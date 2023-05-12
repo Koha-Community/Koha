@@ -426,6 +426,9 @@
             tr.append('<td>'+display_string( 'item_type_id', item._strings, item.item_type_id )+'</td>');
             tr.append('<td>'+display_string( 'materials_notes', item._strings, item.materials_notes )+'</td>');
             tr.append('<td>'+(item.public_notes||'')+'</td>');
+
+            const fp = document.querySelector("#datereceived")._flatpickr;
+            fp.setDate(new Date());
         };
 
         var items_columns = [null, null, 'external_id', 'home_library_id',
