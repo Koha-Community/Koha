@@ -115,7 +115,7 @@ the date the item was last checked out/issued
 
 =head2 datelastseen
 
-  data_type: 'date'
+  data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
@@ -418,7 +418,11 @@ __PACKAGE__->add_columns(
   "datelastborrowed",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "datelastseen",
-  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "stack",
   { data_type => "tinyint", is_nullable => 1 },
   "notforloan",
@@ -939,8 +943,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-01 17:33:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:joGnGYWVILPsYHE9CQxHxg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-12 18:18:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HMU2tnuIRypuatz/J5683A
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

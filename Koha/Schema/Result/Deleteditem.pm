@@ -112,7 +112,7 @@ the date the item was last checked out
 
 =head2 datelastseen
 
-  data_type: 'date'
+  data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
@@ -404,7 +404,11 @@ __PACKAGE__->add_columns(
   "datelastborrowed",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "datelastseen",
-  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "stack",
   { data_type => "tinyint", is_nullable => 1 },
   "notforloan",
@@ -509,8 +513,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-01 17:33:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RMuehNvH+0WSXxEurJks/g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-12 18:18:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6TcVaUWoDdAGfBOr83ZOWQ
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
