@@ -35,6 +35,7 @@ use Koha::Illrequestattributes;
 use Koha::AuthorisedValue;
 use Koha::Illrequest::Logger;
 use Koha::Patron;
+use Koha::Illbatches;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::Items;
@@ -144,6 +145,20 @@ Pushes a passed processor function into our processors arrayref
 sub push_processor {
     my ( $self, $processor ) = @_;
     push @{$self->{processors}}, $processor;
+}
+
+=head3 batch
+
+    my $batch = $request->batch;
+
+Returns the batch associated with a request
+
+=cut
+
+sub batch {
+    my ( $self ) = @_;
+
+    return Koha::Illbatches->find($self->_result->batch_id);
 }
 
 =head3 statusalias
@@ -1976,6 +1991,18 @@ sub strings_map {
             str      => $params->{public} ? $status_alias->lib_opac : $status_alias->lib,
             code     => $status_alias->authorised_value,
             type     => 'av',
+        };
+    }
+
+    my $batch = $self->batch;
+    if ($batch) {
+        $strings->{"batch"} = {
+            id => $batch->id,
+            name => $batch->name,
+            backend => $batch->backend,
+            borrowernumber => $batch->borrowernumber,
+            branchcode => $batch->branchcode,
+            statuscode => $batch->statuscode
         };
     }
 

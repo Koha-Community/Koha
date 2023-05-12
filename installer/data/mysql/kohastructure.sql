@@ -3301,6 +3301,36 @@ CREATE TABLE `illrequestattributes` (
   CONSTRAINT `illrequestattributes_ifk` FOREIGN KEY (`illrequest_id`) REFERENCES `illrequests` (`illrequest_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table `illbatch_statuses`
+--
+DROP TABLE IF EXISTS `illbatch_statuses`;
+CREATE TABLE `illbatch_statuses` (
+    `id` int(11) NOT NULL auto_increment, -- Status ID
+    `name` varchar(100) NOT NULL,         -- Name of status
+    `code` varchar(20) NOT NULL,          -- Unique, immutable code for status
+    `is_system` int(1),                   -- Is this status required for system operation
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `u_illbatchstatuses__code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table `illbatches`
+--
+DROP TABLE IF EXISTS `illbatches`;
+CREATE TABLE `illbatches` (
+    `id` int(11) NOT NULL auto_increment, -- Batch ID
+    `name` varchar(100) NOT NULL,         -- Unique name of batch
+    `backend` varchar(20) NOT NULL,       -- Name of batch backend
+    `borrowernumber` int(11),             -- Patron associated with batch
+    `branchcode` varchar(50),             -- Branch associated with batch
+    `statuscode` varchar(20),             -- Status of batch
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `u_illbatches__name` (`name`),
+    CONSTRAINT `illbatches_bnfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT `illbatches_bcfk` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT `illbatches_sfk` FOREIGN KEY (`statuscode`) REFERENCES `illbatch_statuses` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `illrequests`
@@ -3330,6 +3360,7 @@ CREATE TABLE `illrequests` (
   `notesstaff` mediumtext DEFAULT NULL COMMENT 'Staff notes attached to request',
   `orderid` varchar(50) DEFAULT NULL COMMENT 'Backend id attached to request',
   `backend` varchar(20) DEFAULT NULL COMMENT 'The backend used to create request',
+  `batch_id` int(11) COMMENT 'Optional ID of batch that this request belongs to',
   PRIMARY KEY (`illrequest_id`),
   KEY `illrequests_bnfk` (`borrowernumber`),
   KEY `illrequests_bcfk_2` (`branchcode`),
@@ -3338,7 +3369,8 @@ CREATE TABLE `illrequests` (
   CONSTRAINT `illrequests_bcfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `illrequests_bibfk` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `illrequests_bnfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `illrequests_safk` FOREIGN KEY (`status_alias`) REFERENCES `authorised_values` (`authorised_value`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `illrequests_safk` FOREIGN KEY (`status_alias`) REFERENCES `authorised_values` (`authorised_value`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `illrequests_ibfk` FOREIGN KEY (`batch_id`) REFERENCES `illbatches` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

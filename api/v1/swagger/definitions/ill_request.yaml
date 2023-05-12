@@ -9,6 +9,11 @@ properties:
       - integer
       - "null"
     description: Internal bibliographic record identifier
+  batch_id:
+    type:
+      - integer
+      - "null"
+    description: Batch id this requests belongs to
   patron_id:
     type:
       - integer
@@ -115,6 +120,11 @@ properties:
       - array
       - "null"
     description: The linked extended ill request attributes (x-koha-embed)
+  batch:
+    type:
+      - object
+      - "null"
+    description: The linked ill batch object (x-koha-embed)
   library:
     type:
       - object

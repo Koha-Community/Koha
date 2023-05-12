@@ -64,6 +64,14 @@ definitions:
     $ref: ./definitions/ill_status.yaml
   ill_request:
     $ref: ./definitions/ill_request.yaml
+  illbatch:
+    $ref: ./definitions/illbatch.yaml
+  illbatches:
+    $ref: ./definitions/illbatches.yaml
+  illbatchstatus:
+    $ref: ./definitions/illbatchstatus.yaml
+  illbatchstatuses:
+    $ref: ./definitions/illbatchstatuses.yaml
   import_batch_profile:
     $ref: ./definitions/import_batch_profile.yaml
   import_batch_profiles:
@@ -269,6 +277,14 @@ paths:
     $ref: "./paths/ill_backends.yaml#/~1ill~1backends~1{ill_backend_id}"
   /ill/requests:
     $ref: ./paths/ill_requests.yaml#/~1ill~1requests
+  /illbatches:
+    $ref: ./paths/illbatches.yaml#/~1illbatches
+  "/illbatches/{illbatch_id}":
+    $ref: "./paths/illbatches.yaml#/~1illbatches~1{illbatch_id}"
+  /illbatchstatuses:
+    $ref: ./paths/illbatchstatuses.yaml#/~1illbatchstatuses
+  "/illbatchstatuses/{illbatchstatus_code}":
+    $ref: "./paths/illbatchstatuses.yaml#/~1illbatchstatuses~1{illbatchstatus_code}"
   "/import_batches/{import_batch_id}/records/{import_record_id}/matches/chosen":
     $ref: "./paths/import_batches.yaml#/~1import_batches~1{import_batch_id}~1records~1{import_record_id}~1matches~1chosen"
   /import_batch_profiles:
@@ -521,6 +537,18 @@ parameters:
     name: hold_id
     required: true
     type: integer
+  illbatch_id_pp:
+    description: Internal ILL batch identifier
+    in: path
+    name: illbatch_id
+    required: true
+    type: integer
+  illbatchstatus_code_pp:
+    description: Internal ILL batch status identifier
+    in: path
+    name: illbatchstatus_code
+    required: true
+    type: string
   import_batch_profile_id_pp:
     description: Internal profile identifier
     in: path
@@ -851,6 +879,12 @@ tags:
   - description: "Manage ILL module backends\n"
     name: ill_backends
     x-displayName: ILL backends
+  - description: "Manage ILL module batches\n"
+    name: illbatches
+    x-displayName: ILL batches
+  - description: "Manage ILL module batch statuses\n"
+    name: illbatchstatuses
+    x-displayName: ILL batch statuses
   - description: "Manage ILL requests\n"
     name: ill_requests
     x-displayName: ILL requests

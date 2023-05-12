@@ -27,6 +27,7 @@
             - comments
             - comments+count
             - extended_attributes
+            - batch
             - library
             - id_prefix
             - patron
@@ -46,6 +47,56 @@
           $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Patron not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        ill: "1"
+  post:
+    x-mojo-to: Illrequests#add
+    operationId: addIllrequest
+    tags:
+      - ill_request
+    summary: Add ILL request
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing informations about the new request
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/ill_request"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Request added
+        schema:
+          $ref: "../swagger.yaml#/definitions/ill_request"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating resource
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
