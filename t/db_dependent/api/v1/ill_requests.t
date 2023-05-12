@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Test::MockModule;
 use Test::MockObject;
@@ -253,6 +253,90 @@ subtest 'list() tests' => sub {
       ->status_is(404);
 
     #TODO; test complex query on extended_attributes
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # create an authorized user
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 2 ** 22 } # 22 => ill
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # Create an ILL request
+    my $illrequest = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                backend        => 'Mock',
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                status         => 'STATUS1',
+            }
+        }
+    );
+
+    # Mock ILLBackend (as object)
+    my $backend = Test::MockObject->new;
+    $backend->set_isa('Koha::Illbackends::Mock');
+    $backend->set_always('name', 'Mock');
+    $backend->set_always('capabilities', sub {
+        return $illrequest;
+    } );
+    $backend->mock(
+        'metadata',
+        sub {
+            my ( $self, $rq ) = @_;
+            return {
+                ID => $rq->illrequest_id,
+                Title => $rq->patron->borrowernumber
+            }
+        }
+    );
+    $backend->mock(
+        'status_graph', sub {},
+    );
+
+    # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
+    my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+    $illreqmodule->mock( 'load_backend',
+        sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
+    );
+
+    $schema->storage->txn_begin;
+
+    Koha::Illrequests->search->delete;
+
+    my $body = {
+        backend => 'Mock',
+        borrowernumber => $patron->borrowernumber,
+        branchcode => $library->branchcode,
+        metadata => {
+            article_author => "Jessop, E. G.",
+            article_title => "Sleep",
+            issn => "0957-4832",
+            issue => "2",
+            pages => "89-90",
+            publisher => "OXFORD UNIVERSITY PRESS",
+            title => "Journal of public health medicine.",
+            year => "2001"
+        }
+    };
+
+    ## Authorized user test
+    $t->post_ok( "//$userid:$password@/api/v1/illrequests" => json => $body)
+      ->status_is(201);
 
     $schema->storage->txn_rollback;
 };
