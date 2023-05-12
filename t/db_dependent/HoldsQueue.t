@@ -1969,12 +1969,13 @@ subtest "GetHoldsQueueItems" => sub {
 };
 
 subtest "Test HoldsQueuePrioritizeBranch" => sub {
+
     plan tests => 4;
 
-    Koha::Biblios->delete();
+    $schema->storage->txn_begin;
+
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 0 );
-    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'homebranch' );
-    t::lib::Mocks::mock_preference('UseTransportCostMatrix', 0);
+    t::lib::Mocks::mock_preference( 'UseTransportCostMatrix', 0 );
 
     my $branch1 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -2013,35 +2014,11 @@ subtest "Test HoldsQueuePrioritizeBranch" => sub {
         }
     );
 
-    C4::HoldsQueue::CreateQueue();
-
-    my $queue_rs = $schema->resultset('TmpHoldsqueue');
-    my $target_rs = $schema->resultset('HoldFillTarget');
-    is(
-        $queue_rs->next->itemnumber->itemnumber,
-        $item1->itemnumber,
-        "Picked the item whose homebranch matches the pickup branch"
-    );
-
-    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'holdingbranch' );
-
-    C4::HoldsQueue::CreateQueue();
-
-    $queue_rs = $schema->resultset('TmpHoldsqueue');
-    $target_rs = $schema->resultset('HoldFillTarget');
-    is(
-        $queue_rs->next->itemnumber->itemnumber,
-        $item2->itemnumber,
-        "Picked the item whose holdingbranch matches the pickup branch"
-    );
-
-    t::lib::Mocks::mock_preference('UseTransportCostMatrix', 1);
     t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'homebranch' );
 
     C4::HoldsQueue::CreateQueue();
 
-    $queue_rs = $schema->resultset('TmpHoldsqueue');
-    $target_rs = $schema->resultset('HoldFillTarget');
+    my $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
     is(
         $queue_rs->next->itemnumber->itemnumber,
         $item1->itemnumber,
@@ -2052,11 +2029,34 @@ subtest "Test HoldsQueuePrioritizeBranch" => sub {
 
     C4::HoldsQueue::CreateQueue();
 
-    $queue_rs = $schema->resultset('TmpHoldsqueue');
-    $target_rs = $schema->resultset('HoldFillTarget');
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
     is(
         $queue_rs->next->itemnumber->itemnumber,
         $item2->itemnumber,
         "Picked the item whose holdingbranch matches the pickup branch"
     );
+
+    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'homebranch' );
+
+    C4::HoldsQueue::CreateQueue();
+
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
+    is(
+        $queue_rs->next->itemnumber->itemnumber,
+        $item1->itemnumber,
+        "Picked the item whose homebranch matches the pickup branch"
+    );
+
+    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'holdingbranch' );
+
+    C4::HoldsQueue::CreateQueue();
+
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
+    is(
+        $queue_rs->next->itemnumber->itemnumber,
+        $item2->itemnumber,
+        "Picked the item whose holdingbranch matches the pickup branch"
+    );
+
+    $schema->storage->txn_rollback;
 };
