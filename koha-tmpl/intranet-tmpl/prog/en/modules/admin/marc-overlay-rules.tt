@@ -455,6 +455,8 @@
         });
 
         var categories = [% To.json( categories ) | $raw %];
+        // Add * => * to this array of objects, and *reduce* it to one object
+        // Note: This allows displaying a sorted list of categories later, but we still depend on an object!
         categories.unshift({ categorycode: '*', description: '*'});
         categories = categories.reduce( ( a,c ) => ( { ...a, [c.categorycode]: c.description } ), {} );
 

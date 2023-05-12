@@ -133,7 +133,7 @@ elsif ($op eq 'doedit' || $op eq 'add') {
 }
 
 my $categories = Koha::Patron::Categories->search_with_library_limits( {},
-    { order_by => ['description'] } )->unblessed;
+    { order_by => ['description'], columns => [ 'categorycode', 'description' ] } )->unblessed;
 
 $template->param(
     rules      => $rules,
