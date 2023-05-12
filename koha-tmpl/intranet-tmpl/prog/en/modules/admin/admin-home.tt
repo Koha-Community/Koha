@@ -285,6 +285,10 @@
                         <dt><a href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Keyboard shortcuts</a></dt>
                         <dd>Define which keys trigger actions in the advanced cataloging editor</dd>
                     [% END %]
+                    [% IF Koha.Preference('ILLModule') && CAN_user_ill %]
+                        <dt><a href="/cgi-bin/koha/admin/ill_batch_statuses.pl">Interlibrary Loan batch statuses</a></dt>
+                        <dd>Manage the statuses that can be assigned to Interlibrary Loan batches</dd>
+                    [% END %]
                 </dl>
             [% END %]
             </div>

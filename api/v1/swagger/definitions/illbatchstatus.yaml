@@ -1,0 +1,20 @@
+---
+type: object
+properties:
+  id:
+    type: string
+    description: Internal ILL batch status identifier
+  name:
+    type: string
+    description: Status name
+  code:
+    type: string
+    description: Unique, immutable status code
+  is_system:
+    type: string
+    description: Is this status required for system operation
+additionalProperties: false
+required:
+  - name
+  - code
+  - is_system
