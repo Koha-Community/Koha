@@ -1969,14 +1969,15 @@ sub can_be_waiting_recall {
     }
 
     # Check the circulation rule for each relevant itemtype for this item
-    my $rule = Koha::CirculationRules->get_effective_rules({
-        branchcode => $branchcode,
-        categorycode => $self->check_recalls ? $self->check_recalls->patron->categorycode : undef,
-        itemtype => $self->effective_itemtype,
-        rules => [
-            'recalls_allowed',
-        ],
-    });
+    my $most_relevant_recall = $self->check_recalls;
+    my $rule = Koha::CirculationRules->get_effective_rules(
+        {
+            branchcode   => $branchcode,
+            categorycode => $most_relevant_recall ? $most_relevant_recall->patron->categorycode : undef,
+            itemtype     => $self->effective_itemtype,
+            rules        => [ 'recalls_allowed', ],
+        }
+    );
 
     # check recalls allowed has been set and is not zero
     return 0 if ( !defined($rule->{recalls_allowed}) || $rule->{recalls_allowed} == 0 );
