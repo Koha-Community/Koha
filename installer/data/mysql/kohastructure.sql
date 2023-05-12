@@ -1550,7 +1550,7 @@ CREATE TABLE `branch_transfer_limits` (
   `itemtype` varchar(10) DEFAULT NULL,
   `ccode` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`limitId`),
-  KEY `fromBranch_index` (`fromBranch`)
+  KEY `fromBranch_idx` (`fromBranch`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
