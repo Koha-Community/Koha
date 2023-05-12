@@ -626,6 +626,9 @@
                                                                         [% IF ( items_loo.location ) %]
                                                                             <span class="shelvingloc">[% items_loo.location | html %]</span>
                                                                         [% END %]
+                                                                        [% IF ( items_loo.collectioncode ) %]
+                                                                            <span class="ccode">[% items_loo.collectioncode | html %]</span>
+                                                                        [% END %]
 
                                                                             [% IF ( items_loo.itemcallnumber ) %]
                                                                                 <a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% items_loo.itemcallnumber |uri %]%22">[% items_loo.itemcallnumber | html %]</a>
