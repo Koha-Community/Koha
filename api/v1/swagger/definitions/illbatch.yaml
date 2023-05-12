@@ -1,0 +1,48 @@
+---
+type: object
+properties:
+  id:
+    type: string
+    description: Internal ILL batch identifier
+  name:
+    type: string
+    description: Name of the ILL batch
+  backend:
+    type: string
+    description: Backend name
+  cardnumber:
+    type: string
+    description: Card number of the patron of the ILL batch
+  borrowernumber:
+    type: string
+    description: Borrower number of the patron of the ILL batch
+  branchcode:
+    type: string
+    description: Branch code of the branch of the ILL batch
+  patron:
+    type:
+      - object
+      - "null"
+    description: The patron associated with the batch
+  branch:
+    type:
+      - object
+      - "null"
+    description: The branch associated with the batch
+  statuscode:
+    type: string
+    description: Code of the status of the ILL batch
+  status:
+    type:
+      - object
+      - "null"
+    description: The status associated with the batch
+  requests_count:
+    type: string
+    description: The number of requests in this batch
+additionalProperties: false
+required:
+  - name
+  - backend
+  - branchcode
+  - statuscode

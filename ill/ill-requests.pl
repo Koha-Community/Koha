@@ -27,10 +27,12 @@ use Koha::Notice::Templates;
 use Koha::AuthorisedValues;
 use Koha::Illcomment;
 use Koha::Illrequests;
+use Koha::Illbatches;
 use Koha::Illrequest::Workflow::Availability;
 use Koha::Illrequest::Workflow::TypeDisclaimer;
 use Koha::Libraries;
 use Koha::Token;
+use Koha::Plugins;
 
 use Try::Tiny qw( catch try );
 use URI::Escape qw( uri_escape_utf8 );
@@ -66,10 +68,27 @@ my $has_branch = $cfg->has_branch;
 my $backends_available = ( scalar @{$backends} > 0 );
 $template->param(
     backends_available => $backends_available,
-    has_branch         => $has_branch
+    has_branch         => $has_branch,
+    have_batch         => have_batch_backends($backends)
 );
 
 if ( $backends_available ) {
+    # Establish what metadata enrichment plugins we have available
+    my $enrichment_services = get_metadata_enrichment();
+    if (scalar @{$enrichment_services} > 0) {
+        $template->param(
+            metadata_enrichment_services => encode_json($enrichment_services)
+        );
+    }
+    # Establish whether we have any availability services that can provide availability
+    # for the batch identifier types we support
+    my $batch_availability_services = get_ill_availability($enrichment_services);
+    if (scalar @{$batch_availability_services} > 0) {
+        $template->param(
+            batch_availability_services => encode_json($batch_availability_services)
+        );
+    }
+
     if ( $op eq 'illview' ) {
         # View the details of an ILL
         my $request = Koha::Illrequests->find($params->{illrequest_id});
@@ -138,8 +157,8 @@ if ( $backends_available ) {
             }
 
             $template->param(
-                whole   => $backend_result,
-                request => $request
+                whole     => $backend_result,
+                request   => $request
             );
             handle_commit_maybe($backend_result, $request);
         }
@@ -205,6 +224,9 @@ if ( $backends_available ) {
         # We simulate the API for backend requests for uniformity.
         # So, init:
         my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $batches = Koha::Illbatches->search(undef, {
+            order_by => { -asc => 'name' }
+        });
         if ( !$params->{stage} ) {
             my $backend_result = {
                 error   => 0,
@@ -217,13 +239,15 @@ if ( $backends_available ) {
             };
             $template->param(
                 whole          => $backend_result,
-                request        => $request
+                request        => $request,
+                batches        => $batches
             );
         } else {
             # Commit:
             # Save the changes
             $request->borrowernumber($params->{borrowernumber});
             $request->biblio_id($params->{biblio_id});
+            $request->batch_id($params->{batch_id});
             $request->branchcode($params->{branchcode});
             $request->price_paid($params->{price_paid});
             $request->notesopac($params->{notesopac});
@@ -356,7 +380,7 @@ if ( $backends_available ) {
     } elsif ( $op eq 'illlist') {
 
         # If we receive a pre-filter, make it available to the template
-        my $possible_filters = ['borrowernumber'];
+        my $possible_filters = ['borrowernumber', 'batch_id'];
         my $active_filters = {};
         foreach my $filter(@{$possible_filters}) {
             if ($params->{$filter}) {
@@ -375,6 +399,17 @@ if ( $backends_available ) {
         $template->param(
             prefilters => join("&", @tpl_arr)
         );
+
+        if ($active_filters->{batch_id}) {
+            my $batch_id = $active_filters->{batch_id};
+            if ($batch_id) {
+                my $batch = Koha::Illbatches->find($batch_id);
+                $template->param(
+                    batch => $batch
+                );
+            }
+        }
+
     } elsif ( $op eq "save_comment" ) {
         die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
            session_id => scalar $cgi->cookie('CGISESSID'),
@@ -409,6 +444,10 @@ if ( $backends_available ) {
             scalar $params->{illrequest_id} . $append
         );
         exit;
+    } elsif ( $op eq "batch_list" ) {
+        # Do not remove, it prevents us falling through to the 'else'
+    } elsif ( $op eq "batch_create" ) {
+        # Do not remove, it prevents us falling through to the 'else'
     } else {
         my $request = Koha::Illrequests->find($params->{illrequest_id});
         my $backend_result = $request->custom_capability($op, $params);
@@ -465,4 +504,60 @@ sub handle_commit_maybe {
 sub redirect_to_list {
     print $cgi->redirect('/cgi-bin/koha/ill/ill-requests.pl');
     exit;
+}
+
+# Do any of the available backends provide batch requesting
+sub have_batch_backends {
+    my ( $backends ) = @_;
+
+    my @have_batch = ();
+
+    foreach my $backend(@{$backends}) {
+        my $can_batch = can_batch($backend);
+        if ($can_batch) {
+            push @have_batch, $backend;
+        }
+    }
+    return \@have_batch;
+}
+
+# Does a given backend provide batch requests
+# FIXME: This should be moved to Koha::Illbackend
+sub can_batch {
+    my ( $backend ) = @_;
+    my $request = Koha::Illrequest->new->load_backend( $backend );
+    return $request->_backend_capability( 'provides_batch_requests' );
+}
+
+# Get available metadata enrichment plugins
+sub get_metadata_enrichment {
+    my @candidates = Koha::Plugins->new()->GetPlugins({
+        method => 'provides_api'
+    });
+    my @services = ();
+    foreach my $plugin(@candidates) {
+        my $supported = $plugin->provides_api();
+        if ($supported->{type} eq 'search') {
+            push @services, $supported;
+        }
+    }
+    return \@services;
+}
+
+# Get ILL availability plugins that can help us with the batch identifier types
+# we support
+sub get_ill_availability {
+    my ( $services ) = @_;
+
+    my $id_types = {};
+    foreach my $service(@{$services}) {
+        foreach my $id_supported(keys %{$service->{identifiers_supported}}) {
+            $id_types->{$id_supported} = 1;
+        }
+    }
+
+    my $availability = Koha::Illrequest::Workflow::Availability->new($id_types);
+    return $availability->get_services({
+        ui_context => 'staff'
+    });
 }

@@ -3706,6 +3706,112 @@ input.renew {
 }
 
 #interlibraryloans {
+
+    .ill-toolbar {
+        display: flex;
+    }
+
+    #ill-batch {
+        flex-grow: 1;
+        display: flex;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+
+    #ill-batch-requests {
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+    }
+
+    #ill-batch-modal {
+        .modal-footer {
+            display: flex;
+            & > * {
+                flex: 1;
+            }
+            #lhs {
+                text-align: left;
+            }
+        }
+        #create-progress {
+            margin-top: 17px;
+        }
+        .fetch-failed {
+            background-color: rgba(255,0,0,0.1);
+            & > * {
+                background-color: inherit;
+            }
+        }
+        .progress {
+            margin-bottom: 0;
+            margin-top: 17px;
+        }
+        #create-requests {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .action-column {
+            text-align: center;
+            & > * {
+                margin-left: 5px;
+            }
+            & > *:first-child {
+                margin-left: 0;
+            }
+        }
+        .metadata-row:not(:first-child) {
+            margin-top: 0.5em;
+        }
+        .metadata-label {
+            font-weight: 600;
+        }
+        .more-less {
+            text-align: right;
+            margin: 2px 0;
+        }
+
+    }
+
+    #batch-form {
+        legend {
+            margin-bottom: 2em;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 5px;
+            resize: vertical;
+        }
+        #new-batch-form {
+            display: flex;
+            gap: 20px;
+        }
+        li#process-button {
+            display: flex;
+            justify-content: flex-end;
+        }
+        #textarea-metadata {
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        #textarea-errors {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px 15px 10px
+        }
+        .batch-modal-actions {
+            text-align: center;
+        }
+        fieldset {
+            border: 2px solid #b9d8d9;
+        }
+    }
+
     #dataPreviewLabel {
         margin: .3em 0;
     }

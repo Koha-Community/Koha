@@ -124,6 +124,7 @@
             <div class="dialog message">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo_panel">about page</a></div>
         [% ELSE %]
                 [% INCLUDE 'ill-toolbar.inc' %]
+                [% INCLUDE 'ill-batch-modal.inc' %]
 
                 [% IF whole.error %]
                     <h1>Error performing operation</h1>
@@ -437,6 +438,23 @@
                                         [% END %]
                                     </select>
                                 </li>
+                                [% IF batches.count > 0 %]
+                                <li class="batch">
+                                    <label class="batch_label">Batch:</label>
+                                    <select id="batch_id" name="batch_id">
+                                        <option value="">
+                                        [% FOREACH batch IN batches %]
+                                            [% IF batch.id == request.batch_id %]
+                                            <option value="[% batch.id | html %]" selected>
+                                            [% ELSE %]
+                                            <option value="[% batch.id | html %]">
+                                            [% END %]
+                                                [% batch.name | html %]
+                                            </option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                                [% END %]
                                 <li class="updated">
                                     <label class="updated">Last updated:</label>
                                     [% request.updated | $KohaDates  with_hours => 1 %]
@@ -648,6 +666,14 @@
                                         [% END %]
                                     [% END %]
                                 </li>
+                                [% IF request.batch > 0 %]
+                                <li class="batch">
+                                    <span class="label batch">Batch:</span>
+                                    <a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=[% request.batch.id | html %]">
+                                    [% request.batch.name | html %]
+                                    </a>
+                                </li>
+                                [% END %]
                                 <li class="updated">
                                     <span class="label updated">Last updated:</span>
                                     [% request.updated | $KohaDates  with_hours => 1 %]
@@ -779,7 +805,12 @@
 
                 [% ELSIF query_type == 'illlist' %]
                     <!-- illlist -->
-                    <h1>View ILL requests</h1>
+                    <h1>
+                        View ILL requests
+                        [% IF batch %]
+                        for batch "[% batch.name | html %]"
+                        [% END %]
+                    </h1>
                     <div id="results" class="page-section">
                         <h2>Details for all requests</h2>
                          [% INCLUDE 'ill-list-table.inc' %]
@@ -858,6 +889,8 @@
                             </fieldset>
                         </form>
                     </div>
+                [% ELSIF query_type == 'batch_list' || query_type == 'batch_create' %]
+                    [% INCLUDE 'ill-batch.inc' %]
                 [% ELSE %]
                 <!-- Custom Backend Action -->
                 [% PROCESS $whole.template %]
@@ -877,6 +910,18 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
+    [% IF metadata_enrichment_services %]
+    <script>
+        var metadata_enrichment_services = [% metadata_enrichment_services | $raw %];
+    </script>
+    <script>
+        [% IF batch_availability_services %]
+        var batch_availability_services = [% batch_availability_services | $raw %];
+        [% ELSE %]
+        var batch_availability_services = [];
+        [% END %]
+    </script>
+    [% END %]
     <script>
         var prefilters = '[% prefilters | $raw %]';
         // Set column settings
@@ -901,7 +946,12 @@
         });
     </script>
     [% INCLUDE 'ill-list-table-strings.inc' %]
+    [% INCLUDE 'ill-batch-table-strings.inc' %]
+    [% INCLUDE 'ill-batch-modal-strings.inc' %]
     [% Asset.js("js/ill-list-table.js") | $raw %]
+    [% Asset.js("js/ill-batch.js") | $raw %]
+    [% Asset.js("js/ill-batch-table.js") | $raw %]
+    [% Asset.js("js/ill-batch-modal.js") | $raw %]
     [% IF (query_type == 'availability' || query_type == 'generic_confirm') && Koha.Preference('ILLCheckAvailability') %]
         [% Asset.js("js/ill-availability.js") | $raw %]
     [% END %]

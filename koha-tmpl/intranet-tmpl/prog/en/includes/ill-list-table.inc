@@ -1,11 +1,14 @@
 [% IF patron.borrowernumber %]
 <table id="ill-requests-patron-[% patron.borrowernumber | html %]">
+[% ELSIF batch.id %]
+<table id="ill-requests-batch-[% batch.id | html %]">
 [% ELSE %]
 <table id="ill-requests">
 [% END %]
     <thead>
         <tr id="ill_requests_header">
             <th scope="col">Request ID</th>
+            <th scope="col">Batch</th>
             <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="author"         data-related-search-on="value">Author</th>
             <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="title"         data-related-search-on="value">Title</th>
             <th scope="col" data-datatype="related-object" data-related="extended_attributes" data-related-key="type" data-related-value="article_title" data-related-search-on="value">Article title</th>

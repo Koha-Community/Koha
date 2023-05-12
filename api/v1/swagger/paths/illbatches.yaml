@@ -1,0 +1,236 @@
+---
+/illbatches:
+  get:
+    x-mojo-to: Illbatches#list
+    operationId: listIllbatches
+    tags:
+      - illbatches
+    summary: List ILL batches
+    parameters: []
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of ILL batches
+        schema:
+          $ref: "../swagger.yaml#/definitions/illbatches"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: ILL batches not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        ill: "1"
+  post:
+    x-mojo-to: Illbatches#add
+    operationId: addIllbatch
+    tags:
+      - illbatches
+    summary: Add ILL batch
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing informations about the new batch
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/illbatch"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: Batch added
+        schema:
+          $ref: "../swagger.yaml#/definitions/illbatch"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Patron with given cardnumber not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        ill: "1"
+"/illbatches/{illbatch_id}":
+  get:
+    x-mojo-to: Illbatches#get
+    operationId: getIllbatches
+    tags:
+      - illbatches
+    summary: Get ILL batch
+    parameters:
+      - name: illbatch_id
+        in: path
+        description: ILL batch id/name/contents
+        required: true
+        type: string
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: An ILL batch
+        schema:
+          $ref: "../swagger.yaml#/definitions/illbatch"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: ILL batch not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        ill: "1"
+  put:
+    x-mojo-to: Illbatches#update
+    operationId: updateIllBatch
+    tags:
+      - illbatches
+    summary: Update batch
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/illbatch_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing information on the batch
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/illbatch"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: An ILL batch
+        schema:
+          $ref: "../swagger.yaml#/definitions/illbatch"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: ILL batch not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        ill: "1"
+  delete:
+    x-mojo-to: Illbatches#delete
+    operationId: deleteBatch
+    tags:
+      - illbatches
+    summary: Delete ILL batch
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/illbatch_id_pp"
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: ILL batch deleted
+        schema:
+          type: string
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: ILL batch not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        ill: "1"

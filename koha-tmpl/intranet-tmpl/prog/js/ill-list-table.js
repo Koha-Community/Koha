@@ -51,7 +51,7 @@ $(document).ready(function() {
         return '';
     }
 
-    // At the moment, the only prefilter possible is borrowernumber
+    // Possible prefilters: borrowernumber, batch_id
     // see ill/ill-requests.pl and members/ill-requests.pl
     let additional_prefilters = {};
     if(prefilters){
@@ -63,6 +63,7 @@ $(document).ready(function() {
     }
 
     let borrower_prefilter = additional_prefilters['borrowernumber'] || null;
+    let batch_id_prefilter = additional_prefilters['batch_id'] || null;
 
     let additional_filters = {
         "me.backend": function(){
@@ -77,6 +78,9 @@ $(document).ready(function() {
         },
         "me.borrowernumber": function(){
             return borrower_prefilter ? { "=": borrower_prefilter } : "";
+        },
+        "me.batch_id": function(){
+            return batch_id_prefilter ? { "=": batch_id_prefilter } : "";
         },
         "-or": function(){
             let patron = $("#illfilter_patron").val();
@@ -119,7 +123,7 @@ $(document).ready(function() {
             return filters;
         },
         "me.placed": function(){
-            if ( Object.keys(additional_prefilters).length ) return "";
+            if (Object.keys(additional_prefilters).length && borrower_prefilter) return "";
             let placed_start = $('#illfilter_dateplaced_start').get(0)._flatpickr.selectedDates[0];
             let placed_end = $('#illfilter_dateplaced_end').get(0)._flatpickr.selectedDates[0];
             if (!placed_start && !placed_end) return "";
@@ -129,7 +133,7 @@ $(document).ready(function() {
             }
         },
         "me.updated": function(){
-            if (Object.keys(additional_prefilters).length) return "";
+            if (Object.keys(additional_prefilters).length && borrower_prefilter) return "";
             let updated_start = $('#illfilter_datemodified_start').get(0)._flatpickr.selectedDates[0];
             let updated_end = $('#illfilter_datemodified_end').get(0)._flatpickr.selectedDates[0];
             if (!updated_start && !updated_end) return "";
@@ -175,8 +179,11 @@ $(document).ready(function() {
     };
 
     let table_id = "#ill-requests";
+
     if (borrower_prefilter) {
         table_id += "-patron-" + borrower_prefilter;
+    } else if ( batch_id_prefilter ){
+        table_id += "-batch-" + batch_id_prefilter;
     }
 
     var ill_requests_table = $(table_id).kohaTable({
@@ -188,6 +195,7 @@ $(document).ready(function() {
             'biblio',
             'comments+count',
             'extended_attributes',
+            'batch',
             'library',
             'id_prefix',
             'patron'
@@ -204,6 +212,19 @@ $(document).ready(function() {
                             'method=illview&amp;illrequest_id=' +
                             encodeURIComponent(data) +
                             '">' + escape_str(row.id_prefix) + escape_str(data) + '</a>';
+                }
+            },
+            {
+                "data": "batch.name", // batch
+                "orderable": false,
+                "render": function(data, type, row, meta) {
+                    return row.batch ?
+                        '<a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=' +
+                        row.batch_id +
+                        '">' +
+                        row.batch.name +
+                        '</a>'
+                        : "";
                 }
             },
             {
