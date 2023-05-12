@@ -2141,17 +2141,17 @@ subtest 'is_denied_renewal' => sub {
     is( $deny_book->is_denied_renewal, 1, 'Renewal blocked when 3 rules matched (withdrawn, itype, location)' );
     is( $allow_book->is_denied_renewal, 0, 'Renewal allowed when 3 rules not matched (withdrawn, itype, location)' );
 
-    $idr_rules="itemcallnumber: [NULL]";
+    $idr_rules="itemcallnumber: [null]";
     C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
-    is( $deny_book->is_denied_renewal, 1, 'Renewal blocked for undef when NULL in pref' );
+    is( $deny_book->is_denied_renewal, 1, 'Renewal blocked for undef when null in pref' );
 
     $idr_rules="itemcallnumber: ['']";
     C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
     is( $deny_book->is_denied_renewal, 0, 'Renewal not blocked for undef when "" in pref' );
 
-    $idr_rules="itemnotes: [NULL]";
+    $idr_rules="itemnotes: [null]";
     C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
-    is( $deny_book->is_denied_renewal, 0, 'Renewal not blocked for "" when NULL in pref' );
+    is( $deny_book->is_denied_renewal, 0, 'Renewal not blocked for "" when null in pref' );
 
     $idr_rules="itemnotes: ['']";
     C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
