@@ -17,34 +17,22 @@
 
 use Modern::Perl;
 
-use Test::More;
+use Test::More tests => 38;
 use Test::MockModule;
 
 use DateTime;
 use DateTime::Duration;
 use Koha::Caches;
+use Koha::Calendar;
+use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 
-use Module::Load::Conditional qw/check_install/;
-
-BEGIN {
-    if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 40;
-    } else {
-        plan skip_all => "Need Test::DBIx::Class"
-    }
-}
-
-use_ok('Koha::Calendar');
-
-use Test::DBIx::Class;
-
-my $db = Test::MockModule->new('Koha::Database');
-$db->mock(
-    _new_schema => sub { return Schema(); }
-);
+my $builder = t::lib::TestBuilder->new;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 # We need to mock the C4::Context->preference method for
 # simplicity and re-usability of the session definition. Any
@@ -57,33 +45,34 @@ $module_context->mock(
     }
 );
 
-fixtures_ok [
-    # weekly holidays
-    RepeatableHoliday => [
-        [ qw( branchcode day month weekday title description) ],
-        [ 'MPL', undef, undef, 0, '', '' ], # sundays
-        [ 'MPL', undef, undef, 6, '', '' ],# saturdays
-        [ 'MPL', 1, 1, undef, '', ''], # new year's day
-        [ 'MPL', 25, 12, undef, '', ''], # chrismas
-    ],
-    # exception holidays
-    SpecialHoliday => [
-        [qw( branchcode day month year title description isexception )],
-        [ 'MPL', 11, 11, 2012, '', '', 1 ],    # sunday exception
-        [ 'MPL', 1,  6,  2011, '', '', 0 ],
-        [ 'MPL', 4,  7,  2012, '', '', 0 ],
-        [ 'CPL', 6,  8,  2012, '', '', 0 ],
-        [ 'MPL', 7,  7,  2012, '', '', 1 ], # holiday exception
-        [ 'MPL', 7,  7,  2012, '', '', 0 ], # holiday
-      ],
-], "add fixtures";
+my $mpl = $builder->build_object({ class => 'Koha::Libraries' })->branchcode;
+my $cpl = $builder->build_object({ class => 'Koha::Libraries' })->branchcode;
+my $rows = [ # add weekly holidays
+    { branchcode => $mpl, weekday => 0 }, # sundays
+    { branchcode => $mpl, weekday => 6 }, # saturdays
+    { branchcode => $mpl, day => 1, month => 1 },      # new year's day
+    { branchcode => $mpl, day => 25, month => 12 },    # chrismas
+];
+$schema->resultset('RepeatableHoliday')->delete_all;
+$schema->resultset('RepeatableHoliday')->create({ %$_, description => q{} }) for @$rows;
+
+$rows = [ # exception holidays
+    { branchcode => $mpl, day => 11, month => 11, year => 2012, isexception => 1 },    # sunday exception
+    { branchcode => $mpl, day => 1,  month => 6,  year => 2011, isexception => 0 },
+    { branchcode => $mpl, day => 4,  month => 7,  year => 2012, isexception => 0 },
+    { branchcode => $cpl, day => 6,  month => 8,  year => 2012, isexception => 0 },
+    { branchcode => $mpl, day => 7,  month => 7,  year => 2012, isexception => 1 }, # holiday exception
+    { branchcode => $mpl, day => 7,  month => 7,  year => 2012, isexception => 0 }, # holiday
+];
+$schema->resultset('SpecialHoliday')->delete_all;
+$schema->resultset('SpecialHoliday')->create({ %$_, description => q{} }) for @$rows;
 
 my $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache('MPL_holidays');
 $cache->clear_from_cache('CPL_holidays');
 
-# 'MPL' branch is arbitrary, is not used at all but is needed for initialization
-my $cal = Koha::Calendar->new( branchcode => 'MPL' );
+# $mpl branch is arbitrary, is not used at all but is needed for initialization
+my $cal = Koha::Calendar->new( branchcode => $mpl );
 
 isa_ok( $cal, 'Koha::Calendar', 'Calendar class returned' );
 
@@ -216,7 +205,7 @@ my $holiday_excepted = DateTime->new(
 
 {    ## 'Datedue' tests
 
-    $cal = Koha::Calendar->new( branchcode => 'MPL', days_mode => 'Datedue' );
+    $cal = Koha::Calendar->new( branchcode => $mpl, days_mode => 'Datedue' );
 
     is($cal->addDuration( $dt, $one_day_dur, 'days' ), # tuesday
         dt_from_string('2012-07-05','iso'),
@@ -247,7 +236,7 @@ my $holiday_excepted = DateTime->new(
 
 {   ## 'Calendar' tests'
 
-    $cal = Koha::Calendar->new( branchcode => 'MPL', days_mode => 'Calendar' );
+    $cal = Koha::Calendar->new( branchcode => $mpl, days_mode => 'Calendar' );
 
     $dt = dt_from_string('2012-07-03','iso');
 
@@ -275,7 +264,7 @@ my $holiday_excepted = DateTime->new(
 
 {   ## 'Days' tests
 
-    $cal = Koha::Calendar->new( branchcode => 'MPL', days_mode => 'Days' );
+    $cal = Koha::Calendar->new( branchcode => $mpl, days_mode => 'Days' );
 
     $dt = dt_from_string('2012-07-03','iso');
 
@@ -304,7 +293,7 @@ my $holiday_excepted = DateTime->new(
 }
 
 {
-    $cal = Koha::Calendar->new( branchcode => 'CPL' );
+    $cal = Koha::Calendar->new( branchcode => $cpl );
     is ( $cal->is_holiday($single_holiday), 0, 'Single holiday for MPL, not CPL' );
     is ( $cal->is_holiday($holiday_for_another_branch), 1, 'Holiday defined for CPL should be defined as an holiday' );
 }
@@ -314,11 +303,10 @@ subtest 'days_mode parameter' => sub {
 
     t::lib::Mocks::mock_preference('useDaysMode', 'Days');
 
-    $cal = Koha::Calendar->new( branchcode => 'CPL', days_mode => 'Calendar' );
+    $cal = Koha::Calendar->new( branchcode => $cpl, days_mode => 'Calendar' );
     is( $cal->{days_mode}, 'Calendar', q|If set, days_mode is correctly set|);
 };
 
-END {
-    $cache->clear_from_cache('MPL_holidays');
-    $cache->clear_from_cache('CPL_holidays');
-};
+$cache->clear_from_cache('MPL_holidays');
+$cache->clear_from_cache('CPL_holidays');
+$schema->storage->txn_rollback;
