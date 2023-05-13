@@ -279,16 +279,18 @@
                                         <label for="unitprice">Actual cost:</label>
                                         <input type="text" size="20" name="unitprice" id="unitprice" />
                                         <span id="unitprice_hint" class="hint"></span>
-                                        <label style="font-weight: inherit; float:none;"><input type="checkbox" name="change_currency">Change currency</label>
+                                    </li>
+                                    <li>
+                                        <label style="margin-left: 12em; text-align: left; font-weight: inherit; float:none;"><input type="checkbox" name="change_currency">Change currency</label>
                                     </li>
                                     <li id="select_currency">
-                                        <label for="unitprice_currency"></label>
-                                        <input type="text" size="20" name="unitprice_currency" id="unitprice_currency" value="" />
+                                        <label for="invoice_unitprice"></label>
+                                        <input type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="" />
                                         [% IF currencies.count %]
-                                        <select name="currency">
-                                            <option value="[% active_currency.rate | html %]" selected="selected">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
+                                        <select name="invoice_currency" id="invoice_currency">
+                                            <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected>[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
                                             [% FOR currency IN currencies %]
-                                            <option value="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                                            <option value="[% currency.currency | html %]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
                                             [% END %]
                                         </select>
                                         [% END %]
@@ -656,6 +658,8 @@
                             return item.item_id;
                         })
                 }
+                params['invoice_currency'] = row.invoice_currency;
+                params['invoice_unitprice'] = row.invoice_unit_price;
                 return params;
             };
 
@@ -850,6 +854,8 @@
             $("#order_edit").on("change", "input[name='change_currency']", function(){
                 if ( $(this).is(":checked") ) {
                     $("#select_currency").show();
+                    if(!$("#invoice_unitprice").val())
+                        $("#invoice_unitprice").val($('#unitprice').val());
                     $("#unitprice").prop("readonly", "true");
                 } else {
                     $("#select_currency").hide();
@@ -858,13 +864,17 @@
             });
 
             function _update_unitprice() {
-                var rate = Number($("select[name='currency'] option:selected").val());
-                var unitprice = $("#unitprice_currency").val();
-                var new_unitprice = Number( unitprice * rate ).toFixed(2);
-                $("#unitprice").val(new_unitprice).change();
+                var row = $("#order_edit").data('row');
+                var rate = Number($("select[name='invoice_currency'] option:selected").data('rate'));
+                var invoice_currency = $("select[name='invoice_currency'] option:selected").val();
+                var invoice_unitprice = $("#invoice_unitprice").val();
+                var unitprice = Number( invoice_unitprice * rate ).toFixed(2);
+                $("#unitprice").val(unitprice).change();
+                row.invoice_currency = invoice_currency;
+                row.invoice_unit_price = invoice_unitprice;
             }
-            $("#order_edit").on("change", "select[name='currency']", _update_unitprice );
-            $("#order_edit").on("change", "#unitprice_currency", _update_unitprice );
+            $("#order_edit").on("change", "select[name='invoice_currency']", _update_unitprice );
+            $("#order_edit").on("change", "#invoice_unitprice", _update_unitprice );
 
             $("#order_edit").on("change", "#replacementprice", function() {
                 var val = $(this).val();
@@ -1156,9 +1166,19 @@
                         $('#modal-order-main #items-panel').removeClass('show').addClass('hide');
                     }
                 }
-                $("#select_currency").hide();
-                $("#unitprice").prop("readonly", "");
-                $("input[name='change_currency']").prop('checked', false);
+                if(row.invoice_unit_price) {
+                    $("#select_currency").show();
+                    $("#unitprice").prop("readonly", true);
+                    $("input[name='change_currency']").prop('checked', true);
+                    $("#invoice_currency").val(row.invoice_currency);
+                    $("#invoice_unitprice").val(row.invoice_unit_price);
+                } else {
+                    $("#select_currency").hide();
+                    $("#unitprice").prop("readonly", "");
+                    $("input[name='change_currency']").prop('checked', false);
+                    $("#invoice_currency").val(active_currency);
+                    $("#invoice_unitprice").val('');
+                }
                 set_modal_buttons();
             };
 

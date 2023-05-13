@@ -114,7 +114,7 @@
         <table id="pending_orders" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th><!--input type="checkbox" id="selectAll"/--></th>
+                    <th></th>
                     <th>Basket</th>
                     <th>Basket group</th>
                     <th>Order line</th>
@@ -652,9 +652,6 @@
                 if (!ids.length) return;
                 location.href = 'orderreceive.pl?multiple_orders=' + ids.join(',') + '&invoiceid=[% invoiceid | uri %]';
             }).html(PENDING_MULTI_SELECTION.format('0'))
-            options.select = {
-                style: 'api'
-            };
             options.order = [[1, 'asc']];
             options.columns.unshift({
                 "data": function (row, type, val, meta) {
@@ -673,16 +670,13 @@
                     var data = row.data();
                     $('.selOrder', row.node()).on('click', function (event) {
                         if ($(this).prop('checked')) {
-                            row.select();
                             selected_rows[data.order_id] = data;
                         } else {
-                            row.deselect();
                             delete selected_rows[data.order_id];
                         }
                         $('#select_multiple').html(PENDING_MULTI_SELECTION.format(Object.keys(selected_rows).length));
                     });
                     if (selected_rows[data.order_id]) {
-                        row.select();
                         $('.selOrder', row.node()).prop('checked', true);
                     }
                 });

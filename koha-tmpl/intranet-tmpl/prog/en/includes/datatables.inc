@@ -2,5 +2,4 @@
 [% USE Asset %]
 [% INCLUDE 'format_price.inc' %]
 [% Asset.js("lib/datatables/datatables.min.js") | $raw %]
-[% Asset.js("lib/datatables/dataTables.select.min.js") | $raw %]
 [% Asset.js("js/datatables.js") | $raw %]
