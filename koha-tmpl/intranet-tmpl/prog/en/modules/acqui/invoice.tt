@@ -7,10 +7,10 @@
 [% USE AuthorisedValues %]
 
 [% BLOCK fund_dropdown %]
-    <label for="[% form_name | html %]">Fund: </label>
+    <label for="[% form_name | html %]">Shipping fund: </label>
     <select id="[% form_id | html %]" name="[% form_name | html %]" class="fund_dropdown" data-selected="[% selected | html %]">
     </select>
-    <label for="showallfunds">&nbsp;Show inactive:</label>
+    <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
     <input type="checkbox" class="showallfunds" />
 [% END %]
 
