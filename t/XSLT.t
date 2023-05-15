@@ -16,32 +16,21 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More;
+use Test::More tests => 1;
 
 use File::Temp;
 use File::Path qw/make_path/;
 
 use t::lib::Mocks;
 
-use Module::Load::Conditional qw/check_install/;
-
-BEGIN {
-    if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 9;
-    } else {
-        plan skip_all => "Need Test::DBIx::Class"
-    }
-
-    use_ok('C4::XSLT');
-};
-
-use Test::DBIx::Class;
-my $db = Test::MockModule->new('Koha::Database');
-$db->mock( _new_schema => sub { return Schema(); } );
+use C4::XSLT;
 
 my $dir = File::Temp->newdir();
 my @themes = ('prog', 'test');
 my @langs = ('en', 'es-ES');
+
+subtest 'Tests moved from t' => sub {
+    plan tests => 8;
 
 # create temporary files to be tested later
 foreach my $theme (@themes) {
@@ -76,4 +65,4 @@ is(find_and_slurp($dir, 'nope', 'fr-FR'), 'Theme prog, language en',    'Fell ba
 my $matching_string = q{<syspref name="singleBranchMode">0</syspref>};
 my $sysprefs_xml = C4::XSLT::get_xslt_sysprefs();
 ok( $sysprefs_xml =~ m/$matching_string/, 'singleBranchMode has a value of 0');
-
+};
