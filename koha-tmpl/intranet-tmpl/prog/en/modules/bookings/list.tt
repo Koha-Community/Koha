@@ -38,6 +38,7 @@
                 <div class="row">
                     [% INCLUDE 'cat-toolbar.inc' %]
                     <h1>Bookings for [% INCLUDE 'biblio-title-head.inc' %]</h1>
+                    <div class="page-section" id="bookings-timeline"></div>
                     <div class="page-section">
                         <table id="bookings_table"></table>
                     </div>
@@ -56,6 +57,7 @@
 
     [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
+    [% Asset.js("lib/vis-timeline/vis-timeline-graph2d.min.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
@@ -64,8 +66,93 @@
     [% Asset.js("js/place_booking_modal.js") | $raw %]
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
 <script>
+    var cancel_success = 0;
     var bookings_table;
+    var timeline;
     $(document).ready(function(){
+
+        var items = $.ajax({
+            url: '/api/v1/biblios/[% biblionumber | uri %]/items?bookable=1',
+            dataType: 'json',
+            type: 'GET'
+        });
+        var bookings = $.ajax({
+            url: '/api/v1/biblios/[% biblionumber | uri %]/bookings',
+            dataType: 'json',
+            type: 'GET',
+        });
+
+        $.when(items, bookings).then(
+            function(items, bookings){
+                var itemsSet = new vis.DataSet([{
+                    id: 0,
+                    content: "Biblio level"
+                }]);
+                for (item of items[0]) {
+                    itemsSet.add({
+                        id: item.item_id,
+                        content: "Item " + item.external_id,
+                    });
+                }
+
+                var bookingsSet = new vis.DataSet();
+                for (booking of bookings[0]){
+                    bookingsSet.add({
+                        id: booking.booking_id,
+                        booking: booking.booking_id,
+                        start: dayjs(booking.start_date).toDate(),
+                        end: dayjs(booking.end_date).toDate(),
+                        content: 'Booking: ' + booking.booking_id,
+                        editable: true,
+                        type: 'range',
+                        group: booking.item_id ? booking.item_id : 0
+                    });
+                }
+
+                var container = document.getElementById('bookings-timeline');
+                var options = {
+                    stack: true,
+                    verticalScroll: true,
+                    orientation: {
+                        axis: "both",
+                        item: "top"
+                    },
+                    timeAxis: {scale: 'day', step: 1},
+                    dataAttributes: [ 'booking' ],
+                    onMoving: function (item, callback) {
+                        var overlapping = bookingsSet.get({
+                            filter: function(testItem) {
+                                if (testItem.id == item.id) {
+                                    return false;
+                                }
+                                if (testItem.group != item.group) {
+                                    return false;
+                                }
+                                return ((item.start <= testItem.end) && (item.end >= testItem.start));
+                            }
+                        });
+
+                        if (overlapping.length == 0) {
+                            callback(item);
+                        }
+                    },
+                    onRemove: function (item, callback) {
+                        $('#cancelBookingModal').modal('show', $('<button data-booking="'+item.id+'">'));
+                        $('#cancelBookingModal').on('hide.bs.modal', function(e) {
+                            if (cancel_success) {
+                                cancel_success = 0;
+                                callback(item);
+                            }
+                        });
+                    }
+                };
+                timeline = new vis.Timeline(container, bookingsSet, itemsSet, options);
+            },
+            function(jqXHR, textStatus, errorThrown){
+                console.log("Fetch failed");
+            }
+        );
+
         var bookings_table_url = "/api/v1/biblios/[% biblionumber | uri %]/bookings";
         bookings_table = $('#bookings_table').kohaTable({
             "ajax": {

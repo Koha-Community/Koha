@@ -312,6 +312,19 @@ $("#placeBookingForm").on('submit', function(e) {
         if (typeof bookings_table !== 'undefined' && bookings_table !== null) {
             bookings_table.api().ajax.reload();
         }
+        if (typeof timeline !== 'undefined' && timeline !== null) {
+            timeline.itemsData.add({
+                id: data.booking_id,
+                booking: data.booking_id,
+                patron: data.patron_id,
+                start: dayjs(data.start_date).toDate(),
+                end: dayjs(data.end_date).toDate(),
+                content: 'Booking: ' + data.booking_id,
+                editable: { remove: true, updateTime: true },
+                type: 'range',
+                group: data.item_id ? data.item_id : 0
+            });
+        }
 
         // Close modal
         $('#placeBookingModal').modal('hide');

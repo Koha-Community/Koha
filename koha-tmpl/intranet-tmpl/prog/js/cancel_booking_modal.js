@@ -16,8 +16,12 @@ $("#cancelBookingForm").on('submit', function(e) {
     });
 
     deleting.done(function(data) {
+        cancel_success = 1;
         if (bookings_table) {
             bookings_table.api().ajax.reload();
+        }
+        if (timeline) {
+            timeline.itemsData.remove(Number(booking_id));
         }
         $('#cancelBookingModal').modal('hide');
     });
