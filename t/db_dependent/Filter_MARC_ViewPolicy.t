@@ -205,3 +205,5 @@ subtest 'Koha::Filter::MARC::ViewPolicy intranet tests' => sub {
     $schema->storage->txn_rollback();
 };
 
+my $cache = Koha::Caches->get_instance();
+$cache->flush_all(); # Clear cache for the other tests
