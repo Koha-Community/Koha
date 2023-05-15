@@ -452,20 +452,21 @@ subtest "Test cr_item_field" => sub {
     $server->{account}->{seen_on_item_information} = '';
     $msg->handle_item_information( $server );
     $item_object->get_from_storage;
-    is( $item_object->datelastseen, "1900-01-01", "datelastseen remains unchanged" );
+    my $stored_date = "1900-01-01 00:00:00";
+    is( $item_object->datelastseen, $stored_date, "datelastseen remains unchanged" );
 
     $item_object->update({ itemlost => 1, datelastseen => '1900-01-01' });
     $server->{account}->{seen_on_item_information} = 'keep_lost';
     $msg->handle_item_information( $server );
     $item_object = Koha::Items->find( $item_object->id );
-    isnt( $item_object->datelastseen, "1900-01-01", "datelastseen updated" );
+    isnt( $item_object->datelastseen, $stored_date, "datelastseen updated" );
     is( $item_object->itemlost, 1, "item remains lost" );
 
     $item_object->update({ itemlost => 1, datelastseen => '1900-01-01' });
     $server->{account}->{seen_on_item_information} = 'mark_found';
     $msg->handle_item_information( $server );
     $item_object = Koha::Items->find( $item_object->id );
-    isnt( $item_object->datelastseen, "1900-01-01", "datelastseen updated" );
+    isnt( $item_object->datelastseen, $stored_date, "datelastseen updated" );
     is( $item_object->itemlost, 0, "item is no longer lost" );
 
     my $itype = $item_object->itype;
