@@ -50,6 +50,14 @@
             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio_object_id | url  %]">Items</a>
         </li>
 
+        [%- IF ( bookingsview ) -%]
+        <li class="active">
+        [%- ELSE -%]
+        <li>
+        [%- END -%]
+            <a href="/cgi-bin/koha/bookings/list.pl?biblionumber=[% biblio_object_id | url  %]">Bookings</a>
+        </li>
+
         [%- IF ( CAN_user_reserveforothers ) -%]
         [%- IF ( holdsview ) -%]
         <li class="active">

@@ -308,9 +308,15 @@ $("#placeBookingForm").on('submit', function(e) {
     );
 
     posting.done(function(data) {
+        // Update bookings page as required
+        if (typeof bookings_table !== 'undefined' && bookings_table !== null) {
+            bookings_table.api().ajax.reload();
+        }
+
+        // Close modal
         $('#placeBookingModal').modal('hide');
 
-        // Reset modal form
+        // Reset form
         $('#booking_patron_id').val(null).trigger('change');
         $('#booking_item_id').val(null).trigger('change');
         $("#period").get(0)._flatpickr.clear();

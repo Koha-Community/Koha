@@ -1,0 +1,141 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE KohaDates %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Bookings for [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; Bookings &rsaquo; Circulation &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="circ_request" class="catalog">
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
+    <ol>
+        <li>
+            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        </li>
+        <li>
+            <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        </li>
+        <li>
+            [% INCLUDE 'biblio-title.inc' link =1 %]
+        </li>
+        <li>
+            <a href="#" aria-current="page">
+                Bookings
+            </a>
+        </li>
+    </ol>
+</nav>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+                <div class="row">
+                    <div class="btn-toolbar">
+                        <div class="btn-group">
+                            <button id="placbooking" class="btn btn-default" data-toggle="modal" data-target="#placeBookingModal" data-biblionumber="[% biblionumber | html %]"><i class="fa fa-calendar"></i> Place booking</button>
+                        </div>
+                    </div>
+                    <h1>Bookings for [% INCLUDE 'biblio-title-head.inc' %]</h1>
+                    <div class="page-section">
+                        <table id="bookings_table"></table>
+                    </div>
+                </div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'biblio-view-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
+    [% INCLUDE modals/place_booking.inc %]
+
+    [% MACRO jsinclude BLOCK %]
+    [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'select2.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
+    [% Asset.js("js/place_booking_modal.js") | $raw %]
+<script>
+    var bookings_table;
+    $(document).ready(function(){
+        var bookings_table_url = "/api/v1/biblios/[% biblionumber | uri %]/bookings";
+        bookings_table = $('#bookings_table').kohaTable({
+            "ajax": {
+                "url": bookings_table_url
+            },
+            "embed": [
+                "item",
+                "patron"
+            ],
+            "columns": [{
+                "data": "booking_id",
+                "title": "Booking ID",
+                "visible": false,
+                "searchable": false,
+                "orderable": false
+            },
+            {
+                "data": "item.external_id",
+                "title": "Item",
+                "searchable": true,
+                "orderable": true,
+                "defaultContent": "Any item",
+                "render": function(data,type,row,meta) {
+                    if ( row.item ) {
+                        return row.item.external_id;
+                    } else {
+                        return null;
+                    }
+                }
+            },
+            {
+                "data": "patron.firstname:patron.surname",
+                "title": "Patron",
+                "searchable": true,
+                "orderable": true,
+                "render": function(data, type, row, meta) {
+                    var fullname;
+                    if ( row.patron.firstname == null ) {
+                        fullname = row.patron.surname;
+                    }
+                    else {
+                        fullname = row.patron.firstname + " " + row.patron.surname;
+                    }
+                    return escape_str(fullname);
+                }
+            },
+            {
+                "data": "start_date",
+                "title": "Start date",
+                "searchable": true,
+                "orderable": true,
+                "render": function(data, type, row, meta) {
+                    return $date(row.start_date);
+                }
+            },
+            {
+                "data": "end_date",
+                "title": "End date",
+                "searchable": true,
+                "orderable": true,
+                "render": function(data, type, row, meta) {
+                    return $date(row.end_date);
+                }
+            }]
+        }, [], 1);
+    });
+</script>
+    [% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
