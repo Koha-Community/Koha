@@ -48,9 +48,8 @@ __PACKAGE__->table("vendor_edi_accounts");
 
 =head2 password
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 40
 
 =head2 last_activity
 
@@ -156,7 +155,7 @@ __PACKAGE__->add_columns(
   "username",
   { data_type => "varchar", is_nullable => 1, size => 40 },
   "password",
-  { data_type => "varchar", is_nullable => 1, size => 40 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "last_activity",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "vendor_id",
@@ -259,8 +258,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-02-18 14:08:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yDbPFtwV40n3o+fFoxR99g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-15 18:35:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:06GuQaUKF6/BO/gw3hKLmA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
