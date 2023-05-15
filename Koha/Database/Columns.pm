@@ -183,7 +183,7 @@ sub columns {
             "relationship"                => __("Relationship"),
             "secret"                      => __("Secret (2FA)"),
             "sex"                         => __("Gender"),
-            "sms_provider_id"             => __("SMS provier ID (internal)"),
+            "sms_provider_id"             => __("SMS provider ID (internal)"),
             "smsalertnumber"              => __("Mobile phone number"),
             "sort1"                       => __("Sort 1"),
             "sort2"                       => __("Sort 2"),
