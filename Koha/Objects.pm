@@ -232,11 +232,14 @@ sub update {
 
 =head3 filter_by_last_update
 
-my $filtered_objects = $objects->filter_by_last_update
+my $filtered_objects = $objects->filter_by_last_update({
+    days => $x, from => $date1, to => $date2, days_inclusive => 1, datetime => 1,
+});
 
-days exclusive by default (will be inclusive if days_inclusive is passed and set)
-from inclusive
-to   inclusive
+Note: days are exclusive by default (will be inclusive if days_inclusive is passed and set).
+The parameters from and to are inclusive. They can be DateTime objects or date strings.
+You should pass at least one of the parameters days, from or to.
+The optional parameter datetime allows datetime comparison.
 
 =cut
 
@@ -252,18 +255,19 @@ sub filter_by_last_update {
           or exists $params->{to};
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $method =  $params->{datetime} ? 'format_datetime' : 'format_date';
     if ( exists $params->{days} ) {
         my $dt = Koha::DateUtils::dt_from_string();
         my $operator = $days_inclusive ? '<=' : '<';
-        $conditions->{$operator} = $dtf->format_date( $dt->subtract( days => $params->{days} ) );
+        $conditions->{$operator} = $dtf->$method( $dt->subtract( days => $params->{days} ) );
     }
     if ( exists $params->{from} ) {
         my $from = ref($params->{from}) ? $params->{from} : dt_from_string($params->{from});
-        $conditions->{'>='} = $dtf->format_date( $from );
+        $conditions->{'>='} = $dtf->$method( $from );
     }
     if ( exists $params->{to} ) {
         my $to = ref($params->{to}) ? $params->{to} : dt_from_string($params->{to});
-        $conditions->{'<='} = $dtf->format_date( $to );
+        $conditions->{'<='} = $dtf->$method( $to );
     }
 
     return $self->search(
