@@ -380,10 +380,10 @@ sub ModItemTransfer {
         $item->holdingbranch($frombranch)->store(
             {
                 log_action        => 0,
-                skip_record_index => $params->{skip_record_index}
+                skip_record_index => 1, # avoid indexing duplication, let ->transit handle it
             }
         );
-        $transfer->transit;
+        $transfer->transit({ skip_record_index => $params->{skip_record_index} });
     }
 
     return;

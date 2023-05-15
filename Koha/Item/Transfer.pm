@@ -80,14 +80,19 @@ sub to_library {
 
 =head3 transit
 
-Set the transfer as in transit by updating the datesent time.
+    $transfer->transit({ [ skip_record_index => 0|1 ] });
+
+Set the transfer as in transit by updating the I<datesent> time.
 
 Also, update date last seen and ensure item holdingbranch is correctly set.
+
+An optional I<skip_record_index> parameter can be passed to avoid triggering
+reindex.
 
 =cut
 
 sub transit {
-    my ($self) = @_;
+    my ($self, $params) = @_;
 
     # Throw exception if item is still checked out
     Koha::Exceptions::Item::Transfer::OnLoan->throw() if ( $self->item->checkout );
@@ -107,7 +112,7 @@ sub transit {
         }
     )->store;
 
-    ModDateLastSeen( $self->item->itemnumber );
+    ModDateLastSeen( $self->item->itemnumber, undef, { skip_record_index => $params->{skip_record_index} } );
     return $self;
 
 }
