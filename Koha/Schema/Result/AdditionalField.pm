@@ -67,6 +67,15 @@ is an authorised value category
 
 contains the marc field to copied into the record
 
+=head2 marcfield_mode
+
+  data_type: 'enum'
+  default_value: 'get'
+  extra: {list => ["get","set"]}
+  is_nullable: 0
+
+mode of operation (get or set) for marcfield
+
 =head2 searchable
 
   data_type: 'tinyint'
@@ -88,6 +97,13 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 32 },
   "marcfield",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 16 },
+  "marcfield_mode",
+  {
+    data_type => "enum",
+    default_value => "get",
+    extra => { list => ["get", "set"] },
+    is_nullable => 0,
+  },
   "searchable",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
@@ -138,8 +154,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-19 06:49:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4GqBQNlfw8ITsUZH0GidsQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-15 17:35:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q1mpEq5S0nZAOVXHqz+hEQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
