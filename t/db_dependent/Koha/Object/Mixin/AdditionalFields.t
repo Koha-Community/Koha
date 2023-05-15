@@ -20,7 +20,7 @@ subtest 'set_additional_fields with marcfield_mode = "get"' => sub {
     my $biblio = $builder->build_sample_biblio();
     my $record = $biblio->record;
     $record->append_fields(
-        MARC::Field->new('999', '', '', 'Z' => 'some value'),
+        MARC::Field->new('998', '', '', 'Z' => 'some value'),
     );
     $biblio->metadata->metadata($record->as_xml_record(C4::Context->preference('marcflavour')));
     $biblio->metadata->store()->discard_changes();
@@ -35,7 +35,7 @@ subtest 'set_additional_fields with marcfield_mode = "get"' => sub {
         {
             tablename => 'subscription',
             name => random_string('c' x 100),
-            marcfield => '999$Z',
+            marcfield => '998$Z',
             marcfield_mode => 'get',
         }
     );
