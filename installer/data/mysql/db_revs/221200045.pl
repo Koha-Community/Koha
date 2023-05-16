@@ -25,8 +25,6 @@ return {
                 });
                 say $out "Wrong system preference 'RetainPatronSearchTerms' renamed 'RetainPatronsSearchTerms'";
             }
-        } else {
-            say $out "Wrong system preference 'RetainPatronSearchTerms' does not exist";
         }
     },
 };
