@@ -269,12 +269,6 @@
 </script>
 [% END %]
 
-[% IF Koha.Preference('RecordedBooksClientSecret') && Koha.Preference('RecordedBooksLibraryID') %]
-<script>
-  var SPINNER_THROBBER = "[% interface | html %]/[% theme | html %]/images/spinner-small.gif";
-</script>
-[% END %]
-
 [% Asset.js("lib/js-cookie/js.cookie-3.0.1.min.js") | $raw %]
 <script>
 $(document).ready(function() {

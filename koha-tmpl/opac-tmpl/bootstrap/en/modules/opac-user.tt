@@ -304,17 +304,10 @@
                                     <a class="nav-link" id="opac-user-overdrive-tab" data-toggle="tab" role="tab" aria-controls="opac-user-overdrive" aria-selected="false" href="#opac-user-overdrive">OverDrive account</a>
                                 </li>
                             [% END %]
-                            [% IF ( RecordedBooksCirculation ) %]
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="opac-user-recordedbooks-tab" data-toggle="tab" role="tab" aria-controls="opac-user-recordedbooks" aria-selected="false" href="#opac-user-recordedbooks">RecordedBooks account</a>
-                                </li>
-                            [% END %]
                         </ul>
                         <div class="tab-content">
 
                             <div id="opac-user-overdrive" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-overdrive-tab">
-                            </div>
-                            <div id="opac-user-recordedbooks" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-recordedbooks-tab">
                             </div>
                             <div id="opac-user-checkouts" class="tab-pane active" role="tabpanel" aria-labelledby="opac-user-checkouts-tab">
                                 [% IF ( issues_count ) %]
@@ -1062,9 +1055,6 @@
         [% INCLUDE 'overdrive-login.inc' %]
     [% END %]
 [% END %]
-[% IF ( RecordedBooksCirculation ) %]
-[% INCLUDE 'recordedbooks-checkout.inc' %]
-[% END %]
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
@@ -1424,21 +1414,5 @@
         } );
     });
     </script>
-    [% END %]
-    [% IF RecordedBooksCirculation %]
-        [% Asset.js("js/recordedbooks.js") | $raw %]
-        <script>
-            $(document).ready(function() {
-                [% IF ( recordedbooks_error ) %]
-                    KOHA.RecordedBooks.display_error("#opac-user-recordedbooks", "[% recordedbooks_error.dquote | html %]");
-                [% END %]
-                [% IF ( recordedbooks_tab ) %]
-                    $("#opac-user-views a[href='#opac-user-recordedbooks']").tab("show");
-                [% END %]
-                $("#opac-user-recordedbooks").each( function() {
-                    KOHA.RecordedBooks.display_account_details(this);
-                } );
-            });
-        </script>
     [% END %]
 [% END %]
