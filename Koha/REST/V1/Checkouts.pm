@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON;
-use Mojo::JWT;
 use Digest::MD5 qw( md5_base64 );
 use Encode;
 
@@ -28,6 +27,7 @@ use C4::Context;
 use C4::Circulation qw( AddIssue AddRenewal CanBookBeRenewed );
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
+use Koha::Token;
 
 use Try::Tiny qw( catch try );
 
@@ -123,13 +123,9 @@ sub get_availability {
       C4::Circulation::CanBookBeIssued( $patron, undef, undef, $inprocess, $ignore_reserves,
         $params );
 
-    my $token;
-    if (keys %{$confirmation}) {
-        my $claims = { map { $_ => 1 } keys %{$confirmation} };
-        my $secret =
-          md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) );
-        $token = Mojo::JWT->new( claims => $claims, secret => $secret )->encode;
-    }
+    my $confirm_keys = join( /:/, sort keys %{$confirmation} );
+    my $tokenizer = Koha::Token->new;
+    my $token = $tokeniser->generate_jwt({ id => $confirm_keys });
 
     my $response = {
         blockers           => $impossible,
@@ -210,23 +206,10 @@ sub add {
             # Check for existance of confirmation token
             # and if exists check validity
             if ( my $token = $c->validation->param('confirmation') ) {
-                my $secret =
-                  md5_base64(
-                    Encode::encode( 'UTF-8', C4::Context->config('pass') ) );
-                my $claims = try {
-                    Mojo::JWT->new( secret => $secret )->decode($token);
-                }
-                catch {
-                    return $c->render(
-                        status  => 403,
-                        openapi => { error => "Confirmation required" }
-                    );
-                };
-
-                # check claims match
-                my $token_claims = join( / /, sort keys %{$claims} );
-                my $confirm_keys = join( / /, sort keys %{$confirmation} );
-                $confirmed = 1 if ( $token_claims eq $confirm_keys );
+                my $confirm_keys = join( /:/, sort keys %{$confirmation} );
+                my $tokenizer    = Koha::Token->new;
+                $confirmed = $tokenizer->check_jwt(
+                    { id => $confirm_keys, token => $token } );
             }
 
             unless ($confirmed) {
