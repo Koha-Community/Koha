@@ -67,6 +67,7 @@
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
 <script>
     var cancel_success = 0;
+    var update_success = 0;
     var bookings_table;
     var timeline;
     $(document).ready(function(){
@@ -100,10 +101,11 @@
                     bookingsSet.add({
                         id: booking.booking_id,
                         booking: booking.booking_id,
+                        patron: booking.patron_id,
                         start: dayjs(booking.start_date).toDate(),
                         end: dayjs(booking.end_date).toDate(),
                         content: 'Booking: ' + booking.booking_id,
-                        editable: true,
+                        editable: { remove: true, updateTime: true },
                         type: 'range',
                         group: booking.item_id ? booking.item_id : 0
                     });
@@ -119,6 +121,16 @@
                     },
                     timeAxis: {scale: 'day', step: 1},
                     dataAttributes: [ 'booking' ],
+
+                    // always snap to full days, independent of the scale
+                    snap: function (date, scale, step) {
+                        let offset = date.getTimezoneOffset() * 60 * 1000;
+                        let day = 24 * 60 * 60 * 1000;
+                        let seconds = Math.round(date / day) * day;
+                        return seconds + offset;
+                    },
+
+                    // prevent overlapping bookings
                     onMoving: function (item, callback) {
                         var overlapping = bookingsSet.get({
                             filter: function(testItem) {
@@ -128,13 +140,47 @@
                                 if (testItem.group != item.group) {
                                     return false;
                                 }
-                                return ((item.start <= testItem.end) && (item.end >= testItem.start));
+                                return ((item.start < testItem.end) && (item.end > testItem.start));
                             }
                         });
 
                         if (overlapping.length == 0) {
                             callback(item);
                         }
+                    },
+
+                    // action events
+                    onMove: function (item, callback) {
+
+                        let startDate = new Date(item.start);
+                        
+                        // set end datetime hours and minutes to the end of the day
+                        let endDate = new Date(item.end);
+                        endDate.setHours(endDate.getHours()+23);
+                        endDate.setMinutes(endDate.getMinutes()+59);
+
+                        let url = '/api/v1/bookings/'+item.booking;
+                        var putting = $.ajax({
+                            method: 'PUT',
+                            url: url,
+                            data: JSON.stringify({
+                                "booking_id": item.booking,
+                                "start_date": startDate.toISOString(),
+                                "end_date": endDate.toISOString(),
+                                "biblio_id": [% biblionumber | uri %],
+                                "item_id": item.group != 0 ? item.group : null,
+                                "patron_id": item.patron
+                            })
+                        });
+
+                        putting.done(function(data) {
+                            alert("It worked");
+                            callback(item);
+                        });
+
+                        putting.fail(function(data) {
+                            $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">Failure</div>');
+                        });
                     },
                     onRemove: function (item, callback) {
                         $('#cancelBookingModal').modal('show', $('<button data-booking="'+item.id+'">'));
