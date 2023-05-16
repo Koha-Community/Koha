@@ -17,40 +17,23 @@
 
 use Modern::Perl;
 use Test::More tests => 1;
-use File::Find;
-use File::Slurp;
+use File::Slurp qw( read_file );
 use Data::Dumper;
 use t::lib::QA::TemplateFilters;
 
-my @themes;
-
-# OPAC themes
-my $opac_dir  = 'koha-tmpl/opac-tmpl';
-opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
-for my $theme ( grep { not /^\.|lib|js|xslt/ } readdir($dh) ) {
-    push @themes, "$opac_dir/$theme/en";
-}
-close $dh;
-
-# STAFF themes
-my $staff_dir = 'koha-tmpl/intranet-tmpl';
-opendir ( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
-for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
-    push @themes, "$staff_dir/$theme/en";
-}
-close $dh;
-
 my @files;
-sub wanted {
-    my $name = $File::Find::name;
-    push @files, $name
-        if $name =~ m[\.(tt|inc)$] and -f $name;
-}
 
-find({ wanted => \&wanted, no_chdir => 1 }, @themes );
+# OPAC
+push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.tt'`;
+push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.inc'`;
+
+# Staff
+push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
+push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
 
 my @errors;
 for my $file ( @files ) {
+    chomp $file;
     my $content = read_file($file);
     my @e = t::lib::QA::TemplateFilters::missing_filters($content);
     push @errors, { file => $file, errors => \@e } if @e;
