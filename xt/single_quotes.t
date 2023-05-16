@@ -19,39 +19,28 @@
 
 use Modern::Perl;
 use Test::More tests => 1;
-use File::Find;
-
-my @themes;
-
-# OPAC themes
-my $opac_dir  = 'koha-tmpl/opac-tmpl';
-opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
-for my $theme ( grep { not /^\.|lib|js|xslt/ } readdir($dh) ) {
-    push @themes, "$opac_dir/$theme/en";
-}
-close $dh;
-
-# STAFF themes
-my $staff_dir = 'koha-tmpl/intranet-tmpl';
-opendir ( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
-for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
-    push @themes, "$staff_dir/$theme/en";
-}
-close $dh;
+use File::Slurp qw( read_file );
 
 my @files;
-find(
-    sub {
-        open my $fh, '<', $_ or die "Could not open $_: $!";
-        my @lines = sort grep /\_\(\'/, <$fh>;
-        push @files, { name => "$_", lines => \@lines } if @lines;
-    },
-    @themes
-);
 
-ok( !@files, "Files do not contain single quotes _(' " )
+# OPAC
+push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.tt'`;
+push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.inc'`;
+
+# Staff
+push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
+push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
+
+my @errors;
+for my $file ( @files ) {
+    chomp $file;
+    my @lines = sort grep /\_\(\'/, read_file($file);
+    push @errors, { name => $file, lines => \@lines } if @lines;
+}
+
+ok( !@errors, "Files do not contain single quotes _(' " )
   or diag(
     "Files list: \n",
     join( "\n",
-        map { $_->{name} . ': ' . join( ', ', @{ $_->{lines} } ) } @files )
+        map { $_->{name} . ': ' . join( ', ', @{ $_->{lines} } ) } @errors )
   );
