@@ -900,7 +900,7 @@ The autoload method is used only to get and set values for an objects properties
 =cut
 
 sub AUTOLOAD {
-    my $self = shift;
+    my ($self) = @_;
 
     my $method = our $AUTOLOAD;
     $method =~ s/.*://;
@@ -908,13 +908,17 @@ sub AUTOLOAD {
     my @columns = @{$self->_columns()};
     # Using direct setter/getter like $item->barcode() or $item->barcode($barcode);
     if ( grep { $_ eq $method } @columns ) {
-        if ( @_ ) {
-            $self->_result()->set_column( $method, @_ );
-            return $self;
-        } else {
-            my $value = $self->_result()->get_column( $method );
-            return $value;
-        }
+        no strict 'refs';
+        *{$AUTOLOAD} = sub {
+            my $self = shift;
+            if ( @_ ) {
+                $self->_result()->set_column( $method, @_);
+                return $self;
+            } else {
+                return $self->_result()->get_column( $method );
+            }
+        };
+        goto &{$AUTOLOAD};
     }
 
     my @known_methods = qw( is_changed id in_storage get_column discard_changes make_column_dirty );
@@ -924,7 +928,8 @@ sub AUTOLOAD {
         show_trace => 1
     ) unless grep { $_ eq $method } @known_methods;
 
-
+    # Remove $self so that @_ now contain arguments only
+    shift;
     my $r = eval { $self->_result->$method(@_) };
     if ( $@ ) {
         Koha::Exceptions::Object->throw( ref($self) . "::$method generated this error: " . $@ );
