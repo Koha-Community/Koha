@@ -1833,15 +1833,15 @@ sub UpsertMarcControlField {
 
 sub GetFrameworkCode {
     my ($biblionumber) = @_;
-    my $cache = Koha::Cache::Memory::Lite->get_instance();
-    my $cache_key = "FrameworkCode-$biblionumber";
-    my $frameworkcode = $cache->get_from_cache($cache_key);
-    unless (defined $frameworkcode) {
+    my $cache          = Koha::Cache::Memory::Lite->get_instance();
+    my $cache_key      = "FrameworkCode-$biblionumber";
+    my $frameworkcode  = $cache->get_from_cache($cache_key);
+    unless ( defined $frameworkcode ) {
         my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
-        $sth->execute($biblionumber);
-        ($frameworkcode) = $sth->fetchrow;
-        $cache->set_in_cache($cache_key, $frameworkcode);
+        ($frameworkcode) = $dbh->selectrow_array(
+            "SELECT frameworkcode FROM biblio WHERE biblionumber=?",
+            undef, $biblionumber );
+        $cache->set_in_cache( $cache_key, $frameworkcode );
     }
     return $frameworkcode;
 }
