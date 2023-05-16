@@ -373,7 +373,6 @@ $template->param(
     OverDriveCirculation => C4::Context->preference('OverDriveCirculation') || 0,
     overdrive_error      => scalar $query->param('overdrive_error') || undef,
     overdrive_tab        => scalar $query->param('overdrive_tab') || 0,
-    RecordedBooksCirculation => C4::Context->preference('RecordedBooksClientSecret') && C4::Context->preference('RecordedBooksLibraryID'),
 );
 
 my $patron_messages = Koha::Patron::Messages->search(
