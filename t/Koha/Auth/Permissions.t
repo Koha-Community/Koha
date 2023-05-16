@@ -162,6 +162,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_ill'                                              => 1,
         'CAN_user_lists_delete_public_lists'                        => 1,
         'CAN_user_lists_edit_public_lists'                          => 1,
+        'CAN_user_lists_edit_public_list_contents'                  => 1,
         'CAN_user_lists'                                            => 1,
         'CAN_user_parameters_manage_accounts'                       => 1,
         'CAN_user_parameters_manage_additional_fields'              => 1,
