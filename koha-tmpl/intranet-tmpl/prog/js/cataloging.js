@@ -436,7 +436,7 @@ function AddEventHandlers (oldcontrol, newcontrol, newinputid ) {
 // newinputid is the id attribute of the cloned controlling input field
 // Note: This code depends on the jQuery data for events; this structure
 // is moved to _data as of jQuery 1.8.
-    var ev= $(oldcontrol).data('events');
+    var ev = $._data(oldcontrol, "events");
     if(typeof ev != 'undefined') {
         $.each(ev, function(prop,val) {
             $.each(val, function(prop2,val2) {
