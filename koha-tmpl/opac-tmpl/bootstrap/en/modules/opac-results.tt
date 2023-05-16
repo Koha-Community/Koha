@@ -9,7 +9,6 @@
 
 [% IF firstPage %]
      [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
-     [% SET RecordedBooksEnabled = Koha.Preference('RecordedBooksLibraryID') && Koha.Preference('RecordedBooksClientSecret') %]
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -582,7 +581,6 @@
         <script src="https://ltfl.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID | html %]&amp;systype=koha"></script>
     [% END %]
     [% IF ( OverDriveEnabled ) %][% Asset.js("js/overdrive.js") | $raw %][% END %]
-    [% IF ( RecordedBooksEnabled ) %][% Asset.js("js/recordedbooks.js") | $raw %][% END %]
     [% Asset.js("js/authtoresults.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% IF ( OpacHighlightedWords ) %]
@@ -836,23 +834,6 @@
                         }
                     } );
                 [% END # /IF OverDriveEnabled %]
-                [% IF ( RecordedBooksEnabled ) %]
-                    var $recordedbooks_results = $( '<div id="recordedbooks-results">' + MSG_SEARCHING.format('RecordedBooks') + ' <img class="throbber" src="[% interface | html %]/[% theme | html %]/images/spinner-small.gif" /></div>' );
-                    $( '#numresults' ) .after( $recordedbooks_results );
-                    KOHA.RecordedBooks.search( querystring, [% OPACnumSearchResults || "null" | html %], null, function( data ) {
-                        if ( data.error ) {
-                            $recordedbooks_results.html( MSG_ERROR_SEARCHING_COLLECTION.format('RecordedBooks')  + ': ' + data.error);
-                            return;
-                        }
-
-                        // data.total can be either 42 or "60+"
-                        if ( typeof(data.total) === 'string' && data.total.charAt(0) > 0 || typeof(data.total) === 'number' && data.total > 0 ) {
-                            $recordedbooks_results.html( '<a href="/cgi-bin/koha/opac-recordedbooks-search.pl?q=' + encodeURIComponent( querystring ) + '">' + MSG_RESULTS_FOUND_IN_COLLECTION.format(data.total, 'RecordedBooks') + '</a>' );
-                        } else {
-                            $recordedbooks_results.remove();
-                        }
-                    } );
-                [% END # /IF RecordedBooksEnabled %]
                 [% IF ( OpenLibrarySearch ) %]
                     var $openlibrary_results = $( '<div id="openlibrary-results">' + MSG_SEARCHING.format('OpenLibrary' ) + ' <img class="throbber" src="[% interface | html %]/[% theme | html %]/images/spinner-small.gif" /></div>' );
                     $( '#numresults' ) .after( $openlibrary_results );
