@@ -699,7 +699,9 @@
         </ol>
     </fieldset>
 
+[% IF additional_fields.size %]
     [% INCLUDE 'additional-fields-entry.inc' available = additional_fields values = additional_field_values %]
+[% END %]
 
     <fieldset class="action">
         <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
