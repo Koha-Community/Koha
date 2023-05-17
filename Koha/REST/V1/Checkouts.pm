@@ -161,7 +161,7 @@ sub get_availability {
       $c->_check_availability( $patron, $item );
 
     my $confirm_keys = join( ":", sort keys %{$confirmation} );
-    $confirm_keys = $user->id . ":" . $item->id . ":" . $confirm_keys;
+    $confirm_keys = $user ? $user->id : '' . ":" . $item->id . ":" . $confirm_keys;
     my $token = Koha::Token->new->generate_jwt( { id => $confirm_keys } );
 
     my $response = {
