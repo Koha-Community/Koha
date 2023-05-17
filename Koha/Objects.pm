@@ -233,13 +233,20 @@ sub update {
 =head3 filter_by_last_update
 
 my $filtered_objects = $objects->filter_by_last_update({
-    days => $x, from => $date1, to => $date2, days_inclusive => 1, datetime => 1,
+    days => $days, from => $date1, to => $date2, days_inclusive => 1,
+    older_than => $days, younger_than => $days,
+    datetime => 1,
 });
 
-Note: days are exclusive by default (will be inclusive if days_inclusive is passed and set).
-The parameters from and to are inclusive. They can be DateTime objects or date strings.
-You should pass at least one of the parameters days, from or to.
+You should pass at least one of the parameters: days, from, to, older_than,
+younger_than. Make sure that they do not conflict with each other to get
+meaningful results.
+By default, from and to are inclusive and days is exclusive (unless you
+passed the optional days_inclusive parameter).
+By nature older_than and younger_than are exclusive. This cannot be changed.
 The optional parameter datetime allows datetime comparison.
+
+The from and to parameters can be DateTime objects or date strings.
 
 =cut
 
@@ -248,18 +255,20 @@ sub filter_by_last_update {
     my $timestamp_column_name = $params->{timestamp_column_name} || 'timestamp';
     my $days_inclusive = $params->{days_inclusive} || 0;
     my $conditions;
-    Koha::Exceptions::MissingParameter->throw(
-        "Missing mandatory parameter: days or from or to")
-      unless exists $params->{days}
-          or exists $params->{from}
-          or exists $params->{to};
+    Koha::Exceptions::MissingParameter->throw("Please pass: days|from|to|older_than|younger_than")
+        unless grep { exists $params->{$_} } qw/days from to older_than younger_than/;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $method =  $params->{datetime} ? 'format_datetime' : 'format_date';
-    if ( exists $params->{days} ) {
+    foreach my $p ( qw/days older_than younger_than/  ) {
+        next if !exists $params->{$p};
         my $dt = Koha::DateUtils::dt_from_string();
-        my $operator = $days_inclusive ? '<=' : '<';
-        $conditions->{$operator} = $dtf->$method( $dt->subtract( days => $params->{days} ) );
+        my $operator = $p eq 'days' && $days_inclusive
+            ? '<='
+            : $p eq 'younger_than'
+            ? '>'
+            : '<';
+        $conditions->{$operator} = $dtf->$method( $dt->subtract( days => $params->{$p} ) );
     }
     if ( exists $params->{from} ) {
         my $from = ref($params->{from}) ? $params->{from} : dt_from_string($params->{from});
