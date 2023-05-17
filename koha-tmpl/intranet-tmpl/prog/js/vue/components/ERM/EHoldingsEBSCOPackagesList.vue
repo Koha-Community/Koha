@@ -168,7 +168,7 @@ export default {
             this.show_table = true
             this.local_count_packages = null
 
-            if (this.config.ERMProviders.includes("local")) {
+            if (this.config.settings.ERMProviders.includes("local")) {
                 const client = APIClient.erm
                 const query = this.filters
                     ? {
