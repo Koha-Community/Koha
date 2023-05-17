@@ -110,11 +110,12 @@ Controller function that handles retrieval of Checkout availability
 
 sub get_availability {
     my $c = shift->openapi->valid_input or return;
+    my $user = $c->stash('koha.user');
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
     my $inprocess = 0; # What does this do?
     my $ignore_reserves = 0; # Don't ignore reserves
-    my $item   = Koha::Items->find( $c->validation->param('item_id') );
+    my $item   = Koha::Items->find( $c->param('item_id') );
     my $params = {
         item => $item
     };
@@ -123,9 +124,9 @@ sub get_availability {
       C4::Circulation::CanBookBeIssued( $patron, undef, undef, $inprocess, $ignore_reserves,
         $params );
 
-    my $confirm_keys = join( /:/, sort keys %{$confirmation} );
-    my $tokenizer = Koha::Token->new;
-    my $token = $tokeniser->generate_jwt({ id => $confirm_keys });
+    my $confirm_keys = join( ":", sort keys %{$confirmation} );
+    $confirm_keys = $user->id . ":" . $item->id . ":" . $confirm_keys;
+    my $token = Koha::Token->new->generate_jwt( { id => $confirm_keys } );
 
     my $response = {
         blockers           => $impossible,
@@ -145,8 +146,9 @@ Add a new checkout
 
 sub add {
     my $c = shift->openapi->valid_input or return;
+    my $user = $c->stash('koha.user');
 
-    my $body      = $c->validation->param('body');
+    my $body      = $c->req->json;
     my $item_id   = $body->{item_id};
     my $patron_id = $body->{patron_id};
     my $onsite    = $body->{onsite_checkout};
@@ -205,10 +207,10 @@ sub add {
 
             # Check for existance of confirmation token
             # and if exists check validity
-            if ( my $token = $c->validation->param('confirmation') ) {
-                my $confirm_keys = join( /:/, sort keys %{$confirmation} );
-                my $tokenizer    = Koha::Token->new;
-                $confirmed = $tokenizer->check_jwt(
+            if ( my $token = $c->param('confirmation') ) {
+                my $confirm_keys = join( ":", sort keys %{$confirmation} );
+                $confirm_keys = $user->id . ":" . $item->id . ":" . $confirm_keys;
+                $confirmed = Koha::Token->new->check_jwt(
                     { id => $confirm_keys, token => $token } );
             }
 

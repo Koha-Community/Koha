@@ -30,6 +30,7 @@ use C4::Circulation qw( AddIssue AddReturn CanBookBeIssued );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Token;
 
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -237,7 +238,7 @@ $schema->storage->txn_rollback;
 
 subtest 'get_availability' => sub {
 
-    plan tests => 27;
+    plan tests => 28;
 
     $schema->storage->txn_begin;
     my $librarian = $builder->build_object(
@@ -294,7 +295,7 @@ subtest 'get_availability' => sub {
 "//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
     )->status_is(200)->json_is( '/blockers' => {} )
       ->json_is( '/confirms'           => {} )->json_is( '/warnings' => {} )
-      ->json_is( '/confirmation_token' => undef );
+      ->json_has( '/confirmation_token');
 
     # Blocked
     %issuingimpossible = ( GNA => 1 );
@@ -302,7 +303,7 @@ subtest 'get_availability' => sub {
 "//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
     )->status_is(200)->json_is( '/blockers' => { GNA => 1 } )
       ->json_is( '/confirms'           => {} )->json_is( '/warnings' => {} )
-      ->json_is( '/confirmation_token' => undef );
+      ->json_has( '/confirmation_token');
     %issuingimpossible = ();
 
     # Warnings/Info
@@ -314,18 +315,31 @@ subtest 'get_availability' => sub {
       ->json_is( '/confirms' => {} )
       ->json_is( '/warnings' =>
           { alert1 => "this is an alert", message1 => "this is a message" } )
-      ->json_is( '/confirmation_token' => undef );
+      ->json_has( '/confirmation_token');
     %alerts   = ();
     %messages = ();
 
     # Needs confirm
     %needsconfirmation = ( confirm1 => 1, confirm2 => 'please' );
+    my $token = Koha::Token->new->generate_jwt( { id => $librarian->id . ":" . $item1_id . ":confirm1:confirm2:please" });
     $t->get_ok(
 "//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
     )->status_is(200)->json_is( '/blockers' => {} )
       ->json_is( '/confirms' => { confirm1 => 1, confirm2 => 'please' } )
       ->json_is( '/warnings' => {} )
-      ->json_is( '/confirmation_token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25maXJtMSI6MSwiY29uZmlybTIiOjF9.4QBpITwnIGOAfohyKjaFDoeBWnGmQTdyJrPn9pavArw' );
+      ->json_has( '/confirmation_token');
+    my $confirmation_token = $t->tx->res->json('/confirmation_token');
+    ok(
+        Koha::Token->new->check_jwt(
+            {
+                id => $librarian->id . ":"
+                  . $item1_id
+                  . ":confirm1:confirm2:please",
+                token => $confirmation_token
+            }
+        ),
+        'Correct token'
+    );
 
     $schema->storage->txn_rollback;
 };
@@ -397,7 +411,13 @@ subtest 'add checkout' => sub {
         }
     )->status_is(412);
 
-    my $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25maXJtMSI6MSwiY29uZmlybTIiOjF9.4QBpITwnIGOAfohyKjaFDoeBWnGmQTdyJrPn9pavArw";
+    my $token = Koha::Token->new->generate_jwt(
+        {
+                id => $librarian->id . ":"
+              . $item1_id
+              . ":confirm1:confirm2:please"
+        }
+    );
     $t->post_ok(
         "//$userid:$password@/api/v1/checkouts?confirmation=$token" => json => {
             item_id            => $item1_id,
