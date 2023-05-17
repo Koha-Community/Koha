@@ -16,7 +16,7 @@ return {
             say $out "Added new index on borrowers.userid";
         }
         unless ( index_exists( 'borrowers', 'middle_name_idx' ) ) {
-            $dbh->do(q{CREATE INDEX middle_name_idx ON borrowers ( middle_name )});
+            $dbh->do(q{CREATE INDEX middle_name_idx ON borrowers ( middle_name(768) )});
             say $out "Added new index on borrowers.midddle_name";
         }
     },
