@@ -22,18 +22,16 @@ use FindBin();
 use Data::Dumper qw( Dumper );
 use Test::More tests => 2;
 
-my $vue_dir = "$FindBin::Bin/../koha-tmpl/intranet-tmpl/prog/js/vue";
+my @vue_files;
+push @vue_files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/js/vue/*.vue'`;
+my @js_files;
+push @js_files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/js/vue/*.js'`;
+push @js_files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/js/vue/*.ts'`;
+push @js_files, `git ls-files 't/cypress/integration/*.ts'`;
 
-my @files;
-sub wanted_vue {
-    my $name = $File::Find::name;
-    push @files, $name
-        if $name =~ /\.vue$/;
-}
-find({ wanted => \&wanted_vue, no_chdir => 1 }, $vue_dir);
 
 my @not_tidy;
-foreach my $filepath (@files) {
+foreach my $filepath (@vue_files) {
     chomp $filepath;
     my $tidy = qx{yarn --silent run prettier --trailing-comma es5 --semi false --arrow-parens avoid $filepath};
     my $content = read_file $filepath;
@@ -44,18 +42,8 @@ foreach my $filepath (@files) {
 
 is(scalar(@not_tidy), 0, 'No .vue file should be messy') or diag Dumper \@not_tidy;
 
-@files = ();
-sub wanted_js_ts {
-    my $name = $File::Find::name;
-    push @files, $name
-        if ( $name =~ /\.js$/
-        || $name =~ /\.ts$/ )
-        && $name !~ m{koha-tmpl/intranet-tmpl/prog/js/vue/dist}; # Exclude dist
-}
-find({ wanted => \&wanted_js_ts, no_chdir => 1 }, $vue_dir);
-
 @not_tidy = ();
-foreach my $filepath (@files) {
+foreach my $filepath (@js_files) {
     chomp $filepath;
     my $tidy = qx{yarn --silent run prettier --trailing-comma es5 --arrow-parens avoid $filepath};
     my $content = read_file $filepath;
