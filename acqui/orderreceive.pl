@@ -177,6 +177,7 @@ $template->param(
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
     gst_values            => \@gst_values,
+    vendor                => $bookseller,
 );
 
 my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
