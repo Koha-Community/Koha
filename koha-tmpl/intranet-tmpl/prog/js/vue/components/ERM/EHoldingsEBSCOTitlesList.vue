@@ -179,7 +179,7 @@ export default {
                         "/api/v1/erm/eholdings/ebsco/titles"
                     )
                 }
-                if (this.config.ERMProviders.includes("local")) {
+                if (this.config.settings.ERMProviders.includes("local")) {
                     const client = APIClient.erm
 
                     const q = this.filters

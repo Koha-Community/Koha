@@ -2,9 +2,11 @@ import { defineStore } from "pinia";
 
 export const useERMStore = defineStore("erm", {
     state: () => ({
-        sysprefs: {
-            ERMModule: false,
-            ERMProviders: [],
+        config: {
+            settings: {
+                ERMModule: false,
+                ERMProviders: [],
+            },
         },
     }),
 });
