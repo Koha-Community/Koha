@@ -266,15 +266,42 @@
                                     <li>
                                         <label for="bookfund" class="required">Fund: </label>
                                         <select id="bookfund" name="bookfund">
-                                            <option value=""></option>
-                                            [% FOREACH period IN budget_loop %]
-                                            <optgroup label="[% period.description | html %]">
-                                            [% FOREACH fund IN period.funds %]
-                                                <option value="[% fund.b_id | html %]">[% fund.b_txt | html %]</option>
+                                            <optgroup label="Current">
+                                                <option id="selected_bookfund" selected="selected"></option>
+                                            </optgroup>
+                                        [% FOREACH budget_period_id IN budget_loops.keys %]
+                                            [% SET budget_period = budget_loops.$budget_period_id %]
+                                            [% IF budget_period.active %]
+                                                <optgroup label="[% budget_period.description | html %]">
+                                            [% ELSE %]
+                                                <optgroup class="inactive_budget" label="[% budget_period.description | html %] (Inactive)">
+                                            [% END %]
+                                            [% FOREACH budget_loo IN budget_period.funds %]
+                                            [% level_indent_cnt = 0 %]
+                                                [% level_indent = "" %]
+                                                [% WHILE level_indent_cnt < budget_loo.b_level %]
+                                                    [% level_indent = level_indent _ " -- " %]
+                                                    [% level_indent_cnt = level_indent_cnt +1 %]
+                                                [% END %]
+
+                                                [% IF ( budget_loo.b_sel ) %]
+                                                    [% active_count = 0 #select no other fund %]
+                                                    <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                                [% ELSIF active_count==1 && budget_loo.b_active %]
+                                                    <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                                [% ELSE %]
+                                                    [% bdgclass=budget_loo.b_active? "": "inactive_budget" | html %]
+                                                    <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                                [% END %]
+                                                    [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                                                </option>
                                             [% END %]
                                             </optgroup>
-                                            [% END %]
+                                        [% END %]
                                         </select>
+                                        <span class="required">Required</span>
+                                        <label for="showallbudgets" style="float:none;">&nbsp;Show inactive:</label>
+                                        <input type="checkbox" id="showallbudgets" />
                                     </li>
                                     <li>
                                         <label>&nbsp;</label>
@@ -492,6 +519,8 @@
         var invoice_id = "[% invoiceid | html %]";
 
         $(document).ready(function(){
+            // keep a copy for re-rendering
+            var $funds_tree = $('#bookfund').html();
             var base_query = { "order_id": {"in": [[% multiple_orders | html %]]}};
             var pending_orders_url = "/api/v1/acquisitions/orders?only_active=1";
             var options = {
@@ -1059,7 +1088,7 @@
                                     .filter(function(name){
                                         return name
                                     })
-                                    .join(', ')+' (<a href="http://localhost:8081/cgi-bin/koha/suggestion/suggestion.pl?suggestionid='+row.biblio.suggestions[0].suggestionid+'&op=show">'+SUGGESTION.format(row.biblio.suggestions[0].suggestionid)+'</a>)'
+                                    .join(', ')+' (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid='+row.biblio.suggestions[0].suggestion_id+'&op=show">'+SUGGESTION.format(row.biblio.suggestions[0].suggestion_id)+'</a>)'
                             );
                     } else {
                         $("#biblio_suggestion_suggester").parent().hide();
@@ -1084,10 +1113,16 @@
 
                 var effective_create_items = row.basket.create_items || AcqCreateItem;
                 $("#datereceived").val(row.date_received||$date(new Date().toISOString()));
-                $("#bookfund option[value='']").html(FUND_KEEP.format(row.fund.budget.budget_period_description, row.fund.name));
-                if(row.fund_id != row.fund.fund_id) {
+                // restore the full tree
+                $("#bookfund").html($funds_tree);
+                $("#selected_bookfund")
+                    .html(FUND_KEEP.format(row.fund.budget.budget_period_description, row.fund.name))
+                    .attr( 'data-sort1-authcat', row.fund.sort1_authcat )
+                    .attr( 'data-sort2-authcat', row.fund.sort2_authcat );
+                if (row.fund_id != row.fund.fund_id) {
                     $("#bookfund").val(row.fund_id);
                 }
+                $("#bookfund").select2({ width: '100%' });
                 $("#current-fund").html(FUNC_CUR.format(row.fund.budget.budget_period_description, row.fund.name));
                 $("#creator").html([row.creator.surname, row.creator.firstname].filter(function(name){return name}).join(', ')+" ("+row.creator.patron_id+')')
                 $("#quantity_to_receive").val(row.quantity).prop('readonly', !row.subscription_id);
@@ -1181,6 +1216,18 @@
                     $("#invoice_currency").val(active_currency);
                     $("#invoice_unitprice").val('');
                 }
+
+                disabledBudgetsCopy = $('#bookfund').html();
+                $('#bookfund .inactive_budget').remove();
+
+                $('#showallbudgets').click(function() {
+                    if ($(this).is(":checked")) {
+                        $('#bookfund').html(disabledBudgetsCopy); //Puts back all the funds
+                    }
+                    else {
+                        $('#bookfund .inactive_budget').remove();
+                    }
+                });
                 set_modal_buttons();
             };
 
