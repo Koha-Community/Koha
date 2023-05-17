@@ -1332,11 +1332,10 @@
         }
 
         [% IF StaffDetailItemSelection %]
-            function itemSelectionBuildDeleteLink(div) {
-                var itemnumbers = new Array();
-                $("input[name='itemnumber'][type='checkbox']:checked", div).each(function() {
-                    itemnumbers.push($(this).val());
-                });
+
+            let items_selection = {};
+            function itemSelectionBuildDeleteLink(tab_id) {
+                var itemnumbers = items_selection[tab_id];
                 if (itemnumbers.length > 0) {
                     var url = '/cgi-bin/koha/tools/batchMod.pl?op=show&del=1';
                     url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
@@ -1349,11 +1348,8 @@
                 return true
             }
 
-            function itemSelectionBuildModifyLink(div) {
-                var itemnumbers = new Array();
-                $("input[name='itemnumber'][type='checkbox']:checked", div).each(function() {
-                    itemnumbers.push($(this).val());
-                });
+            function itemSelectionBuildModifyLink(tab_id) {
+                var itemnumbers = items_selection[tab_id];
                 if (itemnumbers.length > 0) {
                     var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
                     url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
@@ -1366,10 +1362,10 @@
                 return true;
             }
 
-            function itemSelectionBuildActionLinks(tab) {
-                var div = $("#" + tab);
-                var delete_link_ok = itemSelectionBuildDeleteLink(div);
-                var modify_link_ok = itemSelectionBuildModifyLink(div);
+            function itemSelectionBuildActionLinks(tab_id) {
+                var delete_link_ok = itemSelectionBuildDeleteLink(tab_id);
+                var modify_link_ok = itemSelectionBuildModifyLink(tab_id);
+                var div = $("#" + tab_id);
                 if (modify_link_ok || delete_link_ok) {
                     $('.itemselection_actions', div).show();
                 } else {
@@ -1378,10 +1374,6 @@
             }
 
             $(document).ready(function() {
-                $('table.items_table').each(function() {
-                    var div = $(this).parent().attr("id");
-                    itemSelectionBuildActionLinks(div);
-                });
 
                 $(".SelectAll").on("click",function(e){
                     e.preventDefault();
@@ -2220,6 +2212,9 @@
             [% IF hidden_count %]
                 default_filters.lost_status = "0";
             [% END %]
+            if ( !items_selection.hasOwnProperty(tab_id) ){
+                items_selection[tab_id] = [];
+            }
             var items_table = $("#" + tab_id + '_table').kohaTable({
                 ajax: { url: item_table_url },
                 order: [[ 0, "asc" ]],
@@ -2234,7 +2229,11 @@
                     orderable: false,
                     render: function (data, type, row, meta) {
                         if ( can_edit_items_from[row.holding_library_id] ){
-                            return '<input type="checkbox" value="%s" name="itemnumber" />'.format(row.item_id);
+                            if ( items_selection[tab_id].includes(row.item_id) ) {
+                                return '<input type="checkbox" value="%s" name="itemnumber" checked />'.format(row.item_id);
+                            } else {
+                                return '<input type="checkbox" value="%s" name="itemnumber" />'.format(row.item_id);
+                            }
                         } else {
                             return ''
                         }
@@ -2686,11 +2685,28 @@
                     });
                     itemSelectionBuildActionLinks(tab_id);
                 },
+                [% IF StaffDetailItemSelection %]
                 drawCallback: function(settings){
-                    $(this).find("td:first input[name='itemnumber'][type='checkbox']").on("change", function(){
-                        itemSelectionBuildActionLinks(tab_id);
-                    });
+                    var api = new $.fn.dataTable.Api(settings)
+                    $.each(
+                        $(this).find("tbody tr td:first-child"),
+                        function (index, e) {
+                            let tr = $(this).parent()
+                            let row = api.row(tr).data()
+                            if (!row) return // Happen if the table is empty
+                            $(this).find("input[name='itemnumber'][type='checkbox']").on("change", function(){
+                                let itemnumber = parseInt($(this).val());
+                                if( $(this).prop("checked") ){
+                                    items_selection[tab_id].push(itemnumber);
+                                } else {
+                                    items_selection[tab_id] = items_selection[tab_id].filter( id => id != itemnumber );
+                                }
+                                itemSelectionBuildActionLinks(tab_id);
+                            });
+                        }
+                    );
                 },
+                [% END %]
                 ...dt_options,
             },
             items_table_settings[tab_id],
