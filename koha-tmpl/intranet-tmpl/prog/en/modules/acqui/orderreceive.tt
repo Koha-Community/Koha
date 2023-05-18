@@ -10,6 +10,48 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Receipt summary for : [% name | html %] [% IF ( invoice ) %]invoice, [% invoice | html %][% END %] &rsaquo; Acquisitions &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
+    <style>
+        @media (min-width: 1200px) {
+            #receive-modal, #receive-modal .modal-content {
+                width: 98%;
+            }
+        }
+        #receive-modal .modal-body {
+            background-color: #F3F4F4;
+        }
+
+        .lbl {
+            font-weight: 700;
+            text-align: right;
+        }
+        .modal-body ol {
+            list-style-type: none;
+        }
+
+        .modal-body ol li {
+            list-style-type: none;
+            padding-bottom: 1em;
+            width: 100%;
+        }
+
+        .modal-body h4 {
+            margin-left: 1em;
+            padding: .2em .5em;
+            margin-bottom: 17px;
+        }
+
+        .modal-body label {
+            margin-right: 1em;
+            text-align: right;
+            width: 11em;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .modal-body textarea {
+            vertical-align: text-top;
+        }
+    </style>
 </head>
 
 <body id="acq_orderreceive" class="acq">
@@ -46,7 +88,7 @@
     <table id="multiple_orders" class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Order</td>
+                <th>Order</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>ISBN</th>
@@ -63,7 +105,9 @@
             <button class="save btn btn-primary" disabled>Confirm</button>
             <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
         </fieldset>
-        <div id="jobpanel"><div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+        <div id="jobpanel">
+            <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+        </div>
     </div>
 
     <div class="modal fade" id="order_edit" tabindex="-1" role="dialog" aria-labelledby="Order edit">
@@ -75,7 +119,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="hide" id="loading">Loading ...</div>
-                    <div id="modal-order-main row">
+                    <div id="modal-order-main" class="row">
                         <!--ul>
                             <li><a href="#info-panel">Info</a></li>
                             <li><a href="#accounting-panel">Accounting</a></li>
@@ -357,48 +401,6 @@
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'format_price.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
-    <style>
-        @media (min-width: 1200px) {
-            #receive-modal, #receive-modal .modal-content {
-                width: 98%;
-            }
-        }
-        #receive-modal .modal-body {
-            background-color: #F3F4F4;
-        }
-
-        .lbl {
-            font-weight: 700;
-            text-align: right;
-        }
-        .modal-body ol {
-            list-style-type: none;
-        }
-
-        .modal-body ol li {
-            list-style-type: none;
-            padding-bottom: 1em;
-            width: 100%;
-        }
-
-        .modal-body h4 {
-            margin-left: 1em;
-            padding: .2em .5em;
-            margin-bottom: 17px;
-        }
-
-        .modal-body label {
-            margin-right: 1em;
-            text-align: right;
-            width: 11em;
-            display: inline-block;
-            font-weight: 700;
-        }
-
-        .modal-body textarea {
-            vertical-align: text-top;
-        }
-    </style>
     <script>
         function display_string(key, strings, fallback) {
             if ( strings.hasOwnProperty(key) ) {
