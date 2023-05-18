@@ -33,7 +33,7 @@
             [% END %]
 
             [% IF method != 'list' %]
-                <li class="breadcrumb-item active">
+                <li class="breadcrumb-item">
                     <a href="/cgi-bin/koha/opac-illrequests.pl">Interlibrary loan requests</a>
                 </li>
                 [% IF method == 'create' %]
@@ -43,6 +43,10 @@
                 [% ELSIF method == 'view' %]
                     <li class="breadcrumb-item active">
                         <a href="#" aria-current="page">View interlibrary loan request</a>
+                    </li>
+                [% ELSIF method == 'typedisclaimer' %]
+                    <li class="breadcrumb-item active">
+                        <a href="#" aria-current="page">ILL request disclaimer</a>
                     </li>
                 [% END %]
             [% ELSE %]
@@ -267,7 +271,7 @@
                                     <input type="hidden" name="checked_availability" value="1">
                                     <div id="continue-request-row" class="alert">
                                         If you can't find what you are looking for, you can
-                                        <button class="button" type="submit">continue creating your request</button> or
+                                        <button class="button" class="btn btn-primary" type="submit">continue creating your request</button> or
                                         <a href="/cgi-bin/koha/opac-illrequests.pl">cancel your request</a>
                                     </div>
                                 </form>
@@ -277,9 +281,8 @@
                                 [% END %]
                             </div> <!-- /#illrequestupdate-form -->
                         [% ELSIF method == 'typedisclaimer' %]
-                            <h1>Request type disclaimer</h1>
+                            <h1>ILL request disclaimer</h1>
                             <div id="results" class="page-section">
-                                <h3>Displaying typedisclaimer results</h3>
                                 [% INCLUDE messages %]
                                 <form method="post" id="typedisclaimer-form">
                                     <fieldset class="rows">
@@ -310,7 +313,8 @@
                                         [% i = i + 1 %]
                                         [% END %]
                                         <input type="hidden" name="type_disclaimer_submitted" value="1">
-                                        <input type="submit" value="Next" />
+                                        <input type="submit" class="btn btn-primary" value="Submit" />
+                                        <a class="action" href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a>
                                     </fieldset>
                                 </form>
                             </div>

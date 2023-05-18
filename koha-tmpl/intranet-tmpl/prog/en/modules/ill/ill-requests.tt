@@ -37,6 +37,13 @@
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Manage request [% request.id_prefix _ request.illrequest_id | html %]</span>
             [% END %]
+        [% ELSIF query_type == 'typedisclaimer' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Request type disclaimer</span>
+            [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>ILL requests</span>
@@ -846,7 +853,8 @@
                                 <input type="hidden" name="method" value="create" />
                                 <input type="hidden" name="stage" value="form">
                                 <input type="hidden" name="type_disclaimer_submitted" value="1">
-                                <input type="submit" value="Next" />
+                                <input type="submit" value="Submit" />
+                                <a class="cancel" href="ill-requests.pl">Cancel</a>
                             </fieldset>
                         </form>
                     </div>
