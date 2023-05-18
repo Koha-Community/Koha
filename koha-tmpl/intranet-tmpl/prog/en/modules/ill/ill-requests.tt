@@ -598,91 +598,87 @@
                             ILL request log
                         </a>
                     </div>
-                    <div class="ill-view-panel panel panel-default">
-                        <div class="panel-heading">
-                            <h3>Request details</h3>
-                        </div>
-                        <div class="panel-body">
-                            <h4>Details from library</h4>
-                            <div class="rows">
-                                <ol>
-                                    <li class="orderid">
-                                        <span class="label orderid">Order ID:</span>
-                                        [% IF request.orderid %][% request.orderid | html %][% ELSE %]<span>N/A</span>[% END %]
-                                    </li>
-                                    <li class="borrowernumber">
-                                        <span class="label borrowernumber">Patron:</span>
-                                        [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
-                                        <a href="[% borrowerlink | url %]" title="View borrower details">
-                                        [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
-                                        </a>
-                                    </li>
+                    <div class="page-section">
+                        <h3>Request details</h3>
+                        <h4>Details from library</h4>
+                        <div class="rows">
+                            <ol>
+                                <li class="orderid">
+                                    <span class="label orderid">Order ID:</span>
+                                    [% IF request.orderid %][% request.orderid | html %][% ELSE %]<span>N/A</span>[% END %]
+                                </li>
+                                <li class="borrowernumber">
+                                    <span class="label borrowernumber">Patron:</span>
+                                    [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
+                                    <a href="[% borrowerlink | url %]" title="View borrower details">
+                                    [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
+                                    </a>
+                                </li>
 
-                                    <li class="biblio_id">
-                                        <span class="label biblio_id">Bibliographic record ID:</span>
-                                        [% IF request.biblio_id %]
-                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% request.biblio_id | uri %]">[% request.biblio_id | html %]</a>
-                                        [% ELSE %]
-                                            <span>N/A</span>
-                                        [% END %]
-                                    </li>
-                                    <li class="branchcode">
-                                        <span class="label branchcode">Library:</span>
-                                        [% Branches.GetName(request.branchcode) | html %]
-                                    </li>
-                                    <li class="status">
-                                        <span class="label status">Status:</span>
-                                        [% IF request.statusalias %]
-                                            [% request.statusalias.lib | html %]
-                                        [% ELSE %]
-                                            [% request.capabilities.$req_status.name | html%]
-                                            [% IF request.requested_partners.length > 0 %]
-                                                ([% request.requested_partners | html %])
-                                            [% END %]
-                                        [% END %]
-                                    </li>
-                                    <li class="updated">
-                                        <span class="label updated">Last updated:</span>
-                                        [% request.updated | $KohaDates  with_hours => 1 %]
-                                    </li>
-                                    <li class="medium">
-                                        <span class="label medium">Request type:</span>
-                                        [% type = request.get_type %]
-                                        [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
-                                    </li>
-                                    <li class="cost">
-                                        <span class="label cost">Cost:</span>
-                                        [% IF request.cost %][% request.cost | $Price %][% ELSE %]<span>N/A</span>[% END %]
-                                    </li>
-                                    <li class="price_paid">
-                                        <span class="label price_paid">Price paid:</span>
-                                        [% IF request.price_paid %][% request.price_paid | $Price %][% ELSE %]<span>N/A</span>[% END %]
-                                    </li>
-                                    <li class="req_id">
-                                        <span class="label req_id">Request number:</span>
-                                        [% request.id_prefix _ request.illrequest_id | html %]
-                                    </li>
-                                    <li class="notesstaff">
-                                        <span class="label notes_staff">Staff notes:</span>
-                                        <p>[% request.notesstaff | html %]</p>
-                                    </li>
-                                    <li class="notesopac">
-                                        <span class="label notes_opac">Notes:</span>
-                                        <p>[% request.notesopac | html %]</p>
-                                    </li>
-                                </ol>
-                            </div>
-                            <div class="rows">
-                                <h4>Details from supplier ([% request.backend | html %])</h4>
-                                <ol>
-                                    [% FOREACH meta IN request.metadata %]
-                                        <li class="requestmeta-[% meta.key.replace('\s','_') | html %]">
-                                            <span class="label">[% meta.key | html %]:</span>
-                                            [% meta.value | html %]
-                                        </li>
+                                <li class="biblio_id">
+                                    <span class="label biblio_id">Bibliographic record ID:</span>
+                                    [% IF request.biblio_id %]
+                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% request.biblio_id | uri %]">[% request.biblio_id | html %]</a>
+                                    [% ELSE %]
+                                        <span>N/A</span>
                                     [% END %]
-                                </ol>
-                            </div>
+                                </li>
+                                <li class="branchcode">
+                                    <span class="label branchcode">Library:</span>
+                                    [% Branches.GetName(request.branchcode) | html %]
+                                </li>
+                                <li class="status">
+                                    <span class="label status">Status:</span>
+                                    [% IF request.statusalias %]
+                                        [% request.statusalias.lib | html %]
+                                    [% ELSE %]
+                                        [% request.capabilities.$req_status.name | html%]
+                                        [% IF request.requested_partners.length > 0 %]
+                                            ([% request.requested_partners | html %])
+                                        [% END %]
+                                    [% END %]
+                                </li>
+                                <li class="updated">
+                                    <span class="label updated">Last updated:</span>
+                                    [% request.updated | $KohaDates  with_hours => 1 %]
+                                </li>
+                                <li class="medium">
+                                    <span class="label medium">Request type:</span>
+                                    [% type = request.get_type %]
+                                    [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
+                                </li>
+                                <li class="cost">
+                                    <span class="label cost">Cost:</span>
+                                    [% IF request.cost %][% request.cost | $Price %][% ELSE %]<span>N/A</span>[% END %]
+                                </li>
+                                <li class="price_paid">
+                                    <span class="label price_paid">Price paid:</span>
+                                    [% IF request.price_paid %][% request.price_paid | $Price %][% ELSE %]<span>N/A</span>[% END %]
+                                </li>
+                                <li class="req_id">
+                                    <span class="label req_id">Request number:</span>
+                                    [% request.id_prefix _ request.illrequest_id | html %]
+                                </li>
+                                <li class="notesstaff">
+                                    <span class="label notes_staff">Staff notes:</span>
+                                    <p>[% request.notesstaff | html %]</p>
+                                </li>
+                                <li class="notesopac">
+                                    <span class="label notes_opac">Notes:</span>
+                                    <p>[% request.notesopac | html %]</p>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="rows">
+                            <h4>Details from supplier ([% request.backend | html %])</h4>
+                            <ol>
+                                [% FOREACH meta IN request.metadata %]
+                                    <li class="requestmeta-[% meta.key.replace('\s','_') | html %]">
+                                        <span class="label">[% meta.key | html %]:</span>
+                                        [% meta.value | html %]
+                                    </li>
+                                [% END %]
+                            </ol>
                         </div>
                     </div>
 
@@ -734,45 +730,41 @@
                         </div>
                     </div>
 
-                    <div class="ill-view-panel panel panel-default">
-                        <div class="panel-heading">
-                            <h3>[% request.illcomments.count | html %] comments</h3>
-                        </div>
-                        <div class="panel-body">
-                            [% IF request.illcomments.count && request.illcomments.count > 0 %]
-                                [% FOREACH comment IN request.illcomments %]
-                                    <div class="rows comment_[% comment.patron.categorycode | html %]">
-                                    <h5>Comment by:
-                                    <a href="[% borrowerlink | url %]" title="View borrower details">
-                                    [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
-                                    [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
-                                    <p>[% comment.comment | html %]</p>
-                                    </div>
-                                [% END %]
-                            [% END %]
-                                <div class="rows">
-                                    <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
-                                    <div id="addcomment" class="content_hidden">
-                                        <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
-                                            <input type="hidden" value="save_comment" name="method">
-                                            <input type="hidden" value="[% csrf_token | html %]" name="csrf_token">
-                                            <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
-                                            <fieldset class="rows">
-                                                <ol>
-                                                    <li>
-                                                        <label class="required" for="comment">Comment: </label>
-                                                        <textarea class="required" required="required" cols="80" rows="10" id="comment" name="comment"></textarea>
-                                                        <span class="required">Required</span>
-                                                    </li>
-                                                </ol>
-                                            </fieldset>
-                                            <fieldset class="action">
-                                                <input type="submit" class="btn btn-primary" value="Submit" />
-                                            </fieldset>
-                                        </form>
-                                    </div>
+                    <div class="page-section">
+                        <h3>[% request.illcomments.count | html %] comments</h3>
+                        [% IF request.illcomments.count && request.illcomments.count > 0 %]
+                            [% FOREACH comment IN request.illcomments %]
+                                <div class="rows comment_[% comment.patron.categorycode | html %]">
+                                <h5>Comment by:
+                                <a href="[% borrowerlink | url %]" title="View borrower details">
+                                [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
+                                [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
+                                <p>[% comment.comment | html %]</p>
                                 </div>
-                        </div>
+                            [% END %]
+                        [% END %]
+                            <div class="rows">
+                                <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
+                                <div id="addcomment" class="content_hidden">
+                                    <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
+                                        <input type="hidden" value="save_comment" name="method">
+                                        <input type="hidden" value="[% csrf_token | html %]" name="csrf_token">
+                                        <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
+                                        <fieldset class="rows">
+                                            <ol>
+                                                <li>
+                                                    <label class="required" for="comment">Comment: </label>
+                                                    <textarea class="required" required="required" cols="80" rows="10" id="comment" name="comment"></textarea>
+                                                    <span class="required">Required</span>
+                                                </li>
+                                            </ol>
+                                        </fieldset>
+                                        <fieldset class="action">
+                                            <input type="submit" class="btn btn-primary" value="Submit" />
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
                     </div>
 
                 [% ELSIF query_type == 'illlist' %]
@@ -785,7 +777,7 @@
                 [% ELSIF query_type == 'availability' %]
                     <!-- availability -->
                     <h1>Availability</h1>
-                    <div id="results">
+                    <div id="results" class="page-section">
                         <h3>Displaying availability results</h3>
                         <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
                             [% FOREACH key IN whole.keys %]
