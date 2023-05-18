@@ -8,33 +8,6 @@ Interlibrary loans:
                   0: Disable
             - the interlibrary loans module (master switch).
         -
-            - "Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
-            - pref: ILLModuleCopyrightClearance
-              type: textarea
-              class: long
-        -
-            - "If the ILL backend supports it, adding YAML will enable the request type disclaimer stage in request creation, prompting the user with a request type specific disclaimer as defined (staff interface and OPAC)."
-            - "For each request type, you can have 3 configuration options: <code>text</code>, <code>av_category_code</code> and <code>bypass</code><ul>"
-            - "<li><code>text</code> is the HTML that will be visible for the specified request type.</li>"
-            - "<li><code>av_category_code</code> is the authorised values category that will be used for the options being presented at the disclaimer stage.</li>"
-            - "<li><code>bypass</code> allows for a specific request type to skip the disclaimer stage.</li></ul>"
-            - "Example (paste bold text in the input box): <br>
-            <code>all:<br>
-            &nbsp;text: |<br>
-            &nbsp;&nbsp;&lt;h2&gt;HTML title&lt;/h2&gt;<br>
-            &nbsp;&nbsp;&lt;p&gt;This is an HTML paragraph&lt;/p&gt;<br>
-            &nbsp;&nbsp;&lt;p&gt;This is another HTML paragraph&lt;/p&gt;<br>
-            &nbsp;av_category_code: YES_NO<br>
-            article:<br>
-            &nbsp;text: copyright text for all article type requests<br>
-            &nbsp;av_category_code: YES_NO<br>
-            &nbsp;bypass: 1<br>
-            </code>"
-            - pref: ILLModuleDisclaimerByType
-              type: textarea
-              syntax: text/x-yaml
-              class: code
-        -
             - pref: ILLModuleUnmediated
               default: 0
               choices:
@@ -48,13 +21,6 @@ Interlibrary loans:
                   1: Enable
                   0: Disable
             - the circulation of ILL requested items.
-        -
-            - pref: ILLCheckAvailability
-              default: 0
-              choices:
-                  1: Check
-                  0: "Don't check"
-            - external sources for availability during the request process.
         -
             - "ILL statuses that are considered finished and should not be displayed in the ILL module: "
             - pref: ILLHiddenRequestStatuses
@@ -81,3 +47,38 @@ Interlibrary loans:
             - pref: ILLOpacbackends
               class: multi
             - (separated with |). If left empty, all installed backends will be enabled.
+    Workflow:
+        -
+            - "Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed. OPAC only."
+            - pref: ILLModuleCopyrightClearance
+              type: textarea
+              class: long
+        -
+            - pref: ILLCheckAvailability
+              default: 0
+              choices:
+                  1: Check
+                  0: "Don't check"
+            - external sources for availability during the request process.
+        -
+            - "If the ILL backend supports it, adding YAML will enable the request type disclaimer stage in request creation, prompting the user with a request type specific disclaimer as defined (staff interface and OPAC)."
+            - "For each request type, you can have 3 configuration options: <code>text</code>, <code>av_category_code</code> and <code>bypass</code><ul>"
+            - "<li><code>text</code> is the HTML that will be visible for the specified request type.</li>"
+            - "<li><code>av_category_code</code> is the authorised values category that will be used for the options being presented at the disclaimer stage.</li>"
+            - "<li><code>bypass</code> allows for a specific request type to skip the disclaimer stage.</li></ul>"
+            - "Example (paste the code in the input box): <br>
+            <code>all:<br>
+            &nbsp;text: |<br>
+            &nbsp;&nbsp;&lt;h2&gt;HTML title&lt;/h2&gt;<br>
+            &nbsp;&nbsp;&lt;p&gt;This is an HTML paragraph&lt;/p&gt;<br>
+            &nbsp;&nbsp;&lt;p&gt;This is another HTML paragraph&lt;/p&gt;<br>
+            &nbsp;av_category_code: YES_NO<br>
+            article:<br>
+            &nbsp;text: copyright text for all article type requests<br>
+            &nbsp;av_category_code: YES_NO<br>
+            &nbsp;bypass: 1<br>
+            </code>"
+            - pref: ILLModuleDisclaimerByType
+              type: textarea
+              syntax: text/x-yaml
+              class: code
