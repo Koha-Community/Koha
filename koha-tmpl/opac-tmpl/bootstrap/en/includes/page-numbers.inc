@@ -2,7 +2,7 @@
 [% IF ( PAGE_NUMBERS ) %]
     <nav class="pagination pagination-sm noprint" aria-label="Search results pagination">
         [% IF hits_to_paginate < total %]
-            <h6>[% hits_to_paginate | html %] of [% total | html %] results loaded, refine your search to view other records</h6>
+            <span class="h6">[% hits_to_paginate | html %] of [% total | html %] results loaded, refine your search to view other records</span>
         [% END %]
         <ul class="pagination">
             [% IF ( previous_page_offset.defined ) %]
