@@ -13,8 +13,13 @@ Interlibrary loans:
               type: textarea
               class: long
         -
-            - "If the ILL backend supports it, adding YAML will enable the request type disclaimer stage in request creation, prompting the user with a request type specific disclaimer as defined (Staff and OPAC). Example (paste bold text in the input box): <br><strong>
-            all:<br>
+            - "If the ILL backend supports it, adding YAML will enable the request type disclaimer stage in request creation, prompting the user with a request type specific disclaimer as defined (staff interface and OPAC)."
+            - "For each request type, you can have 3 configuration options: <code>text</code>, <code>av_category_code</code> and <code>bypass</code><ul>"
+            - "<li><code>text</code> is the HTML that will be visible for the specified request type.</li>"
+            - "<li><code>av_category_code</code> is the authorised values category that will be used for the options being presented at the disclaimer stage.</li>"
+            - "<li><code>bypass</code> allows for a specific request type to skip the disclaimer stage.</li></ul>"
+            - "Example (paste bold text in the input box): <br>
+            <code>all:<br>
             &nbsp;text: |<br>
             &nbsp;&nbsp;&lt;h2&gt;HTML title&lt;/h2&gt;<br>
             &nbsp;&nbsp;&lt;p&gt;This is an HTML paragraph&lt;/p&gt;<br>
@@ -24,7 +29,7 @@ Interlibrary loans:
             &nbsp;text: copyright text for all article type requests<br>
             &nbsp;av_category_code: YES_NO<br>
             &nbsp;bypass: 1<br>
-            </strong>"
+            </code>"
             - pref: ILLModuleDisclaimerByType
               type: textarea
               syntax: text/x-yaml
