@@ -326,13 +326,14 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
         $items_query .=   "JOIN biblioitems USING (biblioitemnumber)
                            LEFT JOIN itemtypes USING (itemtype) ";
     }
-    $items_query .=  " LEFT JOIN branchtransfers ON (items.itemnumber = branchtransfers.itemnumber)";
+    $items_query .=  " LEFT JOIN branchtransfers ON (
+                           items.itemnumber = branchtransfers.itemnumber
+                           AND branchtransfers.datearrived IS NULL AND branchtransfers.datecancelled IS NULL
+                     )";
     $items_query .=  " WHERE items.notforloan = 0
                        AND holdingbranch IS NOT NULL
                        AND itemlost = 0
                        AND withdrawn = 0";
-    $items_query .= "  AND branchtransfers.datearrived IS NULL
-                       AND branchtransfers.datecancelled IS NULL";
     $items_query .= "  AND damaged = 0" unless C4::Context->preference('AllowHoldsOnDamagedItems');
     $items_query .= "  AND items.onloan IS NULL
                        AND (itemtypes.notforloan IS NULL OR itemtypes.notforloan = 0)
@@ -343,7 +344,8 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
                            AND itemnumber IS NOT NULL
                            AND (found IS NOT NULL OR priority = 0)
                         )
-                       AND items.biblionumber = ?";
+                       AND items.biblionumber = ?
+                       AND branchtransfers.itemnumber IS NULL";
 
     my @params = ($biblionumber, $biblionumber);
     if ($branches_to_use && @$branches_to_use) {
