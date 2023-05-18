@@ -2000,7 +2000,7 @@
                               $('#addResult')
                                 .empty()
                                 .attr('class', 'alert alert-warning')
-                                .append(__x('Warning: Item {barcode} is reserved', { barcode }))
+                                .append(__x('Warning: Item {barcode} is on hold', { barcode }))
                                 .append(' ', button);
                           } else {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
