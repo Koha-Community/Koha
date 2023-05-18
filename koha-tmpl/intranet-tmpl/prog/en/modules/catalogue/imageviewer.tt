@@ -138,7 +138,10 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
+    [% Asset.js("js/place_booking_modal.js") | $raw %]
     [% IF ( Koha.Preference('CatalogConcerns') ) %]
         <script>
             /* Set a variable needed by add_catalog_concern.js */
