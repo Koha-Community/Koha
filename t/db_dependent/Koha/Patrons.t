@@ -1891,6 +1891,8 @@ subtest '->set_password' => sub {
 
     plan tests => 16;
 
+    t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'emailpro|email' );
+
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { login_attempts => 3 } } );
