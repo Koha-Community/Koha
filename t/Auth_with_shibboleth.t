@@ -16,33 +16,23 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use utf8;
 
-$| = 1;
-use Module::Load::Conditional qw/check_install/;
-use Test::More;
+use Test::More tests => 18;
 use Test::MockModule;
 use Test::Warn;
+use CGI qw(-utf8 );
 use File::Temp qw(tempdir);
 
 use t::lib::Mocks::Logger;
+use t::lib::TestBuilder;
 
-use utf8;
-use CGI qw(-utf8 );
 use C4::Context;
+use Koha::Database;
 
-BEGIN {
-    if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 18;
-    }
-    else {
-        plan skip_all => "Need Test::DBIx::Class";
-    }
-}
-
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => [ 'dbi:SQLite:dbname=:memory:', '', '' ]
-};
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 
 # Mock Variables
 my $matchpoint = 'userid';
@@ -84,12 +74,6 @@ $context->mock( 'timezone', sub { return 'local'; } );
 ### Mock ->interface
 my $interface = 'opac';
 $context->mock( 'interface', \&mockedInterface );
-
-## Mock Database
-my $database = Test::MockModule->new('Koha::Database');
-
-### Mock ->schema
-$database->mock( 'schema', \&mockedSchema );
 
 ### Mock Letters
 my $mocked_letters = Test::MockModule->new('C4::Letters');
@@ -147,11 +131,6 @@ subtest "shib_ok tests" => sub {
     reset_config();
 };
 
-## logout_shib
-#my $query = CGI->new();
-#is(logout_shib($query),"https://".$opac."/Shibboleth.sso/Logout?return="."https://".$opac,"logout_shib");
-
-## login_shib_url
 subtest "login_shib_url tests" => sub {
     plan tests => 2;
 
@@ -214,23 +193,20 @@ subtest "get_login_shib tests" => sub {
 
 ## checkpw_shib
 subtest "checkpw_shib tests" => sub {
-
-    plan tests => 34;
+    plan tests => 33;
 
     my $shib_login;
     my ( $retval, $retcard, $retuserid );
 
-    # Setup Mock Database Data
-    fixtures_ok [
-        'Borrower' => [
-            [qw/cardnumber userid surname address city email/],
-            [qw/testcardnumber test1234 renvoize myaddress johnston  /],
-            [qw/testcardnumber1 test12345 clamp1 myaddress quechee kid@clamp.io/],
-            [qw/testcardnumber2 test123456 clamp2 myaddress quechee kid@clamp.io/],
-        ],
-        'Category' => [ [qw/categorycode default_privacy/], [qw/S never/], ]
-      ],
-      'Installed some custom fixtures via the Populate fixture class';
+    # Test borrower data
+    my $test_borrowers = [
+        { cardnumber => 'testcardnumber', userid => 'test1234', surname => 'renvoize', address => 'myaddress', city => 'johnston', email => undef },
+        { cardnumber => 'testcardnumber1', userid => 'test12345', surname => 'clamp1', address => 'myaddress', city => 'quechee', email => 'kid@clamp.io' },
+        { cardnumber => 'testcardnumber2', userid => 'test123456', surname => 'clamp2', address => 'myaddress', city => 'quechee', email => 'kid@clamp.io' },
+    ];
+    my $category = $builder->build_object({ class => 'Koha::Patron::Categories', value => { default_privacy => 'never' }});
+    $builder->build_object({ class => 'Koha::Patrons', value => { %$_, categorycode => $category->categorycode }}) for @$test_borrowers;
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
 
     # good user
     $shib_login = "test1234";
@@ -276,11 +252,12 @@ subtest "checkpw_shib tests" => sub {
     $shib_login      = 'test4321';
     $ENV{'uid'}      = 'test4321';
     $ENV{'sn'}       = "pika";
-    $ENV{'exp'}      = "2017";
-    $ENV{'cat'}      = "S";
+    $ENV{'exp'}      = "2017-01-01";
+    $ENV{'cat'}      = $category->categorycode;
     $ENV{'add'}      = 'Address';
     $ENV{'city'}     = 'City';
     $ENV{'emailpro'} = 'me@myemail.com';
+    $ENV{branchcode} = $library->branchcode; # needed since T::D::C does no longer hides the FK constraint
 
     warnings_are {
         ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
@@ -297,11 +274,12 @@ subtest "checkpw_shib tests" => sub {
            ->debug_is("shibboleth attribute to match: uid",   "shib match attribute debug info")
            ->clear();
 
-    ok my $new_user = ResultSet('Borrower')
+    ok my $new_user = $schema->resultset('Borrower')
       ->search( { 'userid' => 'test4321' }, { rows => 1 } ), "new user found";
-    is_fields [qw/surname dateexpiry address city/], $new_user->next,
-      [qw/pika 2017 Address City/],
-      'Found $new_users surname';
+    my $rec = $new_user->next;
+    is_deeply( [ map { $rec->$_ } qw/surname dateexpiry address city/ ],
+        [qw/pika 2017-01-01 Address City/],
+        'Found $new_user surname' );
     $autocreate = 0;
     $welcome    = 0;
 
@@ -313,12 +291,13 @@ subtest "checkpw_shib tests" => sub {
            ->debug_is("shibboleth attribute to match: uid",   "shib match attribute debug info")
            ->clear();
 
-    ok my $sync_user = ResultSet('Borrower')
+    ok my $sync_user = $schema->resultset('Borrower')
       ->search( { 'userid' => 'test4321' }, { rows => 1 } ), "sync user found";
 
-    is_fields [qw/surname dateexpiry address city/], $sync_user->next,
-      [qw/pika 2017 Address AnotherCity/],
-      'Found $sync_user synced city';
+    $rec = $sync_user->next;
+    is_deeply( [ map { $rec->$_ } qw/surname dateexpiry address city/ ],
+        [qw/pika 2017-01-01 Address AnotherCity/],
+        'Found $sync_user synced city' );
     $sync = 0;
 
     # good user
@@ -434,10 +413,6 @@ sub mockedInterface {
     return $interface;
 }
 
-sub mockedSchema {
-    return Schema();
-}
-
 ## Convenience method to reset config
 sub reset_config {
     $matchpoint = 'userid';
@@ -452,6 +427,7 @@ sub reset_config {
         'address'      => { 'is' => 'add' },
         'city'         => { 'is' => 'city' },
         'emailpro'     => { 'is' => 'emailpro' },
+        'branchcode'   => { 'is' => 'branchcode' },
     );
     $ENV{'uid'}      = "test1234";
     $ENV{'sn'}       = undef;
@@ -463,4 +439,3 @@ sub reset_config {
 
     return 1;
 }
-
