@@ -210,6 +210,7 @@ sub add_credit {
     my $payment_type  = $params->{payment_type};
     my $credit_type   = $params->{type} || 'PAYMENT';
     my $item_id       = $params->{item_id};
+    my $issue_id      = $params->{issue_id};
 
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
@@ -239,6 +240,7 @@ sub add_credit {
                         branchcode        => $library_id,
                         register_id       => $cash_register,
                         itemnumber        => $item_id,
+                        issue_id          => $issue_id,
                     }
                 )->store();
 
