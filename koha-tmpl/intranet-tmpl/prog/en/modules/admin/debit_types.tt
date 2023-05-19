@@ -215,10 +215,12 @@
                                         </td>
                                         <td class="actions">
                                             [% IF !debit_type.archived %]
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa fa-pencil"></i> Edit</a>
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=archive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
+                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa fa-pencil"></i> Edit</a>
+                                                [% IF !debit_type.is_system %]
+                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=archive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
+                                                [% END %]
                                             [% ELSIF debit_type.archived %]
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=unarchive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
+                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=unarchive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
                                             [% END %]
                                         </td>
                                     </tr>
