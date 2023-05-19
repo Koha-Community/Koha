@@ -423,6 +423,10 @@ sub mockedPref {
         $return = 'OFF';
     }
 
+    if ( $param eq 'EmailFieldPrecedence' ) {
+        $return = 'emailpro';
+    }
+
     return $return;
 }
 
