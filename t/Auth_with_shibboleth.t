@@ -270,57 +270,57 @@ subtest "checkpw_shib tests" => sub {
 };
 
 subtest 'get_uri' => sub {
-plan tests => 13;
-# Tests for OPAC
-t::lib::Mocks::mock_preference('OPACBaseURL', 'testopac.com' );
-is( C4::Auth_with_shibboleth::_get_uri(),
-    "https://testopac.com", "https opac uri returned" );
+    plan tests => 13;
+    # Tests for OPAC
+    t::lib::Mocks::mock_preference('OPACBaseURL', 'testopac.com' );
+    is( C4::Auth_with_shibboleth::_get_uri(),
+        "https://testopac.com", "https opac uri returned" );
 
-$logger->clear;
+    $logger->clear;
 
-t::lib::Mocks::mock_preference('OPACBaseURL', 'http://testopac.com' );
-my $result = C4::Auth_with_shibboleth::_get_uri();
-is( $result, "https://testopac.com", "https opac uri returned" );
-$logger->warn_is("Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!", "Improper protocol logged to warn")
-       ->clear();
+    t::lib::Mocks::mock_preference('OPACBaseURL', 'http://testopac.com' );
+    my $result = C4::Auth_with_shibboleth::_get_uri();
+    is( $result, "https://testopac.com", "https opac uri returned" );
+    $logger->warn_is("Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!", "Improper protocol logged to warn")
+           ->clear();
 
-t::lib::Mocks::mock_preference('OPACBaseURL', 'https://testopac.com' );
-is( C4::Auth_with_shibboleth::_get_uri(),
-    "https://testopac.com", "https opac uri returned" );
+    t::lib::Mocks::mock_preference('OPACBaseURL', 'https://testopac.com' );
+    is( C4::Auth_with_shibboleth::_get_uri(),
+        "https://testopac.com", "https opac uri returned" );
 
-$logger->clear();
+    $logger->clear();
 
-t::lib::Mocks::mock_preference('OPACBaseURL', undef );
-$result = C4::Auth_with_shibboleth::_get_uri();
-is( $result, "https://", "https $interface uri returned" );
+    t::lib::Mocks::mock_preference('OPACBaseURL', undef );
+    $result = C4::Auth_with_shibboleth::_get_uri();
+    is( $result, "https://", "https $interface uri returned" );
 
-$logger->warn_is("Syspref staffClientBaseURL or OPACBaseURL not set!", "undefined OPACBaseURL - received expected warning")
-       ->clear();
+    $logger->warn_is("Syspref staffClientBaseURL or OPACBaseURL not set!", "undefined OPACBaseURL - received expected warning")
+           ->clear();
 
-# Tests for staff client
-$interface = 'intranet';
-t::lib::Mocks::mock_preference('StaffClientBaseURL', 'teststaff.com' );
-is( C4::Auth_with_shibboleth::_get_uri(),
-    "https://teststaff.com", "https $interface uri returned" );
+    # Tests for staff client
+    $interface = 'intranet';
+    t::lib::Mocks::mock_preference('StaffClientBaseURL', 'teststaff.com' );
+    is( C4::Auth_with_shibboleth::_get_uri(),
+        "https://teststaff.com", "https $interface uri returned" );
 
-$logger->clear;
+    $logger->clear;
 
-t::lib::Mocks::mock_preference('StaffClientBaseURL', 'http://teststaff.com' );
-$result = C4::Auth_with_shibboleth::_get_uri();
-is( $result, "https://teststaff.com", "https $interface uri returned" );
-$logger->warn_is("Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!", 'check protocol warn')
-       ->clear;
+    t::lib::Mocks::mock_preference('StaffClientBaseURL', 'http://teststaff.com' );
+    $result = C4::Auth_with_shibboleth::_get_uri();
+    is( $result, "https://teststaff.com", "https $interface uri returned" );
+    $logger->warn_is("Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!", 'check protocol warn')
+           ->clear;
 
-t::lib::Mocks::mock_preference('StaffClientBaseURL', 'https://teststaff.com' );
-is( C4::Auth_with_shibboleth::_get_uri(),
-    "https://teststaff.com", "https $interface uri returned" );
-is( $logger->count(), 0, 'No logging' );
+    t::lib::Mocks::mock_preference('StaffClientBaseURL', 'https://teststaff.com' );
+    is( C4::Auth_with_shibboleth::_get_uri(),
+        "https://teststaff.com", "https $interface uri returned" );
+    is( $logger->count(), 0, 'No logging' );
 
-t::lib::Mocks::mock_preference('StaffClientBaseURL', undef );
-$result = C4::Auth_with_shibboleth::_get_uri();
-is( $result, "https://", "https $interface uri returned" );
-$logger->warn_is("Syspref staffClientBaseURL or OPACBaseURL not set!", "undefined staffClientBaseURL - received expected warning")
-       ->clear;
+    t::lib::Mocks::mock_preference('StaffClientBaseURL', undef );
+    $result = C4::Auth_with_shibboleth::_get_uri();
+    is( $result, "https://", "https $interface uri returned" );
+    $logger->warn_is("Syspref staffClientBaseURL or OPACBaseURL not set!", "undefined staffClientBaseURL - received expected warning")
+           ->clear;
 };
 $schema->storage->txn_rollback;
 
