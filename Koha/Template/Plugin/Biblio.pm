@@ -24,9 +24,12 @@ use base qw( Template::Plugin );
 
 use Koha::Holds;
 use Koha::Biblios;
+use Koha::Database;
 use Koha::Patrons;
 use Koha::ArticleRequests;
 use Koha::Recalls;
+
+use Koha::DateUtils qw(dt_from_string);
 
 sub HoldsCount {
     my ( $self, $biblionumber ) = @_;
@@ -70,6 +73,20 @@ sub CanBook {
 
     my $biblio = Koha::Biblios->find( $biblionumber );
     return $biblio->bookable_items->count ? 1 : 0;
+}
+
+sub BookingsCount {
+    my ( $self, $biblionumber ) = @_;
+
+    my $biblio = Koha::Biblios->find($biblionumber);
+
+    my $now = dt_from_string;
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    return $biblio->bookings->search(
+        {
+            start_date => { '>' => $dtf->format_datetime($now) }
+        }
+    )->count;
 }
 
 1;

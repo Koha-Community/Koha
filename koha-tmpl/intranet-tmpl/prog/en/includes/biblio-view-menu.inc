@@ -56,7 +56,7 @@
         [%- ELSE -%]
         <li>
         [%- END -%]
-            <a href="/cgi-bin/koha/bookings/list.pl?biblionumber=[% biblio_object_id | url  %]">Bookings</a>
+            <a href="/cgi-bin/koha/bookings/list.pl?biblionumber=[% biblio_object_id | url  %]">Bookings (<span class="bookings_count">[% Biblio.BookingsCount( biblio_object_id ) | html %]</span>)</a>
         </li>
         [% END %]
 

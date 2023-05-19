@@ -326,6 +326,9 @@ $("#placeBookingForm").on('submit', function(e) {
             });
         }
 
+        // Update bookings counts
+        $('.bookings_count').html(parseInt($('.bookings_count').html(), 10)+1);
+
         // Close modal
         $('#placeBookingModal').modal('hide');
 

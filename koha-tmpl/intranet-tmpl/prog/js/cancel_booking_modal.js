@@ -23,6 +23,7 @@ $("#cancelBookingForm").on('submit', function(e) {
         if (timeline) {
             timeline.itemsData.remove(Number(booking_id));
         }
+        $('.bookings_count').html(parseInt($('.bookings_count').html(), 10)-1);
         $('#cancelBookingModal').modal('hide');
     });
 
