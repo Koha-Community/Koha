@@ -12,7 +12,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
     <style>
         @media (min-width: 1200px) {
-            #receive-modal, #receive-modal .modal-content {
+            #receive-modal, #receive-modal {
                 width: 98%;
             }
         }
@@ -51,6 +51,17 @@
         .modal-body textarea {
             vertical-align: text-top;
         }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-header::before,
+        .modal-header::after {
+            content: none;
+        }
+
     </style>
 </head>
 
@@ -112,9 +123,9 @@
 
     <div class="modal fade" id="order_edit" tabindex="-1" role="dialog" aria-labelledby="Order edit">
         <div id="receive-modal" class="modal-dialog modal-lg" role="document">
-            <div class="modal-content modal-lg">
-                <div class="modal-header row">
-                    <h4 class="col-md-11 modal-title"></h4>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="col-md-10 modal-title"></h4>
                     <button type="button" class="close col-md-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
@@ -300,12 +311,14 @@
                                         [% END %]
                                         </select>
                                         <span class="required">Required</span>
-                                        <label for="showallbudgets" style="float:none;">&nbsp;Show inactive:</label>
-                                        <input type="checkbox" id="showallbudgets" />
                                     </li>
                                     <li>
                                         <label>&nbsp;</label>
-                                        <span id="current-fund"></span>
+                                        <span id="current-fund" class="hint"></span>
+                                    </li>
+                                    <li>
+                                        <label for="showallbudgets">&nbsp;Show inactive:</label>
+                                        <input type="checkbox" id="showallbudgets" />
                                     </li>
                                     <li>
                                         <label for="creator">Ordered by: </label>
@@ -1122,7 +1135,7 @@
                 if (row.fund_id != row.fund.fund_id) {
                     $("#bookfund").val(row.fund_id);
                 }
-                $("#bookfund").select2({ width: '100%' });
+                $("#bookfund").select2({ width: '50%' });
                 $("#current-fund").html(FUNC_CUR.format(row.fund.budget.budget_period_description, row.fund.name));
                 $("#creator").html([row.creator.surname, row.creator.firstname].filter(function(name){return name}).join(', ')+" ("+row.creator.patron_id+')')
                 $("#quantity_to_receive").val(row.quantity).prop('readonly', !row.subscription_id);
