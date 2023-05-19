@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Copyright 2014, 2023 Koha development team
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -18,94 +20,61 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 18;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Warn;
 use CGI qw(-utf8 );
 use File::Temp qw(tempdir);
 
+use t::lib::Mocks;
 use t::lib::Mocks::Logger;
 use t::lib::TestBuilder;
 
-use C4::Context;
+use C4::Auth_with_shibboleth qw( shib_ok login_shib_url get_login_shib checkpw_shib );
 use Koha::Database;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
+my $logger = t::lib::Mocks::Logger->new();
 
-# Mock Variables
-my $matchpoint = 'userid';
-my $autocreate = 0;
-my $welcome    = 0;
-my $sync       = 0;
-my %mapping    = (
-    'userid'       => { 'is' => 'uid' },
-    'surname'      => { 'is' => 'sn' },
-    'dateexpiry'   => { 'is' => 'exp' },
-    'categorycode' => { 'is' => 'cat' },
-    'address'      => { 'is' => 'add' },
-    'city'         => { 'is' => 'city' },
-    'emailpro'     => { 'is' => 'emailpro' },
-);
-$ENV{'uid'}      = "test1234";
-$ENV{'sn'}       = undef;
-$ENV{'exp'}      = undef;
-$ENV{'cat'}      = undef;
-$ENV{'add'}      = undef;
-$ENV{'city'}     = undef;
-$ENV{'emailpro'} = undef;
-
-# Setup Mocks
-## Mock Context
-my $context = Test::MockModule->new('C4::Context');
-
-### Mock ->config
-$context->mock( 'config', \&mockedConfig );
-
-### Mock ->preference
-my $OPACBaseURL = "testopac.com";
-my $staffClientBaseURL = "teststaff.com";
-$context->mock( 'preference', \&mockedPref );
-
-### Mock ->tz
-$context->mock( 'timezone', sub { return 'local'; } );
-
-### Mock ->interface
+# Mock variables
+my $shibboleth;
+change_config({});
 my $interface = 'opac';
-$context->mock( 'interface', \&mockedInterface );
 
-### Mock Letters
+# Mock few preferences
+t::lib::Mocks::mock_preference('OPACBaseURL', 'testopac.com' );
+t::lib::Mocks::mock_preference('StaffClientBaseURL', 'teststaff.com' );
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
+t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'emailpro' );
+
+# Mock Context: config, tz and interface
+my $context = Test::MockModule->new('C4::Context');
+$context->mock( 'config', sub { return $shibboleth; } ); # easier than caching by Mocks::mock_config
+$context->mock( 'timezone', sub { return 'local'; } );
+$context->mock( 'interface', sub { return $interface; } );
+
+# Mock Letters: GetPreparedLetter, EnqueueLetter and SendQueuedMessages
+# We want to test the params
 my $mocked_letters = Test::MockModule->new('C4::Letters');
-# we want to test the params
 $mocked_letters->mock( 'GetPreparedLetter', sub {
     warn "GetPreparedLetter called";
     return 1;
 });
-# we don't care about EnqueueLetter for now
 $mocked_letters->mock( 'EnqueueLetter', sub {
     warn "EnqueueLetter called";
     # return a 'message_id'
     return 42;
 });
-# we don't care about EnqueueLetter for now
 $mocked_letters->mock( 'SendQueuedMessages', sub {
     my $params = shift;
     warn "SendQueuedMessages called with message_id: $params->{message_id}";
     return 1;
 });
 
-# Tests
-##############################################################
+# Start testing ----------------------------------------------------------------
 
-my $logger = t::lib::Mocks::Logger->new();
-
-# Can module load
-use C4::Auth_with_shibboleth qw( shib_ok login_shib_url get_login_shib checkpw_shib );
-require_ok('C4::Auth_with_shibboleth');
-
-# Subroutine tests
-## shib_ok
 subtest "shib_ok tests" => sub {
     plan tests => 5;
     my $result;
@@ -114,13 +83,13 @@ subtest "shib_ok tests" => sub {
     is( shib_ok(), '1', "good config" );
 
     # bad config, no debug
-    $matchpoint = undef;
+    delete $shibboleth->{matchpoint};
     warnings_are { $result = shib_ok() }
     [ { carped => 'shibboleth matchpoint not defined' }, ],
       "undefined matchpoint = fatal config, warning given";
     is( $result, '0', "bad config" );
 
-    $matchpoint = 'email';
+    change_config({ matchpoint => 'email' });
     warnings_are { $result = shib_ok() }
     [ { carped => 'shibboleth matchpoint not mapped' }, ],
       "unmapped matchpoint = fatal config, warning given";
@@ -128,7 +97,7 @@ subtest "shib_ok tests" => sub {
 
     # add test for undefined shibboleth block
     $logger->clear;
-    reset_config();
+    change_config({});
 };
 
 subtest "login_shib_url tests" => sub {
@@ -175,28 +144,18 @@ subtest "login_shib_url tests" => sub {
     close $fh_read;
 };
 
-## get_login_shib
 subtest "get_login_shib tests" => sub {
-
     plan tests => 3;
 
-    my $login;
-
-    $login = get_login_shib();
-
+    my $login = get_login_shib();
     $logger->debug_is("koha borrower field to match: userid", "borrower match field debug info")
            ->debug_is("shibboleth attribute to match: uid",   "shib match attribute debug info")
            ->clear();
-
     is( $login, "test1234", "good config, attribute value returned" );
 };
 
-## checkpw_shib
 subtest "checkpw_shib tests" => sub {
     plan tests => 33;
-
-    my $shib_login;
-    my ( $retval, $retcard, $retuserid );
 
     # Test borrower data
     my $test_borrowers = [
@@ -209,9 +168,8 @@ subtest "checkpw_shib tests" => sub {
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
 
     # good user
-    $shib_login = "test1234";
-    ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
-
+    my $shib_login = "test1234";
+    my ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
     is( $logger->count(), 2,          "Two debugging entries");
     is( $retval,    "1",              "user authenticated" );
     is( $retcard,   "testcardnumber", "expected cardnumber returned" );
@@ -229,8 +187,7 @@ subtest "checkpw_shib tests" => sub {
            ->clear();
 
     # duplicated matchpoint
-    $matchpoint = 'email';
-    $mapping{'email'} = { is => 'email' };
+    change_config({ matchpoint => 'email', mapping => { email => { is => 'email' }} });
     $shib_login = 'kid@clamp.io';
     ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
     is( $retval, "0", "user not authenticated if duplicated matchpoint" );
@@ -244,11 +201,8 @@ subtest "checkpw_shib tests" => sub {
            ->warn_is('There are several users with email of kid@clamp.io, matchpoints must be unique', "duplicated matchpoint warned with debug")
            ->clear();
 
-    reset_config();
-
     # autocreate user (welcome)
-    $autocreate      = 1;
-    $welcome         = 1;
+    change_config({ autocreate => 1, welcome => 1 });
     $shib_login      = 'test4321';
     $ENV{'uid'}      = 'test4321';
     $ENV{'sn'}       = "pika";
@@ -280,11 +234,9 @@ subtest "checkpw_shib tests" => sub {
     is_deeply( [ map { $rec->$_ } qw/surname dateexpiry address city/ ],
         [qw/pika 2017-01-01 Address City/],
         'Found $new_user surname' );
-    $autocreate = 0;
-    $welcome    = 0;
 
     # sync user
-    $sync = 1;
+    $shibboleth->{sync} = 1;
     $ENV{'city'} = 'AnotherCity';
     ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
     $logger->debug_is("koha borrower field to match: userid", "borrower match field debug info")
@@ -298,7 +250,7 @@ subtest "checkpw_shib tests" => sub {
     is_deeply( [ map { $rec->$_ } qw/surname dateexpiry address city/ ],
         [qw/pika 2017-01-01 Address AnotherCity/],
         'Found $sync_user synced city' );
-    $sync = 0;
+    change_config({ sync => 0 });
 
     # good user
     $shib_login = "test1234";
@@ -317,109 +269,67 @@ subtest "checkpw_shib tests" => sub {
     $logger->info_is("No users with userid of martin found and autocreate is disabled", "Duplicated matchpoint warned to info");
 };
 
-## _get_uri - opac
-$OPACBaseURL = "testopac.com";
+subtest 'get_uri' => sub {
+plan tests => 13;
+# Tests for OPAC
+t::lib::Mocks::mock_preference('OPACBaseURL', 'testopac.com' );
 is( C4::Auth_with_shibboleth::_get_uri(),
     "https://testopac.com", "https opac uri returned" );
 
 $logger->clear;
 
-$OPACBaseURL = "http://testopac.com";
+t::lib::Mocks::mock_preference('OPACBaseURL', 'http://testopac.com' );
 my $result = C4::Auth_with_shibboleth::_get_uri();
 is( $result, "https://testopac.com", "https opac uri returned" );
 $logger->warn_is("Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!", "Improper protocol logged to warn")
        ->clear();
 
-$OPACBaseURL = "https://testopac.com";
+t::lib::Mocks::mock_preference('OPACBaseURL', 'https://testopac.com' );
 is( C4::Auth_with_shibboleth::_get_uri(),
     "https://testopac.com", "https opac uri returned" );
 
 $logger->clear();
 
-$OPACBaseURL = undef;
+t::lib::Mocks::mock_preference('OPACBaseURL', undef );
 $result = C4::Auth_with_shibboleth::_get_uri();
 is( $result, "https://", "https $interface uri returned" );
 
 $logger->warn_is("Syspref staffClientBaseURL or OPACBaseURL not set!", "undefined OPACBaseURL - received expected warning")
        ->clear();
 
-## _get_uri - intranet
+# Tests for staff client
 $interface = 'intranet';
-$staffClientBaseURL = "teststaff.com";
+t::lib::Mocks::mock_preference('StaffClientBaseURL', 'teststaff.com' );
 is( C4::Auth_with_shibboleth::_get_uri(),
     "https://teststaff.com", "https $interface uri returned" );
 
-
 $logger->clear;
 
-$staffClientBaseURL = "http://teststaff.com";
+t::lib::Mocks::mock_preference('StaffClientBaseURL', 'http://teststaff.com' );
 $result = C4::Auth_with_shibboleth::_get_uri();
 is( $result, "https://teststaff.com", "https $interface uri returned" );
-$logger->warn_is("Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!")
+$logger->warn_is("Shibboleth requires OPACBaseURL/staffClientBaseURL to use the https protocol!", 'check protocol warn')
        ->clear;
 
-$staffClientBaseURL = "https://teststaff.com";
+t::lib::Mocks::mock_preference('StaffClientBaseURL', 'https://teststaff.com' );
 is( C4::Auth_with_shibboleth::_get_uri(),
     "https://teststaff.com", "https $interface uri returned" );
 is( $logger->count(), 0, 'No logging' );
 
-$staffClientBaseURL = undef;
+t::lib::Mocks::mock_preference('StaffClientBaseURL', undef );
 $result = C4::Auth_with_shibboleth::_get_uri();
 is( $result, "https://", "https $interface uri returned" );
 $logger->warn_is("Syspref staffClientBaseURL or OPACBaseURL not set!", "undefined staffClientBaseURL - received expected warning")
        ->clear;
+};
+$schema->storage->txn_rollback;
 
-## _get_shib_config
-# Internal helper function, covered in tests above
+# Internal helper function
 
-sub mockedConfig {
-    my $param = shift;
+sub change_config {
+    my $params = shift;
 
-    my %shibboleth = (
-        'autocreate' => $autocreate,
-        'welcome'    => $welcome,
-        'sync'       => $sync,
-        'matchpoint' => $matchpoint,
-        'mapping'    => \%mapping
-    );
-
-    return \%shibboleth;
-}
-
-sub mockedPref {
-    my $param = $_[1];
-    my $return;
-
-    if ( $param eq 'OPACBaseURL' ) {
-        $return = $OPACBaseURL;
-    }
-
-    if ( $param eq 'staffClientBaseURL' ) {
-        $return = $staffClientBaseURL;
-    }
-
-    if ( $param eq 'EmailFieldPrimary' ) {
-        $return = 'OFF';
-    }
-
-    if ( $param eq 'EmailFieldPrecedence' ) {
-        $return = 'emailpro';
-    }
-
-    return $return;
-}
-
-sub mockedInterface {
-    return $interface;
-}
-
-## Convenience method to reset config
-sub reset_config {
-    $matchpoint = 'userid';
-    $autocreate = 0;
-    $welcome = 0;
-    $sync = 0;
-    %mapping = (
+    my %mapping = (
         'userid'       => { 'is' => 'uid' },
         'surname'      => { 'is' => 'sn' },
         'dateexpiry'   => { 'is' => 'exp' },
@@ -429,6 +339,18 @@ sub reset_config {
         'emailpro'     => { 'is' => 'emailpro' },
         'branchcode'   => { 'is' => 'branchcode' },
     );
+    if( exists $params->{mapping} ) {
+        $mapping{$_} = $params->{mapping}->{$_} for keys %{$params->{mapping}};
+    }
+    $shibboleth = {
+        autocreate => $params->{autocreate} // 0,
+        welcome    => $params->{welcome} // 0,
+        sync       => $params->{sync} // 0,
+        matchpoint => $params->{matchpoint} // 'userid',
+        mapping    => \%mapping,
+    };
+
+    # Change environment too
     $ENV{'uid'}      = "test1234";
     $ENV{'sn'}       = undef;
     $ENV{'exp'}      = undef;
@@ -436,6 +358,4 @@ sub reset_config {
     $ENV{'add'}      = undef;
     $ENV{'city'}     = undef;
     $ENV{'emailpro'} = undef;
-
-    return 1;
 }
