@@ -12,7 +12,7 @@
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_object_id | url  %]">Normal</a>
         </li>
 
-        [%- IF ( can_view_MARC ) -%]
+        [%- IF Koha.Preference('viewMARC') -%]
         [%- IF ( marcview ) -%]
         <li class="active">
         [%- ELSE -%]
@@ -22,7 +22,7 @@
         </li>
         [%- END -%]
 
-        [%- IF ( can_view_labeledMARC ) -%]
+        [%- IF Koha.Preference('viewLabeledMARC') -%]
         [%- IF ( labeledmarcview ) -%]
         <li class="active">
         [%- ELSE -%]
@@ -32,7 +32,7 @@
         </li>
         [%- END -%]
 
-        [%- IF ( can_view_ISBD ) -%]
+        [%- IF Koha.Preference('viewISBD') -%]
         [%- IF ( isbdview ) -%]
         <li class="active">
         [%- ELSE -%]
