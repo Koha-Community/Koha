@@ -776,10 +776,11 @@ sub cancel {
 
 =head3 fill
 
-    $hold->fill;
-    $hold->fill({ itemnumber => $i }); # optional itemnumber: see MoveReserves
+    $hold->fill({ [ item_id => $item->id ] });
 
 This method marks the hold as filled. It effectively moves it to old_reserves.
+The optional I<item_id> parameter is used to set the information about the
+item that filled the hold.
 
 =cut
 
@@ -793,7 +794,7 @@ sub fill {
                 {
                     found    => 'F',
                     priority => 0,
-                    $params->{itemnumber} ? ( itemnumber => $params->{itemnumber} ) : (),
+                    $params->{item_id} ? ( itemnumber => $params->{item_id} ) : (),
                 }
             );
 
