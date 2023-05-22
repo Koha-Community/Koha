@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Copyright 2012, 2023 Koha development team
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -16,59 +18,48 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Test::More tests => 2;
 
-use Test::More;
-use Test::MockModule;
+use t::lib::TestBuilder;
 
-use Module::Load::Conditional qw/check_install/;
+use Koha::Database;
+use C4::SocialData qw( get_data get_report );
 
-BEGIN {
-    if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 6;
-    } else {
-        plan skip_all => "Need Test::DBIx::Class"
-    }
-}
+my $schema  = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
 
-BEGIN {
-    use_ok('C4::SocialData', qw( get_data get_report ));
-}
+$schema->storage->txn_begin;
 
-use Test::DBIx::Class;
+# trivial data for trivial tests
+Koha::Biblioitems->search->update({ isbn => undef });
+$builder->build({ source => 'Biblioitem', value => { isbn => '0-596-52674-1' } });
+$builder->build({ source => 'Biblioitem', value => { isbn => '0-596-00289-0' } });
+$builder->build({ source => 'SocialData', value => { isbn => '0-596-52674-1', score_avg => 6.5 } });
+$builder->build({ source => 'SocialData', value => { isbn => '0-596-00289-0', score_avg => 7 } });
 
-fixtures_ok [
-    Biblioitem => [
-        ['biblionumber', 'isbn'],
-        [1, '0-596-52674-1'],
-        [2, '0-596-00289-0'],
-    ],
-    SocialData => [
-        [
-            'isbn',            'num_critics',
-            'num_critics_pro', 'num_quotations',
-            'num_videos',      'score_avg',
-            'num_scores'
-        ],
-        [ '0-596-52674-1', 1, 2, 3, 4, 5.2, 6 ],
-        [ '0-596-00289-0', 2, 3, 4, 5, 6.2, 7 ]
-    ],
-], 'add fixtures';
+subtest 'get_data' => sub {
+    plan tests => 3;
 
-my $db = Test::MockModule->new('Koha::Database');
-$db->mock( _new_schema => sub { return Schema(); } );
-Koha::Database::flush_schema_cache();
+    my $data = C4::SocialData::get_data();
+    is( $data, undef, 'get_data should return undef if no param given');
 
-my $data = C4::SocialData::get_data();
-is( $data, undef, 'get_data should return undef if no param given');
+    $data = C4::SocialData::get_data('0-596-52674-1');
+    is( $data->{isbn}, '0-596-52674-1', 'get_data should return the matching row');
+    is( sprintf("%3.1f", $data->{score_avg}), 6.5, 'check score_avg');
+};
 
-$data = C4::SocialData::get_data('0-596-52674-1');
-is( $data->{isbn}, '0-596-52674-1', 'get_data should return the matching row');
+subtest 'get_report' => sub {
+    plan tests => 3;
 
-my $report =  C4::SocialData::get_report('0-596-52674-1');
+    my $report =  C4::SocialData::get_report();
+    # if isbn not normalized, social data not found, resulting in without key
+    is( $report->{'without'}->[0]->{'original'}, '0-596-52674-1', 'testing get_report gives isbn' );
+    is( $report->{'without'}->[0]->{'isbn'}, '9780596526740', 'testing get_report' );
 
-is( $report->{'without'}->[0]->{'original'},
-    '0-596-52674-1', 'testing get_report gives isbn' );
+    # test if we can get with key instead
+    $schema->resultset('SocialData')->search({ isbn => '0-596-52674-1' })->next->update({ isbn => '9780596526740' });
+    $report =  C4::SocialData::get_report();
+    is( $report->{with}->[0]->{isbn}, '9780596526740', 'this isbn has social data' );
+};
 
-is( $report->{'without'}->[0]->{'isbn'}, '9780596526740',
-    'testing get_report' );
-
+$schema->storage->txn_rollback;
