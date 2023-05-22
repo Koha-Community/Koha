@@ -120,7 +120,7 @@ sub get_report {
 
     my $sth = $dbh->prepare( qq{
         SELECT biblionumber, isbn FROM biblioitems
-    } );
+    } ); # FIXME We could better join socialdata here than call get_data for each record?
     $sth->execute;
     my %results;
     while ( my ( $biblionumber, $isbn ) = $sth->fetchrow() ) {
@@ -135,7 +135,7 @@ sub get_report {
         };
         next if $@;
         $isbn =~ s/-//g;
-        my $social_datas = C4::SocialData::get_data( $isbn );
+        my $social_datas = C4::SocialData::get_data( $isbn ); # FIXME Why is data not included in $results ?
         if ( $social_datas ) {
             push @{ $results{with} }, { biblionumber => $biblionumber, isbn => $isbn, original => $original_isbn };
         } else {
