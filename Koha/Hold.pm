@@ -777,13 +777,14 @@ sub cancel {
 =head3 fill
 
     $hold->fill;
+    $hold->fill({ itemnumber => $i }); # optional itemnumber: see MoveReserves
 
 This method marks the hold as filled. It effectively moves it to old_reserves.
 
 =cut
 
 sub fill {
-    my ( $self ) = @_;
+    my ( $self, $params ) = @_;
     $self->_result->result_source->schema->txn_do(
         sub {
             my $patron = $self->patron;
@@ -792,6 +793,7 @@ sub fill {
                 {
                     found    => 'F',
                     priority => 0,
+                    $params->{itemnumber} ? ( itemnumber => $params->{itemnumber} ) : (),
                 }
             );
 
