@@ -2058,7 +2058,7 @@ sub MoveReserve {
 
     if ($res->{borrowernumber} == $borrowernumber) {
         my $hold = Koha::Holds->find( $res->{reserve_id} );
-        $hold->fill({ itemnumber => $itemnumber });
+        $hold->fill({ item_id => $itemnumber });
     }
     else {
         # warn "Reserved";
@@ -2074,7 +2074,7 @@ sub MoveReserve {
 
         if ( $borr_res ) {
             # The item is reserved by the current patron
-            $borr_res->fill({ itemnumber => $itemnumber });
+            $borr_res->fill({ item_id => $itemnumber });
         }
 
         if ( $cancelreserve eq 'revert' ) { ## Revert waiting reserve to priority 1

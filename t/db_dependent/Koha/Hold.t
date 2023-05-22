@@ -124,12 +124,12 @@ subtest 'fill() tests' => sub {
     is( $old_hold->priority, 0, 'priority set to 0' );
     is( $old_hold->found, 'F', 'found set to F' );
 
-    subtest 'itemnumber parameter' => sub {
+    subtest 'item_id parameter' => sub {
         plan tests => 1;
         $category->reservefee(0)->store; # do not disturb later accounts
         $hold = $builder->build_object({ class => 'Koha::Holds', value => { biblionumber => $biblio->id, borrowernumber => $patron->id, itemnumber => undef, priority => 1 } });
         # Simulating checkout without confirming hold
-        $hold->fill({ itemnumber => $item->id });
+        $hold->fill({ item_id => $item->id });
         $old_hold = Koha::Old::Holds->find($hold->id);
         is( $old_hold->itemnumber, $item->itemnumber, 'The itemnumber has been saved in old_reserves by fill' );
         $old_hold->delete;
