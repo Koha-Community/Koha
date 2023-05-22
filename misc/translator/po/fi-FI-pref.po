@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2023-04-28 07:26+0000\n"
+"PO-Revision-Date: 2023-05-16 05:33+0000\n"
 "Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fi/22.11/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1682666783.172838\n"
+"X-POOTLE-MTIME: 1684215204.031000\n"
 
 # Accounting > Policy
 msgid "accounting.pref"
@@ -2471,6 +2471,24 @@ msgstr ""
 "täytyy olla \"luo\"):"
 
 # Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Do"
+msgstr "Säilytä"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
+msgstr "Älä säilytä"
+
+# Authorities > Linker > LinkerConsiderThesaurus
+msgid ""
+"authorities.pref#LinkerConsiderThesaurus# compare the source for 6XX "
+"headings to the thesaurus source for authority records when linking. "
+"Enabling this preference may require a reindex, and may generate new "
+"authority records if AutoCreateAuthorities is enabled."
+msgstr ""
+
+# Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
 msgstr "Säilytä"
 
@@ -4677,7 +4695,6 @@ msgid "circulation.pref#CircControl# the library you are logged in at."
 msgstr "Kirjautuneen käyttäjän kotikirjaston säännöt."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#CircControlReturnsBranch# To determine whether an item is "
 "transferred or remains in the library after checkin, use the circulation "
@@ -8974,63 +8991,53 @@ msgid ""
 msgstr "asiakkaiden vaihtaa käytettävää kieltä verkkokirjastossa."
 
 # Serials
-#, fuzzy
 msgid "interlibrary_loans.pref"
-msgstr "Kausijulkaisut"
+msgstr "Kaukolainat"
 
 # Searching > Features
-#, fuzzy
 msgid "interlibrary_loans.pref Features"
 msgstr "Ominaisuudet"
 
-#, fuzzy
 msgid "interlibrary_loans.pref Notifications"
-msgstr "Ilmoitukset ja muistutukset"
+msgstr "Ilmoitukset"
 
 # Interlibrary loans
 msgid "interlibrary_loans.pref OPAC"
-msgstr ""
+msgstr "Verkkokirjasto"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "interlibrary_loans.pref#CirculateILL# Disable"
 msgstr "Älä salli"
 
 # Circulation > Interface
-#, fuzzy
 msgid "interlibrary_loans.pref#CirculateILL# Enable"
 msgstr "Salli"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
-msgstr "kaukolainapyydettyjen niteiden lainaus ja palatus."
+msgstr "kaukolainattujen niteiden lainaus ja palatus."
 
 # Circulation > Checkin Policy
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
 msgstr "Tarkista"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
 msgstr "Älä tarkista"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLCheckAvailability# external sources for "
 "availability during the request process."
-msgstr "ulkoisista lähteistä saatavuutta pyyntöprosessin aikana."
+msgstr "saatavuutta ulkoisista lähteistä pyyntöprosessin aikana."
 
 # Circulation > Interlibrary loans > ILLDefaultStaffEmail
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
 "staff ILL notices to be sent to in the absence of a library address:"
 msgstr ""
-"Sähköposti, johon kirjaston kaukolaina-viestit saapuvat, jos kirjaston "
+"Sähköposti, johon kirjaston kaukolaina-viestit lähetetään, jos kirjaston "
 "sähköpostia ei ole: "
 
 # Circulation > Interlibrary loans > ILLHiddenRequestStatuses
@@ -9047,13 +9054,12 @@ msgstr ""
 "authorised_values.pl?searchfield=ILL_STATUS_ALIAS\">ILL_STATUS_ALIAS</a>."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
 "considered finished and should not be displayed in the ILL module: "
 msgstr ""
 "Kaukolainastatukset, joita pidetään valmiina, ja joita ei tulisi näyttää "
-"kaukolainamoduulissa:"
+"kaukolainamoduulissa: "
 
 # Circulation > Housebound module
 #, fuzzy
@@ -12479,43 +12485,6 @@ msgstr ""
 "maksu, kun asiakastyyppi vaihtuu rekisteröintimaksun vaatimaan "
 "asiakastyyppiin."
 
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# . GDPR is the EU General Data Protection "
-"Regulation. When you enforce, patrons need to give consent before using the "
-"OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-". GDPR on EU:n yleinen tietosuoja-asetus. Jos pakotat kuittauksen, "
-"asiakkaiden on kuitattava ilmoitus ennen verkkokirjaston käyttöä. Jos asetus "
-"on \"salliva\", Koha varoittaa, mutta ei vaadi kuittausta."
-
-# Patrons > Privacy > GDPR_Policy
-msgid ""
-"patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> setting."
-msgstr ""
-"<br><strong>HUOM:</strong> Jos tämä on päällä, täytyy myös määritellä "
-"julkisen tietosuojadokumentin URL <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>-asetuksella."
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr "Aseta GDPR-käytäntö:"
-
-# Patrons > Security
-msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr "Älä käytä"
-
-# Patrons > Notices and notifications
-msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr "Pakota kuittaamaan"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr "Salliva"
-
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
@@ -12864,11 +12833,55 @@ msgstr ""
 "Kun takaajalle lisätään taattava, täytä seuraavat kentät takaajan "
 "lomakkeesta taattavan asiakastietoihin:"
 
+# Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
+"patrons need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+msgstr ""
+". GDPR on EU:n yleinen tietosuoja-asetus. Jos pakotat kuittauksen, "
+"asiakkaiden on kuitattava ilmoitus ennen verkkokirjaston käyttöä. Jos asetus "
+"on \"salliva\", Koha varoittaa, mutta ei vaadi kuittausta."
+
+# Patrons > Privacy > GDPR_Policy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
+"this you will also have to set the URL of your public privacy policy with "
+"the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
+msgstr ""
+"<br><strong>HUOM:</strong> Jos tämä on päällä, täytyy myös määritellä "
+"julkisen tietosuojadokumentin URL <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>-asetuksella."
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
+msgstr "Aseta GDPR-käytäntö:"
+
+# Patrons > Security
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# disabled"
+msgstr "Älä käytä"
+
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# enforced"
+msgstr "Pakota kuittaamaan"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# permissive"
+msgstr "Salliva"
+
 # Circulation > Checkin policy > CalculateFinesOnReturn
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>HUOM:</strong> URL näytetään vain, jos <a href=\"/cgi-bin/koha/"
 "admin/preferences.pl?op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> on "
@@ -12879,10 +12892,11 @@ msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "Käytä seuraavaa URLia"
 
 # Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
-"messages about privacy and data protection. (If you enforce GDPR policy, "
-"make sure that this page is not blocked.)"
+"messages about privacy and data protection. (If you enforce a data privacy "
+"policy, make sure that this page is not blocked.)"
 msgstr ""
 "viitataksesi paikalliseen tietosuojadokumentaatioon viesteissä, jotka "
 "koskevat yksityisyyttä ja tietosuojaa. (Jos pakotat tietosuojakäytänteiden "
@@ -12979,7 +12993,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Sijainti"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Patron's category"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "Asiakastyyppi"
 
 # Patrons > Security
@@ -12995,19 +13010,22 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "Asiakkaan titteli"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
-"separate table for statistics purpose."
+"separate table for statistical purposes."
 msgstr ""
 "Asiakastiedot ja transaktiot kopioidaan erilliseen tauluun "
 "tilastotarkoituksia varten."
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort1"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 1"
 msgstr "Lajittelusääntö 1"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort2"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "Lajittelusääntö 2"
 
 # Patrons > Security
@@ -13019,13 +13037,15 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "Transaktion tyyppi"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Zipcode"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "Postinumero"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
-"personal information."
+"patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
+"policies and regulations like GDPR for managing personal information."
 msgstr ""
 "pseudonymisointi(a) noudattamaan GPDR-sääntöjä henkilökohtaisista tiedoista."
 

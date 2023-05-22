@@ -2461,6 +2461,24 @@ msgstr ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Do"
+msgstr "Do"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
+msgstr " Don't"
+
+# Authorities > Linker > LinkerConsiderThesaurus
+msgid ""
+"authorities.pref#LinkerConsiderThesaurus# compare the source for 6XX "
+"headings to the thesaurus source for authority records when linking. "
+"Enabling this preference may require a reindex, and may generate new "
+"authority records if AutoCreateAuthorities is enabled."
+msgstr ""
+
+# Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
 msgstr "Do"
 
@@ -12417,44 +12435,6 @@ msgid ""
 "to a category with an enrollment fee."
 msgstr "charge a fee when a user changes to a category with an enrollment fee."
 
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# . GDPR is the EU General Data Protection "
-"Regulation. When you enforce, patrons need to give consent before using the "
-"OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-". GDPR is the EU General Data Protection Regulation. When you enforce, "
-"members need to give consent before using the OPAC. If you set to "
-"permissive, Koha will warn but not enforce."
-
-# Patrons > Privacy > GDPR_Policy
-msgid ""
-"patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> setting."
-msgstr ""
-"<br><strong>NOTE:</strong> If you enable this you will also have to set the "
-"URL of your public privacy policy with the <a href=\"/cgi-bin/koha/admin/"
-"preferences.pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> "
-"setting."
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr "Set GDPR policy to:"
-
-# OPAC > Appearance
-msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr "disabled"
-
-# Patrons > Notices and notifications
-msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr "enforced"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr "permissive"
-
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
@@ -12794,11 +12774,56 @@ msgstr ""
 "When adding a guarantee to a guarantor member fill the following fields in "
 "the guarantee's member entry form from the guarantors record:"
 
+# Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
+"patrons need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+msgstr ""
+". GDPR is the EU General Data Protection Regulation. When you enforce, "
+"members need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+
+# Patrons > Privacy > GDPR_Policy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
+"this you will also have to set the URL of your public privacy policy with "
+"the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
+msgstr ""
+"<br><strong>NOTE:</strong> If you enable this you will also have to set the "
+"URL of your public privacy policy with the <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> "
+"setting."
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
+msgstr "Set GDPR policy to:"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# disabled"
+msgstr "disabled"
+
+# Patrons > Notices and notifications
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# enforced"
+msgstr "enforced"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# permissive"
+msgstr "permissive"
+
 # Patrons > Privacy > PrivacyPolicyURL
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>NOTE:</strong> The URL will only be displayed if <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy"
@@ -12809,10 +12834,11 @@ msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "Use the following URL"
 
 # Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
-"messages about privacy and data protection. (If you enforce GDPR policy, "
-"make sure that this page is not blocked.)"
+"messages about privacy and data protection. (If you enforce a data privacy "
+"policy, make sure that this page is not blocked.)"
 msgstr ""
 "to refer to your local privacy policy in messages about privacy and data "
 "protection. (If you enforce GDPR policy, make sure that this page is not "
@@ -12909,7 +12935,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Location"
 
 # Patrons > General
-msgid "patrons.pref#Pseudonymization# Patron's category"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "Member's category"
 
 # Patrons > Notices and notifications
@@ -12925,19 +12952,22 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "Member's title"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
-"separate table for statistics purpose."
+"separate table for statistical purposes."
 msgstr ""
 "Members and transactions will be copied to a separate table for statistics "
 "purpose."
 
 # Patrons > Patron forms
-msgid "patrons.pref#Pseudonymization# Sort1"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 1"
 msgstr "Sort1"
 
 # Patrons > Patron forms
-msgid "patrons.pref#Pseudonymization# Sort2"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "Sort2"
 
 # Patrons > Notices and notifications
@@ -12949,13 +12979,15 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "Transaction type"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Zipcode"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "Zipcode"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
-"personal information."
+"patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
+"policies and regulations like GDPR for managing personal information."
 msgstr "pseudonymisation to comply with GDPR for personal information."
 
 # Patrons > General

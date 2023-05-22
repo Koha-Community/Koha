@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
-"PO-Revision-Date: 2023-04-03 04:41+0000\n"
+"PO-Revision-Date: 2023-05-22 10:47+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: hi\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /hi/22.11/hi-installer.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1680496900.145872\n"
+"X-POOTLE-MTIME: 1684752450.445211\n"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:description:21
 msgid "                B   - Board"
@@ -637,6 +637,10 @@ msgstr "3 कॉलम, लेबल की 10 पंक्तियाँ"
 msgid "3/week"
 msgstr "3/सप्ताह"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:6
+msgid "A discount applied to a patrons fine"
+msgstr "एक संरक्षक जुर्माने के लिए एक छूट लागू होती है"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:57:mul:1
 msgid ""
 "A hold has been placed on the following item : %s (%s) by the user %s %s "
@@ -726,6 +730,10 @@ msgstr ""
 msgid "Account balance slip"
 msgstr "खाता शेष पर्ची"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:1
+msgid "Account creation fee"
+msgstr "खाता निर्माण शुल्क"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:41
 msgid "Account expiration"
 msgstr "खाता समाप्ति"
@@ -737,6 +745,10 @@ msgstr "खाता फीस"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:2
 msgid "Account payment"
 msgstr "खाता भुगतान"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:2
+msgid "Account renewal fee"
+msgstr "खाता नवीनीकरण शुल्क"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:50
 msgid "Account summary for [% borrower.firstname %] [% borrower.surname %]"
@@ -791,7 +803,6 @@ msgid "Added to bundle"
 msgstr "बंडल में जोड़ा गया"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:26
-#, fuzzy
 msgid "Address notes"
 msgstr "पता टिप्पणी"
 
@@ -1048,6 +1059,10 @@ msgstr "अनुच्छेद अनुरोध रद्द कर दि�
 msgid "Article request completed"
 msgstr "लेख का अनुरोध पूरा हुआ"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:3
+msgid "Article request fee"
+msgstr "लेख अनुरोध शुल्क"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:10
 msgid "Article request processing"
 msgstr "लेख का अनुरोध प्रसंस्करण"
@@ -1117,7 +1132,6 @@ msgid "Audio tape"
 msgstr "ऑडियो टेप"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:13
-#, fuzzy
 msgid "Audio visual"
 msgstr "ऑडियो विजुअल"
 
@@ -1370,7 +1384,6 @@ msgid "Binder"
 msgstr "बाइंडर"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:19
-#, fuzzy
 msgid "Binder an agent who binds an item."
 msgstr "बाइंडर एक एजेंट जो किसी आइटम को बांधता है।"
 
@@ -1415,7 +1428,6 @@ msgid "Book"
 msgstr "पुस्तक"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:15
-#, fuzzy
 msgid "Book cart"
 msgstr "पुस्तक कार्ट"
 
@@ -1578,6 +1590,10 @@ msgstr "रद्द करें"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:58
 msgid "Canceled hold available for different patron"
 msgstr "अलग-अलग संरक्षक के लिए कैंसिल होल्ड उपलब्ध है"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:10
+msgid "Cancellation"
+msgstr "रद्दीकरण"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:6
 msgid "Cancelled"
@@ -1764,7 +1780,6 @@ msgid "Child - patron with a guarantor"
 msgstr "बच्चा - एक गारंटर के साथ संरक्षक"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:8
-#, fuzzy
 msgid "Children's area"
 msgstr "बच्चों का क्षेत्र"
 
@@ -2125,6 +2140,18 @@ msgstr "कवर डिजाइनर"
 msgid "Creator"
 msgstr "निर्माता"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:5
+msgid "Credit"
+msgstr "क्रेडिट"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:16
+msgid "Credit has been voided"
+msgstr "क्रेडिट शून्य हो गया है"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:description:1
+msgid "Credit types used in Koha"
+msgstr "कोहा में उपयोग किए जाने वाले क्रेडिट प्रकार"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:1:row:5
 msgid "Creditcard"
 msgstr "केडिटकार्ड"
@@ -2225,6 +2252,10 @@ msgstr "डिफ़ॉल्ट"
 msgid "DVD"
 msgstr "डीवीडी"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:11
+msgid "Daily rental fee"
+msgstr "दैनिक किराया शुल्क"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:103
 msgid "Dakota"
 msgstr "डकोटा"
@@ -2306,6 +2337,10 @@ msgstr "प्रिय महोदय/महोदया,"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:46:mul:1
 msgid "Dear patron,"
 msgstr "प्रिय संरक्षक,"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:description:1
+msgid "Debit types used in Koha"
+msgstr "कोहा में उपयोग किए जाने वाले डेबिट प्रकार"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:49
 msgid "Dedicatee"
@@ -2779,6 +2814,10 @@ msgstr "अवलोकन के लिए"
 msgid "Forger"
 msgstr "जालसाज"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:4
+msgid "Forgiven"
+msgstr "क्षमा"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:6:mul:17
 msgid "Format: %sCopy%sScan%s"
 msgstr "प्रारूप: %sप्रतिलिपि%sस्कैन%s"
@@ -2788,7 +2827,6 @@ msgid "Former Attributed author"
 msgstr "पूर्व जिम्मेदार लेखक"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:65
-#, fuzzy
 msgid "Former attributed author"
 msgstr "पूर्व जिम्मेदार लेखक"
 
@@ -2911,7 +2949,6 @@ msgid "Geez"
 msgstr "गीज़"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:12
-#, fuzzy
 msgid "General stacks"
 msgstr "सामान्य स्टेकस"
 
@@ -3176,6 +3213,10 @@ msgstr "होल्ड पिकअप के लिए उपलब्ध ह�
 msgid "Hold available for pickup at <<branches.branchname>>"
 msgstr "होल्ड पिकअप के लिए उपलब्ध है पर <<branches.branchname>>"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:14
+msgid "Hold fee"
+msgstr "होल्ड शुल्क"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:54
 msgid "Hold has been cancelled"
 msgstr "होल्ड रद्द कर दिया गया है"
@@ -3187,6 +3228,10 @@ msgstr "आइटम पर होल्ड रखा गया"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:17
 msgid "Hold slip"
 msgstr "होल्ड पर्ची"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:15
+msgid "Hold waiting too long"
+msgstr "बहुत लंबा होल्ड इंतजार"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:categories:1:row:3
 msgid "Home Bound"
@@ -4051,15 +4096,10 @@ msgid "Library Laser"
 msgstr "लाइब्रेरी लेजर"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:43
-msgid ""
-"Library account password change notification for [% patron.firstname %] [% "
-"patron.surname %]"
-msgstr ""
-"लाइब्रेरी खाता पासवर्ड परिवर्तन अधिसूचना के लिए [% patron.firstname %] [% patron."
-"surname %]"
+msgid "Library account password change notification"
+msgstr "लाइब्रेरी खाता पासवर्ड परिवर्तन अधिसूचना"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:3
-#, fuzzy
 msgid "Library copy lost"
 msgstr "लाइब्रेरी कॉपी गायब"
 
@@ -4128,7 +4168,6 @@ msgid "Lojban"
 msgstr "लोज्बान"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:1
-#, fuzzy
 msgid "Long overdue (lost)"
 msgstr "लंबा अतिदेय (खोया)"
 
@@ -4137,9 +4176,24 @@ msgid "Lost"
 msgstr "खोया"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:3
-#, fuzzy
 msgid "Lost and paid for"
 msgstr "खोया और भुगतान के लिए"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:4
+msgid "Lost item"
+msgstr "खोया आइटम"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:8
+msgid "Lost item fee refund"
+msgstr "खोया हुआ आइटम शुल्क वापसी"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:8
+msgid "Lost item processing fee"
+msgstr "खोई हुई आइटम प्रसंस्करण शुल्क"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:11
+msgid "Lost item processing fee refund"
+msgstr "खोया आइटम प्रसंस्करण शुल्क वापसी"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:307
 msgid "Low German; Low Saxon; German, Low; Saxon, Low"
@@ -4288,6 +4342,10 @@ msgstr "मणिपुरी"
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:288
 msgid "Manobo languages"
 msgstr "मनोबो भाषाएं"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:5
+msgid "Manual fee"
+msgstr "मैनुअल शुल्क"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:134
 msgid "Manufacture place"
@@ -4661,12 +4719,15 @@ msgstr "नए साल का दिन"
 msgid "New Zealand"
 msgstr "न्यूजीलैंड"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:6
+msgid "New card fee"
+msgstr "नया कार्ड शुल्क"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:60
 msgid "New curbside pickup"
 msgstr "नया कर्बसाइड पिकअप"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:10
-#, fuzzy
 msgid "New materials shelf"
 msgstr "नई सामग्री शेल्फ"
 
@@ -4859,7 +4920,6 @@ msgid "Not currently received"
 msgstr "वर्तमान में प्राप्त नही हुआ"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:22
-#, fuzzy
 msgid "Not for loan"
 msgstr "ऋण के लिए नहीं"
 
@@ -4964,7 +5024,6 @@ msgid "Oman"
 msgstr "ओमान"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:9
-#, fuzzy
 msgid "On display"
 msgstr "प्रर्दशन पर"
 
@@ -5080,6 +5139,10 @@ msgstr ""
 msgid "Out of stock"
 msgstr "स्टाक में नहीं"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:7
+msgid "Overdue fine"
+msgstr "अतिदेय जुर्माना"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:72
 msgid "Overdue item fine description"
 msgstr "अतिदेय आइटम जुर्माना विवरण"
@@ -5091,6 +5154,10 @@ msgstr "अतिदेय नोटिस"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:21
 msgid "Overdues slip"
 msgstr "अतिदेय पर्ची"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:1
+msgid "Overpayment refund"
+msgstr "अधिक भुगतान वापसी"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:149
 msgid "Owner"
@@ -5183,6 +5250,14 @@ msgstr "संरक्षक"
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:3
 msgid "Patrons"
 msgstr "संरक्षक"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:2
+msgid "Payment"
+msgstr "भुगतान"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:9
+msgid "Payment from library to patron"
+msgstr "पुस्तकालय से संरक्षक तक भुगतान"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:319
 msgid "Pedi; Sepedi; Northern Sotho"
@@ -5356,7 +5431,6 @@ msgid "Process contact"
 msgstr "प्रक्रिया संपर्क करें"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:16
-#, fuzzy
 msgid "Processing center"
 msgstr "प्रक्रिया केन्द्र"
 
@@ -5452,6 +5526,10 @@ msgstr "प्यूर्टो रिको"
 msgid "Puppeteer"
 msgstr "कठपुतली चलानेवाला"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:9
+msgid "Purchase"
+msgstr "क्रय"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:62
 msgid "Purchase suggestion accepted"
 msgstr "खरीद सुझाव स्वीकार किया गया"
@@ -5528,6 +5606,10 @@ msgstr "विवरण के लिए https://www.niso.org/publications/stand
 msgid "Reference"
 msgstr "संदर्भ"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:7
+msgid "Refund"
+msgstr "वापसी"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:19
 msgid "Rejected"
 msgstr "अस्वीकृत"
@@ -5547,6 +5629,18 @@ msgstr "रेंडरर"
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:8
 msgid "Renew"
 msgstr "नवीनीकृत "
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:12
+msgid "Renewal of daily rental item"
+msgstr "दैनिक रेंटल आइटम का नवीनीकरण"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:13
+msgid "Renewal of rental item"
+msgstr "रेंटल आइटम का नवीनीकरण"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:10
+msgid "Rental fee"
+msgstr "रेंटल शुल्क"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:39
 msgid "Report"
@@ -5605,7 +5699,6 @@ msgid "Restorationist"
 msgstr "बहालीवादी"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:25
-#, fuzzy
 msgid "Restricted access"
 msgstr "प्रतिबंधित प्रवेश"
 
@@ -5873,7 +5966,6 @@ msgid "Share on list <<listname>> accepted"
 msgstr "सूची पर साझा करें <<listname>> स्वीकार किए जाते हैं"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:2
-#, fuzzy
 msgid "Shelf copy damaged"
 msgstr "शेल्फ कॉपी क्षतिग्रस्त"
 
@@ -6148,12 +6240,10 @@ msgid "Staff"
 msgstr "कर्मचारी"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:23
-#, fuzzy
 msgid "Staff collection"
 msgstr "स्टाफ संग्रह"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:11
-#, fuzzy
 msgid "Staff office"
 msgstr "स्टाफ कार्यालय"
 
@@ -7209,6 +7299,10 @@ msgstr "लकड़ी-उकेरक"
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:221
 msgid "Woodcutter"
 msgstr "लकड़हारा"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:3
+msgid "Writeoff"
+msgstr "ख़ारिज करना"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:137
 msgid "Writer of accompanying material"

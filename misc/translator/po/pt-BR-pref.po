@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:30+0200\n"
-"PO-Revision-Date: 2023-05-02 11:44+0000\n"
+"PO-Revision-Date: 2023-05-16 12:42+0000\n"
 "Last-Translator: Tiago Murakami <trmurakami@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pt_BR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pt_BR/22.11/pt-BR-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1683027862.365244\n"
+"X-POOTLE-MTIME: 1684240958.044519\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -651,7 +651,7 @@ msgstr "admin.pref Autenticação de Certificado de Cliente SSL"
 
 # Administration > Search engine
 msgid "admin.pref Search engine"
-msgstr "admin.pref Mecanismo de pesquisa"
+msgstr "admin.pref Mecanismo de busca"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref Share anonymous usage statistics"
@@ -819,8 +819,8 @@ msgid ""
 "full record searchable may have a negative effect on relevance ranking of "
 "search results."
 msgstr ""
-"<br><strong>NOTA:</strong> Tornar o registro completo pesquisável pode ter "
-"um efeito negativo na classificação de relevância dos resultados da pesquisa."
+"<br><strong>NOTA:</strong> Tornar o registro completo buscável pode ter um "
+"efeito negativo na classificação de relevância dos resultados da busca."
 
 # Administration > Search engine
 msgid ""
@@ -829,8 +829,7 @@ msgid ""
 "record searchable."
 msgstr ""
 "<br>O formato ISO2709 é recomendado, pois é mais rápido e ocupa menos "
-"espaço, enquanto o formato do array torna o registro MARC completo "
-"pesquisável."
+"espaço, enquanto o formato do array torna o registro MARC completo buscável."
 
 # Administration > Search engine
 msgid "admin.pref#ElasticsearchMARCFormat# Elasticsearch MARC format: "
@@ -842,7 +841,7 @@ msgstr "ISO2709 (formato de intercâmbio)"
 
 # Administration > Search engine
 msgid "admin.pref#ElasticsearchMARCFormat# Searchable array"
-msgstr "Matriz pesquisável"
+msgstr "Matriz buscável"
 
 # Patrons > Notices and notifications
 msgid "admin.pref#EmailOverduesNoEmail# Don't send"
@@ -1097,7 +1096,7 @@ msgstr "Elasticsearch"
 
 # Administration > Search engine
 msgid "admin.pref#SearchEngine# Use following search engine: "
-msgstr "Use o seguinte mecanismo de pesquisa:"
+msgstr "Use o seguinte mecanismo de busca:"
 
 # Administration > Search engine
 msgid "admin.pref#SearchEngine# Zebra"
@@ -2491,6 +2490,26 @@ msgstr ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # Authorities > Linker
+msgid "authorities.pref#LinkerConsiderThesaurus# Do"
+msgstr "Fazer"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
+msgstr "Não fazer"
+
+# Authorities > Linker > LinkerConsiderThesaurus
+msgid ""
+"authorities.pref#LinkerConsiderThesaurus# compare the source for 6XX "
+"headings to the thesaurus source for authority records when linking. "
+"Enabling this preference may require a reindex, and may generate new "
+"authority records if AutoCreateAuthorities is enabled."
+msgstr ""
+"compare a fonte dos cabeçalhos 6XX com a fonte do dicionário de sinônimos "
+"para registros de autoridade ao vincular. A ativação dessa preferência pode "
+"exigir uma reindexação e pode gerar novos registros de autoridade se "
+"AutoCreateAuthorities estiver ativado."
+
+# Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
 msgstr "Fazer"
 
@@ -2611,8 +2630,7 @@ msgid ""
 "authorities.pref#UseAuthoritiesForTracings# authority record numbers instead "
 "of text strings for searches from subject tracings."
 msgstr ""
-"número de registros de autoridade ao invés de strings para pesquisa por "
-"assunto."
+"número de registros de autoridade ao invés de strings para busca por assunto."
 
 # Cataloging
 msgid "cataloguing.pref"
@@ -2662,7 +2680,7 @@ msgid ""
 "fields' column of Z39.50 search results (use comma as delimiter e.g.: "
 "\"<code>001, 082$ab, 090$ab</code>\")"
 msgstr ""
-"na coluna 'Campos adicionais' dos resultados da pesquisa Z39.50 (use vírgula "
+"na coluna 'Campos adicionais' dos resultados da busca Z39.50 (use vírgula "
 "como delimitador, por exemplo: \"<code> 001, 082 $ ab, 090 $ ab </code>\")"
 
 # Cataloging > Importing
@@ -2735,7 +2753,7 @@ msgid ""
 "with the subfields separated by"
 msgstr ""
 "como informações de acervos para registros que não têm exemplares (isso pode "
-"conter vários subcampos para pesquisar, por exemplo, <code> 852abhi </code> "
+"conter vários subcampos para buscar, por exemplo, <code> 852abhi </code> "
 "olharia para 852 subcampos a, b, h e i), com os subcampos separados por"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
@@ -3208,8 +3226,8 @@ msgid ""
 "cataloguing.pref#OpacSuppression# bibliographic records marked as suppressed "
 "from OPAC search results."
 msgstr ""
-"registros bibliográficos marcados como suprimidos dos resultados de pesquisa "
-"do OPAC."
+"registros bibliográficos marcados como suprimidos dos resultados de busca do "
+"OPAC."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
@@ -3674,9 +3692,9 @@ msgid ""
 "determining circulation and fines rules, for displaying an item type icon on "
 "either opac detail or results page, etc)."
 msgstr ""
-"como tipo de material padrão (para determinar regras de circulação, multas, "
-"exibir ícone de tipo de material tanto no OPAC como na tela de resultados de "
-"pesquisa etc.)                "
+"como o tipo de exemplar de autoritativo (para determinar as regras de "
+"circulação e multas, para exibir um ícone de tipo de item na página de "
+"detalhes opac ou de resultados, etc.)."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#item-level_itypes# bibliographic record"
@@ -4242,7 +4260,7 @@ msgstr "Use o algoritmo para mostrar ou ocultar"
 msgid ""
 "circulation.pref#ArticleRequestsLinkControl# article request links on search "
 "results."
-msgstr "links de solicitação de artigo nos resultados de pesquisa."
+msgstr "links de solicitação de artigo nos resultados da busca."
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Author"
@@ -5125,7 +5143,7 @@ msgid ""
 "multiple bibliographic records from the search results"
 msgstr ""
 "a capacidade de colocar reservas em vários registros bibliográficos dos "
-"resultados da pesquisa"
+"resultados da busca"
 
 # Circulation > Holds policy
 msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
@@ -5139,9 +5157,7 @@ msgstr "Habilitar"
 msgid ""
 "circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
 "groups."
-msgstr ""
-"a capacidade de colocar reservas em vários registros bibliográficos dos "
-"resultados da pesquisa"
+msgstr "a capacidade de colocar reservas em grupos de exemplares."
 
 # Circulation > Article requests
 msgid "circulation.pref#EnableItemGroups# Don't enable"
@@ -6085,7 +6101,7 @@ msgid ""
 "typing a patron search for circulation or patron search."
 msgstr ""
 "para adivinhar o usuário que está sendo digitado enquanto digita uma "
-"pesquisa de usuário para circulação ou pesquisa de usuário."
+"pesquisa de usuário para circulação ou busca de usuário."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PatronRestrictionTypes# Allow"
@@ -6753,7 +6769,7 @@ msgstr ""
 msgid ""
 "circulation.pref#StaffSearchResultsDisplayBranch# For search results in the "
 "staff interface, display"
-msgstr "Para resultados de pesquisa na interface da equipe, exiba"
+msgstr "Para resultados de busca na interface da equipe, exiba"
 
 # Circulation > Checkout policy
 msgid ""
@@ -7771,7 +7787,7 @@ msgid ""
 "enhanced_content.pref#AmazonCoverImages# cover images from Amazon on search "
 "results and item detail pages on the staff interface."
 msgstr ""
-"capas da Amazon na tela de resultados de pesquisa e na tela de detalhes do "
+"capas da Amazon na tela de resultados de busca e na tela de detalhes do "
 "exemplar na interface administrativa."
 
 # Enhanced content > Amazon
@@ -8209,7 +8225,7 @@ msgid ""
 "enhanced_content.pref#LocalCoverImages# local cover images on staff "
 "interface search and details pages."
 msgstr ""
-"imagens de capa locais nas páginas de pesquisa e detalhes da interface da "
+"imagens de capa locais nas páginas de busca e detalhes da interface da "
 "equipe."
 
 # Enhanced content > Novelist Select
@@ -8340,8 +8356,8 @@ msgid ""
 "enhanced_content.pref#OPACAmazonCoverImages# cover images from Amazon on "
 "search results and item detail pages on the OPAC."
 msgstr ""
-"capas da Amazon nos resultados de pesquisa e na tela de detalhes do exemplar "
-"no OPAC."
+"capas da Amazon nos resultados de busca e na tela de detalhes do exemplar no "
+"OPAC."
 
 # Enhanced content > All
 msgid "enhanced_content.pref#OPACFRBRizeEditions# Don't show"
@@ -8413,7 +8429,7 @@ msgstr "Mostrar"
 msgid ""
 "enhanced_content.pref#OpenLibrarySearch# search results from Open Library on "
 "the OPAC."
-msgstr "resultados da pesquisa da Open Library no OPAC."
+msgstr "resultados da busca da Open Library no OPAC."
 
 # Enhanced content > OverDrive
 msgid ""
@@ -8604,8 +8620,8 @@ msgid ""
 "enhanced_content.pref#SyndeticsCoverImages# cover images from Syndetics on "
 "search results and item detail pages in the OPAC and the staff interface in a"
 msgstr ""
-"imagens de capa de Syndetics em resultados de pesquisa e páginas de detalhes "
-"de exemplares no OPAC e a interface administrativa em um"
+"imagens de capa de Syndetics em resultados da busca e páginas de detalhes de "
+"exemplares no OPAC e a interface administrativa em um"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsCoverImages# large"
@@ -8822,7 +8838,7 @@ msgstr "Exiba"
 # Enhanced content > Tagging
 msgid ""
 "enhanced_content.pref#TagsShowOnList# tags on search results on the OPAC."
-msgstr "tags nos resultados de pesquisa no OPAC."
+msgstr "tags nos resultados de busca no OPAC."
 
 # Enhanced content > Library Thing
 msgid "enhanced_content.pref#ThingISBN# Don't use"
@@ -9034,8 +9050,8 @@ msgid ""
 "i18n_l10n.pref#alphabet# for lists of browsable letters. This should be a "
 "space separated list of uppercase letters."
 msgstr ""
-"para lista pesquisáveis por letras. Pode ser uma lista separada por espaços "
-"de letras em caixa alta."
+"para lista navegável por cartas. Pode ser uma lista separada por espaços de "
+"letras em caixa alta."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# ."
@@ -9370,8 +9386,8 @@ msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
 "HTML source for the OPAC and staff interface."
 msgstr ""
-"despeje a consulta de pesquisa em um comentário na fonte HTML para o OPAC e "
-"a interface administrativa."
+"despeje a consulta de busca em um comentário na fonte HTML para o OPAC e a "
+"interface administrativa."
 
 # Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
@@ -9552,7 +9568,7 @@ msgstr "opac.pref"
 
 # OPAC > Advanced search options
 msgid "opac.pref Advanced search options"
-msgstr "Opções de pesquisa avançada"
+msgstr "Opções de busca avançada"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
@@ -9620,7 +9636,6 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Não permitir"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's charges to the patron's "
@@ -9754,7 +9769,7 @@ msgid ""
 "times."
 msgstr ""
 "COinS / OpenURL / Z39.88 nos resultados de busca no OPAC.  <br/>Aviso: "
-"Ativar esta opção pode aumentar o tempo de resposta das pesquisas no OPAC."
+"Ativar esta opção pode aumentar o tempo de resposta das buscas no OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# Don't include"
@@ -9827,7 +9842,7 @@ msgstr "Guarde"
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# patron search history in the OPAC."
-msgstr "o histórico de pesquisa no OPAC."
+msgstr "o histórico de busca do usuário no OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
@@ -10004,7 +10019,6 @@ msgstr ""
 "de"
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
 "to disable)."
@@ -10116,13 +10130,13 @@ msgid ""
 "{QUERY_KW} that will be replaced with the keywords of the query."
 msgstr ""
 "<br />Nota: Você pode incluir variáveis {QUERY_KW} que serão substituídas "
-"pelas palavras da sua pesquisa."
+"pelas palavras da sua busca."
 
 # OPAC > Appearance
 msgid ""
 "opac.pref#OPACNoResultsFound# Display this HTML when no results are found "
 "for a search in the OPAC:"
-msgstr "Mostrar em HTML os resultados para a pesquisa no OPAC:"
+msgstr "Mostrar em HTML os resultados para a busca no OPAC:"
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACOpenURLItemTypes# <br />"
@@ -10248,7 +10262,7 @@ msgstr ""
 # OPAC > Appearance
 msgid ""
 "opac.pref#OPACResultsLibrary# For search results in the OPAC, show the item's"
-msgstr "Para resultados de pesquisa no OPAC, mostre o exemplar"
+msgstr "Para resultados de busca no OPAC, mostre o exemplar"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# current library"
@@ -10259,15 +10273,16 @@ msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "biblioteca de origem"
 
 # OPAC > Appearance > OPACResultsMaxItems
-#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
 "group unavailable items by 'substatus only', listing item counts per "
 "substatus. Similarly the option 'library only' results in unavailable item "
 "counts per library.)"
 msgstr ""
-". (NOTA: Para grandes consórcios, recomendamos agrupar os exemplares "
-"indisponíveis por substatus, listando apenas as contagens de itens.)"
+". (OBSERVAÇÃO: para grandes consórcios, recomendamos agrupar os itens "
+"indisponíveis por 'somente substatus', listando as contagens de itens por "
+"substatus. Da mesma forma, a opção 'somente biblioteca' resulta em contagens "
+"de itens indisponíveis por biblioteca.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
@@ -10280,6 +10295,10 @@ msgid ""
 "\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
 "show no more than"
 msgstr ""
+"Se <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> estiver definido como \"biblioteca e "
+"substatus\", mostre não mais que"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
@@ -10289,27 +10308,23 @@ msgstr "Mostrar não mais do que"
 msgid ""
 "opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
 "search results.<br>"
-msgstr ""
-"itens individuais (disponíveis) nos resultados da pesquisa OPAC XSLT.<br>"
+msgstr "itens individuais (disponíveis) nos resultados da busca OPAC XSLT.<br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
-#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
 "and category (like Checked out, Damaged, On hold, etc.)<br>"
 msgstr ""
-"(indisponível) exemplares individuais para categorias como Emprestado, "
-"Danificado, Em espera, mas somente quando você os agrupa por unidade.<br>"
+"itens individuais (indisponíveis) por biblioteca e categoria (como "
+"Emprestado, Danificado, Em espera, etc.)<br>"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# library and substatus"
-msgstr "unidade e substatus"
+msgstr "biblioteca e substatus"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# library only"
-msgstr "unidade apenas"
+msgstr "somente biblioteca"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# substatus only"
@@ -10337,8 +10352,8 @@ msgid ""
 "detail pages of items on the OPAC, with the following HTML (leave blank to "
 "disable):"
 msgstr ""
-"Inclua uma caixa \"Mais Pesquisas\" na página de detalhes do exemplar no "
-"OPAC com o seguinte código HTML (deixar em branco para desativar):"
+"Inclua uma caixa \"Mais buscas\" na página de detalhes do exemplar no OPAC "
+"com o seguinte código HTML (deixar em branco para desativar):"
 
 # OPAC > Shelf browser
 msgid "opac.pref#OPACShelfBrowser# Don't show"
@@ -10437,7 +10452,7 @@ msgid ""
 "opac.pref#OPACShowOpenURL# display of OpenURL link in OPAC search results "
 "and detail page."
 msgstr ""
-"exibição do link OpenURL nos resultados de pesquisa do OPAC e na página de "
+"exibição do link OpenURL nos resultados da busca do OPAC e na página de "
 "detalhes."
 
 # OPAC > Appearance
@@ -10708,7 +10723,7 @@ msgstr "Data de publicação"
 msgid ""
 "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded "
 "view:"
-msgstr "Mostrar opções de pesquisa para a visualização expandida:"
+msgstr "Mostrar opções de busca para a visualização expandida:"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
@@ -10736,7 +10751,7 @@ msgstr "Data de publicação"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Show search options:"
-msgstr "Mostrar opções de pesquisa:"
+msgstr "Mostrar opções de busca:"
 
 # OPAC > Advanced search options
 msgid "opac.pref#OpacAdvSearchOptions# Sorting"
@@ -10760,8 +10775,7 @@ msgstr ""
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# Show tabs in the OPAC advanced search for "
 "limiting searches on the"
-msgstr ""
-"Mostrar guias na pesquisa avançada do OPAC para limitar as pesquisas no"
+msgstr "Mostrar guias na busca avançada do OPAC para limitar as buscas no"
 
 # Searching > Search form
 msgid ""
@@ -10951,7 +10965,7 @@ msgid ""
 "<a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target="
 "\"_blank\">Koha wiki</a>."
 msgstr ""
-"Define as regras para ocultar os exemplares específicos de pesquisa e "
+"Define as regras para ocultar os exemplares específicos de busca e "
 "visualizar a opinião sobre o OPAC. Como escrever estas regras é documentado "
 "no <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target="
 "\"_blank\">Koha wiki</a>."
@@ -11002,7 +11016,7 @@ msgid ""
 "search results and detail pages. To prevent certain words from ever being "
 "highlighted, enter a list of stopwords here:"
 msgstr ""
-"palavras que o usuário pesquisou em seus resultados de pesquisa e páginas de "
+"palavras que o usuário pesquisou em seus resultados de bsuca e páginas de "
 "detalhes. Para evitar que certas palavras sejam destacadas, insira uma lista "
 "de palavras irrelevantes aqui:"
 
@@ -11064,7 +11078,7 @@ msgstr "Exibir seletor de idioma em "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# both top and footer"
-msgstr "tano no topo como no rodapé"
+msgstr "tanto no topo como no rodapé"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLangSelectorMode# only footer"
@@ -11178,7 +11192,7 @@ msgid ""
 "opac.pref#OpacMetaDescription# This description will show in search engine "
 "results (160 characters)."
 msgstr ""
-"Esta descrição será exibida nos resultados do mecanismo de pesquisa (160 "
+"Esta descrição será exibida nos resultados do mecanismo de busca (160 "
 "caracteres)."
 
 # OPAC > Features
@@ -11714,7 +11728,7 @@ msgid ""
 "as available for reference in OPAC search results:"
 msgstr ""
 "Liste os seguintes status de empréstimo não disponíveis para referência nos "
-"resultados de pesquisa da OPAC:"
+"resultados de busca da OPAC:"
 
 # OPAC > Restricted page
 msgid ""
@@ -11856,8 +11870,8 @@ msgid ""
 "avatar will be searched on <a href=\"https://www.libravatar.org\" target="
 "\"_blank\">Libravatar</a> using the patron's e-mail address."
 msgstr ""
-"avatar do revisor ao lado dos comentários no OPAC. O avatar será pesquisado "
-"no <a href=\"https://www.libravatar.org\" target=\"_blank\">Libravatar</a> "
+"avatar do revisor ao lado dos comentários no OPAC. O avatar será buscado no "
+"<a href=\"https://www.libravatar.org\" target=\"_blank\">Libravatar</a> "
 "usando o endereço de e-mail do usuário."
 
 # OPAC > Features
@@ -12096,13 +12110,12 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Não permita"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
 "ability for a patron's charges to be viewed by linked patrons in the OPAC."
 msgstr ""
-"funcionários para definir a capacidade de as multas de um usuário serem "
-"vistas pelos usuários vinculados no OPAC."
+"equipe para definir a capacidade de as cobranças de um usuário serem "
+"visualizadas por usuários vinculados no OPAC."
 
 # Patrons > General
 msgid "patrons.pref#AutoApprovePatronProfileSettings# Disable"
@@ -12426,8 +12439,8 @@ msgid ""
 msgstr ""
 "Se Koha estiver vazio, o padrão será \"firstname,middle_name,surname,"
 "othernames,cardnumber,userid\". Campos adicionais adicionados a esta "
-"preferência serão adicionados como opções de pesquisa no menu suspenso na "
-"página de pesquisa de usuários."
+"preferência serão adicionados como opções de busca no menu suspenso na "
+"página de busca de usuários."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -12594,44 +12607,6 @@ msgid ""
 msgstr ""
 "cobrar uma taxa quando um usuário mude para uma categoria com uma taxa de "
 "inscrição."
-
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# . GDPR is the EU General Data Protection "
-"Regulation. When you enforce, patrons need to give consent before using the "
-"OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-". O GDPR é o regulamento geral de proteção de dados da UE. Quando você "
-"aplica, os usuários precisam dar consentimento antes de usar o OPAC. Se você "
-"definir como permissivo, o Koha avisará, mas não obrigará."
-
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> setting."
-msgstr ""
-"<br><strong>NOTA:</strong> Se você habilitar isso, também terá que definir o "
-"URL de sua política de privacidade pública com o <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> configuração."
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr "Defina a política GDPR para:"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr "desativar"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr "forçado"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr "permissiva"
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
@@ -12986,13 +12961,51 @@ msgstr ""
 
 # Patrons > Privacy
 msgid ""
+"patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
+"patrons need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+msgstr ""
+"Quando você aplica uma política de privacidade de dados, os usuários "
+"precisam dar consentimento antes de usar o OPAC. Se você definir como "
+"permissivo, o Koha avisará, mas não aplicará."
+
+# Patrons > Privacy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
+"this you will also have to set the URL of your public privacy policy with "
+"the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
+msgstr ""
+"<br><strong>NOTA:</strong> Se você habilitar isto, também terá que definir a "
+"URL de sua política de privacidade pública com a <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL\""
+">PrivacyPolicyURL</a> configuração."
+
+# Patrons > Privacy
+msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
+msgstr "Defina o consentimento da política de privacidade de dados para:"
+
+# Patrons > Privacy
+msgid "patrons.pref#PrivacyPolicyConsent# disabled"
+msgstr "desabilitado"
+
+# Patrons > Privacy
+msgid "patrons.pref#PrivacyPolicyConsent# enforced"
+msgstr "aplicado"
+
+# Patrons > Privacy
+msgid "patrons.pref#PrivacyPolicyConsent# permissive"
+msgstr "permissivo"
+
+# Patrons > Privacy
+msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
-"<br><strong>NOTA:</strong> o URL só será exibido se <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> "
-"estiver definido."
+"<br><strong>NOTA:</strong> A URL só será exibida se <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent\""
+">PrivacyPolicyConsent</a> estiver definida."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -13001,12 +13014,12 @@ msgstr "Use o seguinte URL"
 # Patrons > Privacy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
-"messages about privacy and data protection. (If you enforce GDPR policy, "
-"make sure that this page is not blocked.)"
+"messages about privacy and data protection. (If you enforce a data privacy "
+"policy, make sure that this page is not blocked.)"
 msgstr ""
-"para se referir à sua política de privacidade local em mensagens sobre "
-"privacidade e proteção de dados. (Se você aplicar a política GDPR, verifique "
-"se esta página não está bloqueada.)"
+"para consultar sua política de privacidade local em mensagens sobre "
+"privacidade e proteção de dados. (Se você aplicar uma política de "
+"privacidade de dados, certifique-se de que esta página não esteja bloqueada.)"
 
 # Patrons > General
 msgid ""
@@ -13099,8 +13112,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Localização"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Patron's category"
-msgstr "Categoria de usuários"
+msgid "patrons.pref#Pseudonymization# Patron category"
+msgstr "Categoria de usuário"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Patron's gender"
@@ -13117,18 +13130,18 @@ msgstr "Título do usuário"
 # Patrons > Security
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
-"separate table for statistics purpose."
+"separate table for statistical purposes."
 msgstr ""
-"usuários e transações serão copiados para uma tabela separada para fins de "
-"estatísticas."
+"Usuários e transações serão copiados para uma tabela separada para fins "
+"estatísticos."
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort1"
-msgstr "Sort1"
+msgid "patrons.pref#Pseudonymization# Sort 1"
+msgstr "Ordenação 1"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort2"
-msgstr "Sort2"
+msgid "patrons.pref#Pseudonymization# Sort 2"
+msgstr "Ordenação 2"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# State"
@@ -13139,14 +13152,16 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "Tipo de transação"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Zipcode"
+msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "CEP"
 
 # Patrons > Security
 msgid ""
-"patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
-"personal information."
-msgstr "pseudonimização para cumprir o GDPR para informações pessoais."
+"patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
+"policies and regulations like GDPR for managing personal information."
+msgstr ""
+"pseudonimização para cumprir as políticas e regulamentos de privacidade de "
+"dados, como GDPR, para gerenciar informações pessoais."
 
 # Patrons > Security
 msgid ""
@@ -13496,8 +13511,8 @@ msgid ""
 "searching.pref#AdvancedSearchTypes# Show tabs in the staff interface "
 "advanced search for limiting searches on the"
 msgstr ""
-"Mostrar guias na pesquisa avançada da interface administrativa para limitar "
-"as pesquisas no"
+"Mostrar guias na busca avançada da interface administrativa para limitar as "
+"pesquisas no"
 
 # Searching > Search form
 msgid ""
@@ -13542,7 +13557,7 @@ msgid ""
 "searching.pref#BrowseResultSelection# browsing search results from the "
 "bibliographic record detail page in staff interface."
 msgstr ""
-"navegar nos resultados da pesquisa na página de detalhes do registro "
+"navegar nos resultados da busca na página de detalhes do registro "
 "bibliográfico na interface de STAFF."
 
 # Searching > Results display
@@ -13583,7 +13598,7 @@ msgid ""
 "searching.pref#ElasticsearchCrossFields# the cross_fields option for "
 "Elasticsearch searches, supported in Elasticsearch 6.X and above."
 msgstr ""
-"a opção cross_fields para pesquisas Elasticsearch, com suporte no "
+"a opção cross_fields para buscas no Elasticsearch, com suporte no "
 "Elasticsearch 6.X e superior."
 
 # Searching > Features
@@ -13598,7 +13613,7 @@ msgstr "Manter"
 msgid ""
 "searching.pref#EnableSearchHistory# patron search history in the staff "
 "interface."
-msgstr "histórico de pesquisa do usuário na interface de STAFF."
+msgstr "histórico de busca do usuário na interface de STAFF."
 
 # Searching > Results display
 msgid "searching.pref#FacetLabelTruncationLength# Truncate facets length to"
@@ -13640,9 +13655,9 @@ msgid ""
 "form) headings in bibliographic searches. Please note: you will need to "
 "reindex your bibliographic database when changing this preference."
 msgstr ""
-"<em>ver</em> (forma não preferida cabeçalho em pesquisas bibliográficas. "
-"Favor note: você precisa reindexar a sua base bibliográfica quando alterar "
-"esta preferência."
+"<em>ver</em> (forma não preferida cabeçalho em buscas bibliográficas. Favor "
+"note: você precisa reindexar a sua base bibliográfica quando alterar esta "
+"preferência."
 
 # Searching > Features
 msgid "searching.pref#IncludeSeeFromInSearches# Don't include"
@@ -13709,8 +13724,7 @@ msgid ""
 "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# search history of the "
 "unlogged user to the next patron logging in."
 msgstr ""
-"histórico de pesquisa do usuário não registrado para o próximo usuário "
-"logado."
+"histórico de busca do usuário não registrado para o próximo usuário logado."
 
 # Searching > Results display
 msgid ""
@@ -13719,9 +13733,8 @@ msgid ""
 "than the limit set. Statuses will display correctly in the record details."
 msgstr ""
 "<br/>Os status de disponibilidade podem aparecer incorretamente nos "
-"resultados da pesquisa de um registro se tiver mais exemplares do que o "
-"limite definido. As situações serão exibidas corretamente nos detalhes do "
-"registro."
+"resultados de busca de um registro se tiver mais exemplares do que o limite "
+"definido. As situações serão exibidas corretamente nos detalhes do registro."
 
 # Searching > Results display
 msgid ""
@@ -13835,7 +13848,7 @@ msgid ""
 "searching.pref#OPACnumSearchResultsDropdown# results per page dropdown on "
 "OPAC search results."
 msgstr ""
-"lista suspensa de resultados por página nos resultados de pesquisa do OPAC."
+"lista suspensa de resultados por página nos resultados de busca do OPAC."
 
 # Searching > Results display > PassItemMarcToXSLT
 msgid ""
@@ -13902,11 +13915,10 @@ msgid ""
 "cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
 "Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
-"para combinar palavras semelhantes em uma pesquisa (por exemplo, uma busca "
-"por <cite>flang</cite> também deve combinar <cite>flange</cite> e "
-"<cite>fang</cite>; Afeta apenas as pesquisas do Zebra. Qualquer termo do "
-"Elasticsearch pode ser confundido adicionando um ~ diretamente após o "
-"termo.)."
+"para combinar palavras semelhantes em uma busca (por exemplo, uma busca por "
+"<cite>flang</cite> também deve combinar <cite>flange</cite> e <cite>fang</"
+"cite>; Afeta apenas as buscas do Zebra. Qualquer termo do Elasticsearch pode "
+"ser confundido adicionando um ~ diretamente após o termo.)."
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"
@@ -13930,9 +13942,9 @@ msgid ""
 "escaped and interpreted as regular strings. (Elasticsearch only.)"
 msgstr ""
 "expressões regulares em cadeias de consulta. Se \"Escape\" for selecionado, "
-"as ocorrências de \"/\" nos termos da pesquisa serão automaticamente "
-"escapadas e as expressões regulares interpretadas como seqüências regulares. "
-"Se \"Escapar escapou\" for selecionado, isso permitirá escrever expressões "
+"as ocorrências de \"/\" nos termos da busca serão automaticamente escapadas "
+"e as expressões regulares interpretadas como seqüências regulares. Se "
+"\"Escapar escapou\" for selecionado, isso permitirá escrever expressões "
 "regulares \"\\ / assim \\ /\" enquanto \"/ isto /\", \"ou / isto\" serão "
 "escapadas e interpretadas como seqüências regulares. (Somente Elasticsearch.)"
 
@@ -13983,8 +13995,8 @@ msgid ""
 "searching.pref#RetainCatalogSearchTerms# search terms between searches when "
 "searching from the 'search the catalog' tab in the staff interface header."
 msgstr ""
-"termos de pesquisa entre as pesquisas ao pesquisar na guia 'pesquisar no "
-"catálogo' no cabeçalho da interface administrativa."
+"termos de busca entre as buscas ao buscar na guia 'buscar no catálogo' no "
+"cabeçalho da interface administrativa."
 
 # Searching > Features
 msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
@@ -14000,8 +14012,8 @@ msgid ""
 "searching from the 'checkout' and 'search patrons' tab in the staff "
 "interface header."
 msgstr ""
-"termos de pesquisa entre as pesquisas ao pesquisar nas guias 'empréstimo' e "
-"'pesquisar clientes' no cabeçalho da interface administrativa."
+"termos de busca entre as buscas ao buscar nas guias 'empréstimo' e 'buscar "
+"clientes' no cabeçalho da interface administrativa."
 
 # Searching > Features
 msgid "searching.pref#SavedSearchFilters# Disable"
@@ -14016,15 +14028,15 @@ msgid ""
 "searching.pref#SavedSearchFilters# the option for staff with permission to "
 "create/edit custom saved search filters."
 msgstr ""
-"a opção para funcionários com permissão para criar/editar filtros de "
-"pesquisa salvos personalizados."
+"a opção para funcionários com permissão para criar/editar filtros de busca "
+"salvos personalizados."
 
 # Searching > Results display > SearchLimitLibrary
 msgid ""
 "searching.pref#SearchLimitLibrary# When limiting search results with a "
 "library or library group, limit by the item's"
 msgstr ""
-"Ao limitar os resultados da pesquisa com uma biblioteca ou grupo de "
+"Ao limitar os resultados da busca com uma biblioteca ou grupo de "
 "bibliotecas, limite pelo exemplar"
 
 # Searching > Results display
@@ -14042,7 +14054,7 @@ msgstr "biblioteca de origem."
 # Searching > Results display
 msgid ""
 "searching.pref#SearchWithISBNVariations# When searching on the ISBN index,"
-msgstr "histórico de pesquisa do usuário na interface administrativa."
+msgstr "Ao buscar no índice ISBN,"
 
 # Searching > Results display
 msgid "searching.pref#SearchWithISBNVariations# don't search"
@@ -14059,7 +14071,7 @@ msgstr "exibir"
 # Searching > Results display
 msgid ""
 "searching.pref#SearchWithISSNVariations# When searching on the ISSN index,"
-msgstr "Ao pesquisar no índice ISSN,"
+msgstr "Ao buscar no índice ISSN,"
 
 # Searching > Results display
 msgid "searching.pref#SearchWithISSNVariations# don't search"
@@ -14153,7 +14165,7 @@ msgid ""
 "searching.pref#defaultSortField# By default, sort search results in the "
 "staff interface by"
 msgstr ""
-"Por padrão, classifique os resultados da pesquisa na interface de STAFF por"
+"Por padrão, classifique os resultados da busca na interface de STAFF por"
 
 # Searching > Results display
 msgid "searching.pref#defaultSortField# ascending."
@@ -14224,8 +14236,7 @@ msgid ""
 "searching.pref#expandedSearchOption# \"More options\" on the OPAC and staff "
 "interface advanced search pages."
 msgstr ""
-"\"Mais opções\" nas páginas de pesquisa avançada do OPAC e da interface de "
-"STAFF"
+"\"Mais opções\" nas páginas de busca avançada do OPAC e da interface de STAFF"
 
 # Searching > Search form
 msgid "searching.pref#expandedSearchOption# By default,"
@@ -14247,7 +14258,7 @@ msgstr "Exibir até"
 msgid ""
 "searching.pref#maxItemsInSearchResults# items per bibliographic record in "
 "the search results"
-msgstr "exemplares por registro bibliográfico nos resultados da pesquisa"
+msgstr "exemplares por registro bibliográfico nos resultados da busca"
 
 # Searching > Results display
 msgid "searching.pref#maxRecordsForFacets# Build facets based on"
@@ -14255,7 +14266,7 @@ msgstr "Constrói resultados com base em"
 
 # Searching > Results display
 msgid "searching.pref#maxRecordsForFacets# records from the search results."
-msgstr "registros dos resultados de pesquisa."
+msgstr "registros dos resultados de busca."
 
 # Searching > Results display
 msgid "searching.pref#numSearchResults# By default, show"
@@ -14279,8 +14290,7 @@ msgid ""
 "searching.pref#numSearchResultsDropdown# results per page dropdown on staff "
 "interface search results."
 msgstr ""
-"resultados por página suspensa em resultados de pesquisa na interface de "
-"STAFF."
+"resultados por página suspensa em resultados da busca na interface de STAFF."
 
 # Serials
 msgid "serials.pref"
@@ -14580,7 +14590,7 @@ msgid ""
 "staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
 "pulldown menu on the staff header search."
 msgstr ""
-"um menu suspenso de seleção de biblioteca na pesquisa de cabeçalho de equipe."
+"um menu suspenso de seleção de biblioteca na busca de cabeçalho de equipe."
 
 # Staff Client > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
@@ -14595,7 +14605,7 @@ msgid ""
 "staff_interface.pref#IntranetCatalogSearchPulldown# a search field pulldown "
 "for 'Search the catalog' boxes."
 msgstr ""
-"um menu suspenso do campo de pesquisa para as caixas 'Pesquisar no catálogo'."
+"um menu suspenso do campo de busca para as caixas 'Buscar no catálogo'."
 
 # Staff Client > Appearance
 msgid ""
@@ -14708,7 +14718,7 @@ msgid ""
 "staff_interface.pref#StaffHighlightedWords# words searched for in the staff "
 "interface search results pages."
 msgstr ""
-"palavras pesquisadas nas páginas de resultados de pesquisa da interface "
+"palavras pesquisadas nas páginas de resultados de busca da interface "
 "administrativa."
 
 # Staff Client > Appearance
@@ -14929,7 +14939,7 @@ msgstr "Mostrar"
 msgid ""
 "staff_interface.pref#showLastPatron# a link to the last searched patron in "
 "the staff interface."
-msgstr "um link para o último usuário pesquisado na interface administrativa."
+msgstr "um link para o último usuário buscado na interface administrativa."
 
 # Staff Client > Appearance
 msgid ""
@@ -15282,7 +15292,7 @@ msgid ""
 msgstr ""
 "envios para Mana KB. Mana centraliza informações entre outras instalações do "
 "Koha para facilitar a criação de novas assinaturas, fornecedores, "
-"relatórios, etc. Você pode pesquisar, compartilhar, importar e comentar o "
+"relatórios, etc. Você pode buscar, compartilhar, importar e comentar o "
 "conteúdo do Mana. As informações compartilhadas com o Mana KB são "
 "compartilhadas sob a licença <a href=\"https://creativecommons.org/choose/"
 "zero/\">CC-0</a>"

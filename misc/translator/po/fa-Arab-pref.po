@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2023-05-02 10:45+0000\n"
+"PO-Revision-Date: 2023-05-04 09:09+0000\n"
 "Last-Translator: Soghra Golmaghani <soghragolmaghani@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fa\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fa/22.11/fa-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1683024304.554500\n"
+"X-POOTLE-MTIME: 1683191365.797265\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2578,6 +2578,24 @@ msgstr ""
 "op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
 "a> و باید اجازه دهد به <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Do"
+msgstr "انجام دادن"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
+msgstr "authorities.pref#LinkerKeepStale# انجام ندادن"
+
+# Authorities > Linker > LinkerConsiderThesaurus
+msgid ""
+"authorities.pref#LinkerConsiderThesaurus# compare the source for 6XX "
+"headings to the thesaurus source for authority records when linking. "
+"Enabling this preference may require a reindex, and may generate new "
+"authority records if AutoCreateAuthorities is enabled."
+msgstr ""
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -6501,7 +6519,8 @@ msgstr "استفاده محلی هنگامی که یک منبع غیر کثیر�
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RecordStaffUserOnCheckout# When checking out an item, "
-msgstr "circulation.pref#پیشینیه امانت های کاربر# هنگام بررسی یک منبع حذف شده، "
+msgstr ""
+"circulation.pref#پیشینیه امانت های کاربر# هنگام بررسی یک منبع حذف شده، "
 
 # Circulation > Interface
 msgid "circulation.pref#RecordStaffUserOnCheckout# don't record"
@@ -6568,17 +6587,17 @@ msgid ""
 "\"due date\", renewed items may still be overdue."
 msgstr ""
 "circulation.pref#افزودن تمدید منبع در اپک# منبع بطور اتوماتیک. اگر اولویت "
-"سیستم <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"RenewalPeriodBase\">پایه دوره تمدید</a> روی \"تاریخ سررسید\", تنظیم شده است، "
-"موارد تمدید شده ممکن است هنوز تاخیر داشته باشد."
+"سیستم <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RenewalPeriodBase\">پایه دوره تمدید</a> روی \"تاریخ "
+"سررسید\", تنظیم شده است، موارد تمدید شده ممکن است هنوز تاخیر داشته باشد."
 
 # Circulation > Checkout policy
 msgid ""
 "circulation.pref#RenewAccruingItemWhenPaid# If a patron pays off all fines "
 "on an overdue item that is accruing fines,"
 msgstr ""
-"circulation.pref#تمدید منبع افزوده شده هنگام پرداخت# اگر کاربر تمام جریمه‌"
-"های یک منبع معوقه را که جریمه تعلف می گیرید پرداخت نماید،"
+"circulation.pref#تمدید منبع افزوده شده هنگام پرداخت# اگر کاربر تمام جریمه‌های "
+"یک منبع معوقه را که جریمه تعلف می گیرید پرداخت نماید،"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# don't renew"
@@ -6596,10 +6615,9 @@ msgid ""
 "\"due date\", renewed items may still be overdue."
 msgstr ""
 "circulation.pref#تمدید منبع افزوده شده هنگام پرداخت# منبع بطور اتوماتیک. اگر "
-"اولویت سیستم <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase\">پایه "
-"دوره تمدید</a> روی \"تاریخ سررسید\", تنظیم شده است، موارد تمدید شده ممکن است "
-"هنوز تاخیر داشته باشد."
+"اولویت سیستم <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RenewalPeriodBase\">پایه دوره تمدید</a> روی \"تاریخ "
+"سررسید\", تنظیم شده است، موارد تمدید شده ممکن است هنوز تاخیر داشته باشد."
 
 # Circulation > Checkout policy
 msgid ""
@@ -11437,9 +11455,9 @@ msgid ""
 "op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 "opac.pref#استثناهای آیتم های پنهان در اپک# فهرست دسته های کاربران که می "
-"توانید آیتم هایی را که بوسیله آنها پنهان شده است را ببیند <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems\""
-">OpacHiddenItems</a>:"
+"توانید آیتم هایی را که بوسیله آنها پنهان شده است را ببیند <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems"
+"\">OpacHiddenItems</a>:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHiddenItemsHidesRecord# Don't hide"
@@ -11456,9 +11474,8 @@ msgid ""
 "op=search&searchfield=OpacHiddenItems'>OpacHiddenItems</a>."
 msgstr ""
 "opac.pref#ثبت آیتم های پنهان اپک# ثبت کتابشناختی موقعی که همه آیتم های آن "
-"پنهان شده باشد توسط <a href='/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems'>آیتم "
-"های پنهان اپک</a>."
+"پنهان شده باشد توسط <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems'>آیتم های پنهان اپک</a>."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)."
@@ -11581,10 +11598,10 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> "
 "administration page."
 msgstr ""
-"opac.pref#موقعیت مکانی اپک در جزئیات# <br />توجه: اگر \"روی یک ستون جداگانه\""
-" انتخاب شده است، شما هنوز هم نیاز دارید فعال کنید نمایش آیتم- قفسه بندی- محل "
-"را در<a href='/cgi-bin/koha/admin/columns_settings.pl'>پیکربندی ستون ها</a> "
-"صفحه مدیریت."
+"opac.pref#موقعیت مکانی اپک در جزئیات# <br />توجه: اگر \"روی یک ستون جداگانه"
+"\" انتخاب شده است، شما هنوز هم نیاز دارید فعال کنید نمایش آیتم- قفسه بندی- "
+"محل را در<a href='/cgi-bin/koha/admin/columns_settings.pl'>پیکربندی ستون ها</"
+"a> صفحه مدیریت."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
@@ -11637,9 +11654,9 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
 "\">OpacMaintenance</a> is enabled:"
 msgstr ""
-"opac.pref#اطلاعیه نگهداری اوپک#  HTML زیر را نشان بده زمانی که <a href"
-"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance\""
-">نگهداری اپک</a> فعال است:"
+"opac.pref#اطلاعیه نگهداری اوپک#  HTML زیر را نشان بده زمانی که <a href=\"/"
+"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance"
+"\">نگهداری اپک</a> فعال است:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# Display up to"
@@ -11732,9 +11749,9 @@ msgid ""
 "\">RESTPublicAnonymousRequests</a> to control the API."
 msgstr ""
 "opac.pref#اپک عمومی# توجه: این API عمومی را تحت تأثیر قرار نمی دهد، نگاه "
-"کنید به <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"RESTPublicAnonymousRequests\">درخواست های ناشناس REST عمومی</a> برای کنترل "
-"API."
+"کنید به <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=RESTPublicAnonymousRequests\">درخواست های ناشناس REST "
+"عمومی</a> برای کنترل API."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -11948,8 +11965,9 @@ msgid ""
 "\">OpenURLImageLocation</a> is defined):"
 msgstr ""
 "opac.pref#آدرس متن را باز کنید# متن لینک های URL باز (یا عنوان تصویر اگر <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"OpenURLImageLocation\">باز کنید آدرس مکان تصویر</a>تعریف شده است):"
+"href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpenURLImageLocation\">باز کنید آدرس مکان تصویر</"
+"a>تعریف شده است):"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -11970,8 +11988,8 @@ msgid ""
 "target='blank'>database columns</a> must be filled in on the patron "
 "modification screen:"
 msgstr ""
-"opac.pref#فیلد اجباری تغییر توسط کاربر# به شرح زیر<a href='http://schema"
-".koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>ستون "
+"opac.pref#فیلد اجباری تغییر توسط کاربر# به شرح زیر<a href='http://schema."
+"koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>ستون "
 "های بانک اطلاعاتی</a> باید در صفحه تغییر کاربر تکمیل شود:"
 
 # OPAC > Self registration and modification
@@ -11981,10 +11999,10 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</"
 "a> to be set to a valid patron category code."
 msgstr ""
-"opac.pref#خود ثبت نامی کاربر# <br><strong>توجه:</strong> این نیازمند <a href"
-"='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistra"
-"tionDefaultCategory'>فهرست پیش فرض خود ثبت نامی کاربر</a> در یک کد دسته "
-"معتبر کاربر تنظیم شود."
+"opac.pref#خود ثبت نامی کاربر# <br><strong>توجه:</strong> این نیازمند <a "
+"href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory'>فهرست پیش فرض "
+"خود ثبت نامی کاربر</a> در یک کد دسته معتبر کاربر تنظیم شود."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -12069,13 +12087,13 @@ msgid ""
 "op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</"
 "a> days ago (unless that delay is empty or zero)."
 msgstr ""
-"opac.pref#دسته پیش فرض کاربر خودثبت نامی# <br>اگر "
-"<code>misc/cronjobs/cleanup_database.pl</code> کرون جاب برای حذف ثبت نام‌های "
-"خود تأیید نشده و ناتمام اپک تنظیم شده است، همه کاربرانی را که بیش از این ثبت‌"
-"نام کرده‌اند به‌طور دائم و غیرقابل بازیابی حذف می‌کند <a href='/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationExpireTempor"
-"aryAccountsDelay'>تأخیر حساب های کاربری خودثبت نامی منقضی می شود</a> روزهای "
-"پیش (مگر اینکه این تاخیر خالی یا صفر باشد)."
+"opac.pref#دسته پیش فرض کاربر خودثبت نامی# <br>اگر <code>misc/cronjobs/"
+"cleanup_database.pl</code> کرون جاب برای حذف ثبت نام‌های خود تأیید نشده و "
+"ناتمام اپک تنظیم شده است، همه کاربرانی را که بیش از این ثبت‌نام کرده‌اند به‌طور "
+"دائم و غیرقابل بازیابی حذف می‌کند <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>تأخیر "
+"حساب های کاربری خودثبت نامی منقضی می شود</a> روزهای پیش (مگر اینکه این تاخیر "
+"خالی یا صفر باشد)."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use"
@@ -12117,11 +12135,10 @@ msgid ""
 "to schedule it.<br>No patrons will be deleted if you set the pref to zero or "
 "make it empty."
 msgstr ""
-"opac.pref#تأخیر حساب های کاربری خودثبت نامی منقضی می شود# "
-"<br><strong>توجه:</strong> این اولویت سیستم نیاز دارد "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob. از مدیر سیستم "
-"بخواهید تا آن را برنامه ریزی کند.<br>اگر Pref را روی صفر تنظیم کنید یا آن را "
-"خالی بگذارید، هیچ کاربری حذف نخواهد شد."
+"opac.pref#تأخیر حساب های کاربری خودثبت نامی منقضی می شود# <br><strong>توجه:</"
+"strong> این اولویت سیستم نیاز دارد <code>misc/cronjobs/cleanup_database.pl</"
+"code> cronjob. از مدیر سیستم بخواهید تا آن را برنامه ریزی کند.<br>اگر Pref "
+"را روی صفر تنظیم کنید یا آن را خالی بگذارید، هیچ کاربری حذف نخواهد شد."
 
 # OPAC > Self registration and modification > PatronSelfRegistrationExpireTemporaryAccountsDelay
 msgid ""
@@ -12131,9 +12148,10 @@ msgid ""
 "\">PatronSelfRegistrationDefaultCategory</a>"
 msgstr ""
 "opac.pref#تأخیر حساب های کاربری خودثبت نامی منقضی می شود# کاربرانی را که "
-"هنوز در دسته بندی مشخص شده با آن هستند حذف کنید <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"PatronSelfRegistrationDefaultCategory\">دسته پیش فرض خود ثبت نامی کاربر</a>"
+"هنوز در دسته بندی مشخص شده با آن هستند حذف کنید <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?"
+"op=search&searchfield=PatronSelfRegistrationDefaultCategory\">دسته پیش فرض "
+"خود ثبت نامی کاربر</a>"
 
 # OPAC > Self registration and modification
 msgid ""
@@ -12167,7 +12185,8 @@ msgstr ""
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Don't show and prefill"
-msgstr "opac.pref#فرم مقدمات خود ثبت نامی کاربر# نشان ندهید و از قبل تکمیل کنید"
+msgstr ""
+"opac.pref#فرم مقدمات خود ثبت نامی کاربر# نشان ندهید و از قبل تکمیل کنید"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Show and prefill"
@@ -12187,10 +12206,9 @@ msgid ""
 "This system preference requires the <code>misc/cronjobs/cleanup_database.pl</"
 "code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
-"opac.pref#تایید خود ثبت نامی کاربران بوسیله پست الکترونیکی# "
-"<br><strong>توجه:</strong> این اولویت سیستم نیازمند "
-"<code>misc/cronjobs/cleanup_database.pl</code> cronjob. .از مدیر سیستم "
-"بخواهید که آن را برنامه ریزی کند."
+"opac.pref#تایید خود ثبت نامی کاربران بوسیله پست الکترونیکی# <br><strong>توجه:"
+"</strong> این اولویت سیستم نیازمند <code>misc/cronjobs/cleanup_database.pl</"
+"code> cronjob. .از مدیر سیستم بخواهید که آن را برنامه ریزی کند."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
@@ -12374,8 +12392,8 @@ msgid ""
 "\"_blank\">Libravatar</a> using the patron's e-mail address."
 msgstr ""
 "opac.pref#نمایش عکس ارزیاب# نماد مرورگر در کنار قسمت نظرات در اپک. این نماد "
-"جستجو می شود <a href=\"https://www.libravatar.org\" target=\"_blank\""
-">Libravatar</a> از طریق آدرس پست الکترونیکی اعضا."
+"جستجو می شود <a href=\"https://www.libravatar.org\" target=\"_blank"
+"\">Libravatar</a> از طریق آدرس پست الکترونیکی اعضا."
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Email"
@@ -12525,10 +12543,9 @@ msgid ""
 "\">AnonSuggestions</a> is disabled, following patron categories are not "
 "allowed to make purchase suggestions:"
 msgstr ""
-"opac.pref#پیشنهاد# وقتی <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=suggestion\">پیشنهاد</a> "
-"فعال شود و <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions\">هرگونه "
+"opac.pref#پیشنهاد# وقتی <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">پیشنهاد</a> فعال شود و <a href=\"/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions\">هرگونه "
 "پیشنهاد</a> غیرفعال است، دسته های کاربران زیر مجاز به ارائه پیشنهاد خرید "
 "نیستند:"
 
@@ -12583,8 +12600,8 @@ msgid ""
 "allow/disallow auto-renewal."
 msgstr ""
 "patrons.pref#اجازه کنترل تمدید خودکار به کاربر# اجازه/عدم اجازه تمدید خودکار "
-"حساب کاربری. اگر اجازه داده شود، یک کاربر می‌تواند حساب خود را به‌روزرسانی "
-"کند تا تمدید خودکار مجاز یا مجاز نباشد."
+"حساب کاربری. اگر اجازه داده شود، یک کاربر می‌تواند حساب خود را به‌روزرسانی کند "
+"تا تمدید خودکار مجاز یا مجاز نباشد."
 
 # Patrons > General
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -13128,51 +13145,6 @@ msgstr ""
 "patrons.pref#تغییر هزینه برای اعضای هر طبقه# در هنگام تغییر هزینه اعضا هر "
 "طبقه هنگام ثبت نام باید هزینه ای را پرداخت نمایند."
 
-# Patrons > Privacy
-#, fuzzy
-msgid ""
-"patrons.pref#GDPR_Policy# . GDPR is the EU General Data Protection "
-"Regulation. When you enforce, patrons need to give consent before using the "
-"OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-"patrons.pref#GDPR_Policy# آیین نامه حفاظت از داده های عمومی اتحادیه اروپا. "
-"هنگام اجرای قانون, کاربران باید قبل از استفاده از اپک موافقت خود را اعلام "
-"کنند. اگر براساس مجاز تنظیم نمایید، Koha هشدار می دهد اما اجرا نمی شود."
-
-# Patrons > Privacy
-#, fuzzy
-msgid ""
-"patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> setting."
-msgstr ""
-"patrons.pref#GDPR_Policy# <br><strong>توجه:</strong> در صورت فعال کردن این "
-"مورد شما باید آدرس اینترنتی حریم خصوصی خود را نیز با تنظیم آدرس اینترنتی حفظ "
-"حریم خصوصی تنظیم کنید."
-
-# Patrons > Privacy
-#, fuzzy
-msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr ""
-"patrons.pref#GDPR_Policy# خط مشی حفاظت از داده های عمومی اتحادیه اروپا را "
-"تنظیم کنید"
-
-# Patrons > Privacy
-#, fuzzy
-msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr "patrons.pref#GDPR_Policy# غیرفعال کردن"
-
-# Patrons > Privacy
-#, fuzzy
-msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr "patrons.pref#GDPR_Policy# اجباری نمودن"
-
-# Patrons > Privacy
-#, fuzzy
-msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr "patrons.pref#GDPR_Policy# مجاز"
-
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
@@ -13520,11 +13492,57 @@ msgstr ""
 "patrons.pref#فیلد گارانتی پیش پر# هنگام افزودن ضمانت نامه به کاربر ضامن، "
 "فیلدهای زیر را در فرم ثبت نام اعضای ضمانت نامه براساس سوابق ضامن پر کنید:"
 
+# Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
+"patrons need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+msgstr ""
+"patrons.pref#GDPR_Policy# آیین نامه حفاظت از داده های عمومی اتحادیه اروپا. "
+"هنگام اجرای قانون, کاربران باید قبل از استفاده از اپک موافقت خود را اعلام "
+"کنند. اگر براساس مجاز تنظیم نمایید، Koha هشدار می دهد اما اجرا نمی شود."
+
+# Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
+"this you will also have to set the URL of your public privacy policy with "
+"the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
+msgstr ""
+"patrons.pref#GDPR_Policy# <br><strong>توجه:</strong> در صورت فعال کردن این "
+"مورد شما باید آدرس اینترنتی حریم خصوصی خود را نیز با تنظیم آدرس اینترنتی حفظ "
+"حریم خصوصی تنظیم کنید."
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
+msgstr ""
+"patrons.pref#GDPR_Policy# خط مشی حفاظت از داده های عمومی اتحادیه اروپا را "
+"تنظیم کنید"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# disabled"
+msgstr "patrons.pref#GDPR_Policy# غیرفعال کردن"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# enforced"
+msgstr "patrons.pref#GDPR_Policy# اجباری نمودن"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# permissive"
+msgstr "patrons.pref#GDPR_Policy# مجاز"
+
 # Patrons > Privacy > PrivacyPolicyURL
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "patrons.pref#آدرس سیاست حفظ حریم خصوصی# <br><strong>توجه:</strong> آدرس فقط "
 "در صورتی نمایش داده می شود که<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -13535,10 +13553,11 @@ msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "opac.pref#آدرس سیاست حفظ حریم خصوصی # از آدرس زیر استفاده کنید"
 
 # Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
-"messages about privacy and data protection. (If you enforce GDPR policy, "
-"make sure that this page is not blocked.)"
+"messages about privacy and data protection. (If you enforce a data privacy "
+"policy, make sure that this page is not blocked.)"
 msgstr ""
 "opac.pref#آدرس سیاست حفظ حریم خصوصی #ارجاع می دهد به به سیاست حفظ حریم محلی "
 "در پیام های مربوط به حریم خصوصی و محافظت از داده ها. (اگر خط مشی GDPR را "
@@ -13580,7 +13599,8 @@ msgstr ""
 # Patrons > Security
 msgid ""
 "patrons.pref#Pseudonymization# <br/>Use the following fields for patrons:"
-msgstr "patrons.pref#نام مستعار# <br/>از فیلدهای زیر برای کاربران استفاده کنید:"
+msgstr ""
+"patrons.pref#نام مستعار# <br/>از فیلدهای زیر برای کاربران استفاده کنید:"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# City"
@@ -13639,7 +13659,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "patrons.pref#نام مستعار# محل"
 
 # Patrons > General
-msgid "patrons.pref#Pseudonymization# Patron's category"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "patrons.pref#نام مستعار# فهرست کاربران"
 
 # Patrons > Notices and notifications
@@ -13655,19 +13676,22 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "patrons.pref#نام مستعار# عنوان کاربران"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
-"separate table for statistics purpose."
+"separate table for statistical purposes."
 msgstr ""
 "patrons.pref#نام مستعار# کاربران و تراکنش ها برای اهداف آمار در جدول جداگانه "
 "کپی می شوند."
 
 # Patrons > Patron forms
-msgid "patrons.pref#Pseudonymization# Sort1"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 1"
 msgstr "patrons.pref#نام مستعار# مرتب سازی1"
 
 # Patrons > Patron forms
-msgid "patrons.pref#Pseudonymization# Sort2"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "patrons.pref#نام مستعار# مرتب سازی2"
 
 # Patrons > Notices and notifications
@@ -13679,13 +13703,15 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "patrons.pref#نام مستعار# نوع تراکنش"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Zipcode"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "patrons.pref#نام مستعار# کدپستی"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
-"personal information."
+"patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
+"policies and regulations like GDPR for managing personal information."
 msgstr ""
 "patrons.pref#نام مستعار# نام مستعار برای مطابقت با GDPR برای اطلاعات شخصی."
 
@@ -13779,12 +13805,11 @@ msgid ""
 "\">PhoneNotification</a> should be disabled."
 msgstr ""
 "patrons.pref#TalkingTechItivaPhoneNotification# <br/><i class=\"fa fa-"
-"exclamation-triangle\"></i> اگر <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"TalkingTechItivaPhoneNotification\">TalkingTechItivaPhoneNotification</a> "
-"فعال کنید, <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PhoneNotification\">"
-"اخطار تلفن</a> باید غیرفعال شود."
+"exclamation-triangle\"></i> اگر <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=TalkingTechItivaPhoneNotification"
+"\">TalkingTechItivaPhoneNotification</a> فعال کنید, <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PhoneNotification\">اخطار تلفن</"
+"a> باید غیرفعال شود."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#TalkingTechItivaPhoneNotification# Disable"
@@ -13889,9 +13914,9 @@ msgid ""
 msgstr ""
 "patrons.pref#شماره عضویت خودکار# <strong>توجه:</strong> اگر <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum\">شماره "
-"عضویت خودکار</a>فعال است، اولویت سیستم <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField\">"
-"فیلد اجباری امانت گیرنده</a>نباید شامل فیلد <code>شماره کارت</code>."
+"عضویت خودکار</a>فعال است، اولویت سیستم <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=BorrowerMandatoryField\">فیلد اجباری "
+"امانت گیرنده</a>نباید شامل فیلد <code>شماره کارت</code>."
 
 # Patrons > Patron forms
 msgid "patrons.pref#autoMemberNum# Do"
@@ -14048,9 +14073,9 @@ msgid ""
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
 "strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
-"searching.pref#انواع جستجوی پیشرفته# <em>مقادیر پشتیبانی شده در حال "
-"حاضر</em>: انواع منابع (<strong>itemtypes</strong>), مجموعه، "
-"(<strong>ccode</strong>) مجل قفسه بندی (<strong>loc</strong>)."
+"searching.pref#انواع جستجوی پیشرفته# <em>مقادیر پشتیبانی شده در حال حاضر</"
+"em>: انواع منابع (<strong>itemtypes</strong>), مجموعه، (<strong>ccode</"
+"strong>) مجل قفسه بندی (<strong>loc</strong>)."
 
 # Searching > Search Form
 msgid ""
@@ -15215,7 +15240,6 @@ msgstr ""
 "جعبه های \"جستجو در کاتالوگ\""
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetCirculationHomeHTML# Show the following HTML in "
 "its own div on the bottom of the home page of the circulation module:"
@@ -15224,40 +15248,35 @@ msgstr ""
 "خود در پایین صفحه اصلی ماژول تیراژ نشان دهید:"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#IntranetFavicon# Use the image at"
-msgstr "به کاربردن تصویر در"
+msgstr "staff_interface.pref#آیکون اینترانت# به کاربردن تصویر در"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetFavicon# for the staff interface's favicon. "
 "(This should be a complete URL, starting with <code>http://</code>.)"
 msgstr ""
-"برای موارد دلخواه در کلاینت کارکنان. (این باید یک URL کامل باشد که شروع می "
-"شود با<code>http://</code>.)"
+"staff_interface.pref#آیکون اینترانت# برای فاویکون رابط کارکنان. (این باید یک "
+"URL کامل باشد که شروع می شود با<code>http://</code>.)"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetNav# Show the following HTML to the left of the "
 "More menu at the top of each page on the staff interface (should be a list "
 "of links or blank):"
 msgstr ""
-"نمایش HTML زیر در سمت چپ منوهای بیشتر در بالای هر صفحه از کلاینت کارکنان "
-"(باید یک فهرست از لینک ها یا خالی باشد):"
+"staff_interface.pref#پیمایش اینترنت# نمایش HTML زیر در سمت چپ منوهای بیشتر "
+"در بالای هر صفحه در رابط کارکنان (باید یک فهرست از لینک ها یا خالی باشد):"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetReportsHomeHTML# Show the following HTML in its "
 "own div on the bottom of the home page of the reports module:"
 msgstr ""
-"staff_client.pref#گزارش های اینترانت صفحه اصلی HTML# زیر را در قسمت HTML "
+"staff_interface.pre#گزارش های اینترانت صفحه اصلی HTML# HTML زیر را در قسمت "
 "اختصاصی خود در پایین صفحه اصلی ماژول گزارش ها نمایش دهید:"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetSlipPrinterJS# Use the following JavaScript for "
 "printing slips. See detailed description on the <a href='https://wiki.koha-"
@@ -15265,158 +15284,145 @@ msgid ""
 "and eventually Firefox add-on <a href='https://github.com/edabg/jsprintsetup/"
 "wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
-"staff_client.pref#چاپگر لغزنده اینترانت جاوا اسکریپت# برای چاپ برگه ها از "
+"staff_interface.pref#چاپگر لغزنده اینترانت جاوا اسکریپت# برای چاپ برگه ها از "
 "جاوا اسکریپت زیر استفاده کنید. توضیحات دقیق را در اینجا ببینید <a "
 "href='https://wiki.koha-community.org/wiki/"
-"Setting_up_slip_printer_to_print_silently'>Koha Wiki</a> و در نهایت پلاگین "
+"Setting_up_slip_printer_to_print_silently'>Koha Wiki</a> و در نهایت افزونه "
 "فایرفاکس <a href='https://github.com/edabg/jsprintsetup/wiki'>jsPrintSetup "
 "documentation</a>:"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetUserCSS# Include the following CSS on all pages "
 "in the staff interface:"
-msgstr "شامل CSS زیر در همه صفحات در کلاینت کارکنان"
+msgstr ""
+"staff_interface.pref# کاربر اینترانت CSS# CSS زیر را در تمام صفحات در رابط "
+"کارکنان قرار دهید:"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetUserJS# Include the following JavaScript on all "
 "pages in the staff interface:"
 msgstr ""
-"staff_client.pref#کاربر اینترانت جاوا اسکریپت# جاوا اسکریپت زیر را در تمام "
-"صفحات کاربری کارمند قرار دهید:"
+"staff_interface.pref#کاربر اینترانت جاوا اسکریپت# جاوا اسکریپت زیر را در "
+"تمام صفحات کاربری کارکنان قرار دهید:"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetmainUserblock# Show the following HTML in its "
 "own column on the main page of the staff interface:"
-msgstr "نمایش HTML زیر در ستون خود در صفحه اصلی کلاینت کارکنان:"
+msgstr ""
+"staff_interface.pref#بلوک کاربر شبکه داخلی# نمایش HTML زیر در ستون خود در "
+"صفحه اصلی رابط کارکنان:"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#SlipCSS# Include the stylesheet at"
-msgstr "شامل شیوه نامه در"
+msgstr "staff_interface.pref#خطای CSS# شامل شیوه نامه در"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#SlipCSS# on Issue and Hold Slips. (This should be a "
 "complete URL, starting with <code>http://</code>.)"
 msgstr ""
-"staff_client.pref#خطایCSS# در مورد شماره و نگه داشتن برگه ها.( این باید با "
+"staff_interface.pre#خطایCSS# در مورد شماره و نگه داشتن برگه ها.( این باید با "
 "یک آدرس کامل شروع شود<code>http://</code>.)"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#StaffDetailItemSelection# Disable"
-msgstr "به کاربردنِ"
+msgstr "staff_interface.pref#انتخاب جزئیات آیتم کارکنان# غیرفعال کنید"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#StaffDetailItemSelection# Enable"
-msgstr "."
+msgstr "staff_interface.pref#انتخاب جزئیات آیتم کارکنان# فعال کنید"
 
 # Staff Client > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#StaffDetailItemSelection# item selection in record "
 "detail page."
-msgstr "به کاربردنِ"
+msgstr ""
+"staff_interface.pref#انتخاب جزئیات آیتم کارکنان# انتخاب آیتم در صفحه جزئیات "
+"رکورد."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffHighlightedWords# Don't highlight"
-msgstr "پررنگ نکردن"
+msgstr "staff_interface.pref#کلمات برجسته کارکنان# پررنگ نکنید"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffHighlightedWords# Highlight"
-msgstr "پررنگ کردن"
+msgstr "staff_interface.pref#کلمات برجسته کارکنان# پررنگ کنید"
 
 # Staff interface > Appearance > StaffHighlightedWords
 msgid ""
 "staff_interface.pref#StaffHighlightedWords# words searched for in the staff "
 "interface search results pages."
 msgstr ""
+"staff_interface.pref#کلمات برجسته کارکنان# کلمات جستجو شده در صفحات نتایج "
+"جستجوی رابط کارکنان."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#StaffLangSelectorMode# Display language selector on "
-msgstr "taff_client.pref#حالت انتخابگر زبان کارکنان#نمایش انتخابگر زبان "
+msgstr ""
+"staff_interface.pref#حالت انتخابگر زبان کارکنان#نمایش انتخابگر زبان روشن "
+"کنید "
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffLangSelectorMode# both top and footer"
-msgstr "taff_client.pref#حالت انتخابگر زبان کارکنان#بالا و پایین صفحه"
+msgstr "staff_interface.pref#حالت انتخابگر زبان کارکنان# بالا و پایین صفحه"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffLangSelectorMode# only footer"
-msgstr "taff_client.pref#حالت انتخابگر زبان کارکنان#فقط پایین صفحه"
+msgstr "staff_interface.pref#حالت انتخابگر زبان کارکنان# فقط پایین صفحه"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffLangSelectorMode# top"
-msgstr "کارکنان_ارباب رجوع.pref#حالت انتخابگر زبان کارکنان# بالا"
+msgstr "staff_interface.pref#حالت انتخابگر زبان کارکنان# بالا"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#StaffLoginInstructions# Show the following HTML on the "
 "staff interface login page"
 msgstr ""
-"staff_client.pref#دستورالعمل های ورود به سیستم کارکنان# HTML زیر را در صفحه "
-"ورود کاربری کارمند نشان دهید"
+"staff_interface.pref#دستورالعمل های ورود به سیستم کارکنان# HTML زیر را در "
+"صفحه ورود کاربری کارمند نشان دهید"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Don't enable"
-msgstr "staff_client.pref#هشدارهای صوتی# فعال نکنید"
+msgstr "staff_interface.pref#احراز هویت دو عاملی# فعال نکنید"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
-msgstr "admin.pref#احراز هویت# بله"
+msgstr "staff_interface.pref#احراز هویت دو عاملی# فعال کنید"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
-msgstr "admin.pref#احراز هویت# بله"
+msgstr "staff_interface.pref#احراز هویت دو عاملی# اجرا کنید"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
 "(2FA) for staff members."
 msgstr ""
-"admin.pref#احراز هویت# از سی ای اس برای احراز هویت ورود به سیستم استفاده "
-"کنید: "
+"staff_interface.pref#احراز هویت دو عاملی# احراز هویت دو عاملی (2FA) برای "
+"کارکنان."
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
-msgstr "staff_client.pref#استفاده از تنظیمات ترجیحی سیستم WYSIWY# نشان نده"
+msgstr "staff_interface.pref#استفاده از تنظیمات ترجیحی سیستم WYSIWY# نشان نده"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Show"
-msgstr "staff_client.pref#استفاده از تنظیمات ترجیحی سیستم WYSIWY# نشان بده"
+msgstr "staff_interface.pref#استفاده از تنظیمات ترجیحی سیستم WYSIWY# نشان نده"
 
 # Staff Client > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#UseWYSIWYGinSystemPreferences# WYSIWYG editor when "
 "editing certain HTML system preferences."
 msgstr ""
-"taff_client.pref#استفاده از تنظیمات ترجیحی سیستم WYSIWY#ویرایشگر WYSIWYG "
-"هنگام ویرایش برخی تنظیمات سیستم HTMLرا ایجاد می کند."
+"staff_interface.pref#استفاده از تنظیمات ترجیحی سیستم WYSIWY# ویرایشگر "
+"WYSIWYG هنگام ویرایش برخی تنظیمات سیستم HTMLرا ایجاد می کند."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
@@ -15426,21 +15432,22 @@ msgid ""
 "languages the placeholder {langcode} will be replaced with current interface "
 "language."
 msgstr ""
-"staff_client.pref#XSLTنمایش جزئیات# <br />گزینه ها:<ul><li>وارد کنید \"<a "
+"staff_interface.pref#XSLTنمایش جزئیات# <br />گزینه ها:<ul><li>وارد کنید \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">پیش فرض</a>\"برای یک پیش فرض</li><li>یک مسیر برای تعریف "
-"فایل xslt قرار دهید</li><li>یک آدرس برای شیوه نامه خاص خارجی قرار دهید "
-"stylesheet.</li></ul>{langcode} با زبان رابط کاربری فعلی جایگزین خواهد شد"
+"value=\"default\">پیش فرض</a>\" برای شیوه نامه پیش فرض</li><li>یک مسیر برای "
+"تعریف فایل xslt قرار دهید</li><li>یک آدرس برای شیوه نامه خاص خارجی قرار دهید."
+"</li></ul>اگر چندین شیوه نامه برای زبان های مختلف دارید {langcode} محل "
+"نگهداری با زبان رابط کاربری فعلی جایگزین خواهد شد."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTDetailsDisplay# Display details in the staff "
 "interface using XSLT stylesheet at: "
-msgstr "نمایش جزئیات در کلاینت کاربران با استفاده از شیوه نامه XSLT در:"
+msgstr ""
+"staff_interface.pref#نمایش جزئیات XSLT#نمایش جزئیات در رابط کاربری کارکنان "
+"با استفاده از شیوه نامه XSLT در: "
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# <br />Options:<ul><li>Enter \"<a href="
 "\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-value="
@@ -15449,23 +15456,22 @@ msgid ""
 "li></ul>If you have multiple stylesheets for different languages the "
 "placeholder {langcode} will be replaced with current interface language."
 msgstr ""
-"staff_client.pref#نمایش نتایج ایکس اس ال تی# <br />گزینه ها:<ul><li>وارد "
-"کنید \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay"
-"\" data-value=\"default\">پیش فرض</a>\" برای یک پیش فرض</li><li>یک مسیر برای "
+"staff_interface.pref#نمایش لیست XSLT# <br />گزینه ها:<ul><li>وارد کنید \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTListsDisplay\" data-"
+"value=\"default\">پیش فرض</a>\" برای شیوه نامه پیش فرض</li><li>یک مسیر برای "
 "تعریف فایل xslt قرار دهید</li><li>یک آدرس برای شیوه نامه خاص خارجی قرار دهید."
-"</li></ul>{langcode} با زبان کاربری فعلی جایگزین خواهد شد"
+"</li></ul>اگر چندین شیوه نامه برای زبان های مختلف دارید {langcode} محل "
+"نگهداری با زبان رابط کاربری فعلی جایگزین خواهد شد."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTListsDisplay# Display lists in the staff interface "
 "using XSLT stylesheet at: "
 msgstr ""
-"staff_client.pref#نمایش فهرست های XSLT#نمایش لیست کاربران با استفاده از شیوه "
-"نامه XSLT در:"
+"staff_interface.pref#نمایش لیست های XSLT# نمایش لیست کاربران در رابط کاربری "
+"کارکنان با استفاده از شیوه نامه XSLT در: "
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -15478,58 +15484,57 @@ msgid ""
 "different languages the placeholder {langcode} will be replaced with current "
 "interface language."
 msgstr ""
-"staff_client.pref#نمایش نتایج ایکس اس ال تی# <br />گزینه ها:<ul><li>وارد "
-"کنید \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay"
-"\" data-value=\"default\">پیش فرض</a>\" برای یک پیش فرض</li><li>یک مسیر برای "
-"تعریف فایل xslt قرار دهید</li><li>یک آدرس برای شیوه نامه خاص خارجی قرار دهید."
-"</li></ul>{langcode} با زبان کاربری فعلی جایگزین خواهد شد"
+"staff_interface.pref#نمایش نتایج XSLT# <br />گزینه ها:<ul><li>وارد کنید \"<a "
+"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
+"value=\"default\">پیش فرض</a>\"برای یک مسیر پیش فرض</li><li>یک مسیر برای "
+"تعریف فایل xslt قرار دهید</li><li>ک آدرس برای شیوه نامه خاص خارجی قرار دهید."
+"</li><li>توجه: اولویت سیستم <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">ارسال آیتم مارک به XSLT</a> اگر "
+"شیوه نامه سفارشی شما از داده ها در فیلدهای آیتم استفاده می شود، باید فعال "
+"شود</li></ul>اگر چندین شیوه نامه برای زبان های مختلف دارید، مکان نگهدار "
+"{langcode} با زبان رابط فعلی جایگزین می شود."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# Display results in the staff "
 "interface using XSLT stylesheet at: "
-msgstr "نمایش نتایج در کلاینت کاربران با استفاده از شیوه نامه XSLT در:"
+msgstr ""
+"staff_interface.pref#نمایش نتایج XSLT#نمایش نتایج در رابط کاربری کارکنان با "
+"استفاده از شیوه نامه XSLT در: "
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#intranet_includes# Use include files from the"
-msgstr "استفاده از فایل های شامل از"
+msgstr "staff_interface.pref#اینترانت_شامل# استفاده از فایل های شامل از"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#intranet_includes# directory in the template directory, "
 "instead of <code>includes/</code>. (Leave blank to disable)"
 msgstr ""
-"دایرکتوری در دایرکتوری قالب، به جای <code>includes/</code>. (برای غیرفعال "
-"کردن خالی بگذارید)"
+"staff_interface.pref#اینترانت_شامل# دایرکتوری در دایرکتوری قالب، به جای "
+"<code>includes/</code>. (برای غیرفعال کردن خالی بگذارید)"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#intranetbookbag# Don't show"
-msgstr "عدم نمایش"
+msgstr "staff_interface.pref#کیف کتاب اینترانتی# نشان نده"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#intranetbookbag# Show"
-msgstr "نمایش"
+msgstr "staff_interface.pref#کیف کتاب اینترانتی# نشان بده"
 
 # Staff Client > Options
-#, fuzzy
 msgid ""
 "staff_interface.pref#intranetbookbag# the cart option in the staff interface."
-msgstr "گزینه سبد در کلاینت کاربران."
+msgstr ""
+"staff_interface.pref#کیف کتاب اینترانتی# گزینه سبد خرید در رابط کارکنان."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#intranetcolorstylesheet# Include the additional CSS "
 "stylesheet"
-msgstr "شامل شیوه نامه CSS اضافی"
+msgstr "staff_interface.pref#شیوه نامه رنگ اینترانت# شامل شیوه نامه CSS اضافی"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#intranetcolorstylesheet# to override specified settings "
 "from the default stylesheet (leave blank to disable.) Enter just a filename, "
@@ -15539,20 +15544,19 @@ msgid ""
 "and language within the Koha templates directory. A full local path is "
 "expected to start from your HTTP document root."
 msgstr ""
-"برای لغو کردن تنظینات خاص از شیوه نامه پیش فرض (برای از کار انداختن خالی "
-"بگذارید). فقط یک نام فایل، مسیر محلی کامل یا  URL كامل که شروع می شود "
-"با<code>http://</code>. را وارد نمائید. (اگر فایل در سرور راه دور قرار داد). "
-"لطفا توجه داشته باشید که چنانچه شما یک نام فایل وارد می کنید، فایل باید در "
-"دایرکتوری های فرعی css  برای هر تم و زبان فعال همراه با دایرکتوری های الگوی "
-"کوها باشد. یک مسیر محلی کامل مورد انتظار است برای شروع از ریشه HTTP سند شما."
+"staff_interface.pref#شیوه نام رنگ اینترانت# برای لغو کردن تنظیمات خاص از "
+"شیوه نامه پیش فرض (برای از کار انداختن خالی بگذارید). فقط یک نام فایل، مسیر "
+"محلی کامل یا یک URL كامل که شروع می شود با<code>http://</code> را وارد "
+"نمائید. (اگر فایل در سرور راه دور قرار داد). لطفاً توجه داشته باشید که چنانچه "
+"شما یک نام فایل وارد می کنید، فایل باید در دایرکتوری های فرعی css برای هر تم "
+"و زبان فعال همراه با دایرکتوری های الگوی کوها باشد. یک مسیر محلی کامل مورد "
+"انتظار است برای شروع از ریشه HTTP سند شما."
 
 # Staff Client > Appearance
-#, fuzzy
 msgid "staff_interface.pref#intranetstylesheet# Use the CSS stylesheet"
-msgstr "شامل شیوه نامه در"
+msgstr "staff_interface.pref#شیوه نامه اینترانت# از شیوه نامه CSS استفاده کنید"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#intranetstylesheet# on all pages in the staff "
 "interface, instead of the default css (used when leaving this field blank). "
@@ -15563,12 +15567,13 @@ msgid ""
 "directory. A full local path is expected to start from your HTTP document "
 "root."
 msgstr ""
-"در همه صفحات اپک، به جای css پیش فرض (مورد استفاده زمانی که شما این قسمت را "
-"خالی بگذارید). فقط وارد کنید یک نام فایل، یک مسیر محلی کامل یا URL کامل که "
-"شروع می شود با  <code>http://</code> (اگر فایل در سرور راه دور قرار دارد). "
-"لطفا توجه داشته باشید که چنانچه شما یک نام فایل وارد می کنید، فایل باید در "
-"دایرکتوری های فرعی css  برای هر تم و زبان فعال همراه با دایرکتوری های الگوی "
-"کوها باشد. یک مسیر محلی کامل مورد انتظار است برای شروع از ریشه HTTP سند شما."
+"staff_interface.pref#شیوه نامه اینترانت# در همه صفحات رابط کاربری، به جای "
+"css پیش فرض (مورد استفاده زمانی که شما این قسمت را خالی بگذارید). فقط یک نام "
+"فایل، مسیر محلی کامل یا یک URL كامل که شروع می شود با<code>http://</code> را "
+"وارد نمائید. (اگر فایل در سرور راه دور قرار داد). لطفاً توجه داشته باشید که "
+"چنانچه شما یک نام فایل وارد می کنید، فایل باید در دایرکتوری های فرعی css "
+"برای هر تم و زبان فعال همراه با دایرکتوری های الگوی کوها باشد. یک مسیر محلی "
+"کامل مورد انتظار است برای شروع از ریشه HTTP سند شما."
 
 # Staff Client > Options
 #, fuzzy
@@ -16013,41 +16018,44 @@ msgid "web_services.pref#OAI-PMH:AutoUpdateSets# Enable"
 msgstr "فعال کردن"
 
 # Web services > OAI-PMH
-#, fuzzy
 msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSets# automatic update of OAI-PMH sets "
 "when a bibliographic or item record is created or updated."
 msgstr ""
-"روزآمدسازی خودکار مجموعه  OAI-PMH هنگامی که یک رکورد کتابشناختی ایجاد یا "
-"روزآمد می شود"
+"web_services.pref#روزآمدسازی خودکار مجموعه: OAI-PMH# روزآمدسازی خودکار "
+"مجموعه OAI-PMH هنگامی که یک رکورد کتابشناختی ایجاد یا روزآمد می شود."
 
 # Patrons > Privacy > PrivacyPolicyURL
-#, fuzzy
 msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# <br><strong>NOTE:</"
 "strong> This needs <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=OAI-PMH:AutoUpdateSets\">OAI-PMH:AutoUpdateSets</a> "
 "syspref to be enabled."
 msgstr ""
-"patrons.pref#آدرس سیاست حفظ حریم خصوصی# <br><strong>توجه:</strong> آدرس فقط "
-"در صورتی نمایش داده می شود که<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a>تنظیم شده باشد."
+"web_services.pref#OAI-PMH:روزآمدسازی خودکار جاسازی داده های آیتم# "
+"<br><strong>توجه:</strong> این نیازمند <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OAI-PMH:AutoUpdateSets\">OAI-PMH:"
+"روزآمدسازی خودکار مجموعه: </a> تنظیمات اولیه سیستم فعال شود."
 
 # Web services > OAI-PMH
-#, fuzzy
 msgid "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# Disable"
-msgstr "از کار انداختن"
+msgstr ""
+"web_services.pref#:روزآمدسازی خودکار جاسازی داده های آیتم مجموعه:OAI-PMH# "
+"فعال نکنید"
 
 # Web services > OAI-PMH
-#, fuzzy
 msgid "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# Enable"
-msgstr "فعال کردن"
+msgstr ""
+"web_services.pref#:روزآمدسازی خودکار جاسازی داده های آیتم مجموعه:OAI-PMH# "
+"فعال کنید"
 
 # Web services > OAI-PMH
 msgid ""
 "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# embedding of item "
 "data when automatically updating OAI-PMH sets."
 msgstr ""
+"web_services.pref#:روزآمدسازی خودکار جاسازی داده های آیتم مجموعه:OAI-PMH# "
+"جاسازی داده های آِتم هنگام روزآمدسازی خودکار مجموعه های OAI-PMH"
 
 # Web services > OAI-PMH > OAI-PMH:ConfFile
 msgid ""
@@ -16059,6 +16067,13 @@ msgid ""
 "available metadata formats and XSL file used to create them from marcxml "
 "records."
 msgstr ""
+"web_services.pref#OAI-PMH:پیکربندی فایل# . اگر خالی باشد، سرور OAI کوها در "
+"حالت عادی کار می کند، در غیر این صورت به صورت توسعه یافته کار می کند. در "
+"حالت توسعه یافته پارامترهای دیگری در فرمت مارک اکس ام ال یا دابلین کور ارائه "
+"می شود. <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OAI-PMH:ConfFile\">OAI-PMH:پیکربندی فایل</a> پیکربندی "
+"YAML را تعیین کنید که در آن فرمت های ابرداده موجود در فایل XSL که در ساختن "
+"آنها از رکوردهای مارک اکس ام ال استفاده شده است."
 
 # Web services > OAI-PMH
 msgid ""
@@ -16159,13 +16174,12 @@ msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "web_services.pref#RESTOAuth2ClientCredentials# فعال کنید"
 
 # Web services > REST API
-#, fuzzy
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
 "grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
 "web_services.pref#اطلاعات کاربریRESTO Auth2 #اعطای اعتبار مشتری OAuth2 برای "
-"REST API.نیاز به Net: OAuth2 :: مجوز سرور نصب شده است. [تجربی]"
+"REST API. نیاز به Net: OAuth2 :: مجوز سرور نصب شده است. [تجربی]"
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# Disable"

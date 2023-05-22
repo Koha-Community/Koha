@@ -2421,6 +2421,24 @@ msgstr ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Do"
+msgstr "做"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
+msgstr "不要"
+
+# Authorities > Linker > LinkerConsiderThesaurus
+msgid ""
+"authorities.pref#LinkerConsiderThesaurus# compare the source for 6XX "
+"headings to the thesaurus source for authority records when linking. "
+"Enabling this preference may require a reindex, and may generate new "
+"authority records if AutoCreateAuthorities is enabled."
+msgstr ""
+
+# Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
 msgstr "做"
 
@@ -12071,42 +12089,6 @@ msgid ""
 "to a category with an enrollment fee."
 msgstr "讀者變更至需要註冊費的類型時向其收費。"
 
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# . GDPR is the EU General Data Protection "
-"Regulation. When you enforce, patrons need to give consent before using the "
-"OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-". GDPR 是 EU General Data Protection Regulation 的簡寫。啟用後，讀者必須同意"
-"才能使用 OPAC。設定為放縱後， Koha 會警示但不強制。"
-
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> setting."
-msgstr ""
-"patrons.pref#GDPR_Policy# <br><strong>說明：</strong> 若啟用它，必須同時設定"
-"您的公眾隱私規範的URL偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting.。"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr "設定 GDPR 政策為："
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr "停用"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr "強制"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr "放縱"
-
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
@@ -12441,10 +12423,53 @@ msgid ""
 msgstr "當加入一位擔保者的擔保品, 從擔保者記錄, 讀者需填以下欄位在擔保品項目: "
 
 # Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
+"patrons need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+msgstr ""
+". GDPR 是 EU General Data Protection Regulation 的簡寫。啟用後，讀者必須同意"
+"才能使用 OPAC。設定為放縱後， Koha 會警示但不強制。"
+
+# Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
+"this you will also have to set the URL of your public privacy policy with "
+"the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
+msgstr ""
+"patrons.pref#GDPR_Policy# <br><strong>說明：</strong> 若啟用它，必須同時設定"
+"您的公眾隱私規範的URL偏好 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting.。"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
+msgstr "設定 GDPR 政策為："
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# disabled"
+msgstr "停用"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# enforced"
+msgstr "強制"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# permissive"
+msgstr "放縱"
+
+# Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>說明：</strong> 如果<a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy"
@@ -12455,10 +12480,11 @@ msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "使用以下的 URL"
 
 # Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
-"messages about privacy and data protection. (If you enforce GDPR policy, "
-"make sure that this page is not blocked.)"
+"messages about privacy and data protection. (If you enforce a data privacy "
+"policy, make sure that this page is not blocked.)"
 msgstr ""
 "隱私與資料保護應參照在地的隱私政策。(若採用 GDPR 政策，應確保此頁未被封鎖。)"
 
@@ -12553,7 +12579,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "位置"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Patron's category"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "讀者類型"
 
 # Patrons > Security
@@ -12569,17 +12596,20 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "讀者敬稱"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
-"separate table for statistics purpose."
+"separate table for statistical purposes."
 msgstr "讀者和交易將被複製到一個單獨的表單進行統計。"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort1"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 1"
 msgstr "排序1"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort2"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "排序2"
 
 # Patrons > Security
@@ -12591,13 +12621,15 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "交易類型"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Zipcode"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "郵政編碼"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
-"personal information."
+"patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
+"policies and regulations like GDPR for managing personal information."
 msgstr "匿名以遵守 GDPR 的個人訊息。"
 
 # Patrons > Security

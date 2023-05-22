@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-20 11:46-0300\n"
-"PO-Revision-Date: 2023-04-27 09:00+0000\n"
-"Last-Translator: Tomas.jiglind <tomas.jiglind@mariestad.se>\n"
+"PO-Revision-Date: 2023-05-19 07:18+0000\n"
+"Last-Translator: plumflower <jeff_lindqvist@hotmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /sv/22.11/sv-SE-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1682586047.954493\n"
+"X-POOTLE-MTIME: 1684480705.662496\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2459,6 +2459,24 @@ msgstr ""
 "op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
 "a> och måste tillåta <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Do"
+msgstr "Gör"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
+msgstr "Gör inte"
+
+# Authorities > Linker > LinkerConsiderThesaurus
+msgid ""
+"authorities.pref#LinkerConsiderThesaurus# compare the source for 6XX "
+"headings to the thesaurus source for authority records when linking. "
+"Enabling this preference may require a reindex, and may generate new "
+"authority records if AutoCreateAuthorities is enabled."
+msgstr ""
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -5745,8 +5763,8 @@ msgid ""
 "circulation.pref#NoIssuesChargeGuarantees# Prevent a patron from checking "
 "out if the patron has guarantees owing in total more than"
 msgstr ""
-"circulation.pref#noissuescharge# Förhindra låntagare att låna böcker om de "
-"har fler än"
+"Förhindra en låntagare från att låna ifall de som låntagaren är "
+"vårdnadshavare för har avgifter som överstiger"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5759,8 +5777,8 @@ msgid ""
 "from checking out if the patron has guarantors and those guarantor's "
 "guarantees owing in total more than"
 msgstr ""
-"Förhindra en låntagare från att låna ifall låntagaren har en vårdnadshavare "
-"och vårdnadshavaren har avgifter som överstiger"
+"Förhindra en låntagare från att låna ifall de som låntagaren är "
+"vårdnadshavare för har avgifter som överstiger"
 
 # Circulation > Checkout policy
 msgid ""
@@ -12739,45 +12757,6 @@ msgid ""
 msgstr ""
 "en avgift när en låntagare byter till en kategori med en inskrivningsavgift."
 
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# . GDPR is the EU General Data Protection "
-"Regulation. When you enforce, patrons need to give consent before using the "
-"OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-"GDPR är EU:s Dataskyddsförordning (DSF, eng. General Data Protection "
-"Regulation). När du väljer \"tvingande\" så kommer låntagaren att behöva ge "
-"sitt godkännande innan hen kan använda OPAC:en. Om du väljer \"valfri\" så "
-"kommer Koha varna men inte vara tvingande."
-
-# Patrons > Privacy > GDPR_Policy
-msgid ""
-"patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> setting."
-msgstr ""
-"<br><strong>NOTERA:</strong> Om du aktiverar den här inställningen så kommer "
-"du behöva ange en URL till din offentliga integritetspolicy i inställningen "
-"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>."
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr "Ange DSF-policyn som:"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr "inaktiverad"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr "tvingande"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr "valfri"
-
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
@@ -13021,9 +13000,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street number"
 msgstr "Alternativ adress - Gatunummer"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - Street type"
-msgstr "Alternativ adress - Gatunummer"
+msgstr "Alternativ adress - Gatutyp"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate address - ZIP/Postal code"
@@ -13114,18 +13092,16 @@ msgid "patrons.pref#PrefillGuaranteeField# Main address - Street number"
 msgstr "Huvudadress - Gatunummer"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Main address - Street type"
-msgstr "Huvudadress - Gatunummer"
+msgstr "Huvudadress - Gatutyp"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "Huvudadress - Postnummer"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Surname"
-msgstr "Kontakt - Fax"
+msgstr "Efternamn"
 
 # Patrons > Patron relationships
 msgid ""
@@ -13134,11 +13110,57 @@ msgid ""
 "the guarantors record:"
 msgstr ""
 
+# Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
+"patrons need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+msgstr ""
+"GDPR är EU:s Dataskyddsförordning (DSF, eng. General Data Protection "
+"Regulation). När du väljer \"tvingande\" så kommer låntagaren att behöva ge "
+"sitt godkännande innan hen kan använda OPAC:en. Om du väljer \"valfri\" så "
+"kommer Koha varna men inte vara tvingande."
+
+# Patrons > Privacy > GDPR_Policy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
+"this you will also have to set the URL of your public privacy policy with "
+"the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
+msgstr ""
+"<br><strong>NOTERA:</strong> Om du aktiverar den här inställningen så kommer "
+"du behöva ange en URL till din offentliga integritetspolicy i inställningen "
+"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>."
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
+msgstr "Ange DSF-policyn som:"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# disabled"
+msgstr "inaktiverad"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# enforced"
+msgstr "tvingande"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# permissive"
+msgstr "valfri"
+
 # Patrons > Privacy > PrivacyPolicyURL
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>NOTERA:</strong> URL:en kommer bara vara synlig om <a href=\"/"
 "cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy"
@@ -13149,10 +13171,11 @@ msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "Använd följande URL"
 
 # Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
-"messages about privacy and data protection. (If you enforce GDPR policy, "
-"make sure that this page is not blocked.)"
+"messages about privacy and data protection. (If you enforce a data privacy "
+"policy, make sure that this page is not blocked.)"
 msgstr ""
 "för att hänvisa till er lokala integritetspolicy i meddelanden om integritet "
 "och dataskydd. (Om du har satt GDPR-policyn till \"tvingande\", se till att "
@@ -13255,7 +13278,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Placering"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Patron's category"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "Låntagares kategori"
 
 # Patrons > Security
@@ -13271,19 +13295,22 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "Låntagares titel"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
-"separate table for statistics purpose."
+"separate table for statistical purposes."
 msgstr ""
 "Låntagare och transaktioner kommer att kopieras till en separat tabell för "
 "statistiska ändamål."
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort1"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 1"
 msgstr "Sort1"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort2"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "Sort2"
 
 # Patrons > Security
@@ -13295,13 +13322,15 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "Typ av transaktion"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Zipcode"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "Postnummer"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
-"personal information."
+"patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
+"policies and regulations like GDPR for managing personal information."
 msgstr "anonymisering för att följa GDPR för personlig information."
 
 # Patrons > Security

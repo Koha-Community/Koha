@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
-"PO-Revision-Date: 2022-12-16 17:47+0000\n"
+"PO-Revision-Date: 2023-05-22 00:39+0000\n"
 "Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: es\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /es/22.11/es-ES-installer.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1671212834.692801\n"
+"X-POOTLE-MTIME: 1684715987.265550\n"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:description:21
 msgid "                B   - Board"
@@ -101,7 +101,7 @@ msgstr "        Crédito total al %s:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:50:mul:90
 msgid "        Total outstanding dues as of %s:"
-msgstr "        Total de venciminetos pendientes al %s:"
+msgstr "        Total de vencimientos pendientes al %s:"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:2:mul:61
 msgid "        Writeoff added to account for %s %s %s"
@@ -644,6 +644,10 @@ msgstr "3 columnas, 10 filas de etiquetas"
 msgid "3/week"
 msgstr "3/semana"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:6
+msgid "A discount applied to a patrons fine"
+msgstr "Un descuento aplicado a una multa de usuario"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:57:mul:1
 msgid ""
 "A hold has been placed on the following item : %s (%s) by the user %s %s "
@@ -719,7 +723,7 @@ msgstr "Abjazo"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:29
 msgid "Abstract and index"
-msgstr ""
+msgstr "Resumen e índice"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:20:mul:3
 msgid ""
@@ -735,6 +739,10 @@ msgstr ""
 msgid "Account balance slip"
 msgstr "Recibo de balance de cuenta"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:1
+msgid "Account creation fee"
+msgstr "Cargo por creación de cuenta"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:41
 msgid "Account expiration"
 msgstr "Vencimiento de cuenta"
@@ -746,6 +754,10 @@ msgstr "Cargo de la cuenta"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:2
 msgid "Account payment"
 msgstr "Pago de la cuenta"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:2
+msgid "Account renewal fee"
+msgstr "Cargo por renovación de cuenta"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:50
 msgid "Account summary for [% borrower.firstname %] [% borrower.surname %]"
@@ -781,7 +793,7 @@ msgstr "Adquisiciones"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:2
 msgid "Active"
-msgstr ""
+msgstr "Activo"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:2
 msgid "Actor"
@@ -800,7 +812,6 @@ msgid "Added to bundle"
 msgstr "Agregado a paquete"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:26
-#, fuzzy
 msgid "Address notes"
 msgstr "Notas de dirección"
 
@@ -846,7 +857,7 @@ msgstr "Institución que pone a disposición una reproducción"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:28
 msgid "Aggregated full"
-msgstr ""
+msgstr "Total agregado"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:10
 msgid "Ainu"
@@ -882,7 +893,7 @@ msgstr "Lenguas algonquinas"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:15
 msgid "Alliance"
-msgstr ""
+msgstr "Alianza"
 
 #: installer/data/mysql/en/optional/sample_z3950_servers.yml:description:1
 msgid ""
@@ -1058,6 +1069,10 @@ msgstr "Solicitud de artículo cancelada"
 msgid "Article request completed"
 msgstr "Solicitud de artículo completada"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:3
+msgid "Article request fee"
+msgstr "Cargo por solicitud de artículo"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:10
 msgid "Article request processing"
 msgstr "Solicitud de artículo procesamiento"
@@ -1128,7 +1143,6 @@ msgid "Audio tape"
 msgstr "Cinta de audio"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:13
-#, fuzzy
 msgid "Audio visual"
 msgstr "Audiovisual"
 
@@ -1190,7 +1204,7 @@ msgstr "Autor de introducción, etc."
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:21
 msgid "Author of screenplay"
-msgstr "Autor de guión"
+msgstr "Autor del guion"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:11
 msgid "Author, attributed"
@@ -1381,9 +1395,8 @@ msgid "Binder"
 msgstr "Encuadernador"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:19
-#, fuzzy
 msgid "Binder an agent who binds an item."
-msgstr "Archivador Un agente que archiva un ítem"
+msgstr "Encuadernador un agente que encuaderna un ítem."
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:20
 msgid "Binding designer"
@@ -1426,7 +1439,6 @@ msgid "Book"
 msgstr "Libro"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:15
-#, fuzzy
 msgid "Book cart"
 msgstr "Cesta de libros"
 
@@ -1467,9 +1479,8 @@ msgid "Bookseller"
 msgstr "Librero"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:46
-#, fuzzy
 msgid "Bookseries"
-msgstr "Librero"
+msgstr "Serie de libros"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:17
 msgid "Bosnia & Herzegovina"
@@ -1584,17 +1595,20 @@ msgid "Canada"
 msgstr "Canadá"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:9
-#, fuzzy
 msgid "Cancel"
-msgstr "Bailarin"
+msgstr "Cancelar"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:58
 msgid "Canceled hold available for different patron"
 msgstr "Reserva cancelada disponible para otro usuario"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:10
+msgid "Cancellation"
+msgstr "Cancelación"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:6
 msgid "Cancelled"
-msgstr ""
+msgstr "Cancelado"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:27
 msgid "Cancelled from the OPAC user page"
@@ -1777,7 +1791,6 @@ msgid "Child - patron with a guarantor"
 msgstr "Niño - usuario con garante"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:8
-#, fuzzy
 msgid "Children's area"
 msgstr "Área de niños"
 
@@ -1863,7 +1876,7 @@ msgstr "Cliente"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:4
 msgid "Closed"
-msgstr ""
+msgstr "Cerrado"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:39
 msgid "Cocos (Keeling) Islands"
@@ -1934,9 +1947,8 @@ msgid "Complainant-appellee"
 msgstr "Querellante-demandado"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:27
-#, fuzzy
 msgid "Complete"
-msgstr "Compilador"
+msgstr "Completo"
 
 #: installer/data/mysql/en/optional/marc21_holdings_coded_values.yml:authorised_values:1:row:96
 msgid "Complete (95%-100% held)"
@@ -2035,9 +2047,8 @@ msgid "Conservator"
 msgstr "Conservador"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:13
-#, fuzzy
 msgid "Consortial"
-msgstr "Censor"
+msgstr "Consorcio"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:59
 msgid "Consultant"
@@ -2089,7 +2100,7 @@ msgstr "Contribuyente"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:21
 msgid "Controlling"
-msgstr ""
+msgstr "Controlante"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:45
 msgid "Cook Islands"
@@ -2143,6 +2154,18 @@ msgstr "Diseñador de cubierta"
 msgid "Creator"
 msgstr "Creador"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:5
+msgid "Credit"
+msgstr "Crédito"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:16
+msgid "Credit has been voided"
+msgstr "El crédito ha sido anulado"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:description:1
+msgid "Credit types used in Koha"
+msgstr "Tipos de crédito utilizados en Koha"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:1:row:5
 msgid "Creditcard"
 msgstr "Tarjeta de crédito"
@@ -2192,9 +2215,8 @@ msgid "Cuba"
 msgstr "Cuba"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:25
-#, fuzzy
 msgid "Cupboard"
-msgstr "Junta"
+msgstr "Armario"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:68
 msgid "Curator"
@@ -2244,6 +2266,10 @@ msgstr "PREDETERMINADO"
 msgid "DVD"
 msgstr "DVD"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:11
+msgid "Daily rental fee"
+msgstr "Cargo diario por alquiler"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:103
 msgid "Dakota"
 msgstr "Dakota"
@@ -2273,9 +2299,8 @@ msgid "Data manager"
 msgstr "Gestor de datos"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:47
-#, fuzzy
 msgid "Database"
-msgstr "Gestor de datos"
+msgstr "Base de datos"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:18:mul:12
 msgid "Date due: %s%s"
@@ -2326,6 +2351,10 @@ msgstr "Estimado/a Señor/Señora,"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:46:mul:1
 msgid "Dear patron,"
 msgstr "Estimado usuario,"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:description:1
+msgid "Debit types used in Koha"
+msgstr "Tipos de débito usados en Koha"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:49
 msgid "Dedicatee"
@@ -2549,19 +2578,16 @@ msgid "Dzongkha"
 msgstr "Dzongkha"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:30
-#, fuzzy
 msgid "E-book"
-msgstr "Libro electrónico"
+msgstr "Libro-e"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:32
-#, fuzzy
 msgid "E-journal"
-msgstr "Diario encuadernado"
+msgstr "Revista-e"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:10
-#, fuzzy
 msgid "ERM librarian"
-msgstr "Bibliotecario"
+msgstr "Bibliotecario ERM"
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:45
 msgid ""
@@ -2723,7 +2749,7 @@ msgstr "Experto"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:5
 msgid "Expired"
-msgstr ""
+msgstr "Vencido"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:98
 msgid "Facsimilist"
@@ -2771,7 +2797,7 @@ msgstr "Fiyiano"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:24
 msgid "Filing cabinet"
-msgstr ""
+msgstr "Archivador"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:134
 msgid "Filipino; Pilipino"
@@ -2803,11 +2829,15 @@ msgstr "Fon"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:7
 msgid "For review"
-msgstr ""
+msgstr "Para revisión"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:64
 msgid "Forger"
 msgstr "Falsificador"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:4
+msgid "Forgiven"
+msgstr "Perdonado"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:6:mul:17
 msgid "Format: %sCopy%sScan%s"
@@ -2818,7 +2848,6 @@ msgid "Former Attributed author"
 msgstr "Ex autor atribuido"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:65
-#, fuzzy
 msgid "Former attributed author"
 msgstr "Ex autor atribuido"
 
@@ -2894,7 +2923,7 @@ msgstr "Fundador"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:22
 msgid "Future"
-msgstr ""
+msgstr "Futuro"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:146
 msgid "Ga"
@@ -2941,7 +2970,6 @@ msgid "Geez"
 msgstr "Ge'ez"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:12
-#, fuzzy
 msgid "General stacks"
 msgstr "Colección general"
 
@@ -3181,7 +3209,7 @@ msgstr "Hiri Motu"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:23
 msgid "Historic"
-msgstr ""
+msgstr "Histórico"
 
 #: installer/data/mysql/en/optional/sample_quotes.yml:quotes:1:row:18
 msgid ""
@@ -3210,6 +3238,10 @@ msgstr "Reserva disponible para retiro (aviso impreso)"
 msgid "Hold available for pickup at <<branches.branchname>>"
 msgstr "Reserva disponible para retiro en <<branches.branchname>>"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:14
+msgid "Hold fee"
+msgstr "Costo de reserva"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:54
 msgid "Hold has been cancelled"
 msgstr "La reserva ha sido cancelada"
@@ -3221,6 +3253,10 @@ msgstr "Se hizo un reserva sobre el ítem"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:17
 msgid "Hold slip"
 msgstr "Recibo de reserva"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:15
+msgid "Hold waiting too long"
+msgstr "Reserva demasiado tiempo en espera"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:categories:1:row:3
 msgid "Home Bound"
@@ -3450,7 +3486,7 @@ msgstr ""
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:3
 msgid "In negotiation"
-msgstr ""
+msgstr "En negociación"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:392
 msgid "Inari Sami"
@@ -3743,9 +3779,8 @@ msgid "Jordan"
 msgstr "Jordania"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:37
-#, fuzzy
 msgid "Journal"
-msgstr "Diario encuadernado"
+msgstr "Revista"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:208
 msgid "Judeo-Arabic"
@@ -4097,15 +4132,10 @@ msgid "Library Laser"
 msgstr "Impresora laser de la biblioteca"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:43
-msgid ""
-"Library account password change notification for [% patron.firstname %] [% "
-"patron.surname %]"
-msgstr ""
-"Notificación de cambio de contraseña de cuenta de la biblioteca de [% patron."
-"firstname %] [% patron.surname %]"
+msgid "Library account password change notification"
+msgstr "Notificación de cambio de contraseña de cuenta de la biblioteca"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:3
-#, fuzzy
 msgid "Library copy lost"
 msgstr "Copia de la biblioteca perdida"
 
@@ -4162,9 +4192,8 @@ msgid "Lithuanian"
 msgstr "Lituano"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:12
-#, fuzzy
 msgid "Local"
-msgstr "Vocalista"
+msgstr "Local"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:25:mul:8
 msgid "Location: %s"
@@ -4175,18 +4204,32 @@ msgid "Lojban"
 msgstr "Lojban"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:1
-#, fuzzy
 msgid "Long overdue (lost)"
-msgstr "Vencimiento prolongado (perdido)"
+msgstr "Retraso prolongado (perdido)"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:2
 msgid "Lost"
 msgstr "Perdido"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:3
-#, fuzzy
 msgid "Lost and paid for"
-msgstr "Perdido y pagado para"
+msgstr "Perdido y pagado"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:4
+msgid "Lost item"
+msgstr "Ítem perdido"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:8
+msgid "Lost item fee refund"
+msgstr "Reembolso de cargo por pérdida de ítem"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:8
+msgid "Lost item processing fee"
+msgstr "Cargo administrativo por pérdida de ítem"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:11
+msgid "Lost item processing fee refund"
+msgstr "Reembolso de cargo administrativo por pérdida de ítem"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:307
 msgid "Low German; Low Saxon; German, Low; Saxon, Low"
@@ -4335,6 +4378,10 @@ msgstr "Meitei"
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:288
 msgid "Manobo languages"
 msgstr "Lenguajes manobo"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:5
+msgid "Manual fee"
+msgstr "Cargo manual"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:134
 msgid "Manufacture place"
@@ -4489,9 +4536,8 @@ msgid "Mixed Materials"
 msgstr "Materiales mixtos"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:31
-#, fuzzy
 msgid "Mixed content"
-msgstr "Contacto para metadatos"
+msgstr "Contenido mixto"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:137
 msgid "Moderator"
@@ -4646,9 +4692,8 @@ msgid "Narrator"
 msgstr "Narrador"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:14
-#, fuzzy
 msgid "National"
-msgstr "Estacional"
+msgstr "Nacional"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:169
 msgid "Nauru"
@@ -4710,12 +4755,15 @@ msgstr "Día de año nuevo"
 msgid "New Zealand"
 msgstr "Nueva Zelanda"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:6
+msgid "New card fee"
+msgstr "Cargo por nueva credencial"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:60
 msgid "New curbside pickup"
 msgstr "Nuevo turno de retiro/devolución"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:10
-#, fuzzy
 msgid "New materials shelf"
 msgstr "Estante de materiales nuevos"
 
@@ -4733,11 +4781,11 @@ msgstr "Nueva sugerencia"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:38
 msgid "Newsletter"
-msgstr ""
+msgstr "Boletín informativo"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:42
 msgid "Newspaper"
-msgstr ""
+msgstr "Periódico"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:310
 msgid "Nias"
@@ -4908,14 +4956,12 @@ msgid "Not currently received"
 msgstr "No recibido actualmente"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:22
-#, fuzzy
 msgid "Not for loan"
 msgstr "No para préstamo"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:17
-#, fuzzy
 msgid "Not yet active"
-msgstr "No recibido actualmente"
+msgstr "No activo aún"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:90
 msgid "Notary"
@@ -5016,7 +5062,6 @@ msgid "Oman"
 msgstr "Omán"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:9
-#, fuzzy
 msgid "On display"
 msgstr "Exhibido"
 
@@ -5052,9 +5097,8 @@ msgid "Online password reset"
 msgstr "Restablecimiento de contraseña en línea"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:33
-#, fuzzy
 msgid "Online reference"
-msgstr "Referencia"
+msgstr "Referencia en línea"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:91
 msgid "Opponent"
@@ -5137,6 +5181,10 @@ msgstr ""
 msgid "Out of stock"
 msgstr "Agotado"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:7
+msgid "Overdue fine"
+msgstr "Multa por retraso"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:72
 msgid "Overdue item fine description"
 msgstr "Descripción de multa por retraso"
@@ -5148,6 +5196,10 @@ msgstr "Aviso de retraso"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:21
 msgid "Overdues slip"
 msgstr "Recibo de retrasos"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:1
+msgid "Overpayment refund"
+msgstr "Reembolso por sobrepago"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:149
 msgid "Owner"
@@ -5240,6 +5292,14 @@ msgstr "Usuario"
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:3
 msgid "Patrons"
 msgstr "Usuarios"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:2
+msgid "Payment"
+msgstr "Pago"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:9
+msgid "Payment from library to patron"
+msgstr "Pago de la biblioteca al usuario"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:319
 msgid "Pedi; Sepedi; Northern Sotho"
@@ -5386,9 +5446,8 @@ msgid "Presenter"
 msgstr "Presentador"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:34
-#, fuzzy
 msgid "Print"
-msgstr "Impresora"
+msgstr "Impresión"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:103
 msgid "Printer"
@@ -5408,14 +5467,13 @@ msgstr "Página de problemas: %s"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:40
 msgid "Proceedings"
-msgstr ""
+msgstr "Actas"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:162
 msgid "Process contact"
 msgstr "Contacto de proceso"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:16
-#, fuzzy
 msgid "Processing center"
 msgstr "Centro de procesamiento"
 
@@ -5512,6 +5570,10 @@ msgstr "Puerto Rico"
 msgid "Puppeteer"
 msgstr "Titiritero"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:9
+msgid "Purchase"
+msgstr "Compra"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:62
 msgid "Purchase suggestion accepted"
 msgstr "Sugerencia de compra aceptada"
@@ -5589,10 +5651,13 @@ msgstr ""
 msgid "Reference"
 msgstr "Referencia"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:7
+msgid "Refund"
+msgstr "Reembolsar"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:19
-#, fuzzy
 msgid "Rejected"
-msgstr "Representado"
+msgstr "Rechazado"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:113
 msgid "Remixer"
@@ -5608,12 +5673,23 @@ msgstr "Renderizador"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:8
 msgid "Renew"
-msgstr ""
+msgstr "Renovar"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:12
+msgid "Renewal of daily rental item"
+msgstr "Renovación de ítem de alquiler diario"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:13
+msgid "Renewal of rental item"
+msgstr "Renovación de ítem de alquiler"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:10
+msgid "Rental fee"
+msgstr "Costo de alquiler"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:39
-#, fuzzy
 msgid "Report"
-msgstr "Informante"
+msgstr "Reporte"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:184
 msgid "Reporter"
@@ -5668,7 +5744,6 @@ msgid "Restorationist"
 msgstr "Restauracionista"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:25
-#, fuzzy
 msgid "Restricted access"
 msgstr "Acceso restringido"
 
@@ -5944,7 +6019,6 @@ msgid "Share on list <<listname>> accepted"
 msgstr "Compartir en la lista <<listname>> aceptada"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:2
-#, fuzzy
 msgid "Shelf copy damaged"
 msgstr "Copia en estante dañada"
 
@@ -6223,14 +6297,12 @@ msgid "Staff"
 msgstr "Administrativo"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:23
-#, fuzzy
 msgid "Staff collection"
 msgstr "Colección del personal"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:11
-#, fuzzy
 msgid "Staff office"
-msgstr "Oficina del personal "
+msgstr "Oficina del personal"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:207
 msgid "Stage manager"
@@ -6270,15 +6342,15 @@ msgstr "Narrador"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:49
 msgid "Streaming audio"
-msgstr ""
+msgstr "Transmisión de audio"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:35
 msgid "Streaming media"
-msgstr ""
+msgstr "Medios de transmisión"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:50
 msgid "Streaming video"
-msgstr ""
+msgstr "Transmisión de vídeo"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:categories:1:row:2
 msgid "Student"
@@ -6294,7 +6366,7 @@ msgstr "Clasificación SuDoc (U.S. GPO)"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:11
 msgid "Subject specialist"
-msgstr ""
+msgstr "Especialista en la materia"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:196
 msgid "Sudan"
@@ -6694,9 +6766,8 @@ msgid "Thesis advisor"
 msgstr "Director de tesis"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:48
-#, fuzzy
 msgid "Thesis/Dissertation"
-msgstr "Disertante"
+msgstr "Tesis/Disertación"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:70:mul:7
 msgid "This item is on hold for another patron."
@@ -6956,11 +7027,11 @@ msgstr "Lugar de la universidad"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:36
 msgid "Unknown"
-msgstr ""
+msgstr "Desconocido"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:43
 msgid "Unspecified"
-msgstr ""
+msgstr "Sin especificar"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:4:row:2
 msgid "Upcoming title by popular author"
@@ -7219,7 +7290,7 @@ msgstr ""
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:41
 msgid "Website"
-msgstr ""
+msgstr "Sitio web"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:48
 msgid "Welcome notice "
@@ -7300,6 +7371,10 @@ msgstr "Grabador de madera"
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:221
 msgid "Woodcutter"
 msgstr "Leñador"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:3
+msgid "Writeoff"
+msgstr "Anular"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:137
 msgid "Writer of accompanying material"

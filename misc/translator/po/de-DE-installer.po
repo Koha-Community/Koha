@@ -2,9 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
-"PO-Revision-Date: 2023-04-27 09:10+0000\n"
-"Last-Translator: Christian Stelzenmüller <christian.stelzenmueller@bsz-bw.de>"
-"\n"
+"PO-Revision-Date: 2023-05-16 13:11+0000\n"
+"Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +13,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /de/22.11/de-DE-installer.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1682586625.965698\n"
+"X-POOTLE-MTIME: 1684242688.119345\n"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:description:21
 msgid "                B   - Board"
@@ -645,6 +644,10 @@ msgstr "3 Spalten, 10 Reihen von Etiketten"
 msgid "3/week"
 msgstr "3/Woche"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:6
+msgid "A discount applied to a patrons fine"
+msgstr "Rabatt für einen Gebührenposten"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:57:mul:1
 msgid ""
 "A hold has been placed on the following item : %s (%s) by the user %s %s "
@@ -735,6 +738,10 @@ msgstr ""
 msgid "Account balance slip"
 msgstr "Gebührenauszug"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:1
+msgid "Account creation fee"
+msgstr "Anmeldegebühr"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:41
 msgid "Account expiration"
 msgstr "Ablauf des Benutzerkontos"
@@ -746,6 +753,10 @@ msgstr "Gebühren"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:2
 msgid "Account payment"
 msgstr "Zahlung"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:2
+msgid "Account renewal fee"
+msgstr "Benutzungsgebühren"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:50
 msgid "Account summary for [% borrower.firstname %] [% borrower.surname %]"
@@ -1057,6 +1068,10 @@ msgstr "Artikelbestellung storniert"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:7
 msgid "Article request completed"
 msgstr "Artikelbestellung abgeschlossen"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:3
+msgid "Article request fee"
+msgstr "Artikelbestellgebühr"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:10
 msgid "Article request processing"
@@ -1585,6 +1600,10 @@ msgstr "Stornieren"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:58
 msgid "Canceled hold available for different patron"
 msgstr "Stornierte Vormerkung verfügbar für anderen Benutzer"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:10
+msgid "Cancellation"
+msgstr "Stornierung"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:6
 msgid "Cancelled"
@@ -2132,6 +2151,18 @@ msgstr "CovergestalterIn"
 msgid "Creator"
 msgstr "GeistigeR SchöpferIn"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:5
+msgid "Credit"
+msgstr "Gutschrift"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:16
+msgid "Credit has been voided"
+msgstr "Guthaben wurde ungültig gemacht"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:description:1
+msgid "Credit types used in Koha"
+msgstr "In Koha verwendete Gutschriftenarten"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:1:row:5
 msgid "Creditcard"
 msgstr "Kreditkarte"
@@ -2232,6 +2263,10 @@ msgstr "STANDARD"
 msgid "DVD"
 msgstr "DVD"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:11
+msgid "Daily rental fee"
+msgstr "Tägliche Leihgebühr"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:103
 msgid "Dakota"
 msgstr "Dakota-Sprache"
@@ -2313,6 +2348,10 @@ msgstr "Sehr geehrte Frau/Herr,"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:46:mul:1
 msgid "Dear patron,"
 msgstr "LiebeR BenutzerIn,"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:description:1
+msgid "Debit types used in Koha"
+msgstr "In Koha verwendete Gebührenarten"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:49
 msgid "Dedicatee"
@@ -2790,6 +2829,10 @@ msgstr "Zur Ansicht"
 msgid "Forger"
 msgstr "FälscherIn"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:4
+msgid "Forgiven"
+msgstr "Erlass"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:6:mul:17
 msgid "Format: %sCopy%sScan%s"
 msgstr "Format: %sKopie%sScan%s"
@@ -3186,6 +3229,10 @@ msgstr "Vormerkung ist abholbereit (Print)"
 msgid "Hold available for pickup at <<branches.branchname>>"
 msgstr "Vormerkung ist abholbereit in <<branches.branchname>>"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:14
+msgid "Hold fee"
+msgstr "Vormerkgebühr"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:54
 msgid "Hold has been cancelled"
 msgstr "Vormerkung wurde storniert"
@@ -3197,6 +3244,10 @@ msgstr "Neue Vormerkung"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:17
 msgid "Hold slip"
 msgstr "Vormerkquittung"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:15
+msgid "Hold waiting too long"
+msgstr "Vormerkung nicht abgeholt"
 
 #: installer/data/mysql/en/optional/patron_categories.yml:categories:1:row:3
 msgid "Home Bound"
@@ -4070,12 +4121,8 @@ msgid "Library Laser"
 msgstr "Laserdrucker"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:43
-msgid ""
-"Library account password change notification for [% patron.firstname %] [% "
-"patron.surname %]"
-msgstr ""
-"Änderung des Passworts für das Bibliothekskonto von [% patron.firstname %] "
-"[% patron.surname %]"
+msgid "Library account password change notification"
+msgstr "Benachrichtigung über Passwortänderung des Bibliothekskontos"
 
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:1:row:3
 msgid "Library copy lost"
@@ -4156,6 +4203,22 @@ msgstr "Vermisst"
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:3:row:3
 msgid "Lost and paid for"
 msgstr "Verloren und Buchersatz bezahlt"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:4
+msgid "Lost item"
+msgstr "Medienverlust"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:8
+msgid "Lost item fee refund"
+msgstr "Rückerstattung Medienverlustgebühr"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:8
+msgid "Lost item processing fee"
+msgstr "Bearbeitungsgebühr Medienverlust"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:11
+msgid "Lost item processing fee refund"
+msgstr "Rückerstattung Bearbeitungsgebühr Medienverlust"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:307
 msgid "Low German; Low Saxon; German, Low; Saxon, Low"
@@ -4304,6 +4367,10 @@ msgstr "Meithei-Sprache"
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:288
 msgid "Manobo languages"
 msgstr "Manobo-Sprachen"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:5
+msgid "Manual fee"
+msgstr "Manuelle Gebühr"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:134
 msgid "Manufacture place"
@@ -4676,6 +4743,10 @@ msgstr "Neujahr"
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:3:row:171
 msgid "New Zealand"
 msgstr "Neuseeland"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:6
+msgid "New card fee"
+msgstr "Gebühr für neuen Ausweis"
 
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:60
 msgid "New curbside pickup"
@@ -5097,6 +5168,10 @@ msgstr ""
 msgid "Out of stock"
 msgstr "Ausverkauft"
 
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:7
+msgid "Overdue fine"
+msgstr "Mahngebühr"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:72
 msgid "Overdue item fine description"
 msgstr "Beschreibung der Mahngebühr"
@@ -5108,6 +5183,10 @@ msgstr "Mahnung"
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:21
 msgid "Overdues slip"
 msgstr "Mahnung (Quittung)"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:1
+msgid "Overpayment refund"
+msgstr "Rückerstattung einer Überzahlung"
 
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:149
 msgid "Owner"
@@ -5200,6 +5279,14 @@ msgstr "Benutzer"
 #: installer/data/mysql/en/optional/auth_val.yml:authorised_values:5:row:3
 msgid "Patrons"
 msgstr "Benutzer"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:2
+msgid "Payment"
+msgstr "Zahlung"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:9
+msgid "Payment from library to patron"
+msgstr "Auszahlung an einen Benutzer"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:4:row:319
 msgid "Pedi; Sepedi; Northern Sotho"
@@ -5470,6 +5557,10 @@ msgstr "Puerto Rico"
 msgid "Puppeteer"
 msgstr "PuppenspielerIn"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:9
+msgid "Purchase"
+msgstr "Kauf"
+
 #: installer/data/mysql/en/mandatory/sample_notices.yml:letter:1:row:62
 msgid "Purchase suggestion accepted"
 msgstr "Anschaffungsvorschlag angenommen"
@@ -5546,6 +5637,10 @@ msgstr "Details unter https://www.niso.org/publications/standards."
 msgid "Reference"
 msgstr "Referenz"
 
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:7
+msgid "Refund"
+msgstr "Rückerstattung"
+
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:19
 msgid "Rejected"
 msgstr "Abgelehnt"
@@ -5565,6 +5660,18 @@ msgstr "ErbringerIn"
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:8
 msgid "Renew"
 msgstr "Verlängern"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:12
+msgid "Renewal of daily rental item"
+msgstr "Verlängerung mit täglicher Leihgebühr"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:13
+msgid "Renewal of rental item"
+msgstr "Verlängerung mit Leihgebühr"
+
+#: installer/data/mysql/en/mandatory/account_debit_types.yml:account_debit_types:1:row:10
+msgid "Rental fee"
+msgstr "Leihgebühr"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:2:row:39
 msgid "Report"
@@ -7242,6 +7349,10 @@ msgstr "HolzschnitzerIn"
 #: installer/data/mysql/en/optional/marc21_relatorterms.yml:authorised_values:1:row:221
 msgid "Woodcutter"
 msgstr "HolzschneiderIn"
+
+#: installer/data/mysql/en/mandatory/account_credit_types.yml:account_credit_types:1:row:3
+msgid "Writeoff"
+msgstr "Erlass"
 
 #: installer/data/mysql/en/mandatory/auth_values.yml:authorised_values:5:row:137
 msgid "Writer of accompanying material"

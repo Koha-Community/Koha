@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2023-05-02 11:47+0000\n"
+"PO-Revision-Date: 2023-05-10 08:47+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: nl_NL\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /nl_NL/22.11/nl-NL-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1683028066.955849\n"
+"X-POOTLE-MTIME: 1683708439.398456\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -652,7 +652,7 @@ msgstr "Zoekmachine"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref Share anonymous usage statistics"
-msgstr "Deel anonieme gebruiksstatistieken"
+msgstr "admin.pref Deel anonieme gebruiksstatistieken"
 
 # Administration > Interface options
 msgid ""
@@ -1190,8 +1190,8 @@ msgid ""
 "admin.pref#UsageStats# <br>Website where usage statistics are published: <a "
 "href=\"https://hea.koha-community.org\">Hea Koha community website</a>."
 msgstr ""
-"<br>Website waar gebruiksstatistieken gepubliceerd worden: <a href=\"https://"
-"hea.koha-community.org\">Hea Koha community website</a>."
+"admin.pref <br>Website waar gebruiksstatistieken gepubliceerd worden: <a "
+"href=\"https://hea.koha-community.org\">Hea Koha community website</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
@@ -2471,6 +2471,24 @@ msgstr ""
 "a> vereisen en moet <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a> "
 "toestaan):"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Do"
+msgstr "Wel"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
+msgstr "Niet"
+
+# Authorities > Linker > LinkerConsiderThesaurus
+msgid ""
+"authorities.pref#LinkerConsiderThesaurus# compare the source for 6XX "
+"headings to the thesaurus source for authority records when linking. "
+"Enabling this preference may require a reindex, and may generate new "
+"authority records if AutoCreateAuthorities is enabled."
+msgstr ""
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -6440,8 +6458,8 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'comparator' is the type of "
 "comparison, possible values are: eq,<,<=,>,>=,ne<br/>"
 msgstr ""
-"- 'comparator' is het type vergelijking, mogelijke waarden zijn: "
-"eq,<,<=,>,>=,ne<br/>"
+"- 'comparator' is het type vergelijking, mogelijke waarden zijn: eq,<,<=,>,"
+">=,ne<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -7209,8 +7227,8 @@ msgid ""
 "bin/koha/admin/smart-rules.pl\">circulation and fines rules</a> for recalls "
 "once enabled."
 msgstr ""
-"terugroepingen. Zorg dat er <a href=\"/cgi-bin/koha/admin/smart-rules.pl\">"
-"uitleen en boeteregels</a> geconfigureerd worden voor terugroepingen als "
+"terugroepingen. Zorg dat er <a href=\"/cgi-bin/koha/admin/smart-rules.pl"
+"\">uitleen en boeteregels</a> geconfigureerd worden voor terugroepingen als "
 "deze geactiveerd zijn."
 
 # Circulation > Checkout Policy
@@ -10040,7 +10058,8 @@ msgstr ""
 msgid ""
 "opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
 "to disable)."
-msgstr "[% local_currency %] aan kosten hebben (laat leeg om uit te schakelen)."
+msgstr ""
+"[% local_currency %] aan kosten hebben (laat leeg om uit te schakelen)."
 
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewalsIncludeCredits# Don't include"
@@ -10318,9 +10337,10 @@ msgid ""
 "\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
 "show no more than"
 msgstr ""
-"Als <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"OPACResultsUnavailableGroupingBy\">OPACResultsUnavailableGroupingBy</a> is "
-"ingesteld op \"bibliotheek en substatus\", niet meer tonen dan"
+"Als <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> is ingesteld op \"bibliotheek en "
+"substatus\", niet meer tonen dan"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
@@ -10681,12 +10701,11 @@ msgstr ""
 "\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" in voor de "
 "standaard stylesheet</li><li>Voer een pad in om een xslt bestand te "
 "definiëren</li><li>Voer een pad in voor een externe stylesheet.</li><li>LET "
-"OP: De systeemvoorkeur <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PassItemMarcToXSLT\""
-">PassItemMarcToXSLT</a> moet ingeschakeld zijn indien de aangepaste "
-"stylesheet data in de exemplaarvelden gebruikt wordt</li></ul>Bij meerdere "
-"stylesheets voor verschillende talen wordt de parameter {langcode} vervangen "
-"door de huidige interfacetaal."
+"OP: De systeemvoorkeur <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> moet "
+"ingeschakeld zijn indien de aangepaste stylesheet data in de exemplaarvelden "
+"gebruikt wordt</li></ul>Bij meerdere stylesheets voor verschillende talen "
+"wordt de parameter {langcode} vervangen door de huidige interfacetaal."
 
 # OPAC > Appearance
 msgid ""
@@ -10725,7 +10744,7 @@ msgid ""
 "the OPAC masthead."
 msgstr ""
 "opac.pref#OpacAddMastheadLibraryPulldown# van een bibliotheekkeuze pulldown "
-"menu op de OPAC masthead."
+"menu aan de OPAC kopsectie."
 
 # OPAC > Appearance
 msgid ""
@@ -11026,9 +11045,8 @@ msgid ""
 "op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 msgstr ""
 "Lijst van lenercategorieën, die exemplaren kunnen zien die anders verborgen "
-"worden door <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems\""
-">OpacHiddenItems</a>:"
+"worden door <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OpacHiddenItems\">OpacHiddenItems</a>:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHiddenItemsHidesRecord# Don't hide"
@@ -11424,7 +11442,7 @@ msgid ""
 "masthead."
 msgstr ""
 "opac.pref#OpacShowRecentComments# link naar recente opmerkingen in de OPAC "
-"masthead."
+"kopsectie."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# Show star-ratings on"
@@ -12422,7 +12440,7 @@ msgstr "Borgsteller informatie"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Housebound roles"
-msgstr "Huiswaartskerende rollen"
+msgstr "Thuisbezorgrollen"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Library management"
@@ -12487,10 +12505,9 @@ msgid ""
 "fields added to this preference will be added as search options in the "
 "dropdown menu on the patron search page."
 msgstr ""
-"Indien leeg gebruikt Koha standaard \""
-"firstname,middle_name,surname,othernames,cardnumber,userid\". Extra aan deze "
-"voorkeur toegevoegde velden worden zoekopties in het dropdown menu op de "
-"lener zoekpagina."
+"Indien leeg gebruikt Koha standaard \"firstname,middle_name,surname,"
+"othernames,cardnumber,userid\". Extra aan deze voorkeur toegevoegde velden "
+"worden zoekopties in het dropdown menu op de lener zoekpagina."
 
 # Acquisitions > Policy
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -12653,45 +12670,6 @@ msgid ""
 msgstr ""
 "kosten rekenen wanneer een lener wisselt naar een categorie met "
 "inschrijfkosten."
-
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# . GDPR is the EU General Data Protection "
-"Regulation. When you enforce, patrons need to give consent before using the "
-"OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-"GDPR is de EU General Data Protection Regulation of wel AVG. Indien dit "
-"wordt afgedwongen, moeten leners toestemming geven voor ze de OPAC kunnen "
-"gebruiken. Indien dit op toestaan staat, zal Koha waarschuwen, maar niet "
-"afdwingen."
-
-# Patrons > Privacy > GDPR_Policy
-msgid ""
-"patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> setting."
-msgstr ""
-"<br><strong>LET OP:</strong> Indien ingeschakeld moet eveneens de URL van "
-"het openbare privacybeleid ingevuld worden via de <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> instelling."
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr "Stel AVG beleid in op:"
-
-# OPAC > Appearance
-msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr "uitgeschakeld"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr "afgedwongen"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr "toestaand"
 
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
@@ -13037,11 +13015,57 @@ msgstr ""
 "Bij toevoegen van geborgde lener aan borgsteller de volgende velden vullen "
 "vanuit het borgsteller's record:"
 
+# Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
+"patrons need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+msgstr ""
+"GDPR is de EU General Data Protection Regulation of wel AVG. Indien dit "
+"wordt afgedwongen, moeten leners toestemming geven voor ze de OPAC kunnen "
+"gebruiken. Indien dit op toestaan staat, zal Koha waarschuwen, maar niet "
+"afdwingen."
+
+# Patrons > Privacy > GDPR_Policy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
+"this you will also have to set the URL of your public privacy policy with "
+"the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
+msgstr ""
+"<br><strong>LET OP:</strong> Indien ingeschakeld moet eveneens de URL van "
+"het openbare privacybeleid ingevuld worden via de <a href=\"/cgi-bin/koha/"
+"admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
+"\">PrivacyPolicyURL</a> instelling."
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
+msgstr "Stel AVG beleid in op:"
+
+# OPAC > Appearance
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# disabled"
+msgstr "uitgeschakeld"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# enforced"
+msgstr "afgedwongen"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# permissive"
+msgstr "toestaand"
+
 # Patrons > Privacy > PrivacyPolicyURL
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>LET OP:</strong> De URL wordt alleen getoond als <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy"
@@ -13052,10 +13076,11 @@ msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "Gebruik de volgende URL"
 
 # Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
-"messages about privacy and data protection. (If you enforce GDPR policy, "
-"make sure that this page is not blocked.)"
+"messages about privacy and data protection. (If you enforce a data privacy "
+"policy, make sure that this page is not blocked.)"
 msgstr ""
 "om te verwijzen naar het lokale AVG beleid in berichten over privacy en "
 "databescherming. (Zorg dat de pagina niet geblokkeerd is bij afdwingen van "
@@ -13159,7 +13184,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Locatie"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Patron's category"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "Categorie lener"
 
 # Patrons > Security
@@ -13175,19 +13201,22 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "Titel lener"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
-"separate table for statistics purpose."
+"separate table for statistical purposes."
 msgstr ""
 "Leners en transacties worden naar een aparte tabel gekopieerd voor "
 "statistische doeleinden."
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort1"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 1"
 msgstr "Sorteer1"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort2"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "Sorteer 2"
 
 # Patrons > Security
@@ -13199,13 +13228,15 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "Transactie type"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Zipcode"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "Postcode"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
-"personal information."
+"patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
+"policies and regulations like GDPR for managing personal information."
 msgstr "pseudonimisatie om te voldoen aan AVG voor persoongegevens."
 
 msgid ""
@@ -13544,8 +13575,9 @@ msgid ""
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
 "strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
-"<em>Huidige ondersteunde waarden</em>: Itemtypes (<strong>itemtypes</strong>)"
-", Collectie (<strong>ccode</strong>) en Plaatscode (<strong>loc</strong>)."
+"<em>Huidige ondersteunde waarden</em>: Itemtypes (<strong>itemtypes</"
+"strong>), Collectie (<strong>ccode</strong>) en Plaatscode (<strong>loc</"
+"strong>)."
 
 # Searching > Search Form
 msgid ""
@@ -14622,13 +14654,10 @@ msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
 msgstr "Toon"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
 "pulldown menu on the staff header search."
-msgstr ""
-"opac.pref#OpacAddMastheadLibraryPulldown# van een bibliotheekkeuze pulldown "
-"menu op de OPAC masthead."
+msgstr "pulldown menu met bibliotheken in de staf kopsectie."
 
 # Staff Client > Options
 msgid "staff_interface.pref#IntranetCatalogSearchPulldown# Don't show"
@@ -14741,21 +14770,18 @@ msgid ""
 msgstr "van exemplaarselectie op de record detailpagina."
 
 # OPAC > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffHighlightedWords# Don't highlight"
 msgstr "Niet arceren"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "staff_interface.pref#StaffHighlightedWords# Highlight"
 msgstr "Arceren"
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#StaffHighlightedWords# words searched for in the staff "
 "interface search results pages."
-msgstr "Toon de volgende HTML op het stafinterface loginscherm"
+msgstr "van zoekwoorden op de stafinterface zoekresultaatpagina's."
 
 # OPAC > Appearance
 msgid ""
@@ -14781,26 +14807,22 @@ msgid ""
 msgstr "Toon de volgende HTML op het stafinterface loginscherm"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Don't enable"
-msgstr "Niet inschakelen"
+msgstr "Deactiveer"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enable"
-msgstr "Authenticatie"
+msgstr "Activeer"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
-msgstr "Authenticatie"
+msgstr "Afdwingen van"
 
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
 "(2FA) for staff members."
-msgstr "Gebruik CAS voor login authenticatie: "
+msgstr "van tweefactorauthenticatie (2FA) voor stafleden."
 
 # Staff interface > Options
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
@@ -14862,7 +14884,6 @@ msgid ""
 msgstr "Toon lijsten in de stafinterface via de XSLT stylesheet op: "
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a "
 "href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-"
@@ -14883,7 +14904,7 @@ msgstr ""
 "op=search&searchfield=PassItemMarcToXSLT\">PassItemMarcToXSLT</a> moet "
 "ingeschakeld zijn indien de handmatige stylesheet data gebruikt in de "
 "exemplaarvelden</li></ul>Bij meerdere stylesheets voor verschillende talen "
-"wordt de placeholder {langcode} vervangen door de huidige interfacetaal."
+"wordt de parameter {langcode} vervangen door de huidige interfacetaal."
 
 # OPAC > Appearance
 msgid ""
@@ -15513,13 +15534,12 @@ msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"
 msgstr "Inschakelen"
 
 # Web services > REST API
-#, fuzzy
 msgid ""
 "web_services.pref#RESTOAuth2ClientCredentials# the OAuth2 client credentials "
 "grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed."
 msgstr ""
-"de OAuth2 client credentials toegekend voor de REST API. Vereist Net::"
-"OAuth2::AuthorizationServer installatie. [EXPERIMENTEEL]"
+"van de OAuth2 client credentials toegekend voor de REST API. Vereist Net::"
+"OAuth2::AuthorizationServer installatie."
 
 # OPAC > Appearance
 msgid "web_services.pref#RESTPublicAPI# Disable"

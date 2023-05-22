@@ -2526,6 +2526,24 @@ msgstr ""
 "être à \"générer\") :"
 
 # Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Do"
+msgstr "Conserver"
+
+# Authorities > Linker
+#, fuzzy
+msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
+msgstr "Ne pas conserver"
+
+# Authorities > Linker > LinkerConsiderThesaurus
+msgid ""
+"authorities.pref#LinkerConsiderThesaurus# compare the source for 6XX "
+"headings to the thesaurus source for authority records when linking. "
+"Enabling this preference may require a reindex, and may generate new "
+"authority records if AutoCreateAuthorities is enabled."
+msgstr ""
+
+# Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
 msgstr "Conserver"
 
@@ -10441,10 +10459,10 @@ msgid ""
 "\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
 "show no more than"
 msgstr ""
-"Si la préférence système <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield="
-"OPACResultsUnavailableGroupingBy\">OPACResultsUnavailableGroupingBy</a> est "
-"paramétrée à \"bibliothèque et statut\", n'afficher au maximum que"
+"Si la préférence système <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> est paramétrée à \"bibliothèque et "
+"statut\", n'afficher au maximum que"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
@@ -12801,45 +12819,6 @@ msgid ""
 msgstr ""
 "des frais quand un utilisateur change de catégorie avec un coût d'abonnement."
 
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# . GDPR is the EU General Data Protection "
-"Regulation. When you enforce, patrons need to give consent before using the "
-"OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-". Le RGDP est le règlement général de l'UE sur la protection des données. Si "
-"la politique est forcée, les usagers doivent donner leur consentement avant "
-"d'utiliser l'OPAC. Si la politique est permissive, Koha avertira mais "
-"n'obligera pas l'usager à donner son consentement."
-
-# Patrons > Privacy
-msgid ""
-"patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you "
-"will also have to set the URL of your public privacy policy with the <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL"
-"\">PrivacyPolicyURL</a> setting."
-msgstr ""
-"<br><strong>NOTE :</strong> Si vous activez cette préférence, vous devrez "
-"également définir l'URL de votre politique de confidentialité publique avec "
-"la préférence système <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>."
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# Set GDPR policy to:"
-msgstr "La politique RGPD est :"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# disabled"
-msgstr "désactivée"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# enforced"
-msgstr "forcée"
-
-# Patrons > Privacy
-msgid "patrons.pref#GDPR_Policy# permissive"
-msgstr "permissive"
-
 # Patrons > General > ListOwnershipUponPatronDeletion
 msgid ""
 "patrons.pref#ListOwnershipUponPatronDeletion# <br/>When changing owner at "
@@ -13199,10 +13178,56 @@ msgstr ""
 "suivants de la personne à charge à partir des informations du garant :"
 
 # Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
+"patrons need to give consent before using the OPAC. If you set to "
+"permissive, Koha will warn but not enforce."
+msgstr ""
+". Le RGDP est le règlement général de l'UE sur la protection des données. Si "
+"la politique est forcée, les usagers doivent donner leur consentement avant "
+"d'utiliser l'OPAC. Si la politique est permissive, Koha avertira mais "
+"n'obligera pas l'usager à donner son consentement."
+
+# Patrons > Privacy
+#, fuzzy
+msgid ""
+"patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
+"this you will also have to set the URL of your public privacy policy with "
+"the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
+msgstr ""
+"<br><strong>NOTE :</strong> Si vous activez cette préférence, vous devrez "
+"également définir l'URL de votre politique de confidentialité publique avec "
+"la préférence système <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>."
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
+msgstr "La politique RGPD est :"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# disabled"
+msgstr "désactivée"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# enforced"
+msgstr "forcée"
+
+# Patrons > Privacy
+#, fuzzy
+msgid "patrons.pref#PrivacyPolicyConsent# permissive"
+msgstr "permissive"
+
+# Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=GDPR_Policy\">GDPR_Policy</a> is set."
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>NOTE :</strong> L'URL ne sera affichée que si <a href=\"/cgi-bin/"
 "koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy\">GDPR_Policy</"
@@ -13213,10 +13238,11 @@ msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "Utilisezr l'URL suivante"
 
 # Patrons > Privacy
+#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
-"messages about privacy and data protection. (If you enforce GDPR policy, "
-"make sure that this page is not blocked.)"
+"messages about privacy and data protection. (If you enforce a data privacy "
+"policy, make sure that this page is not blocked.)"
 msgstr ""
 "pour faire référence à votre politique de confidentialité locale dans les "
 "messages relatifs à la confidentialité et à la protection des données. (Si "
@@ -13314,7 +13340,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Localisation"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Patron's category"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "Catégorie d'utilisateur"
 
 # Patrons > Security
@@ -13330,19 +13357,22 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "Titre de civilité de l'utilisateur"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
-"separate table for statistics purpose."
+"separate table for statistical purposes."
 msgstr ""
 "Les utilisateurs et les transactions seront copiés dans un tableau séparé à "
 "des fins statistiques."
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort1"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 1"
 msgstr "Critère 1"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Sort2"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "Critère 2"
 
 # Patrons > Security
@@ -13354,13 +13384,15 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "Type de transaction"
 
 # Patrons > Security
-msgid "patrons.pref#Pseudonymization# Zipcode"
+#, fuzzy
+msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "Code postal"
 
 # Patrons > Security
+#, fuzzy
 msgid ""
-"patrons.pref#Pseudonymization# pseudonymization to comply with GDPR for "
-"personal information."
+"patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
+"policies and regulations like GDPR for managing personal information."
 msgstr ""
 "la pseudonymisation pour se conformer au RGPD pour les informations "
 "personnelles."
