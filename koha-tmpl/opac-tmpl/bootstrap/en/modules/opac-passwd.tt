@@ -64,7 +64,7 @@
 
                     [% IF logged_in_user.category.effective_change_password %]
                         [% IF ( Ask_data ) %]
-                            <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post" autocomplete="off">
+                            <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post">
                                 <legend class="sr-only">Change your password</legend>
                                 <fieldset>
                                     [% IF ( logged_in_user.category.effective_require_strong_password ) %]
@@ -74,15 +74,15 @@
                                     [% END %]
                                     <div class="form-group">
                                         <label for="Oldkey">Current password:</label>
-                                        <input class="form-control focus" type="password" id="Oldkey" size="25"  name="Oldkey" autocomplete="off" />
+                                        <input class="form-control focus" type="password" id="Oldkey" size="25"  name="Oldkey" autocomplete="current-password" />
                                     </div>
                                     <div class="form-group">
                                         <label for="Newkey">New password:</label>
-                                        <input class="form-control" type="password" id="Newkey"  size="25"  name="Newkey" autocomplete="off" />
+                                        <input class="form-control" type="password" id="Newkey"  size="25"  name="Newkey" autocomplete="new-password" />
                                     </div>
                                     <div class="form-group">
                                         <label for="Confirm">Re-type new password:</label>
-                                        <input class="form-control" type="password"  id="Confirm" size="25" name="Confirm" autocomplete="off" />
+                                        <input class="form-control" type="password"  id="Confirm" size="25" name="Confirm" autocomplete="new-password" />
                                     </div>
                                 </fieldset>
                                 <fieldset class="action">

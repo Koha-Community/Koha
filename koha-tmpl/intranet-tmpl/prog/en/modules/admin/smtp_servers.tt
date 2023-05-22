@@ -112,11 +112,11 @@
                 </li>
                 <li>
                     <label for="smtp_user_name">User name: </label>
-                    <input type="text" name="smtp_user_name" id="smtp_user_name" size="60" />
+                    <input type="text" name="smtp_user_name" id="smtp_user_name" size="60" autocomplete="off" />
                 </li>
                 <li>
                     <label for="smtp_password">Password: </label>
-                    <input type="password" name="smtp_password" id="smtp_password" size="60" />
+                    <input type="password" name="smtp_password" id="smtp_password" size="60" autocomplete="off" />
                 </li>
                 <li>
                     <label for="smtp_debug_mode">Debug mode: </label>
@@ -191,14 +191,14 @@
                 </li>
                 <li>
                     <label for="smtp_user_name">User name: </label>
-                    <input type="text" name="smtp_user_name" id="smtp_user_name" size="60"  value="[%- smtp_server.user_name | html -%]"/>
+                    <input type="text" name="smtp_user_name" id="smtp_user_name" size="60"  value="[%- smtp_server.user_name | html -%]" autocomplete="off" />
                 </li>
                 <li>
                     <label for="smtp_password">Password: </label>
                     [% IF smtp_server.password %]
-                        <input type="password" name="smtp_password" id="smtp_password" size="60"  value="****"/>
+                        <input type="password" name="smtp_password" id="smtp_password" size="60" value="****" autocomplete="off"/>
                     [% ELSE %]
-                        <input type="password" name="smtp_password" id="smtp_password" size="60"  value=""/>
+                        <input type="password" name="smtp_password" id="smtp_password" size="60" value="" autocomplete="off"/>
                     [% END %]
                 </li>
                 <li>
