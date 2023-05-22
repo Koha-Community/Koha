@@ -338,6 +338,14 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
+
+    <script>
+        $(document).ready(function () {
+            // Undo the selection that Branches.all made, since there may be no item with homebranch or holdingbranch
+            $('#holdingbranch option').prop('selected', false);
+            $('#homebranch option').prop('selected', false);
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
