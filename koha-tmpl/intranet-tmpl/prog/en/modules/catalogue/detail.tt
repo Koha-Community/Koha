@@ -2393,7 +2393,7 @@
                                 nodes += _("Checked out to %s").format(patron_to_html);
                             }
                             nodes += ': ';
-                            nodes += _("due %s").format($date(row.checkout.due_date)); [%# FIXME Missing due date formatting here, $date do not have as_due_date option %]
+                            nodes += _("due %s").format($date(row.checkout.due_date, { as_due_date: true }));
                             nodes += "</span>"
                         } else if ( row.transfer ) {
                             if ( row.transfer.datesent ) {
