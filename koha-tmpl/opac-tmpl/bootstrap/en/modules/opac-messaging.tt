@@ -81,7 +81,7 @@
                                                 [% ELSIF ( messaging_preference.Auto_Renewals ) %]<span>Auto renewal</span>
                                                 [% ELSE %]<span>Unknown</span> [% END %]</td>
                                             [% IF ( messaging_preference.takes_days ) %]
-                                                <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS">
+                                                <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS" aria-label="Choose how many days in advance you wish to receive notice">
                                                 [% FOREACH select_day IN messaging_preference.select_days %]
                                                     [% IF ( select_day.selected ) %]
                                                         <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
@@ -97,9 +97,9 @@
                                                 [% IF ( messaging_preference.transport_sms ) %]
                                                     <td class="selectcol">
                                                         [% IF ( messaging_preference.transports_sms ) %]
-                                                        <input type="checkbox" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
+                                                        <input type="checkbox" aria-label="Unselect sms messaging" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
                                                         [% ELSE %]
-                                                            <input type="checkbox" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
+                                                            <input type="checkbox" aria-label="Select sms messaging" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
                                                         [% END %]
                                                     </td>
                                                 [% ELSE %]
@@ -111,12 +111,14 @@
                                                     <td class="selectcol">
                                                         [% IF ( messaging_preference.transports_phone ) %]
                                                             <input type="checkbox"
+                                                                   aria-label="Unselect notification by phone"
                                                                    class="pmp_phone"
                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
                                                                    name="[% messaging_preference.message_attribute_id | html %]"
                                                                    value="phone" checked="checked" />
                                                         [% ELSE %]
                                                             <input type="checkbox"
+                                                                   aria-label="Select notification by phone"
                                                                    class="pmp_phone"
                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
                                                                    name="[% messaging_preference.message_attribute_id | html %]"
@@ -132,12 +134,14 @@
                                                 <td class="selectcol">
                                                 [% IF ( messaging_preference.transports_itiva ) %]
                                                 <input type="checkbox"
+                                                            aria-label="Unselect itiva messaging"
                                                             class="itiva"
                                                             id="itiva[% messaging_preference.message_attribute_id | html %]"
                                                             name="[% messaging_preference.message_attribute_id | html %]"
                                                             value="itiva" checked="checked" />
                                                 [% ELSE %]
                                                 <input type="checkbox"
+                                                            aria-label="Select notification by phone"
                                                             class="itiva"
                                                             id="itiva[% messaging_preference.message_attribute_id | html %]"
                                                             name="[% messaging_preference.message_attribute_id | html %]"
@@ -152,9 +156,9 @@
                                             [% IF ( messaging_preference.transport_email ) %]
                                                 <td class="selectcol">
                                                     [% IF ( messaging_preference.transports_email ) %]
-                                                        <input type="checkbox" class="pmp_email" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" />
+                                                        <input type="checkbox" aria-label="Unselect email messaging"class="pmp_email" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" />
                                                     [% ELSE %]
-                                                        <input type="checkbox" class="pmp_email" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" />
+                                                        <input type="checkbox" aria-label="Select email messaging" class="pmp_email" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" />
                                                     [% END %]
                                                 </td>
                                             [% ELSE %]
@@ -164,9 +168,9 @@
                                             [% IF ( messaging_preference.has_digest ) %]
                                                 <td class="selectcol">
                                                     [% IF ( messaging_preference.digest ) %]
-                                                        <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
+                                                        <input type="checkbox" aria-label="Unselect digests" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
                                                     [% ELSE %]
-                                                        <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
+                                                        <input type="checkbox" aria-label="Select digests"id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
                                                     [% END %]
                                                 </td>
                                             [% ELSE %]
