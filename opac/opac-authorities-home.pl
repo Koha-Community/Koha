@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# WARNING: 4-character tab stops here
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -202,7 +201,3 @@ $template->param(
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
-
-# Local Variables:
-# tab-width: 4
-# End:
