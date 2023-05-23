@@ -86,27 +86,83 @@ sub edit_holiday {
                 }
             }
     } elsif ($showoperation eq 'edit') {
-        if($holidaytype eq 'weekday') {
-        $calendar->ModWeekdayholiday(weekday => $weekday,
-                                    title => $title,
-                                    description => $description);
-        } elsif ($holidaytype eq 'daymonth') {
-        $calendar->ModDaymonthholiday(day => $day,
-                                        month => $month,
-                                        title => $title,
-                                        description => $description);
-        } elsif ($holidaytype eq 'ymd') {
-        $calendar->ModSingleholiday(day => $day,
-                                    month => $month,
-                                    year => $year,
-                                    title => $title,
-                                    description => $description);
-        } elsif ($holidaytype eq 'exception') {
-        $calendar->ModExceptionholiday(day => $day,
-                                    month => $month,
-                                    year => $year,
-                                    title => $title,
-                                    description => $description);
+        if ( $holidaytype eq 'weekday' ) {
+            my $isHoliday = $calendar->isHoliday( $day, $month, $year );
+            if ($isHoliday) {
+                $calendar->ModWeekdayholiday(
+                    weekday     => $weekday,
+                    title       => $title,
+                    description => $description
+                );
+            }
+            else {
+                $calendar->insert_week_day_holiday(
+                    weekday     => $weekday,
+                    title       => $title,
+                    description => $description
+                );
+            }
+        }
+        elsif ( $holidaytype eq 'daymonth' ) {
+            my $isHoliday = $calendar->isHoliday( $day, $month, $year );
+            if ($isHoliday) {
+                $calendar->ModDaymonthholiday(
+                    day         => $day,
+                    month       => $month,
+                    title       => $title,
+                    description => $description
+                );
+            }
+            else {
+                $calendar->insert_day_month_holiday(
+                    day         => $day,
+                    month       => $month,
+                    title       => $title,
+                    description => $description
+                );
+            }
+        }
+        elsif ( $holidaytype eq 'ymd' ) {
+            my $isHoliday = $calendar->isHoliday( $day, $month, $year );
+            if ($isHoliday) {
+                $calendar->ModSingleholiday(
+                    day         => $day,
+                    month       => $month,
+                    year        => $year,
+                    title       => $title,
+                    description => $description
+                );
+            }
+            else {
+                $calendar->insert_single_holiday(
+                    day         => $day,
+                    month       => $month,
+                    year        => $year,
+                    title       => $title,
+                    description => $description
+                );
+            }
+        }
+        elsif ( $holidaytype eq 'exception' ) {
+            my $isHoliday = $calendar->isHoliday( $day, $month, $year );
+            if ($isHoliday) {
+                $calendar->ModExceptionholiday(
+                    day         => $day,
+                    month       => $month,
+                    year        => $year,
+                    title       => $title,
+                    description => $description
+                );
+            }
+            else {
+                $calendar->insert_exception_holiday(
+                    day         => $day,
+                    month       => $month,
+                    year        => $year,
+                    title       => $title,
+                    description => $description
+                );
+            }
         }
     } elsif ($showoperation eq 'delete') {
         $calendar->delete_holiday(weekday => $weekday,
