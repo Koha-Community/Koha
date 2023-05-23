@@ -300,7 +300,6 @@ sub display_value {
       : ( $crit =~ /location/ )      ? $locations->{$value}
       : ( $crit =~ /itemtype/ )      ? Koha::ItemTypes->find( $value )->translated_description
       : ( $crit =~ /branch/ )        ? Koha::Libraries->find($value)->branchname
-      : ( $crit =~ /reservestatus/ ) ? reservestatushuman($value)
       :                                $value;    # default fallback
     if ($crit =~ /sort1/) {
         foreach (@$Bsort1) {
@@ -324,35 +323,9 @@ sub display_value {
     return $display_value;
 }
 
-sub reservestatushuman{
-	my ($val)=@_;
-	my %hashhuman=(
-	1=>"1- placed",
-	2=>"2- processed",
-	3=>"3- pending",
-	4=>"4- satisfied",
-	5=>"5- cancelled",
-	6=>"6- not a status"
-	);
-	$hashhuman{$val};
-}
-
 sub changeifreservestatus{
-	my ($val)=@_;
-	($val=~/reservestatus/
-		?$val=qq{ case 
-					when priority>0 then 1 
-					when priority=0 then
-						(case 
-						   when found='f' then 4
-						   when found='w' then 
-						   (case 
-						    when cancellationdate is null then 3
-							else 5
-							end )
-						   else 2 
-						 end )
-				    else 6 
-					end }
-		:$val);
+    my ( $field ) = @_;
+    return $field unless $field =~ /reservestatus/;
+    # For reservestatus we return C- Cancelled, W- Waiting, F- Filled, P- Placed (or other like processing, transit etc.)
+    return q|CASE WHEN cancellationdate IS NOT NULL THEN 'C' WHEN found='W' THEN 'W' WHEN found='F' THEN 'F' ELSE 'P' END|;
 }

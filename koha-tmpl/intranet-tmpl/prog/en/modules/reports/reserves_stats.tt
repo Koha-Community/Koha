@@ -17,6 +17,19 @@
 </style>
 </head>
 
+[% BLOCK reservestatus %]
+    [% IF field == 'reservestatus' %]
+         [% SWITCH value %]
+             [% CASE 'C'%]Cancelled
+             [% CASE 'F'%]Filled
+             [% CASE 'P'%]Placed
+             [% CASE 'W'%]Waiting
+         [% END %]
+    [% ELSE %]
+        [% value | html %]
+    [% END %]
+[% END %]
+
 <body id="rep_reserve_stats" class="rep">
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -71,13 +84,13 @@
             <tr>
                 <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
                 [% FOREACH loopco IN mainloo.loopcol %]
-                    <th>[% loopco.coltitle_display | html %]</th>
+                    <th>[% PROCESS reservestatus field=mainloo.column value=loopco.coltitle_display %]</th>
                 [% END %]
                 <th>TOTAL</th>
                 </tr>
                 [% FOREACH loopro IN mainloo.looprow %]
                     <tr>
-                        <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" | html %]</td>
+                        <td>[% PROCESS reservestatus field=mainloo.line value=loopro.rowtitle_display %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
 						<td align="center">
                         [% IF ( loopcel.url_complement ) %]<a href="reserves_stats.pl?output=[% loopcel.output | uri %]&amp;[% loopcel.url_complement | uri %]">[% loopcel.value | html %]</a>[% ELSE %][% loopcel.value | html %][% END %]
@@ -115,11 +128,10 @@
                 <td><input type="radio" name="Line" value="reservestatus" /></td>
                 <td><input type="radio" name="Column" value="reservestatus" checked="checked" /></td>
                 <td>
-				<input type="checkbox" name="filter_reservestatus_or_1" value="1" /> Asked
-				<input type="checkbox" name="filter_reservestatus_or_2" value="2" /> Processing
-				<input type="checkbox" name="filter_reservestatus_or_3" value="3" /> Waiting
-				<input type="checkbox" name="filter_reservestatus_or_4" value="4" /> Satisfied
-				<input type="checkbox" name="filter_reservestatus_or_5" value="5" /> Cancelled
+                <input type="checkbox" name="filter_reservestatus_or_C" value="C" /> Cancelled
+                <input type="checkbox" name="filter_reservestatus_or_F" value="F" /> Filled
+                <input type="checkbox" name="filter_reservestatus_or_P" value="P" /> Placed
+                <input type="checkbox" name="filter_reservestatus_or_W" value="W" /> Waiting
 				</td>
              </tr>
              <tr>
