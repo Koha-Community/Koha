@@ -223,7 +223,7 @@
                                         <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a> <span class="sep">|</span>
 
                                         <div id="download-list" class="btn-group dropdown">
-                                            <a id="format" class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
+                                            <a id="format" class="btn btn-link dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download list" data-toggle="dropdown" href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
                                             <div class="dropdown-menu pull-left" role="menu" aria-labelledby="format">
                                                 <a role="menuitem" class="dropdown-item download-list" data-format="bibtex" href="#">BibTeX</a>
                                                 [% IF Koha.Preference('OPACISBD') %]<a role="menuitem" class="dropdown-item download-list" data-format="isbd" href="#">ISBD</a>[% END %]
