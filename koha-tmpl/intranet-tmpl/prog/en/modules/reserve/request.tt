@@ -767,16 +767,16 @@
 
                         <fieldset class="rows">
                             <legend>
-                                <label class="inline">
+                                <label for="requestspecificitem" class="inline">
                                     Place a hold on a specific item
                                 </label>
                                 [% IF force_hold_level == 'item' %]
-                                     <input type="radio" name="request" class="requestspecific" checked="checked" disabled='disabled'/>
+                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific" checked="checked" disabled='disabled'/>
                                      <span class="error"><em>(Required)</em></span>
                                 [% ELSIF force_hold_level == 'record' || force_hold_level == 'item_group' %]
-                                     <input type="radio" name="request" class="requestspecific" disabled='disabled'/>
+                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific" disabled='disabled'/>
                                 [% ELSE %]
-                                     <input type="radio" name="request" class="requestspecific"/>
+                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific"/>
                                 [% END %]
                             </legend>
 
