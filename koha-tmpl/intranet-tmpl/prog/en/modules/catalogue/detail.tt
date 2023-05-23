@@ -2173,7 +2173,7 @@
         [%# In case or SeparateHoldings we may need to display the number of biblios in each tab %]
         [%# Do we need separate/new endpoints or do we hack the somewhere client-side? %]
         let item_table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
-        let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold.patron,item_type"];
+        let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,item_type"];
         [% IF Koha.Preference('LocalCoverImages') %]
             embed.push('cover_image_ids');
         [% END %]
@@ -2425,9 +2425,8 @@
 
                         if ( row.first_hold ) {
                             if ( row.first_hold.waiting_date ) {
-                                [%# FIXME Display library names instead of codes %]
                                 [%# FIXME We lost the desk name, we need an additional embed %]
-                                nodes += '<span class="waitingat">%s</span>'.format(_("Waiting at %s since %s.".format(row.first_hold.pickup_library_id, $date(row.first_hold.waiting_date))));
+                                nodes += '<span class="waitingat">%s</span>'.format(_("Waiting at %s since %s.".format(row.first_hold._strings.pickup_library_id.str, $date(row.first_hold.waiting_date))));
                                 [% IF Koha.Preference('canreservefromotherbranches') %]
                                     if ( row.first_hold.waiting_date || row.first_hold.priority == 1 ) {
                                         let patron_to_html = $patron_to_html(row.first_hold.patron); [%# FIXME What about hide_patron_infos_if_needed?? %]

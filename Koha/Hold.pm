@@ -1041,6 +1041,19 @@ sub can_update_pickup_location_opac {
     return 0;
 }
 
+=head3 strings_map
+
+Returns a map of column name to string representations including the string.
+
+=cut
+
+sub strings_map {
+    my ($self) = @_;
+    return {
+        pickup_library_id => { str => $self->branch->branchname, type => 'library' },
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type
