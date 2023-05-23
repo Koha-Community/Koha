@@ -2173,7 +2173,7 @@
         [%# In case or SeparateHoldings we may need to display the number of biblios in each tab %]
         [%# Do we need separate/new endpoints or do we hack the somewhere client-side? %]
         let item_table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
-        let embed = ["+strings,checkout,checkout.patron,transfer,first_hold,first_hold.patron,item_type"];
+        let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold.patron,item_type"];
         [% IF Koha.Preference('LocalCoverImages') %]
             embed.push('cover_image_ids');
         [% END %]
@@ -2397,9 +2397,9 @@
                             nodes += "</span>"
                         } else if ( row.transfer ) {
                             if ( row.transfer.datesent ) {
-                                nodes += '<span class="intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(escape_str(row.transfer.frombranch), escape_str(row.transfer.tobranch), $date(row.transfer.datesent))); [%# FIXME display library names, not codes, do we use _strings here? %]
+                                nodes += '<span class="intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.datesent)));
                             } else {
-                                nodes += '<span class="transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(escape_str(row.transfer.frombranch), escape_str(row.transfer.tobranch), $date(row.transfer.daterequested))); [%# FIXME See above %]
+                                nodes += '<span class="transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(escape_str(row.transfer._strings.from_library_.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.daterequested)));
                             }
                         }
 

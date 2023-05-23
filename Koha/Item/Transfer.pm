@@ -176,6 +176,21 @@ sub cancel {
     return $self;
 }
 
+
+=head3 strings_map
+
+Returns a map of column name to string representations including the string.
+
+=cut
+
+sub strings_map {
+    my ($self) = @_;
+    return {
+        from_library => { str => $self->from_library->branchname, type => 'library' },
+        to_library   => { str => $self->to_library->branchname,   type => 'library' },
+    };
+}
+
 =head3 type
 
 =cut
