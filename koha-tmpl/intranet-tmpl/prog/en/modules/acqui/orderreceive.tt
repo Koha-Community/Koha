@@ -621,10 +621,15 @@
                         "searchable": false,
                         "orderable": false,
                         "render": function(data, type, row, meta) {
-                            return '<a class="btn btn-default btn-xs" data-toggle="modal" href="#order_edit" data-row="'+meta.row+'" class="order_edit_toggle" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+EDIT+'</a>';
+                            return '<a class="btn btn-default btn-xs order_edit_toggle" data-toggle="modal" href="#order_edit" data-row="'+meta.row+'" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+EDIT+'</a>';
                         }
                     }
-                ]
+                ],
+                [% IF multiple_orders.split(',').size == 1 %]
+                    "drawCallback": function( settings ) {
+                        $(this).find("tbody tr td:last-child a.order_edit_toggle").click();
+                    },
+                [% END %]
             };
             var orders_table = $("#multiple_orders").kohaTable(options);
             var api = orders_table.api();
@@ -1293,6 +1298,9 @@
                 var saved_rows = save_row();
                 if(Object.keys(saved_rows).length) $('.save').prop('disabled', false);
                 $("#order_edit").modal('hide');
+                [% IF multiple_orders.split(',').size == 1 %]
+                    $(".save").click();
+                [% END %]
             })
 
             $("#order_edit").on("show.bs.modal", function (event) {
