@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# WARNING: 4-character tab stops here
 
 # Copyright 2000-2002 Katipo Communications
 # Parts Copyright 2010 Biblibre
@@ -232,7 +231,3 @@ else {
 
 # Print the page
 output_html_with_http_headers $input, $cookie, $template->output;
-
-# Local Variables:
-# tab-width: 4
-# End:

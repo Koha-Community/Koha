@@ -924,7 +924,3 @@ sub add_guarantors {
         );
     }
 }
-
-# Local Variables:
-# tab-width: 8
-# End:
