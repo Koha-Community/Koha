@@ -44,6 +44,8 @@
         if( hashPieces[0] !== "" ){
             selectTab( hashPieces[0] );
             window.scrollTo( 0, 0 );
+        } else {
+            selectTab( "#tab0XX_panel" );
         }
 
         $( "ul.sortable_field", "#addbibliotabs" ).sortable({
@@ -159,7 +161,7 @@
             Changefwk();
         });
 
-        $(".toolbar-tabs a").on("click",function(e){
+        $(".toolbar-tabs-container .nav-tabs a").on("click",function(e){
             e.preventDefault();
             selectTab( this.hash );
         });
@@ -177,7 +179,7 @@
             e.preventDefault();
             var tab = $(this).data("tab");
             var field = $(this).data("field");
-            var tablink = $("a[data-tabid='" + tab + "']" ).get(0).hash;
+            var tablink = $("a[data-tabname='tab" + tab + "XX']" ).get(0).hash;
             selectTab( tablink );
             window.scrollTo( 0, getScrollto( field, "toolbar" ) );
         });
@@ -190,9 +192,10 @@
 
     function selectTab( tablink ){
         let a = $("a[href='" + tablink + "']");
-        $(".toolbar-tabs li").removeClass("selected");
+        $(".toolbar-tabs-container .nav-tabs li").removeClass("selected");
         a.tab("show").parent().addClass("selected");
-        var tabid = a.data("tabid");
+        /* Get number from string like "tab9XX" */
+        var tabid = a.data("tabname").substring(3, 4);
         $(".tag_anchors").removeClass("tab_selected").hide();
         $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
     }
@@ -950,17 +953,18 @@ function PopupMARCFieldDoc(field) {
                     [% END # /UNLESS circborrowernumber %]
                     <div class="toolbar-tabs-container">
                         [% IF ( BIG_LOOP && BIG_LOOP.size > 1 ) %]
-                            <ul class="toolbar-tabs" role="tablist">
+                            [% WRAPPER tabs_nav %]
                                 [%- FOREACH BIG_LOO IN BIG_LOOP -%]
                                     [% IF loop.first %]
-                                        <li role="presentation" class="active selected">
+                                        [% SET bt_active = 1 %]
                                     [% ELSE %]
-                                        <li role="presentation">
+                                        [% SET bt_active = 0 %]
                                     [% END %]
-                                        <a data-tabid="[% BIG_LOO.number | html %]" href="#tab[% BIG_LOO.number | html %]XX" aria-controls="#tab[% BIG_LOO.number | html %]XX" role="tab" data-toggle="tab">[% BIG_LOO.number | html %]</a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= "tab${BIG_LOO.number}XX" bt_active= bt_active %]
+                                        <span>[% BIG_LOO.number | html %]</span>
+                                    [% END %]
                                 [%- END -%]
-                            </ul>
+                            [% END # /WRAPPER tabs_nav %]
                         [% END %]
                         <ul class="tag_anchors_list">
                             [% FOREACH BIG_LOO IN BIG_LOOP %]
@@ -994,15 +998,15 @@ function PopupMARCFieldDoc(field) {
                 <input type="hidden" name="breedingid" value="[% breedingid | html %]" />
                 <input type="hidden" name="changed_framework" value="" />
 
-                <div id="addbibliotabs" class="toptabs numbered">
-                    <div class="tab-content">
-
+                [% WRAPPER tabs id= "addbibliotabs" %]
+                    [% WRAPPER tab_panels %]
                         [% FOREACH BIG_LOO IN BIG_LOOP %]
                             [% IF loop.first %]
-                                <div id="tab[% BIG_LOO.number | html %]XX" role="tabpanel" class="tab-pane active">
+                                [% SET bt_active = 1 %]
                             [% ELSE %]
-                                <div id="tab[% BIG_LOO.number | html %]XX" role="tabpanel" class="tab-pane">
+                                [% SET bt_active = 0 %]
                             [% END %]
+                            [% WRAPPER tab_panel tabname="tab${BIG_LOO.number}XX" bt_active= bt_active %]
 
                                 [% IF ( BIG_LOOP.size > 1 ) %]
                                     <h3>Section [% BIG_LOO.number | html %]</h3>
@@ -1203,10 +1207,10 @@ function PopupMARCFieldDoc(field) {
                                     [% END %]<!-- if innerloo.tag -->
                                 [% END # /FOREACH BIG_LOO.innerloop %]
                                 </ul> <!--  /.sortable_field -->
-                            </div> <!-- /#tabXXX -->
+                            [% END # /tab_panel#tabXXX %]
                         [% END # /FOREACH BIG_LOOP %]
-                    </div> <!-- /.tab-content -->
-                </div><!-- /#addbibliotabs -->
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs %]
 
                 [%# Fields for fast cataloging %]
                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
