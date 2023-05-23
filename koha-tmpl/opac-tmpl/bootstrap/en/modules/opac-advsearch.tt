@@ -57,7 +57,7 @@
                                         </div> <!-- .search-term-input -->
 
                                         <div class="search-term-input">
-                                            <select class="form-control" name="idx" id="search-field_[% loop.index | html %]">
+                                            <select class="form-control" name="idx" aria-label="Choose search type for field [% loop.index + 1 | html %]" id="search-field_[% loop.index | html %]">
                                                 <option value="kw">Keyword</option>
                                                 [% IF ( expanded_options ) %]
                                                     <option value="kw,phr">&nbsp;&nbsp;&nbsp;&nbsp; Keyword phrase</option>
@@ -112,7 +112,7 @@
                                             </select> <!-- /#search-field_[% loop.index | html %] -->
                                         </div> <!-- .search-term-input -->
                                         <div class="search-term-input">
-                                            <input class="form-control" type="text" name="q" title="Enter search terms" value="" />
+                                            <input class="form-control" type="text" name="q" aria-label="Enter field [% loop.index + 1 | html %] search terms" value="" />
                                         </div> <!-- .search-term-input -->
                                         [% IF ( expanded_options ) %]
                                             <div class="search-term-input">
