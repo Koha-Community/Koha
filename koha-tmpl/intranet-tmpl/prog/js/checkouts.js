@@ -308,10 +308,10 @@ $(document).ready(function() {
                 {
                     "iDataSort": 2, // Sort on hidden unformatted date due column
                     "mDataProp": function( oObj ) {
-                        var due = oObj.date_due_formatted;
-                        if ( oObj.date_due_overdue ) {
-                            due = "<span class='overdue'>" + due + "</span>";
-                        }
+                        let date_due_formatted = $datetime(oObj.date_due, { as_due_date: true, no_tz_adjust: true });
+                        var due = oObj.date_due_overdue
+                            ? "<span class='overdue'>" + date_due_formatted + "</span>"
+                            : date_due_formatted;
 
                         due = "<span id='date_due_" + oObj.itemnumber + "' class='date_due'>" + due + "</span>";
 
@@ -426,7 +426,7 @@ $(document).ready(function() {
                 },
                 {
                     "iDataSort": 10, // Sort on hidden unformatted issuedate column
-                    "mDataProp": "issuedate_formatted",
+                    "mDataProp": "issuedate",
                 },
                 {
                     "mDataProp": function ( oObj ) {
@@ -729,10 +729,11 @@ $(document).ready(function() {
                         "mDataProp": function( oObj ) {
                             var today = new Date();
                             var due = new Date( oObj.date_due );
+                            let date_due_formatted = $datetime(oObj.date_due, { as_due_date: true, no_tz_adjust: true });
                             if ( today > due ) {
-                                return "<span class='overdue'>" + oObj.date_due_formatted + "</span>";
+                                return "<span class='overdue'>" + date_due_formatted + "</span>";
                             } else {
-                                return oObj.date_due_formatted;
+                                return date_due_formatted;
                             }
                         }
                     },
@@ -822,7 +823,7 @@ $(document).ready(function() {
                     },
                     {
                         "iDataSort": 7, // Sort on hidden unformatted issuedate column
-                        "mDataProp": "issuedate_formatted",
+                        "mDataProp": "issuedate",
                     },
                     {
                         "mDataProp": function ( oObj ) {

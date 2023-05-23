@@ -42,9 +42,10 @@
          */
         window.$date = function(value, options) {
             if(!value) return '';
-            var tz = (options&&options.tz)||def_tz;
+            let tz = (options&&options.tz)||def_tz;
+            let no_tz_adjust = (options&&options.no_tz_adjust)||false;
             var m = dayjs(value);
-            if ( ! value.match(/^\d{4}-\d{2}-\d{2}$/ ) ) {
+            if ( !no_tz_adjust && ! value.match(/^\d{4}-\d{2}-\d{2}$/ ) ) {
                 m = m.tz(tz);
             }
 

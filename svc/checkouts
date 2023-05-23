@@ -288,18 +288,6 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         return_claim_created_on_formatted => $c->{return_claim_created_on} ? output_pref({ dt => dt_from_string( $c->{return_claim_created_on} ) }) : undef,
         return_claim_updated_on_formatted => $c->{return_claim_updated_on} ? output_pref({ dt => dt_from_string( $c->{return_claim_updated_on} ) }) : undef,
 
-        issuedate_formatted => output_pref(
-            {
-                dt          => dt_from_string( $c->{issuedate} ),
-                as_due_date => 1
-            }
-        ),
-        date_due_formatted => output_pref(
-            {
-                dt          => dt_from_string( $c->{date_due} ),
-                as_due_date => 1
-            }
-        ),
         lost    => $lost,
         claims_returned => $claims_returned,
         damaged => $damaged,
