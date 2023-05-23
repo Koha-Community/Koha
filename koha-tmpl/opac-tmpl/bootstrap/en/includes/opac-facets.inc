@@ -86,10 +86,34 @@
                             [% END %]
                             [% IF facets_loo.facets.size > 5 %]
                                 <li class="moretoggle">
-                                    <a href="#"><strong>Show more</strong></a>
+                                    [% IF facets_loo.type_label_Authors %]<a href="#" aria-label="Show more authors"><strong>Show more</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Titles %]<a href="#" aria-label="Show more titles"><strong>Show more</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Topics %]<a href="#" aria-label="Show more topics"><strong>Show more</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Places %]<a href="#" aria-label="Show more places"><strong>Show more</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Series %]<a href="#" aria-label="Show more series"><strong>Show more</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_ItemTypes %]<a href="#" aria-label="Show more item types"><strong>Show more</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_CollectionCodes %]<a href="#" aria-label="Show more collection codes"><strong>Show more</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Language %]<a href="#" aria-label="Show more languages"><strong>Show more</strong></a>[% END %]
+                                    [% UNLESS singleBranchMode %]
+                                        [% IF ( facets_loo.type_label_HomeLibrary ) %]<a href="#" aria-label="Show more home libraries"><strong>Show more</strong></a>[% END %]
+                                        [% IF ( facets_loo.type_label_HoldingLibrary ) %]<a href="#" aria-label="Show more holding libraries"><strong>Show more</strong></a>[% END %]
+                                    [% END %]
+                                    [% IF facets_loo.type_label_Location %]<a href="#" aria-label="Show more locations"><strong>Show more</strong></a>[% END %]
                                 </li>
                                 <li class="moretoggle" style="display:none">
-                                    <a href="#"><strong>Show less</strong></a>
+                                    [% IF facets_loo.type_label_Authors %]<a href="#" aria-label="Show less authors"><strong>Show less</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Titles %]<a href="#" aria-label="Show less titles"><strong>Show less</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Topics %]<a href="#" aria-label="Show less topics"><strong>Show less</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Places %]<a href="#" aria-label="Show less places"><strong>Show less</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Series %]<a href="#" aria-label="Show less series"><strong>Show less</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_ItemTypes %]<a href="#" aria-label="Show less item types"><strong>Show less</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_CollectionCodes %]<a href="#" aria-label="Show less collection codes"><strong>Show less</strong></a>[% END %]
+                                    [% IF facets_loo.type_label_Language %]<a href="#" aria-label="Show less languages"><strong>Show less</strong></a>[% END %]
+                                    [% UNLESS singleBranchMode %]
+                                        [% IF ( facets_loo.type_label_HomeLibrary ) %]<a href="#" aria-label="Show less home libraries"><strong>Show less</strong></a>[% END %]
+                                        [% IF ( facets_loo.type_label_HoldingLibrary ) %]<a href="#" aria-label="Show less holding libraries"><strong>Show less</strong></a>[% END %]
+                                    [% END %]
+                                    [% IF facets_loo.type_label_Location %]<a href="#" aria-label="Show less locations"><strong>Show less</strong></a>[% END %]
                                 </li>
                             [% END %]
                         </ul>
