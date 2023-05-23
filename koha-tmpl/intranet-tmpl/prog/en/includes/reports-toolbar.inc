@@ -112,7 +112,7 @@
 
 
             <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="format"><i class="fa fa-download"></i> Download <span class="caret"></span></button>
+                <button class="btn btn-default dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download report results" data-toggle="dropdown" id="format"><i class="fa fa-download"></i> Download <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">[% PROCESS 'delimiter_text.inc' %]</a></li>
                     <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
