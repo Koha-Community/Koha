@@ -700,8 +700,9 @@ sub get_matches {
 
             foreach my $result (@$authresults) {
                 my $id = $result->{authid};
+                my $target_record = Koha::Authorities->find( $id )->record;
                 $matches->{$id}->{score} += $matchpoint->{'score'};
-                $matches->{$id}->{record} = $id;
+                $matches->{$id}->{record} = $target_record;
             }
         }
     }
@@ -729,6 +730,15 @@ sub get_matches {
         }
     } elsif ($self->{'record_type'} eq 'authority') {
         require C4::AuthoritiesMarc;
+        # get rid of any that don't meet the required checks
+        $matches = {
+            map {
+                _passes_required_checks( $source_record, $matches->{$_}->{'record'}, $self->{'required_checks'} )
+                  ? ( $_ => $matches->{$_} )
+                  : ()
+            } keys %$matches
+        };
+
         foreach my $id (keys %$matches) {
             push @results, {
                 record_id => $id,
