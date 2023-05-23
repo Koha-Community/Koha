@@ -2184,7 +2184,7 @@
             embed.push('serialitem.serial');
         [% END %]
         [% IF Koha.Preference('UseRecalls') %]
-            embed.push('recall', 'recall.patron')
+            embed.push('recall', 'recall+strings', 'recall.patron')
         [% END %]
         embed.push('in_bundle', 'bundle_host');
         [% IF Koha.Preference('UseCourseReserves') %]
@@ -2441,7 +2441,7 @@
                         [% IF Koha.Preference('UseRecalls') %]
                             if ( row.recall ) {
                                 if ( row.recall.waiting_date ) {
-                                    nodes += '<span>%s</span>'.format(_("Waiting at %s since %s").format(escape_str(row.recall.pickup_library_id), $date(row.recall.waiting_date))); # FIXME Display library names instead of codes
+                                    nodes += '<span>%s</span>'.format(_("Waiting at %s since %s").format(escape_str(row.recall.pickup_library_id.str), $date(row.recall.waiting_date)));
                                 } else {
                                     let patron_to_html = $patron_to_html(row.recall.patron);
                                     nodes += '<span>%s</span>'.format(_("recalled by %s on %s").format(patron_to_html, $date(row.recall.created_date)))

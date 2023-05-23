@@ -461,6 +461,21 @@ sub set_fulfilled {
     return $self;
 }
 
+=head3 strings_map
+
+Returns a map of column name to string representations including the string.
+
+=cut
+
+sub strings_map {
+    my ($self) = @_;
+    return {
+        pickup_library_id => { str => $self->library->branchname, type => 'library' },
+    };
+}
+
+
+
 =head2 Internal methods
 
 =head3 _type
