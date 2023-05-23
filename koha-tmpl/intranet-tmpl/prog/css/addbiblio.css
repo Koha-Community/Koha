@@ -321,12 +321,16 @@ tbody tr.active td {
     width: 15em;
 }
 
+#toolbar {
+    padding: 5px 0;
+}
+
 .toolbar-tabs-container {
     flex-basis: 100%;
     margin-top: .5em;
 }
 
-.toolbar-tabs {
+.toolbar-tabs-container .nav-tabs {
     background-color: #FFF;
     clear: both;
     display: flex;
@@ -336,7 +340,7 @@ tbody tr.active td {
     padding-left: 0;
 }
 
-.toolbar-tabs li {
+.toolbar-tabs-container .nav-tabs li {
     background-color: #FFF;
     display: flex;
     flex-grow: 1;
@@ -345,7 +349,7 @@ tbody tr.active td {
     text-align: center;
 }
 
-.toolbar-tabs li a {
+.toolbar-tabs-container .nav-tabs li a {
     background-color: #71B443;
     border: 1px solid #71B443;
     border-left: 0;
@@ -359,7 +363,7 @@ tbody tr.active td {
     width: 100%;
 }
 
-.toolbar-tabs li.selected a {
+.toolbar-tabs-container .nav-tabs li.selected a {
     background-color: #418940;
     border-bottom: 1px solid #418940;
     border-right: 1px solid #418940;
@@ -372,11 +376,13 @@ tbody tr.active td {
     width: 100%;
 }
 
-.toolbar-tabs li.selected a:hover {
+.toolbar-tabs-container .nav-tabs li.selected a:hover {
     background-color: #418940;
+    border: 1px solid #418940;
+    border-left: 0;
 }
 
-.toolbar-tabs li a:hover {
+.toolbar-tabs-container .nav-tabs li a:hover {
     background-color: #418940;
     border-bottom: 1px solid #418940;
     border-right: 1px solid #418940;
