@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 27;
+use Test::More tests => 28;
 use Test::Exception;
 use Test::Warn;
 
@@ -1928,4 +1928,25 @@ subtest 'update privacy tests' => sub {
     is( $patron->privacy(), 2, "Patron privacy is successfully updated");
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'alert_subscriptions tests' => sub {
+
+    plan tests => 3;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+    my $subscription1 = $builder->build_object({ class => 'Koha::Subscriptions' });
+    $subscription1->add_subscriber( $patron );
+
+    my $subscription2 = $builder->build_object({ class => 'Koha::Subscriptions' });
+    $subscription2->add_subscriber( $patron );
+
+    my @subscriptions = $patron->alert_subscriptions->as_list;
+
+    is( @subscriptions, 2, "Number of patron's subscribed alerts successfully fetched" );
+    is( $subscriptions[0]->subscriptionid, $subscription1->subscriptionid, "First subscribed alert is correct" );
+    is( $subscriptions[1]->subscriptionid, $subscription2->subscriptionid, "Second subscribed alert is correct" );
+
+    $patron->discard_changes;
 };

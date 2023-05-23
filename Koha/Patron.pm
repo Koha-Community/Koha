@@ -2699,6 +2699,24 @@ sub get_savings {
     )->next->get_column('total_savings') // 0;
 }
 
+=head3 alert_subscriptions
+
+    my $subscriptions = $patron->alert_subscriptions;
+
+Return a Koha::Subscriptions object containing subscriptions for which the patron has subscribed to email alerts.
+
+=cut
+
+sub alert_subscriptions {
+    my ( $self ) = @_;
+
+    my $schema = Koha::Database->new->schema;
+    my @alerts = $schema->resultset('Alert')->search({ borrowernumber => $self->borrowernumber });
+    my @subscription_ids = map { $_->externalid } @alerts;
+
+    return Koha::Subscriptions->search({ subscriptionid => \@subscription_ids });
+}
+
 =head2 Internal methods
 
 =head3 _type

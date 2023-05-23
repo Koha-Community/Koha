@@ -185,6 +185,9 @@
     [% IF Koha.Preference('UseRecalls') && CAN_user_recalls %]
         [% IF recallsview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/recallshistory.pl?borrowernumber=[% patron.borrowernumber | uri %]">Recalls history</a></li>
     [% END %]
+    [% IF ( CAN_user_serials && patron.alert_subscriptions.count ) %]
+        [% IF alertsview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/alert-subscriptions.pl?borrowernumber=[% patron.borrowernumber | uri %]">Alert subscriptions ([% patron.alert_subscriptions.count | html %])</a></li>
+    [% END %]
 </ul></div>
 
 [% IF patronimages && CAN_user_tools_batch_upload_patron_images %]

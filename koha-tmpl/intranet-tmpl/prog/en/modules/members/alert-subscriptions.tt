@@ -1,0 +1,115 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE AuthorisedValues  %]
+[% USE Branches %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Alert subscriptions for [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo; Patrons &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="pat_alert_subscriptions" class="pat">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'patron-search-header.inc' %]
+[% END %]
+
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Alert subscriptions</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+                [% INCLUDE 'members-toolbar.inc' %]
+                <h1>Alert subscriptions</h1>
+
+                [% IF patron.alert_subscriptions.count %]
+                    <div class="page-section">
+                        <table id="subscriptions">
+                            <thead>
+                                <tr>
+                                <th>ISSN</th>
+                                <th>Title</th>
+                                <th>Library</th>
+                                <th>Location</th>
+                                <th>Call number</th>
+                                <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                [% FOREACH sub IN patron.alert_subscriptions %]
+                                    <tr>
+                                        <td>
+                                            [% IF sub.biblio.biblioitem.issn %][% sub.biblio.biblioitem.issn | html %][% END %]
+                                        </td>
+                                        <td>
+                                            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid | uri %]" class="button" title="subscription detail">[% sub.biblio.title | html %] [% sub.biblio.subtitle | html %]</a>
+                                        </td>
+                                        <td>
+                                            [% IF ( sub.branchcode ) %][% Branches.GetName( sub.branchcode ) | html %][% END %]
+                                        </td>
+                                        <td>
+                                            [% IF ( sub.location ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => sub.location ) | html %][% END %]
+                                        </td>
+                                        <td>
+                                            [% IF ( sub.callnumber ) %][% sub.callnumber | html %][% END %]
+                                        </td>
+                                        <td class="actions">
+                                            <form action="/cgi-bin/koha/members/alert-subscriptions.pl" method="post" class="unsubscribe" data-title="[% sub.biblio.title | html %] [% sub.biblio.subtitle | html %]"data-patron="[% INCLUDE 'patron-title.inc' no_html = 1 %]">
+                                                <input type="hidden" name="subscription_id" value="[% sub.subscriptionid | html %]">
+                                                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]">
+                                                <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-times"></i> Unsubscribe from email alerts</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                </div> <!-- /.page-section -->
+                [% ELSE %]
+                    <div class="dialog message">
+                        <p>This patron has not subscribed to email alerts for any subscriptions.</p>
+                    </div>
+                [% END %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'circ-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'str/members-menu.inc' %]
+    [% Asset.js("js/members-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function() {
+            $("#subscriptions").dataTable($.extend(true, {}, dataTablesDefaults, {
+            }));
+            $(".unsubscribe").submit(function(){
+                var patron = $(this).data('patron');
+                var title = $(this).data('title');
+                return confirmDelete(__("Are you sure you want to unsubscribe %s from email alerts for %s?").format(patron, title));
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
