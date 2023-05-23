@@ -413,6 +413,8 @@
                                         <div class="modal-footer">
                                             <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
                                                 <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
+                                                <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
+                                                <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                                                 <input type="hidden" name="multiple_confirm" value="1" />
                                                 <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
                                                 [% FOREACH inputloo IN inputloop %]
