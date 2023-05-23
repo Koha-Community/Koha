@@ -38,6 +38,7 @@
          * or JS Date, the function will return a date string formatted as per the koha instance config.
          * Optionally accepts a dateformat parameter to allow override of the configured output format
          * as well as a 'withtime' boolean denoting whether to include time or not in the output string.
+         * 'as_due_date' can be passed to format a date time as a due date: The time part will not be displayed if 23:59.
          */
         window.$date = function(value, options) {
             if(!value) return '';
@@ -54,6 +55,10 @@
 
             var timeformat = (options&&options.timeformat)||def_time_format;
             var date_pattern = get_date_pattern(dateformat);
+            let as_due_date = (options&&options.as_due_date);
+            if (as_due_date) {
+                withtime = !( m.hour() == 23 && m.minute() == 59 );
+            }
             var time_pattern = !withtime?'':' '+get_time_pattern(timeformat);
 
             return m.format(date_pattern+time_pattern);
