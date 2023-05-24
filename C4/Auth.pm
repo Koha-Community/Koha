@@ -1774,6 +1774,15 @@ sub check_cookie_auth {
         } elsif ( $userid ) {
             $session->param( 'lasttime', time() );
             my $patron = Koha::Patrons->find({ userid => $userid });
+
+            # If the user modify their own userid
+            # Better than 500 but we could do better
+            unless ( $patron ) {
+                $session->delete();
+                $session->flush;
+                return ("expired", undef);
+            }
+
             $patron = Koha::Patrons->find({ cardnumber => $userid })
               unless $patron;
             return ("password_expired", undef ) if $patron->password_expired;
