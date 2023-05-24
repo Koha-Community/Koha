@@ -54,6 +54,7 @@
     flatpickr.setDefaults({
         dateFormat: "Y-m-d",
         altInput: true,
+        allowInput: true,
         altFormat: flatpickr_dateformat_string,
         altInputClass: 'flatpickr-input',
         nextArrow: '<i class="fa fa-fw fa-arrow-right" aria-hidden="true"></i>',
