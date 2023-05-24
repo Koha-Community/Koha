@@ -380,7 +380,8 @@
         </thead>
         <tbody>
             [% FOREACH item IN items %]
-                <tr id="item_[% item.itemnumber | html %]" data-itemnumber="[% item.itemnumber | html %]" data-duedate="[% item.datedue | html %]">
+                [% SET date_due = item.object.checkout.date_due %]
+                <tr id="item_[% item.itemnumber | html %]" data-itemnumber="[% item.itemnumber | html %]" data-duedate="[% date_due | html %]">
                 [% IF (StaffDetailItemSelection) %]
                     <td style="text-align:center;vertical-align:middle">
                         [% IF item.can_be_edited %]
@@ -477,7 +478,7 @@
                                   [% END %]
                                   [% INCLUDE 'patron-title.inc' patron=item.object.checkout.patron hide_patron_infos_if_needed=1 %]
                                 [% END %]
-                                : due [% item.object.checkout.date_due | $KohaDates as_due_date => 1 %]
+                                : due [% date_due | $KohaDates as_due_date => 1 %]
                             </span>
                         [% ELSIF ( transfer = item.object.get_transfer ) %]
                             [% IF (transfer.datesent) %]
