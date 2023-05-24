@@ -1857,14 +1857,15 @@
 
                 [% IF bundlesEnabled %]
                 // Add event listener for opening and closing bundle details
-                $('#' + table_name + ' tbody').on('click', 'button.details-control', function () {
+                $('#' + tab_id + '_table tbody').on('click', 'button.details-control', function () {
                     var button = $(this);
                     var tr = button.closest('tr');
                     var dTable = button.closest('table').DataTable({ 'retrieve': true });
 
-                    var itemnumber = tr.data('itemnumber');
-                    var duedate = tr.data('duedate');
-                    var row = dTable.row( tr );
+                    let row = dTable.row( tr );
+                    let data = row.data();
+                    let itemnumber = data.item_id;
+                    let duedate = (data.checkout&&data.checkout.due_date) || null;
 
                     if ( row.child.isShown() ) {
                         // This row is already open - close it
@@ -2186,7 +2187,9 @@
         [% IF Koha.Preference('UseRecalls') %]
             embed.push('recall', 'recall+strings', 'recall.patron')
         [% END %]
-        embed.push('in_bundle', 'bundle_host');
+        [% IF bundlesEnabled %]
+            embed.push('in_bundle', 'bundle_host', 'bundle_items_lost+count', 'bundle_items_not_lost+count');
+        [% END %]
         [% IF Koha.Preference('UseCourseReserves') %]
             embed.push('course_item.course_reserves.course');
         [% END %]
@@ -2460,9 +2463,11 @@
                             nodes += '<span class="restricted">(%s)</span>'.format(escape_str(av_restricted.get(row.restricted_status.toString())));
                         }
 
-                        if ( row.in_bundle ) {
-                            nodes += '<span class="bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
-                        }
+                        [% IF bundlesEnabled %]
+                            if ( row.in_bundle ) {
+                                nodes += '<span class="bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
+                            }
+                        [% END %]
                         return nodes;
                     }
                 },
@@ -2659,7 +2664,7 @@
                         }
                         [% IF bundlesEnabled %]
                             // FIXME How do we handle that correctly?
-                            //nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> Manage bundle (%s|%s)</button>'.format(escape_str(row.bundled), escape_str(row.bundled_lost));
+                            nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> Manage bundle (%s|%s)</button>'.format(escape_str(row.bundle_items_not_lost_count), escape_str(row.bundle_items_lost_count));
                         [% END %]
 
                         return nodes;

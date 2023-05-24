@@ -1888,6 +1888,33 @@ sub bundle_items {
     return Koha::Items->_new_from_dbic($rs);
 }
 
+
+=head3 bundle_items_not_lost
+
+  my $bundle_items = $item->bundle_items_not_lost;
+
+Returns the items associated with this bundle that are not lost
+
+=cut
+
+sub bundle_items_not_lost {
+    my ($self) = @_;
+    return $self->bundle_items->search( { itemlost => { '!=' => 0 } } );
+}
+
+=head3 bundle_items_lost
+
+  my $bundle_items = $item->bundle_items_lost;
+
+Returns the items associated with this bundle that are lost
+
+=cut
+
+sub bundle_items_lost {
+    my ($self) = @_;
+    return $self->bundle_items->search( { itemlost => 0 } );
+}
+
 =head3 is_bundle
 
   my $is_bundle = $item->is_bundle;
