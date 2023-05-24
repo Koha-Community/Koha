@@ -67,6 +67,10 @@ elsif ( $op eq 'cancel_confirmed' ) {
         print $query->redirect(
             "opac-serial-issues.pl?biblionumber=$biblionumber");
         exit;
+    } elsif ( $referer eq 'patron' ) {
+        print $query->redirect(
+            "/cgi-bin/koha/opac-alert-subscriptions.pl"
+        );
     } else {
         print $query->redirect(
             "opac-detail.pl?biblionumber=$biblionumber");

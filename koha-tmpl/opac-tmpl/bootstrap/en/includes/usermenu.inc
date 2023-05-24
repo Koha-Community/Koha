@@ -157,6 +157,15 @@
                 <a href="/cgi-bin/koha/opac-curbside-pickups.pl">Curbside pickups</a></li>
             [% END %]
 
+            [% IF logged_in_user.alert_subscriptions.count %]
+                [% IF ( alertsview ) %]
+                    <li class="active">
+                [% ELSE %]
+                    <li>
+                [% END %]
+                <a href="/cgi-bin/koha/opac-alert-subscriptions.pl">Alert subscriptions ([% logged_in_user.alert_subscriptions.count | html %])</a></li>
+            [% END %]
+
         </ul>
     </div>
 [% END %]
