@@ -182,7 +182,7 @@ subtest 'outstanding_credits() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -293,6 +293,32 @@ subtest 'add_credit() tests' => sub {
 
     # Disable cash registers
     t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
+
+    my $item = $builder->build_sample_item;
+
+    my $checkout = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            date_due       => \'NOW()',
+            branchcode     => $patron->branchcode,
+            issuedate      => \'NOW()',
+        }
+    )->store();
+
+    my $line_4 = $account->add_credit(
+        {
+            amount      => 20,
+            description => 'Manual credit applied',
+            library_id  => $patron->branchcode,
+            user_id     => $patron->id,
+            type        => 'FORGIVEN',
+            interface   => 'commandline',
+            issue_id    => $checkout->id
+        }
+    );
+
+    is( $line_4->issue_id, $checkout->id, 'The issue ID matches the checkout ID' );
 
     $schema->storage->txn_rollback;
 };
