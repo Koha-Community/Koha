@@ -89,17 +89,17 @@ export default {
                             if (typeof action === "object") {
                                 let action_name = Object.keys(action)[0]
                                 content.push(
-                                    `<a class="${action_name} btn btn-default btn-xs" role="button"><i class="${action[action_name].icon}"></i>${action[action_name].text}</a>`
+                                    `<a class="${action_name} btn btn-default btn-xs" role="button"><i class="${action[action_name].icon}"></i> ${action[action_name].text}</a>`
                                 )
                             } else if (action == "edit") {
                                 content.push(
-                                    '<a class="edit btn btn-default btn-xs" role="button"><i class="fa fa-pencil"></i>' +
+                                    '<a class="edit btn btn-default btn-xs" role="button"><i class="fa fa-pencil"></i> ' +
                                         this.$__("Edit") +
                                         "</a>"
                                 )
                             } else if (action == "delete") {
                                 content.push(
-                                    '<a class="delete btn btn-default btn-xs" role="button"><i class="fa fa-trash"></i>' +
+                                    '<a class="delete btn btn-default btn-xs" role="button"><i class="fa fa-trash"></i> ' +
                                         this.$__("Delete") +
                                         "</a>"
                                 )
