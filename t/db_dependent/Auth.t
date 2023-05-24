@@ -762,7 +762,7 @@ subtest 'check_cookie_auth' => sub {
 };
 
 subtest 'checkauth & check_cookie_auth' => sub {
-    plan tests => 31;
+    plan tests => 35;
 
     # flags = 4 => { catalogue => 1 }
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 4 } });
@@ -823,6 +823,23 @@ subtest 'checkauth & check_cookie_auth' => sub {
     ( $auth_status, $session ) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1});
     is( $auth_status, 'ok' );
     is( $session->id, $first_sessionID );
+
+    my $patron_to_delete = $builder->build_object({ class => 'Koha::Patrons' });
+    my $fresh_userid = $patron_to_delete->userid;
+    $patron_to_delete->delete;
+    my $old_userid   = $patron->userid;
+
+    # change the current session user's userid
+    $patron->userid( $fresh_userid )->store;
+    ( $auth_status, $session ) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1});
+    is( $auth_status, 'expired' );
+    is( $session, undef );
+
+    # restore userid and generate a new session
+    $patron->userid($old_userid)->store;
+    ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
+    is( $sessionID, $first_sessionID );
+    is( $userid, $patron->userid );
 
     # Logging out!
     $cgi->param('logout.x', 1);
