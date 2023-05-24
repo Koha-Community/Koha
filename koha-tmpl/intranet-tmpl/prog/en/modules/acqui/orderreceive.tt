@@ -94,7 +94,7 @@
             <main>
 
 <h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% multiple_orders | html %])</h1>
-
+[% SET only_one_order = ( multiple_orders.split(',').size == 1 ) %]
 [% IF multiple_orders %]
     <table id="multiple_orders" class="table table-bordered table-striped">
         <thead>
@@ -393,10 +393,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-defualt modal-prev">Previous order</button>
+                [% IF only_one_order %]
+                    <button type="button" class="btn btn-primary modal-save" disabled>Confirm</button>
+                    <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
+                [% ELSE %]
+                    <button type="button" class="btn btn-default modal-prev">Previous order</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary modal-save">Save changes</button>
-                    <button type="button" class="btn btn-defualt modal-next">Next order</button>
+                    <button type="button" class="btn btn-default modal-next">Next order</button>
+                [% END %]
                 </div>
             </div>
         </div>
@@ -625,7 +630,7 @@
                         }
                     }
                 ],
-                [% IF multiple_orders.split(',').size == 1 %]
+                [% IF only_one_order %]
                     "drawCallback": function( settings ) {
                         $(this).find("tbody tr td:last-child a.order_edit_toggle").click();
                     },
@@ -873,6 +878,9 @@
                 $("#quantity").val(qty);
                 var row = $("#order_edit").data('row');
                 row.quantity_received = qty;
+            [% IF only_one_order %]
+                $('.modal-save').prop('disabled', qty < 1 );
+            [% END %]
             })
 
             $("#order_edit").on("change", "#tax_rate", function() {
@@ -1298,7 +1306,7 @@
                 var saved_rows = save_row();
                 if(Object.keys(saved_rows).length) $('.save').prop('disabled', false);
                 $("#order_edit").modal('hide');
-                [% IF multiple_orders.split(',').size == 1 %]
+                [% IF only_one_order %]
                     $(".save").click();
                 [% END %]
             })
@@ -1317,7 +1325,11 @@
             });
 
             $("#order_edit").on("hide.bs.modal", function() {
+            [% IF only_one_order %] [%# On the single case, dismissing the modal equals to cancelling %]
+                location.href = "/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1";
+            [% ELSE %]
                 $("#child_orders_table").DataTable().off('preDraw').destroy();
+            [% END %]
             });
         });
     </script>
