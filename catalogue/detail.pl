@@ -198,9 +198,6 @@ my $items_params = {
 my $all_items = $biblio->items($items_params);
 my $items_to_display = $all_items->search({ $include_lost_items ? () : ( itemlost => 0 ) });
 
-# flag indicating existence of at least one item linked via a host record
-my $hostrecords = $biblio->host_items->count;
-
 my $dat = &GetBiblioData($biblionumber);
 
 #is biblio a collection and are bundles enabled
@@ -354,7 +351,6 @@ $template->param(
 $template->param(
     MARCNOTES               => !$invalid_marc_record ? $biblio->get_marc_notes() : undef,
     z3950_search_params     => C4::Search::z3950_search_args($dat),
-    hostrecords             => $hostrecords,
     C4::Search::enabled_staff_search_views,
 );
 

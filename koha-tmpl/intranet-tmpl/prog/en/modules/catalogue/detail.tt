@@ -368,7 +368,7 @@
             <th id="[% tab | html %]_materials" data-colname="[% tab | html %]_materials">Materials specified</th>
             <th id="[% tab | html %]_itemnotes" data-colname="[% tab | html %]_itemnotes">Public notes</th>
             <th id="[% tab | html %]_itemnotes_nonpublic" data-colname="[% tab | html %]_itemnotes_nonpublic">Non-public notes</th>
-            [% IF ( hostrecords ) %]<th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>[% END %]
+            <th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>
             [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="[% tab | html %]_usedin">Used in</th><th></th>[% END %]
             [% IF Koha.Preference('UseCourseReserves') %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course reserves</th>[% END %]
             [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="[% tab | html %]_spinelabel" class="NoSort">Spine label</th>[% END %]
@@ -2194,6 +2194,9 @@
             embed.push('course_item.course_reserves.course');
         [% END %]
 
+        // For host records
+        embed.push('biblio.title');
+
         let items_table_settings = {
             holdings: [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %],
             otherholdings: [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %],
@@ -2589,17 +2592,15 @@
                         return escape_str(row.internal_notes);
                     }
                 },
-                [% IF ( hostrecords ) %]
                 {
-                    data: "biblio.biblio_id",
-                    searchable: false, // FIXME
+                    data: "biblio.title",
+                    searchable: false,
                     orderable: true,
                     render: function (data, type, row, meta) {
                         if ( row.biblio_id == [% biblio.biblionumber | html %] ) return "";
-                        return '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=%s>%s</a>'.format(row.biblio_id, row.biblio.title);
+                        return '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=%s">%s</a>'.format(row.biblio_id, row.biblio.title);
                     }
                 },
-                [% END %]
                 [% IF ( analyze ) %]
                 {
                     data: "",
