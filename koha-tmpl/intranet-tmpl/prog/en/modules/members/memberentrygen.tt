@@ -1867,6 +1867,16 @@ legend:hover {
             $("#categorycode_entry").on("change", function(){
                 update_category_code(this);
             });
+
+            [% IF logged_in_user.borrowernumber == borrowernumber %]
+                $("#userid").on("change", function(){
+                    $(this).parent().find("div.hint").remove();
+                    if ( "[% borrower_data.userid | html %]" != $(this).val() ) {
+                        $(this).parent().append('<div class="hint">%s</div>'.format(_("You will be logged out if you modify your username")));
+                    }
+                });
+            [% END %]
+
         });
 
         [% IF quickadd && opadd  && !check_member %]
