@@ -2197,6 +2197,10 @@
         // For host records
         embed.push('biblio.title');
 
+        [% IF analyze %]
+            embed.push('analytics_count');
+        [% END %]
+
         let items_table_settings = {
             holdings: [% TablesSettings.GetTableSettings('catalogue', 'detail','holdings_table','json') | $raw %],
             otherholdings: [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %],
@@ -2601,13 +2605,22 @@
                         return '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=%s">%s</a>'.format(row.biblio_id, row.biblio.title);
                     }
                 },
-                [% IF ( analyze ) %]
+                [% IF analyze %]
                 {
-                    data: "",
-                    searchable: false, // FIXME
-                    orderable: true,
+                    data: "analytics_count",
+                    searchable: false,
+                    orderable: false,
                     render: function (data, type, row, meta) {
-                        return ""; // FIXME Display analytic count + link
+                        if (row.analytics_count == 0) return ""
+                        return '<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=%s">%s analytics</a>'.format(row.item_id, row.analytics_count);
+                    }
+                },
+                {
+                    data: "analytics_count", // create analytics link
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, row, meta) {
+                        return '<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=%s&amp;hostitemnumber=%s">Create analytics</a>'.format(row.biblio_id, row.item_id);
                     }
                 },
                 [% END %]

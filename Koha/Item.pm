@@ -2366,6 +2366,11 @@ sub is_denied_renewal {
     return 0;
 }
 
+sub analytics_count {
+    my ($self) = @_;
+    return C4::Items::GetAnalyticsCount($self->itemnumber);
+}
+
 =head3 strings_map
 
 Returns a map of column name to string representations including the string,
