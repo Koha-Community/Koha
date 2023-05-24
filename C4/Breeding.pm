@@ -478,9 +478,6 @@ sub ImportBreedingAuth {
 
     my $controlnumber = $marcrecord->field('001')->data;
 
-    # Normalize the record so it doesn't have separated diacritics
-    SetUTF8Flag($marcrecord);
-
     $searchbreeding->execute($controlnumber,$heading);
     my ($breedingid) = $searchbreeding->fetchrow;
 
@@ -578,31 +575,34 @@ sub Z3950SearchAuth {
                     for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
                         my $rec = $oResult[$k]->record($i);
                         if ($rec) {
+                            my $marcdata = $rec->raw();
                             my $marcrecord;
-                            my $marcdata;
-                            $marcdata   = $rec->raw();
-
-                            my ($charset_result, $charset_errors);
                             if( $servers[$k]->{servertype} eq 'sru' ) {
-                                $marcrecord = MARC::Record->new_from_xml( $marcdata, 'UTF-8', $servers[$k]->{syntax} );
-                                $marcrecord->encoding('UTF-8');
+                                $marcrecord = eval { MARC::Record->new_from_xml( $marcdata, 'UTF-8', $servers[$k]->{syntax} ) };
+                                if( !$marcrecord || $@ ) {
+                                    _dump_conversion_error( $servers[$k]->{servername}, $marcdata, $@ );
+                                    next; # skip this one
+                                }
                             } else {
+                                my ($charset_result, $charset_errors);
                                 ( $marcrecord, $charset_result, $charset_errors ) = MarcToUTF8Record( $marcdata, $marc_type, $encoding[$k] );
+                                if( !$marcrecord || @$charset_errors ) {
+                                    _dump_conversion_error( $servers[$k]->{servername}, $marcdata, $charset_result, $charset_errors );
+                                    next; # skip this one
+                                }
                             }
-                            my $heading;
-                            my $heading_authtype_code;
-                            $heading_authtype_code = GuessAuthTypeCode($marcrecord);
-                            next if ( not defined $heading_authtype_code ) ;
+                            $marcrecord->encoding('UTF-8');
+                            SetUTF8Flag($marcrecord);
 
-                            $heading = GetAuthorizedHeading({ record => $marcrecord });
-
-                            my $breedingid = ImportBreedingAuth( $marcrecord, $serverhost[$k], $encoding[$k], $heading );
+                            my $heading_authtype_code = GuessAuthTypeCode($marcrecord) or next;
+                            my $heading = GetAuthorizedHeading({ record => $marcrecord });
+                            my $breedingid = ImportBreedingAuth( $marcrecord, $serverhost[$k], 'UTF-8', $heading );
                             my %row_data;
                             $row_data{server}       = $servers[$k]->{'servername'};
                             $row_data{breedingid}   = $breedingid;
                             $row_data{heading}      = $heading;
                             $row_data{authid}       = $authid;
-                            $row_data{heading_code}      = $heading_authtype_code;
+                            $row_data{heading_code} = $heading_authtype_code;
                             push( @breeding_loop, \%row_data );
                         }
                         else {
@@ -637,6 +637,11 @@ sub Z3950SearchAuth {
         servers => \@servers,
         errconn       => \@errconn
     );
+}
+
+sub _dump_conversion_error {
+    require Data::Dumper;
+    warn Data::Dumper->new([ 'Z3950SearchAuth conversion error', @_ ])->Indent(0)->Dump;
 }
 
 1;
