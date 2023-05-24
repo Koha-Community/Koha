@@ -810,7 +810,11 @@ for (my $i=0;$i<@servers;$i++) {
                         sort_by           => \@sort_by
                     }
                 );
-            $template->param( hits_to_paginate => $hits_to_paginate );
+            $template->param(
+                hits_to_paginate    => $hits_to_paginate,
+                current_page_number => $current_page_number,
+                pages               => $pages
+            );
             $template->param(   PAGE_NUMBERS => $page_numbers,
                                 last_page_offset => $last_page_offset,
                                 previous_page_offset => $previous_page_offset) unless $pages < 2;

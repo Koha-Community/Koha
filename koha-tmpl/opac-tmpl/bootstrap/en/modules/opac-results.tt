@@ -47,9 +47,9 @@
                     [% END %]
                     <li class="breadcrumb-item active">
                         [% IF ( ms_value ) %]
-                            <a href="#" aria-current="page" title="You searched [% IF ( query_desc ) %] for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]">Results of search for '[% ms_value | html %]'</a>
+                            <a href="#" aria-current="page" title="You searched [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]">Results of search for '[% ms_value | html %]'[% IF ( pages > 1) %], page [% current_page_number | html %] of [% pages | html %][% END %]</a>
                         [% ELSE %]
-                            <a href="#" aria-current="page" title="You searched [% IF ( query_desc ) %] for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]">Search results</a>
+                            <a href="#" aria-current="page" title="You searched [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]">Search results</a>
                         [% END %]
                     </li>
                 [% ELSE %]
