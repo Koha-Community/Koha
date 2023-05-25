@@ -214,7 +214,7 @@ subtest 'bundle_host tests' => sub {
 };
 
 subtest 'add_to_bundle tests' => sub {
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -263,6 +263,13 @@ subtest 'add_to_bundle tests' => sub {
     'Koha::Exceptions::Item::Bundle::IsBundle',
       'Exception thrown if you try to add a bundle host to a bundle item';
 
+    C4::Circulation::AddIssue( $patron->unblessed, $host_item->barcode );
+    throws_ok { $host_item->add_to_bundle($bundle_item2) }
+    'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut',
+      'Exception thrown if you try to add an item to a checked out bundle';
+    C4::Circulation::AddReturn( $host_item->barcode, $host_item->homebranch );
+    $host_item->discard_changes;
+
     C4::Circulation::AddIssue( $patron->unblessed, $bundle_item2->barcode );
     throws_ok { $host_item->add_to_bundle($bundle_item2) }
     'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut',
@@ -286,19 +293,27 @@ subtest 'add_to_bundle tests' => sub {
 };
 
 subtest 'remove_from_bundle tests' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
     my $host_item = $builder->build_sample_item();
     my $bundle_item1 = $builder->build_sample_item({ notforloan => 1 });
-    $schema->resultset('ItemBundle')
-      ->create(
-        { host => $host_item->itemnumber, item => $bundle_item1->itemnumber } );
+    $host_item->add_to_bundle($bundle_item1);
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    C4::Circulation::AddIssue( $patron->unblessed, $host_item->barcode );
+    throws_ok { $bundle_item1->remove_from_bundle }
+    'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut',
+      'Exception thrown if you try to add an item to a checked out bundle';
+    my ( $doreturn, $messages, $issue ) = C4::Circulation::AddReturn( $host_item->barcode, $host_item->homebranch );
+    $bundle_item1->discard_changes;
 
     is($bundle_item1->remove_from_bundle(), 1, 'remove_from_bundle returns 1 when item is removed from a bundle');
     is($bundle_item1->notforloan, 0, 'remove_from_bundle resets notforloan to 0');
-    $bundle_item1 = $bundle_item1->get_from_storage;
+    $bundle_item1->discard_changes;
     is($bundle_item1->remove_from_bundle(), 0, 'remove_from_bundle returns 0 when item is not in a bundle');
 
     $schema->storage->txn_rollback;
