@@ -10,7 +10,30 @@
     Batch list
 [% END %] &rsaquo; Order staged MARC records &rsaquo; Acquisitions &rsaquo; Koha
 </title>
-<style>.biblio { padding: 0 .5em;margin:0; }.item_edit_form{border-top:1px solid #AAA;padding-top:.5em;}@media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
+<style>
+    .biblio {
+        padding: 0 .5em;
+        margin:0;
+    }
+    .order_details {
+        display: flex;
+        justify-content: space-between;
+    }
+    .biblio .actions {
+        float: right;
+    }
+    @media (max-width: 992px) {
+        .order_details {
+            display: block;
+        }
+    }
+    @media (max-width: 767px) {
+        #dataPreview {
+            margin: 0;
+            width : auto;
+        }
+    }
+</style>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [%# As long as cataloging plugins rely on 'script' tags added inline, JS must be in the header %]
@@ -132,6 +155,11 @@
                                                                 [%- END -%]
                                                             </span>
                                                         </label>
+                                                        <span class="actions">
+                                                            <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id | uri %]" class="previewData btn btn-default btn-xs">MARC</a>
+                                                            <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% biblio.import_record_id | uri %]" class="previewData btn btn-default btn-xs">Card</a>
+                                                            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;breedingid=[% biblio.import_record_id | uri %]&amp;import_batch_id=[% biblio.import_batch_id | uri %]&amp;biblionumber=[% biblio.match_biblionumber | uri %]" class="btn btn-default btn-xs">Add order</a>
+                                                        </span>
                                                         <fieldset class="rows order_details">
                                                             <ol>
                                                                 <li class="status">
@@ -207,7 +235,7 @@
                                                                 <div class="item_edit_form">
                                                                     [% IF biblio.item_error %]Item records could not be processed because the number of item fields was uneven.[% END %]
                                                                     [% FOREACH item IN biblio.iteminfos %]
-                                                                        <fieldset>
+                                                                        <fieldset class="rows">
                                                                             <legend>Item record [% item.item_id | html %]</legend>
                                                                             <ol>
                                                                                 <li>
@@ -335,11 +363,6 @@
                                                                 </div> <!-- /.item_edit_form -->
                                                             [% END %]
                                                         </fieldset> <!-- /.rows.order_details -->
-                                                    </td>
-                                                    <td class="actions">
-                                                        <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id | uri %]" class="previewData btn btn-default btn-xs">MARC</a>
-                                                        <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% biblio.import_record_id | uri %]" class="previewData btn btn-default btn-xs">Card</a>
-                                                        <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;breedingid=[% biblio.import_record_id | uri %]&amp;import_batch_id=[% biblio.import_batch_id | uri %]&amp;biblionumber=[% biblio.match_biblionumber | uri %]" class="btn btn-default btn-xs">Add order</a>
                                                     </td>
                                                 </tr>
                                             [% END # /FOREACH biblio %]
