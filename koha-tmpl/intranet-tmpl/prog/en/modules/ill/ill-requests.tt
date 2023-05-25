@@ -144,7 +144,7 @@
                     [% IF !whole.stage || whole.stage == 'form' %]
                         <h1 id="ill-issue-title">Issue requested item to [% INCLUDE 'patron-title.inc' patron = request.patron %]</h1>
                         [% IF !request.biblio_id || request.biblio_id.length == 0 %]
-                        <div class="alert">This item cannot be issued as it has no biblio record associated with it</div>
+                        <div class="alert">This item cannot be checked out as it has no bibliographic record associated with it</div>
                         [% END %]
                         [% IF whole.value.errors.itemcount %]
                         <div class="alert">The bibliographic record for this request has multiple items, it should only have one. Please fix this then try again.</div>
