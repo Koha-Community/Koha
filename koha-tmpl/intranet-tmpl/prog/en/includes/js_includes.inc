@@ -69,12 +69,14 @@
     </script>
 [% END %]
 
-[% IF ( PatronAutoComplete ) %]
-    <script>
-    // PatronAutoComplete
+<script>
     var defaultPatronSearchFields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' | html %]";
     var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
     var singleBranchMode = '[% singleBranchMode | html %]';
+</script>
+[% IF ( PatronAutoComplete ) %]
+    <script>
+    // PatronAutoComplete
     var loggedInClass = "";
     $(document).ready(function(){
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
