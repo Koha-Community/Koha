@@ -503,14 +503,13 @@ sub Z3950SearchAuth {
 
     my $dbh   = C4::Context->dbh;
     my @id= @{$pars->{id}};
-    my $page= $pars->{page};
+    my $page= $pars->{page} // 1;
 
 
     my $show_next       = 0;
     my $total_pages     = 0;
     my @encoding;
     my @results;
-    my @serverhost;
     my @breeding_loop = ();
     my @oConnection;
     my @oResult;
@@ -562,7 +561,7 @@ sub Z3950SearchAuth {
             my ($error )= $oConnection[$k]->error_x(); #ignores errmsg, addinfo, diagset
             if ($error) {
                 if ($error =~ m/^(10000|10007)$/ ) {
-                    push(@errconn, {'server' => $serverhost[$k]});
+                    push @errconn, { server => $servers[$k]->{host} };
                 }
             }
             else {
@@ -596,7 +595,7 @@ sub Z3950SearchAuth {
 
                             my $heading_authtype_code = GuessAuthTypeCode($marcrecord) or next;
                             my $heading = GetAuthorizedHeading({ record => $marcrecord });
-                            my $breedingid = ImportBreedingAuth( $marcrecord, $serverhost[$k], 'UTF-8', $heading );
+                            my $breedingid = ImportBreedingAuth( $marcrecord, $servers[$k]->{host}, 'UTF-8', $heading );
                             my %row_data;
                             $row_data{server}       = $servers[$k]->{'servername'};
                             $row_data{breedingid}   = $breedingid;
