@@ -139,9 +139,30 @@ subtest 'list() tests' => sub {
     };
 
     # Create some ILL requests
-    my $req_1 = $builder->build_object({ class => 'Koha::Illrequests', value => { borrowernumber => $patron->borrowernumber, status => $request_status->{code}, backend =>$backend->name } });
-    my $req_2 = $builder->build_object({ class => 'Koha::Illrequests', value => { status => $request_status->{code}, backend =>$backend->name , status_alias => $av->authorised_value } } );
-    my $ret   = $builder->build_object({ class => 'Koha::Illrequests', value => { status => 'RET' } } );
+    my $req_1 = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                status         => $request_status->{code},
+                backend        => $backend->name,
+                notesstaff     => '1'
+            }
+        }
+    );
+    my $req_2 = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                status       => $request_status->{code},
+                backend      => $backend->name,
+                status_alias => $av->authorised_value,
+                notesstaff   => '2'
+            }
+
+        }
+    );
+    my $ret = $builder->build_object({ class => 'Koha::Illrequests', value => { status => 'RET' } });
 
     # Three requests exist, expect all three to be returned
     $t->get_ok("//$userid:$password@/api/v1/ill/requests")
@@ -209,7 +230,7 @@ subtest 'list() tests' => sub {
 
     # Hide 'RET', expect to return 2 'REQ'
     t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', 'RET' );
-    $t->get_ok( "//$userid:$password@/api/v1/ill/requests" )
+    $t->get_ok( "//$userid:$password@/api/v1/ill/requests?_order_by=staff_notes" )
       ->status_is(200)
       ->json_is( [ $req_1->to_api, $req_2->to_api ]);
 
