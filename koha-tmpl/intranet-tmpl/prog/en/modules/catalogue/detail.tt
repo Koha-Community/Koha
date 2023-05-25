@@ -1710,7 +1710,7 @@
 
             let items_tab_ids = [ 'holdings', 'otherholdings' ];
             items_tab_ids.forEach( function( tab_id, index ) {
-                build_items_table(tab_id, false, { dom: 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>' });
+                build_items_table(tab_id, false);
 
                 [% IF bundlesEnabled %]
                 // Add event listener for opening and closing bundle details

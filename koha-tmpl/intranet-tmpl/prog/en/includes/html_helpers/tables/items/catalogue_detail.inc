@@ -136,7 +136,7 @@
                 tab.find(".show_filters").hide();
                 tab.find(".hide_filters").show();
                 $("#"+tab_id+"_table thead tr:eq(1)").remove();
-                build_items_table(tab_id, true, { dom: dataTablesDefaults.dom, destroy: true } );
+                build_items_table(tab_id, true, { destroy: true } );
             });
 
             $(".hide_filters").on("click",function(e){
@@ -146,7 +146,7 @@
                 tab.find(".hide_filters").hide();
                 tab.find(".show_filters").show();
                 $("#"+tab_id+"_table thead tr:eq(1)").remove();
-                build_items_table(tab_id, false, { dom: '<"dt-info"i><"top pager"lpfB><"#filter_c">tr<"bottom pager"ip>', destroy: true } );
+                build_items_table(tab_id, false, { destroy: true } );
             });
         });
     [% END %]
@@ -723,6 +723,13 @@
                         });
                     }
                 );
+
+                if (!add_filters && settings._iRecordsDisplay == settings._iRecordsTotal && settings._iDisplayLength >= settings._iRecordsDisplay){
+                    let container = $(this).parent();
+                    container.find(".dt-info").remove();
+                    container.find(".top.pager").remove();
+                    container.find(".bottom.pager").remove();
+                }
             },
             [% END %]
             ...dt_options,
