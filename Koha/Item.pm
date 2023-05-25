@@ -1701,6 +1701,9 @@ sub add_to_bundle {
     try {
         $schema->txn_do(
             sub {
+
+                Koha::Exceptions::Item::Bundle::BundleIsCheckedOut->throw if $self->checkout;
+
                 my $checkout = $bundle_item->checkout;
                 if ($checkout) {
                     unless ($options->{force_checkin}) {
@@ -1785,6 +1788,12 @@ Remove this item from any bundle it may have been attached to.
 
 sub remove_from_bundle {
     my ($self) = @_;
+
+    my $bundle_host = $self->bundle_host;
+
+    return 0 unless $bundle_host; # Should not we raise an exception here?
+
+    Koha::Exceptions::Item::Bundle::BundleIsCheckedOut->throw if $bundle_host->checkout;
 
     my $bundle_item_rs = $self->_result->item_bundles_item;
     if ( $bundle_item_rs ) {
