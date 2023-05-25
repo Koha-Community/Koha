@@ -232,6 +232,16 @@ sub add_to_bundle {
                 }
             );
         }
+        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut' )
+        {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => 'Bundle is checked out',
+                    error_code => 'bundle_checked_out'
+                }
+            );
+        }
         elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut' )
         {
             return $c->render(
@@ -296,11 +306,25 @@ sub remove_from_bundle {
         );
     }
 
-    $bundle_item->remove_from_bundle;
-    return $c->render(
-        status  => 204,
-        openapi => q{}
-    );
+    return try {
+        $bundle_item->remove_from_bundle;
+        return $c->render(
+            status  => 204,
+            openapi => q{}
+        );
+    } catch {
+        if ( ref($_) eq 'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut' ) {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => 'Bundle is checked out',
+                    error_code => 'bundle_checked_out'
+                }
+            );
+        } else {
+            $c->unhandled_exception($_);
+        }
+    };
 }
 
 1;

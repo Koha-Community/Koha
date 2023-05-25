@@ -27,6 +27,10 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Item::Bundle',
         description => "A bundle cannot be added to a bundle",
     },
+    'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut' => {
+        isa         => 'Koha::Exceptions::Item::Bundle',
+        description => 'Someone tried to add an item to a checked out bundle',
+    },
     'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut' => {
         isa         => 'Koha::Exceptions::Item::Bundle',
         description => 'Someone tried to add a checked out item to a bundle',
