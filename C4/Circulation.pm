@@ -4079,7 +4079,6 @@ sub ProcessOfflineReturn {
                 $itemnumber,
                 $operation->{timestamp},
             );
-            $item->renewals_count(0);
             $item->onloan(undef);
             $item->store({ log_action => 0 });
             return "Success.";
