@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 21.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-17 08:42-0300\n"
+"POT-Creation-Date: 2023-05-18 07:33-0300\n"
 "PO-Revision-Date: 2022-02-16 17:04+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
@@ -11,82 +11,142 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/21.05/ru-RU-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
 "X-POOTLE-MTIME: 1645031082.941427\n"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:182
-msgid " (current) "
-msgstr " (текущий)"
+#: koha-tmpl/intranet-tmpl/prog/js/acq.js:7
+msgid "ERROR: Price is not a valid number, please check the price and try again!"
+msgstr "ОШИБКА: цена не является действительным числом, проверьте цену и повторите попытку!"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:580
-#, fuzzy, javascript-format
-msgid " and %s of %s unseen renewals remaining"
-msgstr "%s из %s невидимых продлений осталось"
+#: koha-tmpl/intranet-tmpl/prog/js/acq.js:307
+msgid "Fund amount exceeds parent allocation"
+msgstr "Сумма средств превышает отчисления из источника"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
-msgctxt "Bibliographic record"
-msgid " item(s) added to your cart"
-msgstr " экземпляр(ов) добавлено в корзину"
+#: koha-tmpl/intranet-tmpl/prog/js/acq.js:309
+msgid "Fund amount exceeds period allocation"
+msgstr "Сумма средств превышает выделенный период"
 
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:210
-#, javascript-format
-msgid "%s already in your cart"
-msgstr "%s уже в вашей корзине"
+#: koha-tmpl/intranet-tmpl/prog/js/acq.js:341
+msgid "New budget-parent is beneath budget"
+msgstr "Новый источник сметы меньше бюджета"
 
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:41
-#, javascript-format
-msgid ""
-"%s deleted order(s) are using this record. Are you sure you want to delete "
-"this record?"
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:17
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:50
+msgid "Update item"
+msgstr "Обновить экземпляр"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:22
+msgid "You can't receive any more items"
+msgstr "Вы не можете получить больше экземпляров "
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:91
+msgid "Edit"
+msgstr "Редактировать"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1036
+#: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
+msgid "Delete"
+msgstr "Удалить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:181
+msgid "Add item"
+msgstr "Добавить единицу"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:182
+msgid "Clear"
+msgstr "Очистить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:183
+msgid "Add multiple items"
+msgstr "Добавить несколько экземпляров"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
+msgid "Number of items to add"
+msgstr "Количество экземпляров для добавления"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:186
+msgid "Add"
+msgstr "Добавить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:187
+msgid "NOTE: Fields listed in the 'UniqueItemsFields' system preference will not be copied"
+msgstr "ПРИМЕЧАНИЕ: Поля, перечисленные в системной настройке 'UniqueItemsFields', не будут скопированы."
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:274
+msgid "is duplicated"
+msgstr " — продублирован"
+
+#: koha-tmpl/intranet-tmpl/prog/js/additem.js:299
+msgid "already exists in database"
+msgstr " уже существует в базе данных"
+
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:52
+msgid "There is no record selected"
+msgstr "Не выбрана ни одна запись"
+
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:63
+msgid "quantity values are not filled in or are not numbers"
+msgstr "значения количества не заполнены или не являются числами"
+
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:70
+msgid "Some budgets are not defined in item records"
+msgstr "Некоторые сметы не определены в записях экземпляров"
+
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:78
+msgid "Some required item subfields are not set"
 msgstr ""
-"%s удаленных заказов используют эту запись. Вы действительно хотите удалить "
-"эту запись?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:43
-#, javascript-format
-msgid ""
-"%s deleted order(s) are using this record. You need order managing "
-"permissions to delete this record."
-msgstr ""
-"%s заказов используют эту запись. Для удаления этой записи необходимо "
-"разрешение на управление заказами."
+#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:98
+#: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:113
+msgid "Loading"
+msgstr "Загружается"
 
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:66
-#, javascript-format
-msgid ""
-"%s hold(s) on this record. You must delete all holds before deleting all "
-"items."
-msgstr ""
-"%s резервирований на этой записи. Перед удалением всех экземпляров вы должны "
-"удалить все резервирования."
+#: koha-tmpl/intranet-tmpl/prog/js/ajax.js:18
+msgid "Internal Server Error, please reload the page"
+msgstr "Внутренняя ошибка сервера, пожалуйста, перезагрузите страницу"
 
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:46
-#, javascript-format
-msgid ""
-"%s holds(s) for this record. Are you sure you want to delete this record?"
-msgstr ""
-"%s резервирований для этой записи. Вы действительно хотите удалить эту "
-"запись?"
+#: koha-tmpl/intranet-tmpl/prog/js/ajax.js:25
+msgid "You need to log in again, your session has timed out"
+msgstr "Вам нужно снова войти в систему, время вашего сеанса истекло"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:53
-#, javascript-format
-msgid "%s is neither permitted nor prohibited!"
-msgstr "%s не является ни разрешенным, ни запрещенным!"
+#: koha-tmpl/intranet-tmpl/prog/js/ajax.js:31
+msgid "Error; your data might not have been saved"
+msgstr "Ошибка; ваши данные могли быть не сохранены"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:47
-#, javascript-format
-msgid "%s is permitted!"
-msgstr "%s разрешено!"
+#: koha-tmpl/intranet-tmpl/prog/js/ajax.js:35
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:20
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:4
+msgid "Loading..."
+msgstr "Идёт загрузка…"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:50
-#, javascript-format
-msgid "%s is prohibited!"
-msgstr "%s запрещено!"
+#: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:44
+msgid "Please select or enter a sound."
+msgstr "Пожалуйста, выберите или введите звук."
+
+#: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:66
+msgid "Are you sure you want to delete the selected audio alerts?"
+msgstr "Вы действительно хотите удалить выбранные звуковые уведомления?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:68
+msgid "Check the box next to the alert you want to delete."
+msgstr "Установите флажок рядом с оповещением, которое хотите удалить."
+
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:91
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:82
+msgid "Your cart is currently empty"
+msgstr "Ваша корзина пока пуста"
+
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:119
+msgid "This item is already in your cart"
+msgstr "Эта единица уже есть в Вашей корзине"
+
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:136
+msgid "This item has been added to your cart"
+msgstr "Эта единица была добавлена в Вашу корзину"
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:208
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:213
@@ -94,98 +154,46 @@ msgstr "%s запрещено!"
 msgid "%s item(s) added to your cart"
 msgstr "%s экземпляр(ов) добавлены в вашу корзину"
 
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:32
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:210
 #, javascript-format
-msgid ""
-"%s item(s) are attached to this record. You must delete all items before "
-"deleting this record."
-msgstr ""
-"%s экземпляр(ов) присоединены к этой записи. Перед удалением этой записи вам "
-"необходимо удалить все экземпляры."
+msgid "%s already in your cart"
+msgstr "%s уже в вашей корзине"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:578
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:218
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:311
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:432
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:447
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:457
+#: koha-tmpl/intranet-tmpl/prog/js/cart.js:6
+#: koha-tmpl/intranet-tmpl/prog/js/cart.js:32
+#: koha-tmpl/intranet-tmpl/prog/js/cart.js:52
+msgid "No item was selected"
+msgstr "Ни одной единицы не было выбрано"
+
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:221
+msgid "No item was added to your cart (already in your cart)!"
+msgstr "Экземпляр не был добавлен в вашу корзину (уже в вашей корзине)"
+
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:260
+msgid "The item has been removed from your cart"
+msgstr "Эта единица удалена из вашей корзины"
+
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:287
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:339
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:245
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:300
+msgid "Are you sure you want to empty your cart?"
+msgstr "Действительно ли Вы хотите очистить Вашу корзину?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:358
+msgid "Are you sure you want to remove the selected items?"
+msgstr "Хотите ли Вы на самом деле удалить выбранные единицы?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:415
+#: koha-tmpl/intranet-tmpl/prog/js/basket.js:418
 #, javascript-format
-msgid "%s of %s renewals remaining"
-msgstr "%s из %s продлений осталось"
-
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
-#, javascript-format
-msgid ""
-"%s order(s) are using this record. You need order managing permissions to "
-"delete this record."
-msgstr ""
-"%s заказов используют эту запись. Для удаления этой записи необходимы "
-"разрешения на управление заказами."
-
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:48
-#, fuzzy, javascript-format
-msgid ""
-"%s subscription(s) are attached to this record. You must delete all "
-"subscription before deleting this record."
-msgstr ""
-"%s экземпляр(ов) присоединены к этой записи. Перед удалением этой записи вам "
-"необходимо удалить все экземпляры."
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:18
-msgid "(filtered from _MAX_ total entries)"
-msgstr "(отфильтровано с _MAX_ записей всего)"
-
-#: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:121
-msgid "(select to create)"
-msgstr "(выберите для создания)"
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:31
-msgid "A control field cannot be used with a regular field."
-msgstr "Контрольное поле нельзя использовать с обычным полем."
-
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:21
-#, javascript-format
-msgid "A default letter with the code '%s' already exists."
-msgstr "Письмо по умолчанию с кодом '%s' уже существует."
-
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:23
-#, javascript-format
-msgid "A letter with the code '%s' already exists for '%s'."
-msgstr "Письмо с кодом '%s' уже существует для '%s'."
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:159
-#, javascript-format
-msgid "AJAX error (%s alert)"
-msgstr "AJAX ошибка (%s предупреждение)"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:38
-#, javascript-format
-msgid "AJAX failed to approve tag: %s"
-msgstr "AJAX не удалось утвердить тег: %s"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:44
-#, javascript-format
-msgid "AJAX failed to reject tag: %s"
-msgstr "AJAX не удалось отклонить тег: %s"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1044
-msgid "Actions"
-msgstr "Действия"
-
-#: koha-tmpl/intranet-tmpl/prog/js/table_filters.js:44
-msgid "Activate filters"
-msgstr "Включить фильтры"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:186
-msgid "Add"
-msgstr "Добавить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:36
-msgid "Add an SMS cellular provider"
-msgstr "Добавить сотового оператора SMS"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:181
-msgid "Add item"
-msgstr "Добавить единицу"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:183
-msgid "Add multiple items"
-msgstr "Добавить несколько экземпляров"
+msgid "Items in your cart: %s"
+msgstr "Экземпляры в вашей корзине: %s "
 
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:490
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:498
@@ -199,456 +207,6 @@ msgstr "Добавить несколько экземпляров"
 msgid "Add to cart"
 msgstr "Добавить в корзину"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:51
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:122
-msgid "All"
-msgstr "все"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:133
-msgid "Approve"
-msgstr "Утвердить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:114
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:117
-msgid "Approved"
-msgstr "Утверждено"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Apr"
-msgstr "Апрель"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "April"
-msgstr "Апрель"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:356
-#, fuzzy
-msgid "Are you sure you want to cancel this hold?"
-msgstr "Вы действительно хотите удалить это поле?"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:320
-#, fuzzy
-msgid "Are you sure you want to check out this item?"
-msgstr "Вы действительно хотите удалить это поле?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:4
-msgid "Are you sure you want to close this subscription?"
-msgstr "Действительно ли Вы хотите закрыть эту подписку?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:69
-#, javascript-format
-msgid "Are you sure you want to delete %s?"
-msgstr "Вы действительно хотите удалить %s?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:67
-#, javascript-format
-msgid "Are you sure you want to delete %s? %s patron(s) are using it!"
-msgstr "Вы действительно хотите удалить %s? %s читателей используют его!"
-
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:68
-#, javascript-format
-msgid "Are you sure you want to delete the %s attached items?"
-msgstr "Вы действительно хотите удалить %s выбранных экземпляров?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:66
-msgid "Are you sure you want to delete the selected audio alerts?"
-msgstr "Вы действительно хотите удалить выбранные звуковые уведомления?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/item_search_fields.js:18
-msgid "Are you sure you want to delete this field?"
-msgstr "Вы действительно хотите удалить это поле?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:51
-#, fuzzy
-msgid "Are you sure you want to delete this message? This cannot be undone."
-msgstr ""
-"Вы уверены, что хотите обновить категорию с ребёнка на совершеннолетнего?  "
-"Это нельзя отменить."
-
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:50
-msgid "Are you sure you want to delete this record?"
-msgstr "Вы уверены, что хотите удалить эту запись?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1176
-msgid "Are you sure you want to delete this return claim?"
-msgstr "Вы действительно хотите удалить это претензию о возврате?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:17
-msgid "Are you sure you want to delete this subscription?"
-msgstr "Действительно ли Вы хотите удалить эту подписку?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:287
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:339
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:245
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:300
-msgid "Are you sure you want to empty your cart?"
-msgstr "Действительно ли Вы хотите очистить Вашу корзину?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:358
-msgid "Are you sure you want to remove the selected items?"
-msgstr "Хотите ли Вы на самом деле удалить выбранные единицы?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:150
-msgid "Are you sure you want to renew this patron's registration?"
-msgstr "Вы действительно хотите продолжить регистрацию этого посетителя?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:10
-msgid "Are you sure you want to reopen this subscription?"
-msgstr "Действительно ли Вы хотите заново открыть эту подписку?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:57
-#, javascript-format
-msgid ""
-"Are you sure you want to replace the fields and subfields for the %s "
-"framework structure? The existing structure will be overwritten! For safety "
-"reasons, it is recommended to use the export option to make a backup first."
-msgstr ""
-"Вы действительно хотите заменить поля и подполя в структуре шаблона %s? "
-"Существующая структура будет перезаписана! По соображениям безопасности "
-"рекомендуется использовать опцию экспорта, чтобы сначала сделать резервную "
-"копию."
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:302
-#, fuzzy
-msgid "Are you sure you want to return this item?"
-msgstr "Вы действительно хотите удалить это поле?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:135
-msgid ""
-"Are you sure you want to update this child to an Adult category? This cannot "
-"be undone."
-msgstr ""
-"Вы уверены, что хотите обновить категорию с ребёнка на совершеннолетнего?  "
-"Это нельзя отменить."
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:264
-msgid "Are you sure you wish to delete this template action?"
-msgstr "Вы действительно хотите удалить это действие шаблона?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:268
-msgid "Are you sure you wish to delete this template?"
-msgstr "Вы действительно хотите удалить этот шаблон?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:446
-msgid "At least two records must be selected for merging"
-msgstr "Необходимо выбрать как минимум две записи для объединения"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Aug"
-msgstr "Август"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "August"
-msgstr "Август"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:527
-msgid "Automatic renewal failed, account expired"
-msgstr "Ошибка автоматического продления, срок действия учетной записи истек"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:520
-msgid "Automatic renewal failed, patron has unpaid fines"
-msgstr ""
-"Не удалось автоматическое продление, у патрона есть неоплаченные штрафы"
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:17
-msgid "Both subfield values should be filled or empty."
-msgstr "Оба значения подполей должны быть заполнены или пусты."
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:738
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:286
-msgid "CSV"
-msgstr "CSV"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:513
-msgid "Can no longer be auto-renewed - number of checkout days exceeded"
-msgstr ""
-"Больше нельзя продлевать автоматически - количество дней книговыдачи "
-"превышено"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1137
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:372
-msgid "Cancel"
-msgstr "Отмена"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:355
-#, fuzzy
-msgid "Cancel hold"
-msgstr "Установить резервирование"
-
-#: koha-tmpl/intranet-tmpl/prog/js/categories.js:10
-msgid ""
-"Category code can only contain the following characters: letters, numbers, - "
-"and _."
-msgstr ""
-"Код типа может содержать только следующие символы: буквы, цифры, - и _."
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:301
-#, fuzzy
-msgid "Check in"
-msgstr "Возвращено"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:319
-#, fuzzy
-msgid "Check out"
-msgstr "не выдано"
-
-#: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:68
-msgid "Check the box next to the alert you want to delete."
-msgstr "Установите флажок рядом с оповещением, которое хотите удалить."
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:121
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:123
-msgid "Checked in"
-msgstr "Возвращено"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:290
-#, fuzzy
-msgid "Checked out until: "
-msgstr "Возвращено"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:145
-#, fuzzy
-msgid "Checkouts"
-msgstr "Выдач сегодня"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:610
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:612
-msgid "Claim returned"
-msgstr "Претензия возвращена"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:182
-msgid "Clear"
-msgstr "Очистить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
-msgid "Clear all"
-msgstr "Очистить всё"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:366
-msgid "Clear date to suspend indefinitely"
-msgstr "Очистить дату, чтобы приостановить на неопределенный срок"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:766
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:768
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:314
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:316
-msgid "Clear filter"
-msgstr "Очистить фильтр"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:149
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:159
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:171
-msgid "Click to collapse this section"
-msgstr "Щёлкните, чтобы свернуть этот раздел"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:156
-msgid "Click to expand this section"
-msgstr "Щёлкните, чтобы раскрыть этот раздел"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:332
-msgid "Columns"
-msgstr "Столбцы"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:783
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:331
-msgid "Columns settings"
-msgstr "Настройки столбцов"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:144
-msgid "Confirm"
-msgstr "Подтвердить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:28
-#, javascript-format
-msgid "Copied %d rows to clipboard"
-msgstr "Скопировано %d строк в буфер обмена"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:29
-msgid "Copied one row to clipboard"
-msgstr "Скопирована одна строка в буфер обмена"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:746
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:294
-msgid "Copy"
-msgstr "Копировать"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:25
-msgid "Copy to clipboard"
-msgstr "Копировать в буфер обмена"
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:126
-msgid "Dates of birth should be entered in the format 'DD.MM.YYYY'"
-msgstr "Даты рождения должны быть введены в формате 'ДД.ММ.ГГГГ'"
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:124
-msgid "Dates of birth should be entered in the format 'DD/MM/YYYY'"
-msgstr "Даты рождения должны быть введены в формате 'ДД/ММ/ГГГГ'"
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:120
-msgid "Dates of birth should be entered in the format 'MM/DD/YYYY'"
-msgstr "Даты рождения должны быть введены в формате 'ММ/ДД/ГГГГ'"
-
-#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:122
-msgid "Dates of birth should be entered in the format 'YYYY-MM-DD'"
-msgstr "Даты рождения должны быть введены в формате 'ГГГГ-ММ-ДД'"
-
-#: koha-tmpl/intranet-tmpl/prog/js/table_filters.js:26
-msgid "Deactivate filters"
-msgstr "Отключить фильтры"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Dec"
-msgstr "Декабрь"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "December"
-msgstr "Декабрь"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:94
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1036
-#: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:11
-msgid "Delete"
-msgstr "Удалить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:108
-msgid "Done"
-msgstr "Выполнено"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1003
-msgid "Double click to edit"
-msgstr "Дважды нажмите для редактирования"
-
-#: koha-tmpl/intranet-tmpl/prog/js/acq.js:7
-msgid ""
-"ERROR: Price is not a valid number, please check the price and try again!"
-msgstr ""
-"ОШИБКА: цена не является действительным числом, проверьте цену и повторите "
-"попытку!"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:91
-msgid "Edit"
-msgstr "Редактировать"
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:314
-#, javascript-format
-msgid "Edit action %s"
-msgstr "Редактировать действие %s"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1047
-msgid "Edit notes"
-msgstr "Редактировать примечания"
-
-#: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:44
-#, javascript-format
-msgid "Edit provider %s"
-msgstr "Редактировать провайдера %s"
-
-#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:36
-msgid "Error importing the framework"
-msgstr "Ошибка при импорте структуры"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:7
-msgid ""
-"Error: presence of invalid data prevent saving. Please make the corrections "
-"and try again."
-msgstr ""
-"Ошибка: наличие неверных данных препятствует сохранению. Внесите исправления "
-"и попробуйте еще раз."
-
-#: koha-tmpl/intranet-tmpl/prog/js/ajax.js:31
-msgid "Error; your data might not have been saved"
-msgstr "Ошибка; ваши данные могли быть не сохранены"
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:120
-msgid "Every"
-msgstr "Каждый"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:730
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:278
-msgid "Excel"
-msgstr "Excel"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:799
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:347
-msgid "Export"
-msgstr "Экспортировать"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:798
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:346
-msgid "Export or print"
-msgstr "Экспорт или печать"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Feb"
-msgstr "Февраль"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "February"
-msgstr "Февраль"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:10
-msgid "First"
-msgstr "Первое"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
-msgid "Fr"
-msgstr "Пт"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
-msgid "Fri"
-msgstr "Птн"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
-msgid "Friday"
-msgstr "Пятница"
-
-#: koha-tmpl/intranet-tmpl/prog/js/acq.js:307
-msgid "Fund amount exceeds parent allocation"
-msgstr "Сумма средств превышает отчисления из источника"
-
-#: koha-tmpl/intranet-tmpl/prog/js/acq.js:309
-msgid "Fund amount exceeds period allocation"
-msgstr "Сумма средств превышает выделенный период"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:295
-#, fuzzy
-msgid "Get item"
-msgstr "Удалить экземпляр"
-
-#: koha-tmpl/intranet-tmpl/prog/js/browser.js:120
-msgid "Go back to the results"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:241
-msgid "Hold is <strong>suspended</strong>"
-msgstr "Резервирование <strong>приостановлено</strong>"
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:155
-msgid "Holds"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:26
-msgid "If the field is a control field, the subfield should be empty"
-msgstr "Если поле является контрольным полем, подполе должно быть пустым."
-
-#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:59
-#, javascript-format
-msgid "Importing to framework: %s. Importing from file: %s."
-msgstr "Импорт в структуру: %s. Импорт из файла: %s."
-
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:493
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:515
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:418
@@ -656,145 +214,30 @@ msgstr "Импорт в структуру: %s. Импорт из файла: %s
 msgid "In your cart"
 msgstr "В Вашей корзине"
 
-#: koha-tmpl/intranet-tmpl/prog/js/ajax.js:18
-msgid "Internal Server Error, please reload the page"
-msgstr "Внутренняя ошибка сервера, пожалуйста, перезагрузите страницу"
+#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:36
+msgid "Error importing the framework"
+msgstr "Ошибка при импорте структуры"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:384
-msgid "Item cannot be checked out. There are no available formats"
-msgstr ""
+#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:43
+#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:73
+msgid "Please select a CSV (.csv) or ODS (.ods) spreadsheet file."
+msgstr "Выберите файл электронной таблицы CSV (.csv) или ODS (.ods)."
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:273
+#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:57
 #, javascript-format
-msgid "Item hasn't been transferred yet from %s"
-msgstr "Экземпляр ещё не был перемещён с %s"
+msgid "Are you sure you want to replace the fields and subfields for the %s framework structure? The existing structure will be overwritten! For safety reasons, it is recommended to use the export option to make a backup first."
+msgstr "Вы действительно хотите заменить поля и подполя в структуре шаблона %s? Существующая структура будет перезаписана! По соображениям безопасности рекомендуется использовать опцию экспорта, чтобы сначала сделать резервную копию."
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:271
+#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:59
 #, javascript-format
-msgid "Item is <strong>in transit</strong> from %s since %s"
-msgstr "Экземпляр <strong>в пути</strong> из %s с %s"
+msgid "Importing to framework: %s. Importing from file: %s."
+msgstr "Импорт в структуру: %s. Импорт из файла: %s."
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:257
-msgid "Item is <strong>waiting here</strong>"
-msgstr "Экземпляр <strong>ожидает здесь</strong>"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:262
-msgid "Item is <strong>waiting</strong>"
-msgstr "Экземпляр <strong>ожидает</strong>"
-
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:415
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:418
-#, javascript-format
-msgid "Items in your cart: %s"
-msgstr "Экземпляры в вашей корзине: %s "
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Jan"
-msgstr "Январь"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "January"
-msgstr "Январь"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Jul"
-msgstr "Июль"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "July"
-msgstr "Июль"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Jun"
-msgstr "Июнь"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "June"
-msgstr "Июнь"
-
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:11
-msgid "Last"
-msgstr "Последнее"
-
-#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:98
-#: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:113
-msgid "Loading"
-msgstr "Загружается"
-
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:20
-msgid "Loading more results…"
-msgstr "Загрузка дополнительных результатов…"
-
-#: koha-tmpl/intranet-tmpl/prog/js/ajax.js:35
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:20
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:4
-msgid "Loading..."
-msgstr "Идёт загрузка…"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:274
-msgid "Loading... you may continue scanning."
-msgstr "Загрузка... вы можете продолжить сканирование."
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:79
-msgid "Log in to your OverDrive account"
-msgstr ""
-
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:138
-msgid "Log out of your OverDrive account"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Mar"
-msgstr "Март"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "March"
-msgstr "Март"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "May"
-msgstr "Май"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
-msgid "Mo"
-msgstr "Пн"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
-msgid "Mon"
-msgstr "Пнд"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
-msgid "Monday"
-msgstr "Понедельник"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:480
-msgid "Must be renewed at the library"
-msgstr "Необходимо продлить в библиотеке"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:187
-msgid ""
-"NOTE: Fields listed in the 'UniqueItemsFields' system preference will not be "
-"copied"
-msgstr ""
-"ПРИМЕЧАНИЕ: Поля, перечисленные в системной настройке 'UniqueItemsFields', "
-"не будут скопированы."
-
-#: koha-tmpl/intranet-tmpl/prog/js/acq.js:341
-msgid "New budget-parent is beneath budget"
-msgstr "Новый источник сметы меньше бюджета"
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:88
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:90
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:13
+msgid "Previous"
+msgstr "Предыдущее"
 
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:93
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:95
@@ -803,105 +246,138 @@ msgstr "Новый источник сметы меньше бюджета"
 msgid "Next"
 msgstr "Следующее"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:249
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:97
+#, fuzzy
+msgid "Results"
+msgstr "Возобновить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:120
+msgid "Go back to the results"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:3
 #, javascript-format
-msgid "Next available %s item"
-msgstr "Следующий доступный %s экземпляр"
+msgid "Please enter a valid date (should match %s)."
+msgstr "Пожалуйста, введите правильную дату (должна соответствовать %s)."
 
-# нет (memberentrygen)
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
-msgid "No"
-msgstr "нет"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:108
+msgid "Done"
+msgstr "Выполнено"
 
-#: koha-tmpl/intranet-tmpl/prog/js/localcovers.js:46
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:98
-#: koha-tmpl/opac-tmpl/bootstrap/js/localcovers.js:25
-#: koha-tmpl/opac-tmpl/bootstrap/js/localcovers.js:54
-msgid "No cover image available"
-msgstr "Изображение обложки не доступно"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:109
+msgid "Prev"
+msgstr "Предыдущее"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:15
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:562
-msgid "No data available in table"
-msgstr "Нет данных в таблице"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:111
+msgid "Today"
+msgstr "Сегодня"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:17
-msgid "No entries to show"
-msgstr "Нет записей для отображения"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "January"
+msgstr "Январь"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:177
-msgctxt "Bibliographic record"
-msgid "No item was added to your cart"
-msgstr "Ни один экземпляр не добавлен в вашу корзину"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "February"
+msgstr "Февраль"
 
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:221
-msgid "No item was added to your cart (already in your cart)!"
-msgstr "Экземпляр не был добавлен в вашу корзину (уже в вашей корзине)"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "March"
+msgstr "Март"
 
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:218
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:311
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:432
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:447
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:457
-#: koha-tmpl/intranet-tmpl/prog/js/cart.js:6
-#: koha-tmpl/intranet-tmpl/prog/js/cart.js:32
-#: koha-tmpl/intranet-tmpl/prog/js/cart.js:52
-msgid "No item was selected"
-msgstr "Ни одной единицы не было выбрано"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "April"
+msgstr "Апрель"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:174
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:269
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:351
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:382
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:397
-msgctxt "Bibliographic record"
-msgid "No item was selected"
-msgstr "Экземпляр не выбран"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "May"
+msgstr "Май"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:671
-msgid "No itemtype"
-msgstr "Нет класса экземпляра"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:112
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "June"
+msgstr "Июнь"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:23
-msgid "No matching records found"
-msgstr "Соответствующих записей не найдено"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "July"
+msgstr "Июль"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:499
-#, javascript-format
-msgid "No renewal before %s"
-msgstr "Нет продления до %s"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "August"
+msgstr "Август"
 
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:24
-msgid "No results found"
-msgstr "Ничего не найдено"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "September"
+msgstr "Сентябрь"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:202
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:492
-msgid "Not allowed: overdue"
-msgstr "Не разрешено: просрочка"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "October"
+msgstr "Октябрь"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:200
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:485
-msgid "Not allowed: patron restricted"
-msgstr "Не разрешено: читатель имеет ограничения"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "November"
+msgstr "Ноябрь"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:473
-msgid "Not renewable"
-msgstr "Не продлевается"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
+msgid "December"
+msgstr "Декабрь"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
-msgid "Note: _ALL_ value will override all other values"
-msgstr "Примечание: значение _ALL_ отменит все другие значения."
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Jan"
+msgstr "Январь"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:337
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:364
-#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:372
-msgid "Nothing is selected"
-msgstr "Ничего не выбрано"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Feb"
+msgstr "Февраль"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:25
-msgid "Nothing to save"
-msgstr "Нечего сохранять"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Mar"
+msgstr "Март"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Apr"
+msgstr "Апрель"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:115
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Jun"
+msgstr "Июнь"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Jul"
+msgstr "Июль"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Aug"
+msgstr "Август"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Sep"
+msgstr "Сентябрь"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
+msgid "Oct"
+msgstr "Октябрь"
 
 # нет (memberentrygen)
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
@@ -909,55 +385,116 @@ msgstr "Нечего сохранять"
 msgid "Nov"
 msgstr "Ноябрь"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "November"
-msgstr "Ноябрь"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:677
-msgid "Number of checkouts by item type"
-msgstr "Количество книговыдач по классу экземпляра"
-
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:75
-msgid "Number of issues to display to staff must be a number"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:79
-msgid "Number of issues to display to the public must be a number"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:185
-msgid "Number of items to add"
-msgstr "Количество экземпляров для добавления"
-
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Oct"
-msgstr "Октябрь"
+msgid "Dec"
+msgstr "Декабрь"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "October"
-msgstr "Октябрь"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
+msgid "Sunday"
+msgstr "Воскресенье"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:466
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:313
-msgid "On hold"
-msgstr "Зарезервировано"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
+msgid "Monday"
+msgstr "Понедельник"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:368
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:757
-msgid "On-site checkout"
-msgstr "Оформление выдачи на месте"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
+msgid "Tuesday"
+msgstr "Вторник"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:127
-msgid "OverDrive account page"
-msgstr ""
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
+msgid "Wednesday"
+msgstr "Среда"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:125
-msgid "Patron note"
-msgstr "Примечание читателя"
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
+msgid "Thursday"
+msgstr "Четверг"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
+msgid "Friday"
+msgstr "Пятница"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
+msgid "Saturday"
+msgstr "Суббота"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
+msgid "Sun"
+msgstr "Вск"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
+msgid "Mon"
+msgstr "Пнд"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
+msgid "Tue"
+msgstr "Втр"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
+msgid "Wed"
+msgstr "Срд"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
+msgid "Thu"
+msgstr "Чтв"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
+msgid "Fri"
+msgstr "Птн"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
+msgid "Sat"
+msgstr "Сбт"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+msgid "Su"
+msgstr "Вс"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+msgid "Mo"
+msgstr "Пн"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+msgid "Tu"
+msgstr "Вт"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+msgid "We"
+msgstr "Ср"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+msgid "Th"
+msgstr "Чт"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+msgid "Fr"
+msgstr "Пт"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
+msgid "Sa"
+msgstr "Сб"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
+msgid "Wk"
+msgstr "Нед"
+
+#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:180
+msgid "Select date"
+msgstr "Выбрать дату"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:86
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:354
@@ -965,192 +502,239 @@ msgstr "Примечание читателя"
 msgid "Place hold"
 msgstr "Установить резервирование"
 
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:12
+msgid "Please note that this external search could replace the current record."
+msgstr "Обратите внимание, что этот внешний поиск может заменить текущую запись."
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:32
+#, javascript-format
+msgid "%s item(s) are attached to this record. You must delete all items before deleting this record."
+msgstr "%s экземпляр(ов) присоединены к этой записи. Перед удалением этой записи вам необходимо удалить все экземпляры."
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:35
+#, javascript-format
+msgid "Warning: This record is used in %s order(s). Deleting it could cause serious issues on acquisition module. Are you sure you want to delete this record?"
+msgstr "Предупреждение: эта запись используется в %s заказах. Удаление может вызвать серьезные проблемы с модулем комплектования. Вы действительно хотите удалить эту запись?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:37
+#, javascript-format
+msgid "%s order(s) are using this record. You need order managing permissions to delete this record."
+msgstr "%s заказов используют эту запись. Для удаления этой записи необходимы разрешения на управление заказами."
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:41
+#, javascript-format
+msgid "%s deleted order(s) are using this record. Are you sure you want to delete this record?"
+msgstr "%s удаленных заказов используют эту запись. Вы действительно хотите удалить эту запись?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:43
+#, javascript-format
+msgid "%s deleted order(s) are using this record. You need order managing permissions to delete this record."
+msgstr "%s заказов используют эту запись. Для удаления этой записи необходимо разрешение на управление заказами."
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:46
+#, javascript-format
+msgid "%s holds(s) for this record. Are you sure you want to delete this record?"
+msgstr "%s резервирований для этой записи. Вы действительно хотите удалить эту запись?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:48
+#, fuzzy, javascript-format
+msgid "%s subscription(s) are attached to this record. You must delete all subscription before deleting this record."
+msgstr "%s экземпляр(ов) присоединены к этой записи. Перед удалением этой записи вам необходимо удалить все экземпляры."
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:50
+msgid "Are you sure you want to delete this record?"
+msgstr "Вы уверены, что хотите удалить эту запись?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:66
+#, javascript-format
+msgid "%s hold(s) on this record. You must delete all holds before deleting all items."
+msgstr "%s резервирований на этой записи. Перед удалением всех экземпляров вы должны удалить все резервирования."
+
+#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:68
+#, javascript-format
+msgid "Are you sure you want to delete the %s attached items?"
+msgstr "Вы действительно хотите удалить %s выбранных экземпляров?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:121
+msgid "(select to create)"
+msgstr "(выберите для создания)"
+
+#: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:634
+msgid "Something went wrong. Maybe the value already exists?"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/categories.js:10
+msgid "Category code can only contain the following characters: letters, numbers, - and _."
+msgstr "Код типа может содержать только следующие символы: буквы, цифры, - и _."
+
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:21
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:91
 #: koha-tmpl/intranet-tmpl/prog/js/categories.js:94
 msgid "Please choose an enrollment period in months OR by date."
 msgstr "Пожалуйста, выберите период регистрации в месяцах ИЛИ по дате."
 
-#: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:52
-msgid "Please choose at least one external target"
-msgstr "Пожалуйста, выберите хотя бы одну внешнюю цель"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:121
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:123
+msgid "Checked in"
+msgstr "Возвращено"
 
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:11
-#, javascript-format
-msgid "Please delete %s character(s)"
-msgstr "Пожалуйста, удалите %s символов"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:125
+msgid "Patron note"
+msgstr "Примечание читателя"
 
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:15
-#, javascript-format
-msgid "Please enter %s or more characters"
-msgstr "Введите %s или более символов"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:128
+msgid "Unable to check in"
+msgstr "Невозможно сделать возврат"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:3
-#, javascript-format
-msgid "Please enter a valid date (should match %s)."
-msgstr "Пожалуйста, введите правильную дату (должна соответствовать %s)."
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:144
+msgid "Confirm"
+msgstr "Подтвердить"
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:96
-msgid "Please fill at least one template."
-msgstr "Пожалуйста, заполните хотя бы один шаблон."
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:187
+msgid "Renewed, due:"
+msgstr "Продлено, дата возврата:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:12
-msgid "Please note that this external search could replace the current record."
-msgstr ""
-"Обратите внимание, что этот внешний поиск может заменить текущую запись."
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:190
+msgid "Renew failed:"
+msgstr "Не удалось продлить:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:43
-#: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:73
-msgid "Please select a CSV (.csv) or ODS (.ods) spreadsheet file."
-msgstr "Выберите файл электронной таблицы CSV (.csv) или ODS (.ods)."
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:192
+msgid "not checked out"
+msgstr "не выдано"
 
-#: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:44
-msgid "Please select or enter a sound."
-msgstr "Пожалуйста, выберите или введите звук."
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:194
+msgid "too many renewals"
+msgstr "слишком много продлений"
 
-#: koha-tmpl/intranet-tmpl/prog/js/letter.js:87
-#, javascript-format
-msgid "Please specify title and content for %s"
-msgstr "Укажите заглавие и содержание для %s"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:196
+msgid "too many consecutive renewals without being seen by the library"
+msgstr "слишком много последовательных продлений, которые не видны библиотеке"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:26
-msgid ""
-"Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your "
-"system clipboard.<br><br>To cancel, click this message or press escape."
-msgstr ""
-"Нажмите клавишу <i>Ctrl</i> или <i>⌘</i> + <i>С</i> для копирования данных "
-"из таблицы<br>в буфер обмена системы.<br><br> Чтобы отменить, нажмите на это "
-"сообщение или нажмите клавишу Escape."
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:198
+msgid "on hold"
+msgstr "зарезервировано"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:109
-msgid "Prev"
-msgstr "Предыдущее"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:200
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:485
+msgid "Not allowed: patron restricted"
+msgstr "Не разрешено: читатель имеет ограничения"
 
-#: koha-tmpl/intranet-tmpl/prog/js/browser.js:88
-#: koha-tmpl/intranet-tmpl/prog/js/browser.js:90
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:13
-msgid "Previous"
-msgstr "Предыдущее"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:202
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:492
+msgid "Not allowed: overdue"
+msgstr "Не разрешено: просрочка"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:206
+msgid "reason unknown"
+msgstr "причина неизвестна"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:274
+msgid "Loading... you may continue scanning."
+msgstr "Загрузка... вы можете продолжить сканирование."
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:291
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:656
+msgid "Today's checkouts"
+msgstr "Выдач сегодня"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:293
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:658
 msgid "Previous checkouts"
 msgstr "Предыдущие выдачи"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:754
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
-#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:302
-msgid "Print"
-msgstr "Печать"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:347
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:736
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:136
+msgid "by _AUTHOR_"
+msgstr "   _AUTHOR_"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:21
-msgid "Processing..."
-msgstr "Обработка продолжается…"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:368
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:757
+msgid "On-site checkout"
+msgstr "Оформление выдачи на месте"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:112
-msgid "Reject"
-msgstr "Отклонить"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:466
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:593
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:313
+msgid "On hold"
+msgstr "Зарезервировано"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:135
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:138
-msgid "Rejected"
-msgstr "Отклонено"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:473
+msgid "Not renewable"
+msgstr "Не продлевается"
 
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:26
-msgid "Remove all items"
-msgstr "Удалить все экземпляры"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:480
+msgid "Must be renewed at the library"
+msgstr "Необходимо продлить в библиотеке"
 
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:27
-msgid "Remove item"
-msgstr "Удалить экземпляр"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:87
-msgid "Remove restriction?"
-msgstr "Удалить ограничение?"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:190
-msgid "Renew failed:"
-msgstr "Не удалось продлить:"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:543
-msgid "Renewal denied by syspref"
-msgstr "В продлении отказано системной настройкой"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:187
-msgid "Renewed, due:"
-msgstr "Продлено, дата возврата:"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1039
-msgid "Resolve"
-msgstr "Разрешить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/browser.js:97
-#, fuzzy
-msgid "Results"
-msgstr "Возобновить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:229
-msgid "Resume"
-msgstr "Возобновить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
-msgid "Sa"
-msgstr "Сб"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
-msgid "Sat"
-msgstr "Сбт"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
-msgid "Saturday"
-msgstr "Суббота"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:41
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:499
 #, javascript-format
-msgid "Saved preference %s"
-msgstr "Сохраненный параметр %s"
-
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:28
-msgid "Saving..."
-msgstr "Сохранение…"
+msgid "No renewal before %s"
+msgstr "Нет продления до %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:506
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:534
 msgid "Scheduled for automatic renewal"
 msgstr "Запланировано автоматическое продление"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:22
-msgid "Search:"
-msgstr "Искать:"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:513
+msgid "Can no longer be auto-renewed - number of checkout days exceeded"
+msgstr "Больше нельзя продлевать автоматически - количество дней книговыдачи превышено"
 
-# было Искание
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:25
-msgid "Searching…"
-msgstr "Поиск…"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:520
+msgid "Automatic renewal failed, patron has unpaid fines"
+msgstr "Не удалось автоматическое продление, у патрона есть неоплаченные штрафы"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
-msgid "Select all"
-msgstr "Выделить всё"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:527
+msgid "Automatic renewal failed, account expired"
+msgstr "Ошибка автоматического продления, срок действия учетной записи истек"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
-msgid "Select all pending"
-msgstr "Выделить все ожидающие"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:543
+msgid "Renewal denied by syspref"
+msgstr "В продлении отказано системной настройкой"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:180
-msgid "Select date"
-msgstr "Выбрать дату"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:578
+#, javascript-format
+msgid "%s of %s renewals remaining"
+msgstr "%s из %s продлений осталось"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:170
-msgid "Sep"
-msgstr "Сентябрь"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:580
+#, fuzzy, javascript-format
+msgid " and %s of %s unseen renewals remaining"
+msgstr "%s из %s невидимых продлений осталось"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:113
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:171
-msgid "September"
-msgstr "Сентябрь"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:610
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:612
+msgid "Claim returned"
+msgstr "Претензия возвращена"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:671
+msgid "No itemtype"
+msgstr "Нет класса экземпляра"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:677
+msgid "Number of checkouts by item type"
+msgstr "Количество книговыдач по классу экземпляра"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:926
+msgid "Unable to claim as returned"
+msgstr "Невозможно утвердить как возвращенный"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1003
+msgid "Double click to edit"
+msgstr "Дважды нажмите для редактирования"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1039
+msgid "Resolve"
+msgstr "Разрешить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1044
+msgid "Actions"
+msgstr "Действия"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1047
+msgid "Edit notes"
+msgstr "Редактировать примечания"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1110
 msgid "Show 1 claim"
@@ -1166,30 +750,94 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:19
-msgid "Show _MENU_ entries"
-msgstr "Выводить _MENU_ записей"
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1136
+msgid "Update"
+msgstr "Обновить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1137
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:372
+msgid "Cancel"
+msgstr "Отмена"
+
+#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1176
+msgid "Are you sure you want to delete this return claim?"
+msgstr "Вы действительно хотите удалить это претензию о возврате?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:10
+msgid "First"
+msgstr "Первое"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:11
+msgid "Last"
+msgstr "Последнее"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:15
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:562
+msgid "No data available in table"
+msgstr "Нет данных в таблице"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:16
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr "Показаны _START_ по _END_ из _TOTAL_ записей"
 
-#: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:35
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:17
+msgid "No entries to show"
+msgstr "Нет записей для отображения"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:18
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(отфильтровано с _MAX_ записей всего)"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:19
+msgid "Show _MENU_ entries"
+msgstr "Выводить _MENU_ записей"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:21
+msgid "Processing..."
+msgstr "Обработка продолжается…"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:22
+msgid "Search:"
+msgstr "Искать:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:23
+msgid "No matching records found"
+msgstr "Соответствующих записей не найдено"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:25
+msgid "Copy to clipboard"
+msgstr "Копировать в буфер обмена"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:26
+msgid "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape."
+msgstr "Нажмите клавишу <i>Ctrl</i> или <i>⌘</i> + <i>С</i> для копирования данных из таблицы<br>в буфер обмена системы.<br><br> Чтобы отменить, нажмите на это сообщение или нажмите клавишу Escape."
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:28
 #, javascript-format
-msgid "Showing results for %s"
-msgstr "Показаны результаты для %s"
+msgid "Copied %d rows to clipboard"
+msgstr "Скопировано %d строк в буфер обмена"
 
-#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:70
-msgid "Some budgets are not defined in item records"
-msgstr "Некоторые сметы не определены в записях экземпляров"
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:29
+msgid "Copied one row to clipboard"
+msgstr "Скопирована одна строка в буфер обмена"
 
-#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:78
-msgid "Some required item subfields are not set"
-msgstr ""
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:37
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:39
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:766
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:768
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:314
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:316
+msgid "Clear filter"
+msgstr "Очистить фильтр"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:525
-msgid "Something went wrong when loading the table."
-msgstr ""
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:51
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:122
+msgid "All"
+msgstr "все"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:365
+msgid "a an the"
+msgstr "   "
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:523
 #, javascript-format
@@ -1198,28 +846,124 @@ msgid ""
 "%s: %s"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:634
-msgid "Something went wrong. Maybe the value already exists?"
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:525
+msgid "Something went wrong when loading the table."
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
-msgid "Su"
-msgstr "Вс"
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:730
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:278
+msgid "Excel"
+msgstr "Excel"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
-msgid "Sun"
-msgstr "Вск"
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:738
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:286
+msgid "CSV"
+msgstr "CSV"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
-msgid "Sunday"
-msgstr "Воскресенье"
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:746
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:294
+msgid "Copy"
+msgstr "Копировать"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:754
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:32
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:302
+msgid "Print"
+msgstr "Печать"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:783
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:331
+msgid "Columns settings"
+msgstr "Настройки столбцов"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:784
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:332
+msgid "Columns"
+msgstr "Столбцы"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:798
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:346
+msgid "Export or print"
+msgstr "Экспорт или печать"
+
+#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:799
+#: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:347
+msgid "Export"
+msgstr "Экспортировать"
+
+#: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:53
+msgid "This field is mandatory and must have at least one mapping"
+msgstr "Это поле является обязательным и должно иметь хотя бы одно соответствие."
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:6
+msgid "This pickup location is not allowed according to circulation rules"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:182
+msgid " (current) "
+msgstr " (текущий)"
+
+# нет (memberentrygen)
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
+msgid "No"
+msgstr "нет"
+
+# да (memberentrygen)
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:212
+msgid "Yes"
+msgstr "да"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:229
+msgid "Resume"
+msgstr "Возобновить"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:232
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:371
 msgid "Suspend"
 msgstr "Приостановить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:241
+msgid "Hold is <strong>suspended</strong>"
+msgstr "Резервирование <strong>приостановлено</strong>"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:243
+#, javascript-format
+msgid "until %s"
+msgstr "до %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:249
+#, javascript-format
+msgid "Next available %s item"
+msgstr "Следующий доступный %s экземпляр"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:257
+msgid "Item is <strong>waiting here</strong>"
+msgstr "Экземпляр <strong>ожидает здесь</strong>"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:259
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:263
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:265
+#, javascript-format
+msgid "at %s"
+msgstr "в %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:262
+msgid "Item is <strong>waiting</strong>"
+msgstr "Экземпляр <strong>ожидает</strong>"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:271
+#, javascript-format
+msgid "Item is <strong>in transit</strong> from %s since %s"
+msgstr "Экземпляр <strong>в пути</strong> из %s с %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:273
+#, javascript-format
+msgid "Item hasn't been transferred yet from %s"
+msgstr "Экземпляр ещё не был перемещён с %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:309
+msgid "Unable to resume, hold not found"
+msgstr "Невозможно возобновить, резервирование не найдено"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:357
 msgid "Suspend hold on"
@@ -1229,21 +973,80 @@ msgstr "Приостановить резервирование на"
 msgid "Suspend until:"
 msgstr "Приостановить до:"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:148
-msgid "Testing..."
-msgstr "Тестирование..."
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:366
+msgid "Clear date to suspend indefinitely"
+msgstr "Очистить дату, чтобы приостановить на неопределенный срок"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
-msgid "Th"
-msgstr "Чт"
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:390
+msgid "Unable to suspend hold, invalid date"
+msgstr "Невозможно приостановить резервирование, недействительная дата"
 
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:51
-msgid "The conditional comparison operator should be filled."
-msgstr "Оператор условного сравнения должен быть заполнен."
+#: koha-tmpl/intranet-tmpl/prog/js/holds.js:393
+#, fuzzy
+msgid "Unable to suspend hold, hold not found"
+msgstr "Невозможно приостановить резервирование, резервирование не найдено"
+
+#: koha-tmpl/intranet-tmpl/prog/js/item_search_fields.js:18
+msgid "Are you sure you want to delete this field?"
+msgstr "Вы действительно хотите удалить это поле?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:21
+#, javascript-format
+msgid "A default letter with the code '%s' already exists."
+msgstr "Письмо по умолчанию с кодом '%s' уже существует."
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:23
+#, javascript-format
+msgid "A letter with the code '%s' already exists for '%s'."
+msgstr "Письмо с кодом '%s' уже существует для '%s'."
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:87
+#, javascript-format
+msgid "Please specify title and content for %s"
+msgstr "Укажите заглавие и содержание для %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/letter.js:96
+msgid "Please fill at least one template."
+msgstr "Пожалуйста, заполните хотя бы один шаблон."
+
+#: koha-tmpl/intranet-tmpl/prog/js/localcovers.js:46
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:98
+#: koha-tmpl/opac-tmpl/bootstrap/js/localcovers.js:25
+#: koha-tmpl/opac-tmpl/bootstrap/js/localcovers.js:54
+msgid "No cover image available"
+msgstr "Изображение обложки не доступно"
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:17
+msgid "Both subfield values should be filled or empty."
+msgstr "Оба значения подполей должны быть заполнены или пусты."
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:21
+msgid "The destination should be filled."
+msgstr "Пункт назначения должен быть заполнен."
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:26
+msgid "If the field is a control field, the subfield should be empty"
+msgstr "Если поле является контрольным полем, подполе должно быть пустым."
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:31
+msgid "A control field cannot be used with a regular field."
+msgstr "Контрольное поле нельзя использовать с обычным полем."
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:37
+msgid "The source subfield should be filled for update."
+msgstr "Подполе источника должно быть заполнено для обновления."
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:42
+msgid "The source field should be filled."
+msgstr "Поле источника должно быть заполнено."
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:47
 msgid "The conditional field should be filled."
 msgstr "Условное поле должно быть заполнено."
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:51
+msgid "The conditional comparison operator should be filled."
+msgstr "Оператор условного сравнения должен быть заполнен."
 
 #: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:57
 msgid "The conditional regular expression should be filled."
@@ -1253,41 +1056,173 @@ msgstr "Условное очередное выражение должно бы
 msgid "The conditional value should be filled."
 msgstr "Условное значение должно быть заполнено."
 
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:21
-msgid "The destination should be filled."
-msgstr "Пункт назначения должен быть заполнен."
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:120
+msgid "Every"
+msgstr "Каждый"
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:264
+msgid "Are you sure you wish to delete this template action?"
+msgstr "Вы действительно хотите удалить это действие шаблона?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:268
+msgid "Are you sure you wish to delete this template?"
+msgstr "Вы действительно хотите удалить этот шаблон?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:314
+#, javascript-format
+msgid "Edit action %s"
+msgstr "Редактировать действие %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:317
+msgid "Update action"
+msgstr "Обновить действие"
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:51
+#, fuzzy
+msgid "Are you sure you want to delete this message? This cannot be undone."
+msgstr "Вы уверены, что хотите обновить категорию с ребёнка на совершеннолетнего?  Это нельзя отменить."
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:120
+msgid "Dates of birth should be entered in the format 'MM/DD/YYYY'"
+msgstr "Даты рождения должны быть введены в формате 'ММ/ДД/ГГГГ'"
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:122
+msgid "Dates of birth should be entered in the format 'YYYY-MM-DD'"
+msgstr "Даты рождения должны быть введены в формате 'ГГГГ-ММ-ДД'"
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:124
+msgid "Dates of birth should be entered in the format 'DD/MM/YYYY'"
+msgstr "Даты рождения должны быть введены в формате 'ДД/ММ/ГГГГ'"
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:126
+msgid "Dates of birth should be entered in the format 'DD.MM.YYYY'"
+msgstr "Даты рождения должны быть введены в формате 'ДД.ММ.ГГГГ'"
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:135
+msgid "Are you sure you want to update this child to an Adult category? This cannot be undone."
+msgstr "Вы уверены, что хотите обновить категорию с ребёнка на совершеннолетнего?  Это нельзя отменить."
+
+#: koha-tmpl/intranet-tmpl/prog/js/members-menu.js:150
+msgid "Are you sure you want to renew this patron's registration?"
+msgstr "Вы действительно хотите продолжить регистрацию этого посетителя?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/merge-record.js:72
 msgctxt "Bibliographic record"
-msgid ""
-"The field is non-repeatable and already exists in the destination record. "
-"Therefore, you cannot add it."
+msgid "The field is non-repeatable and already exists in the destination record. Therefore, you cannot add it."
+msgstr "Поле не является повторяемым и уже существует в целевой записи. Следовательно, вы не можете его добавить."
+
+#: koha-tmpl/intranet-tmpl/prog/js/merge-record.js:107
+msgctxt "Bibliographic record"
+msgid "The subfield is non-repeatable and already exists in the destination record. Therefore, you cannot add it."
+msgstr "Подполе не является повторяемым и уже существует в записи назначения. Следовательно, вы не можете его добавить."
+
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:8
+msgid "The results could not be loaded"
+msgstr "Результаты не могут быть загружены"
+
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:11
+#, javascript-format
+msgid "Please delete %s character(s)"
+msgstr "Пожалуйста, удалите %s символов"
+
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:15
+#, javascript-format
+msgid "Please enter %s or more characters"
+msgstr "Введите %s или более символов"
+
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:20
+msgid "Loading more results…"
+msgstr "Загрузка дополнительных результатов…"
+
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:22
+#, javascript-format
+msgid "You can only select %s item(s)"
+msgstr "Вы можете выбрать только %s экземпляр(ов)"
+
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:24
+msgid "No results found"
+msgstr "Ничего не найдено"
+
+# было Искание
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:25
+msgid "Searching…"
+msgstr "Поиск…"
+
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:26
+msgid "Remove all items"
+msgstr "Удалить все экземпляры"
+
+#: koha-tmpl/intranet-tmpl/prog/js/select2.js:27
+msgid "Remove item"
+msgstr "Удалить экземпляр"
+
+#: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:4
+msgid "Are you sure you want to close this subscription?"
+msgstr "Действительно ли Вы хотите закрыть эту подписку?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:10
+msgid "Are you sure you want to reopen this subscription?"
+msgstr "Действительно ли Вы хотите заново открыть эту подписку?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/serials-toolbar.js:17
+msgid "Are you sure you want to delete this subscription?"
+msgstr "Действительно ли Вы хотите удалить эту подписку?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:36
+msgid "Add an SMS cellular provider"
+msgstr "Добавить сотового оператора SMS"
+
+#: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:44
+#, javascript-format
+msgid "Edit provider %s"
+msgstr "Редактировать провайдера %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:67
+#, javascript-format
+msgid "Are you sure you want to delete %s? %s patron(s) are using it!"
+msgstr "Вы действительно хотите удалить %s? %s читателей используют его!"
+
+#: koha-tmpl/intranet-tmpl/prog/js/sms_providers.js:69
+#, javascript-format
+msgid "Are you sure you want to delete %s?"
+msgstr "Вы действительно хотите удалить %s?"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:58
+msgid "The vendor does not exist"
+msgstr "Поставщик не существует"
+
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:75
+msgid "Number of issues to display to staff must be a number"
 msgstr ""
-"Поле не является повторяемым и уже существует в целевой записи. "
-"Следовательно, вы не можете его добавить."
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:201
-msgid "The following values are not formatted correctly:"
-msgstr "Следующие значения отформатированы неправильно:"
+#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:79
+msgid "Number of issues to display to the public must be a number"
+msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:128
-msgctxt "Bibliographic record"
-msgid "The item has been added to your cart"
-msgstr "Этот экземпляр был добавлен в вашу корзину"
+#: koha-tmpl/intranet-tmpl/prog/js/table_filters.js:26
+msgid "Deactivate filters"
+msgstr "Отключить фильтры"
 
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:260
-msgid "The item has been removed from your cart"
-msgstr "Эта единица удалена из вашей корзины"
+#: koha-tmpl/intranet-tmpl/prog/js/table_filters.js:44
+msgid "Activate filters"
+msgstr "Включить фильтры"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:218
-msgctxt "Bibliographic record"
-msgid "The item has been removed from your cart"
-msgstr "Экземпляр был удален из вашей корзины"
+#: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:18
+msgid "View comparison"
+msgstr "Просмотреть сравнение"
 
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:111
-msgctxt "Bibliographic record"
-msgid "The item is already in your cart"
-msgstr "Экземпляр уже есть в вашей корзине"
+#: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:35
+#, javascript-format
+msgid "Showing results for %s"
+msgstr "Показаны результаты для %s"
+
+#: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:42
+msgid "You can select maximum of two checkboxes"
+msgstr "Вы можете установить максимум два флажка"
+
+#: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:128
+msgid "You must select two entries to compare"
+msgstr "Вы должны выбрать две записи для сравнения"
 
 #: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:9
 msgid "The page entered is not a number."
@@ -1298,257 +1233,244 @@ msgstr "Введенная страница не является числом."
 msgid "The page should be a number between 1 and %s."
 msgstr "Страница должна быть числом от 1 до %s."
 
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:8
-msgid "The results could not be loaded"
-msgstr "Результаты не могут быть загружены"
+#: koha-tmpl/intranet-tmpl/prog/js/z3950_search.js:52
+msgid "Please choose at least one external target"
+msgstr "Пожалуйста, выберите хотя бы одну внешнюю цель"
 
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:42
-msgid "The source field should be filled."
-msgstr "Поле источника должно быть заполнено."
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:87
+msgid "Remove restriction?"
+msgstr "Удалить ограничение?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:37
-msgid "The source subfield should be filled for update."
-msgstr "Подполе источника должно быть заполнено для обновления."
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:113
+msgid "You must select checkout(s) to export"
+msgstr "Вы должны выбрать выдачу(и) для экспорта"
 
-#: koha-tmpl/intranet-tmpl/prog/js/merge-record.js:107
-msgctxt "Bibliographic record"
-msgid ""
-"The subfield is non-repeatable and already exists in the destination record. "
-"Therefore, you cannot add it."
-msgstr ""
-"Подполе не является повторяемым и уже существует в записи назначения. "
-"Следовательно, вы не можете его добавить."
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:7
+msgid "Error: presence of invalid data prevent saving. Please make the corrections and try again."
+msgstr "Ошибка: наличие неверных данных препятствует сохранению. Внесите исправления и попробуйте еще раз."
 
-#: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:58
-msgid "The vendor does not exist"
-msgstr "Поставщик не существует"
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:25
+msgid "Nothing to save"
+msgstr "Нечего сохранять"
 
-#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:52
-msgid "There is no record selected"
-msgstr "Не выбрана ни одна запись"
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:28
+msgid "Saving..."
+msgstr "Сохранение…"
 
-#: koha-tmpl/intranet-tmpl/prog/js/elasticsearch-mappings.js:53
-msgid "This field is mandatory and must have at least one mapping"
-msgstr ""
-"Это поле является обязательным и должно иметь хотя бы одно соответствие."
-
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:136
-msgid "This item has been added to your cart"
-msgstr "Эта единица была добавлена в Вашу корзину"
-
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:119
-msgid "This item is already in your cart"
-msgstr "Эта единица уже есть в Вашей корзине"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:6
-msgid "This pickup location is not allowed according to circulation rules"
-msgstr ""
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
-msgid "Thu"
-msgstr "Чтв"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
-msgid "Thursday"
-msgstr "Четверг"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:111
-msgid "Today"
-msgstr "Сегодня"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:291
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:656
-msgid "Today's checkouts"
-msgstr "Выдач сегодня"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
-msgid "Tu"
-msgstr "Вт"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
-msgid "Tue"
-msgstr "Втр"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
-msgid "Tuesday"
-msgstr "Вторник"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:128
-msgid "Unable to check in"
-msgstr "Невозможно сделать возврат"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:926
-msgid "Unable to claim as returned"
-msgstr "Невозможно утвердить как возвращенный"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:309
-msgid "Unable to resume, hold not found"
-msgstr "Невозможно возобновить, резервирование не найдено"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:393
-#, fuzzy
-msgid "Unable to suspend hold, hold not found"
-msgstr "Невозможно приостановить резервирование, резервирование не найдено"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:390
-msgid "Unable to suspend hold, invalid date"
-msgstr "Невозможно приостановить резервирование, недействительная дата"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:1136
-msgid "Update"
-msgstr "Обновить"
-
-#: koha-tmpl/intranet-tmpl/prog/js/marc_modification_templates.js:317
-msgid "Update action"
-msgstr "Обновить действие"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:17
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:50
-msgid "Update item"
-msgstr "Обновить экземпляр"
-
-#: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:18
-msgid "View comparison"
-msgstr "Просмотреть сравнение"
-
-#: koha-tmpl/intranet-tmpl/prog/js/catalog.js:35
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:41
 #, javascript-format
-msgid ""
-"Warning: This record is used in %s order(s). Deleting it could cause serious "
-"issues on acquisition module. Are you sure you want to delete this record?"
-msgstr ""
-"Предупреждение: эта запись используется в %s заказах. Удаление может вызвать "
-"серьезные проблемы с модулем комплектования. Вы действительно хотите удалить "
-"эту запись?"
+msgid "Saved preference %s"
+msgstr "Сохраненный параметр %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:120
-msgid "We"
-msgstr "Ср"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:119
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:165
-msgid "Wed"
-msgstr "Срд"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:118
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:166
-msgid "Wednesday"
-msgstr "Среда"
-
-#: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
-msgid "Wk"
-msgstr "Нед"
-
-# да (memberentrygen)
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:212
-msgid "Yes"
-msgstr "да"
-
-#: koha-tmpl/intranet-tmpl/prog/js/select2.js:22
-#, javascript-format
-msgid "You can only select %s item(s)"
-msgstr "Вы можете выбрать только %s экземпляр(ов)"
-
-#: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:42
-msgid "You can select maximum of two checkboxes"
-msgstr "Вы можете установить максимум два флажка"
-
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:22
-msgid "You can't receive any more items"
-msgstr "Вы не можете получить больше экземпляров "
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
+msgid "modified"
+msgstr "изменено"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:63
 msgid "You have made changes to system preferences."
 msgstr "Вы внесли изменения в параметры системы."
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:149
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:159
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:171
+msgid "Click to collapse this section"
+msgstr "Щёлкните, чтобы свернуть этот раздел"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:156
+msgid "Click to expand this section"
+msgstr "Щёлкните, чтобы раскрыть этот раздел"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
+msgid "Note: _ALL_ value will override all other values"
+msgstr "Примечание: значение _ALL_ отменит все другие значения."
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:201
+msgid "The following values are not formatted correctly:"
+msgstr "Следующие значения отформатированы неправильно:"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:337
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:364
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:372
+msgid "Nothing is selected"
+msgstr "Ничего не выбрано"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:424
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:435
 msgid "You must select at least one record"
 msgstr "Вы должны выбрать по крайней мере одну запись"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:113
-msgid "You must select checkout(s) to export"
-msgstr "Вы должны выбрать выдачу(и) для экспорта"
+#: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:446
+msgid "At least two records must be selected for merging"
+msgstr "Необходимо выбрать как минимум две записи для объединения"
 
-#: koha-tmpl/intranet-tmpl/prog/js/viewlog.js:128
-msgid "You must select two entries to compare"
-msgstr "Вы должны выбрать две записи для сравнения"
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:38
+#, javascript-format
+msgid "AJAX failed to approve tag: %s"
+msgstr "AJAX не удалось утвердить тег: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/ajax.js:25
-msgid "You need to log in again, your session has timed out"
-msgstr "Вам нужно снова войти в систему, время вашего сеанса истекло"
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:44
+#, javascript-format
+msgid "AJAX failed to reject tag: %s"
+msgstr "AJAX не удалось отклонить тег: %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/basket.js:91
-#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:82
-msgid "Your cart is currently empty"
-msgstr "Ваша корзина пока пуста"
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:47
+#, javascript-format
+msgid "%s is permitted!"
+msgstr "%s разрешено!"
 
-#: koha-tmpl/intranet-tmpl/prog/js/datatables.js:365
-msgid "a an the"
-msgstr "   "
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:50
+#, javascript-format
+msgid "%s is prohibited!"
+msgstr "%s запрещено!"
 
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:299
-msgid "already exists in database"
-msgstr " уже существует в базе данных"
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:53
+#, javascript-format
+msgid "%s is neither permitted nor prohibited!"
+msgstr "%s не является ни разрешенным, ни запрещенным!"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
+msgid "Select all"
+msgstr "Выделить всё"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
+msgid "Clear all"
+msgstr "Очистить всё"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:71
+msgid "Select all pending"
+msgstr "Выделить все ожидающие"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:112
+msgid "Reject"
+msgstr "Отклонить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:114
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:117
+msgid "Approved"
+msgstr "Утверждено"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:133
+msgid "Approve"
+msgstr "Утвердить"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:135
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:138
+msgid "Rejected"
+msgstr "Отклонено"
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:148
+msgid "Testing..."
+msgstr "Тестирование..."
+
+#: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:159
+#, javascript-format
+msgid "AJAX error (%s alert)"
+msgstr "AJAX ошибка (%s предупреждение)"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:111
+msgctxt "Bibliographic record"
+msgid "The item is already in your cart"
+msgstr "Экземпляр уже есть в вашей корзине"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:128
+msgctxt "Bibliographic record"
+msgid "The item has been added to your cart"
+msgstr "Этот экземпляр был добавлен в вашу корзину"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:169
+msgctxt "Bibliographic record"
+msgid " item(s) added to your cart"
+msgstr " экземпляр(ов) добавлено в корзину"
 
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:166
 #: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:177
 msgid "already in your cart"
 msgstr "уже есть в Вашей корзине"
 
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:259
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:263
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:265
-#, javascript-format
-msgid "at %s"
-msgstr "в %s"
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:174
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:269
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:351
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:382
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:397
+msgctxt "Bibliographic record"
+msgid "No item was selected"
+msgstr "Экземпляр не выбран"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:347
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:736
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:136
-msgid "by _AUTHOR_"
-msgstr "   _AUTHOR_"
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:177
+msgctxt "Bibliographic record"
+msgid "No item was added to your cart"
+msgstr "Ни один экземпляр не добавлен в вашу корзину"
 
-#: koha-tmpl/intranet-tmpl/prog/js/additem.js:274
-msgid "is duplicated"
-msgstr " — продублирован"
+#: koha-tmpl/opac-tmpl/bootstrap/js/basket.js:218
+msgctxt "Bibliographic record"
+msgid "The item has been removed from your cart"
+msgstr "Экземпляр был удален из вашей корзины"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
-msgid "modified"
-msgstr "изменено"
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:79
+msgid "Log in to your OverDrive account"
+msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:192
-msgid "not checked out"
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:127
+msgid "OverDrive account page"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:138
+msgid "Log out of your OverDrive account"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:145
+#, fuzzy
+msgid "Checkouts"
+msgstr "Выдач сегодня"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:155
+msgid "Holds"
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:290
+#, fuzzy
+msgid "Checked out until: "
+msgstr "Возвращено"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:295
+#, fuzzy
+msgid "Get item"
+msgstr "Удалить экземпляр"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:301
+#, fuzzy
+msgid "Check in"
+msgstr "Возвращено"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:302
+#, fuzzy
+msgid "Are you sure you want to return this item?"
+msgstr "Вы действительно хотите удалить это поле?"
+
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:319
+#, fuzzy
+msgid "Check out"
 msgstr "не выдано"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:198
-msgid "on hold"
-msgstr "зарезервировано"
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:320
+#, fuzzy
+msgid "Are you sure you want to check out this item?"
+msgstr "Вы действительно хотите удалить это поле?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:63
-msgid "quantity values are not filled in or are not numbers"
-msgstr "значения количества не заполнены или не являются числами"
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:355
+#, fuzzy
+msgid "Cancel hold"
+msgstr "Установить резервирование"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:206
-msgid "reason unknown"
-msgstr "причина неизвестна"
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:356
+#, fuzzy
+msgid "Are you sure you want to cancel this hold?"
+msgstr "Вы действительно хотите удалить это поле?"
 
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:196
-msgid "too many consecutive renewals without being seen by the library"
-msgstr "слишком много последовательных продлений, которые не видны библиотеке"
-
-#: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:194
-msgid "too many renewals"
-msgstr "слишком много продлений"
-
-#: koha-tmpl/intranet-tmpl/prog/js/holds.js:243
-#, javascript-format
-msgid "until %s"
-msgstr "до %s"
+#: koha-tmpl/opac-tmpl/bootstrap/js/overdrive.js:384
+msgid "Item cannot be checked out. There are no available formats"
+msgstr ""
 
 #, fuzzy
 #~ msgid "Are you sure you want to expire this recall?"
@@ -1567,9 +1489,7 @@ msgstr "до %s"
 #~ msgstr "Хотите ли Вы на самом деле удалить выбранные единицы?"
 
 #, fuzzy
-#~ msgid ""
-#~ "Are you sure you want to remove this recall and return the item to it's "
-#~ "home library?"
+#~ msgid "Are you sure you want to remove this recall and return the item to it's home library?"
 #~ msgstr "Хотите ли Вы на самом деле удалить выбранные единицы?"
 
 #, fuzzy
@@ -1593,8 +1513,7 @@ msgstr "до %s"
 #~ msgstr "Не разрешено: просрочка"
 
 #~ msgid "One or more selected items cannot be placed on hold."
-#~ msgstr ""
-#~ "Один или несколько выбранных экземпляров не могут быть зарезервированы."
+#~ msgstr "Один или несколько выбранных экземпляров не могут быть зарезервированы."
 
 #~ msgid "Please enter a name for this pattern"
 #~ msgstr "Введите название для этого шаблона"
