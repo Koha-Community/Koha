@@ -233,6 +233,7 @@ $(document).ready(function() {
                             }
                         }
                     },
+                    { "data": "reservenotes" },
                     {
                         "bSortable": false,
                         "mDataProp": function( oObj ) {

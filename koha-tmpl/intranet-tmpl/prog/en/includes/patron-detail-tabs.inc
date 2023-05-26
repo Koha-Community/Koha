@@ -150,6 +150,7 @@
                                     <th>Pickup at</th>
                                     <th>Expiration</th>
                                     <th>Priority</th>
+                                    <th>Notes</th>
                                     <th>Delete?</th>
                                     <th>Suspend?</th>
                                     <th>Status</th>
