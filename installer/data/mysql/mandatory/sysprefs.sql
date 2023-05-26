@@ -545,6 +545,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PassItemMarcToXSLT','0',NULL,'If enabled, item fields in the MARC record will be made avaiable to XSLT sheets. Otherwise they will be removed.','YesNo'),
 ('PatronAnonymizeDelay','',NULL,'Delay for anonymizing patrons', 'Integer'),
 ('PatronAutoComplete','1','Try|Don\'t try','to guess the patron being entered while typing a patron search for circulation or patron search. Only returns the first 10 results at a time.','YesNo'),
+('PatronAutoCompleteSearchMethod','starts_with','Choose which search method to use by default when searching with PatronAutoComplete','starts_with|choice','Choice'),
 ('PatronDuplicateMatchingAddFields','surname|firstname|dateofbirth', NULL,'A list of fields separated by "|" to deduplicate patrons when created','Free'),
 ('patronimages','0',NULL,'Enable patron images for the staff interface','YesNo'),
 ('PatronRemovalDelay','',NULL,'Delay for removing anonymized patrons', 'Integer'),
