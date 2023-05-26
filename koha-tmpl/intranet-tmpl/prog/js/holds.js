@@ -233,7 +233,11 @@ $(document).ready(function() {
                             }
                         }
                     },
-                    { "data": "reservenotes" },
+                    {
+                        "mDataProp": function( oObj ) {
+                            return oObj.reservenotes && oObj.reservenotes.escapeHtml() || "";
+                        }
+                    },
                     {
                         "bSortable": false,
                         "mDataProp": function( oObj ) {
