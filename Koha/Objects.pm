@@ -233,17 +233,16 @@ sub update {
 =head3 filter_by_last_update
 
 my $filtered_objects = $objects->filter_by_last_update({
-    days => $days, from => $date1, to => $date2, days_inclusive => 1,
-    older_than => $days, younger_than => $days,
+    from => $date1, to => $date2,
+    days|older_than => $days, min_days => $days, younger_than => $days,
     datetime => 1,
 });
 
-You should pass at least one of the parameters: days, from, to, older_than,
-younger_than. Make sure that they do not conflict with each other to get
-meaningful results.
-By default, from and to are inclusive and days is exclusive (unless you
-passed the optional days_inclusive parameter).
-By nature older_than and younger_than are exclusive. This cannot be changed.
+You should pass at least one of the parameters: from, to, days|older_than,
+min_days or younger_than. Make sure that they do not conflict with each other
+to get meaningful results.
+Note: from, to and min_days are inclusive! And by nature days|older_than
+and younger_than are exclusive.
 The optional parameter datetime allows datetime comparison.
 
 The from and to parameters can be DateTime objects or date strings.
@@ -253,21 +252,16 @@ The from and to parameters can be DateTime objects or date strings.
 sub filter_by_last_update {
     my ( $self, $params ) = @_;
     my $timestamp_column_name = $params->{timestamp_column_name} || 'timestamp';
-    my $days_inclusive = $params->{days_inclusive} || 0;
     my $conditions;
     Koha::Exceptions::MissingParameter->throw("Please pass: days|from|to|older_than|younger_than")
-        unless grep { exists $params->{$_} } qw/days from to older_than younger_than/;
+        unless grep { exists $params->{$_} } qw/days from to older_than younger_than min_days/;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $method =  $params->{datetime} ? 'format_datetime' : 'format_date';
-    foreach my $p ( qw/days older_than younger_than/  ) {
+    foreach my $p ( qw/days older_than younger_than min_days/  ) {
         next if !exists $params->{$p};
         my $dt = Koha::DateUtils::dt_from_string();
-        my $operator = $p eq 'days' && $days_inclusive
-            ? '<='
-            : $p eq 'younger_than'
-            ? '>'
-            : '<';
+        my $operator = { days => '<', older_than => '<', min_days => '<=' }->{$p} // '>';
         $conditions->{$operator} = $dtf->$method( $dt->subtract( days => $params->{$p} ) );
     }
     if ( exists $params->{from} ) {

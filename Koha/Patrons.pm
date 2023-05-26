@@ -205,8 +205,7 @@ sub filter_by_expiration_date {
     return $class->filter_by_last_update(
         {
             timestamp_column_name => 'dateexpiry',
-            days                  => $params->{days} || 0,
-            days_inclusive        => 1,
+            min_days              => $params->{days} || 0,
         }
     );
 }

@@ -1126,7 +1126,7 @@ subtest "filter_by_last_update" => sub {
     is( $count, 3, '3 patrons have been updated before the last 2 days (exclusive)' );
 
     $count = $patrons->filter_by_last_update(
-        { timestamp_column_name => 'updated_on', days => 2, days_inclusive => 1 } )->count;
+        { timestamp_column_name => 'updated_on', min_days => 2 } )->count;
     is( $count, 4, '4 patrons have been updated before the last 2 days (inclusive)' );
 
     $count = $patrons->filter_by_last_update(
@@ -1134,7 +1134,7 @@ subtest "filter_by_last_update" => sub {
     is( $count, 4, '4 patrons have been updated before yesterday (exclusive)' );
 
     $count = $patrons->filter_by_last_update(
-        { timestamp_column_name => 'updated_on', days => 1, days_inclusive => 1 } )->count;
+        { timestamp_column_name => 'updated_on', min_days => 1 } )->count;
     is( $count, 5, '5 patrons have been updated before yesterday (inclusive)' );
 
     $count = $patrons->filter_by_last_update(
@@ -1142,7 +1142,7 @@ subtest "filter_by_last_update" => sub {
     is( $count, 5, '5 patrons have been updated before today (exclusive)' );
 
     $count = $patrons->filter_by_last_update(
-        { timestamp_column_name => 'updated_on', days => 0, days_inclusive => 1 } )->count;
+        { timestamp_column_name => 'updated_on', min_days => 0 } )->count;
     is( $count, 6, '6 patrons have been updated before today (inclusive)' );
 
     $count = $patrons->filter_by_last_update(

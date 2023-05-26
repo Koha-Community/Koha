@@ -94,7 +94,7 @@ subtest 'anonymize() tests' => sub {
 
     # filter them so only the older two are part of the resultset
     my $checkouts = $patron->old_checkouts->filter_by_last_update(
-        { days => 1, days_inclusive => 1 } );
+        { min_days => 1 } );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', undef );
     throws_ok
