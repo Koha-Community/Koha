@@ -2065,6 +2065,8 @@ sub is_denied_renewal {
     my $denyingrules = C4::Context->yaml_preference('ItemsDeniedRenewal');
     return 0 unless $denyingrules;
     foreach my $field (keys %$denyingrules) {
+        # Silently ignore bad column names; TODO we should validate elsewhere
+        next if !$self->_result->result_source->has_column($field);
         my $val = $self->$field;
         if( !defined $val) {
             if ( any { !defined $_ }  @{$denyingrules->{$field}} ){
