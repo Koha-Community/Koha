@@ -690,7 +690,7 @@
                 var effective_create_items = row.basket.create_items || AcqCreateItem;
                 params['tax_rate'] = (effective_create_items == 'receiving')?row.tax_rate_on_receiving:row.tax_rate_on_ordering;
                 params['replacementprice'] = row.replacement_price;
-                params['unitprice'] = invoiceincgst=="1"?row.unit_price_tax_included:row.unit_price_tax_excluded;
+                params['unitprice'] = ( invoiceincgst=="1" ) ? ( row.unit_price_tax_included || row.ecost_tax_included ) : ( row.unit_price_tax_excluded || row.ecost_tax_excluded );
                 params['order_internalnote'] = row.internal_note;
                 if(effective_create_items == 'receiving') {
                     Object.keys(row.items).forEach(function(key) {
