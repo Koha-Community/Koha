@@ -21,6 +21,9 @@
             [% IF ( showpriority ) %]
                 <th class="psort">Priority</th>
             [% END %]
+            [% IF Koha.Preference('OpacHoldNotes') %]
+                <th>Notes</th>
+            [% END %]
             <th>Status</th>
             [% IF SuspendHoldsOpac and ! onlyinfo %]
                     <th class="nosort" >Suspend</th>
@@ -125,6 +128,9 @@
                         <span class="tdlabel">Priority:</span>
                         [% HOLD.priority | html %]
                     </td>
+                [% END %]
+                [% IF Koha.Preference('OpacHoldNotes') %]
+                    <td>[% HOLD.reservenotes | html | html_line_break %]</td>
                 [% END %]
                 <td class="status">
                     <span class="tdlabel">Status:</span>
