@@ -116,15 +116,15 @@ sub _get_domain_count {
     } keys %$limits;
 
     my $sum = 0;
-    my $dt_parser = Koha::Database->new->schema->storage->datetime_parser;
     my $start_dt = _convert_unit( undef, $limits->{$group}->{unit} );
     foreach my $domain ( @domains ) {
-        $sum += Koha::Notice::Messages->search({
-            message_transport_type => 'email',
-            status => 'sent',
-            to_address => { 'LIKE', '%'.$domain },
-            updated_on => { '>=', $dt_parser->format_datetime($start_dt) }, # FIXME Would be nice if possible via filter_by_last_update
-        })->count;
+        $sum += Koha::Notice::Messages->search(
+            {
+                message_transport_type => 'email',
+                status                 => 'sent',
+                to_address             => { 'LIKE', '%' . $domain },
+            }
+        )->filter_by_last_update( { timestamp_column_name => 'updated_on', from => $start_dt } )->count;
     }
     $limits->{$group}->{count} = $sum;
 }
