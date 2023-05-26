@@ -1447,6 +1447,38 @@ modules:
               columnname: phone
               is_hidden: 1
 
+      holds_table:
+        columns:
+            -
+              columnname: reservedate
+            -
+              columnname: title
+            -
+              columnname: callnumber
+            -
+              columnname: itemtype
+            -
+              columnname: barcode
+            -
+              columnname: pickup_location
+            -
+              columnname: expirationdate
+            -
+              columnname: priority
+            -
+              columnname: notes
+              is_hidden: 1
+            -
+              columnname: delete
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: suspend
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: status
+
     returns:
       checkedintable:
         columns:

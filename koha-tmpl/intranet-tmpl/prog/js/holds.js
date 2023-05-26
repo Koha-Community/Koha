@@ -126,10 +126,10 @@ $(document).ready(function() {
         var holds = new Array();
         if ( ! holdsTable ) {
             var title;
-            holdsTable = $("#holds-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            holdsTable = KohaTable("holds-table", {
                 "bAutoWidth": false,
-                "sDom": "rt",
-                "columns": [
+                "dom": "rt",
+                "aoColumns": [
                     {
                         "data": { _: "reservedate_formatted", "sort": "reservedate" }
                     },
@@ -324,7 +324,7 @@ $(document).ready(function() {
                         d.borrowernumber = borrowernumber;
                     }
                 },
-            }));
+            }, table_settings_holds_table );
 
             $('#holds-table').on( 'draw.dt', function () {
                 $(".hold-suspend").on( "click", function() {
