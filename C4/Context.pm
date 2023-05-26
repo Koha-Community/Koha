@@ -348,6 +348,8 @@ sub yaml_preference {
         return;
     }
 
+    # TODO Remove next line when enforced elsewhere
+    if( $yaml && lc($preference) eq 'itemsdeniedrenewal' and ref($yaml) ne 'HASH' ) { warn "Hashref expected for $preference"; return; }
     return $yaml;
 }
 
