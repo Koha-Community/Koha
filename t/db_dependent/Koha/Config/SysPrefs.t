@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # This file is part of Koha.
 #
 # Copyright 2018 Koha Development Team
