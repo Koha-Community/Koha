@@ -2101,7 +2101,8 @@ subtest 'is_denied_renewal' => sub {
     C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
     is( $deny_book->is_denied_renewal, 0, 'Renewal allowed when no rules' );
 
-    $idr_rules="withdrawn: [1]";
+    # The wrong column delete should be silently ignored and not trigger item delete
+    $idr_rules="delete: [yes]\nwithdrawn: [1]";
     C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
     is( $deny_book->is_denied_renewal, 1, 'Renewal blocked when 1 rules (withdrawn)' );
     is( $allow_book->is_denied_renewal, 0, 'Renewal allowed when 1 rules not matched (withdrawn)' );
