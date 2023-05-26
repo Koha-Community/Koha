@@ -2,6 +2,7 @@ function patron_autocomplete(node, options) {
     let link_to;
     let url_params;
     let on_select_callback;
+    let leading_wildcard = patronAutoCompleteSearchMethod === 'contains' ? '%' : '';
     if ( options ) {
         if ( options['link-to'] ) {
             link_to = options['link-to'];
@@ -22,7 +23,7 @@ function patron_autocomplete(node, options) {
                     let subquery_or = [];
                     defaultPatronSearchFields.split(',').forEach(function(field,i){
                         subquery_or.push(
-                            {["me."+field]: {'like': pattern + '%'}}
+                            {["me."+field]: {'like': leading_wildcard + pattern + '%'}}
                         );
                     });
                     subquery_and.push(subquery_or);
