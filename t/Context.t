@@ -31,7 +31,7 @@ BEGIN {
 
 subtest 'yaml_preference() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 6;
 
     my $data = [ 'uno', 'dos', { 'tres' => 'cuatro' } ];
 
@@ -48,6 +48,12 @@ subtest 'yaml_preference() tests' => sub {
         qr/^Unable to parse nothing syspref/,
         'Invalid YAML on syspref throws a warning';
     is( $pref, undef, 'Invalid YAML on syspref makes it return undef' );
+
+    $context->mock( 'preference', sub { return '{ a : 1 }' });
+    is( ref( C4::Context->new->yaml_preference('ItemsDeniedRenewal') ), 'HASH', 'Got a hash as expected' );
+    $context->mock( 'preference', sub { return '[ 1, 2 ]' });
+    warning_like { $pref = C4::Context->new->yaml_preference('ITEMSDENIEDRENEWAL') } qr/Hashref expected/, 'Array not accepted for ItemsDeniedRenewal';
+    is( $pref, undef, 'Returned undef' );
 
     $context->unmock( 'preference' );
 };
