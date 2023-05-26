@@ -243,7 +243,7 @@ foreach my $item (@items){
         { itemnumber => $item->itemnumber },
         {
             order_by => { '-desc' => 'returndate' },
-            limit    => 3
+            rows     => 3,
         }
     );
 
