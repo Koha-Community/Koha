@@ -41,41 +41,31 @@ subtest 'GetMatcherList' => sub {
         value => { code => 'ISSN', description => 'ISSN', record_type => 'blue', threshold => 0 },
     });
 
-my @matchers = C4::Matcher::GetMatcherList();
+    my @matchers = C4::Matcher::GetMatcherList();
+    is( $matchers[0]->{'matcher_id'}, $matcher1->{matcher_id}, 'First matcher_id value' );
+    is( $matchers[1]->{'matcher_id'}, $matcher2->{matcher_id}, 'Second matcher_id value' );
 
-is( $matchers[0]->{'matcher_id'}, $matcher1->{matcher_id}, 'First matcher_id value' );
+    my $matcher_id = C4::Matcher::GetMatcherId('ISBN');
+    is( $matcher_id, $matcher1->{matcher_id}, 'testing getmatcherid' );
 
-is( $matchers[1]->{'matcher_id'}, $matcher2->{matcher_id}, 'Second matcher_id value' );
+    my $testmatcher;
+    ok( $testmatcher = C4::Matcher->new( 'red', 1 ), 'testing matcher new' );
+    ok( $testmatcher = C4::Matcher->new( 'blue', 0 ), 'testing matcher new' );
 
-my $matcher_id = C4::Matcher::GetMatcherId('ISBN');
+    $testmatcher->threshold(1000);
+    is( $testmatcher->threshold(), 1000, 'testing threshhold accessor method' );
 
-is( $matcher_id, $matcher1->{matcher_id}, 'testing getmatcherid' );
+    $testmatcher->_id(53);
+    is( $testmatcher->_id(), 53, 'testing _id accessor' );
 
-my $testmatcher;
+    $testmatcher->code('match on ISBN');
+    is( $testmatcher->code(), 'match on ISBN', 'testing code accessor' );
 
-ok( $testmatcher = C4::Matcher->new( 'red', 1 ), 'testing matcher new' );
-
-ok( $testmatcher = C4::Matcher->new( 'blue', 0 ), 'testing matcher new' );
-
-$testmatcher->threshold(1000);
-
-is( $testmatcher->threshold(), 1000, 'testing threshhold accessor method' );
-
-$testmatcher->_id(53);
-
-is( $testmatcher->_id(), 53, 'testing _id accessor' );
-
-$testmatcher->code('match on ISBN');
-
-is( $testmatcher->code(), 'match on ISBN', 'testing code accessor' );
-
-$testmatcher->description('match on ISSN');
-
-is( $testmatcher->description(), 'match on ISSN', 'testing code accessor' );
+    $testmatcher->description('match on ISSN');
+    is( $testmatcher->description(), 'match on ISSN', 'testing code accessor' );
 };
 
 subtest '_get_match_keys() tests' => sub {
-
     plan tests => 21;
 
     my $matchpoint = get_title_matchpoint({
@@ -283,7 +273,6 @@ subtest '_get_match_keys() leader tests' => sub {
 };
 
 sub get_title_matchpoint {
-
     my $params = shift;
 
     my $length = $params->{length} // 0;
@@ -312,7 +301,6 @@ sub get_title_matchpoint {
 }
 
 sub get_authors_matchpoint {
-
     my $params = shift;
 
     my $length = $params->{length} // 0;
@@ -350,7 +338,6 @@ sub get_authors_matchpoint {
 }
 
 sub get_isbn_matchpoint {
-
     my $params = shift;
 
     my $length = $params->{length} // 0;
