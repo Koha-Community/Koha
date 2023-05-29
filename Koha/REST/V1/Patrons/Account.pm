@@ -40,8 +40,7 @@ Controller function that handles retrieving a patron's account balance
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron_id = $c->validation->param('patron_id');
-    my $patron    = Koha::Patrons->find($patron_id);
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -84,8 +83,7 @@ sub get {
 sub list_credits {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron_id = $c->validation->param('patron_id');
-    my $patron    = Koha::Patrons->find($patron_id);
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -95,10 +93,7 @@ sub list_credits {
     }
 
     return try {
-        my $account = $patron->account;
-
-        my $credits_set = $account->credits;
-        my $credits     = $c->objects->search($credits_set);
+        my $credits = $c->objects->search( $patron->account->credits );
         return $c->render( status => 200, openapi => $credits );
     }
     catch {
@@ -115,9 +110,8 @@ Controller function that handles adding a credit to a patron's account
 sub add_credit {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron_id = $c->validation->param('patron_id');
-    my $patron    = Koha::Patrons->find($patron_id);
-    my $user      = $c->stash('koha.user');
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
+    my $user   = $c->stash('koha.user');
 
     unless ($patron) {
         return $c->render(
@@ -127,7 +121,7 @@ sub add_credit {
     }
 
     my $account = $patron->account;
-    my $body    = $c->validation->param('body');
+    my $body    = $c->req->json;
 
     return try {
         my $credit_type =
@@ -203,8 +197,7 @@ sub add_credit {
 sub list_debits {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron_id = $c->validation->param('patron_id');
-    my $patron    = Koha::Patrons->find($patron_id);
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -214,10 +207,7 @@ sub list_debits {
     }
 
     return try {
-        my $account = $patron->account;
-
-        my $debits_set = $account->debits;
-        my $debits     = $c->objects->search($debits_set);
+        my $debits = $c->objects->search( $patron->account->debits );
         return $c->render( status => 200, openapi => $debits );
     }
     catch {
@@ -232,8 +222,7 @@ sub list_debits {
 sub add_debit {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron_id = $c->validation->param('patron_id');
-    my $patron    = Koha::Patrons->find($patron_id);
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -244,7 +233,7 @@ sub add_debit {
 
     return try {
         my $data =
-          Koha::Account::Debit->new_from_api( $c->validation->param('body') )
+          Koha::Account::Debit->new_from_api( $c->req->json )
           ->unblessed;
 
         $data->{library_id}       = delete $data->{branchcode};

@@ -40,7 +40,7 @@ Claim that a checked out item was returned.
 
 sub claim_returned {
     my $c    = shift->openapi->valid_input or return;
-    my $body = $c->validation->param('body');
+    my $body = $c->req->json;
 
     return try {
         my $itemnumber      = $body->{item_id};
@@ -99,8 +99,8 @@ Update the notes of an existing claim
 sub update_notes {
     my $c = shift->openapi->valid_input or return;
 
-    my $claim_id = $c->validation->param('claim_id');
-    my $body     = $c->validation->param('body');
+    my $claim_id = $c->param('claim_id');
+    my $body     = $c->req->json;
 
     my $claim = Koha::Checkouts::ReturnClaims->find( $claim_id );
 
@@ -143,10 +143,10 @@ Marks a claim as resolved
 =cut
 
 sub resolve_claim {
-    my $c     = shift->openapi->valid_input or return;
+    my $c = shift->openapi->valid_input or return;
 
-    my $claim_id = $c->validation->param('claim_id');
-    my $body     = $c->validation->param('body');
+    my $claim_id = $c->param('claim_id');
+    my $body     = $c->req->json;
 
     my $claim = Koha::Checkouts::ReturnClaims->find($claim_id);
 
@@ -193,7 +193,7 @@ sub delete_claim {
 
     return try {
 
-        my $claim = Koha::Checkouts::ReturnClaims->find( $c->validation->param('claim_id') );
+        my $claim = Koha::Checkouts::ReturnClaims->find( $c->param('claim_id') );
 
         return $c->render(
             status  => 404,

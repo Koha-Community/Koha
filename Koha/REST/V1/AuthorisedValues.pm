@@ -36,9 +36,7 @@ This routine returns the authorised values for a given category
 sub list_av_from_category {
     my $c = shift->openapi->valid_input or return;
 
-    my $category_name = $c->validation->param('authorised_value_category_name');
-
-    my $category = Koha::AuthorisedValueCategories->find($category_name);
+    my $category = Koha::AuthorisedValueCategories->find($c->param('authorised_value_category_name'));
 
     unless ($category) {
         return $c->render(

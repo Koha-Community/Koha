@@ -59,7 +59,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $smtp_server = Koha::SMTP::Servers->find( $c->validation->param('smtp_server_id') );
+        my $smtp_server = Koha::SMTP::Servers->find( $c->param('smtp_server_id') );
 
         unless ($smtp_server) {
             return $c->render(
@@ -93,7 +93,7 @@ sub add {
 
     return try {
 
-        my $smtp_server = Koha::SMTP::Server->new_from_api( $c->validation->param('body') );
+        my $smtp_server = Koha::SMTP::Server->new_from_api( $c->req->json );
         $smtp_server->store->discard_changes;
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $smtp_server->id );
@@ -127,7 +127,7 @@ Controller method that handles updating a Koha::SMTP::Server object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $smtp_server = Koha::SMTP::Servers->find( $c->validation->param('smtp_server_id') );
+    my $smtp_server = Koha::SMTP::Servers->find( $c->param('smtp_server_id') );
 
     if ( not defined $smtp_server ) {
         return $c->render(
@@ -139,7 +139,7 @@ sub update {
     }
 
     return try {
-        $smtp_server->set_from_api( $c->validation->param('body') );
+        $smtp_server->set_from_api( $c->req->json );
         $smtp_server->store->discard_changes;
 
         return $c->render(
@@ -171,7 +171,7 @@ Controller method that handles deleting a Koha::SMTP::Server object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $smtp_server = Koha::SMTP::Servers->find( $c->validation->param('smtp_server_id') );
+    my $smtp_server = Koha::SMTP::Servers->find( $c->param('smtp_server_id') );
 
     if ( not defined $smtp_server ) {
         return $c->render( status  => 404,

@@ -45,7 +45,8 @@ List Koha::Checkout objects
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $checked_in = delete $c->validation->output->{checked_in};
+    my $checked_in = $c->param('checked_in');
+    $c->req->params->remove('checked_in');
 
     try {
         my $checkouts_set;
@@ -76,7 +77,7 @@ get one checkout
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $checkout_id = $c->validation->param('checkout_id');
+    my $checkout_id = $c->param('checkout_id');
     my $checkout = Koha::Checkouts->find( $checkout_id );
     $checkout = Koha::Old::Checkouts->find( $checkout_id )
         unless ($checkout);
@@ -109,7 +110,7 @@ sub get_renewals {
     my $c = shift->openapi->valid_input or return;
 
     try {
-        my $checkout_id = $c->validation->param('checkout_id');
+        my $checkout_id = $c->param('checkout_id');
         my $checkout    = Koha::Checkouts->find($checkout_id);
         $checkout = Koha::Old::Checkouts->find($checkout_id)
           unless ($checkout);
@@ -144,8 +145,8 @@ Renew a checkout
 sub renew {
     my $c = shift->openapi->valid_input or return;
 
-    my $checkout_id = $c->validation->param('checkout_id');
-    my $seen = $c->validation->param('seen') || 1;
+    my $checkout_id = $c->param('checkout_id');
+    my $seen = $c->param('seen') || 1;
     my $checkout = Koha::Checkouts->find( $checkout_id );
 
     unless ($checkout) {
@@ -195,7 +196,7 @@ Checks if the checkout could be renewed and return the related information.
 sub allows_renewal {
     my $c = shift->openapi->valid_input or return;
 
-    my $checkout_id = $c->validation->param('checkout_id');
+    my $checkout_id = $c->param('checkout_id');
     my $checkout = Koha::Checkouts->find( $checkout_id );
 
     unless ($checkout) {

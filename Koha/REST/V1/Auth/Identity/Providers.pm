@@ -66,8 +66,7 @@ sub get {
 
     return try {
 
-        my $identity_provider_id = $c->validation->param('identity_provider_id');
-        my $provider = $c->objects->find( Koha::Auth::Identity::Providers->new, $identity_provider_id );
+        my $provider = $c->objects->find( Koha::Auth::Identity::Providers->new, $c->param('identity_provider_id') );
 
         unless ( $provider ) {
             return $c->render(
@@ -100,7 +99,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $config   = delete $body->{config};
                 my $mapping  = delete $body->{mapping};
@@ -147,8 +146,7 @@ Controller method for updating an identity provider.
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $identity_provider_id = $c->validation->param('identity_provider_id');
-    my $provider = Koha::Auth::Identity::Providers->find( $identity_provider_id );
+    my $provider = Koha::Auth::Identity::Providers->find( $c->param('identity_provider_id') );
 
     unless ( $provider ) {
         return $c->render(
@@ -165,7 +163,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $config   = delete $body->{config};
                 my $mapping  = delete $body->{mapping};
@@ -211,7 +209,7 @@ Controller method for deleting an identity provider.
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = Koha::Auth::Identity::Providers->find( $c->validation->param('identity_provider_id') );
+    my $provider = Koha::Auth::Identity::Providers->find( $c->param('identity_provider_id') );
     unless ( $provider ) {
         return $c->render(
             status  => 404,

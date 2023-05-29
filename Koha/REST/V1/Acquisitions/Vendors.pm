@@ -62,10 +62,12 @@ Controller function that handles retrieving a single Koha::Acquisition::Booksell
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor = Koha::Acquisition::Booksellers->find( $c->validation->param('vendor_id') );
+    my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
     unless ($vendor) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Vendor not found" } );
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Vendor not found" }
+        );
     }
 
     return try {
@@ -88,7 +90,7 @@ Controller function that handles adding a new Koha::Acquisition::Bookseller obje
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor = Koha::Acquisition::Bookseller->new_from_api( $c->validation->param('body') );
+    my $vendor = Koha::Acquisition::Bookseller->new_from_api( $c->req->json );
 
     return try {
         $vendor->store;
@@ -115,8 +117,8 @@ sub update {
     my $vendor;
 
     return try {
-        $vendor = Koha::Acquisition::Booksellers->find( $c->validation->param('vendor_id') );
-        $vendor->set_from_api( $c->validation->param('body') );
+        $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
+        $vendor->set_from_api( $c->req->json );
         $vendor->store();
         return $c->render(
             status  => 200,
@@ -132,7 +134,6 @@ sub update {
         }
 
         $c->unhandled_exception($_);
-
     };
 
 }
@@ -147,7 +148,7 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $vendor = Koha::Acquisition::Booksellers->find( $c->validation->param('vendor_id') );
+        my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
 
         unless ( $vendor ) {
             return $c->render(

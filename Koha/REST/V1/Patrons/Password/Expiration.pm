@@ -43,12 +43,13 @@ sub set {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
-    my $body   = $c->validation->param('body');
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render( status => 404, openapi => { error => "Patron not found." } );
     }
+
+    my $body = $c->req->json;
 
     my $password_expiration_date   = $body->{expiration_date} // "";
 

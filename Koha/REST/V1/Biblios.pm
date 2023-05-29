@@ -53,7 +53,7 @@ sub get {
     $attributes = { prefetch => [ 'metadata' ] } # don't prefetch metadata if not needed
         unless $c->req->headers->accept =~ m/application\/json/;
 
-    my $biblio = Koha::Biblios->find( { biblionumber => $c->validation->param('biblio_id') }, $attributes );
+    my $biblio = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, $attributes );
 
     unless ( $biblio ) {
         return $c->render(
@@ -125,7 +125,7 @@ Controller function that handles deleting a biblio object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $biblio = Koha::Biblios->find( $c->validation->param('biblio_id') );
+    my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
     if ( not defined $biblio ) {
         return $c->render(
@@ -162,7 +162,7 @@ sub get_public {
     my $c = shift->openapi->valid_input or return;
 
     my $biblio = Koha::Biblios->find(
-        { biblionumber => $c->validation->param('biblio_id') },
+        { biblionumber => $c->param('biblio_id') },
         { prefetch     => ['metadata'] } );
 
     unless ($biblio) {
@@ -255,7 +255,7 @@ Controller function that handles retrieving biblio's items
 sub get_items {
     my $c = shift->openapi->valid_input or return;
 
-    my $biblio = Koha::Biblios->find( { biblionumber => $c->validation->param('biblio_id') }, { prefetch => ['items'] } );
+    my $biblio = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, { prefetch => ['items'] } );
 
     unless ( $biblio ) {
         return $c->render(
@@ -268,8 +268,7 @@ sub get_items {
 
     return try {
 
-        my $items_rs = $biblio->items;
-        my $items    = $c->objects->search( $items_rs );
+        my $items = $c->objects->search( $biblio->items );
         return $c->render(
             status  => 200,
             openapi => $items
@@ -290,7 +289,7 @@ sub add_item {
     my $c = shift->openapi->valid_input or return;
 
     try {
-        my $biblio_id = $c->validation->param('biblio_id');
+        my $biblio_id = $c->param('biblio_id');
         my $biblio    = Koha::Biblios->find( $biblio_id );
 
         unless ($biblio) {
@@ -300,7 +299,7 @@ sub add_item {
             );
         }
 
-        my $body = $c->validation->param('body');
+        my $body = $c->req->json;
 
         $body->{biblio_id} = $biblio_id;
 
@@ -403,9 +402,9 @@ sub update_item {
     my $c = shift->openapi->valid_input or return;
 
     try {
-        my $biblio_id = $c->validation->param('biblio_id');
-        my $item_id = $c->validation->param('item_id');
-        my $biblio = Koha::Biblios->find({ biblionumber => $biblio_id });
+        my $biblio_id = $c->param('biblio_id');
+        my $item_id   = $c->param('item_id');
+        my $biblio    = Koha::Biblios->find( { biblionumber => $biblio_id } );
         unless ($biblio) {
             return $c->render(
                 status  => 404,
@@ -422,7 +421,7 @@ sub update_item {
             );
         }
 
-        my $body = $c->validation->param('body');
+        my $body = $c->req->json;
 
         $body->{biblio_id} = $biblio_id;
 
@@ -458,10 +457,11 @@ List Koha::Checkout objects
 sub get_checkouts {
     my $c = shift->openapi->valid_input or return;
 
-    my $checked_in = delete $c->validation->output->{checked_in};
+    my $checked_in = $c->param('checked_in');
+    $c->req->params->remove('checked_in');
 
     try {
-        my $biblio = Koha::Biblios->find( $c->validation->param('biblio_id') );
+        my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
         unless ($biblio) {
             return $c->render(
@@ -495,8 +495,7 @@ used for building the dropdown selector
 sub pickup_locations {
     my $c = shift->openapi->valid_input or return;
 
-    my $biblio_id = $c->validation->param('biblio_id');
-    my $biblio = Koha::Biblios->find( $biblio_id );
+    my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
     unless ($biblio) {
         return $c->render(
@@ -505,8 +504,8 @@ sub pickup_locations {
         );
     }
 
-    my $patron_id = delete $c->validation->output->{patron_id};
-    my $patron    = Koha::Patrons->find( $patron_id );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
+    $c->req->params->remove('patron_id');
 
     unless ($patron) {
         return $c->render(
@@ -562,7 +561,10 @@ access.
 sub get_items_public {
     my $c = shift->openapi->valid_input or return;
 
-    my $biblio = Koha::Biblios->find( { biblionumber => $c->validation->param('biblio_id') }, { prefetch => ['items'] } );
+    my $biblio = Koha::Biblios->find(
+        $c->param('biblio_id'),
+        { prefetch => ['items'] }
+    );
 
     unless ( $biblio ) {
         return $c->render(
@@ -599,7 +601,7 @@ Set rating for the logged in user
 sub set_rating {
     my $c = shift->openapi->valid_input or return;
 
-    my $biblio = Koha::Biblios->find( $c->validation->param('biblio_id') );
+    my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
     unless ($biblio) {
         return $c->render(
@@ -619,7 +621,7 @@ sub set_rating {
         );
     }
 
-    my $body   = $c->validation->param('body');
+    my $body         = $c->req->json;
     my $rating_value = $body->{rating};
 
     return try {
@@ -733,8 +735,7 @@ Controller function that handles modifying an biblio object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $biblio_id = $c->param('biblio_id');
-    my $biblio    = Koha::Biblios->find($biblio_id);
+    my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
     if ( ! defined $biblio ) {
         return $c->render(
@@ -776,11 +777,11 @@ sub update {
             );
         }
 
-        ModBiblio( $record, $biblio_id, $frameworkcode );
+        ModBiblio( $record, $biblio->id, $frameworkcode );
 
         $c->render(
             status  => 200,
-            openapi => { id => $biblio_id }
+            openapi => { id => $biblio->id }
         );
     }
     catch {

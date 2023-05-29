@@ -44,10 +44,9 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $profiles_set = Koha::ImportBatchProfiles->new;
-        my $profiles = $c->objects->search( $profiles_set );
+        my $profiles = $c->objects->search( Koha::ImportBatchProfiles->new );
         return $c->render(
-            status => 200,
+            status  => 200,
             openapi => $profiles
         );
     }
@@ -65,7 +64,7 @@ Method that handles adding a new Koha::ImportBatchProfile object
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $body = $c->validation->param('body');
+    my $body = $c->req->json;
 
     return try {
         my $profile = Koha::ImportBatchProfile->new_from_api( $body )->store;
@@ -89,19 +88,18 @@ sub edit {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $profile_id = $c->validation->param('import_batch_profile_id');
-        my $profile = Koha::ImportBatchProfiles->find( $profile_id );
+        my $profile = Koha::ImportBatchProfiles->find( $c->param('import_batch_profile_id') );
         unless ($profile) {
-            return $c->render( status  => 404,
-                            openapi => {error => "Import batch profile not found"} );
+            return $c->render(
+                status  => 404,
+                openapi => {error => "Import batch profile not found"}
+            );
         }
 
-        my $body = $c->req->json;
-
-        $profile->set_from_api($body)->store;
+        $profile->set_from_api($c->req->json)->store;
 
         return $c->render(
-            status => 200,
+            status  => 200,
             openapi => $profile->to_api
         );
     }
@@ -119,8 +117,7 @@ Method that handles deleting a Koha::ImportBatchProfile object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $profile_id = $c->validation->param('import_batch_profile_id');
-    my $profile = Koha::ImportBatchProfiles->find( $profile_id );
+    my $profile = Koha::ImportBatchProfiles->find( $c->param('import_batch_profile_id') );
 
     unless ($profile) {
         return $c->render( status  => 404,

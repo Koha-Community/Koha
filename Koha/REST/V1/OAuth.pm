@@ -49,7 +49,7 @@ sub token {
         return $c->render( status => 400, openapi => { error => 'Unimplemented grant type' } );
     }
 
-    my $grant_type = $c->validation->param('grant_type');
+    my $grant_type = $c->param('grant_type');
     unless ( $grant_type eq 'client_credentials' and C4::Context->preference('RESTOAuth2ClientCredentials') ) {
         return $c->render(status => 400, openapi => {error => 'Unimplemented grant type'});
     }
@@ -70,8 +70,8 @@ sub token {
         ( $client_id, $client_secret ) = split( /:/, $decoded_credentials, 2 );
     }
     else {
-        $client_id = $c->validation->param('client_id');
-        $client_secret = $c->validation->param('client_secret');
+        $client_id = $c->param('client_id');
+        $client_secret = $c->param('client_secret');
     }
 
     my $cb = "${grant_type}_grant";

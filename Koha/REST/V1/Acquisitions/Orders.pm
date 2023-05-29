@@ -95,7 +95,7 @@ Controller function that handles retrieving a single Koha::Acquisition::Order ob
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $order = Koha::Acquisition::Orders->find( $c->validation->param('order_id') );
+    my $order = Koha::Acquisition::Orders->find( $c->param('order_id') );
 
     unless ($order) {
         return $c->render(
@@ -105,11 +105,9 @@ sub get {
     }
 
     return try {
-        my $embed = $c->stash('koha.embed');
-
         return $c->render(
             status  => 200,
-            openapi => $order->to_api({ embed => $embed })
+            openapi => $c->objects->to_api( $order ),
         );
     }
     catch {
@@ -127,7 +125,7 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $order = Koha::Acquisition::Order->new_from_api( $c->validation->param('body') );
+        my $order = Koha::Acquisition::Order->new_from_api( $c->req->json );
         $order->store->discard_changes;
 
         $c->res->headers->location(
@@ -136,7 +134,7 @@ sub add {
 
         return $c->render(
             status  => 201,
-            openapi => $order->to_api
+            openapi => $c->objects->to_api( $order ),
         );
     }
     catch {
@@ -160,7 +158,7 @@ Controller function that handles updating a Koha::Acquisition::Order object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $order = Koha::Acquisition::Orders->find( $c->validation->param('order_id') );
+    my $order = Koha::Acquisition::Orders->find( $c->param('order_id') );
 
     unless ($order) {
         return $c->render(
@@ -170,12 +168,12 @@ sub update {
     }
 
     return try {
-        $order->set_from_api( $c->validation->param('body') );
+        $order->set_from_api( $c->req->json );
         $order->store()->discard_changes;
 
         return $c->render(
             status  => 200,
-            openapi => $order->to_api
+            openapi => $c->objects->to_api( $order ),
         );
     }
     catch {
@@ -192,7 +190,7 @@ Controller function that handles deleting a Koha::Patron object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $order = Koha::Acquisition::Orders->find( $c->validation->param('order_id') );
+    my $order = Koha::Acquisition::Orders->find( $c->param('order_id') );
 
     unless ($order) {
         return $c->render(
@@ -213,25 +211,6 @@ sub delete {
     catch {
         $c->unhandled_exception($_);
     };
-}
-
-=head2 Internal methods
-
-=head3 table_name_fixer
-
-    $q = $c->table_name_fixer( $q );
-
-The Koha::Biblio representation includes the biblioitem.* attributes. This is handy
-for API consumers but as they are different tables, converting the queries that mention
-biblioitem columns can be tricky. This method renames known column names as used on Koha's
-UI.
-
-=cut
-
-sub table_name_fixer {
-    my ( $self, $q ) = @_;
-    $q =~ s/biblio\.(?=isbn|ean|publisher)/biblio.biblioitem./g;
-    return $q;
 }
 
 1;

@@ -38,7 +38,7 @@ Controller function that handles listing Koha::Hold objects for the requested pa
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ( $patron ) {
         return $c->render(
@@ -51,8 +51,7 @@ sub list {
 
     return try {
 
-        my $holds_rs = $patron->holds;
-        my $holds    = $c->objects->search( $holds_rs );
+        my $holds = $c->objects->search( $patron->holds );
 
         return $c->render(
             status  => 200,

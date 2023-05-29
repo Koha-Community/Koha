@@ -63,8 +63,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $suggestion_id = $c->validation->param('suggestion_id');
-        my $suggestion = $c->objects->find( Koha::Suggestions->new, $suggestion_id );
+        my $suggestion = $c->objects->find( Koha::Suggestions->new, $c->param('suggestion_id') );
 
         unless ($suggestion) {
             return $c->render(
@@ -92,7 +91,7 @@ Controller method that handles adding a new Koha::Suggestion object
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $body = $c->validation->param('body');
+    my $body = $c->req->json;
 
     # FIXME: This should be handled in Koha::Suggestion->store
     $body->{'status'} = 'ASKED'
@@ -171,8 +170,7 @@ Controller method that handles modifying Koha::Suggestion object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $suggestion_id = $c->validation->param('suggestion_id');
-    my $suggestion = Koha::Suggestions->find( $suggestion_id );
+    my $suggestion = Koha::Suggestions->find( $c->param('suggestion_id') );
 
     return $c->render(
         status  => 404,
@@ -181,7 +179,7 @@ sub update {
 
     return try {
 
-        my $body = $c->validation->param('body');
+        my $body = $c->req->json;
 
         $suggestion->set_from_api( $body )->store;
         $suggestion->discard_changes;
@@ -206,8 +204,7 @@ Controller method that handles removing a Koha::Suggestion object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $suggestion_id = $c->validation->param('suggestion_id');
-    my $suggestion = Koha::Suggestions->find( $suggestion_id );
+    my $suggestion = Koha::Suggestions->find( $c->param('suggestion_id') );
 
     return $c->render(
         status  => 404,

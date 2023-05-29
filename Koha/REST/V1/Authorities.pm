@@ -40,7 +40,7 @@ Controller function that handles retrieving a single authority object
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $authority = Koha::Authorities->find( { authid => $c->validation->param('authority_id') } );
+    my $authority = Koha::Authorities->find( { authid => $c->param('authority_id') } );
     unless ( $authority ) {
         return $c->render(
             status  => 404,
@@ -109,7 +109,7 @@ Controller function that handles deleting an authority object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $authority = Koha::Authorities->find( { authid => $c->validation->param('authority_id') } );
+    my $authority = Koha::Authorities->find( { authid => $c->param('authority_id') } );
 
     if ( not defined $authority ) {
         return $c->render(
@@ -203,7 +203,7 @@ Controller function that handles modifying an authority object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $authid = $c->validation->param('authority_id');
+    my $authid = $c->param('authority_id');
     my $authority = Koha::Authorities->find( { authid => $authid } );
 
     if ( not defined $authority ) {

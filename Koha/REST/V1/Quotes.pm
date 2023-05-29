@@ -35,8 +35,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $quotes_set = Koha::Quotes->new;
-        my $quotes = $c->objects->search( $quotes_set );
+        my $quotes = $c->objects->search( Koha::Quotes->new );
         return $c->render( status => 200, openapi => $quotes );
     }
     catch {
@@ -53,10 +52,12 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $quote = Koha::Quotes->find( $c->validation->param('quote_id') );
+        my $quote = Koha::Quotes->find( $c->param('quote_id') );
         unless ($quote) {
-            return $c->render( status  => 404,
-                            openapi => { error => "quote not found" } );
+            return $c->render(
+                status  => 404,
+                openapi => { error => "quote not found" }
+            );
         }
 
         return $c->render( status => 200, openapi => $quote->to_api );
@@ -74,7 +75,7 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $quote = Koha::Quote->new_from_api( $c->validation->param('body') );
+        my $quote = Koha::Quote->new_from_api( $c->req->json );
         $quote->store;
         $c->res->headers->location( $c->req->url->to_string . '/' . $quote->id );
         return $c->render(
@@ -94,7 +95,7 @@ sub add {
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $quote = Koha::Quotes->find( $c->validation->param('quote_id') );
+    my $quote = Koha::Quotes->find( $c->param('quote_id') );
 
     if ( not defined $quote ) {
         return $c->render( status  => 404,
@@ -102,7 +103,7 @@ sub update {
     }
 
     return try {
-        $quote->set_from_api( $c->validation->param('body') );
+        $quote->set_from_api( $c->req->json );
         $quote->store();
         return $c->render( status => 200, openapi => $quote->to_api );
     }
@@ -118,7 +119,7 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $quote = Koha::Quotes->find( $c->validation->param('quote_id') );
+    my $quote = Koha::Quotes->find( $c->param('quote_id') );
     if ( not defined $quote ) {
         return $c->render( status  => 404,
                            openapi => { error => "Object not found" } );

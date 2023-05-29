@@ -44,8 +44,8 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $body    = $c->validation->param('body');
-        my $club_id = $c->validation->param('club_id');
+        my $body    = $c->req->json;
+        my $club_id = $c->param('club_id');
 
         my $biblio;
 

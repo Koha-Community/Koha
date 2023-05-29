@@ -38,7 +38,8 @@ sub list {
 
     return try {
 
-        my $only_current = delete $c->validation->output->{only_current};
+        my $only_current = $c->param('only_current');
+        $c->req->params->remove('only_current');
 
         my $bj_rs = Koha::BackgroundJobs->new;
 
@@ -66,7 +67,7 @@ sub get {
 
     return try {
 
-        my $job_id = $c->validation->param('job_id');
+        my $job_id = $c->param('job_id');
         my $patron = $c->stash('koha.user');
 
         my $can_manage_background_jobs =

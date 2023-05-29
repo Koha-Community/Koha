@@ -42,7 +42,7 @@ Controller function that handles cancelling a Koha::ArticleRequest object
 sub cancel {
     my $c = shift->openapi->valid_input or return;
 
-    my $article_request = Koha::ArticleRequests->find( $c->validation->param('article_request_id') );
+    my $article_request = Koha::ArticleRequests->find( $c->param('article_request_id') );
 
     unless ( $article_request ) {
         return $c->render(
@@ -51,8 +51,8 @@ sub cancel {
         );
     }
 
-    my $reason = $c->validation->param('cancellation_reason');
-    my $notes  = $c->validation->param('notes');
+    my $reason = $c->param('cancellation_reason');
+    my $notes  = $c->param('notes');
 
     return try {
 
@@ -80,7 +80,7 @@ Controller function that handles cancelling a patron's Koha::ArticleRequest obje
 sub patron_cancel {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ( $patron ) {
         return $c->render(
@@ -91,7 +91,7 @@ sub patron_cancel {
 
     # patron_id has been validated by the allow-owner check, so the following call to related
     # article requests covers the case of article requests not belonging to the patron
-    my $article_request = $patron->article_requests->find( $c->validation->param('article_request_id') );
+    my $article_request = $patron->article_requests->find( $c->param('article_request_id') );
 
     unless ( $article_request ) {
         return $c->render(
@@ -100,8 +100,8 @@ sub patron_cancel {
         );
     }
 
-    my $reason = $c->validation->param('cancellation_reason');
-    my $notes  = $c->validation->param('notes');
+    my $reason = $c->param('cancellation_reason');
+    my $notes  = $c->param('notes');
 
     return try {
 

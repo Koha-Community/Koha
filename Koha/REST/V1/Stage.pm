@@ -36,13 +36,12 @@ Move a stage up or down the stockrotation rota.
 
 sub move {
     my $c = shift->openapi->valid_input or return;
-    my $input = $c->validation->output;
 
-    my $rota  = Koha::StockRotationRotas->find( $input->{rota_id} );
-    my $stage = Koha::StockRotationStages->find( $input->{stage_id} );
+    my $rota  = Koha::StockRotationRotas->find( $c->param('rota_id') );
+    my $stage = Koha::StockRotationStages->find( $c->param('stage_id') );
 
     if ( $stage && $rota ) {
-        my $result = $stage->move_to( $input->{position} );
+        my $result = $stage->move_to( $c->req->json );
         return $c->render( openapi => {}, status => 200 ) if $result;
         return $c->render(
             openapi => { error => "Bad request - new position invalid" },
