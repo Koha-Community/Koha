@@ -395,7 +395,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
         my ( $table, $column ) = split '\.', $key;
         push @translated_keys, NormalizeString($columns->{$table}->{$column} // '');
     }
-    push @translated_keys, 'problem' if $uploadbarcodes;
+    push @translated_keys, 'Problem' if $uploadbarcodes;
 
     $csv->combine(@translated_keys);
     print $csv->string, "\n";
@@ -418,6 +418,8 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
                 $errstr .= "no barcode,";
             } elsif( $key eq 'checkedout' ) {
                 $errstr .= "checked out,";
+            } elsif( $key eq 'out_of_order' ) {
+                $errstr .= "shelved out of order,";
             }
         }
         $errstr =~ s/,$//;
