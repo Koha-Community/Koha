@@ -16,47 +16,40 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use Test::More;
-use Test::MockModule;
+use MARC::Record;
+use Test::More tests => 3;
 use Test::Warn;
 
-use MARC::Record;
+use t::lib::TestBuilder;
+use t::lib::Mocks;
 
-use Module::Load::Conditional qw/check_install/;
+use Koha::Database;
+use C4::Matcher qw( GetMatcherList GetMatcherId );
 
-BEGIN {
-    if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 13;
-    } else {
-        plan skip_all => "Need Test::DBIx::Class"
-    }
-}
+my $schema  = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
+$schema->storage->txn_begin;
 
-use Test::DBIx::Class;
+subtest 'GetMatcherList' => sub {
+    plan tests => 9;
 
-my $db = Test::MockModule->new('Koha::Database');
-$db->mock( _new_schema => sub { return Schema(); } );
-
-use_ok('C4::Matcher', qw( GetMatcherList GetMatcherId ));
-
-fixtures_ok [
-    MarcMatcher => [
-        [ 'matcher_id', 'code', 'description', 'record_type', 'threshold' ],
-        [ 1,            'ISBN', 'ISBN',        'red',         1 ],
-        [ 2,            'ISSN', 'ISSN',        'blue',        0 ]
-    ],
-], 'add fixtures';
+    $schema->resultset('MarcMatcher')->delete_all;
+    my $matcher1 = $builder->build({ source => 'MarcMatcher',
+        value => { code => 'ISBN', description => 'ISBN', record_type => 'red', threshold => 1 },
+    });
+    my $matcher2 = $builder->build({ source => 'MarcMatcher',
+        value => { code => 'ISSN', description => 'ISSN', record_type => 'blue', threshold => 0 },
+    });
 
 my @matchers = C4::Matcher::GetMatcherList();
 
-is( $matchers[0]->{'matcher_id'}, 1, 'First matcher_id value is 1' );
+is( $matchers[0]->{'matcher_id'}, $matcher1->{matcher_id}, 'First matcher_id value' );
 
-is( $matchers[1]->{'matcher_id'}, 2, 'Second matcher_id value is 2' );
+is( $matchers[1]->{'matcher_id'}, $matcher2->{matcher_id}, 'Second matcher_id value' );
 
 my $matcher_id = C4::Matcher::GetMatcherId('ISBN');
 
-is( $matcher_id, 1, 'testing getmatcherid' );
+is( $matcher_id, $matcher1->{matcher_id}, 'testing getmatcherid' );
 
 my $testmatcher;
 
@@ -79,6 +72,7 @@ is( $testmatcher->code(), 'match on ISBN', 'testing code accessor' );
 $testmatcher->description('match on ISSN');
 
 is( $testmatcher->description(), 'match on ISSN', 'testing code accessor' );
+};
 
 subtest '_get_match_keys() tests' => sub {
 
@@ -402,3 +396,5 @@ sub get_leader_matchpoint {
 
     return $matchpoint;
 }
+
+$schema->storage->txn_rollback;
