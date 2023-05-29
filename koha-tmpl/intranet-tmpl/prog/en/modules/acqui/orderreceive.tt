@@ -1161,12 +1161,12 @@
                 if(invoiceincgst == "1") {
                     rrp_txt = Number(row.rrp_tax_included).format_price()+'<span class="hint"> '+ADJ_TAX_INC.format(active_currency)+"</span>";
                     ecost_txt = Number(row.ecost_tax_included).format_price()+'<span class="hint"> '+TAX_INC+"</span>";
-                    $("#unitprice").val(row.unit_price_tax_included);
+                    $("#unitprice").val(Number(row.ecost_tax_included).format_price());
                     $("#unitprice_hint").html(TAX_INC);
                 } else {
                     rrp_txt = Number(row.rrp_tax_excluded).format_price()+'<span class="hint"> '+ADJ_TAX_EXC.format(active_currency)+"</span>";
                     ecost_txt = Number(row.ecost_tax_excluded).format_price()+'<span class="hint"> '+TAX_EXC+"</span>";
-                    $("#unitprice").val(row.unit_price_tax_excluded);
+                    $("#unitprice").val(Number(row.ecost_tax_excluded).format_price());
                     $("#unitprice_hint").html(TAX_EXC);
                 }
                 $("#rrp").html(rrp_txt);
