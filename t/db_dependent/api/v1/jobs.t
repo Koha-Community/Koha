@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 25;
+use Test::More tests => 28;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -99,6 +99,9 @@ my $job = $builder->build_object(
 
     $t->get_ok("//$librarian_userid:$password@/api/v1/jobs")
       ->status_is(200)->json_is( [ $job->to_api ] );
+
+    $t->get_ok("//$librarian_userid:$password@/api/v1/jobs?only_current=1")
+      ->status_is(200)->json_is( [] );
 }
 
 {
