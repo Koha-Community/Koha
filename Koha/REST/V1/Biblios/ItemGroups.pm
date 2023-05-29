@@ -42,9 +42,8 @@ Controller function that handles listing Koha::Biblio::ItemGroup objects
 
 sub list {
     my $c = shift->openapi->valid_input or return;
-    my $biblio_id = $c->validation->param('biblio_id');
 
-    my $biblio=Koha::Biblios->find( $biblio_id);
+    my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
     return try {
 #my $item_groups_set = Koha::Biblio::ItemGroups->new;
@@ -70,8 +69,8 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     try {
-        my $item_group_id = $c->validation->param('item_group_id');
-        my $biblio_id = $c->validation->param('biblio_id');
+        my $item_group_id = $c->param('item_group_id');
+        my $biblio_id     = $c->param('biblio_id');
 
         my $item_group = $c->objects->find( Koha::Biblio::ItemGroups->new, $item_group_id );
 
@@ -154,8 +153,8 @@ sub update {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $item_group_id = $c->validation->param('item_group_id');
-        my $biblio_id     = $c->validation->param('biblio_id');
+        my $item_group_id = $c->param('item_group_id');
+        my $biblio_id     = $c->param('biblio_id');
 
         my $item_group = Koha::Biblio::ItemGroups->find( $item_group_id );
 
@@ -168,7 +167,7 @@ sub update {
             );
         }
 
-        my $item_group_data = $c->validation->param('body');
+        my $item_group_data = $c->req->json;
         $item_group->set_from_api( $item_group_data )->store->discard_changes();
 
         return $c->render(
@@ -204,11 +203,12 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $item_group_id = $c->validation->param('item_group_id');
-    my $biblio_id     = $c->validation->param('biblio_id');
-
     my $item_group = Koha::Biblio::ItemGroups->find(
-        { item_group_id => $item_group_id, biblio_id => $biblio_id } );
+        {
+            item_group_id => $c->param('item_group_id'),
+            biblio_id     => $c->param('biblio_id')
+        }
+    );
 
     if ( not defined $item_group ) {
         return $c->render(

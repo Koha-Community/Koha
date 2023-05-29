@@ -47,7 +47,8 @@ sub list {
     return try {
 
         my $query = {};
-        my $restricted = delete $c->validation->output->{restricted};
+        my $restricted = $c->param('restricted');
+        $c->req->params->remove('restricted');
         $query->{debarred} = { '!=' => undef }
             if $restricted;
 
@@ -74,7 +75,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $patron_id = $c->validation->param('patron_id');
+        my $patron_id = $c->param('patron_id');
         my $patron    = $c->objects->find( Koha::Patrons->search_limited, $patron_id );
 
         unless ($patron) {
@@ -108,7 +109,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $extended_attributes = delete $body->{extended_attributes} // [];
 
@@ -225,8 +226,7 @@ Controller function that handles updating a Koha::Patron object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron_id = $c->validation->param('patron_id');
-    my $patron    = Koha::Patrons->find( $patron_id );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
          return $c->render(
@@ -236,7 +236,7 @@ sub update {
      }
 
     return try {
-        my $body = $c->validation->param('body');
+        my $body = $c->req->json;
         my $user = $c->stash('koha.user');
 
         if (
@@ -269,7 +269,7 @@ sub update {
             }
         }
 
-        $patron->set_from_api($c->validation->param('body'))->store;
+        $patron->set_from_api($body)->store;
         $patron->discard_changes;
         return $c->render( status => 200, openapi => $patron->to_api );
     }
@@ -341,7 +341,7 @@ Controller function that handles deleting a Koha::Patron object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ( $patron ) {
         return $c->render(

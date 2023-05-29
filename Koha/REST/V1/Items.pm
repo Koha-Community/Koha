@@ -95,7 +95,7 @@ sub get {
 
     try {
         my $items_rs = Koha::Items->new;
-        my $item = $c->objects->find($items_rs, $c->validation->param('item_id'));
+        my $item = $c->objects->find($items_rs, $c->param('item_id'));
         unless ( $item ) {
             return $c->render(
                 status => 404,
@@ -119,7 +119,7 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $item = Koha::Items->find($c->validation->param('item_id'));
+        my $item = Koha::Items->find($c->param('item_id'));
         unless ( $item ) {
             return $c->render(
                 status => 404,
@@ -184,7 +184,7 @@ used for building the dropdown selector
 sub pickup_locations {
     my $c = shift->openapi->valid_input or return;
 
-    my $item_id = $c->validation->param('item_id');
+    my $item_id = $c->param('item_id');
     my $item = Koha::Items->find( $item_id );
 
     unless ($item) {
@@ -194,8 +194,10 @@ sub pickup_locations {
         );
     }
 
-    my $patron_id = delete $c->validation->output->{patron_id};
+    my $patron_id = $c->param('patron_id');
     my $patron    = Koha::Patrons->find( $patron_id );
+
+    $c->req->params->remove('patron_id');
 
     unless ($patron) {
         return $c->render(
@@ -250,7 +252,7 @@ Controller function that handles bundled_items Koha::Item objects
 sub bundled_items {
     my $c = shift->openapi->valid_input or return;
 
-    my $item_id = $c->validation->param('item_id');
+    my $item_id = $c->param('item_id');
     my $item = Koha::Items->find( $item_id );
 
     unless ($item) {
@@ -282,7 +284,7 @@ Controller function that handles adding items to this bundle
 sub add_to_bundle {
     my $c = shift->openapi->valid_input or return;
 
-    my $item_id = $c->validation->param('item_id');
+    my $item_id = $c->param('item_id');
     my $item = Koha::Items->find( $item_id );
 
     unless ($item) {
@@ -292,7 +294,9 @@ sub add_to_bundle {
         );
     }
 
-    my $bundle_item_id = $c->validation->param('body')->{'external_id'};
+    my $body = $c->req->json;
+
+    my $bundle_item_id = $body->{'external_id'};
     $bundle_item_id = barcodedecode($bundle_item_id);
     my $bundle_item = Koha::Items->find( { barcode => $bundle_item_id } );
 
@@ -304,7 +308,6 @@ sub add_to_bundle {
     }
 
     return try {
-        my $body = $c->validation->param('body');
         my $options = {
             force_checkin => $body->{force_checkin},
             ignore_holds => $body->{ignore_holds},
@@ -386,7 +389,7 @@ Controller function that handles removing items from this bundle
 sub remove_from_bundle {
     my $c = shift->openapi->valid_input or return;
 
-    my $item_id = $c->validation->param('item_id');
+    my $item_id = $c->param('item_id');
     my $item = Koha::Items->find( $item_id );
 
     unless ($item) {
@@ -396,7 +399,7 @@ sub remove_from_bundle {
         );
     }
 
-    my $bundle_item_id = $c->validation->param('bundled_item_id');
+    my $bundle_item_id = $c->param('bundled_item_id');
     $bundle_item_id = barcodedecode($bundle_item_id);
     my $bundle_item = Koha::Items->find( { itemnumber => $bundle_item_id } );
 

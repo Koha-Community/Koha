@@ -66,12 +66,12 @@ Controller function that handles retrieving a single Koha::AdvancedEditorMacro
 sub get {
     my $c = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
-    my $macro = Koha::AdvancedEditorMacros->find({
-        id => $c->validation->param('advancededitormacro_id'),
-    });
+    my $macro  = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
     unless ($macro) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Macro not found" } );
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Macro not found" }
+        );
     }
     if( $macro->shared ){
         return $c->render( status => 403, openapi => {
@@ -97,7 +97,7 @@ sub get_shared {
     my $c = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
     my $macro = Koha::AdvancedEditorMacros->find({
-        id => $c->validation->param('advancededitormacro_id'),
+        id => $c->param('advancededitormacro_id'),
     });
     unless ($macro) {
         return $c->render( status  => 404,
@@ -120,13 +120,15 @@ Controller function that handles adding a new Koha::AdvancedEditorMacro object
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    if( defined $c->validation->param('body')->{shared} && $c->validation->param('body')->{shared} == 1 ){
+    my $body = $c->req->json;
+
+    if( defined $body->{shared} && $body->{shared} == 1 ){
         return $c->render( status  => 403,
                            openapi => { error => "To create shared macros you must use advancededitor/shared" } );
     }
 
     return try {
-        my $macro = Koha::AdvancedEditorMacro->new_from_api( $c->validation->param('body') );
+        my $macro = Koha::AdvancedEditorMacro->new_from_api( $body );
         $macro->store->discard_changes;
         $c->res->headers->location( $c->req->url->to_string . '/' . $macro->id );
         return $c->render(
@@ -148,12 +150,14 @@ Controller function that handles adding a new shared Koha::AdvancedEditorMacro o
 sub add_shared {
     my $c = shift->openapi->valid_input or return;
 
-    unless( defined $c->validation->param('body')->{shared} && $c->validation->param('body')->{shared} == 1 ){
+    my $body = $c->req->json;
+
+    unless( defined $body->{shared} && $body->{shared} == 1 ){
         return $c->render( status  => 403,
                            openapi => { error => "To create private macros you must use advancededitor" } );
     }
     return try {
-        my $macro = Koha::AdvancedEditorMacro->new_from_api( $c->validation->param('body') );
+        my $macro = Koha::AdvancedEditorMacro->new_from_api( $body );
         $macro->store->discard_changes;
         $c->res->headers->location( $c->req->url->to_string . '/' . $macro->id );
         return $c->render(
@@ -175,7 +179,7 @@ Controller function that handles updating a Koha::AdvancedEditorMacro object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $macro = Koha::AdvancedEditorMacros->find( $c->validation->param('advancededitormacro_id') );
+    my $macro = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
 
     if ( not defined $macro ) {
         return $c->render( status  => 404,
@@ -183,7 +187,9 @@ sub update {
     }
     my $patron = $c->stash('koha.user');
 
-    if( $macro->shared == 1 || defined $c->validation->param('body')->{shared} && $c->validation->param('body')->{shared} == 1 ){
+    my $body = $c->req->json;
+
+    if( $macro->shared == 1 || defined $body->{shared} && $body->{shared} == 1 ){
         return $c->render( status  => 403,
                            openapi => { error => "To update a macro as shared you must use the advanced_editor/macros/shared endpoint" } );
     } else {
@@ -194,8 +200,7 @@ sub update {
     }
 
     return try {
-        my $params = $c->req->json;
-        $macro->set_from_api( $params );
+        $macro->set_from_api( $body );
         $macro->store->discard_changes;
         return $c->render( status => 200, openapi => $macro->to_api );
     }
@@ -213,21 +218,22 @@ Controller function that handles updating a shared Koha::AdvancedEditorMacro obj
 sub update_shared {
     my $c = shift->openapi->valid_input or return;
 
-    my $macro = Koha::AdvancedEditorMacros->find( $c->validation->param('advancededitormacro_id') );
+    my $macro = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
+
+    my $body = $c->req->json;
 
     if ( not defined $macro ) {
         return $c->render( status  => 404,
                            openapi => { error => "Object not found" } );
     }
 
-    unless( $macro->shared == 1 || defined $c->validation->param('body')->{shared} && $c->validation->param('body')->{shared} == 1 ){
+    unless( $macro->shared == 1 || defined $body->{shared} && $body->{shared} == 1 ){
         return $c->render( status  => 403,
                            openapi => { error => "You can only update shared macros using this endpoint" } );
     }
 
     return try {
-        my $params = $c->req->json;
-        $macro->set_from_api( $params );
+        $macro->set_from_api( $body );
         $macro->store->discard_changes;
         return $c->render( status => 200, openapi => $macro->to_api );
     }
@@ -245,7 +251,7 @@ Controller function that handles deleting a Koha::AdvancedEditorMacro object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $macro = Koha::AdvancedEditorMacros->find( $c->validation->param('advancededitormacro_id') );
+    my $macro = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
     if ( not defined $macro ) {
         return $c->render( status  => 404,
                            openapi => { error => "Object not found" } );
@@ -280,7 +286,7 @@ Controller function that handles deleting a shared Koha::AdvancedEditorMacro obj
 sub delete_shared {
     my $c = shift->openapi->valid_input or return;
 
-    my $macro = Koha::AdvancedEditorMacros->find( $c->validation->param('advancededitormacro_id') );
+    my $macro = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
     if ( not defined $macro ) {
         return $c->render( status  => 404,
                            openapi => { error => "Object not found" } );

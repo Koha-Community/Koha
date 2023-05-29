@@ -44,8 +44,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $libraries_set = Koha::Libraries->new;
-        my $libraries     = $c->objects->search( $libraries_set );
+        my $libraries = $c->objects->search( Koha::Libraries->new );
         return $c->render( status => 200, openapi => $libraries );
     }
     catch {
@@ -63,12 +62,13 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $library_id = $c->validation->param('library_id');
-        my $library = Koha::Libraries->find( $library_id );
+        my $library = Koha::Libraries->find( $c->param('library_id') );
 
         unless ($library) {
-            return $c->render( status  => 404,
-                            openapi => { error => "Library not found" } );
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Library not found" }
+            );
         }
 
         return $c->render(
@@ -91,7 +91,7 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $library = Koha::Library->new_from_api( $c->validation->param('body') );
+        my $library = Koha::Library->new_from_api( $c->req->json );
         $library->store;
         $c->res->headers->location( $c->req->url->to_string . '/' . $library->branchcode );
 
@@ -121,7 +121,7 @@ Controller function that handles updating a Koha::Library object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $library = Koha::Libraries->find( $c->validation->param('library_id') );
+    my $library = Koha::Libraries->find( $c->param('library_id') );
 
     if ( not defined $library ) {
         return $c->render(
@@ -154,7 +154,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $library = Koha::Libraries->find( $c->validation->param( 'library_id' ) );
+    my $library = Koha::Libraries->find( $c->param( 'library_id' ) );
 
     if ( not defined $library ) {
         return $c->render( status => 404, openapi => { error => "Library not found" } );

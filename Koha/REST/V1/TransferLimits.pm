@@ -47,8 +47,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $limits_set = Koha::Item::Transfer::Limits->new;
-        my $limits = $c->objects->search( $limits_set );
+        my $limits = $c->objects->search( Koha::Item::Transfer::Limits->new );
         return $c->render( status => 200, openapi => $limits );
     }
     catch {
@@ -66,7 +65,7 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $params = $c->validation->param( 'body' );
+        my $params = $c->req->json;
         my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api( $params );
 
         if ( Koha::Item::Transfer::Limits->search( $transfer_limit->attributes_from_api($params) )->count == 0 ) {
@@ -102,7 +101,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $transfer_limit = Koha::Item::Transfer::Limits->find( $c->validation->param( 'limit_id' ) );
+    my $transfer_limit = Koha::Item::Transfer::Limits->find( $c->param( 'limit_id' ) );
 
     if ( not defined $transfer_limit ) {
         return $c->render( status => 404, openapi => { error => "Transfer limit not found" } );
@@ -127,7 +126,7 @@ sub batch_add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $params = $c->validation->param( 'body' );
+        my $params = $c->req->json;
 
         my @libraries = Koha::Libraries->search->as_list;
 
@@ -175,7 +174,7 @@ sub batch_delete {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $params = $c->validation->param( 'body' );
+        my $params = $c->req->json;
         my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api( $params );
         my $search_params = $transfer_limit->unblessed;
 

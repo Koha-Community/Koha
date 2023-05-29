@@ -131,8 +131,8 @@ sub verification {
 
     return try {
 
-        my $pin_code = $c->validation->param('pin_code');
-        my $secret32 = $c->validation->param('secret32');
+        my $pin_code = $c->param('pin_code');
+        my $secret32 = $c->param('secret32');
 
         my $auth     = Koha::Auth::TwoFactorAuth->new(
             { patron => $patron, secret32 => $secret32 } );

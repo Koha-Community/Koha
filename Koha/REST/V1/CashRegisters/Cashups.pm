@@ -40,11 +40,7 @@ Controller function that handles retrieving a cash registers cashup actions
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $register = Koha::Cash::Registers->find(
-        {
-            id => $c->validation->param('cash_register_id')
-        }
-    );
+    my $register = Koha::Cash::Registers->find( $c->param('cash_register_id') );
 
     unless ($register) {
         return $c->render(
@@ -56,8 +52,7 @@ sub list {
     }
 
     return try {
-        my $cashups_rs = $register->cashups;
-        my $cashups    = $c->objects->search($cashups_rs);
+        my $cashups = $c->objects->search( $register->cashups );
         return $c->render( status => 200, openapi => $cashups );
     }
     catch {
@@ -75,8 +70,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $cashup = Koha::Cash::Register::Cashups->find(
-            $c->validation->param('cashup_id') );
+        my $cashup = Koha::Cash::Register::Cashups->find( $c->param('cashup_id') );
         unless ($cashup) {
             return $c->render(
                 status  => 404,

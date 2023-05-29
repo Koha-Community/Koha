@@ -45,8 +45,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $holds_set = Koha::Holds->new;
-        my $holds     = $c->objects->search( $holds_set );
+        my $holds = $c->objects->search( Koha::Holds->new );
         return $c->render( status => 200, openapi => $holds );
     }
     catch {
@@ -64,7 +63,7 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $body = $c->validation->param('body');
+        my $body = $c->req->json;
 
         my $biblio;
         my $item;
@@ -247,8 +246,7 @@ sub edit {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $hold_id = $c->validation->param('hold_id');
-        my $hold = Koha::Holds->find( $hold_id );
+        my $hold = Koha::Holds->find( $c->param('hold_id') );
 
         unless ($hold) {
             return $c->render(
@@ -260,7 +258,7 @@ sub edit {
         my $overrides = $c->stash('koha.overrides');
         my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
 
-        my $body = $c->validation->output->{body};
+        my $body = $c->req->json;
 
         my $pickup_library_id = $body->{pickup_library_id};
 
@@ -283,7 +281,7 @@ sub edit {
         my $suspended_until = $body->{suspended_until} || $hold->suspend_until;
 
         my $params = {
-            reserve_id    => $hold_id,
+            reserve_id    => $hold->id,
             branchcode    => $pickup_library_id,
             rank          => $priority,
             suspend_until => $suspended_until,
@@ -312,8 +310,7 @@ Method that handles deleting a Koha::Hold object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold_id = $c->validation->param('hold_id');
-    my $hold    = Koha::Holds->find($hold_id);
+    my $hold = Koha::Holds->find($c->param('hold_id'));
 
     unless ($hold) {
         return $c->render( status => 404, openapi => { error => "Hold not found." } );
@@ -341,9 +338,9 @@ Method that handles suspending a hold
 sub suspend {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold_id  = $c->validation->param('hold_id');
-    my $hold     = Koha::Holds->find($hold_id);
-    my $body     = $c->req->json;
+    my $hold = Koha::Holds->find( $c->param('hold_id') );
+    my $body = $c->req->json;
+
     my $end_date = ($body) ? $body->{end_date} : undef;
 
     unless ($hold) {
@@ -381,9 +378,8 @@ Method that handles resuming a hold
 sub resume {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold_id = $c->validation->param('hold_id');
-    my $hold    = Koha::Holds->find($hold_id);
-    my $body    = $c->req->json;
+    my $hold = Koha::Holds->find($c->param('hold_id'));
+    my $body = $c->req->json;
 
     unless ($hold) {
         return $c->render( status => 404, openapi => { error => 'Hold not found.' } );
@@ -407,8 +403,7 @@ Method that handles modifying a Koha::Hold object
 sub update_priority {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold_id = $c->validation->param('hold_id');
-    my $hold = Koha::Holds->find($hold_id);
+    my $hold = Koha::Holds->find($c->param('hold_id'));
 
     unless ($hold) {
         return $c->render(
@@ -421,7 +416,7 @@ sub update_priority {
         my $priority = $c->req->json;
         C4::Reserves::_FixPriority(
             {
-                reserve_id => $hold_id,
+                reserve_id => $hold->id,
                 rank       => $priority
             }
         );
@@ -443,8 +438,7 @@ used for building the dropdown selector
 sub pickup_locations {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold_id = $c->validation->param('hold_id');
-    my $hold = Koha::Holds->find( $hold_id, { prefetch => [ 'patron' ] } );
+    my $hold = Koha::Holds->find( $c->param('hold_id'), { prefetch => [ 'patron' ] } );
 
     unless ($hold) {
         return $c->render(
@@ -509,11 +503,7 @@ Method that handles modifying the pickup location of a Koha::Hold object
 sub update_pickup_location {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold_id = $c->validation->param('hold_id');
-    my $body    = $c->validation->param('body');
-    my $pickup_library_id = $body->{pickup_library_id};
-
-    my $hold = Koha::Holds->find($hold_id);
+    my $hold = Koha::Holds->find($c->param('hold_id'));
 
     unless ($hold) {
         return $c->render(
@@ -522,7 +512,12 @@ sub update_pickup_location {
         );
     }
 
+
     return try {
+
+        my $body = $c->req->json;
+
+        my $pickup_library_id = $body->{pickup_library_id};
 
         my $overrides    = $c->stash('koha.overrides');
         my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
@@ -555,6 +550,5 @@ sub update_pickup_location {
         $c->unhandled_exception($_);
     };
 }
-
 
 1;

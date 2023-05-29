@@ -62,7 +62,7 @@ Get one backend
 sub get {
     my $c = shift->openapi->valid_input;
 
-    my $backend_id = $c->validation->param('ill_backend_id');
+    my $backend_id = $c->param('ill_backend_id');
 
     return try {
 

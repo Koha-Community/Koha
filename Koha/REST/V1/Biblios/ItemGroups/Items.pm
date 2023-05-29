@@ -43,9 +43,7 @@ sub add {
 
     return try {
 
-        my $item_group = Koha::Biblio::ItemGroups->find(
-            $c->validation->param('item_group_id')
-        );
+        my $item_group = Koha::Biblio::ItemGroups->find( $c->param('item_group_id') );
 
         unless ( $item_group ) {
             return $c->render(
@@ -56,7 +54,7 @@ sub add {
             );
         }
 
-        unless ( $item_group->biblio_id eq $c->validation->param('biblio_id') ) {
+        unless ( $item_group->biblio_id eq $c->param('biblio_id') ) {
             return $c->render(
                 status  => 409,
                 openapi => {
@@ -66,7 +64,7 @@ sub add {
         }
 
         # All good, add the item
-        my $body    = $c->validation->param('body');
+        my $body    = $c->req->json;
         my $item_id = $body->{item_id};
 
         $item_group->add_item({ item_id => $item_id });
@@ -125,8 +123,8 @@ Controller function that handles unlinking an item from a Koha::Biblio::ItemGrou
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $item_group_id = $c->validation->param('item_group_id');
-    my $item_id       = $c->validation->param('item_id');
+    my $item_group_id = $c->param('item_group_id');
+    my $item_id       = $c->param('item_id');
 
     my $item_link = Koha::Biblio::ItemGroup::Items->find(
         {

@@ -43,7 +43,7 @@ to a given patron.
 sub list_patron_attributes {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -56,8 +56,7 @@ sub list_patron_attributes {
 
     return try {
 
-        my $attributes_rs = $patron->extended_attributes;
-        my $attributes    = $c->objects->search($attributes_rs);
+        my $attributes = $c->objects->search( $patron->extended_attributes );
 
         return $c->render(
             status  => 200,
@@ -78,7 +77,7 @@ Controller method that handles adding a Koha::Patron::Attribute to a given patro
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -93,7 +92,7 @@ sub add {
 
         my $attribute = $patron->add_extended_attribute(
             Koha::Patron::Attribute->new_from_api( # new_from_api takes care of mapping attributes
-                $c->validation->param('body')
+                $c->req->json
             )->unblessed
         );
 
@@ -150,7 +149,7 @@ Controller method that handles overwriting extended attributes for a given patro
 sub overwrite {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -163,7 +162,7 @@ sub overwrite {
 
     return try {
 
-        my $body = $c->validation->every_param('body');
+        my $body = $c->req->json;
 
         my @attrs;
 
@@ -228,7 +227,7 @@ Controller method that handles updating a single extended patron attribute.
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -241,7 +240,7 @@ sub update {
 
     return try {
         my $attribute = $patron->extended_attributes->find(
-            $c->validation->param('extended_attribute_id') );
+            $c->param('extended_attribute_id') );
 
         unless ($attribute) {
             return $c->render(
@@ -252,7 +251,7 @@ sub update {
             );
         }
 
-        $attribute->set_from_api( $c->validation->param('body') )->store;
+        $attribute->set_from_api( $c->req->json )->store;
         $attribute->discard_changes;
 
         return $c->render(
@@ -302,7 +301,7 @@ Controller method that handles removing an extended patron attribute.
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
     unless ($patron) {
         return $c->render(
@@ -316,7 +315,7 @@ sub delete {
     return try {
 
         my $attribute = $patron->extended_attributes->find(
-            $c->validation->param('extended_attribute_id') );
+            $c->param('extended_attribute_id') );
 
         unless ($attribute) {
             return $c->render(

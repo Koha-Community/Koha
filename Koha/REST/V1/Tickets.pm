@@ -38,8 +38,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $tickets_set = Koha::Tickets->new;
-        my $tickets     = $c->objects->search($tickets_set);
+        my $tickets = $c->objects->search(Koha::Tickets->new);
         return $c->render( status => 200, openapi => $tickets );
     }
     catch {
@@ -56,7 +55,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $ticket = Koha::Tickets->find( $c->validation->param('ticket_id') );
+        my $ticket = Koha::Tickets->find( $c->param('ticket_id') );
         unless ($ticket) {
             return $c->render(
                 status  => 404,
@@ -80,7 +79,7 @@ sub add {
     my $patron = $c->stash('koha.user');
 
     return try {
-        my $body   = $c->validation->param('body');
+        my $body = $c->req->json;
 
         # Set reporter from session
         $body->{reporter_id} = $patron->id;
@@ -108,7 +107,7 @@ sub add {
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $ticket = Koha::Tickets->find( $c->validation->param('ticket_id') );
+    my $ticket = Koha::Tickets->find( $c->param('ticket_id') );
 
     if ( not defined $ticket ) {
         return $c->render(
@@ -118,7 +117,7 @@ sub update {
     }
 
     return try {
-        $ticket->set_from_api( $c->validation->param('body') );
+        $ticket->set_from_api( $c->req->json );
         $ticket->store();
         return $c->render( status => 200, openapi => $ticket->to_api );
     }
@@ -134,7 +133,7 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $ticket = Koha::Tickets->find( $c->validation->param('ticket_id') );
+    my $ticket = Koha::Tickets->find( $c->param('ticket_id') );
     if ( not defined $ticket ) {
         return $c->render(
             status  => 404,
@@ -162,7 +161,7 @@ sub list_updates {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $ticket = Koha::Tickets->find( $c->validation->param('ticket_id') );
+        my $ticket = Koha::Tickets->find( $c->param('ticket_id') );
         unless ($ticket) {
             return $c->render(
                 status  => 404,
@@ -187,8 +186,8 @@ sub add_update {
     my $c = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
 
-    my $ticket_id_param = $c->validation->param('ticket_id');
-    my $ticket_update   = $c->validation->param('body');
+    my $ticket_id_param = $c->param('ticket_id');
+    my $ticket_update   = $c->req->json;
     $ticket_update->{ticket_id} //= $ticket_id_param;
 
     if ( $ticket_update->{ticket_id} != $ticket_id_param ) {
