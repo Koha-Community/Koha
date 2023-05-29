@@ -67,8 +67,6 @@ sub add {
 
     my $body = $c->validation->param('body');
 
-    $body =
-
     return try {
         my $profile = Koha::ImportBatchProfile->new_from_api( $body )->store;
         return $c->render(
