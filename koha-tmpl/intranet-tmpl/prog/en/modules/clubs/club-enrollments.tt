@@ -46,7 +46,7 @@
                                 <th>Name</th>
                                 <th>Card number</th>
                                 [% FOREACH club_template_enrollment_field IN club.club_template.club_template_enrollment_fields %]
-                                    <th>[% club_template_enrollment_field.name %] </th>
+                                    <th>[% club_template_enrollment_field.name | html %] </th>
                                 [% END %]
                             </tr>
                         </thead>

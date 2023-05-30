@@ -16,17 +16,21 @@
                     [% FOREACH c IN club_enrollment_fields %]
                         [% IF f.id == c.club_template_enrollment_field_id %]
                             <li>
-                                <label>[% f.name %]</label>
+                                <label>[% f.name | html %]</label>
                                 [% IF f.authorised_value_category %]
-                                    <select name="[% f.id %]">
+                                    <select name="[% f.id | html %]">
                                         [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
-                                        <option value="[% a.authorised_value %]" [% IF a.authorised_value == c.value %]selected="selected"[% END %]>[% a.lib %]</option>
+                                            [% IF a.authorised_value == c.value %]
+                                                <option value="[% a.authorised_value | html %]" selected="selected">[% a.lib | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
+                                            [% END %]
                                         [% END %]
                                     </select>
                                 [% ELSE %]
-                                    <input type="text" name="[% f.id %]" value="[% c.value %]"/>
+                                    <input type="text" name="[% f.id | html %]" value="[% c.value | html %]"/>
                                 [% END %]
-                                <span class="hint">[% f.description %]</span>
+                                <span class="hint">[% f.description | html %]</span>
                             </li>
                         [% END %]
                     [% END %]
@@ -58,8 +62,8 @@
 </div>
 
 <script>
-if([% enrollent_id %]){
-    $("#heading").html(_("Modifying enrollment")+" <em>[% club.name %]</em>");
+if([% enrollent_id | html %]){
+    $("#heading").html(_("Modifying enrollment")+" <em>[% club.name | html %]</em>");
 }
 function addEnrollment() {
     $("body").css("cursor", "progress");
