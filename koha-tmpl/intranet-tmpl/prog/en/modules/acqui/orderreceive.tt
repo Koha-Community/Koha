@@ -1242,7 +1242,7 @@
                         $('#modal-order-main #items-panel').removeClass('show').addClass('hide');
                     }
                 }
-                if(row.invoice_unit_price) {
+                if(row.invoice_currency && row.invoice_currency != active_currency) {
                     $("#select_currency").show();
                     $("#unitprice").prop("readonly", true);
                     $("input[name='change_currency']").prop('checked', true);
