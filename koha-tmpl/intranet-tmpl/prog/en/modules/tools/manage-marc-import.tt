@@ -159,6 +159,10 @@
                                         [% import_status | html %]
                                     [% END %]
                                 </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="rows">
+                            <ol>
                                 <li>
                                     [% IF ( can_commit ) %]
                                         <label for="new_matcher_id">Matching rule applied:</label>
@@ -253,29 +257,34 @@
                                 <form method="post" id="import_batch_form">
                                     <input type="hidden" name="op" value="commit-batch" />
                                     <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
+                                    [% IF ( record_type != 'auth' ) %]
+                                        <fieldset class="rows">
+                                            <ol>
+                                                <li>
+                                                    <label for="frameworks">New record framework:</label>
+                                                    <select name="framework" id="frameworks">
+                                                        <option value="">Default</option>
+                                                        [% FOREACH framework IN frameworks %]
+                                                            <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
+                                                        [% END %]
+                                                    </select>
+                                                    <div class="hint">New bibliographic records will use this framework</div>
+                                                </li>
+                                                <li>
+                                                    <label for="overlay_framework">Replacement record framework:</label>
+                                                    <select name="overlay_framework" id="overlay_frameworks">
+                                                        <option value="_USE_ORIG_">Keep original framework</option>
+                                                        <option value="">Default</option>
+                                                        [% FOREACH framework IN frameworks %]
+                                                            <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
+                                                        [% END %]
+                                                    </select>
+                                                    <div class="hint">Replacement records will use this framework</div>
+                                                </li>
+                                            </ol>
+                                        </fieldset>
+                                    [% END %]
                                     <fieldset class="action">
-                                        [% IF ( record_type != 'auth' ) %]
-                                            <div class="form-group">
-                                                Add new bibliographic records into this framework:
-                                                <select name="framework" id="frameworks">
-                                                    <option value="">Default</option>
-                                                    [% FOREACH framework IN frameworks %]
-                                                        <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
-                                                    [% END %]
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                When replacing records use this framework:
-                                                <select name="overlay_framework" id="overlay_frameworks">
-                                                    <option value="_USE_ORIG_">Keep original framework</option>
-                                                    <option value="">Default</option>
-                                                    [% FOREACH framework IN frameworks %]
-                                                        <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
-                                                    [% END %]
-                                                </select>
-                                            </div>
-                                        [% END %]
-                                        <br />
                                         <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" />
                                     </fieldset>
                                 </form> <!-- /#import_batch_form -->
