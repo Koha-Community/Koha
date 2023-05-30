@@ -1,4 +1,8 @@
+[% IF patron.borrowernumber %]
+<table id="ill-requests-patron-[% patron.borrowernumber | html %]">
+[% ELSE %]
 <table id="ill-requests">
+[% END %]
     <thead>
         <tr id="ill_requests_header">
             <th scope="col">Request ID</th>
