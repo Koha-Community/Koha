@@ -331,4 +331,32 @@ sub run {
         $c->unhandled_exception($_);
     };
 }
+
+=head3 test_connection
+
+=cut
+
+sub test_connection {
+    my $c = shift->openapi->valid_input or return;
+
+    my $udprovider = Koha::ERM::UsageDataProviders->find( $c->validation->param('erm_usage_data_provider_id') );
+
+    unless ($udprovider) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Usage data provider not found" }
+        );
+    }
+    try {
+        my $service_active = $udprovider->test_connection;
+        return $c->render(
+            status  => 200,
+            openapi => $service_active
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;

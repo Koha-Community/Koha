@@ -25,6 +25,7 @@
                 @edit="edit_usage_data_provider"
                 @delete="delete_usage_data_provider"
                 @run_now="run_harvester_now"
+                @test_connection="test_harvester_connection"
             ></KohaTable>
         </div>
         <div v-else-if="initialized" class="dialog message">
@@ -44,7 +45,8 @@ export default {
         const AVStore = inject("AVStore") // Left in for future permissions fixes
         const { get_lib_from_av, map_av_dt_filter } = AVStore
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const { setConfirmationDialog, setMessage, setWarning } =
+            inject("mainStore")
 
         const table = ref()
 
@@ -53,6 +55,7 @@ export default {
             map_av_dt_filter,
             setConfirmationDialog,
             setMessage,
+            setWarning,
             table,
         }
     },
@@ -74,6 +77,12 @@ export default {
                             run_now: {
                                 text: this.$__("Run now"),
                                 icon: "fa fa-play",
+                            },
+                        },
+                        {
+                            test_connection: {
+                                text: this.$__("Test"),
+                                icon: "fa fa-check",
                             },
                         },
                         "edit",
@@ -213,6 +222,40 @@ export default {
                                 error => {}
                             )
                     }
+                )
+            }
+        },
+        test_harvester_connection(usage_data_provider, dt, event) {
+            const { erm_usage_data_provider_id: id, name } = usage_data_provider
+
+            if (usage_data_provider.active) {
+                const client = APIClient.erm
+                client.usage_data_providers.test(id).then(
+                    success => {
+                        if (success) {
+                            this.setMessage(
+                                this.$__(
+                                    "Harvester connection was successful for usage data provider %s"
+                                ).format(name),
+                                true
+                            )
+                        } else {
+                            this.setMessage(
+                                this.$__(
+                                    "No connection for usage data provider %s, please check your credentials and try again."
+                                ).format(name),
+                                true
+                            )
+                        }
+                    },
+                    error => {}
+                )
+            } else {
+                this.setWarning(
+                    this.$__(
+                        "This data provider is inactive - connection testing is not possible"
+                    ),
+                    true
                 )
             }
         },
