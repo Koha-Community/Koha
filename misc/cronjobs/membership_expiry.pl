@@ -2,7 +2,8 @@
 
 # This file is part of Koha.
 #
-# Copyright (C) 2015 Amit Gupta (amitddng135@gmail.com)
+# Copyright 2023 Koha development team
+# Copyright 2015 Amit Gupta (amitddng135@gmail.com)
 #
 # Koha is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -40,6 +41,8 @@ Options:
    --before=X               include patrons expiring a number of days BEFORE the date set by the preference
    --after=X                include patrons expiring a number of days AFTER  the date set by the preference
    -l --letter <lettercode> use a specific notice rather than the default
+   --active=X               only send notices to active patrons (active within X months)
+   --inactive=X             only send notices to inactive patrons (inactive within X months)
 
 =head1 DESCRIPTION
 
@@ -99,6 +102,15 @@ will only notify patrons who have been seen.
 
 Optional parameter to use another notice than the default: MEMBERSHIP_EXPIRY
 
+=item B<-active>
+
+Optional parameter to include active patrons only (active within passed number of months).
+
+=item B<-inactive>
+
+Optional parameter to include inactive patrons only (inactive within passed number of months).
+This allows you to skip active patrons when you renew them automatically (see bug 28688).
+
 =back
 
 =head1 CONFIGURATION
@@ -157,6 +169,8 @@ my $before  = 0;
 my $after   = 0;
 my ( $branch, $letter_type );
 my @where;
+my $active;
+my $inactive;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -171,10 +185,16 @@ GetOptions(
     'after:i'        => \$after,
     'letter:s'       => \$letter_type,
     'where=s'        => \@where,
+    'active:i'       => \$active,
+    'inactive:i'     => \$inactive,
 ) or pod2usage(2);
 
 pod2usage( -verbose => 2 ) if $man;
 pod2usage(1) if $help || !$confirm;
+if( defined($active) && defined($inactive) ) {
+    print "Sorry, it is not possible to pass both -active as well as -inactive.\n";
+    exit;
+}
 
 cronlogaction({ info => $command_line_options });
 
@@ -203,7 +223,16 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
 
 # main loop
 $letter_type = 'MEMBERSHIP_EXPIRY' if !$letter_type;
+my ( $count_active, $count_inactive, $count_enqueued ) = ( 0, 0, 0 );
 while ( my $recent = $upcoming_mem_expires->next ) {
+    my $patron_active = $recent->is_active({ months => $active // $inactive }); # checked already that only one is defined
+    if( defined($active) && !$patron_active ) {
+        $count_inactive++;
+        next;
+    } elsif( defined($inactive) && $patron_active ) {
+        $count_active++;
+        next;
+    }
     my $from_address = $recent->library->from_email_address;
     my $letter =  C4::Letters::GetPreparedLetter(
         module      => 'members',
@@ -227,6 +256,7 @@ while ( my $recent = $upcoming_mem_expires->next ) {
         from_address           => $from_address,
         message_transport_type => 'email',
     });
+    $count_enqueued++;
 
     if ($recent->smsalertnumber) {
         my $smsletter = C4::Letters::GetPreparedLetter(
@@ -248,6 +278,12 @@ while ( my $recent = $upcoming_mem_expires->next ) {
             });
         }
     }
+}
+
+if( $verbose ) {
+    print "Enqueued notices for $count_enqueued patrons\n";
+    print "Skipped $count_active active patrons\n" if $count_active;
+    print "Skipped $count_inactive inactive patrons\n" if $count_inactive;
 }
 
 cronlogaction({ action => 'End', info => "COMPLETED" });
