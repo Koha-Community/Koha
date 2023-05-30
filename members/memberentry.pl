@@ -619,7 +619,7 @@ if (C4::Context->preference("IndependentBranches")) {
 my $prefillguarantorfields=C4::Context->preference("PrefillGuaranteeField");
 my @prefill_fields=split(/\,/,$prefillguarantorfields);
 $template->param(
-    guarantor_attributes => \@prefill_fields,
+    prefill_fields => \@prefill_fields,
     to_api_mapping => Koha::Patron->new->to_api_mapping
 );
 

@@ -1968,10 +1968,10 @@ legend:hover {
             });
         [% END %]
         $("#guarantor_template").hide();
-        var guarantor_attributes;
+        var prefill_fields;
         var to_api_mapping;
-        [% IF guarantor_attributes %]
-            guarantor_attributes = [% To.json(guarantor_attributes) %];
+        [% IF prefill_fields %]
+            prefill_fields = [% To.json(prefill_fields)%];
         [% END %]
         [% IF to_api_mapping %]
             to_api_mapping = [% To.json(to_api_mapping) %];

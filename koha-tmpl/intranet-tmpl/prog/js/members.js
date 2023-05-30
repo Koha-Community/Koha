@@ -122,26 +122,14 @@ function select_user(borrowernumber, borrower, relationship) {
             fieldset.find('.new_guarantor_relationship').val(relationship);
         }
 
-        if(guarantor_attributes && to_api_mapping) {
-            $('#saverecord').prop('disabled', true);
-            $.ajax({
-                url: '/api/v1/patrons/'+borrowernumber,
-                method: "GET",
-                dataType: 'json',
-                success: function(data){
-                    for (let i = 0; i < parseInt(guarantor_attributes.length, 10); i++) {
-                        let attribute = guarantor_attributes[i];
-                        let key_data = to_api_mapping[attribute] || attribute;
-                        if(data[key_data] != null && attribute in document.forms.entryform && document.forms.entryform[attribute].value == ""){
-                            document.forms.entryform[attribute].value = data[key_data];
-                        }
-                    }
-                    $('#saverecord').prop('disabled', false);
-                },
-                error:function(){
-                    $('#saverecord').prop('disabled', false);
+        if ( prefill_fields && to_api_mapping) {
+            for (let i = 0; i < parseInt(prefill_fields.length, 10); i++) {
+                let field_name = prefill_fields[i];
+                let attribute = to_api_mapping[field_name] || field_name;
+                if ( borrower[attribute] != null && document.forms.entryform[field_name] && document.forms.entryform[field_name].value == "" ) {
+                    document.forms.entryform[field_name].value = borrower[attribute];
                 }
-            });
+            }
         }
     }
 
