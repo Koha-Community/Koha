@@ -8,24 +8,28 @@
                     <ol>
                         <li>
                             <label for="interval"
-                                >{{ $__("Monthly or yearly totals?") }}:</label
+                                >{{ $__("Data display") }}:</label
                             >
                             <v-select
                                 id="interval"
-                                v-model="query.interval"
+                                v-model="query.data_display"
                                 label="description"
                                 :reduce="interval => interval.value"
                                 :options="[
                                     {
                                         value: 'monthly',
-                                        description: 'Monthly',
+                                        description: 'By month',
                                     },
                                     {
                                         value: 'monthly_with_totals',
                                         description:
-                                            'Monthly with period total',
+                                            'By month with period total',
                                     },
-                                    { value: 'yearly', description: 'Yearly' },
+                                    { value: 'yearly', description: 'By year' },
+                                    {
+                                        value: 'metric_type',
+                                        description: 'By metric type',
+                                    },
                                 ]"
                             />
                         </li>
@@ -102,7 +106,9 @@
                                 label="description"
                                 :reduce="month => month.value"
                                 :options="months_data"
-                                :disabled="query.interval.includes('yearly')"
+                                :disabled="
+                                    query.data_display.includes('yearly')
+                                "
                             />
                         </li>
                         <li>
@@ -128,7 +134,9 @@
                                 label="description"
                                 :reduce="month => month.value"
                                 :options="months_data"
-                                :disabled="query.interval.includes('yearly')"
+                                :disabled="
+                                    query.data_display.includes('yearly')
+                                "
                             />
                         </li>
                         <li>
@@ -171,7 +179,7 @@
                         </li>
                     </ol>
                 </div>
-                <div v-if="query.interval.includes('monthly')">
+                <div v-if="query.data_display.includes('monthly')">
                     <h3>{{ $__("Select date display method") }}</h3>
                     <div class="date_display">
                         <label
@@ -368,7 +376,7 @@ export default {
                 },
             },
             query: {
-                interval: "monthly",
+                data_display: "monthly",
                 report_type: null,
                 metric_types: null,
                 usage_data_providers: null,
@@ -481,7 +489,7 @@ export default {
             e.preventDefault()
 
             this.query = {
-                interval: "monthly",
+                data_display: "monthly",
                 report_type: null,
                 metric_types: null,
                 usage_data_providers: null,
@@ -500,7 +508,7 @@ export default {
             const {
                 start_year,
                 end_year,
-                interval,
+                data_display,
                 report_type,
                 metric_types,
             } = queryObject
@@ -533,13 +541,16 @@ export default {
                 queryObject.metric_types = final_metric_types
             }
 
-            const url = interval.includes("monthly")
+            const metric_report_type =
+                data_display === "metric_type" ? true : false
+            const url = !data_display.includes("yearly")
                 ? this.build_monthly_url_query(
                       queryObject,
-                      this.time_period_columns_builder
+                      this.time_period_columns_builder,
+                      metric_report_type
                   )
                 : this.build_yearly_url_query(queryObject)
-            const type = interval
+            const type = data_display
             const columns = this.defineColumns(
                 this.title_property_column_options
             )
@@ -547,7 +558,7 @@ export default {
             this.setReportURL(url)
             this.setQuery(queryObject)
             this.setTimePeriodColumns(this.time_period_columns_builder)
-            if (interval.includes("monthly")) {
+            if (data_display.includes("monthly")) {
                 this.setYearlyFilter(this.yearly_filter_required)
             } else {
                 this.setYearlyFilter(false)
@@ -652,8 +663,14 @@ export default {
 
             this.time_period_columns_builder = time_period_columns
         },
-        build_monthly_url_query(query, time_period_columns) {
-            let url = "/api/v1/erm/usage_titles/monthly_report"
+        build_monthly_url_query(
+            query,
+            time_period_columns,
+            metric_type_report
+        ) {
+            let url = metric_type_report
+                ? "/api/v1/erm/usage_titles/metric_types_report"
+                : "/api/v1/erm/usage_titles/monthly_report"
             // Work out which years are included in the query
             const years = []
             const {

@@ -45,9 +45,7 @@ export default {
 
         const report_type = getReportType()
         const embed =
-            report_type === "monthly" || report_type === "monthly_with_totals"
-                ? ["erm_usage_muses"]
-                : ["erm_usage_yuses"]
+            report_type === "yearly" ? ["erm_usage_yuses"] : ["erm_usage_muses"]
 
         const years = Object.keys(getTimePeriodColumns())
         const year = ref(years[years.length - 1])
@@ -73,10 +71,7 @@ export default {
             building_table: false,
             initialized: false,
             tableOptions: {
-                columns: this.buildColumnArray(
-                    this.report_type,
-                    this.sum_totals
-                ),
+                columns: this.buildColumnArray(this.report_type),
                 options: { embed: this.embed },
                 url: () => this.tableURL(this.year),
                 table_settings: this.report_type.includes("monthly")
@@ -85,8 +80,6 @@ export default {
                 add_filters: true,
             },
             yearly_filter: null,
-            report_ready: false,
-            sum_totals: false,
         }
     },
     methods: {
@@ -95,17 +88,20 @@ export default {
             const months_data = this.getMonthsData()
             const time_period_columns = this.getTimePeriodColumns()
             const yearly_filter = this.getYearlyFilter()
+            const query = this.getQuery()
 
             const column_set = [...columns]
             // Add metric type to each row
-            column_set.push({
-                title: __("Metric"),
-                render: function (data, type, row, meta) {
-                    return row.metric_type
-                },
-                searchable: true,
-                orderable: true,
-            })
+            if (report_type !== "metric_type") {
+                column_set.push({
+                    title: __("Metric"),
+                    render: function (data, type, row, meta) {
+                        return row.metric_type
+                    },
+                    searchable: true,
+                    orderable: true,
+                })
+            }
 
             // Add monthly columns
             if (yearly_filter) {
@@ -181,6 +177,29 @@ export default {
                                     ? find_usage.totalcount
                                     : "-"
                                 return usage
+                            },
+                            searchable: true,
+                            orderable: true,
+                        })
+                    })
+                }
+                if (report_type === "metric_type") {
+                    const metric_types = query.metric_types
+                    metric_types.forEach(metric => {
+                        column_set.push({
+                            title: __(metric),
+                            render: function (data, type, row, meta) {
+                                const filterByMetric =
+                                    row.erm_usage_muses.filter(
+                                        item => item.metric_type === metric
+                                    )
+                                const period_total = filterByMetric.reduce(
+                                    (acc, item) => {
+                                        return acc + item.usage_count
+                                    },
+                                    0
+                                )
+                                return period_total
                             },
                             searchable: true,
                             orderable: true,
