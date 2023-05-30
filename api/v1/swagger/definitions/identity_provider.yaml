@@ -3,10 +3,10 @@ type: object
 properties:
   identity_provider_id:
     type: integer
-    description: Internally assigned authentication provider identifier
+    description: Internally assigned identity provider identifier
     readOnly: true
   code:
-    description: Authentication provider code
+    description: Identity provider code
     type: string
   description:
     description: User-oriented description for the provider
@@ -40,7 +40,7 @@ properties:
      - string
      - "null"
   domains:
-    description: Configured domains for the authentication provider
+    description: Configured domains for the identity provider
     type:
       - array
       - "null"

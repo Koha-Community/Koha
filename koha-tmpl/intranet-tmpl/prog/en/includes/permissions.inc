@@ -838,7 +838,7 @@
   [%# identity_providers %]
     [%- CASE 'manage_identity_providers' -%]
         <span class="sub_permission manage_identity_providers_subpermission">
-            Manage authentication providers
+            Manage identity providers
         </span>
         <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
