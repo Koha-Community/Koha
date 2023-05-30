@@ -105,11 +105,11 @@
         function itemSelectionBuildActionLinks(tab_id) {
             var delete_link_ok = itemSelectionBuildDeleteLink(tab_id);
             var modify_link_ok = itemSelectionBuildModifyLink(tab_id);
-            var div = $("#" + tab_id);
+            var tab = $("#" + tab_id);
             if (modify_link_ok || delete_link_ok) {
-                $('.itemselection_actions', div).show();
+                $('.itemselection_actions', tab).show();
             } else {
-                $('.itemselection_actions', div).hide();
+                $('.itemselection_actions', tab).hide();
             }
         }
 
@@ -117,16 +117,22 @@
 
             $(".SelectAll").on("click",function(e){
                 e.preventDefault();
-                var tab = $(this).data("tab");
-                $("input[name='itemnumber'][type='checkbox']", $("#"+tab)).prop('checked', true);
-                itemSelectionBuildActionLinks(tab);
+                let tab_id = $(this).data("tab");
+                let tab = $("#"+tab_id);
+                tab.find("input[name='itemnumber'][type='checkbox']").each( (i, input) => {
+                    items_selection[tab_id].push($(input).val());
+                    $(input).prop('checked', true);
+                });
+                itemSelectionBuildActionLinks(tab_id);
             });
 
             $(".ClearAll").on("click",function(e){
                 e.preventDefault();
-                var tab = $(this).data("tab");
-                $("input[name='itemnumber'][type='checkbox']", $("#"+tab)).prop('checked', false);
-                itemSelectionBuildActionLinks(tab);
+                let tab_id = $(this).data("tab");
+                let tab = $("#"+tab_id);
+                items_selection[tab_id] = [];
+                $("input[name='itemnumber'][type='checkbox']", tab).prop('checked', false);
+                itemSelectionBuildActionLinks(tab_id);
             });
 
             $(".show_filters").on("click",function(e){
