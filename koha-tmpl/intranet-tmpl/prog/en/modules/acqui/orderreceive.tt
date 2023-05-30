@@ -475,9 +475,6 @@
             tr.append('<td>'+display_string( 'item_type_id', item._strings, item.item_type_id )+'</td>');
             tr.append('<td>'+display_string( 'materials_notes', item._strings, item.materials_notes )+'</td>');
             tr.append('<td>'+(item.public_notes||'')+'</td>');
-
-            const fp = document.querySelector("#datereceived")._flatpickr;
-            fp.setDate(new Date());
         };
 
         var items_columns = [null, null, 'external_id', 'home_library_id',
@@ -1138,7 +1135,10 @@
                 }
 
                 var effective_create_items = row.basket.create_items || AcqCreateItem;
-                $("#datereceived").val(row.date_received||$date(new Date().toISOString()));
+
+                // set today if no date_received in row
+                document.querySelector("#datereceived")._flatpickr.setDate(row.date_received||new Date());
+
                 // restore the full tree
                 $("#bookfund").html($funds_tree);
                 $("#selected_bookfund")
