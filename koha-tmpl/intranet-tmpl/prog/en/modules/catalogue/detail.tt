@@ -379,7 +379,7 @@
                         <td class="cover">
                             <div class="bookcoverimg">
                                 <div class="cover-slider">
-                                    [% FOREACH image IN item.object.cover_images %]
+                                    [% FOREACH image IN item.cover_images %]
                                         <div class="cover-image local-coverimg">
                                             <a href="/cgi-bin/koha/catalogue/image.pl?itemnumber=[% image.itemnumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
                                                 <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% item.itemnumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" />
@@ -404,23 +404,22 @@
                     <td class="homebranch">
                         <span class="homebranchdesc">[% Branches.GetName(item.homebranch) | html %]</span>
                         <span class="shelvingloc">
-                    [%# If permanent location is defined, show description or code and
-                        display current location in parentheses. If not, display current location.
-                        Note that permanent location is a code, and location may be an authval.
-                    %]
+<!--
+If permanent location is defined, show description or code and display current location in parentheses. If not, display current location.
+Note that permanent location is a code, and location may be an authval.
+-->
                             [% IF item.permanent_location %]
                                 [% SET permloc_authval = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.permanent_location ) %]
                                 [% permloc_authval | html %]
-                                [% SET item_location = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) %]
-                                [% IF item_location AND item_location != permloc_authval AND item.location != item.permanent_location %]
-                                    ([% item_location | html %])
+                                [% IF item.location AND item.location != permloc_authval AND item.location != item.permanent_location %]
+                                    ([% item.location | html %])
                                 [% END %]
                             [% ELSE %]
-                                [% item_location | html %]
+                                [% item.location | html %]
                             [% END %]
                         </span>
                     </td>
-                    [% IF ( itemdata_ccode ) %]<td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]</td>[% END %]
+                    [% IF ( itemdata_ccode ) %]<td>[% item.ccode | html %]</td>[% END %]
                     [% IF Koha.Preference('EnableItemGroups') %]<td class="item_group">[% item.object.item_group.description | html %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]
@@ -451,53 +450,62 @@
                     [% END %]
                     <td class="status">
 
-                        [% IF item.object.checkout %]
-                          [% IF item.object.checkout.onsite_checkout %]
+                        [% IF item.checkout %]
+                          [% IF item.checkout.onsite_checkout %]
                             <span>Currently in local use
                           [% ELSE %]
                             <span class="datedue">Checked out
                           [% END %]
-                                [% IF item.can_be_edited %]
-                                  [% IF item.object.checkout.onsite_checkout %]
+                                [% UNLESS ( item.not_same_branch) %]
+                                  [% IF item.checkout.onsite_checkout %]
                                     by
                                   [% ELSE %]
                                     to
                                   [% END %]
-                                  [% INCLUDE 'patron-title.inc' patron=item.object.checkout.patron hide_patron_infos_if_needed=1 %]
+                                  [% INCLUDE 'patron-title.inc' patron=item.checkout.patron hide_patron_infos_if_needed=1 %]
                                 [% END %]
-                                : due [% item.object.checkout.date_due | $KohaDates as_due_date => 1 %]
+                                : due [% item.checkout.date_due | $KohaDates as_due_date => 1 %]
                             </span>
-                        [% ELSIF ( transfer = item.object.get_transfer ) %]
-                            [% IF (transfer.datesent) %]
-                                <span class="intransit">In transit from [% Branches.GetName( transfer.frombranch ) | html %] to [% Branches.GetName( transfer.tobranch ) | html %] since [% transfer.datesent | $KohaDates %]</span>
+                        [% ELSIF ( item.transfer ) %]
+                            [% IF (item.transfer.datesent) %]
+                                <span class="intransit">In transit from [% Branches.GetName( item.transfer.frombranch ) | html %] to [% Branches.GetName( item.transfer.tobranch ) | html %] since [% item.transfer.datesent | $KohaDates %]</span>
                             [% ELSE %]
-                                <span class="transitrequested">Transit pending from [% Branches.GetName( transfer.frombranch ) | html %] to [% Branches.GetName( transfer.tobranch ) | html %] since [% item.transfer.daterequested | $KohaDates %]</span>
+                                <span class="transitrequested">Transit pending from [% Branches.GetName( item.transfer.frombranch ) | html %] to [% Branches.GetName( item.transfer.tobranch ) | html %] since [% item.transfer.daterequested | $KohaDates %]</span>
 
                             [% END %]
                         [% END %]
 
                         [% IF ( item.itemlost ) %]
-                            [% SET itemlost_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) %]
                             [% IF itemlostloop %]
-                                <span class="lost">[% itemlost_description | html %]</span>
+                                [% FOREACH itemlostloo IN itemlostloop %]
+                                    [% IF itemlostloo.authorised_value == item.itemlost %]
+                                        <span class="lost">[% itemlostloo.lib | html %]</span>
+                                    [% END %]
+                                [% END %]
                             [% ELSE %]
                                 <span class="lost">Unavailable (lost or missing)</span>
                             [% END %]
                         [% END %]
 
                         [% IF ( item.withdrawn ) %]
-                            [% SET withdrawn_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) %]
-                            [% IF withdrawn_description %]
-                                <span class="wdn">[% withdrawn_description | html %]</span>
+                            [% IF itemwithdrawnloop %]
+                                [% FOREACH itemwithdrawnloo IN itemwithdrawnloop %]
+                                    [% IF itemwithdrawnloo.authorised_value == item.withdrawn %]
+                                        <span class="wdn">[% itemwithdrawnloo.lib | html %]</span>
+                                    [% END %]
+                                [% END %]
                             [% ELSE %]
                                 <span class="wdn">Withdrawn</span>
                             [% END %]
                         [% END %]
 
                         [% IF ( item.damaged ) %]
-                            [% SET damaged_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => item.damaged ) %]
-                            [% IF damaged_description %]
-                                <span class="dmg">[% damaged_description | html %]</span>
+                            [% IF itemdamagedloop %]
+                                [% FOREACH itemdamagedloo IN itemdamagedloop %]
+                                    [% IF itemdamagedloo.authorised_value == item.damaged %]
+                                        <span class="dmg">[% itemdamagedloo.lib | html %]</span>
+                                    [% END %]
+                                [% END %]
                             [% ELSE %]
                                 <span class="dmg">Damaged</span>
                             [% END %]
@@ -525,15 +533,13 @@
                             [% END %]
                         [% END %]
 
-                        [% IF Koha.Preference('UseRecalls') %]
-                            [% SET recall = item.object.recall %]
-                            [% IF recall %]
-                                [% IF recall.waiting_date %]
-                                    <span>Waiting at [% Branches.GetName( recall.pickup_library_id ) | html %] since [% recall.waiting_date | $KohaDates %]</span>
-                                [% ELSE %]
-                                    [% patron_link = BLOCK %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %] ([% recall.patron.cardnumber | html %])</a>[% END %]
-                                    <span>recalled by [% patron_link| $raw %] on [% recall.created_date | $KohaDates %]</span>
-                                [% END %]
+                        [% SET recall = item.recall %]
+                        [% IF recall %]
+                            [% IF recall.waiting_date %]
+                                <span>Waiting at [% Branches.GetName( recall.pickup_library_id ) | html %] since [% recall.waiting_date | $KohaDates %]</span>
+                            [% ELSE %]
+                                [% patron_link = BLOCK %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %] ([% recall.patron.cardnumber | html %])</a>[% END %]
+                                <span>recalled by [% patron_link| $raw %] on [% recall.created_date | $KohaDates %]</span>
                             [% END %]
                         [% END %]
 
@@ -570,7 +576,7 @@
                         [% END %]
                     [% END %]
                     [% IF ( itemdata_copynumber ) %]
-                        <td class="copynumber">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.copynumber', authorised_value => item.copynumber ) | html %]</td>
+                        <td class="copynumber">[% item.copynumber | html %]</td>
                     [% END %]
                     [% IF ( itemdata_stocknumber ) %]
                         <td class="stocknumber">[% item.stocknumber | html %]</td>
@@ -579,7 +585,7 @@
                         <td class="materials"> [% item.materials | html %] </td>
                     [% END %]
                     [% IF ( itemdata_itemnotes ) %]
-                        <td><div class="itemnotes">[% item.object.itemnotes.replace('\n','<br />') | $raw %]</div></td>
+                        <td><div class="itemnotes">[% item.itemnotes | $raw %]</div></td>
                     [% END %]
                     [% IF itemdata_nonpublicnotes %]
                         <td class="nonpublicnote">[% item.itemnotes_nonpublic | html %]</td>
