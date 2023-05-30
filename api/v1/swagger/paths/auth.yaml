@@ -134,7 +134,7 @@
     operationId: listAuthProviders
     tags:
       - auth_providers
-    summary: List configured authentication providers
+    summary: List configured identity providers
     parameters:
       - $ref: ../swagger.yaml#/parameters/match
       - $ref: ../swagger.yaml#/parameters/order_by
@@ -158,7 +158,7 @@
       - application/json
     responses:
       "200":
-        description: A list of authentication providers
+        description: A list of identity providers
         schema:
           type: array
           items:
@@ -190,7 +190,7 @@
     operationId: addAuthProvider
     tags:
       - auth_providers
-    summary: Add a new authentication provider
+    summary: Add a new identity provider
     parameters:
       - name: body
         in: body
@@ -222,7 +222,7 @@
       - application/json
     responses:
       "201":
-        description: The generated authentication provider
+        description: The generated identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider
       "400":
@@ -253,7 +253,7 @@
     operationId: getAuthProvider
     tags:
       - auth_providers
-    summary: Get authentication provider
+    summary: Get identity provider
     parameters:
       - $ref: ../swagger.yaml#/parameters/auth_provider_id_pp
       - name: x-koha-embed
@@ -270,7 +270,7 @@
       - application/json
     responses:
       "200":
-        description: An authentication provider
+        description: An identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider
       "404":
@@ -296,7 +296,7 @@
     operationId: updateAuthProvider
     tags:
       - auth_providers
-    summary: Update an authentication provider
+    summary: Update an identity provider
     parameters:
       - $ref: ../swagger.yaml#/parameters/auth_provider_id_pp
       - name: body
@@ -329,7 +329,7 @@
       - application/json
     responses:
       "200":
-        description: Updated authentication provider
+        description: Updated identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider
       "400":
@@ -363,14 +363,14 @@
     operationId: delAuthProvider
     tags:
       - auth_providers
-    summary: Delete authentication provider
+    summary: Delete identity provider
     parameters:
       - $ref: ../swagger.yaml#/parameters/auth_provider_id_pp
     produces:
       - application/json
     responses:
       "204":
-        description: Authentication provider deleted
+        description: identity provider deleted
       "401":
         description: Authentication required
         schema:
@@ -401,7 +401,7 @@
     operationId: listAuthProviderDomains
     tags:
       - auth_providers
-    summary: Get authentication provider configured domains
+    summary: Get identity provider configured domains
     parameters:
       - $ref: ../swagger.yaml#/parameters/auth_provider_id_pp
       - $ref: ../swagger.yaml#/parameters/match
@@ -426,7 +426,7 @@
       - application/json
     responses:
       "200":
-        description: An authentication provider
+        description: An identity provider
         schema:
           items:
             $ref: ../swagger.yaml#/definitions/auth_provider_domain
@@ -453,12 +453,12 @@
     operationId: addAuthProviderDomain
     tags:
       - auth_providers
-    summary: Add an authentication provider domain
+    summary: Add an identity provider domain
     parameters:
       - $ref: ../swagger.yaml#/parameters/auth_provider_id_pp
       - name: body
         in: body
-        description: An authentication provider domain object
+        description: An identity provider domain object
         required: true
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider_domain
@@ -466,7 +466,7 @@
       - application/json
     responses:
       "201":
-        description: Updated authentication provider domain
+        description: Updated identity provider domain
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider_domain
       "400":
@@ -501,7 +501,7 @@
     operationId: getAuthProviderDomain
     tags:
       - auth_providers
-    summary: Get authentication provider domain
+    summary: Get identity provider domain
     parameters:
       - $ref: ../swagger.yaml#/parameters/auth_provider_id_pp
       - $ref: ../swagger.yaml#/parameters/auth_provider_domain_id_pp
@@ -509,7 +509,7 @@
       - application/json
     responses:
       "200":
-        description: An authentication provider
+        description: An identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider_domain
       "404":
@@ -535,7 +535,7 @@
     operationId: delAuthProviderDomain
     tags:
       - auth_providers
-    summary: Delete authentication provider
+    summary: Delete identity provider
     parameters:
       - $ref: ../swagger.yaml#/parameters/auth_provider_id_pp
       - $ref: ../swagger.yaml#/parameters/auth_provider_domain_id_pp
@@ -543,7 +543,7 @@
       - application/json
     responses:
       "204":
-        description: Authentication provider deleted
+        description: identity provider deleted
       "401":
         description: Authentication required
         schema:
@@ -574,7 +574,7 @@
     operationId: listIdentityProviders
     tags:
       - identity_providers
-    summary: List configured authentication providers
+    summary: List configured identity providers
     parameters:
       - $ref: ../swagger.yaml#/parameters/match
       - $ref: ../swagger.yaml#/parameters/order_by
@@ -598,7 +598,7 @@
       - application/json
     responses:
       "200":
-        description: A list of authentication providers
+        description: A list of identity providers
         schema:
           type: array
           items:
@@ -630,7 +630,7 @@
     operationId: addIdentityProvider
     tags:
       - identity_providers
-    summary: Add a new authentication provider
+    summary: Add a new identity provider
     parameters:
       - name: body
         in: body
@@ -662,7 +662,7 @@
       - application/json
     responses:
       "201":
-        description: The generated authentication provider
+        description: The generated identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider
       "400":
@@ -693,7 +693,7 @@
     operationId: getIdentityProvider
     tags:
       - identity_providers
-    summary: Get authentication provider
+    summary: Get identity provider
     parameters:
       - $ref: ../swagger.yaml#/parameters/identity_provider_id_pp
       - name: x-koha-embed
@@ -710,7 +710,7 @@
       - application/json
     responses:
       "200":
-        description: An authentication provider
+        description: An identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider
       "404":
@@ -736,7 +736,7 @@
     operationId: updateIdentityProvider
     tags:
       - identity_providers
-    summary: Update an authentication provider
+    summary: Update an identity provider
     parameters:
       - $ref: ../swagger.yaml#/parameters/identity_provider_id_pp
       - name: body
@@ -769,7 +769,7 @@
       - application/json
     responses:
       "200":
-        description: Updated authentication provider
+        description: Updated identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider
       "400":
@@ -803,14 +803,14 @@
     operationId: delIdentityProvider
     tags:
       - identity_providers
-    summary: Delete authentication provider
+    summary: Delete identity provider
     parameters:
       - $ref: ../swagger.yaml#/parameters/identity_provider_id_pp
     produces:
       - application/json
     responses:
       "204":
-        description: Authentication provider deleted
+        description: identity provider deleted
       "401":
         description: Authentication required
         schema:
@@ -841,7 +841,7 @@
     operationId: listIdentityProviderDomains
     tags:
       - identity_providers
-    summary: Get authentication provider configured domains
+    summary: Get identity provider configured domains
     parameters:
       - $ref: ../swagger.yaml#/parameters/identity_provider_id_pp
       - $ref: ../swagger.yaml#/parameters/match
@@ -866,7 +866,7 @@
       - application/json
     responses:
       "200":
-        description: An authentication provider
+        description: An identity provider
         schema:
           items:
             $ref: ../swagger.yaml#/definitions/identity_provider_domain
@@ -893,12 +893,12 @@
     operationId: addIdentityProviderDomain
     tags:
       - identity_providers
-    summary: Add an authentication provider domain
+    summary: Add an identity provider domain
     parameters:
       - $ref: ../swagger.yaml#/parameters/identity_provider_id_pp
       - name: body
         in: body
-        description: An authentication provider domain object
+        description: An identity provider domain object
         required: true
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider_domain
@@ -906,7 +906,7 @@
       - application/json
     responses:
       "201":
-        description: Updated authentication provider domain
+        description: Updated identity provider domain
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider_domain
       "400":
@@ -941,7 +941,7 @@
     operationId: getIdentityProviderDomain
     tags:
       - identity_providers
-    summary: Get authentication provider domain
+    summary: Get identity provider domain
     parameters:
       - $ref: ../swagger.yaml#/parameters/identity_provider_id_pp
       - $ref: ../swagger.yaml#/parameters/identity_provider_domain_id_pp
@@ -949,7 +949,7 @@
       - application/json
     responses:
       "200":
-        description: An authentication provider
+        description: An identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider_domain
       "404":
@@ -975,13 +975,13 @@
     operationId: updateIdentityProviderDomain
     tags:
       - identity_providers
-    summary: Update an authentication provider domain
+    summary: Update an identity provider domain
     parameters:
       - $ref: ../swagger.yaml#/parameters/identity_provider_id_pp
       - $ref: ../swagger.yaml#/parameters/identity_provider_domain_id_pp
       - name: body
         in: body
-        description: An authentication provider domain object
+        description: An identity provider domain object
         required: true
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider_domain
@@ -989,7 +989,7 @@
       - application/json
     responses:
       "200":
-        description: Updated authentication provider domain
+        description: Updated identity provider domain
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider_domain
       "400":
@@ -1023,7 +1023,7 @@
     operationId: delIdentityProviderDomain
     tags:
       - identity_providers
-    summary: Delete authentication provider
+    summary: Delete identity provider
     parameters:
       - $ref: ../swagger.yaml#/parameters/identity_provider_id_pp
       - $ref: ../swagger.yaml#/parameters/identity_provider_domain_id_pp
@@ -1031,7 +1031,7 @@
       - application/json
     responses:
       "204":
-        description: Authentication provider deleted
+        description: identity provider deleted
       "401":
         description: Authentication required
         schema:

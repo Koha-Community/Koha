@@ -41,7 +41,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_background_jobs', 'Manage background jobs'),
    ( 3, 'manage_curbside_pickups', 'Manage curbside pickups'),
    ( 3, 'manage_search_filters', 'Manage custom search filters'),
-   ( 3, 'manage_identity_providers', 'Manage authentication providers'),
+   ( 3, 'manage_identity_providers', 'Manage identity providers'),
    ( 4, 'delete_borrowers', 'Delete patrons'),
    ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
    ( 4, 'view_borrower_infos_from_any_libraries', 'View patron infos from any libraries'),

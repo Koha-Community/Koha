@@ -145,7 +145,7 @@
         <h5>Additional parameters</h5>
         <ul>
             [% IF ( CAN_user_parameters_manage_identity_providers) %]
-                <li><a href="/cgi-bin/koha/admin/identity_providers.pl">Authentication providers</a></li>
+                <li><a href="/cgi-bin/koha/admin/identity_providers.pl">Identity providers</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_search_targets ) %]
                 <li><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a></li>
