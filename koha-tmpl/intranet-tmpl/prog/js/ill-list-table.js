@@ -53,18 +53,16 @@ $(document).ready(function() {
 
     // At the moment, the only prefilter possible is borrowernumber
     // see ill/ill-requests.pl and members/ill-requests.pl
-    let additional_prefilters = [];
+    let additional_prefilters = {};
     if(prefilters){
-            let prefilters_array = prefilters.split("&");
-            prefilters_array.forEach((prefilter) => {
-                let prefilter_split = prefilter.split("=");
-                additional_prefilters.push( {
-                     "key": prefilter_split[0],
-                     "value": prefilter_split[1]
-                } );
-
-            });
+        let prefilters_array = prefilters.split("&");
+        prefilters_array.forEach((prefilter) => {
+            let prefilter_split = prefilter.split("=");
+            additional_prefilters[prefilter_split[0]] = prefilter_split[1]
+        });
     }
+
+    let borrower_prefilter = additional_prefilters['borrowernumber'] || null;
 
     let additional_filters = {
         "me.backend": function(){
@@ -78,9 +76,7 @@ $(document).ready(function() {
             return { "=": branchcode }
         },
         "me.borrowernumber": function(){
-            let borrowernumber_pre_filter = additional_prefilters.find(e => e.key === 'borrowernumber');
-            if ( additional_prefilters.length == 0 || typeof borrowernumber_pre_filter === undefined) return "";
-            return { "=": borrowernumber_pre_filter["value"] }
+            return borrower_prefilter ? { "=": borrower_prefilter } : "";
         },
         "-or": function(){
             let patron = $("#illfilter_patron").val();
@@ -123,7 +119,7 @@ $(document).ready(function() {
             return filters;
         },
         "me.placed": function(){
-            if ( additional_prefilters.length != 0 && !additional_prefilters.find(e => e.key === 'placed')) return "";
+            if ( Object.keys(additional_prefilters).length ) return "";
             let placed_start = $('#illfilter_dateplaced_start').get(0)._flatpickr.selectedDates[0];
             let placed_end = $('#illfilter_dateplaced_end').get(0)._flatpickr.selectedDates[0];
             if (!placed_start && !placed_end) return "";
@@ -133,7 +129,7 @@ $(document).ready(function() {
             }
         },
         "me.updated": function(){
-            if ( additional_prefilters.length != 0 && !additional_prefilters.find(e => e.key === 'updated')) return "";
+            if (Object.keys(additional_prefilters).length) return "";
             let updated_start = $('#illfilter_datemodified_start').get(0)._flatpickr.selectedDates[0];
             let updated_end = $('#illfilter_datemodified_end').get(0)._flatpickr.selectedDates[0];
             if (!updated_start && !updated_end) return "";
@@ -178,7 +174,12 @@ $(document).ready(function() {
         }
     };
 
-    var ill_requests_table = $("#ill-requests").kohaTable({
+    let table_id = "#ill-requests";
+    if (borrower_prefilter) {
+        table_id += "-patron-" + borrower_prefilter;
+    }
+
+    var ill_requests_table = $(table_id).kohaTable({
         "ajax": {
             "url": '/api/v1/ill/requests'
         },
