@@ -83,7 +83,11 @@ DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() )
             if $OPTIONS->{flags}->{commit};
         verbose "Deleting '$item->{itemnumber}'";
     } else {
-        verbose sprintf "Item '%s' not deleted: %s", $item->{itemnumber}, @{$safe_to_delete->messages}[0]->message
+        verbose sprintf "Item '%s' (Barcode: '%s', Title: '%s') not deleted: %s",
+                $item->{itemnumber},
+                $item_object->barcode,
+                $item_object->biblio->title,
+                @{$safe_to_delete->messages}[0]->message;
     }
 }
 
