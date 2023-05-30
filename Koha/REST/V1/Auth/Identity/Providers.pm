@@ -31,13 +31,13 @@ use Try::Tiny;
 =head1 NAME
 
 Koha::REST::V1::Auth::Identity::Providers - Controller library for handling
-authentication providers routes.
+identity providers routes.
 
 =head2 Operations
 
 =head3 list
 
-Controller method for listing authentication providers.
+Controller method for listing identity providers.
 
 =cut
 
@@ -57,7 +57,7 @@ sub list {
 
 =head3 get
 
-Controller method for retrieving an authentication provider.
+Controller method for retrieving an identity provider.
 
 =cut
 
@@ -88,7 +88,7 @@ sub get {
 
 =head3 add
 
-Controller method for adding an authentication provider.
+Controller method for adding an identity provider.
 
 =cut
 
@@ -140,7 +140,7 @@ sub add {
 
 =head3 update
 
-Controller method for updating an authentication provider.
+Controller method for updating an identity provider.
 
 =cut
 
@@ -204,7 +204,7 @@ sub update {
 
 =head3 delete
 
-Controller method for deleting an authentication provider.
+Controller method for deleting an identity provider.
 
 =cut
 
