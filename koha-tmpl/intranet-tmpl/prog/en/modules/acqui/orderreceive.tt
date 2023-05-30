@@ -656,6 +656,12 @@
                 }
             });
 
+            [% IF only_one_order %]
+            $("#quantity").on('change', function() {
+                $('.modal-save').prop('disabled', $(this).val() < 1 );
+            });
+            [% END %]
+
             var _doSave = function(params) {
                 $.ajax($.extend({
                     method: 'POST',
@@ -1152,7 +1158,11 @@
                 $("#current-fund").html(FUNC_CUR.format(row.fund.budget.budget_period_description, row.fund.name));
                 $("#creator").html([row.creator.surname, row.creator.firstname].filter(function(name){return name}).join(', ')+" ("+row.creator.patron_id+')')
                 $("#quantity_to_receive").val(row.quantity).prop('readonly', !row.subscription_id);
-                $("#quantity").val(row.quantity_received).prop('readonly', !row.subscription_id && effective_create_items == 'receiving');
+                $("#quantity").val( effective_create_items == 'cataloguing' ? row.quantity_received || 1 : row.quantity_received )
+                              .prop('readonly', !row.subscription_id && effective_create_items == 'receiving');
+                [% IF only_one_order %]
+                    $(".modal-save").prop('disabled', $("#quantity").val() == 0);
+                [% END %]
                 $('#qtyrecerror').hide();
                 var tax_rate = row.tax_rate_on_receiving || row.tax_rate_on_ordering;
                 $("#tax_rate").val(tax_rate).change();
