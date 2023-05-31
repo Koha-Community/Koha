@@ -112,7 +112,7 @@
                                             </select> <!-- /#search-field_[% loop.index | html %] -->
                                         </div> <!-- .search-term-input -->
                                         <div class="search-term-input">
-                                            <input class="form-control" type="text" size="" name="q" title="Enter search terms" value="" />
+                                            <input class="form-control" type="text" name="q" title="Enter search terms" value="" />
                                         </div> <!-- .search-term-input -->
                                         [% IF ( expanded_options ) %]
                                             <div class="search-term-input">
@@ -144,7 +144,7 @@
                                         See from (non-preferred form) headings are included
                                     </div>
                                 [% END %]
-                            </div> <!-- /.search-terms -->
+                            </div> <!-- /.advanced-search-terms -->
                         </fieldset>
                     </div> <!-- /#booleansearch -->
                 </div> <!-- / .col -->
@@ -162,23 +162,21 @@
                 [%# Following on one line for translatability %]
                 [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) %]
                     <div class="col order-first order-md-first order-lg-2">
-                        <div id="advsearches" class="toptabs">
-                            <ul class="nav nav-tabs" role="tablist">
+                        [% WRAPPER tabs id= "advsearches" %]
+                            [% WRAPPER tabs_nav %]
                                 [% FOREACH advsearchloo IN advancedsearchesloop %]
-                                    <li class="nav-item" role="presentation" id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
-                                        <a href="#advsearch-[% advsearchloo.advanced_search_type | uri %]" class="nav-link" aria-controls="advsearch-[% advsearchloo.advanced_search_type | html %]" aria-selected="false" role="tab" data-toggle="tab">
-                                            [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]<span>Item type</span>
-                                            [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]<span>Collection</span>
-                                            [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]<span>Shelving location</span>
-                                            [% ELSE %]<span>Something else</span>
-                                            [% END %]
-                                        </a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= "advsearch-tab-${advsearchloo.advanced_search_type}" bt_active= "0" %]
+                                        [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]<span>Item type</span>
+                                        [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]<span>Collection</span>
+                                        [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]<span>Shelving location</span>
+                                        [% ELSE %]<span>Something else</span>
+                                        [% END %]
+                                    [% END %]
                                 [% END %]
-                            </ul>
-                            <div class="tab-content">
+                            [% END # /WRAPPER tabs_nav %]
+                            [% WRAPPER tab_panels id= "advsearches" %]
                                 [% FOREACH advsearchloo IN advancedsearchesloop %]
-                                    <div role="tabpanel" class="tab-pane" id="advsearch-[% advsearchloo.advanced_search_type | html %]" class="advsearch" aria-labelledby="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
+                                    [% WRAPPER tab_panel tabname="advsearch-tab-${advsearchloo.advanced_search_type}" %]
                                         <fieldset>
                                             <legend>Limit to any of the following:</legend>
                                             <div class="row">
@@ -204,13 +202,13 @@
                                                     [% END %]
                                                 [% END %]
                                         </fieldset>
-                                    </div> <!-- / #advsearch-[% advsearchloo.advanced_search_type | html %] -->
+                                    [% END # /tab_panel#advsearch-advsearchloo.advanced_search_type %]
                                 [% END # / FOREACH advancedsearchesloop %]
-                            </div> <!-- /.tab-content -->
-                        </div> <!-- / #advsearches -->
+                            [% END # /tab_panels %]
+                        [% END # /WRAPPER tabs#advsearches %]
                     </div> <!-- / .col -->
                 [% END # /IF OpacAdvSearchOptions %]
-            </div>
+            </div> <!-- /.row -->
 
             <div id="advsearch_limits" class="row">
 
@@ -483,7 +481,7 @@ $(document).ready(function() {
     [% END %]
 
     if( $("#advsearches .tab-pane.active").length < 1 ){
-        $("#advsearches a:first").tab("show");
+        $("#advsearches li:first a").tab("show");
     }
 
     $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
