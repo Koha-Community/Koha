@@ -7,8 +7,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>System preferences &rsaquo; Administration &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.min.css") | $raw %]
 [% Asset.css("css/preferences.css") | $raw %]
-[% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.css") | $raw %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 [% Asset.css("lib/codemirror/codemirror.min.css") | $raw %]
 [% Asset.css("lib/codemirror/lint.min.css") | $raw %]
@@ -239,7 +239,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/multiple-select/jquery.multiple.select.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/multiple-select/multiple-select.min.js") | $raw %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/css.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/javascript.min.js" ) | $raw %]
