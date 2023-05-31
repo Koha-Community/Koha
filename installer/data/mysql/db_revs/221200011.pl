@@ -18,6 +18,7 @@ return {
             $dbh->do(q{
                 ALTER TABLE aqorders
                 ADD COLUMN invoice_currency varchar(10) DEFAULT NULL COMMENT 'the currency of the invoice_unitprice' AFTER invoice_unitprice,
+                ADD KEY `aqorders_invoice_currency` (`invoice_currency`),
                 ADD CONSTRAINT `aqorders_invoice_currency` FOREIGN KEY (`invoice_currency`) REFERENCES `currency` (`currency`) ON DELETE SET NULL ON UPDATE SET NULL
             });
         }

@@ -19,6 +19,7 @@ return {
                   `account_email` mediumtext DEFAULT NULL COMMENT 'account email',
                   `notes` longtext DEFAULT NULL COMMENT 'notes',
                   PRIMARY KEY (`interface_id`),
+                  KEY `aqbookseller_interfaces_ibfk_1` (`vendor_id`),
                   CONSTRAINT `aqbookseller_interfaces_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });

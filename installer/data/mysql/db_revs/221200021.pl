@@ -13,6 +13,7 @@ return {
                   `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
                   `alias` varchar(255) NOT NULL COMMENT "the alias",
                   PRIMARY KEY (`alias_id`),
+                  KEY `aqbookseller_aliases_ibfk_1` (`vendor_id`),
                   CONSTRAINT `aqbookseller_aliases_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             });

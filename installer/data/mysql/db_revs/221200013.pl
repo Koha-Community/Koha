@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "32057",
-    description => "Bug 32057 - Add optional stack trace to action logs",
+    description => "Add optional stack trace to action logs",
     up          => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};

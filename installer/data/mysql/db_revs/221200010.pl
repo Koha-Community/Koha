@@ -18,6 +18,9 @@ return {
                   `resolved_date` datetime DEFAULT NULL COMMENT 'date and time this ticket was resolved',
                   `biblio_id` int(11) DEFAULT NULL COMMENT 'id of biblio linked',
                   PRIMARY KEY(`id`),
+                  KEY `tickets_ibfk_1` (`reporter_id`),
+                  KEY `tickets_ibfk_2` (`resolver_id`),
+                  KEY `tickets_ibfk_3` (`biblio_id`),
                   CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`reporter_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
                   CONSTRAINT `tickets_ibfk_2` FOREIGN KEY (`resolver_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
                   CONSTRAINT `tickets_ibfk_3` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -37,6 +40,8 @@ return {
                   `date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date and time this update was logged',
                   `message` text NOT NULL COMMENT 'update message content',
                   PRIMARY KEY(`id`),
+                  KEY `ticket_updates_ibfk_1` (`ticket_id`),
+                  KEY `ticket_updates_ibfk_2` (`user_id`),
                   CONSTRAINT `ticket_updates_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
                   CONSTRAINT `ticket_updates_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
