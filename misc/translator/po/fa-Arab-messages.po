@@ -2761,7 +2761,7 @@ msgctxt "pluralization"
 msgid "There is one archived suggestion."
 msgid_plural "There are {count} archived suggestions."
 msgstr[0] "یک پیشنهاد آرشیو شده وجود دارد."
-msgstr[1] "پیشنهاد آرشیو شده {محاسبه شده} وجود دارد."
+msgstr[1] "پیشنهاد آرشیو شده {count} وجود دارد."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:597
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:17
@@ -2779,7 +2779,7 @@ msgstr "ویرایش"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
 #, perl-brace-format
 msgid "Edit {title} by {author}"
-msgstr "ویرایش {عنوان} توسط {نویسنده}"
+msgstr "ویرایش {title} توسط {author}"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
@@ -2790,7 +2790,7 @@ msgstr "پیشینه #"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:48
 #, perl-brace-format
 msgid "Edit {title}"
-msgstr "ویرایش {عنوان}"
+msgstr "ویرایش {title}"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:53
 msgctxt "Items attached to a bibliographic record"
@@ -2800,19 +2800,19 @@ msgstr "آیتم ها"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:21
 #, perl-brace-format
 msgid "Overdues at {library}"
-msgstr "معوقات در {کتابخانه}"
+msgstr "معوقات در {library}"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/circulation.tt:774
 #, perl-brace-format
 msgid "Bundle of {count} item"
 msgid_plural "Bundle of {count} items"
-msgstr[0] "بسته ای از (فهرست موجود) آیتم"
-msgstr[1] "بسته ای از (فهرست موجود) آیتم ها"
+msgstr[0] "بسته ای از {count} آیتم"
+msgstr[1] "بسته ای از {count} آیتم ها"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:98
 #, perl-brace-format
 msgid "Holds waiting over {count} days:"
-msgstr "بیش از {تعداد} روز در رزرو باقی می ماند:"
+msgstr "بیش از {count} روز در رزرو باقی می ماند:"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:27
 msgctxt "Edit course reserve"
@@ -2828,8 +2828,8 @@ msgstr "رزرو کردن"
 #, perl-brace-format
 msgid "{title} ({barcode}) was removed from {count} course."
 msgid_plural "{title} ({barcode}) was removed from {count} courses."
-msgstr[0] "{عنوان} ({بارکد}) حذف شد از {count} دوره."
-msgstr[1] "{عنوان} ({بارکد}) حذف شد از {count} دوره ها."
+msgstr[0] "{title} ({barcode}) حذف شد از {count} دوره."
+msgstr[1] "{title} ({barcode}) حذف شد از {count} دوره ها."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:75
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:51
@@ -2936,7 +2936,7 @@ msgstr "تکنیک ها (چاپ) 3"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:42
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
-msgstr "هنگام بروزرسانی نقشه نگاری ها خطایی روی داد: {پیام}."
+msgstr "هنگام بروزرسانی نقشه نگاری ها خطایی روی داد: {message}."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:44
 msgid "An error occurred when deleting the existing mappings. Nothing has been changed!"
@@ -2945,12 +2945,12 @@ msgstr "هنگام حذف نقشه های موجود خطایی روی داد. �
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
 msgid "(search field {field_name} with mapping {marc_field}.)"
-msgstr "‌(فیلد جستجو {فیلد_نام} با نقشه نگاری {مارک_فیلد}.)"
+msgstr "‌(فیلد جستجو {field_name} با نقشه نگاری {marc_field}.)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:47
 #, perl-brace-format
 msgid "Invalid field weight '{weight}', must be a positive decimal number."
-msgstr "وزن فیلد نا معتبر است'{وزن}'، بایستی یک عدد اعشاری مثبت باشد."
+msgstr "وزن فیلد نا معتبر است'{weight}'، بایستی یک عدد اعشاری مثبت باشد."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:49
 msgid "You attempted to delete all mappings for a required index, you must leave at least one mapping"
@@ -2959,17 +2959,17 @@ msgstr "شما سعی کردید همه نگاشتها را برای یک شاخ
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:51
 #, perl-brace-format
 msgid "An error occurred when updating Elasticsearch index mappings: {message}."
-msgstr "هنگام بروز رسانی ایندکس نقشه های جستجوی الستیک خطایی رخ داده است: { پیام }."
+msgstr "هنگام بروز رسانی ایندکس نقشه های جستجوی الستیک خطایی رخ داده است: {message}."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 #, perl-brace-format
 msgid "Index '{index}' needs to be reindexed."
-msgstr "نمایه '{نمایه}' باید دوباره فهرست شود."
+msgstr "نمایه '{index}' باید دوباره فهرست شود."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:55
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
-msgstr "نمایه '{نمایه}' نیاز به ایجاد دوباره دارد."
+msgstr "نمایه '{index}' نیاز به ایجاد دوباره دارد."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:57
 msgid "Mappings updated successfully."
@@ -3023,8 +3023,8 @@ msgstr "دلیل نامشخص"
 #, perl-brace-format
 msgid "({age} year)"
 msgid_plural "({age} years)"
-msgstr[0] "({سن} سال)"
-msgstr[1] "({سن} سال ها)"
+msgstr[0] "({age} سال)"
+msgstr[1] "({age} سال ها)"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/patron-search.inc:418
 msgid "Check out"
