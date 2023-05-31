@@ -532,7 +532,7 @@ $template->param(
     materials => $materials_flag,
 );
 
-if (C4::Context->preference("AlternateHoldingsField") && scalar $items->count == 0) {
+if (C4::Context->preference("AlternateHoldingsField") && $items->count == 0) {
     my $fieldspec = C4::Context->preference("AlternateHoldingsField");
     my $subfields = substr $fieldspec, 3;
     my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
