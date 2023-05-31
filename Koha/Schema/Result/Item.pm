@@ -973,7 +973,7 @@ __PACKAGE__->many_to_many(
 );
 
 __PACKAGE__->has_many(
-  "branchtransfer",
+  "current_branchtransfers",
   "Koha::Schema::Result::Branchtransfer",
   { 'foreign.itemnumber' => 'self.itemnumber' },
   {
