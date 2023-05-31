@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 28;
+use Test::More tests => 29;
 use Test::Exception;
 use Test::MockModule;
 
@@ -2157,6 +2157,58 @@ subtest 'is_denied_renewal' => sub {
     $idr_rules="itemnotes: ['']";
     C4::Context->set_preference('ItemsDeniedRenewal', $idr_rules);
     is( $deny_book->is_denied_renewal, 1, 'Renewal blocked for empty string when "" in pref' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'current_branchtransfers relationship' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+    my $transfers = $item->_result->current_branchtransfers;
+    is( ref($transfers), 'DBIx::Class::ResultSet',
+        'current_branchtransfers returns a Koha::Item::Transfers object set' );
+    is( $transfers->count, 0,
+        "Empty Koha::Item::Transfers set returned if no return_claims" );
+    my $transfer1 = $builder->build(
+        {
+            source => 'Branchtransfer',
+            value  => {
+                itemnumber  => $item->itemnumber,
+                datearrived => dt_from_string,
+            }
+        }
+    );
+    my $transfer2 = $builder->build(
+        {
+            source => 'Branchtransfer',
+            value  => {
+                itemnumber    => $item->itemnumber,
+                datearrived   => undef,
+                datecancelled => dt_from_string,
+            }
+        }
+    );
+    my $transfer3 = $builder->build(
+        {
+            source => 'Branchtransfer',
+            value  => {
+                itemnumber    => $item->itemnumber,
+                datearrived   => undef,
+                datecancelled => undef,
+            }
+        }
+    );
+
+    is( $item->_result->current_branchtransfers()->count,
+        1, "One transfer found for item" );
 
     $schema->storage->txn_rollback;
 };

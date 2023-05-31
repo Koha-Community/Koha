@@ -565,7 +565,7 @@ we still expect the item to end up at a final location eventually.
 sub get_transfer {
     my ($self) = @_;
 
-    my $transfer = $self->_result->branchtransfer;
+    my $transfer = $self->_result->current_branchtransfers;
 
     return Koha::Item::Transfers->_new_from_dbic($transfer)->next;
 }
@@ -590,7 +590,7 @@ we still expect the item to end up at a final location eventually.
 sub get_transfers {
     my ($self) = @_;
 
-    my $transfer_rs = $self->_result->branchtransfer;
+    my $transfer_rs = $self->_result->current_branchtransfers;
 
     return Koha::Item::Transfers->_new_from_dbic($transfer_rs);
 }
