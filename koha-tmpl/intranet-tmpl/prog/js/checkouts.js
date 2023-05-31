@@ -350,7 +350,7 @@ $(document).ready(function() {
                             if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
                                 span_class = "circ-hlt";
                             }
-                            title += " - <span class='" + span_class + " item-note-public'>" + oObj.itemnotes.escapeHtml() + "</span>";
+                            title += "<span class='divider-dash'> - </span><span class='" + span_class + " item-note-public'>" + oObj.itemnotes.escapeHtml() + "</span>";
                         }
 
                         if ( oObj.itemnotes_nonpublic ) {
@@ -358,7 +358,7 @@ $(document).ready(function() {
                             if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
                                 span_class = "circ-hlt";
                             }
-                            title += " - <span class='" + span_class + " item-note-nonpublic'>" + oObj.itemnotes_nonpublic.escapeHtml() + "</span>";
+                            title += "<span class='divider-dash'> - </span><span class='" + span_class + " item-note-nonpublic'>" + oObj.itemnotes_nonpublic.escapeHtml() + "</span>";
                         }
 
                         var onsite_checkout = '';
@@ -367,7 +367,7 @@ $(document).ready(function() {
                         }
 
                         if ( oObj.recalled == 1 ) {
-                             title += " - <span class='circ-hlt item-recalled'>" +  __("This item has been recalled and the due date updated") + ".</span>";
+                             title += "<span class='divider-dash'> - </span><span class='circ-hlt item-recalled'>" +  __("This item has been recalled and the due date updated") + ".</span>";
                         }
 
                         title += " "
