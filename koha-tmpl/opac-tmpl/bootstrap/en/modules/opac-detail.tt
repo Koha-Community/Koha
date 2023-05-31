@@ -1509,7 +1509,7 @@
                     var img = div.find("img")[0];
                     if( img && $(img).length > 0 ){
                         var description = "";
-                        if( img.naturalHeight == 0 && div.attr("id") != "googlejacket-coverimg" ){
+                        if( img.naturalHeight == 0 && div.attr("id") != "googlejacket-coverimg" && div.hasClass('coce-coverimg') ){
                             // No image loaded in the container. Remove the slide
                             div.remove();
                         } else {
