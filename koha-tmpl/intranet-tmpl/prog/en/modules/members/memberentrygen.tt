@@ -1971,10 +1971,10 @@ legend:hover {
         var prefill_fields;
         var to_api_mapping;
         [% IF prefill_fields %]
-            prefill_fields = [% To.json(prefill_fields)%];
+            prefill_fields = [% To.json(prefill_fields)  | $raw %];
         [% END %]
         [% IF to_api_mapping %]
-            to_api_mapping = [% To.json(to_api_mapping) %];
+            to_api_mapping = [% To.json(to_api_mapping) | $raw %];
         [% END %]
 
         var TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
