@@ -1854,6 +1854,7 @@ sub searchResults {
                 ( $item->{$hbranch} ? $item->{$hbranch} . '--' : q{} )
               . ( $item->{location} ? $item->{location} : q{} )
               . ( $item->{itype}    ? $item->{itype}    : q{} )
+              . ( $item->{ccode}    ? $item->{ccode}    : q{} )
               . ( $item->{itemcallnumber} ? $item->{itemcallnumber} : q{} );
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
             if ( $item->{onloan}
