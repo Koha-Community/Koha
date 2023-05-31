@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.5.15-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.5.19-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	10.10.2-MariaDB-1:10.10.2+maria~ubu2204
+-- Server version	10.11.3-MariaDB-1:10.11.3+maria~ubu2204
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -172,7 +172,7 @@ CREATE TABLE `action_logs` (
   `info` mediumtext DEFAULT NULL COMMENT 'information about the action (usually includes SQL statement)',
   `interface` varchar(30) DEFAULT NULL COMMENT 'the context this action was taken in',
   `script` varchar(255) DEFAULT NULL COMMENT 'the name of the cron script that caused this change',
-  `trace` TEXT DEFAULT NULL COMMENT 'An optional stack trace enabled by ActionLogsTraceDepth',
+  `trace` text DEFAULT NULL COMMENT 'An optional stack trace enabled by ActionLogsTraceDepth',
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
   KEY `user_idx` (`user`),
@@ -245,7 +245,7 @@ CREATE TABLE `additional_fields` (
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT 'name of the field',
   `authorised_value_category` varchar(32) NOT NULL DEFAULT '' COMMENT 'is an authorised value category',
   `marcfield` varchar(16) NOT NULL DEFAULT '' COMMENT 'contains the marc field to copied into the record',
-  `marcfield_mode` ENUM('get', 'set') NOT NULL DEFAULT 'get' COMMENT 'mode of operation (get or set) for marcfield',
+  `marcfield_mode` enum('get','set') NOT NULL DEFAULT 'get' COMMENT 'mode of operation (get or set) for marcfield',
   `searchable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is the field searchable?',
   PRIMARY KEY (`id`),
   UNIQUE KEY `fields_uniq` (`tablename`(191),`name`(191))
@@ -387,6 +387,46 @@ CREATE TABLE `aqbasketusers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `aqbookseller_aliases`
+--
+
+DROP TABLE IF EXISTS `aqbookseller_aliases`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aqbookseller_aliases` (
+  `alias_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
+  `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
+  `alias` varchar(255) NOT NULL COMMENT 'the alias',
+  PRIMARY KEY (`alias_id`),
+  KEY `aqbookseller_aliases_ibfk_1` (`vendor_id`),
+  CONSTRAINT `aqbookseller_aliases_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `aqbookseller_interfaces`
+--
+
+DROP TABLE IF EXISTS `aqbookseller_interfaces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aqbookseller_interfaces` (
+  `interface_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
+  `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
+  `type` varchar(80) DEFAULT NULL COMMENT 'type of the interface, authorised value VENDOR_INTERFACE_TYPE',
+  `name` varchar(255) NOT NULL COMMENT 'name of the interface',
+  `uri` mediumtext DEFAULT NULL COMMENT 'uri of the interface',
+  `login` varchar(255) DEFAULT NULL COMMENT 'login',
+  `password` mediumtext DEFAULT NULL COMMENT 'hashed password',
+  `account_email` mediumtext DEFAULT NULL COMMENT 'account email',
+  `notes` longtext DEFAULT NULL COMMENT 'notes',
+  PRIMARY KEY (`interface_id`),
+  KEY `aqbookseller_interfaces_ibfk_1` (`vendor_id`),
+  CONSTRAINT `aqbookseller_interfaces_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `aqbooksellers`
 --
 
@@ -423,44 +463,6 @@ CREATE TABLE `aqbooksellers` (
   KEY `name` (`name`(191)),
   CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `aqbookseller_aliases`
---
-
-DROP TABLE IF EXISTS `aqbookseller_aliases`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `aqbookseller_aliases` (
-  `alias_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
-  `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
-  `alias` varchar(255) NOT NULL COMMENT "the alias",
-  PRIMARY KEY (`alias_id`),
-  CONSTRAINT `aqbookseller_aliases_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `aqbookseller_interfaces`
---
-
-DROP TABLE IF EXISTS `aqbookseller_interfaces`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `aqbookseller_interfaces` (
-  `interface_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
-  `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
-  `type` varchar(80) DEFAULT NULL COMMENT "type of the interface, authorised value VENDOR_INTERFACE_TYPE",
-  `name` varchar(255) NOT NULL COMMENT 'name of the interface',
-  `uri` mediumtext DEFAULT NULL COMMENT 'uri of the interface',
-  `login` varchar(255) DEFAULT NULL COMMENT 'login',
-  `password` mediumtext DEFAULT NULL COMMENT 'hashed password',
-  `account_email` mediumtext DEFAULT NULL COMMENT 'account email',
-  `notes` longtext DEFAULT NULL COMMENT 'notes',
-  PRIMARY KEY (`interface_id`),
-  CONSTRAINT `aqbookseller_interfaces_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -744,13 +746,14 @@ CREATE TABLE `aqorders` (
   KEY `aqorders_ibfk_3` (`invoiceid`),
   KEY `aqorders_subscriptionid` (`subscriptionid`),
   KEY `aqorders_currency` (`currency`),
+  KEY `aqorders_invoice_currency` (`invoice_currency`),
   CONSTRAINT `aqorders_budget_id_fk` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqorders_created_by` FOREIGN KEY (`created_by`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `aqorders_currency` FOREIGN KEY (`currency`) REFERENCES `currency` (`currency`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `aqorders_invoice_currency` FOREIGN KEY (`invoice_currency`) REFERENCES `currency` (`currency`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `aqorders_ibfk_3` FOREIGN KEY (`invoiceid`) REFERENCES `aqinvoices` (`invoiceid`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `aqorders_invoice_currency` FOREIGN KEY (`invoice_currency`) REFERENCES `currency` (`currency`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `aqorders_subscriptionid` FOREIGN KEY (`subscriptionid`) REFERENCES `subscription` (`subscriptionid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1763,7 +1766,7 @@ CREATE TABLE `checkout_renewals` (
   `seen` tinyint(1) DEFAULT 0 COMMENT 'boolean denoting whether the item was present or not',
   `interface` varchar(16) NOT NULL COMMENT 'the interface this renewal took place on',
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'the date and time the renewal took place',
-  `renewal_type` enum('Automatic', 'Manual') NOT NULL DEFAULT 'Manual' COMMENT 'whether the renewal was an automatic or manual renewal',
+  `renewal_type` enum('Automatic','Manual') NOT NULL DEFAULT 'Manual' COMMENT 'whether the renewal was an automatic or manual renewal',
   PRIMARY KEY (`renewal_id`),
   KEY `renewer_id` (`renewer_id`),
   CONSTRAINT `renewals_renewer_id` FOREIGN KEY (`renewer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -3311,8 +3314,9 @@ CREATE TABLE `illrequests` (
   KEY `illrequests_bnfk` (`borrowernumber`),
   KEY `illrequests_bcfk_2` (`branchcode`),
   KEY `illrequests_safk` (`status_alias`),
-  CONSTRAINT `illrequests_bibfk` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  KEY `illrequests_bibfk` (`biblio_id`),
   CONSTRAINT `illrequests_bcfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `illrequests_bibfk` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `illrequests_bnfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `illrequests_safk` FOREIGN KEY (`status_alias`) REFERENCES `authorised_values` (`authorised_value`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -4034,7 +4038,7 @@ CREATE TABLE `marc_modification_template_actions` (
   `field_number` smallint(6) NOT NULL DEFAULT 0,
   `from_field` varchar(3) NOT NULL,
   `from_subfield` varchar(1) DEFAULT NULL,
-  `field_value`  text DEFAULT NULL,
+  `field_value` text DEFAULT NULL,
   `to_field` varchar(3) DEFAULT NULL,
   `to_subfield` varchar(1) DEFAULT NULL,
   `to_regex_search` mediumtext DEFAULT NULL,
@@ -5789,14 +5793,36 @@ CREATE TABLE `tags_index` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `ticket_updates`
+--
+
+DROP TABLE IF EXISTS `ticket_updates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ticket_updates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `ticket_id` int(11) NOT NULL COMMENT 'id of catalog ticket the update relates to',
+  `user_id` int(11) NOT NULL DEFAULT 0 COMMENT 'id of the user who logged the update',
+  `public` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean flag to denote whether this update is public',
+  `date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date and time this update was logged',
+  `message` text NOT NULL COMMENT 'update message content',
+  PRIMARY KEY (`id`),
+  KEY `ticket_updates_ibfk_1` (`ticket_id`),
+  KEY `ticket_updates_ibfk_2` (`user_id`),
+  CONSTRAINT `ticket_updates_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ticket_updates_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `tickets`
 --
 
 DROP TABLE IF EXISTS `tickets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE IF NOT EXISTS `tickets` (
-  `id` int(11) NOT NULL auto_increment COMMENT 'primary key',
+CREATE TABLE `tickets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `reporter_id` int(11) NOT NULL DEFAULT 0 COMMENT 'id of the patron who reported the ticket',
   `reported_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date and time this ticket was reported',
   `title` text NOT NULL COMMENT 'ticket title',
@@ -5804,30 +5830,13 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `resolver_id` int(11) DEFAULT NULL COMMENT 'id of the user who resolved the ticket',
   `resolved_date` datetime DEFAULT NULL COMMENT 'date and time this ticket was resolved',
   `biblio_id` int(11) DEFAULT NULL COMMENT 'id of biblio linked',
-  PRIMARY KEY(`id`),
+  PRIMARY KEY (`id`),
+  KEY `tickets_ibfk_1` (`reporter_id`),
+  KEY `tickets_ibfk_2` (`resolver_id`),
+  KEY `tickets_ibfk_3` (`biblio_id`),
   CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`reporter_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tickets_ibfk_2` FOREIGN KEY (`resolver_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tickets_ibfk_3` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ticket_updates`
---
-
-DROP TABLE IF EXISTS `ticket_updates`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE IF NOT EXISTS `ticket_updates` (
-  `id` int(11) NOT NULL auto_increment COMMENT 'primary key',
-  `ticket_id` int(11) NOT NULL COMMENT 'id of catalog ticket the update relates to',
-  `user_id` int(11) NOT NULL DEFAULT 0 COMMENT 'id of the user who logged the update',
-  `public` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean flag to denote whether this update is public',
-  `date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date and time this update was logged',
-  `message` text NOT NULL COMMENT 'update message content',
-  PRIMARY KEY(`id`),
-  CONSTRAINT `ticket_updates_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `ticket_updates_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -6102,4 +6111,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-25 14:12:24
+-- Dump completed on 2023-05-31 12:31:12
