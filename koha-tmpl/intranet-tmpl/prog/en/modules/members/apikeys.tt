@@ -118,7 +118,15 @@
                             </tbody>
                         </table>
                     [% ELSE %]
-                        <div class="dialog message">No keys defined for the current patron. <a href="#" class="toggle_element" data-element="#add-api-key" id="show-api-form"><i class="fa fa-plus"></i> Generate a new client id/secret pair</div>
+                        <div class="dialog message">
+                            <div>No keys defined for the current patron.</div>
+                            <div>
+                                <a href="#" class="toggle_element" data-element="#add-api-key" id="show-api-form">
+                                    <i class="fa fa-plus"></i>
+                                    <span>Generate a new client id/secret pair</span>
+                                </a>
+                            <div>
+                        </div>
                     [% END %]
                 </div>
             </main>
