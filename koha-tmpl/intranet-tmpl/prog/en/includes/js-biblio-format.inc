@@ -9,7 +9,7 @@
          */
         window.$biblio_to_html = function(biblio, config) {
 
-            if (biblio === undefined) {
+            if (!biblio) {
                 return ''; // empty string for no biblio
             }
 
