@@ -18,10 +18,11 @@ package Koha::Sitemapper;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use Moo;
 use Modern::Perl;
+use Moo;
+
+use Koha::Biblios;
 use Koha::Sitemapper::Writer;
-use C4::Context;
 
 
 has url => ( is => 'rw', );
@@ -50,18 +51,16 @@ has count => ( is => 'rw', default => sub { 0 } );
 
 
 sub run {
-    my $self = shift;
+    my ( $self, $where ) = @_;
+    my $filter = $where ? \$where : {};
 
     say "Creation of Sitemap files in '" . $self->dir . "' directory"
         if $self->verbose;
 
     $self->writer( Koha::Sitemapper::Writer->new( sitemapper => $self ) );
-    my $sth = C4::Context->dbh->prepare(
-         "SELECT biblionumber, timestamp FROM biblio" );
-    $sth->execute();
-    $self->sth($sth);
+    my $rs = Koha::Biblios->search( $filter, { columns => [ qw/biblionumber timestamp/ ] });
 
-    while ( $self->process() ) {
+    while ( $self->process($rs) ) {
         say "..... ", $self->count
             if $self->verbose && $self->count % 10000 == 0;
     }
@@ -69,10 +68,10 @@ sub run {
 
 
 sub process {
-    my $self = shift;
+    my ( $self, $rs ) = @_;
 
-    my ($biblionumber, $timestamp) = $self->sth->fetchrow;
-    unless ($biblionumber) {
+    my $biblio = $rs->next;
+    unless( $biblio ) {
         $self->writer->end();
         say "Number of biblio records processed: ", $self->count, "\n" .
             "Number of Sitemap files:            ", $self->writer->count
@@ -80,7 +79,7 @@ sub process {
         return;
     }
 
-    $self->writer->write($biblionumber, $timestamp);
+    $self->writer->write( $biblio->biblionumber, $biblio->timestamp );
     $self->count( $self->count + 1 );
     return $self->count;
 }

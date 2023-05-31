@@ -29,12 +29,14 @@ use Koha::Sitemapper;
 
 
 my ($verbose, $help, $url, $dir, $short) = (0, 0, '', '.', 1);
+my $where;
 GetOptions(
     'verbose'   => \$verbose,
     'help'      => \$help,
     'url=s'     => \$url,
     'dir=s'     => \$dir,
     'short!'    => \$short,
+    'where=s'   => \$where,
 );
 
 sub usage {
@@ -59,14 +61,14 @@ my $sitemapper = Koha::Sitemapper->new(
     dir     => $dir,
     short   => $short,
 );
-$sitemapper->run();
+$sitemapper->run($where);
 
 
 =head1 USAGE
 
 =over
 
-=item sitemap.pl [--verbose|--help|--short|--noshort|--url|--dir]
+=item sitemap.pl [--verbose|--help|--short|--noshort|--url|--dir|--where ]
 
 =back
 
@@ -75,6 +77,7 @@ $sitemapper->run();
   sitemap.pl --verbose
   sitemap.pl --noshort --dir /home/koha/mylibrary/www
   sitemap.pl --url opac.myDNSname.org
+  sitemap.pl --where 'biblionumber<100'
 
 =head1 DESCRIPTION
 
@@ -122,6 +125,10 @@ records processed.
 =item B<--help|-h>
 
 Print this help page.
+
+=item B<--where>
+
+Add a filter to limit the selection of biblio records. May be useful when testing the feature.
 
 =back
 
