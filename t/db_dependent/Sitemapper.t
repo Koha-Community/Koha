@@ -30,8 +30,6 @@ use t::lib::Mocks;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
-use Koha::Biblios;
-use Koha::Checkouts;
 use Koha::Sitemapper;
 use Koha::Sitemapper::Writer;
 
@@ -44,9 +42,6 @@ subtest 'Sitemapper' => sub {
 
     my $now = dt_from_string()->ymd;
 
-    # FIXME Would be nice to remove both deletes again
-    Koha::Checkouts->delete;
-    Koha::Biblios->delete;
     my $biblio1 = $builder->build_sample_biblio;
     $biblio1->set( { datecreated => '2013-11-15', timestamp => '2013-11-15' } )->store;
     my $id1     = $biblio1->id;
@@ -63,7 +58,7 @@ subtest 'Sitemapper' => sub {
         dir     => $dir,
         short   => 0,
     );
-    $sitemapper->run();
+    $sitemapper->run( "biblionumber>=$id1" );
 
     my $file = "$dir/sitemapindex.xml";
     ok( -e "$dir/sitemapindex.xml", 'File sitemapindex.xml created' );
@@ -108,7 +103,7 @@ EOS
         dir     => $dir,
         short   => 1,
     );
-    $sitemapper->run();
+    $sitemapper->run( "biblionumber>=$id1" );
 
     $file = "$dir/sitemap0001.xml";
     ok( -e $file, 'File sitemap0001.xml with short URLs created' );
@@ -129,12 +124,11 @@ EOS
 EOS
     is( $file_content, $expected_content, 'Its content is valid' );
 
-    # No need to create 75000 biblios here. Let's create 10 with $MAX == 6.
-    # Expecting 3 files: index plus 2 url files with 6 and 4 urls.
+    # No need to create 75000 biblios here. Let's create 10 more with $MAX == 6.
+    # Expecting 3 files: index plus 2 url files with 6 and 4 urls (when we start after biblio2).
     $Koha::Sitemapper::Writer::MAX = 6;
-    for my $count ( 3 .. 10 ) {
-        my $biblio2 =
-            $builder->build_sample_biblio->set( { datecreated => '2015-08-31', timestamp => '2015-08-31' } )->store;
+    for my $count ( 0..9 ) {
+        my $biblio2 = $builder->build_sample_biblio->set({ datecreated => '2015-08-31', timestamp => '2015-08-31' })->store;
     }
 
     $sitemapper = Koha::Sitemapper->new(
@@ -143,7 +137,7 @@ EOS
         dir     => $dir,
         short   => 1,
     );
-    $sitemapper->run();
+    $sitemapper->run( "biblionumber>$id2" ); # Note: new filter
 
     $file = "$dir/sitemapindex.xml";
     ok( -e "$dir/sitemapindex.xml", 'File sitemapindex.xml for 10 bibs created' );
