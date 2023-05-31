@@ -26,7 +26,7 @@ use IO::File;
 use Koha::DateUtils qw( dt_from_string );
 
 
-my $MAX = 50000;
+our $MAX = 50000;
 
 
 has sitemapper => (is => 'rw', );
