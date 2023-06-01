@@ -93,6 +93,10 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Vendor [% name | html %] &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<style>
+div.rows p{ margin-left: 1rem; }
+div.rows { padding: 1rem; }
+</style>
 </head>
 
 <body id="acq_supplier" class="acq">
@@ -304,7 +308,7 @@
     <h1>[% name | html %]</h1>
         <div class="row">
             <div class="col-sm-6">
-                <div id="supplier-company-details" class="page-section">
+                <div id="supplier-company-details" class="page-section rows">
                     <h2>Vendor details</h2>
                     <p>
                         <span class="label">Type: </span>
@@ -333,49 +337,49 @@
                     [% END %]
                 </div> <!-- /#supplier-company-details -->
 
-                <div id="supplier-ordering-information" class="page-section">
+                <div id="supplier-ordering-information" class="page-section rows">
                     <h2>Ordering information</h2>
-                    <p><strong>Vendor is: </strong>[% IF ( active ) %]Active[% ELSE %]Inactive[% END %]</p>
-                    <p><strong>List prices are: </strong>[% listprice | html %]</p>
-                    <p><strong>Invoice prices are: </strong>[% invoiceprice | html %]</p>
+                    <p><span class="label">Vendor is: </span>[% IF ( active ) %]Active[% ELSE %]Inactive[% END %]</p>
+                    <p><span class="label">List prices are: </span>[% listprice | html %]</p>
+                    <p><span class="label">Invoice prices are: </span>[% invoiceprice | html %]</p>
                     [% IF ( tax_rate ) %]
-                        <p><strong>Tax number registered: </strong>[% IF ( gstreg ) %]Yes[% ELSE %]No[% END %]</p>
-                        <p><strong>List item price includes tax: </strong>[% IF ( listincgst ) %]Yes[% ELSE %]No[% END %]</p>
-                        <p><strong>Invoice item price includes tax: </strong>[% IF ( invoiceincgst ) %]Yes[% ELSE %]No[% END %]</p>
+                        <p><span class="label">Tax number registered: </span>[% IF ( gstreg ) %]Yes[% ELSE %]No[% END %]</p>
+                        <p><span class="label">List item price includes tax: </span>[% IF ( listincgst ) %]Yes[% ELSE %]No[% END %]</p>
+                        <p><span class="label">Invoice item price includes tax: </span>[% IF ( invoiceincgst ) %]Yes[% ELSE %]No[% END %]</p>
                     [% END %]
-                    <p><strong>Discount: </strong>[% discount | format("%.1f") %] %</p>
-                    <p><strong>Tax rate: </strong>[% ( tax_rate || 0 ) * 100 | html %] %</p>
+                    <p><span class="label">Discount: </span>[% discount | format("%.1f") %] %</p>
+                    <p><span class="label">Tax rate: </span>[% ( tax_rate || 0 ) * 100 | html %] %</p>
                     [% IF deliverytime.defined %]
-                        <p><strong>Delivery time: </strong>[% deliverytime | html %] days</p>
+                        <p><span class="label">Delivery time: </span>[% deliverytime | html %] days</p>
                     [% END %]
                     [% IF ( notes ) %]
-                        <p><strong>Notes: </strong>[% notes | html %]</p>
+                        <p><span class="label">Notes: </span>[% notes | html %]</p>
                     [% END %]
                 </div> <!-- #supplier-ordering-information -->
 
                 [% IF vendor.interfaces.count %]
-                <div id="supplier-interfaces" class="page-section">
+                <div id="supplier-interfaces" class="page-section rows">
                     <h2>Interfaces</h2>
 
                     [% FOR i IN vendor.interfaces %]
                         <h3>[% i.name | html %]</h3>
                         [% IF i.type %]
-                            <p><span>Type: [% AuthorisedValues.GetByCode( 'VENDOR_INTERFACE_TYPE', i.type) | html %]</span></p>
+                            <p><span class="label">Type: </span>[% AuthorisedValues.GetByCode( 'VENDOR_INTERFACE_TYPE', i.type) | html %]</p>
                         [% END %]
                         [% IF i.uri %]
-                            <p><span>URI: [% i.uri | html %]</span></p>
+                            <p><span class="label">URI: </span>[% i.uri | html %]</p>
                         [% END %]
                         [% IF i.login %]
-                            <p><span>Login: [% i.login | html %]</span></p>
+                            <p><span class="label">Login: </span>[% i.login | html %]</p>
                         [% END %]
                         [% IF i.password %]
-                            <p><span>Password: <span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></span></p>
+                            <p><span class="label">Password: </span><span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></span></p>
                         [% END %]
                         [% IF i.account_email %]
-                            <p><span>Account email: [% i.account_email | html %]</span></p>
+                            <p><span class="label">Account email: </span>[% i.account_email | html %]</p>
                         [% END %]
                         [% IF i.notes %]
-                            <p><span>Notes: [% i.notes | html %]</span></p>
+                            <p><span class="label">Notes: </span>[% i.notes | html %]</p>
                         [% END %]
                     [% END %]
                 </div>
@@ -384,14 +388,14 @@
             </div> <!-- /.col-sm-6 -->
 
             <div class="col-sm-6">
-                <div id="supplier-contact-details" class="page-section">
+                <div id="supplier-contact-details" class="page-section rows">
                     <h2>Contact</h2>
                     [% FOREACH contact IN contacts %]
                         [% INCLUDE show_contact %]
                     [% END %]
                 </div> <!-- /#supplier-contact-details -->
 
-                <div id="subscription-details" class="page-section">
+                <div id="subscription-details" class="page-section rows">
                     <h2>Subscription details</h2>
                     <p><strong>Number of subscriptions: </strong>
                         [% IF (  CAN_user_serials ) %]
@@ -406,7 +410,7 @@
         </div>
 
         [% IF ( contracts ) %]
-            <div id="supplier-contracts" class="page-section">
+            <div id="supplier-contracts" class="page-section rows">
                 <h2>Contract(s)</h2>
                 <table id="contractst">
                   <thead>
