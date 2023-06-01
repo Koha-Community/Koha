@@ -1,7 +1,4 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!  
-# Add more tests here!!!
 
 use Modern::Perl;
 
@@ -10,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -979,6 +976,30 @@ subtest 'create_basic_session tests' => sub {
 
     $session = C4::Auth::create_basic_session({ patron => $patron, interface => 'staff' });
     is( $session->param('interface'), 'intranet', 'Staff interface gets converted to intranet' );
+};
+
+subtest 'check_cookie_auth overwriting interface already set' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference( 'SessionRestrictionByIP', 0 );
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $session = C4::Auth::get_session();
+    $session->param( 'number',       $patron->id );
+    $session->param( 'id',           $patron->userid );
+    $session->param( 'ip',           '1.2.3.4' );
+    $session->param( 'lasttime',     time() );
+    $session->param( 'interface',    'opac' );
+    $session->flush;
+
+    C4::Context->interface('intranet');
+    C4::Auth::check_cookie_auth( $session->id );
+    is( C4::Context->interface, 'intranet', 'check_cookie_auth did not overwrite' );
+    delete $C4::Context::context->{interface}; # clear context interface
+    C4::Auth::check_cookie_auth( $session->id );
+    is( C4::Context->interface, 'opac', 'check_cookie_auth used interface from session when context interface was empty' );
+
+    t::lib::Mocks::mock_preference( 'SessionRestrictionByIP', 1 );
 };
 
 $schema->storage->txn_rollback;
