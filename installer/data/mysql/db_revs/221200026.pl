@@ -7,7 +7,7 @@ return {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
 
-        if ( foreign_key_exists( 'illrequests', 'illrequests_bibfk' ) ) {
+        unless ( foreign_key_exists( 'illrequests', 'illrequests_bibfk' ) ) {
             $dbh->do(q{
                 ALTER TABLE illrequests
                     ADD KEY `illrequests_bibfk` (`biblio_id`),
