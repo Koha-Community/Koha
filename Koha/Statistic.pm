@@ -98,7 +98,7 @@ sub new {
             categorycode   => $params->{categorycode},
             ccode          => exists $params->{ccode} ? $params->{ccode} : q{},
             datetime       => $datetime,
-            interface      => $params->{interface},
+            interface      => $params->{interface} // C4::Context->interface,
             itemnumber     => $params->{itemnumber},
             itemtype       => exists $params->{itemtype} ? $params->{itemtype} : q{},
             location       => $params->{location},
