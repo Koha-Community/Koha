@@ -1788,7 +1788,10 @@ sub check_cookie_auth {
             my $flags = defined($flagsrequired) ? haspermission( $userid, $flagsrequired ) : 1;
             if ($flags) {
                 C4::Context->_new_userenv($sessionID);
-                C4::Context->interface($session->param('interface'));
+                if ( !C4::Context->interface ) {
+                    # No need to override the interface, most often set by get_template_and_user
+                    C4::Context->interface( $session->param('interface') );
+                }
                 C4::Context->set_userenv(
                     $session->param('number'),       $session->param('id') // '',
                     $session->param('cardnumber'),   $session->param('firstname'),
