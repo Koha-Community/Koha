@@ -1502,11 +1502,14 @@ The release team for Koha 23.05.00 is
   - Martin Renvoize
   - Marcel de Rooy
   - Fridolin Somers
+  - Andrii Nugged
+  - Petro Vashchuk
 
 - Topic Experts:
-  - UI Design -- Owen Leonard
-  - Zebra -- Fridolin Somers
-  - REST API -- Martin Renvoize
+  - UI design: Owen Leonard
+  - REST API: Martin Renvoize
+  - Zebra: Fridolin Somers
+  - ERM: Pedro Amorim, Agustín Moyano
 
 - Bug Wranglers:
   - Aleisha Amohia
@@ -1523,10 +1526,17 @@ The release team for Koha 23.05.00 is
 
 - Translation Manager: Bernardo González Kriegel
 
+- Website Maintainer
+  - Liz Rea
+  - Martin Renvoize
+  - Katrin Fischer
 
 - Wiki curators: 
   - Thomas Dukleth
   - Katrin Fischer
+
+- Newsletter Editor
+  - Michael Kuhn
 
 - Release Maintainers:
   - 22.11 -- PTFS Europe (Martin Renvoize, Matt Blenkinsop, Jacob O'Mara, Pedro Amorim)
