@@ -51,25 +51,27 @@
                     <h1>Search history</h1>
 
                     [% IF Koha.Preference( 'OpacAuthorities' ) == 1 %]
-                        <div id="tabs" class="toptabs">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="biblio-tab-link" href="#biblio_tab" aria-controls="biblio_tab" role="tab" data-toggle="tab" aria-selected="true">Catalog</a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="authority-tab-link" href="#authority_tab" aria-controls="authority_tab" role="tab" data-toggle="tab" aria-selected="false">Authority</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div id="biblio_tab" role="tabpanel" class="tab-pane active" aria-labelledby="biblio-tab-link">
-                                    [% PROCESS catalog_search_history %]
-                                </div> <!-- / #biblio_tab -->
 
-                                <div id="authority_tab" role="tabpanel" class="tab-pane" aria-labelledby="authority-tab-link">
-                                    [% PROCESS authority_search_history %]
-                                </div> <!-- / #authority_tab -->
-                            </div> <!-- /.tab-content -->
-                        </div> <!-- / #tabs -->
+                        [% WRAPPER tabs id= "tabs" %]
+                            [% WRAPPER tabs_nav %]
+                                [% WRAPPER tab_item tabname= "biblio_tab" bt_active= 1 %] <span>Catalog</span> [% END %]
+                                [% WRAPPER tab_item tabname= "authority_tab" %] <span>Authority</span> [% END %]
+                            [% END # /WRAPPER tabs_nav %]
+
+                            [% WRAPPER tab_panels %]
+                                [% WRAPPER tab_panel tabname="biblio_tab" bt_active= 1 %]
+                                    <div id="biblio_tab" role="tabpanel" class="tab-pane active" aria-labelledby="biblio-tab-link">
+                                        [% PROCESS catalog_search_history %]
+                                    </div> <!-- / #biblio_tab -->
+                                [% END # /tab_panel# %]
+                                [% WRAPPER tab_panel tabname="authority_tab" %]
+                                    <div id="authority_tab" role="tabpanel" class="tab-pane" aria-labelledby="authority-tab-link">
+                                        [% PROCESS authority_search_history %]
+                                    </div> <!-- / #authority_tab -->
+                                [% END # /tab_panel# %]
+                            [% END # /WRAPPER tab_panels %]
+                        [% END # /WRAPPER tabs %]
+
                     [% ELSE %]
                         [% PROCESS catalog_search_history %]
                     [% END %]
