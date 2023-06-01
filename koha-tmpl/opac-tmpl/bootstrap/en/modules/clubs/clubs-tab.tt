@@ -76,7 +76,7 @@
 <script>
 function loadEnrollmentForm( id ) {
     $("body").css("cursor", "progress");
-    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber | html %]&id=' + id, function() {
+    $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber | html %]&id=' + id, function() {
         $("body").css("cursor", "default");
     });
 
@@ -91,7 +91,7 @@ function cancelEnrollment( id ) {
         data: { id: id },
         success: function( data ) {
             if ( data.success ) {
-                $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrower.borrowernumber | html %]', function() {
+                $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrower.borrowernumber | html %]', function() {
                     $("body").css("cursor", "default");
                 });
             } else {

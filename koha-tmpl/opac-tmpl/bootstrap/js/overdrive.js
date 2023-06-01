@@ -225,7 +225,7 @@ KOHA.OverDriveCirculation = new function() {
                 if( $("#overdrive-results-page").length > 0 ){
                     location.reload();
                 } else {
-                    KOHA.OverDriveCirculation.display_account_details( $("#opac-user-overdrive") );
+                    KOHA.OverDriveCirculation.display_account_details( $("#opac-user-overdrive_panel") );
                 }
             }
         });

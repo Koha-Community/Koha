@@ -251,73 +251,72 @@
                     </form>
                     [% END %]
 
-                    <div id="opac-user-views" class="toptabs">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="opac-user-checkouts-tab" data-toggle="tab" role="tab" aria-controls="opac-user-checkouts" aria-selected="true"  href="#opac-user-checkouts">Checked out ([% issues_count | html %])</a>
-                            </li>
+                    [% WRAPPER tabs id= "opac-user-views" %]
+                        [% WRAPPER tabs_nav %]
+                            [% WRAPPER tab_item tabname= "opac-user-checkouts" %]
+                                <span>Checked out ([% issues_count | html %])</span>
+                            [% END %]
                             [% IF relatives %]
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="opac-user-relative-issues-tab" data-toggle="tab" role="tab" aria-controls="opac-user-relative-issues" aria-selected="false" href="#opac-user-relative-issues">Relatives' checkouts</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "opac-user-relative-issues" %]
+                                    <span>Relatives' checkouts</span>
+                                [% END %]
                             [% END %]
                             [% IF ( overdues_count ) %]
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="opac-user-overdues-tab" data-toggle="tab" role="tab" aria-controls="opac-user-overdues" aria-selected="false" href="#opac-user-overdues">Overdue ([% overdues_count | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "opac-user-overdues" %]
+                                    <span>Overdue ([% overdues_count | html %])</span>
+                                [% END %]
                             [% END %]
                             [% IF ( OPACFinesTab ) %]
                                 [% IF ( amountoutstanding > 0 ) %]
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" id="opac-user-fines-tab" data-toggle="tab" role="tab" aria-controls="opac-user-fines" aria-selected="false" href="#opac-user-fines">Charges ([% amountoutstanding | $Price %])</a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= "opac-user-fines" %]
+                                        <span>Charges ([% amountoutstanding | $Price %])</span>
+                                    [% END %]
                                 [% END %]
                                 [% IF ( amountoutstanding < 0 ) %]
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" id="opac-user-fines-tab" data-toggle="tab" role="tab" aria-controls="opac-user-fines" aria-selected="false" href="#opac-user-fines">Credits ([% amountoutstanding * -1 | $Price %])</a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= "opac-user-fines" %]
+                                        <span>Credits ([% amountoutstanding * -1 | $Price %])</span>
+                                    [% END %]
                                 [% END %]
                                 [% IF relatives_with_fines %]
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" id="opac-user-relative-fines-tab" data-toggle="tab" role="tab" aria-controls="opac-user-relative-fines" aria-selected="false" href="#opac-user-relative-fines">Relatives' charges</a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= "opac-user-relative-fines" %]
+                                        <span>Relatives' charges</span>
+                                    [% END %]
                                 [% END %]
                             [% END %]
 
                             [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-toggle="tab" role="tab" aria-controls="opac-user-clubs" aria-selected="false" id="opac-user-clubs-tab-link" href="#opac-user-clubs">
-                                        Clubs ([% borrower_club_enrollments.count || 0 | html %]/[% borrower_enrollable_clubs.count || 0 | html %])
-                                    </a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "opac-user-clubs" %]
+                                    <span>Clubs ([% borrower_club_enrollments.count || 0 | html %]/[% borrower_enrollable_clubs.count || 0 | html %])</span>
+                                [% END %]
                             [% END %]
 
                             [% IF ( RESERVES.count ) %]
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="opac-user-holds-tab" data-toggle="tab" role="tab" aria-controls="opac-user-holds" aria-selected="false" href="#opac-user-holds">Holds ([% RESERVES.count | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "opac-user-holds" %]
+                                    <span>Holds ([% RESERVES.count | html %])</span>
+                                [% END %]
                             [% END %]
                             [% IF Koha.Preference('UseRecalls') && RECALLS.count %]
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="opac-user-recalls-tab" data-toggle="tab" role="tab" aria-controls="opac-user-recalls" aria-selected="false" href="#opac-user-recalls">Recalls ([% RECALLS.count | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "opac-user-recalls" %]
+                                    <span>Recalls ([% RECALLS.count | html %])</span>
+                                [% END %]
                             [% END %]
                             [% IF Koha.Preference('ArticleRequests') %]
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="opac-user-article-requests-tab" data-toggle="tab" role="tab" aria-controls="opac-user-article-requests" aria-selected="false" href="#opac-user-article-requests">Article requests ([% current_article_requests.size || 0 | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "opac-user-article-requests" %]
+                                    <span>Article requests ([% current_article_requests.size || 0 | html %])</span>
+                                [% END %]
                             [% END %]
                             [% IF ( OverDriveCirculation ) %]
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="opac-user-overdrive-tab" data-toggle="tab" role="tab" aria-controls="opac-user-overdrive" aria-selected="false" href="#opac-user-overdrive">OverDrive account</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "opac-user-overdrive" %]
+                                    <span>OverDrive account</span>
+                                [% END %]
                             [% END %]
-                        </ul>
-                        <div class="tab-content">
+                        [% END # /WRAPPER tabs_nav %]
 
-                            <div id="opac-user-overdrive" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-overdrive-tab">
-                            </div>
-                            <div id="opac-user-checkouts" class="tab-pane active" role="tabpanel" aria-labelledby="opac-user-checkouts-tab">
+                        [% WRAPPER tab_panels %]
+                            [% WRAPPER tab_panel tabname="opac-user-overdrive" %]
+                            [% END # /tab_panel#opac-user-overdrive %]
+
+                            [% WRAPPER tab_panel tabname="opac-user-checkouts" %]
                                 [% IF ( issues_count ) %]
                                     <form id="renewselected" action="/cgi-bin/koha/opac-renew.pl" method="post">
                                         <legend class="sr-only">Renew selected</legend>
@@ -602,19 +601,18 @@
                                         </form>
                                     </div>
                                 </div>
-
-                            </div> <!-- / .opac-user-checkouts -->
+                            [% END # /tab_panel#opac-user-checkouts %]
 
                             [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
-                                <div id="opac-user-clubs" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-clubs-tab-link">
+                                [% WRAPPER tab_panel tabname="opac-user-clubs" %]
                                     Loading...
-                                </div>
+                                [% END # /tab_panel#opac-user-clubs %]
                             [% END %]
 
                             [% IF ( OPACFinesTab ) %]
                                 <!-- FINES BOX -->
                                 [% IF ( amountoutstanding > 0 ) %]
-                                    <div id="opac-user-fines" class="tab-pane" id="home" role="tabpanel" aria-labelledby="opac-user-fines-tab">
+                                    [% WRAPPER tab_panel tabname="opac-user-fines" %]
                                         <table class="table table-bordered table-striped">
                                             <caption>Charges</caption>
                                             <thead><tr><th colspan="2">Amount</th></tr></thead>
@@ -625,11 +623,11 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
+                                    [% END # /tab_panel#opac-user-fines %]
                                 [% END %]
 
                                 [% IF ( amountoutstanding < 0 ) %]
-                                    <div id="opac-user-fines" class="tab-pane" id="home" role="tabpanel" aria-labelledby="opac-user-fines-tab">
+                                    [% WRAPPER tab_panel tabname="opac-user-fines" %]
                                         <table class="table table-bordered table-striped">
                                             <caption>Credits</caption>
                                             <thead><tr><th colspan="2">Amount</th></tr></thead>
@@ -639,11 +637,11 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
+                                    [% END # /tab_panel#opac-user-fines %]
                                 [% END %]
 
                                 [% IF relatives_with_fines %]
-                                    <div id="opac-user-relative-fines" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-relative-fines-tab">
+                                    [% WRAPPER tab_panel tabname="opac-user-relative-fines" %]
                                         <table class="table table-bordered table-striped">
                                             <caption>Fines and charges</caption>
                                             <thead>
@@ -660,12 +658,12 @@
                                                 [% END %]
                                             </tbody>
                                         </table>
-                                    </div>
+                                    [% END # /tab_panel#opac-user-relative-fines %]
                                 [% END %]
                             [% END # / OPACFinesTab %]
 
                             [% IF relatives %]
-                                <div id="opac-user-relative-issues" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-relative-issues-tab">
+                                [% WRAPPER tab_panel tabname="opac-user-relative-issues" %]
                                     <table id="opac-user-relative-issues-table" class="table table-bordered table-striped">
                                         <caption class="sr-only">Relatives' checkouts</caption>
                                         <thead>
@@ -710,11 +708,11 @@
                                             [% END %]
                                         </tbody>
                                     </table>
-                                </div>
+                                [% END # /tab_panel#opac-user-relative-issues %]
                             [% END %]
 
                             [% IF ( overdues_count ) %]
-                                <div id="opac-user-overdues" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-overdues-tab">
+                                [% WRAPPER tab_panel tabname="opac-user-overdues" %]
                                     <table id="overduest" class="table table-bordered table-striped">
                                         <caption>Overdues <span class="count">([% overdues_count | html %] total)</span></caption>
                                         <!-- OVERDUES TABLE ROWS -->
@@ -835,13 +833,17 @@
                                             [% END %]
                                         </tbody>
                                     </table>
-                                </div> <!-- / #opac-user-overdues -->
+                                [% END # /tab_panel#opac-user-overdues %]
                             [% END # /overdues_count %]
 
-                            [% PROCESS 'holds-table.inc' HOLDS = RESERVES, SuspendHoldsOpac = SuspendHoldsOpac, showpriority = showpriority, AutoResumeSuspendedHolds = AutoResumeSuspendedHolds %]
+                            [% IF ( RESERVES.count ) %]
+                                [% WRAPPER tab_panel tabname="opac-user-holds" %]
+                                    [% PROCESS 'holds-table.inc' HOLDS = RESERVES, SuspendHoldsOpac = SuspendHoldsOpac, showpriority = showpriority, AutoResumeSuspendedHolds = AutoResumeSuspendedHolds %]
+                                [% END # /tab_panel#opac-user-holds %]
+                            [% END # / #RESERVES.count %]
 
                             [% IF Koha.Preference('UseRecalls') && RECALLS.count %]
-                                <div id="opac-user-recalls" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-recalls-tab">
+                                [% WRAPPER tab_panel tabname="opac-user-recalls" %]
                                     <table id="recalls-table" class="table table-bordered table-striped">
                                         <caption>Recalls <span class="count">([% RECALLS.count | html %])</span></caption>
                                         <thead>
@@ -912,11 +914,11 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
+                                [% END # /tab_panel#opac-user-recalls %]
                             [% END # / # RECALLS.count %]
 
                             [% IF Koha.Preference('ArticleRequests') %]
-                                <div id="opac-user-article-requests" class="tab-pane" role="tabpanel" aria-labelledby="opac-user-article-requests-tab">
+                                [% WRAPPER tab_panel tabname="opac-user-article-requests" %]
                                     [% IF current_article_requests.size %]
                                         <table id="article-requests-table" class="table table-bordered table-striped">
                                             <caption>Article requests <span class="count"></span></caption>
@@ -1025,10 +1027,10 @@
                                             <tr><td>You have no article requests currently.</td></tr>
                                         </table>
                                     [% END # IF current_article_requests.size %]
-                                </div> <!-- / #opac-user-article-requests -->
+                                [% END # /tab_panel#opac-user-article-requests %]
                             [% END %]
-                        </div> <!-- /.tab-content -->
-                    </div> <!-- /#opac-user-views -->
+                        [% END # /WRAPPER tab_panels %]
+                    [% END # /WRAPPER tabs#opac-user-views %]
                 </div> <!-- /#userdetails -->
             </div> <!-- /.col-10 -->
         </div> <!-- /.row -->
@@ -1330,10 +1332,10 @@
                 $("#change-pickup-location" + hold_id ).show();
             });
 
-            if ( $('#opac-user-clubs').length ) {
-                $('#opac-user-clubs-tab-link').on('click', function() {
-                    $('#opac-user-clubs').text(_("Loading..."));
-                    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]');
+            if ( $('#opac-user-clubs_panel').length ) {
+                $('#opac-user-clubs-tab').on('click', function() {
+                    $('#opac-user-clubs_panel').text(_("Loading..."));
+                    $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]');
                 });
             }
 
@@ -1369,6 +1371,10 @@
             $(".dismiss-message-button").click(function(e){
                 return confirmDelete(_("Are you sure you want to dismiss this message?"));
             });
+
+            if( $("#opac-user-views .tab-pane.active").length < 1 ){
+                $("#opac-user-views a:first").tab("show");
+            }
         });
 
         function submitNote( title, issue_id, note ){
@@ -1451,14 +1457,14 @@
     [%- END -%]
     $(document).ready(function() {
         [% IF ( overdrive_error ) %]
-            KOHA.OverDriveCirculation.display_error("#opac-user-overdrive", "[% overdrive_error.dquote | html %]");
+            KOHA.OverDriveCirculation.display_error("#opac-user-overdrive_panel", "[% overdrive_error.dquote | html %]");
         [% END %]
 
         [% IF ( overdrive_tab ) %]
-            $("#opac-user-views a[href='#opac-user-overdrive']").tab("show");
+            $("#opac-user-views a[href='#opac-user-overdrive_panel']").tab("show");
         [% END %]
 
-        $("#opac-user-overdrive").each( function() {
+        $("#opac-user-overdrive_panel").each( function() {
             KOHA.OverDriveCirculation.display_account_details(this);
         } );
     });
