@@ -11,7 +11,6 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 <style>
-    #jobpanel,#jobstatus,#jobfailed { display : none; }
     span.change-status { font-style:italic; color:#666; display:none; }
     ul.matches li { list-style-type:none; }
 </style>
@@ -253,8 +252,6 @@
                             [% IF ( can_commit ) %]
                                 <form method="post" id="import_batch_form">
                                     <input type="hidden" name="op" value="commit-batch" />
-                                    <input type="hidden" name="runinbackground" value="" />
-                                    <input type="hidden" name="completedJobID" value="" />
                                     <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
                                     <fieldset class="action">
                                         [% IF ( record_type != 'auth' ) %]
@@ -282,23 +279,13 @@
                                         <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" />
                                     </fieldset>
                                 </form> <!-- /#import_batch_form -->
-                                <div id="jobpanel">
-                                    <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-                                    <div id="jobfailed"></div>
-                                </div>
                             [% END # /IF can_commit %]
                             [% IF ( can_revert ) %]
                                 <form method="post" id="revert_batch_form">
                                     <input type="hidden" name="op" value="revert-batch" />
-                                    <input type="hidden" name="runinbackground" value="" />
-                                    <input type="hidden" name="completedJobID" value="" />
                                     <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
                                     <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Undo import into catalog" /></fieldset>
                                 </form>
-                                <div id="jobpanel">
-                                    <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-                                    <div id="jobfailed"></div>
-                                </div>
                             [% END # /IF can_revert %]
                         </div>
                         [% END %]
@@ -580,11 +567,8 @@
                         }
                     },
                 }));
-                $("#import_batch_form").on("submit", function() {
-                    return submitBackgroundJob(document.getElementById("import_batch_form"));
-                });
                 $("#revert_batch_form").on("submit", function() {
-                    return confirm(_("Are you sure you want to undo the import of this batch into the catalog?")) && submitBackgroundJob(document.getElementById("revert_batch_form"));
+                    return confirm(_("Are you sure you want to undo the import of this batch into the catalog?"));
                 });
             [% END %]
 
