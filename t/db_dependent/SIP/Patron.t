@@ -320,6 +320,7 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
             value  => {
                 borrowernumber => $sibling->borrowernumber,
                 amountoutstanding => 11.11,
+                debit_type_code   => 'OVERDUE',
             }
         }
     )->store;
