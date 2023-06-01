@@ -428,7 +428,7 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    return data ? escape_str($date(data) + " (" + _("%s years").format($get_age(data)) + ")") : "";
+                                    return data ? "<span class=\"dateofbirth\">" + escape_str($date(data)) + "<span class=\"agehint\"> (" + _("%s years").format($get_age(data)) + ")</span></span>" : "";
                                 }
                             }
                             [% CASE 'address' %]
