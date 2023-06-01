@@ -14,7 +14,7 @@
                         href="#"
                         role="tab"
                         data-content="default"
-                        @click="change_custom_or_default"
+                        @click="changeCustomOrDefault"
                         >Default</a
                     >
                 </li>
@@ -28,7 +28,7 @@
                         href="#"
                         role="tab"
                         data-content="custom"
-                        @click="change_custom_or_default"
+                        @click="changeCustomOrDefault"
                         >Custom</a
                     >
                 </li>
@@ -73,31 +73,16 @@
 
 <script>
 import { inject } from "vue"
-import { storeToRefs } from "pinia"
 import ButtonSubmit from "../ButtonSubmit.vue"
 import { APIClient } from "../../fetch/api-client.js"
 import UsageStatisticsReportBuilder from "./UsageStatisticsReportBuilder.vue"
 
 export default {
     setup() {
-        // const AVStore = inject("AVStore")
-        // const {
-        //     av_report_types,
-        //     av_platform_reports_metrics,
-        //     av_database_reports_metrics,
-        //     av_title_reports_metrics,
-        //     av_item_reports_metrics,
-        // } = storeToRefs(AVStore)
-
         const { setConfirmationDialog, setMessage, setError } =
             inject("mainStore")
 
         return {
-            // av_report_types,
-            // av_platform_reports_metrics,
-            // av_database_reports_metrics,
-            // av_title_reports_metrics,
-            // av_item_reports_metrics,
             setConfirmationDialog,
             setMessage,
             setError,
@@ -126,79 +111,6 @@ export default {
                 "Titles",
                 // etc etc
             ],
-            // metric_types_matrix: {
-            //     Searches_Platform: ["PR", "PR_P1"],
-            //     Searches_Automated: ["DR", "DR_D1"],
-            //     Searches_Federated: ["DR", "DR_D1"],
-            //     Searches_Regular: ["DR", "DR_D1"],
-            //     Total_Item_Investigations: [
-            //         "PR",
-            //         "DR",
-            //         "DR_D1",
-            //         "TR",
-            //         "TR_B3",
-            //         "TR_J3",
-            //         "IR",
-            //     ],
-            //     Total_Item_Requests: [
-            //         "PR",
-            //         "PR_P1",
-            //         "DR",
-            //         "DR_D1",
-            //         "TR",
-            //         "TR_B1",
-            //         "TR_B3",
-            //         "TR_J1",
-            //         "TR_J3",
-            //         "TR_J4",
-            //         "IR",
-            //         "IR_A1",
-            //         "IR_M1",
-            //     ],
-            //     Unique_Item_Investigations: [
-            //         "PR",
-            //         "DR",
-            //         "TR",
-            //         "TR_B3",
-            //         "TR_J3",
-            //         "IR",
-            //     ],
-            //     Unique_Item_Requests: [
-            //         "PR",
-            //         "PR_P1",
-            //         "DR",
-            //         "TR",
-            //         "TR_B1",
-            //         "TR_B3",
-            //         "TR_J1",
-            //         "TR_J3",
-            //         "TR_J4",
-            //         "IR",
-            //         "IR_A1",
-            //     ],
-            //     Unique_Title_Investigations: ["PR", "DR", "TR", "TR_B3"],
-            //     Unique_Title_Requests: ["PR", "PR_P1", "DR", "TR", "TR_B3"],
-            //     Limit_Exceeded: ["DR", "DR_D2", "TR", "TR_B2", "TR_J2", "IR"],
-            //     No_License: ["DR", "DR_D2", "TR", "TR_B2", "TR_J2", "IR"],
-            // },
-            // metric_types_options: null,
-            // months: [
-            //     { short: "Jan", description: "January", value: 1 },
-            //     { short: "Feb", description: "February", value: 2 },
-            //     { short: "Mar", description: "March", value: 3 },
-            //     { short: "Apr", description: "April", value: 4 },
-            //     { short: "May", description: "May", value: 5 },
-            //     { short: "Jun", description: "June", value: 6 },
-            //     { short: "Jul", description: "July", value: 7 },
-            //     { short: "Aug", description: "August", value: 8 },
-            //     { short: "Sep", description: "September", value: 9 },
-            //     { short: "Oct", description: "October", value: 10 },
-            //     { short: "Nov", description: "November", value: 11 },
-            //     { short: "Dec", description: "December", value: 12 },
-            // ],
-            // years: ["2022", "2023"],
-            // titles: [],
-            // usage_data_providers: [],
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -227,8 +139,7 @@ export default {
                 error => {}
             )
         },
-        change_custom_or_default(e) {
-            this.initialized = false
+        changeCustomOrDefault(e) {
             this.custom_or_default = e.target.getAttribute("data-content")
         },
         displayDefaultReport(e) {
@@ -247,19 +158,4 @@ export default {
 .rows {
     float: none;
 }
-/* .report-builder {
-    display: flex;
-}
-.custom-report {
-    width: 50%;
-    align-items: left;
-}
-.custom-report .v-select,
-input {
-    width: 50%;
-    min-width: 50%;
-}
-.default-report {
-    width: 50%;
-} */
 </style>

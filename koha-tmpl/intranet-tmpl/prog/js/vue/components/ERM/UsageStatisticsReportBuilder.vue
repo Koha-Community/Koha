@@ -46,7 +46,9 @@
                                         provider.erm_usage_data_provider_id
                                 "
                                 :options="usage_data_providers"
-                                @update:modelValue="setReportTypes($event)"
+                                @update:modelValue="
+                                    setReportTypesAndResetTitles($event)
+                                "
                                 multiple
                             />
                         </li>
@@ -148,7 +150,11 @@
                                 :options="titles"
                                 multiple
                                 @input="titlesSearchFilter($event)"
-                                :placeholder="$__('Type to search')"
+                                :placeholder="
+                                    $__(
+                                        'Type at least two characters to search'
+                                    )
+                                "
                             />
                         </li>
                     </ol>
@@ -195,7 +201,7 @@
                                 type="radio"
                                 name="yearly_or_monthly"
                                 id="yearly_filter_required_yes"
-                                @change="month_selector($event)"
+                                @change="monthSelector($event)"
                                 :checked="yearly_filter_required ? true : false"
                             />
                             Yes - Table will be limited to 12 columns (Jan-Dec)
@@ -209,7 +215,7 @@
                                 type="radio"
                                 name="yearly_or_monthly"
                                 id="yearly_filter_required_no"
-                                @change="month_selector($event)"
+                                @change="monthSelector($event)"
                                 :checked="
                                     !yearly_filter_required ? true : false
                                 "
@@ -245,7 +251,7 @@
                                     :key="month + key + i"
                                     :checked="true"
                                     @change="
-                                        update_months_required(
+                                        updateMonthsRequired(
                                             $event,
                                             key,
                                             i,
@@ -458,7 +464,7 @@ export default {
     methods: {
         async getTitles(query) {
             const client = APIClient.erm
-            await client.titles.getAll(query).then(
+            await client.usage_titles.getAll(query).then(
                 titles => {
                     // If multiple searches are done we need to keep the results of the
                     // earlier searches but not allow for duplicate titles in the option array
@@ -473,13 +479,19 @@ export default {
                 error => {}
             )
         },
-        change_custom_or_default(e) {
-            this.initialized = false
-            this.custom_or_default = e.target.getAttribute("data-content")
-        },
         titlesSearchFilter(e) {
-            const queryString = `title=${e.target.value}`
-            this.getTitles(queryString)
+            if (e.target.value.length > 1) {
+                const providers = this.query.usage_data_providers
+                    ? this.query.usage_data_providers
+                    : []
+                const titlesQueryObject = {
+                    title: { "-like": `${e.target.value}%` },
+                    ...(providers.length && {
+                        usage_data_provider_id: providers,
+                    }),
+                }
+                this.getTitles(titlesQueryObject)
+            }
         },
         validateYear(year) {
             const validYearCheck = /^\d{4}$/.test(year) ? true : false
@@ -544,12 +556,12 @@ export default {
             const metric_report_type =
                 data_display === "metric_type" ? true : false
             const url = !data_display.includes("yearly")
-                ? this.build_monthly_url_query(
+                ? this.buildMonthlyUrlQuery(
                       queryObject,
                       this.time_period_columns_builder,
                       metric_report_type
                   )
-                : this.build_yearly_url_query(queryObject)
+                : this.buildYearlyUrlQuery(queryObject)
             const type = data_display
             const columns = this.defineColumns(
                 this.title_property_column_options
@@ -570,7 +582,7 @@ export default {
                 name: "UsageStatisticsReportsViewer",
             })
         },
-        month_selector(e) {
+        monthSelector(e) {
             if (!this.query.start_year || !this.query.end_year) {
                 alert(
                     "Please select a start and end year before choosing this option"
@@ -587,7 +599,7 @@ export default {
                     years.push(i)
                 }
 
-                const months = this.determine_months(
+                const months = this.determineMonths(
                     this.query,
                     years,
                     this.months_data
@@ -600,7 +612,7 @@ export default {
                 this.yearly_filter_required = true
             }
         },
-        determine_months(query, years, months_data) {
+        determineMonths(query, years, months_data) {
             const { start_month, end_month } = query
             const months_per_year = {}
             const numberOfYears = years.length
@@ -656,18 +668,14 @@ export default {
             })
             return months_per_year
         },
-        update_months_required($event, key, index, time_period_columns) {
+        updateMonthsRequired($event, key, index, time_period_columns) {
             const value = $event.target.checked
 
             time_period_columns[key][index].active = value
 
             this.time_period_columns_builder = time_period_columns
         },
-        build_monthly_url_query(
-            query,
-            time_period_columns,
-            metric_type_report
-        ) {
+        buildMonthlyUrlQuery(query, time_period_columns, metric_type_report) {
             let url = metric_type_report
                 ? "/api/v1/erm/usage_titles/metric_types_report"
                 : "/api/v1/erm/usage_titles/monthly_report"
@@ -688,7 +696,7 @@ export default {
 
             const months = time_period_columns
                 ? time_period_columns
-                : this.determine_months(query, years, this.months_data)
+                : this.determineMonths(query, years, this.months_data)
             this.time_period_columns_builder = months
 
             // Build a query array by year - [{ year1 }, {year2} ...etc]
@@ -729,7 +737,7 @@ export default {
 
             return url
         },
-        build_yearly_url_query(query) {
+        buildYearlyUrlQuery(query) {
             let url = "/api/v1/erm/usage_titles/yearly_report"
             const {
                 start_year,
@@ -810,7 +818,7 @@ export default {
                 this.query.metric_types = null
             }
         },
-        setReportTypes(report_types) {
+        setReportTypesAndResetTitles(report_types) {
             const permittedReportTypes = []
             if (report_types.length === 0) {
                 this.report_types_options = this.av_report_types
@@ -833,6 +841,8 @@ export default {
                 })
             })
             this.report_types_options = permittedReportTypes
+            // If we change/remove a data provider then we don't want titles being displayed from that provider in the dropdown
+            this.titles.length = 0
         },
         defineColumns(title_props) {
             const columns = [
