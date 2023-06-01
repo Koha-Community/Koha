@@ -371,9 +371,9 @@
 
                 </div> <!-- / #catalogue_detail_biblio -->
 
-                <div id="bibliodescriptions" class="toptabs">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li id="tab_holdings" class="nav-item" role="presentation">
+                [% WRAPPER tabs id= "bibliodescriptions" %]
+                    [% WRAPPER tabs_nav %]
+                        [% WRAPPER tab_item tabname= "holdings" %]
                             [% BLOCK holding_tab_title %]
                                 [% IF SeparateHoldings %]
                                     <span>[% Branches.GetLoggedInBranchname | html %] holdings</span>
@@ -385,46 +385,48 @@
                                     [% END %]
                                 [% END %]
                             [% END %]
-                            <a href="#holdings" class="nav-link" id="holdings-tab" data-toggle="tab" role="tab" aria-controls="holdings" aria-selected="false">
-                                [% PROCESS holding_tab_title %] [% UNLESS too_many_items OR specific_item %][% ' ( ' _ (itemloop.size || 0) _ ' )' | html %][% END %]
-                            </a>
-                        </li>
+                            [% PROCESS holding_tab_title %] [% UNLESS too_many_items OR specific_item %][% ' ( ' _ (itemloop.size || 0) _ ' )' | html %][% END %]
+                        [% END %]
+
                         [% IF (SeparateHoldings) %]
-                            <li class="nav-item" role="presentation">
-                                <a href="#otherholdings" class="nav-link" id="otherholdings-tab" data-toggle="tab" role="tab" aria-controls="otherholdings" aria-selected="false">Other holdings [% ' ( ' _ (otheritemloop.size || 0) _ ' )' | html %]</a>
-                            </li>
-                        [% END %]
-                        [% IF ( MARCNOTES || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
-                            [% SET title_notes_count = 0 %]
-                            [% IF MARCNOTES %]
-                                [% SET title_notes_count = MARCNOTES.size %]
+                            [% WRAPPER tab_item tabname= "otherholdings" %]
+                                <span>Other holdings [% ' ( ' _ (otheritemloop.size || 0) _ ' )' | html %]</span>
                             [% END %]
-                            [% IF SYNDETICS_SUMMARY %][% SET title_notes_count = title_notes_count + 1 %][% END %]
-                            <li id="tab_descriptions" class="nav-item" role="presentation">
-                                <a href="#descriptions" class="nav-link" id="tab_descriptions-tab" data-toggle="tab" role="tab" aria-controls="tab_descriptions" aria-selected="false">Title notes ( [% title_notes_count | html %] )</a>
-                            </li>
                         [% END %]
+
+                        [% IF ( MARCNOTES || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
+                            [% WRAPPER tab_item tabname= "descriptions" %]
+                                [% SET title_notes_count = 0 %]
+                                [% IF MARCNOTES %]
+                                    [% SET title_notes_count = MARCNOTES.size %]
+                                [% END %]
+                                [% IF SYNDETICS_SUMMARY %][% SET title_notes_count = title_notes_count + 1 %][% END %]
+                                <span>Title notes ( [% title_notes_count | html %] )</span>
+                            [% END %]
+                        [% END %]
+
                         [% IF ComponentParts && ComponentParts.size %]
-                            <li id="tab_components" class="nav-item" role="presentation">
-                                <a href="#components" class="nav-link" id="tab_components-tab" data-toggle="tab" role="tab" aria-controls="tab_components" aria-selected="false">
-                                Components ([% ComponentParts.size | html %])</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "components" %]
+                                <span>Components ([% ComponentParts.size | html %])</span>
+                            [% END %]
                         [% END %]
+
                         [% IF ( SYNDETICS_TOC ) %]
-                            <li id="tab_toc" class="nav-item" role="presentation">
-                                <a href="#toc" class="nav-link" id="tab_toc-tab" data-toggle="tab" role="tab" aria-controls="tab_toc" aria-selected="false">TOC</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "toc" %]
+                                <span>TOC</span>
+                            [% END %]
                         [% END %]
+
                         [% IF ( SyndeticsEnabled ) %]
                             [% IF ( SyndeticsExcerpt && SYNDETICS_EXCERPT ) %]
-                                <li id="tab_excerpt" class="nav-item" role="presentation">
-                                    <a href="#excerpt" class="nav-link" id="tab_excerpt-tab" data-toggle="tab" role="tab" aria-controls="tab_excerpt" aria-selected="false">Excerpt</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "excerpt" %]
+                                    <span>Excerpt</span>
+                                [% END %]
                             [% END %]
                             [% IF ( ( SyndeticsReviews && SYNDETICS_REVIEWS ) || ( LibraryThingForLibrariesTabbedView && LibraryThingForLibrariesID) ) %]
-                                <li id="tab_reviews" class="nav-item" role="presentation">
-                                    <a href="#reviews" class="nav-link" id="tab_reviews-tab" data-toggle="tab" role="tab" aria-controls="tab_reviews" aria-selected="false">Reviews</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "reviews" %]
+                                    <span>Reviews</span>
+                                [% END %]
                                 [% IF ( LibraryThingForLibrariesID ) %]
                                     <li id="tab_LTFLreviews">
                                         <script src="https://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID | html %]"></script>
@@ -433,79 +435,76 @@
                                 [% END %]
                             [% END %]
                             [% IF ( SyndeticsAuthorNotes && SYNDETICS_ANOTES ) %]
-                                <li id="tab_anotes" class="nav-item" role="presentation">
-                                    <a href="#anotes" class="nav-link" id="tab_anotes-tab" data-toggle="tab" role="tab" aria-controls="tab_anotes" aria-selected="false">About the author</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "anotes" %]
+                                    <span>About the author</span>
+                                [% END %]
                             [% END %]
                         [% END # / IF SyndeticsEnabled %]
 
                         [% IF ( LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView ) %]
-                            <li id="tab_LFTLSimilarItems" class="nav-item" role="presentation">
-                                <a href="#LFTLSimilarItems" class="nav-link" id="tab_LFTLSimilarItems-tab" data-toggle="tab" role="tab" aria-controls="tab_LFTLSimilarItems" aria-selected="false">Similar items</a>
-                            </li>
-                            <li id="tab_LTFLTagBrowse">
-                                <a href="#LTFLTagBrowse" class="nav-link" id="tab_LTFLTagBrowse-tab" data-toggle="tab" role="tab" aria-controls="tab_LTFLTagBrowse" aria-selected="false">Tag browser</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "LFTLSimilarItems" %]
+                                <span>Similar items</span>
+                            [% END %]
+                            [% WRAPPER tab_item tabname= "LTFLTagBrowse" %]
+                                <span>Tag browser</span>
+                            [% END %]
                         [% END %]
 
                         [% IF ( subscriptionsnumber ) %]
-                            <li id="tab_subscriptions" class="nav-item" role="presentation">
-                                <a href="#subscriptions" class="nav-link" id="tab_subscriptions-tab" data-toggle="tab" role="tab" aria-controls="tab_subscriptions" aria-selected="false">
-                                Subscriptions ( [% subscriptionsnumber | html %] )</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "subscriptions" %]
+                                <span>Subscriptions ( [% subscriptionsnumber | html %] )</span>
+                            [% END %]
                         [% END %]
 
                         [% IF Koha.Preference( 'OPACComments' ) == 1 %]
-                            <li id="tab_comments" class="nav-item" role="presentation">
-                                <a href="#comments" class="nav-link" id="tab_comments-tab" data-toggle="tab" role="tab" aria-controls="tab_comments" aria-selected="false">Comments[% ' ( ' _ (reviews.size || 0) _ ' )' | html %]</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "comments" %]
+                                <span>Comments[% ' ( ' _ (reviews.size || 0) _ ' )' | html %]</span>
+                            [% END %]
                         [% END %]
 
                         [% IF ( NovelistSelectProfile && (normalized_isbn || normalized_upc) ) %]
                             [% IF ( NovelistSelectView == 'tab') %]
-                                <li id="tab_NovelistSelect" class="NovelistSelect" style="display:none;" class="nav-item" role="presentation">
-                                    <a href="#NovelistSelect" class="nav-link" id="tab_NovelistSelect-tab" data-toggle="tab" role="tab" aria-controls="tab_NovelistSelect" aria-selected="false">Novelist Select</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "NovelistSelect" %]
+                                    <span>Novelist Select</span>
+                                [% END %]
                             [% END %]
                         [% END %]
 
                         [% IF ( OPACFRBRizeEditions && XISBNS ) %]
-                            <li id="tab_editions" class="nav-item" role="presentation">
-                                <a href="#editions" class="nav-link" id="tab_editions-tab" data-toggle="tab" role="tab" aria-controls="tab_editions" aria-selected="false">Editions</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "editions" %]
+                                <span>Editions</span>
+                            [% END %]
                         [% END %]
 
                         [% IF ( serialcollection ) %]
-                            <li id="tab_serialcollection" class="nav-item" role="presentation">
-                                <a href="#serialcollection" class="nav-link" id="tab_serialcollection-tab" data-toggle="tab" role="tab" aria-controls="tab_serialcollection" aria-selected="false">
-                                    Serial collection
-                                </a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "serialcollection" %]
+                                <span>Serial collection</span>
+                            [% END %]
                         [% END %]
 
                         [% IF ( OPACLocalCoverImages && localimages.count ) %]
-                            <li id="tab_images" class="nav-item" role="presentation">
-                                <a href="#images" class="nav-link" id="tab_images-tab" data-toggle="tab" role="tab" aria-controls="tab_images" aria-selected="false">Images</a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "images" %]
+                                <span>Images</span>
+                            [% END %]
                         [% END %]
 
                         [% IF HTML5MediaEnabled && HTML5MediaSets.size %]
-                            <li id="tab_html5media" class="nav-item" role="presentation">
-                                <a href="#html5media" class="nav-link" id="tab_html5media-tab" data-toggle="tab" role="tab" aria-controls="tab_html5media" aria-selected="false">
-                                    Play media
-                                </a>
-                            </li>
+                            [% WRAPPER tab_item tabname= "html5media" %]
+                                <span>Play media</span>
+                            [% END %]
                         [% END %]
 
                         [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
-                            <li id="tab_author_identifiers" class="nav-item" role="presentation"><a href="#author_identifiers" class="nav-link" id="tab_author_identifiers-tab" data-toggle="tab" role="tab" aria-control="tab_author_identifiers">Author identifiers</a></li>
+                            [% WRAPPER tab_item tabname= "author_identifiers" %]
+                                <span>Author identifiers</span>
+                            [% END %]
                         [% END %]
 
-                    </ul>
+                    [% END # /WRAPPER tabs_nav %]
 
-                    <div class="tab-content">
+                    [% WRAPPER tab_panels %]
                         [% IF ( serialcollection ) %]
-                            <div id="serialcollection" class="tab-pane" role="tabpanel" aria-labelledby="tab_serialcollection-tab">
+                            [% WRAPPER tab_panel tabname="serialcollection" %]
                                 <table id="serialcollectiont" class="table table-bordered table-striped">
                                     <caption class="sr-only">Serial collections</caption>
                                     <thead>
@@ -525,11 +524,10 @@
                                         [% END %]
                                     </tbody>
                                 </table>
-                            </div> <!-- /#serialcollection -->
+                            [% END # /tab_panel#serialcollection %]
                         [% END # / IF serialcollection %]
 
-
-                        <div id="holdings" class="tab-pane" role="tabpanel" aria-labelledby="holdings-tab">
+                        [% WRAPPER tab_panel tabname="holdings" %]
                             [% IF too_many_items %]
                                 <p>This record has many physical items ([% items_count | html %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;viewallitems=1">View all the physical items.</a></p>
                             [% ELSIF ( itemloop.size ) %]
@@ -579,22 +577,21 @@
                             [% END # IF itemloop.size %]
                             [% PROCESS 'shelfbrowser.inc' %]
                             [% INCLUDE shelfbrowser tab='holdings' %]
-                            <br style="clear:both;" />
-                        </div> <!-- / #holdings -->
+                        [% END # /tab_panel#holdings %]
 
                         [% IF (SeparateHoldings) %]
-                            <div id="otherholdings" class="tab-pane" role="tabpanel" aria-labelledby="otherholdings-tab">
+                            [% WRAPPER tab_panel tabname="otherholdings" %]
                                 [% IF (otheritemloop.size) %]
                                     [% INCLUDE items_table items=otheritemloop tab="otherholdings" table_id="otherholdingst" %]
                                 [% ELSE %]
                                     <span>No other items.</span>
                                 [% END %]
                                 [% INCLUDE shelfbrowser tab='otherholdings' %]
-                            </div>
+                            [% END # /tab_panel#otherholdings %]
                         [% END # / SeparateHoldings %]
 
                         [% IF ( MARCNOTES || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
-                            <div id="descriptions" class="tab-pane" role="tabpanel" aria-labelledby="tab_descriptions-tab">
+                            [% WRAPPER tab_panel tabname="descriptions" %]
                                 <div class="content_set">
 
                                     [% IF ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY ) %]
@@ -604,24 +601,24 @@
 
                                     [% IF ( MARCNOTES ) %]
                                         <div id="marcnotes">
-                                        [% FOREACH MARCNOTE IN MARCNOTES %]
-                                            <p>
-                                            [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
-                                            [% ELSE %]
-                                                [% MARCNOTE.marcnote | html | html_line_break %]
+                                            [% FOREACH MARCNOTE IN MARCNOTES %]
+                                                <p>
+                                                [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                                                    <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
+                                                [% ELSE %]
+                                                    [% MARCNOTE.marcnote | html | html_line_break %]
+                                                [% END %]
+                                                </p>
                                             [% END %]
-                                            </p>
-                                        [% END %]
                                         </div>
                                     [% END %]
 
                                 </div> <!-- /.content_set -->
-                            </div> <!-- / #descriptions -->
+                            [% END # /tab_panel#descriptions %]
                         [% END # / IF MARCNOTES %]
 
                         [% IF ComponentParts && ComponentParts.size %]
-                            <div id="components" class="tab-pane" role="tabpanel" aria-labelledby="tab_components-tab">
+                            [% WRAPPER tab_panel tabname="components" %]
                                 <div class="content_set">
                                     <table>
                                         [% FOR PART IN ComponentParts %]
@@ -636,12 +633,12 @@
                                         <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/opac-search.pl?q=[% ComponentPartsQuery | url %]"/>show all component parts</a></p>
                                     [% END %]
                                 </div>
-                            </div>
+                            [% END # /tab_panel#components %]
                         [% END %]
 
                         [% IF ( SyndeticsEnabled ) %]
                             [% IF ( SyndeticsTOC && SYNDETICS_TOC ) %]
-                                <div id="toc" class="tab-pane" role="tabpanel" aria-labelledby="tab_toc-tab">
+                                [% WRAPPER tab_panel tabname="toc" %]
                                     <div class="content_set">
                                         <h2>Table of contents provided by Syndetics</h2>
                                             <ul>
@@ -650,20 +647,20 @@
                                                 [% END %]
                                             </ul>
                                     </div>
-                                </div>
+                                [% END # /tab_panel#toc %]
                             [% END # / IF SyndeticsTOC && SYNDETICS_TOC %]
 
                             [% IF ( SyndeticsExcerpt && SYNDETICS_EXCERPT ) %]
-                                <div id="excerpt" class="tab-pane" role="tabpanel" aria-labelledby="tab_excerpt-tab">
+                                [% WRAPPER tab_panel tabname="excerpt" %]
                                     <div class="content_set">
                                         <h2>Excerpt provided by Syndetics</h2>
                                         [% SYNDETICS_EXCERPT | $raw %]
                                     </div>
-                                </div>
+                                [% END # /tab_panel#excerpt %]
                             [% END # / IF SyndeticsExcerpt && SYNDETICS_EXCERPT %]
 
                             [% IF ( SyndeticsReviews && SYNDETICS_REVIEWS ) %]
-                                <div id="reviews" class="tab-pane" role="tabpanel" aria-labelledby="tab_reviews-tab">
+                                [% WRAPPER tab_panel tabname="reviews" %]
                                     <div class="content_set">
                                         <h2>Reviews provided by Syndetics</h2>
                                         [% FOREACH SYNDETICS_REVIEW IN SYNDETICS_REVIEWS %]
@@ -679,11 +676,11 @@
                                             [% END %]
                                         [% END %]
                                     </div>
-                                </div>
+                                [% END # /tab_panel#reviews %]
                             [% END # / IF SyndeticsReviews && SYNDETICS_REVIEWS %]
 
                             [% IF ( SyndeticsAuthorNotes && SYNDETICS_ANOTES ) %]
-                                <div id="anotes" class="tab-pane" role="tabpanel" aria-labelledby="tab_anotes-tab">
+                                [% WRAPPER tab_panel tabname="anotes" %]
                                     <div class="content_set">
                                         <h2>Author notes provided by Syndetics</h2>
                                         [% FOREACH SYNDETICS_ANOTE IN SYNDETICS_ANOTES %]
@@ -692,18 +689,18 @@
                                             [% END %]
                                         [% END %]
                                     </div>
-                                </div>
+                                [% END # /tab_panel#anotes %]
                             [% END # / IF SyndeticsReviews && SYNDETICS_REVIEWS %]
                         [% END # / IF SyndeticsEnabled %]
 
                         [% IF ( NovelistSelectProfile && NovelistSelectView == 'tab' && (normalized_isbn || normalized_upc) ) %]
-                            <div id="NovelistSelect" class="tab-pane" role="tabpanel" aria-labelledby="tab_NovelistSelect-tab">
-                                    <div data-novelist-novelistselect=[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]></div>
-                            </div>
+                            [% WRAPPER tab_panel tabname="NovelistSelect" %]
+                                <div data-novelist-novelistselect=[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]></div>
+                            [% END # /tab_panel#NovelistSelect %]
                         [% END # / IF NovelistSelectProfile && NovelistSelectView == 'tab' %]
 
                         [% IF ( subscriptionsnumber ) %]
-                            <div id="subscriptions" class="tab-pane" role="tabpanel" aria-labelledby="tab_subscriptions-tab">
+                            [% WRAPPER tab_panel tabname="subscriptions" %]
                                 <h2>This is a serial</h2>
                                 <p class="subscription_count">There are [% subscriptionsnumber | html %] subscription(s) associated with this title.</p>
                                 [% FOREACH subscription IN subscriptions %]
@@ -780,32 +777,26 @@
                                     </div>
                                 [% END # / FOREACH subscriptions %]
                                 <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblio.biblionumber | uri %]">More details</a></p>
-                            </div> <!-- / #subscriptions -->
+                            [% END # /tab_panel#subscriptions %]
                         [% END # IF subscriptionsnumber %]
 
                         [% IF ( LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView ) %]
                             <!-- Library Thing for Libraries Content -->
-                            <div id="LFTLSimilarItems" class="tab-pane" role="tabpanel" aria-labelledby="tab_LFTLSimilarItems-tab">
+                            [% WRAPPER tab_panel tabname="LFTLSimilarItems" %]
                                 <div class="content_set">
-                                    <!-- Uncommenting this span makes the font smaller in the tab for LTFL -->
-                                    <!-- but breaks Xhtml validation -->
-                                    <!--    <span class="results_summary">-->
                                     <div id="ltfl_related"></div>
                                     <div id="ltfl_similars"></div>
-                                    <!--            </span>-->
                                 </div>
-                            </div>
-                            <div id="LTFLTagBrowse" class="tab-pane" role="tabpanel" aria-labelledby="tab_LTFLTagBrowse-tab">
+                            [% END # /tab_panel#LFTLSimilarItems %]
+                            [% WRAPPER tab_panel tabname="LTFLTagBrowse" %]
                                 <div class="content_set">
-                                    <!-- <span class="results_summary"> -->
                                     <div id="ltfl_tagbrowse" class="ltfl"></div>
-                                    <!-- </span> -->
                                 </div>
-                            </div>
+                            [% END # /tab_panel#LTFLTagBrowse %]
                         [% END # / IF LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView %]
 
                         [% IF Koha.Preference( 'OPACComments' ) == 1 %]
-                            <div id="comments" class="tab-pane" role="tabpanel" aria-labelledby="tab_comments-tab">
+                            [% WRAPPER tab_panel tabname="comments" %]
                                 <div id="newcomment"></div>
                                     [% IF ( reviews ) %]
                                         [% FOREACH review IN reviews %]
@@ -876,53 +867,53 @@
                                             <a class="login-link loginModal-trigger" role="button" data-toggle="modal" data-return="true" data-tab="comment" href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.
                                         </div>
                                     [% END # / IF loggedinusername %]
-                                </div> <!-- / #comments -->
-                            [% END # / IF OPACComments %]
+                            [% END # /tab_panel#newcomment %]
+                        [% END # / IF OPACComments %]
 
-                            [% IF ( OPACFRBRizeEditions && XISBNS ) %]
-                                <div id="editions" class="tab-pane" role="tabpanel" aria-labelledby="tab_editions-tab">
-                                    <h2>Other editions of this work</h2>
-                                    <table class="table table-bordered table-striped">
-                                        <caption class="sr-only">Other editions</caption>
-                                        [% FOREACH XISBN IN XISBNS %]
-                                            <tr>
-                                                <td>
-                                                    [% IF ( OPACAmazonCoverImages ) %]
-                                                        <img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" alt="" />
-                                                    [% END %]
-
-                                                    [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                                        [% IF ( XISBN.content_identifier_exists ) %]
-                                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% XISBN.browser_normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %][% IF ( XISBN.browser_normalized_upc ) %]&amp;upc=[% XISBN.browser_normalized_upc | uri %][% END %][% IF ( XISBN.browser_normalized_oclc ) %]&amp;oclc=[% XISBN.browser_normalized_oclc | uri %][% END %]&amp;type=xw10" alt="" />
-                                                        [% ELSE %]
-                                                            <span class="no-image">No cover image available</span>
-                                                        [% END # / IF  XISBN.content_identifier_exists %]
-                                                    [% END # / IF SyndeticsEnabled && SyndeticsCoverImages %]
-                                                </td>
-
-                                                [% UNLESS ( item_level_itypes ) %]
-                                                    <td>[% XISBN.description | html %]</td>
+                        [% IF ( OPACFRBRizeEditions && XISBNS ) %]
+                            [% WRAPPER tab_panel tabname="editions" %]
+                                <h2>Other editions of this work</h2>
+                                <table class="table table-bordered table-striped">
+                                    <caption class="sr-only">Other editions</caption>
+                                    [% FOREACH XISBN IN XISBNS %]
+                                        <tr>
+                                            <td>
+                                                [% IF ( OPACAmazonCoverImages ) %]
+                                                    <img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" alt="" />
                                                 [% END %]
-                                                <td>
-                                                    <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a>
-                                                    [% IF ( XISBN.author ) %]<span> by </span>[% XISBN.author | html %][% END %]
-                                                    [% IF ( XISBN.copyrightdate ) %]<span> &copy;</span>[% XISBN.copyrightdate | html %][% END %]
-                                                    [% IF ( XISBN.publishercode ) %]
-                                                        <p>[% XISBN.publishercode | html %]
-                                                            [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %]
-                                                            [% IF ( XISBN.publicationyear ) %][% ', ' _ XISBN.publicationyear | html %][% END %]
-                                                            [% IF ( XISBN.pages ) %][% XISBN.pages | html %] [% XISBN.illus | html %] [% XISBN.size | html %][% END %]
-                                                        </p>
-                                                    [% END %]
-                                                </td>
-                                            </tr>
-                                        [% END # / FOREACH XISBNS %]
-                                    </table>
-                                </div> <!-- / #editions -->
-                            [% END # / IF OPACFRBRizeEditions && XISBNS %]
 
-                            [% IF ( HTML5MediaEnabled ) %]
-                                <div id="html5media" class="tab-pane" role="tabpanel" aria-labelledby="tab_html5media-tab">
+                                                [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
+                                                    [% IF ( XISBN.content_identifier_exists ) %]
+                                                        <img src="https://secure.syndetics.com/index.aspx?isbn=[% XISBN.browser_normalized_isbn | uri %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | uri %][% IF ( XISBN.browser_normalized_upc ) %]&amp;upc=[% XISBN.browser_normalized_upc | uri %][% END %][% IF ( XISBN.browser_normalized_oclc ) %]&amp;oclc=[% XISBN.browser_normalized_oclc | uri %][% END %]&amp;type=xw10" alt="" />
+                                                    [% ELSE %]
+                                                        <span class="no-image">No cover image available</span>
+                                                    [% END # / IF  XISBN.content_identifier_exists %]
+                                                [% END # / IF SyndeticsEnabled && SyndeticsCoverImages %]
+                                            </td>
+
+                                            [% UNLESS ( item_level_itypes ) %]
+                                                <td>[% XISBN.description | html %]</td>
+                                            [% END %]
+                                            <td>
+                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a>
+                                                [% IF ( XISBN.author ) %]<span> by </span>[% XISBN.author | html %][% END %]
+                                                [% IF ( XISBN.copyrightdate ) %]<span> &copy;</span>[% XISBN.copyrightdate | html %][% END %]
+                                                [% IF ( XISBN.publishercode ) %]
+                                                    <p>[% XISBN.publishercode | html %]
+                                                        [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %]
+                                                        [% IF ( XISBN.publicationyear ) %][% ', ' _ XISBN.publicationyear | html %][% END %]
+                                                        [% IF ( XISBN.pages ) %][% XISBN.pages | html %] [% XISBN.illus | html %] [% XISBN.size | html %][% END %]
+                                                    </p>
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END # / FOREACH XISBNS %]
+                                </table>
+                            [% END # /tab_panel#editions %]
+                        [% END # / IF OPACFRBRizeEditions && XISBNS %]
+
+                        [% IF ( HTML5MediaEnabled ) %]
+                            [% WRAPPER tab_panel tabname="html5media" %]
                                 [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
                                     <p>
                                         [% IF HTML5MediaSet.is_youtube %]
@@ -937,59 +928,58 @@
                                         [% END %]
                                     </p>
                                 [% END %]
-                                </div>
-                            [% END # / IF HTML5MediaEnabled %]
+                            [% END # /tab_panel#html5media %]
+                        [% END # / IF HTML5MediaEnabled %]
 
-                            [% IF ( OPACLocalCoverImages && localimages.count ) %]
-                                <div id="images" class="tab-pane" role="tabpanel" aria-labelledby="tab_images-tab">
-                                    <p>Click on an image to view it in the image viewer</p>
-                                    [% FOREACH image IN localimages %]
-                                        <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
-                                            <img src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
-                                        </a>
-                                    [% END %]
-                                </div><!-- / #images -->
-                            [% END # / IF OPACLocalCoverImages && localimages.size %]
+                        [% IF ( OPACLocalCoverImages && localimages.count ) %]
+                            [% WRAPPER tab_panel tabname="images" %]
+                                <p>Click on an image to view it in the image viewer</p>
+                                [% FOREACH image IN localimages %]
+                                    <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
+                                        <img src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
+                                    </a>
+                                [% END %]
+                            [% END # /tab_panel#images %]
+                        [% END # / IF OPACLocalCoverImages && localimages.size %]
 
-                            [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
-                                <div id="author_identifiers" class="tab-pane" role="tabpanel" aria-labelledby="tab_author_identifiers-tab">
-                                    [% FOR author IN author_identifiers %]
-                                        <div class="author_identifier">
-                                            <span class="author_name"><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% author.authid | uri %]">[% author.name | html %]</a></span>
-                                            <ul>
-                                            [% FOR identifier IN author.identifiers %]
-                                                [% PROCESS "authority-identifiers.inc" identifier => identifier %]
-                                            [% END %]
-                                            </ul>
-                                        </div>
-                                    [% END %]
-                                </div>
-                            [% END %]
+                        [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                            [% WRAPPER tab_panel tabname="author_identifiers" %]
+                                [% FOR author IN author_identifiers %]
+                                    <div class="author_identifier">
+                                        <span class="author_name"><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% author.authid | uri %]">[% author.name | html %]</a></span>
+                                        <ul>
+                                        [% FOR identifier IN author.identifiers %]
+                                            [% PROCESS "authority-identifiers.inc" identifier => identifier %]
+                                        [% END %]
+                                        </ul>
+                                    </div>
+                                [% END %]
+                            [% END # /tab_panel#author_identifiers %]
+                        [% END %]
 
-                    </div> <!-- / #bibliodescriptions -->
+                        [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && ( normalized_isbn || normalized_upc ) ) %]
+                            [% WRAPPER tab_panel tabname="NovelistSelect" %]
+                                <h2>Novelist Select</h2>
+                                <div data-novelist-novelistselect="[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]"></div>
+                            [% END # /tab_panel#NovelistSelect %]
+                        [% END %]
+                    [% END # /WRAPPER tab_panels %]
+                [% END # /WRAPPER tabs#bibliodescriptions %]
 
-                    [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && ( normalized_isbn || normalized_upc ) ) %]
-                        <div id="NovelistSelect" class="tab-pane" role="tabpanel" aria-labelledby="tab_NovelistSelect-tab">
-                            <h2>Novelist Select</h2>
-                            <div data-novelist-novelistselect="[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]"></div>
-                        </div>
-                    [% END %]
-
-                    [% IF ( Babeltheque ) %]
-                        <div>
-                            <div id="BW_etiquettes"></div>
-                            <div id="BW_suggestions"></div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div>
-                            <div id="BW_podcasts"></div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div>
-                            <div id="BW_videos"></div>
-                        </div>
-                    [% END # / IF Babeltheque %]
-                </div> <!-- /.tab-content -->
+                [% IF ( Babeltheque ) %]
+                    <div>
+                        <div id="BW_etiquettes"></div>
+                        <div id="BW_suggestions"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div>
+                        <div id="BW_podcasts"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div>
+                        <div id="BW_videos"></div>
+                    </div>
+                [% END # / IF Babeltheque %]
 
             </div> <!-- /.col-lg-10 -->
 
@@ -2047,7 +2037,7 @@
 
         function showBsTab( container, panelid ){
             if( $( "#" + panelid ).length == 1 ){
-                $("#" + container + " a[href='#" + panelid + "']").tab("show");
+                $("#" + container + " a[href='#" + panelid + "_panel']").tab("show");
             } else {
                 $("#" + container + " a:first").tab("show");
             }
