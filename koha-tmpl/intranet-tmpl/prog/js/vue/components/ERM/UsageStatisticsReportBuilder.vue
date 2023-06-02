@@ -340,6 +340,26 @@ export default {
                         orderable: true,
                     },
                 },
+                publisher: {
+                    name: "Publisher",
+                    active: false,
+                    column: {
+                        title: __("Publisher"),
+                        data: "publisher",
+                        searchable: true,
+                        orderable: true,
+                    },
+                },
+                publisher_id: {
+                    name: "Publisher ID",
+                    active: false,
+                    column: {
+                        title: __("Publisher ID"),
+                        data: "publisher_id",
+                        searchable: true,
+                        orderable: true,
+                    },
+                },
                 online_issn: {
                     name: "Online ISSN",
                     active: false,

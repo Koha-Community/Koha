@@ -67,6 +67,18 @@ export default {
                     orderable: true,
                 },
                 {
+                    title: __("Publisher"),
+                    data: "publisher",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Publisher ID"),
+                    data: "publisher_id",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
                     title: __("DOI"),
                     data: "title_doi",
                     searchable: true,
