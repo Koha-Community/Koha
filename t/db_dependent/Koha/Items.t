@@ -1390,7 +1390,7 @@ subtest 'get_transfer' => sub {
     );
 
     $transfer = $new_item_1->get_transfer();
-    is( ref($transfer), 'Koha::Item::Transfer', 'Koha::Item->get_transfer should return a Koha::Item::Transfers object' );
+    is( ref($transfer), 'Koha::Item::Transfer', 'Koha::Item->get_transfer should return a Koha::Item::Transfer object' );
 
     my $transfer_2 = $builder->build_object(
         {

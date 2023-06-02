@@ -2174,7 +2174,7 @@ subtest 'current_branchtransfers relationship' => sub {
     );
     my $transfers = $item->_result->current_branchtransfers;
     is( ref($transfers), 'DBIx::Class::ResultSet',
-        'current_branchtransfers returns a Koha::Item::Transfers object set' );
+        'current_branchtransfers returns a DBIx::Class::ResultSet' );
     is( $transfers->count, 0,
         "Empty Koha::Item::Transfers set returned if no return_claims" );
     my $transfer1 = $builder->build(
