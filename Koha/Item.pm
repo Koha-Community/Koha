@@ -565,9 +565,8 @@ we still expect the item to end up at a final location eventually.
 sub get_transfer {
     my ($self) = @_;
 
-    my $transfer = $self->_result->current_branchtransfers;
-
-    return Koha::Item::Transfers->_new_from_dbic($transfer)->next;
+    my $transfer = $self->_result->current_branchtransfers->next;
+    return  Koha::Item::Transfer->_new_from_dbic($transfer) if $transfer;
 }
 
 =head3 get_transfers
