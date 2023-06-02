@@ -45,7 +45,7 @@
                                     provider =>
                                         provider.erm_usage_data_provider_id
                                 "
-                                :options="usage_data_providers"
+                                :options="usage_data_provider_list"
                                 @update:modelValue="
                                     setReportTypesAndResetTitles($event)
                                 "
@@ -62,7 +62,9 @@
                                 label="description"
                                 :reduce="report => report.value"
                                 :options="report_types_options"
-                                @update:modelValue="setMetricTypes($event)"
+                                @update:modelValue="
+                                    setMetricTypesAndProviderList($event)
+                                "
                                 required
                             />
                             <span class="required">{{ $__("Required") }}</span>
@@ -477,6 +479,7 @@ export default {
             metric_types_options: [],
             report_types_options: [...this.av_report_types],
             titles: [],
+            usage_data_provider_list: [...this.usage_data_providers],
             time_period_columns_builder: null,
             request_url: null,
         }
@@ -798,7 +801,7 @@ export default {
 
             return url
         },
-        setMetricTypes(e) {
+        setMetricTypesAndProviderList(e) {
             const report_type = e
             const possible_metric_types = []
             let av_type
@@ -833,19 +836,31 @@ export default {
                     }
                 }
                 this.metric_types_options = possible_metric_types
+
+                // Limit usage data providers to those with the applicable report type
+                this.usage_data_provider_list =
+                    this.usage_data_providers.filter(provider => {
+                        const report_types = provider.report_types
+                        const single_report_types = report_types.split(";")
+                        single_report_types.pop()
+
+                        return single_report_types.includes(report_type)
+                    })
             } else {
                 this.metric_types_options = []
                 this.query.metric_types = null
+                // Reset data providers to include all providers
+                this.usage_data_provider_list = [...this.usage_data_providers]
             }
         },
-        setReportTypesAndResetTitles(report_types) {
+        setReportTypesAndResetTitles(providers) {
             const permittedReportTypes = []
-            if (report_types.length === 0) {
+            if (providers.length === 0) {
                 this.report_types_options = this.av_report_types
                 return
             }
 
-            report_types.forEach(id => {
+            providers.forEach(id => {
                 const data_provider = this.usage_data_providers.find(
                     item => item.erm_usage_data_provider_id === id
                 )
