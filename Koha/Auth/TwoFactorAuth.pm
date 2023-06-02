@@ -101,7 +101,7 @@ sub qr_code {
 
     my $otpauth = $self->SUPER::qr_code( undef, undef, undef, 1);
         # no need to pass secret, key and issuer again
-    my $qrcode = GD::Barcode->new( 'QRcode', $otpauth, { Ecc => 'M', Version => 10, ModuleSize => 4 } );
+    my $qrcode = GD::Barcode->new( 'QRcode', $otpauth, { Ecc => 'M', ModuleSize => 4 } );
     my $data = $qrcode->plot->png;
     return "data:image/png;base64,". encode_base64( $data, q{} ); # does not contain newlines
 }
