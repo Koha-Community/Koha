@@ -36,8 +36,8 @@
 
             [% IF fresh_api_key %]
                 [%# A fresh api key was generated, display the secret, only once %]
-                <div class="rows">
-                    <span class="alert">Make sure to copy your API secret now. You won’t be able to see it again!</span>
+                <div class="dialog message">Make sure to copy your API secret now. You won’t be able to see it again!</div>
+                <div class="page-section rows">
                     <ol>
                         <li>
                             <span class="label">Description: </span>
@@ -72,8 +72,8 @@
                     </fieldset>
                 </form>
 
-                <div id="keys">
-                    [% IF api_keys.count %]
+                [% IF api_keys.count %]
+                    <div class="page-section" id="keys">
                         <p>
                             <button class="btn btn-default toggle_element" type="submit" id="show-api-form" data-element="#add-api-key"><i class="fa fa-plus"></i> Generate a new client id/key pair</button>
                         </p>
@@ -117,18 +117,18 @@
                                 [% END %]
                             </tbody>
                         </table>
-                    [% ELSE %]
-                        <div class="dialog message">
-                            <div>No keys defined for the current patron.</div>
-                            <div>
-                                <a href="#" class="toggle_element" data-element="#add-api-key" id="show-api-form">
-                                    <i class="fa fa-plus"></i>
-                                    <span>Generate a new client id/secret pair</span>
-                                </a>
-                            <div>
-                        </div>
-                    [% END %]
-                </div>
+                    </div> <!-- /#keys.page-section -->
+                [% ELSE %]
+                    <div class="dialog message">
+                        <p>No keys defined for the current patron.</p>
+                        <p>
+                            <a href="#" class="btn btn-default toggle_element" data-element="#add-api-key" id="show-api-form">
+                                <i class="fa fa-plus"></i>
+                                <span>Generate a new client id/secret pair</span>
+                            </a>
+                        <p>
+                    </div>
+                [% END # /IF api_keys.count %]
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
