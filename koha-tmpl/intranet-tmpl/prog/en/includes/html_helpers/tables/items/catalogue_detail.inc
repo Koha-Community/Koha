@@ -282,7 +282,8 @@
             [% END %]
             [% IF ( item_level_itypes ) %]
             {
-                data: "me.itype:biblioitem.itemtype",
+                data: "me.item_type_id", // FIXME Cannot filter by biblioitem.itemtype
+                                         // FIXME Cannot filter on item type description
                 className: "itype",
                 searchable: true,
                 orderable: true,
