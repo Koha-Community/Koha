@@ -995,6 +995,30 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+__PACKAGE__->belongs_to(
+  "holding_library",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "holdingbranch" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
+  "home_library",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "homebranch" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "CASCADE",
+  },
+);
+
 __PACKAGE__->add_columns(
     '+bookable'                          => { is_boolean => 1 },
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },

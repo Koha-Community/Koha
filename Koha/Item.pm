@@ -385,8 +385,19 @@ sub effective_itemtype {
 =cut
 
 sub home_branch {
-    my ($self) = @_;
+    return shift->home_library(@_);
+}
 
+=head3 home_library
+
+my $library = $item->home_library
+
+Return the Koha::Library object representing the home library
+
+=cut
+
+sub home_library {
+    my ($self) = @_;
     my $hb_rs = $self->_result->homebranch;
 
     return Koha::Library->_new_from_dbic( $hb_rs );
@@ -397,6 +408,18 @@ sub home_branch {
 =cut
 
 sub holding_branch {
+    return shift->home_library(@_);
+}
+
+=head3 holding_library
+
+my $library = $item->holding_library
+
+Return the Koha::Library object representing the holding library
+
+=cut
+
+sub holding_library {
     my ($self) = @_;
 
     my $hb_rs = $self->_result->holdingbranch;
