@@ -201,6 +201,10 @@ if ( $op eq "do_search" ) {
         }
     }
 
+    if( $pending_deletion_authid && $results ) {
+        $results = [ grep { $_->{authid} != $pending_deletion_authid } @$results ];
+    }
+
     $template->param( result => $results ) if $results;
 
     my $max_result_window = $searcher->max_result_window;
@@ -241,7 +245,6 @@ my $servers = Koha::Z3950Servers->search(
 $template->param(
     servers => $servers,
     authority_types => $authority_types,
-    pending_deletion_authid => $pending_deletion_authid,
     op            => $op,
 );
 
