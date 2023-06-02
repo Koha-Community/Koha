@@ -3,32 +3,7 @@
 [% USE AuthorisedValues %]
 [% USE raw %]
 
-[% BLOCK items_table %]
-    <div class="[% tab | html %]_table_table_controls">
-        [% IF (StaffDetailItemSelection) %]
-
-            <span class="show_hide_filters">
-                <a href="#" class="show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</a>
-                <a href="#" class="hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</a>
-            </span>
-            | <a href="#" class="SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
-            | <a href="#" class="ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</a>
-            <span class="itemselection_actions">
-              | Actions:
-              [% IF CAN_user_tools_items_batchdel %]
-                <a class="itemselection_action_delete"><i class="fa fa-trash-can"></i> Delete selected items</a>
-              [% END %]
-              [% IF CAN_user_tools_items_batchmod %]
-                <a class="itemselection_action_modify"><i class="fa-solid fa-pencil"></i> Modify selected items</a>
-              [% END %]
-              [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
-                <a class="itemselection_action_item_group_set" href="#"><i class="fa fa-book"></i> Add/move to item group</a>
-                <a class="itemselection_action_item_group_unset" href="#"><i class="fa fa-unlink"></i> Remove from item group</a>
-              [% END %]
-            </span>
-        [% END %]
-    </div>
-
+[% BLOCK build_table %]
     <table class="items_table" id="[% tab | html %]_table">
         <thead>
             [% IF (StaffDetailItemSelection) %]<th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>[% END %]
@@ -65,6 +40,34 @@
             </tr>
         </thead>
     </table>
+[% END %]
+[% BLOCK items_table %]
+    <div class="[% tab | html %]_table_table_controls">
+        [% IF (StaffDetailItemSelection) %]
+
+            <span class="show_hide_filters">
+                <a href="#" class="show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</a>
+                <a href="#" class="hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</a>
+            </span>
+            | <a href="#" class="SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
+            | <a href="#" class="ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</a>
+            <span class="itemselection_actions">
+              | Actions:
+              [% IF CAN_user_tools_items_batchdel %]
+                <a class="itemselection_action_delete"><i class="fa fa-trash-can"></i> Delete selected items</a>
+              [% END %]
+              [% IF CAN_user_tools_items_batchmod %]
+                <a class="itemselection_action_modify"><i class="fa-solid fa-pencil"></i> Modify selected items</a>
+              [% END %]
+              [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
+                <a class="itemselection_action_item_group_set" href="#"><i class="fa fa-book"></i> Add/move to item group</a>
+                <a class="itemselection_action_item_group_unset" href="#"><i class="fa fa-unlink"></i> Remove from item group</a>
+              [% END %]
+            </span>
+        [% END %]
+    </div>
+
+    [% PROCESS build_table tab => tab %]
 [% END %][%# end of block items_table %]
 
 
@@ -211,8 +214,20 @@
         otherholdings: [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %],
     };
 
+    let table_nodes = {
+        holdings: '[% PROCESS 'build_table' tab="holdings" | collapse %]',
+        otherholdings: '[% PROCESS 'build_table' tab="otherholdings" | collapse %]',
+    };
     function build_items_table (tab_id, add_filters, dt_options) {
 
+        if ( dt_options && dt_options.hasOwnProperty('destroy') ) {
+            let table_id = "#"+tab_id+"_table";
+            if( $.fn.dataTable.isDataTable(table_id) ) {
+                $(table_id).DataTable().destroy();
+            }
+            $(table_id).replaceWith(table_nodes[tab_id]);
+            dt_options['destroy'] = null;
+        }
         let default_filters = {};
         [% IF Koha.Preference('SeparateHoldings') %]
             [% SET SeparateHoldingsBranch = Koha.Preference('SeparateHoldingsBranch') || 'homebranch' %];
