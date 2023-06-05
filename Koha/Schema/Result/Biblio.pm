@@ -611,6 +611,13 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->has_many(
+  "ill_requests",
+  "Koha::Schema::Result::Illrequest",
+  { "foreign.biblio_id" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 __PACKAGE__->has_one(
   "metadata",
   "Koha::Schema::Result::BiblioMetadata",
