@@ -522,6 +522,8 @@ sub DelBiblio {
     # We update any existing orders
     my $orders = $biblio->orders;
     $orders->update({ deleted_biblionumber => $biblionumber}, { no_triggers => 1 });
+    # Update related ILL requests
+    $biblio->ill_requests->update({ deleted_biblio_id => $biblio->id, biblio_id => undef });
 
     unless ( $params->{skip_record_index} ){
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });

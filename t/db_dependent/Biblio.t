@@ -670,7 +670,7 @@ subtest 'deletedbiblio_metadata' => sub {
 
 subtest 'DelBiblio' => sub {
 
-    plan tests => 6;
+    plan tests => 10;
 
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
@@ -716,11 +716,22 @@ subtest 'DelBiblio' => sub {
     my $order = $builder->build_object(
         { class => 'Koha::Acquisition::Orders', value => $orderinfo } );
 
+    # Add some ILL requests
+    my $ill_req_1 = $builder->build_object({ class => 'Koha::Illrequests', value => { biblio_id => $biblio->id, deleted_biblio_id => undef } });
+    my $ill_req_2 = $builder->build_object({ class => 'Koha::Illrequests', value => { biblio_id => $biblio->id, deleted_biblio_id => undef } });
+
     C4::Biblio::DelBiblio($biblio->biblionumber); # Or $biblio->delete
     is( $subscription->get_from_storage, undef, 'subscription should be deleted on biblio deletion' );
     is( $serial->get_from_storage, undef, 'serial should be deleted on biblio deletion' );
     is( $subscription_history->get_from_storage, undef, 'subscription history should be deleted on biblio deletion' );
     is( $order->get_from_storage->deleted_biblionumber, $biblio->biblionumber, 'biblionumber of order has been moved to deleted_biblionumber column' );
+
+    $ill_req_1 = $ill_req_1->get_from_storage;
+    $ill_req_2 = $ill_req_2->get_from_storage;
+    is( $ill_req_1->biblio_id, undef, 'biblio_id cleared on biblio deletion' );
+    is( $ill_req_1->deleted_biblio_id, $biblio->id, 'biblio_id is kept on the deleted_biblio_id column' );
+    is( $ill_req_2->biblio_id, undef, 'biblio_id cleared on biblio deletion' );
+    is( $ill_req_2->deleted_biblio_id, $biblio->id, 'biblio_id is kept on the deleted_biblio_id column' );
 };
 
 subtest 'MarcFieldForCreatorAndModifier' => sub {
