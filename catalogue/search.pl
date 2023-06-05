@@ -461,7 +461,7 @@ my $searcher = Koha::SearchEngine::Search->new(
 
 # If index indicates the value is a barocode, we need to preproccess it before searching
 for ( my $i = 0; $i < @operands; $i++ ) {
-    $operands[$i] = barcodedecode($operands[$i]) if $indexes[$i] eq 'bc';
+    $operands[$i] = barcodedecode($operands[$i]) if (defined($indexes[$i]) && $indexes[$i] eq 'bc');
 }
 
 ## I. BUILD THE QUERY
