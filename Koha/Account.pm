@@ -159,13 +159,14 @@ my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
     {
         amount       => $amount,
         description  => $description,
-        note         => $note,
-        user_id      => $user_id,
         interface    => $interface,
+        issue_id     => $checkout->id,
+        item_id      => $item_id,
         library_id   => $library_id,
+        note         => $note,
         payment_type => $payment_type,
         type         => $credit_type,
-        item_id      => $item_id
+        user_id      => $user_id,
     }
 );
 
