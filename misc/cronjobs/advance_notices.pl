@@ -419,7 +419,7 @@ if ($digest_per_branch) {
     while (my ($branchcode, $digests) = each %$due_digest) {
         send_digests({
             sth => $sth_digest,
-            digests => $due_digest,
+            digests => $digests,
             letter_code => 'DUEDGST',
             branchcode => $branchcode,
             message_name => 'item_due',
