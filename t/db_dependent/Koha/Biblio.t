@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 22; # +1
+use Test::More tests => 23;
 use Test::Exception;
 use Test::Warn;
 
@@ -1029,6 +1029,32 @@ subtest 'Recalls tests' => sub {
 
     $item1->update({ withdrawn => 1 });
     is( $biblio->can_be_recalled({ patron => $patron1 }), 1, "Can recall one item" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'ill_requests() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $rs = $biblio->ill_requests;
+    is( ref($rs), 'Koha::Illrequests' );
+    is( $rs->count, 0, 'No linked requests' );
+
+    foreach ( 1..10 ) {
+        $builder->build_object(
+            {
+                class => 'Koha::Illrequests',
+                value => { biblio_id => $biblio->id }
+            }
+        );
+    }
+
+    is( $biblio->ill_requests->count, 10, 'Linked requests are present' );
 
     $schema->storage->txn_rollback;
 };
