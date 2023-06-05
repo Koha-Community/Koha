@@ -73,7 +73,12 @@
             [% SET link_class="nav-link" %]
             [% SET aria_selected="false" %]
         [% END %]
-        <a href="#[% tabname | uri %]_panel" class="[% link_class | html %]" id="[% tabname | html %]-tab" data-toggle="tab" data-target="#[% tabname | html %]_panel" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" aria-selected="[% aria_selected | html %]">
+        [% IF ( tabid ) %]
+            [% SET our_tab_id = tabid %]
+        [% ELSE %]
+            [% SET our_tab_id = tabname %]
+        [% END %]
+        <a href="#[% tabname | uri %]_panel" class="[% link_class | html %]" id="[% our_tab_id | html %]-tab" data-toggle="tab" data-target="#[% tabname | html %]_panel" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" aria-selected="[% aria_selected | html %]">
             [% content | $raw %]
         </a>
     </li>
