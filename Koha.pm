@@ -30,7 +30,7 @@ use vars qw{ $VERSION };
 #        used by developers when the database changes. updatedatabase take care of the changes itself
 #        and is automatically called by Auth.pm when needed.
 
-$VERSION = "22.11.06.003";
+$VERSION = "22.11.06.004";
 sub version {
     return $VERSION;
 }
