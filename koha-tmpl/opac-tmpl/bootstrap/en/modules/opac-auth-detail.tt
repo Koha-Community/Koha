@@ -162,22 +162,23 @@
                             [% END # / IF MARCURLS %]
                         [% END %]
 
-                        <div id="authdescriptions" class="toptabs">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li id="tab_descriptions" class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="descriptions-tab" data-toggle="tab" href="#descriptions" role="tab" aria-controls="descriptions" aria-selected="true" href="#descriptions">Notes</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" role="tabpanel" aria-labelledby="descriptions-tab" id="descriptions">
+                        [% WRAPPER tabs id= "authdescriptions" %]
+                            [% WRAPPER tabs_nav %]
+                                [% WRAPPER tab_item tabname= "tab_descriptions" bt_active= 1 %]
+                                    <span>Notes</span>
+                                [% END %]
+                            [% END # /WRAPPER tabs_nav %]
+                            [% WRAPPER tab_panels %]
+                                [% WRAPPER tab_panel tabname="tab_descriptions" bt_active= 1 %]
                                     <div class="content_set">
                                         [% FOREACH note IN summary.notes %]
                                             <p class="note auth[% note.field | html %]">[% note.note | html %]</p>
                                         [% END %]
                                     </div>
-                                </div>
-                            </div> <!-- /.tab-content -->
-                        </div>
+                                [% END # /tab_panel# %]
+                            [% END # /WRAPPER tab_panels %]
+                        [% END # /WRAPPER tabs#authdescriptions %]
+
                     </div> <!-- / .#userauthdetails -->
                 </div> <!-- / .col-lg-10/12 -->
                 [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
