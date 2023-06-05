@@ -48,6 +48,13 @@ Patron associated with request
 
 Potential bib linked to request
 
+=head2 deleted_biblio_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
+Deleted bib linked to request
+
 =head2 due_date
 
   data_type: 'datetime'
@@ -189,6 +196,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "biblio_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "deleted_biblio_id",
+  { data_type => "integer", is_nullable => 1 },
   "due_date",
   {
     data_type => "datetime",
@@ -352,8 +361,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:10:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1VhNc8tMnvCpBYaj90YOiQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-06-05 16:11:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6b58Mo/KzvheZCurYvKu7A
 
 __PACKAGE__->has_many(
   "comments",
