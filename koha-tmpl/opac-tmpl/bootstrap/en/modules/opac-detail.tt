@@ -1149,6 +1149,27 @@
     </div> <!-- /#myModal -->
 [% END %]
 
+<!-- Library Info Modal -->
+<div class="modal" id="libraryInfoModal" tabindex="-1" aria-labelledby="libraryInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="libraryInfoModalLabel"></h5>
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="libraryInfo"></div>
+            </div>
+            <div class="modal-footer">
+                <a id="libraryInfoLink" href="" class="btn btn-primary">Visit web site</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->
+
 [% INCLUDE 'opac-bottom.inc' %]
 
 [%# End of template %]
@@ -1407,27 +1428,6 @@
         </tbody>
     </table>
 [% END %][%# end of items_table block %]
-
-<!-- Library Info Modal -->
-<div class="modal" id="libraryInfoModal" tabindex="-1" aria-labelledby="libraryInfoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="libraryInfoModalLabel"></h5>
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="libraryInfo"></div>
-            </div>
-            <div class="modal-footer">
-                <a id="libraryInfoLink" href="" class="btn btn-primary">Visit web site</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div> <!-- /.modal-content -->
-    </div> <!-- /.modal-dialog -->
-</div> <!-- /.modal -->
 
 [% IF Koha.Preference('OpacCatalogConcerns') %]
     [% INCLUDE 'modals/catalog_concern.inc' %]
