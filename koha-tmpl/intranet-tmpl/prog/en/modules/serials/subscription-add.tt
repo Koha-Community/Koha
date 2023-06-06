@@ -4,9 +4,19 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( modify ) %][% bibliotitle | html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %] &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF( modify ) %]
+        [% t("Modify subscription") | html %] &rsaquo;
+        [% bibliotitle | html %]
+    [% ELSE %]
+        [% t("New subscription") | html %]
+    [% END %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
 fieldset.rows li.radio { width: 100%; } /* override staff-global.css */

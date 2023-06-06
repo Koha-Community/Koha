@@ -1,7 +1,19 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Frequencies &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF (new or modify) %]
+        [% IF (new) %]
+            [% t("New frequency") | html %]
+        [% ELSE %]
+            [% tx("Modify frequency '{description}'", { description = description }) | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% t("Frequencies") | html %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -24,8 +36,23 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
         [% END %]
-        [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Frequencies</span>
+        [% IF (new or modify) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/serials/subscription-frequencies.pl">Frequencies</a>
+            [% END %]
+            [% IF (new) %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>New frequency</span>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    [% tx("Modify frequency '{description}'", { description = description }) | html %]
+                [% END %]
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Frequencies</span>
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -40,7 +67,7 @@
         [% IF (new) %]
           <h1>New frequency</h1>
         [% ELSE %]
-          <h1>Edit frequency: [% description | html %]</h1>
+          <h1>[% tx("Modify frequency '{description}'", { description = description }) | html %]</h1>
         [% END %]
         <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" id="add_frequency_form" method="post">
             [% INCLUDE 'csrf-token.inc' %]

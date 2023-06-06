@@ -1,10 +1,20 @@
 [% USE raw %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %] &rsaquo; [% title | html %] &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF( op ) %]
+        [% t("New routing list") | html %]
+    [% ELSE %]
+        [% t("Modify routing list") | html %]
+    [% END %] &rsaquo;
+    [% title | html %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="ser_routing" class="ser">
@@ -23,9 +33,9 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ( op ) %]
-                    <span>Create routing list</span>
+                    <span>New routing list</span>
                 [% ELSE %]
-                    <span>Edit routing list</span>
+                    <span>Modify routing list</span>
                 [% END %]
             [% END %]
         [% END # UNLESS blocking_error %]
@@ -39,9 +49,9 @@
                 [% INCLUDE 'messages.inc' %]
 
 [% IF ( op ) %]
-<h1>Create routing list for <em>[% title | html %]</em></h1>
+    <h1>New routing list for <em>[% title | html %]</em></h1>
 [% ELSE %]
-<h1>Edit routing list for <em>[% title | html %]</em></h1>
+    <h1>Modify routing list for <em>[% title | html %]</em></h1>
 [% END %]
 
 <fieldset class="rows">
