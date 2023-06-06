@@ -3,12 +3,15 @@
 [% USE Koha %]
 [% USE Price %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
-
 [% PROCESS 'accounts.inc' %]
-
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Create manual invoice &rsaquo; Patrons &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Create manual invoice") | html %] &rsaquo;
+    [% t("Patrons") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

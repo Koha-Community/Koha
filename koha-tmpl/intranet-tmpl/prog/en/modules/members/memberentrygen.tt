@@ -1,4 +1,3 @@
-[% PROCESS 'i18n.inc' %]
 [% USE raw %]
 [% USE Asset %]
 [% USE To %]
@@ -9,19 +8,22 @@
 [% PROCESS 'member-alt-address-style.inc' %]
 [% PROCESS 'member-alt-contact-style.inc' %]
 [% PROCESS 'restriction-types.inc' %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>
+<title>[% FILTER collapse %]
         [% UNLESS blocking_error %]
             [% IF ( opadd ) %]
-                Add patron
+                [% t("Add patron") | html %]
             [% ELSE %]
-                Modify patron
+                [% t("Modify patron") | html %]
             [% END %]
             [% INCLUDE 'patron-title.inc' no_html = 1 %]
             [% IF patron_category %]([% patron_category.description | html %])[% END %]
-        [% END %] &rsaquo; Patrons &rsaquo; Koha
-    </title>
+        [% END %] &rsaquo;
+    [% t("Patrons") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 <style>
 legend:hover {
     cursor: pointer;

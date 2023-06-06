@@ -1,10 +1,14 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
-
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Print receipt for [% patron.cardnumber | html %]</title>
+<title>[% FILTER collapse %]
+    [% t("Print receipt for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
+    [% t("Patrons") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

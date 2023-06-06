@@ -3,9 +3,16 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% UNLESS blocking_error  %]Discharge for [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])[% END %] &rsaquo; Patrons &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% UNLESS blocking_error  %]
+        [% t("Discharge for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
+    [% END %]
+    [% t("Patrons") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="discharge" class="discharge">

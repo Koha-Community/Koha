@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
@@ -5,18 +6,21 @@
 [% USE ItemTypes %]
 [% USE TablesSettings %]
 [% PROCESS 'member-display-address-style.inc' %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
-
 [% PROCESS 'accounts.inc' %]
-
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>Summary for [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</title>
+    <title>[% FILTER collapse %]
+        [% t("Summary for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;
+        [% t("Patrons") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="pat_moremember-print" class="pat">
     <div id="main">
-        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber | uri %]">Account summary: [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</a></h3>
+        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber | uri %]">Account summary: [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;</a></h3>
 
         <ul>
             [% PROCESS 'display-address-style' %]

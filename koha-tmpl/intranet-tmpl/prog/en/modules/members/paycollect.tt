@@ -4,6 +4,7 @@
 [% USE Branches %]
 [% USE Registers %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -21,13 +22,15 @@
     </div>
 [% END %]
 [% SET registers = Registers.all( filters => { current_branch => 1 } ) %]
-<title>
+<title>[% FILTER collapse %]
     [% IF type == 'WRITEOFF' %]
-        Write off an amount for [% INCLUDE 'patron-title.inc' no_html = 1 %]
+        [% tx("Write off an amount for {patron}", patron = "") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %]
     [% ELSE %]
-        Collect payment for [% INCLUDE 'patron-title.inc' no_html = 1 %]
-    [% END %] &rsaquo; Patrons &rsaquo; Koha
-</title>
+        [% tx("Collect payment for {patron}", patron = "") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %]
+    [% END %] &rsaquo;
+    [% t("Patrons") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

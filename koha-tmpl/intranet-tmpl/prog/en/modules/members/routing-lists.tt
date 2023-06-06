@@ -3,9 +3,14 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Subscription routing lists for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
+<title>[% FILTER collapse %]
+    [% t("Subscription routing lists for") | html %] [% INCLUDE 'patron-title.inc' no_html = 1 %]
+    [% t("Patrons") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

@@ -3,12 +3,17 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE Categories %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET libraries = Branches.all %]
 [% SET categories = Categories.all.unblessed %]
 [% PROCESS 'patron-search.inc' %]
-<title>Patron search &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Patron search") | html %] &rsaquo;
+    [% t("Patrons") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style> .modal-body .close { display: none; } </style>[%# FIXME This is not great, we should make members/memberentrygen.tt use a modal as well and we won't need that here %]
 </head>

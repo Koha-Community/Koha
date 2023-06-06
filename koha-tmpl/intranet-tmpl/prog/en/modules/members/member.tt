@@ -4,6 +4,7 @@
 [% USE TablesSettings %]
 [% USE Branches %]
 [% USE Categories %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% PROCESS 'patronfields.inc' %]
 [% SET libraries = Branches.all %]
@@ -12,7 +13,13 @@
 [% SET searchtype = Koha.Preference('DefaultPatronSearchMethod') %]
 [% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Patrons[% IF ( searching ) %] &rsaquo; Search results[% END %] &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( searching ) %]
+        [% t("Search results") | html %] &rsaquo;
+    [% END %]
+    [% t("Patrons") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
