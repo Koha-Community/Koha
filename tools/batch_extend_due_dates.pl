@@ -26,6 +26,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Checkouts;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Items;
 
 my $input = CGI->new;
 my $op = $input->param('op') // q|form|;
@@ -48,6 +49,7 @@ if ( $op eq 'form' ) {
 elsif ( $op eq 'list' ) {
 
     my @categorycodes     = $input->multi_param('categorycodes');
+    my @itemtypecodes     = $input->multi_param('itemtypecodes');
     my @branchcodes       = $input->multi_param('branchcodes');
     my $from_due_date     = $input->param('from_due_date');
     my $to_due_date       = $input->param('to_due_date');
@@ -61,9 +63,16 @@ elsif ( $op eq 'list' ) {
     if (@categorycodes) {
         $search_params->{'patron.categorycode'} = { -in => \@categorycodes };
     }
+    if (@itemtypecodes) {
+        my $search_items->{'itype'} = { -in => \@itemtypecodes };
+        my @itemnumbers = Koha::Items->search($search_items)->get_column('itemnumber');
+
+        $search_params->{'itemnumber'} = { -in => \@itemnumbers };
+    }
     if (@branchcodes) {
         $search_params->{'me.branchcode'} = { -in => \@branchcodes };
     }
+
     if ( $from_due_date and $to_due_date ) {
         my $to_due_date_endday = dt_from_string($to_due_date);
         $to_due_date_endday
