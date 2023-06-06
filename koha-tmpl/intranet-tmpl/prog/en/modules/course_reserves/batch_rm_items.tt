@@ -1,8 +1,13 @@
+[% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Remove reserves &rsaquo; Course reserves &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Remove reserves") | html %] &rsaquo;
+    [% t("Course reserves") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="courses_rm_items" class="course">

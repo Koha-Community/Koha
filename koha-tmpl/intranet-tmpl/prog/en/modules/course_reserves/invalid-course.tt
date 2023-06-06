@@ -1,6 +1,11 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Course reserves &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Invalid course") | html %]
+    [% t("Course reserves") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <body id="courses_invalid_course" class="course">
 

@@ -3,7 +3,15 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF course_name %] Edit [% course_name | html %] [% ELSE %] New course [% END %] &rsaquo; Course reserves &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( course_name ) %]
+        [% tx("Edit {course_name}", { course_name = course_name }) | html %]
+    [% ELSE %]
+        [% t("New course") | html %]
+    [% END %] &rsaquo;
+    [% t("Course reserves") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     #course_instructors {
