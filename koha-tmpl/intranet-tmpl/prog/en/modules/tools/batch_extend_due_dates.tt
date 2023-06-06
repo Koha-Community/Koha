@@ -96,6 +96,16 @@
                                     </li>
 
                                     <li>
+                                        <label for="itemtypescodes">Item types: </label>
+                                        [% SET itemtypes = ItemTypes.Get() %]
+                                        <select id="itemtypecodes" name="itemtypecodes" multiple="multiple">
+                                            [% FOREACH itemtype IN itemtypes %]
+                                                <option value="[% itemtype.itemtype | html %]">[% itemtype.description | html%]</option>
+                                            [% END %]
+                                        </select>
+                                    </li>
+
+                                    <li>
                                         <label for="branchcodes">Libraries: </label>
                                         <select name="branchcodes" id="branchcodes" multiple="multiple">
                                             [% PROCESS options_for_libraries libraries => Branches.all() %]
