@@ -545,6 +545,7 @@ export default {
 .modal {
     position: fixed;
     z-index: 9998;
+    overflow-y: inherit !important;
     top: 0;
     left: 0;
     width: 35%;
