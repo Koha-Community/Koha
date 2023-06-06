@@ -56,7 +56,8 @@
       <login id="staff"  password="staff" delimiter="|" error-detect="enabled" institution="CPL" encoding="ascii" checked_in_ok="1" payment_type_writeoff="06" disallow_overpayment="1" />
       <login id="koha"   password="koha"  delimiter="|" error-detect="enabled" institution="kohalibrary" encoding="utf8" />
       <login id="koha2"  password="koha" institution="kohalibrary2" terminator="CR" />
-      <login id="lpl-sc" password="1234" institution="LPL" />
+      <login id="lpl-sc" password="1234" institution="LPL" allow_fields="AO,AA,AE"/>
+      <!-- allow_fields hides all fields not in the list, it is the inverse of hide_fields ( hide_fields takes precedence ) -->
       <login id="lpl-sc-beacock" password="xyzzy"
              delimiter="|" error-detect="enabled" institution="LPL"
              send_patron_home_library_in_af="1"

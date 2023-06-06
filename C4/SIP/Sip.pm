@@ -11,7 +11,7 @@ use Encode;
 use POSIX qw(strftime);
 use Socket qw(:crlf);
 use IO::Handle;
-use List::Util qw(first);
+use List::Util qw(any);
 
 use C4::SIP::Sip::Constants qw(SIP_DATETIME FID_SCREEN_MSG);
 use C4::SIP::Sip::Checksum qw(checksum);
@@ -60,10 +60,7 @@ sub timestamp {
 sub add_field {
     my ($field_id, $value, $server) = @_;
 
-    if ( my $hide_fields = $server->{account}->{hide_fields} ) {
-        my @fields = split( ',', $hide_fields );
-        return q{} if first { $_ eq $field_id } @fields;
-    }
+    return q{} if should_hide( $field_id, $value, $server );
 
     my ($i, $ent);
 
@@ -94,10 +91,7 @@ sub add_field {
 sub maybe_add {
     my ($fid, $value, $server) = @_;
 
-    if ( my $hide_fields = $server->{account}->{hide_fields} ) {
-        my @fields = split( ',', $hide_fields );
-        return q{} if first { $_ eq $fid } @fields;
-    }
+    return q{} if should_hide( $fid, $value, $server );
 
     if ( $fid eq FID_SCREEN_MSG && $server->{account}->{screen_msg_regex} && defined($value)) {
         foreach my $regex (
@@ -112,6 +106,24 @@ sub maybe_add {
     return ( defined($value) && length($value) )
       ? add_field( $fid, $value )
       : '';
+}
+
+sub should_hide {
+    my ( $field_id, $value, $server ) = @_;
+
+    my $allow_fields = $server->{account}->{allow_fields};
+    if ($allow_fields) {
+        my @fields = split( ',', $allow_fields );
+        return 1 unless any { $_ eq $field_id } @fields;
+    }
+
+    my $hide_fields = $server->{account}->{hide_fields};
+    if ($hide_fields) {
+        my @fields = split( ',', $hide_fields );
+        return 1 if any { $_ eq $field_id } @fields;
+    }
+
+    return 0;
 }
 
 #

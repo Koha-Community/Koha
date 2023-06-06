@@ -63,7 +63,7 @@ subtest 'Testing Patron Status Request V2' => sub {
 subtest 'Testing Patron Info Request V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 24;
+    plan tests => 32;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
     $schema->storage->txn_rollback;
@@ -722,15 +722,40 @@ sub test_request_patron_info_v2 {
     $respcode = substr( $response, 0, 2 );
     check_field( $respcode, $response, FID_PERSONAL_NAME, 'X' . $patron2->{surname} . 'Y', 'Check customized patron name' );
 
+    # Test hide_fields
     undef $response;
-    $server->{account}->{hide_fields} = "BD,BE,BF,PB";
+    $server->{account}->{hide_fields} = join( ",", FID_HOME_ADDR, FID_EMAIL, FID_HOME_PHONE, FID_PATRON_BIRTHDATE );
     $msg->handle_patron_info( $server );
     $respcode = substr( $response, 0, 2 );
     check_field( $respcode, $response, FID_HOME_ADDR, undef, 'Home address successfully stripped from response' );
     check_field( $respcode, $response, FID_EMAIL, undef, 'Email address successfully stripped from response' );
     check_field( $respcode, $response, FID_HOME_PHONE, undef, 'Home phone successfully stripped from response' );
     check_field( $respcode, $response, FID_PATRON_BIRTHDATE, undef, 'Date of birth successfully stripped from response' );
-    $server->{account}->{hide_fields} = "";
+    delete $server->{account}->{hide_fields};
+
+    # Test allow_fields
+    undef $response;
+    $server->{account}->{allow_fields} = join( ",", FID_EMAIL, FID_HOME_PHONE );
+    $msg->handle_patron_info( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_HOME_ADDR, undef, 'Home address successfully stripped from response' );
+    check_field( $respcode, $response, FID_EMAIL, $patron2->{email}, 'Email address successfully retained in response' );
+    check_field( $respcode, $response, FID_HOME_PHONE, $patron2->{phone}, 'Home phone successfully retained in from response' );
+    check_field( $respcode, $response, FID_PATRON_BIRTHDATE, undef, 'Date of birth successfully stripped from response' );
+    delete $server->{account}->{allow_fields};
+
+    # Test hide_fields should take precedence over allow_fields
+    undef $response;
+    $server->{account}->{hide_fields} = join( ",", FID_HOME_ADDR, FID_EMAIL, FID_PATRON_BIRTHDATE );
+    $server->{account}->{allow_fields} = join( ",", FID_EMAIL, FID_HOME_PHONE );
+    $msg->handle_patron_info( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_HOME_ADDR, undef, 'Home address successfully stripped from response' );
+    check_field( $respcode, $response, FID_EMAIL, undef, 'Email address successfully stripped from response' );
+    check_field( $respcode, $response, FID_HOME_PHONE, $patron2->{phone}, 'Home phone successfully retained in from response' );
+    check_field( $respcode, $response, FID_PATRON_BIRTHDATE, undef, 'Date of birth successfully stripped from response' );
+    delete $server->{account}->{hide_fields};
+    delete $server->{account}->{allow_fields};
 
     # Check empty password and verify CQ again
     $siprequest = PATRON_INFO. 'engYYYYMMDDZZZZHHMMSS'.'Y         '.
