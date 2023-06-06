@@ -472,6 +472,7 @@ export default {
                                     class: "fa fa-pencil",
                                     "aria-hidden": "true",
                                 }),
+                                " ",
                                 __("Edit"),
                             ]
                         )
@@ -490,13 +491,14 @@ export default {
                                     class: "fa fa-trash",
                                     "aria-hidden": "true",
                                 }),
+                                " ",
                                 __("Remove"),
                             ]
                         )
-                        let buttons = [editButton, "", removeButton]
+                        let buttons = [editButton, " ", removeButton]
 
                         if (train.received_on !== null) {
-                            buttons.push("")
+                            buttons.push(" ")
                             buttons.push(
                                 createVNode(
                                     "a",
@@ -512,6 +514,7 @@ export default {
                                             class: "fa fa-copy",
                                             "aria-hidden": "true",
                                         }),
+                                        " ",
                                         __("Copy"),
                                     ]
                                 )
