@@ -1,8 +1,19 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF (template_id) %]Edit ([% template_id | html %])[% ELSE %]New[% END %] &rsaquo; Templates &rsaquo; Patron card creator &rsaquo; Tools &rsaquo; Koha</title>
+    <title>[% FILTER collapse %]
+        [% IF ( template_id ) %]
+            [% t("Edit patron card template") | html %] ([% template_id | html %])
+        [% ELSE %]
+            [% t("New patron card template") | html %]
+        [% END %] &rsaquo;
+        [% t("Templates") | html %] &rsaquo;
+        [% t("Patron card creator") | html %] &rsaquo;
+        [% t("Tools") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -24,9 +35,9 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF (template_id) %]
-                    <span>Edit ([% template_id | html %])</span>
+                    <span>Edit patron card template ([% template_id | html %])</span>
                 [% ELSE %]
-                    <span>New</span>
+                    <span>New patron card template</span>
                 [% END %]
             [% END %]
         [% END #/ WRAPPER breadcrumbs %]
@@ -42,7 +53,7 @@
                         [% IF (template_id) %]
                             <span>Edit patron card template</span>
                         [% ELSE %]
-                            <span>Create patron card template</span>
+                            <span>New patron card template</span>
                         [% END %]
                         [% IF (template_id) %] ([% template_id | html %])[% END %]
                     </h1>

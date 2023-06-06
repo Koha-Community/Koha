@@ -1,7 +1,18 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF ( profile_id ) %]Edit ([% profile_id | html %])[% ELSE %]New[% END%] &rsaquo; Profiles &rsaquo; Patron card creator &rsaquo; Tools &rsaquo; Koha</title>
+    <title>[% FILTER collapse %]
+        [% IF( profile_id ) %]
+            [% t("Edit printer profile") | html %] ([% profile_id | html %])
+        [% ELSE %]
+            [% t("New printer profile") | html %]
+        [% END %] &rsaquo;
+        [% t("Profiles") | html %] &rsaquo;
+        [% t("Patron card creator") | html %] &rsaquo;
+        [% t("Tools") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -23,9 +34,9 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ( profile_id ) %]
-                    <span>Edit ([% profile_id | html %])</span>
+                    <span>Edit printer profile ([% profile_id | html %])</span>
                 [% ELSE %]
-                    <span>New</span>
+                    <span>New printer profile</span>
                 [% END%]
             [% END %]
         [% END #/ WRAPPER breadcrumbs %]
@@ -40,11 +51,10 @@
 
                             <h1>
                                 [% IF (profile_id) %]
-                                    <span>Edit printer profile</span>
+                                    <span>Edit printer profile ([% profile_id | html %])</span>
                                 [% ELSE %]
-                                    <span>Create printer profile</span>
+                                    <span>New printer profile</span>
                                 [% END%]
-                                [% IF (profile_id) %] ([% profile_id | html %])[% END %]
                             </h1>
                                     <form name="input" action="/cgi-bin/koha/patroncards/edit-profile.pl" method="get">
                                     <fieldset class="rows"><legend>Profile settings</legend>

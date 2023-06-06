@@ -1,16 +1,17 @@
+[% USE raw %]
 [% USE CGI %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK translate_card_element %]
 [%-  SWITCH element -%]
 [%-  CASE 'layout'    -%][% t('layout') | html %]
-[%-  CASE 'Layouts'   -%][% t('Layouts') | html %]
+[%-  CASE 'Layouts'   -%][% t('Patron card layouts') | html %]
 [%-  CASE 'template'  -%][% t('template') | html %]
-[%-  CASE 'Templates' -%][% t('Templates') | html %]
+[%-  CASE 'Templates' -%][% t('Patron card templates') | html %]
 [%-  CASE 'profile'   -%][% t('profile') | html %]
-[%-  CASE 'Profiles'  -%][% t('Profiles') | html %]
+[%-  CASE 'Profiles'  -%][% t('Patron card printer profiles') | html %]
 [%-  CASE 'batch'     -%][% t('batch') | html %]
-[%-  CASE 'Batches'   -%][% t('Batches') | html %]
+[%-  CASE 'Batches'   -%][% t('Patron card batches') | html %]
 [%-  CASE 'Actions'   -%][% t('Actions') | html %]
 [%-  END -%]
 [% END %]
@@ -24,7 +25,12 @@
 [% END %]
 
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% PROCESS translate_card_element element=card_element_title %] &rsaquo; Patron card creator &rsaquo; Tools &rsaquo; Koha</title>
+    <title>[% FILTER collapse %]
+        [% PROCESS translate_card_element element=card_element_title %] &rsaquo;
+        [% t("Patron card creator") | html %] &rsaquo;
+        [% t("Tools") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -54,14 +60,13 @@
 
                     [% INCLUDE 'patroncards-toolbar.inc' %]
 
-                    <h1>Patron card templates</h1>
+                    <h1>[% PROCESS translate_card_element element=card_element_title %]</h1>
 
                     [% INCLUDE 'patroncards-errors.inc' %]
                         <div id="manage-patroncards-layouts">
                             [% IF ( table_loop ) %]
                             <form name="layouts" action="/cgi-bin/koha/manage.pl?card_element=[% card_element | html %]">
                             <div class="page-section">
-                                <h2>Currently available [% PROCESS translate_card_element element=card_element_title FILTER lower %]</h2>
                                 <table>
                                     [% FOREACH table_loo IN table_loop %]
                                         [% IF ( table_loo.header_fields ) %]
@@ -105,13 +110,16 @@
                                         [% END %]
                                     [% END %]
                                 </table>
-                                <fieldset class="action">
-                                    [% IF ( print ) %]<input type="button" id="print" value="Export selected batches" />[% END %]
-                                </fieldset>
                             </div> <!-- /.page-section -->
+                            [% IF ( print ) %]
+                                <fieldset class="action">
+                                    <input class="btn btn-primary" type="button" id="print" value="Export selected batches" />
+                                </fieldset>
+                            [% END %]
+
                             [% IF patron_lists %]
                             <fieldset class="rows">
-                                <legend>Or use a patron list</legend>
+                                <legend>Export by patron list</legend>
                                 <ol>
                                     <li>
                                         <label for="patron_list_id">Patron list: </label>
@@ -125,7 +133,7 @@
                                 </ol>
                             </fieldset>
                             <fieldset class="action">
-                                <input type="button" id="printlist" value="Export from patron list" />
+                                <input class="btn btn-primary" type="button" id="printlist" value="Export from patron list" />
                             </fieldset>
                             [% END %]
                             </form>

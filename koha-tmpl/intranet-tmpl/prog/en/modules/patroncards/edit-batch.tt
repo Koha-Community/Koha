@@ -1,8 +1,19 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF batch_id %]Edit ([% batch_id | html %])[% ELSE %]New[% END %] &rsaquo; Batches &rsaquo; Patron card creator &rsaquo; Tools &rsaquo; Koha</title>
+    <title>[% FILTER collapse %]
+        [% IF ( batch_id ) %]
+            [% t("Edit patron card batch") | html %] ([% batch_id | html %])
+        [% ELSE %]
+            [% t("New patron card batch") | html %]
+        [% END %] &rsaquo;
+        [% t("Batches") | html %] &rsaquo;
+        [% t("Patron card creator") | html %] &rsaquo;
+        [% t("Tools") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -28,7 +39,7 @@
                 [% ELSIF batch_id %]
                     <span>Edit ([% batch_id | html %])</span>
                 [% ELSE %]
-                    <span>New</span>
+                    <span>New patron card batch</span>
                 [% END %]
             [% END %]
         [% END #/ WRAPPER breadcrumbs %]
