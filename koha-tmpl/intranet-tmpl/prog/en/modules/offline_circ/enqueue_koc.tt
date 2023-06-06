@@ -1,5 +1,11 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Add offline circulations to queue &rsaquo; Circulation &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Add offline circulations to queue") | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="ocirc_enqueue_koc" class="circ ocirc">

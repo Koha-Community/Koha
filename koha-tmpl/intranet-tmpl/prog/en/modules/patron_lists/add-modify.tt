@@ -1,14 +1,18 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF list.patron_list_id %]
-        Modify patron list
+        [% t("Modify patron list") | html %]
     [% ELSE %]
-        New patron list
-    [% END %] &rsaquo; Patron lists &rsaquo; Tools &rsaquo; Koha
-</title>
+        [% t("New patron list") | html %]
+    [% END %] &rsaquo;
+    [% t("Patron lists") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
