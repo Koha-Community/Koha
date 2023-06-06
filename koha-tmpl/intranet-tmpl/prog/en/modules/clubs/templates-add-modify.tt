@@ -2,15 +2,19 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE HtmlTags %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF club_template %]
-        Modify club template [% club_template.name | html %]
+        [% tx("Modify club template {club_template}", { club_template = club_template.name }) | html %] &rsaquo;
     [% ELSE %]
-        Create a new club template
-    [% END %] &rsaquo; Patron clubs &rsaquo; Tools &rsaquo; Koha
-</title>
+        [% t("New club template") | html %]
+    [% END %] &rsaquo;
+    [% t("Patron clubs") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     .club-field,
@@ -37,7 +41,7 @@
             [% IF club_template %]
                 <span>Modify club template [% club_template.name | html | $HtmlTags tag="em" %]</span>
             [% ELSE %]
-                <span>Create a new club template</span>
+                <span>New club template</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -54,7 +58,7 @@
                     [% IF club_template %]
                         <span>Modify club template [% club_template.name | html | $HtmlTags tag="em" %]</span>
                     [% ELSE %]
-                        <span>Create a new club template</span>
+                        <span>New club template</span>
                     [% END %]
                 </h1>
 

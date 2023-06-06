@@ -3,15 +3,19 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF club %]
-        Modify club [% club.name | html %]
+        [% tx("Modify club {club_name}", { club_name = club.name }) | html %]
     [% ELSE %]
-        Create a new [% club_template.name | html %] club
-    [% END %] &rsaquo; Patron clubs &rsaquo; Tools &rsaquo; Koha
-</title>
+        [% tx("Create a new {club_template} club", { club_template = club_template.name }) | html %]
+    [% END %] &rsaquo;
+    [% t("Patron clubs") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

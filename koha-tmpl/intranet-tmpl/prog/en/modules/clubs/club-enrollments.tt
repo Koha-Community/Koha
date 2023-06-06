@@ -3,11 +3,16 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
-[% USE AuthorisedValues %]
-[% SET AuthorisedValuesCategories = AuthorisedValues.GetCategories %]
+[% USE HtmlTags %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Club enrollments &rsaquo; Patron clubs &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Club enrollments for {club_name}", { club_name = club.name }) | html %] &rsaquo;
+    [% t("Patron clubs") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -25,7 +30,7 @@
             <a href="clubs.pl">Patron clubs</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Club enrollments</span>
+            <span>Club enrollments for [% club.name | html | $HtmlTags tag="em" %]</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -37,7 +42,7 @@
                 [% IF !club %]
                 <div class="dialog message">The club you requested does not exist.</div>
                 [% ELSE %]
-                <h1>Club enrollments for <em>[% club.name | html %]</em></h1>
+                <h1>Club enrollments for [% club.name | html | $HtmlTags tag="em" %]</h1>
 
                 <div class="page-section">
                     <table id="enrollments-table">
