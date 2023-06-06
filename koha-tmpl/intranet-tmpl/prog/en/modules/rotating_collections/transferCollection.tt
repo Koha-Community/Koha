@@ -1,9 +1,16 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Transfer collection &rsaquo; Rotating collections &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Transfer collection") | html %] &rsaquo;
+    [% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %] &rsaquo;
+    [% t("Rotating collections") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="rcoll_transferCollection" class="tools rcoll">
@@ -20,7 +27,7 @@
             <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]">Collection <em>[% colTitle | html %]</em></a>
+            <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]">[% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %]</em></a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Transfer collection</span>
@@ -33,7 +40,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-                <h1>Transfer collection <em>[% colTitle | html %]</em></h1>
+                <h1>[% tx("Transfer collection '{collection_title}'", { collection_title = colTitle }) | html %]</h1>
 
                 [% IF ( messages ) %]
                     [% FOREACH message IN messages %]

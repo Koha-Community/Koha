@@ -1,14 +1,21 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-    [%- IF ( action == "new" ) %]
-        Add a new collection
+<title>[% FILTER collapse %]
+    [% IF ( action == "new" ) %]
+        [% t("Add a new collection") | html %]
+    [% ELSIF ( action == "delete" ) %]
+        [% t("Collection deleted") | html %]
     [% ELSE %]
-        Edit collection [% editColTitle | html %]
-    [% END -%] &rsaquo; Rotating collections &rsaquo; Tools &rsaquo; Koha
-</title>
+        [% t("Edit collection") | html %] &rsaquo;
+        [% tx("Collection '{collection_title}'", { collection_title = editColTitle }) | html %]
+    [% END %] &rsaquo;
+    [% t("Rotating collections") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="rcoll_editCollections" class="tools rcoll">
@@ -35,10 +42,10 @@
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | uri %]">Collection <em>[% editColTitle | html %]</em></a>
+                <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | uri %]">[% tx("Collection '{collection_title}'", { collection_title = editColTitle }) | html %]</em></a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Edit collection</span>
+                [% t("Edit collection") | html %]
             [% END %]
         [% END -%]
     [% END #/ WRAPPER breadcrumbs %]

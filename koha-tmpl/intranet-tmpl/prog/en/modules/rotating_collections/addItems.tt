@@ -1,8 +1,15 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Add or remove items &rsaquo; Collection [% colTitle | html %] &rsaquo; Rotating collections &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Manage items") | html %] &rsaquo;
+    [% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %] &rsaquo;
+    [% t("Rotating collections") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -20,7 +27,7 @@
             <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]">Collection <em>[% colTitle | html %]</em></a>
+            <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]">[% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Manage items</span>
@@ -39,7 +46,7 @@
                 </div>
               [% ELSE %]
               [% INCLUDE 'rotating-collections-toolbar.inc' %]
-              <h1>Manage items for <em>[% colTitle | html %]</em></h1>
+              <h1>[% tx("Manage items for '{collection_title}'", { collection_title = colTitle }) | html %]</h1>
 
               [% IF ( previousActionAdd ) %]
                 [% IF ( addSuccess ) %]
