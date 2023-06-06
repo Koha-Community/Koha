@@ -1,7 +1,12 @@
 [% SET footerjs = 1 %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Labels &rsaquo; Koha</title>
-[% INCLUDE 'doc-head-close.inc' %]
+    <title>[% FILTER collapse %]
+        [% t("Search") | html %] &rsaquo;
+        [% t("Labels") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
+    [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="labels_search" class="tools labels">

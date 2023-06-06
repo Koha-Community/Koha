@@ -1,4 +1,5 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% BLOCK pagination %]
     <nav>
         [% IF ( displayprev || displaynext ) %]
@@ -23,7 +24,11 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Search results &rsaquo; Barcodes and labels &rsaquo; Koha</title>
+    <title>[% FILTER collapse %]
+        [% t("Search results") | html %] &rsaquo;
+        [% t("Labels") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

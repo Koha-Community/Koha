@@ -5,17 +5,22 @@
 [% BLOCK translate_label_element %]
 [%-  SWITCH element -%]
 [%-  CASE 'layout'    -%][% t('layout') | html %]
-[%-  CASE 'Layouts'   -%][% t('Layouts') | html %]
+[%-  CASE 'Layouts'   -%][% t('Label layouts') | html %]
 [%-  CASE 'template'  -%][% t('template') | html %]
-[%-  CASE 'Templates' -%][% t('Templates') | html %]
+[%-  CASE 'Templates' -%][% t('Label templates') | html %]
 [%-  CASE 'profile'   -%][% t('profile') | html %]
-[%-  CASE 'Profiles'  -%][% t('Profiles') | html %]
+[%-  CASE 'Profiles'  -%][% t('Label profiles') | html %]
 [%-  CASE 'batch'     -%][% t('batch') | html %]
-[%-  CASE 'Batches'   -%][% t('Batches') | html %]
+[%-  CASE 'Batches'   -%][% t('Label batches') | html %]
 [%-  END -%]
 [% END %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% PROCESS translate_label_element element=label_element_title %] &rsaquo; Label creator &rsaquo; Cataloging &rsaquo; Koha</title>
+    <title>[% FILTER collapse %]
+        [% PROCESS translate_label_element element=label_element_title %] &rsaquo;
+        [% t("Label creator") | html %] &rsaquo;
+        [% t("Cataloging") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -44,7 +49,15 @@
                 <main>
 
                     [% INCLUDE 'labels-toolbar.inc' %]
-                    <h1>Manage labels</h1>
+                    [% IF ( label_element == 'layout' ) %]
+                        <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
+                    [% ELSIF ( label_element == 'template' ) %]
+                        <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
+                    [% ELSIF ( label_element == 'profile' ) %]
+                        <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
+                    [% ELSIF ( label_element == 'batch' ) %]
+                        <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
+                    [% END %]
 
                         [% IF ( error ) %]
                             <div class="dialog alert">
@@ -55,15 +68,6 @@
                         <div id="manage-label-layouts" class="page-section">
                             [% IF ( table_loop ) %]
                             <form name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element | html %]">
-                            [% IF    ( label_element == 'layout' ) %]
-                            <h2>Currently available layouts</h2>
-                            [% ELSIF ( label_element == 'template' ) %]
-                            <h2>Currently available templates</h2>
-                            [% ELSIF ( label_element == 'profile' ) %]
-                            <h2>Currently available profiles</h2>
-                            [% ELSIF ( label_element == 'batch' ) %]
-                            <h2>Currently available batches</h2>
-                            [% END %]
 
                             <div class="page-section">
                                 <table id="labels-table">

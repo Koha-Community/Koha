@@ -1,9 +1,20 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE ItemTypes %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF batch_id %]Edit label batch ([% batch_id | html %])[% ELSE %]New label batch[% END %]&rsaquo; Batches &rsaquo; Label creator &rsaquo; Cataloging &rsaquo; Koha</title>
+    <title>[% FILTER collapse %]
+        [% IF ( batch_id ) %]
+            [% tx("Edit label batch {batch_id}", { batch_id = batch_id }) | html %]
+        [% ELSE %]
+            [% t("New label batch") | html %]
+        [% END %] &rsaquo;
+            [% t("Batches") | html %] &rsaquo;
+        [% t("Label creator") | html %] &rsaquo;
+        [% t("Cataloging") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
