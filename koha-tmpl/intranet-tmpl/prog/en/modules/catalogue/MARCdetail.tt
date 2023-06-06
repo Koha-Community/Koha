@@ -1,15 +1,18 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-  [% IF ( unknownbiblionumber ) %]
-    Unknown record
-  [% ELSE %]
-    MARC details for [% INCLUDE 'biblio-title-head.inc' %]
-  [% END %] &rsaquo; Catalog &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF ( unknownbiblionumber ) %]
+        [% t("Unknown record") | html %]
+    [% ELSE %]
+        [% t("MARC details for") | html %] [% INCLUDE 'biblio-title-head.inc' %]
+    [% END %] &rsaquo;
+    [% t("Catalog") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

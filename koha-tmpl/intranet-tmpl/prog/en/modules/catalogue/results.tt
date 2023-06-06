@@ -12,7 +12,27 @@
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>[% IF ( searchdesc ) %]Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %] &rsaquo; Catalog &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( searchdesc ) %]
+        [% IF ( query_desc ) %]
+            [% IF ( limit_desc ) %]
+                [% tx("Results of search for {query_desc} with limit(s): '{limit_desc}'", { query_desc = query_desc, limit_desc = limit_desc }) | html %]
+            [% ELSE %]
+                [% tx("Results of search for {query_desc}", { query_desc = query_desc }) | html %]
+            [% END %]
+        [% ELSE %]
+            [% IF ( limit_desc ) %]
+                [% tx("Results of search for {limit_desc}", { limit_desc = limit_desc }) | html %]
+            [% ELSE %]
+                [% t("Results of search") | html %]
+            [% END %]
+        [% END %]
+    [% ELSE %]
+        [% t("You did not specify any search criteria") | html %]
+    [% END %] &rsaquo;
+    [% t("Catalog") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

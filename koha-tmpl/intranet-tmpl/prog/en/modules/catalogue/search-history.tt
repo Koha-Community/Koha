@@ -1,10 +1,15 @@
 [% USE raw %]
 [% USE Asset %]
-[% SET footerjs = 1 %]
-[% INCLUDE 'doc-head-open.inc' %]
 [% USE Koha %]
 [% USE KohaDates %]
-<title>Search history &rsaquo; Catalog &rsaquo; Koha</title>
+[% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% FILTER collapse %]
+    [% t("Search history") | html %] &rsaquo;
+    [% t("Catalog") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

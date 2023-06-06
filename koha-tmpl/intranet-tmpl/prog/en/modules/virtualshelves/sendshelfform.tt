@@ -1,5 +1,11 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Sending your list &rsaquo; Lists &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Sending your list") | html %] &rsaquo;
+    [% t("Lists") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="lists_sendshelfform" class="lists" style="padding: 1em;">

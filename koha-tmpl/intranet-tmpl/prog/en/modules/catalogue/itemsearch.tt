@@ -2,7 +2,7 @@
 [% USE To %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
-
+[% PROCESS 'i18n.inc' %]
 [%- BLOCK form_label -%]
   [%- SWITCH label -%]
     [%- CASE 'barcode' %]<span>Barcode</span>
@@ -142,7 +142,11 @@
 
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-  <title>Item search &rsaquo; Catalog &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Item search") | html %] &rsaquo;
+    [% t("Catalog") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
   [% INCLUDE 'doc-head-close.inc' %]
   [% Asset.css("css/itemsearchform.css") | $raw %]
 </head>

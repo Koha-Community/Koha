@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK controls %]
     <p class="cart-controls">
@@ -27,7 +28,11 @@
     </p>
 [% END %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Your cart &rsaquo; Catalog &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Your cart") | html %] &rsaquo;
+    [% t("Catalog") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

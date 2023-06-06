@@ -4,19 +4,22 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF op == 'view' %]
-        Contents of [% shelf.shelfname | html %] &rsaquo; [% END %]
-
+        [% tx("Contents of {list_name}", { list_name = shelf.shelfname }) | html %] &rsaquo;
+    [% END %]
     [% IF op == 'add_form' %]
-        Create new list &rsaquo; [% END %]
-
+        [% t("Create new list") | html %] &rsaquo;
+    [% END %]
     [% IF op == 'edit_form' %]
-        Edit list [% shelf.shelfname | html %] &rsaquo; [% END %]
-    Lists &rsaquo; Koha
-</title>
+        [% tx("Edit list {list_name}", { list_name = shelf.shelfname }) | html %] &rsaquo;
+    [% END %]
+    [% t("Lists") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>textarea { width: 100%; }</style>
 
