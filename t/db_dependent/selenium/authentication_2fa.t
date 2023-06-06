@@ -16,6 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use utf8;
 use Test::More tests => 5;
 
 use C4::Context;
@@ -34,7 +35,9 @@ SKIP: {
 
     my $builder  = t::lib::TestBuilder->new;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 1 }});
+    my $library_name = 'my ❤ library';
+    my $library = $builder->build_object( { class => 'Koha::Libraries', value => { branchname => $library_name } } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1, branchcode => $library->branchcode } } );
     $patron->flags(1)->store; # superlibrarian permission
     my $password = Koha::AuthUtils::generate_password($patron->category);
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
@@ -46,7 +49,7 @@ SKIP: {
     my $driver   = $s->driver;
 
     subtest 'Setup' => sub {
-        plan tests => 12;
+        plan tests => 13;
 
         my $mainpage = $s->base_url . q|mainpage.pl|;
         $driver->get($mainpage);
@@ -79,6 +82,7 @@ SKIP: {
         $driver->find_element('//*[@id="enable-2FA"]')->click;
         $s->wait_for_ajax;
         ok($driver->find_element('//img[@id="qr_code"]'), 'There is a QR code');
+        is($driver->find_element('//span[@id="issuer"]')->get_text, $library_name);
 
         $driver->find_element('//*[@id="pin_code"]')->send_keys('wrong_code');
         $driver->find_element('//*[@id="register-2FA"]')->click;
