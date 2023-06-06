@@ -173,9 +173,8 @@
                                 ) in item.attributes"
                                 v-bind:key="counter_attribute"
                             >
-                                <!-- FIXME We need to display the description of the AV here -->
                                 {{ attribute.processing_attribute.name }}={{
-                                    attribute.value
+                                    attribute._strings.value.str
                                 }}
                             </span>
                         </div>
@@ -238,6 +237,7 @@ export default {
             train_list: [],
             train_id_selected_for_copy: null,
             train_item_id_to_copy: null,
+            av_options: {},
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -252,12 +252,12 @@ export default {
             await client.trains.get(train_id).then(
                 train => {
                     this.train = train
-                    let display = this.train.items.every(
+                    let display_table = this.train.items.every(
                         item =>
                             item.processing_id ==
                             this.train.default_processing_id
                     )
-                    if (display) {
+                    if (display_table) {
                         this.item_table.data = []
                         this.train.items.forEach(item => {
                             let item_row = {}
@@ -271,7 +271,7 @@ export default {
                                                 a.processing_attribute_id ==
                                                 attribute.processing_attribute_id
                                         )
-                                        .map(a => a.value)
+                                        .map(a => a._strings.value.str)
                                 }
                             )
                             item_row.item = item
@@ -305,7 +305,7 @@ export default {
                         })
                     }
                     this.initialized = true
-                    this.item_table.display = display
+                    this.item_table.display = display_table
                 },
                 error => {}
             )

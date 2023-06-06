@@ -9,27 +9,28 @@ export class PreservationAPIClient extends HttpClient {
 
     get trains() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "trains/" + id,
                     headers: {
                         "x-koha-embed":
-                            "default_processing,default_processing.attributes,items,items.attributes,items.attributes.processing_attribute",
+                            "default_processing,default_processing.attributes,items,items.attributes,items.attributes+strings,items.attributes.processing_attribute",
                     },
                 }),
             getAll: (query = {}) =>
                 this.get({
-                    endpoint: "trains?" +
+                    endpoint:
+                        "trains?" +
                         new URLSearchParams({
                             _per_page: -1,
                             ...(query && { q: JSON.stringify(query) }),
                         }),
                 }),
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "trains/" + id,
                 }),
-            create: (train) =>
+            create: train =>
                 this.post({
                     endpoint: "trains",
                     body: train,
@@ -54,27 +55,28 @@ export class PreservationAPIClient extends HttpClient {
 
     get processings() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "processings/" + id,
                     headers: {
                         "x-koha-embed": "attributes",
                     },
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
-                    endpoint: "processings?" +
+                    endpoint:
+                        "processings?" +
                         new URLSearchParams({
                             _per_page: -1,
                             ...(query && { q: JSON.stringify(query) }),
                         }),
                 }),
 
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "processings/" + id,
                 }),
-            create: (processing) =>
+            create: processing =>
                 this.post({
                     endpoint: "processings",
                     body: processing,
@@ -148,7 +150,7 @@ export class PreservationAPIClient extends HttpClient {
 
     get waiting_list_items() {
         return {
-            get_from_barcode: (barcode) => {
+            get_from_barcode: barcode => {
                 const q = {
                     "me.barcode": barcode,
                 };
@@ -164,15 +166,15 @@ export class PreservationAPIClient extends HttpClient {
                     headers: {
                         "x-koha-embed": "biblio",
                     },
-                }).then((response) => {
+                }).then(response => {
                     return response.length ? response[0] : undefined;
                 });
             },
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "waiting-list/items/" + id,
                 }),
-            createAll: (items) =>
+            createAll: items =>
                 this.post({
                     endpoint: "waiting-list/items",
                     body: items,

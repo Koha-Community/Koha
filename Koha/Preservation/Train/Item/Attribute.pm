@@ -20,7 +20,7 @@ use Modern::Perl;
 use JSON qw( to_json );
 use Try::Tiny;
 
-use Koha::Database;
+use Koha::AuthorisedValues;
 
 use base qw(Koha::Object);
 
@@ -48,6 +48,32 @@ sub processing_attribute {
     my ( $self ) = @_;
     my $processing_attribute_rs = $self->_result->processing_attribute;
     return Koha::Preservation::Processing::Attribute->_new_from_dbic($processing_attribute_rs)
+}
+
+=head3 strings_map
+
+Returns a map of column name to string representations including the string.
+
+=cut
+
+sub strings_map {
+    my ($self) = @_;
+    my $str = $self->value;
+    if ( $self->processing_attribute->type eq 'authorised_value' ) {
+        my $av = Koha::AuthorisedValues->search(
+            {
+                category         => $self->processing_attribute->option_source,
+                authorised_value => $self->value,
+            }
+        );
+        if ( $av->count ) {
+            $str = $av->next->lib || $self->value;
+        }
+    }
+
+    return {
+        value => { str => $str, type => 'authorised_value' },
+    };
 }
 
 =head2 Internal methods
