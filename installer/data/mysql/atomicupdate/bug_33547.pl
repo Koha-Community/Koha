@@ -14,7 +14,8 @@ return {
             });
         }
 
-        my $notice_template = q{[%~ SET train = train_item.train ~%]
+        my $notice_template = q{[%~ USE AuthorisedValues ~%]
+[%~ SET train = train_item.train ~%]
 [%~ SET item = train_item.catalogue_item ~%]
 Train name: [% train.name %]
 Sent on: [% train.sent_on | $KohaDates %]
@@ -24,7 +25,11 @@ Sent on: [% train.sent_on | $KohaDates %]
 Item number #[% train_item.user_train_item_id %]
 
 [% FOREACH item_attribute IN train_item.attributes %]
-    [% item_attribute.processing_attribute.name %]: [% item_attribute.value %]
+    [%~ SET value = item_attribute.value ~%]
+    [%~ IF item_attribute.processing_attribute.type == 'authorised_value' ~%]
+        [%~ SET value = AuthorisedValues.GetByCode(item_attribute.processing_attribute.option_source, item_attribute.value) ~%]
+    [%~ END ~%]
+    [% item_attribute.processing_attribute.name %]: [% value %]
 [% END %]};
 
         $dbh->do(q{
