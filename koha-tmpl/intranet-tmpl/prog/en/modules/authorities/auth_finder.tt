@@ -1,8 +1,12 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Cataloging authority plugin &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Cataloging authority plugin") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
 #clear-form {

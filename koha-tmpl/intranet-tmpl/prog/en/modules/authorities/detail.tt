@@ -1,15 +1,18 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF ( unknownauthid ) %]
-        Unknown authority record
+        [% t("Unknown authority record") | html %]
     [% ELSE %]
-        Details for authority #[% authid | html %] ([% authtypetext | html %])
-    [% END %] &rsaquo; Authorities &rsaquo; Koha
-</title>
+        [% tx("Details for authority #{authid} ({authtypetext})", { authid = authid, authtypetext = authtypetext }) | html %]
+    [% END %] &rsaquo;
+    [% t("Authorities") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% IF ( displayhierarchy ) %]
