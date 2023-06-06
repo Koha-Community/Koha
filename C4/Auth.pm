@@ -260,6 +260,15 @@ sub get_template_and_user {
                 -sameSite => 'Lax',
             ));
 
+            #NOTE: This JWT should only be used by the self-check controllers
+            $cookie = $cookie_mgr->replace_in_list( $cookie, $in->{query}->cookie(
+                -name     => 'JWT',
+                -value    => '',
+                -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                -sameSite => 'Lax',
+            ));
+
             my $auth_error = $in->{query}->param('auth_error');
 
             $template->param(
