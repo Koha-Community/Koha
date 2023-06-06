@@ -1,5 +1,11 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Create a new item type &rsaquo; Web installer &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Create a new item type") | html %] &rsaquo;
+    [% t("Web installer") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 

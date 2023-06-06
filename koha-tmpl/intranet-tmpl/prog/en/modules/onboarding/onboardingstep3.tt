@@ -1,8 +1,13 @@
-[% USE Koha %]
 [% USE raw %]
+[% USE Koha %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Create Koha administrator patron &rsaquo; Web installer &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Create Koha administrator patron") | html %] &rsaquo;
+    [% t("Web installer") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 

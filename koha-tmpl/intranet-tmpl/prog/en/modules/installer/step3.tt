@@ -1,37 +1,40 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>
-     [% IF ( proposeimport ) %]
-         Set up database
-     [% END %]
-     [% IF ( importdatastructure ) %]
-         [% IF ( error ) %]
-           Error creating database tables
-         [% ELSE %]
-           Database tables created
-         [% END %]
-     [% END %]
-     [% IF ( default ) %]
-        [% IF ( upgrading ) %]
-            Update database
+<title>[% FILTER collapse %]
+    [% IF ( proposeimport ) %]
+        [% t("Set up database") | html %]
+    [% END %]
+    [% IF ( importdatastructure ) %]
+        [% IF ( error ) %]
+            [% t("Error creating database tables") | html %]
         [% ELSE %]
-            Install basic configuration settings
+            [% t("Database tables created") | html %]
         [% END %]
-     [% END %]
-     [% IF ( choosemarc ) %]
-        Select your MARC flavor
-     [% END %]
-     [% IF ( selectframeworks ) %]
-        Selecting default settings
-     [% END %]
-     [% IF ( addframeworks ) %]
-        Default data loaded
-     [% END %]
-     [% IF ( finish ) %]
-        Installation complete
-     [% END %] &rsaquo; Web installer &rsaquo; Koha
-</title>
+    [% END %]
+    [% IF ( default ) %]
+       [% IF ( upgrading ) %]
+            [% t("Update database") | html %]
+       [% ELSE %]
+            [% t("Install basic configuration settings") | html %]
+       [% END %]
+    [% END %]
+    [% IF ( choosemarc ) %]
+        [% t("Select your MARC flavor") | html %]
+    [% END %]
+    [% IF ( selectframeworks ) %]
+        [% t("Selecting default settings") | html %]
+    [% END %]
+    [% IF ( addframeworks ) %]
+        [% t("Default data loaded") | html %]
+    [% END %]
+    [% IF ( finish ) %]
+        [% t("Installation complete") | html %]
+    [% END %] &rsaquo;
+    [% t("Web installer") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>

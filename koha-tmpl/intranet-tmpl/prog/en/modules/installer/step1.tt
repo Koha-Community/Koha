@@ -1,18 +1,22 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% UNLESS ( language ) %] Choose your language [% END %]
     [% IF ( language ) %]
         [% UNLESS ( checkmodule ) %]
             [% IF ( missing_modules ) %]
-                Perl modules missing
+                [% t("Perl modules missing") | html %]
             [% END %]
             [% IF ( problems ) %]
-                Perl version obsolete
+                [% t("Perl version obsolete") | html %]
             [% END %]
         [% END %]
-        Check Perl dependencies
-    [% END %] &rsaquo; Web installer &rsaquo; Koha
-</title>
+        [% t("Check Perl dependencies") | html %]
+    [% END %] &rsaquo;
+    [% t("Web installer") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 

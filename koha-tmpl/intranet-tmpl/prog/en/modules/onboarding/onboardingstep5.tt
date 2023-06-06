@@ -1,11 +1,15 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF all_done %]
-        Complete
+        [% t("Onboarding complete") | html %]
     [% ELSE %]
-        Create circulation rule
-    [% END %] &rsaquo; Web installer &rsaquo; Koha
-</title>
+        [% t("Create circulation rule") | html %]
+    [% END %] &rsaquo;
+    [% t("Web installer") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 

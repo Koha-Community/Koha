@@ -1,5 +1,12 @@
+[% USE raw %]
 [% USE HtmlTags %]
-[% INCLUDE 'doc-head-open.inc' %]<title>Database settings &rsaquo; Web installer &rsaquo; Koha</title>
+[% PROCESS 'i18n.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% FILTER collapse %]
+    [% t("Database settings") | html %] &rsaquo;
+    [% t("Web installer") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 

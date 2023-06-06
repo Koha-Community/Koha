@@ -1,7 +1,13 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Add a patron category &rsaquo; Web installer &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Add a patron category") | html %] &rsaquo;
+    [% t("Web installer") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [%# The following if statement checks if the categories variable handed to this template %]
 [%# by onboarding.pl has data in it. If the categories variable does have data %]
 [%# in it this means that the user has previously imported sample patron category %]

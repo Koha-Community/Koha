@@ -1,12 +1,25 @@
+[% USE raw %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-    [% IF ( nopermission ) %]Access denied[% END %]
-    [% IF ( timed_out ) %]Session timed out[% END %]
-    [% IF ( different_ip ) %]IP address change[% END %]
-    [% IF ( invalid_username_or_password ) %]Invalid username or password[% END %]
-    [% IF ( loginprompt ) %]Log in to the Koha web installer[% END %] &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF ( nopermission ) %]
+        [% t("Access denied") | html %]
+    [% END %]
+    [% IF ( timed_out ) %]
+        [% t("Session timed out") | html %]
+    [% END %]
+    [% IF ( different_ip ) %]
+        [% t("IP address change") | html %]
+    [% END %]
+    [% IF ( invalid_username_or_password ) %]
+        [% t("Invalid username or password") | html %]
+    [% END %]
+    [% IF ( loginprompt ) %]
+        [% t("Log in to the Koha web installer") | html %]
+    [% END %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
 
