@@ -6,9 +6,14 @@
 [% USE Asset %]
 [% USE raw %]
 [% USE To %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Curbside pickups &rsaquo; Circulation &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Curbside pickups") | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 <style>
     #pickup-times {
         width: 50%;

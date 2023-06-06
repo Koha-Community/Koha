@@ -4,7 +4,11 @@
 [% USE KohaDates %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Overdues at [% Branches.GetLoggedInBranchname | html %] &rsaquo; Circulation &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Overdues at {library}", { library = Branches.GetLoggedInBranchname }) | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="circ_branchoverdues" class="circ">

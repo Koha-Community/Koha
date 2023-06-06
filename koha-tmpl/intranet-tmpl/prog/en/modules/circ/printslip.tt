@@ -1,18 +1,27 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
+<title>[% FILTER collapse %]
 [% IF ( caller == 'hold-transfer' ) %]
-<title>Hold transfer print receipt &rsaquo; Circulation &rsaquo; Koha</title>
+    [% t("Hold transfer print receipt") | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
 [% ELSIF ( caller == 'transfer' ) %]
-<title>Transfers print receipt &rsaquo; Circulation &rsaquo; Koha</title>
+    [% t("Transfers print receipt") | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
 [% ELSIF ( caller == 'members' ) %]
-<title>Print receipt for [% borrowernumber | html %] &rsaquo; Patrons &rsaquo; Koha</title>
+    [% tx("Print receipt for {borrowernumber}", { borrowernumber = borrowernumber }) | html %] &rsaquo;
+    [% t("Patrons") | html %] &rsaquo;
 [% ELSIF ( caller == 'recall' ) %]
-<title>Recall print receipt &rsaquo; Circulation &rsqaquo; Koha</title>
+    [% t("Recall print receipt") | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsqaquo;
 [% ELSIF ( title ) %][%# FIXME title is never defined %]
-<title>[% title | html %] &rsaquo; Patrons &rsaquo; Koha</title>
+    [% title | html %] &rsaquo;
+    [% t("Patrons") | html %] &rsaquo;
 [% END %]
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />

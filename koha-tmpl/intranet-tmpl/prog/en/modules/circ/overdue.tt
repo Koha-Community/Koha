@@ -8,10 +8,15 @@
 [%- USE ItemTypes -%]
 [%- USE Categories -%]
 [%- USE TablesSettings -%]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% PROCESS 'modal-claims.inc' %]
-<title>Items overdue as of [% todaysdate | $KohaDates %] &rsaquo; Circulation &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Items overdue as of") | html %] [% todaysdate | $KohaDates %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>

@@ -1,8 +1,12 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Circulation &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="circ_circulation-home" class="circ">

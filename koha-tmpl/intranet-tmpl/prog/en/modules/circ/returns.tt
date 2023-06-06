@@ -29,7 +29,11 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Check in [% title | html %] &rsaquo; Circulation &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Check in {title}", { title = title }) | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

@@ -4,13 +4,18 @@
 [% USE Desks %]
 [% USE Registers %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF Koha.Preference('UseCirculationDesks') %]
-<title>Set library and desk &rsaquo; Circulation &rsaquo; Koha</title>
-[% ELSE %]
-<title>Set library &rsaquo; Circulation &rsaquo; Koha</title>
-[% END %]
+<title>[% FILTER collapse %]
+    [% IF Koha.Preference('UseCirculationDesks') %]
+        [% t("Set library and desk") | html %] &rsaquo;
+    [% ELSE %]
+        [% t("Set library") | html %] &rsaquo;
+    [% END %]
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     .noshow {display: none;}

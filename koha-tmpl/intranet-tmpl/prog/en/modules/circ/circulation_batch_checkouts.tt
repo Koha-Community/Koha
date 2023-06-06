@@ -5,16 +5,18 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
-<title>
+<title>[% FILTER collapse %]
     [% IF patron %]
-        Batch check out to [% INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 %] &rsaquo;
+        [% t("Batch check out to") | html %] [% INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 %] &rsaquo;
     [% END %]
 
-    Circulation &rsaquo; Koha
-</title>
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

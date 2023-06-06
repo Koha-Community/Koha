@@ -7,6 +7,7 @@
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% SET article_requests_view = 1 %]
 [% SET biblionumber = biblio.biblionumber %]
@@ -15,7 +16,11 @@
 [% SET categories = Categories.all.unblessed %]
 [% SET columns = ['name', 'address', 'cardnumber', 'dateofbirth', 'category', 'branch', 'phone'] %]
 [% PROCESS "patron-search.inc" %]
-<title>Request article &rsaquo; Circulation &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Request article") | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

@@ -18,11 +18,16 @@
 [% SET categories = Categories.all.unblessed %]
 [% SET columns = ['name', 'cardnumber', 'dateofbirth', 'category', 'branch', 'address', 'phone'] %]
 [% PROCESS "patron-search.inc" %]
-[% UNLESS ( multi_hold ) %]
-    <title>Place a hold on [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; Holds &rsaquo; Circulation &rsaquo; Koha</title>
-[% ELSE %]
-    <title>Confirm holds &rsaquo; Holds &rsaquo; Circulation &rsaquo; Koha</title>
-[% END %]
+<title>[% FILTER collapse %]
+    [% UNLESS ( multi_hold ) %]
+        [% t("Place a hold on") | html %] [% INCLUDE 'biblio-title-head.inc' %] &rsaquo;
+    [% ELSE %]
+        [% t("Confirm holds") | html %] &rsaquo;
+    [% END %]
+    [% t("Holds") | html %] &rsaquo;
+    [% t("Circulation") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
