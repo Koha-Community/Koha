@@ -3,12 +3,27 @@
 [% USE KohaDates %]
 [% USE TablesSettings %]
 [% USE HtmlTags %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency | html %]'[% ELSE %]New currency[% END %][% END %]
-[% IF op == 'delete_confirm' %]Confirm deletion of currency '[% currency.currency | html %]'[% END %]
-[% IF op == 'list' %]Currencies[% END %] &rsaquo; Currencies and exchange rates &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% IF currency %]
+            [% tx("Modify currency '{currency}'", { currency = currency.currency }) | html %]
+        [% ELSE %]
+            [% t("New currency") | html %]
+        [% END %]
+    [% END %] &rsaquo;
+    [% IF op == 'delete_confirm' %]
+        [% tx("Confirm deletion of currency '{currency}'", { currency = currency.currency }) | html %]
+    [% END %]
+    [% IF op == 'list' %]
+        [% t("Currencies") | html %]
+    [% END %] &rsaquo;
+    [% t("Currencies and exchange rates") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

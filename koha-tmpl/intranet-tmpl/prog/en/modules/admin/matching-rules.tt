@@ -1,19 +1,23 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF ( matching_rule_form ) %]
         [% IF ( edit_matching_rule ) %]
-            Modify record matching rule &rsaquo; [% ELSE %]
-            Add record matching rule &rsaquo; [% END %]
+            [% t("Modify record matching rule") | html %] &rsaquo;
+        [% ELSE %]
+            [% t("Add record matching rule") | html %] &rsaquo;
+        [% END %]
     [% END %]
-
     [% IF ( delete_matching_rule_form ) %]
-        Confirm deletion of record matching rule &quot;[% code | html %]&quot; &rsaquo; [% END %]
-
-    Record matching rules &rsaquo; Administration &rsaquo; Koha
-</title>
+        [% tx("Confirm deletion of record matching rule '{code}'", { code = code }) | html %] &rsaquo;
+    [% END %]
+    [% t("Record matching rules") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% BLOCK norms_text %]

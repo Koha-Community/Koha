@@ -3,9 +3,14 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE HtmlId %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>System preferences &rsaquo; Administration &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("System preferences") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.min.css") | $raw %]
 [% Asset.css("css/preferences.css") | $raw %]

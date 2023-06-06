@@ -1,23 +1,27 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF ( add_form ) %]
-    [% IF heading_add_tag_p %]
-        Add tag [% searchfield | html %]
-    [% ELSE %]
-        Modify tag [% searchfield | html %]
-    [% END %] &rsaquo; [% END %]
-
-[% IF ( delete_confirm ) %]
-    Confirm deletion of tag '[% searchfield | html %]' &rsaquo; [% END %]
-
-[% IF ( delete_confirmed ) %]
-    Data deleted &rsaquo; [% END %]
-MARC frameworks &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF ( add_form ) %]
+        [% IF heading_add_tag_p %]
+            [% tx("Add tag {searchfield}", { searchfield = searchfield }) | html %]
+        [% ELSE %]
+            [% tx("Modify tag {searchfield}", { searchfield = searchfield }) | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% IF ( delete_confirm ) %]
+        [% tx("Confirm deletion of tag {searchfield}", { searchfield = searchfield }) | html %] &rsaquo;
+    [% END %]
+    [% IF ( delete_confirmed ) %]
+        [% t("Data deleted") | html %] &rsaquo;
+    [% END %]
+    [% t("MARC frameworks") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

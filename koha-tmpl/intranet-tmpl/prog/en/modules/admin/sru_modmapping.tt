@@ -1,8 +1,12 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>SRU search fields mapping for bibliographic records &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("SRU search fields mapping for bibliographic records") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

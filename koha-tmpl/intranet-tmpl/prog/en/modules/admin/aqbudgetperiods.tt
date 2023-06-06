@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [%- BLOCK action_menu %]
     <div class="btn-group dropup">
@@ -40,34 +41,33 @@
     [% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
 [% END %]
 
-<title>
+<title>[% FILTER collapse %]
     [% IF ( add_form ) %]
         [% IF ( budget_period_id ) %]
-            Modify budget [% budget_period_description | html %]
+            [% tx("Modify budget {budget_period_description}", { budget_period_description = budget_period_description }) | html %]
         [% ELSE %]
-            Add budget
-        [% END %] &rsaquo; [% END %]
-
+            [% t("Add budget") | html %]
+        [% END %] &rsaquo;
+    [% END %]
     [% IF ( duplicate_form ) %]
-        Duplicate budget &rsaquo; [% END %]
-
+        [% t("Duplicate budget") | html %] &rsaquo;
+    [% END %]
     [% IF ( delete_confirm ) %]
-            Delete budget '[% budget_period_description | html %]'? &rsaquo; [% END %]
-
+        [% tx("Delete budget '{budget_period_description}'?", { budget_period_description = budget_period_description }) | html %] &rsaquo;
+    [% END %]
     [% IF ( delete_confirmed ) %]
-        Data deleted &rsaquo; [% END %]
-
+        [% t("Data deleted") | html %] &rsaquo;
+    [% END %]
     [% IF close_form %]
-      Close budget [% budget_period_description | html %] &rsaquo; [% END %]
-
+        [% tx("Close budget {budget_period_description}", { budget_period_description = budget_period_description }) | html %] &rsaquo;
+    [% END %]
     [% IF closed %]
-      Budget [% budget_period_description | html %] closed &rsaquo; [% END %]
-
-    Budgets &rsaquo; Administration &rsaquo; Koha
-
-</title>
-
-
+        [% tx("Budget {budget_period_description} closed", { budget_period_description = budget_period_description }) | html %] &rsaquo;
+    [% END %]
+    [% t("Budgets") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 </head>
 
 <body id="admin_aqbudgetperiods" class="admin">

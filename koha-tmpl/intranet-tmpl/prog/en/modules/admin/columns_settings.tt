@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK pagelist %]
     [% IF module.keys and module.keys.size > 1 %]
@@ -162,7 +163,11 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Table settings &rsaquo; Administration &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Table settings") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     caption {

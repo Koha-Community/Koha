@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK pluginlist %]
 <div class="pluginlist">
@@ -23,7 +24,11 @@
 </div>
 [% END %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Did you mean? &rsaquo; Administration &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Did you mean?") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

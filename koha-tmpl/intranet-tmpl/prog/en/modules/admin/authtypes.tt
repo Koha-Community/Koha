@@ -1,17 +1,22 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF op == 'add_form' %]
-    [% IF authority_type.authtypecode.defined %]
-        Modify authority type
-    [% ELSE %]
-        New authority type
-    [% END %] &rsaquo; [% ELSIF op == 'delete_confirm' %]
-    Confirm deletion of authority type &rsaquo; [% END %]
-Authority types &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% IF authority_type.authtypecode.defined %]
+            [% t("Modify authority type") | html %]
+        [% ELSE %]
+            [% t("New authority type") | html %]
+        [% END %] &rsaquo;
+    [% ELSIF op == 'delete_confirm' %]
+        [% t("Confirm deletion of authority type") | html %] &rsaquo;
+    [% END %]
+    [% t("Authority types") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

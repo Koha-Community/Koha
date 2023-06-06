@@ -1,18 +1,23 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF ean_form %]
-    [% IF ean %]
-        Modify library EAN
-    [% ELSE %]
-        Add new library EAN
-    [% END %] &rsaquo; [% END %]
-[% IF delete_confirm %]
-    Confirm deletion of EAN &rsaquo; [% END %]
-Library EANs &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF ean_form %]
+        [% IF ean %]
+            [% t("Modify library EAN") | html %]
+        [% ELSE %]
+            [% t("Add new library EAN") | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% IF delete_confirm %]
+        [% t("Confirm deletion of EAN") | html %] &rsaquo;
+    [% END %]
+    [% t("Library EANs") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_edi_ean" class="admin">

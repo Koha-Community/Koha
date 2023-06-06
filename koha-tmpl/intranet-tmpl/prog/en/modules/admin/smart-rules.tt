@@ -7,6 +7,7 @@
 [% USE ItemTypes %]
 [% USE CirculationRules %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 
 [% SET branchcode = humanbranch || undef %]
@@ -24,7 +25,11 @@
 [% itemtypes.push(undef) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Circulation and fine rules &rsaquo; Administration &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Circulation and fine rules") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

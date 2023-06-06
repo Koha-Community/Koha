@@ -5,25 +5,31 @@
 [% USE AuthorisedValues %]
 [% USE Price %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF op == 'add_form' %]
-    [% IF ( itemtype ) %]
-        Modify item type '[% itemtype.itemtype | html %]'
-    [% ELSE %]
-        Add item type
-    [% END %] &rsaquo; [% END %]
-[% IF op == 'delete_confirm' %]
-    [% IF ( total ) %]
-        Cannot delete item type '[% itemtype.itemtype | html %]'
-    [% ELSE %]
-        Delete item type '[% itemtype.itemtype | html %]'?
-    [% END %] &rsaquo; [% END %]
-[% IF op == 'delete_confirmed' %]
-    Data deleted &rsaquo; [% END %]
-Item types &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% IF ( itemtype ) %]
+            [% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
+        [% ELSE %]
+            [% t("Add item type") | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% IF op == 'delete_confirm' %]
+        [% IF ( total ) %]
+            [% tx("Cannot delete item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
+        [% ELSE %]
+            [% tx("Delete item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% IF op == 'delete_confirmed' %]
+        [% t("Data deleted") | html %] &rsaquo;
+    [% END %]
+    [% t("Item types") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>

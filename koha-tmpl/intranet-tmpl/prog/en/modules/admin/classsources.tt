@@ -1,26 +1,32 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF op == 'add_source' %]
-    [% IF class_source %]
-        Modify classification source
-    [% ELSE %]
-        Add classification source
-    [% END %] &rsaquo; [% ELSIF op == 'add_sort_rule' %]
-    [% IF sort_rule %]
-        Modify filing rule
-    [% ELSE %]
-        Add filing rule
-    [% END %] &rsaquo; [% ELSIF op == 'add_split_rule' %]
-    [% IF split_rule %]
-        Modify splitting rule
-    [% ELSE %]
-        Add splitting rule
-    [% END %] &rsaquo; [% END %]
-Classification sources &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_source' %]
+        [% IF class_source %]
+            [% t("Modify classification source") | html %]
+        [% ELSE %]
+            [% t("Add classification source") | html %]
+        [% END %] &rsaquo;
+    [% ELSIF op == 'add_sort_rule' %]
+        [% IF sort_rule %]
+            [% t("Modify filing rule") | html %]
+        [% ELSE %]
+            [% t("Add filing rule") | html %]
+        [% END %] &rsaquo;
+    [% ELSIF op == 'add_split_rule' %]
+        [% IF split_rule %]
+            [% t("Modify splitting rule") | html %]
+        [% ELSE %]
+            [% t("Add splitting rule") | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% t("Classification sources") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     #button_add,

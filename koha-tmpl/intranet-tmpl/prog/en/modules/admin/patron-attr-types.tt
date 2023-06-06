@@ -4,20 +4,24 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE scalar %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF ( attribute_type_form ) %]
-    [% IF ( edit_attribute_type ) %]
-        Modify patron attribute type &rsaquo; [% ELSE %]
-        Add patron attribute type &rsaquo; [% END %]
-[% END %]
-
-[% IF ( delete_attribute_type_form ) %]
-    Confirm deletion of patron attribute type &quot;[% code | html %]&quot; &rsaquo; [% END %]
-
-Patron attribute types &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF ( attribute_type_form ) %]
+        [% IF ( edit_attribute_type ) %]
+            [% t("Modify patron attribute type") | html %] &rsaquo;
+        [% ELSE %]
+            [% t("Add patron attribute type") | html %] &rsaquo;
+        [% END %]
+    [% END %]
+    [% IF ( delete_attribute_type_form ) %]
+        [% tx("Confirm deletion of patron attribute type '{code}'", { code = code }) | html %] &rsaquo;
+    [% END %]
+    [% t("Patron attribute types") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

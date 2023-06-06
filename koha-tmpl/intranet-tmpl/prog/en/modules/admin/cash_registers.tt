@@ -2,18 +2,23 @@
 [% USE Asset %]
 [% USE Branches %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF op == 'add_form' %]
-    [% IF cash_register %]
-        Modify cash register
-    [% ELSE %]
-        New cash register [% cash_register.id | html %]
-    [% END %] &rsaquo; [% ELSIF op == 'delete_confirm' %]
-    Confirm deletion of cash register '[% cash_register.id | html %]' &rsaquo; [% END %]
-Cash registers &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% IF cash_register %]
+            [% tx("Modify cash register {cash_register}", { cash_register = cash_register.id }) | html %]
+        [% ELSE %]
+            [% t("New cash register") | html %]
+        [% END %] &rsaquo;
+    [% ELSIF op == 'delete_confirm' %]
+        [% tx("Confirm deletion of cash register '{cash_register}'", { cash_register = cash_register.id }) | html %] &rsaquo;
+    [% END %]
+    [% t("Cash registers") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

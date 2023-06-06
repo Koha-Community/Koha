@@ -1,13 +1,22 @@
 [% USE AuthorisedValues %]
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% SWITCH op %]
-        [% CASE 'add_form' %][% IF field %]Modify additional field '[% field.name | html %]'[% ELSE %]Add additional field[% END %]
-        [% CASE %]Manage additional fields
-    [% END %] &rsaquo; Administration &rsaquo; Koha
-</title>
+        [% CASE 'add_form' %]
+            [% IF field %]
+                [% tx("Modify additional field '{field_name}'", { field_name = field.name }) | html %]
+            [% ELSE %]
+                [% t("Add additional field") | html %]
+            [% END %]
+        [% CASE %]
+            [% t("Manage additional fields") | html %]
+    [% END %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

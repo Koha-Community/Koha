@@ -1,9 +1,15 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Clone circulation and fine rules &rsaquo; Circulation and fine rules &rsaquo; Administration &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Clone circulation and fine rules") | html %] &rsaquo;
+    [% t("Circulation and fine rules") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_clone-rules" class="admin">

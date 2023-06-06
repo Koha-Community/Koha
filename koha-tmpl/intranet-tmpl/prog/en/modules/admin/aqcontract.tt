@@ -1,21 +1,36 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF ( add_form ) %]
-    [% IF ( contractnumber ) %]Modify contract '[% contractname | html %]'
-[% ELSE %]New contract[% END %]
-[% END %]
-[% IF ( else ) %]Contracts of [% booksellername | html %][% END %]
-[% IF ( add_validate ) %]Data recorded[% END %]
-[% IF ( delete_confirm ) %]Confirm deletion of contract '[% contractnumber | html %]'[% END %]
-[% IF ( delete_confirmed ) %]Contract deleted[% END %]
- &rsaquo; Contracts &rsaquo; Acquisitions &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF ( add_form ) %]
+        [% IF ( contractnumber ) %]
+            [% tx("Modify contract {contractname}", { contractname = contractname }) | html %]
+        [% ELSE %]
+            [% t("New contract") | html %]
+        [% END %]
+    [% END %]
+    [% IF ( else ) %]
+        [% tx("Contracts of {vendor}", { vendor = booksellername }) | html %]
+    [% END %]
+    [% IF ( add_validate ) %]
+        [% t("Data recorded") | html %]
+    [% END %]
+    [% IF ( delete_confirm ) %]
+        [% tx("Confirm deletion of contract '{contractnumber}'", { contractnumber = contractnumber }) | html %]
+    [% END %]
+    [% IF ( delete_confirmed ) %]
+        [% t("Contract deleted") | html %]
+    [% END %] &rsaquo;
+    [% t("Contracts") | html %] &rsaquo;
+    [% t("Acquisitions") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
+
 
 <body id="acq_aqcontract" class="acq">
 [% WRAPPER 'header.inc' %]

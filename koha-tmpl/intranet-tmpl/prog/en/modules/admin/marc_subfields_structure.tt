@@ -1,36 +1,34 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-    [%- IF ( add_form ) -%]
-        [%- IF ( use_heading_flags_p ) -%]
-            [%- IF ( heading_edit_subfields_p ) -%]
-                Edit MARC subfields constraints &rsaquo; MARC subfield structure
-            [%- END -%]
-
-        [%- ELSE -%]
-            [%- action | html -%] &rsaquo; MARC subfield structure
-        [%- END -%]
-
-    [%- END -%]
-
-    [%- IF ( delete_confirm ) -%]
-
-        MARC subfield structure &rsaquo; Confirm deletion of subfield [%- mss.tagsubfield | html -%]
-
-        Confirm deletion of subfield [%- tagsubfield | html -%] &rsaquo; MARC subfield structure
-    [%- END -%]
-
-    [%- IF ( delete_confirmed ) -%]
-        Subfield deleted &rsaquo; MARC subfield structure
-
-    [%- END -%]
-
-    [%- IF ( else ) -%]
-        MARC subfield structure
-    [%- END -%] &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF ( add_form ) %]
+        [% IF ( use_heading_flags_p ) %]
+            [% IF ( heading_edit_subfields_p ) %]
+                [% t("Edit MARC subfields constraints") | html %] &rsaquo;
+                [% t("MARC subfield structure") | html %]
+            [% END %]
+        [% ELSE %]
+            [% action | html %] &rsaquo;
+            [% t("MARC subfield structure") | html %]
+        [% END %]
+    [% END %]
+    [% IF ( delete_confirm ) %]
+        Confirm deletion of subfield [% tagsubfield | html %] &rsaquo;
+        [% t("MARC subfield structure") | html %]
+    [% END %]
+    [% IF ( delete_confirmed ) %]
+        [% t("Subfield deleted") | html %] &rsaquo;
+        [% t("MARC subfield structure") | html %]
+    [% END %]
+    [% IF ( else ) %]
+        [% t("MARC subfield structure") | html %]
+    [% END %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>.constraints::after { content:  " "; clear: both; display:block; }</style>
 </head>

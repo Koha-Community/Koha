@@ -3,10 +3,26 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>[% IF op == 'add_form' %][% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name | html %]'[% END %][% ELSE %]Add fund[% END %] &rsaquo;[% END %] Funds &rsaquo; Administration &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% IF ( budget_id ) %]
+            [% IF ( budget_name ) %]
+                [% tx("Modify fund '{fund_name}'", { fund_name = budget_name }) | html %]
+            [% ELSE %]
+                [% t("Modify fund") | html %]
+            [% END %]
+        [% ELSE %]
+            [% t("Add fund") | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% t("Funds") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

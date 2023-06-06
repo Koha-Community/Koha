@@ -4,9 +4,21 @@
 [% PROCESS 'restriction-types.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF op == 'add_form' %][% IF ( restriction ) %]Modify restriction type '[% PROCESS restriction_type_description restriction_type=restriction %]' &rsaquo; [% ELSE %]New restriction type &rsaquo; [% END %][% END %]
-[% IF op == 'delete_confirm' %]Confirm deletion of restriction type '[% PROCESS restriction_type_description restriction_type=restriction %]' &rsaquo; [% END %]Patron restriction types &rsaquo; Administration &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% IF ( restriction ) %]
+            [% t("Modify restriction type") | html %] '[% PROCESS restriction_type_description restriction_type=restriction %]' &rsaquo;
+        [% ELSE %]
+            [% t("New restriction type") | html %] &rsaquo;
+        [% END %]
+    [% END %]
+    [% IF op == 'delete_confirm' %]
+        [% t("Confirm deletion of restriction type") | html %] '[% PROCESS restriction_type_description restriction_type=restriction %]' &rsaquo;
+    [% END %]
+    [% t("Patron restriction types") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

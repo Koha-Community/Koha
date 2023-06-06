@@ -1,21 +1,24 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF op =='add_form' %]
-       Credit types &rsaquo;
        [% IF credit_type.code %]
-           Modify credit type
+           [% t("Modify credit type") | html %] &rsaquo;
        [% ELSE %]
-           New credit type
+           [% t("New credit type") | html %] &rsaquo;
        [% END %]
+       [% t("Credit types") | html %]
     [% ELSE %]
-       Credit types
-    [% END %] &rsaquo; Administration &rsaquo; Koha
-</title>
+       [% t("Credit types") | html %]
+    [% END %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

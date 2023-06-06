@@ -1,25 +1,27 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE HtmlTags %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 
-[% BLOCK ServerType %]
-    [% IF (server.servertype||type) == 'sru' %]
-        <span>SRU</span>
-    [% ELSIF (server.servertype||type) == 'zed' %]
-        <span>Z39.50</span>
-    [% END %]
+[% IF (server.servertype||type) == 'sru' %]
+    [% SET servertype = "SRU" %]
+[% ELSIF (server.servertype||type) == 'zed' %]
+    [% SET servertype = "Z39.50" %]
 [% END %]
 
-<title>
+<title>[% FILTER collapse %]
     [% IF op == 'edit' %]
-        Modify [% PROCESS ServerType | remove("</*span>") %] server [% server.servername | html %] &rsaquo; [% END %]
-
+        [% tx("Modify {servertype} server {servername}", { servertype = servertype, servername = servername }) | html %] &rsaquo;
+    [% END %]
     [% IF op ==  'add' %]
-        New [% PROCESS ServerType | remove("</*span>") %] server &rsaquo; [% END %]
-
-    Z39.50/SRU servers &rsaquo; Administration &rsaquo; Koha
-</title>
+        [% tx("New {servertype} server", { servertype = servertype }) | html %] &rsaquo;
+    [% END %]
+    [% t("Z39.50/SRU servers") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -42,12 +44,12 @@
 
         [% IF op == 'edit' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Modify [% PROCESS ServerType %] server [% server.servername | html %]</span>
+                <span>Modify [% servertype | html %] server [% server.servername | html %]</span>
            [% END %]
 
         [% ELSIF op == 'add' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>New [% PROCESS ServerType %] server</span>
+                <span>New [% servertype | html %] server</span>
            [% END %]
 
         [% ELSE %]
@@ -78,10 +80,10 @@
         <input type="hidden" name="op" value="add_validated" />
         <input type="hidden" name="servertype" value="[% server.servertype||type||'zed' | html %]"/>
         [% IF op == 'edit' %]
-            <h1>Modify [% PROCESS ServerType %] server</h1>
+            <h1>Modify [% servertype | html %] server</h1>
             <input type="hidden" name="id" value="[% server.id | html %]" />
         [% ELSE %]
-            <h1>New [% PROCESS ServerType %] server</h1>
+            <h1>New [% servertype | html %] server</h1>
         [% END %]
         <fieldset class="rows">
         <ol>

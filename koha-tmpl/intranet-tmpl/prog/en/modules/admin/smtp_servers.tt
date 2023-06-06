@@ -1,14 +1,18 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
-        New SMTP server &rsaquo; [% ELSIF op == 'edit_form' %]
-        Edit SMTP server &rsaquo; [% END %]
-
-    SMTP servers &rsaquo; Administration &rsaquo; Koha
-</title>
+        [% t("New SMTP server") | html %] &rsaquo;
+    [% ELSIF op == 'edit_form' %]
+        [% t("Edit SMTP server") | html %] &rsaquo;
+    [% END %]
+    [% t("SMTP servers") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

@@ -3,7 +3,11 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Search engine configuration (Elasticsearch) &rsaquo; Administration &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Search engine configuration (Elasticsearch)") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
 a.add, a.delete {

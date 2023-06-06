@@ -2,15 +2,19 @@
 [% USE Asset %]
 [% USE Branches %]
 [% USE Categories %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
-        New identity provider &rsaquo; [% ELSIF op == 'edit_form' %]
-        Edit identity provider &rsaquo; [% END %]
-
-    Identity providers &rsaquo; Administration &rsaquo; Koha
-</title>
+        [% t("New identity provider") | html %] &rsaquo;
+    [% ELSIF op == 'edit_form' %]
+        [% t("Edit identity provider") | html %] &rsaquo;
+    [% END %]
+    [% t("Identity providers") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

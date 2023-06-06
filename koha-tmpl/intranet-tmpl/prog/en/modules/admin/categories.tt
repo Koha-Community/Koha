@@ -5,26 +5,27 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
         [% IF ( categorycode ) %]
-            Modify category '[% categorycode | html %]'
+            [% tx("Modify category '{categorycode}'", { categorycode = categorycode }) | html %]
         [% ELSE %]
-            New category
-        [% END %]
-        &rsaquo;
+            [% t("New category") | html %]
+        [% END %] &rsaquo;
     [% END %]
     [% IF op == 'delete_confirm' %]
         [% IF ( patrons_in_category > 0 ) %]
-            Cannot delete: category [% categorycode | html %] in use
+            [% tx("Cannot delete: category '{categorycode}'", { categorycode = categorycode }) | html %]
         [% ELSE %]
-            Confirm deletion of category '[% categorycode | html %]'
-        [% END %]
-        &rsaquo;
+            [% tx("Confirm deletion of category '{categorycode}'", { categorycode = categorycode }) | html %]
+        [% END %] &rsaquo;
     [% END %]
-    Patron categories &rsaquo; Administration &rsaquo; Koha
+    [% t("Patron categories") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>#enrolmentmessage.hint { display : none; }</style>

@@ -1,38 +1,52 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF ( add_form ) %]
         [% IF ( use_heading_flags_p ) %]
             [% IF ( heading_modify_tag_p ) %]
-                Modify tag &rsaquo; [% IF ( authtypecode ) %]
-                    [% authtypecode | html %] Framework
+                [% t("Modify tag ") | html %] &rsaquo;
+                [% IF ( authtypecode ) %]
+                    [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
                 [% ELSE %]
-                    Default framework
-                [% END %] &rsaquo; [% END %]
+                    [% t("Default framework") | html %]
+                [% END %] &rsaquo;
+            [% END %]
             [% IF ( heading_add_tag_p ) %]
-                New tag &rsaquo; [% IF ( authtypecode ) %]
-                    [% authtypecode | html %] Framework
+                [% t("New tag") | html %] &rsaquo;
+                [% IF ( authtypecode ) %]
+                    [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
                 [% ELSE %]
-                    Default framework
-                [% END %] &rsaquo; [% END %]
+                    [% t("Default framework") | html %]
+                [% END %] &rsaquo;
+            [% END %]
         [% ELSE %]
-           [% action | html %] &rsaquo; [% END %]
+           [% action | html %] &rsaquo;
+        [% END %]
     [% END %]
     [% IF ( delete_confirm ) %]
-        Confirm deletion &rsaquo; [% IF ( authtypecode ) %]
-            [% authtypecode | html %] Framework
-        [% ELSE %]Default framework
-        [% END %] &rsaquo; [% END %]
+        [% t("Confirm deletion") | html %] &rsaquo;
+        [% IF ( authtypecode ) %]
+            [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
+        [% ELSE %]
+            [% t("Default framework") | html %]
+        [% END %] &rsaquo;
+    [% END %]
     [% IF ( delete_confirmed ) %]
-        Data deleted &rsaquo; [% IF ( authtypecode ) %]
-            [% authtypecode | html %] Framework
-        [% ELSE %]Default framework
-        [% END %] &rsaquo; [% END %]
-Authority MARC framework &rsaquo; Administration &rsaquo; Koha
-</title>
+        [% t("Data deleted") | html %] &rsaquo;
+        [% IF ( authtypecode ) %]
+            [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
+        [% ELSE %]
+            [% t("Default framework") | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% t("Authority MARC framework") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 </head>

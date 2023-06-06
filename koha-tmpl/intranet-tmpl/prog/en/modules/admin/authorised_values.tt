@@ -1,18 +1,27 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
-        [% IF ( action_modify ) %]Modify authorized value &rsaquo; [% END %]
-        [% IF ( action_add_value ) %]New authorized value &rsaquo; [% END %]
-        [% IF ( action_add_category ) %]New category &rsaquo; [% END %]
+        [% IF ( action_modify ) %]
+            [% t("Modify authorized value") | html %] &rsaquo;
+        [% END %]
+        [% IF ( action_add_value ) %]
+            [% t("New authorized value") | html %] &rsaquo;
+        [% END %]
+        [% IF ( action_add_category ) %]
+            [% t("New category") | html %] &rsaquo;
+        [% END %]
         [% IF ( action_modify || action_add_value ) %]
-            Authorized values for category [% category_name | html %] &rsaquo;
+            [% tx("Authorized values for category  {category_name}", { category_name = category_name }) | html %] &rsaquo;
         [% END %]
     [% END %]
-    Authorized values &rsaquo; Administration &rsaquo; Koha
-</title>
+    [% t("Authorized values") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% FILTER collapse %]
