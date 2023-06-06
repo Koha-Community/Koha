@@ -1,6 +1,11 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Cancel order &rsaquo; Acquisition &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Cancel order") | html %] &rsaquo;
+    [% t("Acquisition") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

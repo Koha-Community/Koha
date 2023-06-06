@@ -3,38 +3,44 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF ( batch_details ) %]
-    Batch [% import_batch_id | html %]
-[% ELSE %]
-    Batch list
-[% END %] &rsaquo; Order staged MARC records &rsaquo; Acquisitions &rsaquo; Koha
-</title>
-<style>
-    .biblio {
-        padding: 0 .5em;
-        margin:0;
-    }
-    .order_details {
-        display: flex;
-        justify-content: space-between;
-    }
-    .biblio .actions {
-        float: right;
-    }
-    @media (max-width: 992px) {
+<title>[% FILTER collapse %]
+    [% IF ( batch_details ) %]
+        [% tx('Batch {batch_id}', { batch_id = import_batch_id } ) | html %]
+    [% ELSE %]
+        [% t("Batch list") | html %]
+    [% END %] &rsaquo;
+    [% t("Order staged MARC records") | html %] &rsaquo;
+    [% t("Acquisitions") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
+[% FILTER collapse %]
+    <style>
+        .biblio {
+            padding: 0 .5em;
+            margin:0;
+        }
         .order_details {
-            display: block;
+            display: flex;
+            justify-content: space-between;
         }
-    }
-    @media (max-width: 767px) {
-        #dataPreview {
-            margin: 0;
-            width : auto;
+        .biblio .actions {
+            float: right;
         }
-    }
-</style>
+        @media (max-width: 992px) {
+            .order_details {
+                display: block;
+            }
+        }
+        @media (max-width: 767px) {
+            #dataPreview {
+                margin: 0;
+                width : auto;
+            }
+        }
+    </style>
+[% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [%# As long as cataloging plugins rely on 'script' tags added inline, JS must be in the header %]

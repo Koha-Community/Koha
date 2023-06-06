@@ -5,8 +5,18 @@
 [% USE Price %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %] &rsaquo; Basket [% basketno | html %] &rsaquo; Acquisitions &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( ordernumber ) %]
+        [% tx("Modify order details (line #{ordernumber})", { ordernumber = ordernumber }) | html %]
+    [% ELSE %]
+        [% t("New order") | html %]
+    [% END %] &rsaquo;
+    [% tx("Basket {basketnumber}", { basketnumber = basketno }) | html %] &rsaquo;
+    [% t("Acquisitions") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>

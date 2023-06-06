@@ -3,6 +3,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% BLOCK edit_contact %]
     <ol id="contact-form">
         <input type="hidden" name="contact_id" value="[% contact.id | html %]" />
@@ -144,7 +145,10 @@
 
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Vendor [% name | html %] &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Vendor {vendor}", { vendor = name }) | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
 div.rows p{ margin-left: 1rem; }

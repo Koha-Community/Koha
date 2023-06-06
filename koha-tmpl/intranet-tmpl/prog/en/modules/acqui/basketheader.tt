@@ -3,14 +3,19 @@
 [% USE Branches %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF ( add_form ) %]
-        [% IF ( basketno ) %]Edit basket '[% basketname | html %]'
-        [% ELSE %]Add a basket to [% booksellername | html %]
+        [% IF ( basketno ) %]
+            [% tx("Edit basket '{basketname}'", { basketname = basketname }) | html %]
+        [% ELSE %]
+            [% tx("Add basket to {vendor}", { vendor = booksellername }) | html %]
         [% END %]
-    [% END %] &rsaquo; Acquisitions &rsaquo; Koha
-</title>
+    [% END %] &rsaquo;
+    [% t("Acquisitions") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

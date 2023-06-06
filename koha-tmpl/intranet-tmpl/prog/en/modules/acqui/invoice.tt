@@ -5,7 +5,7 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
-
+[% PROCESS 'i18n.inc' %]
 [% BLOCK fund_dropdown %]
     <select id="[% form_id | html %]" name="[% form_name | html %]" class="fund_dropdown" data-selected="[% selected | html %]">
     </select>
@@ -14,7 +14,11 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Invoice &rsaquo; Acquisitions &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Invoice") | html %] &rsaquo;
+    [% t("Acquisitions") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 </head>

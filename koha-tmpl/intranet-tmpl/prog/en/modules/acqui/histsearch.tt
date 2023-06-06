@@ -4,8 +4,18 @@
 [% USE TablesSettings %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( order_loop ) %]Orders search &rsaquo; Search results[% ELSE %]Order search[% END %] &rsaquo; Acquisitions &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( order_loop ) %]
+        [% t("Orders search") | html %] &rsaquo;
+        [% t("Search results") | html %]
+    [% ELSE %]
+        [% t("Order search") | html %]
+    [% END %] &rsaquo;
+    [% t("Acquisitions") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

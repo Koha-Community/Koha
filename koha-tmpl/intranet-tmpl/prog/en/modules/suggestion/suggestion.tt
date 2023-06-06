@@ -1,4 +1,3 @@
-[% PROCESS 'i18n.inc' %]
 [% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
@@ -6,23 +5,23 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF op == 'save' %]
         [% IF ( suggestionid ) %]
-            Edit suggestion #[% suggestionid | html %] &rsaquo; Suggestions
+            [% tx("Edit suggestion #{suggestion_number}", { suggestion_number = suggestionid }) | html %] &rsaquo;
         [% ELSE %]
-            Add suggestion &rsaquo; Suggestions
+            Add suggestion &rsaquo;
         [% END %]
-
     [% ELSIF ( op == 'show' ) %]
-           Show suggestion #[% suggestionid | html %] &rsaquo; Suggestions
-
-    [% ELSE %]
-        Suggestions management
-    [% END %] &rsaquo; Acquisitions &rsaquo; Koha
-</title>
+        [% tx("Show suggestion #{suggestion_number}", { suggestion_number = suggestionid }) | html %] &rsaquo;
+    [% END %]
+    [% t("Suggestions") | html %] &rsaquo;
+    [% t("Acquisitions") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF op == 'else' %]
     [% FILTER collapse %]

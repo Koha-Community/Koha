@@ -3,8 +3,12 @@
 [% USE Branches %]
 [% USE Price %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Basket grouping for [% booksellername | html %] &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Basket grouping for '{vendor}'", { vendor = booksellername }) %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
 <script>

@@ -3,12 +3,16 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% UNLESS blocking_error %]
-Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders &rsaquo; [% END %]
-Acquisitions &rsaquo; Koha
-</title>
+<title>[% FILTER collapse %]
+    [% UNLESS blocking_error %]
+        [% tx("Basket {basketnumber}", { basketnumber = basket.basketno }) | html %] &rsaquo;
+        [% t("Duplicate existing orders") | html %] &rsaquo;
+    [% END %]
+    [% t("Acquisitions") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     .picked_to_duplicate > td { background-color: #bcdb89 !important; }
