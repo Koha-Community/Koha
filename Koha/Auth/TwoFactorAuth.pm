@@ -75,7 +75,7 @@ sub new {
         Koha::Exceptions::MissingParameter->throw("No secret passed or patron has no secret");
     }
 
-    my $issuer = $patron->library->branchname;
+    my $issuer = Encode::encode_utf8($patron->library->branchname);
     my $key_id = sprintf "%s_%s",
       $issuer, ( $patron->email || $patron->userid );
 
