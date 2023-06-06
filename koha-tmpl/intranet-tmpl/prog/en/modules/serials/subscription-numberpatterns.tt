@@ -1,8 +1,18 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Numbering patterns &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( new ) %]
+        [% t("New numbering pattern") | html %] &rsaquo;
+    [% ELSIF ( modify ) %]
+        [% tx("Modify numbering pattern '{pattern}'", { pattern = label }) | html %] &rsaquo;
+    [% END %]
+    [% t("Numbering patterns") | html %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -27,7 +37,7 @@
             [% END %]
         [% ELSIF ( modify ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Modifying numbering pattern '[% label | html %]'</span>
+                [% tx("Modify numbering pattern '{pattern}'", { pattern = label }) | html %]
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -52,7 +62,7 @@
               </div>
             [% END %]
           [% ELSE %]
-            <h1>Modify pattern: [% label | html %]</h1>
+            <h1>[% tx("Modify numbering pattern '{pattern}'", { pattern = label }) | html %]</h1>
             [% IF (error_existing_numberpattern) %]
               <div class="alert alert-warning">
                 <p>Another pattern with this name already exists.</p>

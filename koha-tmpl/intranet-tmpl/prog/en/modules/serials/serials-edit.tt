@@ -1,8 +1,17 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Serial edition [% bibliotitle | html %] &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Serial edition") | html %]
+    [% IF ( callnumber ) %]
+         ([% callnumber | html %])
+    [% END %] &rsaquo;
+    [% bibliotitle | html %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]
 [% INCLUDE 'calendar.inc' %]
@@ -132,6 +141,8 @@ $(document).ready(function() {
     [% FOREACH subscription IN subscriptions %]
     <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
     [% END %]
+
+<div class="page-section">
 	<table>
 	<tr>
 		<th>Numbered</th>
@@ -491,6 +502,8 @@ $(document).ready(function() {
 [% END %]
 
 </table>
+</div> <!-- /.page-section -->
+
     <fieldset class="action">
         <div class="btn-group"><input type="submit" value="Save" class="btn btn-default"  accesskey="w" /></div>
         [% UNLESS ( serialsadditems ) %]&nbsp;&nbsp;

@@ -1,8 +1,13 @@
-[% USE Koha %]
 [% USE raw %]
+[% USE Koha %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Routing slip preview &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Routing slip for {title}", { title = title }) | html %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style media="print">
      #ser_routing-preview-slip { min-width:0; width:auto; }
@@ -11,6 +16,7 @@
 
 <body id="ser_routing-preview-slip" class="ser">
     <div class="container-fluid">
+        <h1>[% tx("Routing slip for {title}", { title = title }) | html %]</h1>
         <div class="page-section">
 <table>
     <tr>

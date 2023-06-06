@@ -1,9 +1,14 @@
 [% USE raw %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Check expiration &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Check expiration") | html %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -71,18 +76,12 @@
 </form>
 
 [% IF ( subscriptions_loop ) %]
-<p>
-    <strong>[% numsubscription | html %]</strong> subscription(s)
-        [% IF ( title ) %]
-        with title matching <span class="title">[% title | html %]</class>
-        [% IF ( issn ) %]and [% END %]
-    [% END %]
-    [% IF ( issn ) %]
-        with ISSN matching <strong>[% issn | html %]</strong>
-    [% END %]
-        will expire before <strong>[% date | $KohaDates %]</strong>
-</p>
+<h2>
+    [% expirydate = date | $KohaDates %]
+    [% tnx("Your search returned 1 subscription expiring before {date}", "Your search returned {count} subscriptions expiring before {date}", numsubscription, { date = expirydate, count = numsubscription }) %]
+</h2>
 
+<div class="page-section">
 <div class="checkexpiration-table_table_controls">
     <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> |
     <a href="#" class="ClearAll"><i class="fa fa-times"></i> Clear all</a>
@@ -138,6 +137,7 @@
         </tr>
     [% END %]
     </table>
+    </div> <!-- .page-section -->
 [% ELSIF searched %]
     <p>No results for your query</p>
 [% END %]
