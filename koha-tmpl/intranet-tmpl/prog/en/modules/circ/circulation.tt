@@ -916,7 +916,7 @@
         table_settings_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %]
         table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'relatives-issues-table', 'json' ) | $raw %]
         table_settings_borrowers_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
-        table_settings_holds_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'holds_table', 'json' ) | $raw %]
+        table_settings_holds_table = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'holds-table', 'json' ) | $raw %]
 
         [% IF borrowernumber and patron %]
             if( Cookies.get("holdfor") != [% patron.borrowernumber | html %]){

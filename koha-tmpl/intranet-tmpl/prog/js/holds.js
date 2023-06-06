@@ -128,7 +128,7 @@ $(document).ready(function() {
             var title;
             holdsTable = KohaTable("holds-table", {
                 "bAutoWidth": false,
-                "dom": "rt",
+                "dom": '<"table_controls"B>rt',
                 "aoColumns": [
                     {
                         "data": { _: "reservedate_formatted", "sort": "reservedate" }
