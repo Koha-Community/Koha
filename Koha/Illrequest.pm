@@ -1895,20 +1895,21 @@ sub TO_JSON {
 
 sub to_api_mapping {
     return {
-        illrequest_id  => 'ill_request_id',
-        borrowernumber => 'patron_id',
-        branchcode     => 'library_id',
-        status_alias   => 'status_av',
-        placed         => 'requested_date',
-        replied        => 'replied_date',
-        updated        => 'timestamp',
-        completed      => 'completed_date',
-        accessurl      => 'access_url',
-        price_paid     => 'paid_price',
-        notesopac      => 'opac_notes',
-        notesstaff     => 'staff_notes',
-        orderid        => 'ill_backend_request_id',
-        backend        => 'ill_backend_id',
+        accessurl         => 'access_url',
+        backend           => 'ill_backend_id',
+        borrowernumber    => 'patron_id',
+        branchcode        => 'library_id',
+        completed         => 'completed_date',
+        deleted_biblio_id => undef,
+        illrequest_id     => 'ill_request_id',
+        notesopac         => 'opac_notes',
+        notesstaff        => 'staff_notes',
+        orderid           => 'ill_backend_request_id',
+        placed            => 'requested_date',
+        price_paid        => 'paid_price',
+        replied           => 'replied_date',
+        status_alias      => 'status_av',
+        updated           => 'timestamp',
     };
 }
 
