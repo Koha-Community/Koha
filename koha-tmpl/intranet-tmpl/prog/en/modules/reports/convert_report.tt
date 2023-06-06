@@ -1,5 +1,11 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>Convert report &rsaquo; Reports &rsaquo; Koha</title>
+    <title>[% FILTER collapse %]
+        [% t("Convert report") | html %] &rsaquo;
+        [% t("Reports") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body id="rep_report_convert" class="rep">

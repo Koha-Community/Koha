@@ -1,7 +1,15 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( do_it ) %]Acquisitions statistics &rsaquo; Results[% ELSE %]Acquisitions statistics[% END %] &rsaquo; Reports &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF( do_it ) %]
+        [% t("Results") | html %] &rsaquo;
+    [% END %]
+    [% t("Acquisitions statistics") | html %] &rsaquo;
+    [% t("Reports") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

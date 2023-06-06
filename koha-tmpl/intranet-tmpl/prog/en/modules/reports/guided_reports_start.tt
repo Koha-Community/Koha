@@ -22,23 +22,39 @@
 
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>
-    [%- IF ( saved1 ) -%]
-        Saved reports &rsaquo; [%- ELSIF ( create ) -%]
-        Create from SQL &rsaquo; [%- ELSIF ( showsql ) -%]
-        SQL view &rsaquo; Saved reports &rsaquo; [%- ELSIF ( execute ) -%]
-        Report [% name | html %] ([% id | html %]) &rsaquo; Saved reports &rsaquo; [%- ELSIF ( editsql ) -%]
-        Edit report [% reportname | html %] ([% id | html %]) &rsaquo; Saved reports &rsaquo; [%- END -%]
+<title>[% FILTER collapse %]
+    [% IF ( saved1 ) %]
+        [% t("Saved reports") | html %] &rsaquo;
+    [% ELSIF ( create ) %]
+        [% t("Create from SQL") | html %] &rsaquo;
+    [% ELSIF ( showsql ) %]
+        [% t("SQL view") | html %] &rsaquo;
+        [% t("Saved reports") | html %] &rsaquo;
+    [% ELSIF ( execute ) %]
+        [% tx("Report {reportname} ({id})", { reportname = name, id = id }) | html %] &rsaquo;
+        [% t("Saved reports") | html %] &rsaquo;
+    [% ELSIF ( editsql ) %]
+        [% tx("Edit report {reportname} ({id})", { reportname = reportname, id = id }) | html %] &rsaquo;
+        [% t("Saved reports") | html %] &rsaquo;
+    [% END %]
 
-    [%- IF ( build1 ) -%]
-        Build a report, step 1 of 6: Choose a module &rsaquo; [%- ELSIF ( build2 ) -%]
-        Build a report, step 2 of 6: Pick a report type &rsaquo; [%- ELSIF ( build3 ) -%]
-        Build a report, step 3 of 6: Select columns for display &rsaquo; [%- ELSIF ( build4 ) -%]
-        Build a report, step 4 of 6: Select criteria to limit on &rsaquo; [%- ELSIF ( build5 ) -%]
-        Build a report, step 5 of 6: Pick which columns to total &rsaquo; [%- ELSIF ( build6 ) -%]
-        Build a report, step 6 of 6: Select how you want the report ordered &rsaquo; [%- END -%]
-    Guided reports wizard &rsaquo; Reports &rsaquo; Koha
-</title>
+    [% IF ( build1 ) %]
+        [% t("Build a report, step 1 of 6: Choose a module") | html %] &rsaquo;
+    [% ELSIF ( build2 ) %]
+        [% t("Build a report, step 2 of 6: Pick a report type") | html %] &rsaquo;
+    [% ELSIF ( build3 ) %]
+        [% t("Build a report, step 3 of 6: Select columns for display") | html %] &rsaquo;
+    [% ELSIF ( build4 ) %]
+        [% t("Build a report, step 4 of 6: Select criteria to limit on") | html %] &rsaquo;
+    [% ELSIF ( build5 ) %]
+        [% t("Build a report, step 5 of 6: Pick which columns to total") | html %] &rsaquo;
+    [% ELSIF ( build6 ) %]
+        [% t("Build a report, step 6 of 6: Select how you want the report ordered") | html %] &rsaquo;
+    [% END %]
+    [% t("Guided reports wizard") | html %] &rsaquo;
+    [% t("Reports") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/codemirror/codemirror.min.css") | $raw %]

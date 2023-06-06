@@ -4,9 +4,13 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE raw %]
-
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Mana Knowledge Base reports search &rsaquo; Reports &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Mana Knowledge Base reports search") | html %] &rsaquo;
+    [% t("Reports") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/reports.css") | $raw %]
 </head>

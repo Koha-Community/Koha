@@ -1,7 +1,12 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Patrons with no checkouts &rsaquo; Reports &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Patrons with no checkouts") | html %] &rsaquo;
+    [% t("Reports") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
