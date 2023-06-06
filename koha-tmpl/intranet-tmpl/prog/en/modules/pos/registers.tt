@@ -3,9 +3,13 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Cashup &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Cash summary for {library}", { library = library.branchname }) | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -16,9 +20,6 @@
 
     [% WRAPPER 'sub-header.inc' %]
         [% WRAPPER breadcrumbs %]
-            [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/pos/pay.pl">Cash management</a>
-            [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Cash summary for [% library.branchname | html %]</span>
             [% END %]

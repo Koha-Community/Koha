@@ -4,10 +4,14 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE Price %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Cashup &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Transaction history for {register}", { register = register.name }) | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/jquery/plugins/rowGroup/stylesheets/rowGroup.dataTables.min.css") | $raw %]
 </head>
@@ -19,9 +23,6 @@
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
-        [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/pos/pay.pl">Cash management</a>
-        [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Transaction history for [% register.name | html %]</span>
         [% END %]
