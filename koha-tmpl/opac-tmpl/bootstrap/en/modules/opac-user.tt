@@ -313,9 +313,10 @@
                         [% END # /WRAPPER tabs_nav %]
 
                         [% WRAPPER tab_panels %]
-                            [% WRAPPER tab_panel tabname="opac-user-overdrive" %]
-                            [% END # /tab_panel#opac-user-overdrive %]
-
+                            [% IF ( OverDriveCirculation ) %]
+                                [% WRAPPER tab_panel tabname="opac-user-overdrive" %]
+                                [% END # /tab_panel#opac-user-overdrive %]
+                            [% END %]
                             [% WRAPPER tab_panel tabname="opac-user-checkouts" %]
                                 [% IF ( issues_count ) %]
                                     <form id="renewselected" action="/cgi-bin/koha/opac-renew.pl" method="post">
