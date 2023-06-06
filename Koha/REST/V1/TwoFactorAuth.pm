@@ -98,8 +98,8 @@ sub registration {
             { patron => $patron, secret => $secret } );
 
         my $response = {
-            issuer   => $auth->issuer,
-            key_id   => $auth->key_id,
+            issuer   => Encode::decode_utf8($auth->issuer),
+            key_id   => Encode::decode_utf8($auth->key_id),
             qr_code  => $auth->qr_code,
             secret32 => $auth->secret32,
 
