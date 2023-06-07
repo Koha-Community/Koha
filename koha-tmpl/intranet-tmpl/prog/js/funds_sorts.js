@@ -1,7 +1,8 @@
 /* getAuthValueDropbox from js/acq.js is needed */
 $(document).ready(function() {
     // keep copy of the inactive budgets
-    disabledBudgetsCopy = $("select[name='all_budget_id']").html();
+    disabledAllBudgetsCopy = $("select[name='all_budget_id']").html();
+    disabledBudgetsCopy = $("select[name='budget_id']").first().html();
     $("select[name='all_budget_id'] .b_inactive").remove();
     $("select[name='budget_id'] .b_inactive").remove();
 
@@ -16,7 +17,7 @@ $(document).ready(function() {
 
     $("#all_showallbudgets").click(function() {
         if ($(this).is(":checked")) {
-            $("select[name='all_budget_id']").html(disabledBudgetsCopy);
+            $("select[name='all_budget_id']").html(disabledAllBudgetsCopy);
         }
         else {
             $("select[name='all_budget_id'] .b_inactive").remove();
