@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
     [% INCLUDE "doc-head-open.inc" %]
     <title>Offline circulation &rsaquo; Circulation &rsaquo; Koha</title>
@@ -60,7 +61,7 @@
                             <tr class="oc-[% operation.action | html %]">
                                 <td><input type="checkbox" name="operationid" id="operationid[% operation.operationid | html %]" value="[% operation.operationid | html %]" /></td>
                                 <td>
-                                    <label for="operationid[% operation.operationid | html %]">[% operation.timestamp | html %]</label>
+                                    <label for="operationid[% operation.operationid | html %]">[% operation.timestamp | $KohaDates with_hours=1 %]</label>
                                 </td>
                                 <td>
                                     [% SWITCH ( operation.action ) -%]
