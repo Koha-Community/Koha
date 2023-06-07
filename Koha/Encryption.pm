@@ -54,12 +54,14 @@ It's based on Crypt::CBC
 
 sub new {
     my ( $class ) = @_;
-    my $key = C4::Context->config('encryption_key');
-    if( !$key ) {
-        Koha::Exceptions::MissingParameter->throw('No encryption_key in koha-conf.xml');
+    my $encryption_key = C4::Context->config('encryption_key');
+    if ( !$encryption_key || $encryption_key eq '__ENCRYPTION_KEY__') {
+        Koha::Exceptions::MissingParameter->throw(
+            q{No encryption_key in koha-conf.xml. Please generate a key. We recommend one of at least 32 bytes. (You might use 'pwgen 32' to do so.)}
+        );
     }
     return $class->SUPER::new(
-        -key    => $key,
+        -key    => $encryption_key,
         -cipher => 'Cipher::AES'
     );
 }
