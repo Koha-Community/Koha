@@ -463,6 +463,15 @@
                     $( container ).find("input").prop("checked", state);
                     $( container ).find(".selectall,.deselectall").toggle();
                 });
+                function update_sample_libraries_holidays(){
+                    let checked = $("#sample_libraries").prop("checked");
+                    $("#sample_libraries_holidays").prop("disabled", !checked);
+                    if (!checked) {
+                        $("#sample_libraries_holidays").prop("checked", false);
+                    }
+                };
+                $("#sample_libraries").on("change", update_sample_libraries_holidays);
+                $("#sample_libraries").change();
             });
         </script>
     [% END %]
