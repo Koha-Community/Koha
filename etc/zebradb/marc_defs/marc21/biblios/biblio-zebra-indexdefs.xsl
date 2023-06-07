@@ -97,10 +97,10 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='008']">
     <z:index name="date-entered-on-file:n">
-      <xslo:value-of select="substring(., 1, 5)"/>
+      <xslo:value-of select="substring(., 1, 6)"/>
     </z:index>
     <z:index name="date-entered-on-file:s">
-      <xslo:value-of select="substring(., 1, 5)"/>
+      <xslo:value-of select="substring(., 1, 6)"/>
     </z:index>
     <z:index name="pubdate:w">
       <xslo:value-of select="substring(., 8, 4)"/>
