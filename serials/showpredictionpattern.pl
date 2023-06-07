@@ -92,7 +92,7 @@ my %pattern = (
 
 $firstacquidate = $firstacquidate ? dt_from_string($firstacquidate)->ymd : dt_from_string->ymd;
 
-$enddate = dt_from_string($enddate)->ymd;
+$enddate = dt_from_string($enddate)->ymd if $enddate;
 
 $nextacquidate = $nextacquidate ? dt_from_string($nextacquidate)->ymd : $firstacquidate;
 my $date = $nextacquidate;
