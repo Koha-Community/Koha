@@ -111,11 +111,11 @@ use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::MarcOverlayRules;
 use Koha::Plugins;
+use Koha::RecordProcessor;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 use Koha::Libraries;
 use Koha::Util::MARC;
-use Koha::MetadataRecord;
 
 =head1 NAME
 
@@ -2841,7 +2841,8 @@ sub ModBiblioMarc {
     }
 
     if ( C4::Context->preference('StripWhitespaceChars') ) {
-        $record = Koha::MetadataRecord::stripWhitespaceChars( $record );
+        my $p = Koha::RecordProcessor->new({ filters => qw(TrimFields) });
+        $p->process( $record );
     }
 
     my $metadata = {

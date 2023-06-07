@@ -35,6 +35,7 @@ use Koha::Authority::MergeRequests;
 use Koha::Authority::Types;
 use Koha::Authority;
 use Koha::Libraries;
+use Koha::RecordProcessor;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 use Koha::SearchEngine::Search;
@@ -659,7 +660,8 @@ sub AddAuthority {
   }
 
     if ( C4::Context->preference('StripWhitespaceChars') ) {
-        $record = Koha::MetadataRecord::stripWhitespaceChars( $record );
+        my $p = Koha::RecordProcessor->new({ filters => qw(TrimFields) });
+        $p->process( $record );
     }
 
     # Save record into auth_header, update 001

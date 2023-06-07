@@ -203,4 +203,28 @@ subtest 'options() tests' => sub {
     );
 };
 
+subtest "'TrimFields' filter tests" => sub {
+
+    plan tests => 2;
+
+    # Test default values with a MARC::Record record
+    my $record = MARC::Record->new();
+
+    $record->add_fields(
+        [ '001', '1234' ],
+        [ '150', ' ', ' ', a => 'Test' ],
+        [ '520', ' ', ' ', a => "This is\na test!\t" ],
+        [ '521', ' ', ' ', a => "This is a\t test!\t" ],
+    );
+
+    my $p = Koha::RecordProcessor->new({ filters => ['TrimFields'] });
+    $p->process( $record );
+
+    my $get520a = $record->subfield('520','a');
+    is( $get520a, "This is a test!", "Whitespace characters are appropriately stripped or replaced with spaces" );
+
+    my $get521a = $record->subfield('521','a');
+    is( $get521a, "This is a\t test!", "Trailing tabs are stripped while inner tabs are kept" );
+};
+
 done_testing();
