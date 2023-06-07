@@ -42,16 +42,12 @@ BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(
-      GetMemberDetails
-      GetMember
-
       GetAllIssues
 
       GetBorrowersToExpunge
 
       IssueSlip
 
-      checkuserpassword
       get_cardnumber_length
       checkcardnumber
 
