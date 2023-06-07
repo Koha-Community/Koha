@@ -216,9 +216,9 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     }
     my @subtitles = split(/ \| /, $c->{'subtitle'} // '' );
 
-    my $item = Koha::Items->find( $c->{itemnumber} );
     my $recalled = 0;
     if ( C4::Context->preference('UseRecalls') ) {
+        my $item = Koha::Items->find( $c->{itemnumber} );
         my $recall = undef;
         $recall = $item->check_recalls if $item->can_be_waiting_recall;
         if ( defined $recall ) {
