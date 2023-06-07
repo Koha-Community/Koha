@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
+use Test::MockModule;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -65,6 +66,83 @@ subtest 'list() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/patrons/" . $non_existent_patron_id . '/holds')
       ->status_is( 404 )
       ->json_is( '/error' => 'Patron not found' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete_public() tests' => sub {
+
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 },
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $hold_to_delete  = $builder->build_object( { class => 'Koha::Holds' } );
+    my $deleted_hold_id = $hold_to_delete->id;
+    $hold_to_delete->delete;
+
+    $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/" . $patron->id . '/holds/' . $deleted_hold_id )
+        ->status_is(404);
+
+    my $another_user_hold = $builder->build_object( { class => 'Koha::Holds' } );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/" . $patron->id . '/holds/' . $another_user_hold->id )
+        ->status_is( 404, 'Invalid patron_id and hold_id combination yields 404' );
+
+    my $non_waiting_hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron->id,
+                found          => undef,
+                itemnumber     => undef
+            }
+        }
+    );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/" . $patron->id . '/holds/' . $non_waiting_hold->id )
+        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+
+    my $cancellation_requestable;
+
+    my $hold_mock = Test::MockModule->new('Koha::Hold');
+    $hold_mock->mock( 'cancellation_requestable_from_opac', sub { return $cancellation_requestable; } );
+
+    my $item         = $builder->build_sample_item;
+    my $waiting_hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                borrowernumber => $patron->id,
+                found          => 'W',
+                itemnumber     => $item->id,
+            }
+        }
+    );
+
+    $cancellation_requestable = 0;
+
+    $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/" . $patron->id . '/holds/' . $waiting_hold->id )
+        ->status_is(403)->json_is( { error => 'Cancellation forbidden' } );
+
+    $cancellation_requestable = 1;
+
+    $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/" . $patron->id . '/holds/' . $waiting_hold->id )
+        ->status_is(202);
+
+    my $cancellation_requests = $waiting_hold->cancellation_requests;
+    is( $cancellation_requests->count, 1, 'Cancellation request recorded' );
 
     $schema->storage->txn_rollback;
 };
