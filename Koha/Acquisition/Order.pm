@@ -425,6 +425,7 @@ Retrieves patron that created this order.
 sub creator {
     my ( $self )  = @_;
     my $creator_rs = $self->_result->creator;
+    return unless $creator_rs;
     return Koha::Patron->_new_from_dbic( $creator_rs );
 }
 
