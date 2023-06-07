@@ -280,7 +280,8 @@ if ( ! C4::Context->config('tmp_path') ) {
     }
 }
 
-if( ! C4::Context->config('encryption_key') ) {
+my $encryption_key = C4::Context->config('encryption_key');
+if ( !$encryption_key || $encryption_key eq '__ENCRYPTION_KEY__') {
     push @xml_config_warnings, { error => 'encryption_key_missing' };
 }
 
