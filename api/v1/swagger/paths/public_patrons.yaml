@@ -170,3 +170,49 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       allow-owner: true
+"/public/patrons/{patron_id}/holds/{hold_id}":
+  delete:
+    x-mojo-to: Patrons::Holds#delete_public
+    operationId: cancelPatronHoldPublic
+    tags:
+      - patrons
+    summary: Cancel a patron's hold (public)
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - $ref: "../swagger.yaml#/parameters/hold_id_pp"
+    produces:
+      - application/json
+    responses:
+      "202":
+        description: Hold cancellation request accepted
+      "204":
+        description: Hold cancelled
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Hold not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      allow-owner: true
