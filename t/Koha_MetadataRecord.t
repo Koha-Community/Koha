@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More tests => 6;
 use Test::Warn;
 
+use Koha::RecordProcessor;
 use MARC::Record;
 
 BEGIN {
@@ -156,7 +157,8 @@ subtest "stripWhitespaceChars() tests" => sub {
         [ '521', ' ', ' ', a => "This is a\t test!\t" ],
     );
 
-    $record = Koha::MetadataRecord::stripWhitespaceChars( $record );
+    my $p = Koha::RecordProcessor->new({ filters => ['TrimFields'] });
+    $p->process( $record );
 
     my $get520a = $record->subfield('520','a');
     is( $get520a, "This is a test!", "Whitespace characters are appropriately stripped or replaced with spaces" );
