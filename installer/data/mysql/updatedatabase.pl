@@ -41,6 +41,7 @@ use C4::Installer;
 use Koha::Database;
 use Koha;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Caches;
 
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
@@ -69,8 +70,11 @@ $|=1; # flushes output
 
 local $dbh->{RaiseError} = 0;
 
-# Record the version we are coming from
+# Flush memcached before we begin
+Koha::Caches->get_instance('config')->flush_all;
+Koha::Caches->get_instance('sysprefs')->flush_all;
 
+# Record the version we are coming from
 my $original_version = C4::Context->preference("Version");
 
 # Deal with virtualshelves
