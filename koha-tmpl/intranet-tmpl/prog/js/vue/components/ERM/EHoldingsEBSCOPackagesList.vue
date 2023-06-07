@@ -161,7 +161,7 @@ export default {
         },
         filter_table: async function () {
             let { href } = this.$router.resolve({
-                name: "EHoldingsEBSCOPackagesShow",
+                name: "EHoldingsEBSCOPackagesList",
             })
             let new_route = build_url(href, this.filters)
             this.$router.push(new_route)
