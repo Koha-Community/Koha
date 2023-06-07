@@ -172,6 +172,11 @@ Circulation:
 
     Checkout policy:
         -
+            - Delay the automatic loading of the checkouts table on the checkouts page by
+            - pref: LoadCheckoutsTableDelay
+              class: integer
+            - seconds when "Always show checkouts immediately" is enabled.
+        -
             - pref: OnSiteCheckoutAutoCheck
               choices:
                   1: Enable

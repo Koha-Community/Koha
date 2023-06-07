@@ -350,6 +350,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('LinkerRelink','1',NULL,'If ON the authority linker will relink headings that have previously been linked every time it runs.','YesNo'),
 ('ListOwnerDesignated', NULL, NULL, 'Designated list owner at patron deletion', 'Free'),
 ('ListOwnershipUponPatronDeletion', 'delete', 'delete|transfer', 'Defines the action on their public or shared lists when patron is deleted', 'Choice'),
+('LoadCheckoutsTableDelay','0','','Delay before auto-loading checkouts table on checkouts screen','Integer'),
 ('LoadSearchHistoryToTheFirstLoggedUser', '1', NULL, 'If ON, the next user will automatically get the last searches in their history', 'YesNo'),
 ('LocalCoverImages','0','1','Display local cover images on intranet details pages.','YesNo'),
 ('LocalHoldsPriority',  '0', NULL,  'Enables the LocalHoldsPriority feature',  'YesNo'),
