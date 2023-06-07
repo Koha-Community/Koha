@@ -35,6 +35,7 @@ use C4::Circulation qw( barcodedecode AddReturn );
 use C4::Reports::Guided qw( );
 use C4::Charset qw( NormalizeString );
 
+use Koha::I18N qw(__);
 use Koha::Biblios;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Database::Columns;
@@ -393,7 +394,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
         my ( $table, $column ) = split '\.', $key;
         push @translated_keys, NormalizeString($columns->{$table}->{$column} // '');
     }
-    push @translated_keys, 'Problem' if $uploadbarcodes;
+    push @translated_keys, __('Problem') if $uploadbarcodes;
 
     $csv->combine(@translated_keys);
     print $csv->string, "\n";
@@ -407,17 +408,17 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
         my $errstr = '';
         foreach my $key ( keys %{$item->{problems}} ) {
             if( $key eq 'wrongplace' ) {
-                $errstr .= "wrong place,";
+                $errstr .= __("wrong place") . ",";
             } elsif( $key eq 'changestatus' ) {
-                $errstr .= "unselected notforloan status $item->{notforloan},";
+                $errstr .= __("unselected notforloan status") . "  $item->{notforloan},";
             } elsif( $key eq 'not_scanned' ) {
-                $errstr .= "missing,";
+                $errstr .= __("missing") . ",";
             } elsif( $key eq 'no_barcode' ) {
-                $errstr .= "no barcode,";
+                $errstr .= __("no barcode") . ",";
             } elsif( $key eq 'checkedout' ) {
-                $errstr .= "checked out,";
+                $errstr .= __("checked out") . ",";
             } elsif( $key eq 'out_of_order' ) {
-                $errstr .= "shelved out of order,";
+                $errstr .= __("shelved out of order") . ",";
             }
         }
         $errstr =~ s/,$//;
@@ -430,7 +431,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
         my @line;
         if ($error->{'ERR_BARCODE'}) {
             push @line, map { $_ eq 'barcode' ? $error->{'barcode'} : ''} @keys;
-            push @line, "barcode not found";
+            push @line, __("barcode not found");
             $csv->combine(@line);
             print $csv->string, "\n";
         }
