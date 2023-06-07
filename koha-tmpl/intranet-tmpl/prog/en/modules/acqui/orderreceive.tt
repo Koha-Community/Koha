@@ -1156,7 +1156,11 @@
                 }
                 $("#bookfund").select2({ width: '50%' });
                 $("#current-fund").html(FUNC_CUR.format(row.fund.budget.budget_period_description, row.fund.name));
-                $("#creator").html([row.creator.surname, row.creator.firstname].filter(function(name){return name}).join(', ')+" ("+row.creator.patron_id+')')
+                if( row.creator ) {
+                    $("#creator").html([row.creator.surname, row.creator.firstname].filter(function(name){return name}).join(', ')+" ("+row.creator.patron_id+')')
+                } else {
+                    $("#creator").html(__("Account has been deleted"));
+                }
                 $("#quantity_to_receive").val(row.quantity).prop('readonly', !row.subscription_id);
                 $("#quantity").val( effective_create_items == 'cataloguing' ? row.quantity_received || 1 : row.quantity_received )
                               .prop('readonly', !row.subscription_id && effective_create_items == 'receiving')
