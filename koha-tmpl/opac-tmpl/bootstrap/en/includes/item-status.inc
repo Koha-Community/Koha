@@ -103,10 +103,6 @@
 [% ELSIF item.itemtype.notforloan %]
     [% SET itemavailable = 0 %]
     <span class="item-status notforloan">Not for loan [% IF restricted_lib %]<span class="restricted">([% restricted_lib | html %])</span>[% END %]</span>
-[% ELSE %]
-    [% IF restricted_lib %]
-        <span class="item-status restricted">[% restricted_lib | html %]</span>
-    [% END %]
 [% END %]
 
 [% IF ( item.bundle_host ) %]
