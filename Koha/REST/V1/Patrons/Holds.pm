@@ -64,4 +64,49 @@ sub list {
     };
 }
 
+
+=head3 delete_public
+
+Controller function that handles cancelling a hold for the requested patron. Returns
+a I<204> if cancelling took place, and I<202> if a cancellation request is recorded
+instead.
+
+=cut
+
+sub delete_public {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $hold = $c->objects->find_rs( Koha::Holds->new, $c->param('hold_id') );
+
+        unless ( $hold and $c->param('patron_id') == $hold->borrowernumber ) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => 'Object not found' }
+            );
+        }
+
+        if ( $hold->is_cancelable_from_opac ) {
+            $hold->cancel;
+            return $c->render(
+                status  => 204,
+                openapi => q{},
+            );
+        } elsif ( $hold->is_waiting and $hold->cancellation_requestable_from_opac ) {
+            $hold->add_cancellation_request;
+            return $c->render(
+                status  => 202,
+                openapi => q{},
+            );
+        } else {    # reject
+            return $c->render(
+                status  => 403,
+                openapi => { error => 'Cancellation forbidden' }
+            );
+        }
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;
