@@ -47,6 +47,7 @@ use Koha::Libraries;
 use Koha::Old::Holds;
 use Koha::Patrons;
 use Koha::Plugins;
+use Koha::Policy::Holds;
 
 use List::MoreUtils qw( any );
 
@@ -937,7 +938,7 @@ sub CheckReserves {
                     next if $res->{item_group_id} && ( !$item->item_group || $item->item_group->id != $res->{item_group_id} );
                     next if $res->{itemtype} && $res->{itemtype} ne $item->effective_itemtype;
                     $patron //= Koha::Patrons->find( $res->{borrowernumber} );
-                    my $branch = $item->holds_control_library( $patron );
+                    my $branch = Koha::Policy::Holds->holds_control_library( $item, $patron );
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$item->effective_itemtype);
                     next if ($branchitemrule->{'holdallowed'} eq 'not_allowed');
                     next if (($branchitemrule->{'holdallowed'} eq 'from_home_library') && ($item->homebranch ne $patron->branchcode));
@@ -1357,7 +1358,7 @@ sub IsAvailableForItemLevelRequest {
         return 0 unless $destination;
         return 0 unless $destination->pickup_location;
         return 0 unless $item->can_be_transferred( { to => $destination } );
-        my $reserves_control_branch = $item->holds_control_library( $patron );
+        my $reserves_control_branch = Koha::Policy::Holds->holds_control_library( $item, $patron );
         my $branchitemrule =
             C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->itype );
         my $home_library = Koha::Libraries->find( {branchcode => $item->homebranch} );
@@ -1406,7 +1407,7 @@ sub ItemsAnyAvailableAndNotRestricted {
     my @items = Koha::Items->search( { biblionumber => $param->{biblionumber} } )->as_list;
 
     foreach my $i (@items) {
-        my $reserves_control_branch = $i->holds_control_library( $param->{patron} );
+        my $reserves_control_branch = Koha::Policy::Holds->holds_control_library( $i, $param->{patron} );
         my $branchitemrule =
             C4::Circulation::GetBranchItemRule( $reserves_control_branch, $i->itype );
         my $item_library = Koha::Libraries->find( { branchcode => $i->homebranch } );

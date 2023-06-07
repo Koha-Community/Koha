@@ -477,7 +477,7 @@ foreach my $biblioNum (@biblionumbers) {
             $item_info->{hosttitle}        = Koha::Biblios->find( $item_info->{biblionumber} )->title;
         }
 
-        my $branch = $item->holds_control_library( $patron );
+        my $branch = Koha::Policy::Holds->holds_control_library( $item, $patron );
 
         my $policy_holdallowed =
             CanItemBeReserved( $patron, $item, undef, { get_from_cache => 1 } )->{status} eq 'OK' &&
