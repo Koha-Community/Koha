@@ -84,6 +84,18 @@ sub pay {
 
     my $userenv = C4::Context->userenv;
 
+    Koha::Exceptions::Account::PaymentTypeRequired->throw()
+      if ( C4::Context->preference("RequirePaymentType")
+        && !defined($payment_type) );
+
+    my $av = Koha::AuthorisedValues->search_with_library_limits({ category => 'PAYMENT_TYPE', authorised_value => $payment_type });
+
+    if ( !$av->count && C4::Context->preference("RequirePaymentType")) {
+        Koha::Exceptions::Account::InvalidPaymentType->throw(
+            error => 'Invalid payment type'
+        );
+    }
+
     my $manager_id = $userenv ? $userenv->{number} : undef;
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
     my $payment = $self->payin_amount(
@@ -101,10 +113,6 @@ sub pay {
             debits        => $lines
         }
     );
-
-    Koha::Exceptions::Account::PaymentTypeRequired->throw()
-      if ( C4::Context->preference("RequirePaymentType")
-        && !defined($payment_type) );
 
     # NOTE: Pay historically always applied as much credit as it could to all
     # existing outstanding debits, whether passed specific debits or otherwise.

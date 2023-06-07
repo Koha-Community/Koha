@@ -665,7 +665,7 @@ subtest 'reconcile_balance' => sub {
 
 subtest 'pay() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -682,12 +682,24 @@ subtest 'pay() tests' => sub {
         $account->pay(
             {
                 amount       => 5,
-                interface    => 'intranet'
+                interface    => 'intranet',
             }
         );
     }
     'Koha::Exceptions::Account::PaymentTypeRequired',
       'Exception thrown for RequirePaymentType:1 + payment_type:undef';
+
+    throws_ok {
+        $account->pay(
+            {
+                amount       => 5,
+                interface    => 'intranet',
+                payment_type => 'FOOBAR'
+            }
+        );
+    }
+    'Koha::Exceptions::Account::InvalidPaymentType',
+      'Exception thrown for InvalidPaymentType:1 + payment_type:FOOBAR';
 
     t::lib::Mocks::mock_preference( 'RequirePaymentType', 0 );
     my $context = Test::MockModule->new('C4::Context');
@@ -724,7 +736,7 @@ subtest 'pay() tests' => sub {
     my $result = $account->pay(
         {
             amount => 20,
-            payment_Type => 'CASH',
+            payment_type => 'CASH',
             interface => 'intranet'
         }
     );
