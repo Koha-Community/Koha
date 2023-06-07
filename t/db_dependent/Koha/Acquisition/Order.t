@@ -639,7 +639,7 @@ subtest 'filter_by_current & filter_by_cancelled' => sub {
 };
 
 subtest 'creator ()' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -649,6 +649,10 @@ subtest 'creator ()' => sub {
     my $creator = $order->creator;
 
     is($creator->borrowernumber, $patron->borrowernumber, 'Patron is order creator');
+
+    $creator->delete;
+
+    is( $order->get_from_storage->creator, undef );
 
     $schema->storage->txn_rollback;
 };
