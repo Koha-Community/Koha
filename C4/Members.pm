@@ -42,8 +42,6 @@ BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(
-      GetAllIssues
-
       GetBorrowersToExpunge
 
       IssueSlip
@@ -229,59 +227,6 @@ sub patronflags {
         $flags{'WAITING'}     = \%flaginfo;
     }
     return ( \%flags );
-}
-
-=head2 GetAllIssues
-
-  $issues = &GetAllIssues($borrowernumber, $sortkey, $limit);
-
-Looks up what the patron with the given borrowernumber has borrowed,
-and sorts the results.
-
-C<$sortkey> is the name of a field on which to sort the results. This
-should be the name of a field in the C<issues>, C<biblio>,
-C<biblioitems>, or C<items> table in the Koha database.
-
-C<$limit> is the maximum number of results to return.
-
-C<&GetAllIssues> an arrayref, C<$issues>, of hashrefs, the keys of which
-are the fields from the C<issues>, C<biblio>, C<biblioitems>, and
-C<items> tables of the Koha database.
-
-=cut
-
-#'
-sub GetAllIssues {
-    my ( $borrowernumber, $order, $limit ) = @_;
-
-    return unless $borrowernumber;
-    $order = 'date_due desc' unless $order;
-
-    my $dbh = C4::Context->dbh;
-    my $query =
-'SELECT issues.*, items.*, biblio.*, biblioitems.*, issues.timestamp as issuestimestamp, issues.renewals_count AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp,borrowers.firstname,borrowers.surname
-  FROM issues
-  LEFT JOIN items on items.itemnumber=issues.itemnumber
-  LEFT JOIN borrowers on borrowers.borrowernumber=issues.issuer_id
-  LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
-  LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-  WHERE issues.borrowernumber=?
-  UNION ALL
-  SELECT old_issues.*, items.*, biblio.*, biblioitems.*, old_issues.timestamp as issuestimestamp, old_issues.renewals_count AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp,borrowers.firstname,borrowers.surname
-  FROM old_issues
-  LEFT JOIN items on items.itemnumber=old_issues.itemnumber
-  LEFT JOIN borrowers on borrowers.borrowernumber=old_issues.issuer_id
-  LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
-  LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-  WHERE old_issues.borrowernumber=? AND old_issues.itemnumber IS NOT NULL
-  order by ' . $order;
-    if ($limit) {
-        $query .= " limit $limit";
-    }
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $borrowernumber );
-    return $sth->fetchall_arrayref( {} );
 }
 
 =head2 GetBorrowersToExpunge
