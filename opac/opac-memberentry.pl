@@ -28,7 +28,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
-use C4::Members qw( checkcardnumber );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::Patrons;
@@ -43,6 +42,7 @@ use Koha::Patron::Attribute::Types;
 use Koha::Patron::Attributes;
 use Koha::Patron::Images;
 use Koha::Patron::Categories;
+use Koha::Policy::Patrons::Cardnumber;
 use Koha::Token;
 use Koha::AuthorisedValues;
 my $cgi = CGI->new;
@@ -88,7 +88,7 @@ if ( $action eq 'create' || $action eq 'new' ) {
 }
 my $libraries = Koha::Libraries->search($params);
 
-my ( $min, $max ) = C4::Members::get_cardnumber_length();
+my ( $min, $max ) = Koha::Policy::Patrons::Cardnumber->get_valid_length();
 if ( defined $min ) {
      $template->param(
          minlength_cardnumber => $min,
@@ -133,19 +133,25 @@ if ( $action eq 'create' ) {
     my @empty_mandatory_fields = (CheckMandatoryFields( \%borrower, $action ), CheckMandatoryAttributes( \%borrower, $attributes ) );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
     delete $borrower{'password2'};
-    my $cardnumber_error_code;
+    my $is_cardnumber_valid;
     if ( !grep { $_ eq 'cardnumber' } @empty_mandatory_fields ) {
         # No point in checking the cardnumber if it's missing and mandatory, it'll just generate a
         # spurious length warning.
-        $cardnumber_error_code = checkcardnumber( $borrower{cardnumber}, $borrower{borrowernumber} );
+        my $patron = Koha::Patrons->find($borrower{borrowernumber});
+        $is_cardnumber_valid = Koha::Policy::Patrons::Cardnumber->is_valid($borrower{cardnumber}, $patron);
+        unless ($is_cardnumber_valid) {
+            for my $m ( @{ $is_cardnumber_valid->messages } ) {
+                my $message = $m->message;
+                if ( $message eq 'already_exists' ) {
+                    $template->param( cardnumber_already_exists => 1 );
+                } elsif ( $message eq 'invalid_length' ) {
+                    $template->param( cardnumber_wrong_length => 1 );
+                }
+            }
+        }
     }
 
-    if ( @empty_mandatory_fields || @$invalidformfields || $cardnumber_error_code || $conflicting_attribute ) {
-        if ( $cardnumber_error_code == 1 ) {
-            $template->param( cardnumber_already_exists => 1 );
-        } elsif ( $cardnumber_error_code == 2 ) {
-            $template->param( cardnumber_wrong_length => 1 );
-        }
+    if ( @empty_mandatory_fields || @$invalidformfields || !$is_cardnumber_valid || $conflicting_attribute ) {
 
         $template->param(
             empty_mandatory_fields => \@empty_mandatory_fields,

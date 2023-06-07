@@ -48,9 +48,6 @@ BEGIN {
 
       IssueSlip
 
-      get_cardnumber_length
-      checkcardnumber
-
       DeleteUnverifiedOpacRegistrations
       DeleteExpiredOpacRegistrations
     );
@@ -285,65 +282,6 @@ sub GetAllIssues {
     my $sth = $dbh->prepare($query);
     $sth->execute( $borrowernumber, $borrowernumber );
     return $sth->fetchall_arrayref( {} );
-}
-
-sub checkcardnumber {
-    my ( $cardnumber, $borrowernumber ) = @_;
-
-    # If cardnumber is null, we assume they're allowed.
-    return 0 unless defined $cardnumber;
-
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT * FROM borrowers WHERE cardnumber=?";
-    $query .= " AND borrowernumber <> ?" if ($borrowernumber);
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $cardnumber,
-        ( $borrowernumber ? $borrowernumber : () )
-    );
-
-    return 1 if $sth->fetchrow_hashref;
-
-    my ( $min_length, $max_length ) = get_cardnumber_length();
-    return 2
-        if length $cardnumber > $max_length
-        or length $cardnumber < $min_length;
-
-    return 0;
-}
-
-=head2 get_cardnumber_length
-
-    my ($min, $max) = C4::Members::get_cardnumber_length()
-
-Returns the minimum and maximum length for patron cardnumbers as
-determined by the CardnumberLength system preference, the
-BorrowerMandatoryField system preference, and the width of the
-database column.
-
-=cut
-
-sub get_cardnumber_length {
-    my $borrower = Koha::Database->new->schema->resultset('Borrower');
-    my $field_size = $borrower->result_source->column_info('cardnumber')->{size};
-    my ( $min, $max ) = ( 0, $field_size ); # borrowers.cardnumber is a nullable varchar(20)
-    $min = 1 if C4::Context->preference('BorrowerMandatoryField') =~ /cardnumber/;
-    if ( my $cardnumber_length = C4::Context->preference('CardnumberLength') ) {
-        # Is integer and length match
-        if ( $cardnumber_length =~ m|^\d+$| ) {
-            $min = $max = $cardnumber_length
-                if $cardnumber_length >= $min
-                    and $cardnumber_length <= $max;
-        }
-        # Else assuming it is a range
-        elsif ( $cardnumber_length =~ m|(\d*),(\d*)| ) {
-            $min = $1 if $1 and $min < $1;
-            $max = $2 if $2 and $max > $2;
-        }
-
-    }
-    $min = $max if $min > $max;
-    return ( $min, $max );
 }
 
 =head2 GetBorrowersToExpunge

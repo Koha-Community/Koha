@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 53;
+use Test::More tests => 50;
 use Test::MockModule;
 use Test::Exception;
 
@@ -33,7 +33,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 BEGIN {
-        use_ok('C4::Members', qw( checkcardnumber GetBorrowersToExpunge DeleteUnverifiedOpacRegistrations DeleteExpiredOpacRegistrations ));
+        use_ok('C4::Members', qw( GetBorrowersToExpunge DeleteUnverifiedOpacRegistrations DeleteExpiredOpacRegistrations ));
 }
 
 my $schema = Koha::Database->schema;
@@ -57,9 +57,6 @@ my $CHANGED_FIRSTNAME = "Marry Ann";
 my $EMAIL             = "Marie\@email.com";
 my $EMAILPRO          = "Marie\@work.com";
 my $PHONE             = "555-12123";
-
-# XXX should be randomised and checked against the database
-my $IMPOSSIBLE_CARDNUMBER = "XYZZZ999";
 
 t::lib::Mocks::mock_userenv();
 
@@ -103,22 +100,6 @@ ok ( $changedmember->{firstname} eq $CHANGED_FIRSTNAME &&
      $changedmember->{emailpro}  eq $EMAILPRO
      , "Member Changed")
   or diag("Mismatching member details: ".Dumper($member, $changedmember));
-
-t::lib::Mocks::mock_preference( 'CardnumberLength', '' );
-C4::Context->clear_syspref_cache();
-
-my $checkcardnum=C4::Members::checkcardnumber($CARDNUMBER, "");
-is ($checkcardnum, "1", "Card No. in use");
-
-$checkcardnum=C4::Members::checkcardnumber($IMPOSSIBLE_CARDNUMBER, "");
-is ($checkcardnum, "0", "Card No. not used");
-
-t::lib::Mocks::mock_preference( 'CardnumberLength', '4' );
-C4::Context->clear_syspref_cache();
-
-$checkcardnum=C4::Members::checkcardnumber($IMPOSSIBLE_CARDNUMBER, "");
-is ($checkcardnum, "2", "Card number is too long");
-
 
 # Add a new borrower
 %data = (

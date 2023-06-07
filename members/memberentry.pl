@@ -29,7 +29,6 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user haspermission );
 use C4::Context;
 use C4::Output qw( output_and_exit output_and_exit_if_error output_html_with_http_headers );
-use C4::Members qw( checkcardnumber get_cardnumber_length );
 use C4::Koha qw( GetAuthorisedValues );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Form::MessagingPreferences;
@@ -46,6 +45,7 @@ use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::HouseboundRoles;
+use Koha::Policy::Patrons::Cardnumber;
 use Koha::Plugins;
 use Koha::Token;
 use Koha::SMS::Providers;
@@ -293,12 +293,16 @@ if ($op eq 'save' || $op eq 'insert'){
 
     $newdata{'cardnumber'} = $new_barcode;
 
-    if (my $error_code = checkcardnumber( $newdata{cardnumber}, $borrowernumber )){
-        push @errors, $error_code == 1
-            ? 'ERROR_cardnumber_already_exists'
-            : $error_code == 2
-                ? 'ERROR_cardnumber_length'
-                : ()
+    my $is_valid = Koha::Policy::Patrons::Cardnumber->is_valid($newdata{cardnumber}, $patron );
+    unless ($is_valid) {
+        for my $m ( @{ $is_valid->messages } ) {
+            my $message = $m->message;
+            if ( $message eq 'already_exists' ) {
+                $template->param( ERROR_cardnumber_already_exists => 1 );
+            } elsif ( $message eq 'invalid_length' ) {
+                $template->param( ERROR_cardnumber_length => 1 );
+            }
+        }
     }
 
     my $dateofbirth;
@@ -786,7 +790,7 @@ if(defined($data{'contacttitle'})){
 }
 
 
-my ( $min, $max ) = C4::Members::get_cardnumber_length();
+my ( $min, $max ) = Koha::Policy::Patrons::Cardnumber->get_valid_length();
 if ( defined $min ) {
     $template->param(
         minlength_cardnumber => $min,

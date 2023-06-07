@@ -22,12 +22,12 @@ use C4::Context;
 use C4::InstallAuth qw( checkauth get_template_and_user );
 use CGI qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Members qw( checkcardnumber );
 use Koha::Patrons;
 use Koha::Libraries;
 use Koha::Database;
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Policy::Patrons::Cardnumber;
 use Koha::ItemTypes;
 use Koha::CirculationRules;
 
@@ -141,12 +141,16 @@ if ( $step == 3 ) {
             $patron_category );
 
 
-        if ( my $error_code = checkcardnumber($cardnumber) ) {
-            if ( $error_code == 1 ) {
-                push @messages, { code => 'ERROR_cardnumber_already_exists' };
-            }
-            elsif ( $error_code == 2 ) {
-                push @messages, { code => 'ERROR_cardnumber_length' };
+        my $is_cardnumber_valid = Koha::Policy::Patrons::Cardnumber->is_valid($cardnumber);
+        unless ( $is_cardnumber_valid ) {
+            for my $m ( @{ $is_cardnumber_valid->messages } ) {
+                my $message = $m->message;
+                if ( $message eq 'already_exists' ) {
+                    push @messages, { code => 'ERROR_cardnumber_already_exists' };
+                }
+                elsif ( $message eq 'invalid_length' ) {
+                    push @messages, { code => 'ERROR_cardnumber_length' };
+                }
             }
         }
         elsif ( $firstpassword ne $secondpassword ) {

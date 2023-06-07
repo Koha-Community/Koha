@@ -23,13 +23,13 @@ use Text::CSV;
 use Encode qw( decode_utf8 );
 use Try::Tiny qw( catch try );
 
-use C4::Members qw( checkcardnumber );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Patron::Debarments qw( AddDebarment );
+use Koha::Policy::Patrons::Cardnumber;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 =head1 NAME
@@ -212,7 +212,8 @@ sub import_patrons {
             $is_new = 1;
         }
 
-        if ( C4::Members::checkcardnumber( $borrower{cardnumber}, $borrowernumber ) ) {
+        my $is_valid = Koha::Policy::Patrons::Cardnumber->is_valid($borrower{cardnumber}, $patron);
+        unless ( $is_valid ) {
             push @errors,
               {
                 invalid_cardnumber => 1,
