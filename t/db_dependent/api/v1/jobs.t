@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 28;
+use Test::More tests => 31;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -85,9 +85,28 @@ my $job = $builder->build_object(
     }
 );
 
+my $job_current = $builder->build_object(
+    {
+        class => 'Koha::BackgroundJobs',
+        value => {
+            status         => 'new',
+            progress       => 100,
+            size           => 100,
+            borrowernumber => $patron->borrowernumber,
+            type           => 'batch_item_record_modification',
+            queue => 'default',
+            #data => '{"record_ids":["1"],"regex_mod":null,"exclude_from_local_holds_priority":null,"new_values":{"itemnotes":"xxx"}}' ,
+            data => '{"regex_mod":null,"report":{"total_records":1,"modified_fields":1,"modified_itemnumbers":[1]},"new_values":{"itemnotes":"xxx"},"record_ids":["1"],"exclude_from_local_holds_priority":null}',
+        }
+    }
+);
+
 {
     $t->get_ok("//$superlibrarian_userid:$password@/api/v1/jobs")
-      ->status_is(200)->json_is( [ $job->to_api ] );
+      ->status_is(200)->json_is( [ $job->to_api, $job_current->to_api ] );
+
+    $t->get_ok("//$superlibrarian_userid:$password@/api/v1/jobs?only_current=1")
+      ->status_is(200)->json_is( [ $job_current->to_api ] );
 
     $t->get_ok("//$librarian_userid:$password@/api/v1/jobs")
       ->status_is(200)->json_is( [] );
