@@ -37,11 +37,11 @@ my $biblionumber = $biblio_1->biblionumber;
 my $rating_1 = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber}, rating_value => 3 } )->store;
 my $rating_2 = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $patron_2->{borrowernumber}, rating_value => 4 } )->store;
 
-is( Koha::Ratings->search( { biblionumber => $biblionumber } )->get_avg_rating, 3.5, 'get_avg_rating is 3.5' );
+is( $biblio_1->ratings->get_avg_rating, 3.5, 'get_avg_rating is 3.5' );
 
 $rating_1->rating_value(5)->store;
 
-is( Koha::Ratings->search( { biblionumber => $biblionumber } )->get_avg_rating, 4.5, 'get_avg_rating now up to 4.5' );
+is( $biblio_1->ratings->get_avg_rating, 4.5, 'get_avg_rating now up to 4.5' );
 
 $rating_1->rating_value(42)->store;
 is( Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )->rating_value,
@@ -53,7 +53,6 @@ is( Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $pat
 
 Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )->delete;
 Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_2->{borrowernumber} } )->delete;
-is( Koha::Ratings->search( { biblionumber => $biblionumber } )->count, 0, 'Delete should have deleted the ratings' );
+is( $biblio_1->ratings->count, 0, 'Delete should have deleted the ratings' );
 
-is( int(Koha::Ratings->search( { biblionumber => $biblionumber } )->get_avg_rating), 0, 'get_avg_rating should return 0 if no rating exist' );
-
+is( int($biblio_1->ratings->get_avg_rating), 0, 'get_avg_rating should return 0 if no rating exist' );

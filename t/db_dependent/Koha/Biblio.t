@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 25;
+use Test::More tests => 26;
 use Test::Exception;
 use Test::Warn;
 
@@ -1136,6 +1136,12 @@ subtest 'normalized_isbn' => sub {
         $biblio->normalized_isbn, C4::Koha::GetNormalizedISBN( $biblio->biblioitem->isbn ),
         'normalized_isbn is a wrapper around C4::Koha::GetNormalizedISBN'
     );
+};
+
+subtest 'ratings' => sub {
+    plan tests => 1;
+    # See t/db_dependent/Koha/Ratings.t
+    ok(1);
 };
 
 sub component_record1 {
