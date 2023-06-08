@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 28;
+use Test::More tests => 29;
 use Test::Exception;
 use Test::Warn;
 
@@ -1147,6 +1147,18 @@ subtest 'normalized_upc' => sub {
     is(
         $biblio->normalized_upc, C4::Koha::GetNormalizedUPC( $biblio->metadata->record ),
         'normalized_upc is a wrapper around C4::Koha::GetNormalizedUPC'
+    );
+};
+
+subtest 'normalized_oclc' => sub {
+    plan tests => 1;
+
+    # We will move the tests from GetNormalizedOCLC here when it will get replaced
+    # Note that only a single test exist and it's not really meaningful...
+    my $biblio = $builder->build_sample_biblio();
+    is(
+        $biblio->normalized_oclc, C4::Koha::GetNormalizedOCLCNumber( $biblio->metadata->record ),
+        'normalized_oclc is a wrapper around C4::Koha::GetNormalizedOCLCNumber'
     );
 };
 
