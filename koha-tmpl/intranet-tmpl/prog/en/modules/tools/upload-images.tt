@@ -207,8 +207,6 @@
 
                         <form method="post" id="processfile" action="/cgi-bin/koha/tools/upload-cover-image.pl" enctype="multipart/form-data">
                             <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
-                            <input type="hidden" name="runinbackground" id="runinbackground" value="" />
-                            <input type="hidden" name="completedJobID" id="completedJobID" value="" />
 
                             [% IF itemnumber %]
                                 <input type="hidden" id="itemnumber" name="itemnumber" value="[% itemnumber | html %]" />

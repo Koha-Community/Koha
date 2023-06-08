@@ -166,7 +166,6 @@ sub load_records_ui {
                 'comments'        => '',
                 'encoding'        => 'utf8',
                 'parse_items'     => '1',
-                'runinbackground' => '1',
                 'record_type'     => 'biblio'
             }
         },
