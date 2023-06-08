@@ -43,13 +43,14 @@
 [% INCLUDE 'members-toolbar.inc' %]
 <h1>Circulation history</h1>
 
+[% SET all_checkouts = checkouts.merge(old_checkouts) %]
 [% UNLESS Koha.Preference('intranetreadinghistory') %]
     <div class="dialog alert">Staff members are not allowed to access patron's checkout history</div>
 [% ELSIF is_anonymous %]
     <div class="dialog alert">This is the anonymous patron, so no circulation history is displayed. To get a list of anonymized loans, please run a report.</div>
 [% ELSIF ( patron.privacy == 2)  %]
     <div class="dialog message">This patron has set the privacy rules to never keeping a circulation history.</div>
-[% ELSIF ( !loop_reading ) %]
+[% ELSIF ( !all_checkouts.size ) %]
     <div class="dialog message">This patron has no circulation history.</div>
 [% ELSE %]
     <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
@@ -76,57 +77,56 @@
                     </tr>
                 </thead>
                 <tbody>
-                    [% FOREACH issue IN loop_reading %]
-                        [% IF  issue.returndate  %]<tr>[% ELSE %]<tr class="onissue">[% END %]
+                    [% FOREACH checkout IN all_checkouts %]
+                        [% SET item = checkout.item %]
+                        [% SET biblio = item.biblio %]
+                        [% IF checkout.returndate %]<tr>[% ELSE %]<tr class="onissue">[% END %]
                             <td style="display:none;">
-                                [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
+                                [% IF checkout.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
                                 [% ELSE %][% issuetype = 'standard_checkout' | html %]
                                 [% END %]
                                 [% issuetype | html %]
                             </td>
-                            <td data-order="[% issue.issuestimestamp | html %]">
-                                [% issue.issuestimestamp | $KohaDates  with_hours => 1 %]
+                            <td data-order="[% checkout.timestamp | html %]">
+                                [% checkout.timestamp | $KohaDates with_hours => 1 %]
                             </td>
                             <td>
-                                [% INCLUDE 'biblio-title.inc' biblio=issue link = 1 %]
+                                [% INCLUDE 'biblio-title.inc' biblio=biblio link = 1 %]
                             </td>
 
-                            <td>[% issue.author | html %]</td>
+                            <td>[% biblio.author | html %]</td>
 
                             <td>
-                                [% IF issue.classification %]
-                                    [% issue.classification | html %]
-                                [% ELSE %]
-                                    [% issue.itemcallnumber | html %]
+                                [% item.itemcallnumber | html %]
+                            </td>
+
+                            <td>
+                                [% IF item.enumchron %]
+                                    [% item.enumchron | html %]
                                 [% END %]
                             </td>
 
+                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
                             <td>
-                                [% IF issue.enumchron %]
-                                    [% issue.enumchron | html %]
+                                [% checkout.renewals_count | html %]
+                                [% IF checkout.renewals_count > 0 %]
+                                    [ <a class="checkout_renewals_view" data-renewals="[% checkout.renewals_count | html %]" data-issueid="[% checkout.issue_id | html %]" href="#">View</a> ]
                                 [% END %]
                             </td>
-
-                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% issue.itemnumber | uri %]&amp;biblionumber=[% issue.biblionumber | uri %]&amp;bi=[% issue.biblioitemnumber | uri %]#item[% issue.itemnumber | uri %]">[% issue.barcode | html %]</a></td>
-                            <td>
-                                [% issue.renewals_count | html %]
-                                [% IF issue.renewals_count > 0 %]
-                                    [ <a class="checkout_renewals_view" data-renewals="[% issue.renewals_count | html %]" data-issueid="[% issue.issue_id | html %]" href="#">View</a> ]
-                                [% END %]
+                            <td data-order="[% checkout.issuedate | html %]">
+                                [% checkout.issuedate | $KohaDates with_hours => 1 %]
                             </td>
-                            <td data-order="[% issue.issuedate | html %]">
-                                [% issue.issuedate |$KohaDates with_hours => 1 %]
-                            </td>
-                            <td>[% Branches.GetName( issue.branchcode ) | html %]</td>
+                            <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
                             [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
-                                <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issue.issuer_id | uri %]">[% issue.firstname | html %] [% issue.surname | html %]</a></td>
+                                [% SET issuer = checkout.issuer %]
+                                <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issuer.issuer_id | uri %]">[% issuer.firstname | html %] [% issuer.surname | html %]</a></td>
                             [% END %]
-                            <td data-order="[% issue.date_due | html %]">
-                                [% issue.date_due | $KohaDates as_due_date => 1 %]
+                            <td data-order="[% checkout.date_due | html %]">
+                                [% checkout.date_due | $KohaDates as_due_date => 1 %]
                             </td>
-                            [% IF  issue.returndate %]
-                                <td data-order="[% issue.returndate | html %]">
-                                [% issue.returndate |$KohaDates with_hours => 1 %]
+                            [% IF checkout.returndate %]
+                                <td data-order="[% checkout.returndate | html %]">
+                                [% checkout.returndate | $KohaDates with_hours => 1 %]
                             [% ELSE %]
                                 <td data-order="checked out">
                                 <small>Checked out</small>

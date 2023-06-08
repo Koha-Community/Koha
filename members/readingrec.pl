@@ -26,7 +26,6 @@ use CGI qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
-use C4::Members qw( GetAllIssues );
 use List::MoreUtils qw( any uniq );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ActionLogs;
@@ -79,26 +78,39 @@ if ( $op eq 'export_barcodes' ) {
     }
 }
 
-my $order = 'date_due desc';
-my $limit = 0;
-my $issues = ();
 # Do not request the old issues of anonymous patron
 if ( $patron->borrowernumber eq C4::Context->preference('AnonymousPatron') ){
     # use of 'eq' in the above comparison is intentional -- the
     # system preference value could be blank
     $template->param( is_anonymous => 1 );
 } else {
-    $issues = GetAllIssues($patron->borrowernumber,$order,$limit);
-}
-
-if (! $limit){
-	$limit = 'full';
+    $template->param(
+        checkouts => [
+            $patron->checkouts(
+                {},
+                {
+                    order_by => 'date_due desc',
+                    prefetch => { item => { biblio => 'biblioitems' } },
+                }
+            )->as_list
+        ]
+    );
+    $template->param(
+        old_checkouts => [
+            $patron->old_checkouts(
+                {},
+                {
+                    order_by => 'date_due desc',
+                    prefetch => { item => { biblio => 'biblioitems' } },
+                }
+            )->as_list
+        ]
+    );
 }
 
 $template->param(
     patron            => $patron,
     readingrecordview => 1,
-    loop_reading      => $issues
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 
