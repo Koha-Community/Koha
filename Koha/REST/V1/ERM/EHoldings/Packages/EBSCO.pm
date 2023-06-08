@@ -93,7 +93,7 @@ sub get {
 
     return try {
         my ( $vendor_id, $package_id ) = split '-',
-          $c->validation->param('package_id');
+            $c->param('package_id');
         my $ebsco = Koha::ERM::Providers::EBSCO->new;
         my $p     = $ebsco->request(
             GET => '/vendors/' . $vendor_id . '/packages/' . $package_id );
@@ -124,10 +124,10 @@ sub edit {
     my $c = shift or return;
 
     return try {
-        my $body        = $c->validation->param('body');
+        my $body        = $c->req->json;
         my $is_selected = $body->{is_selected};
         my ( $vendor_id, $package_id ) = split '-',
-          $c->validation->param('package_id');
+            $c->param('package_id');
 
         my $ebsco = Koha::ERM::Providers::EBSCO->new;
         my $t     = try {

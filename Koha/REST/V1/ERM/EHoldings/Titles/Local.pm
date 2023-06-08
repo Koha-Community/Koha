@@ -57,8 +57,7 @@ sub get {
     my $c = shift or return;
 
     return try {
-        my $title_id = $c->validation->param('title_id');
-        my $title = $c->objects->find( Koha::ERM::EHoldings::Titles->search, $title_id );
+        my $title = $c->objects->find( Koha::ERM::EHoldings::Titles->search, $c->param('title_id') );
 
         unless ($title ) {
             return $c->render(
@@ -90,7 +89,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $resources = delete $body->{resources} // [];
 
@@ -152,8 +151,7 @@ Controller function that handles updating a Koha::ERM::EHoldings::Title object
 sub update {
     my $c = shift or return;
 
-    my $title_id = $c->validation->param('title_id');
-    my $title = Koha::ERM::EHoldings::Titles->find( $title_id );
+    my $title = Koha::ERM::EHoldings::Titles->find( $c->param('title_id') );
 
     unless ($title) {
         return $c->render(
@@ -166,7 +164,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $resources = delete $body->{resources} // [];
 
@@ -219,7 +217,7 @@ sub update {
 sub delete {
     my $c = shift or return;
 
-    my $title = Koha::ERM::EHoldings::Titles->find( $c->validation->param('title_id') );
+    my $title = Koha::ERM::EHoldings::Titles->find( $c->param('title_id') );
     unless ($title) {
         return $c->render(
             status  => 404,
@@ -246,7 +244,7 @@ sub delete {
 sub import_from_list {
     my $c = shift or return;
 
-    my $body       = $c->validation->param('body');
+    my $body       = $c->req->json;
     my $list_id    = $body->{list_id};
     my $package_id = $body->{package_id};
 

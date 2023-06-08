@@ -36,7 +36,7 @@ use Koha::REST::V1::ERM::EHoldings::Packages::EBSCO;
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider eq 'ebsco' ) {
         return Koha::REST::V1::ERM::EHoldings::Packages::EBSCO::list($c);
     } else {
@@ -53,7 +53,7 @@ Controller function that handles retrieving a single Koha::ERM::EHoldings::Packa
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider eq 'ebsco' ) {
         return Koha::REST::V1::ERM::EHoldings::Packages::EBSCO::get($c);
     } else {
@@ -70,7 +70,7 @@ Controller function that handles adding a new Koha::ERM::EHoldings::Package obje
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider && $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
@@ -87,7 +87,7 @@ Controller function that handles updating a Koha::ERM::EHoldings::Package object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider && $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
@@ -102,7 +102,7 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider && $provider eq 'ebsco' ) {
         die "invalid action";
     } else {
@@ -119,7 +119,7 @@ Controller function that handles editing a single Koha::ERM::EHoldings::Package 
 sub edit {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider eq 'ebsco' ) {
         return Koha::REST::V1::ERM::EHoldings::Packages::EBSCO::edit($c);
     } else {

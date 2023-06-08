@@ -119,9 +119,8 @@ sub get {
     my $c = shift or return;
 
     return try {
-        my $title_id = $c->validation->param('title_id');
-        my $ebsco    = Koha::ERM::Providers::EBSCO->new;
-        my $t        = $ebsco->request( GET => '/titles/' . $title_id );
+        my $ebsco = Koha::ERM::Providers::EBSCO->new;
+        my $t     = $ebsco->request( GET => '/titles/' . $c->param('title_id') );
         unless ($t) {
             return $c->render(
                 status  => 404,
