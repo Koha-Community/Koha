@@ -89,13 +89,19 @@ foreach my $issue ( @{$issues} ) {
           getitemtypeimagelocation( 'opac',
             $itemtypes->{ $issue->{$itype_attribute} }->{imageurl} );
     }
-    my $marcxml = C4::Biblio::GetXmlBiblio( $issue->{biblionumber} );
-    if ( $marcxml ) {
-        $marcxml = StripNonXmlChars( $marcxml );
-        my $marc_rec =
-          MARC::Record::new_from_xml( $marcxml, 'UTF-8',
-            C4::Context->preference('marcflavour') );
-        $issue->{normalized_upc} = GetNormalizedUPC( $marc_rec, C4::Context->preference('marcflavour') );
+
+    if (   C4::Context->preference('BakerTaylorEnabled')
+        || C4::Context->preference('SyndeticsEnabled')
+        || C4::Context->preference('SyndeticsCoverImages') )
+    {
+        my $marcxml = C4::Biblio::GetXmlBiblio( $issue->{biblionumber} );
+        if ( $marcxml ) {
+            $marcxml = StripNonXmlChars( $marcxml );
+            my $marc_rec =
+              MARC::Record::new_from_xml( $marcxml, 'UTF-8',
+                C4::Context->preference('marcflavour') );
+            $issue->{normalized_upc} = GetNormalizedUPC( $marc_rec, C4::Context->preference('marcflavour') );
+        }
     }
     # My Summary HTML
     if ($opac_summary_html) {
