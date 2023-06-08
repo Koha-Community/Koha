@@ -6,6 +6,13 @@
         <div id="issues-table-loading-message">
             <p>
                 <a id="issues-table-load-now-button" href="#" class="btn btn-default"><i class="fa fa-book"></i> Show checkouts</a>
+                [% SET LoadCheckoutsTableDelay = Koha.Preference('LoadCheckoutsTableDelay') %]
+                [% IF LoadCheckoutsTableDelay %]
+                <span id="issues-table-load-delay">
+                    <i id="issues-table-load-delay-spinner" class="fa fa-spinner fa-pulse fa-fw"></i>
+                    <span id="issues-table-load-delay-message">Checkouts table will show automatically in [% LoadCheckoutsTableDelay | html %] seconds...</span>
+                <span>
+                [% END %]
             </p>
         </div>
         <form name="issues" action="/cgi-bin/koha/tools/export.pl" method="post">
