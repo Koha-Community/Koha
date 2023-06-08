@@ -261,6 +261,8 @@ $(document).ready(function() {
             LoadIssuesTable();
         }
         $('#issues-table-load-immediately').prop('checked', true);
+    } else {
+        $('#issues-table-load-delay').hide();
     }
     $('#issues-table-load-immediately').on( "change", function(){
         Cookies.set("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365, sameSite: 'Lax'  });

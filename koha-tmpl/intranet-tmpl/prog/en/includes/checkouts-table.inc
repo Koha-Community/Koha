@@ -7,7 +7,7 @@
             <p>
                 <a id="issues-table-load-now-button" href="#" class="btn btn-default"><i class="fa fa-book"></i> Show checkouts</a>
                 [% SET LoadCheckoutsTableDelay = Koha.Preference('LoadCheckoutsTableDelay') %]
-                [% IF LoadCheckoutsTableDelay %]
+                [% IF LoadCheckoutsTableDelay && page == 'circulation' %]
                 <span id="issues-table-load-delay">
                     <i id="issues-table-load-delay-spinner" class="fa fa-spinner fa-pulse fa-fw"></i>
                     <span id="issues-table-load-delay-message">Checkouts table will show automatically in [% LoadCheckoutsTableDelay | html %] seconds...</span>
@@ -46,7 +46,7 @@
                 [% INCLUDE 'checkouts-table-footer.inc' %]
             </table>
 
-            <label for="issues-table-load-immediately">Always show checkouts immediately</label>
+            <label for="issues-table-load-immediately">Always show checkouts automatically</label>
             <input id="issues-table-load-immediately" type="checkbox" />
 
             <div id="issues-table-actions">
