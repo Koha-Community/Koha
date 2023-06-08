@@ -46,8 +46,10 @@ sub list {
 
     return try {
 
-        my $only_active = delete $c->validation->output->{only_active};
-        my $order_id    = delete $c->validation->output->{order_id};
+        my $only_active = $c->param('only_active');
+        my $order_id    = $c->param('order_id');
+
+        $c->req->params->remove('only_active')->remove('order_id');
 
         my $orders_rs;
 
