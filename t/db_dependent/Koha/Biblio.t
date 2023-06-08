@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::Exception;
 use Test::Warn;
 
@@ -1124,6 +1124,18 @@ subtest 'item_groups() tests' => sub {
     is( $item_groups[1]->id, $item_group_2->id, 'Got correct item group 2');
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'normalized_isbn' => sub {
+    plan tests => 1;
+
+    # We will move the tests from GetNormalizedISBN here when it will get replaced
+    my $biblio = $builder->build_sample_biblio();
+    $biblio->biblioitem->set( { isbn => '9781250067128 | 125006712X' } )->store;
+    is(
+        $biblio->normalized_isbn, C4::Koha::GetNormalizedISBN( $biblio->biblioitem->isbn ),
+        'normalized_isbn is a wrapper around C4::Koha::GetNormalizedISBN'
+    );
 };
 
 sub component_record1 {
