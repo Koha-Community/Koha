@@ -225,7 +225,6 @@ sub _shared_preferences {
         SuspendHoldsOpac
         TransferWhenCancelAllWaitingHolds
         AllowAllMessageDeletion
-        AllowOfflineCirculation
         PatronAutoComplete
         CircAutoPrintQuickSlip
         DisplayClearScreenButton
