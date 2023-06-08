@@ -101,7 +101,9 @@ foreach my $issue ( @{$issues} ) {
               MARC::Record::new_from_xml( $marcxml, 'UTF-8',
                 C4::Context->preference('marcflavour') );
             $issue->{normalized_upc} = GetNormalizedUPC( $marc_rec, C4::Context->preference('marcflavour') );
+            $issue->{normalized_oclc} = GetNormalizedOCLCNumber($marc_rec, C4::Context->preference('marcflavour'));
         }
+
     }
     # My Summary HTML
     if ($opac_summary_html) {
