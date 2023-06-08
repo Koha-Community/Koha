@@ -1,11 +1,14 @@
+[%- IF link && ! biblio %][% link = 0 %][% END %]
 [%- IF ( link ) -%]
     <a href="[%- PROCESS biblio_a_href biblionumber => biblio.biblionumber -%]" class="title">
 [%- END -%]
 
-[%- IF ( biblio.title ) -%]
-    <span class="biblio-title">[%- biblio.title | html -%]</span>
+[%- IF !biblio -%]
+    No bibliographic record
+[%- ELSIF !biblio.title -%]
+    No title
 [%- ELSE -%]
-    <span>No title</span>
+    <span class="biblio-title">[% biblio.title | html %]</span>
 [%- END -%]
 [%- IF ( biblio.medium ) -%]
     <span class="biblio-medium">[%- biblio.medium | html -%]</span>

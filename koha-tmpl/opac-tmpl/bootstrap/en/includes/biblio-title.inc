@@ -1,12 +1,15 @@
+[%- IF link && ! biblio %][% link = 0 %][% END %]
 [% IF ( link ) %]
     <a href="[% PROCESS biblio_a_href biblionumber => biblio.biblionumber %]" class="title">
 [% END %]
 
-[% IF ( biblio.title ) %]
-    <span class="biblio-title">[% biblio.title | html %]</span>
-[% ELSE %]
+[%- IF !biblio -%]
+    No bibliographic record
+[%- ELSIF !biblio.title -%]
     No title
-[% END %]
+[%- ELSE -%]
+    <span class="biblio-title">[% biblio.title | html %]</span>
+[%- END -%]
 [% FOREACH subtitle IN biblio.subtitle.split(' \| ') %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %]
     <span class="subtitle">[% subtitle | html %]</span>
 [% END %]
