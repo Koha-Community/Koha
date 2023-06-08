@@ -35,7 +35,8 @@ use Try::Tiny qw( catch try );
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $max_expiration_date = delete $c->validation->output->{max_expiration_date};
+    my $max_expiration_date = $c->param('max_expiration_date');
+    $c->req->params->remove('max_expiration_date');
 
     return try {
         my $agreements_set = Koha::ERM::Agreements->new;
@@ -61,8 +62,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $agreement_id = $c->validation->param('agreement_id');
-        my $agreement    = $c->objects->find( Koha::ERM::Agreements->search, $agreement_id );
+        my $agreement = $c->objects->find( Koha::ERM::Agreements->search, $c->param('agreement_id') );
 
         unless ($agreement) {
             return $c->render(
@@ -94,7 +94,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $periods    = delete $body->{periods} // [];
                 my $user_roles = delete $body->{user_roles} // [];
@@ -169,8 +169,7 @@ Controller function that handles updating a Koha::ERM::Agreement object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $agreement_id = $c->validation->param('agreement_id');
-    my $agreement = Koha::ERM::Agreements->find( $agreement_id );
+    my $agreement = Koha::ERM::Agreements->find( $c->param('agreement_id') );
 
     unless ($agreement) {
         return $c->render(
@@ -183,7 +182,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $periods    = delete $body->{periods} // [];
                 my $user_roles = delete $body->{user_roles} // [];
@@ -249,7 +248,7 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $agreement = Koha::ERM::Agreements->find( $c->validation->param('agreement_id') );
+    my $agreement = Koha::ERM::Agreements->find( $c->param('agreement_id') );
     unless ($agreement) {
         return $c->render(
             status  => 404,

@@ -36,7 +36,7 @@ use Try::Tiny qw( catch try );
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider eq 'ebsco' ) {
         return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::list($c);
     } else {
@@ -53,7 +53,7 @@ Controller function that handles retrieving a single Koha::ERM::EHoldings::Resou
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider eq 'ebsco' ) {
         return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::get($c);
     } else {
@@ -70,7 +70,7 @@ Controller function that handles editing a single Koha::ERM::EHoldings::Resource
 sub edit {
     my $c = shift->openapi->valid_input or return;
 
-    my $provider = $c->validation->param('provider');
+    my $provider = $c->param('provider');
     if ( $provider eq 'ebsco' ) {
         return Koha::REST::V1::ERM::EHoldings::Resources::EBSCO::edit($c);
     } else {

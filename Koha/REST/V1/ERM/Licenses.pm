@@ -36,8 +36,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $licenses_set = Koha::ERM::Licenses->new;
-        my $licenses = $c->objects->search( $licenses_set );
+        my $licenses = $c->objects->search( Koha::ERM::Licenses->new );
         return $c->render( status => 200, openapi => $licenses );
     }
     catch {
@@ -56,8 +55,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $license_id = $c->validation->param('license_id');
-        my $license    = $c->objects->find( Koha::ERM::Licenses->search, $license_id );
+        my $license = $c->objects->find( Koha::ERM::Licenses->new, $c->param('license_id') );
 
         unless ($license) {
             return $c->render(
@@ -89,7 +87,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $user_roles = delete $body->{user_roles} // [];
                 my $documents = delete $body->{documents} // [];
@@ -158,8 +156,7 @@ Controller function that handles updating a Koha::ERM::License object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $license_id = $c->validation->param('license_id');
-    my $license = Koha::ERM::Licenses->find( $license_id );
+    my $license = Koha::ERM::Licenses->find( $c->param('license_id') );
 
     unless ($license) {
         return $c->render(
@@ -172,7 +169,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $user_roles = delete $body->{user_roles} // [];
                 my $documents = delete $body->{documents} // [];
@@ -232,7 +229,7 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $license = Koha::ERM::Licenses->find( $c->validation->param('license_id') );
+    my $license = Koha::ERM::Licenses->find( $c->param('license_id') );
     unless ($license) {
         return $c->render(
             status  => 404,

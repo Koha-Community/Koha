@@ -36,7 +36,7 @@ sub list {
     my $c = shift or return;
 
     return try {
-        my $package_id = $c->validation->param('package_id');
+        my $package_id = $c->param('package_id');
         my $resources_set =
           $package_id
           ? Koha::ERM::EHoldings::Resources->search( { package_id => $package_id } )

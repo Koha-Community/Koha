@@ -53,9 +53,11 @@ sub get {
     my $c = shift or return;
 
     return try {
-        my $package_id = $c->validation->param('package_id');
-        my $package = $c->objects->find( Koha::ERM::EHoldings::Packages->search,
-            $package_id );
+        my $package_id = $c->param('package_id');
+        my $package    = $c->objects->find(
+            Koha::ERM::EHoldings::Packages->search,
+            $package_id
+        );
 
         unless ($package) {
             return $c->render(
@@ -87,7 +89,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $package_agreements = delete $body->{package_agreements} // [];
                 delete $body->{external_id} unless $body->{external_id};
@@ -149,7 +151,7 @@ Controller function that handles updating a Koha::ERM::EHoldings::Package object
 sub update {
     my $c = shift or return;
 
-    my $package_id = $c->validation->param('package_id');
+    my $package_id = $c->param('package_id');
     my $package = Koha::ERM::EHoldings::Packages->find( $package_id );
 
     unless ($package) {
@@ -163,7 +165,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $package_agreements = delete $body->{package_agreements} // [];
                 delete $body->{external_id} unless $body->{external_id};
@@ -219,7 +221,7 @@ sub update {
 sub delete {
     my $c = shift or return;
 
-    my $package = Koha::ERM::EHoldings::Packages->find( $c->validation->param('package_id') );
+    my $package = Koha::ERM::EHoldings::Packages->find( $c->param('package_id') );
     unless ($package) {
         return $c->render(
             status  => 404,
@@ -238,6 +240,5 @@ sub delete {
         $c->unhandled_exception($_);
     };
 }
-
 
 1;
