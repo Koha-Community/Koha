@@ -23,7 +23,7 @@ use List::MoreUtils qw( any );
 use URI;
 use URI::Escape qw( uri_escape_utf8 );
 
-use C4::Koha qw( GetNormalizedISBN GetNormalizedUPC );
+use C4::Koha qw( GetNormalizedISBN GetNormalizedUPC GetNormalizedOCLCNumber );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -1292,6 +1292,20 @@ sub normalized_upc {
     my ($self) = @_;
     my $marc_record = $self->metadata->record;
     return C4::Koha::GetNormalizedUPC($marc_record);
+}
+
+=head3 normalized_oclc
+
+    my $normalized_oclc = $biblio->normalized_oclc
+
+Normalizes and returns the OCLC number found in the MARC record.
+
+=cut
+
+sub normalized_oclc {
+    my ( $self ) = @_;
+    my $marc_record = $self->metadata->record;
+    return C4::Koha::GetNormalizedOCLCNumber( $marc_record );
 }
 
 =head3 to_api

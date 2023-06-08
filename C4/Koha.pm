@@ -669,6 +669,8 @@ sub GetNormalizedOCLCNumber {
     my ($marcrecord,$marcflavour) = @_;
     return unless $marcrecord;
 
+    $marcflavour ||= C4::Context->preference('marcflavour');
+
     if ($marcflavour ne 'UNIMARC' ) {
         my @fields = $marcrecord->field('035');
         foreach my $field (@fields) {
