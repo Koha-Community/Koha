@@ -1039,7 +1039,7 @@
 
     <script>
         /* Set some variable needed in circulation.js */
-        const LoadCheckoutsTableDelay = [% Koha.Preference('LoadCheckoutsTableDelay') | html %];
+        const LoadCheckoutsTableDelay = [% Koha.Preference('LoadCheckoutsTableDelay') || 0 | html %];
         var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
         var ClaimReturnedLostValue = "[% Koha.Preference('ClaimReturnedLostValue') | html %]";
         var ClaimReturnedChargeFee = "[% Koha.Preference('ClaimReturnedChargeFee') | html %]";
