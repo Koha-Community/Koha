@@ -27,6 +27,7 @@ use C4::Koha qw(
     getitemtypeimagelocation
     GetNormalizedISBN
     GetNormalizedUPC
+    GetNormalizedOCLCNumber
 );
 use C4::Circulation qw( CanBookBeRenewed GetRenewCount GetIssuingCharges );
 use C4::External::BakerTaylor qw( image_url link_url );
@@ -284,9 +285,15 @@ if ( $pending_checkouts->count ) { # Useless test
 
         my $isbn = GetNormalizedISBN($issue->{'isbn'});
         $issue->{normalized_isbn} = $isbn;
-        my $marcrecord = $biblio_object->metadata->record({ embed_items => 1, opac => 1, patron => $patron,});
-        $issue->{normalized_upc} = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
 
+        if (   C4::Context->preference('BakerTaylorEnabled')
+            || C4::Context->preference('SyndeticsEnabled')
+            || C4::Context->preference('SyndeticsCoverImages') )
+        {
+            my $marcrecord = $biblio_object->metadata->record( { embed_items => 1, opac => 1, patron => $patron, } );
+            $issue->{normalized_upc}  = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
+            $issue->{normalized_oclc} = GetNormalizedOCLCNumber( $marcrecord, C4::Context->preference('marcflavour') );
+        }
                 # My Summary HTML
                 if (my $my_summary_html = C4::Context->preference('OPACMySummaryHTML')){
                     $issue->{author} ? $my_summary_html =~ s/{AUTHOR}/$issue->{author}/g : $my_summary_html =~ s/{AUTHOR}//g;
