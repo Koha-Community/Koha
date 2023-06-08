@@ -44,6 +44,7 @@ use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Checkouts;
+use Koha::Ratings;
 use Koha::Recalls;
 use Koha::RecordProcessor;
 use Koha::Suggestions;
@@ -1548,6 +1549,20 @@ sub can_be_recalled {
 
     # can recall
     return @items;
+}
+
+=head3 ratings
+
+    my $ratings = $biblio->ratings
+
+Return a Koha::Ratings object representing the ratings of this bibliographic record
+
+=cut
+
+sub ratings {
+    my ( $self ) = @_;
+    my $rs = $self->_result->ratings;
+    return Koha::Ratings->_new_from_dbic($rs);
 }
 
 =head2 Internal methods
