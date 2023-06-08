@@ -6,6 +6,8 @@ return {
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
-        $dbh->do(q{ALTER TABLE smtp_servers ADD COLUMN `is_default` tinyint(1) NOT NULL DEFAULT 0 AFTER debug});
+        unless ( column_exists( 'smtp_servers', 'is_default' ) ) {
+            $dbh->do(q{ALTER TABLE smtp_servers ADD COLUMN `is_default` tinyint(1) NOT NULL DEFAULT 0 AFTER debug});
+        }
     },
 };
