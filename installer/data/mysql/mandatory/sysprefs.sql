@@ -35,7 +35,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AllowMultipleCovers','0','1','Allow multiple cover images to be attached to each bibliographic record.','YesNo'),
 ('AllowMultipleIssuesOnABiblio',1,'Allow/Don\'t allow patrons to check out multiple items from one biblio','','YesNo'),
 ('AllowNotForLoanOverride','0','','If ON, Koha will allow the librarian to loan a not for loan item.','YesNo'),
-('AllowOfflineCirculation','0','','If on, enables HTML5 offline circulation functionality.','YesNo'),
 ('AllowPatronToControlAutorenewal','0',NULL,'If enabled, patrons will have a field in their account to choose whether their checkouts are auto renewed or not','YesNo'),
 ('AllowPatronToSetCheckoutsVisibilityForGuarantor',  '0', NULL, 'If enabled, the patron can set checkouts to be visible to their guarantor',  'YesNo'),
 ('AllowPatronToSetFinesVisibilityForGuarantor',  '0', NULL, 'If enabled, the patron can set fines to be visible to their guarantor',  'YesNo'),
