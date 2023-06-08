@@ -581,6 +581,8 @@ sub display_marc_indicators {
 sub GetNormalizedUPC {
     my ($marcrecord,$marcflavour) = @_;
 
+    $marcflavour ||= C4::Context->preference('marcflavour');
+
     return unless $marcrecord;
     if ($marcflavour eq 'UNIMARC') {
         my @fields = $marcrecord->field('072');
