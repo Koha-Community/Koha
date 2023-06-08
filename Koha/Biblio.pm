@@ -1565,6 +1565,36 @@ sub ratings {
     return Koha::Ratings->_new_from_dbic($rs);
 }
 
+=head3 opac_summary_html
+
+    my $summary_html = $biblio->opac_summary_html
+
+Based on the syspref OPACMySummaryHTML, returns a string representing the
+summary of this bibliographic record.
+{AUTHOR}, {TITLE}, {ISBN} and {BIBLIONUMBER} will be replaced.
+
+=cut
+
+sub opac_summary_html {
+    my ($self) = @_;
+
+    my $summary_html = C4::Context->preference('OPACMySummaryHTML');
+    return q{} unless $summary_html;
+    my $author = $self->author || q{};
+    my $title  = $self->title  || q{};
+    $title =~ s/\/+$//;    # remove trailing slash
+    $title =~ s/\s+$//;    # remove trailing space
+    my $normalized_isbn = $self->normalized_isbn || q{};
+    my $biblionumber    = $self->biblionumber;
+
+    $summary_html =~ s/{AUTHOR}/$author/g;
+    $summary_html =~ s/{TITLE}/$title/g;
+    $summary_html =~ s/{ISBN}/$normalized_isbn/g;
+    $summary_html =~ s/{BIBLIONUMBER}/$biblionumber/g;
+
+    return $summary_html;
+}
+
 =head2 Internal methods
 
 =head3 type
