@@ -979,7 +979,7 @@ sub custom_cover_image_url {
         $url =~ s|{isbn}|$isbn|g;
     }
     if ( $url =~ m|{normalized_isbn}| ) {
-        my $normalized_isbn = C4::Koha::GetNormalizedISBN($self->biblioitem->isbn);
+        my $normalized_isbn = $self->normalized_isbn;
         return unless $normalized_isbn;
         $url =~ s|{normalized_isbn}|$normalized_isbn|g;
     }
@@ -1249,6 +1249,19 @@ sub get_marc_authors {
     return [@first_authors, @other_authors];
 }
 
+=head3 normalized_isbn
+
+    my $normalized_isbn = $biblio->normalized_isbn
+
+Normalizes and returns the first valid ISBN found in the record.
+ISBN13 are converted into ISBN10. This is required to get some book cover images.
+
+=cut
+
+sub normalized_isbn {
+    my ( $self) = @_;
+    return C4::Koha::GetNormalizedISBN($self->biblioitem->isbn);
+}
 
 =head3 to_api
 
