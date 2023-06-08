@@ -214,9 +214,24 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KwlqhkWWX6CYWb3l2fCcSg
 
+__PACKAGE__->has_many(
+    "biblioitem",
+    "Koha::Schema::Result::Deletedbiblioitem",
+    { "foreign.biblionumber" => "self.biblionumber" },
+    { cascade_copy           => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->has_one(
+    "metadata",
+    "Koha::Schema::Result::DeletedbiblioMetadata",
+    { "foreign.biblionumber" => "self.biblionumber" },
+    { cascade_copy           => 0, cascade_delete => 0 },
+);
+
 sub koha_objects_class {
     'Koha::Old::Biblios';
 }
+
 sub koha_object_class {
     'Koha::Old::Biblio';
 }

@@ -1,4 +1,4 @@
-package Koha::Old::Biblios;
+package Koha::Old::Biblio::Metadatas;
 
 # This file is part of Koha.
 #
@@ -17,13 +17,15 @@ package Koha::Old::Biblios;
 
 use Modern::Perl;
 
-use base qw(Koha::Objects Koha::Objects::Record::Collections);
+use Koha::Database;
 
-use Koha::Old::Biblio;
+use Koha::Old::Biblio::Metadata;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Old::Biblios - Koha Old::Biblio Object set class
+Koha::Old::Biblio::Metadatas - Koha Deleted Metadata Object set class
 
 =head1 API
 
@@ -31,24 +33,20 @@ Koha::Old::Biblios - Koha Old::Biblio Object set class
 
 =cut
 
-=head2 Internal Methods
-
 =head3 _type
 
 =cut
 
 sub _type {
-    return 'Deletedbiblio';
+    return 'DeletedbiblioMetadata';
 }
 
 =head3 object_class
 
-Single object class
-
 =cut
 
 sub object_class {
-    return 'Koha::Old::Biblio';
+    return 'Koha::Old::Biblio::Metadata';
 }
 
 1;
