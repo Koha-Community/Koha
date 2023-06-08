@@ -157,8 +157,7 @@ controller, and thus shouldn't be called twice in it.
             $query_fixers //= [];
 
             # Extract reserved params
-            my ( $filtered_params, $reserved_params, $path_params ) =
-              $c->extract_reserved_params($args);
+            my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($args);
 
             if ( exists $reserved_params->{_order_by} ) {
 
