@@ -81,17 +81,13 @@
 
    <form action="enqueue_koc.pl" id="processfile" method="post" enctype="multipart/form-data">
      <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+     <input type="hidden" name="action" value="add_to_queue" />
      <input type="submit" value="Add to offline circulation queue" id="queueformsubmit" />
    </form>
 
    <form action="process_koc.pl" id="enqueuefile" method="post" enctype="multipart/form-data">
      <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
-     <input type="hidden" name="runinbackground" id="runinbackground" value="" />
-     <input type="hidden" name="completedJobID" id="completedJobID" value="" />
      <!-- <input type="submit" value="Apply directly" id="mainformsubmit" /> -->
-     <!-- FIXME: Job freezes when submitted, disabling button as a temporary mitigation -->
-     <div id="jobstatus" style="display:none">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-     <div id="jobfailed" style="display:none"></div>
    </form>
 [% END %]
 
@@ -100,7 +96,6 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/background-job-progressbar.js") | $raw %]
     [% Asset.js("js/file-upload.js") | $raw %]
     <script>
         var xhr;
@@ -128,7 +123,7 @@
             $("#fileuploadstatus").show();
             $("form#processfile #uploadedfileid").val('');
             $("form#enqueuefile #uploadedfileid").val('');
-            xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
+            xhr = AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
         }
 
         function cbUpload( status, fileid, errors ) {
@@ -154,11 +149,7 @@
             if (f.uploadedfileid.value == '') {
                 alert(_("Please upload a file first."));
             } else {
-                $("#fileuploadstatus").hide();
-                $("#fileuploadform").slideUp();
-                $("#mainformsubmit").prop('disabled',true);
-                $("#queueformsubmit").prop('disabled',true);
-                return submitBackgroundJob(f);
+                return f.submit();
             }
             return false;
         }
