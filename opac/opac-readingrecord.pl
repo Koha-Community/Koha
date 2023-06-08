@@ -25,6 +25,7 @@ use C4::Koha qw(
     getitemtypeimagelocation
     GetNormalizedISBN
     GetNormalizedUPC
+    GetNormalizedOCLCNumber
 );
 use C4::Biblio;
 use C4::Members qw( GetAllIssues );
