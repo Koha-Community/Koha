@@ -61,7 +61,7 @@ sub store {
     $email->transport($transport);
     $email->send_or_die;
 
-Returns an I<Email::Sender::Transport::SMTP> object that can be used directly
+Returns an I<Email::Sender::Transport::SMTP::Persistent> object that can be used directly
 with Email::Sender.
 
 =cut
@@ -88,8 +88,8 @@ sub transport {
 
     $params->{debug} = $self->debug;
 
-    require Email::Sender::Transport::SMTP;
-    my $transport = Email::Sender::Transport::SMTP->new( $params );
+    require Email::Sender::Transport::SMTP::Persistent;
+    my $transport = Email::Sender::Transport::SMTP::Persistent->new( $params );
 
     return $transport;
 }

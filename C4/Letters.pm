@@ -980,6 +980,8 @@ sub SendQueuedMessages {
     my $limit = $params->{limit};
     my $where = $params->{where};
 
+    my $smtp_transports = {};
+
     my $count_messages = 0;
     my $unsent_messages = Koha::Notice::Messages->search({
         status  => 'pending',
@@ -1009,7 +1011,7 @@ sub SendQueuedMessages {
         # This is just begging for subclassing
         next if ( lc($message->{'message_transport_type'}) eq 'rss' );
         if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
-            my $rv = _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
+            my $rv = _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'}, $smtp_transports );
             $count_messages++ if $rv;
         }
         elsif ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
@@ -1315,7 +1317,7 @@ sub _get_unsent_messages {
 
 sub _send_message_by_email {
     my $message = shift or return;
-    my ($username, $password, $method) = @_;
+    my ( $username, $password, $method, $smtp_transports ) = @_;
 
     my $patron;
     my $to_address = $message->{'to_address'};
@@ -1467,8 +1469,11 @@ sub _send_message_by_email {
       if !$message->{to_address}
       || $message->{to_address} ne $email->email->header('To');
 
+    $smtp_transports->{ $smtp_server->id } ||= $smtp_server->transport;
+    my $smtp_transport = $smtp_transports->{ $smtp_server->id };
+
     try {
-        $email->send_or_die({ transport => $smtp_server->transport });
+        $email->send_or_die({ transport => $smtp_transport });
 
         _set_message_status(
             {

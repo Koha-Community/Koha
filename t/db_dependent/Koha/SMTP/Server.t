@@ -44,13 +44,13 @@ subtest 'transport() tests' => sub {
 
     my $transport = $server->transport;
 
-    is( ref($transport), 'Email::Sender::Transport::SMTP', 'Type is correct' );
+    is( ref($transport), 'Email::Sender::Transport::SMTP::Persistent', 'Type is correct' );
     is( $transport->ssl, 0, 'SSL is not set' );
 
     $server->set({ ssl_mode => '1' })->store;
     $transport = $server->transport;
 
-    is( ref($transport), 'Email::Sender::Transport::SMTP', 'Type is correct' );
+    is( ref($transport), 'Email::Sender::Transport::SMTP::Persistent', 'Type is correct' );
     is( $transport->ssl, '1', 'SSL is set' );
     is( $transport->debug, '0', 'Debug setting honoured (disabled)' );
 
