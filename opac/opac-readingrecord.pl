@@ -21,23 +21,14 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Auth qw( get_template_and_user );
-use C4::Koha qw(
-    getitemtypeimagelocation
-    GetNormalizedISBN
-    GetNormalizedUPC
-    GetNormalizedOCLCNumber
-);
 use C4::Biblio;
-use C4::Members qw( GetAllIssues );
 use C4::External::BakerTaylor qw( image_url link_url );
 use MARC::Record;
 
 use C4::Output qw( output_html_with_http_headers );
-use C4::Charset qw( StripNonXmlChars );
 use Koha::Patrons;
 
 use Koha::ItemTypes;
-use Koha::Ratings;
 
 my $query = CGI->new;
 
@@ -55,7 +46,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
+my $patron = Koha::Patrons->find( $borrowernumber );
+my @itemtypes = Koha::ItemTypes->search_with_localization->as_list;
+my %item_types = map {
+    $_->itemtype => $_
+} @itemtypes;
+$template->param(item_types => \%item_types);
 
 # get the record
 my $order = $query->param('order') || '';
@@ -75,64 +71,27 @@ my $limit = $query->param('limit');
 $limit //= '';
 $limit = ( $limit eq 'full' ) ? 0 : 50;
 
-my $issues = GetAllIssues( $borrowernumber, $order, $limit );
-
-my $itype_attribute =
-  ( C4::Context->preference('item-level_itypes') ) ? 'itype' : 'itemtype';
-
-my $opac_summary_html = C4::Context->preference('OPACMySummaryHTML');
-foreach my $issue ( @{$issues} ) {
-    $issue->{normalized_isbn} = GetNormalizedISBN( $issue->{isbn} );
-    if ( $issue->{$itype_attribute} ) {
-        $issue->{translated_description} =
-          $itemtypes->{ $issue->{$itype_attribute} }->{translated_description};
-        $issue->{imageurl} =
-          getitemtypeimagelocation( 'opac',
-            $itemtypes->{ $issue->{$itype_attribute} }->{imageurl} );
-    }
-
-    if (   C4::Context->preference('BakerTaylorEnabled')
-        || C4::Context->preference('SyndeticsEnabled')
-        || C4::Context->preference('SyndeticsCoverImages') )
-    {
-        my $marcxml = C4::Biblio::GetXmlBiblio( $issue->{biblionumber} );
-        if ( $marcxml ) {
-            $marcxml = StripNonXmlChars( $marcxml );
-            my $marc_rec =
-              MARC::Record::new_from_xml( $marcxml, 'UTF-8',
-                C4::Context->preference('marcflavour') );
-            $issue->{normalized_upc} = GetNormalizedUPC( $marc_rec, C4::Context->preference('marcflavour') );
-            $issue->{normalized_oclc} = GetNormalizedOCLCNumber($marc_rec, C4::Context->preference('marcflavour'));
+my $checkouts = [
+    $patron->checkouts(
+        {},
+        {
+            order_by => $order,
+            prefetch => { item => { biblio => 'biblioitems' } },
+            ( $limit ? ( limit => $limit ) : () ),
         }
-
-    }
-    # My Summary HTML
-    if ($opac_summary_html) {
-        my $my_summary_html = $opac_summary_html;
-        $issue->{author}
-          ? $my_summary_html =~ s/{AUTHOR}/$issue->{author}/g
-          : $my_summary_html =~ s/{AUTHOR}//g;
-        my $title = $issue->{title};
-        $title =~ s/\/+$//;    # remove trailing slash
-        $title =~ s/\s+$//;    # remove trailing space
-        $title
-          ? $my_summary_html =~ s/{TITLE}/$title/g
-          : $my_summary_html =~ s/{TITLE}//g;
-        $issue->{normalized_isbn}
-          ? $my_summary_html =~ s/{ISBN}/$issue->{normalized_isbn}/g
-          : $my_summary_html =~ s/{ISBN}//g;
-        $issue->{biblionumber}
-          ? $my_summary_html =~ s/{BIBLIONUMBER}/$issue->{biblionumber}/g
-          : $my_summary_html =~ s/{BIBLIONUMBER}//g;
-        $issue->{MySummaryHTML} = $my_summary_html;
-    }
-    # Star ratings
-    if ( C4::Context->preference('OpacStarRatings') eq 'all' ) {
-        my $ratings = Koha::Ratings->search({ biblionumber => $issue->{biblionumber} });
-        $issue->{ratings} = $ratings;
-        $issue->{my_rating} = $borrowernumber ? $ratings->search({ borrowernumber => $borrowernumber })->next : undef;
-    }
-}
+    )->as_list
+];
+$limit -= scalar(@$checkouts) if $limit;
+my $old_checkouts = [
+    $patron->old_checkouts(
+        {},
+        {
+            order_by => $order,
+            prefetch => { item => { biblio => 'biblioitems' } },
+            ( $limit ? ( limit => $limit ) : () ),
+        }
+    )->as_list
+];
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
 	$template->param(
@@ -152,15 +111,14 @@ for(qw(AmazonCoverImages GoogleJackets)) { # BakerTaylorEnabled handled above
 
 my $saving_display = C4::Context->preference('OPACShowSavings');
 if ( $saving_display =~ /checkouthistory/ ) {
-    my $patron = Koha::Patrons->find( $borrowernumber );
     $template->param( savings => $patron->get_savings );
 }
 
 $template->param(
-    READING_RECORD => $issues,
+    checkouts => $checkouts,
+    old_checkouts => $old_checkouts,
     limit          => $limit,
     readingrecview => 1,
-    OPACMySummaryHTML => $opac_summary_html ? 1 : 0,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

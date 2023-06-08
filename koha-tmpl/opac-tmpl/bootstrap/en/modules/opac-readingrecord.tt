@@ -42,8 +42,8 @@
 
                 <div id="userreadingrecord" class="maincontent">
                     <h1>Checkout history</h1>
-
-                    [% IF READING_RECORD.size == 0 %]
+                    [% SET all_checkouts = checkouts.merge(old_checkouts) %]
+                    [% IF all_checkouts.size == 0 %]
                         You have never borrowed anything from this library.
                     [% ELSE %]
                         <div id="opac-user-readingrec">
@@ -91,16 +91,16 @@
                                     [% END # /WRAPPER tabs_nav %]
                                     [% WRAPPER tab_panels %]
                                         [% WRAPPER tab_panel tabname="tabs-container" bt_active= 1 %]
-                                            [% PROCESS checkout_history_table %]
+                                            [% PROCESS checkout_history_table checkouts=all_checkouts %]
                                         [% END # /tab_panel# %]
                                     [% END # /WRAPPER tab_panels %]
                                 [% END # /WRAPPER tabs %]
                             [% ELSE %]
-                                [% PROCESS checkout_history_table %]
+                                [% PROCESS checkout_history_table checkouts=all_checkouts %]
                             [% END %]
 
                         </div> <!-- / .opac-user-readingrec -->
-                    [% END # / IF READING_RECORD.size %]
+                    [% END # / IF checkouts.size == 0 %]
                 </div> <!-- / .userreadingrecord -->
             </div> <!-- / .col-lg-10 -->
         </div> <!-- / .row -->
@@ -120,91 +120,103 @@
                 <th>Call number</th>
                 <th>Vol info</th>
                 <th>Date</th>
-                [% IF ( OPACMySummaryHTML ) %]
+                [% IF Koha.Preference('OPACMySummaryHTML') %]
                     <th class="NoSort noExport">Links</th>
                 [% END %]
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            [% FOREACH issue IN READING_RECORD %]
+            [% FOREACH checkout IN checkouts %]
+                [% SET item = checkout.item %]
+                [% SET biblio = item.biblio %]
                 <tr>
                     <td style="display:none;">
-                        [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' %]
+                        [% IF checkout.onsite_checkout %][% issuetype = 'onsite_checkout' %]
                         [% ELSE %][% issuetype = 'standard_checkout' %]
                         [% END %]
                         [% issuetype | html %]
                     </td>
                     <td>
-                        [% IF  OPACAmazonCoverImages %]
-                            [% IF  issue.normalized_isbn %]
-                                <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
+                        [% SET normalized_isbn = biblio.normalized_isbn %]
+                        [% IF OPACAmazonCoverImages %]
+                            [% IF normalized_isbn %]
+                                <a href="http://www.amazon.com/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
                             [% ELSE %]
                                 <span class="no-image">No cover image available</span>
                             [% END %]
                         [% END %]
 
                         [% IF GoogleJackets %]
-                            [% IF  issue.normalized_isbn %]
-                                <div title="[% issue.biblionumber |url %]" class="[% issue.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
+                            [% IF normalized_isbn %]
+                                <div title="[% biblio.biblionumber |url %]" class="[% normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
                             [% ELSE %]
-                            <span class="no-image">No cover image available</span>
+                               <span class="no-image">No cover image available</span>
                             [% END %]
                         [% END %]
 
-                        [% IF BakerTaylorEnabled %]
-                            [% bt_id = ( issue.normalized_upc || issue.normalized_isbn ) %]
-                            [% IF ( bt_id ) %]
-                            <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
-                            [% ELSE %]
-                            <span class="no-image">No cover image available</span>
-                            [% END %]
+                         [% IF BakerTaylorEnabled || SyndeticsEnabled && SyndeticsCoverImages %]
+                             [% SET normalized_upc = biblio.normalized_upc %]
+                         [% END %]
+                         [% IF BakerTaylorEnabled %]
+                             [% bt_id = ( normalized_upc || normalized_isbn ) %]
+                             [% IF ( bt_id ) %]
+                                <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                             [% ELSE %]
+                                <span class="no-image">No cover image available</span>
+                             [% END %]
                         [% END %]
 
                         [% IF SyndeticsEnabled && SyndeticsCoverImages %]
-                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn | html %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% issue.normalized_upc | html %]&amp;oclc=[% issue.normalized_oclc | html %]" alt="" class="item-thumbnail" />
+                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | html %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% normalized_upc | html %]&amp;oclc=[% biblio.normalized_oclc | html %]" alt="" class="item-thumbnail" />
                         [% END %]
                     </td>
                     <td>
-                        [% INCLUDE 'biblio-title.inc' biblio=issue, link => 1 %]
+                        [% INCLUDE 'biblio-title.inc' biblio=biblio, link => 1 %]
                         [% IF ( Koha.Preference( 'OpacStarRatings' ) == 'all' ) %]
-                            [% INCLUDE 'user-star-ratings.inc' item=issue %]
+                            [% SET ratings = {ratings => biblio.ratings, itemnumber => item.itemnumber, biblionumber => biblio.biblionumber, my_rating => biblio.ratings.search( borrowernumber => logged_in_user.borrowernumber ).next } %]
+                            [% INCLUDE 'user-star-ratings.inc' item=ratings %]
                         [% END %]
                     </td>
-                    <td>[% issue.author | html %]</td>
+                    <td>[% biblio.author | html %]</td>
                     <td>
+                        [% SET item_type = item_types.${item.effective_itemtype} %]
                         [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
-                            [% IF ( issue.imageurl ) %]
-                                <img src="[% issue.imageurl | html %]" alt="" />
+                            [% SET image_location = item_type.image_location %]
+                            [% IF image_location %]
+                                <img src="[% image_location | html %]" alt="" />
                             [% END %]
                         [% END %]
-                        <span class="itypetext"><span class="tdlabel">Item type:</span>
-                        [% issue.translated_description | html %]</span>
+                        <span class="itypetext">
+                            <span class="tdlabel">Item type:</span>
+                            [% item_type.translated_description | html %]
+                        </span>
                     </td>
                     <td>
                         <span class="tdlabel">Call number:</span>
-                        [% issue.itemcallnumber | html %]
+                        [% item.itemcallnumber | html %]
                     </td>
                     <td>
-                        [% IF issue.enumchron %]
-                            [% issue.enumchron | html %]
+                        [% IF item.enumchron %]
+                            [% item.enumchron | html %]
                         [% END %]
                     </td>
-                    [% IF issue.returndate %]
-                        <td data-order="[% issue.returndate | html %]">
+                    [% IF checkout.returndate %]
+                        <td data-order="[% checkout.returndate | html %]">
                             <span class="tdlabel">Check-in date:</span>
-                            [% issue.returndate | $KohaDates %]
+                            [% checkout.returndate | $KohaDates %]
+                        </td>
                     [% ELSE %]
                         <td data-order="Checked out">
                             <em>(Checked out)</em>
+                        </td>
                     [% END %]
-                    </td>
-                    [% IF OPACMySummaryHTML %]
-                        <td>[% issue.MySummaryHTML | $raw %]</td>
+                    [% IF Koha.Preference('OPACMySummaryHTML') %]
+                        <td>[% biblio.opac_summary_html | $raw %]</td>
                     [% END %]
                     <td></td>
                 </tr>
-            [% END # / FOREACH issue %]
+            [% END # / FOREACH checkout %]
         </tbody>
     </table>
 [% END %]
