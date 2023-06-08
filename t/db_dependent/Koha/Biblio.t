@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 27;
 use Test::Exception;
 use Test::Warn;
 
@@ -1142,6 +1142,30 @@ subtest 'ratings' => sub {
     plan tests => 1;
     # See t/db_dependent/Koha/Ratings.t
     ok(1);
+};
+
+subtest 'opac_summary_html' => sub {
+
+    plan tests => 2;
+
+    my $author = 'my author';
+    my $title  = 'my title';
+    my $isbn   = '9781250067128 | 125006712X';
+    my $biblio = $builder->build_sample_biblio( { author => $author, title => $title } );
+    $biblio->biblioitem->set( { isbn => '9781250067128 | 125006712X' } )->store;
+
+    t::lib::Mocks::mock_preference( 'OPACMySummaryHTML', '' );
+    is( $biblio->opac_summary_html, '', 'opac_summary_html returns empty string if pref is off' );
+
+    t::lib::Mocks::mock_preference(
+        'OPACMySummaryHTML',
+        'Replace {AUTHOR}, {TITLE}, {ISBN} AND {BIBLIONUMBER} please'
+    );
+    is(
+        $biblio->opac_summary_html,
+        sprintf( 'Replace %s, %s, %s AND %s please', $author, $title, $biblio->normalized_isbn, $biblio->biblionumber ),
+        'opac_summary_html replaces the different patterns'
+    );
 };
 
 sub component_record1 {
