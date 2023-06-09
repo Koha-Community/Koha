@@ -2040,7 +2040,7 @@
         });
 
         function showBsTab( container, panelid ){
-            if( $( "#" + panelid ).length == 1 ){
+            if( $( "#" + panelid + "_panel" ).length == 1 ){
                 $("#" + container + " a[href='#" + panelid + "_panel']").tab("show");
             } else {
                 $("#" + container + " a:first").tab("show");
