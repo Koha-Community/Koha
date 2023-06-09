@@ -1310,10 +1310,7 @@
                                 <xsl:call-template name="listCallNumbers">
                                     <xsl:with-param name="items" select="$reference_items[items:resultbranch=$currentbranch and items:substatus=$current_substatus]"/>
                                     <xsl:with-param name="max" select="$OPACResultsMaxItems"/>
-                                    <xsl:with-param name="status_text">
-                                        <xsl:value-of select="concat($currentbranch,': ')"/>
-                                        <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
-                                    </xsl:with-param>
+                                    <xsl:with-param name="status_text" select="concat($currentbranch,': ',$current_substatus)"/>
                                     <xsl:with-param name="class_block" select="concat('notforloandesc_',$current_substatus)"/>
                                     <xsl:with-param name="class_status" select="'ItemBranch'"/>
                                     <xsl:with-param name="OPACItemLocation" select="$OPACItemLocation"/>
@@ -1334,7 +1331,6 @@
                             <status english="Pending hold">Pending hold</status>
                             <status english="In transit">In transit</status>
                             <status english="Waiting">On hold</status>
-			    <status english="Not for loan">Not for loan</status>
                         </xsl:variable>
                         <xsl:variable name="unavailable_items" select="key('item-by-status', 'reallynotforloan')|key('item-by-status', 'other')"/>
                         <xsl:choose>
@@ -1354,7 +1350,12 @@
                                                 <xsl:with-param name="status_text">
                                                     <xsl:value-of select="$currentbranch"/>
                                                     <xsl:text>: </xsl:text>
-                                                    <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
+                                                    <xsl:if test="items:status='other'">
+                                                        <xsl:value-of select="exsl:node-set($other_status_list)/status[@english=$current_substatus]"/>
+                                                    </xsl:if>
+                                                    <xsl:if test="items:status='reallynotforloan'">
+                                                        <xsl:value-of select="$current_substatus"/>
+                                                    </xsl:if>
                                                 </xsl:with-param>
                                                 <xsl:with-param name="class_block" select="concat('unavailable_',items:substatus)"/>
                                                 <xsl:with-param name="class_status" select="'ItemBranch'"/>
@@ -1373,7 +1374,12 @@
                                         <xsl:with-param name="items" select="$unavailable_items[items:substatus=$current_substatus]"/>
                                         <xsl:with-param name="max" select="0"/>
                                         <xsl:with-param name="status_text">
-                                            <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
+                                            <xsl:if test="items:status='other'">
+                                                <xsl:value-of select="exsl:node-set($other_status_list)/status[@english=$current_substatus]"/>
+                                            </xsl:if>
+                                            <xsl:if test="items:status='reallynotforloan'">
+                                                <xsl:value-of select="$current_substatus"/>
+                                            </xsl:if>
                                         </xsl:with-param>
                                         <xsl:with-param name="class_block" select="concat('unavailable_',$current_substatus)"/>
                                         <xsl:with-param name="class_status" select="UnavailableSubstatus"/>
