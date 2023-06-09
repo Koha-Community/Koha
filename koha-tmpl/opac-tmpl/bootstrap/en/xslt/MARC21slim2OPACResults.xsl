@@ -1313,7 +1313,6 @@
                                     <xsl:with-param name="status_text">
                                         <xsl:value-of select="concat($currentbranch,': ')"/>
                                         <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
-                                        <!-- Note that value-of here picks string value of first node only from the union; keep in mind too that current_substatus may contain an authorised value -->
                                     </xsl:with-param>
                                     <xsl:with-param name="class_block" select="concat('notforloandesc_',$current_substatus)"/>
                                     <xsl:with-param name="class_status" select="'ItemBranch'"/>
@@ -1355,7 +1354,7 @@
                                                 <xsl:with-param name="status_text">
                                                     <xsl:value-of select="$currentbranch"/>
                                                     <xsl:text>: </xsl:text>
-                                                    <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/><!-- See former comment on value-of and union -->
+                                                    <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
                                                 </xsl:with-param>
                                                 <xsl:with-param name="class_block" select="concat('unavailable_',items:substatus)"/>
                                                 <xsl:with-param name="class_status" select="'ItemBranch'"/>
@@ -1374,7 +1373,7 @@
                                         <xsl:with-param name="items" select="$unavailable_items[items:substatus=$current_substatus]"/>
                                         <xsl:with-param name="max" select="0"/>
                                         <xsl:with-param name="status_text">
-                                            <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/><!-- See former comment on value-of and union -->
+                                            <xsl:value-of select="exsl:node-set($item_status_list)/status[@english=$current_substatus]|$current_substatus"/>
                                         </xsl:with-param>
                                         <xsl:with-param name="class_block" select="concat('unavailable_',$current_substatus)"/>
                                         <xsl:with-param name="class_status" select="UnavailableSubstatus"/>
