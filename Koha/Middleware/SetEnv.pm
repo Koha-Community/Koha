@@ -96,11 +96,12 @@ sub call {
         }
     } @setenv_headers;
 
-    # Finally, everything is shoved into the $env.
-    $env = {
-        %$env,
-        %setenvs
-    };
+    #Add the environmental variables to the $env hashref which travels between middlewares
+    #NOTE: It's very important that this $env keeps the same reference address so that
+    #all middlewares act correctly
+    foreach my $key ( keys %setenvs ) {
+        $env->{$key} = $setenvs{$key};
+    }
 
     return $self->app->($env);
 }
