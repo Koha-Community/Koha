@@ -86,6 +86,14 @@ export default {
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
+                options: {
+                    order: [
+                        [1, "desc"],
+                        [2, "asc"],
+                        [3, "asc"],
+                        [4, "asc"],
+                    ],
+                },
                 url: this.table_url,
                 add_filters: true,
                 actions: {
