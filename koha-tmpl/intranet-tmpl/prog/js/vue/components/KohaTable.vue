@@ -44,7 +44,7 @@ export default {
                 ajax: {
                     url: typeof this.url === "function" ? this.url() : this.url,
                     ..._dt_default_ajax({
-                        options: this.options,
+                        options: { ...this.options, columns: this.columns },
                         default_filters: this.default_filters,
                     }),
                 },
