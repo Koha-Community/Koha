@@ -209,7 +209,7 @@ elsif ( $phase eq 'Edit SQL'){
     );
 }
 
-elsif ( $phase eq 'Update SQL' || $phase eq 'Update and run SQL' ){
+elsif ( $phase eq 'update_sql' || $phase eq 'update_and_run_sql' ){
     my $id         = $input->param('id');
     my $sql        = $input->param('sql');
     my $reportname = $input->param('reportname');
@@ -301,7 +301,7 @@ elsif ( $phase eq 'Update SQL' || $phase eq 'Update and run SQL' ){
                 cache_expiry_units => $cache_expiry_units,
             );
         }
-        if ( $phase eq 'Update and run SQL' ) {
+        if ( $phase eq 'update_and_run_sql' ) {
             print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?reports=$id&phase=Run%20this%20report");
         }
     }
