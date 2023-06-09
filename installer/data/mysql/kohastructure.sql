@@ -3315,10 +3315,11 @@ DROP TABLE IF EXISTS `illrequestattributes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `illrequestattributes` (
   `illrequest_id` bigint(20) unsigned NOT NULL COMMENT 'ILL request number',
+  `backend` varchar(80) NOT NULL COMMENT 'API ILL backend name',
   `type` varchar(200) NOT NULL COMMENT 'API ILL property name',
   `value` mediumtext NOT NULL COMMENT 'API ILL property value',
   `readonly` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Is this attribute read only',
-  PRIMARY KEY (`illrequest_id`,`type`(191)),
+  PRIMARY KEY (`illrequest_id`,`backend`,`type`(191)),
   CONSTRAINT `illrequestattributes_ifk` FOREIGN KEY (`illrequest_id`) REFERENCES `illrequests` (`illrequest_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
