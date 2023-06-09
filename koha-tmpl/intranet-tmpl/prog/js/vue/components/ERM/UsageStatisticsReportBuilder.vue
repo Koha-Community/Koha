@@ -299,15 +299,7 @@ export default {
         const { setConfirmationDialog, setMessage, setError } =
             inject("mainStore")
 
-        const {
-            setReportURL,
-            setTimePeriodColumns,
-            setReportType,
-            setQuery,
-            setColumns,
-            setYearlyFilter,
-            getMonthsData,
-        } = inject("reportsStore")
+        const { getMonthsData } = inject("reportsStore")
 
         const months_data = getMonthsData()
 
@@ -320,12 +312,6 @@ export default {
             setConfirmationDialog,
             setMessage,
             setError,
-            setReportURL,
-            setTimePeriodColumns,
-            setReportType,
-            setColumns,
-            setYearlyFilter,
-            setQuery,
             months_data,
         }
     },
@@ -589,20 +575,22 @@ export default {
             const columns = this.defineColumns(
                 this.title_property_column_options
             )
-            // Set state to be accessed by reports viewer component
-            this.setReportURL(url)
-            this.setQuery(queryObject)
-            this.setTimePeriodColumns(this.time_period_columns_builder)
-            if (data_display.includes("monthly")) {
-                this.setYearlyFilter(this.yearly_filter_required)
-            } else {
-                this.setYearlyFilter(false)
+            const yearly_filter = data_display.includes("monthly")
+                ? this.yearly_filter_required
+                : false
+
+            const urlParams = {
+                url,
+                columns,
+                queryObject,
+                yearly_filter,
+                type,
+                tp_columns: this.time_period_columns_builder,
             }
-            this.setReportType(type)
-            this.setColumns(columns)
 
             this.$router.push({
                 name: "UsageStatisticsReportsViewer",
+                query: { data: JSON.stringify(urlParams) },
             })
         },
         monthSelector(e) {
@@ -880,14 +868,7 @@ export default {
             this.titles.length = 0
         },
         defineColumns(title_props) {
-            const columns = [
-                {
-                    title: __("Title"),
-                    data: "title",
-                    searchable: true,
-                    orderable: true,
-                },
-            ]
+            const columns = []
             // Add user selected columns
             const title_properties = Object.keys(title_props)
             title_properties.forEach(prop => {

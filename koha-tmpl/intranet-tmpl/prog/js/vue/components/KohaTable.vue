@@ -74,6 +74,10 @@ export default {
         redraw: function (url) {
             this.$refs.table.dt().ajax.url(url).draw()
         },
+        useTableObject: function () {
+            let dt = this.$refs.table.dt()
+            return dt
+        },
     },
     beforeMount() {
         if (this.actions.hasOwnProperty("-1")) {

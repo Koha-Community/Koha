@@ -17,7 +17,7 @@
                 :value="$__('Update table')"
             />
         </fieldset>
-        <div class="page-section">
+        <div class="page-section hide-table" ref="table_div">
             <KohaTable ref="table" v-bind="tableOptions"></KohaTable>
         </div>
     </div>
@@ -31,66 +31,62 @@ export default {
     setup() {
         const table = ref()
 
-        const {
-            getReportURL,
-            getTimePeriodColumns,
-            getReportType,
-            getTableSettings,
-            getColumns,
-            getYearlyFilter,
-            getMonthsData,
-            getQuery,
-            setColumns,
-        } = inject("reportsStore")
-
-        const report_type = getReportType()
-        const embed =
-            report_type === "yearly" ? ["erm_usage_yuses"] : ["erm_usage_muses"]
-
-        const years = Object.keys(getTimePeriodColumns())
-        const year = ref(years[years.length - 1])
+        const { getMonthsData } = inject("reportsStore")
 
         return {
-            getReportURL,
-            getTimePeriodColumns,
-            getTableSettings,
-            getColumns,
-            getYearlyFilter,
             getMonthsData,
-            getQuery,
-            setColumns,
             table,
-            report_type,
-            embed,
-            years,
-            year,
         }
+    },
+    beforeCreate() {
+        const urlParams = JSON.parse(this.$route.query.data)
+        this.params = urlParams
+
+        this.report_type = this.params.type
+        this.embed =
+            this.report_type === "yearly"
+                ? ["erm_usage_yuses"]
+                : ["erm_usage_muses"]
+
+        this.years = Object.keys(this.params.tp_columns)
+        this.year = this.years[this.years.length - 1]
     },
     data() {
         return {
             building_table: false,
             initialized: false,
             tableOptions: {
-                columns: this.buildColumnArray(this.report_type),
+                columns: this.buildColumnArray(this.report_type, this.params),
                 options: { embed: this.embed },
-                url: () => this.tableURL(this.year),
+                url: () => this.tableURL(this.year, this.params),
                 table_settings: this.report_type.includes("monthly")
                     ? this.monthly_usage_table_settings
                     : this.yearly_usage_table_settings,
                 add_filters: true,
             },
             yearly_filter: null,
+            params: this.params,
+            year: this.year,
+            years: this.years,
         }
     },
     methods: {
-        buildColumnArray(report_type) {
-            const columns = this.getColumns()
-            const months_data = this.getMonthsData()
-            const time_period_columns = this.getTimePeriodColumns()
-            const yearly_filter = this.getYearlyFilter()
-            const query = this.getQuery()
+        buildColumnArray(report_type, params) {
+            const columns = params.columns
+            const months_data = this.getMonthsData() //
+            const time_period_columns = params.tp_columns
+            const yearly_filter = params.yearly_filter
+            const query = params.queryObject
 
-            const column_set = [...columns]
+            const column_set = [
+                {
+                    title: __("Title"),
+                    data: "title",
+                    searchable: true,
+                    orderable: true,
+                },
+                ...columns,
+            ]
             // Add metric type to each row
             if (report_type !== "metric_type") {
                 column_set.push({
@@ -224,7 +220,7 @@ export default {
             return column_set
         },
         async update_table() {
-            this.$refs.table.redraw(this.tableURL(this.year))
+            this.$refs.table.redraw(this.tableURL(this.year, this.params))
         },
         buildFilteredQuery(query, time_period_columns, year) {
             let url = "/api/v1/erm/usage_titles/monthly_report"
@@ -261,11 +257,11 @@ export default {
 
             return url
         },
-        tableURL(year) {
-            const filter_required = this.getYearlyFilter()
+        tableURL(year, params) {
+            const filter_required = params.yearly_filter
             if (filter_required) {
-                const query = this.getQuery()
-                const time_period_columns = this.getTimePeriodColumns()
+                const query = params.queryObject
+                const time_period_columns = params.tp_columns
 
                 const url = this.buildFilteredQuery(
                     query,
@@ -275,15 +271,56 @@ export default {
 
                 return url
             } else {
-                const url = this.getReportURL()
+                const url = params.url
 
                 return url
+            }
+        },
+        mergeTitleDataIntoOneLine(numberOfMetricTypes) {
+            let dt = this.$refs.table.useTableObject()
+            dt.on("draw", () => {
+                const rows = dt.rows().nodes().to$()
+
+                const data_rows = []
+                for (let i = 0; i < rows.length; i = i + numberOfMetricTypes) {
+                    data_rows.push([rows.slice(i, i + numberOfMetricTypes)])
+                }
+
+                data_rows
+                    .map(item => item[0])
+                    .forEach(titleRows => {
+                        Array.from(titleRows).forEach((row, i) => {
+                            const cells = row.cells
+                            if (i === 0) {
+                                cells[0].rowSpan = numberOfMetricTypes
+                                cells[0].style.textAlign = "center"
+                                cells[0].style.verticalAlign = "middle"
+                                cells[0].style.borderRight = "1px solid #BCBCBC"
+                            } else {
+                                cells[0].remove()
+                            }
+                        })
+                    })
+            })
+            this.$refs.table_div.classList.remove("hide-table")
+        },
+    },
+    watch: {
+        table() {
+            // table needs to be rendered before header can be created and
+            // table is hidden by .hide-table until table header is created
+            if (this.report_type !== "metric_type") {
+                this.mergeTitleDataIntoOneLine(
+                    this.params.queryObject.metric_types.length
+                )
+            } else {
+                this.$refs.table_div.classList.remove("hide-table")
             }
         },
     },
     mounted() {
         if (!this.building_table) {
-            this.yearly_filter = this.getYearlyFilter()
+            this.yearly_filter = this.params.yearly_filter
             this.building_table = true
             this.initialized = true
         }
@@ -313,5 +350,8 @@ export default {
 }
 .v-select {
     max-width: 30%;
+}
+.hide-table {
+    display: none;
 }
 </style>
