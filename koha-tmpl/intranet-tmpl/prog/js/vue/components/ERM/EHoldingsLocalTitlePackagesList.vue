@@ -63,7 +63,7 @@ export default {
                                 if (!row) return // Happen if the table is empty
                                 let { href } = router.resolve({
                                     name: "EHoldingsLocalResourcesShow",
-                                    params: { resource_id },
+                                    params: { resource_id: row.resource_id },
                                 })
                                 let n = createVNode(
                                     "a",
