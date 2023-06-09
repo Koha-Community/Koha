@@ -204,10 +204,10 @@
                                                         [% END %]
                                                             <option value="">Choose</option>
                                                             [% FOREACH itemlostloo IN itemlostloop %]
-                                                                [% IF ClaimReturnedLostValue && !ITEM_DAT.itemlost && itemlostloo.authorised_value == ClaimReturnedLostValue #Filter claims returned status from pulldown %]
-                                                                    <option value="[% itemlostloo.authorised_value | html %]" disabled="disabled" title="Return claims must be processed from the patron details page">[% itemlostloo.lib | html %]</option>
-                                                                [% ELSIF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
+                                                                [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
                                                                     <option value="[% itemlostloo.authorised_value | html %]" selected="selected">[% itemlostloo.lib | html %]</option>
+                                                                [% ELSIF ClaimReturnedLostValue && itemlostloo.authorised_value == ClaimReturnedLostValue #Filter claims returned status from pulldown %]
+                                                                    <option value="[% itemlostloo.authorised_value | html %]" disabled="disabled" title="Return claims must be processed from the patron details page">[% itemlostloo.lib | html %]</option>
                                                                 [% ELSE %]
                                                                     <option value="[% itemlostloo.authorised_value | html %]">[% itemlostloo.lib | html %]</option>
                                                                 [% END %]
