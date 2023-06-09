@@ -158,10 +158,26 @@
                         <label
                             >{{ item.user_train_item_id }}
                             <span class="action_links">
-                                <router-link
-                                    :to="`/cgi-bin/koha/preservation/trains/${train.train_id}/items/edit/${item.train_item_id}`"
+                                <a
+                                    role="button"
+                                    @click="editItem(item.train_item_id)"
                                     :title="$__('Edit')"
-                                    ><i class="fa fa-pencil"></i></router-link
+                                    ><i class="fa fa-pencil"></i
+                                ></a>
+                                <a
+                                    role="button"
+                                    @click="removeItem(item.train_item_id)"
+                                    :title="$__('Remove')"
+                                    ><i class="fa fa-trash"></i
+                                ></a>
+                                <a
+                                    v-if="train.received_on !== null"
+                                    role="button"
+                                    @click="
+                                        selectTrainForCopy(item.train_item_id)
+                                    "
+                                    :title="$__('Copy')"
+                                    ><i class="fa fa-copy"></i></a
                             ></span>
                         </label>
                         <div class="attributes_values">
