@@ -183,7 +183,14 @@
                                         selectTrainForCopy(item.train_item_id)
                                     "
                                     :title="$__('Copy')"
-                                    ><i class="fa fa-copy"></i></a
+                                    ><i class="fa fa-copy"></i
+                                ></a>
+                                <a
+                                    v-if="item.processing.letter_code !== null"
+                                    role="button"
+                                    @click="printSlip(item.train_item_id)"
+                                    :title="$__('Print')"
+                                    ><i class="fa fa-print"></i></a
                             ></span>
                         </label>
                         <div class="attributes_values">
