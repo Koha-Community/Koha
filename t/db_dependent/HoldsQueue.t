@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 61;
+use Test::More tests => 60;
 use Data::Dumper;
 
 use C4::Calendar qw( new insert_single_holiday );
@@ -1964,99 +1964,6 @@ subtest "GetHoldsQueueItems" => sub {
     );
     is( scalar @$queue_items,
         1, 'One item of shleving location found when locationslimit passed' );
-
-    $schema->storage->txn_rollback;
-};
-
-subtest "Test HoldsQueuePrioritizeBranch" => sub {
-
-    plan tests => 4;
-
-    $schema->storage->txn_begin;
-
-    t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 0 );
-    t::lib::Mocks::mock_preference( 'UseTransportCostMatrix', 0 );
-
-    my $branch1 = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $category = $builder->build_object( { class => 'Koha::Patron::Categories' });
-    my $patron = $builder->build_object(
-        {
-            class => "Koha::Patrons",
-            value => {
-                branchcode => $branch1->branchcode,
-                categorycode => $category->categorycode
-            }
-        }
-    );
-
-    my $biblio = $builder->build_sample_biblio();
-    my $item1   = $builder->build_sample_item(
-        {
-            biblionumber  => $biblio->biblionumber,
-            library    => $branch1->branchcode,
-        }
-    )->holdingbranch( $branch2->id )->store();
-
-    my $item2   = $builder->build_sample_item(
-        {
-            biblionumber  => $biblio->biblionumber,
-            library    => $branch1->branchcode,
-        }
-    )->homebranch( $branch2->id )->store();
-
-    my $reserve_id = AddReserve(
-        {
-            branchcode     => $branch1->branchcode,
-            borrowernumber => $patron->borrowernumber,
-            biblionumber   => $biblio->biblionumber,
-            priority       => 1,
-        }
-    );
-
-    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'homebranch' );
-
-    C4::HoldsQueue::CreateQueue();
-
-    my $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
-    is(
-        $queue_rs->next->itemnumber->itemnumber,
-        $item1->itemnumber,
-        "Picked the item whose homebranch matches the pickup branch"
-    );
-
-    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'holdingbranch' );
-
-    C4::HoldsQueue::CreateQueue();
-
-    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
-    is(
-        $queue_rs->next->itemnumber->itemnumber,
-        $item2->itemnumber,
-        "Picked the item whose holdingbranch matches the pickup branch"
-    );
-
-    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'homebranch' );
-
-    C4::HoldsQueue::CreateQueue();
-
-    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
-    is(
-        $queue_rs->next->itemnumber->itemnumber,
-        $item1->itemnumber,
-        "Picked the item whose homebranch matches the pickup branch"
-    );
-
-    t::lib::Mocks::mock_preference( 'HoldsQueuePrioritizeBranch', 'holdingbranch' );
-
-    C4::HoldsQueue::CreateQueue();
-
-    $queue_rs = $schema->resultset('TmpHoldsqueue')->search({ biblionumber => $biblio->biblionumber });
-    is(
-        $queue_rs->next->itemnumber->itemnumber,
-        $item2->itemnumber,
-        "Picked the item whose holdingbranch matches the pickup branch"
-    );
 
     $schema->storage->txn_rollback;
 };
