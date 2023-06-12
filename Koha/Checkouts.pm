@@ -28,6 +28,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Objects);
 
+
 =head1 NAME
 
 Koha::Checkouts - Koha Checkout object set class
@@ -66,7 +67,7 @@ sub calculate_dropbox_date {
 
 my $automatic_checkins = Koha::Checkouts->automatic_checkin()
 
-Checks in every due issue which itemtype has automatic_checkin enabled
+Checks in every due issue which itemtype has automatic_checkin enabled. Also if the AutoCheckinAutoFill sys. pref. is enabled, the item is trapped for the next patron.
 
 =cut
 
@@ -81,10 +82,20 @@ sub automatic_checkin {
         { prefetch => 'item'}
     );
 
+    my $autofill_next = C4::Context->preference('AutomaticCheckinAutoFill');
+
     while ( my $checkout = $due_checkouts->next ) {
         if ( $checkout->item->itemtype->automatic_checkin ) {
-            C4::Circulation::AddReturn( $checkout->item->barcode,
-                $checkout->branchcode, undef, dt_from_string($checkout->date_due) );
+            my ( undef, $messages) = C4::Circulation::AddReturn($checkout->item->barcode, $checkout->branchcode, undef, dt_from_string($checkout->date_due) );
+            if ( $autofill_next ){
+                if ( $messages->{ResFound} ){
+                    my $is_transfer = $checkout->branchcode ne $messages->{ResFound}->{branchcode};
+                    C4::Reserves::ModReserveAffect($checkout->item->itemnumber, $checkout->borrowernumber, $is_transfer, $messages->{ResFound}->{reserve_id}, $checkout->{desk_id}, 0);
+                    if( $is_transfer ){
+                        C4::Items::ModItemTransfer($checkout->item->itemnumber,$checkout->branchcode, $messages->{ResFound}->{branchcode},"Reserve");
+                    }
+                }
+            }
         }
     }
 }

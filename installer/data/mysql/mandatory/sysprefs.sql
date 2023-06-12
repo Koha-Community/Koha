@@ -83,6 +83,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AutoEmailNewUser','0',NULL,'Send an email to newly created patrons.','YesNo'),
 ('AutoShareWithMana','subscription','','defines datas automatically shared with mana','multiple'),
 ('AutoLocation','0',NULL,'If ON, IP authentication is enabled, blocking access to the staff interface from unauthorized IP addresses','YesNo'),
+('AutomaticCheckinAutoFill','0',NULL,'Automatically fill the next hold with an automatic check in.','YesNo'),
 ('AutomaticItemReturn','1',NULL,'If ON, Koha will automatically set up a transfer of this item to its homebranch','YesNo'),
 ('AutoLinkBiblios','0',NULL,'If enabled, link biblio to authorities on creation and edit','YesNo'),
 ('AutomaticConfirmTransfer','0',NULL,'Defines whether transfers should be automatically confirmed at checkin if modal dismissed','YesNo'),

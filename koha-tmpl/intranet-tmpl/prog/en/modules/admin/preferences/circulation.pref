@@ -977,6 +977,13 @@ Circulation:
                   homebranch: "item's home library"
                   holdingbranch: "item's holding library"
             - "."
+        -
+            - pref: AutomaticCheckinAutoFill
+              choices:
+                  1: "Allow"
+                  0: "Don't allow"
+            - allow holds to be automatically filled after being automatically checked in.
+            - '<br><strong>NOTE:</strong> These system preferences require the <code>misc/cronjobs/automatic_checkin.pl</code> cronjob. Ask your system administrator to schedule it.<br>'
     Patron restrictions:
         -
             - pref: PatronRestrictionTypes
