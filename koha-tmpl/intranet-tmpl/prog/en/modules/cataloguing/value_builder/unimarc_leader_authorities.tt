@@ -1,5 +1,11 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>UNIMARC leader builder</title>
+<title>[% FILTER collapse %]
+    [% t("UNIMARC leader builder") | html %]
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="cat_unimarc_leader_authorities" class="cat" style="padding:1em;">

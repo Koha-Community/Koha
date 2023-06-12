@@ -7,7 +7,17 @@
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Items &rsaquo; [% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %]) &rsaquo; Cataloging &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Items") | html %] &rsaquo;
+    [% IF ( biblio.author ) %]
+        [% tx("{title} by {author}", { title = biblio.title, author = biblio.author }) | html %]
+    [% ELSE %]
+        [% biblio.title | html %]
+    [% END %]
+    [% tx("(Record #{biblionumber})", { biblionumber = biblio.biblionumber }) | html %] &rsaquo;
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]

@@ -2,8 +2,17 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE HtmlTags %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( biblionumber ) %]Editing [% title | html %] (Record number [% biblionumber | html %])[% ELSE %]Add MARC record[% END %] &rsaquo; Cataloging &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF( biblionumber ) %]
+        [% tx("Editing {title} (Record number {biblionumber})", { title = title, biblionumber = biblionumber }) | html %]
+    [% ELSE %]
+        [% t("Add MARC record") | html %]
+    [% END %] &rsaquo;
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]

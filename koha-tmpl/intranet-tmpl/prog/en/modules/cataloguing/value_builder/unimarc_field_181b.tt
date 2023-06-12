@@ -1,5 +1,11 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Framework plugin example &rsaquo; Cataloguing &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("UNIMARC field 181b builder") | html %] &rsaquo;
+    [% t("Cataloguing") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

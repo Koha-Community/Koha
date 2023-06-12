@@ -1,6 +1,12 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>008 builder &rsaquo; Classifications &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("008 builder") | html %] &rsaquo;
+    [% t("Classifications") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

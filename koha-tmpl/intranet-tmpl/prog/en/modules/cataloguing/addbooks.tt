@@ -2,9 +2,18 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Cataloging [% IF ( total || breeding_loop ) %] &rsaquo; Search results [% ELSIF ( query ) %] &rsaquo; No results found [% END %] &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( total || breeding_loop ) %]
+        [% t("Search results") | html %]
+    [% ELSIF ( query ) %]
+        [% t("No results found") | html %]
+    [% END %] &rsaquo;
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

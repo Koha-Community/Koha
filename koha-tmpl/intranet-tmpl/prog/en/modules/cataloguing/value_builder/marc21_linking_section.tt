@@ -1,6 +1,12 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>plugin for links &rsaquo; Cataloguing &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Plugin for links") | html %] &rsaquo;
+    [% t("Cataloguing") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( fillinput ) %]
         </head>

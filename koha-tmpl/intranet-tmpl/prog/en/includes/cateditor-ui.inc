@@ -367,7 +367,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         $.each( backend.links || [], function( i, link ) {
             $('#title').append(' <a target="_blank" href="' + link.href.replace( '{ID}', parts[1] ) + '">(' + link.title + ')</a>' );
         } );
-        $( 'title', document.head ).html( _("Koha &rsaquo; Cataloging &rsaquo; ") + backend.titleForRecord.replace( '{ID}', parts[1] ) );
+        $( 'title', document.head ).html( backend.titleForRecord.replace( '{ID}', parts[1] ) + " &rsaquo; " + _("Cataloging") + " &rsaquo; " + _("Koha") );
         $('#save-record span').text( backends[ state.saveBackend ].saveLabel );
     }
 

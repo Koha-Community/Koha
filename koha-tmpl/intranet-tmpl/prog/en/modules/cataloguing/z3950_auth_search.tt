@@ -1,12 +1,16 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( opsearch ) %]
-    <title>Z39.50 authority search points &rsaquo; Koha</title>
-[% ELSE %]
-    <title>Z39.50 authority search results &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( opsearch ) %]
+        [% t("Z39.50 authority search points") | html %] &rsaquo;
+    [% ELSE %]
+        [% t("Z39.50 authority search results") | html %] &rsaquo;
     [% END %]
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     #marcPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }

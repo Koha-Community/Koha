@@ -1,7 +1,12 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Attach an item to [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; Cataloging &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Attach an item to") | html %] [% INCLUDE 'biblio-title-head.inc' %] &rsaquo;
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_moveitem" class="catalog">
