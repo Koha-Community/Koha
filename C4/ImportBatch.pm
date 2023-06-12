@@ -681,14 +681,13 @@ sub BatchCommitRecords {
                 ModAuthority($recordid, $marc_record, GuessAuthTypeCode($marc_record));
                 $query = "UPDATE import_auths SET matched_authid = ? WHERE import_record_id = ?";
             }
-            my $sth = $dbh->prepare_cached("UPDATE import_records SET marcxml_old = ? WHERE import_record_id = ?");
-            $sth->execute($oldxml, $rowref->{'import_record_id'});
+            # Combine xml update, SetImportRecordOverlayStatus, and SetImportRecordStatus updates into a single update for efficiency, especially in a transaction
+            my $sth = $dbh->prepare_cached("UPDATE import_records SET marcxml_old = ?, status = ?, overlay_status = ? WHERE import_record_id = ?");
+            $sth->execute( $oldxml, 'imported', 'match_applied', $rowref->{'import_record_id'} );
             $sth->finish();
             my $sth2 = $dbh->prepare_cached($query);
             $sth2->execute($recordid, $rowref->{'import_record_id'});
             $sth2->finish();
-            SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'match_applied');
-            SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         } elsif ($record_result eq 'ignore') {
             $recordid = $record_match;
             $num_ignored++;
