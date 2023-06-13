@@ -810,7 +810,11 @@
             [% END %]
             </table>
             [% END %]
-            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]">Subscription details</a>
+            [% IF ( CAN_user_serials ) %]
+                <p>
+                    <a class="btn btn-default" href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]">Subscription details</a>
+                </p>
+            [% END %]
     [% END %]
 </div>
 </div>
