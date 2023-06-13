@@ -28,6 +28,8 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use Mojo::JSON qw(encode_json);
+
 use C4::Auth;
 
 use Koha::Authorities;
@@ -67,34 +69,34 @@ subtest 'get() tests' => sub {
 </record>|
     } });
 
-    $t->get_ok("//$userid:$password@/api/v1/authorities/" . $authority->authid)
+    $t->get_ok("//$userid:$password@/api/v1/authorities/" . $authority->id)
       ->status_is(403);
 
     $patron->flags(4)->store;
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->authid
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
                 => { Accept => 'application/weird+format' } )
       ->status_is(400);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->authid
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
                  => { Accept => 'application/json' } )
       ->status_is(200)
-      ->json_is( '/authid', $authority->authid )
-      ->json_is( '/authtypecode', $authority->authtypecode );
+      ->json_is( '/authority_id', $authority->id )
+      ->json_is( '/framework_id', $authority->authtypecode );
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->authid
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
                  => { Accept => 'application/marcxml+xml' } )
       ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->authid
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
                  => { Accept => 'application/marc-in-json' } )
       ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->authid
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
                  => { Accept => 'application/marc' } )
       ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->authid
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
                  => { Accept => 'text/plain' } )
       ->status_is(200)
       ->content_is(q|LDR 00079     2200049   4500
@@ -103,7 +105,7 @@ subtest 'get() tests' => sub {
        _aMy Corporation|);
 
     $authority->delete;
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->authid
+    $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
                  => { Accept => 'application/marc' } )
       ->status_is(404)
       ->json_is( '/error', 'Object not found.' );
@@ -138,16 +140,16 @@ subtest 'delete() tests' => sub {
 </record>|
     } });
 
-    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->authid)
+    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->id)
       ->status_is(403, 'Not enough permissions makes it return the right code');
 
     $patron->flags( 2 ** 14 )->store; # 14 => editauthorities userflag
 
-    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->authid)
+    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->id)
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
 
-    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->authid)
+    $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->id)
       ->status_is(404);
 
     $schema->storage->txn_rollback;
@@ -261,7 +263,7 @@ subtest 'put() tests' => sub {
 </record>|
     } });
 
-    my $authid       = $authority->authid;
+    my $authid       = $authority->id;
     my $authtypecode = $authority->authtypecode;
 
     my $marcxml = q|<?xml version="1.0" encoding="UTF-8"?>
@@ -333,7 +335,7 @@ subtest 'list() tests' => sub {
     $patron->discard_changes;
     my $userid = $patron->userid;
 
-    my $authid1 = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
+    my $auth_id_1 = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
       marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
 <record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
     <controlfield tag="001">1001</controlfield>
@@ -344,7 +346,7 @@ subtest 'list() tests' => sub {
 </record>|
     } })->authid;
 
-    my $authid2 = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
+    my $auth_id_2 = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
       marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
 <record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
     <controlfield tag="001">1001</controlfield>
@@ -355,37 +357,28 @@ subtest 'list() tests' => sub {
 </record>|
     } })->authid;
 
-    my $search =
-"[{\"authid\": \"$authid1\"}, {\"authid\": \"$authid2\"}]";
-    $t->get_ok(
-        "//$userid:$password@/api/v1/authorities/" => { 'x-koha-query' => $search }
-    )->status_is(403);
+    my $query = encode_json( [ { authority_id => $auth_id_1 }, { authority_id => $auth_id_2 } ] );
+
+    $t->get_ok("//$userid:$password@/api/v1/authorities?q=$query")->status_is(403);
 
     $patron->flags(4)->store;
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
-          { Accept => 'application/weird+format', 'x-koha-query' => $search } )
-      ->status_is(400);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities?q=$query" => { Accept => 'application/weird+format' } )
+        ->status_is(400);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
-          { Accept => 'application/json', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities?q=$query" => { Accept => 'application/json' } )
+        ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
-          { Accept => 'application/marcxml+xml', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities?q=$query" => { Accept => 'application/marcxml+xml' } )
+        ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
-          { Accept => 'application/marc-in-json', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities?q=$query" => { Accept => 'application/marc-in-json' } )
+        ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
-          { Accept => 'application/marc', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities?q=$query" => { Accept => 'application/marc' } )
+        ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/authorities/" =>
-          { Accept => 'text/plain', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/authorities?q=$query" => { Accept => 'text/plain' } )->status_is(200);
 
     $schema->storage->txn_rollback;
 };
