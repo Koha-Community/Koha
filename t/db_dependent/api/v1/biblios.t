@@ -28,6 +28,8 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use Mojo::JSON qw(encode_json);
+
 use C4::Auth;
 use C4::Circulation qw( AddIssue AddReturn );
 
@@ -1646,45 +1648,34 @@ subtest 'list() tests' => sub {
     $record->leader('     nam         3  4500');
     $biblio->metadata->metadata($record->as_xml_record('UNIMARC'))->store;
 
-    my $biblionumber1 = $biblio->biblionumber;
+    my $biblio_id_1 = $biblio->id;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $biblionumber2 = $builder->build_sample_biblio->biblionumber;
+    my $biblio_id_2 = $builder->build_sample_biblio->id;
 
-    my $search =
-"[{\"biblionumber\": \"$biblionumber1\"}, {\"biblionumber\": \"$biblionumber2\"}]";
-    $t->get_ok(
-        "//$userid:$password@/api/v1/biblios/" => { 'x-koha-query' => $search }
-    )->status_is(403);
+    my $query = encode_json( [ { biblio_id => $biblio_id_1 }, { biblio_id => $biblio_id_2 } ] );
+
+    $t->get_ok("//$userid:$password@/api/v1/biblios?q=$query")->status_is(403);
 
     $patron->flags(4)->store;
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
-          { Accept => 'application/weird+format', 'x-koha-query' => $search } )
-      ->status_is(400);
+    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/weird+format' } )
+        ->status_is(400);
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
-          { Accept => 'application/json', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/json' } )->status_is(200);
 
-    my $result = $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
-          { Accept => 'application/marcxml+xml', 'x-koha-query' => $search } )
-      ->status_is(200)->tx->res->body;
+    my $result = $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/marcxml+xml' } )
+        ->status_is(200)->tx->res->body;
 
-    my $encoded_title  = Encode::encode( "UTF-8", $title_with_diacritics );
+    my $encoded_title = Encode::encode( "UTF-8", $title_with_diacritics );
     like( $result, qr/\Q$encoded_title/, "The title is not double encoded" );
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
-          { Accept => 'application/marc-in-json', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/marc-in-json' } )
+        ->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
-          { Accept => 'application/marc', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/marc' } )->status_is(200);
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" =>
-          { Accept => 'text/plain', 'x-koha-query' => $search } )
-      ->status_is(200);
+    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'text/plain' } )->status_is(200);
 
     $schema->storage->txn_rollback;
 };
