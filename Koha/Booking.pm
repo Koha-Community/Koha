@@ -90,10 +90,10 @@ sub store {
                 ) unless ( $self->item );
 
                 $self->biblio_id( $self->item->biblionumber )
-                  unless $self->biblio_id;
+                    unless $self->biblio_id;
 
                 Koha::Exceptions::Object::FKConstraint->throw()
-                  unless ( $self->biblio_id == $self->item->biblionumber );
+                    unless ( $self->biblio_id == $self->item->biblionumber );
             }
 
             Koha::Exceptions::Object::FKConstraint->throw(
@@ -103,23 +103,37 @@ sub store {
 
             # Throw exception for item level booking clash
             Koha::Exceptions::Booking::Clash->throw()
-              if $self->item_id && !$self->item->check_booking(
+                if $self->item_id && !$self->item->check_booking(
                 {
                     start_date => $self->start_date,
                     end_date   => $self->end_date,
                     booking_id => $self->in_storage ? $self->booking_id : undef
                 }
-              );
+                );
 
             # Throw exception for biblio level booking clash
             Koha::Exceptions::Booking::Clash->throw()
-              if !$self->biblio->check_booking(
+                if !$self->biblio->check_booking(
                 {
                     start_date => $self->start_date,
                     end_date   => $self->end_date,
                     booking_id => $self->in_storage ? $self->booking_id : undef
                 }
-              );
+                );
+
+            # Assign item at booking time
+            if ( !$self->item_id ) {
+                $self->item_id(
+                    $self->biblio->assign_item_for_booking(
+                        {
+                            start_date => $self->start_date,
+                            end_date   => $self->end_date
+                        }
+                    )
+                );
+            }
+
+            # FIXME: We should be able to combine the above two functions into one
 
             $self = $self->SUPER::store;
         }

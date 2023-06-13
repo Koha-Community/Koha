@@ -261,6 +261,18 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                         if (booked == bookable) {
                             return true;
                         }
+
+                        // FIXME: The above is not intelligent enough to spot
+                        // cases where an item must be used for a biblio level booking
+                        // due to all other items being booking within the biblio level
+                        // booking period... we end up with a clash
+                        // To reproduce: 
+                        // * One bib with two bookable items.
+                        // * Add item level booking
+                        // * Add biblio level booking that extends one day beyond the item level booking
+                        // * Try to book the item without an item level booking from the day before the biblio level
+                        //   booking is to be returned. Note this is a clash, the only item available for the biblio
+                        //   level booking is the item you just booked out overlapping the end date.
                     }
                 }
             });
