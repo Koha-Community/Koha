@@ -40,10 +40,14 @@ my $command_line_options = join(" ",@ARGV);
 cronlogaction({ info => $command_line_options });
 
 my $recalls = Koha::Recalls->search({ completed => 0 });
+my $today = dt_from_string()->truncate( to  => 'day' );
 while( my $recall = $recalls->next ) {
-    if ( ( $recall->requested or $recall->overdue ) and $recall->expiration_date and dt_from_string( $recall->expiration_date ) < dt_from_string() ){
-        # recall is requested or overdue and has surpassed the specified expiration date
-        $recall->set_expired({ interface => 'COMMANDLINE' });
+    if ( ( $recall->requested or $recall->overdue or $recall->waiting ) and $recall->expiration_date ) {
+        my $expiration_date = dt_from_string( $recall->expiration_date )->truncate( to  => 'day' );
+        if ( $expiration_date < $today ){
+            # recall is requested or overdue and has surpassed the specified expiration date
+            $recall->set_expired({ interface => 'COMMANDLINE' });
+        }
     }
     if ( $recall->waiting ) {
         my $recall_shelf_time = Koha::CirculationRules->get_effective_rule({
@@ -52,16 +56,15 @@ while( my $recall = $recalls->next ) {
             branchcode => $recall->pickup_library_id,
             rule_name => 'recall_shelf_time',
         });
-        my $waitingdate = dt_from_string( $recall->waiting_date );
-        my $now = dt_from_string();
-        my $days_waiting = $now->subtract_datetime( $waitingdate );
-        if ( defined $recall_shelf_time and $recall_shelf_time->rule_value > 0 ) {
+        my $waitingdate = dt_from_string( $recall->waiting_date )->truncate( to  => 'day' );
+        my $days_waiting = $today->subtract_datetime( $waitingdate );
+        if ( defined $recall_shelf_time and $recall_shelf_time->rule_value >= 0 ) {
             if ( $days_waiting->days > $recall_shelf_time->rule_value ) {
                 # recall has been awaiting pickup for longer than the circ rules allow
                 $recall->set_expired({ interface => 'COMMANDLINE' });
             }
         } else {
-            if ( $days_waiting->days > C4::Context->preference('RecallsMaxPickUpDelay') ) {
+            if ( $days_waiting->days >= C4::Context->preference('RecallsMaxPickUpDelay') ) {
                 # recall has been awaiting pickup for longer than the syspref allows
                 $recall->set_expired({ interface => 'COMMANDLINE' });
             }
