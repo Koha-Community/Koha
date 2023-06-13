@@ -197,8 +197,7 @@ controller, and thus shouldn't be called twice in it.
             }
 
             if (   defined $reserved_params->{q}
-                || defined $reserved_params->{query}
-                || defined $reserved_params->{'x-koha-query'} )
+                || defined $reserved_params->{query} )
             {
                 $filtered_params //= {};
 
@@ -225,10 +224,6 @@ controller, and thus shouldn't be called twice in it.
                       $json->decode( $reserved_params->{q} )
                       if $reserved_params->{q};
                 }
-
-                push @query_params_array,
-                  $json->decode( $reserved_params->{'x-koha-query'} )
-                  if defined $reserved_params->{'x-koha-query'};
 
                 my $query_params;
 

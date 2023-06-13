@@ -602,12 +602,6 @@ parameters:
     required: false
     schema:
       type: object
-  q_header:
-    description: Query filter sent as a request header
-    in: header
-    name: x-koha-query
-    required: false
-    type: string
   q_param:
     description: Query filter sent as a request parameter
     in: query
@@ -718,7 +712,6 @@ info:
 
     * as a query parameter `q=`
     * in the request body
-    * in a special header `x-koha-query`
 
     For simple field equality matches we can use `{ "fieldname": "value" }` where the fieldname
     matches one of the fields as described in the particular endpoints response object.

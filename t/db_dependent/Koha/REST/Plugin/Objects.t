@@ -81,7 +81,6 @@ get '/biblios' => sub {
     my $output = $c->req->params->to_hash;
     $output->{query} = $c->req->json if defined $c->req->json;
     my $headers = $c->req->headers->to_hash;
-    $output->{'x-koha-query'} = $headers->{'x-koha-query'} if defined $headers->{'x-koha-query'};
     $c->validation->output($output);
     my $biblios_set = Koha::Biblios->new;
     $c->stash("koha.embed", {
@@ -140,7 +139,7 @@ get '/cities/:city_id/rs' => sub {
 };
 
 # The tests
-use Test::More tests => 18;
+use Test::More tests => 17;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -456,30 +455,6 @@ subtest 'objects.search helper with q parameter' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'objects.search helper with x-koha-query header' => sub {
-    plan tests => 4;
-
-    $schema->storage->txn_begin;
-
-    my $patron1 = $builder->build_object( { class => "Koha::Patrons" } );
-    my $patron2 = $builder->build_object( { class => "Koha::Patrons" } );
-    my $biblio1 = $builder->build_sample_biblio;
-    my $biblio2 = $builder->build_sample_biblio;
-    my $biblio3 = $builder->build_sample_biblio;
-    my $suggestion1 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron1->borrowernumber, biblionumber => $biblio1->biblionumber} } );
-    my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
-    my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
-
-    my $t = Test::Mojo->new;
-    $t->get_ok('/biblios' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron1->borrowernumber.'"}'})
-      ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
-
-    $t->get_ok('/biblios' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron2->borrowernumber.'"}'})
-      ->json_is('/count' => 2, 'there should be 2 biblios with suggestions of patron 2');
-
-    $schema->storage->txn_rollback;
-};
-
 subtest 'objects.search helper with all query methods' => sub {
     plan tests => 6;
 
@@ -495,14 +470,29 @@ subtest 'objects.search helper with all query methods' => sub {
     my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
 
     my $t = Test::Mojo->new;
-    $t->get_ok('/biblios?q={"suggestions.suggester.firstname": "'.$patron1->firstname.'"}' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron1->borrowernumber.'"}'} => json => {"suggestions.suggester.cardnumber" => $patron1->cardnumber})
-      ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
+    my $query = {
+        "suggestions.suggester.firstname" => $patron1->firstname,
+        "suggestions.suggester.patron_id" => $patron1->id,
+    };
+    $t->get_ok(
+        '/biblios?q=' . encode_json($query) => json => { "suggestions.suggester.cardnumber" => $patron1->cardnumber } )
+        ->json_is( '/count' => 1, 'there should be 1 biblio with suggestions of patron 1' );
 
-    $t->get_ok('/biblios?q={"suggestions.suggester.firstname": "'.$patron2->firstname.'"}' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron2->borrowernumber.'"}'} => json => {"suggestions.suggester.cardnumber" => $patron2->cardnumber})
-      ->json_is('/count' => 2, 'there should be 2 biblios with suggestions of patron 2');
+    $query = {
+        "suggestions.suggester.firstname" => $patron2->firstname,
+        "suggestions.suggester.patron_id" => $patron2->id,
+    };
+    $t->get_ok(
+        '/biblios?q=' . encode_json($query) => json => { "suggestions.suggester.cardnumber" => $patron2->cardnumber } )
+        ->json_is( '/count' => 2, 'there should be 2 biblios with suggestions of patron 2' );
 
-    $t->get_ok('/biblios?q={"suggestions.suggester.firstname": "'.$patron1->firstname.'"}' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron2->borrowernumber.'"}'} => json => {"suggestions.suggester.cardnumber" => $patron2->cardnumber})
-      ->json_is('/count' => 0, 'there shouldn\'t be biblios where suggester has patron1 fistname and patron2 id');
+    $query = {
+        "suggestions.suggester.firstname" => $patron1->firstname,
+        "suggestions.suggester.patron_id" => $patron2->id,
+    };
+    $t->get_ok(
+        '/biblios?q=' . encode_json($query) => json => { "suggestions.suggester.cardnumber" => $patron2->cardnumber } )
+        ->json_is( '/count' => 0, 'there shouldn\'t be biblios where suggester has patron1 fistname and patron2 id' );
 
     $schema->storage->txn_rollback;
 };
