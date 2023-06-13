@@ -1589,7 +1589,7 @@ sub RecordsFromISO2709File {
 
 Creates MARC::Record-objects out of the given MARCXML-file.
 
-@PARAM1, String, absolute path to the ISO2709 file.
+@PARAM1, String, absolute path to the MARCXML file.
 @PARAM2, String, should be utf8
 
 Returns two array refs.
