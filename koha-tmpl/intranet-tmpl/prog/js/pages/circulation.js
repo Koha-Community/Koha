@@ -68,7 +68,7 @@ $(document).ready(function() {
     });
 
     // Debarments
-    $("div#reldebarments .remove_restriction").on("click",function(){
+    $("#reldebarments_panel .remove_restriction").on("click",function(){
         return confirm( __("Remove restriction?") );
     });
     var mrform = $("#manual_restriction_form");
