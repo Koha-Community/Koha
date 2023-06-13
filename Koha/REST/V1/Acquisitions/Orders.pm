@@ -133,8 +133,7 @@ sub list {
         }
 
         if (   defined $reserved_params->{q}
-            || defined $reserved_params->{query}
-            || defined $reserved_params->{'x-koha-query'} )
+            || defined $reserved_params->{query} )
         {
 
             $filtered_params //={};
@@ -150,12 +149,6 @@ sub list {
                   $json->decode( $c->table_name_fixer($q) )
                   if $q;    # skip if exists but is empty
             }
-
-            # x-koha-query contains a string
-            push @query_params_array,
-              $json->decode(
-                $c->table_name_fixer( $reserved_params->{'x-koha-query'} ) )
-              if $reserved_params->{'x-koha-query'};
 
             # query is already decoded by JSON::Validator at this point
             push @query_params_array,
