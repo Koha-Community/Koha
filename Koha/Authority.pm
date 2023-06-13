@@ -30,7 +30,7 @@ Koha::Authority - Koha Authority Object class
 
 =head1 API
 
-=head2 Instance Methods
+=head2 Class methods
 
 =head3 get_usage_count
 
@@ -168,9 +168,30 @@ sub record_schema {
       : 'MARC21';
 }
 
-=head2 Class Methods
+=head3 to_api_mapping
 
-=head3 type
+This method returns the mapping for representing a Koha::Authority object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        authid            => 'authority_id',
+        authtrees         => undef,
+        authtypecode      => 'framework_id',
+        datecreated       => 'creation_date',
+        linkid            => undef,
+        marc              => undef,
+        marcxml           => undef,
+        modification_time => 'updated_on',
+        origincode        => undef,
+    };
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
