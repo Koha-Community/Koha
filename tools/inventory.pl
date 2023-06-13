@@ -303,16 +303,6 @@ for ( my $i = 0; $i < @scanned_items; $i++ ) {
     my $item = $scanned_items[$i];
 
     $item->{notforloancode} = $item->{notforloan}; # save for later use
-    my $fc = $item->{'frameworkcode'} || '';
-
-    # Populating with authorised values description
-    foreach my $field (qw/ location notforloan itemlost damaged withdrawn /) {
-        my $av = Koha::AuthorisedValues->get_description_by_koha_field(
-            { frameworkcode => $fc, kohafield => "items.$field", authorised_value => $item->{$field} } );
-        if ( $av and defined $item->{$field} and defined $av->{lib} ) {
-            $item->{$field} = $av->{lib};
-        }
-    }
 
     # If we have scanned items with a non-matching notforloan value
     if( none { $item->{'notforloancode'} eq $_ } @notforloans ) {
@@ -453,6 +443,18 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub additemtoresults {
     my ( $item, $results ) = @_;
     my $itemno = $item->{itemnumber};
+
+    my $fc = $item->{'frameworkcode'} || '';
+
+    # Populating with authorised values description
+    foreach my $field (qw/ location notforloan itemlost damaged withdrawn /) {
+        my $av = Koha::AuthorisedValues->get_description_by_koha_field(
+            { frameworkcode => $fc, kohafield => "items.$field", authorised_value => $item->{$field} } );
+        if ( $av and defined $item->{$field} and defined $av->{lib} ) {
+            $item->{$field} = $av->{lib};
+        }
+    }
+
     # since the script appends to $item, we can just overwrite the hash entry
     $results->{$itemno} = $item;
 }
