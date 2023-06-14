@@ -191,7 +191,9 @@
                     }
                 }
             [% END %]
-            opener.close();
+            if(opener.opener){
+                opener.close();
+            }
             window.close();
             return false;
         });
