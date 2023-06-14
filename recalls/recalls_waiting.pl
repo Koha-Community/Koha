@@ -64,7 +64,9 @@ if ( $op eq 'list' ) {
     }
     $template->param(
         recalls => \@recalls,
+        recallscount =>  scalar @recalls,
         over => \@over,
+        overcount => scalar @over,
     );
 }
 
