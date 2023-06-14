@@ -838,6 +838,12 @@ $(document).ready(function(){
 [% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
+    [% IF ( INVALID_METADATA ) %]
+        <div class="dialog alert">
+            <p>This record had encoding issues, non-xml characters have been stripped in order to allow editing. Please be cautious when saving that some data may have been removed from the record.</br>Decoding error:</p>
+            <span class="problem">[% INVALID_METADATA | html %]</span>
+        </div>
+    [% END %]
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
 

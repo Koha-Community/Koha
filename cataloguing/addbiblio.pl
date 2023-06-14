@@ -577,7 +577,13 @@ my (
 );
 
 if ( $biblio && !$breedingid ) {
-    $record = $biblio->metadata->record;
+    eval { $record = $biblio->metadata->record };
+    if( $@ ){
+        my $exception = $@;
+        $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
+        $record = $biblio->metadata->record_strip_nonxml;
+        $template->param( INVALID_METADATA => $exception );
+    }
 }
 if ($breedingid) {
     ( $record, $encoding ) = MARCfindbreeding( $breedingid ) ;
