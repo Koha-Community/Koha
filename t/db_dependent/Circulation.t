@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 66;
+use Test::More tests => 67;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -5810,6 +5810,7 @@ subtest 'Tests for BlockReturnOfWithdrawnItems' => sub {
     plan tests => 1;
 
     t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 1);
+    t::lib::Mocks::mock_preference('RecordLocalUseOnReturn', 0);
     my $item = $builder->build_sample_item();
     $item->withdrawn(1)->itemlost(1)->store;
     my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
@@ -5841,6 +5842,25 @@ subtest 'Tests for transfer not in transit' => sub {
     $transfer->discard_changes;
     ok( $transfer->datesent, 'The datesent field is populated, i.e. transfer is initiated');
 
+};
+
+subtest 'Tests for RecordLocalUseOnReturn' => sub {
+
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('RecordLocalUseOnReturn', 0);
+    my $item = $builder->build_sample_item();
+    $item->withdrawn(1)->itemlost(1)->store;
+    my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is_deeply(
+        \@return,
+        [ 0, { NotIssued => $item->barcode, withdrawn => 1  }, undef, {} ], "RecordLocalUSeOnReturn is off, no local use recorded");
+
+    t::lib::Mocks::mock_preference('RecordLocalUseOnReturn', 1);
+    my @return2 = AddReturn( $item->barcode, $item->homebranch, 0, undef );
+    is_deeply(
+        \@return2,
+        [ 0, { NotIssued => $item->barcode, withdrawn => 1, LocalUse => 1  }, undef, {} ], "Local use is recorded");
 };
 
 $schema->storage->txn_rollback;
