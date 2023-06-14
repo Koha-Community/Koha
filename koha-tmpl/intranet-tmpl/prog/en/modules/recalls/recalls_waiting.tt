@@ -37,8 +37,8 @@
 
                     [% WRAPPER tabs id= "results" %]
                         [% WRAPPER tabs_nav %]
-                            [% WRAPPER tab_item tabname= "recallswaiting" bt_active= 1 %] <span>Recalls waiting: [% recalls.count | html %]</span> [% END %]
-                            [% WRAPPER tab_item tabname= "recallsover" %] <span>Recalls waiting over [% Koha.Preference('RecallsMaxPickUpDelay') | html %] days: [% over.count | html %]</span> [% END %]
+                            [% WRAPPER tab_item tabname= "recallswaiting" bt_active= 1 %] <span>Recalls waiting: [% recallscount | html %]</span> [% END %]
+                            [% WRAPPER tab_item tabname= "recallsover" %] <span>Recalls waiting over [% Koha.Preference('RecallsMaxPickUpDelay') | html %] days: [% overcount | html %]</span> [% END %]
                         [% END # /WRAPPER tabs_nav %]
 
                         [% WRAPPER tab_panels %]
