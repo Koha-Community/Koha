@@ -523,21 +523,6 @@ sub charge_denied {
     return "Please contact library staff";
 }
 
-=head2 update_lastseen
-
-    $patron->update_lastseen();
-
-    Patron method to update lastseen field in borrower
-    to record that patron has been seen via sip connection
-
-=cut
-
-sub update_lastseen {
-    my $self = shift;
-    my $kohaobj = Koha::Patrons->find( $self->{borrowernumber} );
-    $kohaobj->track_login if $kohaobj; # track_login checks the pref
-}
-
 sub _get_address {
     my $patron = shift;
 
