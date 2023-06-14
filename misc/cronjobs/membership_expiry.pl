@@ -41,8 +41,9 @@ Options:
    --before=X               include patrons expiring a number of days BEFORE the date set by the preference
    --after=X                include patrons expiring a number of days AFTER  the date set by the preference
    -l --letter <lettercode> use a specific notice rather than the default
-   --active=X               only send notices to active patrons (active within X months)
-   --inactive=X             only send notices to inactive patrons (inactive within X months)
+   --active=X               only deal with active patrons (active within X months)
+   --inactive=X             only deal with inactive patrons (inactive within X months)
+   --renew                  renew patrons and send notice (instead of expiry notice only)
 
 =head1 DESCRIPTION
 
@@ -109,7 +110,12 @@ Optional parameter to include active patrons only (active within passed number o
 =item B<-inactive>
 
 Optional parameter to include inactive patrons only (inactive within passed number of months).
-This allows you to skip active patrons when you renew them automatically (see bug 28688).
+This allows you to e.g. send expiry warnings only to inactive patrons.
+
+=item B<-renew>
+
+Optional parameter to automatically renew patrons instead of sending them an expiry notice.
+They will be informed by a patron renewal notice.
 
 =back
 
@@ -171,6 +177,7 @@ my ( $branch, $letter_type );
 my @where;
 my $active;
 my $inactive;
+my $renew;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -187,6 +194,7 @@ GetOptions(
     'where=s'        => \@where,
     'active:i'       => \$active,
     'inactive:i'     => \$inactive,
+    'renew'          => \$renew,
 ) or pod2usage(2);
 
 pod2usage( -verbose => 2 ) if $man;
@@ -223,7 +231,7 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
 
 # main loop
 $letter_type = 'MEMBERSHIP_EXPIRY' if !$letter_type;
-my ( $count_skipped, $count_enqueued ) = ( 0, 0 );
+my ( $count_skipped, $count_renewed, $count_enqueued ) = ( 0, 0, 0 );
 while ( my $recent = $upcoming_mem_expires->next ) {
     if ( $active && !$recent->is_active( { months => $active } ) ) {
         $count_skipped++;
@@ -232,10 +240,20 @@ while ( my $recent = $upcoming_mem_expires->next ) {
         $count_skipped++;
         next;
     }
+
+    my $which_notice;
+    if ($renew) {
+        $recent->renew_account;
+        $which_notice = 'MEMBERSHIP_RENEWED';
+        $count_renewed++;
+    } else {
+        $which_notice = $letter_type;
+    }
+
     my $from_address = $recent->library->from_email_address;
     my $letter =  C4::Letters::GetPreparedLetter(
         module      => 'members',
-        letter_code => $letter_type,
+        letter_code => $which_notice,
         branchcode  => $recent->branchcode,
         lang        => $recent->lang,
         tables      => {
@@ -243,8 +261,8 @@ while ( my $recent = $upcoming_mem_expires->next ) {
             branches  => $recent->branchcode,
         },
     );
-    last if !$letter; # Letters.pm already warned, just exit
-    if( $nomail ) {
+    last if !$letter;    # Letters.pm already warned, just exit
+    if ($nomail) {
         print $letter->{'content'}."\n";
         next;
     }
@@ -260,7 +278,7 @@ while ( my $recent = $upcoming_mem_expires->next ) {
     if ($recent->smsalertnumber) {
         my $smsletter = C4::Letters::GetPreparedLetter(
             module      => 'members',
-            letter_code => $letter_type,
+            letter_code => $which_notice,
             branchcode  => $recent->branchcode,
             lang        => $recent->lang,
             tables      => {
@@ -280,6 +298,7 @@ while ( my $recent = $upcoming_mem_expires->next ) {
 }
 
 if ($verbose) {
+    print "Membership renewed for $count_renewed patrons\n" if $count_renewed;
     print "Enqueued notices for $count_enqueued patrons\n";
     print "Skipped $count_skipped inactive patrons\n" if $active;
     print "Skipped $count_skipped active patrons\n"   if $inactive;
