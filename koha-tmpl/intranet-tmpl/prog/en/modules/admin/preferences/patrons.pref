@@ -103,8 +103,16 @@ Patrons:
            choices:
                1: Do
                0: "Don't"
-         - track last patron activity.
-         - The first time each day that a patron logs into the OPAC, connects to Koha via SIP or ILS-DI, or checks an item out the borrowers.lastseen will update with the current date and time.
+         - track last patron activity. Use TrackLastPatronActivityTriggers to select which activities should be tracked.
+     -
+         - Select which activities should be tracked. The first time each day that one of these activities occurs, borrowers.lastseen will update with the current date and time.
+         - pref: TrackLastPatronActivityTriggers
+           multiple:
+               login: "Login to OPAC"
+               connection: "Connection to Koha via SIP or ILSDI"
+               check_out: "Checking out an item"
+               renewal: "Renewing an item"
+               check_in: "Returning an item"
      -
          - pref: AutoApprovePatronProfileSettings
            choices:
