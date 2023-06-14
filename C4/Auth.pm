@@ -1318,7 +1318,7 @@ sub checkauth {
             ));
         }
 
-        track_login_daily( $userid );
+        track_login_daily( $userid, 'login' );
 
         # In case, that this request was a login attempt, we want to prevent that users can repost the opac login
         # request. We therefore redirect the user to the requested page again without the login parameters.

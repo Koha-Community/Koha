@@ -995,7 +995,7 @@ sub handle_patron_info {
 
     $resp = (PATRON_INFO_RESP);
     if ($patron) {
-        $patron->update_lastseen();
+        C4::Auth::track_login_daily( $patron->userid, 'connection' );
         $resp .= patron_status_string( $patron, $server );
         $resp .= ( defined($lang) and length($lang) == 3 ) ? $lang : $patron->language;
         $resp .= timestamp();

@@ -1677,7 +1677,7 @@ sub AddIssue {
                 )->store;
             }
             $issue->discard_changes;
-            C4::Auth::track_login_daily( $patron->userid );
+            C4::Auth::track_login_daily( $patron->userid, 'check_out' );
             if ( $item_object->location && $item_object->location eq 'CART'
                 && ( !$item_object->permanent_location || $item_object->permanent_location ne 'CART' ) ) {
             ## Item was moved to cart via UpdateItemLocationOnCheckin, anything issued should be taken off the cart.
@@ -2494,7 +2494,10 @@ sub AddReturn {
 
         logaction("CIRCULATION", "RETURN", $borrowernumber, $item->itemnumber)
             if C4::Context->preference("ReturnLog");
-        }
+
+        #Update borrowers.lastseen
+        C4::Auth::track_login_daily( $patron->userid, 'check_in' );
+    }
 
     # Check if this item belongs to a biblio record that is attached to an
     # ILL request, if it is we need to update the ILL request's status
@@ -3357,6 +3360,8 @@ sub AddRenewal {
                 interface      => C4::Context->interface,
             }
         );
+        #Update borrowers.lastseen
+        C4::Auth::track_login_daily( $patron_unblessed->{userid}, 'renewal' );
 
         #Log the renewal
         logaction("CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
