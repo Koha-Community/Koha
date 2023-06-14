@@ -371,7 +371,16 @@ sub ModBiblio {
 
     if ( C4::Context->preference("CataloguingLog") ) {
         my $biblio = Koha::Biblios->find($biblionumber);
-        logaction( "CATALOGUING", "MODIFY", $biblionumber, "biblio BEFORE=>" . $biblio->metadata->record->as_formatted );
+        my $record;
+        my $decoding_error = "";
+        eval { $record = $biblio->metadata->record };
+        if( $@ ){
+            my $exception = $@;
+            $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
+            $decoding_error = "There was an error with this bibliographic record: " . $exception;
+            $record = $biblio->metadata->record_strip_nonxml;
+        }
+        logaction( "CATALOGUING", "MODIFY", $biblionumber, "biblio $decoding_error BEFORE=>" . $record->as_formatted );
     }
 
     if ( !$options->{disable_autolink} && C4::Context->preference('AutoLinkBiblios') ) {
