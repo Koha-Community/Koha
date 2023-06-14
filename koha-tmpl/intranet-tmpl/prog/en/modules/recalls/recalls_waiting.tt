@@ -12,11 +12,16 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-    &rsaquo; <a href="/cgi-bin/koha/recalls/recalls_waiting.pl">Recalls awaiting pickup</a>
-</div>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Recalls awaiting pickup</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
@@ -76,8 +81,8 @@
                                                     <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                     <input type="hidden" name="op" value="modify">
                                                     <fieldset class="action">
-                                                        <input type="submit" name="revert" class="revert_recall" value="Revert waiting status">
-                                                        <input type="submit" name="expire" class="expire_recall" value="Expire recall">
+                                                        <button type="submit" name="revert" value="revert" class="btn btn-default btn-sm revert_recall"><i class="fa fa-undo"></i> Revert waiting status</button>
+                                                        <button type="submit" name="expire" value="expire" class="btn btn-default btn-sm expire_recall"><i class="fa fa-undo"></i> Expire recall</button>
                                                     </fieldset>
                                                 </form>
                                             </td>
@@ -104,15 +109,10 @@
                                         [% FOREACH recall IN over %]<tr>
                                             <td class="recall-waitingdate">[% recall.waiting_date | $KohaDates %]</td>
                                             <td class="recall-title">
-                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | uri %]">
-                                                    [% recall.biblio.title | html %]
-                                                    [% FOREACH s IN recall.biblio.subtitles %]
-                                                        [% s | html %]
-                                                    [% END %]
-                                                    [% recall.item.enumchron | html %]
-                                                </a>
-                                                [% recall.biblio.author | html %]
-                                                <br><i>Barcode: [% recall.item.barcode | html %]</i>
+                                                [% INCLUDE 'biblio-title.inc' biblio=recall.biblio link = 1 %]
+                                                [% IF recall.biblio.author %] by [% recall.biblio.author | html %][% END %]
+                                                [% recall.item.enumchron | html %]
+                                                [% IF ( recall.item.barcode ) %]<br><em>Barcode: [% recall.item.barcode | html %]</em>[% END %]
                                             </td>
                                             <td class="recall-patron">
                                                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.patron_id | uri %]">[% recall.patron.firstname | html %] [% recall.patron.surname | html %]</a>
@@ -125,8 +125,8 @@
                                                     <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                     <input type="hidden" name="op" value="modify">
                                                     <fieldset class="action">
-                                                        <input type="submit" name="revert" class="revert_recall" value="Revert waiting status">
-                                                        <input type="submit" name="expire" class="expire_recall" value="Expire recall">
+                                                        <button type="submit" name="revert" value="revert" class="btn btn-default btn-sm revert_recall"><i class="fa fa-undo"></i> Revert waiting status</button>
+                                                        <button type="submit" name="expire" value="expire" class="btn btn-default btn-sm expire_recall"><i class="fa fa-undo"></i> Expire recall</button>
                                                     </fieldset>
                                                 </form>
                                             </td>

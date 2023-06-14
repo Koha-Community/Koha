@@ -15,11 +15,16 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-    &rsaquo; <a href="/cgi-bin/koha/recalls/recalls_to_pull.pl">Recalls to pull</a>
-</div>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Recalls to pull</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
@@ -34,101 +39,103 @@
         The following recalls could be fulfilled by available items.
 
         [% IF Koha.Preference('UseRecalls') %]
-            <div id="recalls">
-                [% IF recalls %]
-                <table id="recalls-table">
-                    <thead>
-                        <tr>
-                            <th class="recall-topull">Pull this many items</th>
-                            <th class="recall-items">Items available</th>
-                            <th class="recall-patrons">Patrons with recalls</th>
-                            <th class="recall-firstpatron">First patron</th>
-                            <th class="recall-title anti-the">Title</th>
-                            <th class="recall-libraries">Libraries</th>
-                            <th class="recall-callnumbers">Available call numbers</th>
-                            <th class="recall-copynumbers">Available copy numbers</th>
-                            <th class="recall-enumeration">Available enumeration</th>
-                            <th class="recall-itemtypes">Available item types</th>
-                            <th class="recall-locations">Available locations</th>
-                            <th class="recall-date title-string">Earliest recall date</th>
-                            <th class="recall-action nosort">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        [% FOREACH recall IN recalls %]
-                        <tr>
-                            <td class="recall-topull"><b>[% recall.pull_count | html %]</b></td>
-                            <td class="recall-items">[% recall.items_count | html %]</td>
-                            <td class="recall-patrons">[% recall.patrons_count | html %]</td>
-                            <td class="recall-firstpatron"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.first_recall.patron_id | uri %]">[% recall.first_recall.patron.firstname | html %] [% recall.first_recall.patron.surname | html %]</a></td>
-                            <td class="recall-title">
-                                [% INCLUDE 'biblio-title.inc' biblio=recall.first_recall.biblio link=1 %]
-                                [% IF recall.first_recall.biblio.author %] by [% recall.first_recall.biblio.author | html %][% END %]
-                            </td>
-                            <td class="recall-libraries">
-                                <ul>
-                                    [% FOREACH library IN recall.libraries %]
-                                        <li>[% Branches.GetName( library ) | html %]</li>
-                                    [% END %]
-                                </ul>
-                            </td>
-                            <td class="recall-callnumbers">
-                                <ul>
-                                    [% FOREACH callnumber IN recall.callnumbers %]
-                                        <li>[% callnumber | html %]</li>
-                                    [% END %]
-                                </ul>
-                            </td>
-                            <td class="recall-copynumbers">
-                                <ul>
-                                    [% FOREACH copyno IN recall.copynumbers %]
-                                        <li>[% copyno | html %]</li>
-                                    [% END %]
-                                </ul>
-                            </td>
-                            <td class="recall-enumeration">
-                                <ul>
-                                    [% FOREACH enumchron IN recall.enumchrons %]
-                                        <li>[% enumchron | html %]</li>
-                                    [% END %]
-                                </ul>
-                            </td>
-                            <td class="recall-itemtypes">
-                                <ul>
-                                    [% FOREACH itemtype IN recall.itemtypes %]
-                                        <li>[% ItemTypes.GetDescription( itemtype ) | html %]</li>
-                                    [% END %]
-                                </ul>
-                            </td>
-                            <td class="recall-locations">
-                                <ul>
-                                    [% FOREACH loc IN recall.locations %]
-                                        <li>[% AuthorisedValues.GetByCode('LOC', loc) | html %]</li>
-                                    [% END %]
-                                </ul>
-                            </td>
-                            <td class="recall-date">
-                                <span title="[% recall.first_recall.created_date | html %]">[% recall.first_recall.created_date | $KohaDates %] in [% recall.first_recall.library.branchname | html %]</span>
-                            </td>
-                            <td class="recall-action">
-                                <form action="/cgi-bin/koha/recalls/recalls_to_pull.pl" method="post">
-                                    <input type="hidden" name="recall_id" value="[% recall.first_recall.id | html %]">
-                                    <input type="hidden" name="op" value="cancel">
-                                    [% IF recall.first_recall.in_transit %]
-                                        <button type="submit" class="btn btn-default cancelreturn"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.first_recall.item.homebranch) | html %]</button>
-                                    [% ELSE %]
-                                        <button type="submit" class="btn btn-default cancel"><i class="fa fa-times"></i> Cancel recall</button>
-                                    [% END %]
-                                </form>
-                            </td>
-                        </tr>
-                        [% END %]
-                    </tbody>
-                </table>
-                [% ELSE %]
-                    <div class="dialog message">There are no recalls to pull.</div>
-                [% END %]
-            </div>
+            [% IF recalls %]
+                <div id="recalls" class="page-section">
+                    <table id="recalls-table">
+                        <thead>
+                            <tr>
+                                <th class="recall-topull">Pull this many items</th>
+                                <th class="recall-items">Items available</th>
+                                <th class="recall-patrons">Patrons with recalls</th>
+                                <th class="recall-firstpatron">First patron</th>
+                                <th class="recall-title anti-the">Title</th>
+                                <th class="recall-libraries">Libraries</th>
+                                <th class="recall-callnumbers">Available call numbers</th>
+                                <th class="recall-copynumbers">Available copy numbers</th>
+                                <th class="recall-enumeration">Available enumeration</th>
+                                <th class="recall-itemtypes">Available item types</th>
+                                <th class="recall-locations">Available locations</th>
+                                <th class="recall-date title-string">Earliest recall date</th>
+                                <th class="recall-action nosort">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH recall IN recalls %]
+                            <tr>
+                                <td class="recall-topull"><b>[% recall.pull_count | html %]</b></td>
+                                <td class="recall-items">[% recall.items_count | html %]</td>
+                                <td class="recall-patrons">[% recall.patrons_count | html %]</td>
+                                <td class="recall-firstpatron"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.first_recall.patron_id | uri %]">[% recall.first_recall.patron.firstname | html %] [% recall.first_recall.patron.surname | html %]</a></td>
+                                <td class="recall-title">
+                                    [% INCLUDE 'biblio-title.inc' biblio=recall.first_recall.biblio link=1 %]
+                                    [% IF recall.biblio.author %] by [% recall.biblio.author | html %][% END %]
+                                    [% recall.item.enumchron | html %]
+                                    [% IF ( recall.item ) %]<br><em>Barcode: [% recall.item.barcode | html %]</em>[% END %]
+                                </td>
+                                <td class="recall-libraries">
+                                    <ul>
+                                        [% FOREACH library IN recall.libraries %]
+                                            <li>[% Branches.GetName( library ) | html %]</li>
+                                        [% END %]
+                                    </ul>
+                                </td>
+                                <td class="recall-callnumbers">
+                                    <ul>
+                                        [% FOREACH callnumber IN recall.callnumbers %]
+                                            <li>[% callnumber | html %]</li>
+                                        [% END %]
+                                    </ul>
+                                </td>
+                                <td class="recall-copynumbers">
+                                    <ul>
+                                        [% FOREACH copyno IN recall.copynumbers %]
+                                            <li>[% copyno | html %]</li>
+                                        [% END %]
+                                    </ul>
+                                </td>
+                                <td class="recall-enumeration">
+                                    <ul>
+                                        [% FOREACH enumchron IN recall.enumchrons %]
+                                            <li>[% enumchron | html %]</li>
+                                        [% END %]
+                                    </ul>
+                                </td>
+                                <td class="recall-itemtypes">
+                                    <ul>
+                                        [% FOREACH itemtype IN recall.itemtypes %]
+                                            <li>[% ItemTypes.GetDescription( itemtype ) | html %]</li>
+                                        [% END %]
+                                    </ul>
+                                </td>
+                                <td class="recall-locations">
+                                    <ul>
+                                        [% FOREACH loc IN recall.locations %]
+                                            <li>[% AuthorisedValues.GetByCode('LOC', loc) | html %]</li>
+                                        [% END %]
+                                    </ul>
+                                </td>
+                                <td class="recall-date">
+                                    <span title="[% recall.first_recall.created_date | html %]">[% recall.first_recall.created_date | $KohaDates %] in [% recall.first_recall.library.branchname | html %]</span>
+                                </td>
+                                <td class="recall-action">
+                                    <form action="/cgi-bin/koha/recalls/recalls_to_pull.pl" method="post">
+                                        <input type="hidden" name="recall_id" value="[% recall.first_recall.id | html %]">
+                                        <input type="hidden" name="op" value="cancel">
+                                        [% IF recall.first_recall.in_transit %]
+                                            <button type="submit" class="btn btn-default btn-sm cancelreturn"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.first_recall.item.homebranch) | html %]</button>
+                                        [% ELSE %]
+                                            <button type="submit" class="btn btn-default btn-sm cancel"><i class="fa fa-times"></i> Cancel recall</button>
+                                        [% END %]
+                                    </form>
+                                </td>
+                            </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div> <!-- /#recalls.page-section -->
+            [% ELSE %]
+                <div class="dialog message">There are no recalls to pull.</div>
+            [% END %]
         [% ELSE %]
             <div class="dialog message">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
         [% END %]

@@ -12,11 +12,16 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-    &rsaquo; <a href="/cgi-bin/koha/recalls/recalls_old_queue.pl">Old recalls</a>
-</div>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Old recalls</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
@@ -29,7 +34,9 @@
 
         <h1>Old recalls</h1>
         [% IF Koha.Preference('UseRecalls') %]
-            [% INCLUDE 'recalls.inc' %]
+            <div class="page-section">
+                [% INCLUDE 'recalls.inc' %]
+            </div> <!-- /.page-section -->
         [% ELSE %]
             <div class="dialog message">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
         [% END %]

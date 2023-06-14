@@ -12,11 +12,16 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-    &rsaquo; <a href="/cgi-bin/koha/recalls/recalls_overdue.pl">Overdue recalls</a>
-</div>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Overdue recalls</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
@@ -30,14 +35,16 @@
         <h1>Overdue recalls</h1>
         [% IF Koha.Preference('UseRecalls') %]
             [% IF recalls.count %]
-                <form method="post" action="/cgi-bin/koha/recalls/recalls_overdue.pl">
-                    <input type="hidden" name="op" value="cancel_multiple_recalls">
-                    <input type="checkbox" id="select_all"> <span id="select_all_text">Select all</span>
-                    [% INCLUDE 'recalls.inc' %]
-                    <fieldset class="action">
-                        <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
-                    </fieldset>
-                </form>
+                <div class="page-section">
+                    <form method="post" action="/cgi-bin/koha/recalls/recalls_overdue.pl">
+                        <input type="hidden" name="op" value="cancel_multiple_recalls">
+                        <input type="checkbox" id="select_all"> <span id="select_all_text">Select all</span>
+                        [% INCLUDE 'recalls.inc' %]
+                        <fieldset class="action">
+                            <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
+                        </fieldset>
+                    </form>
+                </div> <!-- /.page-section -->
             [% ELSE %]
                 <div class="dialog message">There are no recalls to show.</div>
             [% END %]
