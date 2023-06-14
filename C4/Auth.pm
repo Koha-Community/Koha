@@ -2358,7 +2358,8 @@ Wraps the call to $patron->track_login, the method used to update borrowers.last
 
 sub track_login_daily {
     my $userid = shift;
-    return if !$userid || !C4::Context->preference('TrackLastPatronActivity');
+    my $activity = shift;
+    return if !$userid || !$activity || !C4::Context->preference('TrackLastPatronActivity');
 
     my $cache     = Koha::Caches->get_instance();
     my $cache_key = "track_login_" . $userid;
@@ -2368,6 +2369,10 @@ sub track_login_daily {
 
     my $patron = Koha::Patrons->find({ userid => $userid });
     return unless $patron;
+
+    my $tracked_activities = { map { (lc $_, 1); } split /\s*\,\s*/, C4::Context->preference('TrackLastPatronActivityTriggers') };
+    return unless $tracked_activities->{$activity};
+
     $patron->track_login;
     $cache->set_in_cache( $cache_key, $today );
 }
