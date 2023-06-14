@@ -31,14 +31,10 @@
                     [% END %]
 
                     <td class="recall-title">
-                        <b><a class="recall-title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% recall.biblio_id | html %]">
-                            [% recall.biblio.title | html %]
-                            [% FOREACH s IN recall.biblio.subtitle %]
-                                [% s | html %]
-                            [% END %]
-                        </a></b>
-                        [% IF recall.item %][% recall.item.barcode | html %][% END %]
-                        [% recall.biblio.author | html %]
+                        [% INCLUDE 'biblio-title.inc' biblio=recall.biblio link=1 %]
+                        [% IF recall.biblio.author %] by [% recall.biblio.author | html %][% END %]
+                        [% recall.item.enumchron | html %]
+                        [% IF ( recall.item ) %]<br><em>Barcode: [% recall.item.barcode | html %]</em>[% END %]
                     </td>
 
                     [% UNLESS specific_patron %]
@@ -101,7 +97,9 @@
                             &nbsp;
                         [% ELSE %]
                             <div class="btn-group">
-                                <a class="btn btn-sm dropdown-toggle" data-toggle="dropdown" href="#"> Actions <span class="caret"></span></a>
+                                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions <span class="caret"></span>
+                                </button>
                                 <ul class="dropdown-menu pull-right">
                                     [% IF ( recall.requested or recall.overdue ) %]
                                         <li><a class="cancel_recall" data-id="[% recall.id | html %]" data-action="cancel"><i class="fa fa-times"></i> Cancel</a></li>
