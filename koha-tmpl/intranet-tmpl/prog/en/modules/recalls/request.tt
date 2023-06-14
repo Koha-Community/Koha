@@ -4,7 +4,7 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Confirm recalls &rsaquo; Recalls &rsaquo; Koha</title>
+<title>Existing recalls &rsaquo; Recalls &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="recalls-request" class="catalog">
@@ -12,12 +12,19 @@
     [% INCLUDE 'circ-search.inc' %]
 [% END %]
 
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo;
-    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a> &rsaquo;
-    Confirm recalls on [% biblio.title | html %]
-</div>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item %]
+            [% INCLUDE 'biblio-title.inc' link = 1 %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Existing recalls</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
 <div class="row">
@@ -28,15 +35,17 @@
 
     [% IF Koha.Preference('UseRecalls') %]
         [% IF recalls.count %]
-            <form method="post" action="/cgi-bin/koha/recalls/request.pl">
-                <input type="hidden" name="op" value="cancel_multiple_recalls">
-                <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]">
-                <input type="checkbox" id="select_all"> <span id="select_all_text">Select all</span>
-                [% INCLUDE 'recalls.inc' %]
-                <fieldset class="action">
-                    <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
-                </fieldset>
-            </form>
+            <div class="page-section">
+                <form method="post" action="/cgi-bin/koha/recalls/request.pl">
+                    <input type="hidden" name="op" value="cancel_multiple_recalls">
+                    <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]">
+                    <input type="checkbox" id="select_all"> <span id="select_all_text">Select all</span>
+                    [% INCLUDE 'recalls.inc' %]
+                    <fieldset class="action">
+                        <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
+                    </fieldset>
+                </form>
+            </div> <!-- /.page-section -->
         [% ELSE %]
             <div class="dialog message">No recalls have been made.</div>
         [% END %]
