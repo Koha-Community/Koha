@@ -417,7 +417,7 @@ subtest 'checkauth() tests' => sub {
 
 subtest 'track_login_daily tests' => sub {
 
-    plan tests => 5;
+    plan tests => 18;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $userid = $patron->userid;
@@ -430,31 +430,89 @@ subtest 'track_login_daily tests' => sub {
     $cache->clear_from_cache($cache_key);
 
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login,connection,check_in,check_out,renewal' );
 
     is( $patron->lastseen, undef, 'Patron should have not last seen when newly created' );
 
-    C4::Auth::track_login_daily( $userid );
+    C4::Auth::track_login_daily( $userid, 'login' );
     $patron->_result()->discard_changes();
     isnt( $patron->lastseen, undef, 'Patron should have last seen set when TrackLastPatronActivity = 1' );
 
     sleep(1); # We need to wait a tiny bit to make sure the timestamp will be different
     my $last_seen = $patron->lastseen;
-    C4::Auth::track_login_daily( $userid );
+    C4::Auth::track_login_daily( $userid, 'login' );
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged' );
+    is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a login' );
+    C4::Auth::track_login_daily( $userid, 'connection' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a SIP/ILSDI connection' );
+    C4::Auth::track_login_daily( $userid, 'check_out' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a check out' );
+    C4::Auth::track_login_daily( $userid, 'check_in' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a check in' );
+    C4::Auth::track_login_daily( $userid, 'renewal' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a renewal' );
+
+    # Check that removing options stops tracking changes
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection,check_in,check_out,renewal' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'login' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a login if login is not selected as an option and the cache has been cleared' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'check_in,check_out,renewal' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'connection' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a connection if connection is not selected as an option and the cache has been cleared' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'check_out,renewal' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'check_in' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a check_in if check_in is not selected as an option and the cache has been cleared' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'renewal' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'check_out' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a check_out if check_out is not selected as an option and the cache has been cleared' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'renewal' );
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a renewal if renewal is not selected as an option and the cache has been cleared' );
+
+    # Restore all options to test changes
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login,connection,check_in,check_out,renewal' );
 
     $cache->clear_from_cache($cache_key);
-    C4::Auth::track_login_daily( $userid );
+    C4::Auth::track_login_daily( $userid, 'login' );
     $patron->_result()->discard_changes();
-    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed if we cleared the cache' );
+    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a login if we cleared the cache' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'connection' );
+    $patron->_result()->discard_changes();
+    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a connection if we cleared the cache' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'check_out' );
+    $patron->_result()->discard_changes();
+    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a check_out if we cleared the cache' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'check_in' );
+    $patron->_result()->discard_changes();
+    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a check_in if we cleared the cache' );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid, 'renewal' );
+    $patron->_result()->discard_changes();
+    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a renewal if we cleared the cache' );
 
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
     $patron->lastseen( undef )->store;
     $cache->clear_from_cache($cache_key);
-    C4::Auth::track_login_daily( $userid );
+    C4::Auth::track_login_daily( $userid, 'login' );
     $patron->_result()->discard_changes();
     is( $patron->lastseen, undef, 'Patron should still have last seen unchanged when TrackLastPatronActivity = 0' );
-
 };
 
 subtest 'no_set_userenv parameter tests' => sub {
