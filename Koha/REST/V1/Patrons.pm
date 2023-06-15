@@ -403,10 +403,11 @@ sub delete {
             }
 
             my $error_descriptions = {
-                has_checkouts  => 'Pending checkouts prevent deletion',
-                has_debt       => 'Pending debts prevent deletion',
-                has_guarantees => 'Patron is a guarantor and it prevents deletion',
+                has_checkouts       => 'Pending checkouts prevent deletion',
+                has_debt            => 'Pending debts prevent deletion',
+                has_guarantees      => 'Patron is a guarantor and it prevents deletion',
                 is_anonymous_patron => 'Anonymous patron cannot be deleted',
+                is_protected        => 'Protected patrons cannot be deleted',
             };
 
             if ( any { $error->message eq $_ } keys %{$error_descriptions} ) {

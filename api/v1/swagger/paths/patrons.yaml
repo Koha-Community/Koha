@@ -339,6 +339,11 @@
         description: Search on login_attempts
         required: false
         type: string
+      - name: protected
+        in: query
+        description: Search on protected status
+        required: false
+        type: boolean
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
       - $ref: "../swagger.yaml#/parameters/page"
@@ -603,6 +608,7 @@
             * `has_debt`: The patron has pending debts
             * `has_guarantees`: The patron has guarantees
             * `is_anonymous_patron`: The system-wide anonymous patron cannot be deleted
+            * `is_protected`: Protected patrons cannot be deleted
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":

@@ -1631,7 +1631,7 @@ subtest 'BorrowersLog tests' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'Test Koha::Patrons::merge' => sub {
-    plan tests => 110;
+    plan tests => 113;
 
     my $schema = Koha::Database->new()->schema();
 
@@ -1642,6 +1642,13 @@ subtest 'Test Koha::Patrons::merge' => sub {
     my $keeper  = $builder->build_object({ class => 'Koha::Patrons' });
     my $loser_1 = $builder->build({ source => 'Borrower' })->{borrowernumber};
     my $loser_2 = $builder->build({ source => 'Borrower' })->{borrowernumber};
+
+    my $keeper_protected = $builder->build_object( { class => 'Koha::Patrons' } );
+    $keeper_protected->protected(1)->store;
+
+    my $loser_protected_obj = $builder->build_object( { class => 'Koha::Patrons' } );
+    $loser_protected_obj->protected(1)->store;
+    my $loser_protected = $loser_protected_obj->borrowernumber;
 
     my $anonymous_patron_orig = C4::Context->preference('AnonymousPatron');
     my $anonymous_patron = $builder->build({ source => 'Borrower' })->{borrowernumber};
@@ -1665,7 +1672,14 @@ subtest 'Test Koha::Patrons::merge' => sub {
         is( $loser_2_rs->count(), 1, "Found 1 $r rows for loser_2" );
     }
 
-    my $results = $keeper->merge_with([ $loser_1, $loser_2 ]);
+    my $results_protected = $keeper_protected->merge_with( [$loser_1] );
+    is( $results_protected, undef, "Protected patrons cannot have other patrons merged into them" );
+    is(
+        Koha::Patrons->search( { borrowernumber => $loser_1 } )->count, 1,
+        "Patron from attempted merge with protected patron still exists"
+    );
+
+    my $results = $keeper->merge_with( [ $loser_1, $loser_2, $loser_protected ] );
 
     while (my ($r, $field) = each(%$resultsets)) {
         my $keeper_rs =
@@ -1676,6 +1690,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
     is( Koha::Patrons->find($loser_1), undef, 'Loser 1 has been deleted' );
     is( Koha::Patrons->find($loser_2), undef, 'Loser 2 has been deleted' );
     is( ref Koha::Patrons->find($anonymous_patron), 'Koha::Patron', 'Anonymous Patron was not deleted' );
+    is( ref Koha::Patrons->find($loser_protected), 'Koha::Patron', 'Protected patron was not deleted' );
 
     $anonymous_patron = Koha::Patrons->find($anonymous_patron);
     $results = $anonymous_patron->merge_with( [ $keeper->id ] );

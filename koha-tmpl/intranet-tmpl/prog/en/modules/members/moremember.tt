@@ -476,6 +476,14 @@
                                                 [% END %]
                                             </li>
                                         [% END %]
+                                        <li id="patron-protected">
+                                            <span class="label">Protected: </span>
+                                            [% IF ( patron.protected == 1 ) %]
+                                                Yes
+                                            [% ELSE %]
+                                                No
+                                            [% END %]
+                                        </li>
 
                                         [% IF ( patron.borrowernotes ) %]
                                             <li id="patron-borrowernotes">

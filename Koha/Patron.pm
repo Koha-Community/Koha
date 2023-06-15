@@ -401,6 +401,9 @@ sub delete {
     my $anonymous_patron = C4::Context->preference("AnonymousPatron");
     Koha::Exceptions::Patron::FailedDeleteAnonymousPatron->throw() if $anonymous_patron && $self->id eq $anonymous_patron;
 
+    # Check if patron is protected
+    Koha::Exceptions::Patron::FailedDeleteProtectedPatron->throw() if $self->protected == 1;
+
     $self->_result->result_source->schema->txn_do(
         sub {
             # Cancel Patron's holds
@@ -630,6 +633,9 @@ sub merge_with {
     my $anonymous_patron = C4::Context->preference("AnonymousPatron");
     return if $anonymous_patron && $self->id eq $anonymous_patron;
 
+    # Do not merge other patrons into a protected patron
+    return if $self->protected;
+
     my @patron_ids = @{ $patron_ids };
 
     # Ensure the keeper isn't in the list of patrons to merge
@@ -647,6 +653,9 @@ sub merge_with {
             my $patron = Koha::Patrons->find( $patron_id );
 
             next unless $patron;
+
+            # Do not merge protected patrons into other patrons
+            next if $patron->protected;
 
             # Unbless for safety, the patron will end up being deleted
             $results->{merged}->{$patron_id}->{patron} = $patron->unblessed;
@@ -2491,6 +2500,8 @@ This method tells if the Koha:Patron object can be deleted. Possible return valu
 
 =item 'is_anonymous_patron'
 
+=item 'is_protected'
+
 =back
 
 =cut
@@ -2513,6 +2524,9 @@ sub safe_to_delete {
     }
     elsif ( $self->guarantee_relationships->count ) {
         $error = 'has_guarantees';
+    }
+    elsif ( $self->protected ) {
+        $error = 'is_protected';
     }
 
     if ( $error ) {

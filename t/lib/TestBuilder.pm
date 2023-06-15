@@ -582,6 +582,7 @@ sub _gen_default_values {
 
             password_expiration_date => undef,
             anonymized               => 0,
+            protected                => 0,
         },
         Item => {
             notforloan         => 0,

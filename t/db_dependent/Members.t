@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 49;
+use Test::More tests => 51;
 use Test::MockModule;
 use Test::Exception;
 
@@ -351,6 +351,30 @@ is( scalar @$patstodel, 1, 'Regular patron with flags=0 can be deleted' );
 $patron->set({ flags => 4 })->store;
 $patstodel = GetBorrowersToExpunge( {category_code => 'SMALLSTAFF' } );
 is( scalar @$patstodel, 0, 'Regular patron with flags>0 can not be deleted' );
+
+# Test GetBorrowersToExpunge and patrons with "protected" status (borrowers.protected = 1)
+$builder->build(
+    {
+        source => 'Category',
+        value  => {
+            categorycode  => 'PROTECTED',
+            description   => 'Protected',
+            category_type => 'A',
+        },
+    }
+);
+$borrowernumber = Koha::Patron->new(
+    {
+        categorycode => 'PROTECTED',
+        branchcode   => $library2->{branchcode},
+    }
+)->store->borrowernumber;
+$patron    = Koha::Patrons->find($borrowernumber);
+$patstodel = GetBorrowersToExpunge( { category_code => 'PROTECTED' } );
+is( scalar @$patstodel, 1, 'Patron with default protected status can be deleted' );
+$patron->set( { protected => 1 } )->store;
+$patstodel = GetBorrowersToExpunge( { category_code => 'PROTECTED' } );
+is( scalar @$patstodel, 0, 'Patron with protected status set can not be deleted' );
 
 # Regression tests for BZ13502
 ## Remove all entries with userid='' (should be only 1 max)

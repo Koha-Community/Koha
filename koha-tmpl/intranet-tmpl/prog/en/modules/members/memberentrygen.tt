@@ -1027,6 +1027,29 @@ legend:hover {
                                             </li>
                                         [% END %]
 
+                                        <li class="radio">
+                                            <label for="protected">Protected:</label>
+                                            [% IF ( patron.protected == 1 ) %]
+                                                <label for="yes-protected">
+                                                    Yes
+                                                    <input type="radio" id="yes-protected" name="protected" value="1" checked="checked" />
+                                                </label>
+                                                <label for="no-protected">
+                                                    No
+                                                    <input type="radio" id="no-protected" name="protected" value="0" />
+                                                </label>
+                                            [% ELSE %]
+                                                <label for="yes-protected">
+                                                    Yes
+                                                    <input type="radio" id="yes-protected" name="protected" value="1" />
+                                                </label>
+                                                <label for="no-protected">
+                                                    No
+                                                    <input type="radio" id="no-protected" name="protected" value="0" checked="checked" />
+                                                </label>
+                                            [% END %]
+                                        </li>
+
                                         [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                                             <li>
                                                 <label for="checkprevcheckout">Check for previous checkouts: </label>

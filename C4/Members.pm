@@ -282,6 +282,7 @@ sub GetBorrowersToExpunge {
     $query .= q| WHERE  category_type <> 'S'
         AND ( borrowers.flags IS NULL OR borrowers.flags = 0 )
         AND tmp.guarantor_id IS NULL
+        AND borrowers.protected = 0
     |;
     my @query_params;
     if ( $filterbranch && $filterbranch ne "" ) {

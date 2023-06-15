@@ -12,7 +12,11 @@ $(document).ready(function(){
 
     if( CAN_user_borrowers_delete_borrowers ){
         $("#deletepatron").click(function(){
-            window.location='/cgi-bin/koha/members/deletemem.pl?member=' + borrowernumber;
+            if( $(this).data("toggle") == "tooltip"){ // Disabled menu option has tooltip attribute
+                e.preventDefault();
+            } else {
+                window.location='/cgi-bin/koha/members/deletemem.pl?member=' + borrowernumber;
+            }
         });
     }
     if( CAN_user_borrowers_edit_borrowers ){

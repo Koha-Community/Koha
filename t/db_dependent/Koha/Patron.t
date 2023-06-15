@@ -1446,7 +1446,7 @@ subtest 'password expiration tests' => sub {
 
 subtest 'safe_to_delete() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -1501,6 +1501,14 @@ subtest 'safe_to_delete() tests' => sub {
     my $manager = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_userenv( { borrowernumber => $manager->id } );
     $patron->account->pay({ amount => 10, debits => [ $debit ] });
+
+    ## Make it protected
+    $patron->protected(1);
+    ok( !$patron->safe_to_delete, 'Cannot delete, is protected' );
+    $message = $patron->safe_to_delete->messages->[0];
+    is( $message->type,    'error',        'Type is error' );
+    is( $message->message, 'is_protected', 'Cannot delete, is protected' );
+    $patron->protected(0);
 
     ## Happy case :-D
     ok( $patron->safe_to_delete, 'Can delete, all conditions met' );
