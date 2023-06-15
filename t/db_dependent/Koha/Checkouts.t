@@ -22,9 +22,11 @@ use Modern::Perl;
 use Test::More tests => 11;
 
 use C4::Circulation qw( MarkIssueReturned AddReturn );
+use C4::Reserves qw( AddReserve );
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Holds;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -296,7 +298,7 @@ $schema->storage->txn_rollback;
 
 subtest 'automatic_checkin' => sub {
 
-    plan tests => 9;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -404,6 +406,75 @@ subtest 'automatic_checkin' => sub {
 
     $searched = Koha::Old::Checkouts->find( $checkout_odue_aci->issue_id );
     is( dt_from_string($searched->returndate), $yesterday, 'old checkout for odue_ac_item has the right return date' );
+
+
+    subtest 'automatic_checkin AutomaticCheckinAutoFill tests' => sub {
+
+        plan tests => 3;
+
+        my $checkout_2_due_ac = Koha::Checkout->new(
+            {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $due_ac_item->itemnumber,
+                branchcode     => $patron->branchcode,
+                date_due       => $today
+            }
+        )->store;
+
+        my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $patron->branchcode}  } );
+        my $reserveid = AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron_2->id,
+                biblionumber   => $due_ac_item->biblionumber,
+                priority       => 1
+            }
+        );
+
+        t::lib::Mocks::mock_preference('AutomaticCheckinAutoFill', '0');
+
+        Koha::Checkouts->automatic_checkin;
+        my $reserve = Koha::Holds->find( $reserveid );
+
+        is( $reserve->found, undef, "Hold was not filled when AutomaticCheckinAutoFill disabled");
+
+        my $checkout_3_due_ac = Koha::Checkout->new(
+            {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $due_ac_item->itemnumber,
+                branchcode     => $patron->branchcode,
+                date_due       => $today
+            }
+        )->store;
+        t::lib::Mocks::mock_preference('AutomaticCheckinAutoFill', '1');
+
+        Koha::Checkouts->automatic_checkin;
+        $reserve->discard_changes;
+
+        is( $reserve->found, 'W', "Hold was filled when AutomaticCheckinAutoFill enabled");
+
+        my $checkout_2_odue_ac = Koha::Checkout->new(
+            {
+                borrowernumber => $patron->borrowernumber,
+                itemnumber     => $odue_ac_item->itemnumber,
+                branchcode     => $patron->branchcode,
+                date_due       => $today
+            }
+        )->store;
+        my $branch2 = $builder->build_object({ class=> "Koha::Libraries" });
+        my $reserve2id = AddReserve(
+            {
+                branchcode     => $branch2->branchcode,
+                borrowernumber => $patron_2->id,
+                biblionumber   => $odue_ac_item->biblionumber,
+                priority       => 1
+            }
+        );
+        Koha::Checkouts->automatic_checkin;
+
+        my $reserve2 = Koha::Holds->find( $reserve2id );
+        is( $reserve2->found, 'T', "Hold was filled when AutomaticCheckinAutoFill enabled and transfer was initiated when branches didn't match");
+    };
 
     $schema->storage->txn_rollback;
 }
