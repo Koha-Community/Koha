@@ -54,8 +54,10 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 10   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/advance_notices.pl -c
 
 # MEMBERSHIP_EXPIRY NOTICES
-
 15   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/membership_expiry.pl -c
+# To allow automatic renewal for 'active' patrons and send expiry notices to inactive ones, do:
+# 15   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/membership_expiry.pl -c -active -renew
+# 15   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/membership_expiry.pl -c -inactive
 
 # SERIALS UPDATE
 18   1 * * * __KOHA_USER__  $KOHA_CRON_PATH/serialsUpdate.pl -c
