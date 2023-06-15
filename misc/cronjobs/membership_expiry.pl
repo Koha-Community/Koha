@@ -40,7 +40,8 @@ Options:
    -b --branch <branchname> only deal with patrons from this library/branch
    --before=X               include patrons expiring a number of days BEFORE the date set by the preference
    --after=X                include patrons expiring a number of days AFTER  the date set by the preference
-   -l --letter <lettercode> use a specific notice rather than the default
+   -l --letter <lettercode> use a specific membership expiry notice
+   --letter_renew <code>    use a specific membership renewal notice (needs --renew too)
    --active=X               only deal with active patrons (active within X months)
    --inactive=X             only deal with inactive patrons (inactive within X months)
    --renew                  renew patrons and send notice (instead of expiry notice only)
@@ -101,7 +102,11 @@ will only notify patrons who have been seen.
 
 =item B<-letter>
 
-Optional parameter to use another notice than the default: MEMBERSHIP_EXPIRY
+Optional parameter to use another expiry notice than the default: MEMBERSHIP_EXPIRY
+
+=item B<-letter_renew>
+
+Optional parameter to use another renewal notice than the default: MEMBERSHIP_RENEWED
 
 =item B<-active>
 
@@ -173,11 +178,13 @@ my $help    = 0;
 my $man     = 0;
 my $before  = 0;
 my $after   = 0;
-my ( $branch, $letter_type );
+my $branch;
 my @where;
 my $active;
 my $inactive;
 my $renew;
+my $letter_expiry;
+my $letter_renew;
 
 my $command_line_options = join(" ",@ARGV);
 
@@ -190,12 +197,15 @@ GetOptions(
     'branch:s'       => \$branch,
     'before:i'       => \$before,
     'after:i'        => \$after,
-    'letter:s'       => \$letter_type,
+    'letter:s'       => \$letter_expiry,
+    'letter_renew:s' => \$letter_renew,
     'where=s'        => \@where,
     'active:i'       => \$active,
     'inactive:i'     => \$inactive,
     'renew'          => \$renew,
 ) or pod2usage(2);
+$letter_expiry = 'MEMBERSHIP_EXPIRY'  if !$letter_expiry;
+$letter_renew  = 'MEMBERSHIP_RENEWED' if !$letter_renew;
 
 pod2usage( -verbose => 2 ) if $man;
 pod2usage(1) if $help || !$confirm;
@@ -230,7 +240,6 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
     if $verbose;
 
 # main loop
-$letter_type = 'MEMBERSHIP_EXPIRY' if !$letter_type;
 my ( $count_skipped, $count_renewed, $count_enqueued ) = ( 0, 0, 0 );
 while ( my $recent = $upcoming_mem_expires->next ) {
     if ( $active && !$recent->is_active( { months => $active } ) ) {
@@ -244,10 +253,10 @@ while ( my $recent = $upcoming_mem_expires->next ) {
     my $which_notice;
     if ($renew) {
         $recent->renew_account;
-        $which_notice = 'MEMBERSHIP_RENEWED';
+        $which_notice = $letter_renew;
         $count_renewed++;
     } else {
-        $which_notice = $letter_type;
+        $which_notice = $letter_expiry;
     }
 
     my $from_address = $recent->library->from_email_address;
