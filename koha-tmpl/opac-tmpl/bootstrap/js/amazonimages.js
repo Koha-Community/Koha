@@ -5,9 +5,9 @@ function verify_images() {
             w = this.width;
             h = this.height;
             if ((w == 1) || (h == 1)) {
-				$(this).parent().html("<span class=\"no-image\">"+NO_AMAZON_IMAGE+"</span>");
+                $(this).parent().html("<span class=\"no-image\">"+ __("No cover image available") +"</span>");
             } else if ((this.complete != null) && (!this.complete)) {
-				$(this).parent().html("<span class=\"no-image\">"+NO_AMAZON_IMAGE+"</span>");
+                $(this).parent().html("<span class=\"no-image\">"+ __("No cover image available") +"</span>");
             }
         }
 		});

@@ -4,7 +4,7 @@ function bt_verify_images() {
 	       if (this.src.indexOf('btol.com') >= 0) {
             h = this.height;
             if (h == 20) {
-				$(this).before("<span class=\"no-image\" style=\"margin-bottom:5px;width:80px;\">"+NO_BAKERTAYLOR_IMAGE+"</span>");
+                $(this).before("<span class=\"no-image\" style=\"margin-bottom:5px;width:80px;\">"+ __("No cover image available" ) +"</span>");
             }
 		}
 		});

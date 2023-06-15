@@ -143,9 +143,6 @@
 </script>
 [% Asset.js("js/global.js") | $raw %]
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
-    <script>
-        var NO_AMAZON_IMAGE = _("No cover image available");
-    </script>
     [% Asset.js("js/amazonimages.js") | $raw %]
 [% END %]
 
@@ -194,9 +191,6 @@
         var MSG_MULTI_ADD_TAG_FAILED = _("Unable to add one or more tags.");
         var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
     [% END %]
-    [% IF OpenLibraryCovers || OpenLibrarySearch %]
-        var NO_OL_JACKET = _("No cover image available");
-    [% END %]
     [% IF (query_desc) %]
         var query_desc = "[% query_desc | html %]";
         var querystring = "[% querystring | html %]";
@@ -243,11 +237,6 @@
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %][% IF Koha.Preference( 'TagsEnabled' ) == 1 %][% Asset.js("js/tags.js") | $raw %][% END %][% END %]
 [% IF ( GoogleJackets ) %]
     [% Asset.js("js/google-jackets.js") | $raw %]
-    <script>
-
-        var NO_GOOGLE_JACKET = _("No cover image available");
-
-    </script>
 [% END %]
 [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
     [% Asset.js("js/coce.js") | $raw %]
@@ -260,22 +249,14 @@
 
 [% IF OPACLocalCoverImages %]
     [% Asset.js("js/localcovers.js") | $raw %]
-    <script>
-
-    var NO_LOCAL_JACKET = _("No cover image available");
-
-    </script>
 [% END %]
 
 [% IF ( BakerTaylorEnabled ) %]
     [% Asset.js("js/bakertaylorimages.js") | $raw %]
     <script>
-
-        var NO_BAKERTAYLOR_IMAGE = _("No cover image available");
         $(window).load(function(){
             bt_verify_images();
         });
-
     </script>
 [% END %]
 

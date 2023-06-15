@@ -74,7 +74,7 @@ KOHA.Google = {
                  } else {
                      var message = document.createElement("span");
                      $(message).attr("class","no-image");
-                     $(message).html(NO_GOOGLE_JACKET);
+                     $(message).html(__("No cover image available"));
                      $(this).empty().append(message);
                  }
              });

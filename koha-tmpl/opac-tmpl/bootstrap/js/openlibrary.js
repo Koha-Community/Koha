@@ -60,7 +60,7 @@ KOHA.OpenLibrary = new function() {
                 } else {
                     var message =  document.createElement("span");
                     $(message).attr("class","no-image");
-                    $(message).html(NO_OL_JACKET);
+                    $(message).html( __("No cover image available") );
                     $(this).append(message);
                 }
             });
