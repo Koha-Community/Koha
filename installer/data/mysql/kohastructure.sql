@@ -1559,6 +1559,7 @@ CREATE TABLE `borrowers` (
   `anonymized` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'flag for data anonymization',
   `autorenew_checkouts` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'flag for allowing auto-renewal',
   `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
+  `protected` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean flag to mark selected patrons as protected from deletion',
   PRIMARY KEY (`borrowernumber`),
   UNIQUE KEY `cardnumber` (`cardnumber`),
   UNIQUE KEY `userid` (`userid`),
@@ -2690,6 +2691,7 @@ CREATE TABLE `deletedborrowers` (
   `anonymized` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'flag for data anonymization',
   `autorenew_checkouts` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'flag for allowing auto-renewal',
   `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
+  `protected` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean flag to mark selected patrons as protected from deletion',
   KEY `borrowernumber` (`borrowernumber`),
   KEY `cardnumber` (`cardnumber`),
   KEY `sms_provider_id` (`sms_provider_id`)
