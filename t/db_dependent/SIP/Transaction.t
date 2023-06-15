@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 17;
+use Test::More tests => 18;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -22,6 +22,7 @@ use C4::Reserves qw( AddReserve ModReserve ModReserveAffect RevertWaitingStatus 
 use Koha::CirculationRules;
 use Koha::Item::Transfer;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Recalls;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -1043,4 +1044,108 @@ subtest item_circulation_status => sub {
     is( $status, '01', "Item circulation status is damaged" );
     $item->damaged(0)->store();
 };
+
+subtest do_checkout_with_recalls => sub {
+    plan tests => 7;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    my $patron2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'UseRecalls', 1 );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'recalls_allowed',
+            rule_value   => '10',
+        }
+    );
+
+    my $recall1 = Koha::Recall->new(
+        {
+            patron_id         => $patron2->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $item->biblio->biblionumber,
+            pickup_library_id => $library->branchcode,
+            item_id           => $item->itemnumber,
+            expiration_date   => undef,
+            item_level        => 1
+        }
+    )->store;
+
+    my $sip_patron     = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $sip_item       = C4::SIP::ILS::Item->new( $item->barcode );
+    my $co_transaction = C4::SIP::ILS::Transaction::Checkout->new();
+    is(
+        $co_transaction->patron($sip_patron),
+        $sip_patron, "Patron assigned to transaction"
+    );
+    is(
+        $co_transaction->item($sip_item),
+        $sip_item, "Item assigned to transaction"
+    );
+
+    # Test recalls made by another patron
+
+    $recall1->set_waiting( { item => $item } );
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 0, 'Checkout was not done due to waiting recall' );
+
+    $recall1->revert_waiting;
+    $recall1->start_transfer( { item => $item } );
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 0, 'Checkout was not done due to recall in transit' );
+
+    $recall1->revert_transfer;
+    $recall1->update( { item_id => undef, item_level => 0 } );
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 0, 'Checkout was not done due to a biblio-level recall that this item could fill' );
+
+    $recall1->set_cancelled;
+
+    my $recall2 = Koha::Recall->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            created_date      => \'NOW()',
+            biblio_id         => $item->biblio->biblionumber,
+            pickup_library_id => $library->branchcode,
+            item_id           => $item->itemnumber,
+            expiration_date   => undef,
+            item_level        => 1
+        }
+    )->store;
+
+    # Test recalls made by SIP patron
+
+    $recall2->set_waiting( { item => $item } );
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 1, 'Checkout was done because recalled item was allocated to them' );
+    $recall2 = Koha::Recalls->find( $recall2->id );
+    is( $recall2->status, 'fulfilled', 'Recall is fulfilled by checked out item' );
+};
+
 $schema->storage->txn_rollback;
