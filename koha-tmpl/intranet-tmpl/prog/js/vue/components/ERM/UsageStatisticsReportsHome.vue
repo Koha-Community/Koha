@@ -15,7 +15,7 @@
                         role="tab"
                         data-content="default"
                         @click="changeCustomOrDefault"
-                        >Default</a
+                        >Saved reports</a
                     >
                 </li>
                 <li
@@ -29,38 +29,14 @@
                         role="tab"
                         data-content="custom"
                         @click="changeCustomOrDefault"
-                        >Custom</a
+                        >Create report</a
                     >
                 </li>
             </ul>
         </div>
         <div class="tab-content">
             <div v-if="custom_or_default === 'default'">
-                <form
-                    class="default-report"
-                    @submit="displayDefaultReport($event)"
-                >
-                    <h2>{{ $__("Select default report") }}</h2>
-                    <fieldset class="rows">
-                        <ol>
-                            <li>
-                                <label for="default_reports"
-                                    >{{ $__("Choose report") }}:</label
-                                >
-                                <v-select
-                                    id="default_report"
-                                    v-model="query.default_report"
-                                    label="description"
-                                    :reduce="report => report"
-                                    :options="default_reports"
-                                />
-                            </li>
-                        </ol>
-                    </fieldset>
-                    <fieldset class="action">
-                        <ButtonSubmit />
-                    </fieldset>
-                </form>
+                <UsageStatisticsSavedReports />
             </div>
             <div v-if="custom_or_default === 'custom'">
                 <UsageStatisticsReportBuilder
@@ -76,6 +52,7 @@ import { inject } from "vue"
 import ButtonSubmit from "../ButtonSubmit.vue"
 import { APIClient } from "../../fetch/api-client.js"
 import UsageStatisticsReportBuilder from "./UsageStatisticsReportBuilder.vue"
+import UsageStatisticsSavedReports from "./UsageStatisticsSavedReports.vue"
 
 export default {
     setup() {
@@ -92,25 +69,9 @@ export default {
         return {
             initialized: false,
             custom_or_default: "default",
-            query: {
-                interval: "monthly",
-                report_type: null,
-                metric_types: null,
-                usage_data_providers: null,
-                titles: null,
-                start_month: null,
-                start_year: null,
-                end_month: null,
-                end_year: null,
-            },
-            default_reports: [
-                "Top resource requests",
-                "Publisher rollup",
-                "Provider rollup",
-                "Yearly usage requests",
-                "Titles",
-                // etc etc
-            ],
+            default_usage_report: null,
+            default_usage_reports: [],
+            usage_data_providers: [],
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -118,9 +79,9 @@ export default {
             vm.getUsageDataProviders()
         })
     },
-    beforeRouteUpdate(to, from) {
-        this.usage_data_provider = this.getUsageDataProviders()
-    },
+    // beforeRouteUpdate(to, from) {
+    //     this.usage_data_provider = this.getUsageDataProviders()
+    // },
     methods: {
         async getUsageDataProviders() {
             const client = APIClient.erm
@@ -142,13 +103,11 @@ export default {
         changeCustomOrDefault(e) {
             this.custom_or_default = e.target.getAttribute("data-content")
         },
-        displayDefaultReport(e) {
-            e.preventDefault()
-        },
     },
     components: {
         ButtonSubmit,
         UsageStatisticsReportBuilder,
+        UsageStatisticsSavedReports,
     },
     name: "UsageStatisticsReportsHome",
 }

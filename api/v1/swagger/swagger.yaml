@@ -44,6 +44,8 @@ definitions:
     $ref: ./definitions/erm_counter_file.yaml
   erm_counter_log:
     $ref: ./definitions/erm_counter_log.yaml
+  erm_default_usage_report:
+    $ref: ./definitions/erm_default_usage_report.yaml
   erm_eholdings_title:
     $ref: ./definitions/erm_eholdings_title.yaml
   erm_eholdings_package:
@@ -597,6 +599,12 @@ parameters:
     description: ERM counter_log internal identifier
     in: path
     name: erm_counter_log_id
+    required: true
+    type: integer
+  erm_default_usage_report_id_pp:
+    description: ERM default_usage_report internal identifier
+    in: path
+    name: erm_default_usage_report_id
     required: true
     type: integer
   erm_usage_data_provider_id_pp:

@@ -226,6 +226,23 @@ return {
         } else {
             say $out "erm_usage_yus table already exists - skipping to next table";
         }
+
+        unless( TableExists( 'erm_default_usage_reports')) {
+            $dbh->do(
+                q{
+                CREATE TABLE `erm_default_usage_reports` (
+                `erm_default_usage_report_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                `report_name` varchar(50) DEFAULT NULL COMMENT 'name of the default report',
+                `report_url_params` longtext DEFAULT NULL COMMENT 'url params for the default report',
+                PRIMARY KEY (`erm_default_usage_report_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+                }
+            );
+            
+            say $out "Added new table erm_default_usage_reports";
+        } else {
+            say $out "erm_default_usage_reports table already exists - skipping to next table";
+        }
         
         $dbh->do(q{
             INSERT IGNORE INTO authorised_value_categories (category_name, is_system)

@@ -253,20 +253,20 @@ export class ERMAPIClient extends HttpClient {
 
     get usage_data_providers() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "usage_data_providers/" + id,
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
                     endpoint: "usage_data_providers",
-                    query
+                    query,
                 }),
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "usage_data_providers/" + id,
                 }),
-            create: (usage_data_provider) =>
+            create: usage_data_provider =>
                 this.post({
                     endpoint: "usage_data_providers",
                     body: usage_data_provider,
@@ -278,38 +278,51 @@ export class ERMAPIClient extends HttpClient {
                 }),
             run: (id, begin_date, end_date) =>
                 this.get({
-                    endpoint: "usage_data_providers/" + id + "/run?begin_date="+ begin_date + "&end_date=" + end_date,
+                    endpoint:
+                        "usage_data_providers/" +
+                        id +
+                        "/run?begin_date=" +
+                        begin_date +
+                        "&end_date=" +
+                        end_date,
                 }),
-            test: (id) =>
+            test: id =>
                 this.get({
                     endpoint: "usage_data_providers/" + id + "/test_connection",
                 }),
-            //count: () => this.count("usage_data_providers"), //TODO: Implement count method
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "usage_data_providers?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
         };
     }
 
     get usage_titles() {
         return {
-            get: (id) =>
+            get: id =>
                 this.get({
                     endpoint: "usage_titles/" + id,
                     headers: {
-                        "x-koha-embed":
-                            "usage_mus",
+                        "x-koha-embed": "usage_mus",
                     },
                 }),
-            getAll: (query) =>
+            getAll: query =>
                 this.getAll({
                     endpoint: "usage_titles",
-                    query
+                    query,
                 }),
             getReport: (query, embed) =>
                 this.get({
                     endpoint: "usage_titles/report",
                     query,
                     headers: {
-                        "x-koha-embed":
-                            `${embed}`,
+                        "x-koha-embed": `${embed}`,
                     },
                 }),
             count: (query = {}) =>
@@ -327,18 +340,42 @@ export class ERMAPIClient extends HttpClient {
 
     get counter_files() {
         return {
-            getAll: (query) =>
+            getAll: query =>
                 this.get({
                     endpoint: "counter_files",
                     query,
                     headers: {
-                        "x-koha-embed":
-                            "counter_logs",
-                    }
+                        "x-koha-embed": "counter_logs",
+                    },
                 }),
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "counter_files/" + id,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "counter_files?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get default_usage_reports() {
+        return {
+            getAll: query =>
+                this.get({
+                    endpoint: "default_usage_reports",
+                    query,
+                }),
+            create: default_usage_report =>
+                this.post({
+                    endpoint: "default_usage_reports",
+                    body: default_usage_report,
                 }),
         };
     }

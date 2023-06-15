@@ -1,0 +1,18 @@
+---
+type: object
+properties:
+  erm_default_usage_report_id:
+    type: integer
+    description: internally assigned default_usage_report identifier
+    readOnly: true
+  report_name:
+    description: report_name
+    type: string
+  report_url_params:
+    description: report_url_params
+    type: string
+
+additionalProperties: false
+required:
+  - report_name
+  - report_url_params

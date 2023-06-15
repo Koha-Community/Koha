@@ -268,13 +268,24 @@
             </fieldset>
             <fieldset class="action">
                 <ButtonSubmit />
-                <button
-                    @click="clearForm($event)"
-                    style="padding: 0.5em 1em; margin-left: 0.5em"
-                >
+                <button @click="clearForm($event)" class="button_format">
                     Clear
                 </button>
             </fieldset>
+            <div class="save_report">
+                <input
+                    id="report_name"
+                    v-model="report_name"
+                    :placeholder="$__('Enter report name')"
+                    class="year_input"
+                />
+                <button
+                    @click="saveToDefaultReports($event)"
+                    class="button_format"
+                >
+                    Save report
+                </button>
+            </div>
         </form>
     </div>
 </template>
@@ -468,6 +479,7 @@ export default {
             usage_data_provider_list: [...this.usage_data_providers],
             time_period_columns_builder: null,
             request_url: null,
+            report_name: "",
         }
     },
     methods: {
@@ -525,68 +537,7 @@ export default {
         buildCustomReport(e) {
             e.preventDefault()
 
-            const queryObject = this.query
-            const {
-                start_year,
-                end_year,
-                data_display,
-                report_type,
-                metric_types,
-            } = queryObject
-
-            if (!report_type || !start_year || !end_year) {
-                alert(
-                    "You have not filled in all the required fields, please try again"
-                )
-                return
-            }
-
-            // validate if the year is a valid string
-            const valid_start_year = this.validateYear(start_year)
-            const valid_end_year = this.validateYear(end_year)
-
-            if (!valid_start_year || !valid_end_year) {
-                this.setError(
-                    this.$__("Please enter a year with the format YYYY")
-                )
-                return
-            }
-
-            // If no metric types are selected then all possible values should be included for backend data filtering
-            if (!metric_types || (metric_types && metric_types.length === 0)) {
-                const final_metric_types = this.metric_types_options.map(
-                    metric => {
-                        return metric.value
-                    }
-                )
-                queryObject.metric_types = final_metric_types
-            }
-
-            const metric_report_type =
-                data_display === "metric_type" ? true : false
-            const url = !data_display.includes("yearly")
-                ? this.buildMonthlyUrlQuery(
-                      queryObject,
-                      this.time_period_columns_builder,
-                      metric_report_type
-                  )
-                : this.buildYearlyUrlQuery(queryObject)
-            const type = data_display
-            const columns = this.defineColumns(
-                this.title_property_column_options
-            )
-            const yearly_filter = data_display.includes("monthly")
-                ? this.yearly_filter_required
-                : false
-
-            const urlParams = {
-                url,
-                columns,
-                queryObject,
-                yearly_filter,
-                type,
-                tp_columns: this.time_period_columns_builder,
-            }
+            const urlParams = this.validateFormAndCreateUrlParams()
 
             this.$router.push({
                 name: "UsageStatisticsReportsViewer",
@@ -879,6 +830,93 @@ export default {
 
             return columns
         },
+        async saveToDefaultReports(e) {
+            e.preventDefault()
+
+            if (!this.report_name) {
+                alert("Please provide a report name")
+                return
+            }
+            const params = this.validateFormAndCreateUrlParams()
+            const report = {
+                report_name: this.report_name,
+                report_url_params: JSON.stringify(params),
+            }
+
+            const client = APIClient.erm
+            await client.default_usage_reports.create(report).then(
+                success => {
+                    this.setMessage(this.$__("Report saved successfully"))
+                },
+                error => {}
+            )
+        },
+        validateFormAndCreateUrlParams() {
+            const queryObject = { ...this.query }
+            const {
+                start_year,
+                end_year,
+                data_display,
+                report_type,
+                metric_types,
+            } = queryObject
+
+            if (!report_type || !start_year || !end_year) {
+                alert(
+                    "You have not filled in all the required fields, please try again"
+                )
+                return
+            }
+
+            // validate if the year is a valid string
+            const valid_start_year = this.validateYear(start_year)
+            const valid_end_year = this.validateYear(end_year)
+
+            if (!valid_start_year || !valid_end_year) {
+                this.setError(
+                    this.$__("Please enter a year with the format YYYY")
+                )
+                return
+            }
+
+            // If no metric types are selected then all possible values should be included for backend data filtering
+            if (!metric_types || (metric_types && metric_types.length === 0)) {
+                const final_metric_types = this.metric_types_options.map(
+                    metric => {
+                        return metric.value
+                    }
+                )
+                queryObject.metric_types = final_metric_types
+            }
+
+            const metric_report_type =
+                data_display === "metric_type" ? true : false
+            const url = !data_display.includes("yearly")
+                ? this.buildMonthlyUrlQuery(
+                      queryObject,
+                      this.time_period_columns_builder,
+                      metric_report_type
+                  )
+                : this.buildYearlyUrlQuery(queryObject)
+            const type = data_display
+            const columns = this.defineColumns(
+                this.title_property_column_options
+            )
+            const yearly_filter = data_display.includes("monthly")
+                ? this.yearly_filter_required
+                : false
+
+            const urlParams = {
+                url,
+                columns,
+                queryObject,
+                yearly_filter,
+                type,
+                tp_columns: this.time_period_columns_builder,
+            }
+
+            return urlParams
+        },
     },
     props: ["usage_data_providers"],
     components: {
@@ -939,5 +977,15 @@ input:not([type="submit"]):not([type="search"]):not([type="button"]):not([type="
 }
 .year_input {
     width: 30%;
+    min-height: 2em;
+}
+.button_format {
+    padding: 0.5em 1em;
+    margin-left: 0.5em;
+}
+.save_report {
+    display: flex;
+    gap: 0.5em;
+    margin-top: 1em;
 }
 </style>

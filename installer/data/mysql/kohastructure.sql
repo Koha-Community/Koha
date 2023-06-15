@@ -3182,6 +3182,21 @@ CREATE TABLE `erm_usage_mus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `erm_default_usage_reports`
+--
+
+DROP TABLE IF EXISTS `erm_default_usage_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_default_usage_reports` (
+  `erm_default_usage_report_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `report_name` varchar(50) DEFAULT NULL COMMENT 'name of the default report',
+  `report_url_params` longtext DEFAULT NULL COMMENT 'url params for the default report',
+  PRIMARY KEY (`erm_default_usage_report_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `erm_usage_titles`
 --
 
