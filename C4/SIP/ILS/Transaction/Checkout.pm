@@ -48,7 +48,7 @@ sub do_checkout {
     my $patron         = Koha::Patrons->find($self->{patron}->{borrowernumber});
     my $overridden_duedate; # usually passed as undef to AddIssue
     my $prevcheckout_block_checkout  = $account->{prevcheckout_block_checkout};
-    my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode, 0);
+    my ($issuingimpossible, $needsconfirmation, $messages) = _can_we_issue($patron, $barcode, 0);
 
     if ( $no_block_due_date ) {
         my $year = substr($no_block_due_date,0,4);
@@ -108,6 +108,10 @@ sub do_checkout {
                 $self->screen_msg('Item must be checked out at a circulation desk');
                 $noerror = 0;
                 last;
+            } elsif ( $confirmation eq 'RECALLED' ) {
+                $self->screen_msg('Item has been recalled for another patron');
+                $noerror = 0;
+                last;
             } else {
                 # We've been returned a case other than those above
                 $self->screen_msg("Item cannot be issued: $confirmation");
@@ -141,8 +145,14 @@ sub do_checkout {
         });
     } else {
         # can issue
-        my $issue = AddIssue( $patron, $barcode, $overridden_duedate, 0 );
-        $self->{due} = $self->duedatefromissue($issue, $itemnumber);
+        my $recall_id;
+        foreach ( keys %{$messages} ) {
+            if ( $_ eq "RECALLED" ) {
+                $recall_id = $messages->{RECALLED};
+            }
+        }
+        my $issue = AddIssue( $patron, $barcode, $overridden_duedate, 0, undef, undef, { recall_id => $recall_id } );
+        $self->{due} = $self->duedatefromissue( $issue, $itemnumber );
     }
 
     $self->ok(1);
@@ -152,7 +162,7 @@ sub do_checkout {
 sub _can_we_issue {
     my ( $patron, $barcode, $pref ) = @_;
 
-    my ( $issuingimpossible, $needsconfirmation, $alerts ) =
+    my ( $issuingimpossible, $needsconfirmation, $alerts, $messages ) =
       CanBookBeIssued( $patron, $barcode, undef, 0, $pref );
     for my $href ( $issuingimpossible, $needsconfirmation ) {
 
@@ -163,7 +173,7 @@ sub _can_we_issue {
             }
         }
     }
-    return ( $issuingimpossible, $needsconfirmation );
+    return ( $issuingimpossible, $needsconfirmation, $messages );
 }
 
 1;
