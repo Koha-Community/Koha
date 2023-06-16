@@ -23,7 +23,7 @@
                                         <router-link
                                             :to="{ name: 'AgreementsList' }"
                                         >
-                                            <i class="fa fa-check-circle-o"></i>
+                                            <i class="fa fa-check-circle"></i>
                                             {{ $__("Agreements") }}</router-link
                                         >
                                     </li>
