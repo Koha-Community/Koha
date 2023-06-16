@@ -8,26 +8,26 @@
 var dataTablesDefaults = {
     "language": {
         "paginate": {
-            "first"    : window.MSG_DT_FIRST || "First",
-            "last"     : window.MSG_DT_LAST || "Last",
-            "next"     : window.MSG_DT_NEXT || "Next",
-            "previous" : window.MSG_DT_PREVIOUS || "Previous"
+            "first"    : __("First"),
+            "last"     : __("Last"),
+            "next"     : __("Next"),
+            "previous" : __("Previous")
         },
-        "emptyTable"       : window.MSG_DT_EMPTY_TABLE || "No data available in table",
-        "info"             : window.MSG_DT_INFO || "Showing _START_ to _END_ of _TOTAL_ entries",
-        "infoEmpty"        : window.MSG_DT_INFO_EMPTY || "No entries to show",
-        "infoFiltered"     : window.MSG_DT_INFO_FILTERED || "(filtered from _MAX_ total entries)",
-        "lengthMenu"       : window.MSG_DT_LENGTH_MENU || "Show _MENU_ entries",
-        "loadingRecords"   : window.MSG_DT_LOADING_RECORDS || "Loading...",
-        "processing"       : window.MSG_DT_PROCESSING || "Processing...",
-        "search"           : window.MSG_DT_SEARCH || "Search:",
-        "zeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found",
+        "emptyTable"       : __("No data available in table"),
+        "info"             : __("Showing _START_ to _END_ of _TOTAL_ entries"),
+        "infoEmpty"        : __("No entries to show"),
+        "infoFiltered"     : __("(filtered from _MAX_ total entries)"),
+        "lengthMenu"       : __("Show _MENU_ entries"),
+        "loadingRecords"   : __("Loading..."),
+        "processing"       : __("Processing..."),
+        "search"           : __("Search:"),
+        "zeroRecords"      : __("No matching records found"),
         buttons: {
-            "copyTitle"     : window.MSG_DT_COPY_TO_CLIPBOARD || "Copy to clipboard",
-            "copyKeys"      : window.MSG_DT_COPY_KEYS || "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.",
+            "copyTitle"     : __("Copy to clipboard"),
+            "copyKeys"      : __("Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape."),
             "copySuccess": {
-                _: window.MSG_DT_COPIED_ROWS || "Copied %d rows to clipboard",
-                1: window.MSG_DT_COPIED_ONE_ROW || "Copied one row to clipboard",
+                _: __("Copied %d rows to clipboard"),
+                1: __("Copied one row to clipboard"),
             },
             "print": __("Print")
         }
@@ -55,9 +55,9 @@ var dataTablesDefaults = {
 $.fn.dataTable.ext.buttons.clearFilter = {
     fade: 100,
     className: "dt_button_clear_filter",
-    titleAttr: window.MSG_CLEAR_FILTER,
+    titleAttr: __("Clear filter"),
     enabled: false,
-    text: '<i class="fa fa-lg fa-times"></i> <span class="dt-button-text">' + window.MSG_CLEAR_FILTER + '</span>',
+    text: '<i class="fa fa-lg fa-times"></i> <span class="dt-button-text">' + __("Clear filter") + '</span>',
     available: function ( dt ) {
         // The "clear filter" button is made available if this test returns true
         if( dt.settings()[0].aanFeatures.f ){ // aanFeatures.f is null if there is no search form
@@ -85,7 +85,7 @@ $.fn.dataTable.ext.buttons.clearFilter = {
      * from a configuration file (in English, "a," "an," and "the")
      */
 
-    var config_exclude_articles_from_sort = window.CONFIG_EXCLUDE_ARTICLES_FROM_SORT || "a an the";
+    var config_exclude_articles_from_sort = __("a an the");
     if (config_exclude_articles_from_sort){
         var articles = config_exclude_articles_from_sort.split(" ");
         var rpattern = "";
