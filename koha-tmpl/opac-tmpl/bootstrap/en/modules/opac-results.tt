@@ -603,7 +603,7 @@
                 if (checkedCount > 0) {
                     holdBiblioNums(checkedBiblioNums);
                 } else {
-                    alert( __("No item was selected") );
+                    alert( _("No item was selected") );
                 }
             }
 
@@ -618,7 +618,7 @@
             function tagSelected() {
                 var checkedBoxes = $(".searchresults :checkbox:checked");
                 if ($(checkedBoxes).size() == 0) {
-                    alert( __("No item was selected") );
+                    alert( _("No item was selected") );
                 } else {
                     $("#tagsel_tag").hide();
                     $(".resort").hide();
@@ -637,7 +637,7 @@
             function tagAdded() {
                 var checkedBoxes = $(".searchresults :checkbox:checked");
                 if ($(checkedBoxes).size() == 0) {
-                    alert( __("No item was selected") );
+                    alert( _("No item was selected") );
                     return false;
                 }
 
