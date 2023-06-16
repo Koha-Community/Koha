@@ -1,52 +1,32 @@
 use Modern::Perl;
 
 return {
-    bug_number => "BUG_33028",
-    description =>
-"Fix calculations around fines and values with comma as decimal separator",
+    bug_number => "33028",
+    description => "Fix wrongly formatted values for monetary values in circulation rules",
     up => sub {
         my ($args) = @_;
-        my ( $dbh, $out ) = @$args{qw(dbh out)};
+        my ($dbh, $out) = @$args{qw(dbh out)};
 
         my $rules = $dbh->selectall_arrayref(
-q|select * from circulation_rules where rule_name IN ('fine', 'overduefinescap')|,
+            q|SELECT * FROM circulation_rules WHERE rule_name IN ('fine', 'overduefinescap', 'recall_overdue_fine', 'article_request_fee')|,
             { Slice => {} }
         );
 
         my $query = $dbh->prepare(
-            "UPDATE circulation_rules SET rule_value = ? where id = ?");
+            "UPDATE circulation_rules SET rule_value = ? WHERE id = ?");
 
-        foreach my $rule ( @{$rules} ) {
-            my $rule_id    = $rule->{'id'};
-            my $rule_value = $rule->{'rule_value'};
-            if ( $rule_value =~ /[a-zA-Z]/ ) {
-                die(
-                    sprintf(
-                        'No only numbers in rule id %s ("%s") - fix it before restart this update',
-                        $rule_id, $rule_value
-                    )
-                );
+        my $error;
+        for my $rule ( @{$rules} ) {
+            my $library = defined($rule->{'branchcode'}) ? $rule->{'branchcode'} : "All";
+            my $category = defined($rule->{'categorycode'}) ? $rule->{'categorycode'} : "All";
+            my $itemtype = defined($rule->{'itemtype'}) ? $rule->{'itemtype'} : "All";
+            if ( !( $rule->{'rule_value'} =~ /^[0-9.]*$/ )) {
+                $error .= "Rule ID: $rule->{'id'} ($library-$category-$itemtype) \tRule: $rule->{'rule_name'}\tValue: $rule->{'rule_value'}\n";
             }
-            else {
-                if ( $rule_value =~ /,/ ) {
-                    if ( $rule_value !~ /,.*?,/ ) {
-                        $rule_value =~ s/,/./;
-                        $rule_value =~ s/\.0+$//;
-                        $query->execute( $rule_value, $rule_id );
-                    }
-                    else {
-                        die(
-                            sprintf(
-                                'Many commas in rule id %s ("%s") - fix it before restart this update',
-                                $rule_id, $rule_value
-                            )
-                        );
-                    }
-                }
-            }
-
         }
-        say $out
-        "BUG_33028 - Patch applied";
+        if ( $error ) {
+            die("Circulation rules contain invalid monetary values:\n$error\nPlease fix these before you restart the update.");
+        }
+        say $out "Circulation rules have been validated. All circulation rule values are correctly formatted.";
     },
-  }
+  };
