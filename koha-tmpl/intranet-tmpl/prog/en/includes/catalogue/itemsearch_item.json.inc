@@ -32,6 +32,6 @@
   "[% (item.issues || 0) | html %]",
   "[% IF item.checkout %][% item.checkout.date_due | $KohaDates %][% END %]",
   "[% FILTER escape_quotes ~%]
-    <div class="btn-group dropup"><button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span> </button> <ul class="dropdown-menu pull-right"> [% IF user.can_edit_item( item ) %]<li><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | uri %]&itemnumber=[% item.itemnumber | uri %]">Edit item</a></li>[% END %] <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% item.biblionumber | html %]">Edit record</a></li> </ul> </div>
+    <div class="btn-group dropup"><button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span> </button> <ul class="dropdown-menu pull-right"> [% IF user.can_edit_items_from( item.homebranch ) %]<li><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | uri %]&itemnumber=[% item.itemnumber | uri %]">Edit item</a></li>[% END %] <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% item.biblionumber | html %]">Edit record</a></li> </ul> </div>
   [%~ END %]"
 ]
