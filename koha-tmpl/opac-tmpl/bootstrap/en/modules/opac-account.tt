@@ -79,7 +79,6 @@
 <script>
 $( document ).ready(function() {
 
-    var MSG_MIN_THRESHOLD = _("Minimum amount needed by this service is %s");
     var txtActivefilter = _("Filter paid transactions");
     var txtInactivefilter = _("Show all transactions");
 
@@ -169,7 +168,7 @@ $( document ).ready(function() {
                             help.addClass('hide');
                         } else {
                             $(self).prop('disabled', true);
-                            help.html(MSG_MIN_THRESHOLD.format(parseInt(threshold,10).toFixed(2))).removeClass('hide');
+                            help.html( _("Minimum amount needed by this service is %s").format(parseInt(threshold,10).toFixed(2)) ).removeClass('hide');
                         }
                         resolve();
                     })

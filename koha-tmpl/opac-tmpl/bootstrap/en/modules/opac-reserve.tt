@@ -501,10 +501,6 @@
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'datatables.inc' %]
 <script>
-    var MSG_NO_ITEM_SELECTED = _("Expecting a specific item selection.");
-    var MSG_EMPTY_START_DATE = _("Hold start date should be filled.");
-    var MSG_EMPTY_END_DATE   = _("Hold expiration date should be filled.");
-
     $(document).ready(function() {
 
         $(".toggle_unholdable").click(function(e){
@@ -670,13 +666,13 @@
                 }
 
                 if( $(".holddatefrom").prop('required') && $("#from"+ biblioNum).val() == '' ) {
-                    alert(MSG_EMPTY_START_DATE);
+                    alert( _("Hold start date should be filled.") );
                     badBib = biblioNum;
                     if( $("#from"+biblioNum).parent(":hidden").length ) $("#toggle-hold-options-"+biblioNum).trigger('click');
                     $("#from"+biblioNum).siblings('.flatpickr_wrapper').find('.flatpickr-input').trigger('focus');
                     return false;
                 } else if( $(".futuredate").prop('required') && $("#to"+ biblioNum).val() == '' ) {
-                    alert(MSG_EMPTY_END_DATE);
+                    alert( _("Hold expiration date should be filled.") );
                     badBib = biblioNum;
                     if( $("#to"+biblioNum).parent(":hidden").length ) $("#toggle-hold-options-"+biblioNum).trigger('click');
                     $("#to"+biblioNum).siblings('.flatpickr_wrapper').find('.flatpickr-input').trigger('focus');
@@ -688,7 +684,7 @@
                     // Find the selected copy
                     var item = $(".checkitem_" + biblioNum + ":checked");
                     if ($(item).size() == 0) {
-                        alert(MSG_NO_ITEM_SELECTED);
+                        alert( _("Expecting a specific item selection.") );
                         badBib = biblioNum;
                         return false;
                     } else {

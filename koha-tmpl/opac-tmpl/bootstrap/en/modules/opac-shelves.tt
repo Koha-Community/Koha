@@ -837,10 +837,6 @@
     [% Asset.js("js/openlibrary.js") | $raw %]
 [% END %]
 <script>
-var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
-var MSG_REMOVE_ONE_FROM_LIST = _("Are you sure you want to remove this item from the list?");
-var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to delete this list?");
-var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
 
 [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) ) %]
     function holdSelections() {

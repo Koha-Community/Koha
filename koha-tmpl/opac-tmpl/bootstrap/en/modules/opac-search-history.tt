@@ -291,8 +291,6 @@
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
 <script>
-
-    var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete selected search history entries?");
     $(document).ready(function() {
         // We show table ordered by descending dates by default
         // (so that the more recent query is shown first)
@@ -343,7 +341,7 @@
             if ( $(ids).length < 1 ) {
                 return false;
             }
-            if ( confirm(MSG_CONFIRM_DELETE_HISTORY) ) {
+            if ( confirm( _("Are you sure you want to delete selected search history entries?") ) ) {
                 $(form).submit();
             }
             return false;

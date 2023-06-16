@@ -202,10 +202,9 @@
     }
 
     $(document).ready(function(){
-        var MSG_DELETE_TAG = _("Are you sure you want to delete the selected tag(s)?");
         $(".delete").on("click", function(e){
             if ( checkboxesChecked() == 1 ) {
-                return confirmDelete(MSG_DELETE_TAG);
+                return confirmDelete( _("Are you sure you want to delete the selected tag(s)?") );
             } else {
                 alert(_("Please select a tag to delete."));
                 e.preventDefault();
