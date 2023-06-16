@@ -85,11 +85,21 @@ properties:
     type: 
     - string
     - "null"
+  metric_type:
+    description: metric type of the harvester when reporting
+    type: 
+    - string
+    - "null"
   counter_files:
     type: array
     description: counter files
     items:
       $ref: erm_counter_file.yaml
+  erm_usage_titles:
+    type: array
+    description: usage titles
+    items:
+      $ref: erm_usage_title.yaml
 
 additionalProperties: false
 required:

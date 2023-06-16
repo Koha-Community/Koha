@@ -30,6 +30,10 @@
                                         value: 'metric_type',
                                         description: 'By metric type',
                                     },
+                                    {
+                                        value: 'usage_data_provider',
+                                        description: 'By data provider totals',
+                                    },
                                 ]"
                             />
                         </li>
@@ -637,10 +641,24 @@ export default {
 
             this.time_period_columns_builder = time_period_columns
         },
-        buildMonthlyUrlQuery(query, time_period_columns, metric_type_report) {
-            let url = metric_type_report
-                ? "/api/v1/erm/usage_titles/metric_types_report"
-                : "/api/v1/erm/usage_titles/monthly_report"
+        buildMonthlyUrlQuery(query, time_period_columns, data_display) {
+            let url
+            let prefix
+            switch (data_display) {
+                case "monthly":
+                    url = "/api/v1/erm/usage_titles/monthly_report"
+                    prefix = "erm_usage_muses"
+                    break
+                case "metric_type":
+                    url = "/api/v1/erm/usage_titles/metric_types_report"
+                    prefix = "erm_usage_muses"
+                    break
+                case "usage_data_provider":
+                    url = "/api/v1/erm/usage_data_providers/report"
+                    prefix = "erm_usage_titles.erm_usage_muses"
+                    break
+            }
+
             // Work out which years are included in the query
             const years = []
             const {
@@ -665,8 +683,8 @@ export default {
             const queryArray = years.map(year => {
                 const queryByYear = {}
 
-                queryByYear[`erm_usage_muses.year`] = year
-                queryByYear[`erm_usage_muses.report_type`] = report_type
+                queryByYear[`${prefix}.year`] = year
+                queryByYear[`${prefix}.report_type`] = report_type
 
                 // Find the months applicable to each year, ignoring months that have been de-selected
                 const queryMonths = months[year]
@@ -674,21 +692,21 @@ export default {
                     .map(month => {
                         return month.value
                     })
-                queryByYear[`erm_usage_muses.month`] = queryMonths
+                queryByYear[`${prefix}.month`] = queryMonths
                 // Add any title query
                 if (titles) {
                     const title_ids = titles.map(title => {
                         return title.title_id
                     })
-                    queryByYear[`erm_usage_muses.title_id`] = title_ids
+                    queryByYear[`${prefix}.title_id`] = title_ids
                 }
                 // Add any metric types query
                 if (metric_types) {
-                    queryByYear[`erm_usage_muses.metric_type`] = metric_types
+                    queryByYear[`${prefix}.metric_type`] = metric_types
                 }
                 // Add any data provider query
                 if (usage_data_providers) {
-                    queryByYear[`erm_usage_muses.usage_data_provider_id`] =
+                    queryByYear[`${prefix}.usage_data_provider_id`] =
                         usage_data_providers
                 }
 
@@ -889,19 +907,18 @@ export default {
                 queryObject.metric_types = final_metric_types
             }
 
-            const metric_report_type =
-                data_display === "metric_type" ? true : false
             const url = !data_display.includes("yearly")
                 ? this.buildMonthlyUrlQuery(
                       queryObject,
                       this.time_period_columns_builder,
-                      metric_report_type
+                      data_display
                   )
                 : this.buildYearlyUrlQuery(queryObject)
             const type = data_display
-            const columns = this.defineColumns(
-                this.title_property_column_options
-            )
+            const columns =
+                data_display === "usage_data_provider"
+                    ? []
+                    : this.defineColumns(this.title_property_column_options)
             const yearly_filter = data_display.includes("monthly")
                 ? this.yearly_filter_required
                 : false

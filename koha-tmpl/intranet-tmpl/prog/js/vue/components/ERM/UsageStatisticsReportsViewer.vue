@@ -47,6 +47,20 @@ export default {
             this.report_type === "yearly"
                 ? ["erm_usage_yuses"]
                 : ["erm_usage_muses"]
+        switch (this.report_type) {
+            case "monthly":
+                this.embed = "erm_usage_muses"
+                break
+            case "yearly":
+                this.embed = "erm_usage_yuses"
+                break
+            case "metric_type":
+                this.embed = "erm_usage_muses"
+                break
+            case "usage_data_provider":
+                this.embed = "erm_usage_titles.erm_usage_muses"
+                break
+        }
 
         this.years = Object.keys(this.params.tp_columns)
         this.year = this.years[this.years.length - 1]
@@ -78,15 +92,16 @@ export default {
             const yearly_filter = params.yearly_filter
             const query = params.queryObject
 
-            const column_set = [
-                {
+            const column_set = [...columns]
+
+            report_type !== "usage_data_provider" &&
+                column_set.unshift({
                     title: __("Title"),
                     data: "title",
                     searchable: true,
                     orderable: true,
-                },
-                ...columns,
-            ]
+                })
+
             // Add metric type to each row
             if (report_type !== "metric_type") {
                 column_set.push({
@@ -97,6 +112,36 @@ export default {
                     searchable: true,
                     orderable: true,
                 })
+            }
+
+            if (report_type === "usage_data_provider") {
+                column_set.unshift({
+                    title: __("Data provider"),
+                    data: "name",
+                    searchable: true,
+                    orderable: true,
+                })
+                column_set.push({
+                    title: __("Period Total"),
+                    render: function (data, type, row, meta) {
+                        const sum = row.erm_usage_titles.reduce(
+                            (acc, title) => {
+                                const titleSum = title.erm_usage_muses.reduce(
+                                    (acc, mus) => {
+                                        return acc + mus.usage_count
+                                    },
+                                    0
+                                )
+                                return acc + titleSum
+                            },
+                            0
+                        )
+                        return sum
+                    },
+                    searchable: true,
+                    orderable: true,
+                })
+                return column_set
             }
 
             // Add monthly columns
@@ -307,8 +352,6 @@ export default {
     },
     watch: {
         table() {
-            // table needs to be rendered before header can be created and
-            // table is hidden by .hide-table until table header is created
             if (this.report_type !== "metric_type") {
                 this.mergeTitleDataIntoOneLine(
                     this.params.queryObject.metric_types.length

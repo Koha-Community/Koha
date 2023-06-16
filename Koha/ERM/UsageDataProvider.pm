@@ -921,6 +921,61 @@ sub get_report_type_specific_fields {
 
 }
 
+=head3 test_connection
+
+Tests the connection of the harvester to the SUSHI service and returns any alerts of planned SUSHI outages
+
+=cut
+
+sub test_connection {
+    my ($self) = @_;
+
+    my $url = $self->service_url;
+    $url .= '/status';
+    $url .= '?customer_id=' . $self->customer_id;
+    $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
+    $url .= '&api_key=' . $self->api_key           if $self->api_key;
+
+    my $request  = HTTP::Request->new( 'GET' => $url );
+    my $ua       = LWP::UserAgent->new;
+    my $response = $ua->simple_request($request);
+
+    my @result = decode_json( $response->decoded_content );
+    if ( $result[0][0]->{Service_Active} ) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+
+}
+
+=head3 erm_usage_titles
+
+Method to embed erm_usage_titles to titles for report formatting
+
+=cut
+
+sub erm_usage_titles {
+    my ($self) = @_;
+    my $usage_title_rs = $self->_result->erm_usage_titles;
+    return Koha::ERM::UsageTitles->_new_from_dbic($usage_title_rs);
+}
+
+=head3 erm_usage_muses
+
+Method to embed erm_usage_muses to titles for report formatting
+
+=cut
+
+sub erm_usage_muses {
+    my ($self) = @_;
+    my $usage_mus_rs = $self->_result->erm_usage_muses;
+    return Koha::ERM::MonthlyUsages->_new_from_dbic($usage_mus_rs);
+}
+
+
+
 =head3 _type
 
 =cut

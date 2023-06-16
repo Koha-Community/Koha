@@ -103,6 +103,7 @@
           type: string
           enum:
             - counter_files
+            - erm_usage_titles.erm_usage_muses
         collectionFormat: csv
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
@@ -217,6 +218,9 @@
         type: array
         items:
           type: string
+          enum:
+            - counter_files
+            - erm_usage_titles.erm_usage_muses
         collectionFormat: csv
     responses:
       200:
@@ -416,7 +420,7 @@
     operationId: testUsageDataProviderHarvester
     tags:
       - usage data provider harvester
-    summary: Run this data provider's harvester
+    summary: Test this data provider's harvester
     produces:
       - application/json
     parameters:
@@ -424,6 +428,60 @@
     responses:
       200:
         description: Successful connection test
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1
+"/erm/usage_data_providers/report":
+  get:
+    x-mojo-to: ERM::UsageDataProviders#providers_report
+    operationId: reportUsageDataProvider
+    tags:
+      - usage data provider report
+    summary: Run a report for this data provider
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - counter_files
+            - erm_usage_titles.erm_usage_muses
+    responses:
+      200:
+        description: Successful report run
         schema:
           items:
             $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
