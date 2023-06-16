@@ -23,7 +23,7 @@
                 if (biblio.title != null && biblio.title != '') {
                     title += escape_str(biblio.title);
                 } else {
-                    title += __("No title");
+                    title += _("No title");
                 }
                 title += '</span>';
 
