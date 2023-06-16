@@ -107,6 +107,17 @@
                                     :id="`attribute_option_${counter}`"
                                     v-model="attribute.option_source"
                                     :options="authorised_value_categories"
+                                    :getOptionLabel="
+                                        c =>
+                                            authorised_value_categories.find(
+                                                cc => cc == c
+                                            )
+                                                ? c
+                                                : '%s (%s)'.format(
+                                                      c,
+                                                      $__('DOES NOT EXIST!')
+                                                  )
+                                    "
                                 >
                                     <template #search="{ attributes, events }">
                                         <input

@@ -311,7 +311,9 @@ export default {
                         let av_match = av_categories.find(
                             element => element.category_name == av_cat
                         )
-                        this.av_options[av_cat] = av_match.authorised_values
+                        this.av_options[av_cat] = av_match
+                            ? av_match.authorised_values
+                            : []
                     })
                 })
                 .then(() => this.loaded())
