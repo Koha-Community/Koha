@@ -153,6 +153,27 @@
             </fieldset>
             <fieldset v-if="train.items.length" class="rows">
                 <legend>{{ $__("Items") }}</legend>
+                <span class="action_links">
+                    <a
+                        role="link"
+                        @click="selectAll()"
+                        :title="$__('Select all')"
+                        ><i class="fa fa-check"></i>{{ $__("Select all") }}</a
+                    >
+                    <a @click="clearAll()" :title="$__('Clear all')"
+                        ><i class="fa fa-remove"></i>{{ $__("Clear all") }}</a
+                    >
+                    {{ $__("Actions: ") }}
+                    <a
+                        v-if="selected_items.length > 0"
+                        @click="printSelected()"
+                        :title="$__('Print slips')"
+                        ><i class="fa fa-print"></i>{{ $__("Print slips") }}</a
+                    >
+                    <a v-else class="disabled" :title="$__('Print slips')"
+                        ><i class="fa fa-print"></i>{{ $__("Print slips") }}</a
+                    >
+                </span>
                 <table v-if="item_table.display" :id="table_id"></table>
                 <ol v-else>
                     <li
@@ -268,6 +289,7 @@ export default {
             train_list: [],
             train_id_selected_for_copy: null,
             train_item_id_to_copy: null,
+            selected_items: [],
             av_options: {},
         }
     },
@@ -309,11 +331,21 @@ export default {
                             this.item_table.data.push(item_row)
                         })
                         this.item_table.columns = []
-                        this.item_table.columns.push({
-                            name: "",
-                            title: this.$__("ID"),
-                            data: "item.user_train_item_id",
-                        })
+                        this.item_table.columns.push(
+                            {
+                                name: "checkboxes",
+                                className: "checkboxes",
+                                width: "5%",
+                                render: (data, type, row) => {
+                                    return ""
+                                },
+                            },
+                            {
+                                name: "",
+                                title: this.$__("ID"),
+                                data: "item.user_train_item_id",
+                            }
+                        )
                         train.default_processing.attributes.forEach(a =>
                             this.item_table.columns.push({
                                 name: a.name,
@@ -478,6 +510,38 @@ export default {
                     }
                 )
         },
+        clearAll() {
+            this.selected_items = []
+            $("#" + this.table_id)
+                .find("input[name='user_train_item_id'][type='checkbox']")
+                .prop("checked", false)
+        },
+        selectAll() {
+            $("#" + this.table_id)
+                .find("input[name='user_train_item_id'][type='checkbox']")
+                .each((i, input) => {
+                    this.selected_items.push($(input).val())
+                    $(input).prop("checked", true)
+                })
+        },
+        printSelected() {
+            window.open(
+                "/cgi-bin/koha/preservation/print_slip.pl?%s_blank".format(
+                    this.selected_items
+                        .map(id => "train_item_id=" + id)
+                        .join("&")
+                )
+            )
+        },
+        updateSelectedItems(checked, train_item_id) {
+            if (checked) {
+                this.selected_items.push(train_item_id)
+            } else {
+                this.selected_items = this.selected_items.filter(
+                    id => id != train_item_id
+                )
+            }
+        },
         build_datatable: function () {
             let table_id = this.table_id
             let item_table = this.item_table
@@ -486,6 +550,7 @@ export default {
             let printSlip = this.printSlip
             let selectTrainForCopy = this.selectTrainForCopy
             let train = this.train
+            let updateSelectedItems = this.updateSelectedItems
 
             let table = KohaTable(table_id, {
                 data: item_table.data,
@@ -494,6 +559,25 @@ export default {
                 columns: item_table.columns,
                 drawCallback: function (settings) {
                     var api = new $.fn.dataTable.Api(settings)
+                    $.each($(this).find("td.checkboxes"), function (index, e) {
+                        let tr = $(this).parent()
+                        let train_item = api.row(tr).data().item
+                        let train_item_id = train_item.train_item_id
+
+                        let checkbox = createVNode("input", {
+                            type: "checkbox",
+                            name: "user_train_item_id",
+                            value: train_item_id,
+                            onChange: e => {
+                                updateSelectedItems(
+                                    e.target.checked,
+                                    train_item_id
+                                )
+                            },
+                        })
+
+                        render(checkbox, e)
+                    })
                     $.each($(this).find("td.actions"), function (index, e) {
                         let tr = $(this).parent()
                         let train_item = api.row(tr).data().item
@@ -599,6 +683,7 @@ export default {
 .action_links a {
     padding-left: 0.2em;
     font-size: 11px;
+    cursor: pointer;
 }
 .attributes_values {
     float: left;

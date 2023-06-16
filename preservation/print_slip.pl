@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
@@ -25,8 +24,8 @@ use C4::Letters;
 use Koha::Patrons;
 use Koha::Preservation::Train::Items;
 
-my $input         = CGI->new;
-my $train_item_id = $input->param('train_item_id');
+my $input          = CGI->new;
+my @train_item_ids = $input->multi_param('train_item_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -40,32 +39,27 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 my $branch         = C4::Context->userenv->{'branch'};
 
-my $train_item = Koha::Preservation::Train::Items->find($train_item_id);
-
-unless ($train_item) {
-    print $input->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
+my @slips;
+for my $train_item_id (@train_item_ids) {
+    my $train_item = Koha::Preservation::Train::Items->find($train_item_id);
+    my $letter     = C4::Letters::GetPreparedLetter(
+        module      => 'preservation',
+        letter_code => $train_item->processing->letter_code,
+        branchcode  => $branch,
+        lang        => $logged_in_user->lang,
+        tables      => {
+            preservation_train_items => $train_item_id,
+        },
+        message_transport_type => 'print'
+    );
+    push @slips, {
+        content => $letter->{content},
+        is_html => $letter->{is_html},
+    };
 }
 
-my $train = $train_item->train;
-
-my $letter = C4::Letters::GetPreparedLetter(
-    module      => 'preservation',
-    letter_code => $train_item->processing->letter_code,
-    branchcode  => $branch,
-    lang        => $logged_in_user->lang,
-    tables      => {
-        preservation_train_items => $train_item_id,
-    },
-    message_transport_type => 'print'
-);
-
-my $slip    = $letter->{content};
-my $is_html = $letter->{is_html};
-
 $template->param(
-    slip       => $slip,
-    plain      => !$is_html,
+    slips      => \@slips,
     caller     => 'preservation',
     stylesheet => C4::Context->preference("SlipCSS"),
 );

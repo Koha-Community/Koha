@@ -35,12 +35,18 @@
 <body id="circ_printslip" class="circ">
 <div id="receipt">
 
-[% IF plain %]
+[% UNLESS slips && slips.size %]
+    [% SET slips = [{content => slip, is_html => !plain}] %]
+[% END %]
+[% FOR slip IN slips %]
+[% UNLESS slip.is_html %]
 <pre>
-[% IF ( slip ) %][% slip | html %][% ELSE %]No slip template found[% END %]
+[% IF ( slip.content ) %][% slip.content | html %][% ELSE %]No slip template found[% END %]
 </pre>
 [% ELSE %]
-[% IF ( slip ) %][% slip | $raw %][% ELSE %]No slip template found[% END %]
+[% IF ( slip.content ) %][% slip.content | $raw %][% ELSE %]No slip template found[% END %]
+[% END %]
+[% IF slips.size > 1 && !loop.last%]<div class="pagebreak"></div>[% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
