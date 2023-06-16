@@ -874,7 +874,7 @@ var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
 
         var tag = $("#tagsel_new").val();
         if (!tag || (tag == "")) {
-            alert(MSG_NO_TAG_SPECIFIED);
+            alert( _("No tag was specified.") );
             return false;
         }
 
@@ -967,7 +967,7 @@ $(function() {
           var thisid = $(this).attr("title");
           var tag = $("#newtag"+thisid).val();
           if (!tag || (tag == "")) {
-              alert(MSG_NO_TAG_SPECIFIED);
+              alert( _("No tag was specified.") );
               return false;
           }
           KOHA.Tags.add_tag_button(thisid, tag);

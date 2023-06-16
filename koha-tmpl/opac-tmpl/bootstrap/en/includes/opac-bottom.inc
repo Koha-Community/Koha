@@ -147,22 +147,6 @@
 [% END %]
 
 <script>
-    [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) %]
-        var MSG_TAGS_DISABLED = _("Sorry, tags are not enabled on this system.");
-        var MSG_TAG_ALL_BAD = _("Error! Your tag was entirely markup code.  It was NOT added.  Please try again with plain text.");
-        var MSG_ILLEGAL_PARAMETER = _("Error! Illegal parameter");
-        var MSG_TAG_SCRUBBED = _("Note: your tag contained markup code that was removed. The tag was added as ");
-        var MSG_ADD_TAG_FAILED = _("Error! Adding tags failed at");
-        var MSG_ADD_TAG_FAILED_NOTE = _("Note: you can only tag an item with a given term once.  Check 'My Tags' to see your current tags.");
-        var MSG_DELETE_TAG_FAILED = _("Error! You cannot delete the tag");
-        var MSG_DELETE_TAG_FAILED_NOTE = _("Note: you can only delete your own tags.")
-        var MSG_LOGIN_REQUIRED = _("You must be logged in to add tags.");
-        var MSG_TAGS_ADDED = _("Tags added: ");
-        var MSG_TAGS_DELETED = _("Tags added: ");
-        var MSG_TAGS_ERRORS = _("Errors: ");
-        var MSG_MULTI_ADD_TAG_FAILED = _("Unable to add one or more tags.");
-        var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
-    [% END %]
     [% IF (query_desc) %]
         var query_desc = "[% query_desc | html %]";
         var querystring = "[% querystring | html %]";

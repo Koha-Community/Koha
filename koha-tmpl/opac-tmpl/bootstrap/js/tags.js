@@ -39,9 +39,9 @@ KOHA.Tags = {
     },
     common_status : function(addcount, delcount, errcount) {
         var cstat = "";
-        if (addcount && addcount > 0) {cstat += MSG_TAGS_ADDED + addcount + ".  " ;}
-        if (delcount && delcount > 0) {cstat += MSG_TAGS_DELETED + delcount + ".  " ;}
-        if (errcount && errcount > 0) {cstat += MSG_TAGS_ERRORS + errcount + ". " ;}
+        if (addcount && addcount > 0) {cstat += __("Tags added: ") + addcount + ".  " ;}
+        if (delcount && delcount > 0) {cstat += __("Tags deleted: ") + delcount + ".  " ;}
+        if (errcount && errcount > 0) {cstat += __("Errors: ") + errcount + ". " ;}
         return cstat;
     },
     set_tag_status : function(tagid, newstatus) {
@@ -57,13 +57,13 @@ KOHA.Tags = {
     },
 
     tag_message: {
-    tagsdisabled : function(arg) {return (MSG_TAGS_DISABLED);},
-    scrubbed_all_bad : function(arg) {return (MSG_TAG_ALL_BAD);},
-    badparam : function(arg) {return (MSG_ILLEGAL_PARAMETER+" "+arg);},
-    scrubbed : function(arg) {return (MSG_TAG_SCRUBBED+" "+arg);},
-    failed_add_tag : function(arg) {return (MSG_ADD_TAG_FAILED+ " '"+arg+"'. \n"+MSG_ADD_TAG_FAILED_NOTE);},
-    failed_delete  : function(arg) {return (MSG_DELETE_TAG_FAILED+ " '"+arg+"'. \n"+MSG_DELETE_TAG_FAILED_NOTE);},
-    login : function(arg) {return (MSG_LOGIN_REQUIRED);}
+    tagsdisabled : function(arg) {return ( __("Sorry, tags are not enabled on this system.") );},
+    scrubbed_all_bad : function(arg) {return ( __("Error! Your tag was entirely markup code.  It was NOT added.  Please try again with plain text.") );},
+    badparam : function(arg) {return ( __("Error! Illegal parameter") +" "+arg);},
+    scrubbed : function(arg) {return ( __("Note: your tag contained markup code that was removed. The tag was added as ") +" "+arg);},
+    failed_add_tag : function(arg) {return ( __("Error! Adding tags failed at") + " '"+arg+"'. \n"+ __("Note: you can only tag an item with a given term once.  Check 'Tags' to see your current tags.") );},
+    failed_delete  : function(arg) {return ( __("Error! You cannot delete the tag") + " '"+arg+"'. \n"+ __("Note: you can only delete your own tags.") );},
+    login : function(arg) {return ( __("You must be logged in to add tags.") );}
     },
 
     // Used to tag multiple items at once.  The main difference
@@ -93,7 +93,7 @@ KOHA.Tags = {
                     if (response[bib]) {
                         var added = response[bib]["added"];
                         if (added > 0) {
-                            status = MSG_TAGS_ADDED + added + ".  ";
+                            status = __("Tags added: ") + added + ".  ";
                         KOHA.Tags.set_tag_status(mytagid + "_status", status);
                         }
 
@@ -103,7 +103,7 @@ KOHA.Tags = {
                             bibErrors = true;
                             var errid = "tagerr_" + bib;
                             var errstat = "<a id=\"" + errid + "\" class=\"tagerror\" href=\"#\">";
-                            errstat += MSG_TAGS_ERRORS + errors.length + ". ";
+                            errstat += __("Errors: ") + errors.length + ". ";
                             errstat += "</a>";
                         KOHA.Tags.append_tag_status(mytagid + "_status", errstat);
                             var errmsg = "";
@@ -123,7 +123,7 @@ KOHA.Tags = {
                 if (bibErrors || response["global_errors"]) {
                     var msg = "";
                     if (bibErrors) {
-                        msg = MSG_MULTI_ADD_TAG_FAILED;
+                        msg = __("Unable to add one or more tags.");
                     }
 
                     // Show global errors in a dialog.
