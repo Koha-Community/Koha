@@ -182,6 +182,12 @@
                         v-for="(item, counter) in train.items"
                         v-bind:key="counter"
                     >
+                        <input
+                            v-model="selected_items"
+                            type="checkbox"
+                            name="user_train_item_id"
+                            :value="item.train_item_id"
+                        />
                         <label
                             >{{ item.user_train_item_id }}
                             <span class="action_links">
@@ -512,17 +518,25 @@ export default {
         },
         clearAll() {
             this.selected_items = []
-            $("#" + this.table_id)
-                .find("input[name='user_train_item_id'][type='checkbox']")
-                .prop("checked", false)
+            if (this.item_table.display) {
+                $("#" + this.table_id)
+                    .find("input[name='user_train_item_id'][type='checkbox']")
+                    .prop("checked", false)
+            }
         },
         selectAll() {
-            $("#" + this.table_id)
-                .find("input[name='user_train_item_id'][type='checkbox']")
-                .each((i, input) => {
-                    this.selected_items.push($(input).val())
-                    $(input).prop("checked", true)
-                })
+            if (this.item_table.display) {
+                $("#" + this.table_id)
+                    .find("input[name='user_train_item_id'][type='checkbox']")
+                    .each((i, input) => {
+                        this.selected_items.push($(input).val())
+                        $(input).prop("checked", true)
+                    })
+            } else {
+                this.selected_items = this.train.items.map(
+                    item => item.train_item_id
+                )
+            }
         },
         printSelected() {
             window.open(
@@ -708,5 +722,8 @@ export default {
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
+}
+input[type="checkbox"] {
+    float: left;
 }
 </style>
