@@ -1,4 +1,28 @@
-[%- USE Koha -%]
-[%- SET delimiter = Koha.CSVDelimiter() -%]
-
-[%- BLOCK -%]ORDER DATE[%- delimiter | html -%]ESTIMATED DELIVERY DATE[%- delimiter | html -%]VENDOR[%- delimiter | html -%]INFORMATION[%- delimiter | html -%]TOTAL COST[%- delimiter | html -%]BASKET[%- delimiter | html -%]CLAIMS COUNT[%- delimiter | html -%]CLAIMED DATE[%- delimiter | html -%]INTERNAL NOTE[%- delimiter | html -%]VENDOR NOTE[%- delimiter | html -%]ISBN[%- END -%]
+[% FILTER collapse %]
+    [%- USE Koha -%]
+    [%- PROCESS 'i18n.inc' -%]
+    [%- SET delimiter = Koha.CSVDelimiter() -%]
+    [%- BLOCK -%]
+        "[% t("ORDER DATE") | html %]"
+        [%- delimiter | html -%]
+        "[% t("ESTIMATED DELIVERY DATE") | html %]"
+        [%- delimiter | html -%]
+        "[% t("VENDOR") | html %]"
+        [%- delimiter | html -%]
+        "[% t("INFORMATION") | html %]"
+        [%- delimiter | html -%]
+        "[% t("TOTAL COST") | html %]"
+        [%- delimiter | html -%]
+        "[% t("BASKET") | html %]"
+        [%- delimiter | html -%]
+        "[% t("CLAIMS COUNT") | html %]"
+        [%- delimiter | html -%]
+        "[% t("CLAIMED DATE") | html %]"
+        [%- delimiter | html -%]
+        "[% t("INTERNAL NOTE") | html %]"
+        [%- delimiter | html -%]
+        "[% t("VENDOR NOTE") | html %]"
+        [%- delimiter | html -%]
+        "[% t("ISBN") | html %]"
+    [%- END -%]
+[%- END -%]

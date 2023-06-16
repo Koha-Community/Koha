@@ -1,38 +1,39 @@
 [%- USE raw -%]
 [%- USE Koha -%]
+[%- PROCESS 'i18n.inc' -%]
 [%- SET delimiter = Koha.CSVDelimiter() -%]
 [%- BLOCK -%]
-"Title"
-[%- delimiter | $raw -%]
-"Publication date"
-[%- delimiter | $raw -%]
-"Publisher"
-[%- delimiter | $raw -%]
-"Collection"
-[%- delimiter | $raw -%]
-"Barcode"
-[%- delimiter | $raw -%]
-"Serial enumeration"
-[%- delimiter | $raw -%]
-"Call number"
-[%- delimiter | $raw -%]
-"Home library"
-[%- delimiter | $raw -%]
-"Current library"
-[%- delimiter | $raw -%]
-"Shelving location"
-[%- delimiter | $raw -%]
-"Item type"
-[%- delimiter | $raw -%]
-"Inventory number"
-[%- delimiter | $raw -%]
-"Not for loan status"
-[%- delimiter | $raw -%]
-"Lost status"
-[%- delimiter | $raw -%]
-"Withdrawn status"
-[%- delimiter | $raw -%]
-"Checkouts"
-[%- delimiter | $raw -%]
-"Due date"
+    "[% t("Title") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Publication date") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Publisher") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Collection") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Barcode") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Serial enumeration") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Call number") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Home library") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Current library") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Shelving location") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Item type") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Inventory number") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Not for loan status") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Lost status") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Withdrawn status") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Checkouts") | html %]"
+    [%- delimiter | $raw -%]
+    "[% t("Due date") | html %]"
 [%- END -%]

@@ -1,4 +1,58 @@
-[%- USE Koha -%]
-[%- SET delimiter = Koha.CSVDelimiter() -%]
-
-[%- BLOCK -%]Account number[% delimiter | html %]Basket name[% delimiter | html %]Order number[% delimiter | html %]Author[% delimiter | html %]Title[% delimiter | html %]Publisher[% delimiter | html %]Publication year[% delimiter | html %]Collection title[% delimiter | html %]ISBN[% delimiter | html %]Quantity[% delimiter | html %]RRP tax included[% delimiter | html %]RRP tax excluded[% delimiter | html %]Discount[% delimiter | html %]Estimated cost tax included[% delimiter | html %]Estimated cost tax excluded[% delimiter | html %]Note for vendor[% delimiter | html %]Entry date[% delimiter | html %]Bookseller name[% delimiter | html %]Bookseller physical address[% delimiter | html %]Bookseller postal address[% delimiter | html %]Contract number[% delimiter | html %]Contract name[% delimiter | html %]Basket group delivery place[% delimiter | html %]Basket group billing place[% delimiter | html %]Basket delivery place[% delimiter | html %]Basket billing place[%- END -%]
+[% FILTER collapse %]
+    [%- USE Koha -%]
+    [%- PROCESS 'i18n.inc' -%]
+    [%- SET delimiter = Koha.CSVDelimiter() -%]
+    [%- BLOCK -%]
+        "[% t("Account number") | html %]"
+        [% delimiter | html %]
+        "[% t("Basket name") | html %]"
+        [% delimiter | html %]
+        "[% t("Order number") | html %]"
+        [% delimiter | html %]
+        "[% t("Author") | html %]"
+        [% delimiter | html %]
+        "[% t("Title") | html %]"
+        [% delimiter | html %]
+        "[% t("Publisher") | html %]"
+        [% delimiter | html %]
+        "[% t("Publication year") | html %]"
+        [% delimiter | html %]
+        "[% t("Collection title") | html %]"
+        [% delimiter | html %]
+        "[% t("ISBN") | html %]"
+        [% delimiter | html %]
+        "[% t("Quantity") | html %]"
+        [% delimiter | html %]
+        "[% t("RRP tax included") | html %]"
+        [% delimiter | html %]
+        "[% t("RRP tax excluded") | html %]"
+        [% delimiter | html %]
+        "[% t("Discount") | html %]"
+        [% delimiter | html %]
+        "[% t("Estimated cost tax included") | html %]"
+        [% delimiter | html %]
+        "[% t("Estimated cost tax excluded") | html %]"
+        [% delimiter | html %]
+        "[% t("Note for vendor") | html %]"
+        [% delimiter | html %]
+        "[% t("Entry date") | html %]"
+        [% delimiter | html %]
+        "[% t("Bookseller name") | html %]"
+        [% delimiter | html %]
+        "[% t("Bookseller physical address") | html %]"
+        [% delimiter | html %]
+        "[% t("Bookseller postal address") | html %]"
+        [% delimiter | html %]
+        "[% t("Contract number") | html %]"
+        [% delimiter | html %]
+        "[% t("Contract name") | html %]"
+        [% delimiter | html %]
+        "[% t("Basket group delivery place") | html %]"
+        [% delimiter | html %]
+        "[% t("Basket group billing place") | html %]"
+        [% delimiter | html %]
+        "[% t("Basket delivery place") | html %]"
+        [% delimiter | html %]
+        "[% t("Basket billing place") | html %]"
+    [%- END -%]
+[%- END -%]
