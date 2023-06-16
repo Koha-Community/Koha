@@ -38,6 +38,8 @@ use Koha::Database;
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
 
+use Mojo::JSON qw(encode_json);
+
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
@@ -1619,7 +1621,7 @@ subtest 'put() tests' => sub {
 
 subtest 'list() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -1676,6 +1678,17 @@ subtest 'list() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'application/marc' } )->status_is(200);
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$query" => { Accept => 'text/plain' } )->status_is(200);
+
+    # DELETE any biblio with ISBN = TOMAS
+    Koha::Biblios->search({ 'biblioitem.isbn' => 'TOMAS' }, { join => [ 'biblioitem' ] })
+                 ->delete;
+
+
+    my $isbn_query = encode_json({ isbn => 'TOMAS' });
+    $biblio->biblioitem->set({ isbn => 'TOMAS' })->store;
+    $t->get_ok( "//$userid:$password@/api/v1/biblios?q=$isbn_query" =>
+          { Accept => 'text/plain' } )
+      ->status_is(200);
 
     $schema->storage->txn_rollback;
 };

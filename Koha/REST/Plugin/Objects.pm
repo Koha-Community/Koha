@@ -112,10 +112,10 @@ shouldn't be called twice in it.
 
     $app->helper(
         'objects.search' => sub {
-            my ( $c, $result_set ) = @_;
+            my ( $c, $result_set, $query_fixers ) = @_;
 
             # Generate the resultset using the HTTP request information
-            my $objects_rs = $c->objects->search_rs($result_set);
+            my $objects_rs = $c->objects->search_rs( $result_set, $query_fixers );
 
             # Add pagination headers
             $c->add_pagination_headers();
@@ -127,12 +127,20 @@ shouldn't be called twice in it.
 =head3 objects.search_rs
 
     my $patrons_object = Koha::Patrons->new;
-    my $patrons_rs = $c->objects->search_rs( $patrons_object );
+    my $patrons_rs = $c->objects->search_rs( $patrons_object [, $query_fixers ] );
     . . .
     return $c->render({ status => 200, openapi => $patrons_rs->to_api });
 
 Returns the passed Koha::Objects resultset filtered as requested by the api query
 parameters and with requested embeds applied.
+
+The optional I<$query_fixers> parameter is expected to be a reference to a list of
+function references. This functions need to accept two parameters: ( $query, $no_quotes ).
+
+The I<$query> is a string to be adapted. A modified version will be returned. The
+I<$no_quotes> parameter controls if quotes need to be added for matching inside the string.
+Quoting should be used by default, for replacing JSON keys e.g "biblio.isbn" would match
+and biblio.isbn wouldn't.
 
 Warning: this helper stashes base values for the pagination headers to the calling
 controller, and thus shouldn't be called twice in it.
@@ -141,14 +149,25 @@ controller, and thus shouldn't be called twice in it.
 
     $app->helper(
         'objects.search_rs' => sub {
-            my ( $c, $result_set ) = @_;
+            my ( $c, $result_set, $query_fixers ) = @_;
 
             my $args       = $c->validation->output;
             my $attributes = {};
 
+            $query_fixers //= [];
+
             # Extract reserved params
             my ( $filtered_params, $reserved_params, $path_params ) =
               $c->extract_reserved_params($args);
+
+            if ( exists $reserved_params->{_order_by} ) {
+                # _order_by passed, fix if required
+                for my $p ( @{$reserved_params->{_order_by}} ) {
+                    foreach my $qf ( @{$query_fixers} ) {
+                        $p = $qf->($p, 1); # 1 => no quotes on matching
+                    }
+                }
+            }
 
             # Merge sorting into query attributes
             $c->dbic_merge_sorting(
@@ -203,26 +222,39 @@ controller, and thus shouldn't be called twice in it.
 
                 my @query_params_array;
 
-                # query in request body, JSON::Validator already decoded it
-                push @query_params_array, $reserved_params->{query}
-                  if defined $reserved_params->{query};
-
                 my $json = JSON->new;
+
+                # query in request body, JSON::Validator already decoded it
+                if ( $reserved_params->{query} ) {
+                    my $query = $json->encode( $reserved_params->{query} );
+                    foreach my $qf ( @{$query_fixers} ) {
+                        $query = $qf->($query);
+                    }
+                    push @query_params_array, $json->decode($query);
+                }
 
                 if ( ref( $reserved_params->{q} ) eq 'ARRAY' ) {
 
                    # q is defined as multi => JSON::Validator generates an array
                     foreach my $q ( @{ $reserved_params->{q} } ) {
-                        push @query_params_array, $json->decode($q)
-                          if $q;    # skip if exists but is empty
+                        if ( $q ) { # skip if exists but is empty
+                            foreach my $qf (@{$query_fixers}) {
+                                $q = $qf->($q);
+                            }
+                            push @query_params_array, $json->decode($q);
+                        }
                     }
                 }
                 else {
                     # objects.search called outside OpenAPI context
                     # might be a hashref
-                    push @query_params_array,
-                      $json->decode( $reserved_params->{q} )
-                      if $reserved_params->{q};
+                    if ( $reserved_params->{q} ) {
+                        my $q = $reserved_params->{q};
+                        foreach my $qf (@{$query_fixers}) {
+                            $q = $qf->($q);
+                        }
+                        push @query_params_array, $json->decode( $q );
+                    }
                 }
 
                 my $query_params;
