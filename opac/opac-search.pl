@@ -367,7 +367,7 @@ for (keys %$params) {
     my @pasarParam = $cgi->multi_param($_);
     for my $paramValue(@pasarParam) {
         $pasarParams .= '&amp;' if ($j > 0);
-        $pasarParams .= $_ . '=' . uri_escape_utf8($paramValue);
+        $pasarParams .= uri_escape_utf8($_) . '=' . uri_escape_utf8($paramValue);
         $j++;
     }
 }
