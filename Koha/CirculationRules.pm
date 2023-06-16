@@ -83,6 +83,7 @@ our $RULE_KINDS = {
     },
     article_request_fee => {
         scope => [ 'branchcode', 'categorycode' ],
+        is_monetary => 1,
     },
     open_article_requests_limit => {
         scope => [ 'branchcode', 'categorycode' ],
@@ -202,6 +203,7 @@ our $RULE_KINDS = {
     },
     recall_overdue_fine => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+        is_monetary => 1,
     },
     recall_shelf_time => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
