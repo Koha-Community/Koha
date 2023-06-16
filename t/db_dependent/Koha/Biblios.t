@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Test::Exception;
 use Test::MockModule;
 
 use MARC::Field;
+use Mojo::JSON qw(encode_json);
 
 use C4::Items;
 use C4::Biblio qw( AddBiblio ModBiblio GetMarcFromKohaField );
@@ -321,4 +322,70 @@ subtest 'pickup_locations() tests' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'api_query_fixer() tests' => sub {
+
+    plan tests => 2;
+
+    my $rs = Koha::Biblios->new;
+
+    subtest 'JSON query tests' => sub {
+
+        plan tests => 6;
+
+        my $query = encode_json( { collection_issn => { "-like" => "\%asd" } } );
+        is(
+            $rs->api_query_fixer($query), '{"biblioitem.collection_issn":{"-like":"%asd"}}',
+            'Query adapted for biblioitem attributes'
+        );
+        $query = encode_json( { author => { "-like" => "\%asd" } } );
+        is( $rs->api_query_fixer($query), $query, 'Query unchanged for non-biblioitem attributes' );
+        $query = encode_json( { author => { "-like" => "an age_restriction" } } );
+        is( $rs->api_query_fixer($query), $query, 'Query unchanged because quotes are expected for the match' );
+
+        $query = encode_json( { "biblio.collection_issn" => { "-like" => "\%asd" } } );
+        is(
+            $rs->api_query_fixer( $query, 'biblio' ), '{"biblio.biblioitem.collection_issn":{"-like":"%asd"}}',
+            'Query adapted for biblioitem attributes, context is kept, match using context'
+        );
+        $query = encode_json( { collection_issn => { "-like" => "\%asd" } } );
+        is( $rs->api_query_fixer( $query, 'biblio' ), $query, 'Query unchanged because no match for context' );
+        $query = encode_json( { author => { "-like" => "a biblio.age_restriction" } } );
+        is(
+            $rs->api_query_fixer( $query, 'biblio' ), $query,
+            'Query unchanged because quotes are expected for the match'
+        );
+    };
+
+    subtest 'order_by tests' => sub {
+
+        plan tests => 6;
+
+        my $query = encode_json( { collection_issn => { "-like" => "\%asd" } } );
+        is(
+            $rs->api_query_fixer( $query, undef, 1 ), '{"biblioitem.collection_issn":{"-like":"%asd"}}',
+            'Query adapted for biblioitem attributes'
+        );
+        $query = encode_json( { author => { "-like" => "\%asd" } } );
+        is( $rs->api_query_fixer( $query, undef, 1 ), $query, 'Query unchanged for non-biblioitem attributes' );
+        $query = encode_json( { author => { "-like" => "an age_restriction" } } );
+        is(
+            $rs->api_query_fixer( $query, undef, 1 ), '{"author":{"-like":"an biblioitem.age_restriction"}}',
+            'Query changed because quotes are not expected for the match'
+        );
+
+        $query = encode_json( { "banana.collection_issn" => { "-like" => "\%asd" } } );
+        is(
+            $rs->api_query_fixer( $query, 'banana', 1 ), '{"banana.biblioitem.collection_issn":{"-like":"%asd"}}',
+            'Query adapted for biblioitem attributes'
+        );
+        $query = encode_json( { author => { "-like" => "\%asd" } } );
+        is( $rs->api_query_fixer( $query, 'banana', 1 ), $query, 'Query unchanged for non-biblioitem attributes' );
+        $query = encode_json( { author => { "-like" => "a banana.age_restriction" } } );
+        is(
+            $rs->api_query_fixer( $query, 'banana', 1 ), '{"author":{"-like":"a banana.biblioitem.age_restriction"}}',
+            'Query changed because quotes are not expected for the match'
+        );
+    }
 };
