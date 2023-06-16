@@ -11,7 +11,7 @@ return {
         });
 
         my $edi_vendors =
-          $dbh->selectall_arrayref( "SELECT * FROM vendor_edit_accounts", { Slice => {} } );
+          $dbh->selectall_arrayref( "SELECT * FROM vendor_edi_accounts", { Slice => {} } );
         if (@$edi_vendors) {
             require Koha::Encryption;
             my $e = Koha::Encryption->new;
@@ -19,7 +19,7 @@ return {
                 my $id       = $edi_vendor->{id};
                 my $password = $edi_vendor->{password};
                 $password = $e->encrypt_hex($password);
-                $dbh->do("UPDATE edi_vendor_accounts SET password = $password WHERE id = $id");
+                $dbh->do("UPDATE vendor_edi_accounts SET password = '$password' WHERE id = $id");
             }
         }
     },
