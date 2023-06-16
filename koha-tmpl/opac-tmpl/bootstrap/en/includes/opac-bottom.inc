@@ -147,11 +147,6 @@
 [% END %]
 
 <script>
-    var MSG_SEARCHING = _("Searching %s...");
-    var MSG_ERROR_SEARCHING_COLLECTION = _("Error searching %s collection");
-    var MSG_NO_RESULTS_FOUND_IN_COLLECTION = _("No results found in the library's %s collection");
-    var MSG_RESULTS_FOUND_IN_COLLECTION = _("Found %s results in the library's %s collection");
-
     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) %]
         var MSG_TAGS_DISABLED = _("Sorry, tags are not enabled on this system.");
         var MSG_TAG_ALL_BAD = _("Error! Your tag was entirely markup code.  It was NOT added.  Please try again with plain text.");
