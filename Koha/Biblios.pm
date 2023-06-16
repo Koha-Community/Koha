@@ -72,7 +72,33 @@ sub pickup_locations {
 
 =head2 Internal methods
 
-=head3 type
+=head3 api_query_fixer
+
+    $query_string = $biblios->api_query_fixer( $query_string, $context, $no_quotes );
+
+Method that takes care of adjusting I<$query_string> as required. An optional I<$context> parameter
+will be used to prefix the relevant query atoms if present. A I<$no_quotes> boolean parameter
+can be passed to choose not to use quotes on matching. This is particularly useful in the context of I<order_by>.
+
+=cut
+
+sub api_query_fixer {
+    my ( $self, $query, $context, $no_quotes ) = @_;
+
+    my $quotes = $no_quotes ? '' : '"';
+
+    if ($context) {
+        $query =~
+            s/${quotes}${context}\.(age_restriction|cn_class|cn_item|cn_sort|cn_source|cn_suffix|collection_issn|collection_title|collection_volume|ean|edition_statement|illustrations|isbn|issn|item_type|lc_control_number|notes|number|pages|publication_place|publication_year|publisher|material_size|serial_total_issues|url|volume|volume_date|volume_description)${quotes}/${quotes}${context}\.biblioitem\.$1${quotes}/g;
+    } else {
+        $query =~
+            s/${quotes}(age_restriction|cn_class|cn_item|cn_sort|cn_source|cn_suffix|collection_issn|collection_title|collection_volume|ean|edition_statement|illustrations|isbn|issn|item_type|lc_control_number|notes|number|pages|publication_place|publication_year|publisher|material_size|serial_total_issues|url|volume|volume_date|volume_description)${quotes}/${quotes}biblioitem\.$1${quotes}/g;
+    }
+
+    return $query;
+}
+
+=head3 _type
 
 =cut
 
