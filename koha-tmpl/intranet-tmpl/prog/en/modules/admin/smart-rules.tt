@@ -287,7 +287,7 @@
                                                   [% END %]
                                                 </td>
                                                 <td>[% decreaseloanholds | html %]</td>
-                                                <td>[% fine | html %]</td>
+                                                <td>[% fine | $Price %]</td>
                                                 <td>[% chargeperiod | html %]</td>
                                                 <td>[% IF chargeperiod_charge_at %]Start of interval[% ELSE %]End of interval[% END %]</td>
                                                 <td>[% firstremind | html %]</td>
@@ -462,7 +462,7 @@
                                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </td>
                                 <td><input type="text" name="decreaseloanholds" id="decreaseloanholds" size="2" /></td>
-                                <td><input type="text" name="fine" id="fine" size="4" /></td>
+                                <td><input type="text" name="fine" id="fine" size="4" inputmode="decimal" pattern="^\d+(\.\d{2})?$" /></td>
                                 <td><input type="text" name="chargeperiod" id="chargeperiod" size="2" /></td>
                                 <td>
                                     <select name="chargeperiod_charge_at" id="chargeperiod_charge_at">
@@ -471,7 +471,7 @@
                                     </select>
                                 </td>
                                 <td><input type="text" name="firstremind" id="firstremind" size="2" /> </td>
-                                <td><input type="text" name="overduefinescap" id="overduefinescap" size="6" /> </td>
+                                <td><input type="text" name="overduefinescap" id="overduefinescap" size="6" inputmode="decimal" pattern="^\d+(\.\d{2})?$" /> </td>
                                 <td><input type="checkbox" name="cap_fine_to_replacement_price" id="cap_fine_to_replacement_price" /></td>
                                 <td><input type="text" name="finedays" id="fined" size="3" /> </td>
                                 <td><input type="text" name="maxsuspensiondays" id="maxsuspensiondays" size="3" /> </td>
@@ -531,7 +531,7 @@
                                         </select>
                                     </td>
                                     <td><input type="text" name="recall_due_date_interval" id="recall_due_date_interval" size="3"></td>
-                                    <td><input type="text" name="recall_overdue_fine" id="recall_overdue_fine" size="6"></td>
+                                    <td><input type="text" name="recall_overdue_fine" id="recall_overdue_fine" size="6" inputmode="decimal" pattern="^\d+(\.\d{2})?$"></td>
                                     <td><input type="text" name="recall_shelf_time" id="recall_shelf_time" size="3"></td>
                                 [% END %]
                                 <td class="actions">
@@ -1030,7 +1030,7 @@
                                     </td>
                                     <td>
                                         [% IF article_request_fee.defined && article_request_fee != '' %]
-                                            [% article_request_fee | html %]
+                                            [% article_request_fee | $Price %]
                                         [% ELSE %]
                                             <span>0</span>
                                         [% END %]
@@ -1050,7 +1050,7 @@
                                     [% END %]
                                     </select>
                                 </td>
-                                <td><input name="article_request_fee" size="3" type="text" /></td>
+                                <td><input name="article_request_fee" size="5" type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" /></td>
                                 <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</button></td>
                             </tr>
                         </table>
