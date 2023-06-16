@@ -147,33 +147,10 @@
 [% END %]
 
 <script>
-
-    var MSG_CONFIRM_AGAIN = _("Warning: Cannot be undone. Please confirm once again")
-    var MSG_DELETE_SEARCH_HISTORY = _("Are you sure you want to delete your search history?");
-    var MSG_NO_SUGGESTION_SELECTED = _("No suggestion was selected");
     var MSG_SEARCHING = _("Searching %s...");
     var MSG_ERROR_SEARCHING_COLLECTION = _("Error searching %s collection");
     var MSG_NO_RESULTS_FOUND_IN_COLLECTION = _("No results found in the library's %s collection");
     var MSG_RESULTS_FOUND_IN_COLLECTION = _("Found %s results in the library's %s collection");
-    var MSG_BY = _("by");
-    var MSG_TYPE = _("Type");
-    var MSG_NEXT = _("Next");
-    var MSG_PREVIOUS = _("Previous");
-    var MSG_CHECKOUTS = _("Checkouts");
-    var MSG_NO_CHECKOUTS = _("No checkouts");
-    var MSG_CHECK_OUT = _("Check out");
-    var MSG_CHECK_OUT_CONFIRM = _("Are you sure you want to check out this item?");
-    var MSG_CHECKED_OUT_UNTIL = _("Checked out until %s");
-    var MSG_CHECK_IN = _("Check in");
-    var MSG_CHECK_IN_CONFIRM = _("Are you sure you want to return this item?");
-    var MSG_NO_CHECKOUTS = _("No checkouts");
-    var MSG_DOWNLOAD = _("Download");
-    var MSG_HOLDS = _("Holds");
-    var MSG_NO_HOLDS = _("No holds");
-    var MSG_PLACE_HOLD = _("Place hold");
-    var MSG_CANCEL_HOLD = _("Cancel");
-    var MSG_CANCEL_HOLD_CONFIRM = _("Are you sure you want to cancel this hold?");
-    var MSG_ON_HOLD = _("On hold");
 
     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) %]
         var MSG_TAGS_DISABLED = _("Sorry, tags are not enabled on this system.");
@@ -221,7 +198,7 @@
         delSingleRecord( biblionumber );
     });
     $(".clearsh").on("click", function(){
-        return confirmDelete(MSG_DELETE_SEARCH_HISTORY);
+        return confirmDelete( _("Are you sure you want to delete your search history?") );
     });
 
 </script>
