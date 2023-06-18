@@ -1915,7 +1915,7 @@
                             "data": function( row, type, val, meta ) {
                                 var result;
                                 if (duedate) {
-                                    result = '<button class="btn btn-default btn-xs remove disabled" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
+                                    result = '<button class="btn btn-default btn-xs remove disabled" role="button" data-itemnumber="'+row.item_id+'" title="This bundle is checked out, it cannot be modified"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
                                 } else {
                                     result = '<button class="btn btn-default btn-xs remove" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
                                 }
