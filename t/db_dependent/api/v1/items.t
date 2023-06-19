@@ -42,7 +42,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -90,6 +90,11 @@ subtest 'list() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
       ->status_is(200)
       ->json_is( '' => [ $item->to_api ], 'SWAGGER3.3.2');
+
+    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode => {'x-koha-embed' => 'biblio'} )
+      ->status_is(200)
+      ->json_is( '' => [ { %{$item->to_api}, biblio => $item->biblio->to_api } ], 'SWAGGER3.3.2');
+
 
     my $barcode = $item->barcode;
     $item->delete;
