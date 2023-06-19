@@ -50,11 +50,13 @@ function get_processings() {
             name: "new processing",
             processing_id: 1,
             attributes: get_attributes(),
+            letter_code: null,
         },
         {
             name: "an other processing",
             processing_id: 2,
             attributes: get_other_attributes(),
+            letter_code: null,
         },
     ];
 }
@@ -98,28 +100,33 @@ function get_train_items() {
             processing_attribute_id:
                 processing_attributes[0].processing_attribute_id,
             value: "Argentina",
+            _strings: { value: { str: "Argentina" } },
         },
         {
             processing_attribute: processing_attributes[0],
             processing_attribute_id:
                 processing_attributes[0].processing_attribute_id,
             value: "Not a country",
+            _strings: { value: { str: "Not a country" } },
         },
         {
             processing_attribute: processing_attributes[1],
             processing_attribute_id:
                 processing_attributes[1].processing_attribute_id,
             value: "a biblio title modified",
+            _strings: { value: { str: "a biblio title modified" } },
         },
         {
             processing_attribute: processing_attributes[2],
             processing_attribute_id:
                 processing_attributes[2].processing_attribute_id,
             value: "12cm",
+            _strings: { value: { str: "12cm" } },
         },
     ];
     train_item_1.added_on = "2023-03-31T12:23:34+00:00";
     train_item_1.processing_id = 1;
+    train_item_1.processing = get_processings()[0];
     train_item_1.item_id = 1;
 
     let train_item_2 = get_items()[1];
@@ -130,22 +137,26 @@ function get_train_items() {
             processing_attribute_id:
                 processing_attributes[0].processing_attribute_id,
             value: "Uruguay",
+            _strings: { value: { str: "Uruguay" } },
         },
         {
             processing_attribute: processing_attributes[1],
             processing_attribute_id:
                 processing_attributes[1].processing_attribute_id,
             value: "an other modified title",
+            _strings: { value: { str: "an other modified title" } },
         },
         {
             processing_attribute: processing_attributes[2],
             processing_attribute_id:
                 processing_attributes[2].processing_attribute_id,
             value: "34cm",
+            _strings: { value: { str: "34cm" } },
         },
     ];
     train_item_2.added_on = "2023-04-01T12:34:56+00:00";
     train_item_2.processing_id = 1;
+    train_item_2.processing = get_processings()[0];
     train_item_2.item_id = 2;
 
     let train_item_3 = get_items()[0];
@@ -156,16 +167,19 @@ function get_train_items() {
             processing_attribute_id:
                 processing_attributes[0].processing_attribute_id,
             value: "Bolivia",
+            _strings: { value: { str: "Bolivia" } },
         },
         {
             processing_attribute: processing_attributes[1],
             processing_attribute_id:
                 processing_attributes[1].processing_attribute_id,
             value: "W 123cm",
+            _strings: { value: { str: "W 123cm" } },
         },
     ];
     train_item_3.added_on = "2023-04-02T12:34:56+00:00";
     train_item_3.processing_id = 2;
+    train_item_3.processing = get_processings()[1];
     train_item_3.item_id = 3;
 
     return [train_item_1, train_item_2, train_item_3];
@@ -285,10 +299,10 @@ describe("Trains", () => {
     });
 
     it("Add train", () => {
-        cy.intercept("GET", "/api/v1/preservation/trains", []);
+        cy.intercept("GET", "/api/v1/preservation/trains*", []);
         cy.intercept(
             "GET",
-            "/api/v1/preservation/processings",
+            "/api/v1/preservation/processings*",
             get_processings()
         );
         cy.visit("/cgi-bin/koha/preservation/trains");
