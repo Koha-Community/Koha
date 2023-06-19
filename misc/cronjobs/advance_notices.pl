@@ -388,19 +388,19 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
 
 # Now, run through all the people that want digests and send them
 
-my $sth_digest = $dbh->prepare(<<'END_SQL');
-SELECT biblio.*, items.*, issues.*
+my $digest_query = 'SELECT biblio.*, items.*, issues.*
   FROM issues,items,biblio
   WHERE items.itemnumber=issues.itemnumber
     AND biblio.biblionumber=items.biblionumber
     AND issues.borrowernumber = ?
-    AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
-END_SQL
+    AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)';
+
+my $sth_digest = $dbh->prepare($digest_query);
 
 if ($digest_per_branch) {
     while (my ($branchcode, $digests) = each %$upcoming_digest) {
         send_digests({
-            sth => $sth_digest,
+            sth => $dbh->prepare( $digest_query . " AND issues.branchcode = '" . $branchcode . "'"),
             digests => $digests,
             letter_code => 'PREDUEDGST',
             message_name => 'advance_notice',
@@ -418,7 +418,7 @@ if ($digest_per_branch) {
 
     while (my ($branchcode, $digests) = each %$due_digest) {
         send_digests({
-            sth => $sth_digest,
+            sth => $dbh->prepare( $digest_query . " AND issues.branchcode = '" . $branchcode . "'" ),
             digests => $digests,
             letter_code => 'DUEDGST',
             branchcode => $branchcode,
