@@ -49,7 +49,7 @@
                 [% IF ( delete ) %]
                     <div class="dialog alert">
                         <h3>You are about to delete [% serialnumber | html %] serial(s). Do you want to continue?</h3>
-                        <form action="/cgi-bin/koha/serials/serials-collection.pl/#">
+                        <form action="/cgi-bin/koha/serials/serials-collection.pl">
                             [% IF countitems > 0 %]
                                 <h5>Number of items available: [% countitems | html %]</h5>
                                 <p>
@@ -95,7 +95,7 @@
                         </tr>
                         [% FOREACH subscription IN subscriptions %]
                             <tr>
-                                <td><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]"># [% subscription.subscriptionid | html %]</a> </td>
+                                <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]"># [% subscription.subscriptionid | html %]</a> </td>
                                 <td>[% subscription.frequency.description | html %]</td>
                                 <td>[% subscription.numberpattern.label | html %]</td>
                                 <td>[% IF subscription.branchcode %][% Branches.GetName( subscription.branchcode ) | html %][% END %]</td>
