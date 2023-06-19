@@ -110,7 +110,10 @@ sub get_description_by_koha_field {
     return $cached if $cached;
 
     my $av = $self->find_by_koha_field($params);
-    return {} unless defined $av;
+    if ( ! defined $av ){
+        $memory_cache->set_in_cache( $cache_key, {} );
+        return {};
+    }
     my $descriptions = { lib => $av->lib, opac_description => $av->opac_description };
     $memory_cache->set_in_cache( $cache_key, $descriptions );
     return $descriptions;
