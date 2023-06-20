@@ -31,10 +31,11 @@ export default {
     setup() {
         const table = ref()
 
-        const { getMonthsData } = inject("reportsStore")
+        const { getMonthsData, getColumnOptions } = inject("reportsStore")
 
         return {
             getMonthsData,
+            getColumnOptions,
             table,
         }
     },
@@ -87,12 +88,18 @@ export default {
     methods: {
         buildColumnArray(report_type, params) {
             const columns = params.columns
-            const months_data = this.getMonthsData() //
+            const months_data = this.getMonthsData()
+            const column_options = this.getColumnOptions()
             const time_period_columns = params.tp_columns
             const yearly_filter = params.yearly_filter
             const query = params.queryObject
+            const column_set = []
 
-            const column_set = [...columns]
+            columns.forEach(column => {
+                column_set.push(column_options[column].column)
+                // Reset all columns except data providers to inactive
+                if (column !== 1) column_options[column].active = false
+            })
 
             report_type !== "usage_data_provider" &&
                 column_set.unshift({

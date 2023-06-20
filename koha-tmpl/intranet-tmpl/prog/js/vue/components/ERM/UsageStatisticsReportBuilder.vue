@@ -314,9 +314,10 @@ export default {
         const { setConfirmationDialog, setMessage, setError } =
             inject("mainStore")
 
-        const { getMonthsData } = inject("reportsStore")
+        const { getMonthsData, getColumnOptions } = inject("reportsStore")
 
         const months_data = getMonthsData()
+        const title_property_column_options = getColumnOptions()
 
         return {
             av_report_types,
@@ -328,82 +329,11 @@ export default {
             setMessage,
             setError,
             months_data,
+            title_property_column_options,
         }
     },
     data() {
         return {
-            title_property_column_options: {
-                provider_name: {
-                    name: "Provider name",
-                    active: true,
-                    column: {
-                        title: __("Data provider"),
-                        data: "provider_name",
-                        searchable: true,
-                        orderable: true,
-                    },
-                },
-                publisher: {
-                    name: "Publisher",
-                    active: false,
-                    column: {
-                        title: __("Publisher"),
-                        data: "publisher",
-                        searchable: true,
-                        orderable: true,
-                    },
-                },
-                publisher_id: {
-                    name: "Publisher ID",
-                    active: false,
-                    column: {
-                        title: __("Publisher ID"),
-                        data: "publisher_id",
-                        searchable: true,
-                        orderable: true,
-                    },
-                },
-                online_issn: {
-                    name: "Online ISSN",
-                    active: false,
-                    column: {
-                        title: __("Online ISSN"),
-                        data: "online_issn",
-                        searchable: true,
-                        orderable: true,
-                    },
-                },
-                print_issn: {
-                    name: "Print ISSN",
-                    active: false,
-                    column: {
-                        title: __("Print ISSN"),
-                        data: "print_issn",
-                        searchable: true,
-                        orderable: true,
-                    },
-                },
-                title_doi: {
-                    name: "DOI",
-                    active: false,
-                    column: {
-                        title: __("DOI"),
-                        data: "title_doi",
-                        searchable: true,
-                        orderable: true,
-                    },
-                },
-                title_uri: {
-                    name: "URI",
-                    active: false,
-                    column: {
-                        title: __("URI"),
-                        data: "title_uri",
-                        searchable: true,
-                        orderable: true,
-                    },
-                },
-            },
             query: {
                 data_display: "monthly",
                 report_type: null,
@@ -842,7 +772,7 @@ export default {
             const title_properties = Object.keys(title_props)
             title_properties.forEach(prop => {
                 if (title_props[prop].active) {
-                    columns.push(title_props[prop].column)
+                    columns.push(title_props[prop].id)
                 }
             })
 
