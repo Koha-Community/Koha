@@ -230,7 +230,4 @@ export default {
 .active {
     cursor: pointer;
 }
-.rows {
-    float: none;
-}
 </style>

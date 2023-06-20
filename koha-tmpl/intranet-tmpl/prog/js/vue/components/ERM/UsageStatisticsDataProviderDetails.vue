@@ -101,3 +101,9 @@ export default {
     name: "UsageStatisticsDataProviderDetails",
 }
 </script>
+
+<style scoped>
+.rows {
+    float: none;
+}
+</style>
