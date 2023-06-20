@@ -25,7 +25,6 @@ if ($sql_schema && $db_schema){
         output_db     => 'MySQL',
         source_schema => $db_schema,
         target_schema => $sql_schema,
-        no_batch_alters => 1,
     })->compute_differences->produce_diff_sql;
 
     print $diff;
