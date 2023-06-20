@@ -16,6 +16,7 @@ use C4::SIP::Sip::Checksum qw(verify_cksum);
 
 use Data::Dumper;
 use CGI qw ( -utf8 );
+use C4::Context;
 use C4::Auth qw(&check_api_auth);
 use C4::Items qw(ModDateLastSeen);
 
@@ -995,7 +996,10 @@ sub handle_patron_info {
 
     $resp = (PATRON_INFO_RESP);
     if ($patron) {
-        C4::Auth::track_login_daily( $patron->userid, 'connection' );
+        if ( C4::Context->preference('TrackLastPatronActivity') ) {
+            my $koha_patron = Koha::Patrons->find($patron->userid);
+            $koha_patron->update_lastseen('connection');
+        }
         $resp .= patron_status_string( $patron, $server );
         $resp .= ( defined($lang) and length($lang) == 3 ) ? $lang : $patron->language;
         $resp .= timestamp();

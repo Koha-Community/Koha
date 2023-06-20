@@ -33,6 +33,7 @@ use C4::Log qw( logaction );
 use Koha::Account;
 use Koha::ArticleRequests;
 use Koha::AuthUtils;
+use Koha::Caches;
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::Club::Enrollments;
@@ -1165,24 +1166,34 @@ sub _get_overdue_debarred_delay {
     }
 }
 
+=head3 update_lastseen
 
-=head3 track_login
+  $patron->update_lastseen('activity');
 
-    $patron->track_login;
-    $patron->track_login({ force => 1 });
-
-    Tracks a (successful) login attempt.
-    The preference TrackLastPatronActivity must be enabled. Or you
-    should pass the force parameter.
+Tracks a (successful) login attempt when the TrackLastPatronActivity preference is enabled
+and the activity passed is in the TrackLastPatronActivityTriggers list.
 
 =cut
 
-sub track_login {
-    my ( $self, $params ) = @_;
-    return if
-        !$params->{force} &&
-        !C4::Context->preference('TrackLastPatronActivity');
-    $self->lastseen( dt_from_string() )->store;
+sub update_lastseen {
+    my ( $self, $activity ) = @_;
+    return $self if !C4::Context->preference('TrackLastPatronActivity');
+
+    my $tracked_activities = {
+        map { ( lc $_, 1 ); } split /\s*\,\s*/,
+        C4::Context->preference('TrackLastPatronActivityTriggers')
+    };
+    return $self unless $tracked_activities->{$activity};
+
+    my $cache     = Koha::Caches->get_instance();
+    my $cache_key = "track_login_" . $self->userid;
+    my $cached    = $cache->get_from_cache($cache_key);
+    my $now       = dt_from_string();
+    return if $cached && $cached eq $now->ymd;
+
+    $self->lastseen($now)->store;
+    $cache->set_in_cache( $cache_key, $now->ymd );
+    return $self;
 }
 
 =head3 move_to_deleted

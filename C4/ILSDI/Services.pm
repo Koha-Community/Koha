@@ -396,10 +396,10 @@ sub AuthenticatePatron {
     my $password = $cgi->param('password');
     my ($status, $cardnumber, $userid) = C4::Auth::checkpw( $username, $password );
     if ( $status == 1 ) {
-        # Track the login
-        C4::Auth::track_login_daily( $userid, 'connection' );
         # Get the borrower
         my $patron = Koha::Patrons->find( { userid => $userid } );
+        # Track the login
+        $patron->update_lastseen('connection');
         return { id => $patron->borrowernumber };
     }
     elsif ( $status == -2 ){

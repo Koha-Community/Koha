@@ -1677,7 +1677,7 @@ sub AddIssue {
                 )->store;
             }
             $issue->discard_changes;
-            C4::Auth::track_login_daily( $patron->userid, 'check_out' );
+            $patron->update_lastseen('check_out');
             if ( $item_object->location && $item_object->location eq 'CART'
                 && ( !$item_object->permanent_location || $item_object->permanent_location ne 'CART' ) ) {
             ## Item was moved to cart via UpdateItemLocationOnCheckin, anything issued should be taken off the cart.
@@ -2496,7 +2496,7 @@ sub AddReturn {
             if C4::Context->preference("ReturnLog");
 
         #Update borrowers.lastseen
-        C4::Auth::track_login_daily( $patron->userid, 'check_in' );
+        $patron->update_lastseen('check_in');
     }
 
     # Check if this item belongs to a biblio record that is attached to an
@@ -3361,7 +3361,7 @@ sub AddRenewal {
             }
         );
         #Update borrowers.lastseen
-        C4::Auth::track_login_daily( $patron_unblessed->{userid}, 'renewal' );
+        $patron->update_lastseen('renewal');
 
         #Log the renewal
         logaction("CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
