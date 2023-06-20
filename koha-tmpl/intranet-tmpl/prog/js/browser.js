@@ -105,7 +105,9 @@ KOHA.browser = function (searchid, biblionumber) {
                     });
                     $('a[href*="biblionumber="]').not('a[target="_blank"]').click(function (ev) {
                         ev.preventDefault();
-                        window.location = $(this).attr('href') + '&searchid=' + me.searchid;
+                        var url = new URL($(this).attr('href'), window.location.origin);
+                        url.searchParams.set('searchid', me.searchid);
+                        window.location = url.href;
                     });
                     $('form[name="f"]').append('<input type="hidden" name="searchid" value="' + me.searchid + '"></input>');
                 }
