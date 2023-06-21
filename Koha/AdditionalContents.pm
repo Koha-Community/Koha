@@ -73,44 +73,25 @@ location is one of this:
 
 sub search_for_display {
     my ( $self, $params ) = @_;
+    my $lang = $params->{lang};
+
+    # If lang is not default, we will search for entries matching $lang but fallback to default if $lang is not found
+    # Then we need a subquery count in where clause; DBIx::Class/SQL::Abstract does not support it, fallback to literal SQL
+    my $subquery =
+        qq|(SELECT COUNT(*) FROM additional_contents_localizations WHERE lang='$lang' AND additional_content_id=me.additional_content_id)=0|;
 
     my $search_params;
-    $search_params->{location}     = $params->{location};
-    $search_params->{branchcode}   = $params->{library_id} ? [ $params->{library_id}, undef ] : undef;
-    $search_params->{published_on} = { '<=' => \'CAST(NOW() AS DATE)' };
-    $search_params->{-or}          = [
-        expirationdate => { '>=' => \'CAST(NOW() AS DATE)' },
-        expirationdate => undef
-    ];
-    $search_params->{category} = $params->{category} if $params->{category};
+    $search_params->{location}       = $params->{location};
+    $search_params->{branchcode}     = $params->{library_id} ? [ $params->{library_id}, undef ] : undef;
+    $search_params->{published_on}   = { '<=' => \'CAST(NOW() AS DATE)' };
+    $search_params->{expirationdate} = [ '-or', { '>=' => \'CAST(NOW() AS DATE)' }, undef ];
+    $search_params->{category}       = $params->{category} if $params->{category};
+    $search_params->{lang}           = 'default' if !$lang || $lang eq 'default';
+    $search_params->{-or}            = [ { 'lang' => $lang }, '-and' => [ 'lang', 'default', \$subquery ] ]
+        if !$search_params->{lang};
 
-    my $contents = $self->SUPER::search( $search_params, { order_by => 'number' } );
-    my @all_content_id = $contents->get_column('id');
-
-    my ( $translated_contents, @translated_content_id );
-    if ( $params->{lang} && $params->{lang} ne 'default' ) {
-        $translated_contents = Koha::AdditionalContentsLocalizations->search(
-            {
-                additional_content_id => [$contents->get_column('id')],
-                lang => $params->{lang},
-            }
-        );
-        @translated_content_id = $translated_contents->get_column('additional_content_id');
-    }
-
-    my $default_contents    = Koha::AdditionalContentsLocalizations->search(
-        {
-            additional_content_id => [array_minus(@all_content_id, @translated_content_id)],
-            lang                  => 'default',
-        }
-    );
-
-    return Koha::AdditionalContentsLocalizations->search(
-        {
-            id => [ $translated_contents ? $translated_contents->get_column('id') : (), $default_contents->get_column('id') ]
-        },
-    );
-
+    my $attribs = { prefetch => 'additional_content', order_by => 'additional_content.number' };
+    return Koha::AdditionalContentsLocalizations->search( $search_params, $attribs );
 }
 
 =head3 find_best_match
