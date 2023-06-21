@@ -60,7 +60,7 @@ app.mount("#erm");
 
 const { removeMessages } = mainStore;
 router.beforeEach((to, from) => {
-    navigationStore.$patch({current: to.matched, params: to.params||{}});
+    navigationStore.$patch({ current: to.matched, params: to.params || {} });
     removeMessages(); // This will actually flag the messages as displayed already
 });
 router.afterEach((to, from) => {
