@@ -242,7 +242,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                         <span class="hint">If checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item.</span>
                 </li>
                 <li>
-                    <label for="automatic_checkin">Automatic checkin: </label>
+                    <label for="automatic_checkin">Automatic check-in: </label>
                         [% IF itemtype.automatic_checkin %]
                             <input type="checkbox" id="automatic_checkin" name="automatic_checkin" checked="checked" value="1" />
                         [% ELSE %]
@@ -396,7 +396,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
             <th>Processing fee (when lost)</th>
             <th>Checkin message</th>
             <th>Library limitations</th>
-            <th>Automatic checkin</th>
+            <th>Automatic check-in</th>
             <th class="noExport NoSort">Actions</th>
           </thead>
           [% FOREACH itemtype IN itemtypes %]
