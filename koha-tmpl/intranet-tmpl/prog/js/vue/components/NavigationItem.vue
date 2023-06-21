@@ -7,7 +7,7 @@
                 :class="{ disabled: item.disabled }"
             >
                 <template v-if="item.icon">
-                    <i :class="`fa ${item.icon}`"></i>&nbsp;
+                    <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
                 <span v-if="item.title">{{ $__(item.title) }}</span>
             </router-link>
@@ -17,7 +17,7 @@
                 :class="{ disabled: item.disabled }"
             >
                 <template v-if="item.icon">
-                    <i :class="`fa ${item.icon}`"></i>&nbsp;
+                    <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
                 <span v-if="item.title">{{ $__(item.title) }}</span>
             </router-link>
@@ -27,13 +27,13 @@
                 :class="{ disabled: item.disabled }"
             >
                 <template v-if="item.icon">
-                    <i :class="`fa ${item.icon}`"></i>&nbsp;
+                    <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
                 <span v-if="item.title">{{ $__(item.title) }}</span>
             </a>
             <span v-else :class="{ disabled: item.disabled }">
                 <template v-if="item.icon">
-                    <i :class="`fa ${item.icon}`"></i>&nbsp;
+                    <i :class="`${item.icon}`"></i>&nbsp;
                 </template>
                 <span class="item-last" v-if="item.title">{{
                     $__(item.title)
