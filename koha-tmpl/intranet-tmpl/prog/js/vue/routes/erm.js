@@ -37,7 +37,7 @@ export const routes = [
         path: "/cgi-bin/koha/erm/erm.pl",
         is_default: true,
         is_base: true,
-        title: $__('E-resource management'),
+        title: $__("E-resource management"),
         children: [
             {
                 path: "",
@@ -47,8 +47,8 @@ export const routes = [
             },
             {
                 path: "/cgi-bin/koha/erm/agreements",
-                title: $__('Agreements'),
-                icon: 'fa fa-check-circle',
+                title: $__("Agreements"),
+                icon: "fa fa-check-circle",
                 is_end_node: true,
                 children: [
                     {
@@ -60,25 +60,25 @@ export const routes = [
                         path: ":agreement_id",
                         name: "AgreementsShow",
                         component: markRaw(AgreementsShow),
-                        title: $__('Show agreement'),
+                        title: $__("Show agreement"),
                     },
                     {
                         path: "add",
                         name: "AgreementsFormAdd",
                         component: markRaw(AgreementsFormAdd),
-                        title: $__('Add agreement'),
+                        title: $__("Add agreement"),
                     },
                     {
                         path: "edit/:agreement_id",
                         name: "AgreementsFormAddEdit",
                         component: markRaw(AgreementsFormAdd),
-                        title: $__('Edit agreement'),
+                        title: $__("Edit agreement"),
                     },
                 ],
             },
             {
                 path: "/cgi-bin/koha/erm/licenses",
-                title: $__('Licenses'),
+                title: $__("Licenses"),
                 icon: "fa fa-gavel",
                 is_end_node: true,
                 children: [
@@ -91,105 +91,125 @@ export const routes = [
                         path: ":license_id",
                         name: "LicensesShow",
                         component: markRaw(LicensesShow),
-                        title: $__('Show license'),
+                        title: $__("Show license"),
                     },
                     {
                         path: "add",
                         name: "LicensesFormAdd",
                         component: markRaw(LicensesFormAdd),
-                        title: $__('Add license'),
+                        title: $__("Add license"),
                     },
                     {
                         path: "edit/:license_id",
                         name: "LicensesFormAddEdit",
                         component: markRaw(LicensesFormAdd),
-                        title: $__('Edit license'),
+                        title: $__("Edit license"),
                     },
                 ],
             },
             {
                 path: "/cgi-bin/koha/erm/eholdings",
-                title: $__('eHoldings'),
-                icon: 'fa fa-crosshairs',
+                title: $__("eHoldings"),
+                icon: "fa fa-crosshairs",
                 disabled: true,
                 children: [
                     {
                         path: "local",
-                        title: $__('Local'),
+                        title: $__("Local"),
                         icon: "fa-solid fa-location-dot",
                         disabled: true,
                         children: [
                             {
                                 path: "packages",
-                                title: $__('Packages'),
+                                title: $__("Packages"),
                                 icon: "fa fa-archive",
                                 is_end_node: true,
                                 children: [
                                     {
                                         path: "",
                                         name: "EHoldingsLocalPackagesList",
-                                        component: markRaw(EHoldingsLocalPackagesList),
+                                        component: markRaw(
+                                            EHoldingsLocalPackagesList
+                                        ),
                                     },
                                     {
                                         path: ":package_id",
                                         name: "EHoldingsLocalPackagesShow",
-                                        component: markRaw(EHoldingsLocalPackagesShow),
-                                        title: $__('Show package'),
+                                        component: markRaw(
+                                            EHoldingsLocalPackagesShow
+                                        ),
+                                        title: $__("Show package"),
                                     },
                                     {
                                         path: "add",
                                         name: "EHoldingsLocalPackagesFormAdd",
-                                        component: markRaw(EHoldingsLocalPackagesFormAdd),
-                                        title: $__('Add package'),
+                                        component: markRaw(
+                                            EHoldingsLocalPackagesFormAdd
+                                        ),
+                                        title: $__("Add package"),
                                     },
                                     {
                                         path: "edit/:package_id",
                                         name: "EHoldingsLocalPackagesFormAddEdit",
-                                        component: markRaw(EHoldingsLocalPackagesFormAdd),
-                                        title: $__('Edit package'),
+                                        component: markRaw(
+                                            EHoldingsLocalPackagesFormAdd
+                                        ),
+                                        title: $__("Edit package"),
                                     },
                                 ],
                             },
                             {
                                 path: "titles",
-                                title: $__('Titles'),
+                                title: $__("Titles"),
                                 icon: "fa-solid fa-arrow-down-a-z",
                                 is_end_node: true,
                                 children: [
                                     {
                                         path: "",
                                         name: "EHoldingsLocalTitlesList",
-                                        component: markRaw(EHoldingsLocalTitlesList),
+                                        component: markRaw(
+                                            EHoldingsLocalTitlesList
+                                        ),
                                     },
                                     {
                                         path: ":title_id",
                                         name: "EHoldingsLocalTitlesShow",
-                                        component: markRaw(EHoldingsLocalTitlesShow),
-                                        title: $__('Show title'),
+                                        component: markRaw(
+                                            EHoldingsLocalTitlesShow
+                                        ),
+                                        title: $__("Show title"),
                                     },
                                     {
                                         path: "add",
                                         name: "EHoldingsLocalTitlesFormAdd",
-                                        component: markRaw(EHoldingsLocalTitlesFormAdd),
-                                        title: $__('Add title'),
+                                        component: markRaw(
+                                            EHoldingsLocalTitlesFormAdd
+                                        ),
+                                        title: $__("Add title"),
                                     },
                                     {
                                         path: "edit/:title_id",
                                         name: "EHoldingsLocalTitlesFormAddEdit",
-                                        component: markRaw(EHoldingsLocalTitlesFormAdd),
-                                        title: $__('Edit title'),
+                                        component: markRaw(
+                                            EHoldingsLocalTitlesFormAdd
+                                        ),
+                                        title: $__("Edit title"),
                                     },
                                     {
                                         path: "import",
                                         name: "EHoldingsLocalTitlesFormImport",
-                                        component: markRaw(EHoldingsLocalTitlesFormImport),
-                                        title: $__('Import from a list'),
+                                        component: markRaw(
+                                            EHoldingsLocalTitlesFormImport
+                                        ),
+                                        title: $__("Import from a list"),
                                     },
                                     {
                                         path: "/cgi-bin/koha/erm/eholdings/local/resources/:resource_id",
                                         name: "EHoldingsLocalResourcesShow",
-                                        component: markRaw(EHoldingsLocalResourcesShow),
-                                        title: $__('Resource'),
+                                        component: markRaw(
+                                            EHoldingsLocalResourcesShow
+                                        ),
+                                        title: $__("Resource"),
                                     },
                                 ],
                             },
@@ -197,51 +217,61 @@ export const routes = [
                     },
                     {
                         path: "ebsco",
-                        title: $__('EBSCO'),
-                        icon: 'fa fa-globe',
+                        title: $__("EBSCO"),
+                        icon: "fa fa-globe",
                         disabled: true,
                         children: [
                             {
                                 path: "packages",
-                                title: $__('Packages'),
+                                title: $__("Packages"),
                                 icon: "fa fa-archive",
                                 is_end_node: true,
                                 children: [
                                     {
                                         path: "",
                                         name: "EHoldingsEBSCOPackagesList",
-                                        component: markRaw(EHoldingsEBSCOPackagesList),
+                                        component: markRaw(
+                                            EHoldingsEBSCOPackagesList
+                                        ),
                                     },
                                     {
                                         path: ":package_id",
                                         name: "EHoldingsEBSCOPackagesShow",
-                                        component: markRaw(EHoldingsEBSCOPackagesShow),
-                                        title: $__('Show package'),
+                                        component: markRaw(
+                                            EHoldingsEBSCOPackagesShow
+                                        ),
+                                        title: $__("Show package"),
                                     },
                                 ],
                             },
                             {
                                 path: "titles",
-                                title: $__('Titles'),
+                                title: $__("Titles"),
                                 icon: "fa-solid fa-arrow-down-a-z",
                                 is_end_node: true,
                                 children: [
                                     {
                                         path: "",
                                         name: "EHoldingsEBSCOTitlesList",
-                                        component: markRaw(EHoldingsEBSCOTitlesList),
+                                        component: markRaw(
+                                            EHoldingsEBSCOTitlesList
+                                        ),
                                     },
                                     {
                                         path: ":title_id",
                                         name: "EHoldingsEBSCOTitlesShow",
-                                        component: markRaw(EHoldingsEBSCOTitlesShow),
-                                        title: $__('Show title'),
+                                        component: markRaw(
+                                            EHoldingsEBSCOTitlesShow
+                                        ),
+                                        title: $__("Show title"),
                                     },
                                     {
                                         path: "/cgi-bin/koha/erm/eholdings/ebsco/resources/:resource_id",
                                         name: "EHoldingsEBSCOResourcesShow",
-                                        component: markRaw(EHoldingsEBSCOResourcesShow),
-                                        title: $__('Resource'),
+                                        component: markRaw(
+                                            EHoldingsEBSCOResourcesShow
+                                        ),
+                                        title: $__("Resource"),
                                         is_navigation_item: false,
                                     },
                                 ],
@@ -250,6 +280,6 @@ export const routes = [
                     },
                 ],
             },
-        ]
+        ],
     },
 ];
