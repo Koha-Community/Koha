@@ -53,6 +53,7 @@ sub get {
             blocktitle => $blocktitle
         };
     }
+    return;
 }
 
 sub get_opac_news_by_id {
