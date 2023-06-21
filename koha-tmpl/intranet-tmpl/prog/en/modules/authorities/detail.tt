@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE Koha %]
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
@@ -135,7 +136,18 @@
     <script>
         $(document).ready(function() {
             if( $("#authoritiestabs .tab-pane.active").length < 1 ){
-                $("#authoritiestabs a:first").tab("show");
+                [% SET DefaultAuthorityTab = Koha.Preference('DefaultAuthorityTab') %]
+                [% IF DefaultAuthorityTab %]
+                    let default_tab = "#tab" + [% DefaultAuthorityTab %] + "XX-tab";
+                    let tab_object = $("#authoritiestabs "+default_tab)
+                    if( tab_object.length > 0 ){
+                        tab_object.tab("show");
+                    } else {
+                        $("#authoritiestabs a:first").tab("show");
+                    }
+                [% ELSE %]
+                    $("#authoritiestabs a:first").tab("show");
+                [% END %]
             }
 
             var editAuth = $("#editAuth");

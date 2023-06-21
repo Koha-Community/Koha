@@ -174,6 +174,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('decreaseLoanHighHoldsDuration',NULL,'','Specifies a number of days that a loan is reduced to when used in conjunction with decreaseLoanHighHolds','Integer'),
 ('decreaseLoanHighHoldsIgnoreStatuses', '', 'damaged|itemlost|notforloan|withdrawn', "Ignore items with these statuses for dynamic high holds checking", 'Choice'),
 ('decreaseLoanHighHoldsValue',NULL,'','Specifies a threshold for the minimum number of holds needed to trigger a reduction in loan duration (used with decreaseLoanHighHolds)','Integer'),
+('DefaultAuthorityTab','0','0|1|2|3|4|5|6|7|8|9','Default tab to shwo when displaying authorities','Choice'),
 ('DefaultClassificationSource','ddc',NULL,'Default classification scheme used by the collection. E.g., Dewey, LCC, etc.','ClassSources'),
 ('DefaultCountryField008','','','Fill in the default country code for field 008 Range 15-17 of MARC21 - Place of publication, production, or execution. See <a href=\"http://www.loc.gov/marc/countries/countries_code.html\">MARC Code List for Countries</a>','Free'),
 ('DefaultHoldExpirationdate','0','','Automatically set expiration date for holds','YesNo'),

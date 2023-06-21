@@ -75,7 +75,22 @@ Authorities:
               default: "Work cat."
               type: textarea
               class: code
-
+        -
+            - When viewing authority details default to the
+            - pref: DefaultAuthorityTab
+              default: "0"
+              choices:
+                  "0": 0XX
+                  "1": 1XX
+                  "2": 2XX
+                  "3": 3XX
+                  "4": 4XX
+                  "5": 5XX
+                  "6": 6XX
+                  "7": 7XX
+                  "8": 8XX
+                  "9": 9XX
+            - tab. If the selected tab does not exist, the view will default to the first tab.
     Linker:
         -
             - Use the
