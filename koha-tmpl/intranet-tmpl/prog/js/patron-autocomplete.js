@@ -16,19 +16,32 @@ function patron_autocomplete(node, options) {
     }
     return node.autocomplete({
         source: function( request, response ) {
-            let subquery_and = [];
+            let q = []
+
+            // Add each pattern in search term for each search field
+            let pattern_subquery_and = [];
             request.term.split(/[\s,]+/)
                 .filter(function(s){ return s.length })
                 .forEach(function(pattern,i){
-                    let subquery_or = [];
+                    let pattern_subquery_or = [];
                     defaultPatronSearchFields.split(',').forEach(function(field,i){
-                        subquery_or.push(
-                            {["me."+field]: {'like': leading_wildcard + pattern + '%'}}
+                        pattern_subquery_or.push(
+                            { ["me." + field]: { 'like': leading_wildcard + pattern + '%' } }
                         );
                     });
-                    subquery_and.push(subquery_or);
+                    pattern_subquery_and.push(pattern_subquery_or);
                 });
-            let q = {"-and": subquery_and};
+            q.push({ "-and": pattern_subquery_and });
+
+            // Add full search term for each search field
+            let term_subquery_or = [];
+            defaultPatronSearchFields.split(',').forEach(function (field, i) {
+                term_subquery_or.push(
+                    { ["me." + field]: { 'like': leading_wildcard + request.term + '%' } }
+                );
+            });
+            q.push({ "-or": term_subquery_or });
+
             let params = {
                 '_page': 1,
                 '_per_page': 10,
