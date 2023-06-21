@@ -2167,7 +2167,7 @@ sub RevertWaitingStatus {
             expirationdate => $hold->patron_expiration_date,
             itemnumber  => $hold->item_level_hold ? $hold->itemnumber : undef,
         }
-    )->store();
+    )->store({ hold_reverted => 1 });
 
     logaction( 'HOLDS', 'MODIFY', $hold->id, $hold )
         if C4::Context->preference('HoldsLog');

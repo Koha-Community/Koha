@@ -941,7 +941,9 @@ expirationdate for holds.
 =cut
 
 sub store {
-    my ($self) = @_;
+    my ($self, $params) = @_;
+
+    my $hold_reverted = $params->{hold_reverted} // 0;
 
     Koha::Exceptions::Hold::MissingPickupLocation->throw() unless $self->branchcode;
 
@@ -962,11 +964,13 @@ sub store {
 
         my %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
-
-        if ( exists $updated_columns{reservedate} ) {
+        if ( exists $updated_columns{reservedate} || $hold_reverted ) {
             if (
-                C4::Context->preference('DefaultHoldExpirationdate')
-                && ! exists $updated_columns{expirationdate}
+                ( C4::Context->preference('DefaultHoldExpirationdate')
+                && ! exists $updated_columns{expirationdate} )
+                || ( C4::Context->preference('DefaultHoldExpirationdate')
+                && exists $updated_columns{expirationdate}
+                && $hold_reverted )
               )
             {
                 $self->_set_default_expirationdate;
