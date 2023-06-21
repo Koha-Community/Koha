@@ -324,10 +324,12 @@ my $patron2 = $builder->build({
         flags => undef,
     }
 });
+t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
 t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
-Koha::Patrons->find( $patron2->{borrowernumber} )->track_login;
+Koha::Patrons->find( $patron2->{borrowernumber} )->update_lastseen('connection');
 is( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lastseen should not be changed' );
-Koha::Patrons->find( $patron2->{borrowernumber} )->track_login({ force => 1 });
+t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
+Koha::Patrons->find( $patron2->{borrowernumber} )->update_lastseen('connection');
 isnt( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lastseen should be changed now' );
 
 # Test GetBorrowersToExpunge and regular patron with permission

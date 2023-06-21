@@ -1618,12 +1618,12 @@ subtest 'BorrowersLog tests' => sub {
     is( $log_info->{cardnumber}->{before}, $cardnumber, 'Got correct old cardnumber' );
     is( scalar @logs, 1, 'With BorrowerLogs, one detailed MODIFY action should be logged for the modification.' );
 
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', 1 );
-    $patron->track_login();
+    $patron->update_lastseen('connection');
     @logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
     is( scalar @logs, 1, 'With BorrowerLogs and TrackLastPatronActivity we should not spam the logs');
 };
-
 $schema->storage->txn_rollback;
 
 subtest 'Test Koha::Patrons::merge' => sub {
