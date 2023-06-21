@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( do_it ) %]Review[% ELSE %]Review tags[% END %] &rsaquo; Tags &rsaquo; Tools &rsaquo; Koha</title>
@@ -110,15 +111,15 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                     <td>
                         [% IF ( tagloo.approved == -1 ) %]
                             <label for="checkbox[% offset + loop.count | html %]">
-                                <span class="rejected status[% offset + loop.count | html %]">Rejected</span>
+                                <span class="rejected status[% offset + loop.count | html %]">[% tp('Tags (single)', 'Rejected') | html %]</span>
                             </label>
                         [% ELSIF ( tagloo.approved == 1 ) %]
                             <label for="checkbox[% offset + loop.count | html %]">
-                                <span class="approved status[% offset + loop.count | html %]">Approved</span>
+                                <span class="approved status[% offset + loop.count | html %]">[% tp('Tags (single)', 'Approved') | html %]</span>
                             </label>
                         [% ELSE %]
                             <label for="checkbox[% offset + loop.count | html %]">
-                                <span class="pending status[% offset + loop.count | html %]">Pending</span>
+                                <span class="pending status[% offset + loop.count | html %]">[% tp('Tags (single)', 'Pending') | html %]</span>
                             </label>
                         [% END %]
                     </td>
@@ -130,9 +131,9 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                     <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
                         [% IF ( tagloo.approved == -1 ) %]
                             <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                            <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
+                            <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> [% tp('Tags (single)', 'Rejected') | html %]</button>
                         [% ELSE %]
-                            <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
+                            <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Approved" name="approve"><i class="fa fa-check"></i> [% tp('Tags (single)', 'Approved') | html %]</button>
                             <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
                         [% END %]
                         </span>
@@ -167,13 +168,13 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
  <fieldset class="brief">
   <h4>Terms summary</h4>
   <ul>
-    <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved</a>:
+    <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">[% tp('Tags (multiple)', 'Approved') | html %]</a>:
         <span id="terms_summary_approved_count">[% approved_count | html %]</span>
         </li>
-    <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected</a>:
+    <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">[% tp('Tags (multiple)', 'Rejected') | html %]</a>:
         <span id="terms_summary_rejected_count">[% rejected_count | html %]</span>
     </li>
-    <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending</a>:
+    <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">[% tp('Tags (multiple)', 'Pending') | html %]</a>:
     <span id="terms_summary_unapproved_count">[% unapproved_count | html %]</span>
     </li>
     <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">Total</a>:
