@@ -48,7 +48,7 @@ export const routes = [
             {
                 path: "/cgi-bin/koha/erm/agreements",
                 title: $__('Agreements'),
-                icon: 'fa-check-circle-o',
+                icon: 'fa fa-check-circle',
                 is_end_node: true,
                 children: [
                     {
@@ -79,7 +79,7 @@ export const routes = [
             {
                 path: "/cgi-bin/koha/erm/licenses",
                 title: $__('Licenses'),
-                icon: "fa-gavel",
+                icon: "fa fa-gavel",
                 is_end_node: true,
                 children: [
                     {
@@ -110,19 +110,19 @@ export const routes = [
             {
                 path: "/cgi-bin/koha/erm/eholdings",
                 title: $__('eHoldings'),
-                icon: 'fa-crosshairs',
+                icon: 'fa fa-crosshairs',
                 disabled: true,
                 children: [
                     {
                         path: "local",
                         title: $__('Local'),
-                        icon: "fa-map-marker",
+                        icon: "fa-solid fa-location-dot",
                         disabled: true,
                         children: [
                             {
                                 path: "packages",
                                 title: $__('Packages'),
-                                icon: "fa-archive",
+                                icon: "fa fa-archive",
                                 is_end_node: true,
                                 children: [
                                     {
@@ -153,7 +153,7 @@ export const routes = [
                             {
                                 path: "titles",
                                 title: $__('Titles'),
-                                icon: "fa-sort-alpha-asc",
+                                icon: "fa-solid fa-arrow-down-a-z",
                                 is_end_node: true,
                                 children: [
                                     {
@@ -198,13 +198,13 @@ export const routes = [
                     {
                         path: "ebsco",
                         title: $__('EBSCO'),
-                        icon: 'fa-globe',
+                        icon: 'fa fa-globe',
                         disabled: true,
                         children: [
                             {
                                 path: "packages",
                                 title: $__('Packages'),
-                                icon: "fa-archive",
+                                icon: "fa fa-archive",
                                 is_end_node: true,
                                 children: [
                                     {
@@ -223,7 +223,7 @@ export const routes = [
                             {
                                 path: "titles",
                                 title: $__('Titles'),
-                                icon: "fa-sort-alpha-asc",
+                                icon: "fa-solid fa-arrow-down-a-z",
                                 is_end_node: true,
                                 children: [
                                     {
