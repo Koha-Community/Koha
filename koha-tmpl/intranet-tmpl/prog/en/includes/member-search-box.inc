@@ -37,11 +37,11 @@
                     <label for="searchtype" class="control-label">Search type</label>
                     <select name="searchtype" id="searchtype" class="form-control">
                         [% IF searchtype == 'start_with' %]
-                            <option value='start_with'>Starts with</option>
+                            <option value='start_with' selected='selected'>Starts with</option>
                             <option value='contain'>Contains</option>
                         [% ELSE %]
                             <option value='start_with'>Starts with</option>
-                            <option value='contain'>Contains</option>
+                            <option value='contain' selected='selected'>Contains</option>
                         [% END %]
                     </select>
                 </div>
