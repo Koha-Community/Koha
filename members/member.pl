@@ -75,7 +75,6 @@ $template->param(
     searchmember        => $searchmember,
     branchcode_filter   => scalar $input->param('branchcode_filter'),
     categorycode_filter => scalar $input->param('categorycode_filter'),
-    searchtype          => scalar $input->param('searchtype') || 'contain',
     searchfieldstype    => $searchfieldstype,
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
     do_not_defer_loading => !$defer_loading,
