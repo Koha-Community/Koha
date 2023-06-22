@@ -7,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency | html %]'[% ELSE %]New currency[% END %][% END %]
 [% IF op == 'delete_confirm' %]Confirm deletion of currency '[% currency.currency | html %]'[% END %]
-[% IF op == 'list' %]Currencies[% END %] &rsaquo; Currencies &amp; Exchange rates &rsaquo; Administration &rsaquo; Koha
+[% IF op == 'list' %]Currencies[% END %] &rsaquo; Currencies and exchange rates &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -23,7 +23,7 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a>
+            <a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a>
         [% END %]
 
         [% IF op == 'add_form' %]
