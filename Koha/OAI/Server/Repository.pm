@@ -37,8 +37,11 @@ use YAML::XS;
 use CGI qw/:standard -oldstyle_urls/;
 use C4::Context;
 use C4::Biblio qw( GetFrameworkCode );
+use C4::Charset qw( StripNonXmlChars );
 use Koha::XSLT::Base;
 use Koha::Biblios;
+
+use MARC::Record;
 
 =head1 NAME
 
@@ -178,8 +181,19 @@ sub get_biblio_marcxml {
     }
 
     my $biblio = Koha::Biblios->find($biblionumber);
-    my $record = $biblio->metadata->record({ embed_items => $with_items, opac => 1 });
-    if ( $expanded_avs ) {
+    my $record;
+
+    # Koha::Biblio::Metadata->record throws an exception on bad encoding,
+    # we don't want OAI harvests to die, so we catch and warn, and try to clean the record
+    eval { $record = $biblio->metadata->record( { embed_items => $with_items, opac => 1 } ); };
+    my $decoding_error;
+    if ($@) {
+        my $exception = $@;
+        $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
+        $decoding_error = "INVALID_METADATA";
+        $record         = $biblio->metadata->record_strip_nonxml( { embed_items => $with_items, opac => 1 } );
+    }
+    if ( $record && $expanded_avs ) {
         my $frameworkcode = GetFrameworkCode($biblionumber) || '';
         my $record_processor = Koha::RecordProcessor->new(
             {
@@ -192,8 +206,7 @@ sub get_biblio_marcxml {
         );
         $record_processor->process($record);
     }
-
-    return $record ? $record->as_xml_record() : undef;
+    return ( $record ? $record->as_xml_record() : undef, $decoding_error );
 }
 
 

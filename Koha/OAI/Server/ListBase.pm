@@ -157,17 +157,25 @@ sub GetRecords {
                 push @setSpecs, $_->{spec};
             }
             if ( $metadata ) {
-                my $marcxml = !$deleted ? $repository->get_biblio_marcxml($biblionumber, $format) : undef;
-                if ( $marcxml ) {
-                  $self->record( Koha::OAI::Server::Record->new(
-                      $repository, $marcxml, $timestamp, \@setSpecs,
-                      identifier      => $repository->{ koha_identifier } . ':' . $biblionumber,
-                      metadataPrefix  => $token->{metadata_prefix}
-                  ) );
+                my ( $marcxml, $marcxml_error );
+                ( $marcxml, $marcxml_error ) = $repository->get_biblio_marcxml( $biblionumber, $format ) if !$deleted;
+                my %params;
+                $params{identifier}     = $repository->{koha_identifier} . ':' . $biblionumber;
+                $params{metadataPrefix} = $token->{metadata_prefix};
+                $params{about}          = [$marcxml_error] if $marcxml_error;
+                if ($marcxml) {
+                    $self->record(
+                        Koha::OAI::Server::Record->new(
+                            $repository, $marcxml, $timestamp, \@setSpecs,
+                            %params
+                        )
+                    );
                 } else {
-                  $self->record( Koha::OAI::Server::DeletedRecord->new(
-                      $timestamp, \@setSpecs, identifier => $repository->{ koha_identifier } . ':' . $biblionumber
-                  ) );
+                    $self->record(
+                        Koha::OAI::Server::DeletedRecord->new(
+                            $timestamp, \@setSpecs, identifier => $repository->{koha_identifier} . ':' . $biblionumber
+                        )
+                    );
                 }
             } else {
                 $timestamp =~ s/ /T/;
@@ -175,7 +183,7 @@ sub GetRecords {
                 $self->identifier( HTTP::OAI::Header->new(
                     identifier => $repository->{ koha_identifier} . ':' . $biblionumber,
                     datestamp  => $timestamp,
-                    status     => $deleted ? 'deleted' : undef
+                    status     => $deleted ? 'deleted' : undef,
                 ) );
             }
         }

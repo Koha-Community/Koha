@@ -331,6 +331,37 @@
                             </div>
                         </div>
                     </div>
+                    <xsl:if test="oai:about">
+                        <div class="panel panel-success">
+                            <a data-toggle="collapse">
+                                <xsl:attribute name="href">#about<xsl:value-of select="translate(oai:header/oai:identifier/text(), ':/.', '')"></xsl:value-of></xsl:attribute>
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">
+                                        About
+                                    </h5>
+                                </div>
+                            </a>
+                            <div class="panel-collapse collapse">
+                                <xsl:attribute name="id">about<xsl:value-of select="translate(oai:header/oai:identifier/text(), ':/.', '')"></xsl:value-of></xsl:attribute>
+                                <div class="panel-body list-group">
+                                    <xsl:for-each select="oai:about">
+                                        <div class="list-group-item">
+                                            <span>
+                                                <xsl:choose>
+                                                    <xsl:when test="text()='INVALID_METADATA'">
+                                                        There was a problem decoding the metadata for this record, invalid characters were stripped. See system logs for details
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <xsl:value-of select="text()" />
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
+                                            </span>
+                                        </div>
+                                    </xsl:for-each>
+                                </div>
+                            </div>
+                        </div>
+                    </xsl:if>
                 </div>
             </div>
         </xsl:for-each>
@@ -388,6 +419,31 @@
                                 <xsl:apply-templates select="oai:metadata/*" />
                             </div>
                     </div>
+                    <xsl:if test="oai:about">
+                        <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">
+                                        About
+                                    </h5>
+                                </div>
+                                <div class="panel-body list-group">
+                                    <xsl:for-each select="oai:about">
+                                        <div class="list-group-item">
+                                            <span>
+                                                <xsl:choose>
+                                                    <xsl:when test="text()='INVALID_METADATA'">
+                                                        There was a problem decoding the metadata for this record, invalid characters were stripped. See system logs for details
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <xsl:value-of select="text()" />
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
+                                            </span>
+                                        </div>
+                                    </xsl:for-each>
+                                </div>
+                        </div>
+                    </xsl:if>
                 </div>
             </div>
         </xsl:for-each>
