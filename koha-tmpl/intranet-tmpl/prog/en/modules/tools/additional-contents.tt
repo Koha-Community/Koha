@@ -426,17 +426,11 @@
                             [% IF category == 'pages' %]
                                 <td class="actions">
                                     [% IF c.location == 'opac_only' OR c.location == 'staff_and_opac' %]
-                                        <strong>OPAC</strong>:
-                                        <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.id | uri %]&lang=default" title="View on OPAC">Default</a>
-                                        OR
-                                        <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.id | uri %]&lang=[% lang | uri %]" title="View on OPAC">Current language</a>
+                                        <a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-page.pl?page_id=[% c.id | uri %]" title="View on OPAC"><strong>OPAC</strong></a>
                                     [% END %]
                                     [% IF c.location == 'staff_only' OR c.location == 'staff_and_opac' %]
                                         [% IF c.location == 'staff_and_opac' %]<br/>[% END %]
-                                        <strong>Staff interface</strong>:
-                                        <a href="/cgi-bin/koha/tools/page.pl?page_id=[% c.id | uri %]&lang=default" title="View on staff interface">Default</a>
-                                        OR
-                                        <a href="/cgi-bin/koha/tools/page.pl?page_id=[% c.id | uri %]&lang=[% lang | uri %]" title="View on staff interface">Current language</a>
+                                        <a target="_blank" href="/cgi-bin/koha/tools/page.pl?page_id=[% c.id | uri %]" title="View on staff interface"><strong>Staff</strong></a>
                                     [% END %]
                                 </td>
                             [% END %]
