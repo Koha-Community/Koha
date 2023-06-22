@@ -588,10 +588,11 @@
                                     [% IF letter.message_transport_type == 'sms' %]
                                         <span class="sms_counter" id="sms_counter_[% lang | html %]">
                                             [% IF letter.content && letter.content.length > 0 %]
-                                                [% letter.content.length | html %]
+                                                [% tx("{content_length} / 160 characters", {content_length = letter.content.length} ) %]
                                             [% ELSE %]
-                                                0
-                                            [% END %]/160 characters</span>
+                                                [% tx("{content_length} / 160 characters", {content_length = 0} ) %]
+                                            [% END %]
+                                        </span>
                                     [% END %]
                                     <table>
                                         <tr>
