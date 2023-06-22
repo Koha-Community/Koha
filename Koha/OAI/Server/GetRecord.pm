@@ -105,7 +105,8 @@ sub new {
     } else {
         # We fetch it using this method, rather than the database directly,
         # so it'll include the item data
-        my $marcxml = $repository->get_biblio_marcxml($biblionumber, $args{metadataPrefix});
+        my ( $marcxml, $marcxml_error ) = $repository->get_biblio_marcxml( $biblionumber, $args{metadataPrefix} );
+        $args{about} = [$marcxml_error] if $marcxml_error;
         $self->record(
             Koha::OAI::Server::Record->new($repository, $marcxml, $timestamp, \@setSpecs, %args)
         );
