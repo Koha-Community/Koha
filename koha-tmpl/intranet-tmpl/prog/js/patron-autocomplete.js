@@ -2,7 +2,7 @@ function patron_autocomplete(node, options) {
     let link_to;
     let url_params;
     let on_select_callback;
-    let leading_wildcard = patronAutoCompleteSearchMethod === 'contains' ? '%' : '';
+    let leading_wildcard = defaultPatronSearchMethod === 'contains' ? '%' : '';
     if ( options ) {
         if ( options['link-to'] ) {
             link_to = options['link-to'];
