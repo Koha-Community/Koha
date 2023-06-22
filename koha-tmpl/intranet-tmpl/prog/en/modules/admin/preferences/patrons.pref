@@ -61,6 +61,12 @@ Patrons:
            class: multi
          - "If empty Koha will default to \"firstname,middle_name,surname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page."
      -
+         - pref: DefaultPatronSearchMethod
+           choices:
+               starts_with: "Starts with"
+               contains: "Contains"
+         - Enable this search method to determine whether to use Starts with or Contains for autocomplete patron searches.
+     -
          - "Show the following fields from the items database table as columns on the statistics tab on the patron record: "
          - pref: StatisticsFields
            type: modalselect
