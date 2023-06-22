@@ -58,14 +58,35 @@
 [% IF ( uploadborrowers ) %]
     <h2>Import results</h2>
     <ul>
-        <li>[% imported | html %] imported records [% IF ( lastimported ) %](last was [% lastimported | html %])[% END %]</li>
+        <li>
+            [% tpx("Patron import", "{count_of_imported_records} imported records", {count_of_imported_records = imported}) | html %]
+            [% IF ( lastimported ) %]
+                [% tpx("Patron import", "(last was {last_imported_record})", {last_imported_record = lastimported}) | html %]
+            [% END %]
+        </li>
         [% IF imported and patronlistname %]
-            <li>Patronlist with imported patrons: [% patronlistname | html %]</li>
+            <li>Patron list with imported patrons: [% patronlistname | html %]</li>
         [% END %]
-        <li>[% overwritten | html %] overwritten [% IF ( lastoverwritten ) %](last was [% lastoverwritten | html %])[% END %]</li>
-        <li>[% alreadyindb | html %] not imported because already in borrowers table and overwrite disabled [% IF ( lastalreadyindb ) %](last was [% lastalreadyindb | html %])[% END %]</li>
-        <li>[% invalid | html %] not imported because they are not in the expected format [% IF ( lastinvalid ) %](last was [% lastinvalid | html %])[% END %]</li>
-        <li>[% total | html %] records parsed</li>
+        <li>
+            [% tpx("Patron import", "{count_of_overwritten_records} overwritten records", {count_of_overwritten_records = overwritten}) | html %]
+            [% IF ( lastoverwritten ) %]
+                [% tpx("Patron import", "(last was {last_overwritten_record})", {last_overwritten_record = lastoverwritten}) | html %]
+            [% END %]
+        </li>
+        <li>
+            [% tpx("Patron import", "{count_of_existing_records} not imported because they are already in borrowers table and overwrite is disabled ", {count_of_existing_records = alreadyindb}) | html %]
+            [% IF ( lastalreadyindb ) %]
+                [% tpx("Patron import", "(last was {last_existing_record})", {last_existing_record = lastalreadyindb}) | html %]
+            [% END %]
+        </li>
+        <li>
+            [% tpx("Patron import", "{count_of_invalid_records} not imported because they are not in the expected format", {count_of_invalid_records = invalid}) | html %]
+            [% IF ( lastinvalid ) %]
+                [% tpx("Patron import", "(last was {last_invalid_record})", {last_invalid_record = lastinvalid}) | html %]
+            [% END %]
+        <li>
+            [% tpx("Patron import", "{total} records parsed", {total = total}) | html %]
+        </li>
         <li><a href="/cgi-bin/koha/tools/tools-home.pl">Back to Tools</a></li>
     </ul>
 
@@ -373,7 +394,12 @@
     <ul>
         <li>The first line in the file must be a header row defining which columns you are supplying in the import file.</li>
 
-        <li><strong>Download a <a href="?sample=1">Starter CSV file</a> with all the columns.</strong>  Values are comma-separated.</li>
+        <li>
+            <strong>
+                <a href="?sample=1">Download a Starter CSV file with all the columns.</a>
+            </strong>
+            [% tp("CSV file", "Values are comma-separated.") | html %]
+        </li>
 
         <li>
             OR choose which fields you want to supply from the following list:
