@@ -695,14 +695,12 @@
                 params['replacementprice'] = row.replacement_price;
                 params['unitprice'] = ( invoiceincgst=="1" ) ? ( row.unit_price_tax_included || row.ecost_tax_included ) : ( row.unit_price_tax_excluded || row.ecost_tax_excluded );
                 params['order_internalnote'] = row.internal_note;
-                if(effective_create_items == 'receiving') {
-                    Object.keys(row.items).forEach(function(key) {
-                        var item = row.items[key];
-                        Object.keys(item).forEach(function(key) {
-                            var field = item[key];
-                            Object.keys(field).forEach(function(key) {
-                                if(!params[key]) params[key] = [];
-                                params[key].push(item[key]);
+                if (effective_create_items == 'receiving') {
+                    row.items.forEach(function(item){
+                        Object.keys(item).forEach(function(item_field){
+                            Object.keys(item[item_field]).forEach(function(key){
+                                if (!params[key]) params[key] = [];
+                                params[key].push(item[item_field][key]);
                             });
                         });
                     });

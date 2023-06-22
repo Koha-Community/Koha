@@ -145,11 +145,11 @@ if ($quantityrec > $origquantityrec ) {
     # now, add items if applicable
     if ($basket->effective_create_items eq 'receiving') {
 
-        my @tags         = $input->multi_param('tag');
-        my @subfields    = $input->multi_param('subfield');
-        my @field_values = $input->multi_param('field_value');
-        my @serials      = $input->multi_param('serial');
-        my @itemid       = $input->multi_param('itemid');
+        my @tags         = $input->multi_param('tag[]');
+        my @subfields    = $input->multi_param('subfield[]');
+        my @field_values = $input->multi_param('field_value[]');
+        my @serials      = $input->multi_param('serial[]');
+        my @itemid       = $input->multi_param('itemid[]');
         #Rebuilding ALL the data for items into a hash
         # parting them on $itemid.
         my %itemhash;
