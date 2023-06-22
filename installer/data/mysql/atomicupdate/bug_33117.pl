@@ -9,9 +9,9 @@ return {
 
         $dbh->do(q{
             INSERT INTO systempreferences (`variable`,`value`,`explanation`,`options`,`type`)
-            VALUES ('PatronAutoCompleteSearchMethod','starts_with','Allows staff to set a default method when searching for patrons with autocomplete','starts_with|contains','Choice');
+            VALUES ('DefaultPatronSearchMethod','starts_with','Allows staff to set a default method when searching for patrons with autocomplete','starts_with|contains','Choice');
         });
 
-        say $out "Added new system preference 'PatronAutoCompleteSearchMethod'";
+        say $out "Added new system preference 'DefaultPatronSearchMethod'";
     },
 };

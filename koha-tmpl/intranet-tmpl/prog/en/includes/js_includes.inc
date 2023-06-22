@@ -71,7 +71,7 @@
 
 <script>
     var defaultPatronSearchFields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' | html %]";
-    var patronAutoCompleteSearchMethod = "[% Koha.Preference('PatronAutoCompleteSearchMethod') || 'contains' | html %]";
+    var defaultPatronSearchMethod = "[% Koha.Preference('DefaultPatronSearchMethod') || 'contains' | html %]";
     var loggedInLibrary = '[% Branches.GetLoggedInBranchcode | html %]';
     var singleBranchMode = '[% singleBranchMode | html %]';
 </script>
