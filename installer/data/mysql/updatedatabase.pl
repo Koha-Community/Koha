@@ -29,6 +29,13 @@
 
 use Modern::Perl;
 
+BEGIN {
+    use Koha::Installer;
+    if ( !Koha::Installer->needs_update ) {
+       exit;
+    }
+}
+
 use feature 'say';
 
 # CPAN modules
