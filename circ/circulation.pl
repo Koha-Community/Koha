@@ -150,8 +150,6 @@ my @failedreturns = $query->multi_param('failedreturn');
 our %return_failed = ();
 for (@failedreturns) { $return_failed{$_} = 1; }
 
-my $searchtype = $query->param('searchtype') || q{contain};
-
 my $branch = C4::Context->userenv->{'branch'};
 
 for my $barcode ( @$barcodes ) {

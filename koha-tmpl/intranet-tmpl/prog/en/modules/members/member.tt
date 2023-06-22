@@ -9,6 +9,7 @@
 [% SET libraries = Branches.all %]
 [% SET categories = Categories.all.unblessed %]
 [% SET columns = ['cardnumber', 'name-address', 'dateofbirth', 'branch', 'category', 'dateexpiry', 'checkouts', 'account_balance', 'borrowernotes', 'action'] %]
+[% SET searchtype = Koha.Preference('DefaultPatronSearchMethod') %]
 [% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Patrons[% IF ( searching ) %] &rsaquo; Search results[% END %] &rsaquo; Koha</title>
@@ -259,7 +260,7 @@
                 $("searchfieldstype_filter").val("[% searchfieldstype | html %]");
             [% END %]
             [% IF searchtype %]
-                $("#searchtype_filter").val("[% searchtype | html %]");
+                $("#searchtype_filter option[value='[% searchtype | html %]']").prop("selected", true);
             [% END %]
             [% IF categorycode_filter %]
                 $("#categorycode_filter").val("[% categorycode_filter | html %]");

@@ -20,7 +20,8 @@
 [%# - branch: select library list %]
 [%# - category: select patron category list %]
 [%# - search_field: select patron field list %]
-[%# - search_type: select 'contain' or 'start with' %]
+[%# - search_type: select 'contains' or 'starts with' %]
+[%- SET searchtype = Koha.Preference('DefaultPatronSearchMethod') -%]
 [% BLOCK patron_search_filters %]
     <form id="patron_search_form">
         <fieldset class="brief">
@@ -74,12 +75,12 @@
                         <li>
                             <label for="searchtype_filter">Search type:</label>
                             <select name="searchtype" id="searchtype_filter">
-                              [% IF searchtype == "start_with" %]
-                                <option value='start_with' selected="selected">Starts with</option>
-                                <option value="contain">Contains</option>
+                              [% IF searchtype == "starts_with" %]
+                                <option value='starts_with' selected="selected">Starts with</option>
+                                <option value="contains">Contains</option>
                               [% ELSE %]
-                                <option value='start_with'>Starts with</option>
-                                <option value="contain" selected="selected">Contains</option>
+                                <option value='starts_with'>Starts with</option>
+                                <option value="contains" selected="selected">Contains</option>
                               [% END %]
                             </select>
                         </li>
@@ -339,7 +340,7 @@
                     }
                     let patterns = pattern.split(/[\s,]+/).filter(function(s){ return s.length });
 
-                    let search_type = $("#searchtype_filter").val() || "contain";
+                    let search_type = $("#searchtype_filter").val() || "contains";
                     let search_fields = $("#searchfieldstype_filter").val();
                     if ( !search_fields ) {
                         search_fields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' | html %]";
@@ -349,7 +350,7 @@
                     patterns.forEach(function(pattern,i){
                         let sub_or = [];
                         search_fields.split(',').forEach(function(attr,ii){
-                            sub_or.push({["me."+attr]:{"like":(search_type == "contain" ? "%" : "" ) + pattern + "%"}});
+                            sub_or.push({["me."+attr]:{"like":(search_type == "contains" ? "%" : "" ) + pattern + "%"}});
                             if ( attr == 'dateofbirth' ) {
                                 try {
                                     let d = $date_to_rfc3339(pattern);
@@ -368,7 +369,7 @@
                         patterns.forEach(function(pattern,i){
                             let sub_or = [];
                             sub_or.push({
-                                "extended_attributes.value": { "like": "%" + pattern + (search_type == "contain" ? "%" : "" )},
+                                "extended_attributes.value": { "like": "%" + pattern + (search_type == "contains" ? "%" : "" )},
                                 "extended_attributes.code": extended_attribute_types
                             });
                             subquery_and.push(sub_or);
@@ -758,7 +759,7 @@
         function update_search_description(){
             var searched = $("#searchfieldstype_filter").find("option:selected").text();
             if ( $("#search_patron_filter").val() ) {
-                if ( $("#searchtype_filter").val() == 'start_with' ) {
+                if ( $("#searchtype_filter").val() == 'starts_with' ) {
                     searched += _(" starting with ");
                 } else {
                     searched += _(" containing ");
@@ -846,7 +847,7 @@
 
         function clearFilters() {
             $("#searchfieldstype_filter option:first").prop("selected", true);
-            $("#searchtype_filter option[value='contain']").prop("selected", true);
+            $("#searchtype_filter option[value='[% searchtype || 'contains' | html %]']").prop("selected", true);
             $("#categorycode_filter option:first").prop("selected", true);
             $("#branchcode_filter option:first").prop("selected", true);
             $("#sort1_filter").val('').trigger("change");
