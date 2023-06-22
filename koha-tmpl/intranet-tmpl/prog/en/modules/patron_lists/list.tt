@@ -256,7 +256,7 @@
             patron_autocomplete($("#find_patron"), {
                 'on-select-callback': function( event, ui ) {
                     var field = ui.item.cardnumber;
-                    AddPatron( ui.item.firstname + " " + ( ui.item.middle_name || "" ) + " " + ui.item.surname, field, $("#patrons_to_add"), 'patrons_to_add' );
+                    AddPatron( ( ui.item.firstname || "" ) + " " + ( ui.item.middle_name || "" ) + " " + ( ui.item.surname || "" ), field, $("#patrons_to_add"), 'patrons_to_add' );
                     $("#find_patron").val('').focus();
                     return false;
                 }
