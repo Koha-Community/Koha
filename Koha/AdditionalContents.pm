@@ -87,9 +87,9 @@ sub search_for_display {
     my $contents = $self->SUPER::search( $search_params, { order_by => 'number' } );
     my @all_content_id = $contents->get_column('id');
 
-    my @translated_content_id;
-    if ( $params->{lang} ) {
-        my $translated_contents = Koha::AdditionalContentsLocalizations->search(
+    my ( $translated_contents, @translated_content_id );
+    if ( $params->{lang} && $params->{lang} ne 'default' ) {
+        $translated_contents = Koha::AdditionalContentsLocalizations->search(
             {
                 additional_content_id => [$contents->get_column('id')],
                 lang => $params->{lang},
@@ -107,7 +107,7 @@ sub search_for_display {
 
     return Koha::AdditionalContentsLocalizations->search(
         {
-            id => [@translated_content_id, $default_contents->get_column('id')]
+            id => [ $translated_contents ? $translated_contents->get_column('id') : (), $default_contents->get_column('id') ]
         },
     );
 
