@@ -4,6 +4,7 @@
 [% USE Koha %]
 [% PROCESS 'patronfields.inc' %]
 [% IF CAN_user_borrowers_edit_borrowers %]
+    [%- SET searchtype = Koha.Preference('DefaultPatronSearchMethod') -%]
     [% IF( bs_tab_active ) %]
         <div id="patron_search" role="tabpanel" class="tab-pane active">
     [% ELSE %]
@@ -36,12 +37,12 @@
                 <div>
                     <label for="searchtype" class="control-label">Search type</label>
                     <select name="searchtype" id="searchtype" class="form-control">
-                        [% IF searchtype == 'start_with' %]
-                            <option value='start_with' selected='selected'>Starts with</option>
-                            <option value='contain'>Contains</option>
+                        [% IF searchtype == 'starts_with' %]
+                            <option value='starts_with' selected='selected'>Starts with</option>
+                            <option value='contains'>Contains</option>
                         [% ELSE %]
-                            <option value='start_with'>Starts with</option>
-                            <option value='contain' selected='selected'>Contains</option>
+                            <option value='starts_with'>Starts with</option>
+                            <option value='contains' selected='selected'>Contains</option>
                         [% END %]
                     </select>
                 </div>
