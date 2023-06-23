@@ -428,15 +428,15 @@
                             </td>
                             <td class="actions">
                                 <div class="btn-group dropup">
-                                    <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa fa-pencil-alt"></i> Edit</a><button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu pull-right">
                                         <li>
                                             [% IF ( wysiwyg ) %]
-                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=text"><i class="fa fa-pencil-alt"></i> Edit with text editor</a>
+                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=text"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit with text editor</a>
                                             [% ELSE %]
-                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=wysiwyg"><i class="fa fa-pencil-alt"></i> Edit with WYSIWYG editor</a>
+                                                <a href="/cgi-bin/koha/tools/additional-contents.pl?op=add_form&amp;id=[% c.idnew | uri %]&editmode=wysiwyg"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit with WYSIWYG editor</a>
                                             [% END %]
                                         </li>
                                     </ul>

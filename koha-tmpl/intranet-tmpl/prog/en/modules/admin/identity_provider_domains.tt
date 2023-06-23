@@ -432,7 +432,7 @@
                     },
                     {
                         "data": function( row, type, val, meta ) {
-                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=edit_form&amp;identity_provider_domain_id='+ encodeURIComponent(row.identity_provider_domain_id) +'"><i class="fa fa-pencil-alt" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=edit_form&amp;identity_provider_domain_id='+ encodeURIComponent(row.identity_provider_domain_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
                             result += '<a class="btn btn-default btn-xs delete_identity_provider_domain" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-auth-provider-domain-id="'+ encodeURIComponent(row.identity_provider_domain_id) +'" data-auth-provider-domain="'+ encodeURIComponent((row.domain || '').escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
                             return result;
                         },

@@ -437,7 +437,7 @@
                     },
                     {
                         "data": function( row, type, val, meta ) {
-                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?op=edit_form&amp;identity_provider_id='+ encodeURIComponent(row.identity_provider_id) +'"><i class="fa fa-pencil-alt" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?op=edit_form&amp;identity_provider_id='+ encodeURIComponent(row.identity_provider_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
                             result += '<a class="btn btn-default btn-xs delete_identity_provider" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-auth-provider-id="'+ encodeURIComponent(row.identity_provider_id) +'" data-auth-provider-code="'+ encodeURIComponent(row.code.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>'+"\n";
                             result += '<a class="btn btn-default btn-xs edit_domains" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id='+ encodeURIComponent(row.identity_provider_id) +'"><i class="fa fa-cog" aria-hidden="true"></i> '+_("Manage domains")+'</a>';
                             return result;

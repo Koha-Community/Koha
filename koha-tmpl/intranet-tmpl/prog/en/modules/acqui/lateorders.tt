@@ -109,7 +109,7 @@
                     <span>[% estimated_delivery_date | $KohaDates %]</span>
                     [% IF CAN_user_acquisition_order_manage %]
                         <a class="edit_delivery_date noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-delivery_date="[% estimated_delivery_date | html %]" id="delivery_date_[% lateorder.ordernumber | html %]" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% lateorder.ordernumber | html %]" title="Edit delivery date">
-                            <i class="fa fa-pencil-alt"></i> Edit
+                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
                         </a>
                     [% END %]
                 </p>
@@ -169,7 +169,7 @@
                     <p class="ordernote">
                         <span id="internal-note-[% lateorder.ordernumber | html %]">[% lateorder.order_internalnote | html %]</span>
                         <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Edit internal note">
-                            <i class="fa fa-pencil-alt"></i> Edit internal note
+                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit internal note
                         </a>
                     </p>
                 [% ELSE %]
@@ -183,7 +183,7 @@
                     <p class="ordernote">
                         <span id="vendor-note-[% lateorder.ordernumber | html %]">[% lateorder.order_vendornote | html %]</span>
                         <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Edit vendor note">
-                            <i class="fa fa-pencil-alt"></i> Edit vendor note
+                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit vendor note
                         </a>
                     </p>
                 [% ELSE %]

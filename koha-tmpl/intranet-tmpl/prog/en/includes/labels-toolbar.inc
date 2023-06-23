@@ -11,7 +11,7 @@
         </ul>
     </div>
     <div class="btn-group">
-        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-edit"></i> Manage <span class="caret"></span></button>
+        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Manage <span class="caret"></span></button>
         <ul class="dropdown-menu">
             <li><a href="/cgi-bin/koha/labels/label-manage.pl?label_element=batch">Label batches</a></li>
             <li><a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Layouts</a></li>

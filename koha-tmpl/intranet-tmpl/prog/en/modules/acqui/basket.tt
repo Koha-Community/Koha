@@ -77,7 +77,7 @@
                                         [% IF active %]
                                             <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></div>
                                         [% END %]
-                                        <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;op=add_form" class="btn btn-default" id="basketheadbutton"><i class="fa fa-pencil-alt"></i> Edit basket</a></div>
+                                        <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;op=add_form" class="btn btn-default" id="basketheadbutton"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit basket</a></div>
                                         [% IF CAN_user_acquisition_delete_baskets %]
                                             <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash-can"></i> Delete basket</a></div>
                                         [% END %]
@@ -332,10 +332,10 @@
                                                             <span class="label">Managing library:</span>
                                                             [% IF basketbranchcode %]
                                                                 [% Branches.GetName( basketbranchcode ) | html %]
-                                                                <a href="#" id="set_managing_library"><i class="fa fa-pencil-alt"></i> Change library</a>
+                                                                <a href="#" id="set_managing_library"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Change library</a>
                                                             [% ELSE %]
                                                                 No library
-                                                                <a href="#" id="set_managing_library"><i class="fa fa-pencil-alt"></i> Set library</a>
+                                                                <a href="#" id="set_managing_library"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Set library</a>
                                                             [% END %]
                                                         </li> <!-- /#branch -->
                                                         [% IF branches_loop.size %]
@@ -389,10 +389,10 @@
                                                                             <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid | uri %]&amp;basketgroupid=[% basketgroup.id | uri %]">
                                                                                 [% basketgroup.name | html %]
                                                                             </a>
-                                                                            <a href="#" id="set_basket_group"><i class="fa fa-pencil-alt"></i> Change basket group</a>
+                                                                            <a href="#" id="set_basket_group"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Change basket group</a>
                                                                         [% ELSE %]
                                                                             No group
-                                                                            <a href="#" id="set_basket_group"><i class="fa fa-pencil-alt"></i> Set basket group</a>
+                                                                            <a href="#" id="set_basket_group"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Set basket group</a>
                                                                         [% END %]
                                                                     [% END %]
                                                                 [% END %]
@@ -573,12 +573,12 @@
                                                                 [% END %]
                                                             </p>
                                                             [% IF ( books_loo.order_internalnote ) %]
-                                                                <p class="ordernote"><strong>Internal note: </strong><span id="internal-note-[% books_loo.ordernumber | html %]">[% books_loo.order_internalnote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Edit internal note"><i class="fa fa-pencil-alt"></i> Edit internal note</a></p>
+                                                                <p class="ordernote"><strong>Internal note: </strong><span id="internal-note-[% books_loo.ordernumber | html %]">[% books_loo.order_internalnote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Edit internal note"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit internal note</a></p>
                                                             [% ELSE %]
                                                                 <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Add internal note"><i class="fa fa-plus"></i> Add internal note</a>
                                                             [% END %]
                                                             [% IF ( books_loo.order_vendornote ) %]
-                                                                <p class="ordernote"><strong>Vendor note: </strong> <span id="vendor-note-[% books_loo.ordernumber | html %]">[% books_loo.order_vendornote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Edit vendor note"><i class="fa fa-pencil-alt"></i> Edit vendor note</a></p>
+                                                                <p class="ordernote"><strong>Vendor note: </strong> <span id="vendor-note-[% books_loo.ordernumber | html %]">[% books_loo.order_vendornote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Edit vendor note"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit vendor note</a></p>
                                                             [% ELSE %]
                                                                 <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Add vendor note"><i class="fa fa-plus"></i> Add vendor note</a>
                                                             [% END %]
@@ -647,7 +647,7 @@
                                                             [% books_loo.estimated_delivery_date | $KohaDates %]
                                                             [% IF CAN_user_acquisition_order_manage %]
                                                                     <a class="edit_delivery_date" href="/cgi-bin/koha/acqui/moddeliverydate.pl?ordernumber=[% books_loo.ordernumber | html %]" title="Edit delivery date" data-ordernumber="[% books_loo.ordernumber | html %]" id="delivery_date_[% books_loo.ordernumber | html %]" data-delivery_date="[% books_loo.estimated_delivery_date | html %]">
-                                                                    <i class="fa fa-pencil-alt"></i> Edit</a>
+                                                                    <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                                             [% END %]
                                                         </td>
                                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]

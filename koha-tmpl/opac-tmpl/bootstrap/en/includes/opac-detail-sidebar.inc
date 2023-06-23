@@ -48,8 +48,8 @@
 
     [% IF ( OpacHighlightedWords && query_desc ) %]
     <li>
-        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil-alt" aria-hidden="true"></i> Unhighlight</a>
-        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil-alt" aria-hidden="true"></i> Highlight</a>
+        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_off"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Unhighlight</a>
+        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_on"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Highlight</a>
     </li>
     [% END %]
 

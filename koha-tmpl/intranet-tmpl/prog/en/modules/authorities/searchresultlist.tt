@@ -97,7 +97,7 @@
             <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% resul.authid | html %]" role="button" data-toggle="dropdown" href="#">
             Actions <b class="caret"></b></a>
             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authactions[% resul.authid | html %]">
-              <li><a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a></li>
+              <li><a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
               <li><a class="merge_auth" href="#merge"><i class="fa fa-compress"></i> Merge</a></li>
               [% UNLESS ( resul.used ) %]
                 <li><a onclick='return confirm_deletion("[% resul.authid | html %]")'><i class="fa fa-trash-can"></i> Delete</a></li>

@@ -207,7 +207,7 @@
                    Actions <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]">
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a></li>
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
                     [% IF budget.budget_has_children %]
                         <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has sub funds."><i class="fa fa-trash-can"></i> Delete</a></li>
                     [% ELSE %]

@@ -20,7 +20,7 @@
         </div>
             [% IF ( CAN_user_acquisition_vendors_manage ) %]
                 <div class="btn-group">
-                    <a class="btn btn-default" id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&amp;op=enter"><i class="fa fa-pencil-alt"></i> Edit vendor</a>
+                    <a class="btn btn-default" id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&amp;op=enter"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit vendor</a>
                 </div>
                 [% UNLESS ( basketcount OR subscriptioncount ) %]
                     <div class="btn-group">

@@ -435,7 +435,7 @@ div.rows { padding: 1rem; }
                         <td data-order="[% contract.contractenddate | html %]">[% contract.contractenddate | $KohaDates %]</td>
                         [% IF CAN_user_acquisition_contracts_manage %]
                             <td class="actions">
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                             </td>
                         [% END %]

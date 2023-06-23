@@ -194,7 +194,7 @@
                                         </td>
                                         <td class="actions">
                                             [% IF !credit_type.archived %]
-                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form&amp;code=[% credit_type.code | uri %]&type=credit"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form&amp;code=[% credit_type.code | uri %]&type=credit"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                             [% END %]
                                             [% IF !credit_type.is_system && !credit_type.archived %]
                                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=archive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>

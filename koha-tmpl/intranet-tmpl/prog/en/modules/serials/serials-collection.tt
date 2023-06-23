@@ -117,7 +117,7 @@
                                 [% UNLESS subscription.closed %]
                                     [% IF ( routing && CAN_user_serials_routing ) %]
                                         [% IF ( subscription.hasRouting ) %]
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa fa-pencil-alt"></i> Edit routing list</a>
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit routing list</a>
                                         [% ELSE %]
                                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;op=new"><i class="fa fa-plus"></i> Create routing list</a>
                                         [% END %]

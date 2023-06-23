@@ -58,7 +58,7 @@
                     <a class="clear-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</a>
                     <span class="itemselection_actions [% tab | html %]">
                         | Actions:
-                        <a href="#" data-tab="[% tab | html %]" class="itemselection_action_modify"><i class="fa fa-pencil-alt"></i> Edit selected serials</a>
+                        <a href="#" data-tab="[% tab | html %]" class="itemselection_action_modify"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit selected serials</a>
                     </span>
                 </div>
             [% END %]
@@ -169,7 +169,7 @@
                                                     [% ELSE %]
                                                         [% IF ( subscription.routingedit ) %]
                                                             <li>
-                                                                <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-pencil-alt"></i> Edit routing list ([% subscription.routingedit | html %])</a>
+                                                                <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit routing list ([% subscription.routingedit | html %])</a>
                                                             </li>
                                                         [% ELSE %]
                                                             <li>

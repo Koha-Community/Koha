@@ -93,7 +93,7 @@
                                         <td>[% TemplatesLoo.template_id | html %]</td>
                                         <td>[% TemplatesLoo.name | html %]</td>
                                         <td class="actions">
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id | html %]&amp;op=select_template" ><i class="fa fa-fw fa-pencil-alt"></i> Edit actions</a>
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id | html %]&amp;op=select_template" ><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit actions</a>
                                             <a class="btn btn-default btn-xs duplicate_template" href="#" data-toggle="modal" data-template_id="[% TemplatesLoo.template_id | html %]" data-target="#createTemplate"><i class="fa fa-fw fa-copy"></i> Duplicate</a>
                                             <a class="btn btn-default btn-xs delete_template" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id | html %]&amp;op=delete_template"><i class="fa fa-fw fa-trash-can"></i> Delete</a>
                                         </td>
@@ -188,7 +188,7 @@
                                             </td>
                                             <td>[% ActionsLoo.description | html %]</td>
                                             <td>
-                                                <a class="btn btn-default btn-xs edit_action" href="#modaction" data-mmta_id="[% ActionsLoo.mmta_id | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                                <a class="btn btn-default btn-xs edit_action" href="#modaction" data-mmta_id="[% ActionsLoo.mmta_id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                             </td>
                                             <td>
                                                 <a class="btn btn-default btn-xs" href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id | html %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id | html %]" onclick="return confirmDeleteAction();"><i class="fa fa-trash-can"></i> Delete</a>

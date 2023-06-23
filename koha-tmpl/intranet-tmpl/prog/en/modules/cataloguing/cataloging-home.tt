@@ -26,7 +26,7 @@
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                 <div id="toolbar" class="btn-toolbar">
                     [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
-                        <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil-alt"></i> Advanced editor</a>
+                        <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Advanced editor</a>
                     [% END %]
                     <div class="btn-group">
                         <button class="btn btn-default" id="newRecord"><i class="fa fa-plus"></i> New record</button>
@@ -123,7 +123,7 @@
                         <ul class="buttons-list">
                             [% IF ( CAN_user_tools_items_batchmod ) %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-pencil-alt"></i> Batch item modification</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Batch item modification</a>
                             </li>
                             [% END %]
                             [% IF ( CAN_user_tools_items_batchdel ) %]
@@ -133,7 +133,7 @@
                             [% END %]
                             [% IF CAN_user_tools_records_batchmod %]
                             <li>
-                                <a class="circ-button" href="/cgi-bin/koha/tools/batch_record_modification.pl"><i class="fa fa-pencil-alt"></i> Batch record modification</a>
+                                <a class="circ-button" href="/cgi-bin/koha/tools/batch_record_modification.pl"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Batch record modification</a>
                             </li>
                             [% END %]
                             [% IF CAN_user_tools_records_batchdel %]

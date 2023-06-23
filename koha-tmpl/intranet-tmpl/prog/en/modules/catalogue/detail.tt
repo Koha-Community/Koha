@@ -331,7 +331,7 @@
                 <a class="itemselection_action_delete"><i class="fa fa-trash-can"></i> Delete selected items</a>
               [% END %]
               [% IF CAN_user_tools_items_batchmod %]
-                <a class="itemselection_action_modify"><i class="fa fa-pencil-alt"></i> Modify selected items</a>
+                <a class="itemselection_action_modify"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Modify selected items</a>
               [% END %]
               [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
                 <a class="itemselection_action_item_group_set" href="#"><i class="fa fa-book"></i> Add/move to item group</a>
@@ -639,13 +639,13 @@
                         [% IF item.can_be_edited %]
                             [% IF Koha.Preference('LocalCoverImages') OR Koha.Preference('OPACLocalCoverImages') %]
                                 <div class="btn-group">
-                                    <a  class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil-alt"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                                    <a  class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
                                     <ul class="dropdown-menu pull-right">
                                         <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=[% item.itemnumber | uri %]&amp;filetype=image"><i class="fa fa-upload"></i> Upload image</a></li>
                                     </ul>
                                 </div>
                             [% ELSE %]
-                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                             [% END %]
                         [% END %]
                         [% IF bundlesEnabled %]
@@ -1182,7 +1182,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="modal-item-group-edit-label"><i class='fa fa-edit'></i> Edit item group</h3>
+                <h3 id="modal-item-group-edit-label"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit item group</h3>
             </div>
             <form id="modal-item-group-edit-form" class="validated">
                 <div class="modal-body">
@@ -1200,7 +1200,7 @@
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <button id="modal-item-group-edit-submit" class="btn btn-default"><i class='fa fa-edit'></i> Submit</button>
+                    <button id="modal-item-group-edit-submit" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Submit</button>
                     <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 </div>
             </form>
@@ -2226,7 +2226,7 @@
                         "mDataProp": function( oObj ) {
                             [% IF CAN_user_editcatalogue_manage_item_groups %]
                                 return `<button class='item-group-edit btn btn-default btn-xs' data-item-group-id='${oObj.item_group_id}'>
-                                    <i class='fa fa-edit'></i> ${_("Edit")}
+                                    <i class="fa-solid fa-pencil" aria-hidden="true"></i> ${_("Edit")}
                                 </button>`
                                 + '&nbsp'
                                 + `<button class='item-group-delete btn btn-default btn-xs' data-item-group-id='${oObj.item_group_id}'>

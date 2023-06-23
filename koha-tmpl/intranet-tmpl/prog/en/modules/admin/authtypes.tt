@@ -187,7 +187,7 @@ Authority types &rsaquo; Administration &rsaquo; Koha
                         Actions <b class="caret"></b></a>
                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtypeactions[% authority_type.authtypecode | html %]">
                         <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode | uri %]" class="button parameters"><i class="fa-solid fa-eye"></i> MARC structure</a></li>
-                        <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a></li>
+                        <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
                         [% IF authority_type.authtypecode %]<li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>[% END %]
                         <!-- Button to trigger modal -->
                         <li><a href="#" data-toggle="modal" data-target="#exportModal_[% authority_type.authtypecode | html %][% loop.count | html %]" title="Export authority type (fields, subfields) to a spreadsheet file (.csv, .ods)"><i class="fa fa-upload"></i> Export</a></li>

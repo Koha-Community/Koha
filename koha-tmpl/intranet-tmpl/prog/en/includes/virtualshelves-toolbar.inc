@@ -14,7 +14,7 @@
     [% IF shelf AND op == 'view' %]
         [% IF can_manage_shelf %]
         <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=edit_form&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;referer=[% op | uri %]">Edit list</a></li>
                 <li><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=delete&amp;shelfnumber=[% shelf.shelfnumber | html %]">Delete list</a></li>

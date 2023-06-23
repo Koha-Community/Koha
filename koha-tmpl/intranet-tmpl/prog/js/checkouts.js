@@ -1023,7 +1023,7 @@ $(document).ready(function() {
                                   + __("Actions") + ' <span class="caret"></span>'
                                   + ' </button>'
                                   + ' <ul class="dropdown-menu">'
-                                  + '  <li><a href="#" class="return-claim-tools-editnotes" data-return-claim-id="' + oObj.id + '"><i class="fa fa-edit"></i> ' + __("Edit notes") + '</a></li>'
+                                  + '  <li><a href="#" class="return-claim-tools-editnotes" data-return-claim-id="' + oObj.id + '"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + __("Edit notes") + '</a></li>'
                                   + resolve_html
                                   + delete_html
                                   + ' </ul>'

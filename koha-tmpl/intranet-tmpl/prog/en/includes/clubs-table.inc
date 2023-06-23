@@ -92,7 +92,7 @@
                                 [% IF CAN_user_clubs_edit_clubs %]
                                     <li>
                                         <a href="clubs-add-modify.pl?id=[% c.id | uri %]">
-                                            <i class="fa fa-pencil-alt"></i> Edit
+                                            <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
                                         </a>
                                     </li>
                                     <li>

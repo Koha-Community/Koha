@@ -835,7 +835,7 @@ function PopupMARCFieldDoc(field) {
                             [% IF ( CAN_user_editcatalogue_edit_items ) %]
                                 <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                                     <input type="hidden" name="biblionumber" value="[% duplicatebiblionumber | html %]" />
-                                    <button type="submit" class="new"><i class="fa fa-fw fa-pencil-alt"></i> Yes, edit existing items</button>
+                                    <button type="submit" class="new"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Yes, edit existing items</button>
                                 </form>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/catalogue/detail.pl" method="get">

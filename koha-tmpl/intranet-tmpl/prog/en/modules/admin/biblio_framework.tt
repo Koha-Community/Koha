@@ -237,7 +237,7 @@ MARC frameworks &rsaquo; Administration &rsaquo; Koha
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode | html %]">
                   <li><a href="marctagstructure.pl?frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa-solid fa-eye"></i> MARC structure</a></li>
-                  <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a></li>
+                  <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
                   <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
                   <!-- Trigger modal -->
                   <li><a href="#" data-toggle="modal" data-target="#exportModal_[% loo.frameworkcode | html %][% loop.count | html %]" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv or .ods)"><i class="fa fa-upload"></i> Export</a></li>

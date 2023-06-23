@@ -178,7 +178,7 @@ Cash registers &rsaquo; Administration &rsaquo; Koha
                            <td>[% cash_register.starting_float | $Price %]</td>
                            [% IF cash_register.archived == '0' %]
                            <td class="actions">
-                               <a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                               <a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                [% IF cash_register.branch_default %]
                                <a class="btn btn-default btn-xs" href="cash_registers.pl?op=drop_default&amp;id=[% cash_register.id | uri %]"><i class="fa fa-archive"></i> Drop default</a>
                                [% ELSE %]

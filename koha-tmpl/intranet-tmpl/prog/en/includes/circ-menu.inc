@@ -38,7 +38,7 @@
                 <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" class="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
                 [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
                     <div class="patronimage-controls">
-                        <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-pencil-alt"></i> Edit</a></div>
+                        <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></div>
                     </div>
                 [% END %]
             [% ELSE %]

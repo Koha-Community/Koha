@@ -199,7 +199,7 @@
                     {
                         "data": function( row, type, val, meta ) {
 
-                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/quotes.pl?op=add_form&amp;id='+encodeURIComponent(row.quote_id)+'" role="button"><i class="fa fa-pencil-alt" aria-hidden="true"></i> '+_("Edit")+'</a>';
+                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/quotes.pl?op=add_form&amp;id='+encodeURIComponent(row.quote_id)+'" role="button"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>';
                             result += '<form action="/cgi-bin/koha/tools/quotes.pl" method="post">';
                             result += '<input type="hidden" name="id" value="'+row.quote_id.escapeHtml()+'" />'+"\n";
 

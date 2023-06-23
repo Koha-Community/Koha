@@ -139,7 +139,7 @@
                             filter_buttons += '" data-filter_name="'+ escape_str(filter.name);
                             filter_buttons += '" data-filter_opac="'+ filter.opac;
                             filter_buttons += '" data-filter_staff_client="'+ filter.staff_client;
-                            filter_buttons += '" ><i class="fa fa-pencil-alt"></i> '+_("Edit filter")+'</a>';
+                            filter_buttons += '" ><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit filter")+'</a>';
                             filter_buttons += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/catalogue/search.pl?edit_filter='+encodeURIComponent(filter.search_filter_id)+'"><i class="fa fa-search"></i> '+ _("Edit search") + '</a>';
                             filter_buttons += '<a class="btn btn-default btn-xs delete_filter" onclick="delete_filter(this)"';
                             filter_buttons += ' data-filter_id="'+ escape_str(filter.search_filter_id);

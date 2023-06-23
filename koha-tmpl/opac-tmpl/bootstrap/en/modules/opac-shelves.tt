@@ -253,7 +253,7 @@
                                                 <input type="hidden" name="referer" value="view" />
                                                 <input type='hidden' name='public' value='[% shelf.public | html %]' />
                                                 <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                                <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-edit" aria-hidden="true"></i> Edit list</button>
+                                                <button type="submit" class="btn btn-link editshelf"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit list</button>
                                             </form>
 
                                             [% PROCESS delete_shelf context = "details" %]
@@ -551,7 +551,7 @@
                                             <input type="hidden" name="referer" value="view" />
                                             <input type="hidden" name="public" value="[% shelf.public | html %]" />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-edit" aria-hidden="true"></i> Edit list</button>
+                                            <button type="submit" class="btn btn-link editshelf"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit list</button>
                                         </form>
 
                                         [% PROCESS delete_shelf context = "details" %]
@@ -768,7 +768,7 @@
                                                                 <input type="hidden" name="public" value="[% s.public | html %]" />
                                                                 <input type="hidden" name="op" value="edit_form" />
                                                                 <input type="hidden" name="referer" value="list" />
-                                                                <button type="submit" class="btn btn-link editshelf"><i class="fa fa-edit" aria-hidden="true"></i> Edit</button>
+                                                                <button type="submit" class="btn btn-link editshelf"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</button>
                                                             </form>
                                                         [% END %]
                                                         [% IF s.can_be_deleted( loggedinusernumber ) %]

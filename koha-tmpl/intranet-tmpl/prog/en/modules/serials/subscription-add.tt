@@ -84,7 +84,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     <div class="inputnote"> <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
                                         [% IF ( CAN_user_editcatalogue ) %]
                                             [% IF ( modify ) %]
-                                            | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum | html %]"><i class="fa fa-pencil-alt"></i> Edit record</a>
+                                            | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit record</a>
                                             [% ELSE %]
                                             | <a href="#" id="biblio_add_edit"><i class="fa fa-plus"></i> Create record</a>
                                             [% END %]
@@ -514,7 +514,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     </li>
                                     <li>
                                         <span class="label">&nbsp;</span>
-                                        <a href="#" id="modifyadvancedpatternbutton"><i class="fa fa-pencil-alt"></i> Modify pattern</a>
+                                        <a href="#" id="modifyadvancedpatternbutton"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Modify pattern</a>
                                         <button type="button" class="btn btn-default btn-xs" id="saveadvancedpatternbutton" style="display:none"><i class="fa fa-save"></i> Save as new pattern</button>
                                         <a class="cancel" href="#" id="restoreadvancedpatternbutton" style="display:none">Cancel modifications</a>
                                     </li>

@@ -239,7 +239,7 @@
                                             </td>
                                             <td class="actions">
                                                 [% IF can_edit %]
-                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                                 [% END %]
                                                 [% IF !lette.protected && can_edit %]
                                                     <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-trash-can"></i> Delete</a>

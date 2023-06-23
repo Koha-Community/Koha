@@ -89,7 +89,7 @@
                                 [% HOLD.branch.branchname | html %]
                                 [% IF ( HOLD.can_update_pickup_location_opac ) %]
                                     <button type="button" class="btn btn-sm btn-link" data-toggle="modal" data-target="#changePickup[% HOLD.reserve_id | html %]">
-                                        <i class="fa fa-pencil-alt" aria-hidden="true"></i> Change
+                                        <i class="fa-solid fa-pencil" aria-hidden="true"></i> Change
                                     </button>
                                     <!-- Change pickup location modal -->
                                     <div class="modal" id="changePickup[% HOLD.reserve_id | html %]" tabindex="-1" aria-labelledby="changePickup[% HOLD.reserve_id | html %]Label" aria-hidden="true">

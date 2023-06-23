@@ -59,7 +59,7 @@
                     <a class="btn btn-default" id="rm_items" href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]&amp;action=rm_all"><i class="fa fa-minus"></i> Remove all reserves</a>
                 [% END %]
                 [% IF ( CAN_user_coursereserves_manage_courses ) %]
-                    <a class="btn btn-default" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id | html %]"><i class="fa fa-pencil-alt"></i> Edit course</a>
+                    <a class="btn btn-default" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit course</a>
                 [% END %]
                 [% IF ( CAN_user_coursereserves_manage_courses ) %]
                     <a class="btn btn-default" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id | html %]&amp;action=del"><i class="fa fa-trash-can"></i> Delete course</a>
@@ -289,7 +289,7 @@
                                     [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                                         <td class="actions">
                                             [% IF CAN_user_coursereserves_add_reserves && user.can_edit_items_from( cr.item.homebranch ) %]
-                                                <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id | html %]&amp;itemnumber=[% cr.item.itemnumber | html %]&amp;biblionumber=[% cr.biblio.biblionumber | html %]&amp;action=lookup&amp;return=[% course.course_id | html %]&amp;is_edit=1"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                                <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id | html %]&amp;itemnumber=[% cr.item.itemnumber | html %]&amp;biblionumber=[% cr.biblio.biblionumber | html %]&amp;action=lookup&amp;return=[% course.course_id | html %]&amp;is_edit=1"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                             [% END %]
 
                                             [% IF CAN_user_coursereserves_delete_reserves %]

@@ -13,7 +13,7 @@
         [% IF ( CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_delete_subscription ) %]
             [% UNLESS ( cannotedit ) %]
                 <div class="btn-group">
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil-alt"></i> Edit <span class="caret"></span></button>
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             [% IF ( CAN_user_serials_edit_subscription ) %]
                                 <li>
