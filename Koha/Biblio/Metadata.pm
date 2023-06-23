@@ -21,6 +21,7 @@ use MARC::File::XML;
 use Scalar::Util qw( blessed );
 
 use C4::Biblio qw( GetMarcFromKohaField );
+use C4::Charset qw( StripNonXmlChars );
 use C4::Items qw( GetMarcItem );
 use Koha::Database;
 use Koha::Exceptions::Metadata;
@@ -131,6 +132,42 @@ sub record {
     }
 
     return $record;
+}
+
+=head3 record_strip_nonxml
+
+my $record = $metadata->record_strip_nonxml;
+
+This subroutine is intended for cases where we encounter a record that cannot be parsed, but want
+to make a good effort to present the record (for harvesting, deletion, editing) rather than throwing
+an exception
+
+Will return undef if the record cannot be built
+
+=cut
+
+sub record_strip_nonxml {
+
+    my ($self, $params) = @_;
+
+    my $record;
+    my $marcxml_error;
+
+    eval {
+        $record = MARC::Record->new_from_xml(
+            StripNonXmlChars( $self->metadata ), 'UTF-8',
+            $self->schema
+        );
+    };
+    if( $@ ){
+        $marcxml_error = $@;
+        chomp $marcxml_error;
+        warn $marcxml_error;
+        return;
+    }
+
+    $params->{record} = $record;
+    return $self->record( $params );
 }
 
 =head2 Internal methods
