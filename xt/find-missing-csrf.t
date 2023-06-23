@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Copyright 2021 Koha development team
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -63,19 +65,17 @@ sub check_csrf_in_forms {
     my @lines = read_file($file);
     my @errors;
     return @errors unless grep { $_ =~ m|<form| } @lines;
-    my ( $open, $found, $closed ) = ( 0, 0, 0 );
+    my ( $open, $found ) = ( 0, 0 );
     my $line = 0 ;
     for my $l (@lines) {
         $line++;
-        $open = $line if ( $l =~ m{<form} && !($l =~ m{method=('|")get('|")}));
-        $found++  if ($l =~ m|csrf\-token\.inc| && $open);
-        $closed++ if ($l =~ m|</form| && $open);
-        if ( $open && $closed ) {
-            push @errors, "The <form> starting on line $open is missing it's corresponding csrf_token include (see bug 22990)"
-              if !$found;
-
-            # reset
-            ( $open, $found, $closed ) = ( 0, 0, 0 );
+        $open = $line if ( $l =~ m{<form} && !( $l =~ m{method=('|")get('|")} ) );
+        $found++  if ( $l =~ m|csrf\-token\.inc| && $open );
+        if ( $open && $l =~ m|</form| ) {
+            push @errors,
+                "The <form> starting on line $open is missing it's corresponding csrf_token include (see bug 22990)"
+                if !$found;
+            $found = 0;
         }
     }
     return @errors;
