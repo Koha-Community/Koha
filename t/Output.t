@@ -17,15 +17,22 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Warn;
+use Test::MockModule;
+
+use File::Temp qw/tempfile/;
 use CGI qw ( -utf8 );
+
+use C4::Auth qw( get_template_and_user );
 
 use t::lib::Mocks;
 
 BEGIN {
-    use_ok('C4::Output', qw( output_html_with_http_headers parametrized_url  ));
+    use_ok('C4::Output', qw( output_html_with_http_headers output_and_exit_if_error parametrized_url ));
 }
+
+our $output_module = Test::MockModule->new('C4::Output');
 
 my $query = CGI->new();
 my $cookie;
@@ -92,4 +99,34 @@ subtest 'output_with_http_headers() tests' => sub {
     output_html_with_http_headers $query, $cookie, $output, undef;
     like($stdout, qr/Access-control-allow-origin: https:\/\/koha-community\.org/, 'Header set to https://koha-community.org');
     close STDOUT;
+};
+
+subtest 'output_and_exit_if_error() tests' => sub {
+    plan tests => 1;
+
+    $output_module->mock(
+        'output_and_exit',
+        sub {
+            my ( $query, $cookie, $template, $error ) = @_;
+            is( $error, 'wrong_csrf_token', 'Got right error message' );
+        }
+    );
+
+    t::lib::Mocks::mock_config( 'pluginsdir', [ C4::Context::temporary_directory ] );
+    my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1, DIR => C4::Context::temporary_directory );
+    print $fh qq|[% blocking_error %]|;
+    close $fh;
+
+    my $query = CGI->new();
+    $query->param('csrf_token','');
+    my ( $template, $loggedinuser, $cookies ) = get_template_and_user(
+        {
+            template_name   => $fn,
+            query           => $query,
+            type            => "intranet",
+            authnotrequired => 1,
+        }
+    );
+    # Next call triggers test in the mocked sub
+    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
 };
