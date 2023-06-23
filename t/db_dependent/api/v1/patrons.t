@@ -45,6 +45,32 @@ my $builder = t::lib::TestBuilder->new;
 my $t = Test::Mojo->new('Koha::REST::V1');
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
+### Mock Letters
+my $mocked_letters = Test::MockModule->new('C4::Letters');
+$mocked_letters->mock(
+    'GetPreparedLetter',
+    sub {
+        return 1;
+    }
+);
+my $letter_enqueued;
+$mocked_letters->mock(
+    'EnqueueLetter',
+    sub {
+        $letter_enqueued = 1;
+
+        # return a 'message_id'
+        return 42;
+    }
+);
+$mocked_letters->mock(
+    'SendQueuedMessages',
+    sub {
+        my $params = shift;
+        return 1;
+    }
+);
+
 subtest 'list() tests' => sub {
 
     plan tests => 3;
@@ -382,6 +408,7 @@ subtest 'add() tests' => sub {
         # Set a date-time field
         $newpatron->{last_seen} = output_pref({ dt => dt_from_string->add( days => -1 ), dateformat => 'rfc3339' });
 
+        $letter_enqueued = 0;
         $t->post_ok("//$userid:$password@/api/v1/patrons" => { 'x-koha-welcome' => 'email' } => json => $newpatron)
           ->status_is(201, 'Patron created successfully')
           ->header_like(
@@ -396,7 +423,7 @@ subtest 'add() tests' => sub {
           ->json_is( '/last_seen'     => $newpatron->{last_seen}, 'Date-time field set (Bug 28585)' );
 
         my $p = Koha::Patrons->find( { cardnumber => $newpatron->{cardnumber} } );
-        is( Koha::Notice::Messages->search({ borrowernumber => $p->borrowernumber })->count, 1 , "Patron got welcome notice" );
+        is( $letter_enqueued, 1 , "Patron got welcome notice" );
 
         $newpatron->{userid} = undef; # force regeneration
         warning_like {
