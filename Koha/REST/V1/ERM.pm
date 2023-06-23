@@ -25,7 +25,7 @@ use Try::Tiny qw( catch try );
 
 =head1 NAME
 
-Koha::REST::V1::Acquisitions::Funds
+Koha::REST::V1::ERM
 
 =head1 API
 
@@ -46,16 +46,14 @@ sub config {
                 ERMModule => C4::Context->preference('ERMModule'),
                 ERMProviders => [split ',', C4::Context->preference('ERMProviders')]
             },
-            #permissions => {
-            #    erm =>
-            #}
+            # TODO Add permissions
         },
     )
 }
 
 =head3 list_users
 
-Return the list of possible ERM' users
+Return the list of possible ERM users
 
 =cut
 
