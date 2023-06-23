@@ -862,7 +862,7 @@
                                             <h2>Change selected suggestions</h2>
                                         </div>
                                     </div>
-                                    <div id="suggestions_batch_ops" class="row">
+                                    <div class="suggestions_batch_ops row">
                                         <div class="col-sm-4">
                                             <fieldset class="brief">
                                                 <div id="select-reason[% loop.index | html %]">
@@ -1390,7 +1390,7 @@
                 });
 
                 // Note: the selector below passes a second 'context' param - it is not a multiple selector
-                $("button[type='submit']", "#suggestions_batch_ops").on("click", function(e) {
+                $("button[type='submit']", ".suggestions_batch_ops").on("click", function(e) {
                     var submit_button = this;
                     var form = $(submit_button).parents("form");
                     var action = $(submit_button).val();
