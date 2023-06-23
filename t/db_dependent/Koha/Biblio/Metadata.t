@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 use Test::Warn;
 
@@ -85,6 +85,61 @@ subtest 'record() tests' => sub {
         'Koha::Biblio::Metadata->record called on unhandled format: mij',
         'Exception message built correctly'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'record_strip_nonxml() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $title = 'Oranges and' . chr(31) . ' Peaches';
+
+    # Create a valid record
+    my $record = MARC::Record->new();
+    my $field  = MARC::Field->new( '245', '', '', 'a' => $title );
+    $record->append_fields($field);
+    my ($biblio_id) = C4::Biblio::AddBiblio( $record, '' );
+
+    my $metadata = Koha::Biblios->find($biblio_id)->metadata;
+    my $record2  = $metadata->record_strip_nonxml;
+
+    is( ref $record2, 'MARC::Record', 'Method record() returned a MARC::Record object' );
+    is(
+        $record2->field('245')->subfield("a"),
+        "Oranges and Peaches", 'Title in 245$a matches title with control character removed'
+    );
+
+    my $bad_data = $builder->build_object(
+        {
+            class => 'Koha::Biblio::Metadatas',
+            value => { format => 'marcxml', schema => 'MARC21', metadata => 'this_is_not_marcxml' }
+        }
+    );
+
+    warning_like { $record2 = $bad_data->record_strip_nonxml; }
+    qr/parser error : Start tag expected, '<' not found/,
+        'Warning thrown explicitly';
+
+    is(
+        $record2, undef,
+        "record_strip_nonxml returns undef when the record cannot be parsed after removing nonxml characters"
+    );
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item    = $builder->build_sample_item( { biblionumber => $metadata->biblionumber } );
+
+    # Emptied the OpacHiddenItems pref
+    t::lib::Mocks::mock_preference( 'OpacHiddenItems', '' );
+    my ($itemfield) = C4::Biblio::GetMarcFromKohaField('items.itemnumber');
+
+    $record2 = $metadata->record_strip_nonxml( { embed_items => 1 } );
+
+    my @items = $record2->field($itemfield);
+
+    is( scalar @items, 1, "We got back our item" );
 
     $schema->storage->txn_rollback;
 };
