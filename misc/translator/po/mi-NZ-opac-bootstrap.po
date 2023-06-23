@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
-"POT-Creation-Date: 2023-05-16 05:36-0300\n"
+"POT-Creation-Date: 2023-06-15 16:24-0300\n"
 "PO-Revision-Date: 2022-08-03 23:42+0000\n"
 "Last-Translator: aleisha <aleisha@catalyst.net.nz>\n"
 "Language-Team: Koha Translation Team\n"
@@ -15,6 +15,29 @@ msgstr ""
 "X-Pootle-Path: /mi/22.11/mi-NZ-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 "X-POOTLE-MTIME: 1659570127.952922\n"
+
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  BLOCK biblio_a_href -
+#. %4$s: - IF Koha.Preference('BiblioDefaultView') == 'marc' -
+#. %5$s: - SET this_biblio_href = "/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=" -
+#. %6$s: - ELSIF Koha.Preference('BiblioDefaultView') == 'isbd' -
+#. %7$s: - SET this_biblio_href = "/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=" -
+#. %8$s: - ELSE -
+#. %9$s: - SET this_biblio_href = "/cgi-bin/koha/opac-detail.pl?biblionumber=" -
+#. %10$s: - END -
+#. %11$s: - this_biblio_href | url 
+#. %12$s:  biblionumber | url -
+#. %13$s: - END 
+#. %14$s:  # BOOTSTRAP TAB WRAPPER USAGE                                                                         
+#. %15$s:  #     [ WRAPPER tabs id= "tabs_container_id" ]                                                        
+#. %16$s:  #         [ WRAPPER tabs_nav ]                                                                        
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/html_helpers.inc:22
+#, c-format
+msgid ""
+"%s %s %s %s %s %s %s %s %s %s %s%s %s %s %s %s [%% # [ WRAPPER tab_item "
+"tabname= \"tab_name_1\" bt_active= 1 ] "
+msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -176,7 +199,7 @@ msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
 
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:124
 #, c-format
 msgid "%s %s Did you mean: "
 msgstr "%s %s E mea ana koe:"
@@ -209,7 +232,7 @@ msgstr "%s %s Kāore i kitea he hua. %s "
 #. %9$s:  LibraryNameTitle | html 
 #. %10$s:  ELSE 
 #. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:13
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:12
 #, c-format
 msgid ""
 "%s %s Results of search for '%s' %s Search results %s %s You did not specify "
@@ -260,7 +283,7 @@ msgstr "%s nā %s %s %s %s"
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:654
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:647
 #, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
 msgstr ""
@@ -289,7 +312,7 @@ msgstr ""
 #. %3$s:  Koha.Preference('URLLinkText') | html 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1387
 #, c-format
 msgid "%s %s%s%sLink to resource%s "
 msgstr "%s %s%s%sHono ki te rauemi%s"
@@ -336,8 +359,8 @@ msgstr "%s (Pūkete tau %s)"
 
 #. For the first occurrence,
 #. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:183
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:185
 #, fuzzy, c-format
 msgid "%s (default)"
 msgstr "Taunoa"
@@ -358,7 +381,7 @@ msgstr "%s <?xml version=\"1.0\"?> "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:795
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:788
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Pūkete tio %s %s "
@@ -440,7 +463,7 @@ msgid "%s If you have any questions, please contact the "
 msgstr "%s Mēnā he pātai āu, me whakapā atu ki te"
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:449
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:448
 #, c-format
 msgid "%s Internet user critics"
 msgstr "%s Ngā mataaroaro ipurangi"
@@ -466,7 +489,7 @@ msgid "%s Item waiting at "
 msgstr "%s Kei te tatari te tuemi i"
 
 #. %1$s:  issues_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:326
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:319
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s Tuemi kua takina atu"
@@ -505,7 +528,7 @@ msgstr "%s Kāore he raraunga wātea %s %s"
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:65
 #, c-format
 msgid "%s No results found for that in %s catalog. "
 msgstr "%s Kāore i kitea he hua mō tēnā i te putumōhio %s. "
@@ -528,26 +551,26 @@ msgid "%s No title %s %s%s,%s "
 msgstr "%s Kāore he taitara %s %s%s,%s"
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:807
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
 #, fuzzy, c-format
 msgid "%s Not allowed "
 msgstr "%s Kāore e whakaaetia ana"
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:452
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:451
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s Ngā mataaroaro ngaio"
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:458
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:457
 #, c-format
 msgid "%s Quotations"
 msgstr "%s Ngā whakahua"
 
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:508
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #, fuzzy, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "%s Kāore e taea te whakahou %s Kāore i te whakaaetia "
@@ -577,7 +600,7 @@ msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Rapua %smō '%s'%s%s&nbsp;me ngā tepe:&nbsp;'%s'%s"
 
 #. LINK
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:28
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:27
 #, fuzzy
 msgid "%s Search RSS feed"
 msgstr "%s Rapu"
@@ -623,14 +646,14 @@ msgid "%s This record has no items. %s "
 msgstr "%s Kāore he tuemi i tēnei pūkete. %s "
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:455
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:454
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Ngā tangohanga ataata"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:70
 #, c-format
 msgid "%s You did not specify any search criteria. %s "
 msgstr "%s Kāore koe i tāuru i ētahi paearu rapu. %s "
@@ -664,13 +687,13 @@ msgid "%s of %s results loaded, refine your search to view other records"
 msgstr ""
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:456
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:449
 #, c-format
 msgid "%s per day"
 msgstr ""
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_hourly | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:452
 #, c-format
 msgid "%s per hour"
 msgstr ""
@@ -934,7 +957,7 @@ msgstr ""
 
 #. %1$s:  IF ar.toc_request 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:968
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:961
 #, c-format
 msgid "%sYes%s "
 msgstr "%sĀe%s"
@@ -1490,7 +1513,7 @@ msgstr ""
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:446
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:445
 #, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "&nbsp;&nbsp; %s / 5 (i ngā whakatauranga %s)"
@@ -1566,7 +1589,7 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Kīnga taitara"
 
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:523
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:522
 #, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "&nbsp;&nbsp;(%s poti)"
@@ -1578,12 +1601,12 @@ msgstr "&nbsp;&nbsp;(%s poti)"
 #. %4$s:  ISSUE.unseenleft | html 
 #. %5$s:  ISSUE.unseenallowed | html 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:461
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:479
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:487
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:495
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:503
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:802
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:454
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:472
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:480
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:488
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:496
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:795
 #, c-format
 msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
@@ -1598,8 +1621,8 @@ msgstr "(%s pūkete pukapuka)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:707
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:304
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, c-format
@@ -1704,13 +1727,13 @@ msgstr "(Kāore e tautokona ana e Koha)"
 msgid "(Not supported yet)"
 msgstr "(Kāore anō kia tautokona)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:402
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:395
 #, fuzzy, c-format
 msgid "(On-site checkout)"
 msgstr "Ngā taki atu ā-pae"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1315
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1317
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1336
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1338
 #, c-format
 msgid "(Opens below)"
 msgstr ""
@@ -1846,7 +1869,7 @@ msgid "(Voided)"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:257
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:284
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:283
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:37
 #, c-format
 msgid "(done)"
@@ -1857,19 +1880,19 @@ msgstr "(oti)"
 msgid "(filtered from _MAX_ total entries)"
 msgstr "(i tātaritia i te _MAX_ tāurunga katoa)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:468
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:461
 #, c-format
 msgid "(on hold)"
 msgstr "(kei te puritia)"
 
 #. %1$s:  ar.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:941
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:934
 #, c-format
 msgid "(only %s)"
 msgstr "(%s anake)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:474
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:809
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:802
 #, c-format
 msgid "(overdue)"
 msgstr "(tōmuri)"
@@ -1877,7 +1900,7 @@ msgstr "(tōmuri)"
 #. For the first occurrence,
 #. %1$s:  priority | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:552
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1389
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1410
 #, c-format
 msgid "(priority %s)"
 msgstr "(manakē %s)"
@@ -1893,7 +1916,7 @@ msgstr "(ngā rapu whai pānga: %s%s%s)"
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search | html 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:118
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:117
 #, fuzzy, c-format
 msgid "(related searches:%s %s%s)."
 msgstr "(ngā rapu whai pānga: %s%s%s)"
@@ -1918,7 +1941,7 @@ msgstr "-- Kōwhiri --"
 msgid "-- Choose format --"
 msgstr "-- Kōwhiri hōputu --"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "-- none -- "
 msgstr "-- kāore tētahi -- "
@@ -1972,7 +1995,7 @@ msgstr "000 "
 #. SPAN
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:71
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:76
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:870
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:863
 msgid "0000-00-00"
 msgstr "0000-00-00"
 
@@ -2081,7 +2104,7 @@ msgstr "He tuemi tauwhāiti"
 msgid "About the author"
 msgstr "Mō te kaituhi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:389
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Ngā tangohanga/whakarāpopotonga"
@@ -2163,7 +2186,7 @@ msgstr "Ngā tauwāhi"
 #. INPUT type=submit name=tagsel_button
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:256
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:283
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:282
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:370
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:36
 msgid "Add"
@@ -2181,8 +2204,8 @@ msgstr "Tāpiritia %s tuemi ki te %s"
 msgid "Add another field"
 msgstr "Ki tētahi atu āpure"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:541
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:534
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy, c-format
 msgid "Add note"
 msgstr "Tāpiri tūtohu"
@@ -2237,7 +2260,7 @@ msgstr "Tāpiritia ki tō kāta"
 msgid "Add to your list &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sPutumōhio tuihono Koha%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:228
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:227
 #, c-format
 msgid "Add to..."
 msgstr "Tāpiritia ki te..."
@@ -2254,7 +2277,7 @@ msgstr ""
 msgid "Added %s by you"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:386
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Ngā momo ihirangi tāpiri mō ngā pukapuka/rauemi tā"
@@ -2278,12 +2301,12 @@ msgstr "Wāhinoho 2:"
 msgid "Address:"
 msgstr "Wāhinoho:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:338
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:336
 #, c-format
 msgid "Adolescent"
 msgstr "Taiohi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:339
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "Adult"
 msgstr "Pakeke"
@@ -2295,7 +2318,7 @@ msgstr "Tāpiri tūtohu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:21
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:43
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:42
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:292
 #, c-format
 msgid "Advanced search"
@@ -2335,12 +2358,12 @@ msgid "All collections"
 msgstr "Ngā kohinga katoa"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "All holds will be suspended."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "All holds will resume."
 msgstr ""
 
@@ -2349,7 +2372,7 @@ msgstr ""
 msgid "All item types"
 msgstr "Momo mea katoa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:239
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:237
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:231
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:23
 #, c-format
@@ -2425,13 +2448,13 @@ msgid "Amazon cover image"
 msgstr "Atahanga uhi"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 msgid "Amazon cover image (<a href='%s'>see the original image</a>)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:617
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:632
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:648
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:610
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:625
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:13
 #, c-format
 msgid "Amount"
@@ -2528,22 +2551,22 @@ msgid ""
 "assistance."
 msgstr "Whakapā atu ki te whare pukapuka ki te hiahia āwhina anō."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:390
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:388
 #, c-format
 msgid "Any"
 msgstr "He"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:334
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:332
 #, c-format
 msgid "Any audience"
 msgstr "Tētahi hunga pānui"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:353
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:351
 #, c-format
 msgid "Any content"
 msgstr "Tētahi ihirangi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:367
 #, c-format
 msgid "Any format"
 msgstr "Tētahi hōputu"
@@ -2575,14 +2598,14 @@ msgid "Apply field weights to search "
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Me whakakore i tēnei puringa?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:134
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Me whakakore i tēnei puringa?"
@@ -2647,7 +2670,7 @@ msgstr "Me tango i tēnei tuemi i te rārangi?"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:142
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "Are you sure you want to remove this recall?"
 msgstr "Me tango i tēnei tiringa?"
@@ -2658,13 +2681,13 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Me tango i tēnei tiringa?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "Are you sure you want to request cancelling this hold?"
 msgstr "Me whakakore i tēnei puringa?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Me tīmata anō ngā puringa katoa kua whakatārewatia?"
 
@@ -2675,7 +2698,7 @@ msgid "Are you sure you want to return this item?"
 msgstr "Me muku i tēnei rārangi?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Me whakatārewa i ngā puringa katoa?"
 
@@ -2690,12 +2713,12 @@ msgstr "Kua tae mai"
 msgid "Article request fee"
 msgstr "Ngā tono tuhinga "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1013
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1006
 #, fuzzy, c-format
 msgid "Article requests"
 msgstr "Ngā tono tuhinga "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:913
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:906
 #, c-format
 msgid "Article requests "
 msgstr "Ngā tono tuhinga "
@@ -2743,7 +2766,7 @@ msgstr "Kotahi tuemi i te iti rawa e wātea ana i tēnei whare pukapuka"
 msgid "At library: %s"
 msgstr "Kei te whare pukapuka: %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:332
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:330
 #, c-format
 msgid "Audience"
 msgstr "Hunga pānui"
@@ -2778,8 +2801,8 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:279
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:331
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:919
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:324
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:912
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:180
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:182
@@ -2905,17 +2928,17 @@ msgstr "Whakahou aunoa"
 msgid "Auto-renewal"
 msgstr "Whakahou aunoa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:502
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:495
 #, c-format
 msgid "Automatic renewal"
 msgstr "Whakahou aunoa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:478
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #, c-format
 msgid "Automatic renewal failed, you have unpaid fines."
 msgstr "I rahua te whakahou aunoa, he whaina āu kāore anō kia utua. "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:486
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:479
 #, fuzzy, c-format
 msgid "Automatic renewal failed, your account is expired."
 msgstr ""
@@ -2933,7 +2956,7 @@ msgstr "Wātea"
 msgid "Availability:"
 msgstr "Wāteatanga:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:224
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:222
 #, c-format
 msgid "Availability: "
 msgstr "Wātea: "
@@ -3005,22 +3028,22 @@ msgid "Backends"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:111
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1207
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1228
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:191
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:372
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:337
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:672
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:721
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:330
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:665
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:138
 #, c-format
 msgid "Barcode"
 msgstr "Waeherepae"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:433
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:782
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:775
 #, c-format
 msgid "Barcode:"
 msgstr "Waeherepae:"
@@ -3048,12 +3071,12 @@ msgstr ""
 msgid "BibTeX"
 msgstr "BibTeX"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:392
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:390
 #, c-format
 msgid "Bibliographies"
 msgstr "Rārangi Pukapuka"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:356
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:354
 #, c-format
 msgid "Biography"
 msgstr "Haurongo"
@@ -3068,7 +3091,7 @@ msgstr "Kua aukatia"
 msgid "Blocked record"
 msgstr "Kua aukatia te pūkete"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:372
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:370
 #, c-format
 msgid "Braille"
 msgstr "Tuhi Kāpō"
@@ -3112,7 +3135,6 @@ msgstr "Tuhi Kāpō"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:16
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:14
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:24
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:16
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:14
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:14
@@ -3121,7 +3143,7 @@ msgstr "Tuhi Kāpō"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:19
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:25
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:35
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:34
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-routing-lists.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:22
@@ -3196,8 +3218,8 @@ msgstr "Pūtirotiro hua"
 msgid "Browse search"
 msgstr "Pūtirotiro mā te aroākapa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1315
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1317
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1336
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1338
 #, c-format
 msgid "Browse shelf"
 msgstr "Tirotirohia te whatanga"
@@ -3214,12 +3236,12 @@ msgstr "Tirotiro ana %s Ngā whatanga"
 msgid "CAS login"
 msgstr "Takiuru CAS"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:374
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:372
 #, c-format
 msgid "CD audio"
 msgstr "CD ororongo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:378
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:376
 #, c-format
 msgid "CD software"
 msgstr "CD pūmanawa"
@@ -3242,7 +3264,7 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:79
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:71
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1189
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1210
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:105
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:193
@@ -3250,9 +3272,9 @@ msgstr "CSV - %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:303
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:599
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:601
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:339
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:673
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:722
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:332
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:666
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:715
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:310
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:206
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:208
@@ -3288,8 +3310,8 @@ msgid "Call number (Z-A)"
 msgstr "Tau karanga (Z-A ki te 9-0)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:166
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:438
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:787
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:431
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:780
 #, c-format
 msgid "Call number:"
 msgstr "Tau karanga:"
@@ -3322,10 +3344,10 @@ msgstr "Tau karanga: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:642
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:299
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:596
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:898
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1005
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:34
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:589
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:891
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:998
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:33
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:150
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:159
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:163
@@ -3334,7 +3356,6 @@ msgstr "Tau karanga: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:18
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-login.inc:19
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:12
 #, c-format
 msgid "Cancel"
 msgstr "Whakakore"
@@ -3385,7 +3406,7 @@ msgstr "WhakakorePuringa"
 msgid "CancelRecall "
 msgstr "WhakakoreWhakahoki "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:996
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:989
 #, fuzzy, c-format
 msgid "Canceled"
 msgstr "Whakakore"
@@ -3463,13 +3484,13 @@ msgstr "Me %s pūāhua pū te tau kāri."
 msgid "Card number:"
 msgstr "Tau kāri:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:230
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:229
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:34
 #, c-format
 msgid "Cart"
 msgstr "Kāta"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:375
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:373
 #, c-format
 msgid "Cassette recording"
 msgstr "Tāhopukanga rīpene"
@@ -3479,7 +3500,7 @@ msgstr "Tāhopukanga rīpene"
 msgid "Catalog"
 msgstr "Putumōhio"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:393
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:391
 #, c-format
 msgid "Catalogs"
 msgstr "Ngā putumōhio"
@@ -3528,7 +3549,7 @@ msgstr "Huria tō kupuhipa "
 msgid "Change your password &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sPutumōhio tuihono Koha%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:918
 #, c-format
 msgid "Chapters"
 msgstr "Ngā wāhanga"
@@ -3540,7 +3561,7 @@ msgid "Chapters:"
 msgstr "Ngā wāhanga:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:48
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:616
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:609
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:17
 #, fuzzy, c-format
 msgid "Charges"
@@ -3596,7 +3617,7 @@ msgstr ""
 msgid "Checked in"
 msgstr "I takina atu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:572
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:565
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:62
 #, c-format
 msgid "Checked out"
@@ -3629,12 +3650,6 @@ msgstr "I takina atu ki %s %s %s(%s)%s"
 msgid "Checked out until %s"
 msgstr "I takina atu (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:4
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:11
-#, c-format
-msgid "Checkout"
-msgstr "Taki atu"
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:48
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:66
@@ -3642,7 +3657,7 @@ msgstr "Taki atu"
 msgid "Checkout history"
 msgstr "Hītori taki atu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:350
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:343
 #, fuzzy, c-format
 msgid "Checkout note"
 msgstr "Taki atu"
@@ -3722,7 +3737,7 @@ msgid "Clear"
 msgstr "Ūkui"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:56
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:217
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:216
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:262
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:352
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:534
@@ -3735,7 +3750,7 @@ msgstr "Ūkui katoa"
 msgid "Clear date"
 msgstr "Ūkui rā"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1048
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1041
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:220
 #, c-format
 msgid "Clear date to suspend indefinitely"
@@ -3779,18 +3794,18 @@ msgid "Click to open in new window"
 msgstr "Pāwhiria ki te huaki ki te matapihi hou"
 
 #. DIV
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:370
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:747
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:740
 msgid "Click to view in Google Books"
 msgstr "Pāwhiri kia tirohia i Google Books"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1014
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1077
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1426
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1435
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:584
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1038
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:577
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1031
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:173
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:187
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:100
@@ -3844,19 +3859,19 @@ msgid "Clubs you can enroll in"
 msgstr "Ngā karapu e āhei ana koe te whakauru"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 #, fuzzy
 msgid "Coce image from Amazon.com"
 msgstr "Kitea i Amazon.com"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 #, fuzzy
 msgid "Coce image from Google Books"
 msgstr "Pāwhiri kia tirohia i Google Books"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 #, fuzzy
 msgid "Coce image from Open Library"
 msgstr "Huaki Whare Pukapuka: "
@@ -3866,10 +3881,10 @@ msgstr "Huaki Whare Pukapuka: "
 msgid "Collect items you are interested in"
 msgstr "Kohi tuemi e aro ai koe"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:171
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:170
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:146
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1184
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1205
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:104
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:378
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:92
@@ -3978,7 +3993,7 @@ msgstr "Ngā tākupu mō %s &rsaquo; %s%s%sPutumōhio tuihono Koha%s"
 msgid "Comments%s"
 msgstr "Ngā tākupu%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:994
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:987
 #, c-format
 msgid "Completed"
 msgstr ""
@@ -4056,7 +4071,7 @@ msgstr "Mōhiohio whakapā: "
 msgid "Contact note:"
 msgstr "Tuhipoka whakapā:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
 msgid "Content"
 msgstr "Ngā ihirangi"
@@ -4086,14 +4101,14 @@ msgstr ""
 msgid "Copied one row to clipboard"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:984
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:977
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/columns_settings.inc:3
 #, c-format
 msgid "Copy"
 msgstr "Kape"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1221
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:368
 #, c-format
@@ -4168,7 +4183,7 @@ msgstr "Tau akoranga:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:28
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:26
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1214
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1235
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:296
 #, c-format
 msgid "Course reserves"
@@ -4210,19 +4225,19 @@ msgstr "Ngā akoranga"
 msgid "Courses &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sPutumōhio tuihono Koha%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1172
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:421
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:423
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1193
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:420
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:422
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:481
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:388
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:77
 #, c-format
 msgid "Cover image"
 msgstr "Atahanga uhi"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 msgid "Cover image source unknown"
 msgstr ""
 
@@ -4276,7 +4291,7 @@ msgstr "Ngā whiwhinga"
 msgid "Credit has been voided"
 msgstr "Kua whakahoutia tō tautuhinga!"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:631
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:624
 #, c-format
 msgid "Credits"
 msgstr "Ngā whiwhinga"
@@ -4294,7 +4309,7 @@ msgstr "Ngā whiwhinga (%s)"
 msgid "Curbside pickups"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1199
 #, c-format
 msgid "Current library"
 msgstr "Tauwāhi onāianei"
@@ -4355,7 +4370,7 @@ msgstr "Marautanga"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:140
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:141
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 #, fuzzy, c-format
 msgid "Custom cover image"
 msgstr "Atahanga uhi"
@@ -4365,7 +4380,7 @@ msgstr "Atahanga uhi"
 msgid "Custom search filters"
 msgstr "Tāuru kupu rapu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:377
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:375
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "Ataata DVD / Kōpaeataata"
@@ -4386,7 +4401,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:123
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:176
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:215
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:922
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:915
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:11
 #, c-format
 msgid "Date"
@@ -4419,14 +4434,14 @@ msgid "Date added:"
 msgstr "Rā i tāpiritia:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1227
 #, c-format
 msgid "Date due"
 msgstr "Rā oti"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:414
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:419
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:791
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:407
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:412
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:784
 #, c-format
 msgid "Date due:"
 msgstr "Rā oti:"
@@ -4622,7 +4637,7 @@ msgstr "Dewey"
 msgid "Dewey: %s "
 msgstr "Dewey: %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:394
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:392
 #, c-format
 msgid "Dictionaries"
 msgstr "Papakupu"
@@ -4642,7 +4657,7 @@ msgstr "Ngā hautaka anake "
 msgid "Digital scan"
 msgstr "Hopukanga puoro"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:407
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:405
 #, c-format
 msgid "Directories"
 msgstr "Rārangi Kōpaki"
@@ -4662,7 +4677,7 @@ msgstr "Whakawātea"
 msgid "Discharge &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sPutumōhio tuihono Koha%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:398
 #, c-format
 msgid "Discographies"
 msgstr "Rārangi Rekoata"
@@ -4682,7 +4697,7 @@ msgstr "Whakaatu rongo mō: "
 msgid "Displaying availability results"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1052
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1045
 #, fuzzy, c-format
 msgid "Do not suspend"
 msgstr "Kāore te pūkete i kitea"
@@ -4764,9 +4779,9 @@ msgstr "Tikiake rārangi "
 msgid "Dublin Core"
 msgstr "Dublin Core"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:332
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:671
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:723
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:325
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:664
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:716
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:311
 #, c-format
 msgid "Due"
@@ -4857,8 +4872,8 @@ msgstr "Whakatika rārangi"
 msgid "Edit list &nbsp;"
 msgstr "Whakatika rārangi "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:539
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:532
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy, c-format
 msgid "Edit note"
 msgstr "Tāpae tuhipoka"
@@ -4928,7 +4943,7 @@ msgstr ""
 msgid "Empty and close"
 msgstr "Whakapiakotia ka kati"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:395
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:393
 #, c-format
 msgid "Encyclopedias "
 msgstr "Ngā mātāpunenga "
@@ -4964,12 +4979,12 @@ msgstr "Ngā whakaahuatanga whakarei nā Syndetics:"
 msgid "Enroll "
 msgstr "Rēhita "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:4
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:3
 #, c-format
 msgid "Enroll in "
 msgstr "Rēhita ki "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:10
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:9
 #, fuzzy, c-format
 msgid "Enrollment"
 msgstr "Rēhita "
@@ -4981,7 +4996,7 @@ msgstr "Tāurua he huatau hoko hou"
 
 #. INPUT type=text name=q
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:115
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
 msgid "Enter search terms"
 msgstr "Tāuru kupu rapu"
 
@@ -5107,7 +5122,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:40
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:65
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:146
 #, c-format
 msgid "Error:"
 msgstr "Hapa:"
@@ -5211,8 +5226,8 @@ msgstr "Rā mōnehu:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:866
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:871
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:859
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:864
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:77
 #, c-format
@@ -5226,7 +5241,7 @@ msgid "Expired on %s"
 msgstr "I mōnehu i te %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:39
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:844
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:837
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:19
 #, c-format
 msgid "Expires on"
@@ -5270,7 +5285,7 @@ msgstr "Waeatuhi:"
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) | html 
 #. %2$s:  ISSUE.renewalfee | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:453
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:446
 #, c-format
 msgid "Fee for item type '%s': %s"
 msgstr ""
@@ -5280,12 +5295,12 @@ msgstr ""
 msgid "Female:"
 msgstr "Wahine:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:449
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:447
 #, c-format
 msgid "Fewer options"
 msgstr "Ngā kōwhiringa iti ake"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:354
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:352
 #, c-format
 msgid "Fiction"
 msgstr "Pakimaero"
@@ -5295,7 +5310,7 @@ msgstr "Pakimaero"
 msgid "Fiction notes:"
 msgstr "Ngā tuhipoka kōrero paki:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:406
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:404
 #, c-format
 msgid "Filmographies"
 msgstr "Haurongo Kiriata"
@@ -5315,20 +5330,20 @@ msgstr "Ngā whaina"
 msgid "Fine amount"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:344
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:728
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:337
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:721
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:314
 #, c-format
 msgid "Fines"
 msgstr "Ngā whaina"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:645
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:638
 #, c-format
 msgid "Fines and charges"
 msgstr "Ngā whaina me ngā utu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:516
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:819
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:509
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:812
 #, c-format
 msgid "Fines:"
 msgstr "Ngā whaina:"
@@ -5340,7 +5355,7 @@ msgstr "Ngā whaina:"
 msgid "Finish"
 msgstr "Whakamutu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:33
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:32
 #, c-format
 msgid "Finish enrollment"
 msgstr "Whakamutu rēhita"
@@ -5359,7 +5374,7 @@ msgstr "Tuatahi"
 msgid "First name:"
 msgstr "Ingoa tuatahi:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
 #, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -5432,8 +5447,8 @@ msgstr "Whakaora kupuhipa wareware"
 msgid "Forgotten password recovery &rsaquo; %s%s%sKoha online%s catalog"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:367
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:927
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:920
 #, c-format
 msgid "Format"
 msgstr "Hōputu"
@@ -5506,7 +5521,7 @@ msgstr "Hītori ohauru katoa mō %s &rsaquo; %s%s%sPutumōhio tuihono Koha%s"
 msgid "Fuzzy "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:341
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "General"
 msgstr "Arowhānui"
@@ -5613,7 +5628,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:198
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:197
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:363
 #, c-format
 msgid "Go"
@@ -5694,7 +5709,7 @@ msgstr "Takiuru Google"
 msgid "Groups"
 msgstr "Ngā rōpū"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:249
 #, c-format
 msgid "Groups of libraries"
 msgstr "Ngā rōpū whare pukapuka"
@@ -5724,7 +5739,7 @@ msgstr "I whakaputaina e %s %s %s %s %s, %s %s "
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
 msgstr "I whakaputaina e %s %s %s %s %s, %s %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:396
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:394
 #, c-format
 msgid "Handbooks"
 msgstr "Pukapuka ā-ringa"
@@ -5792,7 +5807,7 @@ msgstr "Tērā tuemi wātea ka whai ake"
 msgid "Hide window"
 msgstr "Huna matapihi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:207
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:206
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:48
 #, c-format
 msgid "Highlight"
@@ -5879,7 +5894,7 @@ msgstr "Ngā whare pukapuka pupuri"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:382
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
 #, c-format
 msgid "Holdings"
 msgstr "Ngā puringa"
@@ -5958,7 +5973,6 @@ msgstr "Hītori katoa"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:19
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:14
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:19
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:17
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:17
@@ -5967,7 +5981,7 @@ msgstr "Hītori katoa"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reset-password.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:37
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-routing-lists.tt:23
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:25
@@ -5990,7 +6004,7 @@ msgstr "Kāinga"
 msgid "Home libraries"
 msgstr "Ngā whare pukapuka kāinga"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1181
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1202
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:101
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:192
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:374
@@ -6106,7 +6120,7 @@ msgstr "ISBN: %s "
 msgid "ISSN"
 msgstr "ISSN"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:191
 #, fuzzy, c-format
 msgid "Identifiers"
 msgstr "Tautohu"
@@ -6265,7 +6279,7 @@ msgid "Image from Amazon.com"
 msgstr "Kitea i Amazon.com"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:132
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 #, fuzzy, c-format
 msgid "Image from Baker &amp; Taylor"
 msgstr "Tirohoa Baker rāua ko Taylor"
@@ -6278,7 +6292,7 @@ msgid "Image from Coce"
 msgstr "Ngā atahanga mō %s "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 msgid "Image from Google Books (<a href='%s'>see the original image</a>)"
 msgstr ""
 
@@ -6293,12 +6307,12 @@ msgid "Image from OpenLibrary"
 msgstr "Ngā tūtohu mai i tēnei whare pukapuka:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 msgid "Image from OpenLibrary (<a href='%s'>see the original image</a>)"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:91
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 #, c-format
 msgid "Image from Syndetics"
 msgstr ""
@@ -6395,7 +6409,7 @@ msgstr "E kawea ana i %s ki te %s mai anō i te %s"
 #. For the first occurrence,
 #. %1$s:  RECALL.library.branchname | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:86
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:887
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:880
 #, c-format
 msgid "In transit to %s"
 msgstr "E kawea ana ki %s"
@@ -6425,7 +6439,7 @@ msgstr "ISBN: %s "
 msgid "In: %s %s %s %s %s %s "
 msgstr "%s nā %s %s %s %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:398
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:396
 #, c-format
 msgid "Indexes"
 msgstr "Ngā rārangi āwhina"
@@ -6461,7 +6475,7 @@ msgstr ""
 msgid "Interlibrary loan ready"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:564
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:563
 #, c-format
 msgid "Interlibrary loan request"
 msgstr ""
@@ -6489,7 +6503,7 @@ msgstr "Kei te whakamahia i tēnei wā"
 msgid "Invalid shelf number."
 msgstr "Tau whatanga muhu."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:921
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:914
 #, c-format
 msgid "Issue"
 msgstr "Tuku"
@@ -6595,12 +6609,12 @@ msgstr "He taipitopito anō"
 msgid "Item due"
 msgstr "Rā oti"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1211
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1232
 #, c-format
 msgid "Item hold queue priority"
 msgstr "Manakē tira puringa tuemi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1209
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1230
 #, c-format
 msgid "Item holds"
 msgstr "Ngā puringa tuemi"
@@ -6632,7 +6646,7 @@ msgid "Item must be checked out at a circulation desk."
 msgstr "Ka aroha, kāore e taea tēnei tuemi te taki atu i tēnei teihana."
 
 #. %1$s:  ISSUE.renewsleft | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:472
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:465
 #, c-format
 msgid "Item must be renewed at the library. %s renewals remaining"
 msgstr ""
@@ -6654,7 +6668,7 @@ msgid "Item on hold: %s"
 msgstr "Puritia ana te tuemi: %s"
 
 #. %1$s:  RECALL.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:855
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:848
 #, fuzzy, c-format
 msgid "Item recalled: %s"
 msgstr "Tau karanga tuemi"
@@ -6669,17 +6683,17 @@ msgstr "Kāore e whakaaetia te whakahou."
 msgid "Item renewed"
 msgstr "Kua whakahoutia!"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:170
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:169
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1196
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:190
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:370
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:115
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:334
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:720
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:327
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:713
 #, c-format
 msgid "Item type"
 msgstr "Momo tuemi"
@@ -6687,7 +6701,7 @@ msgstr "Momo tuemi"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:163
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:212
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:425
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:418
 #, c-format
 msgid "Item type:"
 msgstr "Momo tuemi:"
@@ -6735,7 +6749,7 @@ msgstr "Tangohia i tēnei rārangi"
 msgid "Items: "
 msgstr "Ngā tuemi: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:342
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:340
 #, c-format
 msgid "Juvenile"
 msgstr "Pūhouhou"
@@ -6794,7 +6808,7 @@ msgstr "LCCN:"
 msgid "LCCN: %s "
 msgstr "LCCN: %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:304
 #, c-format
 msgid "Language"
 msgstr "Reo"
@@ -6810,7 +6824,7 @@ msgstr "Ngā reo"
 msgid "Languages:"
 msgstr "Ngā reo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:371
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:369
 #, c-format
 msgid "Large print"
 msgstr "Momotuhi Rahi"
@@ -6857,22 +6871,22 @@ msgstr "i tētahi whakaupoko ake"
 msgid "Latest serials"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:411
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:409
 #, c-format
 msgid "Law reports and digests"
 msgstr "Pūrongo me ngā hautaka ture"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:397
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:395
 #, c-format
 msgid "Legal articles"
 msgstr "Tuhinga ture"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:410
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:408
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Take ā-ture me ngā tuhipoka take"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:401
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:399
 #, c-format
 msgid "Legislation"
 msgstr "Ngā ture"
@@ -6942,7 +6956,7 @@ msgstr "Whare pukapuka:"
 msgid "Library: "
 msgstr "Whare pukapuka: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:183
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:181
 #, c-format
 msgid "Limit to any of the following:"
 msgstr "Here ki tētahi o ēnei:"
@@ -6968,7 +6982,7 @@ msgid "Link"
 msgstr "Hono"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:105
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:340
 #, c-format
 msgid "Links"
 msgstr "Ngā hono"
@@ -7019,7 +7033,7 @@ msgstr "Ngā rārangi e kitea ai tēnei tuemi: "
 msgid "Lists"
 msgstr "Ngā rārangi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:483
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:482
 #, c-format
 msgid "Lists:"
 msgstr "Ngā rārangi:"
@@ -7035,12 +7049,12 @@ msgstr "Uta ana"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Loading..."
 msgstr "Uta ana..."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:606
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:599
 #, c-format
 msgid "Loading... "
 msgstr "Uta ana... "
@@ -7051,9 +7065,9 @@ msgstr "Uta ana... "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:954
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:955
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1228
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1229
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1249
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1473
 #, fuzzy, c-format
 msgid "Local cover image"
 msgstr "Atahanga uhi"
@@ -7076,7 +7090,7 @@ msgstr "Tauwāhi"
 msgid "Location (Status)"
 msgstr "Tauwāhi (Tūnga)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:237
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:235
 #, fuzzy, c-format
 msgid "Location and availability:"
 msgstr "Tauwāhi me te wātea: "
@@ -7361,13 +7375,13 @@ msgstr "Wāhitau matua"
 msgid "Main contact method:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:558
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:560
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:557
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #, c-format
 msgid "Make a "
 msgstr "Whakaotihia he "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:564
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:563
 #, fuzzy, c-format
 msgid "Make an "
 msgstr "Whakaotihia he "
@@ -7397,12 +7411,12 @@ msgstr "Whakahaeretia ana e:"
 msgid "Manual fee"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:497
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:496
 #, c-format
 msgid "Match:"
 msgstr "Ōritenga:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1212
 #, fuzzy, c-format
 msgid "Materials specified"
 msgstr "Kāore tētahi tūtohu i tautuhia."
@@ -7485,7 +7499,7 @@ msgstr "Whakakē"
 msgid "More details"
 msgstr "He taipitopito anō"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:451
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:449
 #, c-format
 msgid "More options"
 msgstr "He kōwhiringa anō"
@@ -7520,7 +7534,7 @@ msgstr "%s%s%sPutumōhio tuihono Koha%s"
 msgid "Musical composition"
 msgstr "Tāhopukanga puoro"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:355
 #, c-format
 msgid "Musical recording"
 msgstr "Tāhopukanga puoro"
@@ -7567,7 +7581,7 @@ msgid "Never"
 msgstr "Kore rawa"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:871
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:864
 #, c-format
 msgid "Never expires "
 msgstr "Kaore rawa e mōnehu "
@@ -7590,7 +7604,7 @@ msgstr ""
 "katoa o te tuemi kua takina atu ina taki mai koe."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:968
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:992
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:985
 #, c-format
 msgid "New"
 msgstr "Hou"
@@ -7648,7 +7662,7 @@ msgstr "Tauwāhi tiki:"
 msgid "New purchase suggestion"
 msgstr "Huatau hoko hou"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:455
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:453
 #, c-format
 msgid "New search"
 msgstr "Rapu hou"
@@ -7661,7 +7675,7 @@ msgid "New tag(s), separated by a comma:"
 msgstr "Ngā tūtohu hou, ka wehea e te piko:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:281
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:280
 #, c-format
 msgid "New tag:"
 msgstr "Tūtohu hou:"
@@ -7721,9 +7735,9 @@ msgstr "Tērā tuemi wātea ka whai ake"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:113
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:130
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:522
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:823
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:515
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:816
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, c-format
 msgid "No"
 msgstr "Kāo"
@@ -7770,13 +7784,13 @@ msgstr "Ngā taki atu"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:123
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:140
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:359
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:367
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:375
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:384
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:392
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:401
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:413
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:358
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:374
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:383
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:391
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:412
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:422
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:434
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:443
@@ -7786,12 +7800,12 @@ msgstr "Ngā taki atu"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:116
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:364
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:372
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:741
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:749
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:758
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:365
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:742
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:751
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:134
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:228
@@ -7847,14 +7861,14 @@ msgstr "Kua tono kē koe i tēnei taitara."
 msgid "No items available."
 msgstr "Kāore he tuemi wātea."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:85
 #, c-format
 msgid "No limit"
 msgstr "Kāore he tepe"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:476
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:469
 #, c-format
 msgid "No longer renewable"
 msgstr "Kāore e taea te whakahou "
@@ -7916,7 +7930,7 @@ msgid "No record was removed."
 msgstr "Kāore tētahi pūkete i tangohia."
 
 #. %1$s:  ISSUE.soonestrenewdate | $KohaDates  as_due_date => 1 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:494
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:487
 #, c-format
 msgid "No renewal before %s"
 msgstr "Kia kaua e whakahou ā muri i te %s "
@@ -7926,7 +7940,7 @@ msgstr "Kia kaua e whakahou ā muri i te %s "
 msgid "No renewals allowed"
 msgstr "Kāore e whakaaetia ngā whakahou"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:813
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:806
 #, fuzzy, c-format
 msgid "No renewals left"
 msgstr "Kāore e whakaaetia ngā whakahou"
@@ -7946,7 +7960,7 @@ msgstr "Kāore he hua i kitea i te kohinga %s o te whare pukapuka."
 msgid "No results found in the library's OverDrive collection."
 msgstr "Kāore he hua i kitea i te kohinga OverDrive o te whare pukapuka."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:64
 #, c-format
 msgid "No results found!"
 msgstr "Kāore i kitea he hua!"
@@ -7982,13 +7996,13 @@ msgid "No, I do not agree. Please remove my account within a reasonable time."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "No, do not cancel article request"
 msgstr "Tuku tono tuhinga mō %s"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "No, do not cancel hold"
 msgstr "Kāore e puritia ana"
@@ -8018,7 +8032,7 @@ msgid "No, do not remove sharing"
 msgstr ", kāore e taea e koe te whakarite puringa."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "No, do not resume holds"
 msgstr ", kāore e taea e koe te whakarite puringa."
@@ -8028,12 +8042,12 @@ msgstr ", kāore e taea e koe te whakarite puringa."
 msgid "Nobody"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:353
 #, c-format
 msgid "Non-fiction"
 msgstr "Kōrero pono"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:358
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:356
 #, c-format
 msgid "Non-musical recording"
 msgstr "Tāhopukanga puoro kore"
@@ -8065,7 +8079,7 @@ msgstr "Kāore tētahi i tautuhia: "
 msgid "Normal view"
 msgstr "Tirohanga noa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:474
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:467
 #, c-format
 msgid "Not allowed "
 msgstr "Kāore e whakaaetia ana"
@@ -8081,7 +8095,7 @@ msgstr "Kāore he tuemi wātea."
 msgid "Not checked in %s"
 msgstr "I takina atu (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:553
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:552
 #, fuzzy, c-format
 msgid "Not finding what you're looking for? "
 msgstr "Kāore e kite ana i tāu e rapu ana?"
@@ -8122,17 +8136,17 @@ msgstr "Kāore i tukuna"
 msgid "Not on hold"
 msgstr "Kāore e puritia ana"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:470
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:463
 #, c-format
 msgid "Not renewable"
 msgstr "Kāore e taea te whakahou "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:468
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:461
 #, c-format
 msgid "Not renewable "
 msgstr "Kāore e taea te whakahou "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:124
 #, c-format
 msgid "Not what you expected? Check for "
 msgstr "Ehara i tāu i tūmanakohia ai? Taki mō "
@@ -8224,15 +8238,15 @@ msgid "Note: your tag was entirely markup code. It was NOT added."
 msgstr ""
 "Hapa! He waehere tautohu takahi ture te katoa o tō tākupu. KĀORE i tāpiritia."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:164
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:170
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-curbside-pickups.tt:180
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1204
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1225
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:134
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:384
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:926
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:919
 #, c-format
 msgid "Notes"
 msgstr "Ngā tuhipoka"
@@ -8266,7 +8280,7 @@ msgid "Nothing"
 msgstr "Horekau"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -8320,7 +8334,7 @@ msgstr "OAI-DC"
 msgid "OK"
 msgstr "Ka pai"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:250
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:248
 #, c-format
 msgid "OR"
 msgstr "TĒNEI RĀNEI"
@@ -8330,7 +8344,7 @@ msgstr "TĒNEI RĀNEI"
 msgid "ORCID: "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:804
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:134
 #, c-format
@@ -8377,7 +8391,7 @@ msgstr ""
 "Kotahi neke atu rānei ngā puringa kāore i whakaritea ko ngā puringa onāianei "
 "te take."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:138
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:141
 #, c-format
 msgid "Online resources:"
 msgstr "Ngā rauemi tuihono:"
@@ -8401,8 +8415,8 @@ msgstr ""
 "i te taitara e tono ana koe. Ka taea te whakamahi te āpure \"Ngā tuhipoka\" "
 "ki te whakarato i ngā mōhiohio tāpiri."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:226
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:260
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:224
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr ""
@@ -8447,7 +8461,7 @@ msgstr "Ētahi atu putanga o tēnei mahi"
 msgid "Other editions of this work"
 msgstr "Ētahi atu putanga o tēnei mahi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:127
 #, c-format
 msgid "Other forms:"
 msgstr "Ētahi atu puka:"
@@ -8525,12 +8539,12 @@ msgid "Overdue (%s)"
 msgstr "Tōmuri (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:90
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:885
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:878
 #, c-format
 msgid "Overdue to be returned"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:707
 #, c-format
 msgid "Overdues "
 msgstr "Ngā tōmuri "
@@ -8551,8 +8565,8 @@ msgstr ""
 msgid "Page error"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:541
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:924
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:540
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:917
 #, c-format
 msgid "Pages"
 msgstr "Ngā whārangi"
@@ -8675,7 +8689,7 @@ msgstr "Kāore e rite ngā kupuhipa! "
 msgid "Passwords do not match. Please re-type your new password."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:399
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:397
 #, c-format
 msgid "Patent document"
 msgstr "Pepa ārai"
@@ -8712,7 +8726,7 @@ msgid "Payment method"
 msgstr "Tiaknga utu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:164
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:988
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:981
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:161
 #, fuzzy, c-format
 msgid "Pending"
@@ -8770,7 +8784,7 @@ msgstr "Whare pukapuka tiki"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:74
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:257
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:877
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:870
 #, c-format
 msgid "Pick up location:"
 msgstr "Tauwāhi tiki:"
@@ -8781,7 +8795,7 @@ msgid "Pickup date:"
 msgstr "Tauwāhi tiki:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-curbside-pickups.tt:178
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:929
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:922
 #, c-format
 msgid "Pickup library"
 msgstr "Whare pukapuka tiki"
@@ -8793,7 +8807,7 @@ msgid "Pickup library:"
 msgstr "Whare pukapuka tiki:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:40
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:845
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:838
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:21
 #, fuzzy, c-format
 msgid "Pickup location"
@@ -8847,7 +8861,7 @@ msgstr "Tuku tono tuhinga mō %s"
 msgid "Place hold"
 msgstr "Whakarite puringa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:269
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:268
 #, c-format
 msgid "Place hold "
 msgstr "Whakarite puringa"
@@ -8865,8 +8879,8 @@ msgid "Place request"
 msgstr "Tuku tono"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:38
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:843
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:917
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:910
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:15
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:17
 #, c-format
@@ -9257,12 +9271,12 @@ msgstr "Tarea ō tākupu mō tēnei tuemi. "
 msgid "Powered by %s "
 msgstr "Whakahikotia ana e %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:337
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:335
 #, c-format
 msgid "Pre-adolescent"
 msgstr "Tamaiti"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:81
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:84
 #, c-format
 msgid "Preferred form: "
 msgstr "Momo manako: "
@@ -9272,7 +9286,7 @@ msgstr "Momo manako: "
 msgid "Preferred language for notices: "
 msgstr "Momo manako: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:335
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:333
 #, c-format
 msgid "Preschool"
 msgstr "Kōhungahunga"
@@ -9308,7 +9322,7 @@ msgstr "Tōmua"
 msgid "Previous sessions"
 msgstr "Ngā wātū tōmua"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:336
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:334
 #, c-format
 msgid "Primary"
 msgstr "Matua"
@@ -9411,7 +9425,7 @@ msgstr "Ngā rārangi tūmataiti e tiria ana ki a au"
 msgid "Problem found on page: "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:990
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:983
 #, fuzzy, c-format
 msgid "Processing"
 msgstr "Tukatuka ana..."
@@ -9421,7 +9435,7 @@ msgstr "Tukatuka ana..."
 msgid "Processing..."
 msgstr "Tukatuka ana..."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:403
 #, c-format
 msgid "Programmed texts"
 msgstr "Pukapuka ako raupapa"
@@ -9464,7 +9478,7 @@ msgid "Public lists"
 msgstr "Ngā rārangi tūmatanui"
 
 #. OPTGROUP
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:246
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:245
 msgid "Public lists:"
 msgstr "Ngā rārangi tūmatanui:"
 
@@ -9473,7 +9487,7 @@ msgstr "Ngā rārangi tūmatanui:"
 msgid "Publication date"
 msgstr "Awhe rā whakaputa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
 #, c-format
 msgid "Publication date range"
 msgstr "Awhe rā whakaputa"
@@ -9646,7 +9660,7 @@ msgid "Re-type new password:"
 msgstr "Patohia anō te kupuhipa hou:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:88
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:889
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:882
 #, c-format
 msgid "Ready for pickup"
 msgstr ""
@@ -9682,7 +9696,7 @@ msgid "Recall a specific item"
 msgstr "Tīpakona he tuemi tauwhāiti:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:60
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:859
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:852
 #, fuzzy, c-format
 msgid "Recall date:"
 msgstr "RecallItem "
@@ -9708,7 +9722,7 @@ msgstr "RecallItem "
 msgid "Recalled by patron expected at %s"
 msgstr "E kawea ana i %s ki te %s mai anō i te %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:839
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:832
 #, fuzzy, c-format
 msgid "Recalls "
 msgstr "RecallItem "
@@ -9776,33 +9790,10 @@ msgstr "%s%s%sPutumōhio tuihono Koha%s"
 msgid "Record not found"
 msgstr "Kāore te pūkete i kitea"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:916
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:909
 #, c-format
 msgid "Record title"
 msgstr "Taitara tāhopukanga"
-
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:309
-#, fuzzy, c-format
-msgid "RecordedBooks account"
-msgstr "Tō pūkete"
-
-#. For the first occurrence,
-#. %1$s:  q | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:23
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:37
-#, fuzzy, c-format
-msgid "RecordedBooks search for '%s'"
-msgstr "Rapu OverDrive mō '%s'"
-
-#. %1$s:  q | html 
-#. %2$s:  IF ( LibraryNameTitle ) 
-#. %3$s:  LibraryNameTitle | html 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:8
-#, c-format
-msgid "RecordedBooks search for '%s' &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "Rapu RecordedBooks mō '%s' &rsaquo; %s%s%sPutumōhio tuihono Koha%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:102
 #, fuzzy, c-format
@@ -9850,7 +9841,7 @@ msgstr "Kua oti te rēhitatanga"
 msgid "Registration invalid!"
 msgstr "Rēhitatanga muhu!"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:370
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:368
 #, c-format
 msgid "Regular print"
 msgstr "Tānga pūnoa"
@@ -9860,12 +9851,12 @@ msgstr "Tānga pūnoa"
 msgid "Related Term"
 msgstr "Kupu Pātahi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:674
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:667
 #, c-format
 msgid "Relative"
 msgstr "Whanaunga"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:667
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:660
 #, fuzzy, c-format
 msgid "Relative issues"
 msgstr "Whanaunga"
@@ -9934,11 +9925,11 @@ msgstr "Tango tiritiri"
 msgid "Remove share "
 msgstr "Tango tiritiri"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:341
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:450
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:559
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:334
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:443
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:552
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:718
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:793
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:138
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:148
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:312
@@ -9946,9 +9937,9 @@ msgstr "Tango tiritiri"
 msgid "Renew"
 msgstr "Whakahou"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:553
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:567
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:546
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:560
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, c-format
 msgid "Renew all"
 msgstr "Whakahou katoa"
@@ -9961,9 +9952,9 @@ msgstr "Whakahou katoa"
 msgid "Renew item"
 msgstr "Whakahou tuemi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:322
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:552
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:315
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:545
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, c-format
 msgid "Renew selected"
 msgstr "Whakahoutia ngā mea kua tīpakona"
@@ -9985,7 +9976,7 @@ msgstr ""
 msgid "Renewal of rental item"
 msgstr "Whakahou tuemi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:447
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:440
 #, c-format
 msgid "Renewed!"
 msgstr "Kua whakahoutia!"
@@ -9998,8 +9989,8 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:37
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:58
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:351
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:583
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:344
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:576
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:29
 #, c-format
 msgid "Report a problem"
@@ -10088,7 +10079,7 @@ msgstr "Tono tuhinga"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:883
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:876
 #, fuzzy, c-format
 msgid "Requested"
 msgstr "Ka hiahiatia"
@@ -10231,7 +10222,7 @@ msgstr "Rārangi parepare"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:58
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:295
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:294
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:125
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:178
@@ -10250,12 +10241,12 @@ msgid "Results %s to %s of %s"
 msgstr "Ngā hua %s ki te %s o te %s"
 
 #. %1$s:  ms_value | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:48
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:47
 #, fuzzy, c-format
 msgid "Results of search for '%s'"
 msgstr "Rapu OverDrive mō '%s'"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:180
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:179
 #, c-format
 msgid "Results per page: "
 msgstr ""
@@ -10270,7 +10261,7 @@ msgstr "Tīmata anō"
 msgid "Resume all suspended holds"
 msgstr "Tīmataria anō ngā puringa katoa kua whakatārewatia"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1034
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1027
 #, fuzzy, c-format
 msgid "Resume hold"
 msgstr "Tīmataria anō tō puringa mō "
@@ -10314,8 +10305,8 @@ msgstr "Hoki ki te whakarāpopotonga pūkete"
 msgid "Return to the catalog home page."
 msgstr "Hoki ki te whārangi putumōhio kāinga."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:78
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:141
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:77
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:140
 #, c-format
 msgid "Return to the last advanced search"
 msgstr "Hoki ki tērā rapu ara atu anō o mua"
@@ -10362,7 +10353,7 @@ msgstr ""
 "whakapā, ngā mōhiohio whaina, ngā mōhiohio tono puringa, ngā mohiohio hoatu "
 "taurewa, me ngā karere."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:404
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:402
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:12
 #, c-format
@@ -10417,7 +10408,7 @@ msgstr "Mihi:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:148
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:263
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:262
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:638
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:114
 #, c-format
@@ -10449,7 +10440,7 @@ msgstr "Tiakina ki ō rārangi"
 msgid "Save to your lists"
 msgstr "Tiakina ki ō rārangi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:984
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:977
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:118
 #, fuzzy, c-format
 msgid "Scan"
@@ -10511,7 +10502,7 @@ msgid "ScopusID: "
 msgstr ""
 
 #. INPUT type=submit name=do
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:445
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:443
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:85
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:184
@@ -10521,7 +10512,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:177
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:216
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:273
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:275
 #, c-format
 msgid "Search"
@@ -10580,7 +10571,7 @@ msgstr "Rapu hītori"
 msgid "Search options:"
 msgstr "Ngā kōwhiringa rapu:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:49
 #, fuzzy, c-format
 msgid "Search results"
 msgstr "E hoki ki ngā hua"
@@ -10589,8 +10580,6 @@ msgstr "E hoki ki ngā hua"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:44
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:54
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:47
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:3
 #, fuzzy
 msgid "Search results pagination"
@@ -10682,18 +10671,18 @@ msgstr "Wāhanga:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:125
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:129
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:410
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:398
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:409
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:460
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:470
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:134
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:379
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:756
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:372
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:749
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:68
 msgid "See Baker & Taylor"
 msgstr "Tirohoa Baker rāua ko Taylor"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:107
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:110
 #, c-format
 msgid "See also:"
 msgstr "Tirohia hoki:"
@@ -10743,7 +10732,7 @@ msgstr "Tīpakona he rārangi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:214
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:213
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:261
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:349
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:534
@@ -10757,9 +10746,9 @@ msgid "Select none"
 msgstr "Tīpako katoa"
 
 #. INPUT type=checkbox name=biblionumber
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:308
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:311
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:315
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:307
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:310
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:314
 #, fuzzy
 msgid "Select search result: %s"
 msgstr "Tīpako rapu ki te: "
@@ -10781,14 +10770,14 @@ msgstr "Tīpako huatau ki te: "
 msgid "Select the item(s) to search"
 msgstr "Tīpakona ngā tuemi hei rapu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:223
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:222
 #, fuzzy, c-format
 msgid "Select titles to:"
 msgstr "Tīpako taitara ki te: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:59
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:368
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:591
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:356
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, c-format
@@ -11001,8 +10990,8 @@ msgstr "Tiria mā HonoTahi"
 msgid "Shared"
 msgstr "Tiritiri"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:172
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1187
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:171
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1208
 #, fuzzy, c-format
 msgid "Shelving location"
 msgstr "Tauwāhi onāianei"
@@ -11055,6 +11044,11 @@ msgstr "Whakaaturia ngā tuemi katoa"
 #, fuzzy
 msgid "Show all transactions"
 msgstr "kāore he whakaahua"
+
+#. A
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:41
+msgid "Show dropdown with detailed list information"
+msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:73
 #, c-format
@@ -11130,11 +11124,6 @@ msgstr "Whakaatu ana i ngā tuemi 50 whakamutunga. "
 msgid "Showing only available items"
 msgstr "Whakaatu ana i ngā tuemi wātea anake"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:39
-#, c-format
-msgid "Sign in to view availability and checkout items or place holds"
-msgstr ""
-
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:442
 #, c-format
 msgid "Similar items"
@@ -11159,7 +11148,7 @@ msgstr ""
 "Ka utaina pea he utu mō te karere kuputuhi ina whakamahi i tēnei ratonga. "
 "Tonoa tō kaiwhakarato ratonga pūkoro mēnā he pātai āu."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:173
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:172
 #, c-format
 msgid "Something else"
 msgstr ""
@@ -11174,7 +11163,7 @@ msgstr "Ka puta he hapa o te tukatuka i ēnei wāhitau. Tirohia. Anei: %s"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "Something went wrong. The note has not been saved"
 msgstr "Kua puta mau he raru. Kāore te tuhipoka i tiakina"
 
@@ -11342,14 +11331,14 @@ msgstr "Kua hurihia tō kupuhipa. "
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "Ka aroha, kua pau te wā o tō wātū. Me takiuru anō."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:157
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:156
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy, c-format
 msgid "Sort"
 msgstr "Kōmaka mā:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:275
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:174
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:173
 #, c-format
 msgid "Sort by:"
 msgstr "Kōmaka mā:"
@@ -11374,7 +11363,7 @@ msgstr ""
 msgid "Spanish"
 msgstr "Whakamutu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:340
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:338
 #, c-format
 msgid "Specialized"
 msgstr "Whāiti"
@@ -11410,21 +11399,21 @@ msgstr "tō whakatauranga: %s, "
 msgid "State:"
 msgstr "Rohe:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:408
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:406
 #, c-format
 msgid "Statistics"
 msgstr "Tauanga"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:757
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1202
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1223
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:137
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:115
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:141
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:41
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:846
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:928
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:839
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:921
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:85
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:26
 #, c-format
@@ -11434,7 +11423,7 @@ msgstr "Tūnga"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:201
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recalls.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:468
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:881
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:874
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:131
 #, c-format
 msgid "Status:"
@@ -11542,7 +11531,7 @@ msgstr "Tāpaetia, ka kati tēnei matapihi"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:242
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "Submit changes"
 msgstr "Tāpae huri"
 
@@ -11554,8 +11543,8 @@ msgstr "Tāpae huri"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:54
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:595
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, c-format
 msgid "Submit note"
 msgstr "Tāpae tuhipoka"
@@ -11601,10 +11590,10 @@ msgid "Subscribe to this list"
 msgstr "Ohauru ki tēnei rarangi"
 
 #. A
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:69
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:70
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:112
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:113
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:114
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:96
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:140
@@ -11724,12 +11713,12 @@ msgstr "Tīpoka"
 msgid "Surname:"
 msgstr "Ingoa whānau:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:403
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:401
 #, c-format
 msgid "Surveys"
 msgstr "Ngā uiui"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1051
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1044
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:28
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:176
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:180
@@ -11742,12 +11731,12 @@ msgstr "Whakatārewa"
 msgid "Suspend all holds"
 msgstr "Whakatāweratia ngā puringa katoa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1036
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1029
 #, fuzzy, c-format
 msgid "Suspend hold"
 msgstr "Whakatāweratia ngā puringa katoa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1045
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1038
 #, c-format
 msgid "Suspend until:"
 msgstr "Whakatārewatia tae rā anō ki:"
@@ -11781,13 +11770,23 @@ msgid "System-wide only"
 msgstr "puta noa i te pūnaha anake"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:413
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:923
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:916
 #, c-format
 msgid "TOC"
 msgstr "Rārangi Ihirangi"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/html_helpers.inc:40
+#, fuzzy, c-format
+msgid "Tab text 1"
+msgstr "Ūkui rā"
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/html_helpers.inc:41
+#, fuzzy, c-format
+msgid "Tab text 2"
+msgstr "Ūkui rā"
+
 #. TH
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:923
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:916
 #, fuzzy
 msgid "Table of contents"
 msgstr "Rārangi Ihirangi nā Syndetics"
@@ -11803,7 +11802,7 @@ msgid "Table of contents:"
 msgstr "Ngā ihirangi whakarei: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:69
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:275
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:274
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:365
 #, c-format
 msgid "Tag"
@@ -11825,7 +11824,7 @@ msgid "Tag status here."
 msgstr "Tūnga tūtohu kei konei."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:258
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:286
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:285
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:39
 #, c-format
 msgid "Tag status here. "
@@ -11874,13 +11873,13 @@ msgstr "Ngā tūtohu hei whakaatu mai i ētahi atu kaiwhakamahi:"
 msgid "Tags to show:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:468
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:491
 #, c-format
 msgid "Tags:"
 msgstr "Ngā tūtohu:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:409
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:407
 #, c-format
 msgid "Technical reports"
 msgstr "Pūrongo hangarau"
@@ -12292,7 +12291,7 @@ msgstr ""
 "I puta mai he hapa i te tukatuka i tō rēhitatanga. Tono āwhina i tō whare "
 "pukapuka."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:402
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:400
 #, c-format
 msgid "Theses"
 msgstr "Tuhinga Whakapae"
@@ -12365,7 +12364,7 @@ msgstr "Tē taea tēnei taitara te tono."
 msgid "This item does not exist."
 msgstr "Kua kore tēnei tuemi."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:408
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:401
 #, fuzzy, c-format
 msgid "This item has been recalled. Please return by the new due date."
 msgstr "Kua tāpirihia tēnei mea ki tō kāta"
@@ -12544,11 +12543,11 @@ msgstr "Karakōnui"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:142
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:330
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:670
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:719
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:842
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:918
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:323
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:663
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:712
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:835
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:911
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:309
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:13
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:7
@@ -12675,7 +12674,7 @@ msgstr ""
 msgid "Transfer ownership of shared list '%s'"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:412
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:410
 #, c-format
 msgid "Treaties "
 msgstr "Ngā tiriti "
@@ -12703,7 +12702,7 @@ msgstr "Momo:"
 msgid "UF"
 msgstr "UF"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
 #, c-format
 msgid "URL"
 msgstr "URL"
@@ -12743,7 +12742,7 @@ msgid "Unable to check the items out to %s"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:39
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:38
 msgid "Unable to create enrollment!"
 msgstr "Tē taea te hanga rēhitatanga!"
 
@@ -12764,7 +12763,7 @@ msgstr "Kore wātea (ngaro)"
 msgid "Unavailable issues"
 msgstr "Ngā tuku tē wātea"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:205
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:47
 #, c-format
 msgid "Unhighlight"
@@ -12844,7 +12843,7 @@ msgid "Updates to your record"
 msgstr "Ngā whakahou ki tō pūkete"
 
 #. TH
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:344
 msgid "Use this to report any problems with your currently checked out items"
 msgstr ""
 
@@ -12860,7 +12859,7 @@ msgstr ""
 msgid "Used For"
 msgstr "Ka Whakamahia Mō"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:90
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:93
 #, c-format
 msgid "Used for/see from:"
 msgstr "Ka whakamahia mō/tirohia mai:"
@@ -12900,7 +12899,7 @@ msgstr ""
 "whakatīo i tētahi pūkete. Mēnā ka kite he wātea tō pūkete, me whakapā ki te "
 "whare pukapuka."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:376
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:374
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "Rīpene VHS / Rīpene ataata"
@@ -12959,8 +12958,8 @@ msgid "View interlibrary loan request"
 msgstr ""
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:362
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:739
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:732
 msgid "View on Amazon.com"
 msgstr "Kitea i Amazon.com"
 
@@ -12982,12 +12981,12 @@ msgstr "Tono momo tuemi tauwhāiti:"
 msgid "View your search history"
 msgstr "Tirohia tō hītori rapu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1434
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
 #, c-format
 msgid "Visit web site"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1215
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-recall.tt:107
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:382
@@ -12995,7 +12994,7 @@ msgstr ""
 msgid "Vol info"
 msgstr "Mōhiohio pukapuka"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:920
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:913
 #, c-format
 msgid "Volume"
 msgstr "Pukapuka"
@@ -13055,7 +13054,7 @@ msgstr ""
 "E āta tiakina ana e mātou tō tūmataitinga. I tēnei mata, ka āhei koe te "
 "whakarite i te roa e pupuri ana mātou i tō hītori pānui."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:379
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:377
 #, c-format
 msgid "Website"
 msgstr "Paetukutuku"
@@ -13099,7 +13098,7 @@ msgstr "Me ngā huatau tīpako: "
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:368
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:591
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "With selected titles: "
 msgstr "Me ngā taitara tīpako: "
@@ -13150,8 +13149,8 @@ msgstr "Tau"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:114
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:131
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:821
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:814
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, c-format
 msgid "Yes"
 msgstr "Āe"
@@ -13162,12 +13161,12 @@ msgstr "Āe"
 msgid "Yes "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:518
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:511
 #, c-format
 msgid "Yes (Item overdue or lost)"
 msgstr "Āe (Kua tōmuri, kua ngaro rānei te tuemi)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:520
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:513
 #, c-format
 msgid "Yes (Rental fees)"
 msgstr ""
@@ -13178,13 +13177,13 @@ msgid "Yes, I agree."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "Yes, cancel article request"
 msgstr "Tuku tono tuhinga mō %s"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "Yes, cancel hold"
 msgstr "WhakakorePuringa"
@@ -13214,13 +13213,13 @@ msgid "Yes, remove sharing"
 msgstr "Tango tiritiri"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "Yes, resume all holds"
 msgstr "Tīmataria anō ngā puringa katoa kua whakatārewatia"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 #, fuzzy
 msgid "Yes, suspend all holds"
 msgstr "Whakatāweratia ngā puringa katoa"
@@ -13428,13 +13427,13 @@ msgstr "Kāore ō takinga atu i tēnei wā."
 msgid "You currently have nothing checked out."
 msgstr "Kāore ō takinga atu i tēnei wā."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:620
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:613
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr ""
 "E namatia ana koe i tēnei wā ki ngā whaina me ngā utu, ko te tapeke ko:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:55
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:54
 #, c-format
 msgid "You did not specify any search criteria"
 msgstr "Kāore koe i tāuru i ētahi paearu rapu"
@@ -13505,7 +13504,7 @@ msgstr ""
 "I whāia e koe he hono tawhito rawa, hei tauira mai i tētahi pūkaha rapu, "
 "tohuwāhi rānei."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:635
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:628
 #, c-format
 msgid "You have a credit of:"
 msgstr "Anei tō moni tāwere:"
@@ -13530,7 +13529,7 @@ msgstr "Kua tono kē koe i tēnei taitara."
 msgid "You have exceeded the number of concurrent holds for this record"
 msgstr "Ka taea te mōrahi o ngā whakahou ka taea mō tēnei tuemi."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1014
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1007
 #, c-format
 msgid "You have no article requests currently."
 msgstr "Kāore ō tono tuhinga i tēnei wā."
@@ -13559,7 +13558,7 @@ msgstr ""
 "Kāore anō kia whakakīa ngā āpure katoa e hiahiatia ana. Whakakīa ngā āpure "
 "pātea ka tāpae anō."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:573
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:566
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Kāore ō takinga atu"
@@ -13669,7 +13668,7 @@ msgstr "Me takiuru rawa koe ki te tāpiri tūtohu."
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:591
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 msgid "You must be logged in to create or add to lists"
 msgstr "Me takiuru rawa koe ki te hanga, ki te tāpiri rānei ki ngā rārangi"
 
@@ -13736,8 +13735,8 @@ msgid "You reached your open article requests limit."
 msgstr "Kāore ō tono tuhinga i tēnei wā."
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:48
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:47
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:49
 msgid "You searched %s for '%s'%s%s with limit(s): '%s'%s"
 msgstr "Rapua %s mō '%s'%s%s me ngā tepe: '%s'%s"
 
@@ -14095,7 +14094,7 @@ msgid "Your lists"
 msgstr "Ō rārangi"
 
 #. OPTGROUP
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:233
 msgid "Your lists:"
 msgstr "Ō rārangi:"
 
@@ -14121,21 +14120,21 @@ msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sPutumōhio tuihono Koha%s"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "Your note about %s could not be saved."
 msgstr "Kāore i taea te tiaki tō tuhipoka mō %s."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Kua tiakina tō tuhipoka mō %s, kua tukuna ki te whare pukapuka."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1073
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1063
 msgid "Your note about %s was removed."
 msgstr "I tangohia tō tuhipoka mō %s."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:592
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:585
 #, c-format
 msgid "Your note will be shown to the librarian when the item is checked in."
 msgstr ""
@@ -14329,7 +14328,7 @@ msgid "Your search history &rsaquo; %s%s%sKoha online%s catalog"
 msgstr "%s%s%sPutumōhio tuihono Koha%s"
 
 #. %1$s:  total | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:111
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:110
 #, c-format
 msgid "Your search returned %s results. "
 msgstr "I whakahoki tō rapu i te %s hua."
@@ -14385,12 +14384,32 @@ msgstr "Kāore i kitea tō tau tuakiri i te pātengi raraunga. Me whakamātau an
 msgid "ZIP/Postal code:"
 msgstr "ZIP/Waehere poutāpeta:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:258
+#. %1$s:  #             ...                                                                                     
+#. %2$s:  #         [ END ]                                                                                     
+#. %3$s:  #         [ WRAPPER tab_panels ]                                                                      
+#. %4$s:  #             [ WRAPPER tab_panel tabname="tab_name_1" bt_active= 1 ] Panel contents 1 [ END ]        
+#. %5$s:  #             [ WRAPPER tab_panel tabname="tab_name_2" ] Panel contents 2 [ END ]                     
+#. %6$s:  #             ...                                                                                     
+#. %7$s:  #         [ END ]                                                                                     
+#. %8$s:  #     [ END ]                                                                                         
+#. %9$s:  BLOCK tabs 
+#. %10$s:  IF ( id ) 
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/html_helpers.inc:41
+#, fuzzy, c-format
+msgid "[ END ] %%] %s %s %s %s %s %s %s %s %s %s "
+msgstr "Kaituhi: %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/html_helpers.inc:40
+#, c-format
+msgid "[ END ] %%] [%% # [ WRAPPER tab_item tabname= \"tab_name_2\" ] "
+msgstr ""
+
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:257
 #, fuzzy, c-format
 msgid "[ More lists ]"
 msgstr "He rārangi anō"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:260
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:259
 #, c-format
 msgid "[ New list ]"
 msgstr "[ Rārangi hou ]"
@@ -14453,7 +14472,7 @@ msgid "bib_id"
 msgstr "tuakiri pūkete pukapuka"
 
 #. IMG
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:337
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:336
 msgid "bonus"
 msgstr "utu tāpiri"
 
@@ -14912,8 +14931,8 @@ msgstr "wāhitau īmēra matua"
 msgid "privacy policy"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:558
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:560
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:557
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #, c-format
 msgid "purchase suggestion"
 msgstr "ngā huatau hoko"
@@ -15050,7 +15069,7 @@ msgstr "ka tīmata me te"
 msgid "subjects "
 msgstr "ngā marau "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:125
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:124
 #, c-format
 msgid "suggestions"
 msgstr "ngā huatau"
@@ -15279,11 +15298,6 @@ msgstr ""
 msgid "your payment of %s has been applied to your account"
 msgstr "kua hoatu tō utunga o te %s ki tō pūkete"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:3
-#, c-format
-msgid "×"
-msgstr "×"
-
 #, fuzzy
 #~ msgid ""
 #~ "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
@@ -15462,9 +15476,8 @@ msgstr "×"
 #~ msgid ": %sa list:%s"
 #~ msgstr ": %she rārangi:%s"
 
-#, fuzzy
-#~ msgid "Clear text"
-#~ msgstr "Ūkui rā"
+#~ msgid "Checkout"
+#~ msgstr "Taki atu"
 
 #~ msgid "Copyright date:"
 #~ msgstr "Rā manatārua:"
@@ -15502,6 +15515,17 @@ msgstr "×"
 #~ msgstr ""
 #~ "Whakamahia hoki te āpure 'Takiuru'. %s Kua tīmataria kētia te tukanga "
 #~ "whakaora kupuhipa mō tēnei pūkete (\""
+
+#, fuzzy
+#~ msgid "RecordedBooks account"
+#~ msgstr "Tō pūkete"
+
+#, fuzzy
+#~ msgid "RecordedBooks search for '%s'"
+#~ msgstr "Rapu OverDrive mō '%s'"
+
+#~ msgid "RecordedBooks search for '%s' &rsaquo; %s%s%sKoha online%s catalog"
+#~ msgstr "Rapu RecordedBooks mō '%s' &rsaquo; %s%s%sPutumōhio tuihono Koha%s"
 
 #~ msgid ""
 #~ "The current subscription began on %s and is issued %s twice per day %s %s "
@@ -15615,3 +15639,6 @@ msgstr "×"
 
 #~ msgid "your tags"
 #~ msgstr "ō tūtohu"
+
+#~ msgid "×"
+#~ msgstr "×"

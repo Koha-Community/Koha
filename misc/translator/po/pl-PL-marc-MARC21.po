@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
-"POT-Creation-Date: 2023-05-16 06:01-0300\n"
-"PO-Revision-Date: 2023-05-19 11:50+0000\n"
-"Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
+"POT-Creation-Date: 2023-06-16 10:35-0300\n"
+"PO-Revision-Date: 2023-06-21 06:54+0000\n"
+"Last-Translator: pmis <pmis@mnw.art.pl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pl/22.11/pl-PL-marc-MARC21.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1684497006.885560\n"
+"X-POOTLE-MTIME: 1687330447.913370\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -7982,6 +7982,8 @@ msgstr "mongo-nkundu"
 msgid "Mongolian"
 msgstr "mongolski"
 
+# takie pojęcie przyjęte jest w https://przepisy.bn.org.pl/formaty/rekord-wzorcowy---instrukcja-marc-21#pole-008---elementy-danych-stalej-dlugosci-np
+# "c - seria monograficzna - Pole 1XX zawiera ujednolicony tytuł serii, który odnosi się do grupy samodzielnych publikacji i/lub podserii posiadających indywidualne tytuły."
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_006.xml:555
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_008.xml:1042
 #, c-format
@@ -11604,7 +11606,7 @@ msgstr "Wydawnictwo Ciągłe/Wymiennokartkowe"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:82
 #, c-format
 msgid "Series"
-msgstr "Serie"
+msgstr "Seria"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:182
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl:412
@@ -11612,7 +11614,7 @@ msgstr "Serie"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:376
 #, c-format
 msgid "Series: "
-msgstr "Serie: "
+msgstr "Seria: "
 
 #: koha-tmpl/intranet-tmpl/prog/en/data/marc21_field_007.xml:500
 #, c-format
@@ -16477,11 +16479,15 @@ msgstr "c- 4 ścieżki"
 msgid "c- Safety base, acetate undetermined"
 msgstr "c- Niepalne/bezpieczne, oktanowo nieokreślone"
 
+# "Tak zwana seria" to seria, którą umieszcza się w uwagach i w polu 830, chociaż nie ma jej w książce. Kodu c używa się w odwrotnej sytuacji: fraza występuje w książce, ale nie jest serią, więc nie należy jej dodawać w polu 830.
+# https://www.loc.gov/catworkshop/courses/naco-full%20series-RDA/Session12SeriesLikePhrases.pdf
+# NUKAT ma dokument, w którym takie serie zostały nazwane pseudoseriami:
+# https://centrum.nukat.edu.pl/images/baza_ustalen/66/Pseudoserie.pdf
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:299
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:301
 #, c-format
 msgid "c- Series-like phrase"
-msgstr "c- Seria jako fraza"
+msgstr "c- Tak zwana seria"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -16581,6 +16587,7 @@ msgstr ""
 msgid "cartographic"
 msgstr "cartographic"
 
+# Skrót od Canadian Subject Headings
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:1198
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:1217
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MADS.xsl:1305
@@ -19758,13 +19765,13 @@ msgstr "pe- Dane sejsmiczne"
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:329
 #, c-format
 msgid "periodical"
-msgstr "okresowy"
+msgstr "periodyk"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:535
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:727
 #, c-format
 msgid "periodical "
-msgstr "okresowy "
+msgstr "periodyk "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:186
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:268
@@ -20195,7 +20202,7 @@ msgstr "results_summary publisher"
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:223
 #, c-format
 msgid "results_summary series"
-msgstr "seria results_summary"
+msgstr "results_summary series"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:539
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:643
@@ -20411,13 +20418,13 @@ msgstr "czasopismo"
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:323
 #, c-format
 msgid "series"
-msgstr "serie"
+msgstr "seria"
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:529
 #: koha-tmpl/opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:721
 #, c-format
 msgid "series "
-msgstr "serie "
+msgstr "seria "
 
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:390
 #: koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:462

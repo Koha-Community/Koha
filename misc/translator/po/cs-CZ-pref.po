@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2023-04-16 20:18+0000\n"
+"PO-Revision-Date: 2023-06-05 19:50+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: cs\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /cs/22.11/cs-CZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1681676309.569639\n"
+"X-POOTLE-MTIME: 1685994646.988314\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -1109,7 +1109,7 @@ msgstr ""
 
 # Administration > Interface options
 msgid "admin.pref#SendAllEmailsTo# Email to redirect all messages to: "
-msgstr "E-mail kam budou přeposílány všechny zrpávy:"
+msgstr "E-mail, kam budou přeposílány všechny zrpávy: "
 
 # Administration > Login options
 msgid ""
@@ -2469,7 +2469,6 @@ msgstr ""
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 
 # Enhanced content > Library Thing
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
 "default value for the 667$a field of MARC21 authority records (must not "
@@ -2478,12 +2477,12 @@ msgid ""
 "a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
-"službu ThingISBN k zobrazení dalších vydání titulu (je nutné mít aktivní <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=FRBRizeEditions\">FRBRizeEditions</a> nebo <a href=\"/"
-"cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions"
-"\">OPACFRBRizeEditions</a>). Toto nastavení je nezávislé na službě Library "
-"Thing pro knihovny."
+"Použít následující text jako výchozí hodnotu pole 667$a v MARC21 autoritních "
+"záznamech (nesmí vyžadovat nastavení <a href='/cgi-bin/koha/admin/"
+"preferences.pl?"
+"op=search&searchfield=RequireChoosingExistingAuthority'>RequireChoosingExistingAuthority</"
+"a> and must allow <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 
 # Enhanced content > Library Thing
 #, fuzzy
@@ -3324,13 +3323,12 @@ msgstr ""
 "[501$a, 505$g] )"
 
 # Cataloging > Exporting
-#, fuzzy
 msgid ""
 "cataloguing.pref#RisExportAdditionalFields# Use of TY ( record type ) as a "
 "key will <em>replace</em> the default TY with the field value of your "
 "choosing."
 msgstr ""
-"Použití TY ( typ záznamu ) jako klíče <i>nahradí</i> nahradí výchozí hodnotu "
+"Použití TY (typ záznamu) jako klíče, který <em>nahradí</em> výchozí hodnotu "
 "TY obsahem pole, které zvolíte."
 
 # Cataloging > Exporting
@@ -3945,7 +3943,9 @@ msgstr ""
 msgid ""
 "circulation.pref#AgeRestrictionMarker# Restrict patrons with the following "
 "target audience values from checking out inappropriate materials:"
-msgstr "Omez čtenáře na hodnoty cílové skupiny výpůjček nevhodných materiálů:"
+msgstr ""
+"Znemožnit čtenářům s následujícími hodnotami cílové skupiny, aby si "
+"nepůjčovali nevhodné materiály:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AgeRestrictionOverride# Allow"
@@ -4022,8 +4022,9 @@ msgid ""
 "koha/admin/preferences.pl?op=search&searchfield=noissuescharge"
 "\">noissuescharge</a> system preference."
 msgstr ""
-"obsluze ručně přepsat a vydat výpůjčky čtenářům, kteří mají pokutu větší než "
-"paušální poplatek."
+"obluze ručně přepsat a provést výpůjčku jednotek čtenářům, kteří mají vyšší "
+"pokuty, než je nastaveno v nastevení <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=noissuescharge\">noissuescharge</a>."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -4159,14 +4160,13 @@ msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Don't allow"
 msgstr "Nepovolit"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple "
 "items from the same record. (<strong>NOTE:</strong> This will only affect "
 "records without a subscription attached.)"
 msgstr ""
-"čtenářům vypůjčení více kusů téhož dokumentu.  (<strong>Poznámka:</strong> "
-"Toto nastavení ovlivňuje jen záznamy bez odběru (předplatného).)"
+"čtenářům vypůjčení více jednotek stejného dokumentu. (<strong>Poznámka:</"
+"strong> Toto nastavení ovlivňuje jen záznamy bez odběru (předplatného).)"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -4327,7 +4327,7 @@ msgstr "Povolit"
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequests# patrons to place article requests."
-msgstr "čtenářům vytvářet požadavky na zpřístupnění článků."
+msgstr "čtenářům vytvářet požadavky na články."
 
 # Circulation > Article requests
 msgid "circulation.pref#ArticleRequestsLinkControl# Always show"
@@ -4970,9 +4970,8 @@ msgid ""
 msgstr "k označení jednotky, jejíž vrácení bylo reklamováno"
 
 # Circulation > Return Claims
-#, fuzzy
 msgid "circulation.pref#CleanUpDatabaseReturnClaims# days."
-msgstr "Reklamace vracení"
+msgstr "dní."
 
 # Circulation > Holds policy
 msgid ""
@@ -6590,14 +6589,13 @@ msgid "circulation.pref#ReturnBeforeExpiry# Require"
 msgstr "Požadovat"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "circulation.pref#ReturnBeforeExpiry# patrons to return items before their "
 "accounts expire (by restricting due dates to before the patron's expiration "
 "date)."
 msgstr ""
-"čtenáři vrátit knihy, dříve než vyprší jeho registrace (omezením výpůjční "
-"doby na datum vypršení registrace čtenáře)."
+"čtenáři vrátit knihy, dříve než vyprší jeho registrace (nastavením data "
+"vrácení před datum vypršení registrace čtenáře)."
 
 # Circulation > Interface
 #, fuzzy
@@ -6610,7 +6608,6 @@ msgid "circulation.pref#SCOAllowCheckin# Don't allow"
 msgstr "Nepovolit"
 
 # Circulation > Self Checkout
-#, fuzzy
 msgid ""
 "circulation.pref#SCOAllowCheckin# patrons to return items through web-based "
 "self checkout system."
@@ -6826,7 +6823,6 @@ msgid ""
 msgstr ""
 
 # Circulation > Self Checkout
-#, fuzzy
 msgid ""
 "circulation.pref#SelfCheckoutByLogin# Have patrons log into the web-based "
 "self checkout system with their"
@@ -7873,11 +7869,6 @@ msgstr "Open Library"
 msgid "enhanced_content.pref OverDrive"
 msgstr "OverDrive"
 
-# Enhanced content > Google
-#, fuzzy
-msgid "enhanced_content.pref RecordedBooks"
-msgstr "Google"
-
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref Syndetics"
 msgstr "Syndetics"
@@ -8683,11 +8674,10 @@ msgid "enhanced_content.pref#OverDriveCirculation# cardnumber"
 msgstr "Umožnit"
 
 # Enhanced Content > OverDrive
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveCirculation# for user access to OverDrive. "
 "<br />"
-msgstr "v účtu OverDrive."
+msgstr "pro přístup uživatele k OverDrive. <br />"
 
 # Enhanced content > OverDrive
 #, fuzzy
@@ -8695,13 +8685,12 @@ msgid "enhanced_content.pref#OverDriveCirculation# user name"
 msgstr "Umožnit"
 
 # Enhanced Content > OverDrive
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive "
 "circulation history, and circulate items.<br />"
 msgstr ""
-", aby uživatelé měli přístup k historii svých  výpůjček v systému OverDrive "
-"a mohli si další jednotky půjčovat."
+", aby uživatelé měli přístup k historii svých výpůjček v systému OverDrive a "
+"mohli si další jednotky půjčovat.<br />"
 
 # Enhanced content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# ."
@@ -8739,36 +8728,6 @@ msgid ""
 "enhanced_content.pref#OverDriveWebsiteID# Authenticate using OverDrive "
 "website id #"
 msgstr "v účtu OverDrive."
-
-# Enhanced content > OverDrive
-#, fuzzy
-msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
-msgstr "."
-
-# Enhanced content > OverDrive
-#, fuzzy
-msgid ""
-"enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks "
-"availability information with the client secret"
-msgstr ""
-"Zahrnout do vyhledávání i dokumenty z databáze Overdrive. Klientský klíč:"
-
-# Enhanced Content > IDreamLibraries
-#, fuzzy
-msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
-msgstr "Přidat"
-
-# Enhanced content > OverDrive
-#, fuzzy
-msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
-msgstr "."
-
-# Enhanced content > OverDrive
-#, fuzzy
-msgid ""
-"enhanced_content.pref#RecordedBooksLibraryID# Show items from the "
-"RecordedBooks catalog of library ID"
-msgstr "Identifikátor knihovny v systému OverDrive:"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -8992,7 +8951,7 @@ msgstr "Nepovolit"
 msgid ""
 "enhanced_content.pref#TagsInputOnDetail# patrons to input tags on item "
 "detail pages on the OPAC."
-msgstr "čtenářům vkládat tagy na podrobném záznamu v on-line katalogu."
+msgstr "čtenářům vkládat štítky do detailu záznamu v on-line katalogu."
 
 # Enhanced content > Tagging
 msgid "enhanced_content.pref#TagsInputOnList# Allow"
@@ -9007,7 +8966,7 @@ msgid ""
 "enhanced_content.pref#TagsInputOnList# patrons to input tags on search "
 "results on the OPAC."
 msgstr ""
-"čtenářům vkládat tagy na stránce s výsledky vyhledávání v on-line katalogu."
+"čtenářům vkládat štítky na stránce s výsledky hledávání v on-line katalogu."
 
 # Enhanced content > Tagging
 msgid "enhanced_content.pref#TagsModeration# Don't require"
@@ -9022,7 +8981,8 @@ msgid ""
 "enhanced_content.pref#TagsModeration# that tags submitted by patrons be "
 "reviewed by a staff member before being shown."
 msgstr ""
-"že štítky vložené čtenáři jsou revidovány obsluhou dříve než budou zobrazeny."
+"že štítky vložené čtenáři jsou projdou schválením knihovníkem dříve, než "
+"budou zobrazeny."
 
 # Enhanced content > Tagging
 msgid "enhanced_content.pref#TagsShowOnDetail# Show"
@@ -9561,12 +9521,10 @@ msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records."
 msgstr "všechny změny v biblio nebo jednotkových záznamech."
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#ClaimsLog# Don't log"
 msgstr "Nelogovat"
 
 # Logging > Logging
-#, fuzzy
 msgid "logs.pref#ClaimsLog# Log"
 msgstr "Logovat"
 
@@ -9857,14 +9815,13 @@ msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's checkouts to the "
 "patron's guarantor."
 msgstr ""
-"nastavit vlastní úroveň soukromí při zobrazení výpůjček čtenáře jeho ručiteli"
-"\". "
+"nastavit vlastní úroveň soukromí pro zobrazení výpůjček čtenáře jeho "
+"ručiteli."
 
 # OPAC > Privacy
 #, fuzzy
@@ -9877,14 +9834,13 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
 msgstr ""
-"nastavit vlastní úroveň soukromí při zobrazení výpůjček čtenáře jeho ručiteli"
-"\". "
+"nastavit vlastní úroveň soukromí při zobrazení výpůjček čtenáře jeho "
+"ručiteli."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonSuggestions# Allow"
@@ -9895,7 +9851,6 @@ msgid "opac.pref#AnonSuggestions# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AnonSuggestions# patrons that aren't logged in to make purchase "
 "suggestions. Suggestions are connected to the <a href=\"/cgi-bin/koha/admin/"
@@ -9903,7 +9858,8 @@ msgid ""
 "system preference."
 msgstr ""
 "nepřihlášeným čtenářům vkládat návrhy na nákupy. Návrhy jsou propojeny s "
-"AnonymousPatron syspref"
+"nastaveným <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=AnonymousPatron\">anonymního čtenáře</a>."
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
@@ -9915,6 +9871,32 @@ msgid ""
 "opac.pref#AnonymousPatron# as the anonymous patron (for anonymous "
 "suggestions and checkout history)."
 msgstr "jako anonymního čtenáře (pro anonymní návrhy a historii čtení)"
+
+# OPAC > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacDetailsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"<br />Možnosti:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"\">Ponechat prázdné</a>pro \"no xslt"
+"\"</li><li>vložit \"<a href=\"#\" class=\"set_syspref\" data-syspref="
+"\"OPACXSLTResultsDisplay\" data-value=\"default\">defaultně</a>\" pro "
+"defaultní hodnotu </li><li> zadat cestu k definici xslt souboru</"
+"li><li>zadat URL pro externí specifickou šablonu.</li></ul>{langcode} bude "
+"nahrazen používaným jazykem rozhranní"
+
+# Staff Client > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacDetailsDisplay# Display authority details in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr "Zobrazit výsledky v intranetu s použití XSLT stylesheetu na: "
 
 # OPAC > Appearance
 #, fuzzy
@@ -9968,7 +9950,6 @@ msgid "opac.pref#BlockExpiredPatronOpacActions# Don't block"
 msgstr "Neblokovat"
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#BlockExpiredPatronOpacActions# expired patrons from OPAC actions "
 "such as placing a hold or renewing. Note that the setting for a patron "
@@ -9976,7 +9957,7 @@ msgid ""
 msgstr ""
 "čtenářům s vypršenou registrací rezervace, prodlužování a další akce v on-"
 "line katalogu. Vezměte na vědomí, že toto je výchozí nastavení a může být "
-"přepsáno nastavením u čtenářských kategorií."
+"přepsáno nastavením u čtenářských kategorií, které má vyšší prioritu."
 
 # OPAC > Appearance > COinSinOPACResults
 msgid ""
@@ -10193,9 +10174,8 @@ msgid "opac.pref#OPACComments# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACComments# patrons to make comments on items on the OPAC."
-msgstr "čtenářům přidávat komentáře k výtiskům na OPACu."
+msgstr "čtenářům přidávat komentáře k jednotkám v on-line katalogu."
 
 # OPAC > OpenURL
 #, fuzzy
@@ -10312,11 +10292,10 @@ msgid "opac.pref#OPACFinesTab# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OPACFinesTab# patrons to access the charges tab on their account "
 "page on the OPAC."
-msgstr "čtenářům přístup k záložce Pokuty v Můj účet na OPACu."
+msgstr "čtenářům přístup k záložce Poplatky v Můj účet v on-line katalogu."
 
 # OPAC > Features
 #, fuzzy
@@ -10329,7 +10308,6 @@ msgid "opac.pref#OPACHoldRequests# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
 msgstr "čtenářům rezervace v on-line katalogu."
@@ -10364,10 +10342,9 @@ msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
-msgstr "čtenáři, aby viděl minulé výpůjčky."
+msgstr "čtenáři, aby viděl historii rezervací."
 
 # Cataloging > Display
 #, fuzzy
@@ -10409,9 +10386,8 @@ msgid ""
 msgstr "Zobrazit následující HTML pro případ, že nebylo nic nalezeno:"
 
 # OPAC > OpenURL
-#, fuzzy
 msgid "opac.pref#OPACOpenURLItemTypes# <br />"
-msgstr "Zakázat"
+msgstr "<br />"
 
 # OPAC > OpenURL
 msgid ""
@@ -10431,7 +10407,9 @@ msgstr "Nepovolit"
 msgid ""
 "opac.pref#OPACPatronDetails# patrons to notify the library of changes to "
 "their contact information from the OPAC."
-msgstr "čtenářům oznámit knihovně změny v jejich kontaktech z OPACu."
+msgstr ""
+"čtenářům oznámit knihovně změny v jejich kontaktech provedené z on-line "
+"katalogu."
 
 # OPAC > Features
 #, fuzzy
@@ -10494,9 +10472,8 @@ msgstr ""
 "Thing pro knihovny."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OPACReportProblem# <br/>"
-msgstr "Zobrazit"
+msgstr "<br/>"
 
 # Patrons > Notices and notifications
 #, fuzzy
@@ -10825,12 +10802,10 @@ msgstr ""
 "Vložit následující javaskriptový kód na všechny stránky on-line katalogu:"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACUserSummary# Don't show"
 msgstr "Nezobrazit"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACUserSummary# Show"
 msgstr "Zobrazit"
 
@@ -11761,18 +11736,14 @@ msgid ""
 msgstr ""
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OpenURLImageLocation# <br />Can be an absolute URL starting with "
 "<code>http://</code> or"
-msgstr ""
-"jako ikonu on-line katalogu. (Je třeba vložit úplnou URL, včetně "
-"<code>http://</code>.)"
+msgstr "<br />Je třeba vložit absolutní URL, včetně <code>http://</code> nebo"
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#OpenURLImageLocation# <br />Examples:"
-msgstr "jen signatura"
+msgstr "<br />Příklady:"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <code>https://</code> or a relative URL"
@@ -12371,9 +12342,8 @@ msgstr ""
 "Thing pro knihovny."
 
 # OPAC > Features
-#, fuzzy
 msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
-msgstr "čtenářům dělat návrhy na nákupy na OPACu."
+msgstr "čtenářům vytvářet návrhy na nákupy v on-line katalogu.<br>"
 
 # Patrons
 msgid "patrons.pref"
@@ -13553,7 +13523,7 @@ msgstr "Používat SMS::Send::"
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
-msgstr "driver pro posílání SMS zpráv."
+msgstr "ovladač pro posílání SMS zpráv."
 
 # Patrons > Notices and notifications
 #, fuzzy
@@ -14080,11 +14050,10 @@ msgid ""
 msgstr ""
 
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty "
 "for no limit."
-msgstr "jednotek."
+msgstr "<br/>Pokud nechcete omezovat, nechte prázdné."
 
 # Searching > Results display
 msgid ""
@@ -15148,14 +15117,12 @@ msgid ""
 msgstr "Použít CAS pro ověření při přihlášení:  "
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Don't show"
-msgstr "Nepoužívat"
+msgstr "Nezobrazovat"
 
 # Staff Client > Options
-#, fuzzy
 msgid "staff_interface.pref#UseWYSIWYGinSystemPreferences# Show"
-msgstr "Používat"
+msgstr "Zobrazit"
 
 # Staff Client > Options
 #, fuzzy
@@ -15997,6 +15964,11 @@ msgstr "řádků z výstupů vyžádaných pomocí webové služby SVC."
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
 #~ msgstr "skenovaných čárových kódů na výtiscích."
 
+# Enhanced content > Google
+#, fuzzy
+#~ msgid "enhanced_content.pref RecordedBooks"
+#~ msgstr "Google"
+
 # Enhanced content > Local or remote cover images
 #, fuzzy
 #~ msgid "enhanced_content.pref#CustomCoverImages# Display"
@@ -16009,6 +15981,36 @@ msgstr "řádků z výstupů vyžádaných pomocí webové služby SVC."
 # Enhanced content > Local or remote cover images
 #~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
 #~ msgstr "Zobrazovat"
+
+# Enhanced content > OverDrive
+#, fuzzy
+#~ msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
+#~ msgstr "."
+
+# Enhanced content > OverDrive
+#, fuzzy
+#~ msgid ""
+#~ "enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks "
+#~ "availability information with the client secret"
+#~ msgstr ""
+#~ "Zahrnout do vyhledávání i dokumenty z databáze Overdrive. Klientský klíč:"
+
+# Enhanced Content > IDreamLibraries
+#, fuzzy
+#~ msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
+#~ msgstr "Přidat"
+
+# Enhanced content > OverDrive
+#, fuzzy
+#~ msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
+#~ msgstr "."
+
+# Enhanced content > OverDrive
+#, fuzzy
+#~ msgid ""
+#~ "enhanced_content.pref#RecordedBooksLibraryID# Show items from the "
+#~ "RecordedBooks catalog of library ID"
+#~ msgstr "Identifikátor knihovny v systému OverDrive:"
 
 # Administration > Interface options
 #, fuzzy

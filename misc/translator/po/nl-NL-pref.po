@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2023-05-10 08:47+0000\n"
+"PO-Revision-Date: 2023-06-22 11:06+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: nl_NL\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /nl_NL/22.11/nl-NL-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1683708439.398456\n"
+"X-POOTLE-MTIME: 1687431991.724732\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2473,12 +2473,10 @@ msgstr ""
 "toestaan):"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerConsiderThesaurus# Do"
 msgstr "Wel"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
 msgstr "Niet"
 
@@ -2489,6 +2487,10 @@ msgid ""
 "Enabling this preference may require a reindex, and may generate new "
 "authority records if AutoCreateAuthorities is enabled."
 msgstr ""
+"de bron voor 6XX ingangen vergelijken met de thesaurusbron voor "
+"thesaurusrecords bij het linken. Inschakelen hiervan vereist mogelijk een "
+"herindexering en kan nieuwe thesaurusrecords creëren als "
+"AutoCreateAuthorities ingeschakeld is."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -7694,10 +7696,6 @@ msgstr "Open Library"
 msgid "enhanced_content.pref OverDrive"
 msgstr "OverDrive"
 
-# Enhanced Content > RecordedBooks
-msgid "enhanced_content.pref RecordedBooks"
-msgstr "RecordedBooks"
-
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref Syndetics"
 msgstr "Syndetics"
@@ -8552,34 +8550,6 @@ msgstr ""
 "enhanced_content.pref#OverDriveWebsiteID# Authenticatie via OverDrive "
 "website id #"
 
-# Enhanced Content > RecordedBooks
-msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
-msgstr "."
-
-# Enhanced Content > RecordedBooks
-msgid ""
-"enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks "
-"availability information with the client secret"
-msgstr ""
-"enhanced_content.pref#RecordedBooksClientSecret# RecordedBooks "
-"beschikbaarheidsinformatie bijvoegen via de client secret"
-
-# Enhanced Content > RecordedBooks
-msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
-msgstr "RecordedBooks domein"
-
-# Enhanced Content > RecordedBooks
-msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
-msgstr "."
-
-# Enhanced Content > RecordedBooks
-msgid ""
-"enhanced_content.pref#RecordedBooksLibraryID# Show items from the "
-"RecordedBooks catalog of library ID"
-msgstr ""
-"enhanced_content.pref#RecordedBooksLibraryID# Toon exemplaren van de "
-"RecordedBooks catalogus van bibliotheek ID"
-
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
 msgstr "Verberg"
@@ -8907,7 +8877,7 @@ msgstr "Activeren"
 
 # Circulation > Interlibrary Loans
 msgid "erm.pref#ERMModule# the e-resource management module"
-msgstr "van de e-resource management module"
+msgstr "van de ERM module"
 
 # E-Resource management > Interface > ERMProviderEbscoApiKey
 msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
@@ -8927,7 +8897,7 @@ msgstr "Lokaal"
 
 # E-resource management > Interface > ERMProviders
 msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
-msgstr "Aanbieders voor de e-resource management module"
+msgstr "Aanbieders voor de ERM module"
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
@@ -9705,6 +9675,30 @@ msgid ""
 "suggestions and checkout history)."
 msgstr ""
 "als de anonieme lener (voor anonieme suggesties en uitleengeschiedenis)."
+
+# OPAC > Appearance
+msgid ""
+"opac.pref#AuthorityXSLTOpacDetailsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"<br />Opties:<ul><li>Leeg. Er wordt geen XSLT toegepast (<strong>standaard</"
+"strong>)</li><li>Voer een pad in om een xslt bestand te definiëren</"
+"li><li>Voer een url in voor een specifieke externe stylesheet.</li></ul>Bij "
+"meerdere stylesheets voor: <ul><li>verschillende talen: gebruik een "
+"plaatshouder {langcode} - deze wordt vervangen door de huidige interfacetaal "
+"</li><li>thesaurustypes: gebruik de plaatshouder {authtypecode} - deze wordt "
+"vervangen door de thesaurustype code"
+
+# OPAC > Appearance
+msgid ""
+"opac.pref#AuthorityXSLTOpacDetailsDisplay# Display authority details in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr "Toon thesaurusdetails in de OPAC via de XSLT stylesheet op: "
 
 # OPAC > Appearance
 msgid ""
@@ -13016,19 +13010,16 @@ msgstr ""
 "vanuit het borgsteller's record:"
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
 "patrons need to give consent before using the OPAC. If you set to "
 "permissive, Koha will warn but not enforce."
 msgstr ""
-"GDPR is de EU General Data Protection Regulation of wel AVG. Indien dit "
-"wordt afgedwongen, moeten leners toestemming geven voor ze de OPAC kunnen "
-"gebruiken. Indien dit op toestaan staat, zal Koha waarschuwen, maar niet "
-"afdwingen."
+". Indien een privacybeleid wordt afgedwongen, moeten leners toestemming "
+"geven voor ze de OPAC kunnen gebruiken. Indien dit op toestaan staat, zal "
+"Koha waarschuwen, maar niet afdwingen."
 
 # Patrons > Privacy > GDPR_Policy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
 "this you will also have to set the URL of your public privacy policy with "
@@ -13041,50 +13032,44 @@ msgstr ""
 "\">PrivacyPolicyURL</a> instelling."
 
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
-msgstr "Stel AVG beleid in op:"
+msgstr "Stel privacyverklaring in op:"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# disabled"
 msgstr "uitgeschakeld"
 
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# enforced"
 msgstr "afgedwongen"
 
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# permissive"
 msgstr "toestaand"
 
 # Patrons > Privacy > PrivacyPolicyURL
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>LET OP:</strong> De URL wordt alleen getoond als <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy"
-"\">GDPR_Policy</a> is ingesteld."
+"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent"
+"\">PrivacyPolicyConsent</a> is ingesteld."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "Gebruik de volgende URL"
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
 "messages about privacy and data protection. (If you enforce a data privacy "
 "policy, make sure that this page is not blocked.)"
 msgstr ""
-"om te verwijzen naar het lokale AVG beleid in berichten over privacy en "
+"om te verwijzen naar het lokale privacybeleid in berichten over privacy en "
 "databescherming. (Zorg dat de pagina niet geblokkeerd is bij afdwingen van "
-"AVG beleid)"
+"privacybeleid)"
 
 # Patrons > General
 msgid ""
@@ -13184,9 +13169,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Locatie"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Patron category"
-msgstr "Categorie lener"
+msgstr "Lenercategorie"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Patron's gender"
@@ -13201,7 +13185,6 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "Titel lener"
 
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
 "separate table for statistical purposes."
@@ -13210,12 +13193,10 @@ msgstr ""
 "statistische doeleinden."
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Sort 1"
-msgstr "Sorteer1"
+msgstr "Sorteer 1"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "Sorteer 2"
 
@@ -13228,16 +13209,16 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "Transactie type"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "Postcode"
 
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
 "policies and regulations like GDPR for managing personal information."
-msgstr "pseudonimisatie om te voldoen aan AVG voor persoongegevens."
+msgstr ""
+"pseudonimisatie om te voldoen aan privacybeleid en AVG voor het beheer van "
+"persoongegevens."
 
 msgid ""
 "patrons.pref#RequireStrongPassword# (must contain at least one digit, one "
@@ -15621,6 +15602,10 @@ msgstr "rijen van een rapport dat opgevraagd is via de rapporten webservice."
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
 #~ msgstr "gescande exemplaarbarcodes."
 
+# Enhanced Content > RecordedBooks
+#~ msgid "enhanced_content.pref RecordedBooks"
+#~ msgstr "RecordedBooks"
+
 # Enhanced Content > Local or remote cover images
 # Enhanced Content > Local or remote cover images
 #~ msgid "enhanced_content.pref#CustomCoverImages# Display"
@@ -15633,6 +15618,34 @@ msgstr "rijen van een rapport dat opgevraagd is via de rapporten webservice."
 # Enhanced Content > Local or remote cover images
 #~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
 #~ msgstr "Toon"
+
+# Enhanced Content > RecordedBooks
+#~ msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
+#~ msgstr "."
+
+# Enhanced Content > RecordedBooks
+#~ msgid ""
+#~ "enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks "
+#~ "availability information with the client secret"
+#~ msgstr ""
+#~ "enhanced_content.pref#RecordedBooksClientSecret# RecordedBooks "
+#~ "beschikbaarheidsinformatie bijvoegen via de client secret"
+
+# Enhanced Content > RecordedBooks
+#~ msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
+#~ msgstr "RecordedBooks domein"
+
+# Enhanced Content > RecordedBooks
+#~ msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
+#~ msgstr "."
+
+# Enhanced Content > RecordedBooks
+#~ msgid ""
+#~ "enhanced_content.pref#RecordedBooksLibraryID# Show items from the "
+#~ "RecordedBooks catalog of library ID"
+#~ msgstr ""
+#~ "enhanced_content.pref#RecordedBooksLibraryID# Toon exemplaren van de "
+#~ "RecordedBooks catalogus van bibliotheek ID"
 
 # Logging > Debugging
 #~ msgid ""

@@ -4,19 +4,19 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-05-17 10:10+0000\n"
+"PO-Revision-Date: 2023-06-08 02:59+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /ru/22.11/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1684318236.312749\n"
+"X-POOTLE-MTIME: 1686193179.754513\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2612,9 +2612,9 @@ msgid ""
 "existing authorities. If set to don't, catalogers can manually enter "
 "uncontrolled terms into controlled fields"
 msgstr ""
-"каталогизаторы для создания ссылки на существующие авторитеты. Если "
-"установлено значение «Не применять», каталогизаторы могут вручную вводить "
-"неконтролируемые термины в контролируемые поля."
+"каталогизаторы для создания ссылки на существующие авторитетные источники. "
+"Если установлено значение «Не применять», каталогизаторы могут вручную "
+"вводить неконтролируемые термины в контролируемые поля."
 
 # Authorities > General
 msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
@@ -2647,8 +2647,8 @@ msgid ""
 "authorities.pref#UseAuthoritiesForTracings# authority record numbers instead "
 "of text strings for searches from subject tracings."
 msgstr ""
-"номера авторитетных записей вместо текстовых строк при поисках по "
-"отслеживанию тематик."
+"номера авторитетных записей вместо текстовых строк для поиска по "
+"отслеживанию тематики."
 
 # Cataloging
 msgid "cataloguing.pref"
@@ -7414,7 +7414,7 @@ msgstr ""
 
 # Circulation > Holds policy
 msgid "circulation.pref#decreaseLoanHighHolds# Withdrawn"
-msgstr "Не выдаются (Изъято - Withdrawn)"
+msgstr "Изъято"
 
 # Circulation > Holds policy
 msgid ""
@@ -7748,10 +7748,6 @@ msgstr "OpenLibrary.org"
 # Enhanced content > OverDrive
 msgid "enhanced_content.pref OverDrive"
 msgstr "OverDrive"
-
-# Enhanced content > RecordedBooks
-msgid "enhanced_content.pref RecordedBooks"
-msgstr "RecordedBooks"
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref Syndetics"
@@ -8569,30 +8565,6 @@ msgid ""
 "enhanced_content.pref#OverDriveWebsiteID# Authenticate using OverDrive "
 "website id #"
 msgstr "Аутентификация с использованием ID веб-сайта OverDrive #"
-
-# Enhanced content > RecordedBooks
-msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
-msgstr "."
-
-# Enhanced content > RecordedBooks
-msgid ""
-"enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks "
-"availability information with the client secret"
-msgstr "Включить информацию о доступности RecordedBooks в тайну клиента"
-
-# Enhanced content > RecordedBooks
-msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
-msgstr "Домен RecordedBooks"
-
-# Enhanced content > RecordedBooks
-msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
-msgstr "."
-
-# Enhanced content > RecordedBooks
-msgid ""
-"enhanced_content.pref#RecordedBooksLibraryID# Show items from the "
-"RecordedBooks catalog of library ID"
-msgstr "Показать экземпляры из каталога RecordedBooks с ID библиотеки"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -9695,6 +9667,33 @@ msgid ""
 msgstr ""
 "для анонимного читателя (для анонимных предложений о покупке и истории "
 "чтения)."
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacDetailsDisplay# <br />Options:<ul><li>Empty. No "
+"XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
+"custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></"
+"ul>If you have multiple stylesheets for: <ul><li>different languages: use "
+"the placeholder {langcode} - this will be replaced with the current "
+"interface language</li><li>authority types: use the placeholder "
+"{authtypecode} - this will be replaced with the authority type code"
+msgstr ""
+"opac.pref#AuthorityXSLTOpacResultsDisplay# <br />Парметры:<ul><li>Пусто. "
+"XSLT файл не будет применен (<strong>по умолчанию</strong>)</li><li> Укажите "
+"путь к своему XSLT файлу.</li><li>Введите URL внешней таблицы стилей.</li></"
+"ul>Для нескольких таблиц стилей: <ul><li>шаблон {langcode} – будет заменен "
+"текущим языком интерфейса</li><li>шаблон {authtypecode} - будет заменен "
+"кодом типа авторитетного источника"
+
+# Staff interface > Appearance
+#, fuzzy
+msgid ""
+"opac.pref#AuthorityXSLTOpacDetailsDisplay# Display authority details in the "
+"OPAC using the XSLT stylesheet at: "
+msgstr ""
+"Показать авторитетные результаты в ЭК с помощью таблицы стилей XSLT по "
+"адресу: "
 
 # Staff interface > Appearance
 msgid ""
@@ -13036,9 +13035,8 @@ msgid ""
 "op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>Примечание:</strong> URL-адрес будет отображаться, только если "
-"установлено <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent\""
-">PrivacyPolicyConsent</a>."
+"установлено <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a>."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -15622,6 +15620,10 @@ msgstr "строк отчета, запрошенного через веб-сл
 #~ msgid "circulation.pref#itemBarcodeInputFilter# scanned item barcodes."
 #~ msgstr "штрих-коды отсканированных экземпляров."
 
+# Enhanced content > RecordedBooks
+#~ msgid "enhanced_content.pref RecordedBooks"
+#~ msgstr "RecordedBooks"
+
 # Enhanced content > Local or remote cover images
 # Enhanced content > Local or remote cover images
 #~ msgid "enhanced_content.pref#CustomCoverImages# Display"
@@ -15634,6 +15636,30 @@ msgstr "строк отчета, запрошенного через веб-сл
 # Enhanced Content > Local Cover Images
 #~ msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
 #~ msgstr "Отображать"
+
+# Enhanced content > RecordedBooks
+#~ msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
+#~ msgstr "."
+
+# Enhanced content > RecordedBooks
+#~ msgid ""
+#~ "enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks "
+#~ "availability information with the client secret"
+#~ msgstr "Включить информацию о доступности RecordedBooks в тайну клиента"
+
+# Enhanced content > RecordedBooks
+#~ msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
+#~ msgstr "Домен RecordedBooks"
+
+# Enhanced content > RecordedBooks
+#~ msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
+#~ msgstr "."
+
+# Enhanced content > RecordedBooks
+#~ msgid ""
+#~ "enhanced_content.pref#RecordedBooksLibraryID# Show items from the "
+#~ "RecordedBooks catalog of library ID"
+#~ msgstr "Показать экземпляры из каталога RecordedBooks с ID библиотеки"
 
 # Logging > Debugging
 #~ msgid ""
