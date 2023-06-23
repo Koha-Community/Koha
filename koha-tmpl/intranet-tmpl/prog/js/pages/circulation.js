@@ -1,3 +1,4 @@
+/* global borrowernumber selectBsTabByHash */
 $(document).ready(function() {
     $("#CheckAllExports").on("click",function(){
         $(".export:visible").prop("checked", true);
@@ -90,11 +91,7 @@ $(document).ready(function() {
     });
 
     /* Preselect Bootstrap tab based on location hash */
-    var hash = window.location.hash.substring(1);
-    if( hash ){
-        var activeTab = $('a[href="#' + hash + '"]');
-        activeTab && activeTab.tab('show');
-    }
+    selectBsTabByHash("finesholdsissues");
 
 });
 
