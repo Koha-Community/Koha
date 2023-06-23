@@ -1218,9 +1218,7 @@
 [% MACRO jsinclude BLOCK %]
     <script>
         $(document).ready(function(){
-            /* Bootstrap doesn't support automatic targeting of tabs by location hash */
-            var activeTab = $("[href='" + location.hash + "']");
-            activeTab && activeTab.tab('show');
+            selectBsTabByHash( "abouttabs" );
         });
     </script>
 [% END %]
