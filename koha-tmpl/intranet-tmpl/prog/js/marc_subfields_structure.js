@@ -1,4 +1,4 @@
-/* global dataTablesDefaults tagsubfield */
+/* global dataTablesDefaults tagsubfield selectBsTabByHash */
 $(document).ready(function() {
     if( tagsubfield && tagsubfield == "@"){
         $("#subfieldtabs a[href='#subATfield']").tab("show");
@@ -39,6 +39,9 @@ $(document).ready(function() {
         aaSorting: [],
         paginate: false
     }));
+
+    selectBsTabByHash("subfieldtabs");
+
 });
 
 /* Function to enable/disable hidden values checkboxes when Flag is (de)selected */

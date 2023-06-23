@@ -598,3 +598,14 @@ function buildPatronSearchQuery(term, options) {
     }
     return q;
 }
+
+function selectBsTabByHash( tabs_container_id ){
+    /* Check for location.hash in the page URL */
+    /* If present the location hash will be used to activate the correct tab */
+    var hash = document.location.hash;
+    if( hash !== "" ){
+        $('#' + tabs_container_id + ' a[href="' + hash + '"]').tab('show');
+    } else {
+        $('#' + tabs_container_id + ' a:first').tab('show');
+    }
+}
