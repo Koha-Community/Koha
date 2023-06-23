@@ -138,7 +138,7 @@
             if( $("#authoritiestabs .tab-pane.active").length < 1 ){
                 [% SET DefaultAuthorityTab = Koha.Preference('DefaultAuthorityTab') %]
                 [% IF DefaultAuthorityTab %]
-                    let default_tab = "#tab" + [% DefaultAuthorityTab %] + "XX-tab";
+                    let default_tab = "#tab" + [% DefaultAuthorityTab | html %] + "XX-tab";
                     let tab_object = $("#authoritiestabs "+default_tab)
                     if( tab_object.length > 0 ){
                         tab_object.tab("show");
