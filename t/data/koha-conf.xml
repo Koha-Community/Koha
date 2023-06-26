@@ -111,6 +111,15 @@
   </mapping>
  </ldapserver>
  <useshibboleth>0</useshibboleth><!-- see C4::Auth_with_shibboleth for extra configs you must do to turn this on -->
+ <shibboleth>
+  <autocreate>1</autocreate>
+  <matchpoint>userid</matchpoint> <!-- koha borrowers field to match against for authentication -->
+  <mapping>
+    <userid is="uid"></userid> <!-- mapping between koha borrowers field and shibboleth attribute name. AD FS should use eppn instead of uid. -->
+    <branchcode content="MAIN" is="MAIN"></branchcode>
+    <categorycode content="STAFF"></categorycode>
+  </mapping>
+ </shibboleth>
  <zebra_lockdir>/home/koha/var/lock/zebradb</zebra_lockdir>
  <lockdir>__LOCK_DIR__</lockdir>
  <use_zebra_facets>1</use_zebra_facets>
