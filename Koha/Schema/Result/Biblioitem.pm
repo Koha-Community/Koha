@@ -84,11 +84,10 @@ ISSN (MARC21 022$a)
 
 =head2 publishercode
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
-publisher (MARC21 260$b)
+publisher (MARC21 260$b and 246$b)
 
 =head2 volumedate
 
@@ -137,19 +136,17 @@ volume information (MARC21 362$a)
 
 =head2 illus
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
 illustrations (MARC21 300$b)
 
 =head2 pages
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
-number of pages (MARC21 300$c)
+number of pages (MARC21 300$a)
 
 =head2 notes
 
@@ -158,19 +155,17 @@ number of pages (MARC21 300$c)
 
 =head2 size
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
 material size (MARC21 300$c)
 
 =head2 place
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
-publication place (MARC21 260$a)
+publication place (MARC21 260$a and 264$a)
 
 =head2 lccn
 
@@ -260,7 +255,7 @@ __PACKAGE__->add_columns(
   "publicationyear",
   { data_type => "mediumtext", is_nullable => 1 },
   "publishercode",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "volumedate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "volumedesc",
@@ -283,15 +278,15 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "illus",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "pages",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "notes",
   { data_type => "longtext", is_nullable => 1 },
   "size",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "place",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "lccn",
   { data_type => "longtext", is_nullable => 1 },
   "url",
@@ -357,8 +352,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-03 13:35:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4+THJV78AKMkqswe76Ul0Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-06-26 12:47:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6a9kLpJoQrsMu+CIx7KMBg
 
 __PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
 
