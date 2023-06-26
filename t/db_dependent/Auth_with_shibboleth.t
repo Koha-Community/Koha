@@ -266,7 +266,7 @@ subtest "checkpw_shib tests" => sub {
     $shib_login = "martin";
     ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
     is( $retval, "0", "user not authenticated" );
-    $logger->info_is("No users with userid of martin found and autocreate is disabled", "Duplicated matchpoint warned to info");
+    $logger->info_is("No users with userid of martin found and autocreate is disabled", "Missing matchpoint warned to info");
 };
 
 subtest 'get_uri' => sub {
