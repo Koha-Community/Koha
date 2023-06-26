@@ -403,7 +403,7 @@ function patron_autocomplete(node, options) {
     let link_to;
     let url_params;
     let on_select_callback;
-    let leading_wildcard = defaultPatronSearchMethod === 'contains' ? '%' : '';
+
     if (options) {
         if (options['link-to']) {
             link_to = options['link-to'];
@@ -417,31 +417,7 @@ function patron_autocomplete(node, options) {
     }
     return node.autocomplete({
         source: function (request, response) {
-            let q = []
-
-            // Add each pattern in search term for each search field
-            let pattern_subquery_and = [];
-            request.term.split(/[\s,]+/)
-                .filter(function (s) { return s.length })
-                .forEach(function (pattern, i) {
-                    let pattern_subquery_or = [];
-                    defaultPatronSearchFields.split(',').forEach(function (field, i) {
-                        pattern_subquery_or.push(
-                            { ["me." + field]: { 'like': leading_wildcard + pattern + '%' } }
-                        );
-                    });
-                    pattern_subquery_and.push(pattern_subquery_or);
-                });
-            q.push({ "-and": pattern_subquery_and });
-
-            // Add full search term for each search field
-            let term_subquery_or = [];
-            defaultPatronSearchFields.split(',').forEach(function (field, i) {
-                term_subquery_or.push(
-                    { ["me." + field]: { 'like': leading_wildcard + request.term + '%' } }
-                );
-            });
-            q.push({ "-or": term_subquery_or });
+            let q = buildPatronSearchQuery(request.term);
 
             let params = {
                 '_page': 1,
@@ -532,4 +508,38 @@ function patron_autocomplete(node, options) {
                     + "</a>")
                 .appendTo(ul);
         };
+}
+
+
+function buildPatronSearchQuery(term) {
+
+    let q = [];
+    let leading_wildcard = defaultPatronSearchMethod === 'contains' ? '%' : '';
+
+    // Add each pattern for each search field
+    let pattern_subquery_and = [];
+    term.split(/[\s,]+/)
+        .filter(function (s) { return s.length })
+        .forEach(function (pattern, i) {
+            let pattern_subquery_or = [];
+            defaultPatronSearchFields.split(',').forEach(function (field, i) {
+                pattern_subquery_or.push(
+                    { ["me." + field]: { 'like': leading_wildcard + pattern + '%' } }
+                );
+            });
+            pattern_subquery_and.push(pattern_subquery_or);
+        });
+    q.push({ "-and": pattern_subquery_and });
+
+    // Add full search term for each search field
+    let term_subquery_or = [];
+    defaultPatronSearchFields.split(',').forEach(function (field, i) {
+        term_subquery_or.push(
+            { ["me." + field]: { 'like': leading_wildcard + term + '%' } }
+        );
+    });
+    q.push({ "-or": term_subquery_or });
+
+
+    return q;
 }
