@@ -19,6 +19,8 @@
 [%# You can then pass a list of filters %]
 [%# - branch: select library list %]
 [%# - category: select patron category list %]
+[%# - sort1: select patron sort1 field %]
+[%# - sort2: select patron sort2 field %]
 [%# - search_field: select patron field list %]
 [%# - search_type: select 'contains' or 'starts with' %]
 [%- SET searchtype = Koha.Preference('DefaultPatronSearchMethod') -%]
@@ -316,6 +318,20 @@
                 },
                 "-and": function(){
                     let filters = [];
+
+                    let search_type = $("#searchtype_filter").val() || "contains";
+                    let search_fields = $("#searchfieldstype_filter").val();
+                    let pattern = $("#search_patron_filter").val();
+
+                    filters = buildPatronSearchQuery(
+                        pattern,
+                        {
+                            search_type: search_type,
+                            search_fields: search_fields,
+                            ...(typeof extended_attribute_types != 'undefined' && {extended_attribute_types: extended_attribute_types})
+                        }
+                    );
+
                     let f_sort1 = $("#sort1_filter").val();
                     if ( f_sort1 ) {
                         filters.push({
@@ -329,53 +345,6 @@
                         });
                     }
 
-                    let pattern = $("#search_patron_filter").val();
-                    if (!pattern) {
-                        if ( filters.length == 0 ) {
-                            return "";
-                        }
-                        else {
-                            return filters;
-                        }
-                    }
-                    let patterns = pattern.split(/[\s,]+/).filter(function(s){ return s.length });
-
-                    let search_type = $("#searchtype_filter").val() || "contains";
-                    let search_fields = $("#searchfieldstype_filter").val();
-                    if ( !search_fields ) {
-                        search_fields = "[% Koha.Preference('DefaultPatronSearchFields') || 'firstname,middle_name,surname,othernames,cardnumber,userid' | html %]";
-                    }
-
-                    let subquery_and = [];
-                    patterns.forEach(function(pattern,i){
-                        let sub_or = [];
-                        search_fields.split(',').forEach(function(attr,ii){
-                            sub_or.push({["me."+attr]:{"like":(search_type == "contains" ? "%" : "" ) + pattern + "%"}});
-                            if ( attr == 'dateofbirth' ) {
-                                try {
-                                    let d = $date_to_rfc3339(pattern);
-                                    sub_or.push({["me."+attr]:d});
-                                } catch {
-                                    // Hide the warning if the date is not correct
-                                }
-                            }
-                        });
-                        subquery_and.push(sub_or);
-                    });
-                    filters.push({"-and": subquery_and});
-
-                    [% IF Koha.Preference('ExtendedPatronAttributes') && extended_attribute_types %]
-                        subquery_and = [];
-                        patterns.forEach(function(pattern,i){
-                            let sub_or = [];
-                            sub_or.push({
-                                "extended_attributes.value": { "like": "%" + pattern + (search_type == "contains" ? "%" : "" )},
-                                "extended_attributes.code": extended_attribute_types
-                            });
-                            subquery_and.push(sub_or);
-                        });
-                        filters.push({"-and": subquery_and});
-                    [% END %]
                     return filters;
                 }
             };
