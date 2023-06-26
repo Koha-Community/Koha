@@ -510,22 +510,58 @@ function patron_autocomplete(node, options) {
         };
 }
 
-
-function buildPatronSearchQuery(term) {
+/**
+ * Build patron search query
+ * - term: The full search term input by the user
+ * You can then pass a list of options:
+ * - search_type: String 'contains' or 'starts_with', defaults to DefaultPatronSearchMethod system preference
+ * - search_fields: String comma-separated list of specific fields, defaults to DefaultPatronSearchFields system preference
+ * - extended_attribute_types: JSON object containing the patron attribute types to be searched on
+ */
+function buildPatronSearchQuery(term, options) {
 
     let q = [];
-    let leading_wildcard = defaultPatronSearchMethod === 'contains' ? '%' : '';
+    let leading_wildcard;
+    let search_fields;
+    let patterns = term.split(/[\s,]+/).filter(function (s) { return s.length });
+
+    // Bail if no patterns
+    if (patterns.length == 0) {
+        return;
+    }
+
+    // Leading wildcard: If search_type option exists, we use that
+    if (typeof options !== 'undefined' && options.search_type) {
+        leading_wildcard = options.search_type === "contains" ? '%' : '';
+    // If not, we use DefaultPatronSearchMethod system preference instead
+    } else {
+        leading_wildcard = defaultPatronSearchMethod === 'contains' ? '%' : '';
+    }
+
+    // Search fields: If search_fields option exists, we use that
+    if (typeof options !== 'undefined' && options.search_fields) {
+        search_fields = options.search_fields;
+    // If not, we use DefaultPatronSearchFields system preference instead
+    } else {
+        search_fields = defaultPatronSearchFields;
+    }
 
     // Add each pattern for each search field
     let pattern_subquery_and = [];
-    term.split(/[\s,]+/)
-        .filter(function (s) { return s.length })
-        .forEach(function (pattern, i) {
+    patterns.forEach(function (pattern, i) {
             let pattern_subquery_or = [];
             defaultPatronSearchFields.split(',').forEach(function (field, i) {
                 pattern_subquery_or.push(
                     { ["me." + field]: { 'like': leading_wildcard + pattern + '%' } }
                 );
+                if (field == 'dateofbirth') {
+                    try {
+                        let d = $date_to_rfc3339(pattern);
+                        pattern_subquery_or.push({ ["me." + field]: d });
+                    } catch {
+                        // Hide the warning if the date is not correct
+                    }
+                }
             });
             pattern_subquery_and.push(pattern_subquery_or);
         });
@@ -540,6 +576,18 @@ function buildPatronSearchQuery(term) {
     });
     q.push({ "-or": term_subquery_or });
 
-
+    // Add each pattern for each extended patron attributes
+    if (typeof options !== 'undefined' && options.extended_attribute_types && extendedPatronAttributes) {
+        extended_attribute_subquery_and = [];
+        patterns.forEach(function (pattern, i) {
+            let extended_attribute_sub_or = [];
+            extended_attribute_sub_or.push({
+                "extended_attributes.value": { "like": leading_wildcard + pattern + '%' },
+                "extended_attributes.code": options.extended_attribute_types
+            });
+            extended_attribute_subquery_and.push(extended_attribute_sub_or);
+        });
+        q.push({ "-and": extended_attribute_subquery_and });
+    }
     return q;
 }
