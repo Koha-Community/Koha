@@ -3,8 +3,8 @@
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% BLOCK pagelist %]
-    [% IF module.keys and module.keys.size > 0 %]
-        <span>Jump to:</span>
+    [% IF module.keys and module.keys.size > 1 %]
+        <span>Jump to page:</span>
         [% FOR pagename IN module.keys.sort %]
             <a href="#[% pagename | url %]">[% pagename | html %]</a>
             [% UNLESS loop.last %]<span class="separator"> | </span>[% END %]
@@ -18,6 +18,14 @@
                 [% FOR pagename IN module.keys.sort %]
                     <h4 class="page_name" id="[% pagename | html %]">Page: [% pagename | html %]</h4>
                     [% SET tables = module %]
+                    [% IF tables.$pagename.keys and tables.$pagename.keys.size > 1 %]
+                        Jump to table:
+                        [% FOR tablename IN tables.$pagename.keys.sort %]
+                            [% SET table_id = pagename _ '#' _ tablename %]
+                            <a href="#[% table_id | uri %]">[% tablename | html %]</a>
+                            [% UNLESS loop.last %]<span class="separator"> | </span>[% END %]
+                        [% END %]
+                    [% END %]
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
                         [% FOR tablename IN tables.$pagename.keys.sort %]
                             [% SET table_id = pagename _ '#' _ tablename %]
