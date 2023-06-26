@@ -20,10 +20,10 @@
 [% BLOCK reservestatus %]
     [% IF field == 'reservestatus' %]
          [% SWITCH value %]
-             [% CASE 'C'%]Cancelled
-             [% CASE 'F'%]Filled
-             [% CASE 'P'%]Placed
-             [% CASE 'W'%]Waiting
+             [% CASE 'C'%]<span>Cancelled</span>
+             [% CASE 'F'%]<span>Filled</span>
+             [% CASE 'P'%]<span>Placed</span>
+             [% CASE 'W'%]<span>Waiting</span>
          [% END %]
     [% ELSE %]
         [% value | html %]
