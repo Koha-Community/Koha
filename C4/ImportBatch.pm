@@ -617,7 +617,7 @@ sub BatchCommitRecords {
             if ($record_type eq 'biblio') {
                 my $biblioitemnumber;
                 ($recordid, $biblioitemnumber) = AddBiblio($marc_record, $framework, { skip_record_index => 1 });
-                push @biblio_ids, $recordid;
+                push @biblio_ids, $recordid if $recordid;
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
                     my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = _batchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result, $biblioitemnumber);
