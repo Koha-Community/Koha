@@ -29,23 +29,27 @@
 
 <body id="labels_result" class="tools labels">
     <div class="main container-fluid">
-            <h1>Search results</h1>
+        <h1>Search results</h1>
+        [% IF ( results ) %]
+            <h3>Results [% from | html %] through [% to | html %] [% IF ( total ) %] of [% total | html %][% END %]</h3>
+        [% ELSE %]
+            <h3>No results found</h3>
+        [% END %]
         <div class="results">
             [% PROCESS pagination %]
-                [% IF ( results ) %]
-                <strong>Results [% from | html %] through [% to | html %] [% IF ( total ) %] of [% total | html %][% END %]</strong>
-                [% ELSE %]
-                No results found
-                [% END %]
 
             <form name="resultform" action="" style="display:block">
             <div id="toolbar" class="btn-toolbar">
                 <div class="btn-group"><button type="button" class="btn btn-default" id="add_items"><i class="fa fa-plus"></i> Add checked</button></div>
                 <div class="btn-group"><a href="#" class="btn btn-default close"><i class="fa fa-times-circle"></i> Done</a></div>
             </div>
-                <div><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a> <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></div>
 
-                <div id="label-search-results">
+            <div id="selection_ops">
+                <a id="CheckAll" class="btn btn-link" href="#"><i class="fa fa-check"></i> Select all</a>
+                <a id="CheckNone" class="btn btn-link"  href="#"><i class="fa fa-remove"></i> Clear all</a>
+            </div>
+
+                <div id="label-search-results" class="page-section">
                 <input type="hidden" name="ccl_query" value="[% ccl_query | html %]" />
             [% FOREACH result_se IN result_set %]
             <div style="border-bottom:1px solid #CCC;padding:1em 0;">
