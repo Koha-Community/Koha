@@ -180,11 +180,11 @@ sub to_api_mapping {
         authid            => 'authority_id',
         authtrees         => undef,
         authtypecode      => 'framework_id',
-        datecreated       => 'creation_date',
+        datecreated       => 'created_date',
         linkid            => undef,
         marc              => undef,
         marcxml           => undef,
-        modification_time => 'updated_on',
+        modification_time => 'modified_date',
         origincode        => undef,
     };
 }
