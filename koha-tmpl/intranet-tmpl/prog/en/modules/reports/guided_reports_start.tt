@@ -1003,6 +1003,15 @@
                                     </textarea>
                                 </form>
 
+                                <form action="/cgi-bin/koha/patroncards/edit-batch.pl" id="patron_card_creator" method="post" target="_blank">
+                                    <input type="hidden" name="op" value="add" />
+                                    <input type="hidden" name="batch_id" value="0" />
+                                    [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    <textarea style="display:none;" name="bor_num_list" id="bor_num_list">
+                                        [%- borrowernumbers = PROCESS batch_list results=results batch_type='borrowernumber' | trim | html %][% IF borrowernumbers %][% SET batch_borrowernumbers = 1 %][% borrowernumbers | html %][% END -%]
+                                    </textarea>
+                                </form>
+
                                 [% BLOCK batch_list %]
                                         [%- FOREACH result IN results %]
                                             [%- FOREACH cells IN result.cells %]
@@ -1026,15 +1035,38 @@
                                     <input type="hidden" name="limit" id="limit" value="20" />
                                 </form> <!-- /#limitselect -->
 
-                                [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) || ( unlimited_total > 10 && limit <= 1000 ) %]
+                                [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers ) || ( unlimited_total > 10 && limit <= 1000 ) %]
                                     <div id="toolbar" class="btn-toolbar">
-                                        [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+                                        [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers ) %]
                                             <div class="btn-group">
                                                 <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                     Batch operations with [% IF unlimited_total >= limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
+                                                    [% FOREACH header_ro IN header_row %]
+                                                        [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' || header_ro.cell == 'borrowernumber' || header_types.item( header_ro.cell ) == 'borrowernumber' %]
+                                                            [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
+                                                                [% SET show_cardnumber_ops = 1 %]
+                                                            [% END %]
+                                                            [% IF header_ro.cell == 'borrowernumber' || header_types.item( header_ro.cell ) == 'borrowernumber' %]
+                                                                [% SET show_borrowernumber_ops = 1 %]
+                                                            [% END %]
+                                                        [% END %]
+                                                    [% END %]
+                                                    [% IF show_cardnumber_ops || show_borrowernumber_ops %]
+                                                        <li class="dropdown-header">Patron records</li>
+                                                        [% IF show_cardnumber_ops %]
+                                                            <li>
+                                                                <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
+                                                            </li>
+                                                        [% END %]
+                                                        [% IF show_borrowernumber_ops %]
+                                                            <li>
+                                                                <a href="#" data-submit="patron_card_creator" data-toggle="tooltip" data-placement="right" title="Send visible results to a new patron card batch" class="batch_op send_to_patron_card_batch">Patron card creator</a>
+                                                            </li>
+                                                        [% END %]
+                                                    [% END %]
                                                     [% FOREACH header_ro IN header_row %]
                                                         [% IF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
                                                             <li class="dropdown-header">Bibliographic records</li>
@@ -1055,12 +1087,6 @@
                                                             </li>
                                                             <li>
                                                                 <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item deletion" class="batch_op send_to_item_del">Batch item deletion</a>
-                                                            </li>
-                                                        [% END %]
-                                                        [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
-                                                            <li class="dropdown-header">Patron records</li>
-                                                            <li>
-                                                                <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
                                                             </li>
                                                         [% END %]
                                                     [% END # /FOREACH header_ro %]
