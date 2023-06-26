@@ -239,7 +239,7 @@ sub _read_from_dom_node {
             delete $subconfig->{id};
         } else {
             my @keys = keys %$subconfig;
-            if (1 == scalar @keys && $keys[0] eq 'content') {
+            if (!$node->hasAttributes() && 1 == scalar @keys && $keys[0] eq 'content') {
                 # An element with no attributes and no child elements becomes its text content
                 $subconfig = $subconfig->{content};
             } elsif (0 == scalar @keys) {

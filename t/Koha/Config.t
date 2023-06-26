@@ -131,6 +131,15 @@ subtest 'read_from_file() tests' => sub {
                 }
             },
             'useshibboleth' => '0',
+            'shibboleth' => {
+                'autocreate' => '1',
+                'matchpoint' => 'userid',
+                'mapping' => {
+                    'userid' => { 'is' => 'uid' },
+                    'branchcode' => { 'content' => 'MAIN', 'is' => 'MAIN' },
+                    'categorycode' => { 'content' => 'STAFF' },
+                },
+            },
             'zebra_lockdir' => '/home/koha/var/lock/zebradb',
             'lockdir' => '__LOCK_DIR__',
             'use_zebra_facets' => '1',
