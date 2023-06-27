@@ -7,7 +7,7 @@
     [% END %]
         <form action="/cgi-bin/koha/circ/circulation.pl" id="patronsearch" method="post">
             <div class="form-title">
-                <label class="control-label" for="findborrower">Check out</label>
+                <label class="control-label" for="findborrower"><span class="control-text">Check out</span> <i class="fa fa-fw fa-upload" aria-hidden="true"></i></label>
             </div>
 
             <div class="form-content">

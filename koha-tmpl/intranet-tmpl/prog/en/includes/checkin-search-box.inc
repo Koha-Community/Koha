@@ -7,7 +7,7 @@
     [% END %]
         <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
             <div class="form-title">
-                <label class="control-label">Check in</label>
+                <label class="control-label"><span class="control-text">Check in</span> <i class="fa fa-fw fa-download" aria-hidden="true"></i></label>
             </div>
 
             <div class="form-content">

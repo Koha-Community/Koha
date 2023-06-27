@@ -113,6 +113,14 @@ a.navbar-toggle {
         }
     }
 
+    .control-label {
+        i {
+            &[class^="fa"] {
+                margin-left: .5em;
+            }
+        }
+    }
+
     .form-content {
         background-color: white;
         margin-left: -16px;
@@ -302,7 +310,13 @@ a.navbar-toggle {
 
 @media (max-width: 768px) {
     #header_search {
+        padding-left: 0;
+
         .form-title {
+            flex-basis: unset;
+        }
+
+        .control-text {
             display: none;
         }
     }
@@ -312,6 +326,10 @@ a.navbar-toggle {
     #header_search {
         .residentsearch {
             flex-grow: 1;
+        }
+
+        .tab-content:first-of-type {
+            flex-basis: 75%;
         }
 
         .tab-title {

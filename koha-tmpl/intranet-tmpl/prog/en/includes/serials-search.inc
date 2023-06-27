@@ -10,7 +10,7 @@
                 <input type="hidden" name="searched" value="1" />
 
                 <div class="form-title">
-                    <label class="control-label">Search subscriptions</label>
+                    <label class="control-label"><span class="control-text">Search subscriptions</span> <i class="fa fa-fw fa-book" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -56,16 +56,16 @@
     </div><!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search subscriptions" href="#subscription_search" aria-controls="subscription_search" aria-expanded="true" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-book"></i> <span class="tab-title">Search subscriptions</span></a>
+            <a title="Search subscriptions" href="#subscription_search" aria-controls="subscription_search" aria-expanded="true" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-book" aria-hidden="true"></i> <span class="tab-title">Search subscriptions</span></a>
         </li>
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             <li role="presentation">
-                <a title="Check out" href="#circ_search" aria-controls="circ_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Check out</span></a>
+                <a title="Check out" href="#circ_search" aria-controls="circ_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span></a>
             </li>
         [% END %]
         [% IF ( CAN_user_catalogue ) %]
             <li role="presentation">
-                <a title="Search catalog" href="#catalog_search" aria-controls="catalog_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-search"></i> <span class="tab-title">Search catalog</span></a>
+                <a title="Search catalog" href="#catalog_search" aria-controls="catalog_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-search" aria-hidden="true"></i> <span class="tab-title">Search catalog</span></a>
             </li>
         [% END %]
     </ul>

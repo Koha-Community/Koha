@@ -81,7 +81,7 @@
                 <input type="hidden" name="excluding" value="" />
 
                 <div class="form-title">
-                    <label class="control-label">Search main heading ($a only)</label>
+                    <label class="control-label"><span class="control-text">Search main heading</span> <i class="fa fa-fw fa-main-heading-a" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -108,7 +108,7 @@
                 <input type="hidden" name="type" value="intranet" />
 
                 <div class="form-title">
-                    <label class="control-label">Search main heading</label>
+                    <label class="control-label"><span class="control-text">Search main heading</span> <i class="fa fa-fw fa-header" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -133,7 +133,7 @@
                 <input type="hidden" name="marclist" value="match" />
 
                 <div class="form-title">
-                    <label class="control-label">Search all headings</label>
+                    <label class="control-label"><span class="control-text">Search all headings</span> <i class="fa fa-fw fa-align-center" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -160,7 +160,7 @@
                 <input type="hidden" name="excluding" value="" />
 
                 <div class="form-title">
-                    <label class="control-label">Search entire record</label>
+                    <label class="control-label"><span class="control-text">Search entire record</span> <i class="fa-solid fa-fw fa-folder-open" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -181,16 +181,16 @@
     </div><!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Search main heading ($a only)" href="#mainmain_heading" aria-controls="mainmain_heading" role="tab"  aria-expanded="true" data-toggle="tab" class="keep_text"><i style="font-weight:bold">$a</i> <span class="tab-title">Main heading ($a only)</span></a>
+            <a title="Search main heading ($a only)" href="#mainmain_heading" aria-controls="mainmain_heading" role="tab"  aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-main-heading-a" aria-hidden="true"></i> <span class="tab-title">Main heading ($a only)</span></a>
         </li>
         <li role="presentation">
-            <a title="Search main heading" href="#main_heading" aria-controls="main_heading" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-header"></i> <span class="tab-title">Main heading</span></a>
+            <a title="Search main heading" href="#main_heading" aria-controls="main_heading" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-header" aria-hidden="true"></i> <span class="tab-title">Main heading</span></a>
         </li>
         <li role="presentation">
-            <a title="Search all headings" href="#matchheading_search" aria-controls="matchheading_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-align-center"></i> <span class="tab-title">All headings</span></a>
+            <a title="Search all headings" href="#matchheading_search" aria-controls="matchheading_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-align-center" aria-hidden="true"></i> <span class="tab-title">All headings</span></a>
         </li>
         <li role="presentation">
-            <a title="Search entire record" href="#entire_record" aria-controls="entire_record" role="tab" data-toggle="tab" class="keep_text"><i class="fa-solid fa-folder-open"></i> <span class="tab-title">Entire record</span></a>
+            <a title="Search entire record" href="#entire_record" aria-controls="entire_record" role="tab" data-toggle="tab" class="keep_text"><i class="fa-solid fa-fw fa-folder-open" aria-hidden="true"></i> <span class="tab-title">Entire record</span></a>
         </li>
         <li role="presentation">
     </ul>

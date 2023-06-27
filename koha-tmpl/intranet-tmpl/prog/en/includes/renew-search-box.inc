@@ -7,7 +7,7 @@
     [% END %]
         <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
             <div class="form-title">
-                <label class="control-label">Renew</label>
+                <label class="control-label"><span class="control-text">Renew</span> <i class="fa fa-fw fa-retweet" aria-hidden="true"></i></label>
             </div>
 
             <div class="form-content">

@@ -14,7 +14,7 @@
             <input type="hidden" name="quicksearch" value="1" />
 
             <div class="form-title">
-                <label class="control-label">Search patrons</label>
+                <label class="control-label"><span class="control-text">Search patrons</span> <i class="fa fa-fw fa-id-card" aria-hidden="true"></i></label>
             </div>
 
             <div class="form-content">

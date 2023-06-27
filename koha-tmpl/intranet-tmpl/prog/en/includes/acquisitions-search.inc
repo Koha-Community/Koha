@@ -4,7 +4,7 @@
         <div id="supplier_search" role="tabpanel" class="tab-pane active">
             <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
                 <div class="form-title">
-                    <label class="control-label">Vendor search</label>
+                    <label class="control-label"><span class="control-text">Vendor search</span> <i class="fa fa-fw fa-upload" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -17,7 +17,7 @@
         <div id="orders_search" role="tabpanel" class="tab-pane">
             <form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
                 <div class="form-title">
-                    <label class="control-label">Orders search</label>
+                    <label class="control-label"><span class="control-text">Orders search</span> <i class="fa fa-fw fa-download" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -46,10 +46,10 @@
     </div><!-- /.tab-content -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a title="Vendor search" href="#supplier_search" aria-controls="supplier_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-upload"></i> <span class="tab-title">Vendor search</span></a>
+            <a title="Vendor search" href="#supplier_search" aria-controls="supplier_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-upload" aria-hidden="true"></i> <span class="tab-title">Vendor search</span></a>
         </li>
         <li role="presentation">
-            <a title="Orders search" href="#orders_search" aria-controls="orders_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-download"></i> <span class="tab-title">Orders search</span></a>
+            <a title="Orders search" href="#orders_search" aria-controls="orders_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-download" aria-hidden="true"></i> <span class="tab-title">Orders search</span></a>
         </li>
     </ul>
 </div><!-- /#header_search -->

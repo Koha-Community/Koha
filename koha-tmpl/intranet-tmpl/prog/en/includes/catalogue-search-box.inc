@@ -9,7 +9,7 @@
     [% END %]
         <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
             <div class="form-title">
-                <label class="control-label">Search catalog</label>
+                <label class="control-label"><span class="control-text">Search catalog</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
             </div>
 
             <div class="form-content">
