@@ -1978,6 +1978,8 @@
                           var response = data.responseJSON;
                           if ( response.error_code === 'already_bundled' ) {
                               $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
+                          } else if (response.error_code === 'bundle_checkout_out') {
+                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Bundle is currently checked out")+'</div>');
                           } else if (response.error_code === 'checked_out') {
                               const button = $('<button type="button">')
                                 .addClass('btn btn-xs')
@@ -2091,7 +2093,9 @@
                             var barcode = $('#rm_external_id').val();
                             if ( data.status === 409 ) {
                                 var response = data.responseJSON;
-                                if ( response.key === "PRIMARY" ) {
+                                if (response.error_code === 'bundle_checkout_out') {
+                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Bundle is currently checked out")+'</div>');
+                                } else if ( response.key === "PRIMARY" ) {
                                     $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
                                 } else {
                                     $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
