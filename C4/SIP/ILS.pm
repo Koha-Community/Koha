@@ -124,6 +124,10 @@ sub offline_ok {
 sub checkout {
     my ( $self, $patron_id, $item_id, $sc_renew, $fee_ack, $account, $no_block_due_date ) = @_;
     my ( $patron, $item, $circ );
+    my @blocked_item_types;
+    if (defined $account->{blocked_item_types}) {
+        @blocked_item_types = split /\|/, $account->{blocked_item_types};
+    }
     $circ = C4::SIP::ILS::Transaction::Checkout->new();
     # BEGIN TRANSACTION
     $circ->patron( $patron = C4::SIP::ILS::Patron->new($patron_id) );
@@ -160,6 +164,9 @@ sub checkout {
         && !_ci_cardnumber_cmp( $item->{borrowernumber}, $patron->borrowernumber ) )
     {
         $circ->screen_msg("Item checked out to another patron");
+    }
+    elsif (grep { $_ eq $item->{itemtype} } @blocked_item_types) {
+        $circ->screen_msg("Item type cannot be checked out at this checkout location");
     }
     else {
         $circ->do_checkout($account, $no_block_due_date);
