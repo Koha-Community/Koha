@@ -86,26 +86,19 @@ $(document).ready(function() {
             let patron = $("#illfilter_patron").val();
             let status = $("#illfilter_status").val();
             let filters = [];
-            let patron_sub_or = [];
             let status_sub_or = [];
             let subquery_and = [];
 
             if (!patron && !status) return "";
 
             if(patron){
-                const patron_search_fields = "me.borrowernumber,patron.cardnumber,patron.firstname,patron.surname";
-                patron_search_fields.split(',').forEach(function(attr){
-                    let operator = "=";
-                    let patron_data = patron;
-                    if ( attr != "me.borrowernumber" && attr != "patron.cardnumber") {
-                        operator = "like";
-                        patron_data = "%" + patron + "%";
+                let patronquery = buildPatronSearchQuery(
+                    patron,
+                    {
+                        table_prefix: 'patron',
                     }
-                    patron_sub_or.push({
-                        [attr]:{[operator]: patron_data }
-                    });
-                });
-                subquery_and.push(patron_sub_or);
+                );
+                subquery_and.push(patronquery);
             }
 
             if(status){
@@ -154,7 +147,7 @@ $(document).ready(function() {
             let filters = [];
             let subquery_and = [];
 
-            const search_fields = "me.illrequest_id,me.borrowernumber,me.biblio_id,me.due_date,me.branchcode,library.name,me.status,me.status_alias,me.placed,me.replied,me.updated,me.completed,me.medium,me.accessurl,me.cost,me.price_paid,me.notesopac,me.notesstaff,me.orderid,me.backend,patron.firstname,patron.surname";
+            const search_fields = "me.illrequest_id,me.biblio_id,me.due_date,me.branchcode,library.name,me.status,me.status_alias,me.placed,me.replied,me.updated,me.completed,me.medium,me.accessurl,me.cost,me.price_paid,me.notesopac,me.notesstaff,me.orderid,me.backend";
             let sub_or = [];
             search_fields.split(',').forEach(function(attr){
                 sub_or.push({
@@ -163,6 +156,14 @@ $(document).ready(function() {
             });
             subquery_and.push(sub_or);
             filters.push({"-and": subquery_and});
+
+            let patronquery = buildPatronSearchQuery(
+                keyword,
+                {
+                    table_prefix: 'patron',
+                }
+            );
+            filters.push(patronquery);
 
             const extended_attributes = "title,type,author,article_title,pages,issue,volume,year";
             let extended_sub_or = [];
