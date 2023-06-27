@@ -37,6 +37,8 @@ use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::SharedContent;
 use Koha::Util::OpenDocument qw( generate_ods );
+use Koha::Notice::Templates;
+use Koha::TemplateUtils qw( process_tt );
 use C4::ClassSource qw( GetClassSources );
 
 =head1 NAME
@@ -78,6 +80,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 my $session_id = $input->cookie('CGISESSID');
 my $session = $session_id ? get_session($session_id) : undef;
+
+$template->param(  templates => Koha::Notice::Templates->search({ module => 'report' }) );
 
 my $filter;
 if ( $input->param("filter_set") or $input->param('clear_filters') ) {
@@ -671,6 +675,7 @@ elsif ($phase eq 'Run this report'){
     my $report_id  = $input->param('reports');
     my @sql_params = $input->multi_param('sql_params');
     my @param_names = $input->multi_param('param_name');
+    my $template_id = $input->param('template');
     my $want_full_chart = $input->param('want_full_chart') || 0;
 
     # offset algorithm
@@ -870,6 +875,15 @@ elsif ($phase eq 'Run this report'){
                 }
                 if (@sql_params) {
                     $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape_utf8($_) } @sql_params);
+                }
+
+                if ($template_id) {
+                    my $notice_template = Koha::Notice::Templates->find($template_id);
+                    my ( $sth2, $errors2 ) = execute_query( { sql => $sql, report_id => $report_id } );
+                    my $data = $sth2->fetchall_arrayref( {} );
+                    my $notice_rendered =
+                        process_tt( $notice_template->content, { data => $data, report_id => $report_id } );
+                    $template->param( processed_notice => $notice_rendered );
                 }
 
                 $template->param(

@@ -903,7 +903,9 @@
                     </form>
                 [% END # /IF ( enter_params ) %]
 
-                [% IF ( execute ) %]
+                [% IF processed_notice %]
+                    [% processed_notice | $raw %]
+                [% ELSIF ( execute ) %]
                     <h1>[% name | html %] <span class="report_heading_id"><span class="report_label">Report ID:</span> <span class="report_number">[% id | html %]</span></span></h1>
                     <div class="page-section">
                         [% IF ( notes ) %]

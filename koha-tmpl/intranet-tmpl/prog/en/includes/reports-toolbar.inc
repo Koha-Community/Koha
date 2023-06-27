@@ -63,6 +63,23 @@
                     <i class="fa fa-play"></i> Run report
                 </a>
             </div>
+            [% IF templates.count %]
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="fa fa-code"></i> Run with template <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    [% FOREACH t IN templates %]
+                        <li>
+                            <a id="runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run%20this%20report&amp;template=[% t.id | html %][% PROCESS params %]">
+                                [% t.name | html %]
+                            </a>
+                        </li>
+                    [% END %]
+                </ul>
+            </div>
+            [% END %]
             <div class="btn-group">
                 <a class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=[% id | html %]">
                     <i class="fa-solid fa-clock"></i> Schedule
