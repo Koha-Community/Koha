@@ -192,6 +192,7 @@ $(document).ready(function() {
             'id_prefix',
             'patron'
         ],
+        "order": [[0, 'desc']],
         "stateSave": true, // remember state on page reload
         "columns": [
             {
