@@ -144,7 +144,11 @@ $(document).ready(function() {
         if ( url.match(/\?(.+)$/) ) {
             params = "?" + RegExp.$1;
         }
-        $("a[href$=\"/" + path + params + "\"]", navmenulist).addClass("current");
+        if ($("a[href$=\"/" + path + params + "\"]", navmenulist).length == 0){
+            $("a[href$=\"/" + path + "\"]", navmenulist).addClass("current");
+        } else {
+            $("a[href$=\"/" + path + params + "\"]", navmenulist).addClass("current");
+        }
     }
 
     $("#catalog-search-link a").on("mouseenter mouseleave", function(){
