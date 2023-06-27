@@ -6016,7 +6016,6 @@ DROP TABLE IF EXISTS `virtualshelfcontents`;
 CREATE TABLE `virtualshelfcontents` (
   `shelfnumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key linking to the virtualshelves table, defines the list that this record has been added to',
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key linking to the biblio table, defines the bib record that has been added to the list',
-  `flags` int(11) DEFAULT NULL,
   `dateadded` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'date and time this bib record was added to the list',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'borrower number that created this list entry (only the first one is saved: no need for use in/as key)',
   KEY `shelfnumber` (`shelfnumber`),
