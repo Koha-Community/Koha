@@ -567,13 +567,15 @@ function expandPatronSearchFields(search_fields) {
  * Build patron search query
  * - term: The full search term input by the user
  * You can then pass a list of options:
- * - search_type: String 'contains' or 'starts_with', defaults to DefaultPatronSearchMethod system preference
- * - search_fields: String comma-separated list of specific fields, defaults to DefaultPatronSearchFields system preference
- * - extended_attribute_types: JSON object containing the patron attribute types to be searched on
+ * - search_type: (String) 'contains' or 'starts_with', defaults to defaultPatronSearchMethod (see js_includes.inc)
+ * - search_fields: (String) comma-separated list of specific fields, defaults to defaultPatronSearchFields (see js_includes.inc)
+ * - extended_attribute_types: (JSON object) contains the patron searchable attribute types to be searched on (see patron-search.inc)
+ * - table_prefix: (String) table name to prefix the fields with, defaults to 'me'
  */
 function buildPatronSearchQuery(term, options) {
 
     let q = [];
+    let table_prefix;
     let leading_wildcard;
     let search_fields = [];
     let patterns = term.split(/[\s,]+/).filter(function (s) { return s.length });
@@ -583,10 +585,18 @@ function buildPatronSearchQuery(term, options) {
         return q;
     }
 
-    // Leading wildcard: If search_type option exists, we use that
+    // Table prefix: If table_prefix options exists, use that
+    if (typeof options !== 'undefined' && options.table_prefix) {
+        table_prefix = options.table_prefix;
+    // If not, default to 'me'
+    } else {
+        table_prefix = 'me';
+    }
+
+    // Leading wildcard: If search_type option exists, use that
     if (typeof options !== 'undefined' && options.search_type) {
         leading_wildcard = options.search_type === "contains" ? '%' : '';
-    // If not, we use DefaultPatronSearchMethod system preference instead
+    // If not, use DefaultPatronSearchMethod system preference instead
     } else {
         leading_wildcard = defaultPatronSearchMethod === 'contains' ? '%' : '';
     }
@@ -614,12 +624,12 @@ function buildPatronSearchQuery(term, options) {
             let pattern_subquery_or = [];
             search_fields.forEach(function (field, i) {
                 pattern_subquery_or.push(
-                    { ["me." + field]: { 'like': leading_wildcard + pattern + '%' } }
+                    { [table_prefix + "." + field]: { 'like': leading_wildcard + pattern + '%' } }
                 );
                 if (field == 'dateofbirth') {
                     try {
                         let d = $date_to_rfc3339(pattern);
-                        pattern_subquery_or.push({ ["me." + field]: d });
+                        pattern_subquery_or.push({ [table_prefix + "." + field]: d });
                     } catch {
                         // Hide the warning if the date is not correct
                     }
@@ -634,7 +644,7 @@ function buildPatronSearchQuery(term, options) {
     let term_subquery_or = [];
     search_fields.forEach(function (field, i) {
         term_subquery_or.push(
-            { ["me." + field]: { 'like': leading_wildcard + term + '%' } }
+            { [table_prefix + "." + field]: { 'like': leading_wildcard + term + '%' } }
         );
     });
     q.push({ "-or": term_subquery_or });
