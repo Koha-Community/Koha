@@ -42,9 +42,10 @@
 
         Sticky = $("#toolbar");
         Sticky.hcSticky({
-            stickTo: ".main",
+            stickTo: "#f",
             stickyClass: "floating"
         });
+
         $("#addauth").click(function(){
             if(Check()){
                 $("#f").submit();
@@ -91,6 +92,21 @@
             f.authtypecode.value = authtypecode;
             f.submit();
         });
+
+        $("body").on("click", ".linkfield", function(e){
+            e.preventDefault();
+            var tab = $(this).data("tab");
+            var field = $(this).data("field");
+            var tablink = $("a[data-tabname='tab" + tab + "XX']" ).get(0).hash;
+            selectTab( tablink );
+            window.scrollTo( 0, getScrollto( field, "toolbar" ) );
+        });
+
+        $("body").on("click", ".show-errors", function(e){
+            document.getElementById("form-errors").scrollIntoView();
+            Sticky.hcSticky('refresh');
+        });
+
     });
 
     function selectTab( tablink ){
@@ -147,44 +163,74 @@
     * check if mandatory subfields are written
     */
     function AreMandatoriesNotOk(){
-        var mandatories = new Array();
-        var mandatoriesfields = new Array();
+        var fields = new Array();
+        var subfields = new Array();
         var   tab = new Array();
         var label = new Array();
+        var flag = false;
+        var tabflag= new Array();
+        var StrAlert = "<div id='form-errors' class='dialog alert list'>";
+        var notFilledClass = "subfield_not_filled";
+
         [% FOREACH BIG_LOO IN BIG_LOOP %]
             [% FOREACH innerloo IN BIG_LOO.innerloop %]
                 [% IF ( innerloo.mandatory ) %]
-                    mandatoriesfields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
+                    fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]", "[% BIG_LOO.number | html %]"));
                 [% END %]
                 [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-                    [% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
+                    [% IF ( subfield_loo.mandatory ) %]subfields.push("[% subfield_loo.id | html %]");
                         tab.push("[% BIG_LOO.number | html %]");
-                        label.push("[% To.json(subfield_loo.marc_lib) | html %]");
+                        label.push("[% subfield_loo.marc_lib | $raw %]");
                     [% END %]
                 [% END %]
             [% END %]
         [% END %]
-        var StrAlert = "";
-        for(var i=0,len=mandatories.length; i<len ; i++){
-            var id_string = mandatories[i];
-            // alert (id_string);
-            if( ! $("#" + id_string).val() ){
-                var elt = document.getElementById(id_string);
-                if ( elt.nodeName == 'SELECT' ) {
-                    $(elt).siblings('.select2').find("span[role='combobox']").addClass('subfield_not_filled');
-                } else {
-                    $(elt).addClass('subfield_not_filled');
-                }
 
-                $(elt).focus();
-                StrAlert += "\t* " + _("%s in tab %s").format(label[i], tab[i]) + "\n";
+        StrAlert += "<h4>" + _("The following mandatory subfields aren't filled:") + "</h4>";
+        StrAlert += "<ul>";
+
+        for(var i=0,len=subfields.length; i<len ; i++){
+            var tag=subfields[i].substr(4,3);
+            var subfield=subfields[i].substr(17,1);
+            var tagnumber=subfields[i].substr(19,subfields[i].lastIndexOf("_")-19);
+            if (tabflag[tag+subfield+tagnumber] ==  null) {
+                tabflag[tag+subfield+tagnumber]=new Array();
+                tabflag[tag+subfield+tagnumber][0]=0;
+            }
+            if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(subfields[i]) != null && ! document.getElementById(subfields[i]).value || document.getElementById(subfields[i]) == null)){
+                tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
+
+                var elt = document.getElementById(subfields[i]);
+                if ( elt.nodeName == 'SELECT' ) {
+                    $(elt).siblings('.select2').find("span[role='combobox']").addClass(notFilledClass);
+                } else {
+                    elt.setAttribute('class','input_marceditor noEnterSubmit ' + notFilledClass);
+                }
+                $('#' + subfields[i]).focus();
+                tabflag[tag+subfield+tagnumber][1]=label[i];
+                tabflag[tag+subfield+tagnumber][2]=tab[i];
+            } else {
+                tabflag[tag+subfield+tagnumber][0] = 1;
+            }
+            tabflag[tag+subfield+tagnumber][3] = subfields[i];
+        }
+
+        for (var tagsubfieldid in tabflag){
+            if (tabflag[tagsubfieldid][0]==0){
+                var tag=tagsubfieldid.substr(0,3);
+                var subfield=tagsubfieldid.substr(3,1);
+                StrAlert += "<li>"+_("Tag %s subfield %s %s in tab %s").format(tag, subfield, formatFieldName( tabflag[tagsubfieldid][1] ), tabflag[tagsubfieldid][2]) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + tabflag[tagsubfieldid][2] + '" data-field="' + tabflag[tagsubfieldid][3] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
+                flag = true;
             }
         }
 
+        StrAlert += "</ul>";
+        mandatoryFields = new Object();
+
         /* Check for mandatories field(not subfields) */
-        for(var i=0,len=mandatoriesfields.length; i<len; i++){
+        for(var i=0,len=fields.length; i<len; i++){
             isempty  = true;
-            arr      = mandatoriesfields[i];
+            arr      = fields[i];
             divid    = "tag_" + arr[0] + "_" + arr[1];
             varegexp = new RegExp("^tag_" + arr[0] + "_code_");
 
@@ -198,28 +244,64 @@
                         inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
 
                         for( var k=0; k<len2; k++){
-                            if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
+                            if( eleminputs[k].id.match(inputregexp) ){
+                                if( eleminputs[k].value ){
+                                    isempty = false
+                                }
+                            }
+                        }
+
+                        elemselect = elem.getElementsByTagName('select');
+                        for( var k=0; k<elemselect.length; k++){
+                            if(elemselect[k].id.match(inputregexp) && elemselect[k].value){
                                 isempty = false
                             }
                         }
                     }
                 }
-            }else{
+
+                elemtextareas = elem.getElementsByTagName('textarea');
+                for(var j=0,len2=elemtextareas.length; j<len2; j++){
+                    // this bit assumes that the only textareas in this context would be for subfields
+                    if (elemtextareas[j].value) {
+                        isempty = false;
+                    }
+                }
+
+            } else {
                 isempty = false;
             }
 
             if(isempty){
-                flag = 1;
-                    StrAlert += "\t* " + _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]) + "\n";
+                flag = true;
+                mandatoryFields[ arr[0] ] = {
+                    importance: "mandatory",
+                    elemid: "div_indicator_" + divid,
+                    tab: arr[3]
+                }
             }
 
         }
 
-
-        if(StrAlert){
-            return _("Can't save this record because the following field aren't filled :") + "\n\n" + StrAlert;
+        if( Object.entries(mandatoryFields).length > 0 ){
+            StrAlert += "<h4>" + _("The following fields aren't filled:") + "</h4>";
+            StrAlert += "<ul>";
+            for( var prop in mandatoryFields ){
+                if( mandatoryFields[prop]["importance"] == "mandatory" ){
+                    StrAlert += "<li>" + _("Field %s is mandatory, at least one of its subfields must be filled.").format( prop ) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
+                } else {
+                    StrAlert += "<li>" + _("Field %s is important, at least one of its subfields must be filled.").format(prop) + ' <a class="linkfield btn btn-link" href="#" data-tab="' + mandatoryFields[prop]["tab"] + '" data-field="' + mandatoryFields[prop]["elemid"] + '"><i class="fa fa-arrow-right" aria-hidden="true"></i> ' + _("Go to field") + '</a></li>';
+                }
+            }
+            StrAlert += "</ul>";
         }
-        return false;
+        StrAlert += "</div>";
+        if ( flag ) {
+            $("#show-errors").html('<button type="button" class="btn btn-danger show-errors"><i class="fa-solid fa-triangle-exclamation"></i> ' + _("Errors") + '</span>');
+            return StrAlert;
+        } else {
+            return flag;
+        }
     }
 
     function Check(){
@@ -228,7 +310,9 @@
             document.f.submit();
             return true;
         } else {
-            alert(StrAlert);
+            $("#check_errors").html( StrAlert );
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            Sticky.hcSticky('refresh');
             return false;
         }
     }
@@ -252,6 +336,10 @@
     function confirmnotdup(redirect){
         $("#confirm_not_duplicate").attr("value","1");
         Check();
+    }
+    /* Wrap a value in HTML without putting HTML in translatable string */
+    function formatFieldName( string ){
+        return "<strong><em>" + string + "</em></strong>";
     }
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
@@ -295,6 +383,8 @@
                     <h1>Adding authority [% authtypetext | html %]</h1>
                 [% END %]
 
+                <div id="check_errors"></div>
+
                 [% IF ( duplicateauthid ) %]
                     <div class="dialog alert">
                         <h3>Duplicate record suspected</h3>
@@ -310,7 +400,7 @@
                     </div>
                 [% END # /IF duplicateauthid %]
 
-                <form method="post" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
+                <form method="post" id="f" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
                     <input type="hidden" name="op" value="add" />
                     <input type="hidden" name="addfield_field" value="" />
                     <input type="hidden" name="repeat_field" value="" />
@@ -364,6 +454,7 @@
                                 <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/authorities/authorities-home.pl">Cancel</a>
                             [% END %]
                         </div>
+                        <div id="show-errors" class="btn-group"></div>
                         <div class="toolbar-tabs-container">
                             [% IF ( BIG_LOOP && BIG_LOOP.size > 1 ) %]
                                 [% WRAPPER tabs_nav %]
