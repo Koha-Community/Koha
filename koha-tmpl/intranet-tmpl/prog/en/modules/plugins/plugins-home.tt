@@ -15,7 +15,11 @@
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+            [% IF ( method == 'tool' ) %]
+                <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+            [% ELSE %]
+                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+            [% END %]
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Plugins</span>
@@ -223,7 +227,11 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                [% INCLUDE 'tools-menu.inc' %]
+                [% IF ( method == 'tool' ) %]
+                    [% INCLUDE 'tools-menu.inc' %]
+                [% ELSE %]
+                    [% INCLUDE 'admin-menu.inc' %]
+                [% END %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
