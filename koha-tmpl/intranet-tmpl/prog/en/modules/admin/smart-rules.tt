@@ -1392,6 +1392,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'format_price.inc' %]
     <script>
          $(document).ready(function() {
             KohaTable("default-circulation-rules", {
@@ -1486,6 +1487,10 @@
                         $('#overduefinescap').prop('disabled', cap_fine_to_replacement_price.is(':checked') );
                     } else {
                         $(current_column).find("input[type='text']").val(itm);
+                        // unformat prices
+                        $(current_column).find("input[inputmode='decimal']").each(function() {
+                          $(this).val(itm.unformat_price());
+                        });
                         // select the corresponding option
                         $(current_column).find("select option").each(function(){
                             opt = $(this).text().toLowerCase();
