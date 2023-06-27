@@ -71,7 +71,7 @@ subtest 'Testing Patron Info Request V2' => sub {
 subtest 'Checkout V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 5;
+    plan tests => 8;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkout_v2();
     $schema->storage->txn_rollback;
@@ -823,6 +823,24 @@ sub test_checkout_v2 {
     undef $response;
     $msg->handle_checkout( $server );
     ok( $response =~ m/AH\d{4}-\d{2}-\d{2}/, "Found AH field as SQL date in response");
+
+    #returning item and now testing for blocked_item_types
+    t::lib::Mocks::mock_preference( 'CheckPrevCheckout',  'hardno' );
+    AddReturn($item_object->barcode, $branchcode);
+
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $server->{account}->{blocked_item_types} = "CR|".$item_object->itype;
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_SCREEN_MSG, 'Item type cannot be checked out at this checkout location', 'Check screen msg', 'equals' );
+
+    is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 0, "Item was not checked out (item type matched blocked_item_types)");
+
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $server->{account}->{blocked_item_types} = "";
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 0, 2 );
+    is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 1, "Item was checked out successfully");
 
 }
 
