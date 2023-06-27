@@ -655,6 +655,7 @@
             }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters);
 
             $("#patron_search_form").on('submit', filter);
+            $("#patron_search_form").on('submit', update_search_type);
             $(".filterByLetter").on("click",function(e){
                 e.preventDefault();
                 filterByFirstLetterSurname($(this).text(), true);
@@ -712,6 +713,10 @@
                     filterByFirstLetterSurname( firstletter, setstate );
                 }
             }
+        }
+
+        function update_search_type(){
+            $("#searchtype").val($("#searchtype_filter").val());
         }
 
         function update_search_description(){
