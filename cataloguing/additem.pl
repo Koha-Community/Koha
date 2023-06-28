@@ -45,7 +45,7 @@ use Koha::Result::Boolean;
 
 use Encode qw( encode_utf8 );
 use List::MoreUtils qw( any uniq );
-use List::Util qw( first );
+use List::Util qw( first min );
 use MARC::File::XML;
 use MIME::Base64 qw( decode_base64url encode_base64url );
 use Storable qw( freeze thaw );
@@ -238,7 +238,7 @@ if ($op eq "additem") {
     my $add_duplicate_submit       = $input->param('add_duplicate_submit');
     my $add_multiple_copies_submit = $input->param('add_multiple_copies_submit');
     my $save_as_template_submit    = $input->param('save_as_template_submit');
-    my $number_of_copies           = $input->param('number_of_copies');
+    my $number_of_copies           = min( scalar $input->param('number_of_copies'), 1000 ); # TODO refine hardcoded maximum?
 
     my @columns = Koha::Items->columns;
     my $item = Koha::Item->new;
