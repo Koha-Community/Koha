@@ -113,9 +113,9 @@ sub type_disclaimer_template_params {
 
 =head3 after_request_created
 
-    #example here
+    $type_disclaimer->after_request_created($params, $request);
 
-#description here
+Actions that need to be done after the request has been created
 
 =cut
 

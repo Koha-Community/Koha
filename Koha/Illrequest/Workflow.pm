@@ -28,16 +28,15 @@ use Koha::Plugins;
 
 =head1 NAME
 
-Koha::Illrequest::TypeDisclaimer - Koha ILL TypeDisclaimer
+Koha::Illrequest::Workflow - Koha ILL Workflow parent class
 
 =head1 SYNOPSIS
 
-Object-oriented class that provides the ILL request type disclaimer
+Object-oriented parent class for ILL workflow stages
 
 =head1 DESCRIPTION
 
-This class provides the ability to verify if it should render type disclaimer
-and handle the template params accordingly
+This class contains methods do be used by ILL workflow stages
 
 =head1 API
 
@@ -45,10 +44,10 @@ and handle the template params accordingly
 
 =head3 new
 
-    my $type_disclaimer = Koha::Illrequest::Logger->new($metadata);
+    my $availability = Koha::Illrequest::Workflow::Availability->new( $params, 'opac' )
 
-Create a new Koha::Illrequest::TypeDisclaimer object.
-We also store the metadata to be used to retrieve the request type
+Create a new Koha::Illrequest::Workflow child class object.
+We store the metadata and ui_context
 
 =cut
 
