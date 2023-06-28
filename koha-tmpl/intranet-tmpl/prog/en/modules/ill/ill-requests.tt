@@ -684,7 +684,7 @@
                             <ol>
                                 [% FOREACH meta IN request.metadata %]
                                     <li class="requestmeta-[% meta.key.replace('\s','_') | html %]">
-                                        <span class="label">[% meta.key | html %]:</span>
+                                        <span class="label">[% meta.key.replace('_',' ') | html %]:</span>
                                         [% meta.value | html %]
                                     </li>
                                 [% END %]
