@@ -32,9 +32,14 @@ use C4::Installer;
 use C4::Installer::PerlModules;
 
 use Koha;
+use Koha::Caches;
 
 my $query = CGI->new;
 my $step  = $query->param('step');
+
+# Flush memcached before we begin
+Koha::Caches->get_instance('config')->flush_all;
+Koha::Caches->get_instance('sysprefs')->flush_all;
 
 my $language = $query->param('language');
 my ( $template, $loggedinuser, $cookie );
