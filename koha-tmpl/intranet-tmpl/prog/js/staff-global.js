@@ -163,20 +163,43 @@ $(document).ready(function() {
         $("#catalog-search-dropdown a").toggleClass("catalog-search-dropdown-hover");
     });
 
-    if ( localStorage.getItem("lastborrowernumber") ){
-        if( $("#hiddenborrowernumber").val() != localStorage.getItem("lastborrowernumber") ) {
-            $("#lastborrowerlink").show();
-            $("#lastborrowerlink").prop("title", localStorage.getItem("lastborrowername") + " (" + localStorage.getItem("lastborrowercard") + ")");
-            $("#lastborrowerlink").prop("href", "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + localStorage.getItem("lastborrowernumber"));
-            $("#lastborrower-window").css("display", "inline-flex");
+    if ( localStorage.getItem("previousPatrons") || $("#hiddenborrowernumber").val() ){
+        var previous_patrons = [];
+        if ( localStorage.getItem("previousPatrons") ) {
+            previous_patrons = JSON.parse(localStorage.getItem("previousPatrons"));
         }
-    }
 
-    if( !localStorage.getItem("lastborrowernumber") || ( $("#hiddenborrowernumber").val() != localStorage.getItem("lastborrowernumber") && localStorage.getItem("currentborrowernumber") != $("#hiddenborrowernumber").val())) {
-        if( $("#hiddenborrowernumber").val() ){
-            localStorage.setItem("lastborrowernumber", $("#hiddenborrowernumber").val() );
-            localStorage.setItem("lastborrowername", $("#hiddenborrowername").val() );
-            localStorage.setItem("lastborrowercard", $("#hiddenborrowercard").val() );
+        if ( $("#hiddenborrowernumber").val() ) {
+            // Remove this patron from the list if they are already there
+            previous_patrons = previous_patrons.filter(function (p) {
+                return p["borrowernumber"] != $("#hiddenborrowernumber").val();
+            });
+
+            const previous_patron = {
+                "borrowernumber": $("#hiddenborrowernumber").val(),
+                "name": $("#hiddenborrowername").val(),
+                "card": $("#hiddenborrowercard").val()
+            };
+
+            previous_patrons.unshift( previous_patron );
+            // Limit to last 10 patrons
+            if ( previous_patrons.length > 10 ) previous_patrons.pop();
+            localStorage.setItem("previousPatrons", JSON.stringify(previous_patrons));
+        }
+
+        if ( previous_patrons.length ) {
+            let p = previous_patrons[0];
+            $("#lastborrowerlink").show();
+            $("#lastborrowerlink").prop("title", `${p["name"]} (${p["card"]})`);
+            $("#lastborrowerlink").prop("href", `/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}`);
+            $("#lastborrower-window").css("display", "inline-flex");
+
+            previous_patrons.reverse();
+            for ( i in previous_patrons ) {
+                p = previous_patrons[i];
+                const el = `<li><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}">${p["name"]} (${p["card"]})</a></li>`;
+                $("#lastBorrowerList").prepend(el);
+            }
         }
     }
 
@@ -224,10 +247,7 @@ $(document).ready(function() {
 });
 
 function removeLastBorrower(){
-    localStorage.removeItem("lastborrowernumber");
-    localStorage.removeItem("lastborrowername");
-    localStorage.removeItem("lastborrowercard");
-    localStorage.removeItem("currentborrowernumber");
+    localStorage.removeItem("previousPatrons");
 }
 
 // http://jennifermadden.com/javascript/stringEnterKeyDetector.html
