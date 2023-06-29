@@ -307,7 +307,7 @@ $(document).ready(function() {
 
         <hr>
         <div class="subfield_line">
-            <label for="number_of_copies">Number of copies to be made of this item </label> <input type="text" id="number_of_copies[% newserialloo.serialid | html %][% newserialloo.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]" name="number_of_copies" value="1" size="2"> <span class="hint">The barcode you enter will be incremented for each additional item.</p>
+            <label for="number_of_copies">Number of copies to be made of this item </label> <input type="text" id="number_of_copies[% newserialloo.serialid | html %][% newserialloo.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]" name="number_of_copies" value="1" maxlength="3" size="2"> <span class="hint">Number of copies limited to under 1000. The barcode you enter will be incremented for each additional item.</p>
         </div>
 
         <input type="hidden" name="moditem" value="" /> 
@@ -458,7 +458,7 @@ $(document).ready(function() {
 
         <hr>
         <div class="subfield_line">
-            <label for="number_of_copies">Number of copies to be made of this item </label> <input type="text" id="number_of_copies[% newserialloo.serialid | html %][% newserialloo.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]" name="number_of_copies" value="1" size="2"> <span class="hint">The barcode you enter will be incremented for each additional item.</p>
+            <label for="number_of_copies">Number of copies to be made of this item </label> <input type="text" id="number_of_copies[% newserialloo.serialid | html %][% newserialloo.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]" name="number_of_copies" value="1" maxlength="3" size="2"> <span class="hint">Number of copies limited to under 1000. The barcode you enter will be incremented for each additional item.</p>
         </div>
 
         <input type="hidden" name="moditem" value="" /> 
