@@ -275,7 +275,7 @@
     </span>
     <fieldset id="add_multiple_copies_span">
         <label for="number_of_copies">Number of copies of this item to add: </label>
-        <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" />
+        <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" maxlength="3" />
         <input type="submit" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" onclick="javascript:return Check(this.form) && CheckMultipleAdd(this.form.number_of_copies.value);" /> <a href="#" id="cancel_add_multiple" class="cancel">Cancel</a>
         <div class="hint"><p>Maximum currently set to 1000. The barcode you enter will be incremented for each additional item.</p></div>
     </fieldset>
