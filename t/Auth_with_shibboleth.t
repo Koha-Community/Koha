@@ -335,7 +335,7 @@ subtest "checkpw_shib tests" => sub {
     $shib_login = "martin";
     ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
     is( $retval, "0", "user not authenticated" );
-    $logger->info_is("There are several users with userid of martin, matchpoints must be unique", "Duplicated matchpoint warned to info");
+    $logger->info_is("No users with userid of martin found and autocreate is disabled", "Duplicated matchpoint warned to info");
 };
 
 ## _get_uri - opac
