@@ -2492,7 +2492,7 @@ CREATE TABLE `deletedbiblioitems` (
   `pages` text DEFAULT NULL COMMENT 'number of pages (MARC21 300$a)',
   `notes` longtext DEFAULT NULL,
   `size` text DEFAULT NULL COMMENT 'material size (MARC21 300$c)',
-  `place` text DEFAULT NULL COMMENT 'publication place (MARC21 260$a and 264§a)',
+  `place` text DEFAULT NULL COMMENT 'publication place (MARC21 260$a and 264$a)',
   `lccn` longtext DEFAULT NULL COMMENT 'library of congress control number (MARC21 010$a)',
   `url` mediumtext DEFAULT NULL COMMENT 'url (MARC21 856$u)',
   `cn_source` varchar(10) DEFAULT NULL COMMENT 'classification source (MARC21 942$2)',
