@@ -498,6 +498,7 @@ sub get_template_and_user {
             IntranetmainUserblock        => C4::Context->preference("IntranetmainUserblock"),
             IntranetNav                  => C4::Context->preference("IntranetNav"),
             intranetreadinghistory       => C4::Context->preference("intranetreadinghistory"),
+            IntranetReadingHistoryHolds  => C4::Context->preference("IntranetReadingHistoryHolds"),
             intranetstylesheet           => C4::Context->preference("intranetstylesheet"),
             IntranetUserCSS              => C4::Context->preference("IntranetUserCSS"),
             IntranetUserJS               => C4::Context->preference("IntranetUserJS"),
