@@ -77,6 +77,7 @@ use Koha::Items;
 use Koha::Serial::Items;
 
 use List::MoreUtils qw( uniq );
+use List::Util qw( min );
 
 my $query           = CGI->new();
 my $dbh             = C4::Context->dbh;
@@ -277,7 +278,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
         my @serials      = $query->multi_param('serial');
         my @bibnums      = $query->multi_param('bibnum');
         my @itemid       = $query->multi_param('itemid');
-        my @num_copies   = $query->multi_param('number_of_copies');
+        my @num_copies   = map { min($_, 1000); } $query->multi_param('number_of_copies');
 
         #Rebuilding ALL the data for items into a hash
         # parting them on $itemid.
