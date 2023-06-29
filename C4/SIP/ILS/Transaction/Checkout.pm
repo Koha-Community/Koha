@@ -18,6 +18,7 @@ use C4::Context;
 use C4::Circulation qw( AddIssue GetIssuingCharges CanBookBeIssued ProcessOfflineIssue );
 use C4::Members;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Items;
 
 use parent qw(C4::SIP::ILS::Transaction);
 
@@ -48,6 +49,7 @@ sub do_checkout {
     my $patron         = Koha::Patrons->find($self->{patron}->{borrowernumber});
     my $overridden_duedate; # usually passed as undef to AddIssue
     my $prevcheckout_block_checkout  = $account->{prevcheckout_block_checkout};
+    my $allow_additional_materials_checkout = $account->{allow_additional_materials_checkout};
     my ($issuingimpossible, $needsconfirmation, $messages) = _can_we_issue($patron, $barcode, 0);
 
     if ( $no_block_due_date ) {
@@ -105,9 +107,14 @@ sub do_checkout {
                 $noerror = 0 if ($prevcheckout_block_checkout);
                 last;
             } elsif ( $confirmation eq 'ADDITIONAL_MATERIALS' ) {
-                $self->screen_msg('Item must be checked out at a circulation desk');
-                $noerror = 0;
-                last;
+                if ( $allow_additional_materials_checkout ) {
+                    my $item = Koha::Items->find({ barcode => $barcode });
+                    $self->screen_msg( 'Item has additional materials: ' . $item->materials );
+                } else {
+                    $self->screen_msg('Item must be checked out at a circulation desk');
+                    $noerror = 0;
+                    last;
+                }
             } elsif ( $confirmation eq 'RECALLED' ) {
                 $self->screen_msg('Item has been recalled for another patron');
                 $noerror = 0;
