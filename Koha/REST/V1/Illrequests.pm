@@ -93,14 +93,12 @@ sub add {
                 my $create_result = &{$create_api}($body, $request);
                 my $new_id = $create_result->illrequest_id;
 
-                my @new_req = Koha::Illrequests->search({
-                    illrequest_id => $new_id
-                })->as_list;
+                my $new_req = Koha::Illrequests->find($new_id);
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $new_req[0]->illrequest_id);
+                $c->res->headers->location($c->req->url->to_string . '/' . $new_req->illrequest_id);
                 return $c->render(
                     status  => 201,
-                    openapi => $new_req[0]->to_api
+                    openapi => $new_req->to_api
                 );
             }
         );

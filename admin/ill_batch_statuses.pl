@@ -18,11 +18,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
+use CGI       qw ( -utf8 );
 use Try::Tiny qw( catch try );
 
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::IllbatchStatus;
@@ -35,55 +35,51 @@ my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/ill_batch_statuses.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'ill' },
+        template_name => "admin/ill_batch_statuses.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'ill' },
     }
 );
 
 my $status;
 if ($code) {
-    $status = Koha::IllbatchStatuses->find({ code => $code });
+    $status = Koha::IllbatchStatuses->find( { code => $code } );
 }
 
 if ( $op eq 'add_form' ) {
     if ($status) {
-        $template->param(
-            status => $status
-        );
+        $template->param( status => $status );
     }
-}
-elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'add_validate' ) {
     my $name = $input->param('name');
     my $code = $input->param('code');
 
     if ( not defined $status ) {
-        $status = Koha::IllbatchStatus->new( {
-            name => $name,
-            code => $code
-        } );
+        $status = Koha::IllbatchStatus->new(
+            {
+                name => $name,
+                code => $code
+            }
+        );
     }
 
     try {
-        if ($status->id) {
-            $status->update_and_log({ name => $name });
+        if ( $status->id ) {
+            $status->update_and_log( { name => $name } );
         } else {
             $status->create_and_log;
         }
         push @messages, { type => 'message', code => 'success_on_saving' };
-    }
-    catch {
+    } catch {
         push @messages, { type => 'error', code => 'error_on_saving' };
     };
     $op = 'list';
-}
-elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'delete' ) {
     try {
         $status->delete_and_log;
         push @messages, { code => 'success_on_delete', type => 'message' };
-    }
-    catch {
+    } catch {
         push @messages, { code => 'error_on_delete', type => 'alert' };
 
     };

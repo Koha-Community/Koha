@@ -310,7 +310,7 @@
             batch_id: batchId,
             ill_backend_id: batch.data.backend,
             patron_id: batch.data.patron.borrowernumber,
-            library_id: batch.data.branchcode,
+            library_id: batch.data.library_id,
             extended_attributes: extended_attributes
         };
         window.doCreateSubmission(payload)
@@ -378,7 +378,7 @@
             var option = document.createElement('option')
             option.value = status.code;
             option.text = status.name;
-            if (batch.data.id && batch.data.statuscode === status.code) {
+            if (batch.data.batch_id && batch.data.statuscode === status.code) {
                 option.selected = true;
             }
             statusesSelect.add(option);
@@ -479,7 +479,7 @@
         updateBatch()
             .then(function () {
                 $('#ill-batch-modal').modal({ show: false });
-                location.href = '/cgi-bin/koha/ill/ill-requests.pl?batch_id=' + batch.data.id;
+                location.href = '/cgi-bin/koha/ill/ill-requests.pl?batch_id=' + batch.data.batch_id;
             });
     };
 
@@ -505,11 +505,11 @@
             })
             .then(function (jsoned) {
                 batch.data = {
-                    id: jsoned.id,
+                    batch_id: jsoned.batch_id,
                     name: jsoned.name,
                     backend: jsoned.backend,
                     cardnumber: jsoned.cardnumber,
-                    branchcode: jsoned.branchcode,
+                    library_id: jsoned.library_id,
                     statuscode: jsoned.statuscode
                 }
                 return jsoned;
@@ -534,7 +534,7 @@
                 name: nameInput.value,
                 backend: backend,
                 cardnumber: cardnumberInput.value,
-                branchcode: selectedBranchcode,
+                library_id: selectedBranchcode,
                 statuscode: selectedStatuscode
             })
         })
@@ -545,13 +545,13 @@
                 return Promise.reject(response);
             })
             .then(function (body) {
-                batchId = body.id;
+                batchId = body.batch_id;
                 batch.data = {
-                    id: body.id,
+                    batch_id: body.batch_id,
                     name: body.name,
                     backend: body.backend,
                     cardnumber: body.patron.cardnumber,
-                    branchcode: body.branchcode,
+                    library_id: body.library_id,
                     statuscode: body.statuscode,
                     patron: body.patron,
                     status: body.status
@@ -572,7 +572,7 @@
     function updateBatch() {
         var selectedBranchcode = branchcodeSelect.selectedOptions[0].value;
         var selectedStatuscode = statusesSelect.selectedOptions[0].value;
-        return doBatchApiRequest('/' + batch.data.id, {
+        return doBatchApiRequest('/' + batch.data.batch_id, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json'
@@ -581,7 +581,7 @@
                 name: nameInput.value,
                 backend: batch.data.backend,
                 cardnumber: batch.data.patron.cardnumber,
-                branchcode: selectedBranchcode,
+                library_id: selectedBranchcode,
                 statuscode: selectedStatuscode
             })
         })
@@ -966,7 +966,7 @@
                 {
                     width: '18%',
                     render: createActions,
-                    className: 'action-column'
+                    className: 'action-column noExport'
                 }
             ],
             createdRow: function (row, data) {
@@ -1039,13 +1039,13 @@
     }
 
     function manageBatchItemsDisplay() {
-        batchItemsDisplay.style.display = batch.data.id ? 'block' : 'none'
+        batchItemsDisplay.style.display = batch.data.batch_id ? 'block' : 'none'
     };
 
     function updateBatchInputs() {
         nameInput.value = batch.data.name || '';
         cardnumberInput.value = batch.data.cardnumber || '';
-        branchcodeSelect.value = batch.data.branchcode || '';
+        branchcodeSelect.value = batch.data.library_id || '';
     }
 
     function debounce(func) {

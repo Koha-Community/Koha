@@ -1,7 +1,7 @@
 ---
 type: object
 properties:
-  id:
+  batch_id:
     type: string
     description: Internal ILL batch identifier
   name:
@@ -13,10 +13,10 @@ properties:
   cardnumber:
     type: string
     description: Card number of the patron of the ILL batch
-  borrowernumber:
+  patron_id:
     type: string
     description: Borrower number of the patron of the ILL batch
-  branchcode:
+  library_id:
     type: string
     description: Branch code of the branch of the ILL batch
   patron:
@@ -44,5 +44,5 @@ additionalProperties: false
 required:
   - name
   - backend
-  - branchcode
+  - library_id
   - statuscode

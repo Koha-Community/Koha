@@ -197,4 +197,12 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-08 13:49:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YKxQxJMKxdBP9X4+i0Rfzw
 
+sub koha_object_class {
+    'Koha::Illbatch';
+}
+
+sub koha_objects_class {
+    'Koha::Illbatches';
+}
+
 1;

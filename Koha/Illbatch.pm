@@ -39,10 +39,8 @@ Return the status object associated with this batch
 =cut
 
 sub status {
-    my ( $self ) = @_;
-    return Koha::IllbatchStatus->_new_from_dbic(
-        scalar $self->_result->statuscode
-    );
+    my ($self) = @_;
+    return Koha::IllbatchStatus->_new_from_dbic( scalar $self->_result->statuscode );
 }
 
 =head3 patron
@@ -54,10 +52,8 @@ Return the patron object associated with this batch
 =cut
 
 sub patron {
-    my ( $self ) = @_;
-    return Koha::Patron->_new_from_dbic(
-        scalar $self->_result->borrowernumber
-    );
+    my ($self) = @_;
+    return Koha::Patron->_new_from_dbic( scalar $self->_result->borrowernumber );
 }
 
 =head3 branch
@@ -69,10 +65,8 @@ Return the branch object associated with this batch
 =cut
 
 sub branch {
-    my ( $self ) = @_;
-    return Koha::Library->_new_from_dbic(
-        scalar $self->_result->branchcode
-    );
+    my ($self) = @_;
+    return Koha::Library->_new_from_dbic( scalar $self->_result->branchcode );
 }
 
 =head3 requests_count
@@ -84,10 +78,8 @@ Return the number of requests associated with this batch
 =cut
 
 sub requests_count {
-    my ( $self ) = @_;
-    return Koha::Illrequests->search({
-        batch_id => $self->id
-    })->count;
+    my ($self) = @_;
+    return Koha::Illrequests->search( { batch_id => $self->id } )->count;
 }
 
 =head3 create_and_log
@@ -99,18 +91,20 @@ Log batch creation following storage
 =cut
 
 sub create_and_log {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     $self->store;
 
     my $logger = Koha::Illrequest::Logger->new;
 
-    $logger->log_something({
-        modulename   => 'ILL',
-        actionname  => 'batch_create',
-        objectnumber => $self->id,
-        infos        => to_json({})
-    });
+    $logger->log_something(
+        {
+            modulename   => 'ILL',
+            actionname   => 'batch_create',
+            objectnumber => $self->id,
+            infos        => to_json( {} )
+        }
+    );
 }
 
 =head3 update_and_log
@@ -129,7 +123,7 @@ sub update_and_log {
         branchcode => $self->branchcode
     };
 
-    $self->set( $params );
+    $self->set($params);
     my $update = $self->store;
 
     my $after = {
@@ -139,15 +133,19 @@ sub update_and_log {
 
     my $logger = Koha::Illrequest::Logger->new;
 
-    $logger->log_something({
-        modulename   => 'ILL',
-        actionname  => 'batch_update',
-        objectnumber => $self->id,
-        infos        => to_json({
-            before => $before,
-            after  => $after
-        })
-    });
+    $logger->log_something(
+        {
+            modulename   => 'ILL',
+            actionname   => 'batch_update',
+            objectnumber => $self->id,
+            infos        => to_json(
+                {
+                    before => $before,
+                    after  => $after
+                }
+            )
+        }
+    );
 }
 
 =head3 delete_and_log
@@ -159,16 +157,18 @@ Log batch delete
 =cut
 
 sub delete_and_log {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $logger = Koha::Illrequest::Logger->new;
 
-    $logger->log_something({
-        modulename   => 'ILL',
-        actionname  => 'batch_delete',
-        objectnumber => $self->id,
-        infos        => to_json({})
-    });
+    $logger->log_something(
+        {
+            modulename   => 'ILL',
+            actionname   => 'batch_delete',
+            objectnumber => $self->id,
+            infos        => to_json( {} )
+        }
+    );
 
     $self->delete;
 }

@@ -39,34 +39,36 @@ Log batch status creation following storage
 =cut
 
 sub create_and_log {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     # Ensure code is uppercase and contains only word characters
     my $fixed_code = uc $self->code;
     $fixed_code =~ s/\W/_/;
 
     # Ensure this status doesn't already exist
-    my $status = Koha::IllbatchStatuses->find({ code => $fixed_code });
+    my $status = Koha::IllbatchStatuses->find( { code => $fixed_code } );
     if ($status) {
-        return {
-            error => "Duplicate status found"
-        };
+        return { error => "Duplicate status found" };
     }
 
     # Ensure system statuses can't be created
-    $self->set({
-        code      => $fixed_code,
-        is_system => 0
-    })->store;
+    $self->set(
+        {
+            code      => $fixed_code,
+            is_system => 0
+        }
+    )->store;
 
     my $logger = Koha::Illrequest::Logger->new;
 
-    $logger->log_something({
-        modulename   => 'ILL',
-        actionname   => 'batch_status_create',
-        objectnumber => $self->id,
-        infos        => to_json({})
-    });
+    $logger->log_something(
+        {
+            modulename   => 'ILL',
+            actionname   => 'batch_status_create',
+            objectnumber => $self->id,
+            infos        => to_json( {} )
+        }
+    );
 }
 
 =head3 update_and_log
@@ -80,31 +82,29 @@ Log batch status update following storage
 sub update_and_log {
     my ( $self, $params ) = @_;
 
-    my $before = {
-        name => $self->name
-    };
+    my $before = { name => $self->name };
 
     # Ensure only the name can be changed
-    $self->set({
-        name => $params->{name}
-    });
+    $self->set( { name => $params->{name} } );
     my $update = $self->store;
 
-    my $after = {
-        name => $self->name
-    };
+    my $after = { name => $self->name };
 
     my $logger = Koha::Illrequest::Logger->new;
 
-    $logger->log_something({
-        modulename   => 'ILL',
-        actionname  => 'batch_status_update',
-        objectnumber => $self->id,
-        infos        => to_json({
-            before => $before,
-            after  => $after
-        })
-    });
+    $logger->log_something(
+        {
+            modulename   => 'ILL',
+            actionname   => 'batch_status_update',
+            objectnumber => $self->id,
+            infos        => to_json(
+                {
+                    before => $before,
+                    after  => $after
+                }
+            )
+        }
+    );
 }
 
 =head3 delete_and_log
@@ -116,25 +116,27 @@ Log batch status delete
 =cut
 
 sub delete_and_log {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     # Don't permit deletion of system statuses
-    if ($self->is_system) {
+    if ( $self->is_system ) {
         return;
     }
 
     # Update all batches that use this status to have status UNKNOWN
-    my $affected = Koha::Illbatches->search({ statuscode => $self->code });
-    $affected->update({ statuscode => 'UNKNOWN'});
+    my $affected = Koha::Illbatches->search( { statuscode => $self->code } );
+    $affected->update( { statuscode => 'UNKNOWN' } );
 
     my $logger = Koha::Illrequest::Logger->new;
 
-    $logger->log_something({
-        modulename   => 'ILL',
-        actionname   => 'batch_status_delete',
-        objectnumber => $self->id,
-        infos        => to_json({})
-    });
+    $logger->log_something(
+        {
+            modulename   => 'ILL',
+            actionname   => 'batch_status_delete',
+            objectnumber => $self->id,
+            infos        => to_json( {} )
+        }
+    );
 
     $self->delete;
 }

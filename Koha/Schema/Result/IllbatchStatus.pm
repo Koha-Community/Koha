@@ -114,4 +114,16 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-08 13:49:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yo60FJ+kyRj8QuEMac8CFA
 
+__PACKAGE__->add_columns(
+    '+is_system' => { is_boolean => 1 },
+);
+
+sub koha_object_class {
+    'Koha::IllbatchStatus';
+}
+
+sub koha_objects_class {
+    'Koha::IllbatchStatuses';
+}
+
 1;

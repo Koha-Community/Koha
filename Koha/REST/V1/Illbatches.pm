@@ -47,47 +47,46 @@ sub list {
     # Get all patrons associated with all our batches
     # in one go
     my $patrons = {};
-    foreach my $batch(@batches) {
+    foreach my $batch (@batches) {
         my $patron_id = $batch->borrowernumber;
-        $patrons->{$patron_id} = 1
-    };
-    my @patron_ids = keys %{$patrons};
-    my $patron_results = Koha::Patrons->search({
-        borrowernumber => { -in => \@patron_ids }
-    });
+        $patrons->{$patron_id} = 1;
+    }
+    my @patron_ids     = keys %{$patrons};
+    my $patron_results = Koha::Patrons->search( { borrowernumber => { -in => \@patron_ids } } );
 
     # Get all branches associated with all our batches
     # in one go
     my $branches = {};
-    foreach my $batch(@batches) {
+    foreach my $batch (@batches) {
         my $branch_id = $batch->branchcode;
-        $branches->{$branch_id} = 1
-    };
-    my @branchcodes = keys %{$branches};
-    my $branch_results = Koha::Libraries->search({
-        branchcode => { -in => \@branchcodes }
-    });
+        $branches->{$branch_id} = 1;
+    }
+    my @branchcodes    = keys %{$branches};
+    my $branch_results = Koha::Libraries->search( { branchcode => { -in => \@branchcodes } } );
 
     # Get all batch statuses associated with all our batches
     # in one go
     my $statuses = {};
-    foreach my $batch(@batches) {
+    foreach my $batch (@batches) {
         my $code = $batch->statuscode;
-        $statuses->{$code} = 1
-    };
-    my @statuscodes = keys %{$statuses};
-    my $status_results = Koha::IllbatchStatuses->search({
-        code => { -in => \@statuscodes }
-    });
+        $statuses->{$code} = 1;
+    }
+    my @statuscodes    = keys %{$statuses};
+    my $status_results = Koha::IllbatchStatuses->search( { code => { -in => \@statuscodes } } );
 
     # Populate the response
     my @to_return = ();
-    foreach my $it_batch(@batches) {
-        my $patron = $patron_results->find({ borrowernumber => $it_batch->borrowernumber});
-        my $branch = $branch_results->find({ branchcode => $it_batch->branchcode });
-        my $status = $status_results->find({ code => $it_batch->statuscode });
+    foreach my $it_batch (@batches) {
+        my $patron = $patron_results->find( { borrowernumber => $it_batch->borrowernumber } );
+        my $branch = $branch_results->find( { branchcode     => $it_batch->branchcode } );
+        my $status = $status_results->find( { code           => $it_batch->statuscode } );
         push @to_return, {
-            %{$it_batch->unblessed},
+            batch_id       => $it_batch->id,
+            backend        => $it_batch->backend,
+            library_id     => $it_batch->branchcode,
+            name           => $it_batch->name,
+            statuscode     => $it_batch->statuscode,
+            patron_id      => $it_batch->borrowernumber,
             patron         => $patron,
             branch         => $branch,
             status         => $status,
@@ -111,17 +110,22 @@ sub get {
 
     my $batch = Koha::Illbatches->find($batchid);
 
-    if (not defined $batch) {
+    if ( not defined $batch ) {
         return $c->render(
-            status => 404,
+            status  => 404,
             openapi => { error => "ILL batch not found" }
         );
     }
 
     return $c->render(
-        status => 200,
+        status  => 200,
         openapi => {
-            %{$batch->unblessed},
+            batch_id       => $batch->id,
+            backend        => $batch->backend,
+            library_id     => $batch->branchcode,
+            name           => $batch->name,
+            statuscode     => $batch->statuscode,
+            patron_id      => $batch->borrowernumber,
             patron         => $batch->patron->unblessed,
             branch         => $batch->branch->unblessed,
             status         => $batch->status->unblessed,
@@ -143,7 +147,7 @@ sub add {
 
     # We receive cardnumber, so we need to look up the corresponding
     # borrowernumber
-    my $patron = Koha::Patrons->find({ cardnumber => $body->{cardnumber} });
+    my $patron = Koha::Patrons->find( { cardnumber => $body->{cardnumber} } );
 
     if ( not defined $patron ) {
         return $c->render(
@@ -154,26 +158,31 @@ sub add {
 
     delete $body->{cardnumber};
     $body->{borrowernumber} = $patron->borrowernumber;
+    $body->{branchcode}     = delete $body->{library_id};
 
     return try {
-        my $batch = Koha::Illbatch->new( $body );
+        my $batch = Koha::Illbatch->new($body);
         $batch->create_and_log;
         $c->res->headers->location( $c->req->url->to_string . '/' . $batch->id );
 
         my $ret = {
-            %{$batch->unblessed},
-            patron           => $batch->patron->unblessed,
-            branch           => $batch->branch->unblessed,
-            status           => $batch->status->unblessed,
-            requests_count   => 0
+            batch_id       => $batch->id,
+            backend        => $batch->backend,
+            library_id     => $batch->branchcode,
+            name           => $batch->name,
+            statuscode     => $batch->statuscode,
+            patron_id      => $batch->borrowernumber,
+            patron         => $batch->patron->unblessed,
+            branch         => $batch->branch->unblessed,
+            status         => $batch->status->unblessed,
+            requests_count => 0
         };
 
         return $c->render(
             status  => 201,
             openapi => $ret
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
                 return $c->render(
@@ -206,12 +215,19 @@ sub update {
 
     my $params = $c->req->json;
     delete $params->{cardnumber};
+    $params->{borrowernumber} = delete $params->{patron_id}  if $params->{patron_id};
+    $params->{branchcode}     = delete $params->{library_id} if $params->{library_id};
 
     return try {
-        $batch->update_and_log( $params );
+        $batch->update_and_log($params);
 
         my $ret = {
-            %{$batch->unblessed},
+            batch_id       => $batch->id,
+            backend        => $batch->backend,
+            library_id     => $batch->branchcode,
+            name           => $batch->name,
+            statuscode     => $batch->statuscode,
+            patron_id      => $batch->borrowernumber,
             patron         => $batch->patron->unblessed,
             branch         => $batch->branch->unblessed,
             status         => $batch->status->unblessed,
@@ -222,8 +238,7 @@ sub update {
             status  => 200,
             openapi => $ret
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -238,7 +253,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $batch = Koha::Illbatches->find( $c->validation->param( 'illbatch_id' ) );
+    my $batch = Koha::Illbatches->find( $c->validation->param('illbatch_id') );
 
     if ( not defined $batch ) {
         return $c->render( status => 404, openapi => { error => "ILL batch not found" } );
@@ -246,9 +261,8 @@ sub delete {
 
     return try {
         $batch->delete_and_log;
-        return $c->render( status => 204, openapi => '');
-    }
-    catch {
+        return $c->render( status => 204, openapi => '' );
+    } catch {
         $c->unhandled_exception($_);
     };
 }

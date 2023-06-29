@@ -144,6 +144,7 @@ subtest 'list() tests' => sub {
             class => 'Koha::Illrequests',
             value => {
                 borrowernumber => $patron->borrowernumber,
+                batch_id       => undef,
                 status         => $request_status->{code},
                 backend        => $backend->name,
                 notesstaff     => '1'
@@ -154,6 +155,7 @@ subtest 'list() tests' => sub {
         {
             class => 'Koha::Illrequests',
             value => {
+                batch_id     => undef,
                 status       => $request_status->{code},
                 backend      => $backend->name,
                 status_alias => $av->authorised_value,
@@ -291,9 +293,7 @@ subtest 'add() tests' => sub {
     my $backend = Test::MockObject->new;
     $backend->set_isa('Koha::Illbackends::Mock');
     $backend->set_always('name', 'Mock');
-    $backend->set_always('capabilities', sub {
-        return $illrequest;
-    } );
+
     $backend->mock(
         'metadata',
         sub {
@@ -310,8 +310,49 @@ subtest 'add() tests' => sub {
 
     # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
     my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
-    $illreqmodule->mock( 'load_backend',
+    $illreqmodule->mock(
+        'load_backend',
         sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
+    );
+
+    $illreqmodule->mock(
+        '_backend',
+        sub {
+            my $self = shift;
+            $self->{_my_backend} = $backend if ($backend);
+
+            return $self;
+            }
+    );
+
+    $illreqmodule->mock(
+        'capabilities',
+        sub {
+            my ( $self, $name ) = @_;
+
+            my $capabilities = {
+
+                create_api => sub {
+                    my ($body, $request ) = @_;
+
+                    my $api_req = $builder->build_object(
+                        {
+                            class => 'Koha::Illrequests',
+                            value => {
+                                borrowernumber => $patron->borrowernumber,
+                                batch_id       => undef,
+                                status         => 'NEW',
+                                backend        => $backend->name,
+                            }
+                        }
+                    );
+
+                    return $api_req;
+                }
+            };
+
+            return $capabilities->{$name};
+        }
     );
 
     $schema->storage->txn_begin;
@@ -319,23 +360,13 @@ subtest 'add() tests' => sub {
     Koha::Illrequests->search->delete;
 
     my $body = {
-        backend => 'Mock',
-        borrowernumber => $patron->borrowernumber,
-        branchcode => $library->branchcode,
-        metadata => {
-            article_author => "Jessop, E. G.",
-            article_title => "Sleep",
-            issn => "0957-4832",
-            issue => "2",
-            pages => "89-90",
-            publisher => "OXFORD UNIVERSITY PRESS",
-            title => "Journal of public health medicine.",
-            year => "2001"
-        }
+        ill_backend_id => 'Mock',
+        patron_id => $patron->borrowernumber,
+        library_id => $library->branchcode
     };
 
     ## Authorized user test
-    $t->post_ok( "//$userid:$password@/api/v1/illrequests" => json => $body)
+    $t->post_ok( "//$userid:$password@/api/v1/ill/requests" => json => $body)
       ->status_is(201);
 
     $schema->storage->txn_rollback;

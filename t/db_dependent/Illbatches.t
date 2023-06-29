@@ -30,7 +30,7 @@ use Test::MockModule;
 
 use Test::More tests => 8;
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 use_ok('Koha::Illbatch');
 use_ok('Koha::Illbatches');
@@ -40,43 +40,45 @@ $schema->storage->txn_begin;
 Koha::Illrequests->search->delete;
 
 # Create a patron
-my $patron = $builder->build({ source => 'Borrower' });
+my $patron = $builder->build( { source => 'Borrower' } );
 
 # Create a librarian
-my $librarian = $builder->build({
-    source => 'Borrower',
-    value => {
-        firstname => "Grogu"
+my $librarian = $builder->build(
+    {
+        source => 'Borrower',
+        value  => { firstname => "Grogu" }
     }
-});
+);
 
 # Create a branch
-my $branch = $builder->build({
-    source => 'Branch'
-});
+my $branch = $builder->build( { source => 'Branch' } );
 
 # Create a batch
-my $illbatch = $builder->build({
-    source => 'Illbatch',
-    value => {
-        name  => "My test batch",
-        backend  => "Mock",
-        borrowernumber => $librarian->{borrowernumber},
-        branchcode => $branch->{branchcode}
+my $illbatch = $builder->build(
+    {
+        source => 'Illbatch',
+        value  => {
+            name           => "My test batch",
+            backend        => "Mock",
+            borrowernumber => $librarian->{borrowernumber},
+            branchcode     => $branch->{branchcode}
+        }
     }
-});
-my $batch_obj = Koha::Illbatches->find($illbatch->{id});
+);
+my $batch_obj = Koha::Illbatches->find( $illbatch->{id} );
 isa_ok( $batch_obj, 'Koha::Illbatch' );
 
 # Create an ILL request in the batch
-my $illrq = $builder->build({
-    source => 'Illrequest',
-    value => {
-        borrowernumber => $patron->{borrowernumber},
-        batch_id       => $illbatch->{id}
+my $illrq = $builder->build(
+    {
+        source => 'Illrequest',
+        value  => {
+            borrowernumber => $patron->{borrowernumber},
+            batch_id       => $illbatch->{id}
+        }
     }
-});
-my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
+);
+my $illrq_obj = Koha::Illrequests->find( $illrq->{illrequest_id} );
 
 # Check requests_count
 my $requests_count = $batch_obj->requests_count;

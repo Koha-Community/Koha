@@ -3306,10 +3306,10 @@ CREATE TABLE `illrequestattributes` (
 --
 DROP TABLE IF EXISTS `illbatch_statuses`;
 CREATE TABLE `illbatch_statuses` (
-    `id` int(11) NOT NULL auto_increment, -- Status ID
-    `name` varchar(100) NOT NULL,         -- Name of status
-    `code` varchar(20) NOT NULL,          -- Unique, immutable code for status
-    `is_system` int(1),                   -- Is this status required for system operation
+    `id` int(11) NOT NULL auto_increment COMMENT "Status ID",
+    `name` varchar(100) NOT NULL COMMENT "Name of status",
+    `code` varchar(20) NOT NULL COMMENT "Unique, immutable code for status",
+    `is_system` tinyint(1) COMMENT "Is this status required for system operation",
     PRIMARY KEY (`id`),
     UNIQUE KEY `u_illbatchstatuses__code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3319,12 +3319,12 @@ CREATE TABLE `illbatch_statuses` (
 --
 DROP TABLE IF EXISTS `illbatches`;
 CREATE TABLE `illbatches` (
-    `id` int(11) NOT NULL auto_increment, -- Batch ID
-    `name` varchar(100) NOT NULL,         -- Unique name of batch
-    `backend` varchar(20) NOT NULL,       -- Name of batch backend
-    `borrowernumber` int(11),             -- Patron associated with batch
-    `branchcode` varchar(50),             -- Branch associated with batch
-    `statuscode` varchar(20),             -- Status of batch
+    `id` int(11) NOT NULL auto_increment COMMENT "Batch ID",
+    `name` varchar(100) NOT NULL COMMENT "Unique name of batch",
+    `backend` varchar(20) NOT NULL COMMENT "Name of batch backend",
+    `borrowernumber` int(11) COMMENT "Patron associated with batch",
+    `branchcode` varchar(50) COMMENT "Branch associated with batch",
+    `statuscode` varchar(20) COMMENT "Status of batch",
     PRIMARY KEY (`id`),
     UNIQUE KEY `u_illbatches__name` (`name`),
     CONSTRAINT `illbatches_bnfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,

@@ -11,7 +11,7 @@
        [% ELSE %]
            New batch status
        [% END %] &rsaquo; [% END %]
-    Interlibrary Loan batch statuses &rsaquo; Administration &rsaquo; Koha
+    Interlibrary loan batch statuses &rsaquo; Administration &rsaquo; Koha
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -20,38 +20,29 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-        </li>
-
-        [% IF op == 'add_form' %]
-            <li>
-                <a href="/cgi-bin/koha/admin/ill_batch_statuses.pl">Interlibrary Loan batch statuses</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF status.id %]
-                        Modify
-                    [% ELSE %]
-                        New
-                    [% END %] batch status
-                </a>
-            </li>
-
-        [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Interlibrary Loan batch statuses
-                </a>
-            </li>
         [% END %]
-    </ol>
-</nav>
+        [% IF op == 'add_form' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/ill_batch_statuses.pl">Interlibrary loan batch statuses</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF status.id %]
+                    <span>Modify batch status</span>
+                [% ELSE %]
+                    <span>New batch status</span>
+                [% END %]
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                Interlibrary loan batch statuses
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
@@ -101,14 +92,18 @@
                                 </li>
                                 <li>
                                     <label for="is_system">Is a system status: </label>
-                                    <strong>[% status.is_system ? "Yes" : "No" | html %]</strong>
+                                    [% IF status.is_system %]
+                                        <strong>Yes</strong>
+                                    [% ELSE %]
+                                        <strong>No</strong>
+                                    [% END %]
                                     <input type="hidden" name="is_system" value="[% status.is_system | html %]" />
                                 </li>
                             </ol>
                         </fieldset>
 
                         <fieldset class="action">
-                            <button id="save_batch_status" class="btn btn-default">Save</button>
+                            <button id="save_batch_status" class="btn btn-primary">Save</button>
                             <a class="cancel" href="/cgi-bin/koha/admin/ill_batch_statuses.pl">Cancel</a>
                         </fieldset>
                     </form>
@@ -119,31 +114,33 @@
                         <a class="btn btn-default" id="newillbatchstatus" href="/cgi-bin/koha/admin/ill_batch_statuses.pl?op=add_form"><i class="fa fa-plus"></i> New batch status</a>
                     </div>
 
-                    <h1>Interlibrary Loan batch statuses</h1>
+                    <h1>Interlibrary loan batch statuses</h1>
                     [% IF statuses.count %]
-                        <table id="table_batch_statuses">
-                            <thead>
-                                <th>Name</th>
-                                <th>Code</th>
-                                <th>Is system</th>
-                                <th class="noExport">Actions</th>
-                            </thead>
-                            <tbody>
-                                [% FOREACH status IN statuses %]
-                                <tr>
-                                    <td>[% status.name | html %]</td>
-                                    <td>[% status.code | html %]</td>
-                                    <td>[% status.is_system ? "Yes" : "No" | html %]</td>
-                                    <td class="actions">
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/ill_batch_statuses.pl?op=add_form&amp;code=[% status.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-                                        [% IF !status.is_system %]
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/ill_batch_statuses.pl?op=delete&amp;code=[% status.code | uri %]"><i class="fa fa-delete"></i> Delete</a>
-                                        [% END %]
-                                    </td>
-                                </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
+                        <div class="page-section">
+                            <table id="table_batch_statuses">
+                                <thead>
+                                    <th>Name</th>
+                                    <th>Code</th>
+                                    <th>Is system</th>
+                                    <th class="noExport">Actions</th>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH status IN statuses %]
+                                    <tr>
+                                        <td>[% status.name | html %]</td>
+                                        <td>[% status.code | html %]</td>
+                                        <td>[% status.is_system ? "Yes" : "No" | html %]</td>
+                                        <td class="actions">
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/ill_batch_statuses.pl?op=add_form&amp;code=[% status.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                                            [% IF !status.is_system %]
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/ill_batch_statuses.pl?op=delete&amp;code=[% status.code | uri %]"><i class="fa fa-delete"></i> Delete</a>
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </page-section>
                     [% ELSE %]
                         <div class="dialog message">
                             There are no batch statuses defined. <a href="/cgi-bin/koha/admin/ill_batch_statuses.pl?op=add_form">Create new batch status</a>

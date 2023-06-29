@@ -178,7 +178,7 @@
                 <li><a href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Keyboard shortcuts</a></li>
             [% END %]
             [% IF Koha.Preference('ILLModule ') && CAN_user_ill %]
-                <li><a href="/cgi-bin/koha/admin/ill_batch_statuses.pl">Interlibrary Loan batch statuses</a></li>
+                <li><a href="/cgi-bin/koha/admin/ill_batch_statuses.pl">Interlibrary loan batch statuses</a></li>
             [% END %]
         </ul>
     [% END %]

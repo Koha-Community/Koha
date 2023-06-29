@@ -1,0 +1,42 @@
+---
+#
+#  Copyright 2023 Koha Development Team
+#
+#  This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+description:
+  - "ILL batch statuses used in Koha"
+
+tables:
+  - illbatch_statuses:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        - code: "NEW"
+          name: "New"
+          is_system: "1"
+
+        - code: "IN_PROGRESS"
+          name: "In progress"
+          is_system: "1"
+
+        - code: "COMPLETED"
+          name: "Completed"
+          is_system: "1"
+
+        - code: "UNKNOWN"
+          name: "Unknown"
+          is_system: "1"

@@ -669,7 +669,7 @@
                                 [% IF request.batch > 0 %]
                                 <li class="batch">
                                     <span class="label batch">Batch:</span>
-                                    <a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=[% request.batch.id | html %]">
+                                    <a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=[% request.batch.id | uri %]">
                                     [% request.batch.name | html %]
                                     </a>
                                 </li>
@@ -806,9 +806,10 @@
                 [% ELSIF query_type == 'illlist' %]
                     <!-- illlist -->
                     <h1>
-                        View ILL requests
-                        [% IF batch %]
-                        for batch "[% batch.name | html %]"
+                        [% IF !batch %]
+                        <span>View ILL requests</span>
+                        [% ELSIF batch %]
+                        <span>View ILL requests for batch "[% batch.name | html %]"</span>
                         [% END %]
                     </h1>
                     <div id="results" class="page-section">

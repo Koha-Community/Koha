@@ -37,7 +37,7 @@
         <div id="ill-batch">
             <div class="dropdown btn-group">
                 <button class="btn btn-default dropdown-toggle" type="button" id="ill-batch-backend-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <i class="fa fa-plus"></i> New ILL batch request <span class="caret"></span>
+                    <i class="fa fa-plus"></i> New ILL requests batch <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="ill-batch-backend-dropdown">
                     [% FOREACH backend IN have_batch %]

@@ -52,20 +52,18 @@ sub get {
 
     my $status_code = $c->validation->param('illbatchstatus_code');
 
-    my $status = Koha::IllbatchStatuses->find({ code => $status_code });
+    my $status = Koha::IllbatchStatuses->find( { code => $status_code } );
 
-    if (not defined $status) {
+    if ( not defined $status ) {
         return $c->render(
-            status => 404,
+            status  => 404,
             openapi => { error => "ILL batch status not found" }
         );
     }
 
     return $c->render(
-        status => 200,
-        openapi => {
-            %{$status->unblessed}
-        }
+        status  => 200,
+        openapi => { %{ $status->unblessed } }
     );
 }
 
@@ -80,11 +78,11 @@ sub add {
 
     my $body = $c->validation->param('body');
 
-    my $status = Koha::IllbatchStatus->new( $body );
+    my $status = Koha::IllbatchStatus->new($body);
 
     return try {
         my $return = $status->create_and_log;
-        if ($return && $return->{error}) {
+        if ( $return && $return->{error} ) {
             return $c->render(
                 status  => 500,
                 openapi => $return
@@ -95,8 +93,7 @@ sub add {
                 openapi => $status
             );
         }
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -110,7 +107,7 @@ Update a batch status
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $status = Koha::IllbatchStatuses->find({ code => $c->validation->param('illbatchstatus_code') });
+    my $status = Koha::IllbatchStatuses->find( { code => $c->validation->param('illbatchstatus_code') } );
 
     if ( not defined $status ) {
         return $c->render(
@@ -122,15 +119,15 @@ sub update {
     my $params = $c->req->json;
 
     return try {
+
         # Only permit updating of name
-        $status->update_and_log({ name => $params->{name} });
+        $status->update_and_log( { name => $params->{name} } );
 
         return $c->render(
             status  => 200,
             openapi => $status
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -145,21 +142,23 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $status = Koha::IllbatchStatuses->find({ code => $c->validation->param( 'illbatchstatus_code' ) });
+    my $status = Koha::IllbatchStatuses->find( { code => $c->validation->param('illbatchstatus_code') } );
 
     if ( not defined $status ) {
         return $c->render( status => 404, openapi => { errors => [ { message => "ILL batch status not found" } ] } );
     }
 
-    if ( $status->is_system) {
-        return $c->render( status => 400, openapi => { errors => [ { message => "ILL batch status cannot be deleted" } ] } );
+    if ( $status->is_system ) {
+        return $c->render(
+            status  => 400,
+            openapi => { errors => [ { message => "ILL batch status cannot be deleted" } ] }
+        );
     }
 
     return try {
         $status->delete_and_log;
-        return $c->render( status => 204, openapi => '');
-    }
-    catch {
+        return $c->render( status => 204, openapi => '' );
+    } catch {
         $c->unhandled_exception($_);
     };
 }
