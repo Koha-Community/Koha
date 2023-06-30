@@ -120,7 +120,7 @@ subtest 'JWT' => sub {
 };
 
 subtest 'testing _add_default_csrf_params with/without userenv (bug 27849)' => sub {
-    plan tests => 5;
+    plan tests => 8;
 
     # Current userenv: userid == 42
     my $result = Koha::Token::_add_default_csrf_params({ session_id => '567' });
@@ -133,4 +133,15 @@ subtest 'testing _add_default_csrf_params with/without userenv (bug 27849)' => s
     $result = Koha::Token::_add_default_csrf_params({}); # pass no session_id
     is( $result->{session_id}, Koha::Token::DEFA_SESSION_ID, 'Check session id' );
     is( $result->{id}, Koha::Token::DEFA_SESSION_USERID. '_'. $result->{session_id}, 'Check userid' );
+
+    # Empty anonymous userenv (see C4::Auth::check_cookie_auth)
+    C4::Context->_new_userenv('ANON SESSION');
+    C4::Context->set_userenv( undef, q{} );
+    ok( C4::Context->userenv, "Userenv exists" );
+    $result = Koha::Token::_add_default_csrf_params( {} );    # pass no session_id
+    is( $result->{session_id}, Koha::Token::DEFA_SESSION_ID, 'Check session id for anon session' );
+    is(
+        $result->{id}, Koha::Token::DEFA_SESSION_USERID . '_' . $result->{session_id},
+        'Check userid for anon session'
+    );
 };
