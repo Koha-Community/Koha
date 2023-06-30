@@ -215,7 +215,10 @@ sub decode_jwt {
 sub _add_default_csrf_params {
     my ( $params ) = @_;
     $params->{session_id} //= DEFA_SESSION_ID;
-    my $userenv = C4::Context->userenv // { id => DEFA_SESSION_USERID };
+    my $userenv = C4::Context->userenv;
+    if ( ( !$userenv ) || !$userenv->{id} ) {
+        $userenv = { id => DEFA_SESSION_USERID };
+    }
     $params->{id} //= Encode::encode( 'UTF-8', $userenv->{id} );
     $params->{id} .= '_' . $params->{session_id};
 
