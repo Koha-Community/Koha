@@ -126,56 +126,59 @@
             Sticky.hcSticky('refresh');
         });
 
-        $('#preview').click(function (){
-            var content="<h3>Authority #: [% authid %]</h3><hr>";
-            content+="<div style='color:#004d99;'>";
-            var line=1;
-            var has_input=0;
-            var sf_has_input=0;
-            $("#authoritytabs").find("[id^=tag_]").each(function(){
+        $("#preview").click(function () {
+            var content = "<h3>Authority #: [% authid | html %]</h3><hr>";
+            content += "<div style=\"color:#004d99;\">";
+            var line = 1;
+            var has_input = 0;
+            var sf_has_input = 0;
+            $("#authoritytabs").find("[id^=tag_]").each(function () {
                 //check if tag has content
-                has_input=0;
-                $(this).find(".input_marceditor").each(function(){
-                    if($(this).val()) has_input=1;
+                has_input = 0;
+                $(this).find(".input_marceditor").each(function () {
+                    if ($(this).val()) has_input = 1;
                 });
 
-                if(has_input){
-                    line=1;
+                if (has_input) {
+                    line = 1;
                     //tag
                     var $tag = $(this).find(".tagnum").text();
-                    content += $tag.replace("*",") +"&nbsp;&nbsp;";
+                    content += $tag.replace("*", "") + "&nbsp;&nbsp;";
                     //indicators
-                    $(this).find(".indicator").each(function(){
-                        if( $(this).val() ) content += $(this).val();
+                    $(this).find(".indicator").each(function () {
+                        if ($(this).val()) content += $(this).val();
                         else content += "_";
                     });
                     content += "&nbsp;&nbsp;";
                     //subfields
-                    $(this).find(".subfield_line").each(function(){
+                    $(this).find(".subfield_line").each(function () {
                         //check if subfield has content
-                        sf_has_input=0;
-                        $(this).find(".input_marceditor").each(function(){
-                            if($(this).val()) sf_has_input=1;
-                    });
-                    if(sf_has_input){
-                        if(line>1) content += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                        //code
-                        $(this).find(".subfieldcode").each(function(){
-                            $(this).find(".flat").each(function(){
-                                if($(this).val()!="00")
-                                    content += "\$"+$(this).val()+"&nbsp;&nbsp;";
+                        sf_has_input = 0;
+                        $(this).find(".input_marceditor").each(function () {
+                            if ($(this).val()) sf_has_input = 1;
+                        });
+                        if (sf_has_input) {
+                            if (line > 1) content += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            //code
+                            $(this).find(".subfieldcode").each(function () {
+                                $(this).find(".flat").each(function () {
+                                    if ($(this).val() != "00")
+                                        content += "\$" + $(this).val() + "&nbsp;&nbsp;";
+                                });
                             });
-                        });
-                        //value
-                        $(this).find(".input_marceditor").each(function(){
-                            content += "<span style='color:#000;'>"+$(this).val()+"</span>";
-                        });
-                        content+="</br>";
-                        line+=1;
-                    }
+                            //value
+                            $(this).find(".input_marceditor").each(function () {
+                                content += "<span style=\"color:#000;\">" + $(this).val() + "</span>";
+                            });
+                            content += "</br>";
+                            line += 1;
+                        }
+                    });
                 }
             });
-         });
+            $("#auloadpreview").html( content );
+            $("#auEditPreview").modal();
+        });
     });
 
     function selectTab( tablink ){
@@ -420,7 +423,9 @@
     });
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
-
+<style>
+    #auloadpreview { font-family: monospace; }
+</style>
 </head>
 <body id="auth_authorities" class="auth">
 
