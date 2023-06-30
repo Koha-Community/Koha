@@ -6,6 +6,7 @@ use C4::Context;
 use C4::Circulation qw( AddIssue AddReturn );
 use C4::Items;
 use Koha::Items;
+use Koha::Cache::Memory::Lite;
 use Koha::CirculationRules;
 
 use Test::More tests => 13;
@@ -20,6 +21,7 @@ BEGIN {
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
+my $cache = Koha::Cache::Memory::Lite->get_instance();
 
 my $builder = t::lib::TestBuilder->new;
 
@@ -113,6 +115,7 @@ $is = IsAvailableForItemLevelRequest( $item1, $patron1 );
 is( $is, 0, "Item cannot be held, 1 item available" );
 
 AddIssue( $patron2->unblessed, $item2->barcode );
+$cache->flush();
 
 $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 } );
 is( $is, 0, "Items availability: none of items are available" );
@@ -159,6 +162,7 @@ AddReturn( $item1->barcode );
                 set_holdallowed_rule( $hold_allowed_from_any_libraries, $library_B );
 
                 #Adding a rule for the item's home library affects the availability for a borrower from another library because ReservesControlBranch is set to ItemHomeLibrary
+                $cache->flush();
 
                 $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 } );    # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 1,
@@ -170,6 +174,7 @@ AddReturn( $item1->barcode );
                       . "One item is available at different library, holdable = one available => the hold is not allowed at item level" );
 
                 t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
+                $cache->flush();
 
                 $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 } );    # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 0,
@@ -182,6 +187,7 @@ AddReturn( $item1->barcode );
 
                 #Adding a rule for the patron's home library affects the availability for an item from another library because ReservesControlBranch is set to PatronLibrary
                 set_holdallowed_rule( $hold_allowed_from_any_libraries, $library_A );
+                $cache->flush();
 
                 $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 } );    # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 1,
@@ -197,6 +203,7 @@ AddReturn( $item1->barcode );
                 set_holdallowed_rule($hold_allowed_from_any_libraries);
 
                 t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+                $cache->flush();
 
                 $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 } );    # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 1, "Items availability: hold allowed from any library + ReservesControlBranch=ItemHomeLibrary + one item is available at different library" );
@@ -207,6 +214,7 @@ AddReturn( $item1->barcode );
                       . "One item is available at the diff library, holdable = 1 available => the hold is not allowed at item level" );
 
                 t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
+                $cache->flush();
 
                 $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 } );    # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 1, "Items availability: hold allowed from any library + ReservesControlBranch=PatronLibrary + one item is available at different library" );
@@ -380,6 +388,7 @@ subtest 'Check holds availability with different item types' => sub {
     is( $is, 0, "Item5 cannot be requested to hold: 2 items, Item4 available, Item5 restricted" );
 
     AddIssue( $patron2->unblessed, $item4->barcode );
+    $cache->flush();
 
     $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblio2->biblionumber, patron => $patron1 } );
     is( $is, 0, "Items availability: 2 items, one allowed by smart rule and checked out, another one not allowed to be held by smart rule" );
@@ -419,6 +428,7 @@ subtest 'Check item checkout availability with ordered item' => sub {
             }
         }
     );
+    $cache->flush();
 
     $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblio2->biblionumber, patron => $patron1 } );
     is( $is, 0, "Ordered item cannot be checked out" );
@@ -452,6 +462,7 @@ subtest 'Check item availability for hold with ordered item' => sub {
         }
     );
 
+    $cache->flush();
     $is = IsAvailableForItemLevelRequest( $item1, $patron1 );
     is( $is, 1, "Ordered items are available for hold" );
 };
