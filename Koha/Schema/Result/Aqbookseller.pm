@@ -319,6 +319,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 aqbookseller_issues
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AqbooksellerIssue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqbookseller_issues",
+  "Koha::Schema::Result::AqbooksellerIssue",
+  { "foreign.vendor_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 aqcontacts
 
 Type: has_many
@@ -495,8 +510,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-05 12:54:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+Z62eWfOqHCcN0Uu2oE/7w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-06-30 09:54:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xjeOqpcdN3Kb1wmLGDjzLg
 
 __PACKAGE__->add_columns(
     '+active' => { is_boolean => 1 },
