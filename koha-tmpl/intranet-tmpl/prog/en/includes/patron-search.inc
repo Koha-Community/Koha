@@ -208,7 +208,7 @@
 [% BLOCK patron_search_js %]
 
     [% IF redirect_if_one_result && !redirect_url %]
-        <script>console.log("Wrong call of patron_searh_js - missing redirect_url");</script>
+        <script>console.log("Wrong call of patron_search_js - missing redirect_url");</script>
     [% END %]
 
     [% INCLUDE 'select2.inc' %]
