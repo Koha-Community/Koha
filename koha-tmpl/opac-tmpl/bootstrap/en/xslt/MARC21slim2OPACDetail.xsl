@@ -1283,21 +1283,32 @@
             </span>
         </xsl:if>
 
+        <!-- 520 - Summary, etc. -->
         <xsl:for-each select="marc:datafield[@tag=520]">
-        <span class="results_summary summary"><span class="label">
-        <xsl:choose>
-          <xsl:when test="@ind1=0"><xsl:text>Subject: </xsl:text></xsl:when>
-          <xsl:when test="@ind1=1"><xsl:text>Review: </xsl:text></xsl:when>
-          <xsl:when test="@ind1=2"><xsl:text>Scope and content: </xsl:text></xsl:when>
-          <xsl:when test="@ind1=3"><xsl:text>Abstract: </xsl:text></xsl:when>
-          <xsl:when test="@ind1=4"><xsl:text>Content advice: </xsl:text></xsl:when>
-          <xsl:otherwise><xsl:text>Summary: </xsl:text></xsl:otherwise>
-        </xsl:choose>
-        </span>
-        <xsl:call-template name="subfieldSelect">
-          <xsl:with-param name="codes">abcu</xsl:with-param>
-        </xsl:call-template>
-        </span>
+            <span class="results_summary summary">
+                <span class="label">
+                    <xsl:choose>
+                        <xsl:when test="@ind1=0"><xsl:text>Subject: </xsl:text></xsl:when>
+                        <xsl:when test="@ind1=1"><xsl:text>Review: </xsl:text></xsl:when>
+                        <xsl:when test="@ind1=2"><xsl:text>Scope and content: </xsl:text></xsl:when>
+                        <xsl:when test="@ind1=3"><xsl:text>Abstract: </xsl:text></xsl:when>
+                        <xsl:when test="@ind1=4"><xsl:text>Content advice: </xsl:text></xsl:when>
+                        <xsl:otherwise><xsl:text>Summary: </xsl:text></xsl:otherwise>
+                    </xsl:choose>
+                </span>
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">abc</xsl:with-param>
+                </xsl:call-template>
+                <xsl:if test="marc:subfield[@code='u']">
+                    <xsl:for-each select="marc:subfield[@code='u']">
+                        <xsl:text> </xsl:text>
+                        <a>
+                            <xsl:attribute name="href"><xsl:value-of select="text()"/></xsl:attribute>
+                            <xsl:value-of select="text()"/>
+                        </a>
+                    </xsl:for-each>
+                </xsl:if>
+            </span>
         </xsl:for-each>
 
         <!-- Content Warning -->
