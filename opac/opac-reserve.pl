@@ -25,7 +25,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Koha qw( getitemtypeimagelocation getitemtypeimagesrc );
 use C4::Circulation qw( GetBranchItemRule );
-use C4::Reserves qw( CanItemBeReserved CanBookBeReserved AddReserve GetReservesControlBranch ItemsAnyAvailableAndNotRestricted IsAvailableForItemLevelRequest GetReserveFee );
+use C4::Reserves qw( CanItemBeReserved CanBookBeReserved AddReserve GetReservesControlBranch IsAvailableForItemLevelRequest GetReserveFee );
 use C4::Biblio qw( GetBiblioData GetFrameworkCode );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
@@ -441,8 +441,6 @@ foreach my $biblioNum (@biblionumbers) {
     # to pass this value further inside down to IsAvailableForItemLevelRequest to
     # it's complicated logic to analyse.
     # (before this loop was inside that sub loop so it was O(n^2) )
-    my $items_any_available;
-    $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblioNum, patron => $patron }) if $patron;
     foreach my $item (@{$biblioData->{items}}) {
 
         my $item_info = $item->unblessed;
@@ -481,11 +479,9 @@ foreach my $biblioNum (@biblionumbers) {
 
         my $branch = GetReservesControlBranch( $item_info, $patron_unblessed );
 
-        # items_any_available defined outside of the current loop,
-        # so we avoiding loop inside IsAvailableForItemLevelRequest:
         my $policy_holdallowed =
             CanItemBeReserved( $patron, $item, undef, { get_from_cache => 1 } )->{status} eq 'OK' &&
-            IsAvailableForItemLevelRequest($item, $patron, undef, $items_any_available);
+            IsAvailableForItemLevelRequest($item, $patron, undef);
 
         if ($policy_holdallowed) {
             my $opac_hold_policy = Koha::CirculationRules->get_opacitemholds_policy( { item => $item, patron => $patron } );

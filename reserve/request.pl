@@ -33,7 +33,7 @@ use List::MoreUtils qw( uniq );
 use Date::Calc qw( Date_to_Days );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use C4::Reserves qw( RevertWaitingStatus AlterPriority ToggleLowestPriority ToggleSuspend CanBookBeReserved GetMaxPatronHoldsForRecord ItemsAnyAvailableAndNotRestricted CanItemBeReserved IsAvailableForItemLevelRequest );
+use C4::Reserves qw( RevertWaitingStatus AlterPriority ToggleLowestPriority ToggleSuspend CanBookBeReserved GetMaxPatronHoldsForRecord CanItemBeReserved IsAvailableForItemLevelRequest );
 use C4::Items qw( get_hostitemnumbers_of );
 use C4::Koha qw( getitemtypeimagelocation );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
@@ -393,9 +393,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
             # to pass this value further inside down to IsAvailableForItemLevelRequest to
             # it's complicated logic to analyse.
             # (before this loop was inside that sub loop so it was O(n^2) )
-            my $items_any_available;
-            $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblio->biblionumber, patron => $patron })
-                if $patron;
 
             for my $item_object ( @items ) {
                 my $do_check;
@@ -512,9 +509,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                                !$item->{cantreserve}
                             && !$exceeded_maxreserves
                             && $can_item_be_reserved eq 'OK'
-                            # items_any_available defined outside of the current loop,
-                            # so we avoiding loop inside IsAvailableForItemLevelRequest:
-                            && IsAvailableForItemLevelRequest($item_object, $patron, undef, $items_any_available)
+                            && IsAvailableForItemLevelRequest($item_object, $patron, undef)
                         ) || C4::Context->preference('AllowHoldPolicyOverride')
                              # If AllowHoldPolicyOverride is set, it overrides EVERY restriction
                              # not just branch item rules

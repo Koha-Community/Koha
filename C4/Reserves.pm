@@ -1336,9 +1336,6 @@ sub IsAvailableForItemLevelRequest {
     my $item                = shift;
     my $patron              = shift;
     my $pickup_branchcode   = shift;
-    # items_any_available is precalculated status passed from request.pl when set of items
-    # looped outside of IsAvailableForItemLevelRequest to avoid nested loops:
-    my $items_any_available = shift;
 
     my $dbh = C4::Context->dbh;
     # must check the notforloan setting of the itemtype
@@ -1376,13 +1373,19 @@ sub IsAvailableForItemLevelRequest {
         return 1;
     } elsif ( $on_shelf_holds == 2 ) {
 
-        # if we have this param predefined from outer caller sub, we just need
-        # to return it, so we saving from having loop inside other loop:
-        return  $items_any_available ? 0 : 1
-            if defined $items_any_available;
+        # These calculations work at the biblio level, and can be expensive
+        # we use the in-memory cache to avoid calling once per item when looping items on a biblio
 
-        my $any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron });
+        my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+        my $cache_key = sprintf "ItemsAnyAvailableAndNotRestricted:%s:%s", $patron->id, $item->biblionumber;
+
+        my $any_available = $memory_cache->get_from_cache( $cache_key );
+        return $any_available ? 0 : 1 if defined( $any_available );
+
+        $any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron });
+        $memory_cache->set_in_cache( $cache_key, $any_available );
         return $any_available ? 0 : 1;
+
     } else { # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
         return $item->onloan || IsItemOnHoldAndFound( $item->itemnumber );
     }
