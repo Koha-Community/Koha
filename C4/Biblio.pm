@@ -233,8 +233,7 @@ sub AddBiblio {
                     part_name     => $olddata->{part_name},
                     unititle      => $olddata->{unititle},
                     notes         => $olddata->{notes},
-                    serial =>
-                      ( $olddata->{serial} || $olddata->{seriestitle} ? 1 : 0 ),
+                    serial        => $olddata->{serial},
                     seriestitle   => $olddata->{seriestitle},
                     copyrightdate => $olddata->{copyrightdate},
                     datecreated   => \'NOW()',
