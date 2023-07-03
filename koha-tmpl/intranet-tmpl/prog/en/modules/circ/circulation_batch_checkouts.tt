@@ -100,15 +100,29 @@
           </li>
         </ol>
       </fieldset>
-      [% IF Koha.Preference('SpecifyDueDate') %]
-          <fieldset class="rows">
-              <legend>Due date: </legend>
-              <label for="duedatespec">Hard due date [% INCLUDE 'date-format.inc' %]:</label>
-                <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true" />
-          </fieldset>
-      [% END %]
+      <fieldset class="rows">
+          <legend>Due date</legend>
+          <ol>
+          [% IF Koha.Preference('SpecifyDueDate') %]
+            <li>
+              <label for="duedatespec">Hard due date: [% INCLUDE 'date-format.inc' %]</label>
+              <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true"/>
+            </li>
+          [% END %]
+          [% IF Koha.Preference('OnSiteCheckouts') %]
+            <li>
+              <div id="onsite_checkout-select">
+                  <label for="onsite_checkout">On-site checkout:</label>
+                  <input type="checkbox" id="onsite_checkout" name="onsite_checkout" class="circ_setting"/>
+              </div>
+            </li>
+          [% END %]
+          </ol>
+      </fieldset>
+
       <input type="hidden" name="op" value="show" />
     </fieldset>
+
     <fieldset class="action">
         <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
         <input type="hidden" name="branch" value="[% branch | html %]" />
@@ -349,10 +363,19 @@
                 "bPaginate": false
             }));
         });
+        // On-site batch checkout
+        function toggle_onsite_checkout(){
+            if ( $("#onsite_checkout").prop('checked') ) {
+                const duedatespec_fp = document.querySelector("#duedatespec")._flatpickr;
+                duedatespec_fp.setDate("[% today_due_date_and_time | $KohaDates dateformat => 'iso', with_hours => 1 %]");
+            };
+        };
 
+        $("#onsite_checkout").click(function(){
+            toggle_onsite_checkout();
+        });
     </script>
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
