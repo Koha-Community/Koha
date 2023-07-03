@@ -19,8 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON;
-use Digest::MD5 qw( md5_base64 );
-use Encode;
 
 use C4::Auth qw( haspermission );
 use C4::Context;
@@ -102,7 +100,7 @@ sub get {
     };
 }
 
-=head3 get_availablity
+=head3 get_availability
 
 Controller function that handles retrieval of Checkout availability
 
@@ -205,7 +203,7 @@ sub add {
         if ( keys %{$confirmation} ) {
             my $confirmed = 0;
 
-            # Check for existance of confirmation token
+            # Check for existence of confirmation token
             # and if exists check validity
             if ( my $token = $c->param('confirmation') ) {
                 my $confirm_keys = join( ":", sort keys %{$confirmation} );
