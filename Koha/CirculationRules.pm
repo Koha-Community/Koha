@@ -381,7 +381,8 @@ sub set_rule {
     my $can_be_blank = defined $kind_info->{can_be_blank} ? $kind_info->{can_be_blank} : 1;
     $rule_value = undef if defined $rule_value && $rule_value eq "" && !$can_be_blank;
     my $is_monetary = defined $kind_info->{is_monetary} ? $kind_info->{is_monetary} : 0;
-    $rule_value = Koha::Number::Price->new($rule_value)->unformat if defined $rule_value && $is_monetary;
+    Koha::Exceptions::BadParameter->throw("set_rule expected decimal")
+        if ( $is_monetary && defined($rule_value) && $rule_value !~ /^\d+(\.\d{2})?$/ );
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
         $v = undef if $v and $v eq '*';
