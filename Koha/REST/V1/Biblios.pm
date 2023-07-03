@@ -31,7 +31,6 @@ use C4::Context;
 
 use Koha::Items;
 
-use Clone qw( clone );
 use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
 
