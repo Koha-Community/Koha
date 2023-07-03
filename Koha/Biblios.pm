@@ -93,6 +93,8 @@ sub api_query_fixer {
     } else {
         $query =~
             s/${quotes}(age_restriction|cn_class|cn_item|cn_sort|cn_source|cn_suffix|collection_issn|collection_title|collection_volume|ean|edition_statement|illustrations|isbn|issn|item_type|lc_control_number|notes|number|pages|publication_place|publication_year|publisher|material_size|serial_total_issues|url|volume|volume_date|volume_description)${quotes}/${quotes}biblioitem\.$1${quotes}/g;
+        $query =~ # handle ambiguous 'biblionumber'
+            s/${quotes}(biblio_id)${quotes}/${quotes}me\.$1${quotes}/g;
     }
 
     return $query;
