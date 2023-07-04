@@ -44,6 +44,14 @@ return {
                 for my $translated_content ( @$translated_contents ) {
                     $sth_insert->execute($content->{id}, $translated_content->{title}, $translated_content->{content}, $translated_content->{lang}, $translated_content->{updated_on});
                 }
+
+                # Delete duplicates
+                $q = q{
+                    DELETE FROM additional_contents
+                    WHERE category=? AND code=? AND id<>? AND
+                };
+                $q .= defined $content->{branchcode} ? " branchcode = ?" : " branchcode IS NULL";
+                $dbh->do($q, undef, $content->{category}, $content->{code}, $content->{id}, $content->{branchcode});
             }
             $dbh->do(q{
                 ALTER TABLE additional_contents
