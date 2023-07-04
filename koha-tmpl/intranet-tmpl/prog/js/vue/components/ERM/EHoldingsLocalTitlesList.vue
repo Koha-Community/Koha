@@ -164,7 +164,7 @@ export default {
             return [
                 {
                     title: __("Title"),
-                    data: "me.publication_title",
+                    data: "me.publication_title:me.title_id",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
