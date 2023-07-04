@@ -1,0 +1,18 @@
+---
+type: object
+properties:
+  blockers:
+    type: object
+    description: blocking issues
+  confirms:
+    type: object
+    description: issues requireing confirmation
+  warnings:
+    type: object
+    description: informational issues
+  confirmation_token:
+    type:
+      - string
+      - "null"
+    description: token for confirmation
+additionalProperties: false
