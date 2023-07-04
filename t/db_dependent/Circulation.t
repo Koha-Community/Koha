@@ -2104,7 +2104,7 @@ subtest 'AddIssue & AllowReturnToBranch' => sub {
     ## Can be issued from homebranch
     set_userenv($homebranch);
     is ( ref( AddIssue( $patron_2, $item->barcode ) ), $ref_issue, 'AllowReturnToBranch - homebranch | Can be issued from homebranch' );
-    set_userenv($holdingbranch); AddIssue( $patron_1, $item->barcode ); # Reinsert the original issue
+    AddIssue( $patron_1, $item->barcode ); # Re-issue to patron 1
     ## Cannot be issued from holdinbranch
     set_userenv($holdingbranch);
     is ( ref( AddIssue( $patron_2, $item->barcode ) ), '', 'AllowReturnToBranch - homebranch | Cannot be issued from holdingbranch' );
