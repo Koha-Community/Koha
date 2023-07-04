@@ -263,7 +263,7 @@ sub add {
         }
 
         # Call 'AddIssue'
-        my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+        my $checkout = AddIssue( $patron, $item->barcode );
         if ($checkout) {
             $c->res->headers->location(
                 $c->req->url->to_string . '/' . $checkout->id );

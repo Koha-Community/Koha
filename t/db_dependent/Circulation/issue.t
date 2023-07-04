@@ -598,17 +598,17 @@ my $itemnumber4 = Koha::Item->new(
 )->store->itemnumber;
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', q{} );
-AddIssue( $borrower_2, 'barcode_6', dt_from_string );
+AddIssue( $patron_2, 'barcode_6', dt_from_string );
 $item = Koha::Items->find( $itemnumber4 );
 ok( $item->notforloan eq -1, 'UpdateNotForLoanStatusOnCheckout does not modify value when not enabled' );
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckout', '-1: 0' );
 AddReturn( 'barcode_6', $branchcode_1 );
-my $test = AddIssue( $borrower_2, 'barcode_6', dt_from_string );
+my $test = AddIssue( $patron_2, 'barcode_6', dt_from_string );
 $item = Koha::Items->find( $itemnumber4 );
 ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckout updates notforloan value from -1 to 0 with setting "-1: 0"} );
 
-AddIssue( $borrower_2, 'barcode_6', dt_from_string );
+AddIssue( $patron_2, 'barcode_6', dt_from_string );
 AddReturn( 'barcode_6', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber4 );
 ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckout does not update notforloan value from 0 with setting "-1: 0"} );
