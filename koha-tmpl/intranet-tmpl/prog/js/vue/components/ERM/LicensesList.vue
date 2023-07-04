@@ -137,7 +137,7 @@ export default {
             return [
                 {
                     title: __("Name"),
-                    data: "me.license_id:me.name",
+                    data: "me.name:me.license_id",
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
