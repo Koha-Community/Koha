@@ -849,7 +849,7 @@ sub run_atomic_updates {
             my $code = read_file( $filepath );
             my ( $out, $err ) = ('', '');
             {
-                open my $oldout, qw{>}, "&STDOUT";
+                open my $oldout, qw{>&}, "STDOUT";
                 close STDOUT;
                 open STDOUT,'>:encoding(utf8)', \$out;
                 my $DBversion = Koha::version; # We need $DBversion and $dbh for the eval
