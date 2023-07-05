@@ -21,18 +21,18 @@
         </form>
 
         <div id="searchresults">
+        [% IF columns.grep('checkbox').size %]
             <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
                 <div>
-                [% IF columns.grep('checkbox').size %]
                     <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
                     |
                     <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
                     [% IF selection_type == 'add' %]
                     <button id="add-selected" class="btn btn-sm btn-default" type="submit">Add selected patrons</button>
                     [% END %]
-                [% END %]
                 </div>
             </div>
+        [% END %]
         [% PROCESS patron_search_table table_id => 'memberresultst' columns => columns %]
         </div>
 
