@@ -391,7 +391,7 @@
                         </li>
                         <li>
                             <label for="itemtype">Document type:</label>
-                            [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20, default=itemtype %]
+                            [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size=20, default=itemtype, empty=1 %]
                         </li>
                         [% IF patron_reason_loop %]
                             <li>
