@@ -140,6 +140,7 @@ sub prep_report {
     {    #The placeholders are always the odd elements of the array
         my ( $type, $name ) = split /\|/,
           $split[ $i * 2 + 1 ];    # We split them on '|'
+        $name =~ s/^\s+|\s+$//;    # Trim
         $headers->{$name} = $type; # Store as a lookup for the template
         $headers->{$name} =~
           s/^\w*\.//;    # strip the table name just as in $sth->{NAME} array
