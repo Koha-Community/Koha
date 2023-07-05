@@ -49,7 +49,7 @@ $retrieved_report_1->delete;
 is( Koha::Reports->search->count, $nb_of_reports + 1, 'Delete should have deleted the report' );
 
 subtest 'prep_report' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my $report = Koha::Report->new({
         report_name => 'report_name_for_test_1',
@@ -68,6 +68,12 @@ subtest 'prep_report' => sub {
     ($sql, undef) = $report->prep_report( [],["1\n12\n\r243",'the other',"42\n32\n22\n12"] );
     is( $sql, qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('42','32','22','12') /* saved_sql.id: $id */},'Expected sql generated correctly with multiple params and no names');
 
+    $report->savedsql(
+        q{SELECT  i.itemnumber, i.itemnumber as Exemplarnummber, [[i.itemnumber| itemnumber for batch]] FROM items})
+        ->store;
+    my $headers;
+    ( $sql, $headers ) = $report->prep_report( [], [] );
+    is_deeply( $headers, { 'itemnumber for batch' => 'itemnumber' } );
 };
 
 $schema->storage->txn_rollback;
