@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 101;
+use Test::More tests => 105;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -125,6 +125,12 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_
   ->json_is('/0/patron_id' => $patron_id)
   ->json_is('/0/item_id' => $item4->itemnumber)
   ->json_hasnt('/1');
+
+$item4->delete;
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=1" )
+  ->status_is(200)
+  ->json_is('/0/patron_id' => $patron_id)
+  ->json_is('/0/item_id' => undef);
 
 $t->get_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id )
   ->status_is(403)
