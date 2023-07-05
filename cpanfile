@@ -99,6 +99,7 @@ requires 'Schedule::At', '1.06';
 requires 'Search::Elasticsearch', '6.80';
 requires 'Sereal::Decoder', '3.0';
 requires 'Sereal::Encoder', '3.0';
+requires 'SQL::Translator', '0.11024';
 requires 'Storable', '2.20';
 requires 'String::Random', '0.22';
 requires 'Template', '>= 2.22, != 3.008';
