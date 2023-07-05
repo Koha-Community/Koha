@@ -344,7 +344,7 @@
                                                     [% IF ( OPACFinesTab ) %]
                                                         <th>Fines</th>
                                                     [% END %]
-                                                    [% IF ( OPACMySummaryHTML ) %]
+                                                    [% IF Koha.Preference('OPACMySummaryHTML') %]
                                                         <th class="nosort">Links</th>
                                                     [% END %]
                                                     [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
@@ -525,8 +525,8 @@
                                                             [% END %]
                                                         </td>
                                                     [% END %]
-                                                    [% IF ( OPACMySummaryHTML ) %]
-                                                        <td class="links">[% ISSUE.MySummaryHTML | $raw %]</td>
+                                                    [% IF Koha.Preference('OPACMySummaryHTML') %]
+                                                        <td class="links">[% ISSUE.biblio_object.opac_summary_html| $raw %]</td>
                                                     [% END %]
                                                     [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
                                                         <td>

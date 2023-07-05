@@ -178,7 +178,6 @@ $template->param(
                     amountoutstanding => $amountoutstanding,
                     borrowernumber    => $borrowernumber,
                     patron_flagged    => $borr->{flagged},
-                    OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
                     surname           => $borr->{surname},
                     RENEW_ERROR       => $renew_error,
                     borrower          => $borr,
@@ -306,16 +305,6 @@ if ( $pending_checkouts->count ) { # Useless test
             $issue->{normalized_upc}  = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
             $issue->{normalized_oclc} = GetNormalizedOCLCNumber( $marcrecord, C4::Context->preference('marcflavour') );
         }
-                # My Summary HTML
-                if (my $my_summary_html = C4::Context->preference('OPACMySummaryHTML')){
-                    $issue->{author} ? $my_summary_html =~ s/{AUTHOR}/$issue->{author}/g : $my_summary_html =~ s/{AUTHOR}//g;
-                    $issue->{title} =~ s/\/+$//; # remove trailing slash
-                    $issue->{title} =~ s/\s+$//; # remove trailing space
-                    $issue->{title} ? $my_summary_html =~ s/{TITLE}/$issue->{title}/g : $my_summary_html =~ s/{TITLE}//g;
-                    $issue->{isbn} ? $my_summary_html =~ s/{ISBN}/$isbn/g : $my_summary_html =~ s/{ISBN}//g;
-                    $issue->{biblionumber} ? $my_summary_html =~ s/{BIBLIONUMBER}/$issue->{biblionumber}/g : $my_summary_html =~ s/{BIBLIONUMBER}//g;
-                    $issue->{MySummaryHTML} = $my_summary_html;
-                }
 
         if ( C4::Context->preference('UseRecalls') ) {
             my $maybe_recalls = Koha::Recalls->search({ biblio_id => $issue->{biblionumber}, item_id => [ undef, $issue->{itemnumber} ], completed => 0 });
