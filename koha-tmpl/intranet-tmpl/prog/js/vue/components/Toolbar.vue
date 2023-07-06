@@ -5,7 +5,7 @@
             :key="index"
             :to="{ name: option.to }"
             class="btn btn-default"
-            ><font-awesome-icon icon="plus" />
+            ><font-awesome-icon :icon="option.icon" />
             {{ option.button_title }}</router-link
         >
     </div>

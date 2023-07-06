@@ -153,6 +153,7 @@ export default {
             toolbar_options: [
                 {
                     to: "AgreementsFormAdd",
+                    icon: "plus",
                     button_title: this.$__("New agreement"),
                 },
             ],
