@@ -295,7 +295,7 @@ sub _chk_jwt {
 
     my $claims = Mojo::JWT->new(secret => $params->{secret})->decode($params->{token});
 
-    return 1 if exists $claims->{id} && $claims->{id} == $params->{id};
+    return 1 if exists $claims->{id} && $claims->{id} eq $params->{id};
 }
 
 sub _decode_jwt {
