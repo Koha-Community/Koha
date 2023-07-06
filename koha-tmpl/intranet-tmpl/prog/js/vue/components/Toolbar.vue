@@ -1,21 +1,11 @@
 <template>
     <div id="toolbar" class="btn-toolbar">
-        <router-link
-            v-for="(option, index) in options"
-            :key="index"
-            :to="{ name: option.to }"
-            class="btn btn-default"
-            ><font-awesome-icon :icon="option.icon" />
-            {{ option.button_title }}</router-link
-        >
+        <slot />
     </div>
 </template>
 
 <script>
 export default {
-    props: {
-        options: Array,
-    },
     name: "Toolbar",
 }
 </script>

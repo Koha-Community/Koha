@@ -2,7 +2,18 @@
     <div>
         <div v-if="!initialized">{{ $__("Loading") }}</div>
         <div v-else id="titles_list">
-            <Toolbar :options="this.toolbar_options" />
+            <Toolbar>
+                <ToolbarButton
+                    :to="{ name: 'EHoldingsLocalTitlesFormAdd' }"
+                    icon="plus"
+                    :title="$__('New title')"
+                />
+                <ToolbarButton
+                    :to="{ name: 'EHoldingsLocalTitlesFormImport' }"
+                    icon="plus"
+                    :title="$__('Import from list')"
+                />
+            </Toolbar>
             <div
                 v-if="title_count > 0"
                 id="title_list_result"
@@ -25,6 +36,7 @@
 
 <script>
 import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 import { inject, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
@@ -90,18 +102,6 @@ export default {
                 },
             },
             cannot_search: false,
-            toolbar_options: [
-                {
-                    to: "EHoldingsLocalTitlesFormAdd",
-                    icon: "plus",
-                    button_title: this.$__("New title"),
-                },
-                {
-                    to: "EHoldingsLocalTitlesFormImport",
-                    icon: "plus",
-                    button_title: this.$__("Import from list"),
-                },
-            ],
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -239,7 +239,7 @@ export default {
             ]
         },
     },
-    components: { Toolbar, KohaTable },
+    components: { Toolbar, ToolbarButton, KohaTable },
     name: "EHoldingsLocalTitlesList",
 }
 </script>

@@ -1,7 +1,13 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_list">
-        <Toolbar v-if="!embedded" :options="this.toolbar_options" />
+        <Toolbar v-if="!embedded">
+            <ToolbarButton
+                :to="{ name: 'AgreementsFormAdd' }"
+                icon="plus"
+                :title="$__('New agreement')"
+            />
+        </Toolbar>
         <fieldset v-if="agreement_count > 0" class="filters">
             <label for="expired_filter">{{ $__("Filter by expired") }}:</label>
             <input
@@ -52,6 +58,7 @@
 <script>
 import flatPickr from "vue-flatpickr-component"
 import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 import { inject, ref, reactive } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { storeToRefs } from "pinia"
@@ -150,13 +157,6 @@ export default {
             },
             before_route_entered: false,
             building_table: false,
-            toolbar_options: [
-                {
-                    to: "AgreementsFormAdd",
-                    icon: "plus",
-                    button_title: this.$__("New agreement"),
-                },
-            ],
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -353,7 +353,7 @@ export default {
             }
         },
     },
-    components: { flatPickr, Toolbar, KohaTable },
+    components: { flatPickr, Toolbar, ToolbarButton, KohaTable },
     props: {
         embedded: {
             type: Boolean,
