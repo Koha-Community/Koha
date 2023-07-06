@@ -160,7 +160,7 @@ subtest 'get() tests' => sub {
 
 subtest 'get_items() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -191,6 +191,11 @@ subtest 'get_items() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items")
       ->status_is(200)
       ->json_is( '' => [ $item_1->to_api, $item_2->to_api ], 'The items are returned' );
+
+    $t->get_ok(
+        "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items" => { "x-koha-embed" => "+strings" } )
+        ->status_is(200)
+        ->json_has( '/0/_strings/home_library_id/str' => $item_1->holding_branch->branchname, '_strings are embedded' );
 
     $schema->storage->txn_rollback;
 };
