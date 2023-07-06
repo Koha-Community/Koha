@@ -101,6 +101,7 @@ export default {
             toolbar_options: [
                 {
                     to: "EHoldingsLocalPackagesFormAdd",
+                    icon: "plus",
                     button_title: this.$__("New package"),
                 },
             ],
