@@ -1,6 +1,9 @@
 <template>
     <div v-if="initialized && PreservationModule == 1">
-        <Breadcrumb />
+        <div id="sub-header">
+            <Breadcrumbs />
+            <Help />
+        </div>
         <div class="main container-fluid">
             <div class="row">
                 <div class="col-sm-10 col-sm-push-2">
@@ -11,43 +14,7 @@
                 </div>
 
                 <div class="col-sm-2 col-sm-pull-10">
-                    <aside>
-                        <div id="navmenu">
-                            <div id="navmenulist">
-                                <h5>{{ $__("Preservation") }}</h5>
-                                <ul>
-                                    <li>
-                                        <router-link :to="{ name: 'Home' }">
-                                            <i class="fa fa-home"></i>
-                                            {{ $__("Home") }}</router-link
-                                        >
-                                    </li>
-                                    <li>
-                                        <router-link
-                                            :to="{ name: 'TrainsList' }"
-                                        >
-                                            <i class="fa fa-train"></i>
-                                            {{ $__("Trains") }}</router-link
-                                        >
-                                    </li>
-                                    <li>
-                                        <router-link
-                                            :to="{ name: 'WaitingList' }"
-                                        >
-                                            <i class="fa fa-recycle"></i>
-                                            {{ $__("Waiting list") }}
-                                        </router-link>
-                                    </li>
-                                    <li>
-                                        <router-link :to="{ name: 'Settings' }">
-                                            <i class="fa fa-cog"></i>
-                                            {{ $__("Settings") }}
-                                        </router-link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </aside>
+                    <LeftMenu :title="$__('Preservation')"></LeftMenu>
                 </div>
             </div>
         </div>
@@ -59,7 +26,9 @@
 
 <script>
 import { inject } from "vue"
-import Breadcrumb from "../Breadcrumb.vue"
+import Breadcrumbs from "../Breadcrumbs.vue"
+import Help from "../Help.vue"
+import LeftMenu from "../LeftMenu.vue"
 import Dialog from "../Dialog.vue"
 import { APIClient } from "../../fetch/api-client.js"
 import "vue-select/dist/vue-select.css"
@@ -145,16 +114,15 @@ export default {
     },
 
     components: {
-        Breadcrumb,
+        Breadcrumbs,
         Dialog,
+        Help,
+        LeftMenu,
     },
 }
 </script>
 
 <style>
-#navmenulist a.router-link-active {
-    font-weight: 700;
-}
 #menu ul ul,
 #navmenulist ul ul {
     padding-left: 2em;
@@ -179,12 +147,14 @@ textarea {
     width: 30%;
 }
 
+#navmenulist ul li a.current.disabled {
+    background-color: inherit;
+    border-left: 5px solid #e6e6e6;
+    color: #000;
+}
 #navmenulist ul li a.disabled {
     color: #666;
     pointer-events: none;
     font-weight: 700;
-}
-#navmenulist ul li a.disabled.router-link-active {
-    color: #000;
 }
 </style>

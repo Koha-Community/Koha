@@ -29,27 +29,25 @@ library.add(
 
 import App from "../components/Preservation/Main.vue";
 
-import { routes } from "../routes/preservation";
-
-const router = createRouter({
-    history: createWebHistory(),
-    linkActiveClass: "current",
-    routes,
-});
+import { routes as routesDef } from "../routes/preservation";
 
 import { useMainStore } from "../stores/main";
 import { useAVStore } from "../stores/authorised-values";
 import { usePreservationStore } from "../stores/preservation";
+import { useNavigationStore } from "../stores/navigation";
+import i18n from "../i18n";
 
 const pinia = createPinia();
 
-const i18n = {
-    install: (app, options) => {
-        app.config.globalProperties.$__ = key => {
-            return window["__"](key);
-        };
-    },
-};
+const mainStore = useMainStore(pinia);
+const navigationStore = useNavigationStore(pinia);
+const routes = navigationStore.setRoutes(routesDef);
+
+const router = createRouter({
+    history: createWebHistory(),
+    linkExactActiveClass: "current",
+    routes,
+});
 
 const app = createApp(App);
 
@@ -61,8 +59,8 @@ const rootComponent = app
     .component("v-select", vSelect);
 
 app.config.unwrapInjectedRef = true;
-const mainStore = useMainStore(pinia);
 app.provide("mainStore", mainStore);
+app.provide("navigationStore", navigationStore);
 app.provide("AVStore", useAVStore(pinia));
 app.provide("PreservationStore", usePreservationStore(pinia));
 
@@ -70,5 +68,6 @@ app.mount("#preservation");
 
 const { removeMessages } = mainStore;
 router.beforeEach((to, from) => {
+    navigationStore.$patch({ current: to.matched, params: to.params || {} });
     removeMessages(); // This will actually flag the messages as displayed already
 });

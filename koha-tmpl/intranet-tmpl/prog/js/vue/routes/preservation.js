@@ -1,3 +1,5 @@
+import { markRaw } from "vue";
+
 import Home from "../components/Preservation/Home.vue";
 import TrainsList from "../components/Preservation/TrainsList.vue";
 import TrainsShow from "../components/Preservation/TrainsShow.vue";
@@ -9,234 +11,136 @@ import Settings from "../components/Preservation/Settings.vue";
 import SettingsProcessingsShow from "../components/Preservation/SettingsProcessingsShow.vue";
 import SettingsProcessingsFormAdd from "../components/Preservation/SettingsProcessingsFormAdd.vue";
 
-const breadcrumbs = {
-    home: {
-        text: "Home", // $t("Home")
-        path: "/cgi-bin/koha/mainpage.pl",
-    },
-    preservation_home: {
-        text: "Preservation", //$t("Preservation")
-        path: "/cgi-bin/koha/preservation/home.pl",
-    },
-    trains: {
-        text: "Trains", // $t("Trains")
-        path: "/cgi-bin/koha/preservation/trains",
-    },
-    waiting_list: {
-        text: "Waiting list", // $t("Waiting list")
-        path: "/cgi-bin/koha/preservation/waiting-list",
-    },
-    settings: {
-        home: {
-            text: "Settings", // $t("Settings")
-            path: "/cgi-bin/koha/preservation/settings",
-        },
-        processings: {
-            home: {
-                text: "Processings", //$t("Processings")
-            },
-        },
-    },
-};
-const breadcrumb_paths = {
-    trains: [
-        breadcrumbs.home,
-        breadcrumbs.preservation_home,
-        breadcrumbs.trains,
-    ],
-    settings: [
-        breadcrumbs.home,
-        breadcrumbs.preservation_home,
-        breadcrumbs.settings.home,
-    ],
-    settings_processings: [
-        breadcrumbs.home,
-        breadcrumbs.preservation_home,
-        breadcrumbs.settings.home,
-    ],
-};
-
-function build_breadcrumb(parent_breadcrumb, current) {
-    let breadcrumb = parent_breadcrumb.flat(Infinity);
-    if (current) {
-        breadcrumb.push({
-            text: current,
-        });
-    }
-    return breadcrumb;
-}
+import { $__ } from "../i18n";
 
 export const routes = [
     {
         path: "/cgi-bin/koha/mainpage.pl",
+        is_base: true,
         beforeEnter(to, from, next) {
             window.location.href = "/cgi-bin/koha/mainpage.pl";
         },
     },
     {
         path: "/cgi-bin/koha/preservation/home.pl",
-        name: "Home",
-        component: Home,
-        meta: {
-            breadcrumb: () => [breadcrumbs.home, breadcrumbs.preservation_home],
-        },
-    },
-    {
-        path: "/cgi-bin/koha/preservation/trains",
+        is_default: true,
+        is_base: true,
+        title: $__("Preservation"),
         children: [
             {
                 path: "",
-                name: "TrainsList",
-                component: TrainsList,
-                meta: {
-                    breadcrumb: () => breadcrumb_paths.trains,
-                },
+                name: "Home",
+                component: markRaw(Home),
+                title: $__("Home"),
+                icon: "fa fa-home",
             },
             {
-                path: ":train_id",
+                path: "/cgi-bin/koha/preservation/trains",
+                title: $__("Trains"),
+                icon: "fa fa-train",
+                is_end_node: true,
                 children: [
                     {
                         path: "",
-                        name: "TrainsShow",
-                        component: TrainsShow,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    breadcrumb_paths.trains,
-                                    "Show train" // $t("Show train")
-                                ),
-                        },
+                        name: "TrainsList",
+                        component: markRaw(TrainsList),
                     },
                     {
-                        path: "items",
+                        path: ":train_id",
+                        title: $__("Show train"),
+                        is_end_node: true,
                         children: [
                             {
-                                path: "add",
-                                name: "TrainsFormAddItem",
-                                component: TrainsFormAddItem,
-                                meta: {
-                                    breadcrumb: () =>
-                                        build_breadcrumb(
-                                            breadcrumb_paths.trains,
-                                            "Add item to train" // $t("Add item to train")
-                                        ),
-                                },
+                                path: "",
+                                name: "TrainsShow",
+                                component: markRaw(TrainsShow),
                             },
                             {
-                                path: "add/:item_ids",
-                                name: "TrainsFormAddItems",
-                                component: TrainsFormAddItems,
-                                meta: {
-                                    breadcrumb: () =>
-                                        build_breadcrumb(
-                                            breadcrumb_paths.trains,
-                                            "Add items to train" // $t("Add items to train")
-                                        ),
-                                },
-                            },
-                            {
-                                path: "edit/:train_item_id",
-                                name: "TrainsFormEditItem",
-                                component: TrainsFormAddItem,
-                                meta: {
-                                    breadcrumb: () =>
-                                        build_breadcrumb(
-                                            breadcrumb_paths.trains,
-                                            "Edit item in train" // $t("Edit item in train")
-                                        ),
-                                },
+                                path: "items",
+                                is_empty: true,
+                                children: [
+                                    {
+                                        path: "add",
+                                        name: "TrainsFormAddItem",
+                                        component: markRaw(TrainsFormAddItem),
+                                        title: $__("Add item to train"),
+                                    },
+                                    {
+                                        path: "add/:item_ids",
+                                        name: "TrainsFormAddItems",
+                                        component: markRaw(TrainsFormAddItems),
+                                        title: $__("Add items to train"),
+                                    },
+                                    {
+                                        path: "edit/:train_item_id",
+                                        name: "TrainsFormEditItem",
+                                        component: markRaw(TrainsFormAddItem),
+                                        title: $__("Edit item in train"),
+                                    },
+                                ],
                             },
                         ],
+                    },
+                    {
+                        path: "add",
+                        name: "TrainsFormAdd",
+                        component: markRaw(TrainsFormAdd),
+                        title: $__("Add train"),
+                    },
+                    {
+                        path: "edit/:train_id",
+                        name: "TrainsFormEdit",
+                        component: markRaw(TrainsFormAdd),
+                        title: $__("Edit train"),
                     },
                 ],
             },
             {
-                path: "add",
-                name: "TrainsFormAdd",
-                component: TrainsFormAdd,
-                meta: {
-                    breadcrumb: () =>
-                        build_breadcrumb(
-                            breadcrumb_paths.trains,
-                            "Add train" // $t("Add train")
-                        ),
-                },
-            },
-            {
-                path: "edit/:train_id",
-                name: "TrainsFormEdit",
-                component: TrainsFormAdd,
-                meta: {
-                    breadcrumb: () =>
-                        build_breadcrumb(
-                            breadcrumb_paths.trains,
-                            "Edit train" // $t("Edit train")
-                        ),
-                },
-            },
-        ],
-    },
-    {
-        path: "/cgi-bin/koha/preservation/waiting-list",
-        name: "WaitingList",
-        component: WaitingList,
-        meta: {
-            breadcrumb: () => [
-                breadcrumbs.home,
-                breadcrumbs.preservation_home,
-                breadcrumbs.waiting_list,
-            ],
-        },
-    },
-    {
-        path: "/cgi-bin/koha/preservation/settings",
-        children: [
-            {
-                path: "",
-                name: "Settings",
-                component: Settings,
-                meta: {
-                    breadcrumb: () => breadcrumb_paths.settings,
-                },
-            },
-            {
-                path: "processings",
+                path: "/cgi-bin/koha/preservation/waiting-list",
+                title: $__("Waiting List"),
+                icon: "fa fa-recycle",
+                is_end_node: true,
                 children: [
                     {
-                        path: ":processing_id",
-                        name: "SettingsProcessingsShow",
-                        component: SettingsProcessingsShow,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    breadcrumb_paths.settings_processings,
-                                    "Show processing" // $t("Show processing")
-                                ),
-                        },
+                        path: "",
+                        name: "WaitingList",
+                        component: markRaw(WaitingList),
+                    },
+                ],
+            },
+            {
+                path: "/cgi-bin/koha/preservation/settings",
+                title: $__("Settings"),
+                icon: "fa fa-cog",
+                is_end_node: true,
+                children: [
+                    {
+                        path: "",
+                        name: "Settings",
+                        component: markRaw(Settings),
                     },
                     {
-                        path: "add",
-                        name: "SettingsProcessingsFormAdd",
-                        component: SettingsProcessingsFormAdd,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    breadcrumb_paths.settings_processings,
-                                    "Add processing" // $t("Add processing")
-                                ),
-                        },
-                    },
-                    {
-                        path: "edit/:processing_id",
-                        name: "SettingsProcessingsFormEdit",
-                        component: SettingsProcessingsFormAdd,
-                        meta: {
-                            breadcrumb: () =>
-                                build_breadcrumb(
-                                    breadcrumb_paths.settings_processings,
-                                    "Edit processing" // $t("Edit processing")
-                                ),
-                        },
+                        path: "processings",
+                        children: [
+                            {
+                                path: ":processing_id",
+                                name: "SettingsProcessingsShow",
+                                component: markRaw(SettingsProcessingsShow),
+                                title: $__("Show processing"),
+                            },
+                            {
+                                path: "add",
+                                name: "SettingsProcessingsFormAdd",
+                                component: markRaw(SettingsProcessingsFormAdd),
+                                title: $__("Add processing"),
+                            },
+                            {
+                                path: "edit/:processing_id",
+                                name: "SettingsProcessingsFormEdit",
+                                component: markRaw(SettingsProcessingsFormAdd),
+                                title: $__("Edit processing"),
+                            },
+                        ],
                     },
                 ],
             },
