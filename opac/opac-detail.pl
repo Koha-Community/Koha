@@ -639,7 +639,7 @@ $variables->{show_analytics_link} = $show_analytics;
 $template->param(
     XSLTBloc => XSLTParse4Display({
         biblionumber   => $biblionumber,
-        record         => $record,
+        record         => $record->clone(),
         xsl_syspref    => 'OPACXSLTDetailsDisplay',
         fix_amps       => 1,
         xslt_variables => $variables,
