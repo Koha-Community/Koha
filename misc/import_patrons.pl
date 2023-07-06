@@ -134,7 +134,7 @@ Confirms you really want to import these patrons, otherwise prints this help
 
 Path to the CSV file of patrons to import
 
-=item B<-c|--matchpoint>
+=item B<-m|--matchpoint>
 
 Field on which to match incoming patrons to existing patrons
 
