@@ -135,13 +135,22 @@
 
     [% UNLESS IndependentBranches %]
         <p>
-            <label for="branch">Library:</label>
-            <select name="branch" id="branch" class="input" tabindex="3">
+            [% IF Koha.Preference('ForcedLibrarySelection') %]
+                <label for="branch" class="required">Library:</label>
+                <select name="branch" id="branch" class="input" tabindex="3" required="required">
+                <option value=""></option>
+            [% ELSE %]
+                <label for="branch">Library:</label>
+                <select name="branch" id="branch" class="input" tabindex="3">
                 <option value="">My library</option>
+            [% END %]
                 [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
                     <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
                  [% END %]
             </select>
+            [% IF Koha.Preference('ForcedLibrarySelection') %]
+                <span class="required">Required</span>
+            [% END %]
         </p>
 
         [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
