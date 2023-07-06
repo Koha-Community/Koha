@@ -112,3 +112,18 @@ cy.get_agreements_to_relate = () => {
         },
     ]
 }
+
+cy.get_vendors_to_relate = () => {
+    return [
+        {
+            "id": 1,
+            "name": "My Vendor",
+            "aliases": [],
+        },
+        {
+            "id": 2,
+            "name": "My Vendor 2",
+            "aliases": [],
+        }
+    ]
+}

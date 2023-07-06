@@ -18,7 +18,8 @@ function get_agreement() {
         name: "agreement 1",
         renewal_priority: "",
         status: "active",
-        vendor_id: null,
+        vendor_id: 1,
+        vendor: [cy.get_vendors_to_relate()[0]],
         periods: [
             {
                 started_on: dates["today_iso"],
@@ -259,6 +260,7 @@ describe("Agreement CRUD operations", () => {
 
         // Fill in the form for normal attributes
         let agreement = get_agreement();
+        let vendors = cy.get_vendors_to_relate();
 
         cy.get("#agreements_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
@@ -276,6 +278,15 @@ describe("Agreement CRUD operations", () => {
             agreement.status + "{enter}",
             { force: true }
         );
+
+        // vendors
+        cy.get("#agreement_vendor_id .vs__selected").should("not.exist"); //no vendor pre-selected for new agreement
+
+        cy.get("#agreement_vendor_id .vs__search").type(
+            vendors[0].name + "{enter}",
+            { force: true }
+        );
+        cy.get("#agreement_vendor_id .vs__selected").contains(vendors[0].name);
 
         cy.contains("Add new period").click();
         cy.get("#agreements_add").contains("Submit").click();
@@ -446,6 +457,13 @@ describe("Agreement CRUD operations", () => {
         let licenses_to_relate = get_licenses_to_relate();
         let agreement = get_agreement();
         let agreements = [agreement];
+        let vendors = cy.get_vendors_to_relate();
+
+        // Intercept vendors request
+        cy.intercept("GET", "/api/v1/acquisitions/vendors?_per_page=-1", {
+            statusCode: 200,
+            body: vendors,
+        }).as("get-vendor-options");
 
         // Intercept initial /agreements request once
         cy.intercept(
@@ -502,6 +520,15 @@ describe("Agreement CRUD operations", () => {
             agreements[0].description
         );
         cy.get("#agreement_status .vs__selected").contains("Active");
+        cy.get("#agreement_vendor_id .vs__selected").contains(
+            agreement.vendor[0].name
+        );
+
+        cy.get("#agreement_vendor_id .vs__search").type(
+            vendors[1].name + "{enter}",
+            { force: true }
+        );
+
         cy.get("#agreement_is_perpetual_no").should("be.checked");
         cy.get("#started_on_0").invoke("val").should("eq", dates["today_iso"]);
         cy.get("#ended_on_0").invoke("val").should("eq", dates["tomorrow_iso"]);
