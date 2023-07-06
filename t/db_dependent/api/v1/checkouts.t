@@ -321,7 +321,7 @@ subtest 'get_availability' => sub {
 
     # Needs confirm
     %needsconfirmation = ( confirm1 => 1, confirm2 => 'please' );
-    my $token = Koha::Token->new->generate_jwt( { id => $librarian->id . ":" . $item1_id . ":confirm1:confirm2:please" });
+    my $token = Koha::Token->new->generate_jwt( { id => $librarian->id . ":" . $item1_id . ":confirm1:confirm2" });
     $t->get_ok(
 "//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
     )->status_is(200)->json_is( '/blockers' => {} )
@@ -334,7 +334,7 @@ subtest 'get_availability' => sub {
             {
                 id => $librarian->id . ":"
                   . $item1_id
-                  . ":confirm1:confirm2:please",
+                  . ":confirm1:confirm2",
                 token => $confirmation_token
             }
         ),
@@ -415,7 +415,7 @@ subtest 'add checkout' => sub {
         {
                 id => $librarian->id . ":"
               . $item1_id
-              . ":confirm1:confirm2:please"
+              . ":confirm1:confirm2"
         }
     );
     $t->post_ok(
