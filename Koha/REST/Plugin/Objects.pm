@@ -161,10 +161,15 @@ controller, and thus shouldn't be called twice in it.
               $c->extract_reserved_params($args);
 
             if ( exists $reserved_params->{_order_by} ) {
+
+                # convert to arrayref if it is a single param, to keep code simple
+                $reserved_params->{_order_by} = [ $reserved_params->{_order_by} ]
+                    unless ref( $reserved_params->{_order_by} ) eq 'ARRAY';
+
                 # _order_by passed, fix if required
-                for my $p ( @{$reserved_params->{_order_by}} ) {
+                for my $p ( @{ $reserved_params->{_order_by} } ) {
                     foreach my $qf ( @{$query_fixers} ) {
-                        $p = $qf->($p, 1); # 1 => no quotes on matching
+                        $p = $qf->( $p, 1 );    # 1 => no quotes on matching
                     }
                 }
             }
