@@ -26,10 +26,11 @@ export class ERMAPIClient extends HttpClient {
                             "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor",
                     },
                 }),
-            getAll: query =>
+            getAll: (query, params) =>
                 this.getAll({
                     endpoint: "agreements",
-                    query: query,
+                    query,
+                    params,
                 }),
             delete: id =>
                 this.delete({
@@ -68,10 +69,11 @@ export class ERMAPIClient extends HttpClient {
                             "user_roles,user_roles.patron,vendor,documents",
                     },
                 }),
-            getAll: query =>
+            getAll: (query, params) =>
                 this.getAll({
                     endpoint: "licenses",
-                    query: query,
+                    query,
+                    params,
                     headers: {
                         "x-koha-embed": "vendor",
                     },
@@ -113,10 +115,11 @@ export class ERMAPIClient extends HttpClient {
                             "package_agreements,package_agreements.agreement,resources+count,vendor",
                     },
                 }),
-            getAll: query =>
+            getAll: (query, params) =>
                 this.getAll({
                     endpoint: "eholdings/local/packages",
-                    query: query,
+                    query,
+                    params,
                     headers: {
                         "x-koha-embed": "resources+count,vendor.name",
                     },

@@ -57,6 +57,7 @@ class HttpClient {
             "?" +
             new URLSearchParams({
                 _per_page: -1,
+                ...(params.params && params.params),
                 ...(params.query && { q: JSON.stringify(params.query) }),
             });
         return this._fetchJSON(url, params.headers, {
