@@ -352,6 +352,9 @@ export default {
                                 this.$__("Train %s deleted").format(train.name),
                                 true
                             )
+                            this.$router.push(
+                                "/cgi-bin/koha/preservation/trains"
+                            )
                         },
                         error => {}
                     )
