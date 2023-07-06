@@ -1,7 +1,13 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="trains_list">
-        <Toolbar />
+        <Toolbar>
+            <ToolbarButton
+                to="/cgi-bin/koha/preservation/trains/add"
+                icon="plus"
+                :title="$__('New train')"
+            />
+        </Toolbar>
         <fieldset v-if="count_trains > 0" class="filters">
             <label>{{ $__("Filter by") }}:</label>
             <input
@@ -54,7 +60,8 @@
 
 <script>
 import flatPickr from "vue-flatpickr-component"
-import Toolbar from "./TrainsToolbar.vue"
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 import { inject, ref, reactive } from "vue"
 import { APIClient } from "../../fetch/api-client"
 import { build_url } from "../../composables/datatables"
@@ -265,7 +272,7 @@ export default {
             ]
         },
     },
-    components: { flatPickr, Toolbar, KohaTable },
+    components: { flatPickr, Toolbar, ToolbarButton, KohaTable },
     name: "trainsList",
     emits: ["select-train", "close"],
 }

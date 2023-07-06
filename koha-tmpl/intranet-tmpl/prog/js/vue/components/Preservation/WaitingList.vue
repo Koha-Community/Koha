@@ -85,7 +85,7 @@
         {{ $__("You need to configure this module first.") }}
     </div>
     <div v-else id="waiting-list">
-        <div id="toolbar" class="btn-toolbar">
+        <Toolbar>
             <a
                 class="btn btn-default"
                 @click="show_modal_add_to_waiting_list = true"
@@ -103,7 +103,7 @@
                     )
                 }}</a
             >
-        </div>
+        </Toolbar>
         <div v-if="count_waiting_list_items > 0" class="page-section">
             <KohaTable
                 ref="table"
@@ -119,6 +119,7 @@
 
 <script>
 import flatPickr from "vue-flatpickr-component"
+import Toolbar from "../Toolbar.vue"
 import { inject, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client"
@@ -294,7 +295,7 @@ export default {
             ]
         },
     },
-    components: { flatPickr, KohaTable },
+    components: { flatPickr, KohaTable, Toolbar },
     name: "WaitingList",
 }
 </script>

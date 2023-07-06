@@ -47,14 +47,14 @@
     </transition>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="trains_show">
-        <div id="toolbar" class="btn-toolbar">
-            <router-link
+        <Toolbar>
+            <ToolbarButton
                 v-if="train.closed_on == null"
                 :to="`/cgi-bin/koha/preservation/trains/${train.train_id}/items/add`"
                 class="btn btn-default"
-                ><font-awesome-icon icon="plus" />
-                {{ $__("Add items") }}</router-link
-            >
+                icon="plus"
+                :title="$__('Add items')"
+            />
             <span
                 v-else
                 class="btn btn-default"
@@ -63,12 +63,12 @@
             >
                 <font-awesome-icon icon="plus" /> {{ $__("Add items") }}
             </span>
-            <router-link
+            <ToolbarButton
                 :to="`/cgi-bin/koha/preservation/trains/edit/${train.train_id}`"
                 class="btn btn-default"
-                ><font-awesome-icon icon="pencil" />
-                {{ $__("Edit") }}</router-link
-            >
+                icon="pencil"
+                :title="$__('Edit')"
+            />
             <a @click="deleteTrain(train)" class="btn btn-default"
                 ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
             >
@@ -90,7 +90,7 @@
                 @click="receiveTrain"
                 ><font-awesome-icon icon="inbox" /> {{ $__("Receive") }}</a
             >
-        </div>
+        </Toolbar>
         <h2>
             {{ $__("Train #%s").format(train.train_id) }}
         </h2>
@@ -213,6 +213,8 @@
 import { inject, createVNode, render } from "vue"
 import { APIClient } from "../../fetch/api-client"
 import { useDataTable } from "../../composables/datatables"
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 
 export default {
     setup() {
@@ -547,6 +549,7 @@ export default {
             })
         },
     },
+    components: { Toolbar, ToolbarButton },
     name: "TrainsShow",
 }
 </script>
