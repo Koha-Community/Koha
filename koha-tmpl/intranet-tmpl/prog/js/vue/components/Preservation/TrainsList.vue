@@ -3,7 +3,7 @@
     <div v-else id="trains_list">
         <Toolbar>
             <ToolbarButton
-                to="/cgi-bin/koha/preservation/trains/add"
+                :to="{ name: 'TrainsFormAdd' }"
                 icon="plus"
                 :title="$__('New train')"
             />
@@ -138,14 +138,16 @@ export default {
         },
         doShow: function (train, dt, event) {
             event.preventDefault()
-            this.$router.push(
-                "/cgi-bin/koha/preservation/trains/" + train.train_id
-            )
+            this.$router.push({
+                name: "TrainsShow",
+                params: { train_id: train.train_id },
+            })
         },
         doEdit: function (train, dt, event) {
-            this.$router.push(
-                "/cgi-bin/koha/preservation/trains/edit/" + train.train_id
-            )
+            this.$router.push({
+                name: "TrainsFormEdit",
+                params: { train_id: train.train_id },
+            })
         },
         doDelete: function (train, dt, event) {
             this.setConfirmationDialog(
@@ -176,11 +178,10 @@ export default {
             if (train.closed_on != null) {
                 this.setWarning(this.$__("Cannot add items to a closed train"))
             } else {
-                this.$router.push(
-                    "/cgi-bin/koha/preservation/trains/" +
-                        train.train_id +
-                        "/items/add"
-                )
+                this.$router.push({
+                    name: "TrainsFormAddItem",
+                    params: { train_id: train.train_id },
+                })
             }
         },
         table_url() {

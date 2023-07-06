@@ -90,7 +90,7 @@
             <fieldset class="action">
                 <input type="submit" value="Submit" />
                 <router-link
-                    to="/cgi-bin/koha/preservation/trains"
+                    :to="{ name: 'TrainsList' }"
                     role="button"
                     class="cancel"
                     >{{ $__("Cancel") }}</router-link
@@ -264,11 +264,10 @@ export default {
                                 "%s items have been added to train %s."
                             ).format(result.length, this.train.train_id)
                         )
-
-                        this.$router.push(
-                            "/cgi-bin/koha/preservation/trains/" +
-                                this.train.train_id
-                        )
+                        this.$router.push({
+                            name: "TrainsShow",
+                            params: { train_id: this.train.train_id },
+                        })
                     } else {
                         this.setMessage(
                             this.$__("No items have been added to the train.")

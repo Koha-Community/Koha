@@ -9,7 +9,10 @@
                 v-bind:key="counter"
             >
                 <router-link
-                    :to="`/cgi-bin/koha/preservation/settings/processings/${processing.processing_id}`"
+                    :to="{
+                        name: 'SettingsProcessingsShow',
+                        params: { processing_id: processing.processing_id },
+                    }"
                 >
                     {{ processing.name }}
                 </router-link>
@@ -21,7 +24,10 @@
                     >
 
                     <router-link
-                        :to="`/cgi-bin/koha/preservation/settings/processings/edit/${processing.processing_id}`"
+                        :to="{
+                            name: 'SettingsProcessingsFormEdit',
+                            params: { processing_id: processing.processing_id },
+                        }"
                         ><i class="fa fa-pencil"></i>
                         {{ $__("Edit this processing") }}</router-link
                     >
@@ -29,7 +35,7 @@
             </li>
         </ol>
         <router-link
-            to="/cgi-bin/koha/preservation/settings/processings/add"
+            :to="{ name: 'SettingsProcessingsFormAdd' }"
             role="button"
             class="btn btn-default"
             ><font-awesome-icon icon="plus" />

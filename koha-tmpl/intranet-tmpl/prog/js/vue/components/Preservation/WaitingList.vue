@@ -191,12 +191,13 @@ export default {
         addItemsToTrain: function (e) {
             e.preventDefault()
             let item_ids = this.last_items.map(i => i.item_id)
-            this.$router.push(
-                "/cgi-bin/koha/preservation/trains/" +
-                    this.train_id_selected_for_add +
-                    "/items/add/" +
-                    item_ids.join(",")
-            )
+            this.$router.push({
+                name: "TrainsFormAddItems",
+                params: {
+                    train_id: this.train_id_selected_for_add,
+                    item_ids: item_ids.join(","),
+                },
+            })
         },
         addItemsToWaitingList: function (e) {
             e.preventDefault()

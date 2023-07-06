@@ -75,6 +75,7 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/preservation/home.pl",
+        name: "Home",
         component: Home,
         meta: {
             breadcrumb: () => [breadcrumbs.home, breadcrumbs.preservation_home],
@@ -85,6 +86,7 @@ export const routes = [
         children: [
             {
                 path: "",
+                name: "TrainsList",
                 component: TrainsList,
                 meta: {
                     breadcrumb: () => breadcrumb_paths.trains,
@@ -95,6 +97,7 @@ export const routes = [
                 children: [
                     {
                         path: "",
+                        name: "TrainsShow",
                         component: TrainsShow,
                         meta: {
                             breadcrumb: () =>
@@ -109,6 +112,7 @@ export const routes = [
                         children: [
                             {
                                 path: "add",
+                                name: "TrainsFormAddItem",
                                 component: TrainsFormAddItem,
                                 meta: {
                                     breadcrumb: () =>
@@ -120,6 +124,7 @@ export const routes = [
                             },
                             {
                                 path: "add/:item_ids",
+                                name: "TrainsFormAddItems",
                                 component: TrainsFormAddItems,
                                 meta: {
                                     breadcrumb: () =>
@@ -131,6 +136,7 @@ export const routes = [
                             },
                             {
                                 path: "edit/:train_item_id",
+                                name: "TrainsFormEditItem",
                                 component: TrainsFormAddItem,
                                 meta: {
                                     breadcrumb: () =>
@@ -146,6 +152,7 @@ export const routes = [
             },
             {
                 path: "add",
+                name: "TrainsFormAdd",
                 component: TrainsFormAdd,
                 meta: {
                     breadcrumb: () =>
@@ -157,6 +164,7 @@ export const routes = [
             },
             {
                 path: "edit/:train_id",
+                name: "TrainsFormEdit",
                 component: TrainsFormAdd,
                 meta: {
                     breadcrumb: () =>
@@ -170,6 +178,7 @@ export const routes = [
     },
     {
         path: "/cgi-bin/koha/preservation/waiting-list",
+        name: "WaitingList",
         component: WaitingList,
         meta: {
             breadcrumb: () => [
@@ -184,6 +193,7 @@ export const routes = [
         children: [
             {
                 path: "",
+                name: "Settings",
                 component: Settings,
                 meta: {
                     breadcrumb: () => breadcrumb_paths.settings,
@@ -194,6 +204,7 @@ export const routes = [
                 children: [
                     {
                         path: ":processing_id",
+                        name: "SettingsProcessingsShow",
                         component: SettingsProcessingsShow,
                         meta: {
                             breadcrumb: () =>
@@ -205,6 +216,7 @@ export const routes = [
                     },
                     {
                         path: "add",
+                        name: "SettingsProcessingsFormAdd",
                         component: SettingsProcessingsFormAdd,
                         meta: {
                             breadcrumb: () =>
@@ -216,6 +228,7 @@ export const routes = [
                     },
                     {
                         path: "edit/:processing_id",
+                        name: "SettingsProcessingsFormEdit",
                         component: SettingsProcessingsFormAdd,
                         meta: {
                             breadcrumb: () =>

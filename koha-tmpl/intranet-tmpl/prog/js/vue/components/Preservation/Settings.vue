@@ -59,7 +59,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/preservation/home.pl"
+                        :to="{ name: 'Home' }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link

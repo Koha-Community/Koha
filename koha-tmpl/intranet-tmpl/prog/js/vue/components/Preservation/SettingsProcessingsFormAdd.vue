@@ -168,7 +168,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/preservation/settings"
+                        :to="{ name: 'Settings' }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link
@@ -276,7 +276,7 @@ export default {
                 client.processings.update(processing, processing_id).then(
                     success => {
                         this.setMessage(this.$__("Processing updated"))
-                        this.$router.push("/cgi-bin/koha/preservation/settings")
+                        this.$router.push({ name: "Settings" })
                     },
                     error => {}
                 )
@@ -284,7 +284,7 @@ export default {
                 client.processings.create(processing).then(
                     success => {
                         this.setMessage(this.$__("Processing created"))
-                        this.$router.push("/cgi-bin/koha/preservation/settings")
+                        this.$router.push({ name: "Settings" })
                     },
                     error => {}
                 )

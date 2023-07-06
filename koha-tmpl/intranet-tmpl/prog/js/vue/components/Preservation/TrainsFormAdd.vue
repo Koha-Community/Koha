@@ -79,7 +79,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/preservation/trains"
+                        :to="{ name: 'TrainsList' }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link
@@ -176,7 +176,7 @@ export default {
                 client.trains.update(train, train_id).then(
                     success => {
                         this.setMessage(this.$__("Train updated"))
-                        this.$router.push("/cgi-bin/koha/preservation/trains")
+                        this.$router.push({ name: "TrainsList" })
                     },
                     error => {}
                 )
@@ -184,7 +184,7 @@ export default {
                 client.trains.create(train).then(
                     success => {
                         this.setMessage(this.$__("Train created"))
-                        this.$router.push("/cgi-bin/koha/preservation/trains")
+                        this.$router.push({ name: "TrainsList" })
                     },
                     error => {}
                 )

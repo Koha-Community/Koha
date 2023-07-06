@@ -17,16 +17,14 @@
                                 <h5>{{ $__("Preservation") }}</h5>
                                 <ul>
                                     <li>
-                                        <router-link
-                                            to="/cgi-bin/koha/preservation/home.pl"
-                                        >
+                                        <router-link :to="{ name: 'Home' }">
                                             <i class="fa fa-home"></i>
                                             {{ $__("Home") }}</router-link
                                         >
                                     </li>
                                     <li>
                                         <router-link
-                                            to="/cgi-bin/koha/preservation/trains"
+                                            :to="{ name: 'TrainsList' }"
                                         >
                                             <i class="fa fa-train"></i>
                                             {{ $__("Trains") }}</router-link
@@ -34,16 +32,14 @@
                                     </li>
                                     <li>
                                         <router-link
-                                            to="/cgi-bin/koha/preservation/waiting-list"
+                                            :to="{ name: 'WaitingList' }"
                                         >
                                             <i class="fa fa-recycle"></i>
                                             {{ $__("Waiting list") }}
                                         </router-link>
                                     </li>
                                     <li>
-                                        <router-link
-                                            to="/cgi-bin/koha/preservation/settings"
-                                        >
+                                        <router-link :to="{ name: 'Settings' }">
                                             <i class="fa fa-cog"></i>
                                             {{ $__("Settings") }}
                                         </router-link>

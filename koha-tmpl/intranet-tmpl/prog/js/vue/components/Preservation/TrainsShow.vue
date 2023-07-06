@@ -50,7 +50,10 @@
         <Toolbar>
             <ToolbarButton
                 v-if="train.closed_on == null"
-                :to="`/cgi-bin/koha/preservation/trains/${train.train_id}/items/add`"
+                :to="{
+                    name: 'TrainsFormAddItem',
+                    params: { train_id: train.train_id },
+                }"
                 class="btn btn-default"
                 icon="plus"
                 :title="$__('Add items')"
@@ -64,7 +67,10 @@
                 <font-awesome-icon icon="plus" /> {{ $__("Add items") }}
             </span>
             <ToolbarButton
-                :to="`/cgi-bin/koha/preservation/trains/edit/${train.train_id}`"
+                :to="{
+                    name: 'TrainsFormEdit',
+                    params: { train_id: train.train_id },
+                }"
                 class="btn btn-default"
                 icon="pencil"
                 :title="$__('Edit')"
@@ -199,7 +205,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/preservation/trains"
+                    :to="{ name: 'TrainsList' }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link
@@ -354,9 +360,7 @@ export default {
                                 this.$__("Train %s deleted").format(train.name),
                                 true
                             )
-                            this.$router.push(
-                                "/cgi-bin/koha/preservation/trains"
-                            )
+                            this.$router.push({ name: "TrainsList" })
                         },
                         error => {}
                     )
@@ -400,9 +404,10 @@ export default {
             )
         },
         editItem(train_item_id) {
-            this.$router.push(
-                `/cgi-bin/koha/preservation/trains/${this.train.train_id}/items/edit/${train_item_id}`
-            )
+            this.$router.push({
+                name: "TrainsFormEditItem",
+                params: { train_id: this.train.train_id, train_item_id },
+            })
         },
         removeItem(train_item_id) {
             this.setConfirmationDialog(

@@ -96,7 +96,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        to="/cgi-bin/koha/preservation/trains"
+                        :to="{ name: 'TrainsList' }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link
@@ -125,7 +125,10 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" />
                     <router-link
-                        :to="`/cgi-bin/koha/preservation/trains/${train.train_id}`"
+                        :to="{
+                            name: 'TrainsShow',
+                            params: { train_id: train.train_id },
+                        }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link
@@ -351,10 +354,10 @@ export default {
                     .then(
                         success => {
                             this.setMessage(this.$__("Item updated"))
-                            this.$router.push(
-                                "/cgi-bin/koha/preservation/trains/" +
-                                    this.train.train_id
-                            )
+                            this.$router.push({
+                                name: "TrainsShow",
+                                params: { train_id: this.train.train_id },
+                            })
                         },
                         error => {}
                     )
@@ -362,10 +365,10 @@ export default {
                 client.train_items.create(train_item, this.train.train_id).then(
                     success => {
                         this.setMessage(this.$__("Item added to train"))
-                        this.$router.push(
-                            "/cgi-bin/koha/preservation/trains/" +
-                                this.train.train_id
-                        )
+                        this.$router.push({
+                            name: "TrainsShow",
+                            params: { train_id: this.train.train_id },
+                        })
                     },
                     error => {}
                 )

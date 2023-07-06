@@ -5,7 +5,10 @@
             {{ $__("Processing #%s").format(processing.processing_id) }}
             <span class="action_links">
                 <router-link
-                    :to="`/cgi-bin/koha/preservation/settings/processings/edit/${processing.processing_id}`"
+                    :to="{
+                        name: 'SettingsProcessingsFormEdit',
+                        params: { processing_id: processing.processing_id },
+                    }"
                     :title="$__('Edit')"
                     ><i class="fa fa-pencil"></i
                 ></router-link>
@@ -55,7 +58,7 @@
             </fieldset>
             <fieldset class="action">
                 <router-link
-                    to="/cgi-bin/koha/preservation/settings"
+                    :to="{ name: 'Settings' }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link
@@ -129,9 +132,7 @@ export default {
                                     ),
                                     true
                                 )
-                                this.$router.push(
-                                    "/cgi-bin/koha/preservation/settings"
-                                )
+                                this.$router.push({ name: "Settings" })
                             },
                             error => {}
                         )
