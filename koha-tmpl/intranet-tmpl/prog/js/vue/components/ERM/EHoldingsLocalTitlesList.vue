@@ -93,10 +93,12 @@ export default {
             toolbar_options: [
                 {
                     to: "EHoldingsLocalTitlesFormAdd",
+                    icon: "plus",
                     button_title: this.$__("New title"),
                 },
                 {
                     to: "EHoldingsLocalTitlesFormImport",
+                    icon: "plus",
                     button_title: this.$__("Import from list"),
                 },
             ],

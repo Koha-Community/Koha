@@ -53,6 +53,7 @@ export default {
             toolbar_options: [
                 {
                     to: "LicensesFormAdd",
+                    icon: "plus",
                     button_title: this.$__("New license"),
                 },
             ],
