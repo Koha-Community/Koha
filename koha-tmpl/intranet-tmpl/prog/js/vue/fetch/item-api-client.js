@@ -10,14 +10,10 @@ export class ItemAPIClient extends HttpClient {
     get items() {
         return {
             getAll: (query, params) =>
-                this.get({
-                    endpoint:
-                        "items?" +
-                        new URLSearchParams({
-                            _per_page: -1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
-                    ...params,
+                this.getAll({
+                    endpoint: "items",
+                    query,
+                    params,
                 }),
         };
     }
