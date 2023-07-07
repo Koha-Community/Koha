@@ -137,7 +137,8 @@
             <input type="hidden" name="issue_id" value="[% issue.issue_id | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
-        <form action="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]" method="get">
+        <form action="/cgi-bin/koha/acqui/vendor_issues.pl" method="get">
+            <input type="hidden" name="booksellerid" value="[% vendor.id | html %]" />
             <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>

@@ -48,6 +48,11 @@ if ( $issue_id ) {
 }
 my $vendor = Koha::Acquisition::Booksellers->find($booksellerid);
 
+unless ( $vendor ) {
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 if ( $op eq 'add_form' || $op eq 'show' ) {
     $template->param( issue => $issue );
 } elsif ( $op eq 'add_validate' ) {
