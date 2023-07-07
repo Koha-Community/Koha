@@ -562,12 +562,11 @@ function _dt_default_ajax (params){
                     }
 
                     let built_value;
+                    let is_date_field;
+
                     if ( col.datatype !== undefined ) {
                         if ( col.datatype == 'date' ) {
-                            let rfc3339 = $date_to_rfc3339(value);
-                            if ( rfc3339 != 'Invalid Date' ) {
-                                built_value = rfc3339;
-                            }
+                            is_date_field = true;
                         }
                         else if (col.datatype == 'related-object') {
                             let query_term = value;
@@ -582,6 +581,15 @@ function _dt_default_ajax (params){
                             };
                         } else {
                             console.log("datatype %s not supported yet".format(col.datatype));
+                        }
+                    } else if (col.data && ( col.data.endsWith('_on') || col.data.endsWith('_date') ) ) {
+                        is_date_field = true;
+                    }
+
+                    if ( is_date_field ) {
+                        let rfc3339 = $date_to_rfc3339(value);
+                        if ( rfc3339 != 'Invalid Date' ) {
+                            built_value = rfc3339;
                         }
                     }
 
