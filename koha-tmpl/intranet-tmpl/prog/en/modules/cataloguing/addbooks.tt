@@ -7,10 +7,10 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF ( total || breeding_loop ) %]
-        [% t("Search results") | html %]
+        [% t("Search results") | html %] &rsaquo;
     [% ELSIF ( query ) %]
-        [% t("No results found") | html %]
-    [% END %] &rsaquo;
+        [% t("No results found") | html %] &rsaquo;
+    [% END %]
     [% t("Cataloging") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
