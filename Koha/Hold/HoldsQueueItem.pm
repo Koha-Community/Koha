@@ -1,5 +1,7 @@
 package Koha::Hold::HoldsQueueItem;
 
+# Copyright 2023 Koha development team
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -27,7 +29,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Hold::HoldsQueueItem - Koha hold cancellation request Object class
+Koha::Hold::HoldsQueueItem - Koha holds queue items object class
 
 =head1 API
 

@@ -1,5 +1,7 @@
 package Koha::Hold::HoldsQueueItems;
 
+# Copyright 2023 Koha development team
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -17,7 +19,6 @@ package Koha::Hold::HoldsQueueItems;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Hold::HoldsQueueItem;
@@ -26,7 +27,7 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Hold::HoldsQueueItems - Koha hold cancellation requests Object set class
+Koha::Hold::HoldsQueueItems - Koha holds queue items object set class
 
 =head1 API
 
