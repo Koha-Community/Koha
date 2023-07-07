@@ -752,11 +752,13 @@ if( my $default_location = C4::Context->preference('NewItemsDefaultLocation') ) 
 }
 
 my @ig = Koha::Biblio::ItemGroups->search({ biblio_id => $biblionumber })->as_list();
+#sort by display order
+my @sorted_ig = sort { $a->display_order <=> $b->display_order } @ig;
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(
     biblio       => $biblio,
     items        => \@items,
-    item_groups      => \@ig,
+    item_groups      => \@sorted_ig,
     item_header_loop => \@header_value_loop,
     subfields        => $subfields,
     itemnumber       => $itemnumber,
