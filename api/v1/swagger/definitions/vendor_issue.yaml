@@ -6,9 +6,8 @@ properties:
     description: internally assigned vendor identifier
     readOnly: true
   vendor_id:
-    type:
-      - string
-    description: Vendor id
+    description: ID of the vendor
+    type: integer
   type:
     type:
       - string
@@ -18,11 +17,13 @@ properties:
     type:
       - string
       - "null"
+    format: date
     description: Start date
   ended_on:
     type:
       - string
       - "null"
+    format: date
     description: End date
   notes:
     type:
