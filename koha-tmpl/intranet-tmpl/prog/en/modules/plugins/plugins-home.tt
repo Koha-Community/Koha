@@ -3,7 +3,15 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Plugins &rsaquo; Tools &rsaquo; Koha </title>
+<title>
+    Plugins &rsaquo;
+    [% IF ( method == 'tool' ) %]
+        Tools
+    [% ELSE %]
+        Administration
+    [% END %]
+    &rsaquo; Koha
+ </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
