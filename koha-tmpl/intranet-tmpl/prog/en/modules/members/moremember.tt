@@ -188,24 +188,25 @@
                                                 </li>
                                             [% END %]
                                         [% END %]
-                                         <li id="patron-privacyguarantor">
-                                            <span class="label">Show checkouts to guarantor:</span>
-                                            [% IF patron.privacy_guarantor_checkouts %]
-                                                Yes
-                                            [% ELSE %]
-                                                No
-                                            [% END %]
-                                        </li>
+                                        [% IF Koha.Preference("borrowerRelationship") %]
+                                             <li id="patron-privacyguarantor">
+                                                <span class="label">Show checkouts to guarantor:</span>
+                                                [% IF patron.privacy_guarantor_checkouts %]
+                                                    Yes
+                                                [% ELSE %]
+                                                    No
+                                                [% END %]
+                                            </li>
 
-                                        <li id="patron-privacy_guarantor_fines">
-                                            <span class="label">Show charges to guarantor:</span>
-                                            [% IF patron.privacy_guarantor_fines %]
-                                                Yes
-                                            [% ELSE %]
-                                                No
-                                            [% END %]
-                                        </li>
-
+                                            <li id="patron-privacy_guarantor_fines">
+                                                <span class="label">Show charges to guarantor:</span>
+                                                [% IF patron.privacy_guarantor_fines %]
+                                                    Yes
+                                                [% ELSE %]
+                                                    No
+                                                [% END %]
+                                            </li>
+                                        [% END %]
                                         [% IF guarantees %]
                                             <li>
                                                 <span class="label">Guarantees:</span>
