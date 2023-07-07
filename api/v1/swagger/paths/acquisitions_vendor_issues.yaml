@@ -56,7 +56,6 @@
       - $ref: "../swagger.yaml#/parameters/per_page"
       - $ref: "../swagger.yaml#/parameters/q_param"
       - $ref: "../swagger.yaml#/parameters/q_body"
-      - $ref: "../swagger.yaml#/parameters/q_header"
       - $ref: "../swagger.yaml#/parameters/request_id_header"
     responses:
       "200":
@@ -69,7 +68,7 @@
         description: Authentication required
         schema:
           $ref: "../swagger.yaml#/definitions/error"
-      403:
+      "403":
         description: Access forbidden
         schema:
           $ref: "../swagger.yaml#/definitions/error"
@@ -77,13 +76,13 @@
         description: Resource not found
         schema:
           $ref: "../swagger.yaml#/definitions/error"
-      500:
+      "500":
         description: |-
           Internal server error. Possible `error_code` attribute values:
           * `internal_server_error`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
-      503:
+      "503":
         description: Under maintenance
         schema:
           $ref: "../swagger.yaml#/definitions/error"
