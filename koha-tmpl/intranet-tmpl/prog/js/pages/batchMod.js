@@ -1,4 +1,4 @@
-/* global dataTablesDefaults allColumns Cookies */
+/* global KohaTable allColumns Cookies */
 // Set expiration date for cookies
 var date = new Date();
 date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
