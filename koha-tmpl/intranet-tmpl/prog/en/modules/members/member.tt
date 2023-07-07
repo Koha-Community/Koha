@@ -151,6 +151,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         function showPatronSelections( number ){
             $("#patron_search_selected").show().find("span").text(_("Patrons selected: " + number ) );
