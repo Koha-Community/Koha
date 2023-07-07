@@ -98,7 +98,7 @@
                                     [% END %]
                                 </td>
                                 <td>
-                                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]" class="button" title="subscription detail">[% subscription.title | html %] [% subscription.subtitle | html %]</a>
+                                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]" class="button" title="subscription detail">[% subscription.title | html %] [% subscription.subtitle | html %] [% subscription.part_number | html %] [%subscription.part_name | html %]</a>
                                 </td>
                                 <td>
                                     [% IF ( subscription.publicnotes ) %][% subscription.publicnotes | html %][% END %]
