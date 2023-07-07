@@ -211,7 +211,6 @@
         <script>console.log("Wrong call of patron_search_js - missing redirect_url");</script>
     [% END %]
 
-    [% INCLUDE 'select2.inc' %]
     <script>
         let categories = [% To.json(categories) | $raw %].map(e => {
             e['_id'] = e.categorycode.toLowerCase();
