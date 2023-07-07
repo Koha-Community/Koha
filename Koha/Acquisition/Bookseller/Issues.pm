@@ -17,7 +17,6 @@ package Koha::Acquisition::Bookseller::Issues;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use Koha::Acquisition::Bookseller::Issue;
@@ -26,7 +25,7 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Acquisition::Bookseller::Issues
+Koha::Acquisition::Bookseller::Issues - Koha vendor issues object class
 
 =head1 API
 

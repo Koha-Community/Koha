@@ -17,14 +17,15 @@ package Koha::Acquisition::Bookseller::Issue;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
 
+use constant ISSUE_TYPE_CATEGORY => 'VENDOR_ISSUE_TYPE';
+
 =head1 NAME
 
-Koha::Acquisition::Bookseller::Issue - Koha Issue Object class
+Koha::Acquisition::Bookseller::Issue - Koha vendor issue object class
 
 =head1 API
 
@@ -40,10 +41,9 @@ sub strings_map {
     my $strings = {};
 
     if ( defined $self->type ) {
-        my $type_av_category = 'VENDOR_ISSUE_TYPE';
         my $av = Koha::AuthorisedValues->search(
             {
-                category => $type_av_category,
+                category => ISSUE_TYPE_CATEGORY,
                 authorised_value => $self->type,
             }
         );
@@ -55,7 +55,7 @@ sub strings_map {
           : $self->type;
 
         $strings->{type} = {
-            category => 'VENDOR_ISSUE_TYPE',
+            category => ISSUE_TYPE_CATEGORY,
             str      => $type_str,
             type     => 'av',
         };
