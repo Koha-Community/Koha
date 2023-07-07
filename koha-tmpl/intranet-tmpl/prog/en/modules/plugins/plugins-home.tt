@@ -110,6 +110,8 @@
                                 <div class="dialog message">No plugins that can process online payments via the public catalog are installed</div>
                             [% ELSIF method == 'intranet_catalog_biblio_enhancements' %]
                                 <div class="dialog message">No plugins that can enhance the bibliographic records in the staff interface are installed</div>
+                            [% ELSIF method == 'ill_availability_services' %]
+                                <div class="dialog message">No plugins that can show ILL availability results are installed</div>
                             [% ELSE %]
                                 <div class="dialog message">Unknown plugin type <em>[% method | html %]</em></div>
                             [% END %]
