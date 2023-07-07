@@ -7,6 +7,7 @@
 [% USE Price %]
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
+[%- PROCESS 'html_helpers.inc' -%]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Details for subscription #[% subscriptionid | html %] &rsaquo; Serials &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -42,7 +43,7 @@
                 [% INCLUDE 'serials-toolbar.inc' %]
                 [% INCLUDE 'mana/mana-comment-status.inc' %]
 
-                <h1>Subscription for [% bibliotitle | html %] [% bibliosubtitle | html %] [% IF closed %](closed)[% END %]</h1>
+                <h1>Subscription for [% INCLUDE 'biblio-title.inc' biblio=subscription.biblio link = 0 %] [% IF closed %](closed)[% END %]</h1>
 
                 [% IF ( abouttoexpire ) %]
                     [% UNLESS closed %]
@@ -102,7 +103,10 @@
                                             <li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
                                             <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
                                             <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
-                                            <li><span class="label">Biblio:</span>  <a href="[% PROCESS biblio_a_href biblionumber => bibnum %]">[% bibliotitle | html %] [% bibliosubtitle | html %]</a> <em>([% bibnum | html %])</em></li>
+                                            <li>
+                                                <span class="label">Bibliographic record:</span>
+                                                [%- INCLUDE 'biblio-title.inc' biblio=subscription.biblio link = 1 -%] <em>([% subscription.biblionumber | html %])</em>
+                                            </li>
                                             [% IF ( OPACBaseURL ) %]
                                                 <li>
                                                     <span class="label">OPAC view:</span>

@@ -36,8 +36,9 @@ use Koha::SharedContent;
 my $query = CGI->new;
 my $op = $query->param('op') || q{};
 my $issueconfirmed = $query->param('issueconfirmed');
-my $dbh = C4::Context->dbh;
+my $dbh            = C4::Context->dbh;
 my $subscriptionid = $query->param('subscriptionid');
+my $subscription = Koha::Subscriptions->find( $subscriptionid );
 
 if ( $op and $op eq "close" ) {
     C4::Serials::CloseSubscription( $subscriptionid );
@@ -124,13 +125,9 @@ my @irregular_issues = split /;/, $subs->{irregularity};
 my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subs->{periodicity});
 my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subs->{numberpattern});
 
-my $subscription_object = Koha::Subscriptions->find( $subscriptionid );
 $template->param(
     available_additional_fields => Koha::AdditionalFields->search( { tablename => 'subscription' } ),
-    additional_field_values => {
-        map { $_->field->name => $_->value }
-          $subscription_object->additional_field_values->as_list
-    },
+    additional_field_values => { map { $_->field->name => $_->value } $subscription->additional_field_values->as_list },
 );
 
 # FIXME Do we want to hide canceled orders?
@@ -151,6 +148,7 @@ while ( my $o = $orders->next ) {
 }
 
 $template->param(
+    subscription => $subscription,
     subscriptionid => $subscriptionid,
     serialslist => \@serialslist,
     hasRouting  => $hasRouting,
