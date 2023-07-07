@@ -429,7 +429,7 @@
                 [% IF ( circulation ) %]
                     [% INCLUDE 'circ-menu.inc' %]
                 [% ELSE %]
-                    [% IF ( CATALOGUING ) %]
+                    [% IF ( CATALOGUING && object ) %]
                         [% INCLUDE 'biblio-view-menu.inc' %]
                     [% ELSE %]
                         [% INCLUDE 'tools-menu.inc' %]
