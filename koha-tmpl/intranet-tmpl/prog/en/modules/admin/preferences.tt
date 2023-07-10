@@ -139,9 +139,17 @@
                     [% ELSIF ( CHUNK.type_modaljs ) %]
                         <input type="text" name="pref_[% CHUNK.name | html %]" data-initiator="[% CHUNK.initiator | html %]" data-processor="[% CHUNK.processor | html %]" id="pref_[% CHUNK.name | html %]" class="modaljs preference preference-[% CHUNK.type | html %]" readonly="readonly" value="[% CHUNK.value | html %]"/>
                     [% ELSIF ( CHUNK.type_multiple ) %]
-                    <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]" multiple="multiple">
-                        [% FOREACH CHOICE IN CHUNK.CHOICES %][% IF ( CHOICE.selected ) %]<option value="[% CHOICE.value | html %]" selected="selected">[% ELSE %]<option value="[% CHOICE.value | html %]">[% END %][% CHOICE.text | html %]</option>[% END %]
-                    </select>
+                        <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]" multiple="multiple">
+                            [% FOREACH CHOICE IN CHUNK.CHOICES %]
+                                [% IF ( CHOICE.selected ) %]
+                                    <option value="[% CHOICE.value | html %]" selected="selected">
+                                [% ELSE %]
+                                    <option value="[% CHOICE.value | html %]">
+                                [% END %]
+                                    [% CHOICE.text | html %]
+                                </option>
+                            [% END %]
+                        </select>
                     [% ELSIF ( CHUNK.type_textarea )%]
                         [% IF ( CHUNK.syntax == "text/html" && Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
                             <textarea name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] mce" rows="20" cols="60">[% CHUNK.value | html %]</textarea>

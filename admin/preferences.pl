@@ -108,6 +108,11 @@ sub _get_chunk {
             } elsif ( $options{choices} eq 'patron-categories' ) {
                 $options{choices} = { map { $_->categorycode => $_->description } Koha::Patron::Categories->search->as_list };
                 $add_blank = 1;
+            } elsif ( $options{'choices'} eq 'authval' ){
+                if( $options{'source'} ){
+                    $options{'choices'} = { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search( { category => $options{'source'} } )->as_list };
+                    $add_blank = 1;
+                }
             } else {
                 die 'Unrecognized source of preference values: ' . $options{'choices'};
             }

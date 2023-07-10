@@ -1286,10 +1286,14 @@ Circulation:
         -
             - Use the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> authorized value
             - pref: BundleLostValue
+              choices: authval
+              source: LOST
             - to represent 'missing from bundle' at return.
         -
             - Use the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN">NOT_LOAN</a> authorized value
             - pref: BundleNotLoanValue
+              choices: authval
+              source: NOT_LOAN
             - to represent 'added to bundle' when an item is attached to bundle.
 
     Return claims:
@@ -1305,6 +1309,8 @@ Circulation:
         -
             - Use the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> authorized value
             - pref: ClaimReturnedLostValue
+              choices: authval
+              source: LOST
             - to represent 'claims returned'.
         -
             - Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than
