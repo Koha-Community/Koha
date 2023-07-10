@@ -1791,7 +1791,7 @@ sub remove_from_bundle {
 
     my $bundle_host = $self->bundle_host;
 
-    return 0 unless $bundle_host; # Should not we raise an exception here?
+    return 0 unless $bundle_host;    # Should not we raise an exception here?
 
     Koha::Exceptions::Item::Bundle::BundleIsCheckedOut->throw if $bundle_host->checkout;
 
