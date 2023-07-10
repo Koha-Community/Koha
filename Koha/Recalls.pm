@@ -142,8 +142,14 @@ sub add_recall {
         });
         my $due_interval = defined $recall_due_date_interval ? $recall_due_date_interval->rule_value : 5;
         my $timestamp = dt_from_string( $recall->timestamp );
-        my $due_date = $timestamp->add( days => $due_interval );
-        $checkout->update({ date_due => $due_date });
+        my $checkout_timestamp = dt_from_string( $checkout->date_due );
+        my $due_date = $timestamp->set(
+            {
+                hour   => $checkout_timestamp->hour, minute => $checkout_timestamp->minute,
+                second => $checkout_timestamp->second
+            }
+        )->add( days => $due_interval );
+        $checkout->update( { date_due => $due_date } );
 
         # get itemnumber of most relevant checkout if a biblio-level recall
         unless ( $recall->item_level ) { $itemnumber = $checkout->itemnumber; }

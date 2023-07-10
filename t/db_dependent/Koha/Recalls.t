@@ -136,8 +136,14 @@ is( $due_interval, 3, "Recall due date interval is based on circulation rules" )
 });
 is( $recall->item_level, 0, "No item provided so recall not flagged as item-level" );
 
-my $expected_due_date = dt_from_string->add( days => 3 );
-is( t::lib::Dates::compare( $recall->checkout->date_due, $expected_due_date ), 0, "Checkout due date has correctly been extended by recall_due_date_interval days" );
+my $checkout_timestamp = dt_from_string( $recall->checkout->date_due );
+my $expected_due_date  = dt_from_string->set(
+    { hour => $checkout_timestamp->hour, minute => $checkout_timestamp->minute, second => $checkout_timestamp->second }
+)->add( days => 3 );
+is(
+    t::lib::Dates::compare( $recall->checkout->date_due, $expected_due_date ), 0,
+    "Checkout due date has correctly been extended by recall_due_date_interval days"
+);
 is( t::lib::Dates::compare( $due_date, $expected_due_date ), 0, "Due date correctly returned" );
 
 my $messages_count = Koha::Notice::Messages->search({ borrowernumber => $patron3->borrowernumber, letter_code => 'RETURN_RECALLED_ITEM' })->count;
