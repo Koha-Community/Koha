@@ -48,16 +48,19 @@ Return a list of existing ILL statuses
 sub existing_statuses {
     my ( $self, $backend_id ) = @_;
 
-    #FIXME: Currently fetching all requests, it'd be great if we could fetch distinct(status).
-    # Even doing it with distinct status, we need the ILL request object, so that strings_map works and
-    # the ILL request returns the correct status and info respective to its backend.
+    # NOTE: This query fetches all distinct status's found in the database for this backend.
+    # We need the 'status' field for obvious reasons, the 'backend' field is required to not
+    # throw 'Koha::Exceptions::Ill::InvalidBackendId' when we're converting to a Koha object.
+    # Finally, to get around 'ONLY_FULL_GROUP_BY', we have to be explicit about which
+    # 'request_id' we want to return, hense the 'MAX' call.
     my $ill_requests = Koha::Illrequests->search(
-            {backend => $backend_id},
-            # {
-            #     columns => [ qw/status/ ],
-            #     group_by => [ qw/status/ ],
-            # }
-        );
+        { backend => $backend_id },
+        {
+            select   => [ 'status', \'MAX(illrequest_id)', 'backend' ],
+            as       => [qw/ status illrequest_id backend /],
+            group_by => [qw/status backend/],
+        }
+    );
 
     my @data;
     while (my $request = $ill_requests->next) {
@@ -73,10 +76,6 @@ sub existing_statuses {
             }
         }
     }
-
-    # Remove duplicate statuses
-    my %seen;
-    @data =  grep { my $e = $_; my $key = join '___', map { $e->{$_}; } sort keys %$_;!$seen{$key}++ } @data;
 
     return \@data;
 }
