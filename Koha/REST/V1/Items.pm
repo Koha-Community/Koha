@@ -327,8 +327,7 @@ sub add_to_bundle {
                 }
             );
         }
-        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut' )
-        {
+        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut' ) {
             return $c->render(
                 status  => 409,
                 openapi => {
@@ -336,9 +335,7 @@ sub add_to_bundle {
                     error_code => 'bundle_checked_out'
                 }
             );
-        }
-        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut' )
-        {
+        } elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut' ) {
             return $c->render(
                 status  => 409,
                 openapi => {
