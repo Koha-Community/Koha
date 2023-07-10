@@ -4,9 +4,9 @@
 [%- END -%]
 
 [%- IF !biblio -%]
-    No bibliographic record
+    <span class="biblio-no-record">No bibliographic record</span>
 [%- ELSIF !biblio.title -%]
-    No title
+    <span class="biblio-no-title">No title</span>
 [%- ELSE -%]
     <span class="biblio-title">[% biblio.title | html %]</span>
 [%- END -%]
