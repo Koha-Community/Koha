@@ -242,7 +242,7 @@
             <select name="item_group" id="item-group-add-or-create-form-select">
                 <optgroup label="Use existing item group">
                     [% FOREACH ig IN item_groups %]
-                        <option value="[% ig.id | html %]">Use: [% ig.description | html %]</option>
+                        <option value="[% ig.id | html %]">[% ig.description | html %]</option>
                     [% END %]
                 </optgroup>
                 <optgroup label="Other options">
