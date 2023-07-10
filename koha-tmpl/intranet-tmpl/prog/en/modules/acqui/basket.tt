@@ -309,7 +309,7 @@
                                                     <ol>
                                                         <li id="managedby">
                                                             <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
-                                                                <span class="label">Managed by:</span>
+                                                                <span class="label">[% tp('Acquisitions basket managed by user', 'Managed by:') | html %]</span>
                                                                 <div style="display:inline-block">
                                                                     <ul id="users_names" style="padding-left:0">
                                                                         [% FOREACH user IN users %]

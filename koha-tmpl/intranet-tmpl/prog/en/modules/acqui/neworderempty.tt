@@ -287,7 +287,7 @@
             <li><span class="label">Contract number: </span>[% basketcontractno | html %]</li>
             <li><span class="label">Contract name:</span> <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | uri %]">[% basketcontractname | html %]</a></li>
         [% END %]
-        [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname | html %]</li>[% END %]
+        [% IF ( authorisedbyname ) %]<li><span class="label">[% tp('Acquisitions basket managed by user', 'Managed by:') | html %]</span>  [% authorisedbyname | html %]</li>[% END %]
         [% IF ( creationdate ) %]<li><span class="label">Open on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
         [% IF ( closedate ) %]
         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
