@@ -74,6 +74,7 @@ subtest 'Search patrons' => sub {
         { class => 'Koha::Libraries', value => { branchname => $branchname } }
     );
     my $default_patron_search_fields = C4::Context->preference('DefaultPatronSearchFields');
+    my $default_patron_search_method = C4::Context->preference('DefaultPatronSearchMethod');
     my $default_patron_per_page = C4::Context->preference('PatronsPerPage');
     for my $i ( 1 .. 25 ) {
         push @patrons,
@@ -155,6 +156,7 @@ subtest 'Search patrons' => sub {
 
     $s->auth;
     C4::Context->set_preference('DefaultPatronSearchFields',"");
+    C4::Context->set_preference('DefaultPatronSearchMethod',"contains");
     my $PatronsPerPage = 15;
     my $nb_standard_fields = 13;
     C4::Context->set_preference('PatronsPerPage', $PatronsPerPage);
@@ -335,6 +337,7 @@ subtest 'Search patrons' => sub {
     push @cleanup, $patron_category;
     push @cleanup, $attribute_type, $attribute_type_searchable;
     C4::Context->set_preference('DefaultPatronSearchFields',$default_patron_search_fields);
+    C4::Context->set_preference('DefaultPatronSearchMethod',$default_patron_search_method);
     C4::Context->set_preference('PatronsPerPage',$default_patron_per_page);
 
     $driver->quit();
