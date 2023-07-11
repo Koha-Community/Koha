@@ -170,6 +170,15 @@ sub GetRecords {
                             %params
                         )
                     );
+                } elsif ($marcxml_error) {
+                    my $record = MARC::Record->new();
+                    my $marcxml = $record->as_xml_record();
+                    $self->record(
+                        Koha::OAI::Server::Record->new(
+                            $repository, $marcxml, $timestamp, \@setSpecs,
+                            %params
+                        )
+                    );
                 } else {
                     $self->record(
                         Koha::OAI::Server::DeletedRecord->new(

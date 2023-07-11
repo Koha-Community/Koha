@@ -349,7 +349,7 @@
                                             <span>
                                                 <xsl:choose>
                                                     <xsl:when test="text()='INVALID_METADATA'">
-                                                        There was a problem decoding the metadata for this record, invalid characters were stripped. See system logs for details
+                                                        There was a problem decoding the metadata for this record, an attempt was made to ignore invalid characters, the metadata view may be degraded. See system logs for details
                                                     </xsl:when>
                                                     <xsl:otherwise>
                                                         <xsl:value-of select="text()" />
