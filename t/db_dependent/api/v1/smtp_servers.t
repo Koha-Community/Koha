@@ -68,7 +68,7 @@ subtest 'list() tests' => sub {
     my $smtp_server =
       $builder->build_object( { class => 'Koha::SMTP::Servers' } );
 
-    # One city created, should get returned
+    # One smtp server created, should get returned
     $t->get_ok("//$userid:$password@/api/v1/config/smtp_servers")
       ->status_is(200)->json_is( [ $smtp_server->to_api ] );
 
