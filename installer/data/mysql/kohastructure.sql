@@ -1763,6 +1763,7 @@ CREATE TABLE `categories` (
   `BlockExpiredPatronOpacActions` tinyint(1) NOT NULL DEFAULT -1 COMMENT 'wheither or not a patron of this category can renew books or place holds once their card has expired. 0 means they can, 1 means they cannot, -1 means use syspref BlockExpiredPatronOpacActions',
   `default_privacy` enum('default','never','forever') NOT NULL DEFAULT 'default' COMMENT 'Default privacy setting for this patron category',
   `checkprevcheckout` varchar(7) NOT NULL DEFAULT 'inherit' COMMENT 'produce a warning for this patron category if this item has previously been checked out to this patron if ''yes'', not if ''no'', defer to syspref setting if ''inherit''.',
+  `canplaceillopac` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'can this patron category place interlibrary loan requests',
   `can_be_guarantee` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'if patrons of this category can be guarantees',
   `reset_password` tinyint(1) DEFAULT NULL COMMENT 'if patrons of this category can do the password reset flow,',
   `change_password` tinyint(1) DEFAULT NULL COMMENT 'if patrons of this category can change their passwords in the OAPC',
