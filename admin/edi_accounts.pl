@@ -64,7 +64,7 @@ if ( $op eq 'acct_form' ) {
     }
 }
 elsif ( $op eq 'delete_confirm' ) {
-    show_account();
+    show_account($crypt);
     $template->param( delete_confirm => 1 );
 }
 else {
