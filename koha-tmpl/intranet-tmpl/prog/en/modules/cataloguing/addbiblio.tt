@@ -191,6 +191,10 @@
     });
 
     function selectTab( tablink ){
+        /* return if no tabs displayed (fast add framework) */
+        if ($(".toolbar-tabs-container .nav-tabs li").length === 0){
+          return;
+        }
         let a = $("a[href='" + tablink + "']");
         $(".toolbar-tabs-container .nav-tabs li").removeClass("selected");
         a.tab("show").parent().addClass("selected");
