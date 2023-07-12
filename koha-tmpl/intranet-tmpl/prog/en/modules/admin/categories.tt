@@ -384,6 +384,23 @@
                       </div>
                   </li>
                 [% END %]
+                [% IF ( Koha.Preference('ILLModule') ) %]
+                    <li>
+                        <label for="canplaceillopac">Can place ILL in OPAC: </label>
+                        <select id="canplaceillopac" name="canplaceillopac">
+                            [% IF category.canplaceillopac %]
+                                <option value="0">No</option>
+                                <option value="1" selected="selected">Yes</option>
+                            [% ELSE %]
+                                <option value="0" selected="selected">No</option>
+                                <option value="1">Yes</option>
+                            [% END %]
+                        </select>
+                        <div class="hint">
+                            Choose whether patrons of this category can create new interlibrary loan requests.
+                        </div>
+                    </li>
+                [% END %]
                 <li>
                     <label for="default_privacy">Default privacy: </label>
                     <select id="default_privacy" name="default_privacy">
@@ -487,6 +504,13 @@
             </tr>
             [% END %]
             <tr><th scope="row">Can be guarantee:</th><td>[% IF category.can_be_guarantee %]Yes[% ELSE %]No[% END %]</td></tr>
+            [% IF ( Koha.Preference('ILLModule') ) %]
+                <tr>
+                    <th scope="row">Can place ILL in OPAC: </th>
+                    <td>[% IF category.canplaceillopac %]Yes[% ELSE %]No[% END %]</td>
+                </tr>
+            [% END %]
+            <tr><th scope="row">Can be guarantee</th><td>[% IF category.can_be_guarantee %]Yes[% ELSE %]No[% END %]</td></tr>
             <tr>
                 <th scope="row">Default privacy: </th>
                 <td>
@@ -549,6 +573,9 @@
                     <th scope="col">Library limitations</th>
                     [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                     <th scope="col">Check previous checkout?</th>
+                    [% END %]
+                    [% IF ( Koha.Preference('ILLModule') ) %]
+                    <th scope="col">Can place ILL in OPAC?</th>
                     [% END %]
                     <th scope="col">Can be guarantee</th>
                     <th scope="col">Default privacy</th>
@@ -668,6 +695,9 @@
                               <span>Inherit</span>
                               [% END %]
                           </td>
+                        [% END %]
+                         [% IF ( Koha.Preference('ILLModule') ) %]
+                            <td>[% IF category.canplaceillopac %] Yes [% ELSE %] No [% END %]</td>
                         [% END %]
                         <td>[% IF category.can_be_guarantee %] Yes [% ELSE %] No [% END %]</td>
                         <td>

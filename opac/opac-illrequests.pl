@@ -58,6 +58,7 @@ my $reduced  = C4::Context->preference('ILLOpacbackends');
 my $backends = Koha::Illrequest::Config->new->available_backends($reduced);
 my $backends_available = ( scalar @{$backends} > 0 );
 $template->param( backends_available => $backends_available );
+my $patron = Koha::Patrons->find($loggedinuser);
 
 my $op = $params->{'method'} || 'list';
 
@@ -69,6 +70,11 @@ if ( $illrequest_id = $params->{illrequest_id} ) {
         print $query->redirect("/cgi-bin/koha/errors/404.pl");
         exit;
     }
+}
+
+if ( ( $op eq 'create' || $op eq 'cancreq' || $op eq 'update' ) && !$patron->_result->categorycode->canplaceillopac ) {
+    print $query->redirect('/cgi-bin/koha/errors/403.pl');
+    exit;
 }
 
 if ( $op eq 'list' ) {
@@ -140,9 +146,7 @@ if ( $op eq 'list' ) {
             exit;
         }
 
-        $params->{cardnumber} = Koha::Patrons->find({
-            borrowernumber => $loggedinuser
-        })->cardnumber;
+        $params->{cardnumber} = $patron->cardnumber;
         $params->{opac} = 1;
         my $backend_result = $request->backend_create($params);
 
@@ -175,6 +179,7 @@ if ( $op eq 'list' ) {
 }
 
 $template->param(
+    canplaceillopac => $patron->_result->categorycode->canplaceillopac,
     message         => $params->{message},
     illrequestsview => 1,
     method          => $op

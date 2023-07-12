@@ -112,8 +112,9 @@
                             <h1>Interlibrary loan requests</h1>
                             [% INCLUDE messages %]
 
-                            <div id="illrequests-create-button" class="dropdown btn-group">
-                                [% IF backends.size > 1 %]
+                            [% IF canplaceillopac %]
+                                <div id="illrequests-create-button" class="dropdown btn-group">
+                                    [% IF backends.size > 1 %]
                                         <button class="btn btn-primary dropdown-toggle" type="button" id="ill-backend-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             <i class="fa fa-plus" aria-hidden="true"></i> Create a new request <span class="caret"></span>
                                         </button>
@@ -122,12 +123,13 @@
                                                 <a class="dropdown-item" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backend | uri %]">[% backend | html %]</a>
                                             [% END %]
                                         </div>
-                                [% ELSE %]
-                                    <a id="ill-new" class="btn btn-primary" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backends.0 | html %]">
-                                        <i class="fa fa-plus" aria-hidden="true"></i> Create a new request
-                                    </a>
-                                [% END %]
-                            </div>
+                                    [% ELSE %]
+                                        <a id="ill-new" class="btn btn-primary" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backends.0 | html %]">
+                                            <i class="fa fa-plus" aria-hidden="true"></i> Create a new request
+                                        </a>
+                                    [% END %]
+                                </div>
+                            [% END %]
 
                             <table id="illrequestlist" class="table table-bordered table-striped">
                                 <caption class="sr-only">Requests</caption>
@@ -232,6 +234,7 @@
                                         </div>
                                     [% END %]
                                 </div>
+                            [% IF canplaceillopac %]
                                 <fieldset class="action illrequest-actions">
                                     <input type="hidden" name="illrequest_id" value="[% request.illrequest_id | html %]" />
                                     <input type="hidden" name="method" value="update" />
@@ -243,6 +246,7 @@
                                     [% END %]
                                     <span class="cancel"><a href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a></span>
                                 </fieldset>
+                            [% END %]
                             </form>
                         [% ELSIF method == 'availability' %]
                             <h1>Interlibrary loan item availability</h1>
