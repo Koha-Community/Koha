@@ -72,7 +72,7 @@ subtest 'list() tests' => sub {
         }
     );
 
-    # One city created, should get returned
+    # One suggestion created, should get returned
     $t->get_ok("//$userid:$password@/api/v1/suggestions?q={\"suggested_by\":\"$patron_id\"}")
       ->status_is(200)->json_is( [ $suggestion_1->to_api ] );
 
