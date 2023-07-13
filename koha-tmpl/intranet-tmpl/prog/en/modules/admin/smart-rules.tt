@@ -209,7 +209,7 @@
                                                     [% ELSE %]
                                                         0
                                                     [% END %]</td>
-                                                <td>
+                                                <td data-code="[% c %]">
                                                     [% IF c == undef %]
                                                         <em>All</em>
                                                     [% ELSE %]
@@ -221,7 +221,7 @@
                                                     [% ELSE %]
                                                         0
                                                     [% END %]</td>
-                                                <td>
+                                                <td data-code="[% i %]">
                                                     [% IF i == undef %]
                                                         <em>All</em>
                                                     [% ELSE %]
@@ -252,7 +252,7 @@
                                                     [% END %]
                                                 </td>
                                                 <td>[% issuelength | html %]</td>
-                                                <td>
+                                                <td data-code="[% daysmode %]">
                                                     [% SWITCH daysmode %]
                                                     [% CASE 'Calendar' %]<span title="Use the calendar to skip days the library is closed">Skip closed days</span>
                                                     [% CASE 'Datedue' %]<span title="Use the calendar to push the due date to the next open day">Next open day</span>
@@ -261,7 +261,7 @@
                                                     [% CASE %]<span title="Use the system preference 'useDaysMode' as a default value">Default</span>
                                                     [% END %]
                                                 </td>
-                                                <td>
+                                                <td data-code="[% lengthunit %]">
                                                     [% IF ( lengthunit == 'days' ) %]
                                                         <span>Days</span>
                                                     [% ELSIF ( lengthunit == 'hours') %]
@@ -270,7 +270,7 @@
                                                         <span>Undefined</span>
                                                     [% END %]
                                                 </td>
-                                                <td>
+                                                <td data-code="[% hardduedatecompare %]">
                                                   [% IF ( hardduedate ) %]
                                                     [% IF ( hardduedatecompare == '-1' ) %]
                                                       before [% hardduedate | $KohaDates %]
@@ -314,7 +314,7 @@
                                                 [% END %]
                                                 <td>[% renewalperiod | html %]</td>
                                                 <td>[% norenewalbefore | html %]</td>
-                                                <td>
+                                                <td data-code="[%- IF auto_renew -%]yes[%- ELSE -%]no[%- END -%]">
                                                     [% IF auto_renew %]
                                                         <span>Yes</span>
                                                     [% ELSE %]
@@ -344,7 +344,7 @@
                                                         <span>Unlimited</span>
                                                     [% END %]
                                                 </td>
-                                                <td>
+                                                <td data-code="[% onshelfholds %]">
                                                     [% IF onshelfholds == 1 %]
                                                         <span>Yes</span>
                                                     [% ELSIF onshelfholds == 2 %]
@@ -353,7 +353,7 @@
                                                         <span>If any unavailable</span>
                                                     [% END %]
                                                 </td>
-                                                <td>
+                                                <td data-code="[% opacitemholds %]">
                                                     [% IF opacitemholds == 'F'%]
                                                         <span>Force</span>
                                                     [% ELSIF opacitemholds == 'Y'%]
@@ -363,7 +363,7 @@
                                                     [% END %]
                                                 </td>
                                                 [% IF Koha.Preference('ArticleRequests') %]
-                                                <td>
+                                                <td data-code="[% article_requests %]">
                                                     [% IF article_requests == 'no' %]
                                                         <span>No</span>
                                                     [% ELSIF article_requests == 'yes' %]
@@ -379,7 +379,7 @@
                                                 [% IF Koha.Preference('UseRecalls') %]
                                                     <td>[% recalls_allowed | html %]</td>
                                                     <td>[% recalls_per_record | html %]</td>
-                                                    <td>
+                                                    <td data-code="[% on_shelf_recalls %]">
                                                         [% IF on_shelf_recalls == 'all' %]
                                                             <span>If all unavailable</span>
                                                         [% ELSE %]
@@ -1462,8 +1462,9 @@
                 $('#default-circulation-rules td').removeClass('highlighted-row');
                 $(this).parent().parent().find("td").each(function (i) {
                     $(this).addClass('highlighted-row');
-                    itm = $(this).text();
-                    itm = itm.replace(/^\s*|\s*$/g,'');
+                    itm_code = $(this).data('code');
+                    itm_text = $(this).text();
+                    itm_text = itm_text.replace(/^\s*|\s*$/g,'');
                     var current_column = $("#edit_row td:eq("+i+")");
                     if ( i == 3 ) {
                         // specific processing for the Note column
@@ -1476,7 +1477,7 @@
                         if (typeof select_value === 'undefined'){
                             select_value = '-1';
                         }else {
-                            input_value = itm.split(' ')[1];
+                            input_value = itm_text.split(' ')[1];
                         }
                         $(current_column).find("input[type='text']").val(input_value);
                         $(current_column).find("select").val(select_value);
@@ -1486,18 +1487,15 @@
                         $('#cap_fine_to_replacement_price').prop('checked', cap_fine_to_replacement_price.is(':checked') );
                         $('#overduefinescap').prop('disabled', cap_fine_to_replacement_price.is(':checked') );
                     } else {
-                        $(current_column).find("input[type='text']").val(itm);
+                        $(current_column).find("input[type='text']").val(itm_text);
                         // unformat prices
                         $(current_column).find("input[inputmode='decimal']").each(function() {
-                          $(this).val(itm.unformat_price());
+                          $(this).val(itm_text.unformat_price());
                         });
                         // select the corresponding option
                         $(current_column).find("select option").each(function(){
-                            opt = $(this).text().toLowerCase();
-                            opt = opt.replace(/ \(\w*?\)$/,""); //If option is a parent, compare without (All) or the equivalent in other languages
-                            itm = itm.replace(/.*->(.*)/,"$1"); //If item type is part of a group we need to clear the parent description
-                            opt = opt.replace(/^\s*|\s*$/g,'');
-                            if ( opt == itm.toLowerCase() ) {
+                            opt = $(this).attr('value');
+                            if ( opt == itm_code ) {
                                 $(this).attr('selected', 'selected');
                             }
                         });
@@ -1520,7 +1518,7 @@
                             //     - "Holds per record (count)"
                             // The value is "Unlimited" (or an equivalent translated string)
                             // an it should be set to an empty string
-                            if( !((parseFloat(itm) == parseInt(itm)) && !isNaN(itm)) ) {
+                            if( !((parseFloat(itm_text) == parseInt(itm_text)) && !isNaN(itm_text)) ) {
                                 $(current_column).find("input[type='text']").val("");
                             }
                         }
