@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -313,6 +313,36 @@ subtest renew_all => sub {
     # Send empty AD segments (i.e. empty string for patron_pwd)
     my $transaction = $ils->renew_all( $patron->cardnumber, "", undef );
     isnt( $transaction->{screen_msg}, 'Invalid patron password.', "Empty password succeeds" );
+};
+
+subtest renew => sub {
+    plan tests => 2;
+
+    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+
+    my $item = $builder->build_sample_item({
+        library => $library->branchcode,
+    });
+
+    AddIssue( $patron->unblessed, $item->barcode, undef, 0 );
+    my $checkout = $item->checkout;
+    ok( defined($checkout), "Successfully checked out an item prior to renewal");
+
+    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
+
+    my $transaction = $ils->renew( $patron->cardnumber, "", $item->barcode );
+
+    is( $transaction->{renewal_ok}, 1, "Renewal succeeded" );
+
 };
 
 $schema->storage->txn_rollback;
