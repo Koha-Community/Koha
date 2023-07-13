@@ -36,6 +36,26 @@
         $("#loading").hide();
     });
     var Sticky;
+
+    function changeEditor() {
+
+        var breedingid = [% breedingid || "null" | html %];
+
+        if ( !confirm( breedingid ? _("This record cannot be transferred to the advanced editor. Continue?") : _("Any changes will not be saved. Continue?") ) ) return false;
+
+        Cookies.set( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'advanced', { expires: 365, path: '/', sameSite: 'Lax'  } );
+
+        var biblionumber = [% biblionumber || "null" | html %];
+
+        if ( biblionumber ) {
+            window.location = '/cgi-bin/koha/cataloguing/editor.pl#catalog/' + biblionumber;
+        } else {
+            window.location = '/cgi-bin/koha/cataloguing/editor.pl';
+        }
+
+        return false;
+    }
+
     $(document).ready(function() {
 
         [% IF bib_doesnt_exist %]
@@ -151,23 +171,14 @@
             return false;
         });
 
-        $( '#switcheditor' ).click( function() {
-            var breedingid = [% breedingid || "null" | html %];
-
-            if ( !confirm( breedingid ? _("This record cannot be transferred to the advanced editor. Continue?") : _("Any changes will not be saved. Continue?") ) ) return false;
-
-            Cookies.set( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'advanced', { expires: 365, path: '/', sameSite: 'Lax'  } );
-
-            var biblionumber = [% biblionumber || "null" | html %];
-
-            if ( biblionumber ) {
-                window.location = '/cgi-bin/koha/cataloguing/editor.pl#catalog/' + biblionumber;
-            } else {
-                window.location = '/cgi-bin/koha/cataloguing/editor.pl';
-            }
-
-            return false;
+        $( '#toggleEditor' ).change( function() {
+            changeEditor();
         } );
+
+        $( '#switcheditor' ).click( function() {
+            changeEditor();
+        } );
+
         $(".change-framework").on("click", function(){
             var frameworkcode = $(this).data("frameworkcode");
             $("#frameworkcode").val( frameworkcode );

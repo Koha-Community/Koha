@@ -976,6 +976,20 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             });
     }
 
+    function changeEditor() {
+            if ( !confirm( _("Any changes will not be saved. Continue?") ) ) return;
+
+            Cookies.set( "catalogue_editor_[% logged_in_user.borrowernumber | html %]", "basic", { expires: 365, path: '/', sameSite: 'Lax'} );
+
+            if ( state.backend == 'catalog' ) {
+                window.location = '/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=' + state.recordID;
+            } else if ( state.backend == 'new' ) {
+                window.location = '/cgi-bin/koha/cataloguing/addbiblio.pl';
+            } else {
+                humanMsg.displayAlert( _("Cannot open this record in the basic editor"), { className: 'humanError' } );
+            }
+    }
+
     $(".macro_shared").change(function(){
         if(this.checked){
             saveMacro(true);
@@ -987,6 +1001,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     // END Macro functions
 
     $(document).ready( function() {
+
         // Editor setup
         editor = new MARCEditor( {
             onCursorActivity: function() {
@@ -1223,18 +1238,12 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             return false;
         } );
 
+        $( '#toggleEditor' ).change( function() {
+            changeEditor();
+        });
+
         $( '#switch-editor' ).click( function() {
-            if ( !confirm( _("Any changes will not be saved. Continue?") ) ) return;
-
-            Cookies.set( "catalogue_editor_[% logged_in_user.borrowernumber | html %]", "basic", { expires: 365, path: '/', sameSite: 'Lax'} );
-
-            if ( state.backend == 'catalog' ) {
-                window.location = '/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=' + state.recordID;
-            } else if ( state.backend == 'new' ) {
-                window.location = '/cgi-bin/koha/cataloguing/addbiblio.pl';
-            } else {
-                humanMsg.displayAlert( _("Cannot open this record in the basic editor"), { className: 'humanError' } );
-            }
+            changeEditor();
         } );
 
         $( '#show-advanced-search' ).click( function() {

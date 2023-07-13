@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% t("Editor") | html %] &rsaquo;
@@ -41,7 +42,18 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
+[% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
+    <div id="toggle-editor">
+        <label for="toggle-editor">Advanced editor: </label>
+        <label class="switch">
+            <input id="toggleEditor" type="checkbox" checked="checked">
+            <span class="slider"></span>
+        </label>
+    </div>
+[% END %]
+
 <h1 id="title">Cataloging editor</h1>
+
 
 <div id="editor">
     <input id="import-records-input" type="file" style="display: none">
