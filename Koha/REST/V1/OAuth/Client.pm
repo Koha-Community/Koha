@@ -23,7 +23,6 @@ use Mojo::Base 'Mojolicious::Controller';
 use Mojo::URL;
 use Scalar::Util qw(blessed);
 use Try::Tiny;
-use Koha::Logger;
 use Koha::Token;
 use URI::Escape qw(uri_escape_utf8);
 
@@ -46,8 +45,6 @@ sub login {
 
     my $provider  = $c->param('provider_code');
     my $interface = $c->param('interface');
-
-    my $logger = Koha::Logger->get({ interface => 'api' });
 
     my $provider_config = $c->oauth2->providers->{$provider};
 
@@ -132,7 +129,7 @@ sub login {
                 $c->redirect_to($uri);
             } catch {
                 my $error = $_;
-                $logger->error($error);
+                $c->app->log->error($error);
                 # TODO: Review behavior
                 if ( blessed $error ) {
                     if ( $error->isa('Koha::Exceptions::Auth::Unauthorized') ) {
@@ -151,7 +148,7 @@ sub login {
     )->catch(
         sub {
             my $error = shift;
-            $logger->error($error);
+            $c->app->log->error($error);
             $error = uri_escape_utf8($error);
             $c->redirect_to($uri."?auth_error=$error");
         }
