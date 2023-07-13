@@ -109,8 +109,7 @@ sub startup {
         # to catch bad ones.
 
         # JSON::Validator uses confess, so trim call stack from the message.
-        my $logger = Koha::Logger->get({ interface => 'api' });
-        $logger->error("Warning: Could not load REST API spec bundle: " . $_);
+        $self->app->log->error("Warning: Could not load REST API spec bundle: " . $_);
 
         try {
 
@@ -135,7 +134,7 @@ sub startup {
         }
         catch {
             # JSON::Validator uses confess, so trim call stack from the message.
-            $logger->error("Warning: Could not load REST API spec bundle: " . $_);
+            $self->app->log->error("Warning: Could not load REST API spec bundle: " . $_);
         };
     };
 
@@ -148,8 +147,7 @@ sub startup {
             $oauth_configuration->{ $provider->code } = decode_json( $provider->config );
         }
     } catch {
-        my $logger = Koha::Logger->get( { interface => 'api' } );
-        $logger->warn( "Warning: Failed to fetch oauth configuration: " . $_ );
+        $self->app->log->warn( "Warning: Failed to fetch oauth configuration: " . $_ );
     };
 
     $self->plugin( 'Koha::REST::Plugin::Pagination' );
