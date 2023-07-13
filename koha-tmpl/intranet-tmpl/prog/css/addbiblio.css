@@ -43,31 +43,35 @@ ul li.tag::before {
 ul li.tag.sortable_tag::before,
 ul li.tag li.subfield_line::before {
     color: #999;
-    content: "\f0c9";
+    content: "\f58e";
     cursor: move;
     font-family: "Font Awesome 6 Free";
     font-size: .8em;
     left: 10px;
     position: absolute;
-    top: 0;
+    top: -3px;
 }
 
-li.ui-sortable-helper {
+ul li.tag li.subfield_line::before {
+    top: 3px;
+}
+
+li.sortable-ghost {
     background-color: #E0E0E0;
     border-radius: 4px;
     max-height: 150px;
     padding: 2px;
 }
 
-li.ui-sortable-helper ul li {
+li.sortable-ghost ul li {
     display: none !important;
 }
 
-.sortable_subfield .ui-sortable-helper input.flat {
+.sortable_subfield .sortable-ghost input.flat {
     background-color: transparent;
 }
 
-ul li.tag li.subfield_line.ui-sortable-helper::before {
+ul li.tag li.subfield_line.sortable-ghost::before {
     top: 5px;
 }
 
@@ -211,7 +215,7 @@ a.tagnum {
 
 #cat_addbiblio .subfield_loop_mandatory,
 #authoritytabs .subfield_loop_mandatory {
-    padding: .25em .5em;
+    padding: .25em 0;
 }
 
 .indicator {

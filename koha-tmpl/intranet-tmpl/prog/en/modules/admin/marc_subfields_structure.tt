@@ -434,6 +434,7 @@
 
     [% MACRO jsinclude BLOCK %]
         [% INCLUDE 'datatables.inc' %]
+        [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
         [% Asset.js("js/admin-menu.js") | $raw %]
         <script>
             var tagsubfield = "[% tagsubfield | html %]";

@@ -8,6 +8,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Stock rotation &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<style>i.drag_handle{ color: #999; }</style>
 </head>
 
 <body id="tools_stockrotation" class="tools">
@@ -257,7 +258,7 @@
                     [% IF existing_stages.size > 0 %]
                         <div id="manage_stages" class="page-section">
                             <div id="manage_stages_help">
-                                Stages can be re-ordered by using the <i class="drag_handle fa fa-lg fa-bars"></i>handle to drag and drop them to their new position
+                                Stages can be re-ordered by using the <i class="drag_handle fa-solid fa-fw fa-grip-vertical" aria-hidden="true"></i> handle to drag and drop them to their new position
                             </div>
                             <div id="stage_list_headings">
                                 <span class="stagename">Library</span>
@@ -268,7 +269,7 @@
                                     <li id="stage_[% stage.stage_id | html %]">
                                         <span data-toggle="tooltip" title="Drag and drop to move this stage to another position" data-placement="right" class="stagename">
                                             [% IF existing_stages.size > 1 %]
-                                                <i class="drag_handle fa fa-lg fa-bars"></i>
+                                                <i class="drag_handle fa-solid fa-fw fa-grip-vertical" aria-hidden="true"></i>
                                             [% END %]
                                             [% Branches.GetName(stage.branchcode_id) | html %]
                                         </span>
@@ -616,6 +617,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
     [% Asset.js("js/pages/stockrotation.js") | $raw %]
     <script>
         var stock_rotation_items_table_settings = [% TablesSettings.GetTableSettings( 'tools', 'stockrotation', 'stock_rotation_manage_items', 'json' ) | $raw %];

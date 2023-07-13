@@ -22,6 +22,7 @@
     [% END %]
 </script>
 [% INCLUDE 'select2.inc' %]
+[% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
 [% Asset.js("js/cataloging.js") | $raw %]
 
 <script>
@@ -46,8 +47,17 @@
             selectTab( "#tab0XX_panel" );
         }
 
-        $( "ul.sortable_field", "#authoritytabs" ).sortable();
-        $( "ul.sortable_subfield", "#authoritytabs" ).sortable();
+        $("#authoritytabs ul.sortable_field").each( (i, e) => {
+            Sortable.create(e, {
+                animation: 150
+            });
+        });
+
+        $("#authoritytabs ul.sortable_subfield").each( (i, e) => {
+            Sortable.create(e, {
+                animation: 150
+            });
+        });
 
         Sticky = $("#toolbar");
         Sticky.hcSticky({

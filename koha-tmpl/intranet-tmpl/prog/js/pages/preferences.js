@@ -184,11 +184,14 @@ $( document ).ready( function () {
         return false;
     });
 
-    $(".sortable").sortable();
-    $(".sortable").on( "sortchange", function( event, ui ) {
-        // This is not exact but we just need to trigger a change
-        $(ui.item.find('input:first')).change();
-    } );
+    $(".sortable").each( (i, e) => {
+        Sortable.create(e, {
+            animation: 150,
+            onUpdate: function( e ){
+                $(e.target).find('input:first').change();
+            }
+        });
+    });
 
     $( '.prefs-tab .action .cancel' ).click( function () { KOHA.Preferences.Modified = false } );
 

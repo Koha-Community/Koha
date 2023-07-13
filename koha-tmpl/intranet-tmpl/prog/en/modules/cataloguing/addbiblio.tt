@@ -16,6 +16,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
+[% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
 [% INCLUDE 'select2.inc' %]
 <script>
     [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]
@@ -57,13 +58,16 @@
             selectTab( "#tab0XX_panel" );
         }
 
-        $( "ul.sortable_field", "#addbibliotabs" ).sortable({
-            axis: "y",
-            containment: $("#addbibliotabs")
+        $("#addbibliotabs ul.sortable_field").each( (i, e) => {
+            Sortable.create(e, {
+                animation: 150
+            });
         });
-        $( "ul.sortable_subfield", "#addbibliotabs" ).sortable({
-            axis: "y",
-            containment: "parent"
+
+        $("#addbibliotabs ul.sortable_subfield").each( (i, e) => {
+            Sortable.create(e, {
+                animation: 150
+            });
         });
 
         [% IF tab %]

@@ -153,7 +153,7 @@
                         <ul class="sortable">
                             [% FOREACH language IN CHUNK.languages %]
                                 [% IF ( language.plural ) %]
-                                    <li>
+                                    <li><i class="fa-solid fa-fw fa-grip-vertical" aria-hidden="true" style="color:#B7B7B7"></i>
                                         [% IF ( language.native_description ) %]
                                             [% language.native_description | html %]
                                         [% ELSE %]
@@ -175,7 +175,7 @@
                                         [% END %]
                                     </li>
                                 [% ELSE %]
-                                    <li>
+                                    <li><i class="fa-solid fa-fw fa-grip-vertical" aria-hidden="true" style="color:#B7B7B7"></i>
                                         <label for="pref_[% CHUNK.name | html %]_[% language.rfc4646_subtag | html %]">[% language.native_description | html %] ([% language.rfc4646_subtag | html %])</label>
                                         [% IF ( language.group_enabled ) %]
                                             <input value="[% language.rfc4646_subtag | html %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]_[% language.rfc4646_subtag | html %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
@@ -261,6 +261,7 @@
     [% Asset.js( "lib/codemirror/javascript-lint.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/css-lint.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/yaml-lint.min.js" ) | $raw %]
+    [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
 
     <script>
         var Sticky;
@@ -289,6 +290,7 @@
         var to_highlight = "[% To.json( searchfield ) | html %]";
         var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
         var db_columns = [% To.json( db_columns ) | $raw %];
+
     </script>
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/ajax.js") | $raw %]
