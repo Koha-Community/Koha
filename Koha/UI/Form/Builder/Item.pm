@@ -16,6 +16,7 @@ package Koha::UI::Form::Builder::Item;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use List::Util qw( any );
 use MARC::Record;
 use C4::Context;
 use C4::Biblio qw( GetFrameworkCode GetMarcStructure IsMarcStructureInternal );
@@ -224,7 +225,12 @@ sub generate_subfield_form {
                 my $itype_sth = $dbh->prepare(
                     "SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
                 $itype_sth->execute($biblionumber);
-                ($value) = $itype_sth->fetchrow_array;
+                my ($biblio_itemtype) = $itype_sth->fetchrow_array;
+
+                # Use biblioitems.itemtype as a default value only if it's a valid itemtype
+                if ( any { $_ eq $biblio_itemtype } @authorised_values ) {
+                    $value = $biblio_itemtype;
+                }
             }
 
             #---- class_sources
