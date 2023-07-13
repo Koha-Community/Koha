@@ -99,6 +99,7 @@ my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
 # filter informations which are not suggestion related.
 my $suggestion_ref  = { %{$input->Vars} }; # Copying, otherwise $input will be modified
+delete $suggestion_ref->{csrf_token};
 
 # get only the columns of Suggestion
 my $schema = Koha::Database->new()->schema;
