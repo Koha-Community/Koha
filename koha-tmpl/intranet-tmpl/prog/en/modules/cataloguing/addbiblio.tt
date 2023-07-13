@@ -848,6 +848,16 @@ $(document).ready(function(){
                     </div>
                 [% END %]
 
+                [% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
+                    <div id="toggle-editor">
+                        <label for="toggle-editor">Advanced editor: </label>
+                        <label class="switch">
+                            <input id="toggleEditor" type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                [% END %]
+
                 <div id="check_errors"></div>
 
                 <h1>
