@@ -15,9 +15,9 @@
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | html %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />
 
 [% IF ( bidi ) %]
-    [% Asset.css("lib/jquery/jquery-ui-rtl-1.13.1.min.css") | $raw %]
+    [% Asset.css("lib/jquery/jquery-ui-rtl-1.13.2.min.css") | $raw %]
 [% ELSE %]
-    [% Asset.css("lib/jquery/jquery-ui-1.13.1.min.css") | $raw %]
+    [% Asset.css("lib/jquery/jquery-ui-1.13.2.min.css") | $raw %]
 [% END %]
 [% Asset.css("lib/bootstrap/bootstrap.min.css") | $raw %]
 [% Asset.css("lib/bootstrap/bootstrap-theme.min.css") | $raw %]
