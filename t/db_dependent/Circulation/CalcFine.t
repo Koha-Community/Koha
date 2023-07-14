@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 use Test::Warn;
 
 use C4::Context;
@@ -77,6 +77,84 @@ subtest 'Test basic functionality' => sub {
                 firstremind                   => 0,
                 chargeperiod                  => 1,
                 overduefinescap               => undef,
+                cap_fine_to_replacement_price => 0,
+            }
+        },
+    );
+
+    my $start_dt = DateTime->new(
+        year       => 2000,
+        month      => 1,
+        day        => 1,
+    );
+
+    my $end_dt = DateTime->new(
+        year       => 2000,
+        month      => 1,
+        day        => 30,
+    );
+
+    my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+
+    is( $amount, 29, 'Amount is calculated correctly' );
+
+    teardown();
+};
+
+subtest 'Overdue fines cap should be disabled when value is 0' => sub {
+    plan tests => 1;
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                fine                          => '1.00',
+                lengthunit                    => 'days',
+                finedays                      => 0,
+                firstremind                   => 0,
+                chargeperiod                  => 1,
+                overduefinescap               => "0",
+                cap_fine_to_replacement_price => 0,
+            }
+        },
+    );
+
+    my $start_dt = DateTime->new(
+        year       => 2000,
+        month      => 1,
+        day        => 1,
+    );
+
+    my $end_dt = DateTime->new(
+        year       => 2000,
+        month      => 1,
+        day        => 30,
+    );
+
+    my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+
+    is( $amount, 29, 'Amount is calculated correctly' );
+
+    teardown();
+};
+
+subtest 'Overdue fines cap should be disabled when value is 0.00' => sub {
+    plan tests => 1;
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                fine                          => '1.00',
+                lengthunit                    => 'days',
+                finedays                      => 0,
+                firstremind                   => 0,
+                chargeperiod                  => 1,
+                overduefinescap               => "0.00",
                 cap_fine_to_replacement_price => 0,
             }
         },
