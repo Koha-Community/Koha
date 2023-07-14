@@ -58,6 +58,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
+    [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/place_booking_modal.js") | $raw %]
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
@@ -231,14 +232,10 @@
                 "searchable": true,
                 "orderable": true,
                 "render": function(data, type, row, meta) {
-                    var fullname;
-                    if ( row.patron.firstname == null ) {
-                        fullname = row.patron.surname;
-                    }
-                    else {
-                        fullname = row.patron.firstname + " " + row.patron.surname;
-                    }
-                    return escape_str(fullname);
+                    return $patron_to_html(row.patron, {
+                        display_cardnumber: false,
+                        url: true
+                    });
                 }
             },
             {
