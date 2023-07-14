@@ -386,6 +386,16 @@
         description: Availability
         schema:
           type: "object"
+          properties:
+            blockers:
+              type: object
+            confirms:
+              type: object
+            warnings:
+              type: object
+            confirmation_token:
+              type: string
+          additionalProperties: false
       "403":
         description: Access forbidden
         schema:
