@@ -72,9 +72,9 @@ BEGIN {
     @ISA = qw(Exporter);
 
     @EXPORT_OK = qw(
-      checkauth check_api_auth get_session check_cookie_auth checkpw checkpw_internal checkpw_hash
-      get_all_subpermissions get_user_subpermissions track_login_daily in_iprange
-      get_template_and_user haspermission create_basic_session
+        checkauth check_api_auth get_session check_cookie_auth checkpw checkpw_internal checkpw_hash
+        get_all_subpermissions get_cataloguing_page_permissions get_user_subpermissions track_login_daily in_iprange
+        get_template_and_user haspermission create_basic_session
     );
 
     $ldap      = C4::Context->config('useldapserver') || 0;
@@ -471,7 +471,9 @@ sub get_template_and_user {
         minPasswordLength  => $minPasswordLength,
     );
     if ( $in->{'type'} eq "intranet" ) {
+
         $template->param(
+            can_see_cataloguing_module => haspermission( $user, get_cataloguing_page_permissions() ) ? 1 : 0,
             AmazonCoverImages                                                          => C4::Context->preference("AmazonCoverImages"),
             AutoLocation                                                               => C4::Context->preference("AutoLocation"),
             PatronAutoComplete                                                         => C4::Context->preference("PatronAutoComplete"),
@@ -2182,6 +2184,38 @@ sub get_all_subpermissions {
         $all_perms->{ $perm->{'flag'} }->{ $perm->{'code'} } = 1;
     }
     return $all_perms;
+}
+
+=head2 get_cataloguing_page_permissions
+
+    my $required_permissions = get_cataloguing_page_permissions();
+
+Returns the required permissions to access the main cataloguing page. Useful for building
+the global I<can_see_cataloguing_module> template variable, and also for reusing in
+I<cataloging-home.pl>.
+
+=cut
+
+sub get_cataloguing_page_permissions {
+
+    my @cataloguing_tools_subperms = qw(
+        inventory
+        items_batchdel
+        items_batchmod
+        items_batchmod
+        label_creator
+        manage_staged_marc
+        marc_modification_templates
+        records_batchdel
+        records_batchmod
+        stage_marc_import
+        upload_cover_images
+    );
+
+    return [
+        { editcatalogue => '*' }, { tools => \@cataloguing_tools_subperms },
+        C4::Context->preference('StockRotation') ? { stockrotation => 'manage_rotas' } : ()
+    ];
 }
 
 =head2 haspermission
