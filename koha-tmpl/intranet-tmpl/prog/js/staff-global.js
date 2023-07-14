@@ -110,6 +110,9 @@ $(document).ready(function() {
     $(".validated").each(function() {
         $(this).validate();
     });
+    jQuery.validator.addClassRules("decimal", {
+        number: true
+    });
 
     $("#logout").on("click",function(){
         logOut();
