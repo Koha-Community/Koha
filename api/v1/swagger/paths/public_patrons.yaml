@@ -103,11 +103,18 @@
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "405":
-        description: Method not allowed
+        description: |
+          Method not allowed. Possible `error_code` attribute values:
+
+          * `FEATURE_DISABLED`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "409":
-        description: Conflict in creating checkout
+        description: |
+          Conflict in creating checkout. Possible `error_code` attribute values:
+
+          * `ITEM_NOT_FOUND`
+          * `PATRON_NOT_FOUND`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "412":
