@@ -264,8 +264,7 @@ subtest 'get_availability' => sub {
         }
     );
     my $unauth_password = 'thePassword000';
-    $patron->set_password(
-        { password => $unauth_password, skip_validattion => 1 } );
+    $patron->set_password( { password => $unauth_password, skip_validattion => 1 } );
     my $unauth_userid = $patron->userid;
     my $patron_id     = $patron->borrowernumber;
 
@@ -278,7 +277,7 @@ subtest 'get_availability' => sub {
     my %needsconfirmation = ();
     my %alerts            = ();
     my %messages          = ();
-    my $mocked_circ = Test::MockModule->new('C4::Circulation');
+    my $mocked_circ       = Test::MockModule->new('C4::Circulation');
     $mocked_circ->mock(
         'CanBookBeIssued',
         sub {
@@ -287,60 +286,48 @@ subtest 'get_availability' => sub {
     );
 
     $t->get_ok(
-"//$unauth_userid:$unauth_password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-    )->status_is(403)->json_is(
+        "//$unauth_userid:$unauth_password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
+        ->status_is(403)->json_is(
         {
-            error => "Authorization failure. Missing required permission(s).",
-            required_permissions =>
-              { circulate => "circulate_remaining_permissions" }
+            error                => "Authorization failure. Missing required permission(s).",
+            required_permissions => { circulate => "circulate_remaining_permissions" }
         }
-    );
+        );
 
     # Available
-    $t->get_ok(
-"//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-    )->status_is(200)->json_is( '/blockers' => {} )
-      ->json_is( '/confirms'           => {} )->json_is( '/warnings' => {} )
-      ->json_has( '/confirmation_token');
+    $t->get_ok("//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
+        ->status_is(200)->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+        ->json_has('/confirmation_token');
 
     # Blocked
     %issuingimpossible = ( GNA => 1 );
-    $t->get_ok(
-"//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-    )->status_is(200)->json_is( '/blockers' => { GNA => 1 } )
-      ->json_is( '/confirms'           => {} )->json_is( '/warnings' => {} )
-      ->json_has( '/confirmation_token');
+    $t->get_ok("//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
+        ->status_is(200)->json_is( '/blockers' => { GNA => 1 } )->json_is( '/confirms' => {} )
+        ->json_is( '/warnings' => {} )->json_has('/confirmation_token');
     %issuingimpossible = ();
 
     # Warnings/Info
     %alerts   = ( alert1   => "this is an alert" );
     %messages = ( message1 => "this is a message" );
-    $t->get_ok(
-"//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-    )->status_is(200)->json_is( '/blockers' => {} )
-      ->json_is( '/confirms' => {} )
-      ->json_is( '/warnings' =>
-          { alert1 => "this is an alert", message1 => "this is a message" } )
-      ->json_has( '/confirmation_token');
+    $t->get_ok("//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
+        ->status_is(200)->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )
+        ->json_is( '/warnings' => { alert1 => "this is an alert", message1 => "this is a message" } )
+        ->json_has('/confirmation_token');
     %alerts   = ();
     %messages = ();
 
     # Needs confirm
     %needsconfirmation = ( confirm1 => 1, confirm2 => 'please' );
-    my $token = Koha::Token->new->generate_jwt( { id => $librarian->id . ":" . $item1_id . ":confirm1:confirm2" });
-    $t->get_ok(
-"//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-    )->status_is(200)->json_is( '/blockers' => {} )
-      ->json_is( '/confirms' => { confirm1 => 1, confirm2 => 'please' } )
-      ->json_is( '/warnings' => {} )
-      ->json_has( '/confirmation_token');
+    my $token = Koha::Token->new->generate_jwt( { id => $librarian->id . ":" . $item1_id . ":confirm1:confirm2" } );
+    $t->get_ok("//$userid:$password@/api/v1/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
+        ->status_is(200)->json_is( '/blockers' => {} )
+        ->json_is( '/confirms' => { confirm1 => 1, confirm2 => 'please' } )->json_is( '/warnings' => {} )
+        ->json_has('/confirmation_token');
     my $confirmation_token = $t->tx->res->json('/confirmation_token');
     ok(
         Koha::Token->new->check_jwt(
             {
-                id => $librarian->id . ":"
-                  . $item1_id
-                  . ":confirm1:confirm2",
+                id    => $librarian->id . ":" . $item1_id . ":confirm1:confirm2",
                 token => $confirmation_token
             }
         ),
@@ -352,20 +339,15 @@ subtest 'get_availability' => sub {
         plan tests => 18;
 
         # Available, Not authentication required
-        $t->get_ok(
-"/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-        )->status_is(200)->json_is( '/blockers' => {} )
-          ->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
-          ->json_has('/confirmation_token');
+        $t->get_ok("/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")->status_is(200)
+            ->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+            ->json_has('/confirmation_token');
 
         # Needs confirmation upgrade to blocker
         %needsconfirmation = ( TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 );
-        $t->get_ok(
-"/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-        )->status_is(200)
-          ->json_is( '/blockers' => { TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 } )
-          ->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
-          ->json_has('/confirmation_token');
+        $t->get_ok("/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")->status_is(200)
+            ->json_is( '/blockers' => { TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 } )->json_is( '/confirms' => {} )
+            ->json_is( '/warnings' => {} )->json_has('/confirmation_token');
         %needsconfirmation = ();
 
         # Remove personal information from public endpoint
@@ -412,11 +394,9 @@ subtest 'get_availability' => sub {
             ressurname            => 'private',
             item_notforloan       => 'private'
         );
-        $t->get_ok(
-"/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-        )->status_is(200)->json_is( '/blockers' => {} )
-          ->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
-          ->json_has('/confirmation_token');
+        $t->get_ok("/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")->status_is(200)
+            ->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+            ->json_has('/confirmation_token');
         %issuingimpossible = ();
         %alerts            = ();
         %needsconfirmation = ();
@@ -447,8 +427,7 @@ subtest 'add checkout' => sub {
         }
     );
     my $unauth_password = 'thePassword000';
-    $patron->set_password(
-        { password => $unauth_password, skip_validattion => 1 } );
+    $patron->set_password( { password => $unauth_password, skip_validattion => 1 } );
     my $unauth_userid = $patron->userid;
     my $patron_id     = $patron->borrowernumber;
 
@@ -461,7 +440,7 @@ subtest 'add checkout' => sub {
     my %needsconfirmation = ();
     my %alerts            = ();
     my %messages          = ();
-    my $mocked_circ = Test::MockModule->new('C4::Circulation');
+    my $mocked_circ       = Test::MockModule->new('C4::Circulation');
     $mocked_circ->mock(
         'CanBookBeIssued',
         sub {
@@ -469,95 +448,69 @@ subtest 'add checkout' => sub {
         }
     );
 
-    $t->post_ok(
-        "//$unauth_userid:$unauth_password@/api/v1/checkouts" => json =>
-          { item_id => $item1_id, patron_id => $patron_id } )->status_is(403)
-      ->json_is(
+    $t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts" => json =>
+            { item_id => $item1_id, patron_id => $patron_id } )->status_is(403)->json_is(
         {
-            error => "Authorization failure. Missing required permission(s).",
-            required_permissions =>
-              { circulate => "circulate_remaining_permissions" }
+            error                => "Authorization failure. Missing required permission(s).",
+            required_permissions => { circulate => "circulate_remaining_permissions" }
         }
-      );
+            );
 
-    $t->post_ok( "//$userid:$password@/api/v1/checkouts" => json =>
-          { item_id => $item1_id, patron_id => $patron_id } )->status_is(201);
+    $t->post_ok( "//$userid:$password@/api/v1/checkouts" => json => { item_id => $item1_id, patron_id => $patron_id } )
+        ->status_is(201);
 
     # Needs confirm
     %needsconfirmation = ( confirm1 => 1, confirm2 => 'please' );
     $t->post_ok(
         "//$userid:$password@/api/v1/checkouts" => json => {
-            item_id            => $item1_id,
-            patron_id          => $patron_id,
+            item_id   => $item1_id,
+            patron_id => $patron_id,
         }
     )->status_is(412);
 
-    my $token = Koha::Token->new->generate_jwt(
-        {
-                id => $librarian->id . ":"
-              . $item1_id
-              . ":confirm1:confirm2"
-        }
-    );
+    my $token = Koha::Token->new->generate_jwt( { id => $librarian->id . ":" . $item1_id . ":confirm1:confirm2" } );
     $t->post_ok(
         "//$userid:$password@/api/v1/checkouts?confirmation=$token" => json => {
-            item_id            => $item1_id,
-            patron_id          => $patron_id
+            item_id   => $item1_id,
+            patron_id => $patron_id
         }
-    )->status_is(201)->or(sub { diag $t->tx->res->body });
+    )->status_is(201)->or( sub { diag $t->tx->res->body } );
     %needsconfirmation = ();
 
     subtest 'public add' => sub {
         plan tests => 14;
 
         my $useridp = $patron->userid;
-        $patron->set_password(
-            { password => $password, skip_validation => 1 } );
+        $patron->set_password( { password => $password, skip_validation => 1 } );
 
         # Feature disabled
         t::lib::Mocks::mock_preference( 'OpacTrustedCheckout', 0 );
 
-        $t->post_ok( "/api/v1/public/patrons/$patron_id/checkouts" => json =>
-              { item_id => $item1_id, patron_id => $patron_id } )
-          ->status_is(401)->json_is(
-            {
-                error => "Authentication failure."
-            }
-          );
-
         $t->post_ok(
-            "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts"
-              => json => { item_id => $item1_id, patron_id => $patron_id } )
-          ->status_is(405)
-          ->json_is(
-            { error => "Feature disabled", error_code => "FEATURE_DISABLED" } );
+            "/api/v1/public/patrons/$patron_id/checkouts" => json => { item_id => $item1_id, patron_id => $patron_id } )
+            ->status_is(401)->json_is( { error => "Authentication failure." } );
+
+        $t->post_ok( "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
+                { item_id => $item1_id, patron_id => $patron_id } )->status_is(405)
+            ->json_is( { error => "Feature disabled", error_code => "FEATURE_DISABLED" } );
 
         # Feature enabled
         t::lib::Mocks::mock_preference( 'OpacTrustedCheckout', 1 );
 
-        $t->post_ok( "/api/v1/public/patrons/$patron_id/checkouts" => json =>
-              { item_id => $item1_id, patron_id => $patron_id } )
-          ->status_is(401)->json_is(
-            {
-                error => "Authentication failure."
-            }
-          );
-
         $t->post_ok(
-            "//$userid:$password@/api/v1/public/patrons/$patron_id/checkouts"
-              => json => { item_id => $item1_id, patron_id => $patron_id } )
-          ->status_is(403)->json_is(
+            "/api/v1/public/patrons/$patron_id/checkouts" => json => { item_id => $item1_id, patron_id => $patron_id } )
+            ->status_is(401)->json_is( { error => "Authentication failure." } );
+
+        $t->post_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
+                { item_id => $item1_id, patron_id => $patron_id } )->status_is(403)->json_is(
             {
-                error =>
-                  "Authorization failure. Missing required permission(s).",
+                error                => "Authorization failure. Missing required permission(s).",
                 required_permissions => undef
             }
-          );
+                );
 
-        $t->post_ok(
-            "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts"
-              => json => { item_id => $item1_id, patron_id => $patron_id } )
-          ->status_is(201);
+        $t->post_ok( "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
+                { item_id => $item1_id, patron_id => $patron_id } )->status_is(201);
     };
 
     $schema->storage->txn_rollback;

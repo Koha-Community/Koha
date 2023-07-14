@@ -9,8 +9,8 @@ return {
         $dbh->do(
             q{
                 INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
-	            ('OpacTrustedCheckout', '0', NULL, 'Allow logged in OPAC users to check out to themselves', 'YesNo')
-	        }
+                ('OpacTrustedCheckout', '0', NULL, 'Allow logged in OPAC users to check out to themselves', 'YesNo')
+            }
         );
     },
 };
