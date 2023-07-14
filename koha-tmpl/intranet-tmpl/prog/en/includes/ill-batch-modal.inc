@@ -73,6 +73,9 @@
                                 <th scope="col">Metadata</th>
                                 <th scope="col">Request ID</th>
                                 <th scope="col">Request status</th>
+                                [% IF Koha.Preference('ILLCheckAvailability') %]
+                                <th scope="col">Availability</th>
+                                [% END %]
                                 <th scope="col"></th>
                             </tr>
                         </thead>

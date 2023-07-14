@@ -913,6 +913,7 @@
     [% INCLUDE 'select2.inc' %]
     [% IF metadata_enrichment_services %]
     <script>
+        var ill_check_availability_syspref = '[% Koha.Preference('ILLCheckAvailability') | html %]';
         var metadata_enrichment_services = [% metadata_enrichment_services | $raw %];
     </script>
     <script>
