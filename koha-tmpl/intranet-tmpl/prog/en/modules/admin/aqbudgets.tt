@@ -449,7 +449,6 @@
 
 [% IF op == 'list' %]
   <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
-    <a href="#" id="filterbutton">Filters</a>
     <fieldset class="brief" id="fundfilters">
     <h4>Fund filters</h4>
         <ol>
@@ -459,15 +458,6 @@
                 <option value=""></option>
                 [% PROCESS options_for_libraries libraries => Branches.all( selected => selected_branchcode, unfiltered => 1 ) %]
             </select>
-        </li>
-        <li class="radio">
-
-        <label for="show_mine">Show my funds only:</label>
-            [% IF ( show_mine ) %]
-                <input type="checkbox" id="show_mine"  name="show_mine" value="1" checked="checked" />
-            [% ELSE %]
-                <input type="checkbox" id="show_mine"  name="show_mine" value="1" />
-        [% END %]
         </li>
 
         [% IF periods %]
@@ -485,8 +475,18 @@
             </select>
           </li>
         [% END %]
-        </ol>
+        <li class="radio">
 
+        <label for="show_mine">Show my funds only:</label>
+            [% IF ( show_mine ) %]
+                <input type="checkbox" id="show_mine"  name="show_mine" value="1" checked="checked" />
+            [% ELSE %]
+                <input type="checkbox" id="show_mine"  name="show_mine" value="1" />
+        [% END %]
+        </li>
+        </ol>
+    </fieldset>
+    <fieldset class="action">
         <input type="hidden" name="op" value="list" />
         <input type="submit" class="submit" name="filter" value="Go" />
     </fieldset>
@@ -732,10 +732,6 @@
                     [% END %]
                     oTable.fnAddFilters("filter", 750);
                 [% END %]
-
-                $("#filterbutton").click(function() {
-                    $("#fundfilters").slideToggle(0);
-                });
 
                 $(".deletefund-disabled").tooltip().on("click", function(e){
                     e.preventDefault();
