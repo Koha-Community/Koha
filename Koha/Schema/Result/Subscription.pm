@@ -334,6 +334,13 @@ date of last renewal for the subscription
 
 collection code to assign to serial items
 
+=head2 published_on_template
+
+  data_type: 'text'
+  is_nullable: 1
+
+Template Toolkit syntax to generate the default "Published on (text)" field when receiving an issue this serial
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -425,6 +432,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "ccode",
   { data_type => "varchar", is_nullable => 1, size => 80 },
+  "published_on_template",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -557,8 +566,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2022-07-05 17:45:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MFOz3AKUVSPuQv6kMb1EbA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-14 11:46:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LICIiWzag365cUAq5OYD2A
 
 __PACKAGE__->has_many(
   "additional_field_values",
