@@ -907,19 +907,20 @@ sub AUTOLOAD {
 
     my @columns = @{$self->_columns()};
     if ( grep { $_ eq $method } @columns ) {
+
         # Lazy definition of get/set accessors like $item->barcode; note that it contains $method
         my $accessor = sub {
             my $self = shift;
-            if ( @_ ) {
-                $self->_result()->set_column( $method, @_);
+            if (@_) {
+                $self->_result()->set_column( $method, @_ );
                 return $self;
             } else {
-                return $self->_result()->get_column( $method );
+                return $self->_result()->get_column($method);
             }
         };
         no strict 'refs';
         *{$AUTOLOAD} = $accessor;
-        return $accessor->($self, @_);
+        return $accessor->( $self, @_ );
     }
 
     my @known_methods = qw( is_changed id in_storage get_column discard_changes make_column_dirty );
