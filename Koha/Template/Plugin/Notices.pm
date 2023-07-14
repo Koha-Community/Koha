@@ -26,6 +26,39 @@ use C4::Koha;
 use C4::Context;
 use Koha::Notice::Templates;
 
+=head1 NAME
+
+Koha::Template::Plugin::Notices
+
+=head1 DESCRIPTION
+
+The Asset plugin is a helper that gets notice template objects
+accepting an optional module parameter
+
+=head1 SYNOPSIS
+
+    [% USE Notices %]
+
+    [% SET notices = Notices.GetTemplates( 'patron_slip' ) %]
+    [% FOREACH notice IN notices %]
+    ...
+    [% END %]
+
+=cut
+
+=head1 API
+
+=head2 Class Methods
+
+=cut
+
+=head3 GetTemplates
+
+This routine searches the Koha::Notice::Template objects with passed module
+parameter
+
+=cut
+
 sub GetTemplates {
     my ( $self, $module ) = @_;
     my $params = {};
