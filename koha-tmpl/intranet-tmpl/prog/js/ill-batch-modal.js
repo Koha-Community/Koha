@@ -86,7 +86,6 @@
                 updateTable();
                 updateRowCount();
                 updateProcessTotals();
-                checkAvailability();
             }
         }
     );
@@ -235,53 +234,28 @@
         });
     };
 
-    // Identify items that can have their availability checked, and do it
-    function checkAvailability() {
-        // Only proceed if we've got services that can check availability
-        if (!batch_availability_services || batch_availability_services.length === 0) return;
-        var toCheck = tableContent.data;
-        toCheck.forEach(function (row) {
-            if (
-                !row.url &&
-                Object.keys(row.metadata).length > 0 &&
-                !availabilitySent[row.value]
-            ) {
-                availabilitySent[row.value] = 1;
-                getAvailability(row.value, row.metadata);
-            }
-        });
-    };
+    async function populateAvailability(row) {
+        let metadata = row.metadata;
 
-    // Check availability services for immediate availability, if found,
-    // create a link in the table linking to the item
-    function getAvailability(identifier, metadata) {
-        // Prep the metadata for passing to the availability plugins
         let availability_object = {};
         if (metadata.issn) availability_object['issn'] = metadata.issn;
         if (metadata.doi) availability_object['doi'] = metadata.doi;
         if (metadata.pubmedid) availability_object['pubmedid'] = metadata.pubmedid;
-        var prepped = encodeURIComponent(base64EncodeUnicode(JSON.stringify(availability_object)));
-        for (i = 0; i < batch_availability_services.length; i++) {
-            var service = batch_availability_services[i];
-            window.doApiRequest(
-                service.endpoint + prepped
-            )
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (data) {
-                    if (data.results.search_results && data.results.search_results.length > 0) {
-                        var result = data.results.search_results[0];
-                        tableContent.data = tableContent.data.map(function (row) {
-                            if (row.value === identifier) {
-                                row.url = result.url;
-                                row.availabilitySupplier = service.name;
-                            }
-                            return row;
-                        });
-                    }
-                });
-        }
+
+        // Check each service and use the first results we get, if any
+            var av_hits = [];
+        for (const service of batch_availability_services){
+            var prepped = encodeURIComponent(base64EncodeUnicode(JSON.stringify(availability_object)));
+
+            var endpoint = service.endpoint + prepped;
+            var availability = await getAvailability(endpoint);
+            if (availability.results.search_results && availability.results.search_results.length > 0) {
+                av_hits.push({name: service.name, url: availability.results.search_results[0].url});
+            }else{
+                av_hits.push({ name: service.name, empty:1 });
+            }
+        };
+        return av_hits;
     };
 
     // Help btoa with > 8 bit strings
@@ -691,6 +665,7 @@
             } else if (alreadyInDeduped.length === 0) {
                 row.metadata = {};
                 row.failed = {};
+                row.availability_hits = {};
                 row.requestId = null;
                 deduped.push(row);
             }
@@ -741,6 +716,16 @@
             } catch (e) {
                 row.failed = ill_populate_failed;
             }
+
+            if (ill_check_availability_syspref == 1){
+                try {
+                    var availability = await populateAvailability(row);
+                    row.availability_hits = availability || {};
+                } catch (e) {
+                    //do nothing
+                }
+            }
+
             newData[i] = row;
             tableContent.data = newData;
         }
@@ -774,6 +759,11 @@
                 return parsed;
             }
         }
+    };
+
+    async function getAvailability(endpoint) {
+        var response = await debounce(doApiRequest)(endpoint);
+        return response.json();
     };
 
     async function getMetadata(endpoint) {
@@ -826,15 +816,7 @@
         label.innerText = ill_batch_metadata[prop] + ': ';
 
         // Add a link to the availability URL if appropriate
-        var value;
-        if (!data.url) {
-            value = document.createElement('span');
-        } else {
-            value = document.createElement('a');
-            value.setAttribute('href', data.url);
-            value.setAttribute('target', '_blank');
-            value.setAttribute('title', ill_batch_available_via + ' ' + data.availabilitySupplier);
-        }
+        var value = document.createElement('span');
         value.classList.add('metadata-value');
         value.innerText = meta[prop];
         div.appendChild(label);
@@ -936,6 +918,31 @@
         return data.requestStatus || '-';
     }
 
+    function createRequestAvailability(x, y, data) {
+
+        // If the fetch failed
+        if (data.failed.length > 0) {
+            return data.failed;
+        }
+
+        if (Object.keys(data.availability_hits).length === 0){
+            return ill_populate_waiting;
+        }
+
+        let str = '';
+        let has_some = false;
+        for (i = 0; i < data.availability_hits.length; i++) {
+            if (!data.availability_hits[i].empty){
+                has_some = true;
+                str += "<li><a href=" + data.availability_hits[i].url + " target=\"_blank\">" + data.availability_hits[i].name + "</a></li>"
+            }
+        }
+        if(!has_some){
+            str = ill_batch_none;
+        }
+        return str;
+    };
+
     function buildTable(identifiers) {
         table = KohaTable('identifier-table', {
             processing: true,
@@ -969,8 +976,13 @@
                     width: '6.5%',
                     render: createRequestStatus
                 },
+                ...( ill_check_availability_syspref == 1 ? [{
+                    data: '',
+                    width: '13%',
+                    render: createRequestAvailability, }] : []
+                    ),
                 {
-                    width: '18%',
+                    width: '6.5%',
                     render: createActions,
                     className: 'action-column noExport'
                 }

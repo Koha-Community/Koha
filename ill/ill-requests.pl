@@ -556,8 +556,6 @@ sub get_ill_availability {
         }
     }
 
-    my $availability = Koha::Illrequest::Workflow::Availability->new($id_types);
-    return $availability->get_services({
-        ui_context => 'staff'
-    });
+    my $availability = Koha::Illrequest::Workflow::Availability->new($id_types, 'staff');
+    return $availability->get_services();
 }
