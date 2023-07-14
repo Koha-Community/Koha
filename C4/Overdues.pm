@@ -282,7 +282,10 @@ sub CalcFine {
         }
     } # else { # a zero (or null) chargeperiod or negative units_minus_grace value means no charge. }
 
-    $amount = $issuing_rule->{overduefinescap} if $issuing_rule->{overduefinescap} && $amount > $issuing_rule->{overduefinescap};
+    $amount = $issuing_rule->{overduefinescap}
+        if $issuing_rule->{overduefinescap}
+        && $issuing_rule->{overduefinescap} > 0
+        && $amount > $issuing_rule->{overduefinescap};
 
     # This must be moved to Koha::Item (see also similar code in C4::Accounts::chargelostitem
     $item->{replacementprice} ||= $itemtype->defaultreplacecost
