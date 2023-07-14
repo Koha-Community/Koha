@@ -284,7 +284,8 @@ elsif ($op eq 'add') {
     my $rentaldiscount = $input->param('rentaldiscount') || 0;
     my $opacitemholds = $input->param('opacitemholds') || 0;
     my $article_requests = $input->param('article_requests') || 'no';
-    my $overduefinescap = $input->param('overduefinescap') || q{};
+    my $overduefinescap = $input->param('overduefinescap')
+        && ( $input->param('overduefinescap') + 0 ) > 0 ? sprintf( "%.02f", $input->param('overduefinescap') ) : q{};
     my $cap_fine_to_replacement_price = ($input->param('cap_fine_to_replacement_price') || q{}) eq 'on';
     my $note = $input->param('note');
     my $decreaseloanholds = $input->param('decreaseloanholds') || q{};
