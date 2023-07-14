@@ -30,7 +30,7 @@
                 <a href="/cgi-bin/koha/mainpage.pl" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
-                    [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
+                    [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || can_see_cataloguing_module ) %]
                         <li><a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a></li>
                     [% END %]
                     [% IF ( CAN_user_acquisition ) %]
