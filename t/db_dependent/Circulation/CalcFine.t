@@ -122,15 +122,15 @@ subtest 'Overdue fines cap should be disabled when value is 0' => sub {
     );
 
     my $start_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 1,
+        year  => 2000,
+        month => 1,
+        day   => 1,
     );
 
     my $end_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 30,
+        year  => 2000,
+        month => 1,
+        day   => 30,
     );
 
     my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
@@ -161,15 +161,15 @@ subtest 'Overdue fines cap should be disabled when value is 0.00' => sub {
     );
 
     my $start_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 1,
+        year  => 2000,
+        month => 1,
+        day   => 1,
     );
 
     my $end_dt = DateTime->new(
-        year       => 2000,
-        month      => 1,
-        day        => 30,
+        year  => 2000,
+        month => 1,
+        day   => 30,
     );
 
     my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
@@ -178,6 +178,7 @@ subtest 'Overdue fines cap should be disabled when value is 0.00' => sub {
 
     teardown();
 };
+
 
 subtest 'Test with fine amount empty' => sub {
     plan tests => 1;
