@@ -160,9 +160,12 @@ sub get_availability {
     my ( $impossible, $confirmation, $warnings ) =
       $c->_check_availability( $patron, $item );
 
-    my $confirm_keys = join( ":", sort keys %{$confirmation} );
-    $confirm_keys = $user ? $user->id : '' . ":" . $item->id . ":" . $confirm_keys;
-    my $token = Koha::Token->new->generate_jwt( { id => $confirm_keys } );
+    my @confirm_keys = sort keys %{$confirmation};
+    unshift @confirm_keys, $item->id;
+    unshift @confirm_keys, $user->id
+      if $user;
+
+    my $token = Koha::Token->new->generate_jwt( { id => join( ':', @confirm_keys ) } );
 
     my $response = {
         blockers           => $impossible,
