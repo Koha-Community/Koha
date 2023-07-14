@@ -209,7 +209,7 @@
                                                     [% ELSE %]
                                                         0
                                                     [% END %]</td>
-                                                <td data-code="[% c %]">
+                                                <td data-code="[% c | html %]">
                                                     [% IF c == undef %]
                                                         <em>All</em>
                                                     [% ELSE %]
@@ -221,7 +221,7 @@
                                                     [% ELSE %]
                                                         0
                                                     [% END %]</td>
-                                                <td data-code="[% i %]">
+                                                <td data-code="[% i | html %]">
                                                     [% IF i == undef %]
                                                         <em>All</em>
                                                     [% ELSE %]
@@ -252,7 +252,7 @@
                                                     [% END %]
                                                 </td>
                                                 <td>[% issuelength | html %]</td>
-                                                <td data-code="[% daysmode %]">
+                                                <td data-code="[% daysmode | html %]">
                                                     [% SWITCH daysmode %]
                                                     [% CASE 'Calendar' %]<span title="Use the calendar to skip days the library is closed">Skip closed days</span>
                                                     [% CASE 'Datedue' %]<span title="Use the calendar to push the due date to the next open day">Next open day</span>
@@ -261,7 +261,7 @@
                                                     [% CASE %]<span title="Use the system preference 'useDaysMode' as a default value">Default</span>
                                                     [% END %]
                                                 </td>
-                                                <td data-code="[% lengthunit %]">
+                                                <td data-code="[% lengthunit | html %]">
                                                     [% IF ( lengthunit == 'days' ) %]
                                                         <span>Days</span>
                                                     [% ELSIF ( lengthunit == 'hours') %]
@@ -270,7 +270,7 @@
                                                         <span>Undefined</span>
                                                     [% END %]
                                                 </td>
-                                                <td data-code="[% hardduedatecompare %]">
+                                                <td data-code="[% hardduedatecompare | html %]">
                                                   [% IF ( hardduedate ) %]
                                                     [% IF ( hardduedatecompare == '-1' ) %]
                                                       before [% hardduedate | $KohaDates %]
@@ -344,7 +344,7 @@
                                                         <span>Unlimited</span>
                                                     [% END %]
                                                 </td>
-                                                <td data-code="[% onshelfholds %]">
+                                                <td data-code="[% onshelfholds | html %]">
                                                     [% IF onshelfholds == 1 %]
                                                         <span>Yes</span>
                                                     [% ELSIF onshelfholds == 2 %]
@@ -353,7 +353,7 @@
                                                         <span>If any unavailable</span>
                                                     [% END %]
                                                 </td>
-                                                <td data-code="[% opacitemholds %]">
+                                                <td data-code="[% opacitemholds | html %]">
                                                     [% IF opacitemholds == 'F'%]
                                                         <span>Force</span>
                                                     [% ELSIF opacitemholds == 'Y'%]
@@ -363,7 +363,7 @@
                                                     [% END %]
                                                 </td>
                                                 [% IF Koha.Preference('ArticleRequests') %]
-                                                <td data-code="[% article_requests %]">
+                                                <td data-code="[% article_requests | html %]">
                                                     [% IF article_requests == 'no' %]
                                                         <span>No</span>
                                                     [% ELSIF article_requests == 'yes' %]
@@ -379,7 +379,7 @@
                                                 [% IF Koha.Preference('UseRecalls') %]
                                                     <td>[% recalls_allowed | html %]</td>
                                                     <td>[% recalls_per_record | html %]</td>
-                                                    <td data-code="[% on_shelf_recalls %]">
+                                                    <td data-code="[% on_shelf_recalls | html %]">
                                                         [% IF on_shelf_recalls == 'all' %]
                                                             <span>If all unavailable</span>
                                                         [% ELSE %]
