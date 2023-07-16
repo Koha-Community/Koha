@@ -420,7 +420,8 @@ Circulation:
         -
             - By default, set the LOST value of an item to
             - pref: DefaultLongOverdueLostValue
-              class: integer
+              choices: authval
+              source: LOST
             - when the item has been overdue for more than
             - pref: DefaultLongOverdueDays
               class: integer
@@ -432,7 +433,8 @@ Circulation:
         -
             - "Charge a lost item to the patron's account when the LOST value of the item changes to:"
             - pref: DefaultLongOverdueChargeValue
-              class: integer
+              choices: authval
+              source: LOST
             - <br>Leave this field empty if you don't want to charge the patron for lost items.
             - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
