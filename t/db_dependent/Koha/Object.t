@@ -20,7 +20,6 @@ use Modern::Perl;
 use Test::More tests => 21;
 use Test::Exception;
 use Test::Warn;
-use DateTime;
 
 use C4::Context;
 use C4::Circulation qw( AddIssue );
@@ -988,7 +987,7 @@ subtest 'unblessed_all_relateds' => sub {
         }
     );
 
-    my $issue = AddIssue( $patron, $item->barcode, DateTime->now->subtract( days => 1 ) );
+    my $issue = AddIssue( $patron, $item->barcode, dt_from_string()->subtract( days => 1 ) );
     my $overdues = Koha::Patrons->find( $patron->id )->overdues; # Koha::Patron->overdues prefetches
     my $overdue = $overdues->next->unblessed_all_relateds;
     is( $overdue->{issue_id}, $issue->issue_id, 'unblessed_all_relateds has field from the original table (issues)' );
