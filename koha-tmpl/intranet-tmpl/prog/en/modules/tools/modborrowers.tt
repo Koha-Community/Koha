@@ -510,7 +510,7 @@
             var selected_option = $(select_attr).find("option:selected");
             var type = $(selected_option).attr('data-type');
             var category = $(selected_option).attr('data-category');
-            var li_node = $(select_attr).parent().parent();
+            var li_node = $(select_attr).parent();
             var span = $(li_node).find('span.patron_attributes_value');
             var information_category_node = $(li_node).find('span.information_category');
             information_category_node.html("");
