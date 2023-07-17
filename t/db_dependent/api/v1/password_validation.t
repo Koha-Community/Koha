@@ -136,8 +136,7 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(204, 'Validating using `cardnumber` works')
-      ->content_is(q{});
+        ->status_is( 204, 'Validating using `cardnumber` works' )->content_is(q{});
 
     $json = {
         identifier => $librarian->cardnumber,
@@ -145,8 +144,7 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(204, 'Validating using `cardnumber` works')
-      ->content_is(q{});
+        ->status_is( 204, 'Validating using `cardnumber` works' )->content_is(q{});
 
     $json = {
         identifier => $deleted_cardnumber,
@@ -154,8 +152,8 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(400, 'Validating using and invalid identifier fails')
-      ->json_is({ error => 'Validation failed' });
+        ->status_is( 400, 'Validating using and invalid identifier fails' )
+        ->json_is( { error => 'Validation failed' } );
 
     $json = {
         identifier => $deleted_userid,
@@ -163,8 +161,8 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(400, 'Validating using and invalid identifier fails')
-      ->json_is({ error => 'Validation failed' });
+        ->status_is( 400, 'Validating using and invalid identifier fails' )
+        ->json_is( { error => 'Validation failed' } );
 
     $json = {
         password => $password,
@@ -172,8 +170,7 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(400, 'Validating using and invalid userid fails')
-      ->json_is({ error => 'Validation failed' });
+        ->status_is( 400, 'Validating using and invalid userid fails' )->json_is( { error => 'Validation failed' } );
 
     $json = {
         password => $password,
@@ -181,8 +178,7 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(204, 'Validating using the `userid` attribute works')
-      ->content_is(q{});
+        ->status_is( 204, 'Validating using the `userid` attribute works' )->content_is(q{});
 
     $json = {
         password => $password,
@@ -199,8 +195,8 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(400, 'Passing both parameters forbidden')
-      ->json_is({ error => 'Bad request. Only one identifier attribute can be passed.' });
+        ->status_is( 400, 'Passing both parameters forbidden' )
+        ->json_is( { error => 'Bad request. Only one identifier attribute can be passed.' } );
 
     $schema->storage->txn_rollback;
 };
