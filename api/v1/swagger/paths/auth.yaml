@@ -1062,18 +1062,30 @@
     parameters:
       - name: body
         in: body
-        description: A JSON object containing username and password information
+        description: |
+          A JSON object containing a patron identifier and password information.
+
+          The identifier will be used to match patrons on the database using the
+          following order:
+
+          * userid
+          * cardnumber
+
+          Optionally, you can specify the `userid` attribute if you don't want it
+          to be checked against the patron cardnumbers.
         schema:
           type: object
           properties:
-            userid:
-              description: Username
+            identifier:
+              description: A patron identifier (`userid` or `cardnumber`)
               type: string
             password:
               description: Password (plain text)
               type: string
+            userid:
+              description: A patron userid
+              type: string
           required:
-            - userid
             - password
           additionalProperties: false
     produces:
