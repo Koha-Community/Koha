@@ -426,7 +426,9 @@ $(document).ready(function() {
                 },
                 {
                     "iDataSort": 10, // Sort on hidden unformatted issuedate column
-                    "mDataProp": "issuedate",
+                    "mDataProp": function( oObj ) {
+                        return $datetime(oObj.issuedate, { no_tz_adjust: true });
+                    }
                 },
                 {
                     "mDataProp": function ( oObj ) {
@@ -823,7 +825,9 @@ $(document).ready(function() {
                     },
                     {
                         "iDataSort": 7, // Sort on hidden unformatted issuedate column
-                        "mDataProp": "issuedate",
+                        "mDataProp": function ( oObj ) {
+                            return $datetime(oObj.issuedate, { no_tz_adjust: true });
+                        }
                     },
                     {
                         "mDataProp": function ( oObj ) {
