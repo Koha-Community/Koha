@@ -148,7 +148,7 @@ Will return undef if the record cannot be built
 
 sub record_strip_nonxml {
 
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $record;
     my $marcxml_error;
@@ -159,7 +159,7 @@ sub record_strip_nonxml {
             $self->schema
         );
     };
-    if( $@ ){
+    if ($@) {
         $marcxml_error = $@;
         chomp $marcxml_error;
         warn $marcxml_error;
@@ -167,7 +167,7 @@ sub record_strip_nonxml {
     }
 
     $params->{record} = $record;
-    return $self->record( $params );
+    return $self->record($params);
 }
 
 =head2 Internal methods
