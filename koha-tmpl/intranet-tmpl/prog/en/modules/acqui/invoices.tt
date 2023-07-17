@@ -162,7 +162,7 @@
                         [% END # /#invoicestabs %]
 
                         <div id="merge_invoices">
-                            <form id="merge_invoice_form" action="/cgi-bin/koha/acqui/invoice.pl" method="post">
+                            <form id="merge_invoice_form" class="validated" action="/cgi-bin/koha/acqui/invoice.pl" method="post">
                                 <fieldset class="rows">
                                     <ol>
                                         <li><h2>Merge invoices</h2></li>
@@ -180,6 +180,7 @@
                                                 </tbody>
                                             </table>
                                         </li>
+
 
                                         <li>
                                             <label for="merge_invoicenumber" class="required">Invoice number:</label>
@@ -201,7 +202,7 @@
 
                                         <li>
                                             <label for="merge_shipmentcost">Shipment cost:</label>
-                                            <input type="text" size="10" id="merge_shipmentcost" name="shipmentcost" value="" />
+                                            <input class="decimal" type="text" size="10" id="merge_shipmentcost" name="shipmentcost" value="" />
                                         </li>
                                         <li>
                                             <label for="merge_shipment_budgetid">Fund:</label>
