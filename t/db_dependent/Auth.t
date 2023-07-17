@@ -7,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -20,7 +20,10 @@ use Koha::Patrons;
 use Koha::Auth::TwoFactorAuth;
 
 BEGIN {
-    use_ok('C4::Auth', qw( checkauth haspermission track_login_daily checkpw get_template_and_user checkpw_hash ));
+    use_ok(
+        'C4::Auth',
+        qw( checkauth haspermission track_login_daily checkpw get_template_and_user checkpw_hash get_cataloguing_page_permissions )
+    );
 }
 
 my $schema  = Koha::Database->schema;
@@ -1003,3 +1006,81 @@ subtest 'check_cookie_auth overwriting interface already set' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'get_cataloguing_page_permissions() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 2**2 } } );    # catalogue
+
+    ok(
+        !C4::Auth::haspermission( $patron->userid, get_cataloguing_page_permissions() ),
+        '"catalogue" is not enough to see the cataloguing page'
+    );
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->id,
+                module_bit     => 24,               # stockrotation
+                code           => 'manage_rotas',
+            },
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'StockRotation', 1 );
+    ok(
+        C4::Auth::haspermission( $patron->userid, get_cataloguing_page_permissions() ),
+        '"stockrotation => manage_rotas" is enough'
+    );
+
+    t::lib::Mocks::mock_preference( 'StockRotation', 0 );
+    ok(
+        !C4::Auth::haspermission( $patron->userid, get_cataloguing_page_permissions() ),
+        '"stockrotation => manage_rotas" is not enough when `StockRotation` is disabled'
+    );
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->id,
+                module_bit     => 13,                     # tools
+                code           => 'manage_staged_marc',
+            },
+        }
+    );
+
+    ok(
+        C4::Auth::haspermission( $patron->userid, get_cataloguing_page_permissions() ),
+        'Having one of the listed `tools` subperm is enough'
+    );
+
+    $schema->resultset('UserPermission')->search( { borrowernumber => $patron->id } )->delete;
+
+    ok(
+        !C4::Auth::haspermission( $patron->userid, get_cataloguing_page_permissions() ),
+        'Permission removed, no access'
+    );
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->id,
+                module_bit     => 9,                    # editcatalogue
+                code           => 'delete_all_items',
+            },
+        }
+    );
+
+    ok(
+        C4::Auth::haspermission( $patron->userid, get_cataloguing_page_permissions() ),
+        'Having any `editcatalogue` subperm is enough'
+    );
+
+    $schema->storage->txn_rollback;
+};
