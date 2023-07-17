@@ -93,7 +93,7 @@
                                 [% IF readonly %]
                                     [% shipmentcost | $Price %]
                                 [% ELSE %]
-                                    <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost | $Price on_editing => 1 %]" />
+                                    <input class="decimal" type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost | $Price on_editing => 1 %]" />
                                 [% END %]
                             </li>
                             <li>
@@ -168,7 +168,7 @@
                                             [% IF readonly %]
                                                 [% adjustment.adjustment | $Price %]
                                             [% ELSE %]
-                                                <input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price on_editing => 1 %]" />
+                                                <input class="decimal" type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price on_editing => 1 %]" />
                                             [% END %]
                                         </td>
                                         <td>
@@ -245,7 +245,7 @@
                                 <ol>
                                     <li>
                                         <label for="adjustment_new">Amount: </label>
-                                        <input type="text" name="adjustment" id="adjustment_new" />
+                                        <input class="decimal" type="text" name="adjustment" id="adjustment_new" />
                                     </li>
                                     [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
                                     [% IF reasons.0 %]

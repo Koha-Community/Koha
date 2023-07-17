@@ -269,125 +269,127 @@
                         <div class="col-md-12 col-lg-6">
                             <div id="accounting-panel" class="page-section">
                                 <h4>Accounting details</h4>
-                                <ol>
-                                    <li>
-                                        <label for="datereceived">Date received: </label>
-                                        <input type="text" size="10" id="datereceived" name="datereceived" class="flatpickr" />
-                                    </li>
-                                    <li>
-                                        <label for="bookfund" class="required">Fund: </label>
-                                        <select id="bookfund" name="bookfund">
-                                            <optgroup label="Current">
-                                                <option id="selected_bookfund" selected="selected"></option>
-                                            </optgroup>
-                                        [% FOREACH budget_period_id IN budget_loops.keys %]
-                                            [% SET budget_period = budget_loops.$budget_period_id %]
-                                            [% IF budget_period.active %]
-                                                <optgroup label="[% budget_period.description | html %]">
-                                            [% ELSE %]
-                                                <optgroup class="inactive_budget" label="[% budget_period.description | html %] (Inactive)">
-                                            [% END %]
-                                            [% FOREACH budget_loo IN budget_period.funds %]
-                                            [% level_indent_cnt = 0 %]
-                                                [% level_indent = "" %]
-                                                [% WHILE level_indent_cnt < budget_loo.b_level %]
-                                                    [% level_indent = level_indent _ " -- " %]
-                                                    [% level_indent_cnt = level_indent_cnt +1 %]
-                                                [% END %]
-
-                                                [% IF ( budget_loo.b_sel ) %]
-                                                    [% active_count = 0 #select no other fund %]
-                                                    <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
-                                                [% ELSIF active_count==1 && budget_loo.b_active %]
-                                                    <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                <form action="/cgi-bin/koha/acqui/orderreceive.pl" class="validated">
+                                    <ol>
+                                        <li>
+                                            <label for="datereceived">Date received: </label>
+                                            <input type="text" size="10" id="datereceived" name="datereceived" class="flatpickr" />
+                                        </li>
+                                        <li>
+                                            <label for="bookfund" class="required">Fund: </label>
+                                            <select id="bookfund" name="bookfund">
+                                                <optgroup label="Current">
+                                                    <option id="selected_bookfund" selected="selected"></option>
+                                                </optgroup>
+                                            [% FOREACH budget_period_id IN budget_loops.keys %]
+                                                [% SET budget_period = budget_loops.$budget_period_id %]
+                                                [% IF budget_period.active %]
+                                                    <optgroup label="[% budget_period.description | html %]">
                                                 [% ELSE %]
-                                                    [% bdgclass=budget_loo.b_active? "": "inactive_budget" | html %]
-                                                    <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                                    <optgroup class="inactive_budget" label="[% budget_period.description | html %] (Inactive)">
                                                 [% END %]
-                                                    [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
-                                                </option>
-                                            [% END %]
-                                            </optgroup>
-                                        [% END %]
-                                        </select>
-                                        <span class="required">Required</span>
-                                    </li>
-                                    <li>
-                                        <label>&nbsp;</label>
-                                        <span id="current-fund" class="hint"></span>
-                                    </li>
-                                    <li>
-                                        <label for="showallbudgets">&nbsp;Show inactive:</label>
-                                        <input type="checkbox" id="showallbudgets" />
-                                    </li>
-                                    <li>
-                                        <label for="creator">Ordered by: </label>
-                                        <span id="creator"></span>
-                                    </li>
-                                    <li>
-                                        <label for="quantity_to_receive">Quantity ordered: </label>
-                                        <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" />
-                                    </li>
-                                    <li>
-                                        <label for="quantity">Quantity received: </label>
-                                        <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" />
-                                        <div id="qtyrecerror" style="display:none">
-                                            <p class="error">Warning, you have entered more items than expected.
-                                            Items will not be created.</p>
-                                        </div>
-                                    </li>
+                                                [% FOREACH budget_loo IN budget_period.funds %]
+                                                [% level_indent_cnt = 0 %]
+                                                    [% level_indent = "" %]
+                                                    [% WHILE level_indent_cnt < budget_loo.b_level %]
+                                                        [% level_indent = level_indent _ " -- " %]
+                                                        [% level_indent_cnt = level_indent_cnt +1 %]
+                                                    [% END %]
 
-                                    [% IF ( gst_values ) %]
-                                    <li>
-                                        <label for="tax_rate">Tax rate: </label>
-                                        <select name="tax_rate" id="tax_rate">
-                                        [% FOREACH gst IN gst_values %]
-                                            <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
-                                        [% END %]
-                                        </select>
-                                    </li>
-                                    [% END %]
-
-                                    <li>
-                                        <label for="rrp">Retail price: </label>
-                                        <span id="rrp"></span>
-                                    <li>
-                                        <label for="replacementprice">Replacement price:</label>
-                                        <input type="text" size="20" name="replacementprice" id="replacementprice" />
-                                    </li>
-                                    <li>
-                                        <label for="ecost">Budgeted cost: </label>
-                                        <span id="ecost"></span>
-                                    </li>
-                                    <li>
-                                        <label for="unitprice">Actual cost:</label>
-                                        <input type="text" size="20" name="unitprice" id="unitprice" />
-                                        <span id="unitprice_hint" class="hint"></span>
-                                    </li>
-                                    <li>
-                                        <label style="margin-left: 12em; text-align: left; font-weight: inherit; float:none;"><input type="checkbox" id="change_currency" name="change_currency">Change currency</label>
-                                    </li>
-                                    <li id="select_currency">
-                                        <label for="invoice_unitprice"></label>
-                                        <input type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="" />
-                                        [% IF currencies.count %]
-                                        <select name="invoice_currency" id="invoice_currency">
-                                            <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected>[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
-                                            [% FOR currency IN currencies %]
-                                            <option value="[% currency.currency | html %]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                                                    [% IF ( budget_loo.b_sel ) %]
+                                                        [% active_count = 0 #select no other fund %]
+                                                        <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                                    [% ELSIF active_count==1 && budget_loo.b_active %]
+                                                        <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                                    [% ELSE %]
+                                                        [% bdgclass=budget_loo.b_active? "": "inactive_budget" | html %]
+                                                        <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
+                                                    [% END %]
+                                                        [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                                                    </option>
+                                                [% END %]
+                                                </optgroup>
                                             [% END %]
-                                        </select>
+                                            </select>
+                                            <span class="required">Required</span>
+                                        </li>
+                                        <li>
+                                            <label>&nbsp;</label>
+                                            <span id="current-fund" class="hint"></span>
+                                        </li>
+                                        <li>
+                                            <label for="showallbudgets">&nbsp;Show inactive:</label>
+                                            <input type="checkbox" id="showallbudgets" />
+                                        </li>
+                                        <li>
+                                            <label for="creator">Ordered by: </label>
+                                            <span id="creator"></span>
+                                        </li>
+                                        <li>
+                                            <label for="quantity_to_receive">Quantity ordered: </label>
+                                            <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" />
+                                        </li>
+                                        <li>
+                                            <label for="quantity">Quantity received: </label>
+                                            <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" />
+                                            <div id="qtyrecerror" style="display:none">
+                                                <p class="error">Warning, you have entered more items than expected.
+                                                Items will not be created.</p>
+                                            </div>
+                                        </li>
+
+                                        [% IF ( gst_values ) %]
+                                        <li>
+                                            <label for="tax_rate">Tax rate: </label>
+                                            <select name="tax_rate" id="tax_rate">
+                                            [% FOREACH gst IN gst_values %]
+                                                <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
+                                            [% END %]
+                                            </select>
+                                        </li>
                                         [% END %]
-                                    </li>
-                                    <li>
-                                        <label for="order_internalnote">Internal note: </label>
-                                        <textarea name="order_internalnote" id="order_internalnote" width="40" rows="8" ></textarea>
-                                    </li>
-                                    <li>
-                                        <label for="order_vendornote">Vendor note: </label>
-                                        <span id="order_vendornote"></span>
-                                    </li>
-                                </ol>
+
+                                        <li>
+                                            <label for="rrp">Retail price: </label>
+                                            <span id="rrp"></span>
+                                        <li>
+                                            <label for="replacementprice">Replacement price:</label>
+                                            <input class="decimal" type="text" size="20" name="replacementprice" id="replacementprice" />
+                                        </li>
+                                        <li>
+                                            <label for="ecost">Budgeted cost: </label>
+                                            <span id="ecost"></span>
+                                        </li>
+                                        <li>
+                                            <label for="unitprice">Actual cost:</label>
+                                            <input class="decimal" type="text" size="20" name="unitprice" id="unitprice" />
+                                            <span id="unitprice_hint" class="hint"></span>
+                                        </li>
+                                        <li>
+                                            <label style="margin-left: 12em; text-align: left; font-weight: inherit; float:none;"><input type="checkbox" id="change_currency" name="change_currency">Change currency</label>
+                                        </li>
+                                        <li id="select_currency">
+                                            <label for="invoice_unitprice"></label>
+                                            <input class="decimal" type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="" />
+                                            [% IF currencies.count %]
+                                            <select name="invoice_currency" id="invoice_currency">
+                                                <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected>[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
+                                                [% FOR currency IN currencies %]
+                                                <option value="[% currency.currency | html %]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                                                [% END %]
+                                            </select>
+                                            [% END %]
+                                        </li>
+                                        <li>
+                                            <label for="order_internalnote">Internal note: </label>
+                                            <textarea name="order_internalnote" id="order_internalnote" width="40" rows="8" ></textarea>
+                                        </li>
+                                        <li>
+                                            <label for="order_vendornote">Vendor note: </label>
+                                            <span id="order_vendornote"></span>
+                                        </li>
+                                    </ol>
+                                </form>
                             </div>
                         </div>
                     </div>
