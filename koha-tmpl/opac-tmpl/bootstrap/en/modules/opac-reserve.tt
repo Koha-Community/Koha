@@ -340,7 +340,7 @@
                                                 [% IF bibitemloo.itemholdable %]
                                                     <!-- ITEM HOLDS -->
                                                     <li class="lradio place_on_type" style="display:none;">
-                                                        [% UNLESS bibitemloo.forced_hold_level == 'item' || bibitemloo.forced_hold_level == 'item_group' %]
+                                                        [% UNLESS bibitemloo.forced_hold_level == 'item' || bibitemloo.forced_hold_level == 'item_group' || bibitemloo.force_hold %]
                                                             <label class="radio inline" for="reqany_[% bibitemloo.biblionumber | html %]">Next available item</label>
                                                             <input type="radio" name="reqtype_[% bibitemloo.biblionumber | html %]"
                                                                     id="reqany_[% bibitemloo.biblionumber | html %]"
