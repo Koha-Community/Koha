@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 4;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -45,24 +45,6 @@ my $password = 'thePassword123';
 $librarian->set_password( { password => $password, skip_validation => 1 } );
 my $userid = $librarian->userid;
 
-subtest 'password validation - success' => sub {
-
-    plan tests => 3;
-
-    $schema->storage->txn_begin;
-
-    my $json = {
-        "userid"   => $userid,
-        "password" => $password,
-    };
-
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(204)
-      ->content_is(q{});
-
-    $schema->storage->txn_rollback;
-};
-
 subtest 'password validation - account lock out' => sub {
 
     plan tests => 6;
@@ -72,8 +54,8 @@ subtest 'password validation - account lock out' => sub {
     t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 1 );
 
     my $json = {
-        "userid"   => $userid,
-        "password" => "bad",
+        identifier => $userid,
+        password   => "bad",
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
@@ -81,43 +63,6 @@ subtest 'password validation - account lock out' => sub {
       ->json_is({ error => q{Validation failed} });
 
     $json->{password} = $password;
-
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(400)
-      ->json_is({ error => q{Validation failed} });
-
-    $schema->storage->txn_rollback;
-};
-
-
-subtest 'password validation - bad userid' => sub {
-
-    plan tests => 3;
-
-    $schema->storage->txn_begin;
-
-    my $json = {
-        "userid"   => '1234567890abcdefghijklmnopqrstuvwxyz@koha-community.org',
-        "password" => $password,
-    };
-
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-      ->status_is(400)
-      ->json_is({ error => q{Validation failed} });
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'password validation - bad password' => sub {
-
-    plan tests => 3;
-
-    $schema->storage->txn_begin;
-
-    my $json = {
-        "userid"   => $userid,
-        "password" => 'bad',
-    };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
       ->status_is(400)
@@ -143,8 +88,8 @@ subtest 'password validation - unauthorized user' => sub {
     my $userid = $patron->userid;
 
     my $json = {
-        "userid"   => $userid,
-        "password" => "test",
+        identifier => $userid,
+        password   => "test",
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
@@ -160,13 +105,102 @@ subtest 'password validation - unauthenticated user' => sub {
     $schema->storage->txn_begin;
 
     my $json = {
-        "userid"   => "banana",
-        "password" => "test",
+        identifier => "banana",
+        password   => "test",
     };
 
     $t->post_ok( "/api/v1/auth/password/validation" => json => $json )
       ->json_is( '/error' => 'Authentication failure.' )
       ->status_is(401);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Password validation - authorized requests tests' => sub {
+
+    plan tests => 24;
+
+    $schema->storage->txn_begin;
+
+    # generate a random unused userid
+    my $patron_to_delete = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $deleted_userid     = $patron_to_delete->userid;
+    my $deleted_cardnumber = $patron_to_delete->cardnumber;
+
+    $patron_to_delete->delete;
+
+    my $json = {
+        identifier => $librarian->userid,
+        password   => $password,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+      ->status_is(204, 'Validating using `cardnumber` works')
+      ->content_is(q{});
+
+    $json = {
+        identifier => $librarian->cardnumber,
+        password   => $password,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+      ->status_is(204, 'Validating using `cardnumber` works')
+      ->content_is(q{});
+
+    $json = {
+        identifier => $deleted_cardnumber,
+        password   => $password,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+      ->status_is(400, 'Validating using and invalid identifier fails')
+      ->json_is({ error => 'Validation failed' });
+
+    $json = {
+        identifier => $deleted_userid,
+        password   => $password,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+      ->status_is(400, 'Validating using and invalid identifier fails')
+      ->json_is({ error => 'Validation failed' });
+
+    $json = {
+        password => $password,
+        userid   => $deleted_userid,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+      ->status_is(400, 'Validating using and invalid userid fails')
+      ->json_is({ error => 'Validation failed' });
+
+    $json = {
+        password => $password,
+        userid   => $userid,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+      ->status_is(204, 'Validating using the `userid` attribute works')
+      ->content_is(q{});
+
+    $json = {
+        password => $password,
+        userid   => $librarian->cardnumber,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+        ->status_is( 400, 'Validating using a cardnumber as userid fails' )->json_is( { error => 'Validation failed' } );
+
+    $json = {
+        identifier => $userid,
+        password   => $password,
+        userid     => $userid,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
+      ->status_is(400, 'Passing both parameters forbidden')
+      ->json_is({ error => 'Bad request. Only one identifier attribute can be passed.' });
 
     $schema->storage->txn_rollback;
 };
