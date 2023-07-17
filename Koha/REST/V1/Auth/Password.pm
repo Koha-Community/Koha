@@ -44,15 +44,39 @@ sub validate {
     my $userid = $body->{userid} // '';
     my $patron = Koha::Patrons->find({ userid => $userid });
 
-    unless ($patron) {
-        return $c->render( status => 400, openapi => { error => "Validation failed" } );
+    my $body = $c->req->json;
+
+    my $identifier = $body->{identifier};
+    my $userid     = $body->{userid};
+
+    unless ( defined $identifier or defined $userid ) {
+        return $c->render(
+            status  => 400,
+            openapi => { error => "Validation failed" },
+        );
     }
 
-    my $password   = $body->{password}   // "";
+    if ( defined $identifier and defined $userid ) {
+        return $c->render(
+            status  => 400,
+            openapi => { error => "Bad request. Only one identifier attribute can be passed." },
+        );
+    }
+
+    if ($userid) {
+        return $c->render(
+            status  => 400,
+            openapi => { error => "Validation failed" },
+        ) unless Koha::Patrons->find( { userid => $userid } );
+    }
+
+    $identifier //= $userid;
+
+    my $password = $body->{password} // "";
 
     return try {
-        my ($status, $cardnumber, $userid) = C4::Auth::checkpw($patron->userid, $password );
-        unless ( $status ) {
+        my ( $status, $cardnumber, $userid ) = C4::Auth::checkpw( $identifier, $password );
+        unless ($status) {
             return $c->render(
                 status  => 400,
                 openapi => { error => "Validation failed" }
