@@ -150,7 +150,7 @@
                                     <th>Pickup at</th>
                                     <th>Expiration</th>
                                     <th>Priority</th>
-                                    <th>Delete?</th>
+                                    <th>Cancel?</th>
                                     <th>Suspend?</th>
                                     <th>Status</th>
                                 </tr>
