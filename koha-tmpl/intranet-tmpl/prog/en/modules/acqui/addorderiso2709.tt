@@ -87,7 +87,7 @@
                         Add orders from [% comments | html %]
                         ([% file_name | html %] staged on [% upload_timestamp | $KohaDates  with_hours => 1 %])
                     </h1>
-                    <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
+                    <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform" class="validated">
                         [% WRAPPER tabs id= "tabs" %]
                             [% WRAPPER tabs_nav %]
                                 [% WRAPPER tab_item tabname= "records_to_import" bt_active= 1 %] <span>Select to import</span> [% END %]
@@ -161,211 +161,209 @@
                                                             <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% biblio.import_record_id | uri %]" class="previewData btn btn-default btn-xs">Card</a>
                                                             <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;breedingid=[% biblio.import_record_id | uri %]&amp;import_batch_id=[% biblio.import_batch_id | uri %]&amp;biblionumber=[% biblio.match_biblionumber | uri %]" class="btn btn-default btn-xs">Add order</a>
                                                         </span>
-                                                        <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" class="validated">
                                                             <fieldset class="rows order_details">
-                                                                <ol>
-                                                                    <li class="status">
-                                                                        <span class="label">Match:</span>
-                                                                        <span class="match">
-                                                                            [% IF ( biblio_lis.overlay_status == 'no_match' ) %]
-                                                                            <span>No match</span>
-                                                                            [% ELSIF ( biblio_lis.overlay_status == 'match_applied' ) %]
-                                                                            <span>Match applied</span>
-                                                                            [% ELSIF ( biblio_lis.overlay_status == 'auto_match' ) %]
-                                                                            <span>Match found</span>
-                                                                            [% ELSE %]
-                                                                                [% biblio_lis.overlay_status | html %]
-                                                                            [% END %]
-                                                                            [% IF ( biblio.match_biblionumber ) %]
-                                                                            <span>Matches biblio [% biblio.match_biblionumber | uri %]</span> (score = [% biblio.match_score | html %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.match_biblionumber | uri %]">[% biblio.match_citation | html %]</a>
-                                                                            [% END %]
-                                                                        </span>
-                                                                    </li>
-                                                                    <li class="quantity">
-                                                                        <label for="quantity_record_[% biblio.import_record_id | html %]" class="required">Quantity: </label>
-                                                                        <input id="quantity_record_[% biblio.import_record_id | html %]" type="text" pattern="[0-9]+" value="[% biblio.quantity.length ? biblio.quantity : 1 | html %]" name="quantity" />
-                                                                        <span class="required">Required</span>
-                                                                    </li>
-                                                                    <li class="price">
-                                                                        <label for="price_record_[% biblio.import_record_id | html %]">Price: </label>
-                                                                        <input id="price_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.price | $Price on_editing => 1 %]" name="price" />
-                                                                    </li>
-                                                                    <li class="replacementprice">
-                                                                        <label for="replacementprice_record_[% biblio.import_record_id | html %]">Replacement price: </label>
-                                                                        <input id="replacementprice_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.replacementprice | $Price on_editing => 1 %]" name="replacementprice" />
-                                                                    </li>
-                                                                    <li class="discount">
-                                                                        <label for="discount_record_[% biblio.import_record_id | html %]">Discount: </label>
-                                                                        <input id="discount_record_[% biblio.import_record_id | html %]" type="text" value="[% biblio.discount | html %]" name="discount" size="6" /> %
-                                                                        <div class="hint">If empty, discount rate from vendor will be used</div>
-                                                                    </li>
-                                                                    <li class="fund">
-                                                                        [% IF ( close ) %]
-                                                                            <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
-                                                                            <input type="hidden" size="20" name="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
+                                                            <ol>
+                                                                <li class="status">
+                                                                    <span class="label">Match:</span>
+                                                                    <span class="match">
+                                                                        [% IF ( biblio_lis.overlay_status == 'no_match' ) %]
+                                                                        <span>No match</span>
+                                                                        [% ELSIF ( biblio_lis.overlay_status == 'match_applied' ) %]
+                                                                        <span>Match applied</span>
+                                                                        [% ELSIF ( biblio_lis.overlay_status == 'auto_match' ) %]
+                                                                        <span>Match found</span>
                                                                         [% ELSE %]
-                                                                            <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
-                                                                            <select id="fund_record_[% biblio.import_record_id | html %]" name="budget_id">
-                                                                                <option value="">Select a fund (will use default if set)</option>
-                                                                                [% FOREACH budget IN budget_loop %]
-                                                                                    [% IF ( budget.b_id == biblio.budget_id ) %]
-                                                                                    [% IF budget.b_active %]
-                                                                                        <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]" selected="selected">[% budget.b_txt | html %]</option>
-                                                                                    [% ELSE %]
-                                                                                    <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]" selected="selected">[% budget.b_txt | html %] (inactive)</option>
-                                                                                [% END %]
-                                                                                [% ELSE %]
-                                                                                    [% IF budget.b_active %]<option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
-                                                                                    [% ELSE %]<option value="[% budget.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %] (inactive)</option>
-                                                                                    [% END %]
-                                                                                    [% END %]
-                                                                                [% END %]
-                                                                            </select>
-                                                                            <span class="required" style="display:none">Required</span>
+                                                                            [% biblio_lis.overlay_status | html %]
                                                                         [% END %]
-                                                                    </li>
-                                                                    <li class="sort1">
-                                                                        <label for="sort1_record_[% biblio.import_record_id | html %]">Statistic 1: </label>
-                                                                        <input id="sort1_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort1" value="[% biblio.sort1 | html %]" />
-                                                                    </li>
-                                                                    <li class="sort2">
-                                                                        <label for="sort2_record_[% biblio.import_record_id | html %]">Statistic 2: </label>
-                                                                        <input id="sort2_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort2" value="[% biblio.sort2 | html %]" />
-                                                                    </li>
-                                                                </ol>
-                                                                [% IF ( biblio.iteminfos.size ) %]
-                                                                    <div class="item_edit_form">
-                                                                        [% IF biblio.item_error %]Item records could not be processed because the number of item fields was uneven.[% END %]
-                                                                        [% FOREACH item IN biblio.iteminfos %]
-                                                                            <fieldset class="rows">
-                                                                                <legend>Item record [% item.item_id | html %]</legend>
-                                                                                <ol>
-                                                                                    <li>
-                                                                                        <label for="homebranch_item_[% item.item_id | html %]">homebranch</label>
-                                                                                        <select id="homebranch_item_[% item.item_id | html %]" name="homebranch_[% biblio.import_record_id | html %]">
-                                                                                            [% FOREACH l IN libraries %]
-                                                                                                [% IF l.branchcode == item.homebranch %]
-                                                                                                    <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
-                                                                                                [% ELSE %]
-                                                                                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
-                                                                                                [% END %]
+                                                                        [% IF ( biblio.match_biblionumber ) %]
+                                                                        <span>Matches biblio [% biblio.match_biblionumber | uri %]</span> (score = [% biblio.match_score | html %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.match_biblionumber | uri %]">[% biblio.match_citation | html %]</a>
+                                                                        [% END %]
+                                                                    </span>
+                                                                </li>
+                                                                <li class="quantity">
+                                                                    <label for="quantity_record_[% biblio.import_record_id | html %]" class="required">Quantity: </label>
+                                                                    <input id="quantity_record_[% biblio.import_record_id | html %]" type="text" pattern="[0-9]+" value="[% biblio.quantity.length ? biblio.quantity : 1 | html %]" name="quantity" />
+                                                                    <span class="required">Required</span>
+                                                                </li>
+                                                                <li class="price">
+                                                                    <label for="price_record_[% biblio.import_record_id | html %]">Price: </label>
+                                                                    <input id="price_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.price | $Price on_editing => 1 %]" name="price" />
+                                                                </li>
+                                                                <li class="replacementprice">
+                                                                    <label for="replacementprice_record_[% biblio.import_record_id | html %]">Replacement price: </label>
+                                                                    <input id="replacementprice_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.replacementprice | $Price on_editing => 1 %]" name="replacementprice" />
+                                                                </li>
+                                                                <li class="discount">
+                                                                    <label for="discount_record_[% biblio.import_record_id | html %]">Discount: </label>
+                                                                    <input id="discount_record_[% biblio.import_record_id | html %]" type="text" value="[% biblio.discount | html %]" name="discount" size="6" /> %
+                                                                    <div class="hint">If empty, discount rate from vendor will be used</div>
+                                                                </li>
+                                                                <li class="fund">
+                                                                    [% IF ( close ) %]
+                                                                        <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
+                                                                        <input type="hidden" size="20" name="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
+                                                                    [% ELSE %]
+                                                                        <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
+                                                                        <select id="fund_record_[% biblio.import_record_id | html %]" name="budget_id">
+                                                                            <option value="">Select a fund (will use default if set)</option>
+                                                                            [% FOREACH budget IN budget_loop %]
+                                                                                [% IF ( budget.b_id == biblio.budget_id ) %]
+                                                                                [% IF budget.b_active %]
+                                                                                    <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]" selected="selected">[% budget.b_txt | html %]</option>
+                                                                                [% ELSE %]
+                                                                                <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]" selected="selected">[% budget.b_txt | html %] (inactive)</option>
+                                                                            [% END %]
+                                                                            [% ELSE %]
+                                                                                [% IF budget.b_active %]<option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
+                                                                                [% ELSE %]<option value="[% budget.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %] (inactive)</option>
+                                                                                [% END %]
+                                                                                [% END %]
+                                                                            [% END %]
+                                                                        </select>
+                                                                        <span class="required" style="display:none">Required</span>
+                                                                    [% END %]
+                                                                </li>
+                                                                <li class="sort1">
+                                                                    <label for="sort1_record_[% biblio.import_record_id | html %]">Statistic 1: </label>
+                                                                    <input id="sort1_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort1" value="[% biblio.sort1 | html %]" />
+                                                                </li>
+                                                                <li class="sort2">
+                                                                    <label for="sort2_record_[% biblio.import_record_id | html %]">Statistic 2: </label>
+                                                                    <input id="sort2_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort2" value="[% biblio.sort2 | html %]" />
+                                                                </li>
+                                                            </ol>
+                                                            [% IF ( biblio.iteminfos.size ) %]
+                                                                <div class="item_edit_form">
+                                                                    [% IF biblio.item_error %]Item records could not be processed because the number of item fields was uneven.[% END %]
+                                                                    [% FOREACH item IN biblio.iteminfos %]
+                                                                        <fieldset class="rows">
+                                                                            <legend>Item record [% item.item_id | html %]</legend>
+                                                                            <ol>
+                                                                                <li>
+                                                                                    <label for="homebranch_item_[% item.item_id | html %]">homebranch</label>
+                                                                                    <select id="homebranch_item_[% item.item_id | html %]" name="homebranch_[% biblio.import_record_id | html %]">
+                                                                                        [% FOREACH l IN libraries %]
+                                                                                            [% IF l.branchcode == item.homebranch %]
+                                                                                                <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
+                                                                                            [% ELSE %]
+                                                                                                <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
                                                                                             [% END %]
-                                                                                        </select>
-                                                                                    </li>
+                                                                                        [% END %]
+                                                                                    </select>
+                                                                                </li>
 
-                                                                                    <li>
-                                                                                        <label for="holdingbranch_item_[% item.item_id | html %]">holdingbranch</label>
-                                                                                        <select id="holdingbranch_item_[% item.item_id | html %]" name="holdingbranch_[% biblio.import_record_id | html %]">
-                                                                                            [% FOREACH l IN libraries %]
-                                                                                                [% IF l.branchcode == item.holdingbranch %]
-                                                                                                    <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
-                                                                                                [% ELSE %]
-                                                                                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
-                                                                                                [% END %]
+                                                                                <li>
+                                                                                    <label for="holdingbranch_item_[% item.item_id | html %]">holdingbranch</label>
+                                                                                    <select id="holdingbranch_item_[% item.item_id | html %]" name="holdingbranch_[% biblio.import_record_id | html %]">
+                                                                                        [% FOREACH l IN libraries %]
+                                                                                            [% IF l.branchcode == item.holdingbranch %]
+                                                                                                <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
+                                                                                            [% ELSE %]
+                                                                                                <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
                                                                                             [% END %]
-                                                                                        </select>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="itype_item_[% item.item_id | html %]">itype</label>
-                                                                                        <select id="itype_item_[% item.item_id | html %]" name="itype_[% biblio.import_record_id | html %]">
-                                                                                            [% FOREACH itemtype IN itemtypes %]
-                                                                                                [% IF itemtype.itemtype == item.itype %]
-                                                                                                    <option value="[% itemtype.itemtype | html %]" selected="selected">[% itemtype.description | html %]</option>
-                                                                                                [% ELSE %]
-                                                                                                    <option value="[% itemtype.itemtype | html %]">[% itemtype.description | html %]</option>
-                                                                                                [% END %]
+                                                                                        [% END %]
+                                                                                    </select>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="itype_item_[% item.item_id | html %]">itype</label>
+                                                                                    <select id="itype_item_[% item.item_id | html %]" name="itype_[% biblio.import_record_id | html %]">
+                                                                                        [% FOREACH itemtype IN itemtypes %]
+                                                                                            [% IF itemtype.itemtype == item.itype %]
+                                                                                                <option value="[% itemtype.itemtype | html %]" selected="selected">[% itemtype.description | html %]</option>
+                                                                                            [% ELSE %]
+                                                                                                <option value="[% itemtype.itemtype | html %]">[% itemtype.description | html %]</option>
                                                                                             [% END %]
-                                                                                        </select>
-                                                                                    </li>
+                                                                                        [% END %]
+                                                                                    </select>
+                                                                                </li>
 
-                                                                                    <li>
-                                                                                        <label for="nonpublic_note_item_[% item.item_id | html %]">nonpublic_note</label>
-                                                                                        <input type="text" id="nonpublic_note_item_[% item.item_id | html %]" name="nonpublic_note_[% biblio.import_record_id | html %]" value="[% item.nonpublic_note | html %]">
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="public_note_item_[% item.item_id | html %]">public_note</label>
-                                                                                        <input type="text" id="public_note_item_[% item.item_id | html %]" name="public_note_[% biblio.import_record_id | html %]" value="[% item.public_note | html %]">
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="loc_item_[% item.item_id | html %]">loc</label>
-                                                                                        <select id="loc_item_[% item.item_id | html %]" name="loc_[% biblio.import_record_id | html %]">
-                                                                                            <option value=""> </option>
-                                                                                            [% FOREACH locationloo IN locationloop %]
-                                                                                                [% IF ( locationloo.code ) == (item.loc) %]
-                                                                                                    <option value="[% locationloo.code | html %]" selected="selected">[% locationloo.description | html %]</option>
-                                                                                                [% ELSE %]
-                                                                                                    <option value="[% locationloo.code | html %]">[% locationloo.description | html %]</option>
-                                                                                                [% END %]
+                                                                                <li>
+                                                                                    <label for="nonpublic_note_item_[% item.item_id | html %]">nonpublic_note</label>
+                                                                                    <input type="text" id="nonpublic_note_item_[% item.item_id | html %]" name="nonpublic_note_[% biblio.import_record_id | html %]" value="[% item.nonpublic_note | html %]">
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="public_note_item_[% item.item_id | html %]">public_note</label>
+                                                                                    <input type="text" id="public_note_item_[% item.item_id | html %]" name="public_note_[% biblio.import_record_id | html %]" value="[% item.public_note | html %]">
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="loc_item_[% item.item_id | html %]">loc</label>
+                                                                                    <select id="loc_item_[% item.item_id | html %]" name="loc_[% biblio.import_record_id | html %]">
+                                                                                        <option value=""> </option>
+                                                                                        [% FOREACH locationloo IN locationloop %]
+                                                                                            [% IF ( locationloo.code ) == (item.loc) %]
+                                                                                                <option value="[% locationloo.code | html %]" selected="selected">[% locationloo.description | html %]</option>
+                                                                                            [% ELSE %]
+                                                                                                <option value="[% locationloo.code | html %]">[% locationloo.description | html %]</option>
                                                                                             [% END %]
-                                                                                        </select>
-                                                                                    </li>
+                                                                                        [% END %]
+                                                                                    </select>
+                                                                                </li>
 
-                                                                                    <li>
-                                                                                        <label for="ccode_item_[% item.item_id | html %]">ccode</label>
-                                                                                        <select id="ccode_item_[% item.item_id | html %]" name="ccode_[% biblio.import_record_id | html %]">
-                                                                                            <option value=""> </option>
-                                                                                            [% FOREACH ccodeloo IN ccodeloop %]
-                                                                                                [% IF ( ccodeloo.code ) == (item.ccode) %]
-                                                                                                    <option value="[% ccodeloo.code | html %]" selected="selected">[% ccodeloo.description | html %]</option>
-                                                                                                [% ELSE %]
-                                                                                                    <option value="[% ccodeloo.code | html %]">[% ccodeloo.description | html %]</option>
-                                                                                                [% END %]
+                                                                                <li>
+                                                                                    <label for="ccode_item_[% item.item_id | html %]">ccode</label>
+                                                                                    <select id="ccode_item_[% item.item_id | html %]" name="ccode_[% biblio.import_record_id | html %]">
+                                                                                        <option value=""> </option>
+                                                                                        [% FOREACH ccodeloo IN ccodeloop %]
+                                                                                            [% IF ( ccodeloo.code ) == (item.ccode) %]
+                                                                                                <option value="[% ccodeloo.code | html %]" selected="selected">[% ccodeloo.description | html %]</option>
+                                                                                            [% ELSE %]
+                                                                                                <option value="[% ccodeloo.code | html %]">[% ccodeloo.description | html %]</option>
                                                                                             [% END %]
-                                                                                        </select>
-                                                                                    </li>
+                                                                                        [% END %]
+                                                                                    </select>
+                                                                                </li>
 
-                                                                                    <li>
-                                                                                        <label for="notforloan_item_[% item.item_id | html %]">notforloan</label>
-                                                                                        <select id="notforloan_item_[% item.item_id | html %]" name="notforloan_[% biblio.import_record_id | html %]">
-                                                                                            <option value=""> </option>
-                                                                                            [% FOREACH n IN notforloanloop %]
-                                                                                                [% IF n.code == item.notforloan %]
-                                                                                                    <option value="[% n.code | html %]" selected="selected">[% n.description | html %]</option>
-                                                                                                [% ELSE %]
-                                                                                                    <option value="[% n.code | html %]">[% n.description | html %]</option>
-                                                                                                [% END %]
+                                                                                <li>
+                                                                                    <label for="notforloan_item_[% item.item_id | html %]">notforloan</label>
+                                                                                    <select id="notforloan_item_[% item.item_id | html %]" name="notforloan_[% biblio.import_record_id | html %]">
+                                                                                        <option value=""> </option>
+                                                                                        [% FOREACH n IN notforloanloop %]
+                                                                                            [% IF n.code == item.notforloan %]
+                                                                                                <option value="[% n.code | html %]" selected="selected">[% n.description | html %]</option>
+                                                                                            [% ELSE %]
+                                                                                                <option value="[% n.code | html %]">[% n.description | html %]</option>
                                                                                             [% END %]
-                                                                                        </select>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="uri_item_[% item.item_id | html %]">uri</label>
-                                                                                        <input type="text" id="uri_item_[% item.item_id | html %]" name="uri_[% biblio.import_record_id | html %]" value="[% item.uri | html %]">
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="copyno_item_[% item.item_id | html %]">copyno</label>
-                                                                                        <input type="text" id="copyno_item_[% item.item_id | html %]" name="copyno_[% biblio.import_record_id | html %]" value="[% item.copyno | html %]">
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="budget_code_item_[% item.item_id | html %]">budget_code</label>
-                                                                                        <select class="budget_code_item" id="budget_code_item_[% item.item_id | html %]" name="budget_code_[% biblio.import_record_id | html %]">
-                                                                                            <option value="">Select a fund (will use default if set)</option>
-                                                                                            [% FOREACH budget_loo IN budget_loop %]
-                                                                                                [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]<option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
-                                                                                                [% ELSE %]<option value="[% budget_loo.b_id | html %]">[% budget_loo.b_txt | html %]</option>
-                                                                                                [% END %]
+                                                                                        [% END %]
+                                                                                    </select>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="uri_item_[% item.item_id | html %]">uri</label>
+                                                                                    <input type="text" id="uri_item_[% item.item_id | html %]" name="uri_[% biblio.import_record_id | html %]" value="[% item.uri | html %]">
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="copyno_item_[% item.item_id | html %]">copyno</label>
+                                                                                    <input type="text" id="copyno_item_[% item.item_id | html %]" name="copyno_[% biblio.import_record_id | html %]" value="[% item.copyno | html %]">
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="budget_code_item_[% item.item_id | html %]">budget_code</label>
+                                                                                    <select class="budget_code_item" id="budget_code_item_[% item.item_id | html %]" name="budget_code_[% biblio.import_record_id | html %]">
+                                                                                        <option value="">Select a fund (will use default if set)</option>
+                                                                                        [% FOREACH budget_loo IN budget_loop %]
+                                                                                            [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]<option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
+                                                                                            [% ELSE %]<option value="[% budget_loo.b_id | html %]">[% budget_loo.b_txt | html %]</option>
                                                                                             [% END %]
-                                                                                        </select>
-                                                                                        <span class="item_fund required">Required</span>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="price_item_[% item.item_id | html %]">price</label>
-                                                                                        <input type="text" id="price_item_[% item.item_id | html %]" class="decimal" name="itemprice_[% biblio.import_record_id | html %]" value="[% item.itemprice | $Price on_editing => 1 %]">
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="replacementprice_item_[% item.item_id | html %]">replacement price</label>
-                                                                                        <input type="text" id="replacementprice_item_[% item.item_id | html %]" class="decimal" name="replacementprice_[% biblio.import_record_id | html %]" value="[% item.replacementprice | $Price on_editing => 1 %]">
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <label for="callnumber_item_[% item.item_id | html %]">callnumber</label>
-                                                                                        <input type="text" id="callnumber_item_[% item.item_id | html %]" name="itemcallnumber_[% biblio.import_record_id | html %]" value="[% item.itemcallnumber | html %]">
-                                                                                    </li>
-                                                                                </ol>
-                                                                            </fieldset>
-                                                                        [% END # /FOREACH item %]
-                                                                    </div> <!-- /.item_edit_form -->
-                                                                [% END %]
-                                                            </fieldset> <!-- /.rows.order_details -->
-                                                        </form>
+                                                                                        [% END %]
+                                                                                    </select>
+                                                                                    <span class="item_fund required">Required</span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="price_item_[% item.item_id | html %]">price</label>
+                                                                                    <input type="text" id="price_item_[% item.item_id | html %]" class="decimal" name="itemprice_[% biblio.import_record_id | html %]" value="[% item.itemprice | $Price on_editing => 1 %]">
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="replacementprice_item_[% item.item_id | html %]">replacement price</label>
+                                                                                    <input type="text" id="replacementprice_item_[% item.item_id | html %]" class="decimal" name="replacementprice_[% biblio.import_record_id | html %]" value="[% item.replacementprice | $Price on_editing => 1 %]">
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="callnumber_item_[% item.item_id | html %]">callnumber</label>
+                                                                                    <input type="text" id="callnumber_item_[% item.item_id | html %]" name="itemcallnumber_[% biblio.import_record_id | html %]" value="[% item.itemcallnumber | html %]">
+                                                                                </li>
+                                                                            </ol>
+                                                                        </fieldset>
+                                                                    [% END # /FOREACH item %]
+                                                                </div> <!-- /.item_edit_form -->
+                                                            [% END %]
+                                                        </fieldset> <!-- /.rows.order_details -->
                                                     </td>
                                                 </tr>
                                             [% END # /FOREACH biblio %]
