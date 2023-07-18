@@ -104,7 +104,7 @@ our $RULE_KINDS = {
     fine => {
         scope       => [ 'branchcode', 'categorycode', 'itemtype' ],
         is_monetary => 1,
-      },
+    },
     finedays => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
@@ -163,7 +163,7 @@ our $RULE_KINDS = {
     overduefinescap => {
         scope       => [ 'branchcode', 'categorycode', 'itemtype' ],
         is_monetary => 1,
-      },
+    },
     renewalperiod => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
