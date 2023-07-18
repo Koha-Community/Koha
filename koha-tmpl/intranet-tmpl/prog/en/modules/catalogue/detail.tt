@@ -889,7 +889,7 @@
               [% END %]
             </td>
             <td>[% order.quantity | html %]</td>
-            <td>[% IF ( order.unitprice_tax_included > 0 ) %][% order.unitprice_tax_included | $Price %][% ELSE %][% order.ecost_tax_included | $Price %][% END %]
+            <td>[% IF ( order.orderstatus == "complete" ) %][% order.unitprice_tax_included | $Price %][% ELSE %][% order.ecost_tax_included | $Price %][% END %]
             <td>[% order.order_internalnote | html %]</td>
             <td>
                 [% IF order.subscriptionid %]
