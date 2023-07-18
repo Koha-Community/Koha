@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
+use Test::Exception;
 
 use DateTime;
 use DateTime::TimeZone;
@@ -275,6 +276,64 @@ subtest 'copy_to_branch' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'with a library that is never open' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $calendar   = C4::Calendar->new( branchcode => $branchcode );
+    foreach my $weekday ( 0 .. 6 ) {
+        $calendar->insert_week_day_holiday( weekday => $weekday, title => '', description => '' );
+    }
+
+    my $now = DateTime->now;
+
+    subtest 'next_open_days should throw an exception' => sub {
+        my $kcalendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        throws_ok { $kcalendar->next_open_days( $now, 1 ) } 'Koha::Exceptions::Calendar::NoOpenDays';
+    };
+
+    subtest 'prev_open_days should throw an exception' => sub {
+        my $kcalendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        throws_ok { $kcalendar->prev_open_days( $now, 1 ) } 'Koha::Exceptions::Calendar::NoOpenDays';
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'with a library that is *almost* never open' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $calendar   = C4::Calendar->new( branchcode => $branchcode );
+    foreach my $weekday ( 0 .. 6 ) {
+        $calendar->insert_week_day_holiday( weekday => $weekday, title => '', description => '' );
+    }
+
+    my $now                    = DateTime->now;
+    my $open_day_in_the_future = $now->clone()->add( years => 1 );
+    my $open_day_in_the_past   = $now->clone()->subtract( years => 1 );
+    $calendar->insert_exception_holiday( date => $open_day_in_the_future->ymd, title => '', description => '' );
+    $calendar->insert_exception_holiday( date => $open_day_in_the_past->ymd,   title => '', description => '' );
+
+    subtest 'next_open_days should find the open day' => sub {
+        my $kcalendar     = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        my $next_open_day = $kcalendar->next_open_days( $now, 1 );
+        is( $next_open_day->ymd, $open_day_in_the_future->ymd );
+    };
+
+    subtest 'prev_open_days should find the open day' => sub {
+        my $kcalendar     = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
+        my $prev_open_day = $kcalendar->prev_open_days( $now, 1 );
+        is( $prev_open_day->ymd, $open_day_in_the_past->ymd );
+    };
+
+    $schema->storage->txn_rollback;
 };
 
 # Clear cache

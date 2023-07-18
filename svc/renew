@@ -79,6 +79,8 @@ if ( $data->{renew_okay} || ( $seen && $data->{error} eq 'too_unseen') ) {
     } catch {
         if ( ref($_) eq 'Koha::Exceptions::Checkout::FailedRenewal' ) {
             $data->{error} = 'renewal_failed';
+        } elsif ( ref($_) eq 'Koha::Exceptions::Calendar::NoOpenDays' ) {
+            $data->{error} = 'no_open_days';
         } else {
             $_->rethrow;
         }
