@@ -13,5 +13,6 @@ if ( $EVAL_ERROR ) {
     plan( skip_all => $msg );
 }
 
-Test::Perl::Critic->import( -profile => '.perlcriticrc');
-all_critic_ok('.');
+Test::Perl::Critic->import( -profile => '.perlcriticrc' );
+my @files = map { chomp; $_ } `git ls-tree -r master --name-only`;    # only files part of git
+all_critic_ok(@files);
