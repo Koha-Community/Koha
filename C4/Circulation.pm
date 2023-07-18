@@ -3103,6 +3103,7 @@ sub CanBookBeRenewed {
       branch           => $branch,
       [datedue         => $datedue],
       [lastreneweddate => $lastreneweddate],
+      [skipfinecalc    => $skipfinecalc],
       [seen            => $seen],
       [automatic       => $automatic],
       [skip_record_index => $skip_record_index]
