@@ -203,6 +203,8 @@ $(document).ready(function() {
                             content += __("Not allowed: patron restricted");
                         } else if ( data.error == "overdue" ) {
                             content += __("Not allowed: overdue");
+                        } else if ( data.error == 'no_open_days' ) {
+                            content += __('Unable to find an open day');
                         } else if ( data.error ) {
                             content += data.error;
                         } else {
