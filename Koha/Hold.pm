@@ -92,6 +92,8 @@ my $hold = $hold->suspend_hold( $suspend_until );
 sub suspend_hold {
     my ( $self, $date ) = @_;
 
+    my $original = C4::Context->preference('HoldsLog') ? $self->unblessed : undef;
+
     $date &&= dt_from_string($date)->truncate( to => 'day' )->datetime;
 
     if ( $self->is_found ) {    # We can't suspend found holds
@@ -126,7 +128,7 @@ sub suspend_hold {
         }
     );
 
-    logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, $self )
+    logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, $self, undef, $original )
         if C4::Context->preference('HoldsLog');
 
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
@@ -147,6 +149,8 @@ my $hold = $hold->resume();
 sub resume {
     my ( $self ) = @_;
 
+    my $original = C4::Context->preference('HoldsLog') ? $self->unblessed : undef;
+
     $self->suspend(0);
     $self->suspend_until( undef );
 
@@ -160,7 +164,7 @@ sub resume {
         }
     );
 
-    logaction( 'HOLDS', 'RESUME', $self->reserve_id, $self )
+    logaction( 'HOLDS', 'RESUME', $self->reserve_id, $self, undef, $original )
         if C4::Context->preference('HoldsLog');
 
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
@@ -709,6 +713,8 @@ sub cancel {
 
     my $autofill_next = $params->{autofill} && $self->itemnumber && $self->found && $self->found eq 'W';
 
+    my $original = C4::Context->preference('HoldsLog') ? $self->unblessed : undef;
+
     $self->_result->result_source->schema->txn_do(
         sub {
             my $patron = $self->patron;
@@ -796,7 +802,7 @@ sub cancel {
                 );
             }
 
-            C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, $self )
+            C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, $self, undef, $original )
                 if C4::Context->preference('HoldsLog');
 
             Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
@@ -835,6 +841,8 @@ sub fill {
     $self->_result->result_source->schema->txn_do(
         sub {
             my $patron = $self->patron;
+
+            my $original = C4::Context->preference('HoldsLog') ? $self->unblessed : undef;
 
             $self->set(
                 {
@@ -880,7 +888,7 @@ sub fill {
                 }
             }
 
-            C4::Log::logaction( 'HOLDS', 'FILL', $self->id, $self )
+            C4::Log::logaction( 'HOLDS', 'FILL', $self->id, $self, undef, $original )
                 if C4::Context->preference('HoldsLog');
 
             Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
