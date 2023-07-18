@@ -918,7 +918,7 @@ sub AUTOLOAD {
                 return $self->_result()->get_column($method);
             }
         };
-        no strict 'refs';
+        no strict 'refs'; ## no critic (strict)
         *{$AUTOLOAD} = $accessor;
         return $accessor->( $self, @_ );
     }
