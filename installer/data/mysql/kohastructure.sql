@@ -173,6 +173,7 @@ CREATE TABLE `action_logs` (
   `interface` varchar(30) DEFAULT NULL COMMENT 'the context this action was taken in',
   `script` varchar(255) DEFAULT NULL COMMENT 'the name of the cron script that caused this change',
   `trace` text DEFAULT NULL COMMENT 'An optional stack trace enabled by ActionLogsTraceDepth',
+  `diff` LONGTEXT NULL DEFAULT NULL COMMENT 'Stores a diff of the changed object',
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
   KEY `user_idx` (`user`),
