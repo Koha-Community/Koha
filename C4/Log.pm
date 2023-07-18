@@ -25,9 +25,10 @@ use strict;
 use warnings;
 
 use Data::Dumper qw( Dumper );
-use JSON qw( to_json );
-use Scalar::Util qw( blessed );
 use File::Basename qw( basename );
+use JSON qw( to_json encode_json );
+use Scalar::Util qw( blessed );
+use Struct::Diff qw( diff );
 
 use C4::Context;
 use Koha::Logger;
@@ -59,7 +60,7 @@ The functions in this module perform various functions in order to log all the o
 
 =item logaction
 
-  &logaction($modulename, $actionname, $objectnumber, $infos, $interface);
+  &logaction($modulename, $actionname, $objectnumber, $infos, $interface, $hashref_of_original);
 
 Adds a record into action_logs table to report the different changes upon the database.
 Each log entry includes the number of the user currently logged in.  For batch
@@ -70,7 +71,9 @@ number is set to 0, which is the same as the superlibrarian's number.
 
 #'
 sub logaction {
-    my ($modulename, $actionname, $objectnumber, $infos, $interface)=@_;
+    my ($modulename, $actionname, $objectnumber, $infos, $interface, $original )=@_;
+
+    my $updated;
 
     # Get ID of logged in user.  if called from a batch job,
     # no user session exists and C4::Context->userenv() returns
@@ -82,13 +85,16 @@ sub logaction {
 
     if( blessed($infos) && $infos->isa('Koha::Object') ) {
         $infos = $infos->get_from_storage if $infos->in_storage;
+        $updated = $infos->unblessed;
         local $Data::Dumper::Sortkeys = 1;
 
         if ( $infos->isa('Koha::Item') && $modulename eq 'CATALOGUING' && $actionname eq 'MODIFY' ) {
-            $infos = "item " . Dumper( $infos->unblessed );
+            $infos = "item " . Dumper( $updated );
         } else {
-            $infos = Dumper( $infos->unblessed );
+            $infos = Dumper( $updated );
         }
+    } else {
+        $updated = $infos;
     }
 
     my $script = ( $interface eq 'cron' or $interface eq 'commandline' )
@@ -112,6 +118,8 @@ sub logaction {
     }
     my $trace = @trace ? to_json( \@trace, { utf8 => 1, pretty => 0 } ) : undef;
 
+    my $diff = ( $original && ref $updated eq 'HASH' ) ? encode_json( diff( $original, $updated, noU => 1 ) ) : undef;
+
     Koha::ActionLog->new(
         {
             timestamp => \'NOW()',
@@ -123,6 +131,7 @@ sub logaction {
             interface => $interface,
             script    => $script,
             trace     => $trace,
+            diff      => $diff,
         }
     )->store();
 
@@ -134,7 +143,7 @@ sub logaction {
     );
     $logger->debug(
         sub {
-            "ACTION LOG: " . to_json(
+            "ACTION LOG: " . encode_json(
                 {
                     user   => $usernumber,
                     module => $modulename,

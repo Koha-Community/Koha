@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 use Data::Dumper qw( Dumper );
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use C4::Context;
 use C4::Log qw( logaction cronlogaction );
@@ -26,6 +26,8 @@ use Koha::ActionLogs;
 
 use t::lib::Mocks qw/mock_preference/; # to mock CronjobLog
 use t::lib::TestBuilder;
+
+use JSON qw( decode_json );
 
 # Make sure we can rollback.
 our $schema  = Koha::Database->new->schema;
@@ -192,6 +194,19 @@ subtest 'Reduce log size by unblessing Koha objects' => sub {
     logaction( 'MY_MODULE', 'TEST03', $item->itemnumber, $builder, 'opac' );
     $logs = Koha::ActionLogs->search({ module => 'MY_MODULE', action => 'TEST03', object => $item->itemnumber });
     like( $logs->next->info, qr/^t::lib::TestBuilder/, 'Dumped TestBuilder object' );
+};
+
+subtest 'Test storing diff of objects' => sub {
+    plan tests => 1;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item = $builder->build_sample_item;
+    my $original = $item->unblessed();
+    $item->barcode('_MY_TEST_BARCODE_')->store();
+    logaction( 'MY_MODULE', 'TEST01', $item->itemnumber, $item, 'opac', $original );
+    my $logs = Koha::ActionLogs->search({ module => 'MY_MODULE', action => 'TEST01', object => $item->itemnumber })->next;
+    my $diff = decode_json( $logs->diff );
+    is( $diff->{D}->{barcode}->{N}, '_MY_TEST_BARCODE_', 'Diff of changes logged successfully' );
 };
 
 $schema->storage->txn_rollback;
