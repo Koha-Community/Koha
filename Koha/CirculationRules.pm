@@ -21,6 +21,7 @@ use Modern::Perl;
 use Carp qw( croak );
 
 use Koha::Exceptions;
+use Koha::Exceptions::CirculationRule;
 use Koha::CirculationRule;
 use Koha::Caches;
 use Koha::Cache::Memory::Lite;
@@ -381,7 +382,7 @@ sub set_rule {
     my $can_be_blank = defined $kind_info->{can_be_blank} ? $kind_info->{can_be_blank} : 1;
     $rule_value = undef if defined $rule_value && $rule_value eq "" && !$can_be_blank;
     my $is_monetary = defined $kind_info->{is_monetary} ? $kind_info->{is_monetary} : 0;
-    Koha::Exceptions::BadParameter->throw("set_rule expected decimal")
+    Koha::Exceptions::CirculationRule::NotDecimal->throw( name => $rule_name, value => $rule_value )
         if ( $is_monetary && defined($rule_value) && $rule_value !~ /^\d+(\.\d{2})?$/ );
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
