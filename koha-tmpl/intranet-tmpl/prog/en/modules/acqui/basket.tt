@@ -482,6 +482,7 @@
                                                     [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                         <th>Supplier report</th>
                                                     [% END %]
+                                                    <th>Place hold</th>
                                                     [% IF ( active ) %]
                                                         [% UNLESS ( closedate ) %]
                                                             <th class="NoSort">Modify</th>
@@ -675,6 +676,11 @@
                                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                             <td>[% books_loo.suppliers_report | html %]</td>
                                                         [% END %]
+                                                        <td>
+                                                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% books_loo.biblionumber | uri %]">
+                                                                Place a hold on the order
+                                                            </a>
+                                                        </td>
                                                         [% IF ( active ) %]
                                                             [% UNLESS ( closedate ) %]
                                                                 <td>
