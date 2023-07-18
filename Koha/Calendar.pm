@@ -8,6 +8,15 @@ use DateTime::Duration;
 use C4::Context;
 use Koha::Caches;
 use Koha::Exceptions;
+use Koha::Exceptions::Calendar;
+
+# This limit avoids an infinite loop when searching for an open day in an
+# always closed library
+# The value is arbitrary, but it should be large enough to be able to
+# consider there is no open days if we haven't found any with that many
+# iterations, and small enough to allow the loop to end quickly
+# See next_open_days and prev_open_days
+use constant OPEN_DAYS_SEARCH_MAX_ITERATIONS => 5000;
 
 sub new {
     my ( $classname, %options ) = @_;
@@ -261,10 +270,18 @@ sub next_open_days {
     my $base_date = $dt->clone();
 
     $base_date->add(days => $to_add);
-    while ($self->is_holiday($base_date)) {
+    my $i = 0;
+    while ( $self->is_holiday($base_date) && $i < OPEN_DAYS_SEARCH_MAX_ITERATIONS ) {
         my $add_next = $self->get_push_amt($base_date);
         $base_date->add(days => $add_next);
+        ++$i;
     }
+
+    if ( $self->is_holiday($base_date) ) {
+        Koha::Exceptions::Calendar::NoOpenDays->throw(
+            sprintf( 'Unable to find an open day for library %s', $self->{branchcode} ) );
+    }
+
     return $base_date;
 }
 
@@ -282,11 +299,18 @@ sub prev_open_days {
 
     $base_date->add(days => $to_sub);
 
-    while ($self->is_holiday($base_date)) {
+    my $i = 0;
+    while ( $self->is_holiday($base_date) && $i < OPEN_DAYS_SEARCH_MAX_ITERATIONS ) {
         my $sub_next = $self->get_push_amt($base_date);
         # Ensure we're subtracting when we need to be
         $sub_next = $sub_next > 0 ? 0 - $sub_next : $sub_next;
         $base_date->add(days => $sub_next);
+        ++$i;
+    }
+
+    if ( $self->is_holiday($base_date) ) {
+        Koha::Exceptions::Calendar::NoOpenDays->throw(
+            sprintf( 'Unable to find an open day for library %s', $self->{branchcode} ) );
     }
 
     return $base_date;
