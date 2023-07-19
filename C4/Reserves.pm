@@ -1377,16 +1377,17 @@ sub IsAvailableForItemLevelRequest {
         # we use the in-memory cache to avoid calling once per item when looping items on a biblio
 
         my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
-        my $cache_key = sprintf "ItemsAnyAvailableAndNotRestricted:%s:%s", $patron->id, $item->biblionumber;
+        my $cache_key    = sprintf "ItemsAnyAvailableAndNotRestricted:%s:%s", $patron->id, $item->biblionumber;
 
-        my $any_available = $memory_cache->get_from_cache( $cache_key );
-        return $any_available ? 0 : 1 if defined( $any_available );
+        my $any_available = $memory_cache->get_from_cache($cache_key);
+        return $any_available ? 0 : 1 if defined($any_available);
 
-        $any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron });
+        $any_available =
+            ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron } );
         $memory_cache->set_in_cache( $cache_key, $any_available );
         return $any_available ? 0 : 1;
 
-    } else { # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
+    } else {  # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
         return $item->onloan || IsItemOnHoldAndFound( $item->itemnumber );
     }
 }
