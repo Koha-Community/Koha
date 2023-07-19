@@ -464,9 +464,7 @@ sub old_checkouts {
 
 =head3 items
 
-my $items = $biblio->items({ [ host_items => 1 ] });
-
-The optional param host_items allows you to include 'analytical' items.
+my $items = $biblio->items();
 
 Returns the related Koha::Items object for this biblio
 
