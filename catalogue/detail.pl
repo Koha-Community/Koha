@@ -194,16 +194,13 @@ my $all_items = $biblio->items->search_ordered;
 my @items;
 my $patron = Koha::Patrons->find( $borrowernumber );
 $params->{ itemlost } = 0 if $patron->category->hidelostitems && !$showallitems;
-my $items_params = {
-    ( $invalid_marc_record ? () : ( host_items => 1 ) ),
-};
-my $items = $biblio->items($items_params)->search_ordered( $params, { prefetch => ['issue','current_branchtransfers'] } );
+my $items = $biblio->items({ host_items => 1 })->search_ordered( $params, { prefetch => ['issue','current_branchtransfers'] } );
 
 # flag indicating existence of at least one item linked via a host record
 my $hostrecords = $biblio->host_items->count;
 
 my $dat = &GetBiblioData($biblionumber);
-$dat->{'count'} = $biblio->items($items_params)->count;
+$dat->{'count'} = $biblio->items({ host_items => 1 })->count;
 $dat->{'showncount'} = $items->count;
 $dat->{'hiddencount'} = $dat->{'count'} - $dat->{'showncount'};
 
