@@ -164,7 +164,7 @@ material size (MARC21 300$c)
   data_type: 'text'
   is_nullable: 1
 
-publication place (MARC21 260$a and 264Â§a)
+publication place (MARC21 260$a and 264$a)
 
 =head2 lccn
 
@@ -314,8 +314,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("biblioitemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-06-26 12:47:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GiuL+3o/fRyTkale3lq2xQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-19 08:58:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum://St+Sqs2eNxnSuMIijGeQ
 
 sub koha_objects_class {
     'Koha::Old::Biblioitems';
