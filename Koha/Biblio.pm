@@ -479,10 +479,11 @@ sub items {
 
     return Koha::Items->_new_from_dbic( $items_rs ) unless $params->{host_items};
 
-    my @itemnumbers = $items_rs->get_column('itemnumber')->all;
     my $host_itemnumbers = $self->_host_itemnumbers();
-    push @itemnumbers, @{ $host_itemnumbers };
-    return Koha::Items->search({ "me.itemnumber" => { -in => \@itemnumbers } });
+    my $search_params = { -or => [biblionumber => $self->id] };
+    push @{$search_params->{'-or'}}, itemnumber => { -in => $host_itemnumbers } if $host_itemnumbers;
+
+    return Koha::Items->search($search_params);
 }
 
 =head3 host_items
