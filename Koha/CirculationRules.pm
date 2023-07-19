@@ -383,7 +383,7 @@ sub set_rule {
     $rule_value = undef if defined $rule_value && $rule_value eq "" && !$can_be_blank;
     my $is_monetary = defined $kind_info->{is_monetary} ? $kind_info->{is_monetary} : 0;
     Koha::Exceptions::CirculationRule::NotDecimal->throw( name => $rule_name, value => $rule_value )
-        if ( $is_monetary && defined($rule_value) && $rule_value !~ /^\d+(\.\d{2})?$/ );
+        if ( $is_monetary && defined($rule_value) && $rule_value !~ /^\d+(\.\d+)?$/ );
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
         $v = undef if $v and $v eq '*';
