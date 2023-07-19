@@ -71,7 +71,7 @@ sub validate {
     my $password = $body->{password} // "";
 
     return try {
-        my ( $status, $cardnumber, $userid ) = C4::Auth::checkpw( $identifier, $password );
+        my ( $status, $THE_cardnumber, $THE_userid ) = C4::Auth::checkpw( $identifier, $password );
         unless ($status) {
             return $c->render(
                 status  => 400,
@@ -79,9 +79,17 @@ sub validate {
             );
         }
 
-        return $c->render( status => 204, openapi => '' );
-    }
-    catch {
+        my $patron = Koha::Patrons->find( { cardnumber => $THE_cardnumber } );
+
+        return $c->render(
+            status  => 201,
+            openapi => {
+                cardnumber => $patron->cardnumber,
+                patron_id  => $patron->id,
+                userid     => $patron->userid,
+            }
+        );
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Password') ) {
             return $c->render(
                 status  => 400,
