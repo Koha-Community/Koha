@@ -136,7 +136,9 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-        ->status_is( 204, 'Validating using `cardnumber` works' )->content_is(q{});
+        ->status_is( 201, 'Validating using `cardnumber` works' )
+        ->json_is(
+        { cardnumber => $librarian->cardnumber, patron_id => $librarian->id, userid => $librarian->userid } );
 
     $json = {
         identifier => $librarian->cardnumber,
@@ -144,7 +146,9 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-        ->status_is( 204, 'Validating using `cardnumber` works' )->content_is(q{});
+        ->status_is( 201, 'Validating using `cardnumber` works' )
+        ->json_is(
+        { cardnumber => $librarian->cardnumber, patron_id => $librarian->id, userid => $librarian->userid } );
 
     $json = {
         identifier => $deleted_cardnumber,
@@ -178,7 +182,9 @@ subtest 'Password validation - authorized requests tests' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
-        ->status_is( 204, 'Validating using the `userid` attribute works' )->content_is(q{});
+        ->status_is( 201, 'Validating using the `userid` attribute works' )
+        ->json_is(
+        { cardnumber => $librarian->cardnumber, patron_id => $librarian->id, userid => $librarian->userid } );
 
     $json = {
         password => $password,
