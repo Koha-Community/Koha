@@ -1658,8 +1658,8 @@ subtest 'list() tests' => sub {
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my $biblionumber2 = $builder->build_sample_biblio->biblionumber;
 
-    my $search =
-"[{\"biblionumber\": \"$biblionumber1\"}, {\"biblionumber\": \"$biblionumber2\"}]";
+    my $search = 
+      encode_json( [ { 'me.biblio_id' => $biblionumber1 }, { 'me.biblio_id' => $biblionumber2 } ] );
     $t->get_ok(
         "//$userid:$password@/api/v1/biblios/" => { 'x-koha-query' => $search }
     )->status_is(403);
