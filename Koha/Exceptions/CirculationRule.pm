@@ -30,4 +30,21 @@ use Exception::Class (
     },
 );
 
+=head1 NAME
+
+Koha::Exceptions::CirculationRule - Base class for CirculationRule exceptions
+
+=head1 Exceptions
+
+=head2 Koha::Exceptions::CirculationRule
+
+Generic CirculationRule exception
+
+=head2 Koha::Exceptions::CirculationRule::NotDecimal
+
+Exception to be used when an attempt is made to insert a non-decimal value into
+a monetary rule.
+
+=cut
+
 1;
