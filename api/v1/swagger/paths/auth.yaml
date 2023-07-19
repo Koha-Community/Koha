@@ -1091,8 +1091,21 @@
     produces:
       - application/json
     responses:
-      "204":
+      "201":
         description: Validation successful
+        schema:
+          type: object
+          properties:
+            cardnumber:
+              type: string
+              description: cardnumber for the validated patron
+            patron_id:
+              type: integer
+              description: Internal patron identifier
+            userid:
+              type: string
+              description: userid for the validated patron
+          additionalProperties: false
       "400":
         description: Bad request
         schema:
