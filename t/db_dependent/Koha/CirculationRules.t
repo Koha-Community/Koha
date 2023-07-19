@@ -153,7 +153,7 @@ subtest 'get_effective_issuing_rule' => sub {
 };
 
 subtest 'set_rule' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -205,7 +205,7 @@ subtest 'set_rule' => sub {
                 branchcode => $branchcode,
                 categorycode => $categorycode,
                 itemtype => $itemtype,
-                rule_name => 'fine',
+                rule_name => 'article_requests',
                 rule_value => '',
             } );
         }, 'setting fine with branch/category/itemtype succeeds' );
@@ -298,6 +298,30 @@ subtest 'set_rule' => sub {
                 rule_value => '',
             } );
         }, qr/categorycode/, 'setting holdallowed with categorycode fails' );
+    };
+
+    subtest 'Call with badly formatted params' => sub {
+        plan tests => 4;
+
+        Koha::CirculationRules->delete;
+
+        foreach my $monetary_rule ( ( 'article_request_fee', 'fine', 'overduefinescap', 'recall_overdue_fine' ) ) {
+            throws_ok(
+                sub {
+                    Koha::CirculationRules->set_rule(
+                        {
+                            categorycode => '*',
+                            branchcode   => '*',
+                            ( $monetary_rule ne 'article_request_fee' ? ( itemtype => '*' ) : () ),
+                            rule_name  => $monetary_rule,
+                            rule_value => '10,00',
+                        }
+                    );
+                },
+                qr/decimal/,
+                "setting $monetary_rule fails when passed value is not decimal"
+            );
+        }
     };
 
     $schema->storage->txn_rollback;
