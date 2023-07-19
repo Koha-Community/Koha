@@ -318,8 +318,8 @@ subtest renew_all => sub {
 subtest renew => sub {
     plan tests => 2;
 
-    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
-    my $patron = $builder->build_object(
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
@@ -327,17 +327,19 @@ subtest renew => sub {
             }
         }
     );
-    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
 
-    my $item = $builder->build_sample_item({
-        library => $library->branchcode,
-    });
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
 
     AddIssue( $patron->unblessed, $item->barcode, undef, 0 );
     my $checkout = $item->checkout;
-    ok( defined($checkout), "Successfully checked out an item prior to renewal");
+    ok( defined($checkout), "Successfully checked out an item prior to renewal" );
 
-    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
+    my $ils = C4::SIP::ILS->new( { id => $library->branchcode } );
 
     my $transaction = $ils->renew( $patron->cardnumber, "", $item->barcode );
 
