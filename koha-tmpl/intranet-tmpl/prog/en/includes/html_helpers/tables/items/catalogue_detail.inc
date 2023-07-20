@@ -145,7 +145,7 @@
                 tab.find(".show_filters").hide();
                 tab.find(".hide_filters").show();
                 $("#"+tab_id+"_table thead tr:eq(1)").remove();
-                build_items_table(tab_id, true, { destroy: true } );
+                build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback );
             });
 
             $(".hide_filters").on("click",function(e){
@@ -155,7 +155,7 @@
                 tab.find(".hide_filters").hide();
                 tab.find(".show_filters").show();
                 $("#"+tab_id+"_table thead tr:eq(1)").remove();
-                build_items_table(tab_id, false, { destroy: true } );
+                build_items_table(tab_id, false, { destroy: true }, build_items_table_drawncallback );
             });
         });
     [% END %]
@@ -218,7 +218,7 @@
         holdings: '[% PROCESS 'build_table' tab="holdings" | collapse %]',
         otherholdings: '[% PROCESS 'build_table' tab="otherholdings" | collapse %]',
     };
-    function build_items_table (tab_id, add_filters, dt_options) {
+    function build_items_table (tab_id, add_filters, dt_options, drawcallback) {
 
         if ( dt_options && dt_options.hasOwnProperty('destroy') ) {
             let table_id = "#"+tab_id+"_table";
@@ -753,6 +753,8 @@
                     container.find(".top.pager").remove();
                     container.find(".bottom.pager").remove();
                 }
+
+                if ( drawcallback ) { drawcallback(this); }
             },
             [% END %]
             ...dt_options,

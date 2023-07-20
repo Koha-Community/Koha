@@ -1122,9 +1122,10 @@
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
         // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
-        function verify_cover_images() {
+        function verify_cover_images(container) {
             // Loop over each container in the template which contains covers
-            $(".cover-slider").each(function(){
+            let cover_sliders = container ? container.find('.cover-slider') : $(".cover-slider");
+            cover_sliders.each(function(){
                 var lightbox_descriptions = [];
                 var first_shown = 0;
                 $(this).find(".cover-image").each( function( index ){
@@ -1189,7 +1190,7 @@
 
             });
 
-            $(".cover-slider").each(function(){
+            cover_sliders.each(function(){
                 var coverSlide = this;
                 var coverImages = $(this).find(".cover-image");
                 if( coverImages.length > 1 ){
@@ -1230,6 +1231,11 @@
                 }
             });
         }
+
+        let build_items_table_drawncallback = function (table) {
+            let tab_id = table.parents('.tab-pane').attr('id');
+            verify_cover_images($("#" + tab_id + '_table'));
+        };
 
         function removeLocalImage(imagenumber) {
             var thumbnail = $("#imagenumber-" + imagenumber );
@@ -1710,7 +1716,7 @@
 
             let items_tab_ids = [ 'holdings', 'otherholdings' ];
             items_tab_ids.forEach( function( tab_id, index ) {
-                build_items_table(tab_id, false);
+                build_items_table(tab_id, false, {}, build_items_table_drawncallback);
 
                 [% IF bundlesEnabled %]
                 // Add event listener for opening and closing bundle details
