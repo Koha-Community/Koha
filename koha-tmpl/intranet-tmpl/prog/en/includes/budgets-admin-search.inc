@@ -15,7 +15,7 @@
                 <div class="form-content">
                     <input class="query form-control" type="text" name="filter_budgetname" id="filter_budgetname" value="[% filter_budgetname | html %]" placeholder="Search funds" />
 
-                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-folder-open"></i></button>
+                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-sliders"></i></button>
                 </div>
 
                 <button type="submit"><i class="fa fa-arrow-right"></i></button>
