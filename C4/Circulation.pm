@@ -3000,6 +3000,20 @@ sub CanBookBeRenewed {
     # override_limit will override anything else except on_reserve
     unless ( $override_limit ){
         my $branchcode = _GetCircControlBranch( $item, $patron );
+
+        ( $auto_renew, $soonest ) = _CanBookBeAutoRenewed({
+            patron     => $patron,
+            item       => $item,
+            branchcode => $branchcode,
+            issue      => $issue
+        });
+        return ( 0, $auto_renew, { soonest_renew_date => $soonest } ) if $auto_renew =~ 'auto_too_soon' && $cron;
+        # cron wants 'too_soon' over 'on_reserve' for performance and to avoid
+        # extra notices being sent. Cron also implies no override
+        return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_account_expired';
+        return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_late';
+        return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_much_oweing';
+
         my $issuing_rule = Koha::CirculationRules->get_effective_rules(
             {
                 categorycode => $patron->categorycode,
@@ -3036,18 +3050,6 @@ sub CanBookBeRenewed {
             return ( 0, 'overdue');
         }
 
-        ( $auto_renew, $soonest ) = _CanBookBeAutoRenewed({
-            patron     => $patron,
-            item       => $item,
-            branchcode => $branchcode,
-            issue      => $issue
-        });
-        return ( 0, $auto_renew, { soonest_renew_date => $soonest } ) if $auto_renew =~ 'auto_too_soon' && $cron;
-        # cron wants 'too_soon' over 'on_reserve' for performance and to avoid
-        # extra notices being sent. Cron also implies no override
-        return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_account_expired';
-        return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_late';
-        return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_much_oweing';
     }
 
     if ( C4::Context->preference('UseRecalls') ) {
