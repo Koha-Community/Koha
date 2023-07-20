@@ -73,7 +73,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'planning_manage', 'Manage budget plannings'),
    (11, 'order_manage', 'Manage baskets and order lines'),
    (11, 'order_manage_all', 'Manage all baskets and order lines, regardless of restrictions on them'),
-   (11, 'issue_manage', 'Manage issues');
+   (11, 'issue_manage', 'Manage issues'),
    (11, 'group_manage', 'Manage basket groups'),
    (11, 'order_receive', 'Receive orders and manage shipments'),
    (11, 'budget_add_del', 'Add and delete funds (but can''t modify funds)'),
