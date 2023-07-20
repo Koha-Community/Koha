@@ -20,7 +20,7 @@
                 [% END %]
 
                 [% IF Koha.Preference('IntranetCatalogSearchPulldown') || Koha.Preference('IntranetAddMastheadLibraryPulldown') %]
-                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-sliders"></i></button>
+                    <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
                 [% END %]
             </div>
             <button type="submit"><i class="fa fa-arrow-right"></i></button>

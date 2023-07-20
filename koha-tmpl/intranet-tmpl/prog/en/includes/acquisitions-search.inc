@@ -23,7 +23,7 @@
                 <div class="form-content">
                     <input type="text" id="title" class="form-control" placeholder="Title" name="title" size="13" value="[% title | html %]" />
                     <input type="text" id="searchsupplier" class="form-control" placeholder="Vendor" name="name" size="13" value="[% name | html %]" />
-                    <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-sliders"></i></button>
+                    <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
                     <input type="hidden" id="do_search" name="do_search" value="do" />
                 </div>
                 <button type="submit"><i class="fa fa-arrow-right"></i></button>

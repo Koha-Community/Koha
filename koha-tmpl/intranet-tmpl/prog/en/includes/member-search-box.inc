@@ -24,7 +24,7 @@
                     <input name="searchmember" id="searchmember" class="head-searchbox form-control" type="text" placeholder="Enter patron card number or partial name" size="25"/>
                 [% END %]
 
-                <button type="button" class="form-extra-content-toggle"><i class="fa-solid fa-sliders"></i></button>
+                <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
             </div>
 
             <button type="submit"><i class="fa fa-arrow-right"></i></button>

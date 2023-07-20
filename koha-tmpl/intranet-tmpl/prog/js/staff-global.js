@@ -101,8 +101,10 @@ $(document).ready(function() {
         const extraContent = $(this).closest('form').find('.form-extra-content');
         if (extraContent.is(':visible')) {
             extraContent.hide();
+            $(this).removeClass("extra-content-open");
         } else {
             extraContent.show();
+            $(this).addClass("extra-content-open");
         }
     });
 
