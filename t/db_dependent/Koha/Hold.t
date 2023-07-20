@@ -728,9 +728,9 @@ subtest 'suspend_hold() and resume() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'cancellation_requests() and add_cancellation_request() tests' => sub {
+subtest 'cancellation_requests(), add_cancellation_request() and cancellation_requested() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -739,6 +739,7 @@ subtest 'cancellation_requests() and add_cancellation_request() tests' => sub {
     my $hold = $builder->build_object( { class => 'Koha::Holds', } );
 
     is( $hold->cancellation_requests->count, 0 );
+    ok( !$hold->cancellation_requested );
 
     # Add two cancellation requests
     my $request_1 = $hold->add_cancellation_request;
@@ -756,6 +757,7 @@ subtest 'cancellation_requests() and add_cancellation_request() tests' => sub {
     is( $request_2->creation_date, $creation_date, 'Passed creation_date set' );
 
     is( $hold->cancellation_requests->count, 2 );
+    ok( $hold->cancellation_requested );
 
     $schema->storage->txn_rollback;
 };
