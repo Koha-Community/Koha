@@ -43,16 +43,17 @@ sub strings_map {
     if ( defined $self->type ) {
         my $av = Koha::AuthorisedValues->search(
             {
-                category => ISSUE_TYPE_CATEGORY,
+                category         => ISSUE_TYPE_CATEGORY,
                 authorised_value => $self->type,
             }
         );
 
-        my $type_str = $av->count
-          ? $params->{public}
-              ? $av->next->opac_description
-              : $av->next->lib
-          : $self->type;
+        my $type_str =
+              $av->count
+            ? $params->{public}
+                ? $av->next->opac_description
+                : $av->next->lib
+            : $self->type;
 
         $strings->{type} = {
             category => ISSUE_TYPE_CATEGORY,

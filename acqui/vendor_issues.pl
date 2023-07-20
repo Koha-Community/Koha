@@ -42,13 +42,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $issue;
-if ( $issue_id ) {
-    $issue = Koha::Acquisition::Bookseller::Issues->find($issue_id);
+if ($issue_id) {
+    $issue        = Koha::Acquisition::Bookseller::Issues->find($issue_id);
     $booksellerid = $issue->vendor_id;
 }
 my $vendor = Koha::Acquisition::Booksellers->find($booksellerid);
 
-unless ( $vendor ) {
+unless ($vendor) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }

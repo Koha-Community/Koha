@@ -147,7 +147,7 @@ sub interfaces {
 sub issues {
     my ($self) = @_;
     my $rs = $self->_result->aqbookseller_issues;
-    return Koha::Acquisition::Bookseller::Issues->_new_from_dbic( $rs );
+    return Koha::Acquisition::Bookseller::Issues->_new_from_dbic($rs);
 }
 
 =head3 to_api_mapping

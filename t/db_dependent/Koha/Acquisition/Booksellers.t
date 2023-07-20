@@ -246,8 +246,8 @@ subtest 'issues' => sub {
 
     $vendor = $vendor->get_from_storage;
     my $issues = $vendor->issues;
-    is( $issues->count, 1, '1 issue stored' );
-    is( ref($issues), 'Koha::Acquisition::Bookseller::Issues', 'Type is correct' );
+    is( $issues->count, 1,                                       '1 issue stored' );
+    is( ref($issues),   'Koha::Acquisition::Bookseller::Issues', 'Type is correct' );
 
     is( $issues->next->strings_map->{type}->{str}, 'Maintenance' );
 

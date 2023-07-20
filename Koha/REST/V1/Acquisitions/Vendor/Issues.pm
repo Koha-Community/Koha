@@ -47,7 +47,7 @@ sub list {
     return try {
 
         my $vendor_id = $c->validation->param('vendor_id');
-        my $vendor = Koha::Acquisition::Booksellers->find($vendor_id);
+        my $vendor    = Koha::Acquisition::Booksellers->find($vendor_id);
 
         unless ($vendor) {
             return $c->render(
@@ -57,14 +57,13 @@ sub list {
         }
 
         my $issues_rs = $vendor->issues;
-        my $issues    = $c->objects->search( $issues_rs );
+        my $issues    = $c->objects->search($issues_rs);
 
         return $c->render(
             status  => 200,
             openapi => $issues,
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

@@ -38,13 +38,13 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+    my $vendor    = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
     my $vendor_id = $vendor->id;
 
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2 ** 11 }
+            value => { flags => 2**11 }
         }
     );
     my $password = 'thePassword123';
@@ -52,9 +52,7 @@ subtest 'list() tests' => sub {
     my $userid = $librarian->userid;
 
     # No issues, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues")
-      ->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues")->status_is(200)->json_is( [] );
 
     my $issue = Koha::Acquisition::Bookseller::Issue->new(
         {
@@ -63,20 +61,20 @@ subtest 'list() tests' => sub {
             notes     => 'a vendor issue'
         }
     )->store;
+
     # One issue created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues")
-      ->status_is(200)
-      ->json_is( [$issue->to_api] );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues")->status_is(200)
+        ->json_is( [ $issue->to_api ] );
+
     # Embed the AV description
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues"
-        => { 'x-koha-embed' => '+strings' })
-      ->status_is(200)
-      ->json_is( [$issue->to_api({ strings => 1 })] );
+    $t->get_ok(
+        "//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues" => { 'x-koha-embed' => '+strings' } )
+        ->status_is(200)->json_is( [ $issue->to_api( { strings => 1 } ) ] );
 
     $vendor->delete;
+
     # No vendor, should get 404
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues")
-      ->status_is(404);
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/vendors/$vendor_id/issues")->status_is(404);
 
     $schema->storage->txn_rollback;
 };
