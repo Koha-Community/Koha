@@ -1,23 +1,44 @@
-// ***********************************************************
-// This example support/index.js is processed and
-// loaded automatically before your test files.
+// ***********************************************
+// This example commands.js shows you how to
+// create various custom commands and overwrite
+// existing commands.
 //
-// This is a great place to put global configuration and
-// behavior that modifies Cypress.
+// For more comprehensive examples of custom
+// commands please read more here:
+// https://on.cypress.io/custom-commands
+// ***********************************************
 //
-// You can change the location of this file or turn off
-// automatically serving support files with the
-// 'supportFile' configuration option.
 //
-// You can read more here:
-// https://on.cypress.io/configuration
-// ***********************************************************
+// -- This is a parent command --
+// Cypress.Commands.add('login', (email, password) => { ... })
+//
+//
+// -- This is a child command --
+// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
+//
+//
+// -- This is a dual command --
+// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
+//
+//
+// -- This will overwrite an existing command --
+// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-// Import commands.js using ES2015 syntax:
-import './commands';
+function get_fallback_login_value(param) {
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+    var env_var = param == 'username' ? 'KOHA_USER' : 'KOHA_PASS';
+
+    return typeof Cypress.env(env_var) === 'undefined' ? 'koha' : Cypress.env(env_var);
+}
+
+Cypress.Commands.add('login', (username, password) => {
+    var user = typeof username === 'undefined' ? get_fallback_login_value('username') : username;
+    var pass = typeof password === 'undefined' ? get_fallback_login_value('password') : password;
+    cy.visit('/cgi-bin/koha/mainpage.pl?logout.x=1')
+    cy.get("#userid").type(user)
+    cy.get("#password").type(pass)
+    cy.get("#submit-button").click()
+})
 
 Cypress.Commands.add('left_menu_active_item_is', (label) => {
     cy.get("#navmenulist a.current:not(.disabled)").should('have.length',1).contains(label);
