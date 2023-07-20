@@ -645,6 +645,20 @@ sub cancellation_requests {
     return Koha::Hold::CancellationRequests->search( { hold_id => $self->id } );
 }
 
+=head3 cancellation_requested
+
+    if ( $hold->cancellation_requested ) { ... }
+
+Returns true if a cancellation request has been placed for the hold.
+
+=cut
+
+sub cancellation_requested {
+    my ($self) = @_;
+
+    return Koha::Hold::CancellationRequests->search( { hold_id => $self->id } )->count > 0;
+}
+
 =head3 cancel
 
 my $cancel_hold = $hold->cancel(
