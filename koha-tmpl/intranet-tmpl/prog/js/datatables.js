@@ -896,7 +896,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 if ( existing_search ) {
                     $(this).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
                 } else {
-                    var search_title = _("%s search").format(title);
+                    var search_title = __("%s search").format(title);
                     $(this).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
                 }
             }
