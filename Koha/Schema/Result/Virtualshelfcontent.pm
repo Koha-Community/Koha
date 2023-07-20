@@ -41,11 +41,6 @@ foreign key linking to the virtualshelves table, defines the list that this reco
 
 foreign key linking to the biblio table, defines the bib record that has been added to the list
 
-=head2 flags
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 dateadded
 
   data_type: 'timestamp'
@@ -80,8 +75,6 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
-  "flags",
-  { data_type => "integer", is_nullable => 1 },
   "dateadded",
   {
     data_type => "timestamp",
@@ -146,8 +139,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4c7f4juRHZXLlSgNwOohrA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-20 15:47:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BRP+j1kip95rxOd8H5ootg
 
 #TODO See BZ 14544: Should be resolved by db revision
 __PACKAGE__->set_primary_key("shelfnumber","biblionumber");
