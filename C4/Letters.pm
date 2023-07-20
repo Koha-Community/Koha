@@ -1469,8 +1469,8 @@ sub _send_message_by_email {
       if !$message->{to_address}
       || $message->{to_address} ne $email->email->header('To');
 
-    $smtp_transports->{ $smtp_server->id } ||= $smtp_server->transport;
-    my $smtp_transport = $smtp_transports->{ $smtp_server->id };
+    $smtp_transports->{ $smtp_server->id // 'default' } ||= $smtp_server->transport;
+    my $smtp_transport = $smtp_transports->{ $smtp_server->id // 'default' };
 
     try {
         $email->send_or_die({ transport => $smtp_transport });
