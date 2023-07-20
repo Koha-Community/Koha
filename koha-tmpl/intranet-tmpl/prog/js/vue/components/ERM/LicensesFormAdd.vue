@@ -232,13 +232,6 @@ export default {
                 return false
             }
 
-            let apiUrl = "/api/v1/erm/licenses"
-
-            let method = "POST"
-            if (license.license_id) {
-                method = "PUT"
-                apiUrl += "/" + license.license_id
-            }
             delete license.license_id
             delete license.vendor
 
