@@ -123,7 +123,8 @@
                 let tab_id = $(this).data("tab");
                 let tab = $("#"+tab_id);
                 tab.find("input[name='itemnumber'][type='checkbox']").each( (i, input) => {
-                    items_selection[tab_id].push($(input).val());
+                    let itemnumber = parseInt($(input).val());
+                    items_selection[tab_id].push(itemnumber);
                     $(input).prop('checked', true);
                 });
                 itemSelectionBuildActionLinks(tab_id);
@@ -146,6 +147,7 @@
                 tab.find(".hide_filters").show();
                 $("#"+tab_id+"_table thead tr:eq(1)").remove();
                 build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback );
+                itemSelectionBuildActionLinks(tab_id);
             });
 
             $(".hide_filters").on("click",function(e){
@@ -156,6 +158,7 @@
                 tab.find(".show_filters").show();
                 $("#"+tab_id+"_table thead tr:eq(1)").remove();
                 build_items_table(tab_id, false, { destroy: true }, build_items_table_drawncallback );
+                itemSelectionBuildActionLinks(tab_id);
             });
         });
     [% END %]
