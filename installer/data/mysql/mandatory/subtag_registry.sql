@@ -425,6 +425,29 @@ VALUES ( 'fr', 'language', 'de', 'Französisch');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'fr', 'language', 'pl', 'Francuski');
 
+-- Scottish Gaelic
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'gd', 'language', 'Scottish Gaelic', NOW() );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'gd','gla');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gd', 'language', 'en', 'Scottish Gaelic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gd', 'language', 'gd', 'Gàidhlig');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gd', 'language', 'fr', 'Gaélique écossais');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gd', 'language', 'de', 'Schottisch-Gälisch');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gd', 'language', 'pl', 'Język szkocki gaelicki');
+
 -- Galician
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'gl', 'language', 'Galician','2005-10-16' );
