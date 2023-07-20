@@ -3405,7 +3405,7 @@ sub GetSoonestRenewDate {
         {
             $soonestrenewal->truncate( to => 'day' );
         }
-        return $soonestrenewal if $now < $soonestrenewal;
+        return $soonestrenewal;
     } elsif ( $checkout->auto_renew && $patron->autorenew_checkouts ) {
         # Checkouts with auto-renewing fall back to due date
         my $soonestrenewal = dt_from_string( $checkout->date_due );
