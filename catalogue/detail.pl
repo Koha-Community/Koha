@@ -193,8 +193,12 @@ my $itemtypes = { map { $_->itemtype => $_ } @{ Koha::ItemTypes->search_with_loc
 my $all_items = $biblio->items->search_ordered;
 my @items;
 my $patron = Koha::Patrons->find( $borrowernumber );
-$params->{ itemlost } = 0 if $patron->category->hidelostitems && !$showallitems;
-my @items = $biblio->items->search_ordered( $params )->as_list;
+while ( my $item = $all_items->next ) {
+    push @items, $item
+      unless $item->itemlost
+      && $patron->category->hidelostitems
+      && !$showallitems;
+}
 
 # flag indicating existence of at least one item linked via a host record
 my $hostrecords;
@@ -206,9 +210,6 @@ if ( $hostitems->count ) {
 }
 
 my $dat = &GetBiblioData($biblionumber);
-$dat->{'count'} = $biblio->items->count + $hostitems->count;
-$dat->{'showncount'} = scalar @items;
-$dat->{'hiddencount'} = $dat->{'count'} - $dat->{'showncount'};
 
 #is biblio a collection and are bundles enabled
 my $leader = $marc_record->leader();
