@@ -317,10 +317,8 @@ sub add_credit {
                 Koha::Exceptions::Account::UnrecognisedType->throw(
                     error => 'Type of credit not recognised' );
             }
-            else {
-                $_->rethrow;
-            }
         }
+        $_->rethrow;
     };
 
     return $line;
