@@ -299,7 +299,6 @@ sub _build_COUNTER_report_file {
 
                 #TODO: add ".csv" to end of filename here
                 filename => $self->name . "_" . $self->{report_type},
-                type  =>  $self->{report_type}
             }
         ]
     );

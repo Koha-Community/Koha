@@ -37,6 +37,7 @@
 <script>
 import { inject } from "vue"
 import ButtonSubmit from "../ButtonSubmit.vue"
+import { setMessage, setError, setWarning } from "../../messages"
 import { storeToRefs } from "pinia"
 import { APIClient } from "../../fetch/api-client.js"
 
@@ -65,10 +66,23 @@ export default {
         loadFile(filename, content) {
             this.file.filename = filename
             this.file.file_content = btoa(content)
+            this.getDataProvider(this.$route.params.usage_data_provider_id)
         },
         addDocument(e) {
             e.preventDefault()
-            // Harvesting and import to happen here
+            const client = APIClient.erm
+            client.counter_files
+                .create({
+                    usage_data_provider_id: this.file.usage_data_provider_id,
+                    filename: this.file.filename,
+                    file_content: this.file.file_content,
+                })
+                .then(
+                    success => {
+                        setMessage(this.$__("COUNTER file uploaded"))
+                    },
+                    error => {}
+                )
         },
         clearForm(e) {
             e.preventDefault()
