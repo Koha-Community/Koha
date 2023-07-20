@@ -33,6 +33,7 @@ use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Statistics;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -68,7 +69,7 @@ my $retrieved_item_1 = Koha::Items->find( $new_item_1->itemnumber );
 is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should return the correct item' );
 
 subtest 'store' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     my $biblio = $builder->build_sample_biblio;
     my $today  = dt_from_string->set( hour => 0, minute => 0, second => 0 );
@@ -1362,6 +1363,22 @@ subtest 'store' => sub {
             1,
             "Item modification logged"
         );
+    };
+
+    subtest 'itemlost / statistics' => sub {    # TODO BZ 34308 (gt zero checks)
+        plan tests => 5;
+
+        my $item = $builder->build_sample_item;
+        $item->itemlost(-1)->store;             # weird value; >0 test not triggered ?
+        is( Koha::Statistics->search( { itemnumber => $item->id } )->count, 0, 'No statistics added' );
+        $item->itemlost(1)->store;
+        is( Koha::Statistics->search( { itemnumber => $item->id } )->count, 1, 'statistics added' );
+        $item->itemlost(2)->store;
+        is( Koha::Statistics->search( { itemnumber => $item->id } )->count, 1, 'No statistics added, already lost' );
+        $item->itemlost(-1)->store;             # weird value; <=0 test triggered ?
+        is( Koha::Statistics->search( { itemnumber => $item->id } )->count, 2, 'statistics added' );
+        $item->itemlost(-2)->store;             # weird value, but no status change
+        is( Koha::Statistics->search( { itemnumber => $item->id } )->count, 2, 'No statistics added, already *found*' );
     };
 };
 

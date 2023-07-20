@@ -131,8 +131,9 @@ sub store {
             $self->cn_sort($cn_sort);
         }
 
-        if( $self->itemlost ) {
-            $self->_add_statistic('item_lost'); # should be quite rare when adding item
+        # should be quite rare when adding item
+        if ( $self->itemlost && $self->itemlost > 0 ) {    # TODO BZ34308
+            $self->_add_statistic('item_lost');
         }
 
     } else { # ModItem
@@ -190,10 +191,20 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
-        if( exists $updated_columns{itemlost} && !$updated_columns{itemlost} && $pre_mod_item->itemlost ) { # item found again
-            $self->_set_found_trigger($pre_mod_item); # reverse any list item charges if necessary
+        # TODO BZ 34308 (gt zero checks)
+        if (   exists $updated_columns{itemlost}
+            && ( !$updated_columns{itemlost} || $updated_columns{itemlost} <= 0 )
+            && ( $pre_mod_item->itemlost && $pre_mod_item->itemlost > 0 ) )
+        {
+            # item found
+            # reverse any list item charges if necessary
+            $self->_set_found_trigger($pre_mod_item);
             $self->_add_statistic('item_found');
-        } elsif( exists $updated_columns{itemlost} && $updated_columns{itemlost} && !$pre_mod_item->itemlost ) { # item lost
+        } elsif ( exists $updated_columns{itemlost}
+            && ( $updated_columns{itemlost} && $updated_columns{itemlost} > 0 )
+            && ( !$pre_mod_item->itemlost || $pre_mod_item->itemlost <= 0 ) )
+        {
+            # item lost
             $self->_add_statistic('item_lost');
         }
     }
