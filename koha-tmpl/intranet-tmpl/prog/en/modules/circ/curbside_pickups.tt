@@ -7,6 +7,7 @@
 [% USE raw %]
 [% USE To %]
 [% PROCESS 'i18n.inc' %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
@@ -66,7 +67,7 @@
 [% END %]
 
 [% BLOCK patron_info %]
-    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cp.borrowernumber | uri %]">[% cp.patron.firstname | html %] [% cp.patron.surname | html %] ([% cp.patron.cardnumber | html %])</a>
+    [% INCLUDE 'patron-title.inc' patron=cp.patron invert_name = 1 hide_patron_infos_if_needed=1 %]
     [% IF cp.notes %]
         <br/>
         <span>Notes: </span>[% cp.notes | html %]
@@ -192,20 +193,20 @@
                     [% WRAPPER tab_panels %]
                         [% WRAPPER tab_panel tabname="to-be-staged" bt_active= to_be_staged_active %]
                             [% IF to_be_staged.count %]
-                                <table class="table table-striped">
+                                <table id="to_be_stagedt" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Pickup date/time</th>
                                             <th>Patron</th>
                                             <th>Items for pickup</th>
-                                            <th>Action</th>
+                                            <th class="NoSort noExport">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         [% FOREACH cp IN to_be_staged %]
                                             [% UNLESS cp.staged_datetime %]
                                                 <tr class="[% class | html %]">
-                                                    <td>[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
+                                                    <td data-order="[% cp.scheduled_pickup_datetime | html %]">[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
                                                     <td>
                                                         [% PROCESS patron_info %]
                                                     </td>
@@ -244,21 +245,21 @@
                         [% END # /tab_panel %]
                         [% WRAPPER tab_panel tabname="staged-and-ready" bt_active = staged_and_ready_active %]
                             [% IF staged_and_ready.count %]
-                                <table class="table table-striped">
+                                <table id="staged_and_readyt" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Pickup date/time</th>
                                             <th>Patron</th>
                                             <th>Items for pickup</th>
                                             <th>Staged by</th>
-                                            <th>Action</th>
+                                            <th class="NoSort noExport">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         [% FOREACH cp IN staged_and_ready %]
                                             [% IF cp.staged_datetime && !cp.arrival_datetime %]
                                                 <tr class="[% class | html %]">
-                                                    <td>[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
+                                                    <td data-order="[% cp.scheduled_pickup_datetime | html %]">[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
                                                     <td>
                                                         [% PROCESS patron_info %]
                                                     </td>
@@ -310,21 +311,21 @@
                         [% END # /tab_panel %]
                         [% WRAPPER tab_panel tabname="patron-is-outside" bt_active = patron_is_outside_active %]
                             [% IF patron_outside.count %]
-                                <table class="table table-striped">
+                                <table id="patron_is_outsidet" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Pickup date/time</th>
                                             <th>Patron</th>
                                             <th>Items for pickup</th>
                                             <th>Staged by</th>
-                                            <th>Action</th>
+                                            <th class="NoSort noExport">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         [% FOREACH cp IN patron_outside %]
                                             [% IF cp.arrival_datetime && !cp.delivered_datetime %]
                                                 <tr class="[% class | html %]">
-                                                    <td>[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
+                                                    <td data-order="[% cp.scheduled_pickup_datetime | html %]">[% cp.scheduled_pickup_datetime | $KohaDates with_hours = 1 %]</td>
                                                     <td>
                                                         [% PROCESS patron_info %]
                                                     </td>
@@ -376,7 +377,7 @@
                         [% END # /tab_panel %]
                         [% WRAPPER tab_panel tabname="delivered-today" bt_active = delivered_today_active %]
                             [% IF delivered_today.count %]
-                                <table class="table table-striped">
+                                <table id="delivered_todayt" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Deliver date/time</th>
@@ -388,7 +389,7 @@
                                         [% FOREACH cp IN delivered_today %]
                                             [% IF cp.delivered_datetime %]
                                                 <tr class="[% class | html %]">
-                                                    <td>[% cp.delivered_datetime | $KohaDates with_hours = 1 %]</td>
+                                                    <td data-order="[% cp.delivered_datetime | html %]">[% cp.delivered_datetime | $KohaDates with_hours = 1 %]</td>
                                                     <td>
                                                         [% PROCESS patron_info %]
                                                     </td>
@@ -501,6 +502,8 @@
     <script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'js-patron-format.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         let pickups = [% To.json(curbside_pickups.unblessed) | $raw %];
         let policy = [% To.json(policy.unblessed) | $raw %];
@@ -660,6 +663,21 @@
             });
 
             set_interval_if_needed();
+
+
+            let dt_settings = [];
+            dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'to_be_stagedt', 'json') | $raw %] );
+            dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'staged_and_readyt', 'json') | $raw %] );
+            dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'patron_is_outsidet', 'json') | $raw %] );
+            dt_settings.push( [% TablesSettings.GetTableSettings('circ', 'curbside_pickups', 'delivered_todayt', 'json') | $raw %] );
+
+            let dt_tables = new Array("to_be_stagedt", "staged_and_readyt", "patron_is_outsidet", "delivered_todayt");
+            dt_tables.forEach(function( id, index ){
+                KohaTable( id , {
+                    "autoWidth": false
+                }, dt_settings[ index ] );
+            });
+
 
         });
 

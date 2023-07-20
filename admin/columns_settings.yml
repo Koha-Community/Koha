@@ -1752,6 +1752,56 @@ modules:
             -
               columnname: status
 
+    curbside_pickups:
+      to_be_stagedt:
+        columns:
+          -
+            columnname: pickup_datetime
+          -
+            columnname: patron
+          -
+            columnname: items_for_pickup
+          -
+            columnname: action
+            cannot_be_toggled: 1
+            cannot_be_modified: 1
+      staged_and_readyt:
+        columns:
+          -
+            columnname: pickup_datetime
+          -
+            columnname: patron
+          -
+            columnname: items_for_pickup
+          -
+            columnname: staged_by
+          -
+            columnname: action
+            cannot_be_toggled: 1
+            cannot_be_modified: 1
+      patron_is_outsidet:
+        columns:
+          -
+            columnname: pickup_datetime
+          -
+            columnname: patron
+          -
+            columnname: items_for_pickup
+          -
+            columnname: staged_by
+          -
+            columnname: action
+            cannot_be_toggled: 1
+            cannot_be_modified: 1
+      delivered_todayt:
+        columns:
+          -
+            columnname: delivery_datetime
+          -
+            columnname: patron
+          -
+            columnname: items_checked_out
+
     returns:
       checkedintable:
         columns:
