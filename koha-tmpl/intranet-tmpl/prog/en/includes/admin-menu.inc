@@ -152,6 +152,7 @@
             [% END %]
             [% IF ( CAN_user_parameters_manage_search_targets ) %]
                 <li><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a></li>
+                <li><a href="/cgi-bin/koha/admin/oaiservers.pl">OAI repositories</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_smtp_servers ) %]
                 <li><a href="/cgi-bin/koha/admin/smtp_servers.pl">SMTP servers</a></li>

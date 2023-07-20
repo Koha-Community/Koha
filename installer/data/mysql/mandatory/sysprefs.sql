@@ -449,6 +449,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OAI-PMH:AutoUpdateSetsEmbedItemData', '0', '', 'Embed item information when automatically updating OAI sets. Requires OAI-PMH:AutoUpdateSets syspref to be enabled', 'YesNo'),
 ('OAI-PMH:ConfFile','',NULL,'If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode.','File'),
 ('OAI-PMH:DeletedRecord','persistent','Koha\'s deletedbiblio table will never be deleted (persistent), might be deleted (transient), or will never have any data in it (no)','transient|persistent|no','Choice'),
+('OAI-PMH:HarvestEmailReport','','','If set, a report email will be sent to this address after an OAI harvest','Free'),
 ('OAI-PMH:MaxCount','50',NULL,'OAI-PMH maximum number of records by answer to ListRecords and ListIdentifiers queries','Integer'),
 ('OnSiteCheckoutAutoCheck','0','','Enable/Do not enable onsite checkout by default if last checkout was an onsite checkout','YesNo'),
 ('OnSiteCheckouts','0','','Enable/Disable the on-site checkouts feature','YesNo'),

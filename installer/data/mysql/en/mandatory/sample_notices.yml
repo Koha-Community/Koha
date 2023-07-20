@@ -2626,3 +2626,26 @@ tables:
             - "Your hold on [% hold.biblio.title %] ([% hold.biblio.id %]) has been confirmed."
             - "You will be notified by the library when your item is available for pickup."
             - "Thank you!"
+
+        - module: catalogue
+          code: OAI_HARVEST_REPORT
+          branchcode: ""
+          name: "OAI Harvest Report"
+          is_html: 0
+          title: "OAI Harvest report for [% servername %]"
+          message_transport_type: email
+          lang: default
+          content:
+            - "OAI Harvest report for [% servername %]:"
+            - ""
+            - "Endpoint: [% endpoint %]"
+            - "Set: [% set %]"
+            - "Data format: [% dataformat %]"
+            - "Record type: [% recordtype %]"
+            - ""
+            - "[% added %] records added"
+            - "[% updated %] records updated"
+            - "[% deleted %] records deleted"
+            - "[% skipped %] records skipped"
+            - "[% in_error %] records in error"
+            - "[% total %] total"

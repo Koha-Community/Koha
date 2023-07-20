@@ -244,7 +244,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_search_targets' -%]
         <span class="sub_permission manage_search_targets_subpermission">
-            Manage Z39.50 and SRU server configuration
+            Manage Z39.50 and SRU servers, OAI repositories configuration
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_didyoumean' -%]
