@@ -46,8 +46,7 @@ sub list {
 
     return try {
 
-        my $vendor_id = $c->validation->param('vendor_id');
-        my $vendor    = Koha::Acquisition::Booksellers->find($vendor_id);
+        my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
 
         unless ($vendor) {
             return $c->render(
