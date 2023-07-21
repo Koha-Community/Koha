@@ -437,6 +437,9 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'gd', 'language', 'en', 'Scottish Gaelic');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'gd', 'language', 'en_GB', 'Scottish Gaelic');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'gd', 'language', 'gd', 'Gàidhlig');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
