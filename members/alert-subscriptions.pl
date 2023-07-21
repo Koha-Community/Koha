@@ -28,29 +28,33 @@ use Koha::Patrons;
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "members/alert-subscriptions.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { serials => '*' },
+    {
+        template_name => "members/alert-subscriptions.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { serials => '*' },
     }
 );
 
 my $borrowernumber = $input->param('borrowernumber');
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron         = Koha::Patrons->find( $borrowernumber );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser);
+my $patron         = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
+);
 
 my $subscription_id = $input->param('subscription_id');
-if ( $subscription_id ) {
-    my $subscription = Koha::Subscriptions->find( $subscription_id );
-    $subscription->remove_subscriber( $patron );
-    print $input->redirect("/cgi-bin/koha/members/alert-subscriptions.pl?borrowernumber=".$borrowernumber);
+if ($subscription_id) {
+    my $subscription = Koha::Subscriptions->find($subscription_id);
+    $subscription->remove_subscriber($patron);
+    print $input->redirect( "/cgi-bin/koha/members/alert-subscriptions.pl?borrowernumber=" . $borrowernumber );
 }
 
 $template->param(
-    patron => $patron,
-    alertsview  => 1,
+    patron     => $patron,
+    alertsview => 1,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

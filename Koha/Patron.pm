@@ -2708,12 +2708,12 @@ Return a Koha::Subscriptions object containing subscriptions for which the patro
 =cut
 
 sub alert_subscriptions {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my @alerts = $self->_result->alerts;
+    my @alerts           = $self->_result->alerts;
     my @subscription_ids = map { $_->externalid } @alerts;
 
-    return Koha::Subscriptions->search({ subscriptionid => \@subscription_ids });
+    return Koha::Subscriptions->search( { subscriptionid => \@subscription_ids } );
 }
 
 =head2 Internal methods

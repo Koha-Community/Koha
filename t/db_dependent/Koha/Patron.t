@@ -1934,13 +1934,13 @@ subtest 'alert_subscriptions tests' => sub {
 
     plan tests => 3;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $subscription1 = $builder->build_object({ class => 'Koha::Subscriptions' });
-    $subscription1->add_subscriber( $patron );
+    my $subscription1 = $builder->build_object( { class => 'Koha::Subscriptions' } );
+    $subscription1->add_subscriber($patron);
 
-    my $subscription2 = $builder->build_object({ class => 'Koha::Subscriptions' });
-    $subscription2->add_subscriber( $patron );
+    my $subscription2 = $builder->build_object( { class => 'Koha::Subscriptions' } );
+    $subscription2->add_subscriber($patron);
 
     my @subscriptions = $patron->alert_subscriptions->as_list;
 

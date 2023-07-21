@@ -29,25 +29,27 @@ my $query = CGI->new();
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => 'opac-alert-subscriptions.tt',
-        query           => $query,
-        type            => 'opac',
+        template_name => 'opac-alert-subscriptions.tt',
+        query         => $query,
+        type          => 'opac',
     }
 );
 
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $patron = Koha::Patrons->find($borrowernumber);
 
 $template->param(
     alertsview => 1,
-    patron => $patron,
-    referer => 'patron',
+    patron     => $patron,
+    referer    => 'patron',
 );
 
 my $new_session_id = $query->cookie('CGISESSID');
 $template->param(
-    csrf_token => Koha::Token->new->generate_csrf({
-        session_id => $new_session_id,
-    }),
+    csrf_token => Koha::Token->new->generate_csrf(
+        {
+            session_id => $new_session_id,
+        }
+    ),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
