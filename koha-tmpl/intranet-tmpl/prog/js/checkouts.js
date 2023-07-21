@@ -975,16 +975,28 @@ $(document).ready(function() {
                         }
                     },
                     {
+                        "mDataProp": "created_on",
+                        "bVisible": false,
+                    },
+                    {
+                        "orderData": 4,
                         "mDataProp": function ( oObj ) {
-                            let created_on = new Date( oObj.created_on );
-                            return created_on.toLocaleDateString();
+                            if ( oObj.created_on ) {
+                                return $date(oObj.created_on, { no_tz_adjust: true });;
+                            } else {
+                                return "";
+                            }
                         }
                     },
                     {
+                        "mDataProp": "updated_on",
+                        "bVisible": false,
+                    },
+                    {
+                        "orderData": 6,
                         "mDataProp": function ( oObj ) {
                             if ( oObj.updated_on ) {
-                                let updated_on = new Date( oObj.updated_on );
-                                return updated_on.toLocaleDateString();
+                                return $date(oObj.updated_on, { no_tz_adjust: true });
                             } else {
                                 return "";
                             }
