@@ -2710,8 +2710,7 @@ Return a Koha::Subscriptions object containing subscriptions for which the patro
 sub alert_subscriptions {
     my ( $self ) = @_;
 
-    my $schema = Koha::Database->new->schema;
-    my @alerts = $schema->resultset('Alert')->search({ borrowernumber => $self->borrowernumber });
+    my @alerts = $self->_result->alerts;
     my @subscription_ids = map { $_->externalid } @alerts;
 
     return Koha::Subscriptions->search({ subscriptionid => \@subscription_ids });
