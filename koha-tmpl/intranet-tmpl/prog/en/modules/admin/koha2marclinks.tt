@@ -33,7 +33,7 @@
             <main>
 
 <h1>Koha to MARC mapping</h1>
-<br/>
+
 <div class="dialog message">If you make any change to the mappings, you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</div>
 <form action="/cgi-bin/koha/admin/koha2marclinks.pl" method="post" id="koha2marc">
 
@@ -59,8 +59,10 @@
     <td>[% loo.liblibrarian | html %]</td>
     <td class="actions">
         [% IF !loo.readonly %]
-            <a onclick="AddFld('[% loo.kohafield | html %]');" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</a>
-            [% IF loo.tagfield %] <a onclick="RemFld('[% loo.tagfield | html %]','[% loo.tagsubfield | html %]');" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Remove</a> [% END %]
+            <a href="#" data-kohafield="[% loo.kohafield | html %]" class="addfld btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</a>
+            [% IF loo.tagfield %]
+                <a href="#" data-tagfield="[% loo.tagfield | html %]" data-tagsubfield="[% loo.tagsubfield | html %]" class="remfld btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Remove</a>
+            [% END %]
         [% END %]
     </td>
     </td>
@@ -90,12 +92,14 @@
     <script>
         function AddFld(kohafield) {
             var fieldstr = prompt( _("Adding a mapping for: %s.").format(kohafield) + "\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)") + "\n" + _("The change will be applied immediately.") );
-            var temp = fieldstr.split(',');
-            if( temp.length == 2 ) {
-                $('#add_field').val( kohafield+','+fieldstr );
-                $('#koha2marc').submit();
-            } else {
-                alert( _("Invalid input. Enter something like: 245,a") );
+            if( fieldstr ){
+                var temp = fieldstr.split(',');
+                if( temp.length == 2 ) {
+                    $('#add_field').val( kohafield+','+fieldstr );
+                    $('#koha2marc').submit();
+                } else {
+                    alert( _("Invalid input. Enter something like: 245,a") );
+                }
             }
         }
 
@@ -113,6 +117,18 @@
                 "paging":   false
             } ));
 
+            $(".addfld").on("click", function(e){
+                e.preventDefault();
+                const kohafield = $(this).data("kohafield");
+                AddFld( kohafield );
+            });
+
+            $(".remfld").on("click", function(e){
+                e.preventDefault();
+                const tagfield = $(this).data("tagfield");
+                const tagsubfield = $(this).data("tagsubfield");
+                RemFld( tagfield, tagsubfield );
+            });
          });
     </script>
 [% END %]
