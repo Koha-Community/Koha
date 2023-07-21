@@ -210,10 +210,10 @@ sub embed {
 
 sub build_query_pagination {
     my ( $self, $params ) = @_;
-    my $per_page = $params->{_per_page}
+    my $per_page = $params->{per_page}
       // C4::Context->preference('RESTdefaultPageSize') // 20;
     if ( $per_page == -1 || $per_page > 100 ) { $per_page = 100; }
-    my $page = $params->{_page} || 1;
+    my $page = $params->{page} || 1;
 
     return ( $per_page, $page );
 }

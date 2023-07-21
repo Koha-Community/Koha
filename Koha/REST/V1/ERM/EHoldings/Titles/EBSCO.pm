@@ -38,13 +38,15 @@ sub list {
 
     return try {
 
-        my $args = $c->validation->output;
-
         my $ebsco = Koha::ERM::Providers::EBSCO->new;
 
         # We cannot get base_total as a search kw is required by the API
-
-        my ( $per_page, $page ) = $ebsco->build_query_pagination($args);
+        my ( $per_page, $page ) = $ebsco->build_query_pagination(
+            {
+                per_page => $c->stash('koha.pagination.per_page'),
+                page     => $c->stash('koha.pagination.page'),
+            }
+        );
 
         my $additional_params = $ebsco->build_additional_params( $c->req->params->to_hash );
 
@@ -86,7 +88,6 @@ sub list {
                #base_total   => $base_total,
                 page         => $page,
                 per_page     => $per_page,
-                query_params => $args,
                 total        => $total,
             }
         );

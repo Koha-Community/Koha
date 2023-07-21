@@ -30,13 +30,17 @@ sub list {
 
     return try {
 
-        my $args       = $c->validation->output;
         my $params     = '?orderby=packagename&offset=1&count=1';
         my $ebsco      = Koha::ERM::Providers::EBSCO->new;
         my $result     = $ebsco->request( GET => '/packages' . $params );
         my $base_total = $result->{totalResults};
 
-        my ( $per_page, $page ) = $ebsco->build_query_pagination($args);
+        my ( $per_page, $page ) = $ebsco->build_query_pagination(
+            {
+                per_page => $c->stash('koha.pagination.per_page'),
+                page     => $c->stash('koha.pagination.page'),
+            }
+        );
         my $additional_params =
           $ebsco->build_additional_params( $c->req->params->to_hash );
 
@@ -61,9 +65,8 @@ sub list {
         $c->add_pagination_headers(
             {
                 base_total   => $base_total,
-                page         => $args->{_page},
-                per_page     => $args->{_per_page},
-                query_params => $args,
+                page         => $page,
+                per_page     => $per_page,
                 total        => $total,
             }
         );
