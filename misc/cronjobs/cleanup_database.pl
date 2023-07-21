@@ -673,6 +673,12 @@ if ($pTransfers) {
 
 if (defined $pPseudoTransactions or $pPseudoTransactionsFrom or $pPseudoTransactionsTo ) {
     print "Purging pseudonymized transactions\n" if $verbose;
+    if ($pPseudoTransactionsTo) {
+        $pPseudoTransactionsTo = dt_from_string($pPseudoTransactionsTo);
+        if ( $pPseudoTransactionsTo->hour == 0 && $pPseudoTransactionsTo->minute == 0 ) {
+            $pPseudoTransactionsTo->set( hour => 23, minute => 59, second => 59 );
+        }
+    }
     my $anonymized_transactions = Koha::PseudonymizedTransactions->filter_by_last_update(
         {
             timestamp_column_name => 'datetime',

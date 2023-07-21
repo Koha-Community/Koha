@@ -1188,22 +1188,38 @@ subtest "filter_by_last_update" => sub {
         );
     };
 
-    subtest 'Parameters datetime, older_than, younger_than' => sub {
+    subtest 'Parameters older_than, younger_than' => sub {
         my $now = dt_from_string();
-        my $rs = Koha::Patrons->search({ borrowernumber => { -in => \@borrowernumbers } } );
-        $rs->update({ updated_on => $now->clone->subtract( hours => 25 ) });
-        is( $rs->filter_by_last_update({ timestamp_column_name => 'updated_on', from => $now })->count, 0, 'All updated yesterday' );
-        is( $rs->filter_by_last_update({ timestamp_column_name => 'updated_on', from => $now->clone->subtract( days => 1 ) })->count,
-            6, 'Yesterday, truncated from is inclusive' );
-        is( $rs->filter_by_last_update({ timestamp_column_name => 'updated_on', from => $now->clone->subtract( days => 1 ),
-            datetime => 1 })->count, 0, 'Yesterday, not truncated, one hour too late' );
-        is( $rs->filter_by_last_update({ timestamp_column_name => 'updated_on', from => $now->clone->subtract( hours => 25 ),
-            datetime => 1 })->count, 6, 'Yesterday - 1h, not truncated, within time frame' );
-
-        is( $rs->filter_by_last_update({ timestamp_column_name => 'updated_on', younger_than => 2, older_than => 1 })->count,
-            0, 'when using dates, we will find nothing' );
-        is( $rs->filter_by_last_update({ timestamp_column_name => 'updated_on', younger_than => 2, older_than => 1, datetime => 1 })->count,
-            6, 'when using datetime, we will find them all' );
+        my $rs  = Koha::Patrons->search( { borrowernumber => { -in => \@borrowernumbers } } );
+        $rs->update( { updated_on => $now->clone->subtract( hours => 25 ) } );
+        is(
+            $rs->filter_by_last_update( { timestamp_column_name => 'updated_on', from => $now } )->count, 0,
+            'All updated yesterday'
+        );
+        is(
+            $rs->filter_by_last_update(
+                {
+                    timestamp_column_name => 'updated_on',
+                    from                  => $now->clone->subtract( days => 1 )->truncate( to => 'day' )
+                }
+            )->count,
+            6,
+            'Yesterday, truncated from is inclusive'
+        );
+        is(
+            $rs->filter_by_last_update(
+                { timestamp_column_name => 'updated_on', from => $now->clone->subtract( days => 1 ), }
+            )->count,
+            0,
+            'Yesterday, not truncated, one hour too late'
+        );
+        is(
+            $rs->filter_by_last_update(
+                { timestamp_column_name => 'updated_on', from => $now->clone->subtract( hours => 25 ), }
+            )->count,
+            6,
+            'Yesterday - 1h, not truncated, within time frame'
+        );
     };
 
     $schema->storage->txn_rollback;

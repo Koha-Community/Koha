@@ -235,7 +235,6 @@ sub update {
 my $filtered_objects = $objects->filter_by_last_update({
     from => $date1, to => $date2,
     days|older_than => $days, min_days => $days, younger_than => $days,
-    datetime => 1,
 });
 
 You should pass at least one of the parameters: from, to, days|older_than,
@@ -243,7 +242,6 @@ min_days or younger_than. Make sure that they do not conflict with each other
 to get meaningful results.
 Note: from, to and min_days are inclusive! And by nature days|older_than
 and younger_than are exclusive.
-The optional parameter datetime allows datetime comparison.
 
 The from and to parameters can be DateTime objects or date strings.
 
@@ -257,20 +255,20 @@ sub filter_by_last_update {
         unless grep { exists $params->{$_} } qw/days from to older_than younger_than min_days/;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $method =  $params->{datetime} ? 'format_datetime' : 'format_date';
     foreach my $p ( qw/days older_than younger_than min_days/  ) {
         next if !exists $params->{$p};
         my $dt = Koha::DateUtils::dt_from_string();
         my $operator = { days => '<', older_than => '<', min_days => '<=' }->{$p} // '>';
-        $conditions->{$operator} = $dtf->$method( $dt->subtract( days => $params->{$p} ) );
+        $dt->subtract( days => $params->{$p} )->truncate( to => 'day' );
+        $conditions->{$operator} = $dtf->format_datetime( $dt );
     }
     if ( exists $params->{from} ) {
         my $from = ref($params->{from}) ? $params->{from} : dt_from_string($params->{from});
-        $conditions->{'>='} = $dtf->$method( $from );
+        $conditions->{'>='} = $dtf->format_datetime( $from );
     }
     if ( exists $params->{to} ) {
         my $to = ref($params->{to}) ? $params->{to} : dt_from_string($params->{to});
-        $conditions->{'<='} = $dtf->$method( $to );
+        $conditions->{'<='} = $dtf->format_datetime( $to );
     }
 
     return $self->search(
