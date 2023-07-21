@@ -462,6 +462,7 @@
                     }
                     $( container ).find("input").prop("checked", state);
                     $( container ).find(".selectall,.deselectall").toggle();
+                    update_sample_libraries_dependencies();
                 });
                 let required_text = _("(requires sample libraries)");
                 $("#sample_libraries_holidays, #sample_patrons").parent().after(" <span class='hint'>"+required_text+"</span>");
