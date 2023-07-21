@@ -31,7 +31,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'is_valid' => sub {
 
-    plan tests => 21;
+    plan tests => 23;
 
     $schema->storage->txn_begin;
 
@@ -91,6 +91,9 @@ subtest 'is_valid' => sub {
     ok( $policy->is_valid(q{1234567}),           "1234567 matches $pref" );
     ok( !$policy->is_valid(q{1234567890123456}), "1234567890123456 is longer than $pref" );
     ok( !$policy->is_valid(q{1234567890}),       "1234567890 is longer than $pref" );
+
+    ok( $policy->is_valid(undef), "If cardnumber is null, we assume they're allowed" );
+    ok( !$policy->is_valid(""),   "Empty string is not correct" );
 
     $schema->storage->txn_rollback;
 };

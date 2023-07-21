@@ -51,7 +51,7 @@ Returns whether a cardnumber is valid of not for a given I<Koha::Patron> object.
 sub is_valid {
     my ( $class, $cardnumber, $patron ) = @_;
 
-    return Koha::Result::Boolean->new(0)->add_message( { message => "is_empty" } )
+    return Koha::Result::Boolean->new(1)
         unless defined $cardnumber;
 
     return Koha::Result::Boolean->new(0)->add_message( { message => "already_exists" } )
