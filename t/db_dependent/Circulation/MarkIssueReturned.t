@@ -242,8 +242,8 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
 
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_1->itemnumber );
 
-    $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
-    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaining items would not result in patron debarment' );
+    $restrictions = $patron->restrictions;
+    is($restrictions->count, 0, 'OVERDUES debarment is removed if remaining items would not result in patron debarment' );
 
     $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $ten_days_ago ); # overdue and would trigger debarment
 
@@ -257,8 +257,8 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
 
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_2->itemnumber );
 
-    $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
-    is( $debarments->[0]->{type}, 'OVERDUES', 'OVERDUES debarment is not removed if patron still has overdues that would trigger debarment' );
+    $restrictions = $patron->restrictions->search({ type => 'OVERDUES' });
+    is( $restrictions->count, 1, 'OVERDUES debarment is not removed if patron still has overdues that would trigger debarment' );
 
     my $eleven_days_ago = dt_from_string->subtract( days => 11 );
 
@@ -282,8 +282,8 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
 
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_2->itemnumber );
 
-    $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
-    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if remaining items would not result in patron debarment' );
+    $restrictions = $patron->restrictions;
+    is( $restrictions->count, 0, 'OVERDUES debarment is removed if remaining items would not result in patron debarment' );
 
     $schema->storage->txn_rollback;
 };
