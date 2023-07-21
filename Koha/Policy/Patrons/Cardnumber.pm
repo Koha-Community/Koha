@@ -85,7 +85,7 @@ sub get_valid_length {
     my ($class)    = @_;
     my $borrower   = Koha::Database->new->schema->resultset('Borrower');
     my $field_size = $borrower->result_source->column_info('cardnumber')->{size};
-    my ( $min, $max ) = ( 0, $field_size );    # borrowers.cardnumber is a nullable varchar(20)
+    my ( $min, $max ) = ( 0, $field_size );
     $min = 1 if C4::Context->preference('BorrowerMandatoryField') =~ /cardnumber/;
     if ( my $cardnumber_length = C4::Context->preference('CardnumberLength') ) {
 
