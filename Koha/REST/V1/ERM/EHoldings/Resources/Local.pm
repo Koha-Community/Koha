@@ -60,7 +60,7 @@ sub get {
     my $c = shift or return;
 
     return try {
-        my $resource_id = $c->validation->param('resource_id');
+        my $resource_id = $c->param('resource_id');
         my $resource = $c->objects->find( Koha::ERM::EHoldings::Resources->search, $resource_id );
 
         unless ($resource ) {

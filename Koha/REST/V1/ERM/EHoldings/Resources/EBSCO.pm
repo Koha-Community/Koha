@@ -38,13 +38,12 @@ sub list {
 
     return try {
 
-        my $args = $c->validation->output;
-        my $ebsco      = Koha::ERM::Providers::EBSCO->new;
+        my $ebsco = Koha::ERM::Providers::EBSCO->new;
 
         # FIXME Do we need more validation here? Don't think so we have the API specs.
         my ( $vendor_id, $package_id ) = split '-',
-          $c->validation->param('package_id') || q{};
-        my $title_id = $c->validation->param('title_id') || q{};
+          $c->param('package_id') || q{};
+        my $title_id = $c->param('title_id') || q{};
 
         my $url =
           $title_id
@@ -74,7 +73,12 @@ sub list {
 
         my $base_total = $result->{totalResults};
 
-        my ( $per_page, $page ) = $ebsco->build_query_pagination($args);
+        my ( $per_page, $page ) = $ebsco->build_query_pagination(
+            {
+                per_page => $c->stash('koha.pagination.per_page'),
+                page     => $c->stash('koha.pagination.page'),
+            }
+        );
 
         my $additional_params = $ebsco->build_additional_params( $c->req->params->to_hash );
         my $searchfield = 'titlename';
@@ -107,7 +111,6 @@ sub list {
                 base_total   => $base_total,
                 page         => $page,
                 per_page     => $per_page,
-                query_params => $args,
                 total        => $total,
             }
         );
@@ -127,7 +130,7 @@ sub get {
 
     return try {
         my ( $vendor_id, $package_id, $resource_id ) = split '-',
-          $c->validation->param('resource_id');
+          $c->param('resource_id');
         my $ebsco      = Koha::ERM::Providers::EBSCO->new;
         my $t = try {
               return $ebsco->request( GET => '/vendors/'
@@ -182,10 +185,10 @@ sub edit {
     my $c = shift or return;
 
     return try {
-        my $body        = $c->validation->param('body');
+        my $body        = $c->req->json;
         my $is_selected = $body->{is_selected};
         my ( $vendor_id, $package_id, $resource_id ) = split '-',
-          $c->validation->param('resource_id');
+          $c->param('resource_id');
 
         my $ebsco = Koha::ERM::Providers::EBSCO->new;
         my $t     = try {
