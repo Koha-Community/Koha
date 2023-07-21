@@ -23,6 +23,11 @@ return {
 
         $dbh->do(q{
             INSERT INTO language_descriptions(subtag, type, lang, description)
+            VALUES ( 'gd', 'language', 'en_GB', 'Scottish Gaelic')
+        });
+
+        $dbh->do(q{
+            INSERT INTO language_descriptions(subtag, type, lang, description)
             VALUES ( 'gd', 'language', 'gd', 'Gàidhlig')
         });
 
