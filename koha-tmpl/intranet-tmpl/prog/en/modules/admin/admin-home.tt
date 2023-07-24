@@ -246,6 +246,10 @@
                         <dt><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></dt>
                         <dd>Manage library EDI EANs</dd>
                     [% END %]
+                    [% IF Koha.Preference('MarcOrderingAutomation') %]
+                        <dt><a href="/cgi-bin/koha/admin/marc_order_accounts.pl">MARC order accounts</a></dt>
+                        <dd>Manage vendor accounts for automated order line creation from marc records</dd>
+                    [% END %]
                 </dl>
             [% END %]
 

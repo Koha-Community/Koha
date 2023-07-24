@@ -141,6 +141,9 @@
                 <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
                 <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
             [% END %]
+            [% IF Koha.Preference('MarcOrderingAutomation') %]
+                <li><a href="/cgi-bin/koha/admin/marc_order_accounts.pl">MARC order accounts</a></li>
+            [% END %]
         </ul>
     [% END %]
 

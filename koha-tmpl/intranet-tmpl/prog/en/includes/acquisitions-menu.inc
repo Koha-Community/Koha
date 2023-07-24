@@ -40,6 +40,9 @@
                     <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
                     <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
                 [% END %]
+                [% IF Koha.Preference('MarcOrderingAutomation') %]
+                    <li><a href="/cgi-bin/koha/admin/marc_order_accounts.pl">MARC order accounts</a></li>
+                [% END %]
                 [% IF CAN_user_acquisition_edit_invoices && CAN_user_parameters_manage_additional_fields %]
                     <li>
                         <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=aqinvoices">Manage invoice fields</a>
