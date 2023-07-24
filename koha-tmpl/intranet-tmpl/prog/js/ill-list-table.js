@@ -334,7 +334,8 @@ $(document).ready(function() {
                 "data": "access_url",
                 "orderable": true,
                 "render": function(data, type, row, meta) {
-                    return escape_str(data);
+                    return '<a target="_blank" href="' + data + '">'
+                    + escape_str(data) + '</a>';
                 }
             },
             {
