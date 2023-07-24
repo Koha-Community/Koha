@@ -33,7 +33,7 @@
                 <li><a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_circ_rules ) %]
-                <li><a href="/cgi-bin/koha/admin/smart-rules.pl">Circulation and fines rules</a></li>
+                <li><a href="/cgi-bin/koha/admin/smart-rules.pl">Circulation and fine rules</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_patron_attributes ) %]
                 <li><a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron attribute types</a></li>
