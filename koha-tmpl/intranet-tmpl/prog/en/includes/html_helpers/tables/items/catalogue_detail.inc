@@ -504,6 +504,7 @@
             },
             {
                 data: "me.last_seen_date",
+                type: "date",
                 className: "datelastseen",
                 searchable: true,
                 orderable: true,
@@ -531,6 +532,7 @@
             },
             {
                 data: "me.acquisition_date",
+                type: "date",
                 className: "dateaccessioned",
                 searchable: true,
                 orderable: true,
@@ -540,6 +542,7 @@
             },
             {
                 data: "me.last_checkout_date",
+                type: "date",
                 className: "datelastborrowed",
                 searchable: true,
                 orderable: true,
