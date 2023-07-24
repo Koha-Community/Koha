@@ -38,8 +38,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $browser_upload_enabled = C4::Context->config('enable_plugin_browser_upload');
 my $class = $input->param('class');
 
-Koha::Plugins::Handler->delete( { class => $class } );
+if ( $browser_upload_enabled && $class ) {
+    Koha::Plugins::Handler->delete( { class => $class } );
+}
 
 print $input->redirect("/cgi-bin/koha/plugins/plugins-home.pl");
