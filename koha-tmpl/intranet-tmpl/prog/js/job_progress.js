@@ -12,7 +12,8 @@ function updateProgress(job_id, callback) {
             const percent = progress > 0 ? ( progress / size ) * 100 : 0;
             $('#job-percent-' + job_id).text(percent.toFixed(2));
             $('#job-status-' + job_id).text(JOB_PROGRESS_STARTED);
-            $('#progress-bar-' + job_id).attr('aria-valuenow', percent).css("width", "percent+%");
+            $('#progress-bar-' + job_id).attr('aria-valuenow', percent);
+            $('#progress-bar-' + job_id).width(Math.floor(percent) +"%");
         } else if ( job.status == "finished" ) {
             $('#job-percent-' + job_id).text(100);
             $('#job-status-' + job_id).text(JOB_PROGRESS_FINISHED);
