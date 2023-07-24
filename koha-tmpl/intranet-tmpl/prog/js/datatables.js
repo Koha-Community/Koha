@@ -562,13 +562,15 @@ function _dt_default_ajax (params){
                     }
 
                     let built_value;
-                    let is_date_field;
+                    if ( col.type == 'date' ) {
+                        let rfc3339 = $date_to_rfc3339(value);
+                        if ( rfc3339 != 'Invalid Date' ) {
+                            built_value = rfc3339;
+                        }
+                    }
 
                     if ( col.datatype !== undefined ) {
-                        if ( col.datatype == 'date' ) {
-                            is_date_field = true;
-                        }
-                        else if (col.datatype == 'related-object') {
+                        if (col.datatype == 'related-object') {
                             let query_term = value;
 
                             if (criteria != 'exact') {
@@ -581,15 +583,6 @@ function _dt_default_ajax (params){
                             };
                         } else {
                             console.log("datatype %s not supported yet".format(col.datatype));
-                        }
-                    } else if (col.data && ( col.data.endsWith('_on') || col.data.endsWith('_date') ) ) {
-                        is_date_field = true;
-                    }
-
-                    if ( is_date_field ) {
-                        let rfc3339 = $date_to_rfc3339(value);
-                        if ( rfc3339 != 'Invalid Date' ) {
-                            built_value = rfc3339;
                         }
                     }
 
@@ -671,8 +664,12 @@ function _dt_default_ajax (params){
 
             if(query_parameters.length) {
                 query_parameters = JSON.stringify(query_parameters.length === 1?query_parameters[0]:{"-and": query_parameters});
-                dataSet.q = query_parameters;
-                delete options.query_parameters;
+                if(options.header_filter) {
+                    options.query_parameters = query_parameters;
+                } else {
+                    dataSet.q = query_parameters;
+                    delete options.query_parameters;
+                }
             } else {
                 delete options.query_parameters;
             }
@@ -930,15 +927,18 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
 
     /**
     * Create a new dataTables instance that uses the Koha RESTful API's as a data source
-    * @param  {Object}  options         Please see the dataTables documentation for further details
-    *                                   We extend the options set with the `criteria` key which allows
-    *                                   the developer to select the match type to be applied during searches
-    *                                   Valid keys are: `contains`, `starts_with`, `ends_with` and `exact`
-    * @param  {Object}  table_settings The arrayref as returned by TableSettings.GetTableSettings function available
-    *                                   from the columns_settings template toolkit include
-    * @param  {Boolean} add_filters     Add a filters row as the top row of the table
-    * @param  {Object}  default_filters Add a set of default search filters to apply at table initialisation
-    * @return {Object}                  The dataTables instance
+    * @param  {Object}  options                      Please see the dataTables settings documentation for further
+    *                                                details
+    * @param  {string}  [options.criteria=contains]  A koha specific extension to the dataTables settings block that
+    *                                                allows setting the 'comparison operator' used in searches
+    *                                                Supports `contains`, `starts_with`, `ends_with` and `exact` match
+    * @param  {string}  [options.columns.*.type      Data type the field is stored in so we may impose some additional
+    *                                                manipulation to search strings. Supported types are currenlty 'date'
+    * @param  {Object}  table_settings               The arrayref as returned by TableSettings.GetTableSettings function
+    *                                                available from the columns_settings template toolkit include
+    * @param  {Boolean} add_filters                  Add a filters row as the top row of the table
+    * @param  {Object}  default_filters              Add a set of default search filters to apply at table initialisation
+    * @return {Object}                               The dataTables instance
     */
     $.fn.kohaTable = function(options, table_settings, add_filters, default_filters) {
         var settings = null;

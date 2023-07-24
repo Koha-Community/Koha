@@ -430,6 +430,7 @@
                             [% CASE 'dateofbirth' %]
                             {
                                 "data": "date_of_birth",
+                                "type": "date",
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
@@ -551,6 +552,7 @@
                             [% CASE 'dateexpiry' %]
                             {
                                 "data": "expiry_date",
+                                "type": "date",
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
