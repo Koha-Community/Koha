@@ -320,6 +320,19 @@ sub delete {
     }
 
     return try {
+
+        my $overrides = $c->stash('koha.overrides');
+
+        if ( $overrides->{'cancellation-request-flow'} && $hold->is_waiting ) {
+
+            $hold->add_cancellation_request;
+
+            return $c->render(
+                status  => 202,
+                openapi => q{},
+            );
+        }
+
         $hold->cancel;
 
         return $c->render(
