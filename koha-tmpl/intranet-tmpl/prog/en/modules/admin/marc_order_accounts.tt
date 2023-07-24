@@ -1,0 +1,246 @@
+[% USE raw %]
+[% USE Koha %]
+[% USE Asset %]
+[% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>
+MARC Order Accounts
+</title>
+<style>
+    #fileuploadstatus,#fileuploadfailed,#fileuploadcancel { display : none; }
+</style>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="admin_marc_order_acct" class="admin">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'prefs-admin-search.inc' %]
+[% END %]
+
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        [% END %]
+
+        [% IF acct_form || delete_confirm %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/marc_order_accounts.pl">MARC Order Accounts</a>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>MARC Order Accounts</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+                [% IF display %]
+                    <div id="toolbar" class="btn-toolbar">
+                    <a class="btn btn-default" id="newmarcorderacct" href="/cgi-bin/koha/admin/marc_order_accounts.pl?op=acct_form">
+                        <i class="fa fa-plus"></i>
+                        New account
+                    </a>
+                    </div>
+                    [% IF ( accounts ) %]
+                        <h1>Marc Ordering Accounts</h1>
+                        <div class="page-section">
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Vendor</th>
+                                    <th>Budget</th>
+                                    <th>Description</th>
+                                    <th>Download directory</th>
+                                    <th>Actions</th>
+                                </tr>
+                                [% FOREACH account IN accounts %]
+                                    <tr>
+                                        <td>[% account.id | html %]</td>
+                                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% account.vendor_id | uri %]">[% account.vendor.name | html %]</a></td>
+                                        <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% account.budget.budget_period_id | uri %]">[% account.budget.budget_name | html %]</a></td>
+                                        <td>[% account.description | html %]</td>
+                                        <td>[% account.download_directory | html %]</td>
+                                        <td class="actions">
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/marc_order_accounts.pl?op=acct_form&id=[% account.id | html %]"><i class="fa fa-pencil-alt"></i> Edit</a>
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/marc_order_accounts.pl?op=delete_acct&id=[% account.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </table>
+                        </div>
+                    [% ELSE %]
+                        <div class="dialog message">
+                            There are no MARC Order accounts.
+                        </div>
+                    [% END %]
+                [% END %]
+                [% IF acct_form %]
+                    <h1>
+                        [% IF account %]
+                            Modify account
+                        [% ELSE %]
+                            New account
+                        [% END %]
+                    </h1>
+                    <form action="/cgi-bin/koha/admin/marc_order_accounts.pl" name="Actform" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-save" />
+                        [% IF account %]
+                        <input type="hidden" name="id" value="[% account.id | html %]" />
+                        [% END %]
+                        <fieldset class="rows">
+                            <legend>Account details</legend>
+                            <ol>
+                                <li>
+                                    <label for="vendor_id">Vendor: </label>
+                                    <select name="vendor_id" id="vendor_id">
+                                        [% FOREACH vendor IN vendors %]
+                                            [% IF account.vendor_id == vendor.id %]
+                                                <option value="[% vendor.id | html %]" selected="selected">[% vendor.name | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% vendor.id | html %]">[% vendor.name | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="budget_id">Budget: </label>
+                                    <select name="budget_id" id="budget_id">
+                                        [% FOREACH budget IN budgets %]
+                                            [% IF account.budget_id == budget.budget_id %]
+                                                <option value="[% budget.budget_id | html %]" selected="selected">[% budget.budget_name | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% budget.budget_id | html %]">[% budget.budget_name | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                    <div class="hint">This budget will be used as the fallback value if the MARC records do not contain a mapped value for a budget code.</div>
+                                </li>
+                                <li>
+                                    <label for="description">Description: </label>
+                                    <input type="text" name="description" id="description" size="20" value="[% account.description | html %]" />
+                                </li>
+                                <li>
+                                    <label for="download_directory">Download directory: </label>
+                                    <input type="text" name="download_directory" id="download_directory" size="20" value="[% account.download_directory | html %]" />
+                                    <div class="hint">The download directory specifies the directory in your koha installation that should be searched for new files.</div>
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="rows">
+                            <legend>File import settings</legend>
+                            <ol>
+                                <li>
+                                        <label for='record_type'>Record type:</label>
+                                        <select name='record_type' id='record_type'>
+                                            <option value='biblio' selected='selected'>Bibliographic</option>
+                                            <option value='auth'>Authority</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <label for="encoding">Character encoding: </label>
+                                        <select name="encoding" id="encoding">
+                                            <option value="UTF-8" selected="selected">UTF-8 (Default)</option>
+                                            <option value="MARC-8">MARC 8</option>
+                                            <option value="ISO_5426">ISO 5426</option>
+                                            <option value="ISO_6937">ISO 6937</option>
+                                            <option value="ISO_8859-1">ISO 8859-1</option>
+                                            <option value="EUC-KR">EUC-KR</option>
+                                        </select>
+                                    </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="rows">
+                            <legend>Record matching settings</legend>
+                            <ol>
+                                <li>
+                                    <label for="matcher">Record matching rule:</label>
+                                    <select name="matcher" id="matcher">
+                                        [% FOREACH available_matcher IN available_matchers %]
+                                            [% IF available_matcher.id == account.matcher_id %]
+                                                <option value="[% available_matcher.matcher_id | html %]" selected="selected">[% available_matcher.code | html %] ([% available_matcher.description | html %])</option>
+                                            [% ELSE %]
+                                                <option value="[% available_matcher.matcher_id | html %]">[% available_matcher.code | html %] ([% available_matcher.description | html %])</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="overlay_action">Action if matching record found: </label>
+                                    [% INCLUDE 'tools-overlay-action.inc' %]
+                                </li>
+                                <li>
+                                    <label for="nomatch_action">Action if no match is found: </label>
+                                    [% INCLUDE 'tools-nomatch-action.inc' %]
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="rows" id="items">
+                            <legend>Check for embedded item record data?</legend>
+                            <ol>
+                                <li class="radio">
+                                    <input type="radio" id="parse_itemsyes" name="parse_items" value="1" checked="checked" />
+                                    <label for="parse_itemsyes">Yes</label>
+                                </li>
+                                <li class="radio">
+                                    <input type="radio" id="parse_itemsno" name="parse_items" value="0" />
+                                    <label for="parse_itemsno">No</label>
+                                </li>
+                            </ol>
+                            <ol>
+                                <li><label for="item_action">How to process items: </label>
+                                    [% INCLUDE 'tools-item-action.inc' %]
+                                </li>
+                            </ol>
+                        </fieldset>
+
+                        <fieldset class="action">
+                            <input type="submit" class="btn btn-primary" value="Submit" />
+                            <a href="/cgi-bin/koha/admin/marc_order_accounts.pl" class="cancel">Cancel</a>
+                        </fieldset>
+                    </form>
+                [% END %]
+                [% IF delete_acct %]
+                    <div class="dialog alert">
+                        <h1>Delete this account?</h1>
+                        <table>
+                            <tr>
+                                <th>Vendor</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td>[% account.vendor.name | html %]</td>
+                                <td>[% account.description | html %]</td>
+                            </tr>
+                            <tr>
+                        </table>
+                        <form action="/cgi-bin/koha/admin/marc_order_accounts.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-delete_acct" />
+                            <input type="hidden" name="id" value="[% account.id | html %]" />
+                            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+                        </form>
+                        <form action="/cgi-bin/koha/admin/marc_order_accounts.pl" method="get">
+                            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+                        </form>
+                    </div>
+                [% END %]
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
