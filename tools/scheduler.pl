@@ -25,6 +25,8 @@ use C4::Auth qw( get_template_and_user );
 use CGI qw ( -utf8 );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::DateUtils qw( dt_from_string );;
+use Koha::Reports;
+use Koha::Email;
 
 my $input = CGI->new;
 my $base;
@@ -60,23 +62,42 @@ if ( $mode eq 'job_add' ) {
     $starttime =~ s/\://g;
     my $start  = $startdate . $starttime;
     my $report = $input->param('report');
+    if ($report) {
+        my $saved_report;
+        my $report_id = int($report);
+        if ($report_id) {
+            $saved_report = Koha::Reports->find($report_id);
+        }
+        if ( !$saved_report ) {
+            $report = undef;
+        }
+    }
     my $format = $input->param('format');
-    my $email  = $input->param('email');
-    my $command =
-        "export KOHA_CONF=\"$CONFIG_NAME\"; " .
-        "$base/cronjobs/runreport.pl $report --format=$format --to=$email";
+    if ($format) {
+        unless ( $format eq 'text' || $format eq 'csv' || $format eq 'html' ) {
+            $format = undef;
+        }
+    }
+    my $email = $input->param('email');
+    if ($email) {
+        my $is_valid = Koha::Email->is_valid($email);
+        if ( !$is_valid ) {
+            $email = undef;
+        }
+    }
+    if ( $report && $format && $email ) {
 
-#FIXME commit ea899bc55933cd74e4665d70b1c48cab82cd1257 added recurring parameter (it is not in template) and call to add_cron_job (undefined)
-#    my $recurring = $input->param('recurring');
-#    if ($recurring) {
-#        my $frequency = $input->param('frequency');
-#        add_cron_job( $start, $command );
-#    }
-#    else {
-#        #here was the the unless ( add_at_job
-#    }
+        #NOTE: Escape any single quotes in email since we're wrapping it in single quotes in bash
+        $email =~ s/'/'"'"'/g;
+        my $command =
+              "export KOHA_CONF=\"$CONFIG_NAME\"; "
+            . "$base/cronjobs/runreport.pl $report --format=$format --to='$email'";
 
-    unless ( add_at_job( $start, $command ) ) {
+        unless ( add_at_job( $start, $command ) ) {
+            $template->param( job_add_failed => 1 );
+        }
+    }
+    else {
         $template->param( job_add_failed => 1 );
     }
 }
