@@ -1,3 +1,6 @@
+<script>
+   var showLastPatronCount = "[% Koha.Preference('showLastPatronCount') | html %]";
+</script>
 <div id="lastborrower-window">
     <div class="btn-group">
         <a class="btn btn-default navbar-btn lastborrower" id="lastborrowerlink" href="#" title=""><i class="fa fa-arrow-right"></i> Last patron</a>

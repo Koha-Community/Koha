@@ -182,8 +182,8 @@ $(document).ready(function() {
             };
 
             previous_patrons.unshift( previous_patron );
-            // Limit to last 10 patrons
-            if ( previous_patrons.length > 10 ) previous_patrons.pop();
+            // Limit to number of patrons specified in showLastPatronCount
+            if ( previous_patrons.length > showLastPatronCount ) previous_patrons.pop();
             localStorage.setItem("previousPatrons", JSON.stringify(previous_patrons));
         }
 
