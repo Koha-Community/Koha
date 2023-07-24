@@ -1442,7 +1442,7 @@ sub first_valid_email_address {
       C4::Context->preference('EmailFieldPrecedence');
     for my $field (@fields) {
         $email = $self->$field;
-        last if ( $email );
+        last if ($email);
     }
 
     return $email;
