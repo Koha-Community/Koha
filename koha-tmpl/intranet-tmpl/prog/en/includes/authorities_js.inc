@@ -68,7 +68,7 @@ $(document).ready(function () {
 
     $("#z3950_new").click(function(e){
         e.preventDefault();
-        window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+        window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl","z3950search",'width=800,height=550,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     });
 
     $("#z3950_replace").click(function(e){
