@@ -379,9 +379,21 @@
     summary: Cancel hold
     parameters:
       - $ref: "../swagger.yaml#/parameters/hold_id_pp"
+      - name: x-koha-override
+        in: header
+        required: false
+        description: Overrides list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - cancellation-request-flow
+        collectionFormat: csv
     produces:
       - application/json
     responses:
+      "202":
+        description: Hold request recorded
       "204":
         description: Hold deleted
       "401":

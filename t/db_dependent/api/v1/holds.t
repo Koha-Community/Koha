@@ -1408,13 +1408,13 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
 
 subtest 'delete() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
     my $password = 'AbcdEFG123';
-    my $patron   = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 } });
-    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
     # Only have 'place_holds' subpermission
@@ -1454,9 +1454,61 @@ subtest 'delete() tests' => sub {
         )
     );
 
-    $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id )
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id )->status_is( 204, 'SWAGGER3.2.4' )
+        ->content_is( '', 'SWAGGER3.3.4' );
+
+    $hold = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => undef,
+            }
+        )
+    );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id => { 'x-koha-override' => q{} } )
+        ->status_is( 204, 'Same behavior if header not set' )->content_is('');
+
+    $hold = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => undef,
+            }
+        )
+    );
+
+    $t->delete_ok(
+        "//$userid:$password@/api/v1/holds/" . $hold->id => { 'x-koha-override' => q{cancellation-request-flow} } )
+        ->status_is( 204, 'Same behavior if header set but hold not waiting' )->content_is('');
+
+    $hold = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $patron->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => undef,
+            }
+        )
+    );
+
+    $hold->set_waiting;
+
+    is( $hold->cancellation_requests->count, 0 );
+
+    $t->delete_ok(
+        "//$userid:$password@/api/v1/holds/" . $hold->id => { 'x-koha-override' => q{cancellation-request-flow} } )
+        ->status_is( 202, 'Cancellation request accepted' );
+
+    is( $hold->cancellation_requests->count, 1 );
 
     $schema->storage->txn_rollback;
 };
