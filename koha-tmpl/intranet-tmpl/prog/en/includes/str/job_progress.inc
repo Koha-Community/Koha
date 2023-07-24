@@ -1,4 +1,4 @@
-<!-- str/job_progess.inc -->
+<!-- str/job_progress.inc -->
 <script>
     var JOB_PROGRESS_NOT_STARTED = _("Not started");
     var JOB_PROGRESS_STARTED     = _("Started");
