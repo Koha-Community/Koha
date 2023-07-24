@@ -19,8 +19,7 @@
 
 use Modern::Perl;
 
-use Data::Dumper;
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -133,5 +132,22 @@ is ( $item_type->can_be_deleted, 0, 'An item type that is used by an item and a 
 $biblio->delete;
 
 is ( $item_type->can_be_deleted, 1, 'The item type that was being used by the removed item and biblioitem can now be deleted' );
+
+subtest 'image_location' => sub {
+    plan tests => 3;
+
+    my $item_type = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    $item_type->imageurl('https://myserver.org/image01');
+    is( $item_type->image_location, 'https://myserver.org/image01', 'Check URL' );
+    $item_type->imageurl('bridge/newthing.png');
+    is(
+        $item_type->image_location('opac'), '/opac-tmpl/bootstrap/itemtypeimg/bridge/newthing.png',
+        'Check path for opac'
+    );
+    is(
+        $item_type->image_location('intranet'), '/intranet-tmpl/prog/img/itemtypeimg/bridge/newthing.png',
+        'Check path for intranet'
+    );
+};
 
 $schema->txn_rollback;
