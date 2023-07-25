@@ -45,7 +45,7 @@
                                 [% ELSE %]
                                     </ul>
                                     <p class="error">User [% user | $HtmlTags tag=>'code' %] doesn't have enough privilege on database [% dbname | $HtmlTags tag=>'code' %].</p>
-                                    <p class="tip">Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database [% dbname | $HtmlTags tag=>'code' %].</p>
+                                    <p class="hint">Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database [% dbname | $HtmlTags tag=>'code' %].</p>
                                     <p>Need help? For help with granting permissions, please search online for "[% dbms | $HtmlTags tag=>'code' %] manual grant permissions"
                                     </p>
                                 [% END %]
@@ -64,7 +64,7 @@
                             [% END %]
                         [% ELSE %]
                             <div class="alert alert-warning" role="alert">[% error | html %] : [% message | html %]</div>
-                            <div class="tip">
+                            <div class="hint">
                                 <ul>
                                     <li>Check that your database is running.</li>
                                     <li>Check your database settings in [% 'koha-conf.xml' | $HtmlTags Tag=>'code' %].</li>
