@@ -137,13 +137,6 @@ sub GetHoldsQueueItems {
         {
             join => [
                 'borrower',
-                'biblio',
-                'biblioitem',
-                {
-                    'item' => {
-                        'item_group_item' => 'item_group'
-                    }
-                },
             ],
             prefetch => [
                 'biblio',
