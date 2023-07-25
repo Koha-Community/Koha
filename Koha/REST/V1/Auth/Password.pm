@@ -40,12 +40,8 @@ Controller method that checks a patron's password
 
 sub validate {
     my $c = shift->openapi->valid_input or return;
-    my $body   = $c->validation->param('body');
-    my $userid = $body->{userid} // '';
-    my $patron = Koha::Patrons->find({ userid => $userid });
 
-    my $body = $c->req->json;
-
+    my $body       = $c->req->json;
     my $identifier = $body->{identifier};
     my $userid     = $body->{userid};
 
