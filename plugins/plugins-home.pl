@@ -59,7 +59,7 @@ if ($plugins_enabled) {
     );
 
     $template->param( plugins => \@plugins, );
-    $template->param( enable_browser_upload => C4::Context->config('enable_plugin_browser_upload') );
+    $template->param( plugins_restricted => C4::Context->config('plugins_restricted') );
 
     $template->param( can_search => C4::Context->config('plugin_repos') ? 1 : 0 );
     my @results;

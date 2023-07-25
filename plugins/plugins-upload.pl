@@ -20,31 +20,36 @@ use Modern::Perl;
 
 use Archive::Extract;
 use CGI qw ( -utf8 );
+use List::Util qw( any );
 use Mojo::UserAgent;
 use File::Temp;
 
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Members;
 use Koha::Logger;
 use Koha::Plugins;
 
-my $plugins_enabled = C4::Context->config("enable_plugins");
-my $browser_upload_enabled = C4::Context->config('enable_plugin_browser_upload');
+my $plugins_enabled    = C4::Context->config("enable_plugins");
+my $plugins_restricted = C4::Context->config("plugins_restricted");
 
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name => ($plugins_enabled && $browser_upload_enabled) ? "plugins/plugins-upload.tt" : "plugins/plugins-disabled.tt",
+    {
+        template_name => $plugins_enabled ? "plugins/plugins-upload.tt" : "plugins/plugins-disabled.tt",
         query         => $input,
         type          => "intranet",
-        flagsrequired   => { plugins => 'manage' },
+        flagsrequired => { plugins => 'manage' },
     }
 );
 
-if ($plugins_enabled){
-    $template->param( browser_upload_enabled => $browser_upload_enabled );
+if ($plugins_enabled) {
+    $template->param( plugins_restricted => $plugins_restricted );
+} else {
+    # Exit early if uploads are not enabled
+    output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 my $uploadfilename = $input->param('uploadfile');
@@ -56,7 +61,7 @@ my ( $tempfile, $tfh );
 
 my %errors;
 
-if ($plugins_enabled && $browser_upload_enabled) {
+if ($plugins_enabled) {
     if ( ( $op eq 'Upload' ) && ( $uploadfile || $uploadlocation ) ) {
         my $plugins_dir = C4::Context->config("pluginsdir");
         $plugins_dir = ref($plugins_dir) eq 'ARRAY' ? $plugins_dir->[0] : $plugins_dir;
@@ -67,22 +72,39 @@ if ($plugins_enabled && $browser_upload_enabled) {
         $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
         ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
 
-        $errors{'NOTKPZ'} = 1 if ( $uploadfilename !~ /\.kpz$/i );
+        $errors{'NOTKPZ'}         = 1 if ( $uploadfilename !~ /\.kpz$/i );
         $errors{'NOWRITETEMP'}    = 1 unless ( -w $dirname );
         $errors{'NOWRITEPLUGINS'} = 1 unless ( -w $plugins_dir );
 
-        if ( $uploadlocation ) {
-            my $ua = Mojo::UserAgent->new(max_redirects => 5);
-            my $tx = $ua->get($uploadlocation);
-            $tx->result->content->asset->move_to($tempfile);
+        if ($uploadlocation) {
+            my $do_get = 1;
+            if ( $plugins_restricted ) {
+                my $repos = C4::Context->config('plugin_repos');
+
+                # Fix data structure if only one repo defined
+                if ( ref($repos->{repo}) eq 'HASH' ) {
+                    $repos = { repo => [ $repos->{repo} ] };
+                }
+
+                $do_get = any { index($uploadlocation, $_->{org_name}) != -1 } @{ $repos->{repo} };
+            }
+
+            if ( $do_get ) {
+                my $ua = Mojo::UserAgent->new( max_redirects => 5 );
+                my $tx = $ua->get($uploadlocation);
+                $tx->result->content->asset->move_to($tempfile);
+            } else {
+                $errors{'RESTRICTED'} = 1;
+            }
         } else {
-            $errors{'EMPTYUPLOAD'}    = 1 unless ( length($uploadfile) > 0 );
+            $errors{'RESTRICTED'} = 1 unless ( !$plugins_restricted );
+            $errors{'EMPTYUPLOAD'} = 1 unless ( length($uploadfile) > 0 );
         }
 
         if (%errors) {
             $template->param( ERRORS => [ \%errors ] );
         } else {
-            if ( $uploadfile ) {
+            if ($uploadfile && !$plugins_restricted) {
                 while (<$uploadfile>) {
                     print $tfh $_;
                 }
@@ -104,7 +126,7 @@ if ($plugins_enabled && $browser_upload_enabled) {
         warn "Problem uploading file or no file uploaded.";
     }
 
-    if ( ($uploadfile || $uploadlocation) && !%errors && !$template->param('ERRORS') ) {
+    if ( ( $uploadfile || $uploadlocation ) && !%errors && !$template->param('ERRORS') ) {
         print $input->redirect("/cgi-bin/koha/plugins/plugins-home.pl");
     } else {
         output_html_with_http_headers $input, $cookie, $template->output;

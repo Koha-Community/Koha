@@ -39,6 +39,7 @@
                         [% ELSIF ( ERROR.EMPTYUPLOAD ) %]<li><strong>The upload file appears to be empty.</strong></li>
                         [% ELSIF ( ERROR.UZIPFAIL ) %]<li><strong>[% ERROR.UZIPFAIL | html %] failed to unpack.<br />Please verify the integrity of the zip file and retry.</strong></li>
                         [% ELSIF ( ERROR.NOWRITEPLUGINS ) %]<li><strong>Cannot unpack file to the plugins directory.<br />Please verify that the Apache user can write to the plugins directory.</strong></li>
+                        [% ELSIF ( ERROR.RESTRICTED ) %]<li><strong>Cannot install plugin from unknown source whilst plugins_restricted is enabled.<br /></strong></li>
                         [% ELSE %]<li><strong>[% ERROR.CORERR | html %] An unknown error has occurred.<br />Please review the error log for more details.</strong></li>[% END %]
                     [% END %]
                 </div>

@@ -38,10 +38,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $browser_upload_enabled = C4::Context->config('enable_plugin_browser_upload');
 my $class = $input->param('class');
 
-if ( $browser_upload_enabled && $class ) {
+if ( $class ) {
     Koha::Plugins::Handler->delete( { class => $class } );
 }
 

@@ -46,7 +46,7 @@
 
                     [% IF ( CAN_user_plugins_manage ) %]
                         <div class="btn-toolbar" id="toolbar">
-                            [% IF ( enable_browser_upload ) %]
+                            [% IF ( !plugins_restricted ) %]
                             <a href="/cgi-bin/koha/plugins/plugins-upload.pl" id="upload_plugin" class="btn btn-default"><i class="fa fa-upload"></i> Upload plugin</a>
                             [% END %]
 
@@ -90,9 +90,7 @@
                                         <th>Description</th>
                                         <th>Organization</th>
                                         <th>Latest version</th>
-                                        [% IF ( enable_browser_upload ) %]
                                         <th>&nbsp;</th>
-                                        [% END %]
                                     </tr>
                                 </thead>
 
@@ -102,9 +100,7 @@
                                         <td>[% sr.result.description | html %]</td>
                                         <td>[% sr.repo.name | html %]</td>
                                         <td>[% sr.result.tag_name | html %]</td>
-                                        [% IF ( enable_browser_upload ) %]
                                         <td><a class="btn btn-default btn-sm btn-install-plugin" href="/cgi-bin/koha/plugins/plugins-upload.pl?op=Upload&uploadfile=[% sr.result.install_name | uri %]&uploadlocation=[% sr.result.install_url | uri %]"><i class="fa fa-download"></i> Install</a></td>
-                                        [% END %]
                                     </tr>
                                 [% END %]
                             </table>
@@ -220,9 +216,7 @@
                                                             [% END %]
                                                         [% END %]
                                                         [% IF ( CAN_user_plugins_manage ) %]
-                                                            [% IF ( enable_browser_upload ) %]
                                                                 <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash-can fa-fw"></i> Uninstall</a></li>
-                                                            [% END %]
                                                             [% IF ( plugin.is_enabled ) %]
                                                                     <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"><i class="fa fa-pause fa-fw"></i> Disable</a></li>
                                                             [% ELSE %]
