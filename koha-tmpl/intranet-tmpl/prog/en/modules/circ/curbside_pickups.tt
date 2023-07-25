@@ -452,17 +452,19 @@
 
                                             <li>
                                                 <label>Items ready for pickup: </label>
-                                                <span>
-                                                    [% IF waiting_holds.count %]
-                                                        [% FOREACH h IN waiting_holds %]
-                                                            <p>
-                                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)
-                                                            </p>
+                                                <fieldset>
+                                                    <ul>
+                                                        [% IF waiting_holds.count %]
+                                                            [% FOREACH h IN waiting_holds %]
+                                                                <li>
+                                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)
+                                                                </li>
+                                                            [% END %]
+                                                        [% ELSE %]
+                                                            <li>There are no waiting holds for this patron at this library.</li>
                                                         [% END %]
-                                                    [% ELSE %]
-                                                        <span>There are no waiting holds for this patron at this library.</span>
-                                                    [% END %]
-                                                </span>
+                                                    </ul>
+                                                </fieldset>
                                             </li>
 
                                             <li>
