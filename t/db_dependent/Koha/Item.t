@@ -364,6 +364,7 @@ subtest 'has_pending_hold() tests' => sub {
     $dbh->do("INSERT INTO tmp_holdsqueue (surname,borrowernumber,itemnumber) VALUES ('Clamp',42,$itemnumber)");
     ok( $item->has_pending_hold, "Yes, we have a pending hold");
     $dbh->do("DELETE FROM tmp_holdsqueue WHERE itemnumber=$itemnumber");
+    $item->discard_changes;
     ok( !$item->has_pending_hold, "We don't have a pending hold if nothing in the tmp_holdsqueue");
 
     $schema->storage->txn_rollback;

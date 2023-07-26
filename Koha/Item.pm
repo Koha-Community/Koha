@@ -891,9 +891,8 @@ This method checks the tmp_holdsqueue to see if this item has been selected for 
 =cut
 
 sub has_pending_hold {
-    my ( $self ) = @_;
-    my $pending_hold = $self->_result->tmp_holdsqueues;
-    return $pending_hold->count ? 1: 0;
+    my ($self) = @_;
+    return $self->_result->tmp_holdsqueue ? 1 : 0;
 }
 
 =head3 has_pending_recall {
