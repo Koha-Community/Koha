@@ -143,7 +143,7 @@
                             <thead>
                                 <tr>
                                     <th>Hold date</th>
-                                    <th>Title</th>
+                                    <th class="anti-the">Title</th>
                                     <th>Call number</th>
                                     <th>Item type</th>
                                     <th>Barcode</th>
