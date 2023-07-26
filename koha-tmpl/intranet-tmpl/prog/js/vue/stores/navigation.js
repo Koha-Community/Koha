@@ -115,16 +115,20 @@ export const useNavigationStore = defineStore("navigation", {
                 return child.is_base || (child.path && child.path !== "");
             }
 
+            function _isEmptyNode(child) {
+                return !child.is_empty;
+            }
+
             function _mapMatches(currentMatches) {
                 return currentMatches
                     .filter(match => _isBaseOrNotStub(match.meta.self))
+                    .filter(match => _isEmptyNode(match.meta.self))
                     .map(match => ({
                         ...match.meta.self,
                         icon: null,
                         path: match.path,
                         children: null,
-                    }))
-                    .filter(match => match.title);
+                    }));
             }
         },
         leftNavigation() {
