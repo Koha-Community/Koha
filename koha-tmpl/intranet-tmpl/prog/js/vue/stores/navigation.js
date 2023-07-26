@@ -123,7 +123,8 @@ export const useNavigationStore = defineStore("navigation", {
                         icon: null,
                         path: match.path,
                         children: null,
-                    }));
+                    }))
+                    .filter(match => match.title);
             }
         },
         leftNavigation() {
