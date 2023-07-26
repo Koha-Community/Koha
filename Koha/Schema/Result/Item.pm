@@ -927,24 +927,24 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 tmp_holdsqueues
+=head2 tmp_holdsqueue
 
-Type: has_many
+Type: might_have
 
 Related object: L<Koha::Schema::Result::TmpHoldsqueue>
 
 =cut
 
-__PACKAGE__->has_many(
-  "tmp_holdsqueues",
+__PACKAGE__->might_have(
+  "tmp_holdsqueue",
   "Koha::Schema::Result::TmpHoldsqueue",
   { "foreign.itemnumber" => "self.itemnumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-12 18:18:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HMU2tnuIRypuatz/J5683A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-26 17:44:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FHB+BvL4it4HrzlfNCxoKw
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

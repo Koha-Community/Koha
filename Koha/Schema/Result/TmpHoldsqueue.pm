@@ -33,7 +33,7 @@ __PACKAGE__->table("tmp_holdsqueue");
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 barcode
 
@@ -123,7 +123,7 @@ __PACKAGE__->add_columns(
   "biblionumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itemnumber",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "barcode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "surname",
@@ -158,6 +158,18 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</itemnumber>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("itemnumber");
 
 =head1 RELATIONS
 
@@ -208,17 +220,12 @@ __PACKAGE__->belongs_to(
   "itemnumber",
   "Koha::Schema::Result::Item",
   { itemnumber => "itemnumber" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-04 22:42:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RdIrLi+vbzj3ab/UP7e9pw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-26 17:44:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5vbBn2tKY/nPx5aA4gaEtg
 
 __PACKAGE__->add_columns(
     '+item_level_request' => { is_boolean => 1 }
@@ -273,11 +280,11 @@ __PACKAGE__->belongs_to(
 );
 
 sub koha_object_class {
-    'Koha::HoldsQueueItem';
+    'Koha::Hold::HoldsQueueItem';
 }
 
 sub koha_objects_class {
-    'Koha::HoldsQueueItems';
+    'Koha::Hold::HoldsQueueItems';
 }
 
 1;
