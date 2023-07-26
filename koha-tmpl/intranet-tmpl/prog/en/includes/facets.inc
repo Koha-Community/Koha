@@ -21,10 +21,10 @@
                                         <span class="filter_label"><a href="[% base_url _ '&limit=search_filter:' _ search_filter_id | $raw %]">[% search_filter.name | html %]</a></span>
                                     [% END %]
                                 </li>
-                            [% END %]
+                            [% END # /FOREACH search_filter %]
                         </ul>
                     </li>
-                [% END %]
+                [% END # /IF SavedSearchFilters %]
                 <li id="availability_facet">
                     Availability
                     <ul>
@@ -35,7 +35,8 @@
                                 <li>
                                     <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]">Show all records</a>
                             [% ELSE %]
-                                <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]&amp;limit=available">Limit to records with available items</a>[% END %]
+                                <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]&amp;limit=available">Limit to records with available items</a>
+                            [% END # /IF available %]
                         </li>
                     </ul>
                     [% IF ( related ) %]
@@ -43,7 +44,7 @@
                             (related searches: [% FOREACH relate IN related %][% relate.related_search | html %][% END %])
                         </li>
                     [% END %]
-                </li>
+                </li> <!-- /#availability_facet -->
 
                 [% FOREACH facets_loo IN facets_loop %]
                     [% IF facets_loo.facets.size > 0 %]
@@ -112,9 +113,9 @@
                                             [% IF ( displayFacetCount ) %]
                                                 <span class="facet-count"> ([% facet.facet_count | html %])</span>
                                             [% END %]
-                                        [% END %]
+                                        [% END # /IF facet.active %]
                                     </li>
-                                [% END %]
+                                [% END # /FOREACH facet %]
                                 [% IF facets_loo.facets.size > 5 %]
                                     <li class="moretoggle">
                                         <a href="#"><strong>Show more</strong></a>
@@ -125,9 +126,9 @@
                                 [% END %]
                             </ul>
                         </li>
-                    [% END %]
-                [% END %]
+                    [% END # /IF facets_loo.facets.size %]
+                [% END # /FOREACH facets_loo %]
             </ul>
-        </div>
-    [% END %]
-[% END %]
+        </div> <!-- /#search-facets -->
+    [% END # /IF ( facets_loop ) %]
+[% END # /IF ( opacfacets ) %]
