@@ -5885,6 +5885,7 @@ CREATE TABLE `tmp_holdsqueue` (
   `notes` mediumtext DEFAULT NULL,
   `item_level_request` tinyint(4) NOT NULL DEFAULT 0,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'date and time this entry as added/last updated',
+  PRIMARY KEY (`itemnumber`),
   KEY `tmp_holdsqueue_ibfk_1` (`itemnumber`),
   KEY `tmp_holdsqueue_ibfk_2` (`biblionumber`),
   KEY `tmp_holdsqueue_ibfk_3` (`borrowernumber`),

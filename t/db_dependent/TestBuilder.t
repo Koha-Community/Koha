@@ -285,7 +285,7 @@ subtest 'Test build with NULL values' => sub {
 
 
 subtest 'Tests for delete method' => sub {
-    plan tests => 12;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -304,23 +304,20 @@ subtest 'Tests for delete method' => sub {
 
 
     # Test delete in table without primary key (..)
-    is( $schema->source('TmpHoldsqueue')->primary_columns, 0,
+    is( $schema->source('AccountCreditTypesBranch')->primary_columns, 0,
         'Table without primary key detected' );
-    my $bibno = $builder->build_sample_biblio->biblionumber;
-    my $cnt1 = $schema->resultset('TmpHoldsqueue')->count;
-    # Insert a new record in TmpHoldsqueue with that biblionumber
-    my $val = { biblionumber => $bibno };
-    my $rec = $builder->build({ source => 'TmpHoldsqueue', value => $val });
-    my $cnt2 = $schema->resultset('TmpHoldsqueue')->count;
+    my $cnt1 = $schema->resultset('AccountCreditTypesBranch')->count;
+    # Insert a new record in AccountCreditTypesBranch with that biblionumber
+    my $rec = $builder->build({ source => 'AccountCreditTypesBranch' });
+    my $cnt2 = $schema->resultset('AccountCreditTypesBranch')->count;
     is( defined($rec) && $cnt2 == $cnt1 + 1 , 1, 'Created a record' );
-    is( $builder->delete({ source => 'TmpHoldsqueue', records => $rec }),
+    is( $builder->delete({ source => 'AccountCreditTypesBranch', records => $rec }),
         undef, 'delete returns undef' );
-    is( $rec->{biblionumber}, $bibno, 'Hash value untouched' );
-    is( $schema->resultset('TmpHoldsqueue')->count, $cnt2,
+    is( $schema->resultset('AccountCreditTypesBranch')->count, $cnt2,
         "Method did not delete record in table without PK" );
 
     # Test delete with NULL values
-    $val = { branchcode => undef };
+    my $val = { branchcode => undef };
     is( $builder->delete({ source => 'Branch', records => $val }), 0,
         'delete returns zero for an undef search with one key' );
     $val = { module_bit => 1, #catalogue
