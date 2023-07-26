@@ -528,6 +528,7 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     } grep {
         $$_{'value'}
     } @$values_list;
+    @codes_list = sort { $a->{desc} cmp $b->{desc} } @codes_list;
     $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }
 
