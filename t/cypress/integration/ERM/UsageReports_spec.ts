@@ -1,14 +1,5 @@
 import { mount } from "@cypress/vue"
 
-const dayjs = require("dayjs")
-
-const dates = {
-    today_iso: dayjs().format("YYYY-MM-DD"),
-    today_us: dayjs().format("MM/DD/YYYY"),
-    tomorrow_iso: dayjs().add(1, "day").format("YYYY-MM-DD"),
-    tomorrow_us: dayjs().add(1, "day").format("MM/DD/YYYY"),
-}
-
 describe("Reports home tabs", () => {
     beforeEach(() => {
         cy.login()
@@ -145,10 +136,9 @@ describe("Custom reports", () => {
             '{"value":"local"}'
         )
 
-        const dataProvider = cy.get_usage_data_provider()
-        const dataProviders = [dataProvider]
+        const dataProviders = cy.get_multiple_providers()
         const defaultReport = cy.get_default_report()
-        const defaulReports = [defaultReport]
+        const defaultReports = [defaultReport]
 
         cy.intercept("GET", "/api/v1/erm/usage_data_providers*", {
             statusCode: 200,
@@ -160,7 +150,7 @@ describe("Custom reports", () => {
         })
         cy.intercept("GET", "/api/v1/erm/default_usage_reports*", {
             statusCode: 200,
-            body: defaulReports,
+            body: defaultReports,
             headers: {
                 "X-Base-Total-Count": "1",
                 "X-Total-Count": "1",
@@ -168,9 +158,81 @@ describe("Custom reports", () => {
         })
 
         cy.visit("/cgi-bin/koha/erm/eusage/reports")
+        cy.get("#usage_data_providerstabs").contains("Create report").click()
     })
 
-    it("Should offer options to create and display custom reports", () => {
-        // ToDo
+    it("Should limit report types based on the provider(s) selected", () => {
+        const dataProviders = cy.get_multiple_providers()
+        cy.get('#report_type').find('.vs__actions').click()
+        cy.get('#report_type').find('li').as('options')
+        cy.get('@options').should('have.length', 16)
+
+        cy.get("#usage_data_provider .vs__search").type(
+            dataProviders[0].name + "{enter}",
+            { force: true }
+        )
+        cy.get('#report_type').find('.vs__actions').click()
+        cy.get('#report_type').find('li').as('options')
+        cy.get('@options').should('have.length', 1)
+        
+        cy.get("#usage_data_provider .vs__search").type(
+            dataProviders[1].name + "{enter}",
+            { force: true }
+        )
+        cy.get('#report_type').find('.vs__actions').click()
+        cy.get('#report_type').find('li').as('options')
+        cy.get('@options').should('have.length', 3)
+    })
+
+    it("Should limit data providers based on the report type(s) selected", () => {
+        cy.get('#usage_data_provider').find('.vs__actions').click()
+        cy.get('#usage_data_provider').find('li').as('options')
+        cy.get('@options').should('have.length', 2)
+
+        cy.get("#report_type .vs__search").type(
+            "TR_J2" + "{enter}",
+            { force: true }
+        )
+        cy.get('#usage_data_provider').find('.vs__actions').click()
+        cy.get('#usage_data_provider').find('li').as('options')
+        cy.get('@options').should('have.length', 1)
+        
+        cy.get("#report_type .vs__search").type(
+            "TR_J1" + "{enter}",
+            { force: true }
+        )
+        cy.get('#usage_data_provider').find('.vs__actions').click()
+        cy.get('#usage_data_provider').find('li').as('options')
+        cy.get('@options').should('have.length', 2)
+    })
+
+    it("Should limit metric types based on the report type(s) selected", () => {
+        cy.get("#metric_type .vs__search").should('be.disabled')
+
+        cy.get("#report_type .vs__search").type(
+            "TR_J1" + "{enter}",
+            { force: true }
+        )
+        cy.get('#metric_type').find('.vs__actions').click()
+        cy.get('#metric_type').find('li').as('options')
+        cy.get('@options').should('have.length', 2)
+        
+        cy.get("#report_type .vs__search").type(
+            "PR" + "{enter}",
+            { force: true }
+        )
+        cy.get('#metric_type').find('.vs__actions').click()
+        cy.get('#metric_type').find('li').as('options')
+        cy.get('@options').should('have.length', 7)
+    })
+
+    it("Should disable the month selectors when a yearly report is selected", () => {
+        cy.get("#interval .vs__search").type(
+            "By year" + "{enter}",
+            { force: true }
+        )
+
+        cy.get("#start-month .vs__search").should('be.disabled')
+        cy.get("#end_month .vs__search").should('be.disabled')
     })
 })

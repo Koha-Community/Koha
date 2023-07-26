@@ -122,7 +122,8 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.begin_date
+                        const date = getEarliestDate(row, "TR")
+                        return date
                     },
                 },
                 {
@@ -141,7 +142,8 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.begin_date
+                        const date = getEarliestDate(row, "PR")
+                        return date
                     },
                 },
                 {
@@ -160,7 +162,8 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return row.begin_date
+                        const date = getEarliestDate(row, "DR")
+                        return date
                     },
                 },
                 {
@@ -169,7 +172,7 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        const date = getLatestDate(row, "PR")
+                        const date = getLatestDate(row, "DR")
                         return date
                     },
                 },

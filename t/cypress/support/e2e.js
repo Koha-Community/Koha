@@ -387,3 +387,46 @@ cy.get_default_report = () => {
         "report_url_params": JSON.stringify(params)
     }
 }
+
+cy.get_multiple_providers = () => {
+    return [
+        {
+            "active": 1,
+            "aggregator": "test_aggregator",
+            "api_key": '12345',
+            "begin_date": dates['today_iso'],
+            "customer_id": "12345",
+            "description": "A data provider for cypress testing",
+            "end_date": dates['tomorrow_iso'],
+            "erm_usage_data_provider_id": 1,
+            "method": "test",
+            "name": "Cypress test provider",
+            "report_release": "test_report_release",
+            "report_types": "TR_J1;",
+            "requestor_email": "test_requestor_email",
+            "requestor_id": "12345",
+            "requestor_name": "test_requestor_name",
+            "service_type": "test_service_type",
+            "service_url": "www.url.com",
+        },
+        {
+            "active": 1,
+            "aggregator": "test_aggregator",
+            "api_key": '12345',
+            "begin_date": dates['today_iso'],
+            "customer_id": "12345",
+            "description": "A second provider for reports testing",
+            "end_date": dates['tomorrow_iso'],
+            "erm_usage_data_provider_id": 2,
+            "method": "test",
+            "name": "Second test provider",
+            "report_release": "test_report_release",
+            "report_types": "TR_J1;TR_J2;TR_J3",
+            "requestor_email": "test_requestor_email",
+            "requestor_id": "12345",
+            "requestor_name": "test_requestor_name",
+            "service_type": "test_service_type",
+            "service_url": "www.url.com",
+        },
+    ]
+}

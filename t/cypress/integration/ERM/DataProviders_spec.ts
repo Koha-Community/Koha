@@ -54,7 +54,6 @@ describe("Data provider CRUD operations", () => {
                 "X-Total-Count": "1",
             },
         })
-        cy.intercept("GET", "/api/v1/erm/usage_data_providers/*", dataProvider)
         cy.visit("/cgi-bin/koha/erm/eusage/usage_data_providers")
         cy.get("#usage_data_providers_list").contains("Showing 1 to 1 of 1 entries")
     })
@@ -527,3 +526,87 @@ describe("Data provider tab options", () => {
         cy.get("#counter_logs_list").contains("Showing 1 to 1 of 1 entries")
     })
 })
+
+describe("Data providers action buttons", () => {
+    beforeEach(() => {
+        cy.login()
+        cy.title().should("eq", "Koha staff interface")
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMModule",
+            '{"value":"1"}'
+        )
+        cy.intercept(
+            "GET",
+            "/cgi-bin/koha/svc/config/systempreferences/?pref=ERMProviders",
+            '{"value":"local"}'
+        )
+    })
+
+    it("Should queue a harvest background job", () => {
+        const dataProvider = cy.get_usage_data_provider()
+        const dataProviders = [dataProvider]
+
+        cy.intercept("GET", "/api/v1/erm/usage_data_providers*", {
+            statusCode: 200,
+            body: dataProviders,
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        })
+        cy.intercept("GET", "/api/v1/erm/usage_data_providers/*", dataProvider)
+        cy.visit("/cgi-bin/koha/erm/eusage/usage_data_providers")
+
+        cy.get("#usage_data_providers_list table tbody tr:first").contains("Run now").click()
+        cy.get(".modal_centered p").contains(dataProvider.name)
+
+        cy.intercept("GET", "/api/v1/erm/usage_data_providers/1/run*", {
+            statusCode: 200,
+            body: { jobs: [
+                {
+                    report_type: 'TR_J1',
+                    job_id: 1
+                }
+            ]},
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        })
+        cy.get('#accept_modal').click()
+        cy.get('#erm > div > div.main.container-fluid > div > div.col-sm-10.col-sm-push-2 > main > div.dialog.message > li')
+            .contains("Harvest background job for report type TR_J1 has started, click here to check its progress.")
+    })
+
+    it("Should test a provider's SUSHI connection", () => {
+        const dataProvider = cy.get_usage_data_provider()
+        const dataProviders = [dataProvider]
+
+        cy.intercept("GET", "/api/v1/erm/usage_data_providers*", {
+            statusCode: 200,
+            body: dataProviders,
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        })
+        cy.intercept("GET", "/api/v1/erm/usage_data_providers/*", dataProvider)
+        cy.visit("/cgi-bin/koha/erm/eusage/usage_data_providers")
+
+        
+        cy.intercept("GET", "/api/v1/erm/usage_data_providers/1/test_connection", {
+            statusCode: 200,
+            body: 1,
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        }).as("test-connection")
+        cy.get("#usage_data_providers_list table tbody tr:first").contains("Test").click()
+        cy.wait("@test-connection")
+        cy.get('#erm > div > div.main.container-fluid > div > div.col-sm-10.col-sm-push-2 > main > div.dialog.message')
+            .contains("Harvester connection was successful for usage data provider " + dataProvider.name)
+    })
+}) 
+
