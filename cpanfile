@@ -21,7 +21,6 @@ requires 'Class::Inspector', '1.31';
 requires 'Clone', '0.37';
 requires 'Crypt::CBC', '2.33';
 requires 'Crypt::Eksblowfish::Bcrypt', '0.008';
-requires 'DBD::Mock', '1.39';
 requires 'DBD::mysql', '4.004';
 requires 'DBI', '1.53';
 requires 'DBIx::Class::Schema::Loader', '0.07039';
