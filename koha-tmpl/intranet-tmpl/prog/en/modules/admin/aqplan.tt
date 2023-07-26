@@ -6,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% PROCESS 'budget_planning.inc' %]
 <title>[% FILTER collapse %]
-    [% tx("Planning for {fund}", { fund = budget_period_description }) | html %][% PROCESS planning plan=authcat %] &rsaquo;
+    [% tx("Planning for {fund} ", { fund = budget_period_description }) | html %][% PROCESS planning plan=authcat %] &rsaquo;
     [% t("Funds") | html %] &rsaquo;
     [% t("Budgets") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;

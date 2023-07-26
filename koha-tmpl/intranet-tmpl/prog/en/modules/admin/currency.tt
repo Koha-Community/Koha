@@ -9,17 +9,17 @@
 <title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
         [% IF currency %]
-            [% tx("Modify currency '{currency}'", { currency = currency.currency }) | html %]
+            [% tx("Modify currency '{currency}'", { currency = currency.currency }) | html %] &rsaquo;
         [% ELSE %]
-            [% t("New currency") | html %]
+            [% t("New currency") | html %] &rsaquo;
         [% END %]
-    [% END %] &rsaquo;
+    [% END %]
     [% IF op == 'delete_confirm' %]
-        [% tx("Confirm deletion of currency '{currency}'", { currency = currency.currency }) | html %]
+        [% tx("Confirm deletion of currency '{currency}'", { currency = currency.currency }) | html %] &rsaquo;
     [% END %]
     [% IF op == 'list' %]
-        [% t("Currencies") | html %]
-    [% END %] &rsaquo;
+        [% t("Currencies") | html %] &rsaquo;
+    [% END %]
     [% t("Currencies and exchange rates") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]

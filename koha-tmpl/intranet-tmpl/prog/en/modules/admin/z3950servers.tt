@@ -13,7 +13,7 @@
 
 <title>[% FILTER collapse %]
     [% IF op == 'edit' %]
-        [% tx("Modify {servertype} server {servername}", { servertype = servertype, servername = servername }) | html %] &rsaquo;
+        [% tx("Modify {servertype} server {servername}", { servertype = servertype, servername = server.servername }) | html %] &rsaquo;
     [% END %]
     [% IF op ==  'add' %]
         [% tx("New {servertype} server", { servertype = servertype }) | html %] &rsaquo;
