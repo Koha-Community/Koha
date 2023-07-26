@@ -314,6 +314,9 @@ $(document).ready(function() {
                 "bPaginate": false,
                 "bProcessing": true,
                 "bServerSide": false,
+                "aoColumnDefs": [
+                    { "type": "anti-the", "targets": [ "anti-the" ] }
+                ],
                 "ajax": {
                     "url": '/cgi-bin/koha/svc/holds',
                     "data": function ( d ) {
