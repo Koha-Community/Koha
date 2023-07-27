@@ -263,12 +263,12 @@
 
         [% IF ( authid ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Modify authority #[% authid | html %] ([% authtypetext | html %])
+                <span>Modify authority #[% authid | html %]</span> ([% authtypetext | html %])
             [% END %]
 
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Adding authority [% authtypetext | html %]
+                <span>Adding authority [% authtypetext | html %]</span>
             [% END %]
 
         [% END %]
