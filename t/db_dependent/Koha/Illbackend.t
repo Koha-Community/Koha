@@ -36,6 +36,35 @@ subtest 'existing_statuses() tests' => sub {
     $schema->storage->txn_begin;
     Koha::Illrequests->search->delete;
 
+    # Mock ILLBackend (as object)
+    my $backend = Test::MockObject->new;
+    $backend->set_isa('Koha::Illbackends::Mock');
+    $backend->set_always( 'name', 'Mock' );
+
+    $backend->mock(
+        'status_graph',
+        sub {
+            return {
+                READY => {
+                    prev_actions   => [ 'NEW', 'REQREV', 'QUEUED', 'CANCREQ' ],
+                    id             => 'READY',
+                    name           => 'Ready',
+                    ui_method_name => 'Make request ready',
+                    method         => 'confirm',
+                    next_actions   => [ 'REQREV', 'COMP', 'CHK' ],
+                    ui_method_icon => 'fa-check',
+                }
+            };
+        },
+    );
+
+    # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
+    my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+    $illreqmodule->mock(
+        'load_backend',
+        sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
+    );
+
     my $alias = $builder->build_object(
         {
             class => 'Koha::AuthorisedValues',
@@ -47,6 +76,18 @@ subtest 'existing_statuses() tests' => sub {
         }
     );
 
+    my $backend_req_status = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                status       => 'READY',
+                status_alias => undef,
+                biblio_id    => undef,
+                backend      => 'Mock'
+            }
+        }
+    );
+
     my $req = $builder->build_object(
         {
             class => 'Koha::Illrequests',
@@ -54,7 +95,7 @@ subtest 'existing_statuses() tests' => sub {
                 status       => 'REQ',
                 status_alias => undef,
                 biblio_id    => undef,
-                backend      => 'FreeForm'
+                backend      => 'Mock'
             }
         }
     );
@@ -65,7 +106,7 @@ subtest 'existing_statuses() tests' => sub {
                 status       => 'CHK',
                 status_alias => undef,
                 biblio_id    => undef,
-                backend      => 'FreeForm'
+                backend      => 'Mock'
             }
         }
     );
@@ -76,7 +117,7 @@ subtest 'existing_statuses() tests' => sub {
                 status       => 'REQ',
                 status_alias => 'BOB',
                 biblio_id    => undef,
-                backend      => 'FreeForm'
+                backend      => 'Mock'
             }
         }
     );
@@ -87,22 +128,23 @@ subtest 'existing_statuses() tests' => sub {
                 status       => 'REQ',
                 status_alias => undef,
                 biblio_id    => undef,
-                backend      => 'FreeForm'
+                backend      => 'Mock'
             }
         }
     );
 
     my $backend_module = Koha::Illbackend->new;
 
-    my $existing_statuses = $backend_module->existing_statuses('FreeForm');
+    my $existing_statuses = $backend_module->existing_statuses('Mock');
 
-    is( @{$existing_statuses}, 3, "Return 3 unique existing statuses" );
+    is( @{$existing_statuses}, 4, "Return 4 unique existing statuses" );
 
     # FIXME: Add tests to check content and order of return
     my $expected_statuses = [
-        { code => 'CHK', str => 'Checked out' },
-        { code => 'REQ', str => 'Requested' },
-        { code => 'BOB', str => 'Bob is the best status' }
+        { code => 'CHK',   str => 'Checked out' },
+        { code => 'READY', str => 'Ready' },
+        { code => 'REQ',   str => 'Requested' },
+        { code => 'BOB',   str => 'Bob is the best status' }
     ];
 
     is_deeply( $existing_statuses, $expected_statuses, 'Deep match on return' );
