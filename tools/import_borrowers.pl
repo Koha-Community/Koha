@@ -77,7 +77,7 @@ $template->param( categories => \@patron_categories );
 $template->param( borrower_fields => Koha::Database::Columns->columns->{borrowers} );
 
 if ( $input->param('sample') ) {
-    our $csv = Text::CSV->new( { binary => 1 } );    # binary needed for non-ASCII Unicode
+    our $csv = Text::CSV->new( { binary => 1, formula => 'empty' } );    # binary needed for non-ASCII Unicode
     print $input->header(
         -type       => 'application/vnd.sun.xml.calc',    # 'application/vnd.ms-excel' ?
         -attachment => 'patron_import.csv',

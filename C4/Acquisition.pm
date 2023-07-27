@@ -279,7 +279,15 @@ sub GetBasketAsCSV {
 
         my $delimiter = $csv_profile->csv_separator;
         $delimiter = "\t" if $delimiter eq "\\t";
-        my $csv = Text::CSV_XS->new({'quote_char'=>'"','escape_char'=>'"','sep_char'=>$delimiter,'binary'=>1});
+        my $csv = Text::CSV_XS->new(
+            {
+                quote_char  => '"',
+                escape_char => '"',
+                sep_char    => $delimiter,
+                binary      => 1,
+                formula     => "empty",
+            }
+        );
         my $csv_profile_content = $csv_profile->content;
         my ( @headers, @fields );
         while ( $csv_profile_content =~ /
