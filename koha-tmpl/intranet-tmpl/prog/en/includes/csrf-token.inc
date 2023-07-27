@@ -1,1 +1,3 @@
-<input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+[%- USE Koha %]
+[%- USE raw %]
+<input type="hidden" name="csrf_token" value="[% Koha.GenerateCSRF | $raw %]" />

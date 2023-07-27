@@ -22,6 +22,7 @@ use Modern::Perl;
 use base qw( Template::Plugin );
 
 use C4::Context;
+use Koha::Token;
 use Koha;
 
 =head1 NAME
@@ -48,7 +49,21 @@ is necessary.
 
 =head2 Class Methods
 
+=head3 new
+
+This new method allows us to store the context which gives us
+access to the template vars already set. In particular this gives
+us access to the template vars set by C4::Auth::get_template_and_user
+
 =cut
+
+sub new {
+    my ( $class, $context ) = @_;
+    bless {
+        _CONTEXT => $context,
+    }, $class;
+}
+
 
 sub Preference {
     my ( $self, $pref ) = @_;
@@ -82,6 +97,18 @@ sub Version {
         maintenance => $major . "." . $minor . "." . $maintenance,
         development => ( $development ne '000' ) ? $development : undef,
     };
+}
+
+=head3 GenerateCSRF
+
+Generate a new CSRF token.
+
+=cut
+
+sub GenerateCSRF {
+    my ($self) = @_;
+    my $session_id = $self->{_CONTEXT}->stash->{sessionID};
+    return Koha::Token->new->generate_csrf( { session_id => scalar $session_id } );
 }
 
 1;
