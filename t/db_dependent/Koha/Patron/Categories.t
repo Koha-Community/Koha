@@ -62,7 +62,7 @@ is( $retrieved_category_1->checkprevcheckout, 'inherit', 'Koha::Patron::Category
 is( $retrieved_category_2->checkprevcheckout, 'inherit', 'Koha::Patron::Category->store should default checkprevcheckout to inherit' );
 
 subtest 'get_expiry_date' => sub {
-    plan tests => 5;
+    plan tests => 7;
     my $next_month = dt_from_string->add( months => 1 );
     my $next_year = dt_from_string->add( months => 12 );
     my $yesterday = dt_from_string->add( days => -1 );
@@ -76,9 +76,25 @@ subtest 'get_expiry_date' => sub {
     is( $category->get_expiry_date, $next_month, 'Without enrolmentperiod and parameter, ->get_expiry_date should return enrolmentperioddate' );
     is( $category->get_expiry_date( $next_year ), $next_month, 'Without enrolmentperiod, ->get_expiry_date should return enrolmentperiodadate even if a parameter is given' );
 
+    my $dt          = dt_from_string;
+    my $original_dt = $dt->clone;
+    $category->get_expiry_date($dt);
+    is(
+        t::lib::Dates::compare( $dt, $original_dt ), 0,
+        'Without enrolment period, DateTime object passed as a parameter should not be modified when ->get_expiry_date is called'
+    );
+
     $category->enrolmentperiod( 12 )->store;
     is( t::lib::Dates::compare($category->get_expiry_date, $next_year), 0, 'With enrolmentperiod defined and no parameter, ->get_expiry_date should return today + enrolmentperiod' );
     is( t::lib::Dates::compare($category->get_expiry_date( $yesterday ), $next_year->clone->add( days => -1 )), 0, 'With enrolmentperiod defined and a date given in parameter, ->get_expiry_date should take this date + enrolmentperiod' );
+
+    $dt          = dt_from_string;
+    $original_dt = $dt->clone;
+    $category->get_expiry_date($dt);
+    is(
+        t::lib::Dates::compare( $dt, $original_dt ), 0,
+        'With enrolment period defined, DateTime object passed as a parameter should not be modified when ->get_expiry_date is called'
+    );
 
     my $hardcoded_date = '2000-01-31';
     is( t::lib::Dates::compare($category->get_expiry_date( $hardcoded_date ), dt_from_string( $hardcoded_date )->add( months => 12 )), 0, 'get_expiry_date accepts strings as well'  );
