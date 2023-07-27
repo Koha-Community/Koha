@@ -96,6 +96,8 @@ $(document).ready(function() {
 
     // Handle renewals and returns
     $("#RenewCheckinChecked").on("click",function(){
+
+        let refresh_table = true;
         $(".checkin:checked:visible").each(function() {
             itemnumber = $(this).val();
 
@@ -125,6 +127,7 @@ $(document).ready(function() {
                     } else {
                         content = __("Unable to check in");
                         $(id).parent().parent().addClass('warn');
+                        refresh_table = false;
                     }
 
                     $(id).replaceWith( content );
@@ -203,6 +206,7 @@ $(document).ready(function() {
                         } else {
                             content += __("reason unknown");
                         }
+                        refresh_table = false;
                     }
 
                     $(id).replaceWith( content );
@@ -215,6 +219,10 @@ $(document).ready(function() {
         // Refocus on barcode field if it exists
         if ( $("#barcode").length ) {
             $("#barcode").focus();
+        }
+
+        if ( refresh_table ) {
+            RefreshIssuesTable();
         }
 
         // Prevent form submit
@@ -245,10 +253,6 @@ $(document).ready(function() {
         LoadIssuesTable();
         barcodefield.focus();
         return false;
-    });
-
-    $('#RenewCheckinChecked').on('click', function(){
-        RefreshIssuesTable();
     });
 
     if ( Cookies.get("issues-table-load-immediately-" + script) == "true" ) {
