@@ -48,6 +48,8 @@ Return a list of existing ILL statuses
 sub existing_statuses {
     my ( $self, $backend_id ) = @_;
 
+    my @data;
+
     # NOTE: This query fetches all distinct status's found in the database for this backend.
     # We need the 'status' field for obvious reasons, the 'backend' field is required to not
     # throw 'Koha::Exceptions::Ill::InvalidBackendId' when we're converting to a Koha object.
@@ -61,19 +63,38 @@ sub existing_statuses {
             group_by => [qw/status backend/],
         }
     );
-
-    my @data;
-    while (my $request = $ill_requests->next) {
+    while ( my $request = $ill_requests->next ) {
         my $status_data = $request->strings_map;
 
-        foreach my $status_class ( qw(status_alias status) ){
-            if ($status_data->{$status_class}){
-                push @data, {
-                    $status_data->{$status_class}->{str} ? (str => $status_data->{$status_class}->{str}) :
-                        $status_data->{$status_class}->{code} ? (str => $status_data->{$status_class}->{code}) : (),
-                    $status_data->{$status_class}->{code} ? (code => $status_data->{$status_class}->{code}) : (),
-                }
-            }
+        if ( $status_data->{status} ) {
+            push @data, {
+                  $status_data->{status}->{str}  ? ( str => $status_data->{status}->{str} )
+                : $status_data->{status}->{code} ? ( str => $status_data->{status}->{code} )
+                : (),
+                $status_data->{status}->{code} ? ( code => $status_data->{status}->{code} ) : (),
+            };
+        }
+    }
+
+    # Now do the same to get all status_aliases
+    $ill_requests = Koha::Illrequests->search(
+        { backend => $backend_id },
+        {
+            select   => [ 'status_alias', \'MAX(illrequest_id)', 'backend' ],
+            as       => [qw/ status_alias illrequest_id backend /],
+            group_by => [qw/status_alias backend/],
+        }
+    );
+    while ( my $request = $ill_requests->next ) {
+        my $status_data = $request->strings_map;
+
+        if ( $status_data->{status_alias} ) {
+            push @data, {
+                  $status_data->{status_alias}->{str}  ? ( str => $status_data->{status_alias}->{str} )
+                : $status_data->{status_alias}->{code} ? ( str => $status_data->{status_alias}->{code} )
+                : (),
+                $status_data->{status_alias}->{code} ? ( code => $status_data->{status_alias}->{code} ) : (),
+            };
         }
     }
 
