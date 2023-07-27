@@ -351,9 +351,9 @@
                                             [% ELSIF ( loopro.module == 'CATALOGUING' ) %]
                                                 [% IF ( loopro.info.substr(0, 4) == 'item' ) %]
                                                     <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.object | uri %]">Item [% loopro.object | html %]</a> from
-                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]" title="Display detail for this biblio">Biblio [% loopro.biblionumber | html %]</a>
+                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]" title="Display detail for this bibliographic record">Bibliographic record [% loopro.biblionumber | html %]</a>
                                                 [% ELSIF ( loopro.info.substr(0, 6) == 'biblio' ) %]
-                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object | uri %]" title="Display detail for this biblio">Biblio [% loopro.object | html %]</a>
+                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object | uri %]" title="Display detail for this bibliographic record">Bibliographic record [% loopro.object | html %]</a>
                                                 [% ELSE %]
                                                     [% loopro.object | html %]
                                                 [% END %]
@@ -371,7 +371,7 @@
                                                 [% IF loopro.recall.item_level %]
                                                     Item-level recall on <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.recall.item_id | uri %]&amp;biblionumber=[% loopro.recall.biblio_id | uri %]&amp;bi=[% loopro.recall.item.biblioitemnumber | uri %]">item</a>
                                                 [% ELSE %]
-                                                    Biblio-level recall on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.recall.biblio_id | uri %]">biblio</a>
+                                                    Bibliographic record-level recall on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.recall.biblio_id | uri %]">biblio</a>
                                                 [% END %]
                                             [% ELSIF ( loopro.module == 'ACQUISITIONS' && loopro.action == 'ACQUISITION ORDER' && loopro.object ) %]
                                                 [% IF ( CAN_user_acquisition_order_manage ) %]

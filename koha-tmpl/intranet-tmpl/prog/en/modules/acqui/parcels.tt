@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Receive shipment from vendor [% name | html %] &rsaquo; Acquisitions &rsaquo; Koha</title>
@@ -82,7 +83,7 @@
             <th>Date received</th>
             <th>Invoice number</th>
             <th>Item count</th>
-            <th>Biblio count</th>
+            <th>[% tp("Bibliographic record", "Record count") | html %]</th>
             <th>Items expected</th>
         </tr>
     </thead>
