@@ -96,7 +96,7 @@ if ( $help || !$file || !$confirm ) {
 
 my $schema = Koha::Database->new()->schema();
 
-my $csv = Text::CSV->new( { binary => 1, sep_char => "\t" } )
+my $csv = Text::CSV->new( { binary => 1, sep_char => "\t", formula => 'empty' } )
   or die "Cannot use CSV: " . Text::CSV->error_diag();
 
 open my $fh, "<:encoding(utf8)", $file or die "test.csv: $!";

@@ -306,12 +306,15 @@ foreach my $report_id (@ARGV) {
         }
         $message = $cgi->table(join "", @rows);
     } elsif ($format eq 'csv') {
-        my $csv = Text::CSV::Encoded->new({
-            encoding_out => 'utf8',
-            binary      => 1,
-            quote_char  => $quote,
-            sep_char    => $separator,
-            });
+        my $csv = Text::CSV::Encoded->new(
+            {
+                encoding_out => 'utf8',
+                binary       => 1,
+                quote_char   => $quote,
+                sep_char     => $separator,
+                formula      => 'empty',
+            }
+        );
 
         if ( $csv_header ) {
             my @fields = map { decode( 'utf8', $_ ) } @{ $sth->{NAME} };

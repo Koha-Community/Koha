@@ -28,7 +28,6 @@ This script displays lost items.
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use Text::CSV_XS;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Text::CSV::Encoded;
@@ -91,7 +90,7 @@ if ( $op eq 'export' ) {
         my $delimiter = $csv_profile->csv_separator;
         $delimiter = "\t" if $delimiter eq "\\t";
 
-        my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
+        my $csv = Text::CSV::Encoded->new( { encoding_out => 'UTF-8', sep_char => $delimiter, formula => 'empty' } );
         $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
         $csv->combine(@headers);
         my $content .= Encode::decode('UTF-8', $csv->string()) . "\n";

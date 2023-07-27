@@ -374,9 +374,9 @@ $template->param(
 
 # Export to csv
 if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
-    eval {use Text::CSV ();};
-    my $csv = Text::CSV->new or
-            die Text::CSV->error_diag ();
+    eval { use Text::CSV (); };
+    my $csv = Text::CSV->new( { formula => 'empty' } )
+        or die Text::CSV->error_diag();
     binmode STDOUT, ":encoding(UTF-8)";
     print $input->header(
         -type       => 'text/csv',
