@@ -37,11 +37,11 @@
             [% END %]
             [% IF framework %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Modify framework text
+                    <span>Modify framework text</span>
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    Add framework
+                    <span>Add framework</span>
                 [% END %]
             [% END %]
 
@@ -50,12 +50,12 @@
                 <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                Delete framework for [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])?
+                <span>Delete framework for [% framework.frameworktext | html %]</span> ([% framework.frameworkcode | html %])?
             [% END %]
 
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                MARC frameworks
+                <span>MARC frameworks</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
