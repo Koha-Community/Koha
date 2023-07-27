@@ -72,7 +72,11 @@ export const useNavigationStore = defineStore("navigation", {
     getters: {
         breadcrumbs() {
             if (this.current)
-                return _buildFromCurrentMatches(this.current, this.routeState);
+                return _buildFromCurrentMatches(
+                    this.current,
+                    this.routeState,
+                    this.params
+                );
 
             return _getBaseElements(this.routeState);
 
@@ -100,14 +104,18 @@ export const useNavigationStore = defineStore("navigation", {
                 );
             }
 
-            function _buildFromCurrentMatches(currentMatches, routeState) {
+            function _buildFromCurrentMatches(
+                currentMatches,
+                routeState,
+                params
+            ) {
                 return [
                     {
                         ...routeState,
                         icon: null,
                         children: null,
                     },
-                    ..._mapMatches(currentMatches),
+                    ..._mapMatches(currentMatches, params),
                 ];
             }
 
@@ -119,16 +127,28 @@ export const useNavigationStore = defineStore("navigation", {
                 return !child.is_empty;
             }
 
-            function _mapMatches(currentMatches) {
+            function _getPath(match, params) {
+                if (!match.name && match.path && params) {
+                    return match.path.replaceAll(/(:[^/]+)/g, param_name => {
+                        return params[param_name.substr(1)];
+                    });
+                }
+                return match.path;
+            }
+
+            function _mapMatches(currentMatches, params) {
                 return currentMatches
                     .filter(match => _isBaseOrNotStub(match.meta.self))
                     .filter(match => _isEmptyNode(match.meta.self))
-                    .map(match => ({
-                        ...match.meta.self,
-                        icon: null,
-                        path: match.path,
-                        children: null,
-                    }));
+                    .map(match => {
+                        let path = _getPath(match, params);
+                        return {
+                            ...match.meta.self,
+                            icon: null,
+                            path,
+                            children: null,
+                        };
+                    });
             }
         },
         leftNavigation() {
