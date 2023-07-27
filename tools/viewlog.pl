@@ -232,7 +232,7 @@ if ($do_it) {
         my $content = q{};
         if (@data) {
             my $delimiter = C4::Context->csv_delimiter;
-            my $csv = Text::CSV::Encoded->new( { encoding_out => 'utf8', sep_char => $delimiter } );
+            my $csv = Text::CSV::Encoded->new( { encoding_out => 'utf8', sep_char => $delimiter, formula => 'empty' } );
             $csv or die "Text::CSV::Encoded->new FAILED: " . Text::CSV::Encoded->error_diag();
 
             # First line with heading

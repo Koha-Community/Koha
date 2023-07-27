@@ -400,7 +400,7 @@ sub marc2csv {
     my ($biblios, $id, $itemnumbers) = @_;
     $itemnumbers ||= [];
     my $output;
-    my $csv = Text::CSV::Encoded->new();
+    my $csv = Text::CSV::Encoded->new( { formula => "empty" } );
 
     # Getting yaml file
     my $configfile = "../tools/csv-profiles/$id.yaml";

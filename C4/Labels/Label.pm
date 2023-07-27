@@ -113,7 +113,7 @@ sub _get_label_item {
 
 sub _get_text_fields {
     my $format_string = shift;
-    my $csv = Text::CSV_XS->new({allow_whitespace => 1});
+    my $csv = Text::CSV_XS->new( { allow_whitespace => 1, formula => "empty" } );
     my $status = $csv->parse($format_string);
     my @sorted_fields = map {{ 'code' => $_, desc => $_ }} 
                         map { $_ && $_ eq 'callnumber' ? 'itemcallnumber' : $_ } # see bug 5653

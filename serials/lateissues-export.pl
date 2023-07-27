@@ -46,12 +46,15 @@ die "There is no valid csv profile given" unless $csv_profile;
 my $delimiter = $csv_profile->csv_separator;
 $delimiter = "\t" if $delimiter eq "\\t";
 
-my $csv = Text::CSV_XS->new({
-    'quote_char'  => '"',
-    'escape_char' => '"',
-    'sep_char'    => $delimiter,
-    'binary'      => 1
-});
+my $csv = Text::CSV_XS->new(
+    {
+        quote_char  => '"',
+        escape_char => '"',
+        sep_char    => $delimiter,
+        binary      => 1,
+        formula     => 'empty',
+    }
+);
 
 my $content = $csv_profile->content;
 my ( @headers, @fields );

@@ -73,7 +73,7 @@ else {
     $items = $batch->get_attr('items');
 }
 
-my $csv = Text::CSV_XS->new();
+my $csv = Text::CSV_XS->new( { formula => "empty" } );
 
 foreach my $item (@$items) {
     my $label = C4::Labels::Label->new(

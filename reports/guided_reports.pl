@@ -899,7 +899,6 @@ elsif ($phase eq 'Run this report'){
         push @errors, { no_sql_for_id => $report_id };
     }
 }
-
 elsif ($phase eq 'Export'){
 
 	# export results to tab separated text or CSV
@@ -927,7 +926,7 @@ elsif ($phase eq 'Export'){
             if ( $format eq 'csv' ) {
                 my $delimiter = C4::Context->csv_delimiter;
                 $type = 'application/csv';
-                my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
+                my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter, formula => 'empty' });
                 $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
                 if ($csv->combine(header_cell_values($sth))) {
                     $content .= Encode::decode('UTF-8', $csv->string()) . "\n";

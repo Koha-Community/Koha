@@ -624,7 +624,7 @@ sub generate_patron_attributes {
     push (@$feedback, { feedback => 1, name => 'attribute string', value => $string });
     return [] unless $string; # Unit tests want the feedback, is it really needed?
 
-    my $csv = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
+    my $csv = Text::CSV->new( { binary => 1, formula => "empty" } );    # binary needed for non-ASCII Unicode
     my $ok   = $csv->parse($string);  # parse field again to get subfields!
     my @list = $csv->fields();
     my @patron_attributes =
