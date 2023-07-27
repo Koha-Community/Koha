@@ -206,7 +206,7 @@ subtest 'effective_require_strong_password' => sub {
 
 subtest 'get_password_expiry_date() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -217,6 +217,14 @@ subtest 'get_password_expiry_date() tests' => sub {
 
     $category->password_expiry_days( 32 )->store;
     is( $category->get_password_expiry_date(), dt_from_string()->add( days => 32 )->ymd, "Date correctly calculated from password_expiry_days when set");
+
+    my $dt          = dt_from_string;
+    my $original_dt = $dt->clone;
+    $category->get_password_expiry_date($dt);
+    is(
+        $dt->ymd, $original_dt->ymd,
+        'DateTime object passed as a parameter should not be modified when ->get_password_expiry_date is called'
+    );
 
 };
 
