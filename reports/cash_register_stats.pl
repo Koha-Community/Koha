@@ -23,7 +23,6 @@ use C4::Reports qw( GetDelimiterChoices );
 use C4::Output qw( output_html_with_http_headers );
 use DateTime;
 use Koha::DateUtils qw( dt_from_string );
-use Text::CSV::Encoded;
 use List::Util qw( any );
 
 use Koha::Account::CreditTypes;

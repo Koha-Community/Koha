@@ -415,7 +415,7 @@ our $csv;       # the Text::CSV_XS object
 our $csv_fh;    # the filehandle to the CSV file.
 if ( defined $csvfilename ) {
     my $sep_char = C4::Context->csv_delimiter;
-    $csv = Text::CSV_XS->new( { binary => 1 , sep_char => $sep_char } );
+    $csv = Text::CSV_XS->new( { binary => 1, sep_char => $sep_char, formula => "empty" } );
     if ( $csvfilename eq '' ) {
         $csv_fh = *STDOUT;
     } else {
