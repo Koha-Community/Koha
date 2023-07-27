@@ -126,7 +126,7 @@ sub get_password_expiry_date {
     my ($self, $date ) = @_;
     if ( $self->password_expiry_days ) {
         $date ||= dt_from_string;
-        $date = dt_from_string( $date ) unless ref $date;
+        $date = ref $date ? $date->clone() : dt_from_string( $date );
         return $date->add( days => $self->password_expiry_days )->ymd;
     } else {
         return;
