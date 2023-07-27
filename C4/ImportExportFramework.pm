@@ -965,7 +965,7 @@ sub _import_table_csv
     shift @fieldsPK;
     my $ok = 0;
     my $pos = 0;
-    my $csv = Text::CSV_XS->new ({ binary => 1 });
+    my $csv = Text::CSV_XS->new( { binary => 1, formula => "empty" } );
     while ( my $row = $csv->getline($dom) ) {
         my @fields = @$row;
         @arrData = @fields;

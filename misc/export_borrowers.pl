@@ -94,7 +94,7 @@ unless ( $separator ) {
     $separator = C4::Context->csv_delimiter;
 }
 
-my $csv = Text::CSV->new( { sep_char => $separator, binary => 1 } );
+my $csv = Text::CSV->new( { sep_char => $separator, binary => 1, formula => 'empty' } );
 
 # If the user did not specify any field to export, we assume they want them all
 # We retrieve the first borrower informations to get field names

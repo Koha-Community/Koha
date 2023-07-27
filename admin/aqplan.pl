@@ -429,8 +429,10 @@ sub _print_to_csv {
     binmode STDOUT, ':encoding(UTF-8)';
 
     my $csv = Text::CSV_XS->new(
-        {   sep_char     => $del,
+        {
+            sep_char     => $del,
             always_quote => 'TRUE',
+            formula      => "empty",
         }
     );
     print $input->header(

@@ -30,7 +30,7 @@ my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, $frameworkcode );
 
 my $csv_content = q(Title=245$a|Author=245$c|Subject=650$a);
 my $csv_profile_id_1 = insert_csv_profile({ csv_content => $csv_content });
-my $csv = Text::CSV::Encoded->new();
+my $csv = Text::CSV::Encoded->new( { formula => 'empty' } );
 
 # Test bad biblionumber case
 my $csv_output = C4::Record::marcrecord2csv( -1, $csv_profile_id_1, 1, $csv );
