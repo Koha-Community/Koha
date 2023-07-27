@@ -100,13 +100,16 @@ if ( defined $min ) {
      );
  }
 
+my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('template') );
+
 $template->param(
     action            => $action,
     hidden            => GetHiddenFields( $mandatory, $action ),
     mandatory         => $mandatory,
     libraries         => $libraries,
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
-    defaultCategory  => $defaultCategory,
+    defaultCategory   => $defaultCategory,
+    languages         => $translated_languages,
 );
 
 my $attributes = ParsePatronAttributes($borrowernumber,$cgi);
@@ -569,7 +572,7 @@ sub ParseCgiForBorrower {
     # Replace checkbox 'agreed' by datetime in gdpr_proc_consent
     $borrower{gdpr_proc_consent} = dt_from_string if  $borrower{gdpr_proc_consent} && $borrower{gdpr_proc_consent} eq 'agreed';
 
-    delete $borrower{$_} for qw/borrowernumber date_renewed debarred debarredcomment flags privacy privacy_guarantor_fines privacy_guarantor_checkouts checkprevcheckout updated_on lastseen lang login_attempts overdrive_auth_token anonymized/; # See also members/memberentry.pl
+    delete $borrower{$_} for qw/borrowernumber date_renewed debarred debarredcomment flags privacy privacy_guarantor_fines privacy_guarantor_checkouts checkprevcheckout updated_on lastseen login_attempts overdrive_auth_token anonymized/; # See also members/memberentry.pl
     delete $borrower{$_} for qw/dateenrolled dateexpiry borrowernotes opacnote sort1 sort2 sms_provider_id autorenew_checkouts gonenoaddress lost relationship/; # On OPAC only
     delete $borrower{$_} for split( /\s*\|\s*/, C4::Context->preference('PatronSelfRegistrationBorrowerUnwantedField') || q{} );
 
