@@ -10,7 +10,7 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
-            ('showLastPatronCount', '10', NULL, 'How many patrons should showLastPatron remember', 'Integer')
+            ('showLastPatronCount', '1', NULL, 'How many patrons should showLastPatron remember', 'Integer')
         }
         );
         say $out "Added new system preference 'showLastPatronCount'";
