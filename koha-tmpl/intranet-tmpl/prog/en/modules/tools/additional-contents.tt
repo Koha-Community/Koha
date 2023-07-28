@@ -181,6 +181,7 @@
     </div>
 
     <form id="add_additional_content" method="post" action="/cgi-bin/koha/tools/additional-contents.pl" class="validate">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="category" value="[% category | html %]" />
         <input type="hidden" name="code" value="[% additional_content.code | html %]" />
@@ -398,6 +399,7 @@
             <fieldset class="action"><input type="submit" class="button" value="Delete selected" /></fieldset>
         </form>
         <form action="/cgi-bin/koha/tools/additional-contents.pl" method="post" id="delete_single">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" id="del_op" name="op" value="delete_confirmed" />
             <input type="hidden" id="del_category" name="category" value="[% category | html %]" />
             <input type="hidden" id="del_ids" name="ids" />
