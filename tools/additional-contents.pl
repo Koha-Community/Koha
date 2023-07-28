@@ -28,7 +28,7 @@ use C4::Auth qw(get_template_and_user);
 use C4::Koha;
 use C4::Context;
 use C4::Log qw( logaction );
-use C4::Output qw(output_html_with_http_headers);
+use C4::Output qw(output_html_with_http_headers output_and_exit_if_error);
 use C4::Languages qw(getTranslatedLanguages);
 use Koha::DateUtils qw( dt_from_string output_pref );
 
@@ -84,6 +84,7 @@ if ( $op eq 'add_form' ) {
     );
 }
 elsif ( $op eq 'add_validate' ) {
+    output_and_exit_if_error($cgi, $cookie, $template, { check => 'csrf_token' });
     my $location   = $cgi->param('location');
     my $code       = $cgi->param('code');
     my $branchcode = $cgi->param('branchcode') || undef;
@@ -202,6 +203,7 @@ elsif ( $op eq 'add_validate' ) {
     }
 }
 elsif ( $op eq 'delete_confirmed' ) {
+    output_and_exit_if_error($cgi, $cookie, $template, { check => 'csrf_token' });
     my @ids = $cgi->multi_param('ids');
     my $deleted = eval {
 
