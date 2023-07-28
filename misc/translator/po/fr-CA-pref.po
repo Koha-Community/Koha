@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 07:13-0300\n"
-"PO-Revision-Date: 2023-06-01 14:20+0000\n"
-"Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
+"PO-Revision-Date: 2023-07-05 12:55+0000\n"
+"Last-Translator: Patrick Robitaille <patrick.robitaille@ccsr.qc.ca>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /fr_CA/22.11/fr-CA-pref.po\n"
-"X-POOTLE-MTIME: 1685629244.940920\n"
+"X-POOTLE-MTIME: 1688561720.300190\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2987,13 +2987,11 @@ msgstr ""
 
 # Authorities > Linker > LinkerKeepStale
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerConsiderThesaurus# Do"
 msgstr "Conserver"
 
 # Authorities > Linker > LinkerKeepStale
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
 msgstr "Ne pas conserver"
 
@@ -3004,6 +3002,10 @@ msgid ""
 "Enabling this preference may require a reindex, and may generate new "
 "authority records if AutoCreateAuthorities is enabled."
 msgstr ""
+"comparer la source des vedettes 6XX à la source du thésaurus pour les "
+"notices d'autorité lors de la liaison. L'activation de cette préférence peut "
+"nécessiter une réindexation et peut générer de nouvelles notices d'autorité "
+"si AutoCreateAuthorities est activé."
 
 # Authorities > Linker > LinkerKeepStale
 # Authorities > Linker
@@ -4965,27 +4967,6 @@ msgid ""
 "items that are marked as not for loan."
 msgstr "au personnel de prêter des exemplaires marqués comme non empruntables."
 
-# Circulation > Interface > AllowOfflineCirculation
-# Circulation > Interface
-msgid "circulation.pref#AllowOfflineCirculation# Don't enable"
-msgstr "Ne pas activer"
-
-# Circulation > Interface > AllowOfflineCirculation
-# Circulation > Interface
-msgid "circulation.pref#AllowOfflineCirculation# Enable"
-msgstr "Activer"
-
-# Circulation > Interface > AllowOfflineCirculation
-# Circulation > Interface
-msgid ""
-"circulation.pref#AllowOfflineCirculation# offline circulation on regular "
-"circulation computers. (<strong>NOTE:</strong> This system preference does "
-"not affect the Firefox add-on or the desktop application)."
-msgstr ""
-"l'outil de circulation hors-ligne sur les ordinateurs de circulation. "
-"(<strong>NOTE :</strong> Cette préférence système n'affecte pas le plugin "
-"Firefox ni l'application de bureau.)"
-
 # Circulation > Holds policy > AllowRenewalIfOtherItemsAvailable
 # Circulation > Holds policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
@@ -5741,7 +5722,6 @@ msgstr "la bibliothèque à laquelle on est connecté"
 
 # Circulation > Checkout policy > CircControlReturnsBranch
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#CircControlReturnsBranch# To determine whether an item is "
 "transferred or remains in the library after checkin, use the circulation "
@@ -6571,17 +6551,18 @@ msgid ""
 "prioritize filling a hold by matching the patron's home library with an item "
 "having a matching"
 msgstr ""
+"La file d'attente des réservations doit donner la priorité au remplissage "
+"d'une réservation en faisant correspondre la bibliothèque personnelle de "
+"l'usager avec un exemplaire ayant une correspondance"
 
 # Circulation > Checkout policy > HomeOrHoldingBranch
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#HoldsQueuePrioritizeBranch# holding library (holdingbranch)."
 msgstr "la bibliothèque actuelle de l'exemplaire (holdingbranch)."
 
 # Circulation > Checkout policy > HomeOrHoldingBranch
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#HoldsQueuePrioritizeBranch# home library (homebranch)."
 msgstr "la bibliothèque propriétaire de l'exemplaire (homebranch)."
 
@@ -6748,15 +6729,14 @@ msgstr ""
 
 # Circulation > Checkout policy > ItemsDeniedRenewal
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#ItemsDeniedRenewal# <br /> <strong>NOTE:</strong> The word "
 "'null' can be used to block renewal on undefined fields, while an empty "
 "string \"\" will block on an empty (but defined) field."
 msgstr ""
-"<br /> <strong>NOTE :</strong> Le mot \"NULL\" peut être utilisé pour "
-"bloquer les renouvellements sur des champs non définis, tandis qu'une chaîne "
-"vide \"\" bloquera sur un champ vide (mais défini)."
+"<br /> <strong>NOTE :</strong> Le mot 'null' peut être utilisé pour bloquer "
+"le renouvellement sur des champs non définis, tandis qu'une chaîne vide \"\" "
+"bloquera sur un champ vide (mais défini)."
 
 # Circulation > Checkout policy > ItemsDeniedRenewal
 # Circulation > Checkout policy
@@ -6769,7 +6749,6 @@ msgstr ""
 
 # Circulation > Checkout policy > ItemsDeniedRenewal
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,null,DVD]"
 msgstr " <br />ccode: [NEWFIC,NULL,DVD]"
 
@@ -8541,28 +8520,24 @@ msgstr ""
 
 # Circulation > Checkout policy > UpdateNotForLoanStatusOnCheckout
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckout# Each pair of values "
 "should be on a separate line."
-msgstr "Les paires de valeurs doivent se trouver sur des lignes distinctes."
+msgstr "Chaque paire de valeurs doit figurer sur une ligne distincte."
 
 # Circulation > Checkout policy > UpdateNotForLoanStatusOnCheckout
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckout# This is a list of value "
 "pairs. When an item is checked out, if the not for loan value on the left "
 "matches the items not for loan value"
 msgstr ""
-"Mettre à jour les statuts \"Exclu du prêt\" lors d'un retour avec une liste "
-"de paires de valeurs, de la forme a:b. Si la valeur a est trouvée dans le "
-"champ statut \"Exclu du prêt\" de l'exemplaire, le statut passe à la valeur "
-"b."
+"Ceci est une liste de paires de valeurs. Lorsqu'un exemplaire est prêté, si "
+"la valeur non destinée au prêt sur la gauche correspond aux exemplaires non "
+"destinés au prêt"
 
 # Circulation > Checkout policy > UpdateNotForLoanStatusOnCheckout
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#UpdateNotForLoanStatusOnCheckout# it will be updated to the "
 "right-hand value. For example, '-1: 0' will cause an item that was set to "
@@ -10869,62 +10844,52 @@ msgid ""
 msgstr "aux utilisateurs de changer la langue d'utilisation de Koha à l'OPAC."
 
 # Serials
-#, fuzzy
 msgid "interlibrary_loans.pref"
-msgstr "périodiques"
+msgstr "interlibrary_loans.pref"
 
 # Interlibrary loans
 # Searching > Features
-#, fuzzy
 msgid "interlibrary_loans.pref Features"
 msgstr "Fonctionnalités"
 
 # Interlibrary loans
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "interlibrary_loans.pref Notifications"
-msgstr "Avis et notifications"
+msgstr "Notifications"
 
 # Interlibrary loans
 # Serials
-#, fuzzy
 msgid "interlibrary_loans.pref OPAC"
-msgstr "périodiques"
+msgstr "OPAC"
 
 # Interlibrary loans > Features > CirculateILL
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#CirculateILL# Disable"
 msgstr "Désactiver"
 
 # Interlibrary loans > Features > CirculateILL
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#CirculateILL# Enable"
 msgstr "Activer"
 
 # Interlibrary loans > Features > CirculateILL
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#CirculateILL# the circulation of ILL requested items."
 msgstr " la circulation d'exemplaires demandés par prêt entre bibliothèques."
 
 # Interlibrary loans > Features > ILLCheckAvailability
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLCheckAvailability# Check"
 msgstr "Vérifier"
 
 # Interlibrary loans > Features > ILLCheckAvailability
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLCheckAvailability# Don't check"
 msgstr "Ne pas vérifier"
 
 # Interlibrary loans > Features > ILLCheckAvailability
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLCheckAvailability# external sources for "
 "availability during the request process."
@@ -10933,7 +10898,6 @@ msgstr ""
 
 # Interlibrary loans > Notifications > ILLDefaultStaffEmail
 # Circulation > Interlibrary loans > ILLDefaultStaffEmail
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLDefaultStaffEmail# Fallback email address for "
 "staff ILL notices to be sent to in the absence of a library address:"
@@ -10958,7 +10922,6 @@ msgstr ""
 
 # Interlibrary loans > Features > ILLHiddenRequestStatuses
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# ILL statuses that are "
 "considered finished and should not be displayed in the ILL module: "
@@ -10968,19 +10931,16 @@ msgstr ""
 
 # Interlibrary loans > Features > ILLModule
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModule# Disable"
 msgstr " Désactiver"
 
 # Interlibrary loans > Features > ILLModule
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModule# Enable"
 msgstr " Activer"
 
 # Interlibrary loans > Features > ILLModule
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
 "switch)."
@@ -10988,7 +10948,6 @@ msgstr " le module de prêts entre bibliothèques (interrupteur principal)."
 
 # Interlibrary loans > Features > ILLModuleCopyrightClearance
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
 "the copyright clearance stage in request creation. The text you enter will "
@@ -11000,19 +10959,16 @@ msgstr ""
 
 # Interlibrary loans > Features > ILLModuleUnmediated
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
 msgstr "Désactiver"
 
 # Interlibrary loans > Features > ILLModuleUnmediated
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
 msgstr "Activer"
 
 # Interlibrary loans > Features > ILLModuleUnmediated
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
 "requests. If enabled and the ILL backend supports it, the newly created "
@@ -11024,7 +10980,6 @@ msgstr ""
 
 # Interlibrary loans > OPAC > ILLOpacbackends
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
 "all installed backends will be enabled."
@@ -11034,7 +10989,6 @@ msgstr ""
 
 # Interlibrary loans > OPAC > ILLOpacbackends
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
 "initiated requests:"
@@ -11042,7 +10996,6 @@ msgstr "Service PEB activé afin de permettre les demandes sur l'OPAC:"
 
 # Interlibrary loans > Notifications > ILLSendStaffNotices
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
 "ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
@@ -11053,7 +11006,6 @@ msgstr ""
 
 # Interlibrary loans > Notifications > ILLSendStaffNotices
 # Circulation > Interlibrary loans > ILLSendStaffNotices
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
 "when appropriate:"
@@ -11546,7 +11498,6 @@ msgstr "Interdire"
 
 # OPAC > Privacy > AllowPatronToSetFinesVisibilityForGuarantor
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's charges to the patron's "
@@ -11594,7 +11545,6 @@ msgstr ""
 
 # OPAC > Appearance > AuthorityXSLTOpacResultsDisplay
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacDetailsDisplay# <br />Options:<ul><li>Empty. No "
 "XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
@@ -11614,7 +11564,6 @@ msgstr ""
 
 # OPAC > Appearance > AuthorityXSLTOpacResultsDisplay
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacDetailsDisplay# Display authority details in the "
 "OPAC using the XSLT stylesheet at: "
@@ -12030,7 +11979,6 @@ msgstr ""
 
 # OPAC > Policy > OPACFineNoRenewals
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
 "to disable)."
@@ -12408,7 +12356,6 @@ msgstr ""
 
 # OPAC > Appearance > OPACSearchForTitleIn
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, "
 "{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
@@ -13227,7 +13174,6 @@ msgstr ""
 "\"_blank\">le wiki de Koha</a> (anglais)."
 
 # OPAC > Policy > OpacHiddenItemsExceptions
-#, fuzzy
 msgid ""
 "opac.pref#OpacHiddenItemsExceptions# List of patron categories, that can see "
 "items otherwise hidden by <a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -14595,7 +14541,6 @@ msgstr "Interdire"
 
 # Patrons > Patron relationships > AllowStaffToSetFinesVisibilityForGuarantor
 # Patrons > Patron relationships
-#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
 "ability for a patron's charges to be viewed by linked patrons in the OPAC."
@@ -14923,7 +14868,6 @@ msgstr ""
 
 # Patrons > General > DefaultPatronSearchFields
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
@@ -14945,6 +14889,23 @@ msgstr ""
 "nom de famille, autres noms, numéro de carte, identifiant) par défaut. Les "
 "champs supplémentaires ajoutés ici seront ajoutés comme options de recherche "
 "dans le menu déroulant sur la page de recherche d'utilisateurs."
+
+# Searching > Results display > RetainPatronsSearchTerms
+# Searching > Features
+#, fuzzy
+msgid "patrons.pref#DefaultPatronSearchMethod# Contains"
+msgstr "Ne pas retenir"
+
+# Patrons > General > DefaultPatronSearchMethod
+msgid ""
+"patrons.pref#DefaultPatronSearchMethod# Enable this search method to "
+"determine whether to use Starts with or Contains for autocomplete patron "
+"searches."
+msgstr ""
+
+# Patrons > General > DefaultPatronSearchMethod
+msgid "patrons.pref#DefaultPatronSearchMethod# Starts with"
+msgstr ""
 
 # Patrons > Notices and notifications > EmailFieldPrecedence
 msgid ""
@@ -15057,7 +15018,6 @@ msgid "patrons.pref#EnableExpiredPasswordReset# Enable"
 msgstr "Activer"
 
 # Patrons > Security > EnableExpiredPasswordReset
-#, fuzzy
 msgid ""
 "patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
@@ -15349,23 +15309,20 @@ msgstr "jours avant l'expiration effective."
 
 # Patrons > Notices and notifications > NotifyPasswordChange
 # OPAC > Features
-#, fuzzy
 msgid "patrons.pref#NotifyPasswordChange# Don't notify"
-msgstr "Ne pas autoriser"
+msgstr "Ne pas notifier"
 
 # Patrons > Notices and notifications > NotifyPasswordChange
 # OPAC > Features
-#, fuzzy
 msgid "patrons.pref#NotifyPasswordChange# Notify"
-msgstr "Autoriser"
+msgstr "Notifier"
 
 # Patrons > Notices and notifications > NotifyPasswordChange
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#NotifyPasswordChange# patrons whenever their password is "
 "changed."
-msgstr "réinitialiser leur mot de passe."
+msgstr "l'usager chaque fois que leur mot de passe est modifié."
 
 # Patrons > Patron forms > PatronDuplicateMatchingAddFields
 # Patrons > Patron forms
@@ -15625,9 +15582,8 @@ msgstr "Adresse principale - Code-postal"
 
 # Patrons > Patron relationships > PrefillGuaranteeField
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Surname"
-msgstr "Contact - Télécopieur"
+msgstr "Nom de famille"
 
 # Patrons > Patron relationships > PrefillGuaranteeField
 # Patrons > Patron relationships
@@ -15641,7 +15597,6 @@ msgstr ""
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
 "patrons need to give consent before using the OPAC. If you set to "
@@ -15654,7 +15609,6 @@ msgstr ""
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
 "this you will also have to set the URL of your public privacy policy with "
@@ -15668,25 +15622,22 @@ msgstr ""
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
-msgstr "La politique RGPD est :"
+msgstr ""
+"Définir le consentement de la politique de confidentialité des données sur :"
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# disabled"
 msgstr "désactivée"
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# enforced"
 msgstr "forcée"
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# permissive"
 msgstr "permissive"
 
@@ -15709,7 +15660,6 @@ msgstr "Utilisezr l'URL suivante"
 
 # Patrons > Privacy > PrivacyPolicyURL
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
 "messages about privacy and data protection. (If you enforce a data privacy "
@@ -15832,7 +15782,6 @@ msgstr "Localisation"
 
 # Patrons > Security > Pseudonymization
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "Catégorie d'utilisateur"
 
@@ -15853,7 +15802,6 @@ msgstr "Titre de civilité de l'utilisateur"
 
 # Patrons > Security > Pseudonymization
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
 "separate table for statistical purposes."
@@ -15863,13 +15811,11 @@ msgstr ""
 
 # Patrons > Security > Pseudonymization
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Sort 1"
 msgstr "Critère 1"
 
 # Patrons > Security > Pseudonymization
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Sort 2"
 msgstr "Critère 2"
 
@@ -15885,19 +15831,18 @@ msgstr "Type de transaction"
 
 # Patrons > Security > Pseudonymization
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "Code postal"
 
 # Patrons > Security > Pseudonymization
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
 "policies and regulations like GDPR for managing personal information."
 msgstr ""
-"la pseudonymisation pour se conformer au RGPD pour les informations "
-"personnelles."
+"pseudonymisation pour se conformer aux politiques de confidentialité des "
+"données et aux réglementations telles que le RGPD pour la gestion des "
+"informations personnelles."
 
 # Patrons > Security > RequireStrongPassword
 # Patrons > Security
@@ -16439,11 +16384,10 @@ msgstr "Tronquer la longueur des facettes à"
 
 # Searching > Results display > FacetLabelTruncationLength
 # Searching > Results display
-#, fuzzy
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
 "interface (REQUIRES ZEBRA)."
-msgstr "caractères à l'OPAC et à l'intranet."
+msgstr "caractères, dans l'interface OPAC/personnel (NÉCESSITE ZEBRA)."
 
 # Searching > Results display > FacetMaxCount
 # Searching > Results display
@@ -16873,13 +16817,11 @@ msgstr "le classement des résultats par ordre de pertinence (REQUIERT ZEBRA)."
 
 # Searching > Results display > RetainCatalogSearchTerms
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainCatalogSearchTerms# Don't retain"
 msgstr "Ne pas conserver"
 
 # Searching > Results display > RetainCatalogSearchTerms
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainCatalogSearchTerms# Retain"
 msgstr "Conserver"
 
@@ -16888,18 +16830,19 @@ msgid ""
 "searching.pref#RetainCatalogSearchTerms# search terms between searches when "
 "searching from the 'search the catalog' tab in the staff interface header."
 msgstr ""
+"les termes de recherche entre les recherches lors de la recherche à partir "
+"de l'onglet \"Rechercher dans le catalogue\" dans l'en-tête de l'interface "
+"du personnel."
 
 # Searching > Results display > RetainPatronsSearchTerms
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainPatronsSearchTerms# Don't retain"
-msgstr "Ne pas inclure"
+msgstr "Ne pas retenir"
 
 # Searching > Results display > RetainPatronsSearchTerms
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#RetainPatronsSearchTerms# Retain"
-msgstr "Ne pas inclure"
+msgstr "Retenir"
 
 # Searching > Results display > RetainPatronsSearchTerms
 msgid ""
@@ -16907,6 +16850,9 @@ msgid ""
 "searching from the 'checkout' and 'search patrons' tab in the staff "
 "interface header."
 msgstr ""
+"les termes de recherche entre les recherches lors de la recherche à partir "
+"des onglets « paiement » et « recherche d'usagers» dans l'en-tête de "
+"l'interface professionnel."
 
 # Searching > Features > SavedSearchFilters
 # Searching > Features
@@ -16915,7 +16861,6 @@ msgstr "Désactiver"
 
 # Searching > Features > SavedSearchFilters
 # Searching > Features
-#, fuzzy
 msgid "searching.pref#SavedSearchFilters# Enable"
 msgstr "Activer"
 
@@ -16924,6 +16869,8 @@ msgid ""
 "searching.pref#SavedSearchFilters# the option for staff with permission to "
 "create/edit custom saved search filters."
 msgstr ""
+"l'option pour le personnel autorisé à créer/modifier des filtres de "
+"recherche enregistrés personnalisés."
 
 # Searching > Results display > SearchLimitLibrary
 msgid ""
@@ -17247,7 +17194,6 @@ msgstr "périodiques"
 
 # Serials
 # Searching > Features
-#, fuzzy
 msgid "serials.pref Features"
 msgstr "Fonctionnalités"
 
@@ -17581,23 +17527,22 @@ msgstr ""
 
 # Staff interface > Options > IntranetAddMastheadLibraryPulldown
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
 msgstr "Ne pas afficher"
 
 # Staff interface > Options > IntranetAddMastheadLibraryPulldown
 # Staff interface > Options
-#, fuzzy
 msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Show"
 msgstr "Afficher"
 
 # Staff interface > Options > IntranetAddMastheadLibraryPulldown
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
 "pulldown menu on the staff header search."
-msgstr "un menu de sélection de la bibliothèque dans les en-têtes de l'OPAC."
+msgstr ""
+"un menu de sélection de la bibliothèque dans les en-têtes de l'interface "
+"professionnel."
 
 # Staff interface > Options > IntranetCatalogSearchPulldown
 # Staff interface > Options
@@ -17789,17 +17734,15 @@ msgstr "Activer"
 
 # Staff interface > Authentication > TwoFactorAuthentication
 # Administration > CAS authentication
-#, fuzzy
 msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
-msgstr "Activer"
+msgstr "Forcer"
 
 # Staff interface > Authentication > TwoFactorAuthentication
 # Administration > CAS authentication
-#, fuzzy
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
 "(2FA) for staff members."
-msgstr "l'authentification à deux facteurs (A2F)."
+msgstr "authentification à deux facteurs (2FA) pour les membres du personnel."
 
 # Staff interface > Options > UseWYSIWYGinSystemPreferences
 # Staff interface > Options
@@ -18742,6 +18685,27 @@ msgstr " lignes d'un rapport demandé par le service Web de rapports."
 # Circulation > Interlibrary loans
 #~ msgid "circulation.pref Interlibrary loans"
 #~ msgstr "Prêts entre bibliothèques"
+
+# Circulation > Interface > AllowOfflineCirculation
+# Circulation > Interface
+#~ msgid "circulation.pref#AllowOfflineCirculation# Don't enable"
+#~ msgstr "Ne pas activer"
+
+# Circulation > Interface > AllowOfflineCirculation
+# Circulation > Interface
+#~ msgid "circulation.pref#AllowOfflineCirculation# Enable"
+#~ msgstr "Activer"
+
+# Circulation > Interface > AllowOfflineCirculation
+# Circulation > Interface
+#~ msgid ""
+#~ "circulation.pref#AllowOfflineCirculation# offline circulation on regular "
+#~ "circulation computers. (<strong>NOTE:</strong> This system preference "
+#~ "does not affect the Firefox add-on or the desktop application)."
+#~ msgstr ""
+#~ "l'outil de circulation hors-ligne sur les ordinateurs de circulation. "
+#~ "(<strong>NOTE :</strong> Cette préférence système n'affecte pas le plugin "
+#~ "Firefox ni l'application de bureau.)"
 
 # Circulation > Checkout policy > HoldsInNoissuesCharge
 # Circulation > Checkout policy

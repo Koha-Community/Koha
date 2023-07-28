@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 07:10-0300\n"
-"PO-Revision-Date: 2023-02-07 01:57+0000\n"
+"PO-Revision-Date: 2023-06-29 01:47+0000\n"
 "Last-Translator: aleisha <aleisha@catalyst.net.nz>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: en_NZ\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /en_NZ/22.11/en-NZ-pref.po\n"
-"X-POOTLE-MTIME: 1675735042.629895\n"
+"X-POOTLE-MTIME: 1688003228.234295\n"
 
 # Accounting > Policy
 msgid "accounting.pref"
@@ -4831,27 +4831,6 @@ msgid ""
 "circulation.pref#AllowNotForLoanOverride# staff to override and check out "
 "items that are marked as not for loan."
 msgstr "staff to override and issue items that are marked as not for loan."
-
-# Circulation > Interface > AllowOfflineCirculation
-# Circulation > Interface
-msgid "circulation.pref#AllowOfflineCirculation# Don't enable"
-msgstr "Don't enable"
-
-# Circulation > Interface > AllowOfflineCirculation
-# Circulation > Interface
-msgid "circulation.pref#AllowOfflineCirculation# Enable"
-msgstr "Enable"
-
-# Circulation > Interface > AllowOfflineCirculation
-# Circulation > Interface
-msgid ""
-"circulation.pref#AllowOfflineCirculation# offline circulation on regular "
-"circulation computers. (<strong>NOTE:</strong> This system preference does "
-"not affect the Firefox add-on or the desktop application)."
-msgstr ""
-"offline circulation on regular circulation computers. (<strong>NOTE:</"
-"strong> This system preference does not affect the Firefox add-on or the "
-"desktop application)."
 
 # Circulation > Holds policy > AllowRenewalIfOtherItemsAvailable
 # Circulation > Holds policy
@@ -10650,7 +10629,6 @@ msgstr ""
 
 # Interlibrary loans > Features > ILLHiddenRequestStatuses
 # Circulation > Interlibrary loans > ILLHiddenRequestStatuses
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLHiddenRequestStatuses# (separated with |). If "
 "left empty, all ILL requests will be displayed. The request codes are "
@@ -10658,9 +10636,10 @@ msgid ""
 "href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
 "\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
-"(separated with |). If left empty, all ILL requests will be displayed. The "
-"request codes can be found in the <a href=\"/cgi-bin/koha/admin/"
-"authorised_values.pl?searchfield=ILLSTATUS\">ILLSTATUS</a> authorised value "
+" (separated with |). If left empty, all ILL requests will be displayed. The "
+"request codes are defined in the backends and additional aliases can be "
+"configured via the <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILL_STATUS_ALIAS\">ILL_STATUS_ALIAS</a> authorised value "
 "category."
 
 # Interlibrary loans > Features > ILLHiddenRequestStatuses
@@ -12039,13 +12018,10 @@ msgid "opac.pref#OPACResultsMaxItems# Show no more than"
 msgstr "Show no more than"
 
 # OPAC > Appearance > OPACResultsMaxItems
-#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
 "search results.<br>"
-msgstr ""
-"(available) individual items on the OPAC XSLT search results, and show no "
-"more than"
+msgstr "individual (available) items on the OPAC XSLT search results.<br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 #, fuzzy
@@ -14538,6 +14514,23 @@ msgstr ""
 "cardnumber,userid\". Additional fields added to this preference will be "
 "added as search options in the dropdown menu on the member search page."
 
+# Searching > Results display > RetainPatronsSearchTerms
+# Searching > Features
+#, fuzzy
+msgid "patrons.pref#DefaultPatronSearchMethod# Contains"
+msgstr "Don't retain"
+
+# Patrons > General > DefaultPatronSearchMethod
+msgid ""
+"patrons.pref#DefaultPatronSearchMethod# Enable this search method to "
+"determine whether to use Starts with or Contains for autocomplete patron "
+"searches."
+msgstr ""
+
+# Patrons > General > DefaultPatronSearchMethod
+msgid "patrons.pref#DefaultPatronSearchMethod# Starts with"
+msgstr ""
+
 # Patrons > Notices and notifications > EmailFieldPrecedence
 msgid ""
 "patrons.pref#EmailFieldPrecedence# <br><strong>NOTE:</strong> All patron "
@@ -14563,29 +14556,28 @@ msgstr ""
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
 # Authorities > General
-#, fuzzy
 msgid ""
 "patrons.pref#EmailFieldPrecedence# When <a href='/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=EmailFieldPrimary'>EmailFieldPrimary</"
 "a> is set to '<strong>first valid</strong>', check the patron email address "
 "fields in the following order and use the first valid email address found:"
 msgstr ""
-"<br>If you choose <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
+"When <a href='/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=EmailFieldPrimary'>EmailFieldPrimary</a> is set to "
+"'<strong>first valid</strong>', check the member email address fields in the "
+"following order and use the first valid email address found:"
 
 # Patrons > Notices and notifications > EnhancedMessagingPreferences
-#, fuzzy
 msgid ""
 "patrons.pref#EmailFieldPrimary# <br><strong>NOTE:</strong> If set to \"first "
 "valid\", the order in which the email addresses are checked is set in <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailFieldPrecedence\">EmailFieldPrecedence</a>."
 msgstr ""
-"<br><strong>NOTE:</strong> This only applies to courtesy notices. To manage "
-"if members have also access to these settings, use <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=EnhancedMessagingPreferencesOPAC"
-"\">EnhancedMessagingPreferencesOPAC</a>."
+"<br><strong>NOTE:</strong> If set to \"first valid\", the order in which the "
+"email addresses are checked is set in <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=EmailFieldPrecedence"
+"\">EmailFieldPrecedence</a>."
 
 # Patrons > Notices and notifications > EmailFieldPrimary
 msgid "patrons.pref#EmailFieldPrimary# Use the patron's"
@@ -15244,15 +15236,14 @@ msgid "patrons.pref#PrivacyPolicyConsent# permissive"
 msgstr "permissive"
 
 # Patrons > Privacy > PrivacyPolicyURL
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only "
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>NOTE:</strong> The URL will only be displayed if <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy"
-"\">GDPR_Policy</a> is set."
+"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent"
+"\">PrivacyPolicyConsent</a> is set."
 
 # Patrons > Privacy > PrivacyPolicyURL
 # Patrons > Privacy
@@ -18202,6 +18193,27 @@ msgstr "rows of a report requested via the reports web service."
 # Circulation > Interlibrary Loans
 #~ msgid "circulation.pref Interlibrary loans"
 #~ msgstr " Interlibrary loans"
+
+# Circulation > Interface > AllowOfflineCirculation
+# Circulation > Interface
+#~ msgid "circulation.pref#AllowOfflineCirculation# Don't enable"
+#~ msgstr "Don't enable"
+
+# Circulation > Interface > AllowOfflineCirculation
+# Circulation > Interface
+#~ msgid "circulation.pref#AllowOfflineCirculation# Enable"
+#~ msgstr "Enable"
+
+# Circulation > Interface > AllowOfflineCirculation
+# Circulation > Interface
+#~ msgid ""
+#~ "circulation.pref#AllowOfflineCirculation# offline circulation on regular "
+#~ "circulation computers. (<strong>NOTE:</strong> This system preference "
+#~ "does not affect the Firefox add-on or the desktop application)."
+#~ msgstr ""
+#~ "offline circulation on regular circulation computers. (<strong>NOTE:</"
+#~ "strong> This system preference does not affect the Firefox add-on or the "
+#~ "desktop application)."
 
 # Circulation > Checkout policy > HoldsInNoissuesCharge
 # Circulation > Checkout policy
