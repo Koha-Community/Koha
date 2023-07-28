@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-16 10:01-0300\n"
-"PO-Revision-Date: 2023-06-21 09:13+0000\n"
-"Last-Translator: Atron Chen <atron@customer-support.com.tw>\n"
+"POT-Creation-Date: 2023-07-27 11:45-0300\n"
+"PO-Revision-Date: 2023-07-19 13:58+0000\n"
+"Last-Translator: CindyCheng <cindycheng914@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /zh_TW/22.11/zh-Hant-TW-messages-js.po\n"
-"X-POOTLE-MTIME: 1687338785.964728\n"
+"X-POOTLE-MTIME: 1689775082.477024\n"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:211
 msgid " (current) "
@@ -28,7 +28,7 @@ msgstr " 測試"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:592
 #, javascript-format
 msgid " and %s of %s unseen renewals remaining"
-msgstr " 和續借剩 %s 次(共 %s 次)"
+msgstr " and %s of %s 未見續借剩餘"
 
 #: koha-tmpl/intranet-tmpl/prog/js/letter.js:150
 msgid " characters"
@@ -151,7 +151,7 @@ msgstr "%s 年"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:18
 msgid "(filtered from _MAX_ total entries)"
-msgstr "(篩選自 _MAX_ total 總款目)"
+msgstr "(篩選自 _MAX_ 總款目)"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging.js:122
 msgid "(select to create)"
@@ -179,7 +179,7 @@ msgstr "含代碼 '%s' 的信件已經存在 '%s' 。覆蓋這封信？"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:266
 msgid "A license is used several times"
-msgstr "一個許可證被多次使用"
+msgstr "一個授權被多次使用"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:470
 msgid "A package is used several times"
@@ -198,12 +198,12 @@ msgstr "AJAX 錯誤：從 %s 接收資料"
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:38
 #, javascript-format
 msgid "AJAX failed to approve tag: %s"
-msgstr "AJAX 無法審核標籤：%s"
+msgstr "AJAX 無法審核欄號: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:44
 #, javascript-format
 msgid "AJAX failed to reject tag: %s"
-msgstr "AJAX 不能拒絕標籤：%s"
+msgstr "AJAX 不能拒絕欄號: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/patron-webcam.js:115
 msgid "Access to camera denied."
@@ -289,14 +289,14 @@ msgstr "新增到書目清單"
 
 #: koha-tmpl/intranet-tmpl/prog/js/members.js:162
 msgid "Age"
-msgstr "時間"
+msgstr "年齡"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageAgreements.vue:14
 #, javascript-format
 msgid "Agreement %s"
 msgstr "協議 %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:196
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:205
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:410
 #, javascript-format
 msgid "Agreement %s deleted"
@@ -331,7 +331,7 @@ msgstr "全部"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:280
 msgid "An agreement is used as relationship several times"
-msgstr "一個協議被用作關係多次"
+msgstr "一個協議被作為關聯多次"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:153
 msgid "An agreement is used several times"
@@ -346,7 +346,7 @@ msgstr "當刪除這個封面時發生程式錯誤"
 msgid "An error occurred while uploading."
 msgstr "當上傳時發生錯誤。"
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:49
+#: koha-tmpl/intranet-tmpl/prog/js/staff-global.js:444
 msgid "An error occurred. Check the logs"
 msgstr "發生錯誤。檢查紀錄"
 
@@ -457,17 +457,17 @@ msgstr "確定移除指定的館藏嗎？"
 msgid "Are you sure you want to remove the selected recall(s)?"
 msgstr "確定移除指定的催還嗎？"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:185
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:194
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:399
 msgid "Are you sure you want to remove this agreement?"
 msgstr "你確定要移除此協議嗎？"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:105
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:112
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:206
 msgid "Are you sure you want to remove this license?"
 msgstr "你確定你要移除此授權嗎？"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:135
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:142
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:175
 msgid "Are you sure you want to remove this package?"
 msgstr "你確定你要移除此套裝嗎？"
@@ -482,7 +482,7 @@ msgstr "您確定要移除此催還並歸還此館藏至他的館藏圖書館嗎
 msgid "Are you sure you want to remove this recall?"
 msgstr "確定移除此催還嗎？"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:127
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:139
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:336
 msgid "Are you sure you want to remove this title?"
 msgstr "你確定你要移除此標題嗎？"
@@ -539,7 +539,7 @@ msgstr "八月"
 msgid "August"
 msgstr "八月"
 
-#: koha-tmpl/intranet-tmpl/prog/js/authorities-detail-modal.js:12
+#: koha-tmpl/intranet-tmpl/prog/js/authorities-detail-modal.js:13
 msgid "Authority"
 msgstr "權威"
 
@@ -599,7 +599,7 @@ msgstr "已取消"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:64
 msgid "Cannot import, no package selected"
-msgstr "無法輸入，未選擇套裝"
+msgstr "無法匯入，未選擇套裝"
 
 #: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:305
 #, javascript-format
@@ -690,7 +690,7 @@ msgid "Close"
 msgstr "關閉"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:74
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:292
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:301
 msgid "Closure reason"
 msgstr "關閉原因"
 
@@ -720,7 +720,7 @@ msgstr "設定欄"
 #: koha-tmpl/intranet-tmpl/prog/js/modals/display_ticket.js:114
 #, javascript-format
 msgid "Concern #%s updated successfully."
-msgstr "問題 #%s 更新成功。"
+msgstr "關係 #%s 更新成功."
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:804
 msgid "Configure"
@@ -736,7 +736,7 @@ msgstr "確認"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:244
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:68
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:207
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:214
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:52
 msgid "Content type"
 msgstr "內容類型"
@@ -745,7 +745,7 @@ msgstr "內容類型"
 msgid "Content type: "
 msgstr "內容類型： "
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:173
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:185
 msgid "Contributors"
 msgstr "其他作者"
 
@@ -773,21 +773,21 @@ msgstr "無法存取照相機。"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:109
 msgid "Coverage dates"
-msgstr "覆蓋日期"
+msgstr "日期涵蓋範圍"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:121
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:138
 msgid "Coverage depth"
-msgstr "覆蓋深度"
+msgstr "深度涵蓋範圍"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:221
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:228
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:65
 msgid "Created on"
 msgstr "建立在"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:60
 msgid "Date of first serial issue available online"
-msgstr "第一期刊為期數日期可在線上取得"
+msgstr "線上提供的第一期期刊日期"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:75
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:123
@@ -844,8 +844,8 @@ msgstr "刪除"
 msgid "Denied"
 msgstr "拒絕"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:275
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:164
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:284
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:171
 msgid "Description"
 msgstr "說明"
 
@@ -859,8 +859,8 @@ msgid ""
 "will overwrite the current configuration. For safety reasons please use the "
 "export option to make a backup"
 msgstr ""
-"您真的要輸入權威類型的欄位與分欄嗎？將覆寫現在的組態。基於安全的理由，請使用"
-"輸出選項備份"
+"您真的要匯入權威類型的欄位與分欄嗎？將覆寫現在的組態。基於安全的理由，請使用"
+"匯出選項備份"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:3
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:98
@@ -911,7 +911,7 @@ msgstr "電子全文取用限制期資訊"
 msgid "End date"
 msgstr "結束日期"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:201
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:208
 msgid "Ended on"
 msgstr "結束於"
 
@@ -985,7 +985,7 @@ msgstr "二月"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:19
 msgid "File"
-msgstr "文件"
+msgstr "檔案"
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "File already exists"
@@ -999,7 +999,7 @@ msgstr "檔案名稱"
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:208
 #, javascript-format
 msgid "File size exceeds maximum allowed: %s MB"
-msgstr "文件大小超過允許的最大值：%s MB"
+msgstr "檔案大小超過允許的最大值：%s MB"
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:181
 msgid "File size:"
@@ -1061,7 +1061,7 @@ msgstr "基金超過期間的分配額度"
 msgid "Get item"
 msgstr "取得館藏"
 
-#: koha-tmpl/intranet-tmpl/prog/js/browser.js:120
+#: koha-tmpl/intranet-tmpl/prog/js/browser.js:122
 msgid "Go back to the results"
 msgstr "返回結果"
 
@@ -1074,7 +1074,7 @@ msgid "Holds"
 msgstr "預約"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:267
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:202
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:214
 msgid "Identifier"
 msgstr "識別符"
 
@@ -1092,20 +1092,24 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:135
 msgid "Import"
-msgstr "輸出"
+msgstr "匯入"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:2
 msgid "Import from a list"
+msgstr "從清單中匯入"
+
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:102
+msgid "Import from list"
 msgstr "從清單中輸入"
 
 #: koha-tmpl/intranet-tmpl/prog/js/background-job-progressbar.js:72
 msgid "Import of record(s) failed: "
-msgstr ""
+msgstr "匯入紀錄失敗:"
 
 #: koha-tmpl/intranet-tmpl/prog/js/authtype.js:61
 #, javascript-format
 msgid "Importing to authority type: %s. Importing from file: %s"
-msgstr "輸入權限類型：%s。輸入自檔案：%s"
+msgstr "匯入權威類型: %s.從檔案匯入: %s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/biblio_framework.js:59
 #, javascript-format
@@ -1123,7 +1127,7 @@ msgstr "在您的書目清單"
 msgid "Internal Server Error, please reload the page"
 msgstr "內部伺服器錯誤，請再上傳頁面"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:306
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:315
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:67
 msgid "Is perpetual"
 msgstr "是永久的"
@@ -1195,7 +1199,7 @@ msgstr "最後項"
 msgid "License"
 msgstr "許可證"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:116
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:123
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:217
 #, javascript-format
 msgid "License %s deleted"
@@ -1207,7 +1211,7 @@ msgstr "建立權限"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:128
 msgid "License info"
-msgstr "許可證資訊"
+msgstr "授權資訊"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:261
 msgid "License updated"
@@ -1268,13 +1272,13 @@ msgstr "載入中......您可繼續掃瞄。"
 msgid "Local bibliographic record"
 msgstr "本地書目記錄"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:146
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:153
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:186
 #, javascript-format
 msgid "Local package %s deleted"
-msgstr "本地套裝 %s 刪除"
+msgstr "本地包裝 %s 刪除"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:138
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:150
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:347
 #, javascript-format
 msgid "Local title %s deleted"
@@ -1328,19 +1332,20 @@ msgid ""
 "copied"
 msgstr "註: 欄位列於'UniqueItemsFields'系統偏好將不會被複製"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:245
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:254
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:155
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:199
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:105
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageTitlesList.vue:58
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:163
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:170
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlePackagesList.vue:44
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:89
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:133
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:140
 msgid "Name"
 msgstr "姓名"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:7
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:157
 msgid "New agreement"
 msgstr "新協議"
 
@@ -1349,14 +1354,17 @@ msgid "New budget-parent is beneath budget"
 msgstr "新預算-上層預算低於預算"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:7
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:57
 msgid "New license"
-msgstr "新授權"
+msgstr "新的授權"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:7
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:105
 msgid "New package"
-msgstr "新套裝"
+msgstr "新包裝"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:7
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:97
 msgid "New title"
 msgstr "新標題"
 
@@ -1456,13 +1464,13 @@ msgstr "未找到結果"
 msgid "No subscription found on Mana Knowledge Base"
 msgstr "在 Mana 知識庫找不到訂閱"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:189
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:198
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:403
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:139
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:146
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:179
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:131
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:143
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:340
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:109
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:116
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:210
 msgid "No, do not delete"
 msgstr "不，不要刪除"
@@ -1490,7 +1498,7 @@ msgstr "未選擇"
 #: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:13
 #, javascript-format
 msgid "Note: %s out of %s renewals have been logged"
-msgstr "注意：已記錄 %s 的續借中的 %s"
+msgstr "注意：%s 在外的 %s 續借已經被記錄"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:190
 msgid "Note: _ALL_ value will override all other values"
@@ -1500,7 +1508,7 @@ msgstr "說明：_ALL_ 的值將取代其他的值"
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementRelationships.vue:68
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:155
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/Documents.vue:90
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:230
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:237
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:209
 msgid "Notes"
 msgstr "記錄"
@@ -1529,7 +1537,7 @@ msgstr "依館藏類型統計借出次數"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:98
 msgid "Number of first issue available online"
-msgstr "第一期刊為期數量可在線上取得"
+msgstr "在線提供的第一期期刊數量"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:55
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:88
@@ -1556,9 +1564,8 @@ msgid "Number of last issue available online"
 msgstr "上一期的在線數量"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:132
-#, fuzzy
 msgid "Number of last volume available online"
-msgstr "表單內無可用的資料"
+msgstr "在線提供的最後一卷數量"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesShow.vue:175
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:289
@@ -1603,7 +1610,7 @@ msgstr "OverDrive 帳號"
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:61
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:21
 msgid "Package"
-msgstr ""
+msgstr "套裝"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:99
 msgid "Package content type"
@@ -1611,7 +1618,7 @@ msgstr "套裝內容類型"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:195
 msgid "Package created"
-msgstr ""
+msgstr "已創建套裝"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:4
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlePackagesList.vue:13
@@ -1620,11 +1627,11 @@ msgstr "套裝名稱"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:185
 msgid "Package updated"
-msgstr ""
+msgstr "套裝已更新"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:3
 msgid "Packages"
-msgstr ""
+msgstr "套裝"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:123
 msgid "Patron note"
@@ -1692,9 +1699,8 @@ msgid "Please enter a valid date (should match %s)."
 msgstr "請鍵入有效日期 (應符合 %s)。"
 
 #: koha-tmpl/intranet-tmpl/prog/js/item_search_fields.js:5
-#, fuzzy
 msgid "Please enter letters or numbers"
-msgstr "請鍵入 %s 或更多的字元"
+msgstr "請輸入字母或數字"
 
 #: koha-tmpl/intranet-tmpl/prog/js/subscription-add.js:449
 msgid ""
@@ -1758,11 +1764,11 @@ msgstr "列印"
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:44
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:36
 msgid "Print-format identifier"
-msgstr ""
+msgstr "打印格式識別碼"
 
 #: koha-tmpl/intranet-tmpl/prog/js/modals/display_ticket.js:47
 msgid "Private"
-msgstr ""
+msgstr "私人的"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:21
 msgid "Processing..."
@@ -1770,25 +1776,25 @@ msgstr "處理中..."
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:77
 msgid "Proxy"
-msgstr ""
+msgstr "代理"
 
 #: koha-tmpl/intranet-tmpl/prog/js/modals/display_ticket.js:43
 msgid "Public"
-msgstr ""
+msgstr "公共的"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:4
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:18
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:23
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:34
 msgid "Publication title"
-msgstr "刊物名稱"
+msgstr "出版品標題"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:177
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:57
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:253
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackageTitlesList.vue:73
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:230
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:188
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:200
 msgid "Publication type"
 msgstr "出版類型"
 
@@ -1831,7 +1837,7 @@ msgstr "移除所有項目"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAddResources.vue:13
 msgid "Remove from this package"
-msgstr ""
+msgstr "從這個套裝移除"
 
 #: koha-tmpl/intranet-tmpl/prog/js/select2.js:27
 msgid "Remove item"
@@ -1839,9 +1845,9 @@ msgstr "移除館藏"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:22
 msgid "Remove package from holdings"
-msgstr "從預約中刪除套裝"
+msgstr "從移除中刪除套裝"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:71
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:72
 msgid "Remove restriction?"
 msgstr "移除限制？"
 
@@ -1862,9 +1868,8 @@ msgid "Remove this relationship"
 msgstr "移除此關聯"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:13
-#, fuzzy
 msgid "Remove this user"
-msgstr "移除館藏"
+msgstr "移除這個使用者"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:22
 msgid "Remove title from holdings"
@@ -1878,20 +1883,18 @@ msgstr "續借失敗："
 msgid "Renewal denied by syspref"
 msgstr "續借被系統偏好設定阻止"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:315
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:324
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:74
 msgid "Renewal priority"
 msgstr "續借優先權"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:26
-#, fuzzy
 msgid "Renewal type:"
-msgstr "續借失敗："
+msgstr "續借類型"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
-#, fuzzy
 msgid "Renewed by"
-msgstr "續借到期日："
+msgstr "更新者"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:185
 msgid "Renewed, due:"
@@ -1921,11 +1924,11 @@ msgstr "解決"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOResourcesShow.vue:31
 msgid "Resource identifier"
-msgstr "資源標識符號"
+msgstr "資源標識符"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:9
 msgid "Resource information"
-msgstr ""
+msgstr "資源資訊"
 
 #: koha-tmpl/intranet-tmpl/prog/js/browser.js:97
 msgid "Results"
@@ -2004,9 +2007,8 @@ msgid "Select all pending"
 msgstr "所選皆暫緩"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:28
-#, fuzzy
 msgid "Select user"
-msgstr "全選"
+msgstr "選擇讀者"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:44
 msgid "Selected"
@@ -2054,9 +2056,8 @@ msgid "Showing results for %s"
 msgstr "展示 %s 結果"
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:70
-#, fuzzy
 msgid "Some funds are not defined in item records"
-msgstr "部份預算未定義於館藏記錄中"
+msgstr "某些資金未在館藏紀錄中定義"
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:78
 msgid "Some required item subfields are not set"
@@ -2096,18 +2097,18 @@ msgstr "抱歉，無找到任何東西。"
 msgid "Start date"
 msgstr "開始日期"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:192
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:199
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:62
 msgid "Started on"
-msgstr ""
+msgstr "開始於"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementLicenses.vue:42
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:50
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:281
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:290
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:49
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:153
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:74
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:181
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:188
 msgid "Status"
 msgstr "狀態"
 
@@ -2146,7 +2147,7 @@ msgstr "暫停至："
 
 #: koha-tmpl/intranet-tmpl/prog/js/cataloging_additem.js:148
 msgid "Template name is required."
-msgstr ""
+msgstr "模板名稱為必填項"
 
 #: koha-tmpl/intranet-tmpl/prog/js/upload-images.js:109
 msgid "Temporary directory for uploads not defined"
@@ -2182,6 +2183,8 @@ msgid ""
 "koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule\">ERMModule</"
 "a> to use it"
 msgstr ""
+"電子資源管理模塊已禁用,開啟 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"tab=&op=search&searchfield=ERMModule\">ERMModule</a>使用它"
 
 #: koha-tmpl/intranet-tmpl/prog/js/merge-record.js:72
 msgctxt "Bibliographic record"
@@ -2270,15 +2273,15 @@ msgstr "供應器不存在"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:15
 msgid "There are no licenses defined"
-msgstr ""
+msgstr "沒有定義許可證"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:20
 msgid "There are no packages defined"
-msgstr ""
+msgstr "沒有定義包"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:20
 msgid "There are no titles defined"
-msgstr ""
+msgstr "沒有定義標題"
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:52
 msgid "There is no record selected"
@@ -2335,7 +2338,7 @@ msgstr "星期四"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackageTitlesList.vue:13
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOTitlesList.vue:220
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:156
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:168
 msgid "Title"
 msgstr "標題"
 
@@ -2356,7 +2359,7 @@ msgstr "任何之前出版物標題的標題標識符"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:320
 msgid "Title identifier of the parent publication"
-msgstr "上層出版物的標題標識碼"
+msgstr "上層出版物的標題標識符"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormAdd.vue:501
 msgid "Title updated"
@@ -2388,9 +2391,9 @@ msgid "Tuesday"
 msgstr "星期二"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:230
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:193
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:200
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:52
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:170
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:177
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:46
 msgid "Type"
 msgstr "類型"
@@ -2432,7 +2435,7 @@ msgstr "上傳狀態："
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/UserRoles.vue:19
 msgid "User"
-msgstr ""
+msgstr "使用者"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:121
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:71
@@ -2441,16 +2444,16 @@ msgid "Users"
 msgstr "使用者"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsFormAdd.vue:26
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:260
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:269
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:33
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesList.vue:221
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsEBSCOPackagesShow.vue:36
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesFormAdd.vue:26
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:178
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:185
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:34
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalResourcesShow.vue:74
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesFormAdd.vue:26
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:148
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:155
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:30
 msgid "Vendor"
 msgstr "供應商"
@@ -2497,13 +2500,13 @@ msgstr "星期三"
 msgid "Yes"
 msgstr "是"
 
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:188
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsList.vue:197
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/AgreementsShow.vue:402
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:138
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesList.vue:145
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalPackagesShow.vue:178
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:130
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesList.vue:142
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesShow.vue:339
-#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:108
+#: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesList.vue:115
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/LicensesShow.vue:209
 msgid "Yes, delete"
 msgstr "是的，刪除"
@@ -2548,7 +2551,7 @@ msgstr "您必須選擇或新增一個書目記錄"
 msgid "You must select at least one record"
 msgstr "您必須選擇至少一個紀錄"
 
-#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:103
+#: koha-tmpl/intranet-tmpl/prog/js/pages/circulation.js:110
 msgid "You must select checkout(s) to export"
 msgstr "您必須選擇借出以匯出"
 
@@ -2568,7 +2571,7 @@ msgstr "您的書目清單是空的"
 #: koha-tmpl/opac-tmpl/bootstrap/js/ratings.js:35
 #, javascript-format
 msgid "Your rating: %s."
-msgstr ""
+msgstr "您的評分: %s."
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:345
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:431
@@ -2603,19 +2606,19 @@ msgstr "by _AUTHOR_"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:32
 msgid "has backfile in"
-msgstr ""
+msgstr "有回檔"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:30
 msgid "has demand-driven acquisitions in"
-msgstr ""
+msgstr "進行了需求驅動的收購"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:33
 msgid "has frontfile in"
-msgstr ""
+msgstr "有前文件在"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:22
 msgid "has post-cancellation access in"
-msgstr ""
+msgstr "取消後可以訪問"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:274
 msgid "is duplicated"
@@ -2623,12 +2626,11 @@ msgstr "被重複"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:15
 msgid "is superseded by"
-msgstr ""
+msgstr "被取代"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkout_renewals_modal.js:24
-#, fuzzy
 msgid "manually"
-msgstr "一月"
+msgstr "手動地"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:57
 msgid "modified"
@@ -2648,7 +2650,7 @@ msgstr "預約中"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:18
 msgid "provides post-cancellation access for"
-msgstr ""
+msgstr "提供取消後訪問"
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:63
 msgid "quantity values are not filled in or are not numbers"
@@ -2660,16 +2662,16 @@ msgstr "理由不詳"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:34
 msgid "related to"
-msgstr ""
+msgstr "相關"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/components/ERM/EHoldingsLocalTitlesFormImport.vue:6
 #, javascript-format
 msgid "see job #%s"
-msgstr ""
+msgstr "查看工作 #%s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:14
 msgid "supersedes"
-msgstr ""
+msgstr "取代"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:194
 msgid "too many consecutive renewals without being seen by the library"
@@ -2681,14 +2683,14 @@ msgstr "續借過多"
 
 #: koha-tmpl/intranet-tmpl/prog/js/vue/stores/authorised-values.js:26
 msgid "tracks demand-driven acquisitions for"
-msgstr ""
+msgstr "跟蹤需求驅動的收購"
 
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:272
 #, javascript-format
 msgid "until %s"
 msgstr "直到 %s"
 
-#: koha-tmpl/intranet-tmpl/prog/js/patron-autocomplete.js:105
+#: koha-tmpl/intranet-tmpl/prog/js/staff-global.js:500
 msgid "years"
 msgstr "年"
 
@@ -2750,9 +2752,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Hide filters"
 #~ msgstr "運作中的篩選器"
-
-#~ msgid "Import from list"
-#~ msgstr "從清單中輸入"
 
 #, fuzzy
 #~ msgid "License #%s"
