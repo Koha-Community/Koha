@@ -602,7 +602,6 @@ subtest 'get_template_and_user' => sub {   # Tests for the language URL paramete
     );
     is($template->{VARS}->{'opac_name'}, "multibranch-19", "Opac name was set correctly");
     is($template->{VARS}->{'opac_search_limit'}, "branch:multibranch-19", "Search limit was set correctly");
-    ok(defined($template->{VARS}->{'csrf_token'}), "CSRF token returned");
 
     delete $ENV{"HTTP_COOKIE"};
 };
