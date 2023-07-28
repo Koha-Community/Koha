@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2023-05-25 12:05+0000\n"
+"PO-Revision-Date: 2023-07-26 09:51+0000\n"
 "Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /fi/22.11/fi-FI-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1685016353.435772\n"
+"X-POOTLE-MTIME: 1690365093.945375\n"
 
 # Accounting > Policy
 msgid "accounting.pref"
@@ -2471,14 +2471,12 @@ msgstr ""
 "täytyy olla \"luo\"):"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerConsiderThesaurus# Do"
-msgstr "Säilytä"
+msgstr "Vertaa"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
-msgstr "Älä säilytä"
+msgstr "Älä vertaa"
 
 # Authorities > Linker > LinkerConsiderThesaurus
 msgid ""
@@ -2487,6 +2485,9 @@ msgid ""
 "Enabling this preference may require a reindex, and may generate new "
 "authority records if AutoCreateAuthorities is enabled."
 msgstr ""
+"6XX-termien lähteitä auktoriteetti-tesaurukseen, kun tietueita linkitetään. "
+"Tämän laittaminen päälle voi vaatia uudelleenindeksoinnin ja saattaa luoda "
+"uusia auktoriteettitietueita, jos AutoCreateAuthorities on päällä."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
@@ -5532,9 +5533,10 @@ msgstr ""
 "lainauskieltoon."
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#ItemsDeniedRenewal# <br /> <strong>NOTE:</strong> The word "
-"'NULL' can be used to block renewal on undefined fields, while an empty "
+"'null' can be used to block renewal on undefined fields, while an empty "
 "string \"\" will block on an empty (but defined) field."
 msgstr ""
 "<br /> <strong>HUOM:</strong> Sanaa 'NULL' käytetään estämään uusinta "
@@ -5550,7 +5552,8 @@ msgstr ""
 "kaksoispiste ja tyhjämerkki, sitten"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,NULL,DVD]"
+#, fuzzy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,null,DVD]"
 msgstr "<br />ccode: [NEWFIC,NULL,DVD]"
 
 # Circulation > Checkout policy
@@ -9033,25 +9036,20 @@ msgstr ""
 "Kaukolainastatukset, joita pidetään valmiina, ja joita ei tulisi näyttää "
 "kaukolainamoduulissa: "
 
-# Circulation > Housebound module
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModule# Disable"
-msgstr "Älä salli"
+msgstr "Älä käytä"
 
 # Circulation > Self check-in module
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModule# Enable"
-msgstr "Salli"
+msgstr "Käytä"
 
 # Circulation > Housebound module
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModule# the interlibrary loans module (master "
 "switch)."
-msgstr "kaukolaina-moduulin käyttö (\"master switch\")."
+msgstr "kaukolaina-moduulia (\"pääkytkin\")."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModuleCopyrightClearance# Adding text will enable "
 "the copyright clearance stage in request creation. The text you enter will "
@@ -9061,27 +9059,23 @@ msgstr ""
 "clearance stage) pyydetyille teoksille. Lisätty teksti näytetään."
 
 # Circulation > Housebound module
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModuleUnmediated# Disable"
 msgstr "Älä salli"
 
 # Circulation > Self check-in module
-#, fuzzy
 msgid "interlibrary_loans.pref#ILLModuleUnmediated# Enable"
 msgstr "Salli"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
 "requests. If enabled and the ILL backend supports it, the newly created "
 "requests are immediately requested by backend."
 msgstr ""
 "asiakkaiden lähettämät kaukolainapyynnöt. Jos sallittu ja kaukolainayhteydet "
-"tukevat ominaisuutta, uudet pyynnöt lähetetään suoraa eteenpäin."
+"tukevat ominaisuutta, uudet pyynnöt lähetetään suoraan eteenpäin."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# (separated with |). If left empty, "
 "all installed backends will be enabled."
@@ -9090,28 +9084,25 @@ msgstr ""
 "kaukolainayhteydet sallitaan."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
 "initiated requests:"
-msgstr "Salli kaukolainayhteydet verkkokirjastossa tehdyille pyynnöille:"
+msgstr "Sallitut kaukolainayhteydet verkkokirjastossa tehdyille pyynnöille:"
 
 # Circulation > Interlibrary loans > ILLSendStaffNotices
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# (separated with |). e.g. "
 "ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
 "will be sent."
 msgstr ""
-"(erotetaan | -merkillä). Esim. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED. Jos "
+"(erotetaan | -merkillä). Esim. jos ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED "
 "jätetään tyhjäksi, kirjastolle ei lähetetä yhtään kaukolaina-viestiä."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
 "when appropriate:"
-msgstr "Lähetä nämä kaukolaina-viestit kirjastolle tarvittaessa:"
+msgstr "Lähetä nämä kaukolaina-viestit kirjastolle:"
 
 # Local Use
 msgid "local_use.pref"
@@ -9500,7 +9491,6 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Älä salli"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's charges to the patron's "
@@ -9542,7 +9532,6 @@ msgstr ""
 "lainahistorioille)."
 
 # Staff interface > Appearance > AuthorityXSLTResultsDisplay
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacDetailsDisplay# <br />Options:<ul><li>Empty. No "
 "XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
@@ -9555,17 +9544,16 @@ msgstr ""
 "<br />Vaihtoehdot:<ul><li>Tyhjä. Mitään XSLT-tiedostoa ei käytetä "
 "(<strong>oletus</strong>)</li><li>Lisää XSLT-tiedoston hakemistopolku.</"
 "li><li>Lisää ulkoisen tyylitiedoston URL.</li></ul>Jos tyylitiedostoja on "
-"useita: <ul><li>eri kielet: käytä paikanpitäjä {langcode} - tämä korvautuu "
+"useita: <ul><li>eri kielet: käytä paikanpitäjää {langcode} - tämä korvautuu "
 "käytössä olevalla kielellä.</li><li>auktoriteettityypit {authtypecode} - "
 "tämä korvautuu auktoriteettityypin koodilla"
 
 # Staff Client > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacDetailsDisplay# Display authority details in the "
 "OPAC using the XSLT stylesheet at: "
 msgstr ""
-"Näytä auktoriteettitulokset verkkokirjastossa käyttäen XSLT-tyylitiedostoa "
+"Näytä auktoriteetit verkkokirjastossa käyttäen XSLT-tyylitiedostoa "
 "osoitteesta: "
 
 # Staff interface > Appearance > AuthorityXSLTResultsDisplay
@@ -9911,7 +9899,6 @@ msgstr ""
 "vähemmän kuin"
 
 # OPAC > Policy
-#, fuzzy
 msgid ""
 "opac.pref#OPACFineNoRenewals# [% local_currency %] in charges (leave blank "
 "to disable)."
@@ -10168,16 +10155,16 @@ msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "kotikirjasto"
 
 # OPAC > Appearance > OPACResultsMaxItems
-#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
 "group unavailable items by 'substatus only', listing item counts per "
 "substatus. Similarly the option 'library only' results in unavailable item "
 "counts per library.)"
 msgstr ""
-"mukaan. HUOM: Suurille yhteenliittymille suosittelemme ei saatavana olevien "
+". (HUOM: Suurille yhteenliittymille suosittelemme ei saatavana olevien "
 "niteiden ryhmittämistä osatilan (substatus) mukaan, jolloin näytetään vain "
-"niteiden määrä.)"
+"niteiden määrä per osatila. Samantapaisesti vaihtoehdoll 'vain kirjasto' "
+"laskee ei saatavana olevat kirjaston mukaisesti.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
@@ -10190,6 +10177,10 @@ msgid ""
 "\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
 "show no more than"
 msgstr ""
+"opac.pref#OPACResultsMaxItems# Jos <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> -asetukseen on asetettu \"kirjasto "
+"ja osatila\", ei näytetä enempää kuin"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
@@ -10202,21 +10193,18 @@ msgid ""
 msgstr "(saatavana olevaa) yksittäistä nidettä OPAC XSLT hakutuloksissa. <br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
-#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
 "and category (like Checked out, Damaged, On hold, etc.)<br>"
 msgstr ""
-"(ei saatavana olevaa) yksittäistä nidettä kategorioille Lainassa, "
-"Vahingoittunut, Varattu, mutta vain, jos ne ryhmitetään kirjaston mukaan.<br>"
+"(ei saatavana olevaa) yksittäistä nidettä per kirjasto ja kategoria (kuten "
+"Lainassa, Vahingoittunut, Varattu jne.) <br>"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# library and substatus"
 msgstr "kirjaston ja osatilan (substatus) mukaan"
 
 # OPAC > Appearance
-#, fuzzy
 msgid "opac.pref#OPACResultsMaxItems# library only"
 msgstr "vain kirjaston mukaan"
 
@@ -11996,7 +11984,6 @@ msgid "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Älä salli"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
 "ability for a patron's charges to be viewed by linked patrons in the OPAC."
@@ -12305,12 +12292,13 @@ msgstr ""
 "myöhemmin):"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
 "option in the patrons or circulation module:"
-msgstr "Pilkulla erotettu lista oletuskentistä, joita käytetään asiakashaussa:"
+msgstr ""
+"Pilkulla erotettu lista oletuskentistä, joita käytetään asiakashaussa "
+"perushakua käytettäessä:"
 
 # Patrons > General
 msgid ""
@@ -12322,6 +12310,22 @@ msgstr ""
 "Jos tyhjä, Koha asettaa oletukseksi \"firstname,middle_name,surname,"
 "othernames,cardnumber,userid\". Muut tähän asetukseen lisätyt kentät "
 "lisätään hakuvaihtoehtoina pudotusvalikkoon asiakkaan hakusivulla."
+
+# Searching > Features
+#, fuzzy
+msgid "patrons.pref#DefaultPatronSearchMethod# Contains"
+msgstr "Älä säilytä"
+
+# Patrons > General > DefaultPatronSearchMethod
+msgid ""
+"patrons.pref#DefaultPatronSearchMethod# Enable this search method to "
+"determine whether to use Starts with or Contains for autocomplete patron "
+"searches."
+msgstr ""
+
+# Patrons > General > DefaultPatronSearchMethod
+msgid "patrons.pref#DefaultPatronSearchMethod# Starts with"
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -12819,9 +12823,8 @@ msgid "patrons.pref#PrefillGuaranteeField# Main address - ZIP/Postal code"
 msgstr "Pääosoite - Postinumero"
 
 # Patrons > Patron relationships
-#, fuzzy
 msgid "patrons.pref#PrefillGuaranteeField# Surname"
-msgstr "Yhteystieto - Fax"
+msgstr "Sukunimi"
 
 # Patrons > Patron relationships
 msgid ""
@@ -12833,47 +12836,42 @@ msgstr ""
 "lomakkeesta taattavan asiakastietoihin:"
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
 "patrons need to give consent before using the OPAC. If you set to "
 "permissive, Koha will warn but not enforce."
 msgstr ""
-". GDPR on EU:n yleinen tietosuoja-asetus. Jos pakotat kuittauksen, "
-"asiakkaiden on kuitattava ilmoitus ennen verkkokirjaston käyttöä. Jos asetus "
-"on \"salliva\", Koha varoittaa, mutta ei vaadi kuittausta."
+"Jos pakotat kuittauksen, asiakkaiden on kuitattava ilmoitus ennen "
+"verkkokirjaston käyttöä. Jos asetus on \"salliva\", Koha varoittaa, mutta ei "
+"vaadi kuittausta."
 
 # Patrons > Privacy > GDPR_Policy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyConsent# <br><strong>NOTE:</strong> If you enable "
 "this you will also have to set the URL of your public privacy policy with "
 "the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
 msgstr ""
-"<br><strong>HUOM:</strong> Jos tämä on päällä, täytyy myös määritellä "
-"julkisen tietosuojadokumentin URL <a href=\"/cgi-bin/koha/admin/preferences."
-"pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a>-asetuksella."
+"<br><strong>HUOM:</strong> Jos tämä on sallittu, täytyy myös määritellä "
+"julkisen tietosuojaselosteen URL <a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> -"
+"järjestelmäasetuksella."
 
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
-msgstr "Aseta GDPR-käytäntö:"
+msgstr "Aseta tietosuojakäytäntö:"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# disabled"
-msgstr "Älä käytä"
+msgstr "ei käytössä"
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# enforced"
-msgstr "Pakota kuittaamaan"
+msgstr "pakollinen"
 
 # Patrons > Privacy
-#, fuzzy
 msgid "patrons.pref#PrivacyPolicyConsent# permissive"
-msgstr "Salliva"
+msgstr "salliva"
 
 # Circulation > Checkin policy > CalculateFinesOnReturn
 msgid ""
@@ -12890,15 +12888,14 @@ msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
 msgstr "Käytä seuraavaa URLia"
 
 # Patrons > Privacy
-#, fuzzy
 msgid ""
 "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in "
 "messages about privacy and data protection. (If you enforce a data privacy "
 "policy, make sure that this page is not blocked.)"
 msgstr ""
-"viitataksesi paikalliseen tietosuojadokumentaatioon viesteissä, jotka "
-"koskevat yksityisyyttä ja tietosuojaa. (Jos pakotat tietosuojakäytänteiden "
-"kuittaamisen, varmista, että kaikki voivat avata dokumentaation.)"
+"viitataksesi paikalliseen tietosuojaselosteeseen viesteissä, jotka koskevat "
+"yksityisyyttä ja tietosuojaa. (Jos pakotat asiakkaan antamaan suosutuksen "
+"tietosuojakäytäntöön, varmista, että kaikki voivat avata selosteen.)"
 
 # Patrons > General
 msgid ""
@@ -12991,7 +12988,6 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Sijainti"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Patron category"
 msgstr "Asiakastyyppi"
 
@@ -13008,23 +13004,20 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "Asiakkaan titteli"
 
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
 "separate table for statistical purposes."
 msgstr ""
-"Asiakastiedot ja transaktiot kopioidaan erilliseen tauluun "
+"Asiakastiedot ja asiakkaan tapahtumat kopioidaan erilliseen tauluun "
 "tilastotarkoituksia varten."
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Sort 1"
-msgstr "Lajittelusääntö 1"
+msgstr "Lajittelu 1"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Sort 2"
-msgstr "Lajittelusääntö 2"
+msgstr "Lajittelu 2"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# State"
@@ -13035,12 +13028,10 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "Transaktion tyyppi"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
 msgstr "Postinumero"
 
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
 "policies and regulations like GDPR for managing personal information."

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-06-23 09:24+0000\n"
+"PO-Revision-Date: 2023-07-17 12:36+0000\n"
 "Last-Translator: pmis <pmis@mnw.art.pl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pl/22.11/pl-PL-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1687512246.000473\n"
+"X-POOTLE-MTIME: 1689597406.551513\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -5116,8 +5116,7 @@ msgstr "Włącz"
 msgid ""
 "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on "
 "multiple bibliographic records from the search results"
-msgstr ""
-"wielokrotne zamawianie tych samych egzemplarzy z listy wyników wyszukiwania."
+msgstr "zamawianie wielu pozycji z listy wyników wyszukiwania."
 
 # Circulation > Holds policy
 msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
@@ -5574,9 +5573,10 @@ msgstr ""
 "będzie powyżej ustalonego limitu."
 
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
 "circulation.pref#ItemsDeniedRenewal# <br /> <strong>NOTE:</strong> The word "
-"'NULL' can be used to block renewal on undefined fields, while an empty "
+"'null' can be used to block renewal on undefined fields, while an empty "
 "string \"\" will block on an empty (but defined) field."
 msgstr ""
 "<br /> <strong>UWAGA:</strong> Wartość 'NULL' może zablokować prolongaty na "
@@ -5592,7 +5592,8 @@ msgstr ""
 "i spację, a następnie"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,NULL,DVD]"
+#, fuzzy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,null,DVD]"
 msgstr "<br />ccode: [NEWFIC,NULL,DVD]"
 
 # Circulation > Checkout policy
@@ -8836,7 +8837,7 @@ msgstr "Dostawcy w module zarządzania zasobami cyfrowymi"
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
-msgstr "i18n_l10n.pref"
+msgstr "I18N/L10N"
 
 # I18N/L10N
 #, fuzzy
@@ -9610,7 +9611,6 @@ msgstr ""
 "wypożyczeń)."
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacDetailsDisplay# <br />Options:<ul><li>Empty. No "
 "XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a "
@@ -9620,21 +9620,20 @@ msgid ""
 "interface language</li><li>authority types: use the placeholder "
 "{authtypecode} - this will be replaced with the authority type code"
 msgstr ""
-"<br />Wartości:<ul><li>Puste. Żaden XSLT nie zostanie wyświetlony "
-"(<strong>default</strong>)</li><li>Dodaj ścieżkę dostępu pliku XSLT</"
-"li><li>Dodaj URL do konkretnego zewnętrznego arkusza stylów.</li></ul>Jeśli "
-"masz wiele arkuszy stylów dla: <ul><li>różnych języków: użyj element "
-"zastępczy {langcode}- zostanie zastąpiony bieżący język</"
-"li><li>dopuszczonych wartości: użyj element zastępczy {authtypecode} - "
-"zostanie zastąpiony kodem typu hasła wzorcowego"
+"<br />Wartości:<ul><li>Puste. Żaden XSLT nie zostanie zastosowany "
+"(<strong>działanie domyślne</strong>)</li><li>Dodaj ścieżkę dostępu pliku "
+"XSLT.</li><li>Dodaj URL do konkretnego zewnętrznego arkusza stylów.</li></"
+"ul>Jeśli masz wiele arkuszy stylów dla: <ul><li>różnych języków: użyj "
+"zmiennej {langcode} - zostanie zastąpiona bieżącym językiem interfejsu</"
+"li><li>typów haseł: użyj zmiennej {authtypecode} - zostanie zastąpiona kodem "
+"typu hasła wzorcowego"
 
 # Staff interface > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#AuthorityXSLTOpacDetailsDisplay# Display authority details in the "
 "OPAC using the XSLT stylesheet at: "
 msgstr ""
-"Wyświetl wyniki haseł wzorcowych w OPAC, używając arkusza stylów XSLT z: "
+"Wyświetl szczegóły haseł wzorcowych w OPAC, używając arkusza stylów XSLT z: "
 
 # Staff interface > Appearance
 msgid ""
@@ -12400,6 +12399,22 @@ msgstr ""
 "Domyślnie, jeśli puste: \"firstname,middle_name,surname,othernames,"
 "cardnumber,userid\". Dodatkowe pola, dodane w tej opcji, będą widoczne jako "
 "dodatkowe opcje wyszukiwania użytkownika w rozwijanym menu."
+
+# Searching > Features
+#, fuzzy
+msgid "patrons.pref#DefaultPatronSearchMethod# Contains"
+msgstr "Nie przechowuj zapytań"
+
+# Patrons > General > DefaultPatronSearchMethod
+msgid ""
+"patrons.pref#DefaultPatronSearchMethod# Enable this search method to "
+"determine whether to use Starts with or Contains for autocomplete patron "
+"searches."
+msgstr ""
+
+# Patrons > General > DefaultPatronSearchMethod
+msgid "patrons.pref#DefaultPatronSearchMethod# Starts with"
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
