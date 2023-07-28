@@ -483,11 +483,11 @@
                                                         <th>Supplier report</th>
                                                     [% END %]
                                                     <th class="NoSort">Place hold</th>
-                                                    [% IF ( active ) %]
-                                                        [% UNLESS ( closedate ) %]
+                                                    [% IF ( active && !closedate ) %]
                                                             <th class="NoSort">Modify</th>
-                                                            <th class="NoSort">Cancel order</th>
-                                                        [% END %]
+                                                    [% END %]
+                                                    [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
+                                                        <th class="NoSort">Cancel order</th>
                                                     [% END %]
                                                 </tr>
                                             </thead>
@@ -517,11 +517,11 @@
                                                             <th>&nbsp;</th>
                                                         [% END %]
                                                         <th>&nbsp;</th>
-                                                        [% IF ( active ) %]
-                                                            [% UNLESS ( closedate ) %]
-                                                                <th>&nbsp;</th>
-                                                                <th>&nbsp;</th>
-                                                            [% END %]
+                                                        [% IF ( active && !closedate ) %]
+                                                            <th>&nbsp;</th>
+                                                        [% END %]
+                                                        [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
+                                                            <th>&nbsp;</th>
                                                         [% END %]
                                                     </tr>
                                                 [% END %]
@@ -549,11 +549,11 @@
                                                         <th>&nbsp;</th>
                                                     [% END %]
                                                     <th>&nbsp;</th>
-                                                    [% IF ( active ) %]
-                                                        [% UNLESS ( closedate ) %]
-                                                            <th>&nbsp;</th>
-                                                            <th>&nbsp;</th>
-                                                        [% END %]
+                                                    [% IF ( active && !closedate ) %]
+                                                        <th>&nbsp;</th>
+                                                    [% END %]
+                                                    [% IF !closedate || Koha.Preference('CancelOrdersInClosedBaskets') %]
+                                                        <th>&nbsp;</th>
                                                     [% END %]
                                                 </tr>
                                             </tfoot>
@@ -686,42 +686,42 @@
                                                                 </a>
                                                             [% END %]
                                                         </td>
-                                                        [% IF ( active ) %]
-                                                            [% UNLESS ( closedate ) %]
-                                                                <td>
-                                                                    [% UNLESS (books_loo.order_received) %]
-                                                                        <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Modify</a>
-                                                                        <br />
-                                                                        <a href="#" class="transfer_order" data-ordernumber="[% books_loo.ordernumber | html %]">Transfer</a>
+                                                        [% IF ( active && !closedate ) %]
+                                                            <td>
+                                                                <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Modify</a>
+                                                                [% UNLESS (books_loo.order_received) %]
+                                                                    <br />
+                                                                    <a href="#" class="transfer_order" data-ordernumber="[% books_loo.ordernumber | html %]">Transfer</a>
+                                                                [% END %]
+                                                            </td>
+                                                        [% END %]
+                                                        [% IF ( !closedate || Koha.Preference('CancelOrdersInClosedBaskets') ) %]
+                                                            <td>
+                                                                [% IF ( books_loo.orderstatus != "complete") %]
+                                                                    [% IF ( books_loo.left_holds_on_order ) %]
+                                                                        <span class="button" title="Can't cancel order, ([% books_loo.holds_on_order | html %]) holds are linked with this order. Cancel holds first">Can't cancel order</span><br>
+                                                                    [% ELSE %]
+                                                                        <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | uri %]&biblionumber=[% books_loo.biblionumber | uri %]&basketno=[% basketno | uri %]&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | uri %]" class="button">Cancel order</a><br>
                                                                     [% END %]
-                                                                </td>
-                                                                <td>
-                                                                    [% IF ( books_loo.orderstatus != "complete") %]
-                                                                        [% IF ( books_loo.left_holds_on_order ) %]
-                                                                            <span class="button" title="Can't cancel order, ([% books_loo.holds_on_order | html %]) holds are linked with this order. Cancel holds first">Can't cancel order</span><br>
-                                                                        [% ELSE %]
-                                                                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | uri %]&biblionumber=[% books_loo.biblionumber | uri %]&basketno=[% basketno | uri %]&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | uri %]" class="button">Cancel order</a><br>
-                                                                        [% END %]
-                                                                        [% IF ( books_loo.can_del_bib ) %]
-                                                                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | uri %]&biblionumber=[% books_loo.biblionumber | uri %]&basketno=[% basketno | uri %]&del_biblio=1&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | uri %]" class="button">Cancel order and delete catalog record</a><br>
-                                                                        [% ELSE %]
-                                                                            <span class="button" title="Can't delete catalog record, see constraints below">Can't cancel order and delete catalog record</span><br>
-                                                                        [% END %]
-                                                                        [% IF ( books_loo.left_item ) %]
-                                                                            <strong title="Can't delete catalog record, because of [% books_loo.items | html %] existing hold(s)" >[% books_loo.items | html %] item(s) left</strong><br>
-                                                                        [% END %]
-                                                                        [% IF ( books_loo.left_biblio ) %]
-                                                                            <strong title="Can't delete catalog record, delete other orders linked to it first">[% books_loo.biblios | html %] order(s) left</strong><br>
-                                                                        [% END %]
-                                                                        [% IF ( books_loo.left_subscription ) %]
-                                                                            <strong title="Can't delete catalog record, delete subscriptions first">[% books_loo.subscriptions | html %] subscription(s) left</strong><br>
-                                                                        [% END %]
-                                                                        [% IF ( books_loo.left_holds ) %]
-                                                                            <strong title="Can't delete catalog record or order, cancel holds first">[% books_loo.holds | html %] hold(s) left</strong>
-                                                                        [% END %]
+                                                                    [% IF ( books_loo.can_del_bib ) %]
+                                                                        <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | uri %]&biblionumber=[% books_loo.biblionumber | uri %]&basketno=[% basketno | uri %]&del_biblio=1&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | uri %]" class="button">Cancel order and delete catalog record</a><br>
+                                                                    [% ELSE %]
+                                                                        <span class="button" title="Can't delete catalog record, see constraints below">Can't cancel order and delete catalog record</span><br>
                                                                     [% END %]
-                                                                </td>
-                                                            [% END %]
+                                                                    [% IF ( books_loo.left_item ) %]
+                                                                        <strong title="Can't delete catalog record, because of [% books_loo.items | html %] existing hold(s)" >[% books_loo.items | html %] item(s) left</strong><br>
+                                                                    [% END %]
+                                                                    [% IF ( books_loo.left_biblio ) %]
+                                                                        <strong title="Can't delete catalog record, delete other orders linked to it first">[% books_loo.biblios | html %] order(s) left</strong><br>
+                                                                    [% END %]
+                                                                    [% IF ( books_loo.left_subscription ) %]
+                                                                        <strong title="Can't delete catalog record, delete subscriptions first">[% books_loo.subscriptions | html %] subscription(s) left</strong><br>
+                                                                    [% END %]
+                                                                    [% IF ( books_loo.left_holds ) %]
+                                                                        <strong title="Can't delete catalog record or order, cancel holds first">[% books_loo.holds | html %] hold(s) left</strong>
+                                                                    [% END %]
+                                                                [% END %]
+                                                            </td>
                                                         [% END %]
                                                     </tr>
                                                 [% END %]

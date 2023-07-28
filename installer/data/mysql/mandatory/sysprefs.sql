@@ -130,6 +130,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CanMarkHoldsToPullAsLost','do_not_allow','do_not_allow|allow|allow_and_notify','Add a button to the "Holds to pull" screen to mark an item as lost and notify the patron.','Choice'),
 ('canreservefromotherbranches','1','','With Independent branches on, can a user from one library place a hold on an item from another library','YesNo'),
 ('CardnumberLength', '', '', 'Set a length for card numbers with a maximum of 32 characters.', 'Free'),
+('CancelOrdersInClosedBaskets', '0', NULL, 'Allow/Do not allow cancelling order lines in closed baskets.', 'YesNo'),
 ('casAuthentication','0','','Enable or disable CAS authentication','YesNo'),
 ('casLogout','0','','Does a logout from Koha should also log the user out of CAS?','YesNo'),
 ('casServerUrl','https://localhost:8443/cas','','URL of the cas server','Free'),
