@@ -21,6 +21,7 @@ use Try::Tiny;
 use base 'Koha::BackgroundJob';
 
 use Koha::Database;
+use Koha::ImportBatches;
 use C4::Matcher;
 use C4::ImportBatch qw(
     RecordsFromMARCXMLFile
