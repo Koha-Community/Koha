@@ -224,7 +224,8 @@ if ($op eq ""){
         my @notforloans = $input->multi_param('notforloan_' . $import_record->import_record_id);
         my @uris = $input->multi_param('uri_' . $import_record->import_record_id);
         my @copynos = $input->multi_param('copyno_' . $import_record->import_record_id);
-        my @budget_codes = $input->multi_param('budget_code_' . $import_record->import_record_id);
+        my @budget_ids =
+            $input->multi_param( 'budget_code_' . $import_record->import_record_id ); # bad field name used in template!
         my @itemprices = $input->multi_param('itemprice_' . $import_record->import_record_id);
         my @replacementprices = $input->multi_param('replacementprice_' . $import_record->import_record_id);
         my @itemcallnumbers = $input->multi_param('itemcallnumber_' . $import_record->import_record_id);
@@ -257,11 +258,14 @@ if ($op eq ""){
             # Group orderlines from MarcItemFieldsToOrder
             my $budget_hash;
             for (my $i = 0; $i < $count; $i++) {
-                $budget_hash->{$budget_codes[$i]}->{quantity} += 1;
-                $budget_hash->{$budget_codes[$i]}->{price} = $itemprices[$i];
-                $budget_hash->{$budget_codes[$i]}->{replacementprice} = $replacementprices[$i];
-                $budget_hash->{$budget_codes[$i]}->{itemnumbers} //= [];
-                push @{ $budget_hash->{$budget_codes[$i]}->{itemnumbers} }, $itemnumbers[$i];
+                $budget_ids[$i] = $budget_id if !$budget_ids[$i];   # Use default budget if no budget selected in the UI
+                $budget_hash->{ $budget_ids[$i] }->{quantity} += 1;
+                $budget_hash->{ $budget_ids[$i] }->{price} = $itemprices[$i];
+                $budget_hash->{ $budget_ids[$i] }->{replacementprice} =
+                  $replacementprices[$i];
+                $budget_hash->{ $budget_ids[$i] }->{itemnumbers} //= [];
+                push @{ $budget_hash->{ $budget_ids[$i] }->{itemnumbers} },
+                  $itemnumbers[$i];
             }
 
             # Create orderlines from MarcItemFieldsToOrder
