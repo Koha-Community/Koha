@@ -21,16 +21,24 @@ class HttpClient {
             ...options,
             headers: { ...this._headers, ...headers },
         })
-            .then(response => this.checkError(response, return_response))
-            .then(
-                result => {
-                    res = result;
-                },
-                err => {
-                    error = err;
-                    setError(err.toString());
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        let json = JSON.parse(text);
+                        let message =
+                            json.error ||
+                            json.errors.map(e => e.message).join("\n") ||
+                            json;
+                        console.log("Server returned an error:");
+                        console.log(response);
+                        throw new Error(message);
+                    });
                 }
-            )
+                return return_response ? response : response.json();
+            })
+            .then(result => {
+                res = result;
+            })
             .catch(err => {
                 error = err;
                 setError(err);
@@ -143,16 +151,6 @@ class HttpClient {
             body,
             method: "PATCH",
         });
-    }
-
-    checkError(response, return_response = 0) {
-        if (response.status >= 200 && response.status <= 299) {
-            return return_response ? response : response.json();
-        } else {
-            console.log("Server returned an error:");
-            console.log(response);
-            throw Error("%s (%s)".format(response.statusText, response.status));
-        }
     }
 }
 
