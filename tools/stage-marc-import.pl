@@ -95,6 +95,7 @@ if ($fileID) {
         item_action                => $item_action,
         basket_id                  => $basketno,
         vendor_id                  => $booksellerid,
+        profile_id                 => $profile_id,
     };
     try {
         my $job_id = Koha::BackgroundJob::StageMARCForImport->new->enqueue( $params );
