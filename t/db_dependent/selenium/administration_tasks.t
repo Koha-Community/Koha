@@ -76,7 +76,7 @@ SKIP: {
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
         $s->click( { href => '/admin/smart-rules.pl', main_class => 'main container-fluid' } )
-          ;    # Circulation and fines rules
+          ;    # Circulation and fine rules
         my $elt = $driver->find_element('//tr[@id="edit_row"]/td/select[@id="matrixitemtype"]/option[@value="'.$itype->itemtype.'"]');
         is( $elt->get_text(),$itype->description,"Our new itemtype is in the list");
         $elt->click();
