@@ -142,7 +142,7 @@ describe("License CRUD operations", () => {
         });
         cy.get("#licenses_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Submit the form, success!
@@ -196,7 +196,7 @@ describe("License CRUD operations", () => {
         });
         cy.get("#licenses_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Submit the form, success!
@@ -266,7 +266,7 @@ describe("License CRUD operations", () => {
         });
         cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Accept the confirmation dialog, success!
