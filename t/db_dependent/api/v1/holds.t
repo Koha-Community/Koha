@@ -1270,7 +1270,7 @@ subtest 'add() tests' => sub {
 
 subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
 
-    plan tests => 28;
+    plan tests => 37;
 
     $schema->storage->txn_begin;
 
@@ -1402,6 +1402,25 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->json_is({ error => '[The supplied pickup location is not valid]' });
 
     is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'invalid pickup library not used, even if x-koha-override is passed' );
+
+    my $waiting_hold       = $builder->build_object( { class => 'Koha::Holds', value => { found => 'W' } } );
+    my $in_processing_hold = $builder->build_object( { class => 'Koha::Holds', value => { found => 'P' } } );
+    my $in_transit_hold    = $builder->build_object( { class => 'Koha::Holds', value => { found => 'T' } } );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+            . $waiting_hold->id
+            . "/pickup_location" => json => { pickup_library_id => $library_2->branchcode } )->status_is(409)
+        ->json_is( { error => q{Cannot change pickup location}, error_code => 'hold_waiting' } );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+            . $in_processing_hold->id
+            . "/pickup_location" => json => { pickup_library_id => $library_2->branchcode } )->status_is(409)
+        ->json_is( { error => q{Cannot change pickup location}, error_code => 'hold_in_processing' } );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+            . $in_transit_hold->id
+            . "/pickup_location" => json => { pickup_library_id => $library_2->branchcode } )->status_is(409)
+        ->json_is( { error => q{Cannot change pickup location}, error_code => 'hold_in_transit' } );
 
     $schema->storage->txn_rollback;
 };
