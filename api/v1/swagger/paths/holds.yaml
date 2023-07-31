@@ -692,13 +692,19 @@
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "409":
-        description: Unable to perform action on hold
+        description: |
+          Unable to perform action on hold. Possible `error_code` attribute values:
+
+          * `hold_waiting`
+          * `hold_in_transit`
+          * `hold_in_processing`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "500":
-        description: Internal error
-        schema:
-          $ref: "../swagger.yaml#/definitions/error"
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
       "503":
         description: Under maintenance
         schema:
