@@ -535,6 +535,17 @@ sub update_pickup_location {
         my $overrides    = $c->stash('koha.overrides');
         my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
 
+        my $error_code =
+              $hold->is_waiting       ? 'hold_waiting'
+            : $hold->is_in_transit    ? 'hold_in_transit'
+            : $hold->is_in_processing ? 'hold_in_processing'
+            :                           undef;
+
+        return $c->render(
+            status  => 409,
+            openapi => { error => 'Cannot change pickup location', error_code => $error_code }
+        ) if $error_code;
+
         $hold->set_pickup_location(
             {
                 library_id => $pickup_library_id,
