@@ -5,7 +5,10 @@
             {{ $__("Edit preservation settings") }}
         </h2>
         <div>
-            <form @submit="onSubmit($event)">
+            <form
+                v-if="config.permissions.manage_sysprefs"
+                @submit="onSubmit($event)"
+            >
                 <fieldset class="rows">
                     <legend>{{ $__("General settings") }}</legend>
                     <ol>
@@ -72,6 +75,38 @@
                     >
                 </fieldset>
             </form>
+            <fieldset v-else class="rows">
+                <legend>{{ $__("General settings") }}</legend>
+                <ol>
+                    <li>
+                        <label for="not_for_loan_waiting_list_in"
+                            >{{
+                                $__("Status for item added to waiting list")
+                            }}:</label
+                        >
+                        <span>{{
+                            get_lib_from_av(
+                                "av_notforloan",
+                                config.settings.not_for_loan_waiting_list_in
+                            )
+                        }}</span>
+                    </li>
+                    <li>
+                        <label for="not_for_loan_default_train_in"
+                            >{{
+                                $__("Default status for item added to train")
+                            }}:</label
+                        >
+                        <span>{{
+                            get_lib_from_av(
+                                "av_notforloan",
+                                config.settings.not_for_loan_default_train_in
+                            )
+                        }}</span>
+                    </li>
+                </ol>
+            </fieldset>
+
             <SettingsProcessings />
         </div>
     </div>
@@ -87,12 +122,19 @@ export default {
     setup() {
         const AVStore = inject("AVStore")
         const { av_notforloan } = storeToRefs(AVStore)
+        const { get_lib_from_av } = AVStore
 
         const { setMessage, setWarning } = inject("mainStore")
         const PreservationStore = inject("PreservationStore")
         const { config } = PreservationStore
 
-        return { av_notforloan, setMessage, setWarning, config }
+        return {
+            av_notforloan,
+            get_lib_from_av,
+            setMessage,
+            setWarning,
+            config,
+        }
     },
     data() {
         return {

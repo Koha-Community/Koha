@@ -39,6 +39,7 @@ Return the configuration options needed for the Preservation Vue app
 
 sub config {
     my $c = shift->openapi->valid_input or return;
+    my $patron = $c->stash('koha.user');
     return $c->render(
         status  => 200,
         openapi => {
@@ -46,6 +47,9 @@ sub config {
                 enabled                       => C4::Context->preference('PreservationModule'),
                 not_for_loan_waiting_list_in  => C4::Context->preference('PreservationNotForLoanWaitingListIn'),
                 not_for_loan_default_train_in => C4::Context->preference('PreservationNotForLoanDefaultTrainIn'),
+            },
+            permissions => {
+                'manage_sysprefs' => $patron->has_permission( { parameters => 'manage_sysprefs' } ) ? 1 : 0,
             },
         },
     );
