@@ -98,6 +98,8 @@ definitions:
     $ref: ./definitions/patron_balance.yaml
   patron_extended_attribute:
     $ref: ./definitions/patron_extended_attribute.yaml
+  preservation_config:
+    $ref: ./definitions/preservation_config.yaml
   preservation_train:
     $ref: ./definitions/preservation_train.yaml
   preservation_processing:
@@ -337,6 +339,8 @@ paths:
     $ref: "./paths/patrons_password.yaml#/~1patrons~1{patron_id}~1password"
   "/patrons/{patron_id}/password/expiration_date":
     $ref: "./paths/patrons_password.yaml#/~1patrons~1{patron_id}~1password~1expiration_date"
+  /preservation/config:
+    $ref: ./paths/preservation_config.yaml#/~1preservation~1config
   /preservation/trains:
     $ref: ./paths/preservation_trains.yaml#/~1preservation~1trains
   "/preservation/trains/{train_id}":

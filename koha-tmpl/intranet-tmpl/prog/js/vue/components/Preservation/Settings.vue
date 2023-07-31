@@ -21,7 +21,9 @@
                             >
                             <v-select
                                 id="not_for_loan_waiting_list_in"
-                                v-model="settings.not_for_loan_waiting_list_in"
+                                v-model="
+                                    config.settings.not_for_loan_waiting_list_in
+                                "
                                 label="description"
                                 :reduce="av => av.value"
                                 :options="av_notforloan"
@@ -29,7 +31,8 @@
                                 <template #search="{ attributes, events }">
                                     <input
                                         :required="
-                                            !settings.not_for_loan_waiting_list_in
+                                            !config.settings
+                                                .not_for_loan_waiting_list_in
                                         "
                                         class="vs__search"
                                         v-bind="attributes"
@@ -48,7 +51,10 @@
                             >
                             <v-select
                                 id="not_for_loan_default_train_in"
-                                v-model="settings.not_for_loan_default_train_in"
+                                v-model="
+                                    config.settings
+                                        .not_for_loan_default_train_in
+                                "
                                 label="description"
                                 :reduce="av => av.value"
                                 :options="av_notforloan"
@@ -84,9 +90,9 @@ export default {
 
         const { setMessage, setWarning } = inject("mainStore")
         const PreservationStore = inject("PreservationStore")
-        const { settings } = storeToRefs(PreservationStore)
+        const { config } = PreservationStore
 
-        return { av_notforloan, setMessage, setWarning, settings }
+        return { av_notforloan, setMessage, setWarning, config }
     },
     data() {
         return {
@@ -108,12 +114,12 @@ export default {
             client.sysprefs
                 .update(
                     "PreservationNotForLoanWaitingListIn",
-                    this.settings.not_for_loan_waiting_list_in
+                    this.config.settings.not_for_loan_waiting_list_in
                 )
                 .then(
                     client.sysprefs.update(
                         "PreservationNotForLoanDefaultTrainIn",
-                        this.settings.not_for_loan_default_train_in || 0
+                        this.config.settings.not_for_loan_default_train_in || 0
                     )
                 )
                 .then(

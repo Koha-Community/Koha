@@ -1,5 +1,5 @@
 <template>
-    <div v-if="initialized && PreservationModule == 1">
+    <div v-if="initialized && config.settings.enabled == 1">
         <div id="sub-header">
             <Breadcrumbs />
             <Help />
@@ -32,6 +32,7 @@ import LeftMenu from "../LeftMenu.vue"
 import Dialog from "../Dialog.vue"
 import { APIClient } from "../../fetch/api-client.js"
 import "vue-select/dist/vue-select.css"
+import { storeToRefs } from "pinia"
 
 export default {
     setup() {
@@ -42,62 +43,45 @@ export default {
         const { loading, loaded, setError } = mainStore
 
         const PreservationStore = inject("PreservationStore")
+
+        const { config } = storeToRefs(PreservationStore)
+
         return {
             AVStore,
             loading,
             loaded,
+            config,
             setError,
-            PreservationStore,
         }
     },
     data() {
         return {
             initialized: false,
-            PreservationModule: null,
         }
     },
     beforeCreate() {
         this.loading()
 
-        const fetch_config = () => {
-            const sysprefs_client = APIClient.sysprefs
+        const fetch_additional_config = () => {
+            let promises = []
             const av_client = APIClient.authorised_values
-            let promises = [
-                sysprefs_client.sysprefs
-                    .get("PreservationNotForLoanWaitingListIn")
-                    .then(
-                        value => {
-                            this.PreservationStore.settings.not_for_loan_waiting_list_in =
-                                value.value
-                        },
-                        error => {}
-                    ),
-                sysprefs_client.sysprefs
-                    .get("PreservationNotForLoanDefaultTrainIn")
-                    .then(
-                        value => {
-                            this.PreservationStore.settings.not_for_loan_default_train_in =
-                                value.value
-                        },
-                        error => {}
-                    ),
+            promises.push(
                 av_client.values.get("NOT_LOAN").then(
                     values => {
                         this.AVStore.av_notforloan = values
                     },
                     error => {}
-                ),
-            ]
-
+                )
+            )
             return Promise.all(promises)
         }
 
-        const sysprefs_client = APIClient.sysprefs
-        sysprefs_client.sysprefs
-            .get("PreservationModule")
-            .then(value => {
-                this.PreservationModule = value.value
-                if (this.PreservationModule != 1) {
+        const client = APIClient.preservation
+        client.config
+            .get()
+            .then(config => {
+                this.config = config
+                if (this.config.settings.enabled != 1) {
                     return this.setError(
                         this.$__(
                             'The preservation module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=PreservationModule">PreservationModule</a> to use it'
@@ -105,7 +89,7 @@ export default {
                         false
                     )
                 }
-                return fetch_config()
+                return fetch_additional_config()
             })
             .then(() => {
                 this.loaded()

@@ -103,9 +103,9 @@ export default {
         const { setMessage, setWarning } = inject("mainStore")
 
         const PreservationStore = inject("PreservationStore")
-        const { settings } = storeToRefs(PreservationStore)
+        const { config } = PreservationStore
 
-        return { av_notforloan, setMessage, setWarning, settings }
+        return { av_notforloan, setMessage, setWarning, config }
     },
     data() {
         return {
@@ -113,7 +113,8 @@ export default {
                 train_id: null,
                 name: "",
                 description: "",
-                not_for_loan: this.settings.not_for_loan_default_train_in,
+                not_for_loan:
+                    this.config.settings.not_for_loan_default_train_in,
                 default_processing_id: null,
                 created_on: null,
                 closed_on: null,

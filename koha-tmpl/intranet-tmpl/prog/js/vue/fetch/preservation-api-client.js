@@ -7,6 +7,15 @@ export class PreservationAPIClient extends HttpClient {
         });
     }
 
+    get config() {
+        return {
+            get: () =>
+                this.get({
+                    endpoint: "config",
+                }),
+        };
+    }
+
     get trains() {
         return {
             get: id =>

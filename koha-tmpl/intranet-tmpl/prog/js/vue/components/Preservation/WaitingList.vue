@@ -81,7 +81,10 @@
         </div>
     </transition>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
-    <div v-else-if="!settings.not_for_loan_waiting_list_in" id="waiting-list">
+    <div
+        v-else-if="!config.settings.not_for_loan_waiting_list_in"
+        id="waiting-list"
+    >
         {{ $__("You need to configure this module first.") }}
     </div>
     <div v-else id="waiting-list">
@@ -130,14 +133,14 @@ export default {
         const table = ref()
 
         const PreservationStore = inject("PreservationStore")
-        const { settings } = storeToRefs(PreservationStore)
+        const { config } = PreservationStore
 
         const { setMessage, setConfirmationDialog, loading, loaded } =
             inject("mainStore")
 
         return {
             table,
-            settings,
+            config,
             setMessage,
             setConfirmationDialog,
             loading,
