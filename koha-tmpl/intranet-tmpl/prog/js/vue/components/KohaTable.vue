@@ -81,6 +81,7 @@ export default {
                 ...this.tableColumns,
                 {
                     name: "actions",
+                    className: "noExport",
                     title: this.$__("Actions"),
                     searchable: false,
                     render: (data, type, row) => {
