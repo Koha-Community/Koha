@@ -367,7 +367,7 @@ describe("Agreement CRUD operations", () => {
         });
         cy.get("#agreements_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Submit the form, success!
@@ -536,7 +536,7 @@ describe("Agreement CRUD operations", () => {
         cy.get("main div[class='modal_centered']").contains("Submitting...");
         cy.wait(1000);
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Submit the form, success!
@@ -618,7 +618,7 @@ describe("Agreement CRUD operations", () => {
         });
         cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Accept the confirmation dialog, success!

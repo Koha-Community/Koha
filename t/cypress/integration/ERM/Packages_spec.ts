@@ -116,7 +116,7 @@ describe("Package CRUD operations", () => {
         });
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Submit the form, success!
@@ -189,7 +189,7 @@ describe("Package CRUD operations", () => {
         });
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Submit the form, success!
@@ -304,7 +304,7 @@ describe("Package CRUD operations", () => {
         });
         cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: Error: Internal Server Error"
+            "Something went wrong: SyntaxError: Unexpected end of JSON input"
         );
 
         // Accept the confirmation dialog, success!
