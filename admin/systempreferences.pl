@@ -49,7 +49,7 @@ use C4::Context;
 use C4::Koha qw( getallthemes );
 use C4::Languages qw( getTranslatedLanguages );
 use C4::ClassSource qw( GetClassSources GetClassSource );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output qw( output_html_with_http_headers output_and_exit_if_error );
 use YAML::XS;
 
 my %tabsysprefs; #we do no longer need to keep track of a tab per pref (yaml)
@@ -235,6 +235,7 @@ if ($op) {
 }
 
 if ( $op eq 'update_and_reedit' ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     foreach ( $input->param ) {
     }
     my $value = '';
@@ -302,6 +303,7 @@ if ( $op eq 'add_form' ) {
 ################## ADD_VALIDATE ##################################
     # called by add_form, used to insert/modify data in DB
 } elsif ( $op eq 'add_validate' ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     # to handle multiple values
     my $value;
 
@@ -348,6 +350,7 @@ if ( $op eq 'add_form' ) {
 ################## DELETE_CONFIRMED ##################################
     # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ( $op eq 'delete_confirmed' ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     C4::Context->delete_preference($searchfield);
     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################

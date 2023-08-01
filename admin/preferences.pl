@@ -25,7 +25,7 @@ use C4::Context;
 use C4::Koha qw( getallthemes );
 use C4::Languages qw( getTranslatedLanguages );
 use C4::ClassSource qw( GetClassSources GetClassSource );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output qw( output_html_with_http_headers output_and_exit_if_error );
 use C4::Templates;
 use Koha::Acquisition::Currencies;
 use Koha::Database::Columns;
@@ -348,6 +348,7 @@ $tab ||= 'accounting'; # Ideally this should be "local-use" but preferences.pl
 my $highlighted;
 
 if ( $op eq 'save' ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     foreach my $param ( $input->param() ) {
         my ( $pref ) = ( $param =~ /pref_(.*)/ );
 
