@@ -75,4 +75,12 @@ __PACKAGE__->set_primary_key("erm_default_usage_report_id");
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+sub koha_object_class {
+    'Koha::ERM::DefaultUsageReport';
+}
+sub koha_objects_class {
+    'Koha::ERM::DefaultUsageReports';
+}
+
 1;

@@ -69,8 +69,17 @@
                                 @update:modelValue="
                                     setMetricTypesAndProviderList($event)
                                 "
-                                required
-                            />
+                                :required="!query.report_type"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!query.report_type"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
                             <span class="required">{{ $__("Required") }}</span>
                         </li>
                         <li>

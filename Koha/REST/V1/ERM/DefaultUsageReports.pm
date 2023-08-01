@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use Koha::ERM::DefaultUsageReport;
 use Koha::ERM::DefaultUsageReports;
 
 use Scalar::Util qw( blessed );

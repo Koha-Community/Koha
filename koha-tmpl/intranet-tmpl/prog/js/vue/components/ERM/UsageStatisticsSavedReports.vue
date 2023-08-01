@@ -24,14 +24,32 @@
                             id="default_usage_reports"
                             v-model="default_usage_report"
                             label="report_name"
-                            :reduce="report => report.report_url_params"
+                            :reduce="report => report"
                             :options="default_usage_reports"
-                        />
+                            :required="!default_usage_report"
+                        >
+                            <template #search="{ attributes, events }">
+                                <input
+                                    :required="!default_usage_report"
+                                    class="vs__search"
+                                    v-bind="attributes"
+                                    v-on="events"
+                                />
+                            </template>
+                        </v-select>
+                        <span class="required">{{ $__("Required") }}</span>
                     </li>
                 </ol>
             </fieldset>
             <fieldset class="action">
                 <ButtonSubmit />
+                <button
+                    v-if="default_usage_report"
+                    @click="deleteSavedReport($event)"
+                    class="button_format"
+                >
+                    Delete report
+                </button>
             </fieldset>
         </form>
     </div>
@@ -40,8 +58,17 @@
 <script>
 import ButtonSubmit from "../ButtonSubmit.vue"
 import { APIClient } from "../../fetch/api-client.js"
+import { inject } from "vue"
 
 export default {
+    setup() {
+        const { setMessage, setError } = inject("mainStore")
+
+        return {
+            setMessage,
+            setError,
+        }
+    },
     data() {
         return {
             initialized: false,
@@ -63,12 +90,34 @@ export default {
                 error => {}
             )
         },
+        async deleteSavedReport(e) {
+            e.preventDefault()
+            const id = this.default_usage_report.erm_default_usage_report_id
+            if (id) {
+                const client = APIClient.erm
+                await client.default_usage_reports.delete(id).then(
+                    success => {
+                        this.setMessage(this.$__("Report deleted successfully"))
+                        this.default_usage_reports =
+                            this.default_usage_reports.filter(
+                                report =>
+                                    report.erm_default_usage_report_id !== id
+                            )
+                        this.default_usage_report = null
+                    },
+                    error => {}
+                )
+            } else {
+                this.setError(
+                    this.$__("No report was selected - could not delete")
+                )
+            }
+        },
         displayDefaultReport(e) {
             e.preventDefault()
-
             this.$router.push({
                 name: "UsageStatisticsReportsViewer",
-                query: { data: this.default_usage_report },
+                query: { data: this.default_usage_report.report_url_params },
             })
         },
     },
@@ -79,4 +128,9 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.button_format {
+    padding: 0.5em 1em;
+    margin-left: 0.5em;
+}
+</style>
