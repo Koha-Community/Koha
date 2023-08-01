@@ -25,6 +25,13 @@ KOHA.Preferences = {
             humanMsg.displayAlert( __("Nothing to save") );
             return;
         }
+        let csrf_token_el = $( form ).find('input[name="csrf_token"]');
+        if (csrf_token_el.length > 0){
+            let csrf_token = csrf_token_el.val();
+            if (csrf_token){
+                data += '&' + 'csrf_token=' + csrf_token;
+            }
+        }
         KOHA.AJAX.MarkRunning($(form).find('.save-all'), __("Saving...") );
         KOHA.AJAX.Submit( {
             data: data,
