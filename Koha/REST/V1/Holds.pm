@@ -542,7 +542,6 @@ sub update_pickup_location {
 
         my $error_code =
               $hold->is_waiting       ? 'hold_waiting'
-            : $hold->is_in_transit    ? 'hold_in_transit'
             : $hold->is_in_processing ? 'hold_in_processing'
             :                           undef;
 
