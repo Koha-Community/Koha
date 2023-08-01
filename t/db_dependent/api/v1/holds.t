@@ -1419,8 +1419,8 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
 
     $t->put_ok( "//$userid:$password@/api/v1/holds/"
             . $in_transit_hold->id
-            . "/pickup_location" => json => { pickup_library_id => $library_2->branchcode } )->status_is(409)
-        ->json_is( { error => q{Cannot change pickup location}, error_code => 'hold_in_transit' } );
+            . "/pickup_location" => json => { pickup_library_id => $library_2->branchcode } )->status_is(200)
+        ->json_is( { pickup_library_id => $library_2->branchcode } );
 
     $schema->storage->txn_rollback;
 };
