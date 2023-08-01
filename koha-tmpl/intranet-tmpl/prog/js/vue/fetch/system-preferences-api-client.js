@@ -16,7 +16,11 @@ export class SysprefAPIClient extends HttpClient {
             update: (variable, value) =>
                 this.post({
                     endpoint: "",
-                    body: "pref_%s=%s".format(variable, value),
+                    body: "pref_%s=%s&csrf_token=%s".format(
+                        variable,
+                        value,
+                        csrf_token
+                    ),
                     headers: {
                         "Content-Type":
                             "application/x-www-form-urlencoded;charset=utf-8",
