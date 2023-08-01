@@ -99,6 +99,8 @@
     </ol>
 </nav>
 
+[% INCLUDE 'blocking_errors.inc' %]
+
 <div class="main container-fluid">
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
@@ -110,6 +112,7 @@
         [% ELSE %]
             <form action="[% script_name | html %]" name="Aform" method="post">
         [% END %]
+        [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows"><legend>
         [% IF ( modify ) %]Modify
         [% ELSE %]Add
@@ -302,6 +305,7 @@
         [% Tvalue | html %]
         </td></tr></table>
         <form class="inline" action="[% script_name | html %]" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
         <input type="hidden" name="Tvalue" value="[% Tvalue | html %]" />
@@ -349,6 +353,7 @@
         [% ELSE %]
             <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
         [% END %]
+            [% INCLUDE 'csrf-token.inc' %]
                 [% IF ( loo.type_free ) %]
                 <input type="text" name="value" size="[% loo.fieldlength | html %]" value="[% loo.value | html %]" />
                 [% END %]
