@@ -68,19 +68,21 @@ my $bib_heading_fields;
 sub new {
     my $class = shift;
 
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "SELECT tagfield, authtypecode
-         FROM marc_subfield_structure
-         WHERE frameworkcode = '' AND authtypecode <> ''"
-    );
-    $sth->execute();
-    $bib_heading_fields = {};
-    while ( my ( $tag, $auth_type ) = $sth->fetchrow ) {
-        $bib_heading_fields->{$tag} = {
-            auth_type => $auth_type,
-            subfields => 'abcdefghjklmnopqrstvxyz',
-        };
+    unless ( defined $bib_heading_fields ) {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare(
+            "SELECT tagfield, authtypecode
+             FROM marc_subfield_structure
+             WHERE frameworkcode = '' AND authtypecode <> ''"
+        );
+        $sth->execute();
+        $bib_heading_fields = {};
+        while ( my ( $tag, $auth_type ) = $sth->fetchrow ) {
+            $bib_heading_fields->{$tag} = {
+                auth_type => $auth_type,
+                subfields => 'abcdefghjklmnopqrstvxyz',
+            };
+        }
     }
 
     return bless {}, $class;
