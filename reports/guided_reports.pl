@@ -884,7 +884,13 @@ elsif ($phase eq 'Run this report'){
                     my $data = $sth2->fetchall_arrayref( {} );
                     my $notice_rendered =
                         process_tt( $notice_template->content, { data => $data, report_id => $report_id } );
-                    $template->param( processed_notice => $notice_rendered );
+                    my $title_rendered =
+                        process_tt( $notice_template->title, { data => $data, report_id => $report_id } );
+                    $template->param(
+                        template_id            => $template_id,
+                        processed_notice       => $notice_rendered,
+                        processed_notice_title => $title_rendered,
+                    );
                 }
 
                 $template->param(
@@ -982,6 +988,13 @@ elsif ($phase eq 'Export'){
                 open $ods_fh, '<', $ods_filepath;
                 $content .= $_ while <$ods_fh>;
                 unlink $ods_filepath;
+            }
+            elsif ( $format eq 'template' ) {
+                my $template_id = $input->param('template');
+                my $notice_template = Koha::Notice::Templates->find($template_id);
+                my $data = $sth->fetchall_arrayref({});
+                $content = process_tt( $notice_template->content, { data => $data, report_id => $report_id, for_download => 1 } );
+                $reportfilename = process_tt( $notice_template->title, { data => $data, report_id => $report_id } );
             }
         }
         print $input->header(
