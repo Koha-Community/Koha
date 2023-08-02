@@ -42,14 +42,30 @@ export default {
     beforeCreate() {
         const urlParams = JSON.parse(this.$route.query.data)
         this.params = urlParams
-
         this.report_type = this.params.type
+        let data_type
+        switch (this.params.queryObject.report_type.substring(0, 1)) {
+            case "P":
+                data_type = "platform"
+                break
+            case "T":
+                data_type = "title"
+                break
+            case "I":
+                data_type = "item"
+                break
+            case "D":
+                data_type = "database"
+                break
+        }
+        this.data_type = data_type
         this.embed =
             this.report_type === "yearly"
                 ? ["erm_usage_yuses"]
                 : ["erm_usage_muses"]
         switch (this.report_type) {
             case "monthly":
+            case "monthly_with_totals":
                 this.embed = "erm_usage_muses"
                 break
             case "yearly":
@@ -59,7 +75,7 @@ export default {
                 this.embed = "erm_usage_muses"
                 break
             case "usage_data_provider":
-                this.embed = "erm_usage_titles.erm_usage_muses"
+                this.embed = `erm_usage_${data_type}s.erm_usage_muses`
                 break
         }
 
@@ -71,7 +87,11 @@ export default {
             building_table: false,
             initialized: false,
             tableOptions: {
-                columns: this.buildColumnArray(this.report_type, this.params),
+                columns: this.buildColumnArray(
+                    this.report_type,
+                    this.params,
+                    this.data_type
+                ),
                 options: { embed: this.embed },
                 url: () => this.tableURL(this.year, this.params),
                 table_settings: this.report_type.includes("monthly")
@@ -86,7 +106,7 @@ export default {
         }
     },
     methods: {
-        buildColumnArray(report_type, params) {
+        buildColumnArray(report_type, params, data_type) {
             const columns = params.columns
             const months_data = this.getMonthsData()
             const column_options = this.getColumnOptions()
@@ -103,8 +123,10 @@ export default {
 
             report_type !== "usage_data_provider" &&
                 column_set.unshift({
-                    title: __("Title"),
-                    data: "title",
+                    title: __(
+                        data_type.charAt(0).toUpperCase() + data_type.slice(1)
+                    ),
+                    data: data_type,
                     searchable: true,
                     orderable: true,
                 })
@@ -131,15 +153,15 @@ export default {
                 column_set.push({
                     title: __("Period Total"),
                     render: function (data, type, row, meta) {
-                        const sum = row.erm_usage_titles.reduce(
-                            (acc, title) => {
-                                const titleSum = title.erm_usage_muses.reduce(
+                        const sum = row[`erm_usage_${data_type}s`].reduce(
+                            (acc, obj) => {
+                                const objSum = obj.erm_usage_muses.reduce(
                                     (acc, mus) => {
                                         return acc + mus.usage_count
                                     },
                                     0
                                 )
-                                return acc + titleSum
+                                return acc + objSum
                             },
                             0
                         )
@@ -275,10 +297,25 @@ export default {
             this.$refs.table.redraw(this.tableURL(this.year, this.params))
         },
         buildFilteredQuery(query, time_period_columns, year) {
-            let url = "/api/v1/erm/usage_titles/monthly_report"
             const queryObject = {}
             const { metric_types, usage_data_providers, titles, report_type } =
                 query
+            let data_type
+            switch (report_type.substring(0, 1)) {
+                case "P":
+                    data_type = "platform"
+                    break
+                case "T":
+                    data_type = "title"
+                    break
+                case "I":
+                    data_type = "item"
+                    break
+                case "D":
+                    data_type = "database"
+                    break
+            }
+            let url = `/api/v1/erm/eUsage/monthly_report/${data_type}`
 
             // Identify the year
             queryObject[`erm_usage_muses.year`] = year

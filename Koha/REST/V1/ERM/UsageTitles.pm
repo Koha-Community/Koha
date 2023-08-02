@@ -18,8 +18,12 @@ package Koha::REST::V1::ERM::UsageTitles;
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
+use Module::Load qw( load );
 
 use Koha::ERM::UsageTitles;
+use Koha::ERM::UsagePlatforms;
+use Koha::ERM::UsageItems;
+use Koha::ERM::UsageDatabases;
 use Koha::ERM::UsageDataProvider;
 use Koha::ERM::UsageDataProviders;
 

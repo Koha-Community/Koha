@@ -580,21 +580,27 @@ export default {
 
             this.time_period_columns_builder = time_period_columns
         },
-        buildMonthlyUrlQuery(query, time_period_columns, data_display) {
+        buildMonthlyUrlQuery(
+            query,
+            time_period_columns,
+            data_display,
+            db_table
+        ) {
             let url
             let prefix
             switch (data_display) {
                 case "monthly":
-                    url = "/api/v1/erm/usage_titles/monthly_report"
+                case "monthly_with_totals":
+                    url = `/api/v1/erm/eUsage/monthly_report/${db_table}`
                     prefix = "erm_usage_muses"
                     break
                 case "metric_type":
-                    url = "/api/v1/erm/usage_titles/metric_types_report"
+                    url = `/api/v1/erm/eUsage/metric_types_report/${db_table}`
                     prefix = "erm_usage_muses"
                     break
-                case "usage_data_provider":
-                    url = "/api/v1/erm/usage_data_providers/report"
-                    prefix = "erm_usage_titles.erm_usage_muses"
+                case "usage_data_provider": // TODO: platform/item/database table embeds?
+                    url = `/api/v1/erm/eUsage/provider_rollup_report/${db_table}`
+                    prefix = `erm_usage_${db_table}s.erm_usage_muses`
                     break
             }
 
@@ -656,8 +662,8 @@ export default {
 
             return url
         },
-        buildYearlyUrlQuery(query) {
-            let url = "/api/v1/erm/usage_titles/yearly_report"
+        buildYearlyUrlQuery(query, db_table) {
+            let url = `/api/v1/erm/eUsage/yearly_report/${db_table}`
             const {
                 start_year,
                 end_year,
@@ -846,13 +852,31 @@ export default {
                 queryObject.metric_types = final_metric_types
             }
 
+            // Determine which database table should be queried
+            let db_table
+            switch (report_type.substring(0, 1)) {
+                case "P":
+                    db_table = "platform"
+                    break
+                case "T":
+                    db_table = "title"
+                    break
+                case "I":
+                    db_table = "item"
+                    break
+                case "D":
+                    db_table = "database"
+                    break
+            }
+
             const url = !data_display.includes("yearly")
                 ? this.buildMonthlyUrlQuery(
                       queryObject,
                       this.time_period_columns_builder,
-                      data_display
+                      data_display,
+                      db_table
                   )
-                : this.buildYearlyUrlQuery(queryObject)
+                : this.buildYearlyUrlQuery(queryObject, db_table)
             const type = data_display
             const columns =
                 data_display === "usage_data_provider"

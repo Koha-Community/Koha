@@ -28,6 +28,11 @@ use base qw(Koha::Object);
 
 use Koha::ERM::CounterFile;
 use Koha::ERM::CounterFiles;
+use Koha::ERM::UsageTitles;
+use Koha::ERM::UsageItems;
+use Koha::ERM::UsagePlatforms;
+use Koha::ERM::UsageDatabases;
+use Koha::ERM::MonthlyUsages;
 use Koha::BackgroundJob::ErmSushiHarvester;
 
 =head1 NAME
@@ -974,6 +979,42 @@ sub erm_usage_muses {
 }
 
 
+
+=head3 erm_usage_platforms
+
+Method to embed erm_usage_platforms to platforms for report formatting
+
+=cut
+
+sub erm_usage_platforms {
+    my ( $self ) = @_;
+    my $usage_platform_rs = $self->_result->erm_usage_platforms;
+    return Koha::ERM::UsagePlatforms->_new_from_dbic($usage_platform_rs);
+}
+
+=head3 erm_usage_items
+
+Method to embed erm_usage_items to items for report formatting
+
+=cut
+
+sub erm_usage_items {
+    my ( $self ) = @_;
+    my $usage_item_rs = $self->_result->erm_usage_items;
+    return Koha::ERM::UsageItems->_new_from_dbic($usage_item_rs);
+}
+
+=head3 erm_usage_databases
+
+Method to embed erm_usage_databases to databases for report formatting
+
+=cut
+
+sub erm_usage_databases {
+    my ( $self ) = @_;
+    my $usage_database_rs = $self->_result->erm_usage_databases;
+    return Koha::ERM::UsageDatabases->_new_from_dbic($usage_database_rs);
+}
 
 =head3 _type
 

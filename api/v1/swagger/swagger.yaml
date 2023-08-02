@@ -44,6 +44,8 @@ definitions:
     $ref: ./definitions/erm_counter_file.yaml
   erm_counter_log:
     $ref: ./definitions/erm_counter_log.yaml
+  erm_custom_report:
+    $ref: ./definitions/erm_custom_report.yaml
   erm_default_usage_report:
     $ref: ./definitions/erm_default_usage_report.yaml
   erm_eholdings_title:
@@ -285,6 +287,14 @@ paths:
     $ref: "./paths/erm_eholdings_packages.yaml#/~1erm~1eholdings~1{provider}~1packages~1{package_id}"
   "/erm/eholdings/{provider}/packages/{package_id}/resources":
     $ref: "./paths/erm_eholdings_packages_resources.yaml#/~1erm~1eholdings~1{provider}~1packages~1{package_id}~1resources"
+  "/erm/eUsage/monthly_report/{data_type}":
+    $ref: "./paths/erm_custom_reports.yaml#/~1erm~1eUsage~1monthly_report~1{data_type}"
+  "/erm/eUsage/yearly_report/{data_type}":
+    $ref: "./paths/erm_custom_reports.yaml#/~1erm~1eUsage~1yearly_report~1{data_type}"
+  "/erm/eUsage/metric_types_report/{data_type}":
+    $ref: "./paths/erm_custom_reports.yaml#/~1erm~1eUsage~1metric_types_report~1{data_type}"
+  "/erm/eUsage/provider_rollup_report/{data_type}":
+    $ref: "./paths/erm_custom_reports.yaml#/~1erm~1eUsage~1provider_rollup_report~1{data_type}"
   /erm/licenses:
     $ref: ./paths/erm_licenses.yaml#/~1erm~1licenses
   "/erm/licenses/{license_id}":
@@ -297,8 +307,6 @@ paths:
     $ref: "./paths/erm_usage_data_providers.yaml#/~1erm~1usage_data_providers~1{erm_usage_data_provider_id}~1run"
   "/erm/usage_data_providers/{erm_usage_data_provider_id}/test_connection":
     $ref: "./paths/erm_usage_data_providers.yaml#/~1erm~1usage_data_providers~1{erm_usage_data_provider_id}~1test_connection"
-  "/erm/usage_data_providers/report":
-    $ref: "./paths/erm_usage_data_providers.yaml#/~1erm~1usage_data_providers~1report"
   /erm/usage_titles:
     $ref: ./paths/erm_usage_titles.yaml#/~1erm~1usage_titles
   /erm/users:
