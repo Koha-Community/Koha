@@ -45,15 +45,19 @@
                     >
                 </li>
                 <li
+                    v-for="(item, i) in available_data_types"
                     role="presentation"
-                    v-bind:class="tab_content === 'titles' ? 'active' : ''"
+                    v-bind:class="
+                        tab_content === item.data_type ? 'active' : ''
+                    "
+                    :key="i"
                 >
                     <a
                         href="#"
                         role="tab"
-                        data-content="titles"
+                        :data-content="item.data_type"
                         @click="change_tab_content"
-                        >Titles</a
+                        >{{ $__(item.tab_name) }}</a
                     >
                 </li>
                 <li
@@ -91,9 +95,13 @@
                     :usage_data_provider="usage_data_provider"
                 />
             </div>
-            <div v-if="tab_content === 'titles'">
-                <UsageStatisticsTitlesList />
-            </div>
+            <template v-for="(item, i) in available_data_types">
+                <div v-if="tab_content === item.data_type" :key="i">
+                    <UsageStatisticsProviderDataList
+                        :data_type="item.data_type"
+                    />
+                </div>
+            </template>
             <div v-if="tab_content === 'upload'">
                 <UsageStatisticsDataProvidersFileImport />
             </div>
@@ -115,10 +123,10 @@
 <script>
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
-import UsageStatisticsTitlesList from "./UsageStatisticsTitlesList.vue"
 import UsageStatisticsDataProvidersFileImport from "./UsageStatisticsDataProvidersFileImport.vue"
 import UsageStatisticsDataProvidersCounterLogs from "./UsageStatisticsDataProvidersCounterLogs.vue"
 import UsageStatisticsDataProviderDetails from "./UsageStatisticsDataProviderDetails.vue"
+import UsageStatisticsProviderDataList from "./UsageStatisticsProviderDataList.vue"
 
 export default {
     setup() {
@@ -135,27 +143,14 @@ export default {
     },
     data() {
         return {
-            usage_data_provider: {
-                erm_usage_data_provider_id: null,
-                name: "",
-                description: "",
-                active: 1,
-                method: "",
-                aggregator: "",
-                service_type: "",
-                service_url: "",
-                report_release: "",
-                begin_date: null,
-                end_date: null,
-                customer_id: "",
-                requestor_id: "",
-                api_key: "",
-                requestor_name: "",
-                requestor_email: "",
-                report_types: [],
-            },
             initialized: false,
             tab_content: "detail",
+            available_data_types: [
+                { test: "TR", data_type: "title", tab_name: "Titles" },
+                { test: "PR", data_type: "platform", tab_name: "Platforms" },
+                { test: "IR", data_type: "item", tab_name: "Items" },
+                { test: "DR", data_type: "database", tab_name: "Databases" },
+            ],
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -214,10 +209,10 @@ export default {
     },
     name: "UsageStatisticsDataProvidersShow",
     components: {
-        UsageStatisticsTitlesList,
         UsageStatisticsDataProvidersFileImport,
         UsageStatisticsDataProvidersCounterLogs,
         UsageStatisticsDataProviderDetails,
+        UsageStatisticsProviderDataList,
     },
 }
 </script>
