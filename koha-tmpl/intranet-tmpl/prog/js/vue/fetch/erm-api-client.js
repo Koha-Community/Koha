@@ -303,51 +303,8 @@ export class ERMAPIClient extends HttpClient {
         };
     }
 
-    get usage_titles() {
-        return {
-            get: id =>
-                this.get({
-                    endpoint: "usage_titles/" + id,
-                    headers: {
-                        "x-koha-embed": "usage_mus",
-                    },
-                }),
-            getAll: query =>
-                this.getAll({
-                    endpoint: "usage_titles",
-                    query,
-                }),
-            getReport: (query, embed) =>
-                this.get({
-                    endpoint: "usage_titles/report",
-                    query,
-                    headers: {
-                        "x-koha-embed": `${embed}`,
-                    },
-                }),
-            count: (query = {}) =>
-                this.count({
-                    endpoint:
-                        "usage_titles?" +
-                        new URLSearchParams({
-                            _page: 1,
-                            _per_page: 1,
-                            ...(query && { q: JSON.stringify(query) }),
-                        }),
-                }),
-        };
-    }
-
     get counter_files() {
         return {
-            getAll: query =>
-                this.get({
-                    endpoint: "counter_files",
-                    query,
-                    headers: {
-                        "x-koha-embed": "counter_logs",
-                    },
-                }),
             delete: id =>
                 this.delete({
                     endpoint: "counter_files/" + id,
@@ -380,6 +337,66 @@ export class ERMAPIClient extends HttpClient {
             delete: (id) =>
                 this.delete({
                     endpoint: "default_usage_reports/" + id,
+                }),
+        };
+    }
+
+    get usage_platforms() {
+        return {
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "usage_platforms?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get usage_items() {
+        return {
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "usage_items?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get usage_databases() {
+        return {
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "usage_databases?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
+
+    get usage_titles() {
+        return {
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "usage_titles?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
                 }),
         };
     }

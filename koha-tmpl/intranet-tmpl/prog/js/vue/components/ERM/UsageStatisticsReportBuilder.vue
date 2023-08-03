@@ -35,7 +35,18 @@
                                         description: 'By data provider totals',
                                     },
                                 ]"
-                            />
+                                :required="!query.data_display"
+                            >
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!query.data_display"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
+                            <span class="required">{{ $__("Required") }}</span>
                         </li>
                         <li>
                             <label for="usage_data_provider"
@@ -51,7 +62,7 @@
                                 "
                                 :options="usage_data_provider_list"
                                 @update:modelValue="
-                                    setReportTypesAndResetTitles($event)
+                                    setReportTypesAndResetFilterData($event)
                                 "
                                 multiple
                             />
@@ -124,7 +135,11 @@
                                 :reduce="month => month.value"
                                 :options="months_data"
                                 :disabled="
-                                    query.data_display.includes('yearly')
+                                    (query.data_display &&
+                                        query.data_display.includes(
+                                            'yearly'
+                                        )) ||
+                                    !query.data_display
                                 "
                             />
                         </li>
@@ -152,19 +167,23 @@
                                 :reduce="month => month.value"
                                 :options="months_data"
                                 :disabled="
-                                    query.data_display.includes('yearly')
+                                    (query.data_display &&
+                                        query.data_display.includes(
+                                            'yearly'
+                                        )) ||
+                                    !query.data_display
                                 "
                             />
                         </li>
                         <li>
-                            <label for="title">{{ $__("Title") }}:</label>
+                            <label for="keyword">{{ $__("Keyword") }}:</label>
                             <v-select
-                                id="title"
-                                v-model="query.titles"
-                                label="title"
-                                :options="titles"
+                                id="keyword"
+                                v-model="query.keywords"
+                                :label="data_type"
+                                :options="filter_data"
                                 multiple
-                                @input="titlesSearchFilter($event)"
+                                @input="dataSearchFilter($event)"
                                 :placeholder="
                                     $__(
                                         'Type at least two characters to search'
@@ -200,7 +219,12 @@
                         </li>
                     </ol>
                 </div>
-                <div v-if="query.data_display.includes('monthly')">
+                <div
+                    v-if="
+                        query.data_display &&
+                        query.data_display.includes('monthly')
+                    "
+                >
                     <h3>{{ $__("Select date display method") }}</h3>
                     <div class="date_display">
                         <label
@@ -348,7 +372,7 @@ export default {
                 report_type: null,
                 metric_types: null,
                 usage_data_providers: null,
-                titles: null,
+                keywords: null,
                 start_month: null,
                 start_year: null,
                 end_month: null,
@@ -418,43 +442,51 @@ export default {
             },
             metric_types_options: [],
             report_types_options: [...this.av_report_types],
-            titles: [],
+            filter_data: [],
             usage_data_provider_list: [...this.usage_data_providers],
             time_period_columns_builder: null,
             request_url: null,
             report_name: "",
+            data_type: null,
         }
     },
     methods: {
-        async getTitles(query) {
+        async getData(query, report_type) {
             const client = APIClient.erm
-            await client.usage_titles.getAll(query).then(
-                titles => {
+            await client[`usage_${report_type}s`].getAll(query).then(
+                response => {
                     // If multiple searches are done we need to keep the results of the
-                    // earlier searches but not allow for duplicate titles in the option array
-                    const addNewTitles = [...this.titles, ...titles]
+                    // earlier searches but not allow for duplicate objects in the option array
+                    const addNewData = [...this.filter_data, ...response]
                     const removedDuplicates = [
                         ...new Map(
-                            addNewTitles.map(title => [title.title_id, title])
+                            addNewData.map(object => [
+                                object[`${report_type}_id`],
+                                object,
+                            ])
                         ).values(),
                     ]
-                    this.titles = removedDuplicates
+                    this.filter_data = removedDuplicates
                 },
                 error => {}
             )
         },
-        titlesSearchFilter(e) {
+        dataSearchFilter(e) {
+            const report_type = this.query.report_type
+            const data_type = this.data_type
+            if (!report_type) {
+                alert("Please select a report type")
+            }
             if (e.target.value.length > 1) {
                 const providers = this.query.usage_data_providers
                     ? this.query.usage_data_providers
                     : []
-                const titlesQueryObject = {
-                    title: { "-like": `${e.target.value}%` },
-                    ...(providers.length && {
-                        usage_data_provider_id: providers,
-                    }),
+                const dataQueryObject = {}
+                dataQueryObject[data_type] = { "-like": `${e.target.value}%` }
+                if (providers.length) {
+                    dataQueryObject.usage_data_provider_id = providers
                 }
-                this.getTitles(titlesQueryObject)
+                this.getData(dataQueryObject, this.data_type)
             }
         },
         validateYear(year) {
@@ -469,7 +501,7 @@ export default {
                 report_type: null,
                 metric_types: null,
                 usage_data_providers: null,
-                titles: null,
+                keywords: null,
                 start_month: null,
                 start_year: null,
                 end_month: null,
@@ -611,7 +643,7 @@ export default {
                 end_year,
                 metric_types,
                 usage_data_providers,
-                titles,
+                keywords,
                 report_type,
             } = query
 
@@ -638,12 +670,12 @@ export default {
                         return month.value
                     })
                 queryByYear[`${prefix}.month`] = queryMonths
-                // Add any title query
-                if (titles) {
-                    const title_ids = titles.map(title => {
-                        return title.title_id
+                // Add any keyword query
+                if (keywords) {
+                    const object_ids = keywords.map(object => {
+                        return object[`${db_table}_id`]
                     })
-                    queryByYear[`${prefix}.title_id`] = title_ids
+                    queryByYear[`${prefix}.${db_table}_id`] = object_ids
                 }
                 // Add any metric types query
                 if (metric_types) {
@@ -669,7 +701,7 @@ export default {
                 end_year,
                 metric_types,
                 usage_data_providers,
-                titles,
+                keywords,
                 report_type,
             } = query
             const queryObject = {}
@@ -688,11 +720,12 @@ export default {
                 queryObject[`erm_usage_yuses.metric_type`] = metric_types
             }
             // Add any title query
-            if (titles) {
-                const title_ids = titles.map(title => {
-                    return title.title_id
+            // Add any keyword query
+            if (keywords) {
+                const object_ids = keywords.map(object => {
+                    return object[`${db_table}_id`]
                 })
-                queryObject[`erm_usage_yuses.title_id`] = title_ids
+                queryByYear[`erm_usage_yuses.${db_table}_id`] = object_ids
             }
             // Add any data provider query
             if (usage_data_providers) {
@@ -708,19 +741,26 @@ export default {
             const possible_metric_types = []
             let av_type
 
+            this.filter_data.length = 0
+            this.query.keywords = null
+
             if (report_type) {
                 switch (report_type.substring(0, 1)) {
                     case "P":
                         av_type = this.av_platform_reports_metrics
+                        this.data_type = "platform"
                         break
                     case "T":
                         av_type = this.av_title_reports_metrics
+                        this.data_type = "title"
                         break
                     case "I":
                         av_type = this.av_item_reports_metrics
+                        this.data_type = "item"
                         break
                     case "D":
                         av_type = this.av_database_reports_metrics
+                        this.data_type = "database"
                         break
                 }
 
@@ -755,10 +795,12 @@ export default {
                 this.usage_data_provider_list = [...this.usage_data_providers]
             }
         },
-        setReportTypesAndResetTitles(providers) {
+        setReportTypesAndResetFilterData(providers) {
             const permittedReportTypes = []
             if (providers.length === 0) {
                 this.report_types_options = this.av_report_types
+                this.query.keywords = null
+                this.filter_data.length = 0
                 return
             }
 
@@ -776,10 +818,13 @@ export default {
                     )
                     permittedReportTypes.push(report_type)
                 })
+                // If we change/remove a data provider then we don't want data being displayed from that provider in the dropdown
+                const removeProviderData = this.filter_data.filter(
+                    obj => obj.erm_usage_data_provider_id !== id
+                )
+                this.filter_data = removeProviderData
             })
             this.report_types_options = permittedReportTypes
-            // If we change/remove a data provider then we don't want titles being displayed from that provider in the dropdown
-            this.titles.length = 0
         },
         defineColumns(title_props) {
             const columns = []
@@ -853,30 +898,14 @@ export default {
             }
 
             // Determine which database table should be queried
-            let db_table
-            switch (report_type.substring(0, 1)) {
-                case "P":
-                    db_table = "platform"
-                    break
-                case "T":
-                    db_table = "title"
-                    break
-                case "I":
-                    db_table = "item"
-                    break
-                case "D":
-                    db_table = "database"
-                    break
-            }
-
             const url = !data_display.includes("yearly")
                 ? this.buildMonthlyUrlQuery(
                       queryObject,
                       this.time_period_columns_builder,
                       data_display,
-                      db_table
+                      this.data_type
                   )
-                : this.buildYearlyUrlQuery(queryObject, db_table)
+                : this.buildYearlyUrlQuery(queryObject, this.data_type)
             const type = data_display
             const columns =
                 data_display === "usage_data_provider"
