@@ -499,6 +499,7 @@
                         url: '/api/v1/items/'+itemnumber,
                         success: function(item) {
                             var tr = $("#item_"+itemnumber);
+                            item._checked = $(tr).find('input[type="checkbox"]').prop('checked');
                             tr.html('');
                             _build_item(item, tr);
                         }
