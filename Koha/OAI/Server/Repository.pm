@@ -206,7 +206,7 @@ sub get_biblio_marcxml {
         );
         $record_processor->process($record);
     }
-    return ( $record ? $record->as_xml_record() : undef, $decoding_error );
+    return ( $record ? $record->as_xml_record( C4::Context->preference('marcflavour') ) : undef, $decoding_error );
 }
 
 
