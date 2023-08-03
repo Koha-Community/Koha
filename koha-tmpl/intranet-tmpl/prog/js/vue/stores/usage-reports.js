@@ -22,6 +22,7 @@ export const useReportsStore = defineStore('reports', {
                 id: 1,
                 name: "Provider name",
                 active: true,
+                used_by: ["title", "item", "database", 'platform'],
                 column: {
                     title: __("Data provider"),
                     data: "provider_name",
@@ -33,6 +34,7 @@ export const useReportsStore = defineStore('reports', {
                 id: 2,
                 name: "Publisher",
                 active: false,
+                used_by: ["title", "item", "database"],
                 column: {
                     title: __("Publisher"),
                     data: "publisher",
@@ -42,8 +44,21 @@ export const useReportsStore = defineStore('reports', {
             },
             3: {
                 id: 3,
+                name: "Platform",
+                active: false,
+                used_by: ["item", "database", "platforms"],
+                column: {
+                    title: __("Platform"),
+                    data: "platform",
+                    searchable: true,
+                    orderable: true,
+                },
+            },
+            4: {
+                id: 4,
                 name: "Publisher ID",
                 active: false,
+                used_by: ["title", "database"],
                 column: {
                     title: __("Publisher ID"),
                     data: "publisher_id",
@@ -51,10 +66,11 @@ export const useReportsStore = defineStore('reports', {
                     orderable: true,
                 },
             },
-            4: {
-                id: 4,
+            5: {
+                id: 5,
                 name: "Online ISSN",
                 active: false,
+                used_by: ["title"],
                 column: {
                     title: __("Online ISSN"),
                     data: "online_issn",
@@ -62,10 +78,11 @@ export const useReportsStore = defineStore('reports', {
                     orderable: true,
                 },
             },
-            5: {
-                id: 5,
+            6: {
+                id: 6,
                 name: "Print ISSN",
                 active: false,
+                used_by: ["title"],
                 column: {
                     title: __("Print ISSN"),
                     data: "print_issn",
@@ -73,10 +90,11 @@ export const useReportsStore = defineStore('reports', {
                     orderable: true,
                 },
             },
-            6: {
-                id: 6,
+            7: {
+                id: 7,
                 name: "DOI",
                 active: false,
+                used_by: ["title"],
                 column: {
                     title: __("DOI"),
                     data: "title_doi",
@@ -84,10 +102,11 @@ export const useReportsStore = defineStore('reports', {
                     orderable: true,
                 },
             },
-            7: {
-                id: 7,
+            8: {
+                id: 8,
                 name: "URI",
                 active: false,
+                used_by: ["title"],
                 column: {
                     title: __("URI"),
                     data: "title_uri",

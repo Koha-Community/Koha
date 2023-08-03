@@ -204,16 +204,19 @@
                             class="checkbox_options"
                         >
                             <!-- TODO: Check translations -->
-                            <label :for="prop.property" class="checkbox"
+                            <label :for="prop.name" class="checkbox"
                                 >{{ $__(prop.name) }}:</label
                             >
                             <input
                                 type="checkbox"
-                                :name="prop.property"
-                                :id="prop.property"
+                                :name="prop.name"
+                                :id="prop.name"
                                 :checked="true"
                                 v-model="
                                     title_property_column_options[key].active
+                                "
+                                :disabled="
+                                    !prop.used_by.includes(this.data_type)
                                 "
                             />
                         </li>
@@ -788,6 +791,20 @@ export default {
 
                         return single_report_types.includes(report_type)
                     })
+                // Unselect any additional columns that aren't applicable to this data_type
+                const title_properties = Object.keys(
+                    this.title_property_column_options
+                )
+                title_properties.shift() // Remove the first column as this is a default
+                title_properties.forEach(prop => {
+                    if (
+                        !this.title_property_column_options[
+                            prop
+                        ].used_by.includes(this.data_type)
+                    ) {
+                        this.title_property_column_options[prop].active = false
+                    }
+                })
             } else {
                 this.metric_types_options = []
                 this.query.metric_types = null
