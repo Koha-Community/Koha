@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% BLOCK pluginlist %]
 <div class="pluginlist">
@@ -62,6 +63,7 @@
             plugins that you want to use.
         </div>
         <form action="/cgi-bin/koha/admin/didyoumean.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <fieldset id="didyoumeanopac">
                 <legend>OPAC</legend>
                 [% PROCESS pluginlist plugins=OPACpluginlist type='opac' %]
@@ -105,7 +107,8 @@
         function yesimeant() {
             var OPACdidyoumean = serialize_plugins('opac');
 
-            var data = "pref_OPACdidyoumean=" + encodeURIComponent(OPACdidyoumean);
+            const csrf_token = "[% Koha.GenerateCSRF | $raw %]";
+            let data = "pref_OPACdidyoumean=%s&csrf_token=%s".format(encodeURIComponent(OPACdidyoumean), csrf_token);
 
             $.ajax({
                 data: data,
