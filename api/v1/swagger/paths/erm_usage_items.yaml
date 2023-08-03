@@ -1,0 +1,83 @@
+---
+/erm/usage_items:
+  get:
+    x-mojo-to: ERM::UsageItems#list
+    operationId: listErmUsageItems
+    tags:
+      - usage_item
+    summary: List usage_items
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on usage_item item_id
+        in: query
+        name: item_id
+        required: false
+        type: integer
+      - description: Case insensitive search on usage_item item
+        in: query
+        name: item
+        required: false
+        type: string
+      - description: Case insensitive search on usage_item usage_data_provider_id
+        in: query
+        name: usage_data_provider_id
+        required: false
+        type: string
+      - description: Case insensitive search on usage_item platform
+        in: query
+        name: platform
+        required: false
+        type: string
+      - description: Case insensitive search on usage_item publisher
+        in: query
+        name: publisher
+        required: false
+        type: string
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - erm_usage_muses
+            - erm_usage_yuses
+        collectionFormat: csv
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/q_header"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    responses:
+      200:
+        description: A list of usage_items
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_usage_item"
+          type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

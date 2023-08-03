@@ -58,8 +58,14 @@ definitions:
     $ref: ./definitions/erm_license.yaml
   erm_usage_data_provider:
     $ref: ./definitions/erm_usage_data_provider.yaml
+  erm_usage_database:
+    $ref: ./definitions/erm_usage_database.yaml
+  erm_usage_item:
+    $ref: ./definitions/erm_usage_item.yaml
   erm_usage_mus:
     $ref: ./definitions/erm_usage_mus.yaml
+  erm_usage_platform:
+    $ref: ./definitions/erm_usage_platform.yaml
   erm_usage_title:
     $ref: ./definitions/erm_usage_title.yaml
   erm_usage_yus:
@@ -307,6 +313,12 @@ paths:
     $ref: "./paths/erm_usage_data_providers.yaml#/~1erm~1usage_data_providers~1{erm_usage_data_provider_id}~1run"
   "/erm/usage_data_providers/{erm_usage_data_provider_id}/test_connection":
     $ref: "./paths/erm_usage_data_providers.yaml#/~1erm~1usage_data_providers~1{erm_usage_data_provider_id}~1test_connection"
+  /erm/usage_databases:
+    $ref: ./paths/erm_usage_databases.yaml#/~1erm~1usage_databases
+  /erm/usage_items:
+    $ref: ./paths/erm_usage_items.yaml#/~1erm~1usage_items
+  /erm/usage_platforms:
+    $ref: ./paths/erm_usage_platforms.yaml#/~1erm~1usage_platforms
   /erm/usage_titles:
     $ref: ./paths/erm_usage_titles.yaml#/~1erm~1usage_titles
   /erm/users:

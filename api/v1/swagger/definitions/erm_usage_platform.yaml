@@ -1,0 +1,30 @@
+---
+type: object
+properties:
+  platform_id:
+    type: integer
+    description: internally assigned platform identifier
+    readOnly: true
+  platform:
+    description: title of the platform
+    type: 
+    - string
+    - "null"
+  usage_data_provider_id:
+    description: usage_data_provider the platform is harvested by
+    type: integer
+  erm_usage_muses:
+    type: array
+    description: usage mus
+    items:
+      $ref: erm_usage_mus.yaml
+  erm_usage_yuses:
+    type: array
+    description: usage yus
+    items:
+      $ref: erm_usage_yus.yaml
+
+additionalProperties: false
+required:
+  - platform
+  - usage_data_provider_id

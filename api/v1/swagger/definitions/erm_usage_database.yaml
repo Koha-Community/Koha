@@ -1,0 +1,45 @@
+---
+type: object
+properties:
+  database_id:
+    type: integer
+    description: internally assigned database identifier
+    readOnly: true
+  database:
+    description: name of the database
+    type: 
+    - string
+    - "null"
+  usage_data_provider_id:
+    description: usage_data_provider the database is harvested by
+    type: integer
+  platform:
+    description: name of the platform
+    type: 
+    - string
+    - "null"
+  publisher:
+    description: publisher of the database data
+    type:
+    - string
+    - "null"
+  publisher_id:
+    description: publisher_id of the database data
+    type:
+    - string
+    - "null"
+  erm_usage_muses:
+    type: array
+    description: usage mus
+    items:
+      $ref: erm_usage_mus.yaml
+  erm_usage_yuses:
+    type: array
+    description: usage yus
+    items:
+      $ref: erm_usage_yus.yaml
+
+additionalProperties: false
+required:
+  - database
+  - usage_data_provider_id
