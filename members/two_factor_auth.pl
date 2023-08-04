@@ -84,9 +84,6 @@ else {
 }
 
 $template->param(
-    csrf_token => Koha::Token->new->generate_csrf(
-        { session_id => scalar $cgi->cookie('CGISESSID') }
-    ),
     patron => $logged_in_user,
     op     => $op,
 );

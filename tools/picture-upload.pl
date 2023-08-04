@@ -209,11 +209,6 @@ if ( $borrowernumber && !%errors && !$template->param('ERRORS') ) {
         "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 }
 else {
-    $template->param(
-        csrf_token => Koha::Token->new->generate_csrf({
-            session_id => scalar $input->cookie('CGISESSID'),
-        }),
-    );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
 

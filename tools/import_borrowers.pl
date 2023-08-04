@@ -176,13 +176,6 @@ else {
         }
         $template->param( matchpoints => \@matchpoints );
     }
-
-    $template->param(
-        csrf_token => Koha::Token->new->generate_csrf(
-            { session_id => scalar $input->cookie('CGISESSID'), }
-        ),
-    );
-
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

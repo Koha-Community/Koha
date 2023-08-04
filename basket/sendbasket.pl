@@ -124,9 +124,6 @@ else {
         url            => "/cgi-bin/koha/basket/sendbasket.pl",
         suggestion     => C4::Context->preference("suggestion"),
         virtualshelves => C4::Context->preference("virtualshelves"),
-        csrf_token     => Koha::Token->new->generate_csrf(
-            { session_id => scalar $query->cookie('CGISESSID'), }
-        ),
     );
     output_html_with_http_headers $query, $cookie, $template->output;
 }

@@ -181,8 +181,6 @@ if ($input->param('newflags')) {
 $template->param(
     patron         => $patron,
     loop           => \@loop,
-    csrf_token =>
-        Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID'), } ),
     disable_superlibrarian_privs => C4::Context->preference('ProtectSuperlibrarianPrivileges') ? !C4::Context->IsSuperLibrarian : 0,
 );
 

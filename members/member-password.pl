@@ -97,7 +97,6 @@ if ( $newpassword and not @errors) {
 $template->param(
     patron      => $patron,
     destination => $destination,
-    csrf_token  => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID'), }),
 );
 
 if ( scalar(@errors) ) {

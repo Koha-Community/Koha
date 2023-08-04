@@ -227,9 +227,6 @@ my $debit_types = Koha::Account::DebitTypes->search_with_library_limits(
 
 $template->param(
   debit_types => $debit_types,
-  csrf_token  => Koha::Token->new->generate_csrf(
-      { session_id => scalar $input->cookie('CGISESSID') }
-  ),
   patron    => $patron,
   finesview => 1,
   available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:debit' })->as_list ],

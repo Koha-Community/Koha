@@ -132,11 +132,6 @@ if ( !$patron->is_valid_age ) {
     $template->param( age_high => $patron->category->upperagelimit );
 }
 
-# Generate CSRF token for upload and delete image buttons
-$template->param(
-    csrf_token => Koha::Token->new->generate_csrf({ session_id => $input->cookie('CGISESSID'),}),
-);
-
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my @attributes = $patron->extended_attributes->as_list; # FIXME Must be improved!
     my @classes = uniq( map {$_->type->class} @attributes );

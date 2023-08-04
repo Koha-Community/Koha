@@ -108,9 +108,6 @@ if ( $backends_available ) {
         $template->param(
             notices    => $notices,
             request    => $request,
-            csrf_token => Koha::Token->new->generate_csrf({
-                session_id => scalar $cgi->cookie('CGISESSID'),
-            }),
             ( $params->{tran_error} ?
                 ( tran_error => $params->{tran_error} ) : () ),
             ( $params->{tran_success} ?

@@ -141,9 +141,6 @@ else {
         patron       => $patron,
         credit_types => \@credit_types,
         finesview    => 1,
-        csrf_token   => Koha::Token->new->generate_csrf(
-            { session_id => scalar $input->cookie('CGISESSID') }
-        ),
         available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:credit' })->as_list ],
     );
     output_html_with_http_headers $input, $cookie, $template->output;

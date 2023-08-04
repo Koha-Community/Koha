@@ -92,11 +92,6 @@ if( $opac_messaging && C4::Context->preference("SMSSendDriver") eq 'Email' ) {
 }
 
 my $new_session_id = $query->cookie('CGISESSID');
-$template->param(
-    csrf_token => Koha::Token->new->generate_csrf({
-            session_id => $new_session_id,
-        }),
-);
 
 if ( C4::Context->preference('TranslateNotices') ) {
     my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('template') );

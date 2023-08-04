@@ -230,7 +230,6 @@ $template->param(
     authtypetext    => $type ? $type->authtypetext: "",
     authtypecode    => $authtypecode,
     authority_types => $authority_types,
-    csrf_token      => Koha::Token->new->generate_csrf({ session_id => scalar $query->cookie('CGISESSID') }),
     servers => $servers,
 );
 

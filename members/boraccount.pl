@@ -244,10 +244,6 @@ foreach my $renew_result(@renew_results) {
     };
 }
 
-my $csrf_token = Koha::Token->new->generate_csrf({
-    session_id => scalar $input->cookie('CGISESSID'),
-});
-
 $template->param(
     patron              => $patron,
     finesview           => 1,
@@ -258,7 +254,6 @@ $template->param(
     change_given        => $change_given,
     renew_results       => $renew_results_display,
     receipt_sent        => $receipt_sent,
-    csrf_token          => $csrf_token,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

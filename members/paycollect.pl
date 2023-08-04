@@ -282,8 +282,6 @@ $template->param(
     borrowernumber => $borrowernumber,    # some templates require global
     patron         => $patron,
     total          => $total_due,
-
-    csrf_token => Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID') } ),
     available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:credit' })->as_list ],
 );
 

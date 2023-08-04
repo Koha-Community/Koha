@@ -126,8 +126,6 @@ else {
         url            => "/cgi-bin/koha/opac-sendbasket.pl",
         suggestion     => C4::Context->preference("suggestion"),
         virtualshelves => C4::Context->preference("virtualshelves"),
-        csrf_token =>
-          Koha::Token->new->generate_csrf( { session_id => $new_session_id, } ),
     );
     output_html_with_http_headers $query, $cookie, $template->output, undef,
       { force_no_caching => 1 };

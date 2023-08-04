@@ -336,9 +336,6 @@ elsif ( $action eq 'update' ) {
             empty_mandatory_fields => \@empty_mandatory_fields,
             invalid_form_fields    => $invalidformfields,
             borrower               => \%borrower,
-            csrf_token             => Koha::Token->new->generate_csrf({
-                session_id => scalar $cgi->cookie('CGISESSID'),
-            }),
         );
         $template->param( patron_attribute_classes => GeneratePatronAttributesForm( $borrowernumber, $attributes ) );
 
@@ -384,9 +381,6 @@ elsif ( $action eq 'update' ) {
                 nochanges => 1,
                 borrower => $patron->unblessed,
                 patron_attribute_classes => GeneratePatronAttributesForm( $borrowernumber, $attributes ),
-                csrf_token => Koha::Token->new->generate_csrf({
-                    session_id => scalar $cgi->cookie('CGISESSID'),
-                }),
             );
         }
     }
@@ -398,9 +392,6 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
     $template->param(
         borrower  => $borrower,
         hidden => GetHiddenFields( $mandatory, 'edit' ),
-        csrf_token => Koha::Token->new->generate_csrf({
-            session_id => scalar $cgi->cookie('CGISESSID'),
-        }),
     );
 
     if (C4::Context->preference('OPACpatronimages')) {

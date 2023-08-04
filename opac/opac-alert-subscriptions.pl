@@ -23,7 +23,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Patrons;
-use Koha::Token;
 
 my $query = CGI->new();
 
@@ -41,15 +40,6 @@ $template->param(
     alertsview => 1,
     patron     => $patron,
     referer    => 'patron',
-);
-
-my $new_session_id = $query->cookie('CGISESSID');
-$template->param(
-    csrf_token => Koha::Token->new->generate_csrf(
-        {
-            session_id => $new_session_id,
-        }
-    ),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

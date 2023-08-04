@@ -367,7 +367,6 @@ if ( $patron) {
         my $patron_image = $patron->image;
         $template->param(
             display_patron_image => 1,
-            csrf_token           => Koha::Token->new->generate_csrf( { session_id => scalar $query->cookie('CGISESSID') . $patron->cardnumber, id => $patron->userid } ),
         ) if $patron_image;
     }
 } else {

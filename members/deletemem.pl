@@ -114,7 +114,6 @@ $template->param(
 if ( $op eq 'delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
     $template->param(
         op         => 'delete_confirm',
-        csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
     );
 
 } elsif ( $op eq 'delete_confirmed' ) {

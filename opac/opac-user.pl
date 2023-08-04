@@ -181,9 +181,6 @@ $template->param(
                     surname           => $borr->{surname},
                     RENEW_ERROR       => $renew_error,
                     borrower          => $borr,
-                    csrf_token             => Koha::Token->new->generate_csrf({
-                        session_id => scalar $query->cookie('CGISESSID'),
-                    }),
                 );
 
 #get issued items ....

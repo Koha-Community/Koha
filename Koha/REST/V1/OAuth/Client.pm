@@ -94,10 +94,6 @@ sub login {
             return $c->redirect_to( $uri . "?auth_error=$error" );
         }
     }
-    else {
-        # initial request, generate CSRF token
-        $state = Koha::Token->new->generate_csrf( { session_id => $c->req->cookie('CGISESSID')->value } );
-    }
 
     return $c->oauth2->get_token_p( $provider => { ( !$is_callback ? ( state => $state ) : () ), redirect_uri => $redirect_url . $provider . "/" . $interface } )->then(
         sub {

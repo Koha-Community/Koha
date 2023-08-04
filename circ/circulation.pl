@@ -705,9 +705,4 @@ $template->param(
     logged_in_user            => $logged_in_user,
 );
 
-# Generate CSRF token for upload and delete image buttons
-$template->param(
-    csrf_token => Koha::Token->new->generate_csrf({ session_id => $query->cookie('CGISESSID'),}),
-);
-
 output_html_with_http_headers $query, $cookie, $template->output;
