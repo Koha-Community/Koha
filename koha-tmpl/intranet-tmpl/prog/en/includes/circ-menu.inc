@@ -262,7 +262,7 @@
                         </div>
                         <input type="hidden" name="uploadfilename" value="patron-photo.jpg" />
                         <textarea id="uploadfiletext" name="uploadfiletext" style="display:none;"></textarea>
-                        <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="filetype" value="image" />
                         <input type="hidden" name="cardnumber" value="[% patron.cardnumber | html %]" />
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />

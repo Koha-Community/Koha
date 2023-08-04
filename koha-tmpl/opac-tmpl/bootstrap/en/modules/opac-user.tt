@@ -240,7 +240,7 @@
                                         <input type="radio" id="no-autorenew_checkouts" name="borrower_autorenew_checkouts" value="0" checked="checked" />
                                     </label>
                                 [% END %]
-                        <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="update_arc" value="1" />
                         <input type="submit" value="Update auto-renewal preference" />
                     </form>
