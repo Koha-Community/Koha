@@ -118,8 +118,10 @@ use C4::Biblio qw( GetMarcFromKohaField );
         }
     }
 
-    my @decoding_errors;
+    my ( @decoding_errors, @ids_not_in_marc );
     my $biblios = Koha::Biblios->search;
+    my ( $biblio_tag,     $biblio_subfield )     = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
+    my ( $biblioitem_tag, $biblioitem_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblioitems.biblioitemnumber" );
     while ( my $biblio = $biblios->next ) {
         my $record = eval{$biblio->metadata->record;};
         if ($@) {
@@ -159,6 +161,33 @@ use C4::Biblio qw( GetMarcFromKohaField );
         new_section("Bibliographic records have invalid MARCXML");
         new_item($_) for @decoding_errors;
         new_hint("The bibliographic records must have a valid MARCXML or you will face encoding issues or wrong displays");
+    }
+    if (@ids_not_in_marc) {
+        new_section("Bibliographic records have MARCXML without biblionumber or biblioitemnumber");
+        for my $id (@ids_not_in_marc) {
+            if ( exists $id->{biblioitemnumber} ) {
+                new_item(
+                    sprintf(q{Biblionumber %s has biblioitemnumber '%s' but should be '%s' in %s$%s},
+                        $id->{biblionumber},
+                        $id->{biblioitemnumber},
+                        $id->{biblioitemnumber_in_marc},
+                        $biblioitem_tag,
+                        $biblioitem_subfield,
+                    )
+                );
+            }
+            else {
+                new_item(
+                    sprintf(q{Biblionumber %s has '%s' in %s$%s},
+                        $id->{biblionumber},
+                        $id->{biblionumber_in_marc},
+                        $biblio_tag,
+                        $biblio_subfield,
+                    )
+                );
+            }
+        }
+        new_hint("The bibliographic records must have the biblionumber and biblioitemnumber in MARCXML");
     }
 }
 

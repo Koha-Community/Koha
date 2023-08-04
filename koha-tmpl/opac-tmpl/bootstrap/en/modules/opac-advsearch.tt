@@ -450,6 +450,9 @@
 [% BLOCK jsinclude %]
 [% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") | $raw %]
 <script>
+window.addEventListener('pageshow', function( e ){
+    $('.form-control').prop('disabled' , false );
+});
 $(document).ready(function() {
     [% IF search_groups %]
         function branch_limit() {
@@ -548,6 +551,5 @@ $(document).ready(function() {
         $(this).parent().parent().remove();
         $('.search-term-row .search-term-input select[name="op"]').first().prop("disabled",true).hide();
     });
-
 </script>
 [% END %]
