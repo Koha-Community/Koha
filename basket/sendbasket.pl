@@ -30,7 +30,6 @@ use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Templates;
 use Koha::Biblios;
 use Koha::Email;
-use Koha::Token;
 
 my $query = CGI->new;
 
@@ -49,13 +48,6 @@ my $email_add = $query->param('email_add');
 my $dbh = C4::Context->dbh;
 
 if ($email_add) {
-    output_and_exit( $query, $cookie, $template, 'wrong_csrf_token' )
-      unless Koha::Token->new->check_csrf(
-        {
-            session_id => scalar $query->cookie('CGISESSID'),
-            token      => scalar $query->param('csrf_token'),
-        }
-      );
 
     my $patron     = Koha::Patrons->find($borrowernumber);
     my $user_email = $patron->notice_email_address;

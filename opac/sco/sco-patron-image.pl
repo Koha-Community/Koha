@@ -23,7 +23,6 @@ use C4::Service;
 use C4::Members;
 use Koha::Patron::Images;
 use Koha::Patrons;
-use Koha::Token;
 
 my ( $query, $response ) = C4::Service->init( self_check => 'self_checkout_module' );
 
@@ -49,21 +48,6 @@ my $patron_image = $patron->image;
 
 if ($patron_image) {
 
-    unless (
-        Koha::Token->new->check_csrf(
-            {
-                session_id => scalar $query->cookie('CGISESSID')
-                  . $patron->cardnumber,
-                id => $patron->userid,
-                token => $csrf_token,
-            }
-        )
-      )
-    {
-
-        print $query->header(-type => 'text/plain', -status => '403 Forbidden');
-        exit;
-    }
     print $query->header(
         -type           => $patron_image->mimetype,
         -Content_Length => length( $patron_image->imagefile )

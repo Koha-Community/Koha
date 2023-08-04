@@ -26,7 +26,6 @@ use C4::Output qw( output_and_exit output_html_with_http_headers );
 
 use Koha::ApiKeys;
 use Koha::Patrons;
-use Koha::Token;
 
 my $cgi = CGI->new;
 
@@ -59,18 +58,6 @@ if( $patron_id != $loggedinuser && !C4::Context->IsSuperLibrarian() ) {
 }
 
 my $op = $cgi->param('op') // '';
-
-if ( $op eq 'generate' or
-     $op eq 'delete' or
-     $op eq 'revoke' or
-     $op eq 'activate' ) {
-
-    output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
-        unless Koha::Token->new->check_csrf({
-            session_id => scalar $cgi->cookie('CGISESSID'),
-            token      => scalar $cgi->param('csrf_token'),
-        });
-}
 
 if ($op) {
     if ( $op eq 'generate' ) {

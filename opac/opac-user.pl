@@ -48,7 +48,6 @@ use Koha::Patron::Discharge;
 use Koha::Patrons;
 use Koha::Ratings;
 use Koha::Recalls;
-use Koha::Token;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -90,12 +89,6 @@ $template->param( shibbolethAuthentication => C4::Context->config('useshibboleth
 my $patron = Koha::Patrons->find( $borrowernumber );
 
 if( $op eq 'cud-update_arc' && C4::Context->preference("AllowPatronToControlAutorenewal") ){
-    die "Wrong CSRF token"
-        unless Koha::Token->new->check_csrf({
-            session_id => scalar $query->cookie('CGISESSID'),
-            token  => scalar $query->param('csrf_token'),
-        });
-
     my $autorenew_checkouts = $query->param('borrower_autorenew_checkouts');
     $patron->autorenew_checkouts( $autorenew_checkouts )->store() if defined $autorenew_checkouts;
 }

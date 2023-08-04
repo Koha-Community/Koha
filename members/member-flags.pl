@@ -15,7 +15,6 @@ use Koha::Patron::Categories;
 use Koha::Patrons;
 
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
-use Koha::Token;
 
 my $input = CGI->new;
 
@@ -46,13 +45,6 @@ my %member2;
 $member2{'borrowernumber'}=$member;
 
 if ($input->param('newflags')) {
-
-    output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )
-        unless Koha::Token->new->check_csrf({
-            session_id => scalar $input->cookie('CGISESSID'),
-            token  => scalar $input->param('csrf_token'),
-        });
-
 
     my $dbh=C4::Context->dbh();
 

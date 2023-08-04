@@ -10,7 +10,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Context;
 use CGI qw ( -utf8 );
-use Koha::Token;
 
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -56,12 +55,6 @@ if ( ( $patron_id ne $loggedinuser ) && ( $category_type eq 'S' ) ) {
 push( @errors, 'NOMATCH' ) if ( ( $newpassword && $newpassword2 ) && ( $newpassword ne $newpassword2 ) );
 
 if ( $newpassword and not @errors) {
-
-    output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )
-        unless Koha::Token->new->check_csrf({
-            session_id => scalar $input->cookie('CGISESSID'),
-            token  => scalar $input->param('csrf_token'),
-        });
 
     try {
         $patron->set_password({ password => $newpassword });

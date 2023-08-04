@@ -34,7 +34,6 @@ use URI::Escape;
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Templates;
-use Koha::Token;
 
 our (@ISA, @EXPORT_OK);
 

@@ -31,7 +31,6 @@ use Koha::Illbatches;
 use Koha::Illrequest::Workflow::Availability;
 use Koha::Illrequest::Workflow::TypeDisclaimer;
 use Koha::Libraries;
-use Koha::Token;
 use Koha::Plugins;
 
 use Try::Tiny qw( catch try );
@@ -408,10 +407,6 @@ if ( $backends_available ) {
         }
 
     } elsif ( $op eq "save_comment" ) {
-        die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
-           session_id => scalar $cgi->cookie('CGISESSID'),
-           token      => scalar $cgi->param('csrf_token'),
-        });
         my $comment = Koha::Illcomment->new({
             illrequest_id  => scalar $params->{illrequest_id},
             borrowernumber => $patronnumber,

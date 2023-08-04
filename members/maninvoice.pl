@@ -31,7 +31,6 @@ use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_htt
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
-use Koha::Token;
 
 use Koha::Patrons;
 use Koha::Items;
@@ -91,14 +90,6 @@ $template->param(
 
 my $add = $input->param('add');
 if ($add) {
-    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
-      unless Koha::Token->new->check_csrf(
-        {
-            session_id => scalar $input->cookie('CGISESSID'),
-            token      => scalar $input->param('csrf_token'),
-        }
-      );
-
     # Note: If the logged in user is not allowed to see this patron an invoice can be forced
     # Here we are trusting librarians not to hack the system
     my $desc       = $input->param('desc');

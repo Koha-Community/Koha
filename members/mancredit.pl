@@ -36,8 +36,6 @@ use Koha::Patron::Categories;
 use Koha::Account::CreditTypes;
 use Koha::AdditionalFields;
 
-use Koha::Token;
-
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -70,13 +68,6 @@ my $library_id =
 
 my $add = $input->param('add');
 if ($add) {
-    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
-      unless Koha::Token->new->check_csrf(
-        {
-            session_id => scalar $input->cookie('CGISESSID'),
-            token      => scalar $input->param('csrf_token'),
-        }
-      );
 
 # Note: If the logged in user is not allowed to see this patron an invoice can be forced
 # Here we are trusting librarians not to hack the system

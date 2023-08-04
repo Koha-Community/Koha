@@ -43,7 +43,6 @@ use Koha::Patron::Attributes;
 use Koha::Patron::Images;
 use Koha::Patron::Categories;
 use Koha::Policy::Patrons::Cardnumber;
-use Koha::Token;
 use Koha::AuthorisedValues;
 my $cgi = CGI->new;
 my $dbh = C4::Context->dbh;
@@ -315,11 +314,6 @@ if ( $action eq 'create' ) {
 elsif ( $action eq 'update' ) {
 
     my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-    die "Wrong CSRF token"
-        unless Koha::Token->new->check_csrf({
-            session_id => scalar $cgi->cookie('CGISESSID'),
-            token  => scalar $cgi->param('csrf_token'),
-        });
 
     my %borrower = ParseCgiForBorrower($cgi);
     $borrower{borrowernumber} = $borrowernumber;

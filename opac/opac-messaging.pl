@@ -28,7 +28,6 @@ use C4::Members::Messaging;
 use C4::Form::MessagingPreferences;
 use Koha::Patrons;
 use Koha::SMS::Providers;
-use Koha::Token;
 
 my $query = CGI->new();
 my $opac_messaging = C4::Context->preference('EnhancedMessagingPreferencesOPAC');
@@ -53,10 +52,6 @@ my $messaging_options;
 $messaging_options = C4::Members::Messaging::GetMessagingOptions() if $opac_messaging;
 
 if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
-    die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
-        session_id => scalar $query->cookie('CGISESSID'),
-        token  => scalar $query->param('csrf_token'),
-    });
 
     if( $opac_messaging ) {
         my $sms = $query->param('SMSnumber');

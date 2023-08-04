@@ -34,7 +34,6 @@ use Koha::AuthorisedValues;
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::AdditionalFields;
-use Koha::Token;
 use Koha::DateUtils qw( output_pref );
 
 my $input = CGI->new();
@@ -149,12 +148,6 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             total_paid => $total_paid
         );
     } else {
-        output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )
-            unless Koha::Token->new->check_csrf( {
-                session_id => $input->cookie('CGISESSID'),
-                token  => scalar $input->param('csrf_token'),
-            });
-
         my $url;
         my $pay_result;
         if ($pay_individual) {
