@@ -51,6 +51,19 @@ $(document).ready(function() {
         return '';
     }
 
+    function display_request_status(row) {
+        let status       = row._strings.status.str;
+        let status_alias = row._strings.status_av ?
+                                row._strings.status_av.str ?
+                                    row._strings.status_av.str :
+                                row._strings.status_av.code :
+                           null;
+
+        let status_label = status + (status_alias ? " <i><strong>"+status_alias+"</strong></i>" : "");
+
+        return status_label;
+    }
+
     // Possible prefilters: borrowernumber, batch_id
     // see ill/ill-requests.pl and members/ill-requests.pl
     let additional_prefilters = {};
@@ -316,12 +329,7 @@ $(document).ready(function() {
                 "data": "status",
                 "orderable": true,
                 "render": function(data, type, row, meta) {
-                    let status_label = row._strings.status_av ?
-                        row._strings.status_av.str ?
-                            row._strings.status_av.str :
-                            row._strings.status_av.code :
-                        row._strings.status.str
-                    return escape_str(status_label);
+                    return display_request_status(row);
                 }
             },
             {
