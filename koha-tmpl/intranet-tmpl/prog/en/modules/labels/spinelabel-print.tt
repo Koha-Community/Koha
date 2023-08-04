@@ -17,18 +17,29 @@
 	[% IF ( BarcodeNotFound ) %]
 		<body id="labels_spinelabel-print" class="tools labels">
             <div class="dialog message">The barcode [% Barcode | html %] was not found.</div>
-            <div id="print_button" class="noprint">
-                <button class="btn btn-default close-window">Close</button>
-            </div>
+
+            <nav class="navbar navbar-default navbar-fixed-bottom noprint">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <button class="btn btn-default close-window">Close</button>
+                    </fieldset>
+                </div>
+            </nav>
 	[% ELSE %]
             <body id="labels_spinelabel-print" class="tools labels">
             <div id="spinelabel" class="[% Branches.GetLoggedInBranchcode | html %]" data-loggedinbranch="[% Branches.GetLoggedInBranchcode | html %]" data-homebranch="[% itemhomebranch | html %]" data-holdingbranch="[% itemholdingbranch | html %]">
                 [% content | $raw %]
             </div>
-            <div id="print_button" class="noprint">
-                <button class="btn btn-default print-label"><i class="fa fa-print"></i> Print this label</button>
-                <button class="btn btn-default edit-label"><i class="fa fa-lock"></i> Edit this label</button>
-            </div>
+
+            <nav class="navbar navbar-default navbar-fixed-bottom noprint">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <button class="btn btn-primary print-label"><i class="fa fa-print"></i> Print this label</button>
+                        <button class="btn btn-default edit-label"><i class="fa fa-lock"></i> Edit this label</button>
+                    </fieldset>
+                </div>
+            </nav>
+
 	[% END %]
 
 [% Asset.js( "lib/jquery/jquery-3.6.0.min.js" ) | $raw %]
