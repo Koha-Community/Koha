@@ -656,8 +656,8 @@
                                                         [% IF ( active ) %]
                                                             [% UNLESS ( closedate ) %]
                                                                 <td>
-                                                                    <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Modify</a>
                                                                     [% UNLESS (books_loo.order_received) %]
+                                                                        <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Modify</a>
                                                                         <br />
                                                                         <a href="#" class="transfer_order" data-ordernumber="[% books_loo.ordernumber | html %]">Transfer</a>
                                                                     [% END %]
