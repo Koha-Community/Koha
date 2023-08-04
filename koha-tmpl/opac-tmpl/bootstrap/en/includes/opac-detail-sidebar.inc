@@ -118,7 +118,7 @@
                 <h3 class="modal-title" id="exportModalLabel">Exporting to Dublin Core...</h3>
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
-            <form method="get" action="/cgi-bin/koha/opac-export.pl">
+            <form method="post" action="/cgi-bin/koha/opac-export.pl">
                 <div class="modal-body">
                     <fieldset id="dc_fieldset">
                         <input id="input-simple" type="radio" name="format" value="rdfdc">

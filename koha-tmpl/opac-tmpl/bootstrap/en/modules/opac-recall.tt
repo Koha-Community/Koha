@@ -61,7 +61,7 @@
                             [% IF logged_in_user %]
                                 <div class="dialog">
 
-                                    <form id="recallform" action="/cgi-bin/koha/opac-recall.pl" method="get">
+                                    <form id="recallform" action="/cgi-bin/koha/opac-recall.pl" method="post">
                                         <fieldset class="rows" id="options">
                                             <legend>Place a recall on <b>[% biblio.title | html %]</b> ([% biblio.author | html %])?</legend>
                                             <ul>

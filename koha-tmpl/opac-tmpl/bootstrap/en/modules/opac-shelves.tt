@@ -244,7 +244,7 @@
 
                                         [% IF can_manage_shelf %]
                                             <span class="sep">|</span>
-                                            <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
+                                            <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
                                                 <input type="hidden" name="op" value="edit_form" />
                                                 <input type="hidden" name="referer" value="view" />
                                                 <input type='hidden' name='public' value='[% shelf.public | html %]' />
@@ -550,7 +550,7 @@
                                     <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a>
                                     [% IF can_manage_shelf %]
                                         <span class="sep">|</span>
-                                        <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
+                                        <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
                                             <input type="hidden" name="op" value="edit_form" />
                                             <input type="hidden" name="referer" value="view" />
                                             <input type="hidden" name="public" value="[% shelf.public | html %]" />
@@ -759,7 +759,7 @@
                                                     <td>[% s.lastmodified | $KohaDates %]</td>
                                                     <td>
                                                         [% IF s.can_be_managed( loggedinusernumber ) %]
-                                                            <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="d-inline">
+                                                            <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="d-inline">
                                                                 <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
                                                                 <input type="hidden" name="public" value="[% s.public | html %]" />
                                                                 <input type="hidden" name="op" value="edit_form" />
@@ -774,7 +774,7 @@
                                                             <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber | uri %]" class="sharelist btn btn-link"><i class="fa fa-share" aria-hidden="true"></i> Share</a>
                                                         [% END %]
                                                         [% IF s.is_shared AND s.can_be_managed( loggedinusernumber ) %]
-                                                            <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="d-inline">
+                                                            <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="d-inline">
                                                                 <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
                                                                 <input type="hidden" name="public" value="0" />
                                                                 <input type="hidden" name="op" value="transfer" />
