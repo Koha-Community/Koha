@@ -947,6 +947,8 @@ sub checkauth {
         }
     }
 
+    my $request_method = $query->request_method // q{};
+
     if ( $auth_state eq 'failed' || $logout ) {
         $sessionID = undef;
         $userid    = undef;
@@ -1090,7 +1092,6 @@ sub checkauth {
                 }
                 else {
                     my $retuserid;
-                    my $request_method = $query->request_method // q{};
 
                     if (
                         $request_method eq 'POST'
@@ -1478,6 +1479,29 @@ sub checkauth {
             my $reason = $query->param('OpenIDConnectFailed');
             $template->param(invalidGoogleOpenIDConnectLogin => $reason);
         }
+    }
+
+    if ( $auth_state eq 'completed' && defined $query->param('op') ) {
+        die "Cannot use GET for this request"
+            if $request_method ne 'POST';
+
+        print $query->header(
+            {
+                type              => 'text/html',
+                charset           => 'utf-8',
+                cookie            => $cookie,
+                'X-Frame-Options' => 'SAMEORIGIN',
+                -sameSite         => 'Lax'
+            }
+        );
+
+        output_and_exit( $query, $cookie, $template, 'wrong_csrf_token' )
+            unless Koha::Token->new->check_csrf(
+                {
+                    session_id => scalar $query->cookie('CGISESSID'),
+                    token      => scalar $query->param('csrf_token'),
+                }
+            );
     }
 
     $template->param(
