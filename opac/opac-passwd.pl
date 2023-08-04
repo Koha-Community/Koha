@@ -30,6 +30,7 @@ use Koha::Patrons;
 use Try::Tiny qw( catch try );
 
 my $query = CGI->new;
+my $op = $query->param('op') || q{};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -45,6 +46,7 @@ if ( $patron->category->effective_change_password ) {
         && $query->param('Newkey')
         && $query->param('Confirm') )
     {
+        die "op must be set" unless $op eq 'change_password';
         my $error;
         my $new_password = $query->param('Newkey');
         my $confirm_password = $query->param('Confirm');
