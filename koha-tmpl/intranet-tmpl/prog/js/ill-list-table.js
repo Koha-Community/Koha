@@ -98,11 +98,12 @@ $(document).ready(function() {
         "-or": function(){
             let patron = $("#illfilter_patron").val();
             let status = $("#illfilter_status").val();
+            let status_alias = $("#illfilter_status_alias").val();
             let filters = [];
             let status_sub_or = [];
             let subquery_and = [];
 
-            if (!patron && !status) return "";
+            if (!patron && !status && !status_alias) return "";
 
             if(patron){
                 let patronquery = buildPatronSearchQuery(
@@ -115,13 +116,10 @@ $(document).ready(function() {
             }
 
             if(status){
-                const status_search_fields = "me.status,me.status_av";
-                status_search_fields.split(',').forEach(function(attr){
-                    status_sub_or.push({
-                        [attr]:{"=": status }
-                    });
-                });
-                subquery_and.push(status_sub_or);
+                subquery_and.push( {"me.status":{"=": status }});
+            }
+            if(status_alias){
+                subquery_and.push({"me.status_alias":{"=": status_alias }});
             }
 
             filters.push({"-and": subquery_and});
@@ -465,37 +463,71 @@ $(document).ready(function() {
         $('#illfilter_form > fieldset > ol > li:nth-child(6) > span > a').click();
         $('#illfilter_form > fieldset > ol > li:nth-child(7) > span > a').click();
 
-        disableStatusFilter();
-
         redrawTable();
     }
 
-    function populateStatusFilter(backend) {
-        $.ajax({
-            type: "GET",
-            url: "/api/v1/ill/backends/"+backend,
-            headers: {
-                'x-koha-embed': 'statuses+strings'
-            },
-            success: function(response){
-                let statuses = response.statuses
-                $('#illfilter_status').append(
-                    '<option value="">'+ill_all_statuses+'</option>'
-                );
-                statuses.sort((a, b) => a.str.localeCompare(b.str)).forEach(function(status) {
-                    $('#illfilter_status').append(
-                        '<option value="' + status.code  +
-                        '">' + status.str +  '</option>'
-                    );
-                });
-            }
+    function addStatusOptions(statuses){
+        $('#illfilter_status').children().remove();
+        $('#illfilter_status').append(
+            '<option value="">'+ill_all_statuses+'</option>'
+        );
+        statuses.sort((a, b) => a.str.localeCompare(b.str)).forEach(function(status) {
+            $('#illfilter_status').append(
+                '<option value="' + status.code  +
+                '">' + status.str +  '</option>'
+            );
         });
+    }
+
+    function addStatusAliasOptions(status_aliases){
+        $('#illfilter_status_alias').parent().remove();
+        if (status_aliases.length !== 0) {
+            $('#illfilter_status').parent().after(function() {
+            return '<li><label for="illfilter_status_alias">'+ill_status_aliases+':</label> <select name="illfilter_status_alias" id="illfilter_status_alias"></select></li>';
+            });
+            $('#illfilter_status_alias').append(
+                '<option value="">'+ill_all_status_aliases+'</option>'
+            );
+            status_aliases.sort((a, b) => a.str.localeCompare(b.str)).forEach(function (status_alias) {
+                $('#illfilter_status_alias').append(
+                    '<option value="' + status_alias.code +
+                    '">' + status_alias.str + '</option>'
+                );
+            });
+        }
+    }
+
+    function populateStatusFilter(params) {
+        if(params.backend_statuses){
+            if(params.backend_statuses.statuses){
+                addStatusOptions(params.backend_statuses.statuses);
+            }
+            if(params.backend_statuses.status_aliases){
+                addStatusAliasOptions(params.backend_statuses.status_aliases);
+            }
+        }else if(params.backend){
+            let backend_id = params.backend || "";
+            $.ajax({
+                type: "GET",
+                url: "/api/v1/ill/backends/"+backend_id,
+                headers: {
+                    'x-koha-embed': 'statuses+strings'
+                },
+                success: function(response){
+                    addStatusOptions(response.statuses.filter(status => status.type == 'ill_status'));
+                    addStatusAliasOptions(response.statuses.filter(status => status.type == 'av'));
+                }
+            });
+        }
     }
 
     function populateBackendFilter() {
         $.ajax({
             type: "GET",
             url: "/api/v1/ill/backends",
+            headers: {
+                'x-koha-embed': 'statuses+strings'
+            },
             success: function(backends){
                 backends.sort((a, b) => a.ill_backend_id.localeCompare(b.ill_backend_id)).forEach(function(backend) {
                     $('#illfilter_backend').append(
@@ -503,33 +535,51 @@ $(document).ready(function() {
                         '">' + backend.ill_backend_id +  '</option>'
                     );
                 });
+
+                let all_existing_statuses = [];
+                backends.forEach((backend) => {
+                    let existing_statuses = backend.statuses;
+                    existing_statuses.filter(status => status.type == 'ill_status').forEach((existing_status) => {
+                        let index = all_existing_statuses.map(function(e) { return e.code; }).indexOf(existing_status.code) || false;
+                        if(index == -1){
+                            all_existing_statuses.push(existing_status);
+                        }
+                    });
+                });
+
+                let all_existing_status_aliases = [];
+                backends.forEach((backend) => {
+                    let existing_status_aliases = backend.statuses;
+                    existing_status_aliases.filter(status => status.type == 'av').forEach((existing_status_aliases) => {
+                        let index = all_existing_status_aliases.map(function(e) { return e.code; }).indexOf(existing_status_aliases.code) || false;
+                        if(index == -1){
+                            all_existing_status_aliases.push(existing_status_aliases);
+                        }
+                    });
+                });
+
+                populateStatusFilter(
+                    { backend_statuses:
+                        {
+                            statuses      : all_existing_statuses,
+                            status_aliases: all_existing_status_aliases
+                        }
+                    }
+                )
+
             }
         });
-    }
-
-    function disableStatusFilter() {
-        $('#illfilter_status').children().remove();
-        $("#illfilter_status").attr('title', ill_manage_select_backend_first);
-        $('#illfilter_status').prop("disabled", true);
-    }
-
-    function enableStatusFilter() {
-        $('#illfilter_status').children().remove();
-        $("#illfilter_status").attr('title', '');
-        $('#illfilter_status').prop("disabled", false);
     }
 
     $('#illfilter_backend').change(function() {
         var selected_backend = $('#illfilter_backend option:selected').val();
         if (selected_backend && selected_backend.length > 0) {
-            populateStatusFilter(selected_backend);
-            enableStatusFilter();
-        } else {
-            disableStatusFilter();
+            populateStatusFilter( { backend : selected_backend } );
+        } else{
+            populateBackendFilter();
         }
     });
 
-    disableStatusFilter();
     populateBackendFilter();
 
     // Clear all filters
