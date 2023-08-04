@@ -141,10 +141,10 @@ subtest 'existing_statuses() tests' => sub {
 
     # FIXME: Add tests to check content and order of return
     my $expected_statuses = [
-        { code => 'CHK',   str => 'Checked out' },
-        { code => 'READY', str => 'Ready' },
-        { code => 'REQ',   str => 'Requested' },
-        { code => 'BOB',   str => 'Bob is the best status' }
+        { code => 'CHK',   str => 'Checked out',            type => 'ill_status' },
+        { code => 'READY', str => 'Ready',                  type => 'ill_status' },
+        { code => 'REQ',   str => 'Requested',              type => 'ill_status' },
+        { code => 'BOB',   str => 'Bob is the best status', type => 'av' }
     ];
 
     is_deeply( $existing_statuses, $expected_statuses, 'Deep match on return' );
