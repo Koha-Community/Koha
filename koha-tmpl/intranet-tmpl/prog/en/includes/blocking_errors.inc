@@ -14,7 +14,7 @@
     [% CASE 'unknown_vendor' %]
         <div class="dialog message">Vendor not found.</div>
     [% CASE 'order_cannot_be_edited' %]
-        <div class="dialog message">This order cannot be edited, the basket is closed.</div>
+        <div class="dialog message">This order cannot be edited, the basket is closed or the order was already received.</div>
     [% CASE 'wrong_csrf_token' %]
         <div class="dialog message">The form submission failed (Wrong CSRF token). Try to come back, refresh the page, then try again.</div>
     [% CASE 'budget_is_locked' %]
