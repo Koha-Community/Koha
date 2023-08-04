@@ -40,15 +40,22 @@ sub list {
 
     my $config   = Koha::Illrequest::Config->new;
     my $backends = $config->available_backends;
+    my $backend_module = Koha::Illbackend->new;
 
     my @data;
     foreach my $b (@$backends) {
         my $backend = Koha::Illrequest->new->load_backend($b);
-        push @data,
-          {
+
+        my $embed = $backend_module->embed(
+            $b,
+            $c->req->headers->header('x-koha-embed')
+        );
+
+        my $return = {
             ill_backend_id => $b,
             capabilities   => $backend->capabilities,
-          };
+        };
+        push @data, $embed ? { %$return, %$embed } : $return;
     }
     return $c->render( status => 200, openapi => \@data );
 }
