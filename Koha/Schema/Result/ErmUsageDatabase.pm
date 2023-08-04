@@ -153,4 +153,12 @@ __PACKAGE__->belongs_to(
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+sub koha_object_class {
+    'Koha::ERM::UsageDatabase';
+}
+
+sub koha_objects_class {
+    'Koha::ERM::UsageDatabases';
+}
 1;

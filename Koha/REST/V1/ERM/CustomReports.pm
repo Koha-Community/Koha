@@ -283,6 +283,8 @@ sub metric_types_report {
 
 =head3 provider_rollup_report
 
+An endpoint to fetch all data for all providers for a given report type
+
 =cut
 
 sub provider_rollup_report {
@@ -389,7 +391,11 @@ sub provider_rollup_report {
     };
 }
 
+=head3 _get_data_set
 
+Returns the Koha object that needs to be used to fetch the data for this report.
+
+=cut
 
 sub _get_data_set {
     my ($data_type) = @_;
@@ -409,6 +415,13 @@ sub _get_data_set {
     return 0;
 }
 
+=head3 _get_correct_query_param
+
+Returns the array of ids (or an empty array) for the data type that has been requested as a report parameter.
+e.g. If it is a titles report and the user has requested titles with the ids 1,2,3, these will be fetched from the query parameters and returned as (1,2,3).
+
+=cut
+
 sub _get_correct_query_param {
     my ( $data_type, $array_ref, $period ) = @_;
 
@@ -427,6 +440,13 @@ sub _get_correct_query_param {
 
     return $param;
 }
+
+=head3 _get_result_with_no_statistics
+
+Takes in an id number and a dataset. If that id number exists within the dataset then no action is needed.
+If it isn't found then that means there are no statistics for that object. It is however required in the report so is returned with a blank dataset.
+
+=cut
 
 sub _get_result_with_no_statistics {
     my ($args) = @_;
@@ -466,6 +486,7 @@ sub _get_object_hash {
     my $provider    = $args->{provider};
     my $metric_type = $args->{metric_type};
     my $period      = $args->{period};
+    my $sum         = $args->{sum};
     my %object_hash;
 
     if ( $data_type eq 'title' ) {
@@ -526,6 +547,12 @@ sub _get_object_hash {
     }
     return \%object_hash;
 }
+
+=head3 _get_missing_data
+
+If an id is identified as missing, this piece of data is fetched and returned into _get_result_with_no_statistics for processing.
+
+=cut
 
 sub _get_missing_data {
     my ( $data_type, $id ) = @_;

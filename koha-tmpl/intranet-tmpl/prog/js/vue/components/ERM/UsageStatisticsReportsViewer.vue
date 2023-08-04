@@ -151,22 +151,8 @@ export default {
                     orderable: true,
                 })
                 column_set.push({
-                    title: __("Period Total"),
-                    render: function (data, type, row, meta) {
-                        const sum = row[`erm_usage_${data_type}s`].reduce(
-                            (acc, obj) => {
-                                const objSum = obj.erm_usage_muses.reduce(
-                                    (acc, mus) => {
-                                        return acc + mus.usage_count
-                                    },
-                                    0
-                                )
-                                return acc + objSum
-                            },
-                            0
-                        )
-                        return sum
-                    },
+                    title: __("Period total"),
+                    data: "provider_rollup_total",
                     searchable: true,
                     orderable: true,
                 })
@@ -281,12 +267,7 @@ export default {
             if (report_type === "monthly_with_totals") {
                 column_set.push({
                     title: __("Period total"),
-                    render: function (data, type, row, meta) {
-                        const sum = row.erm_usage_muses.reduce((acc, item) => {
-                            return acc + item.usage_count
-                        }, 0)
-                        return sum
-                    },
+                    name: "usage_total",
                     searchable: true,
                     orderable: true,
                 })
