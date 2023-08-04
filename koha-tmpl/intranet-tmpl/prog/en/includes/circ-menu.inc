@@ -222,7 +222,7 @@
                         <label for="uploadfile">Select the file to upload: </label>
                         <input type="file" id="uploadfile" name="uploadfile" required="required" />
                         <div class="action">
-                            <input type="hidden" id="csrf_token" name="csrf_token" value="[% csrf_token | html %]" />
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" id="image" name="filetype" value="image" />
                             <input type="hidden" id="cardnumber" name="cardnumber" value="[% patron.cardnumber | html %]" />
                             <input type="hidden" id="borrowernumber" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
