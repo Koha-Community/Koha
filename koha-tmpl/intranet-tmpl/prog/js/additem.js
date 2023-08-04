@@ -1,7 +1,21 @@
 /* global __ */
 /* exported addItem checkCount showItem deleteItemBlock clearItemBlock check_additem */
 function addItem( node, unique_item_fields ) {
-    var index = $(node).closest("div").attr('id');
+    var item_form = $(node).closest("div");
+    var index = item_form.attr("id");
+
+    //We need to verify the item form before saving
+    var empty_item_mandatory = CheckMandatorySubfields(item_form);
+    if (empty_item_mandatory > 0) {
+        var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
+
+        _alertString +="-------------------------------------------------------------------\n\n";
+        _alertString +=
+            "\n- " + _("%s item mandatory fields empty").format(empty_item_mandatory);
+        alert(_alertString);
+        return false;
+    }
+
     var current_qty = parseInt($("#quantity").val());
     var max_qty;
     if($("#quantity_to_receive").length != 0){

@@ -1328,6 +1328,23 @@
             });
 
             $('.modal-save').click(function() {
+
+                //We need to validate the item forms here - if one is opened with missing subfields at
+                //confirm, it would be submitted without this
+                var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
+                _alertString +="-------------------------------------------------------------------\n\n";
+                var empty_mandatory_fields = 0;
+                $('div[id^="itemblock"]').each(function(){
+                    var item_form = $(this);
+                    var empty_item_mandatory = CheckMandatorySubfields(item_form);
+                    empty_mandatory_fields += empty_item_mandatory;
+                });
+                if (empty_mandatory_fields > 0) {
+                    _alertString +="\n- " + _("%s item mandatory fields empty").format(empty_mandatory_fields);
+                    alert(_alertString);
+                    return false;
+                }
+
                 var saved_rows = save_row();
                 if(Object.keys(saved_rows).length) $('.save').prop('disabled', false);
                 $("#order_edit").modal('hide');
