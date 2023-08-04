@@ -88,6 +88,19 @@ include in facets, sorting, or suggestion fields)
 sub fields {
     my ($self, $record) = @_;
 
+    my $params = $self->params;
+    my $other_headings = $params->{options}->{other_headings} || [ 'see_from' ];
+
+    my @auth_others;
+    foreach my $other_heading ( @$other_headings ) {
+        if ( $other_heading eq 'see_from' ) {
+            push @auth_others, '4..';
+        }
+        if ( $other_heading eq 'see_also_from' ) {
+            push @auth_others, '5..';
+        }
+    }
+
     my ($item_tag) = GetMarcFromKohaField( "items.itemnumber" );
     $item_tag ||= '';
 
@@ -102,8 +115,8 @@ sub fields {
         my $authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
         next unless $authority;
         my $auth_marc = $authority->record;
-        my @seefrom = $auth_marc->field('4..');
-        foreach my $authfield (@seefrom) {
+        my @authfields = $auth_marc->field(@auth_others);
+        foreach my $authfield (@authfields) {
             my $tag = substr($field->tag(), 0, 1) . substr($authfield->tag(), 1, 2);
             next if MARC::Field->is_controlfield_tag($tag);
             my $newfield = MARC::Field->new($tag,

@@ -325,6 +325,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ILS-DI','0','','Enables ILS-DI services at OPAC.','YesNo'),
 ('ILS-DI:AuthorizedIPs','','Restricts usage of ILS-DI to some IPs','.','Free'),
 ('ImageLimit','5','','Limit images stored in the database by the Patron Card image manager to this number.','Integer'),
+('IncludeSeeAlsoFromInSearches','0','','Include see-also-from references in searches.','YesNo'),
 ('IncludeSeeFromInSearches','0','','Include see-from references in searches.','YesNo'),
 ('IndependentBranches','0',NULL,'If ON, increases security between libraries','YesNo'),
 ('IndependentBranchesPatronModifications','0', NULL, 'Show only modification request for the logged in branch','YesNo'),

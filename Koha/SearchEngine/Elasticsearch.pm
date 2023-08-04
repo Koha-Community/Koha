@@ -664,8 +664,23 @@ sub marc_records_to_documents {
             }
         }
 
-        if (C4::Context->preference('IncludeSeeFromInSearches') and $self->index eq 'biblios') {
-            foreach my $field (Koha::Filter::MARC::EmbedSeeFromHeadings->new->fields($record)) {
+        if ( $self->index eq $BIBLIOS_INDEX and ( C4::Context->preference('IncludeSeeFromInSearches') || C4::Context->preference('IncludeSeeAlsoFromInSearches') ) ) {
+            my $marc_filter = Koha::Filter::MARC::EmbedSeeFromHeadings->new;
+            my @other_headings;
+            if ( C4::Context->preference('IncludeSeeFromInSearches') ) {
+                push @other_headings, 'see_from';
+            }
+            if ( C4::Context->preference('IncludeSeeAlsoFromInSearches') ) {
+                push @other_headings, 'see_also_from';
+            }
+            $marc_filter->initialize(
+                {
+                    options => {
+                        other_headings => \@other_headings
+                    }
+                }
+            );
+            foreach my $field ($marc_filter->fields($record)) {
                 my $data_field_rules = $data_fields_rules->{$field->tag()};
                 if ($data_field_rules) {
                     my $subfields_mappings = $data_field_rules->{subfields};

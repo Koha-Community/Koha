@@ -660,11 +660,26 @@ sub get_corrected_marc_record {
         elsif ( $record_type eq 'biblio' ) {
 
             my @filters;
+            my @other_headings;
             push @filters, 'EmbedItemsAvailability';
-            push @filters, 'EmbedSeeFromHeadings'
-                if C4::Context->preference('IncludeSeeFromInSearches');
+            if ( C4::Context->preference('IncludeSeeFromInSearches') || C4::Context->preference('IncludeSeeAlsoFromInSearches') ){
+                push @filters, 'EmbedSeeFromHeadings';
+                if ( C4::Context->preference('IncludeSeeFromInSearches') ) {
+                    push @other_headings, 'see_from';
+                }
+                if ( C4::Context->preference('IncludeSeeAlsoFromInSearches') ) {
+                    push @other_headings, 'see_also_from';
+                }
+            }
 
-            my $normalizer = Koha::RecordProcessor->new( { filters => \@filters } );
+            my $normalizer = Koha::RecordProcessor->new(
+                {
+                    filters => \@filters,
+                    options => {
+                        other_headings => \@other_headings
+                    }
+                }
+            );
             $marc = $normalizer->process($marc);
         }
         if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
