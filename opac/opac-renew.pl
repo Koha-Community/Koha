@@ -31,6 +31,9 @@ use C4::Members;
 use Koha::Items;
 use Koha::Patrons;
 my $query = CGI->new;
+my $op = $query->param('op') || q{};
+
+die "op must be set" unless $op eq 'renew';
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	{

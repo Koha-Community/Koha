@@ -216,6 +216,7 @@
 
                     [% IF Koha.Preference('AllowPatronToControlAutorenewal') %]
                     <form id="autorenewal_option" action="/cgi-bin/koha/opac-user.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <legend class="sr-only">Auto-renewal</legend>
                             <label for="yes-autorenew_checkouts">
                                 Allow auto-renewal:
@@ -240,8 +241,7 @@
                                         <input type="radio" id="no-autorenew_checkouts" name="borrower_autorenew_checkouts" value="0" checked="checked" />
                                     </label>
                                 [% END %]
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="update_arc" value="1" />
+                        <input type="hidden" name="op" value="cud-update_arc" />
                         <input type="submit" value="Update auto-renewal preference" />
                     </form>
                     [% END %]
@@ -544,6 +544,7 @@
                                         </table>
                                         [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                                             <input type="submit" class="btn btn-primary" value="Renew selected" />
+                                            <input type="hidden" name="op" value="cud-renew" />
                                             <button type="button" id="renewall_js" class="btn btn-primary">Renew all</button>
                                         [% END %]
                                     </form>
@@ -553,6 +554,7 @@
                                             [% INCLUDE 'csrf-token.inc' %]
                                             <legend class="sr-only">Renew</legend>
                                             <input type="hidden" name="from" value="opac_user" />
+                                            <input type="hidden" name="op" value="renew" />
                                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                             [% FOREACH ISSUE IN ISSUES %]
                                                 [% IF ISSUE.status %]

@@ -57,6 +57,8 @@ use Date::Calc qw( Date_to_Days Today );
 
 my $query = CGI->new;
 
+my $op = $query->param('op') || q{};
+
 # CAS single logout handling
 # Will print header and exit
 if ( C4::Context->preference('casAuthentication') ) {
@@ -87,7 +89,7 @@ $template->param( shibbolethAuthentication => C4::Context->config('useshibboleth
 # get borrower information ....
 my $patron = Koha::Patrons->find( $borrowernumber );
 
-if( $query->param('update_arc') && C4::Context->preference("AllowPatronToControlAutorenewal") ){
+if( $op eq 'cud-update_arc' && C4::Context->preference("AllowPatronToControlAutorenewal") ){
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({
             session_id => scalar $query->cookie('CGISESSID'),
