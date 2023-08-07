@@ -616,9 +616,6 @@ sub _COUNTER_report_body {
     my $header = $self->{sushi}->{header};
     my $body   = $self->{sushi}->{body};
 
-    my @metric_types_string = $self->_get_SUSHI_Name_Value( $header->{Report_Filters}, "Metric_Type" );
-    my @metric_types        = split( /\|/, $metric_types_string[0] );
-
     my @report_body = ();
 
     my $total_records = 0;
