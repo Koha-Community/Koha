@@ -457,6 +457,9 @@ $(document).ready(function() {
             $("#"+filter).val("");
         });
 
+        $('#illfilter_status').prop('selectedIndex',0);
+        $('#illfilter_status_alias').prop('selectedIndex',0);
+
         //Clear flatpickr date filters
         $('#illfilter_form > fieldset > ol > li:nth-child(4) > span > a').click();
         $('#illfilter_form > fieldset > ol > li:nth-child(5) > span > a').click();
