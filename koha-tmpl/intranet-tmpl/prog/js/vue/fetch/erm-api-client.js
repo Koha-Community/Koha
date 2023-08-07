@@ -343,6 +343,11 @@ export class ERMAPIClient extends HttpClient {
 
     get usage_platforms() {
         return {
+            getAll: query =>
+                this.getAll({
+                    endpoint: "usage_platforms",
+                    query: query,
+                }),
             count: (query = {}) =>
                 this.count({
                     endpoint:
@@ -358,6 +363,11 @@ export class ERMAPIClient extends HttpClient {
 
     get usage_items() {
         return {
+            getAll: query =>
+                this.getAll({
+                    endpoint: "usage_items",
+                    query: query,
+                }),
             count: (query = {}) =>
                 this.count({
                     endpoint:
@@ -373,6 +383,11 @@ export class ERMAPIClient extends HttpClient {
 
     get usage_databases() {
         return {
+            getAll: query =>
+                this.getAll({
+                    endpoint: "usage_databases",
+                    query: query,
+                }),
             count: (query = {}) =>
                 this.count({
                     endpoint:
@@ -388,6 +403,11 @@ export class ERMAPIClient extends HttpClient {
 
     get usage_titles() {
         return {
+            getAll: query =>
+                this.getAll({
+                    endpoint: "usage_titles",
+                    query: query,
+                }),
             count: (query = {}) =>
                 this.count({
                     endpoint:

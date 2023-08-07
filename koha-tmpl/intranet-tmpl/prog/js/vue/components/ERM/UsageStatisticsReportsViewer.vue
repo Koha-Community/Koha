@@ -267,7 +267,7 @@ export default {
             if (report_type === "monthly_with_totals") {
                 column_set.push({
                     title: __("Period total"),
-                    name: "usage_total",
+                    data: "usage_total",
                     searchable: true,
                     orderable: true,
                 })
@@ -279,8 +279,12 @@ export default {
         },
         buildFilteredQuery(query, time_period_columns, year) {
             const queryObject = {}
-            const { metric_types, usage_data_providers, titles, report_type } =
-                query
+            const {
+                metric_types,
+                usage_data_providers,
+                keywords,
+                report_type,
+            } = query
             let data_type
             switch (report_type.substring(0, 1)) {
                 case "P":
@@ -306,12 +310,12 @@ export default {
                 return month.value
             })
             queryObject[`erm_usage_muses.month`] = months
-            // Add any title query
-            if (titles) {
-                const title_ids = titles.map(title => {
-                    return title.title_id
+            // Add any keyword query
+            if (keywords) {
+                const object_ids = keywords.map(object => {
+                    return object[`${data_type}_id`]
                 })
-                queryObject[`erm_usage_muses.title_id`] = title_ids
+                queryObject[`erm_usage_muses.${data_type}_id`] = object_ids
             }
             // Add any metric types query
             if (metric_types) {
