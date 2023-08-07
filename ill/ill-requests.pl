@@ -301,13 +301,14 @@ if ( $backends_available ) {
             # Prepare availability searching, if required
             # Get the definition for the z39.50 plugin
             if ( C4::Context->preference('ILLCheckAvailability') ) {
-                my $availability = Koha::Illrequest::Workflow::Availability->new($request->metadata);
-                my $services = $availability->get_services({
-                    ui_context => 'partners',
-                    metadata => {
-                        name => 'ILL availability - z39.50'
-                    }
-                });
+                my $availability = Koha::Illrequest::Workflow::Availability->new(
+                    {
+                        name => 'ILL availability - z39.50',
+                        %{$request->metadata}
+                    },
+                    'partners'
+                );
+                my $services = $availability->get_services();
                 # Only pass availability searching stuff to the template if
                 # appropriate
                 if ( scalar @{$services} > 0 ) {
