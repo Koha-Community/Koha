@@ -76,37 +76,8 @@ export default {
             let url = "/api/v1/erm/usage_data_providers"
             return url
         },
-        getEarliestDate(row, identifier) {
-            const counter_files = row.counter_files.filter(file =>
-                file.type.includes(identifier)
-            )
-            if (counter_files.length === 0) {
-                return "Not run"
-            }
-            const findData = counter_files.sort(
-                (a, b) => new Date(a.date_uploaded) - new Date(b.date_uploaded)
-            )
-            const date = findData[0].date_uploaded.substr(0, 10)
-            return `${date}`
-        },
-        getLatestDate(row, identifier) {
-            const counter_files = row.counter_files.filter(file =>
-                file.type.includes(identifier)
-            )
-            if (counter_files.length === 0) {
-                return "Not run"
-            }
-            const findData = counter_files.sort(
-                (a, b) => new Date(b.date_uploaded) - new Date(a.date_uploaded)
-            )
-            const date = findData[0].date_uploaded.substr(0, 10)
-            return `${date}`
-        },
         getTableColumns() {
-            const getEarliestDate = this.getEarliestDate
-            const getLatestDate = this.getLatestDate
-
-            return [
+            const columns = [
                 {
                     title: __("Provider"),
                     data: "me.erm_usage_data_provider_id:me.name",
@@ -116,87 +87,39 @@ export default {
                         return row.name
                     },
                 },
-                {
-                    title: __("Start"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const date = getEarliestDate(row, "TR")
-                        return date
-                    },
-                },
-                {
-                    title: __("End"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const date = getLatestDate(row, "TR")
-                        return date
-                    },
-                },
-                {
-                    title: __("Start"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const date = getEarliestDate(row, "PR")
-                        return date
-                    },
-                },
-                {
-                    title: __("End"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const date = getLatestDate(row, "PR")
-                        return date
-                    },
-                },
-                {
-                    title: __("Start"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const date = getEarliestDate(row, "DR")
-                        return date
-                    },
-                },
-                {
-                    title: __("End"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const date = getLatestDate(row, "DR")
-                        return date
-                    },
-                },
-                {
-                    title: __("Start"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const date = getEarliestDate(row, "IR")
-                        return date
-                    },
-                },
-                {
-                    title: __("End"),
-                    data: "description",
-                    searchable: true,
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        const date = getLatestDate(row, "IR")
-                        return date
-                    },
-                },
             ]
+
+            const data_types = ["title", "platform", "database", "item"]
+            data_types.forEach(data_type => {
+                columns.push(
+                    {
+                        title: __("Start"),
+                        data: "description",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            const date = row[`earliest_${data_type}`]
+                                ? row[`earliest_${data_type}`]
+                                : "N/A"
+                            return date
+                        },
+                    },
+                    {
+                        title: __("End"),
+                        data: "description",
+                        searchable: true,
+                        orderable: true,
+                        render: function (data, type, row, meta) {
+                            const date = row[`latest_${data_type}`]
+                                ? row[`latest_${data_type}`]
+                                : "N/A"
+                            return date
+                        },
+                    }
+                )
+            })
+
+            return columns
         },
         createTableHeader() {
             const table = this.$refs.table.$el.getElementsByTagName("table")[0]

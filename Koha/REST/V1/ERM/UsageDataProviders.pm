@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ERM::UsageDataProviders;
+use Koha::ERM::MonthlyUsages;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny    qw( catch try );
@@ -34,6 +35,7 @@ use Try::Tiny    qw( catch try );
 
 sub list {
     my $c = shift->openapi->valid_input or return;
+    use Data::Dumper;
 
     return try {
         my $usage_data_providers_set = Koha::ERM::UsageDataProviders->new;
@@ -357,6 +359,81 @@ sub test_connection {
     catch {
         $c->unhandled_exception($_);
     };
+}
+
+=head3 _get_earliest_and_latest_dates
+
+=cut
+
+sub _get_earliest_and_latest_dates {
+    my ( $report_type, $id ) = @_;
+
+    my @years = Koha::ERM::MonthlyUsages->search(
+        { 
+            usage_data_provider_id => $id,
+            report_type => { -like => "%$report_type%" }
+        }, 
+        {
+            columns => [
+                { earliestYear => { min => "year" } },
+                { latestYear => { max => "year" } },
+            ]
+        }
+    )->unblessed;
+    if($years[0][0]->{earliestYear}) {
+        my @earliest_month = Koha::ERM::MonthlyUsages->search(
+            { 
+                usage_data_provider_id => $id,
+                report_type => { -like => "%$report_type%" },
+                year => $years[0][0]->{earliestYear},
+            }, 
+            {
+                columns => [
+                    { month => { min => "month" } },
+                ]
+            }
+        )->unblessed;
+        my @latest_month = Koha::ERM::MonthlyUsages->search(
+            { 
+                usage_data_provider_id => $id,
+                report_type => { -like => "%$report_type%" },
+                year => $years[0][0]->{latestYear},
+            }, 
+            {
+                columns => [
+                    { month => { max => "month" } },
+                ]
+            }
+        )->unblessed;
+
+        $earliest_month[0][0]->{month} = _format_month("0$earliest_month[0][0]->{month}");
+        $latest_month[0][0]->{month} = _format_month("0$latest_month[0][0]->{month}");
+
+        my $earliest_date = "$years[0][0]->{earliestYear}-$earliest_month[0][0]->{month}";
+        my $latest_date = "$years[0][0]->{latestYear}-$latest_month[0][0]->{month}";
+
+        return {
+            earliest_date => $earliest_date,
+            latest_date   => $latest_date,
+        };
+    } else {
+        return {
+            earliest_date => 0,
+            latest_date   => 0,
+        };
+    }
+}
+
+=head3 _format_month
+
+=cut
+
+sub _format_month {
+    my ( $month ) = @_;
+
+    $month = length($month) eq 2 ? $month : "0$month";
+
+    return $month;
 }
 
 1;

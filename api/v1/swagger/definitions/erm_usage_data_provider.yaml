@@ -100,6 +100,61 @@ properties:
     description: usage titles
     items:
       $ref: erm_usage_title.yaml
+  erm_usage_items:
+    type: array
+    description: usage items
+    items:
+      $ref: erm_usage_item.yaml
+  erm_usage_platforms:
+    type: array
+    description: usage platforms
+    items:
+      $ref: erm_usage_platform.yaml
+  erm_usage_databases:
+    type: array
+    description: usage databases
+    items:
+      $ref: erm_usage_database.yaml
+  earliest_title:
+    description: time period of data harvested
+    type: 
+    - string
+    - "null"
+  latest_title:
+    description: time period of data harvested
+    type: 
+    - string
+    - "null"
+  earliest_platform:
+    description: time period of data harvested
+    type: 
+    - string
+    - "null"
+  latest_platform:
+    description: time period of data harvested
+    type: 
+    - string
+    - "null"
+  earliest_item:
+    description: time period of data harvested
+    type: 
+    - string
+    - "null"
+  latest_item:
+    description: time period of data harvested
+    type: 
+    - string
+    - "null"
+  earliest_database:
+    description: time period of data harvested
+    type: 
+    - string
+    - "null"
+  latest_database:
+    description: time period of data harvested
+    type: 
+    - string
+    - "null"
 
 additionalProperties: false
 required:
