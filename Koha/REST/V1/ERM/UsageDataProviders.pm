@@ -312,6 +312,17 @@ sub delete {
 sub run {
     my $c = shift->openapi->valid_input or return;
 
+    my $body       = $c->validation->param('body');
+    my $begin_date = $body->{begin_date};
+    my $end_date   = $body->{end_date};
+
+    unless ( $begin_date lt $end_date ) {
+        return $c->render(
+            status  => 400,
+            openapi => { error => "Begin date must be before end date" }
+        );
+    }
+
     my $udprovider = Koha::ERM::UsageDataProviders->find( $c->validation->param('erm_usage_data_provider_id') );
 
     unless ($udprovider) {
@@ -322,7 +333,7 @@ sub run {
     }
 
     return try {
-        my $jobs = $udprovider->run;
+        my $jobs = $udprovider->run( { begin_date => $begin_date, end_date => $end_date } );
 
         return $c->render(
             status  => 200,

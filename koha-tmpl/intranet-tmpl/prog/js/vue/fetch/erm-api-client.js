@@ -261,6 +261,7 @@ export class ERMAPIClient extends HttpClient {
                 this.get({
                     endpoint: "usage_data_providers",
                     query,
+                    query,
                 }),
             delete: id =>
                 this.delete({
@@ -276,15 +277,10 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "usage_data_providers/" + id,
                     body: usage_data_provider,
                 }),
-            run: (id, begin_date, end_date) =>
-                this.get({
-                    endpoint:
-                        "usage_data_providers/" +
-                        id +
-                        "/run?begin_date=" +
-                        begin_date +
-                        "&end_date=" +
-                        end_date,
+            run: (id, body) =>
+                this.post({
+                    endpoint: "usage_data_providers/" + id + "/run",
+                    body: body,
                 }),
             test: id =>
                 this.get({
@@ -334,7 +330,7 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "default_usage_reports",
                     body: default_usage_report,
                 }),
-            delete: (id) =>
+            delete: id =>
                 this.delete({
                     endpoint: "default_usage_reports/" + id,
                 }),

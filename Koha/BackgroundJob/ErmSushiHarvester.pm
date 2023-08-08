@@ -76,6 +76,8 @@ sub process {
       Koha::ERM::UsageDataProviders->find( $args->{ud_provider_id} );
 
     $ud_provider->harvest(
+        $args->{begin_date},
+        $args->{end_date},
         $args->{report_type},
         {
             report_info_callback => sub { $self->report_info(@_); },

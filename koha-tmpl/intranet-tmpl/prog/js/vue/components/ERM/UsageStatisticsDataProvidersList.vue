@@ -194,6 +194,7 @@ export default {
                     }
                 )
             } else {
+                let date = new Date()
                 this.setConfirmationDialog(
                     {
                         title: this.$__(
@@ -202,13 +203,36 @@ export default {
                         message: name,
                         accept_label: this.$__("Yes, run"),
                         cancel_label: this.$__("No, do not run"),
+                        inputs: [
+                            {
+                                id: "begin_date",
+                                type: "Date",
+                                value: null,
+                                required: true,
+                                label: this.$__("Begin date"),
+                            },
+                            {
+                                id: "end_date",
+                                type: "Date",
+                                value: $date_to_rfc3339($date(date.toString())),
+                                required: true,
+                                label: this.$__("End date"),
+                            },
+                        ],
                     },
-                    () => {
+                    callback_result => {
                         const client = APIClient.erm
-                        // TODO: below begin_date and end_date need to be dynamic, or are they needed at all?
-                        // FIXME: this is not even being used atm, API backend is using begin_date+end_date from data provider in database
                         client.usage_data_providers
-                            .run(id, "2022-01-01", "2023-06-15")
+                            .run(id, {
+                                begin_date: callback_result.inputs.find(
+                                    input => {
+                                        return input.id == "begin_date"
+                                    }
+                                ).value,
+                                end_date: callback_result.inputs.find(input => {
+                                    return input.id == "end_date"
+                                }).value,
+                            })
                             .then(
                                 success => {
                                     let message = ""
