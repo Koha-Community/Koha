@@ -1235,6 +1235,9 @@ sub _split_query {
     # Filter out empty values
     @tokens = grep( /\S/, @tokens );
 
+    # Filter out some known isolated trouble makers: -, ^, \, ~, +
+    @tokens = grep( !/^[-\^\\~\+]*$/, @tokens );
+
     return @tokens;
 }
 
