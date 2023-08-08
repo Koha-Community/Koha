@@ -53,6 +53,7 @@
                                 <tr>
                                 <th>Summary</th>
                                 <th>Note</th>
+                                <th>Non-public note</th>
                                 <th>Managed by</th>
                                 <th>Managed on</th>
                                 <th>Suggested on</th>
@@ -83,6 +84,7 @@
                                             </p>
                                         </td>
                                         <td>[% s.note | html %]
+                                        <td>[% s.staff_note | html %]
                                         <td>
                                             [% INCLUDE 'patron-title.inc' patron => s.manager %]
                                         </td>
