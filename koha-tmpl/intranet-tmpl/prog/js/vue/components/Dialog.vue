@@ -12,11 +12,42 @@
         <div class="dialog alert confirmation">
             <h1 v-html="confirmation.title"></h1>
             <p v-html="confirmation.message"></p>
+            <div class="inputs" v-if="confirmation.inputs">
+                <form ref="confirmationform">
+                    <div
+                        class="row"
+                        v-for="input in confirmation.inputs"
+                        v-bind:key="input.id"
+                    >
+                        <div class="col-md-6">
+                            <label
+                                :for="`confirmation_input_${input.id}`"
+                                v-bind:class="{ required: input.required }"
+                                >{{ input.label }}:</label
+                            >
+                        </div>
+                        <div class="col-md-6">
+                            <flat-pickr
+                                v-if="input.type == 'Date'"
+                                :id="`confirmation_input_${input.id}`"
+                                v-model="input.value"
+                                :required="input.required"
+                                :config="fp_config"
+                            />
+                            <input
+                                v-if="input.type == 'Text'"
+                                :id="`confirmation_input_${input.id}`"
+                                v-model="input.value"
+                            />
+                        </div>
+                    </div>
+                </form>
+            </div>
             <button
                 v-if="accept_callback"
                 id="accept_modal"
                 class="approve"
-                @click="accept_callback"
+                @click="submit"
             >
                 <i class="fa fa-fw fa-check"></i>
                 <span v-html="confirmation.accept_label"></span>
@@ -44,7 +75,27 @@
 <script>
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
+import flatPickr from "vue-flatpickr-component"
 export default {
+    data() {
+        return {
+            fp_config: flatpickr_defaults,
+        }
+    },
+    methods: {
+        submit: function (e) {
+            if (
+                this.confirmation.inputs &&
+                this.confirmation.inputs.filter(
+                    input => input.required && input.value == null
+                ).length
+            ) {
+                this.$refs.confirmationform.reportValidity()
+            } else {
+                this.accept_callback()
+            }
+        },
+    },
     setup() {
         const mainStore = inject("mainStore")
         const {
@@ -68,6 +119,9 @@ export default {
             removeMessages,
             removeConfirmationMessages,
         }
+    },
+    components: {
+        flatPickr,
     },
 }
 </script>
@@ -115,5 +169,23 @@ export default {
     margin: auto;
     align-items: center;
     justify-content: center;
+}
+.confirmation .inputs {
+    margin-top: 0.4em;
+}
+.confirmation .inputs input,
+:deep(.flatpickr-input) {
+    width: auto;
+    margin: 0px;
+    float: left;
+}
+
+:deep(.flatpickr-input) {
+    padding-left: 20px;
+}
+
+.confirmation .inputs label {
+    padding: 0.4em;
+    float: right;
 }
 </style>
