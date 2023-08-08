@@ -5870,7 +5870,7 @@ DROP TABLE IF EXISTS `tmp_holdsqueue`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tmp_holdsqueue` (
   `biblionumber` int(11) DEFAULT NULL,
-  `itemnumber` int(11) DEFAULT NULL,
+  `itemnumber` int(11) NOT NULL,
   `barcode` varchar(20) DEFAULT NULL,
   `surname` longtext NOT NULL,
   `firstname` mediumtext DEFAULT NULL,
