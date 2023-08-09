@@ -94,22 +94,6 @@ service_url of the harvester
 
 report_release of the harvester
 
-=head2 begin_date
-
-  data_type: 'date'
-  datetime_undef_if_invalid: 1
-  is_nullable: 1
-
-start date of the harvester
-
-=head2 end_date
-
-  data_type: 'date'
-  datetime_undef_if_invalid: 1
-  is_nullable: 1
-
-end date of the harvester
-
 =head2 customer_id
 
   data_type: 'varchar'
@@ -179,10 +163,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "report_release",
   { data_type => "varchar", is_nullable => 1, size => 80 },
-  "begin_date",
-  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
-  "end_date",
-  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "customer_id",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "requestor_id",
@@ -331,8 +311,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-26 14:35:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AVt5SSRe/g6EmvBtASWHPA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-08-09 11:00:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B99vhhVjbyR/7VoGHcrnFA
 
 # __PACKAGE__->add_columns(
 #     '+active' => { is_boolean => 1 }

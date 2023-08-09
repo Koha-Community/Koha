@@ -20,8 +20,6 @@ return {
                 `service_type` varchar(80) DEFAULT NULL COMMENT 'service_type of the harvester',
                 `service_url` varchar(80) DEFAULT NULL COMMENT 'service_url of the harvester',
                 `report_release` varchar(80) DEFAULT NULL COMMENT 'report_release of the harvester',
-                `begin_date` date DEFAULT NULL COMMENT 'start date of the harvester',
-                `end_date` date DEFAULT NULL COMMENT 'end date of the harvester',
                 `customer_id` varchar(50) DEFAULT NULL COMMENT 'sushi customer id',
                 `requestor_id` varchar(50) DEFAULT NULL COMMENT 'sushi requestor id',
                 `api_key` varchar(80) DEFAULT NULL COMMENT 'sushi api key',

@@ -27,18 +27,6 @@
                 </span>
             </li>
             <li>
-                <label>{{ $__("Harvest Start") }}:</label>
-                <span id="usage_data_provider_begin_date">
-                    {{ usage_data_provider.begin_date }}
-                </span>
-            </li>
-            <li>
-                <label>{{ $__("Harvest End") }}:</label>
-                <span id="usage_data_provider_end_date">
-                    {{ usage_data_provider.end_date }}
-                </span>
-            </li>
-            <li>
                 <label>{{ $__("Report types") }}:</label>
                 <span id="report_type">
                     {{ usage_data_provider.report_types }}

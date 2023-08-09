@@ -81,27 +81,6 @@
                             />
                         </li>
                         <li>
-                            <label for="usage_data_provider_begin_date"
-                                >{{ $__("Harvest start date") }}:
-                            </label>
-                            <flat-pickr
-                                id="usage_data_provider_begin_date"
-                                v-model="usage_data_provider.begin_date"
-                                :config="fp_config"
-                                data-date_to="usage_data_provider_end_date"
-                            />
-                        </li>
-                        <li>
-                            <label for="usage_data_provider_end_date"
-                                >{{ $__("Harvest end date") }}:
-                            </label>
-                            <flat-pickr
-                                id="usage_data_provider_end_date"
-                                v-model="usage_data_provider.end_date"
-                                :config="fp_config"
-                            />
-                        </li>
-                        <li>
                             <label
                                 class="required"
                                 for="usage_data_provider_report_types"
@@ -269,8 +248,6 @@ export default {
                 service_type: "",
                 service_url: "",
                 report_release: "",
-                begin_date: null,
-                end_date: null,
                 customer_id: "",
                 requestor_id: "",
                 api_key: "",

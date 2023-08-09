@@ -143,6 +143,23 @@ export default {
     },
     data() {
         return {
+            usage_data_provider: {
+                erm_usage_data_provider_id: null,
+                name: "",
+                description: "",
+                active: 1,
+                method: "",
+                aggregator: "",
+                service_type: "",
+                service_url: "",
+                report_release: "",
+                customer_id: "",
+                requestor_id: "",
+                api_key: "",
+                requestor_name: "",
+                requestor_email: "",
+                report_types: [],
+            },
             initialized: false,
             tab_content: "detail",
             available_data_types: [
