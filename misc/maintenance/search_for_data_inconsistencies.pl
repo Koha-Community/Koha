@@ -310,7 +310,7 @@ use C4::Biblio qw( GetMarcFromKohaField );
     );
     my @invalid_patrons;
     while ( my $aging_patron = $aging_patrons->next ) {
-        push @invalid_patrons, $aging_patron unless $aging_patron->is_valid_age;
+        push @invalid_patrons, $aging_patron unless $aging_patron->is_expired || $aging_patron->is_valid_age;
     }
     if (@invalid_patrons) {
         new_section("Patrons with invalid age for category");
