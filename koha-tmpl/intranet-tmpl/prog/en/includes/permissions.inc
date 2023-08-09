@@ -576,7 +576,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_staged_marc' -%]
         <span class="sub_permission manage_staged_marc_subpermission">
-            Managed staged MARC records, including completing and reversing imports
+            Manage staged MARC records, including completing and reversing imports
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'marc_modification_templates' -%]
