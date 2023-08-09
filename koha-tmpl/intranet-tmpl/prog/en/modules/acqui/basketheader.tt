@@ -82,14 +82,8 @@
                 <li>
                     <label for="basketbooksellerid">Vendor: </label>
                     <select name="basketbooksellerid" id="basketbooksellerid">
-                    [% FOREACH b IN booksellers %]
-                        [% IF booksellerid == b.id %]
-                           <option value="[% b.id | html %]" selected="selected">[% b.name | html %]</option>
-                        [% ELSE %]
-                           <option value="[% b.id | html %]">[% b.name | html %]</option>
-                        [% END %]
-                    [% END %]
-            </select>
+                        <option value="[% booksellerid | html %]" selected="selected">Current vendor ([% booksellername | html %])</option>
+                    </select>
                 </li>
                 <li>
                     <label for="basketnote">Internal note: </label>
@@ -163,6 +157,54 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
+<script>
+
+$(document).ready(function() {
+
+    function display_vendor(vendor) {
+        var $text;
+        $text = $('<span>'+vendor.text+'</span>');
+
+        return $text;
+    };
+
+    $("#basketbooksellerid").kohaSelect({
+        width: '50%',
+        allowClear: false,
+        ajax: {
+            url: '/api/v1/acquisitions/vendors',
+            delay: 300, // wait 300 milliseconds before triggering the request
+            cache: true,
+            dataType: 'json',
+            data: function (params) {
+                var search_term = (params.term === undefined) ? '' : params.term;
+                var query = {
+                    "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
+                    "_order_by": "name",
+                    "_page": params.page
+                };
+
+                return query;
+            },
+            processResults: function (data) {
+                var results = [];
+                data.results.forEach( function ( vendor ) {
+                    results.push(
+                        {
+                            "id": vendor.id,
+                            "text": vendor.name.escapeHtml()
+                        }
+                    );
+                });
+                return { "results": results, "pagination": { "more": data.pagination.more } };
+            }
+        },
+        templateResult: display_vendor,
+        templateSelection: display_vendor
+    });
+});
+</script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
