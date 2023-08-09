@@ -135,6 +135,7 @@ while (1) {
         }
 
         $pm->start and next;
+        srand();    # ensure each child process begins with a new seed
         process_job( $job, $args );
         $pm->finish;
 
@@ -152,6 +153,7 @@ while (1) {
             next unless $args;
 
             $pm->start and next;
+            srand();    # ensure each child process begins with a new seed
             process_job( $job, { job_id => $job->id, %$args } );
             $pm->finish;
 
