@@ -55,12 +55,12 @@ tables:
             - "[%- PROCESS 'html_helpers.inc' -%]"
             - "Dear [%- INCLUDE 'patron-title.inc' patron => ticket.reporter -%],<br>"
             - "<br>"
-            - "Thankyou for your report concerning [%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 -%].<br>"
+            - "Thank you for your report concerning [%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 -%].<br>"
             - "<br>"
             - "You reported: <br>"
             - "[%- ticket.body -%]<br>"
             - "<br>"
-            - "Thankyou"
+            - "Thank you"
 
         - module: catalogue
           code: TICKET_RESOLVE
@@ -79,7 +79,7 @@ tables:
             - "The following comment was left: <br>"
             - "[%- ticket_update.message -%]<br>"
             - "<br>"
-            - "Thankyou"
+            - "Thank you"
 
         - module: catalogue
           code: TICKET_UPDATE
@@ -98,7 +98,7 @@ tables:
             - "The following comment was left: <br>"
             - "[%- ticket_update.message -%]<br>"
             - "<br>"
-            - "Thankyou"
+            - "Thank you"
 
         - module: catalogue
           code: TICKET_NOTIFY
