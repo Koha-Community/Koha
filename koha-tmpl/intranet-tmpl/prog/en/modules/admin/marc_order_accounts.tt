@@ -7,9 +7,6 @@
 <title>
 MARC Order Accounts
 </title>
-<style>
-    #fileuploadstatus,#fileuploadfailed,#fileuploadcancel { display : none; }
-</style>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_marc_order_acct" class="admin">
@@ -138,19 +135,59 @@ MARC Order Accounts
                                 <li>
                                         <label for='record_type'>Record type:</label>
                                         <select name='record_type' id='record_type'>
-                                            <option value='biblio' selected='selected'>Bibliographic</option>
-                                            <option value='auth'>Authority</option>
+                                            [% IF ( account.record_type == 'biblio' ) %]
+                                                <option value="biblio" selected="selected">
+                                            [% ELSE %]
+                                                <option value="biblio">
+                                            [% END %]
+                                                Bibliographic</option>
+                                            [% IF ( account.record_type == 'auth' ) %]
+                                                <option value="auth" selected="selected">
+                                            [% ELSE %]
+                                                <option value="auth">
+                                            [% END %]
+                                                Authority</option>
                                         </select>
                                     </li>
                                     <li>
                                         <label for="encoding">Character encoding: </label>
                                         <select name="encoding" id="encoding">
-                                            <option value="UTF-8" selected="selected">UTF-8 (Default)</option>
-                                            <option value="MARC-8">MARC 8</option>
-                                            <option value="ISO_5426">ISO 5426</option>
-                                            <option value="ISO_6937">ISO 6937</option>
-                                            <option value="ISO_8859-1">ISO 8859-1</option>
-                                            <option value="EUC-KR">EUC-KR</option>
+                                            [% IF ( account.encoding == 'UTF-8' ) %]
+                                                <option value="UTF-8" selected="selected">
+                                            [% ELSE %]
+                                                <option value="UTF-8">
+                                            [% END %]
+                                                UTF-8 (Default)</option>
+                                            [% IF ( account.encoding == 'MARC-8' ) %]
+                                                <option value="MARC-8" selected="selected">
+                                            [% ELSE %]
+                                                <option value="MARC-8">
+                                            [% END %]
+                                                MARC 8</option>
+                                            [% IF ( account.encoding == 'ISO_5426' ) %]
+                                                <option value="ISO_5426" selected="selected">
+                                            [% ELSE %]
+                                                <option value="ISO_5426">
+                                            [% END %]
+                                                ISO 5426</option>
+                                            [% IF ( account.encoding == 'ISO_6937' ) %]
+                                                <option value="ISO_6937" selected="selected">
+                                            [% ELSE %]
+                                                <option value="ISO_6937">
+                                            [% END %]
+                                                ISO 6937</option>
+                                            [% IF ( account.encoding == 'ISO_8859-1' ) %]
+                                                <option value="ISO_8859-1" selected="selected">
+                                            [% ELSE %]
+                                                <option value="ISO_8859-1">
+                                            [% END %]
+                                                ISO 8859-1</option>
+                                            [% IF ( account.encoding == 'EUC-KR' ) %]
+                                                <option value="EUC-KR" selected="selected">
+                                            [% ELSE %]
+                                                <option value="EUC-KR">
+                                            [% END %]
+                                                EUC-KR</option>
                                         </select>
                                     </li>
                             </ol>
@@ -162,7 +199,7 @@ MARC Order Accounts
                                     <label for="matcher">Record matching rule:</label>
                                     <select name="matcher" id="matcher">
                                         [% FOREACH available_matcher IN available_matchers %]
-                                            [% IF available_matcher.id == account.matcher_id %]
+                                            [% IF available_matcher.matcher_id == account.matcher_id %]
                                                 <option value="[% available_matcher.matcher_id | html %]" selected="selected">[% available_matcher.code | html %] ([% available_matcher.description | html %])</option>
                                             [% ELSE %]
                                                 <option value="[% available_matcher.matcher_id | html %]">[% available_matcher.code | html %] ([% available_matcher.description | html %])</option>
@@ -172,11 +209,43 @@ MARC Order Accounts
                                 </li>
                                 <li>
                                     <label for="overlay_action">Action if matching record found: </label>
-                                    [% INCLUDE 'tools-overlay-action.inc' %]
+                                    <select name="overlay_action" id="overlay_action">
+                                        [% IF ( account.overlay_action == 'replace' ) %]
+                                            <option value="replace"  selected="selected">
+                                        [% ELSE %]
+                                            <option value="replace">
+                                        [% END %]
+                                            Replace existing record with incoming record</option>
+                                        [% IF ( account.overlay_action == 'create_new' ) %]
+                                            <option value="create_new" selected="selected">
+                                        [% ELSE %]
+                                            <option value="create_new">
+                                        [% END %]
+                                            Add incoming record</option>
+                                        [% IF ( account.overlay_action == 'ignore' ) %]
+                                            <option value="ignore" selected="selected">
+                                        [% ELSE %]
+                                            <option value="ignore">
+                                        [% END %]
+                                            Ignore incoming record (its items may still be processed)</option>
+                                    </select>
                                 </li>
                                 <li>
                                     <label for="nomatch_action">Action if no match is found: </label>
-                                    [% INCLUDE 'tools-nomatch-action.inc' %]
+                                    <select name="nomatch_action" id="nomatch_action">
+                                        [% IF ( account.nomatch_action == 'create_new' ) %]
+                                            <option value="create_new" selected="selected">
+                                        [% ELSE %]
+                                            <option value="create_new">
+                                        [% END %]
+                                            Add incoming record</option>
+                                        [% IF ( account.nomatch_action == 'ignore' ) %]
+                                            <option value="ignore" selected="selected">
+                                        [% ELSE %]
+                                            <option value="ignore">
+                                        [% END %]
+                                            Ignore incoming record</option>
+                                    </select>
                                 </li>
                             </ol>
                         </fieldset>
@@ -184,17 +253,57 @@ MARC Order Accounts
                             <legend>Check for embedded item record data?</legend>
                             <ol>
                                 <li class="radio">
-                                    <input type="radio" id="parse_itemsyes" name="parse_items" value="1" checked="checked" />
+                                    [% IF ( account.parse_items == 1 || !account ) %]
+                                        <input type="radio" id="parse_itemsyes" name="parse_items" value="1" checked="checked" />
+                                    [% ELSE %]
+                                        <input type="radio" id="parse_itemsyes" name="parse_items" value="1" />
+                                    [% END %]
                                     <label for="parse_itemsyes">Yes</label>
                                 </li>
                                 <li class="radio">
-                                    <input type="radio" id="parse_itemsno" name="parse_items" value="0" />
+                                    [% IF ( account.parse_items == 0 ) %]
+                                        <input type="radio" id="parse_itemsno" name="parse_items" value="0" checked="checked" />
+                                    [% ELSE %]
+                                        <input type="radio" id="parse_itemsno" name="parse_items" value="0" />
+                                    [% END %]
                                     <label for="parse_itemsno">No</label>
                                 </li>
                             </ol>
                             <ol>
-                                <li><label for="item_action">How to process items: </label>
-                                    [% INCLUDE 'tools-item-action.inc' %]
+                                <li>
+                                    <label for="item_action">How to process items: </label>
+                                    <select name="item_action" id="item_action">
+                                    [% IF ( account.item_action == 'always_add' ) %]
+                                        <option value="always_add" selected="selected">
+                                    [% ELSE %]
+                                        <option value="always_add">
+                                    [% END %]
+                                        Always add items</option>
+                                    [% IF ( account.item_action == 'add_only_for_matches' ) %]
+                                        <option value="add_only_for_matches" selected="selected">
+                                    [% ELSE %]
+                                        <option value="add_only_for_matches">
+                                    [% END %]
+                                        Add items only if matching bib was found</option>
+                                    [% IF ( account.item_action == 'add_only_for_new' ) %]
+                                        <option value="add_only_for_new" selected="selected">
+                                    [% ELSE %]
+                                        <option value="add_only_for_new">
+                                    [% END %]
+                                        Add items only if no matching bib was found</option>
+                                    [% IF ( account.item_action == 'replace' ) %]
+                                        <option value="replace" selected="selected">
+                                    [% ELSE %]
+                                        <option value="replace">
+                                    [% END %]
+                                        Replace items if matching bib was found (only for existing items)</option>
+                                    [% IF ( account.item_action == 'ignore' ) %]
+                                        <option value="ignore" selected="selected">
+                                    [% ELSE %]
+                                        <option value="ignore">
+                                    [% END %]
+                                        Ignore items</option>
+                                    </select>
                                 </li>
                             </ol>
                         </fieldset>
