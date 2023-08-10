@@ -520,6 +520,25 @@ function patron_autocomplete(node, options) {
         };
 }
 
+function expandPatronSearchFields(search_fields) {
+    switch(search_fields) {
+        case 'standard':
+            return defaultPatronSearchFields;
+            break;
+        case 'full_address':
+            return 'streetnumber,streettype,address,address2,city,state,zipcode,country';
+            break;
+        case 'all_emails':
+            return 'email,emailpro,B_email';
+            break;
+        case 'all_phones':
+            return 'phone,phonepro,B_phone,altcontactphone,mobile';
+            break;
+        default:
+            return search_fields;
+    }
+}
+
 /**
  * Build patron search query
  * - term: The full search term input by the user
@@ -550,7 +569,7 @@ function buildPatronSearchQuery(term, options) {
 
     // Search fields: If search_fields option exists, we use that
     if (typeof options !== 'undefined' && options.search_fields) {
-        search_fields = options.search_fields;
+        search_fields = expandPatronSearchFields(options.search_fields);
     // If not, we use DefaultPatronSearchFields system preference instead
     } else {
         search_fields = defaultPatronSearchFields;
@@ -587,7 +606,7 @@ function buildPatronSearchQuery(term, options) {
     q.push({ "-or": term_subquery_or });
 
     // Add each pattern for each extended patron attributes
-    if (typeof options !== 'undefined' && options.extended_attribute_types && extendedPatronAttributes) {
+    if (typeof options !== 'undefined' && options.search_fields == 'standard' && options.extended_attribute_types && extendedPatronAttributes) {
         extended_attribute_subquery_and = [];
         patterns.forEach(function (pattern, i) {
             let extended_attribute_sub_or = [];
