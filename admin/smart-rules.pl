@@ -96,6 +96,7 @@ if ($op eq 'delete') {
                 unseen_renewals_allowed          => undef,
                 renewalperiod                    => undef,
                 norenewalbefore                  => undef,
+                noautorenewalbefore              => undef,
                 auto_renew                       => undef,
                 no_auto_renewal_after            => undef,
                 no_auto_renewal_after_hard_limit => undef,
@@ -268,6 +269,8 @@ elsif ($op eq 'add') {
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
     $norenewalbefore = q{} if $norenewalbefore =~ /^\s*$/;
+    my $noautorenewalbefore = $input->param('noautorenewalbefore');
+    $noautorenewalbefore = q{} if $noautorenewalbefore =~ /^\s*$/;
     my $auto_renew = $input->param('auto_renew') eq 'yes' ? 1 : 0;
     my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
     $no_auto_renewal_after = q{} if $no_auto_renewal_after =~ /^\s*$/;
@@ -316,6 +319,7 @@ elsif ($op eq 'add') {
         unseen_renewals_allowed       => $unseen_renewals_allowed,
         renewalperiod                 => $renewalperiod,
         norenewalbefore               => $norenewalbefore,
+        noautorenewalbefore           => $noautorenewalbefore,
         auto_renew                    => $auto_renew,
         no_auto_renewal_after         => $no_auto_renewal_after,
         no_auto_renewal_after_hard_limit => $no_auto_renewal_after_hard_limit,

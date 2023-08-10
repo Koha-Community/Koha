@@ -273,6 +273,7 @@ if ( $step == 5 ) {
                 no_auto_renewal_after            => "",
                 no_auto_renewal_after_hard_limit => "",
                 norenewalbefore                  => "",
+                noautorenewalbefore              => "",
                 opacitemholds                    => "N",
                 overduefinescap                  => "",
                 rentaldiscount                   => 0,

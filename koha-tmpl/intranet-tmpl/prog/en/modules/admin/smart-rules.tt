@@ -137,6 +137,7 @@
                             [% END %]
                             <th>Renewal period</th>
                             <th>No renewal before</th>
+                            <th>No automatic renewal before</th>
                             <th>Automatic renewal</th>
                             <th>No automatic renewal after</th>
                             <th>No automatic renewal after (hard limit)</th>
@@ -187,6 +188,7 @@
                                     [% SET unseenrenewalsallowed = all_rules.$c.$i.unseen_renewals_allowed %]
                                     [% SET renewalperiod = all_rules.$c.$i.renewalperiod %]
                                     [% SET norenewalbefore = all_rules.$c.$i.norenewalbefore %]
+                                    [% SET noautorenewalbefore = all_rules.$c.$i.noautorenewalbefore %]
                                     [% SET auto_renew = all_rules.$c.$i.auto_renew %]
                                     [% SET no_auto_renewal_after = all_rules.$c.$i.no_auto_renewal_after %]
                                     [% SET no_auto_renewal_after_hard_limit = all_rules.$c.$i.no_auto_renewal_after_hard_limit %]
@@ -205,7 +207,7 @@
                                     [% SET recall_overdue_fine = all_rules.$c.$i.recall_overdue_fine %]
                                     [% SET recall_shelf_time = all_rules.$c.$i.recall_shelf_time %]
 
-                                    [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || unseenrenewalsallowed || renewalperiod || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds || recalls_allowed || recalls_per_record || on_shelf_recalls || recall_due_date_interval || recall_overdue_fine || recall_shelf_time %]
+                                    [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || unseenrenewalsallowed || renewalperiod || norenewalbefore || noautorenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds || recalls_allowed || recalls_per_record || on_shelf_recalls || recall_due_date_interval || recall_overdue_fine || recall_shelf_time %]
                                     [% IF show_rule %]
                                         [% SET row_count = row_count + 1 %]
                                         <tr row_countd="row_[% row_count | html %]">
@@ -319,6 +321,7 @@
                                                 [% END %]
                                                 <td>[% renewalperiod | html %]</td>
                                                 <td>[% norenewalbefore | html %]</td>
+                                                <td>[% noautorenewalbefore | html %]</td>
                                                 <td data-code="[%- IF auto_renew -%]yes[%- ELSE -%]no[%- END -%]">
                                                     [% IF auto_renew %]
                                                         <span>Yes</span>
@@ -487,6 +490,7 @@
                                 [% END %]
                                 <td><input type="text" name="renewalperiod" id="renewalperiod" size="3" /></td>
                                 <td><input type="text" name="norenewalbefore" id="norenewalbefore" size="3" /></td>
+                                <td><input type="text" name="noautorenewalbefore" id="noautorenewalbefore" size="3" /></td>
                                 <td>
                                     <select name="auto_renew" id="auto_renew">
                                         <option value="no" selected>No</option>
@@ -576,6 +580,7 @@
                                   [% END %]
                                   <th>Renewal period</th>
                                   <th>No renewal before</th>
+                                  <th>No automatic renewal before</th>
                                   <th>Automatic renewal</th>
                                   <th>No automatic renewal after</th>
                                   <th>No automatic renewal after (hard limit)</th>
