@@ -640,7 +640,7 @@ function buildPatronSearchQuery(term, options) {
     q.push({ "-or": term_subquery_or });
 
     // Add each pattern for each extended patron attributes
-    if ( typeof options !== 'undefined' && ( (options.search_fields == 'standard' && options.extended_attribute_types) || searched_attribute_fields ) && extendedPatronAttributes) {
+    if ( typeof options !== 'undefined' && ( (options.search_fields == 'standard' && options.extended_attribute_types) || ( searched_attribute_fields.length > 0 ) ) && extendedPatronAttributes) {
         extended_attribute_codes_to_search = (searched_attribute_fields.length > 0) ? searched_attribute_fields : options.extended_attribute_types;
         extended_attribute_subquery_and = [];
         patterns.forEach(function (pattern, i) {

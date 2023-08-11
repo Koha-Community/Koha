@@ -169,7 +169,21 @@
           [% ELSE %]
             <input type="checkbox" id="staff_searchable" name="staff_searchable" />
           [% END %]
-            <span class="hint">Check to make this attribute staff_searchable in the staff patron search.</span>
+            <span class="hint">
+                Check to make this attribute searchable in staff patron searches. If
+                checked, this attribute will appear in patron search dropdowns.
+            </span>
+       </li>
+       <li><label for="searched_by_default">Search by default: </label>
+          [% IF attribute_type AND attribute_type.searched_by_default %]
+            <input type="checkbox" id="searched_by_default" name="searched_by_default" checked="checked" />
+          [% ELSE %]
+            <input type="checkbox" id="searched_by_default" name="searched_by_default" />
+          [% END %]
+            <span class="hint">
+                If checked, this field will be included in 'Standard' patron searches. Requires
+                field to be marked as searchable above
+            </span>
        </li>
        <li><label for="mandatory">Mandatory: </label>
           [% IF attribute_type AND attribute_type.mandatory %]
@@ -301,6 +315,7 @@
               <th>Library limitation</th>
               <th>Authorized value category</th>
               <th>Mandatory</th>
+              <th>Searching</th>
               <th class="NoSort noExport">Actions</th>
             </tr>
           </thead>
@@ -340,6 +355,17 @@
                        <span>No</span>
                     [% END %]
                 </td>
+                <td>
+                    [% IF ( item.staff_searchable ) %]
+                        [% IF( item.searched_by_default ) %]
+                            <span>Searched by default</span>
+                        [% ELSE %]
+                            <span>Searchable</span>
+                        [% END %]
+                    [% ELSE %]
+                        <span>Not searchable</span>
+                    [% END %]
+                </td>
                 <td class="actions">
                   <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=edit_attribute_type&amp;code=[% item.code | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                   <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=delete_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
@@ -374,6 +400,22 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
+
+            function toggle_search_default(){
+                if( $("#staff_searchable").is(":checked") ){
+                    $("#searched_by_default").prop('disabled', false);
+                } else {
+
+                    $("#searched_by_default").prop('disabled', true).prop('checked',false);
+                }
+            }
+            $("#staff_searchable").on('change',function(){
+                toggle_search_default();
+            });
+
+            toggle_search_default();
+
+
             if ( $("#branches option:selected").length < 1 ) {
                 $("#branches option:first").attr("selected", "selected");
             }
