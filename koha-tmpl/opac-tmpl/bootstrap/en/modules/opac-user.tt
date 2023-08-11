@@ -564,7 +564,7 @@
                                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                             [% FOREACH ISSUE IN ISSUES %]
                                                 [% IF ISSUE.status %]
-                                                    <input type="hidden" name="item" value="[% ISSUE.itemnumber | html %]" />
+                                                    <input type="hidden" name="issue" value="[% ISSUE.issue_id | html %]" />
                                                 [% END %]
                                             [% END %]
                                             <input type="submit" class="btn btn-primary" value="Renew all" />
