@@ -92,7 +92,7 @@
                                 [% IF readonly %]
                                     [% shipmentcost | $Price %]
                                 [% ELSE %]
-                                    <input class="decimal" type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost | $Price on_editing => 1 %]" />
+                                    <input class="decimal" type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% IF shipmentcost %][% shipmentcost | $Price on_editing => 1 %][% END %]" />
                                 [% END %]
                             </li>
                             <li>
