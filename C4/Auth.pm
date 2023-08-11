@@ -918,6 +918,7 @@ sub checkauth {
                 C4::Context::_unset_userenv($sessionID);
                 $sessionID = undef;
                 undef $userid; # IMPORTANT: this assures us a new session in code below
+                $auth_state = 'failed';
             } elsif (!$logout) {
 
                 $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
