@@ -1234,6 +1234,7 @@ CREATE TABLE `borrower_attribute_types` (
   `opac_display` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines if this field is visible to patrons on their account in the OPAC (1 for yes, 0 for no)',
   `opac_editable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines if this field is editable by patrons on their account in the OPAC (1 for yes, 0 for no)',
   `staff_searchable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines if this field is searchable via the patron search in the staff interface (1 for yes, 0 for no)',
+  `searched_by_default` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines if this field is included in "Standard" patron searches in the staff interface (1 for yes, 0 for no)',
   `authorised_value_category` varchar(32) DEFAULT NULL COMMENT 'foreign key from authorised_values that links this custom field to an authorized value category',
   `display_checkout` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines if this field displays in checkout screens',
   `category_code` varchar(10) DEFAULT NULL COMMENT 'defines a category for an attribute_type',
