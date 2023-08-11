@@ -526,13 +526,13 @@ function expandPatronSearchFields(search_fields) {
             return defaultPatronSearchFields;
             break;
         case 'full_address':
-            return 'streetnumber,streettype,address,address2,city,state,zipcode,country';
+            return 'streetnumber|streettype|address|address2|city|state|zipcode|country';
             break;
         case 'all_emails':
-            return 'email,emailpro,B_email';
+            return 'email|emailpro|B_email';
             break;
         case 'all_phones':
-            return 'phone,phonepro,B_phone,altcontactphone,mobile';
+            return 'phone|phonepro|B_phone|altcontactphone|mobile';
             break;
         default:
             return search_fields;
@@ -598,7 +598,7 @@ function buildPatronSearchQuery(term, options) {
 
     // Add full search term for each search field
     let term_subquery_or = [];
-    search_fields.split('|').forEach(function (field, i) {
+    search_fields.split('\|').forEach(function (field, i) {
         term_subquery_or.push(
             { ["me." + field]: { 'like': leading_wildcard + term + '%' } }
         );
