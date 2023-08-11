@@ -164,8 +164,9 @@ subtest 'Search patrons' => sub {
     $s->auth;
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     C4::Context->set_preference('DefaultPatronSearchMethod',"contains");
+    my $searchable_attributes = Koha::Patron::Attribute::Types->search({ staff_searchable => 1 })->count();
     my $PatronsPerPage = 15;
-    my $nb_standard_fields = 13;
+    my $nb_standard_fields = 13 + $searchable_attributes; # Standard fields, plus one searchable attribute
     C4::Context->set_preference('PatronsPerPage', $PatronsPerPage);
     $driver->get( $base_url . "/members/members-home.pl" );
     my @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
@@ -182,7 +183,6 @@ subtest 'Search patrons' => sub {
     @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
     is( scalar @filter_options, $nb_standard_fields, 'New filter option added when DefaultPatronSearchFields is populated with a field');
     is( $filter_options[0]->get_value(), 'standard', 'Standard filter uses value "standard"');
-    C4::Context->set_preference('DefaultPatronSearchFields',"firstname|initials|horses");
     $driver->get( $base_url . "/members/members-home.pl" );
     @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
     @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
