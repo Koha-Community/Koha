@@ -251,6 +251,14 @@ __PACKAGE__->add_columns(
     '+mandatory' => { is_boolean => 1 },
 );
 
+__PACKAGE__->add_columns(
+    '+staff_searchable' => { is_boolean => 1 },
+);
+
+__PACKAGE__->add_columns(
+    '+searched_by_default' => { is_boolean => 1 },
+);
+
 sub koha_object_class {
     'Koha::Patron::Attribute::Type';
 }
