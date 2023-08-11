@@ -233,7 +233,7 @@
         }, {});
 
         [% IF Koha.Preference('ExtendedPatronAttributes') %]
-            [% SET extended_attribute_types = ExtendedAttributeTypes.codes( staff_searchable => 1 ) %]
+            [% SET extended_attribute_types = [ ExtendedAttributeTypes.codes( staff_searchable => 1 ) ] %]
             let extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
         [% END %]
 
