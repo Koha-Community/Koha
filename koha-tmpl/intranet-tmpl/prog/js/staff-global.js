@@ -575,7 +575,7 @@ function buildPatronSearchQuery(term, options) {
 
     let q = [];
     let leading_wildcard;
-    let search_fields;
+    let search_fields = [];
     let patterns = term.split(/[\s,]+/).filter(function (s) { return s.length });
 
     // Bail if no patterns
@@ -591,9 +591,18 @@ function buildPatronSearchQuery(term, options) {
         leading_wildcard = defaultPatronSearchMethod === 'contains' ? '%' : '';
     }
 
+    let searched_attribute_fields = [];
     // Search fields: If search_fields option exists, we use that
     if (typeof options !== 'undefined' && options.search_fields) {
-        search_fields = expandPatronSearchFields(options.search_fields);
+        expand_fields = expandPatronSearchFields(options.search_fields);
+        expand_fields.split('\|').forEach(function (field, i) {
+            if( field.startsWith('_ATTR_') ){
+                let attr_field = field.replace("_ATTR_","");
+                searched_attribute_fields.push( attr_field );
+            } else {
+                search_fields.push( field );
+            }
+        });
     // If not, we use DefaultPatronSearchFields system preference instead
     } else {
         search_fields = defaultPatronSearchFields;
@@ -603,7 +612,7 @@ function buildPatronSearchQuery(term, options) {
     let pattern_subquery_and = [];
     patterns.forEach(function (pattern, i) {
             let pattern_subquery_or = [];
-            search_fields.split('\|').forEach(function (field, i) {
+            search_fields.forEach(function (field, i) {
                 pattern_subquery_or.push(
                     { ["me." + field]: { 'like': leading_wildcard + pattern + '%' } }
                 );
@@ -620,9 +629,10 @@ function buildPatronSearchQuery(term, options) {
         });
     q.push({ "-and": pattern_subquery_and });
 
+
     // Add full search term for each search field
     let term_subquery_or = [];
-    search_fields.split('\|').forEach(function (field, i) {
+    search_fields.forEach(function (field, i) {
         term_subquery_or.push(
             { ["me." + field]: { 'like': leading_wildcard + term + '%' } }
         );
@@ -630,13 +640,14 @@ function buildPatronSearchQuery(term, options) {
     q.push({ "-or": term_subquery_or });
 
     // Add each pattern for each extended patron attributes
-    if (typeof options !== 'undefined' && options.search_fields == 'standard' && options.extended_attribute_types && extendedPatronAttributes) {
+    if ( typeof options !== 'undefined' && ( (options.search_fields == 'standard' && options.extended_attribute_types) || searched_attribute_fields ) && extendedPatronAttributes) {
+        extended_attribute_codes_to_search = (searched_attribute_fields.length > 0) ? searched_attribute_fields : options.extended_attribute_types;
         extended_attribute_subquery_and = [];
         patterns.forEach(function (pattern, i) {
             let extended_attribute_sub_or = [];
             extended_attribute_sub_or.push({
                 "extended_attributes.value": { "like": leading_wildcard + pattern + '%' },
-                "extended_attributes.code": options.extended_attribute_types
+                "extended_attributes.code": extended_attribute_codes_to_search
             });
             extended_attribute_subquery_and.push(extended_attribute_sub_or);
         });

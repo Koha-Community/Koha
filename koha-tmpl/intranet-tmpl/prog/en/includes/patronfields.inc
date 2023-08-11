@@ -99,5 +99,14 @@
                 <option value=[% s_o | html %]>[% display_name | $raw %]</option>
             [% END %]
         [% END %]
+        [% IF Koha.Preference('ExtendedPatronAttributes') %]
+            [% FOREACH attribute IN ExtendedAttributeTypes.all( staff_searchable => 1 ) %]
+                [% IF searchfieldstype == "_ATTR_" _ attribute.code %]
+                    <option value=[% "_ATTR_" _ attribute.code | html %] selected="selected">[% attribute.description | html %]</option>
+                [% ELSE %]
+                    <option value=[% "_ATTR_" _ attribute.code | html %]>[% attribute.description | html %]</option>
+                [% END %]
+            [% END %]
+        [% END %]
     </select>
 [%- END -%]
