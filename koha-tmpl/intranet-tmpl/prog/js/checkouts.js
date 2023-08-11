@@ -530,13 +530,6 @@ $(document).ready(function() {
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "auto_too_soon" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("Scheduled for automatic renewal")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_too_late" ) {
                             msg += "<span class='renewals-disabled'>"
                                     + __("Can no longer be auto-renewed - number of checkout days exceeded")
@@ -554,13 +547,6 @@ $(document).ready(function() {
                         } else if ( oObj.can_renew_error == "auto_account_expired" ) {
                             msg += "<span class='renewals-disabled'>"
                                     + __("Automatic renewal failed, account expired")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "auto_renew" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("Scheduled for automatic renewal")
                                     + "</span>";
 
                             span_style = "display: none";
@@ -608,6 +594,11 @@ $(document).ready(function() {
                             if (UnseenRenewals && oObj.unseen_allowed) {
                                 content += __(" and %s of %s unseen renewals remaining").format(oObj.unseen_remaining, oObj.unseen_allowed);
                             }
+                            content += ")</span>";
+                        }
+                        if(oObj.auto_renew){
+                            content += "<span class='renewals-info'>(";
+                            content += __("Scheduled for automatic renewal");
                             content += ")</span>";
                         }
 

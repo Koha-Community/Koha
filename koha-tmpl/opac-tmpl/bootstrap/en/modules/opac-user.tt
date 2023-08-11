@@ -495,16 +495,11 @@
                                                                     / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
                                                                 [% END %]
                                                             )</span>
-                                                        [% ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) %]
-                                                            <span class="usr-msg automatic-renewal">Automatic renewal</span>
-                                                            <span class="renewals">(
-                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
-                                                                [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
-                                                                    / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
-                                                                [% END %]
-                                                            )</span>
                                                         [% ELSIF ( ISSUE.item_denied_renewal ) %]
                                                             Renewal not allowed
+                                                        [% END %]
+                                                        [% IF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) %]
+                                                            <br><span class="usr-msg automatic-renewal">This item is scheduled for auto renewal.</span>
                                                         [% END %]
                                                         </td>
                                                     [% END %]

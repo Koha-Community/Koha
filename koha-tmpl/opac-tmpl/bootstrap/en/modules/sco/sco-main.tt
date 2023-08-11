@@ -363,9 +363,7 @@
                                                                     <input type="submit" value="Renew item" class="btn btn-primary btn-sm renew" />
                                                                 [% END %]
                                                             [% ELSE %]
-                                                                [% IF ISSUE.renew_error == 'auto_renew' OR ISSUE.renew_error == 'auto_too_soon' %]
-                                                                    <span>This item has been scheduled for automatic renewal and cannot be renewed</span>
-                                                                [% ELSIF ISSUE.renew_error == 'onsite_checkout' %]
+                                                                [% IF ISSUE.renew_error == 'onsite_checkout' %]
                                                                     <span>This is a on-site checkout, it cannot be renewed.</span>
                                                                 [% ELSIF ISSUE.renew_error == 'too_unseen' %]
                                                                     <span>You have renewed this item the maximum number of consecutive times without it being seen by the library.</span>
@@ -379,6 +377,9 @@
                                                                     <input type="hidden" name="op" value="returnbook" />
                                                                     <input type="hidden" name="confirmed" value=""  />
                                                                 [% END %]
+                                                            [% END %]
+                                                            [% IF ISSUE.auto_renew %]
+                                                                <br><span>This item is scheduled for automatic renewal</span>
                                                             [% END %]
                                                         </form>
                                                     </td>
