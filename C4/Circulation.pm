@@ -4531,7 +4531,7 @@ sub _CanBookBeAutoRenewed {
                 'no_auto_renewal_after',
                 'no_auto_renewal_after_hard_limit',
                 'lengthunit',
-                'norenewalbefore',
+                'noautorenewalbefore',
             ]
         }
     );
