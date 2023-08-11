@@ -3433,6 +3433,8 @@ C<$patron> is the patron who currently has the item on loan.
 
 C<$issue> is the the item issue.
 
+C<$is_auto> is this soonest renew date for an auto renewal?
+
 C<$GetSoonestRenewDate> returns the DateTime of the soonest possible
 renew date, based on the value "No renewal before" of the applicable
 issuing rule. Returns the current date if the item can already be
@@ -3442,12 +3444,14 @@ cannot be found.
 =cut
 
 sub GetSoonestRenewDate {
-    my ( $patron, $issue ) = @_;
+    my ( $patron, $issue, $is_auto ) = @_;
     return unless $issue;
     return unless $patron;
 
     my $item = $issue->item;
     return unless $item;
+
+    my $circ_rule = $is_auto ? 'noautorenewalbefore' : 'norenewalbefore';
 
     my $dbh = C4::Context->dbh;
 
@@ -3457,7 +3461,7 @@ sub GetSoonestRenewDate {
             itemtype     => $item->effective_itemtype,
             branchcode   => $branchcode,
             rules => [
-                'norenewalbefore',
+                $circ_rule,
                 'lengthunit',
             ]
         }
@@ -3465,12 +3469,12 @@ sub GetSoonestRenewDate {
 
     my $now = dt_from_string;
 
-    if ( defined $issuing_rule->{norenewalbefore}
-        and $issuing_rule->{norenewalbefore} ne "" )
+    if ( defined $issuing_rule->{$circ_rule}
+        and $issuing_rule->{$circ_rule} ne "" )
     {
         my $soonestrenewal =
           dt_from_string( $issue->date_due )->subtract(
-            $issuing_rule->{lengthunit} => $issuing_rule->{norenewalbefore} );
+            $issuing_rule->{lengthunit} => $issuing_rule->{$circ_rule} );
 
         if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
             and $issuing_rule->{lengthunit} eq 'days' )
@@ -3478,8 +3482,8 @@ sub GetSoonestRenewDate {
             $soonestrenewal->truncate( to => 'day' );
         }
         return $soonestrenewal;
-    } elsif ( $issue->auto_renew && $patron->autorenew_checkouts ) {
-        # Checkouts with auto-renewing fall back to due date
+    } elsif ( $is_auto && $issue->auto_renew && $patron->autorenew_checkouts ) {
+        # Checkouts with auto-renewing fall back to due date if noautorenewalbefore is undef
         my $soonestrenewal = dt_from_string( $issue->date_due );
         if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
             and $issuing_rule->{lengthunit} eq 'days' )
@@ -4572,7 +4576,7 @@ sub _CanBookBeAutoRenewed {
         }
     }
 
-    my $soonest = GetSoonestRenewDate($patron, $issue);
+    my $soonest = GetSoonestRenewDate( $patron, $issue, 1 );
     if ( $soonest > dt_from_string() )
     {
         return ( "auto_too_soon", $soonest );
