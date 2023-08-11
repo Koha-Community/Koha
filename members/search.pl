@@ -46,8 +46,5 @@ $template->param(
     columns        => \@columns,
     filter         => $filter,
     selection_type => $selection_type,
-    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
-        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
-        : [] ),
 );
 output_html_with_http_headers( $input, $cookie, $template->output );

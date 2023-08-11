@@ -77,7 +77,7 @@
     });
 </script>
 
-    [% PROCESS patron_search_js table_id => 'memberresultst', categories => categories, libraries => libraries, extended_attribute_types => attribute_type_codes, columns => columns, filter => filter, actions => [selection_type], preview_on_name_click => 1, callback => callback %]
+    [% PROCESS patron_search_js table_id => 'memberresultst', categories => categories, libraries => libraries, columns => columns, filter => filter, actions => [selection_type], preview_on_name_click => 1, callback => callback %]
 [% END %]
 
 [% SET popup_window = 1 %]

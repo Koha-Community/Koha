@@ -123,10 +123,6 @@ $template->param(
     patron => $patron,
     subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
     C4::Search::enabled_staff_search_views,
-    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
-        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
-        : []
-    ),
 );
 
 

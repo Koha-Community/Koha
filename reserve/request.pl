@@ -704,14 +704,6 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
 }
 $template->param( biblionumbers => \@biblionumbers );
 
-$template->param(
-    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
-        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
-        : []
-    ),
-);
-
-
 # pass the userenv branch if no pickup location selected
 $template->param( pickup => $pickup || C4::Context->userenv->{branch} );
 

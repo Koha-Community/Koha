@@ -81,9 +81,6 @@ $template->param(
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
     do_not_defer_loading => !$defer_loading,
     circsearch          => $circsearch,
-    attribute_type_codes => ( C4::Context->preference('ExtendedPatronAttributes')
-        ? [ Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code') ]
-        : [] ),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

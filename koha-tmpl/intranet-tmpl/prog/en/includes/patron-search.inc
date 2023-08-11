@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE I18N %]
 [% USE Branches %]
+[% USE ExtendedAttributeTypes %]
 [% USE raw %]
 [% USE Asset %]
 [% USE To %]
@@ -231,7 +232,8 @@
             return map;
         }, {});
 
-        [% IF Koha.Preference('ExtendedPatronAttributes') && extended_attribute_types %]
+        [% IF Koha.Preference('ExtendedPatronAttributes') %]
+            [% SET extended_attribute_types = ExtendedAttributeTypes.codes( staff_searchable => 1 ) %]
             let extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
         [% END %]
 

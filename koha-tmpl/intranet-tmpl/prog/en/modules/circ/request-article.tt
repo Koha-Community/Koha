@@ -441,7 +441,7 @@
         });
     </script>
 
-    [% PROCESS patron_search_js table_id => 'table_borrowers', categories => categories, libraries => libraries, extended_attribute_types => attribute_type_codes, columns => columns, open_on_row_click => 1, on_click_url => '/cgi-bin/koha/circ/request-article.pl?biblionumber=' _ biblio.biblionumber, redirect_if_one_result => 1, redirect_url => '/cgi-bin/koha/circ/request-article.pl?biblionumber=' _ biblio.biblionumber %]
+    [% PROCESS patron_search_js table_id => 'table_borrowers', categories => categories, libraries => libraries, columns => columns, open_on_row_click => 1, on_click_url => '/cgi-bin/koha/circ/request-article.pl?biblionumber=' _ biblio.biblionumber, redirect_if_one_result => 1, redirect_url => '/cgi-bin/koha/circ/request-article.pl?biblionumber=' _ biblio.biblionumber %]
 
 [% END %]
 
