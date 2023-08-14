@@ -91,19 +91,24 @@ sub new {
 =cut
 
 sub draw_barcode {
-    my ($self, $pdf) = @_;
+    my ( $self, $pdf ) = @_;
+
     # Default values for barcode scaling are set in constructor to work with pre-existing installations
     my $barcode_height_scale = $self->{'barcode_height_scale'};
-    my $barcode_width_scale = $self->{'barcode_width_scale'};
-
-    _draw_barcode(      $self,
-                        llx     => $self->{'llx'} + $self->{'layout'}->{'barcode'}->[0]->{'llx'} * $self->{'unitvalue'},
-                        lly     => $self->{'lly'} + $self->{'layout'}->{'barcode'}->[0]->{'lly'} * $self->{'unitvalue'},
-                        width   => $self->{'width'} * $barcode_width_scale,
-                        y_scale_factor  => $self->{'height'} * $barcode_height_scale,
-                        barcode_type    => $self->{'layout'}->{'barcode'}->[0]->{'type'},
-                        barcode_data    => $self->{'layout'}->{'barcode'}->[0]->{'data'},
-                        text    => $self->{'layout'}->{'barcode'}->[0]->{'text_print'},
+    my $barcode_width_scale  = $self->{'barcode_width_scale'};
+    my $llx                  = $self->{'llx'} || 0;
+    my $llx_layout           = $self->{'layout'}->{'barcode'}->[0]->{'llx'} || 0;
+    my $lly                  = $self->{'lly'} || 0;
+    my $lly_layout           = $self->{'layout'}->{'barcode'}->[0]->{'lly'} || 0;
+    _draw_barcode(
+        $self,
+        llx            => $llx + $llx_layout * $self->{'unitvalue'},
+        lly            => $lly + $lly_layout * $self->{'unitvalue'},
+        width          => $self->{'width'} * $barcode_width_scale,
+        y_scale_factor => $self->{'height'} * $barcode_height_scale,
+        barcode_type   => $self->{'layout'}->{'barcode'}->[0]->{'type'},
+        barcode_data   => $self->{'layout'}->{'barcode'}->[0]->{'data'},
+        text           => $self->{'layout'}->{'barcode'}->[0]->{'text_print'},
     );
 }
 
@@ -241,9 +246,14 @@ sub draw_text {
             } @orig_line;
             $line = join(' ',@orig_line);
         }
-        my $text_attribs = shift @$text;
-        my $origin_llx = $self->{'llx'} + $text_attribs->{'llx'} * $self->{'unitvalue'};
-        my $origin_lly = $self->{'lly'} + $text_attribs->{'lly'} * $self->{'unitvalue'};
+        my $text_attribs  = shift @$text;
+        my $llx           = $self->{'llx'} || 0;
+        my $llx_text_attr = $text_attribs->{'llx'} || 0;
+        my $lly           = $self->{'lly'} || 0;
+        my $lly_text_attr = $text_attribs->{'lly'} || 0;
+
+        my $origin_llx = $llx + $llx_text_attr * $self->{'unitvalue'};
+        my $origin_lly = $lly + $lly_text_attr * $self->{'unitvalue'};
         my $Tx = 0;     # final text llx
         my $Ty = $origin_lly;   # final text lly
         my $Tw = 0;     # final text word spacing. See http://www.adobe.com/devnet/pdf/pdf_reference.html ISO 32000-1
@@ -258,32 +268,46 @@ sub draw_text {
 #        my $units_per_em =  $m->get_units_per_em();
 #        my $font_units_width = $m->string_width($line);
 #        my $string_width = ($font_units_width * $text_attribs->{'font_size'}) / $units_per_em;
-        my $string_width = C4::Creators::PDF->StrWidth($line, $text_attribs->{'font'}, $text_attribs->{'font_size'});
-        if (($string_width + $text_attribs->{'llx'}) > $self->{'width'}) {
+## Please see file perltidy.ERR
+        my $string_width = C4::Creators::PDF->StrWidth( $line, $text_attribs->{'font'}, $text_attribs->{'font_size'} );
+        if ( ( $string_width + $llx_text_attr ) > $self->{'width'} ) {
             my $cur_line = "";
-            WRAP_LINES:
+        WRAP_LINES:
             while (1) {
-#                $line =~ m/^.*(\s\b.*\b\s*|\s&|\<\b.*\b\>)$/; # original regexp... can be removed after dev stage is over
+
+                #                $line =~ m/^.*(\s\b.*\b\s*|\s&|\<\b.*\b\>)$/; # original regexp... can be removed after dev stage is over
                 $line =~ m/^.*(\s.*\s*|\s&|\<.*\>)$/;
                 $trim = $1 . $trim;
+
                 #Sanitize the input into this regular expression so regex metacharacters are escaped as literal values (https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22429)
                 $line =~ s/\Q$1\E$//;
-                $string_width = C4::Creators::PDF->StrWidth($line, $text_attribs->{'font'}, $text_attribs->{'font_size'});
-#                $font_units_width = $m->string_width($line);
-#                $string_width = ($font_units_width * $text_attribs->{'font_size'}) / $units_per_em;
-                if (($string_width + $text_attribs->{'llx'}) < $self->{'width'}) {
-                    ($Tx, $Tw) = text_alignment($origin_llx, $self->{'width'}, $text_attribs->{'llx'}, $string_width, $line, $text_attribs->{'text_alignment'});
-                    push @lines, {line=> $line, Tx => $Tx, Ty => $Ty, Tw => $Tw};
+                $string_width =
+                    C4::Creators::PDF->StrWidth( $line, $text_attribs->{'font'}, $text_attribs->{'font_size'} );
+
+                #                $font_units_width = $m->string_width($line);
+                #                $string_width = ($font_units_width * $text_attribs->{'font_size'}) / $units_per_em;
+                if ( ( $string_width + $text_attribs->{'llx'} ) < $self->{'width'} ) {
+                    ( $Tx, $Tw ) = text_alignment(
+                        $origin_llx, $self->{'width'}, $text_attribs->{'llx'}, $string_width, $line,
+                        $text_attribs->{'text_alignment'}
+                    );
+                    push @lines, { line => $line, Tx => $Tx, Ty => $Ty, Tw => $Tw };
                     $line = undef;
                     last WRAP_LINES if $trim eq '';
-                    $Ty -= leading($text_attribs->{'font_size'});
+                    $Ty -= leading( $text_attribs->{'font_size'} );
                     $line = $trim;
                     $trim = '';
-                    $string_width = C4::Creators::PDF->StrWidth($line, $text_attribs->{'font'}, $text_attribs->{'font_size'});
+                    $string_width =
+                        C4::Creators::PDF->StrWidth( $line, $text_attribs->{'font'}, $text_attribs->{'font_size'} );
+
                     #$font_units_width = $m->string_width($line);
                     #$string_width = ($font_units_width * $text_attribs->{'font_size'}) / $units_per_em;
-                    if ( $string_width + ( $text_attribs->{'llx'} * $self->{'unitvalue'} ) < $self->{'width'}) {
-                        ($Tx, $Tw) = text_alignment($origin_llx, $self->{'width'}, $text_attribs->{'llx'} * $self->{'unitvalue'}, $string_width, $line, $text_attribs->{'text_alignment'});
+                    if ( $string_width + ( $text_attribs->{'llx'} * $self->{'unitvalue'} ) < $self->{'width'} ) {
+                        ( $Tx, $Tw ) = text_alignment(
+                            $origin_llx, $self->{'width'},
+                            $text_attribs->{'llx'} * $self->{'unitvalue'}, $string_width, $line,
+                            $text_attribs->{'text_alignment'}
+                        );
                         $line =~ s/^\s+//g;     # strip naughty leading spaces
                         push @lines, {line=> $line, Tx => $Tx, Ty => $Ty, Tw => $Tw};
                         last WRAP_LINES;
@@ -298,7 +322,7 @@ sub draw_text {
             }
         }
         else {
-            ($Tx, $Tw) = text_alignment($origin_llx, $self->{'width'}, $text_attribs->{'llx'} * $self->{'unitvalue'}, $string_width, $line, $text_attribs->{'text_alignment'});
+            ($Tx, $Tw) = text_alignment($origin_llx, $self->{'width'}, $lly_text_attr * $self->{'unitvalue'}, $string_width, $line, $text_attribs->{'text_alignment'});
             $line =~ s/^\s+//g;     # strip naughty leading spaces
             push @lines, {line=> $line, Tx => $Tx, Ty => $Ty, Tw => $Tw};
         }
