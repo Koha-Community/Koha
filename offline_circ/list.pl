@@ -48,7 +48,13 @@ for (@$operations) {
         $_->{'bibliotitle'}    = $biblio->title;
         $_->{'biblionumber'}   = $biblio->biblionumber;
     }
-    my $patron             = $_->{cardnumber} ? Koha::Patrons->find( { cardnumber => $_->{cardnumber} } ) : undef;
+
+    my $patron =
+        $_->{cardnumber}
+        ? Koha::Patrons->find( { cardnumber => $_->{cardnumber} } )
+        || Koha::Patrons->find( { userid => $_->{cardnumber} } )
+        : undef;
+
     if ($patron) {
         $_->{'borrowernumber'} = $patron->borrowernumber;
         $_->{'borrower'}       = ($patron->firstname ? $patron->firstname:'').' '.$patron->surname;

@@ -4242,6 +4242,7 @@ sub ProcessOfflineIssue {
     my $operation = shift;
 
     my $patron = Koha::Patrons->find( { cardnumber => $operation->{cardnumber} } );
+    $patron ||= Koha::Patrons->find( { userid => $operation->{cardnumber} } );
 
     if ( $patron ) {
         my $item = Koha::Items->find({ barcode => $operation->{barcode} });
@@ -4275,7 +4276,8 @@ sub ProcessOfflineIssue {
 sub ProcessOfflinePayment {
     my $operation = shift;
 
-    my $patron = Koha::Patrons->find({ cardnumber => $operation->{cardnumber} });
+    my $patron = Koha::Patrons->find( { cardnumber => $operation->{cardnumber} } );
+    $patron ||= Koha::Patrons->find( { userid => $operation->{cardnumber} } );
 
     $patron->account->pay(
         {
