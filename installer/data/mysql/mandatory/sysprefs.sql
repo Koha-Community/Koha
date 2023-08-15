@@ -307,7 +307,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IndependentBranchesPatronModifications','0', NULL, 'Show only modification request for the logged in branch','YesNo'),
 ('IndependentBranchesTransfers','0', NULL, 'Allow non-superlibrarians to transfer items between libraries','YesNo'),
 ('IntranetAddMastheadLibraryPulldown','0', NULL, 'Add a library select pulldown menu on the staff header search','YesNo'),
-('IntranetAcquisitionsHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the acquisitions home page', 'Free'),
 ('IntranetAuthoritiesHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the authorities home page', 'Free'),
 ('IntranetCatalogingHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the cataloging home page', 'Free'),
 ('IntranetCatalogSearchPulldown','0', NULL, 'Show a search field pulldown for \"Search the catalog\" boxes','YesNo'),

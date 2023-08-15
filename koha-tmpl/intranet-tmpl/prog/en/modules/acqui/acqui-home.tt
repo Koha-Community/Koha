@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE AdditionalContents %]
 [% USE Asset %]
 [% USE Price %]
 [% USE Branches %]
@@ -202,9 +203,12 @@
 </div><!-- /.page-section -->
 [% END %]
 
-    <div class="row" id="intranet-acqui-home-html">
-        [% Koha.Preference('IntranetAcquisitionsHomeHTML') | $raw %]
+    [%- SET StaffAcquisitionsHome = AdditionalContents.get( location => "StaffAcquisitionsHome", lang => lang, library => logged_in_user.branchcode ) -%]
+    [%- FOREACH block IN StaffAcquisitionsHome.content -%]
+    <div class="page-section">
+        [%- block.content | $raw -%]
     </div>
+    [%- END -%]
 
 </main>
 </div> <!-- /.col-sm-10.col-sm-push-2 -->
