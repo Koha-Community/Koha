@@ -1080,10 +1080,10 @@ sub get_marc_notes {
             push @marcnotes, { marcnote => $field->as_string($othersub) };
             foreach my $sub ( $field->subfield('u') ) {
                 $sub =~ s/^\s+|\s+$//g; # trim
-                push @marcnotes, { marcnote => $sub };
+                push @marcnotes, { marcnote => $sub, tag => $tag };
             }
         } else {
-            push @marcnotes, { marcnote => $field->as_string() };
+            push @marcnotes, { marcnote => $field->as_string(), tag => $tag };
         }
     }
     return \@marcnotes;
