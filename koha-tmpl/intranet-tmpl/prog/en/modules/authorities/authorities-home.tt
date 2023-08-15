@@ -1,6 +1,7 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% USE Koha %]
+[% USE AdditionalContents %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
@@ -28,16 +29,17 @@
         <div class="col-md-8 col-md-offset-2">
             [% INCLUDE 'authorities-toolbar.inc' %]
 
-    [% INCLUDE 'authorities-toolbar.inc' %]
+            <h1>Authorities</h1>
 
-    <h1>Authorities</h1>
+            <div id="merge_in_progress" class="page-section bg-info" style="display:none;"></div>
 
-    <div id="merge_in_progress" class="page-section bg-info" style="display:none;"></div>
+            [%- SET StaffAuthoritiesHome = AdditionalContents.get( location => "StaffAuthoritiesHome", lang => lang, library => logged_in_user.branchcode ) -%]
+            [%- FOREACH block IN StaffAuthoritiesHome.content -%]
+            <div class="page-section">
+                [%- block.content | $raw -%]
+            </div>
+            [%- END -%]
         </div>
-    </div>
-
-    <div class="row" id="intranet-authorities-home-html">
-        [% Koha.Preference('IntranetAuthoritiesHomeHTML') | $raw %]
     </div>
 
 [% MACRO jsinclude BLOCK %]
