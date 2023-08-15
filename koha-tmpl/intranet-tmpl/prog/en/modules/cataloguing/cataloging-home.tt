@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE AdditionalContents %]
 [% USE Koha %]
 [% USE Branches %]
 [% PROCESS 'i18n.inc' %]
@@ -216,6 +217,14 @@
 
                     </div>
                 </div>
+
+                [%- SET StaffCataloguingHome = AdditionalContents.get( location => "StaffCataloguingHome", lang => lang, library => logged_in_user.branchcode ) -%]
+                [%- FOREACH block IN StaffCataloguingHome.content -%]
+                <div class="page-section">
+                    [%- block.content | $raw -%]
+                </div>
+                [%- END -%]
+
             </div>
         </div>
 
