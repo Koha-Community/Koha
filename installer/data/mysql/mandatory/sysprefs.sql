@@ -317,7 +317,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IntranetCoce','0', NULL, 'If on, enables cover retrieval from the configured Coce server in the staff interface', 'YesNo'),
 ('intranetcolorstylesheet','','50','Define the color stylesheet to use in the staff interface','free'),
 ('IntranetFavicon','','','Enter a complete URL to an image to replace the default Koha favicon on the staff interface','free'),
-('IntranetListsHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the lists home page', 'Free'),
 ('IntranetmainUserblock','','70|10','Add a block of HTML that will display on the intranet home page','Textarea'),
 ('IntranetNav','','70|10','Use HTML tabs to add navigational links to the top-hand navigational bar in the staff interface','Textarea'),
 ('IntranetNumbersPreferPhrase','0',NULL,'Control the use of phr operator in callnumber and standard number staff interface searches','YesNo'),
