@@ -1471,6 +1471,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% IF ( saved1 ) %]
         [% INCLUDE 'columns_settings.inc' %]
+        [% Asset.js( "lib/jsdiff/jsdiff.min.js" ) | $raw %]
     [% END %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/overlay.min.js" ) | $raw %]
