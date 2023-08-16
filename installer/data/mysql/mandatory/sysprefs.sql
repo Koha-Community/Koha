@@ -322,7 +322,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IntranetNumbersPreferPhrase','0',NULL,'Control the use of phr operator in callnumber and standard number staff interface searches','YesNo'),
 ('intranetreadinghistory','1','','If ON, Checkout history is enabled for all patrons','YesNo'),
 ('IntranetReportsHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the reports home page', 'Free'),
-('IntranetSerialsHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the serials home page', 'Free'),
 ('IntranetSlipPrinterJS','','','Use this JavaScript for printing slips. Define at least function printThenClose(). For use e.g. with Firefox PlugIn jsPrintSetup, see http://jsprintsetup.mozdev.org/','Free'),
 ('intranetstylesheet','','50','Enter a complete URL to use an alternate layout stylesheet in Intranet','free'),
 ('IntranetUserCSS','',NULL,'Add CSS to be included in the intranet in an embedded <style> tag.','free'),
