@@ -2945,13 +2945,16 @@ sub GetUpcomingDueIssues {
 
 =head2 CanBookBeRenewed
 
-  ($ok,$error,$info) = &CanBookBeRenewed($patron, $issue, $override_limit);
+  ($ok,$error,$info) = &CanBookBeRenewed($patron, $issue, $override_limit, $cron);
 
 Find out whether a borrowed item may be renewed.
 
 C<$patron> is the patron who currently has the issue.
 
 C<$issue> is the checkout to renew.
+
+C<$cron> true or false, specifies if this check is being made
+by the automatic_renewals.pl cronscript
 
 C<$override_limit>, if supplied with a true value, causes
 the limit on the number of times that the loan can be renewed
