@@ -523,19 +523,32 @@
             [% END %]
         [% END %]
     [% ELSE %]
-        [% SET available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo', 'CatalogConcernHelp', 'CatalogConcernTemplate', 'CookieConsentBar', 'CookieConsentPopup', 'StaffAcquisitionsHome', 'StaffAuthoritiesHome', 'StaffCataloguingHome', 'StaffListsHome', 'StaffPatronsHome', 'StaffPOSHome', 'StaffSerialsHome' ] %]
-        [% FOREACH l IN available_options.sort %]
-            [% IF l == location %]
-                <option value="[% l | html %]" selected="selected">[% l | html %]</option>
-            [% ELSE %]
-                <option value="[% l | html %]">[% l | html %]</option>
+        [% SET opac_available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo',  ] %]
+        <optgroup label="OPAC">
+            [% FOREACH l IN opac_available_options.sort %]
+                [% IF l == location %]
+                    <option value="[% l | html %]" selected="selected">[% l | html %]</option>
+                [% ELSE %]
+                    <option value="[% l | html %]">[% l | html %]</option>
+                [% END %]
             [% END %]
-        [% END %]
+        </optgroup>
+        [% SET staff_available_options = [ 'CatalogConcernHelp', 'CatalogConcernTemplate', 'CookieConsentBar', 'CookieConsentPopup', 'StaffAcquisitionsHome', 'StaffAuthoritiesHome', 'StaffCataloguingHome', 'StaffListsHome', 'StaffPatronsHome', 'StaffPOSHome', 'StaffSerialsHome' ] %]
+        <optgroup label="Staff">
+            [% FOREACH l IN staff_available_options.sort %]
+                [% IF l == location %]
+                    <option value="[% l | html %]" selected="selected">[% l | html %]</option>
+                [% ELSE %]
+                    <option value="[% l | html %]">[% l | html %]</option>
+                [% END %]
+            [% END %]
+        </optgroup>
     [% END %]
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     <script>
@@ -694,7 +707,7 @@
                     stickTo: ".main",
                     stickyClass: "floating"
                 });
-
+                $("#location").select2({ width: '50%' });
             });
         </script>
     [% END %]
