@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE AdditionalContents %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE Koha %]
@@ -160,9 +161,13 @@
         </form>
         [% END %]
 
-        <div class="row" id="intranet-pos-home-html">
-            [% Koha.Preference('IntranetPOSHomeHTML') | $raw %]
+        [%- SET StaffPOSHome = AdditionalContents.get( location => "StaffPOSHome", lang => lang, library => logged_in_user.branchcode ) -%]
+        [%- FOREACH block IN StaffPOSHome.content -%]
+        <div class="page-section">
+            [%- block.content | $raw -%]
         </div>
+        [%- END -%]
+
     </div>
 
     <div class="col-md-2 col-md-pull-10">
