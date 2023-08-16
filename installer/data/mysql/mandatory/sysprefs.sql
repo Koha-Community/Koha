@@ -320,7 +320,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IntranetmainUserblock','','70|10','Add a block of HTML that will display on the intranet home page','Textarea'),
 ('IntranetNav','','70|10','Use HTML tabs to add navigational links to the top-hand navigational bar in the staff interface','Textarea'),
 ('IntranetNumbersPreferPhrase','0',NULL,'Control the use of phr operator in callnumber and standard number staff interface searches','YesNo'),
-('IntranetPatronsHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the patrons home page', 'Free'),
 ('IntranetPOSHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the point of sale home page', 'Free'),
 ('intranetreadinghistory','1','','If ON, Checkout history is enabled for all patrons','YesNo'),
 ('IntranetReportsHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the reports home page', 'Free'),

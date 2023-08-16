@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE AdditionalContents %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE TablesSettings %]
@@ -117,9 +118,12 @@
             </form>
         [% END %]
 
-          <div class="row" id="intranet-members-home-html">
-              [% Koha.Preference('IntranetPatronsHomeHTML') | $raw %]
-          </div>
+                [%- SET StaffPatronsHome = AdditionalContents.get( location => "StaffPatronsHome", lang => lang, library => logged_in_user.branchcode ) -%]
+                [%- FOREACH block IN StaffPatronsHome.content -%]
+                <div class="page-section">
+                    [%- block.content | $raw -%]
+                </div>
+                [%- END -%]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
