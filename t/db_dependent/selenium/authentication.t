@@ -42,7 +42,7 @@ SKIP: {
     my $driver   = $s->driver;
 
     subtest 'Staff interface authentication' => sub {
-        plan tests => 6;
+        plan tests => 7;
         my $mainpage = $s->base_url . q|mainpage.pl|;
         $driver->get($mainpage);
         like( $driver->get_title, qr(Log in to Koha), 'Hitting the main page should redirect to the login form');
@@ -52,9 +52,13 @@ SKIP: {
         t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
         $patron->set_password({ password => $password });
 
-        # Patron does not have permission to access staff interface
+        # Patron is authenticated but is not authorized to access staff interface
         $s->auth( $patron->userid, $password );
         like( $driver->get_title, qr(Access denied), 'Patron without permission should be redirected to the login form' );
+
+        # Try logging in as someone else (even a non-existent patron) and you should still be denied access
+        $s->auth('Bond','James Bond');
+        like( $driver->get_title, qr(Invalid username or password), 'Trying to change to a non-existent user should fail login' );
 
         $driver->get($mainpage . q|?logout.x=1|);
         $patron->flags(4)->store; # catalogue permission
