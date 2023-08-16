@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -99,6 +99,8 @@ my $dummy_template_values = {
     row_gap          => 0,
     units            => 'INCH',
     template_stat    => 1,
+    barcode_width    => 0.8,
+    barcode_height   => 0.01
 };
 
 my $label_info = {
@@ -122,9 +124,13 @@ my $label_info = {
         label_width      => $dummy_template_values->{'label_width'},
         left_text_margin => $dummy_template_values->{'left_text_margin'}
     ),
+    scale_width => $dummy_template_values->{barcode_width},
+    scale_height => $dummy_template_values->{barcode_height},
 };
 
 my $format_string = '100a 245a';
+my $barcode_width = $label_info->{scale_width} * $label_info->{width};
+my $barcode_height = $label_info->{scale_height} * $label_info->{height};
 my $label = C4::Labels::Label->new(%$label_info, format_string => $format_string);
 my $label_text = $label->create_label();
 ok( defined $label_text, 'Label Text Value defined.' );
@@ -142,6 +148,8 @@ is_deeply(
         sprintf( "%s %s", $item->enumchron,      $item->copynumber )
     ]
 );
+is($barcode_width, '2.104',);
+is($barcode_height, '0.01',);
 
 $schema->storage->txn_rollback();
 
