@@ -1206,6 +1206,7 @@
                                             <th class="ci-barcode">Barcode</th>
                                             <th class="ci-homelibrary">Home library</th>
                                             <th class="ci-transferlibrary">Transfer to</th>
+                                            <th class="ci-transferreason">Transfer reason</th>
                                             <th class="ci-shelvinglocation">Shelving location</th>
                                             <th class="ci-callnumber">Call number</th>
                                             <th class="ci-dateaccessioned">Date acquired</th>
@@ -1254,6 +1255,20 @@
                                             </td>
                                             <td class="ci-transferlibrary">
                                                 [% Branches.GetName( riloo.transferbranch ) | html %]
+                                            </td>
+                                            <td class="ci-transferreason">
+                                                 [%- SWITCH riloo.transferreason -%]
+                                                     [%- CASE 'Manual' -%]<span>Manual</span>
+                                                     [%- CASE 'StockrotationAdvance' -%]<span>Stock rotation advance</span>
+                                                     [%- CASE 'StockrotationRepatriation' -%]<span>Stock rotation repatriation</span>
+                                                     [%- CASE 'ReturnToHome' -%]<span>Return to home library</span>
+                                                     [%- CASE 'ReturnToHolding' -%]<span>Return to holding library</span>
+                                                     [%- CASE 'RotatingCollection' -%]<span>Rotating collection</span>
+                                                     [%- CASE 'Reserve' -%]<span>Hold</span>
+                                                     [%- CASE 'LostReserve' -%]<span>Lost hold</span>
+                                                     [%- CASE 'CancelReserve' -%]<span>Cancelled hold</span>
+                                                     [%- CASE 'TransferCancellation' -%]<span>Transfer was cancelled whilst in transit</span>
+                                                 [%- END -%]
                                             </td>
                                             <td class="ci-shelvinglocation">
                                                 <span class="shelvingloc">[% riloo.location | html %]</span>

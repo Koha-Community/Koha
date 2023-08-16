@@ -812,6 +812,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{homebranch}          = $item->homebranch;
         $ri{transferbranch}      = $item->get_transfer ? $item->get_transfer->tobranch : '';
         $ri{damaged}             = $item->damaged;
+        $ri{transferreason}      = $item->get_transfer ? $item->get_transfer->reason : '';
 
         $ri{location} = $item->location;
         my $shelfcode = $ri{'location'};
