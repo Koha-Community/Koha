@@ -19,7 +19,8 @@ function addToCart(){
     addRecord( biblionumber );
 }
 
-function addToShelf() { window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=' + biblionumber,'Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes');
+function addToShelf() {
+    openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=' + biblionumber,'Add_to_virtualshelf');
 }
 function printBiblio() {window.print(); }
 

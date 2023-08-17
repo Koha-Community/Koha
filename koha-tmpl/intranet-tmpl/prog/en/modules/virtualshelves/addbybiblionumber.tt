@@ -13,12 +13,12 @@
     <div class="container-fluid">
 
 [% UNLESS (authorized) %]
-<h1>Error adding to list</h1>
-    <p align="center">
-        [% IF (errcode==1) %]Could not create a new list. Please check the name.<br/>[% END %]
-        [% IF (errcode==2) %]Sorry, you do not have permission to add items to this list.<br/>[% END %]
-        <a href="javascript:self.close();">Close this window.</a>
-    </p>
+    <div class="dialog alert">
+        <h1>Error adding to list</h1>
+        [% IF (errcode==1) %]<p>Could not create a new list. Please check the name.</p>[% END %]
+        [% IF (errcode==2) %]<p>Sorry, you do not have permission to add items to this list.</p>[% END %]
+        <button class="btn btn-default close_window focus">Close window</button>
+    </div>
 [% ELSE %]
 
                 [% IF ( multiple ) %]
@@ -111,15 +111,16 @@
 
 [% END %]
 
-
-<!-- SAVE -->
-            <fieldset class="action">
-            <input type="hidden" name="sortfield" value="title" />
-            <input type="submit" class="btn btn-primary" value="Save" /> <a class="close cancel" href="#">Cancel</a>
-            </fieldset>
-        </form>
-<!-- /SAVE -->
-
+        <input type="hidden" name="sortfield" value="title" />
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                    <button class="btn btn-default close_window">Cancel</button>
+                </fieldset>
+            </div>
+        </nav>
+    </form>
 [% END %]
 
 [% SET popup_window = 1 %]
