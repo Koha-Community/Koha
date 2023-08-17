@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE AdditionalContents %]
+[% PROCESS 'html_helpers.inc' %]
 [% SET OpacNavRight = AdditionalContents.get( location => "OpacNavRight", lang => news_lang, library => logged_in_user.branchcode || default_branch ) %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
@@ -109,7 +110,7 @@
                                     <input type="hidden" name="op" value="cud-login">
                                     <fieldset class="brief">
                                         <legend>Log in to your account:</legend>
-                                        <label for="userid">[% Koha.Preference('OPACLoginLabelTextContent') | html %]:</label>
+                                        [% PROCESS login_label for="userid" %]
                                         [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
                                             <input class="form-control" type="text" id="userid" size="10" name="login_userid" value="[% borrower.userid | html %]" autocomplete="off" />
                                         [% ELSE %]

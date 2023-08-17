@@ -8,6 +8,7 @@
 [% USE AdditionalContents %]
 [% USE Branches %]
 [% SET SCOMainUserBlock = AdditionalContents.get( location => "SCOMainUserBlock", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Self checkout &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -466,7 +467,7 @@
                                     <fieldset>
                                         [% IF ( Koha.Preference('SelfCheckoutByLogin') ) %]
                                             <legend>Log in to your account</legend>
-                                            <label for="patronlogin">[% Koha.Preference('OPACLoginLabelTextContent') | html %]:</label>
+                                            [% PROCESS login_label for="patronlogin" %]
                                             <input type="text" id="patronlogin" class="focus noEnterSubmit" size="20" name="patronlogin" autocomplete="off"/>
                                             <label for="patronpw">Password:</label>
                                             <input type="password" id="patronpw" size="20" name="patronpw" autocomplete="off"/>

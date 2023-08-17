@@ -176,3 +176,14 @@
         [% t("Koha online catalog") | html %]
     [% END %]
 [% END %]
+
+[% BLOCK login_label %]
+    [%- SET preference_value = Koha.Preference('OPACLoginLabelTextContent') %]
+    [%- SET label = "Cardnumber" %]
+    [%- IF preference_value == "username" %]
+        [%- SET label = "Username" %]
+    [%- ELSIF preference_value == "cardnumberorusername" %]
+        [%- SET label = "Cardnumber or Username" %]
+    [%- END %]
+    <label for="[% for | html %]">[% label | html %]:</label>
+[% END %]

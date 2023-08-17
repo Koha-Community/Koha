@@ -438,7 +438,7 @@
                             <input type="hidden" name="koha_login_context" value="opac" />
                             <fieldset class="brief">
                                 <div class="local-login">
-                                    <label for="muserid">[% Koha.Preference('OPACLoginLabelTextContent') | html %]:</label><input type="text" id="muserid" name="login_userid" autocomplete="off" />
+                                    [% PROCESS login_label for="muserid" %]<input type="text" id="muserid" name="login_userid" autocomplete="off" />
                                     <label for="mpassword">Password:</label><input type="password" id="mpassword" name="login_password" autocomplete="off" />
                                     <fieldset class="action">
                                         <input type="hidden" name="op" value="cud-login" />

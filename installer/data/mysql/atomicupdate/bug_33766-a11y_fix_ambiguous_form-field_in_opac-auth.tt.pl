@@ -9,7 +9,7 @@ return {
 
         # Do you stuffs here
         $dbh->do(
-            q{INSERT IGNORE INTO systempreferences (variable,value) VALUES ('OPACLoginLabelTextContent','Cardnumber')  }
+            q{INSERT IGNORE INTO systempreferences (variable,value) VALUES ('OPACLoginLabelTextContent','cardnumber')  }
         );
 
         # sysprefs
