@@ -44,10 +44,10 @@ use Koha::List::Patron qw( GetPatronLists );
 
 my $cgi = CGI->new;
 
-# Fetch the paramater list as a hash in scalar context:
-#  * returns paramater list as tied hash ref
+# Fetch the parameter list as a hash in scalar context:
+#  * returns parameter list as tied hash ref
 #  * we can edit the values by changing the key
-#  * multivalued CGI paramaters are returned as a packaged string separated by "\0" (null)
+#  * multivalued CGI parameters are returned as a packaged string separated by "\0" (null)
 my $params = $cgi->Vars;
 
 my $step = $params->{step} || 1;
