@@ -265,17 +265,10 @@
                                                         <li>
                                                             <label for="kohafield[% loo.row | html %]">Koha link:</label>
                                                             <!-- This select should be DISABLED; value is submitted by the following hidden input -->
-                                                            <select name="kohafield_[% loo.row | html %]" id="kohafield[% loo.row | html %]" disabled>
-                                                            [% FOREACH value IN loo.kohafields %]
-                                                            [% IF ( value == loo.kohafield ) %]
-                                                                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
-                                                            [% ELSE %]
-                                                                <option value="[% value | html %]">[% value | html %]</option>
-                                                            [% END %]
-                                                            [% END %]
-                                                            </select>
+                                                            [% loo.kohafield | html %]
                                                             <!-- Do NOT remove this next hidden input! We need it to save kohafield. -->
                                                             <input type="hidden" name="kohafield_[% loo.row | html %]" value="[% loo.kohafield | html %]"/>
+                                                            <div class="hint">Edit in 'Koha to MARC mapping'</div>
                                                         </li>
                                                     </ol>
                                                 </fieldset> <!-- /.rows -->
