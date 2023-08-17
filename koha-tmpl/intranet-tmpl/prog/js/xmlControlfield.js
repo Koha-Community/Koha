@@ -307,7 +307,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
                             try {
                                 url = ((nodePos.getAttributeNode("url") || nodePos.hasAttribute("url")) && nodePos.getAttribute("url") != "" && nodePos.getElementsByTagName('urltext')[0].textContent != "")?"&nbsp;<a href='" + nodePos.attributes.getNamedItem("url").nodeValue + "' target='_blank'>" + nodePos.getElementsByTagName('urltext')[0].textContent + "</a>":"";
                             } catch (e) { url = "";}
-                            td.innerHTML = "<label for='" + pos + "' title='" + title + "'>" + pos + " - " + name + url + "</label>";
+                            td.innerHTML = "<label for='f" + pos + "' title='" + title + "'>" + pos + " - " + name + url + "</label>";
                             td = tr.insertCell(tr.cells.length);
                             value = returnValuePosFromResult(result, pos);
                             if ((index = pos.indexOf("-")) > 0) { // Position interval
