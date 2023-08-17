@@ -203,7 +203,6 @@
                             v-bind:key="index"
                             class="checkbox_options"
                         >
-                            <!-- TODO: Check translations -->
                             <label :for="prop.name" class="checkbox"
                                 >{{ $__(prop.name) }}:</label
                             >
@@ -246,8 +245,11 @@
                                 @change="monthSelector($event)"
                                 :checked="yearly_filter_required ? true : false"
                             />
-                            Yes - Table will be limited to 12 columns (Jan-Dec)
-                            with the option to switch between years
+                            {{
+                                $__(
+                                    "Yes - Table will be limited to 12 columns (Jan-Dec) with the option to switch between years"
+                                )
+                            }}
                         </label>
                         <label
                             for="yearly_filter_required_no"
@@ -262,8 +264,11 @@
                                     !yearly_filter_required ? true : false
                                 "
                             />
-                            No - Table will include one column for every month
-                            of data selected
+                            {{
+                                $__(
+                                    "No - Table will include one column for every month of data selected"
+                                )
+                            }}
                         </label>
                     </div>
                 </div>
@@ -309,7 +314,7 @@
             <fieldset class="action">
                 <ButtonSubmit />
                 <button @click="clearForm($event)" class="button_format">
-                    Clear
+                    {{ $__("Clear") }}
                 </button>
             </fieldset>
             <div class="save_report">
@@ -323,7 +328,7 @@
                     @click="saveToDefaultReports($event)"
                     class="button_format"
                 >
-                    Save report
+                    {{ $__("Save report") }}
                 </button>
             </div>
         </form>
@@ -633,7 +638,7 @@ export default {
                     url = `/api/v1/erm/eUsage/metric_types_report/${db_table}`
                     prefix = "erm_usage_muses"
                     break
-                case "usage_data_provider": // TODO: platform/item/database table embeds?
+                case "usage_data_provider":
                     url = `/api/v1/erm/eUsage/provider_rollup_report/${db_table}`
                     prefix = `erm_usage_${db_table}s.erm_usage_muses`
                     break

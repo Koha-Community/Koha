@@ -1,5 +1,7 @@
 package Koha::ERM::DefaultUsageReports;
 
+# Copyright 2023 PTFS Europe
+
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it

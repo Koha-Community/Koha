@@ -1,5 +1,7 @@
 package Koha::REST::V1::ERM::UsageItems;
 
+# Copyright 2023 PTFS Europe
+
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it

@@ -221,7 +221,7 @@
 
 <script>
 import ButtonSubmit from "../ButtonSubmit.vue"
-import { setMessage, setError, setWarning } from "../../messages"
+import { setMessage } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 import { inject } from "vue"
 import { storeToRefs } from "pinia"

@@ -1,7 +1,7 @@
 <template>
     <div class="page-section" id="files">
         <form @submit="addDocument($event)" class="file_upload">
-            <h2>Manual upload:</h2>
+            <h2>{{ $__("Manual upload:") }}</h2>
             <label>{{ $__("File") }}:</label>
             <div class="file_information">
                 <span v-if="!file.filename">
@@ -35,10 +35,8 @@
 </template>
 
 <script>
-import { inject } from "vue"
 import ButtonSubmit from "../ButtonSubmit.vue"
-import { setMessage, setError, setWarning } from "../../messages"
-import { storeToRefs } from "pinia"
+import { setMessage } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 
 export default {

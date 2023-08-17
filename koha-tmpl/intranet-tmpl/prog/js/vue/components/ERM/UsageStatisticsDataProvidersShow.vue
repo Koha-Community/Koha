@@ -41,7 +41,7 @@
                         role="tab"
                         data-content="detail"
                         @click="change_tab_content"
-                        >Detail</a
+                        >{{ $__("Detail") }}</a
                     >
                 </li>
                 <li
@@ -69,7 +69,7 @@
                         role="tab"
                         data-content="upload"
                         @click="change_tab_content"
-                        >Manual upload</a
+                        >{{ $__("Manual upload") }}</a
                     >
                 </li>
                 <li
@@ -81,7 +81,7 @@
                         role="tab"
                         data-content="imports"
                         @click="change_tab_content"
-                        >Import logs</a
+                        >{{ $__("Import logs") }}</a
                     >
                 </li>
             </ul>

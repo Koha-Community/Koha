@@ -1,7 +1,7 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="report_builder">
-        <h2>Usage Statistics Reports</h2>
+        <h2>{{ $__("Usage statistics reports") }}</h2>
         <div id="usage_data_providerstabs" class="toptabs numbered">
             <ul class="nav nav-tabs" role="tablist">
                 <li
@@ -15,7 +15,7 @@
                         role="tab"
                         data-content="default"
                         @click="changeCustomOrDefault"
-                        >Saved reports</a
+                        >{{ $__("Saved reports") }}</a
                     >
                 </li>
                 <li
@@ -29,7 +29,7 @@
                         role="tab"
                         data-content="custom"
                         @click="changeCustomOrDefault"
-                        >Create report</a
+                        >{{ $__("Create report") }}</a
                     >
                 </li>
             </ul>

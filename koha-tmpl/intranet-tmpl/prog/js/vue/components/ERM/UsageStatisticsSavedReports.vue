@@ -48,7 +48,7 @@
                     @click="deleteSavedReport($event)"
                     class="button_format"
                 >
-                    Delete report
+                    {{ $__("Delete report") }}
                 </button>
             </fieldset>
         </form>
