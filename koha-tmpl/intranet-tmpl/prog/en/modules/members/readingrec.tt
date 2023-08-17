@@ -174,10 +174,15 @@
     [% Asset.js("js/checkout_renewals_modal.js") | $raw %]
     <script id="js">
         $(document).ready(function() {
+            [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
+                var column_sort = 11;
+            [% ELSE %]
+                var column_sort = 10;
+            [% END %]
             var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') | $raw %];
             var table = KohaTable("table_readingrec", {
                 "sPaginationType": "full",
-                "aaSorting": [[10, 'desc']]
+                "aaSorting": [[column_sort, 'desc']]
             }, table_settings);
 
             $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
