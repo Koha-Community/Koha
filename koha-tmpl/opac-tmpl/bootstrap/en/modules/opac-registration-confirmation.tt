@@ -109,7 +109,7 @@
                                     <input type="hidden" name="op" value="cud-login">
                                     <fieldset class="brief">
                                         <legend>Log in to your account:</legend>
-                                        <label for="userid">Login:</label>
+                                        <label for="userid">[% Koha.Preference('OPACLoginLabelTextContent') | html %]:</label>
                                         [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
                                             <input class="form-control" type="text" id="userid" size="10" name="login_userid" value="[% borrower.userid | html %]" autocomplete="off" />
                                         [% ELSE %]

@@ -182,6 +182,15 @@ OPAC:
             - "for items on the OPAC record details page."
             - "<br />Note: If 'on a separate column' is selected, you still need to enable the item_shelving_location display on the <a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> administration page."
         -
+            - Use
+            - pref: OPACLoginLabelTextContent
+              default: Cardnumber
+              choices:
+                  Cardnumber: Cardnumber
+                  Username: Username
+                  "Cardnumber or Username": Cardnumber or Username
+            - "as the text content of the userid input field's label."
+        -
             - pref: OPACShowMusicalInscripts
               default: 0
               choices:
@@ -533,6 +542,7 @@ OPAC:
               type: textarea
               syntax: text/html
               class: code
+
         -
             - pref: OpacBrowseSearch
               default: 0

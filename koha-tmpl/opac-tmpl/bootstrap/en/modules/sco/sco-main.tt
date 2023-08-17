@@ -466,7 +466,7 @@
                                     <fieldset>
                                         [% IF ( Koha.Preference('SelfCheckoutByLogin') ) %]
                                             <legend>Log in to your account</legend>
-                                            <label for="patronlogin">Login:</label>
+                                            <label for="patronlogin">[% Koha.Preference('OPACLoginLabelTextContent') | html %]:</label>
                                             <input type="text" id="patronlogin" class="focus noEnterSubmit" size="20" name="patronlogin" autocomplete="off"/>
                                             <label for="patronpw">Password:</label>
                                             <input type="password" id="patronpw" size="20" name="patronpw" autocomplete="off"/>
