@@ -87,7 +87,7 @@ Optional parameter, number of days an items has been 'waiting' on hold
 to send a message for. If not included a notice will be sent to all
 patrons with waiting holds.
 
-=item B<-triggered>
+=item B<-t> | B<--triggered>
 
 Optional parameter, only send notices for holds exactly <days> waiting.
 If not included a notice will be sent to all patrons with waiting holds
@@ -184,7 +184,7 @@ GetOptions(
     'v'              => \$verbose,
     'c|confirm'      => \$confirm,
     'days=s'         => \$days,
-    'triggered'      => \$triggered,
+    't|triggered'      => \$triggered,
     'lettercode=s'   => \$lettercode,
     'library=s'      => \@branchcodes,
     'date=s'         => \$date_input,
