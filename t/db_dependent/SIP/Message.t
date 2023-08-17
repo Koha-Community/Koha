@@ -98,7 +98,7 @@ subtest 'Test renew desensitize' => sub {
 subtest 'Checkin V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 39;
+    plan tests => 40;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkin_v2();
     $schema->storage->txn_rollback;
@@ -878,6 +878,7 @@ sub test_checkin_v2 {
     is( substr($response,2,1), '0', 'OK flag is false' );
     is( substr($response,5,1), 'Y', 'Alert flag is set' );
     check_field( $respcode, $response, FID_SCREEN_MSG, 'Invalid Item', 'Check screen msg', 'regex' );
+    check_field( $respcode, $response, FID_PERM_LOCN, '', 'Check that AQ is in the response');
 
     # Not checked out, toggle option checked_in_ok
     $siprequest = CHECKIN . 'N' . 'YYYYMMDDZZZZHHMMSS' .
