@@ -7,7 +7,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
     // Patron select2
     $("#booking_patron_id").kohaSelect({
         dropdownParent: $(".modal-content", "#placeBookingModal"),
-        width: '30%',
+        width: '50%',
         dropdownAutoWidth: true,
         allowClear: true,
         minimumInputLength: 3,
@@ -15,6 +15,9 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
             url: '/api/v1/patrons',
             delay: 250,
             dataType: 'json',
+            headers: {
+                "x-koha-embed": "library"
+            },
             data: function(params) {
                 var search_term = (params.term === undefined) ? '' : params.term;
                 var query = {
@@ -36,7 +39,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                             }
                         ]
                     }),
-                    '_order_by': 'firstname',
+                    '_order_by': '+me.surname,+me.firstname',
                     '_page': params.page,
                 };
                 return query;
@@ -44,17 +47,52 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
             processResults: function(data, params) {
                 var results = [];
                 data.results.forEach(function(patron) {
-                    results.push({
-                        "id": patron.patron_id,
-                        "text": escape_str(patron.firstname) + " " + escape_str(patron.surname) + " (" + escape_str(patron.cardnumber) + ")"
-                    });
+                    patron.id = patron.patron_id;
+                    results.push(patron);
                 });
                 return {
                     "results": results, "pagination": { "more": data.pagination.more }
                 };
             },
         },
-        placeholder: "Search for a patron"
+        templateResult: function (patron) {
+            if (patron.library_id == loggedInLibrary) {
+                loggedInClass = "ac-currentlibrary";
+            } else {
+                loggedInClass = "";
+            }
+
+            var $patron = $("<span></span>")
+                .append(
+                    "" +
+                        (patron.surname
+                            ? escape_str(patron.surname) + ", "
+                            : "") +
+                        (patron.firstname
+                            ? escape_str(patron.firstname) + " "
+                            : "") +
+                        (patron.cardnumber
+                            ? " (" + escape_str(patron.cardnumber) + ") "
+                            : "") +
+                        (patron.date_of_birth
+                            ? '<small><span class="age_years">' +
+                              $get_age(patron.date_of_birth) +
+                              " " +
+                              __("years") +
+                              "</span></small>"
+                            : "")
+                )
+                .addClass(loggedInClass);
+            return $patron;
+        },
+        templateSelection: function (patron) {
+            if (!patron.id) {
+                return patron.text;
+            }
+            return (
+                escape_str(patron.surname) + ", " + escape_str(patron.firstname)
+            );
+        },        placeholder: "Search for a patron"
     });
 
     // If passed patron, pre-select
@@ -77,7 +115,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
     // Item select2
     $("#booking_item_id").select2({
         dropdownParent: $(".modal-content", "#placeBookingModal"),
-        width: '30%',
+        width: '50%',
         dropdownAutoWidth: true,
         minimumResultsForSearch: 20,
         placeholder: "Select item"
