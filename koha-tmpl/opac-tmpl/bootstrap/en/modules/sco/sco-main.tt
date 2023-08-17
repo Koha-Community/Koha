@@ -106,6 +106,7 @@
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" name="returnbook" class="btn btn-primary"><i class="fa fa-undo" aria-hidden="true"></i> Return this item</button>
                                 </form>
@@ -116,6 +117,7 @@
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                 <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                 <input type="submit" name= "confirm" value="Return to account summary" class="btn btn-info back focus" />
                             </form>
@@ -135,6 +137,7 @@
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                     <input type="hidden" name="confirmed" value="" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" name="returnbook" class="btn btn-primary"><i class="fa fa-undo" aria-hidden="true"></i> Return this item</button>
@@ -147,6 +150,7 @@
                                     <input type="hidden" name="op" value="renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" name="confirm" class="btn btn-primary"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Renew item</button>
@@ -157,6 +161,7 @@
                                     <input type="hidden" name="op" value="renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" class="btn btn-primary"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Renew item</button>
@@ -167,6 +172,7 @@
                                 <legend class="sr-only">Cancel</legend>
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                 <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-cancel" aria-hidden="true"></i> Cancel</button>
                             </form>
@@ -271,6 +277,7 @@
                                             <button type="button" id="logout_form" class="btn btn-info"><i class="fa fa-check" aria-hidden="true"></i> Finish</button>
                                             <input type="hidden" name="op" value="checkout" />
                                             <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                            <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                             <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                         </div>
                                     </div> <!-- /.row -->
@@ -307,7 +314,23 @@
                     <div class="tab-content">
                         <div id="checkouts-tab" class="tab-pane show active" aria-labelledby="checkouts">
                             <div id="borrowerdetails">
+                                [% IF ( new_issue ) %]
+                                    <div class="lastchecked">
+                                        <p>
+                                            <strong>Checked out: </strong>
+                                            [% new_issue.item.biblio.title | html %] ([% new_issue.item.barcode | html %]).
+
+                                            [% IF new_issue.item.is_bundle %]
+                                                [% SET bundle_items_count = new_issue.item.bundle_items.count %]
+                                                [% tnx('Bundle of {count} item', 'Bundle of {count} items', bundle_items_count, { count = bundle_items_count }) | html %].
+                                            [% END %]
+
+                                            Due on [% new_issue.date_due | $KohaDates as_due_date => 1 %]
+                                        </p>
+                                    </div>
+                                [% END %]
                                 [% IF ( issues_count ) %]
+                                    [% IF ( Koha.Preference('SCOLoadCheckoutsByDefault') || load_checkouts ) %]
                                     <table id="loanTable" class="table table-bordered table-striped">
                                         <caption>Checkouts for [% borrowername | html %] <span class="count">([% issues_count | html %] total)</span></caption>
                                         <!-- ISSUES TABLE ROWS -->
@@ -354,6 +377,7 @@
                                                         <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
                                                             <legend class="sr-only">Issue renews</legend>
                                                             <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                                            <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                                             <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
                                                             <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                                             [% IF ISSUE.can_be_renewed %]
@@ -397,6 +421,9 @@
                                             [% END # / FOREACH ISSUE %]
                                         </tbody>
                                     </table>
+                                    [% ELSE %]
+                                        <a href="?load_checkouts=1">Load your checkouts</a>
+                                    [% END # / IF ( Koha.preference('SCOLoadCheckoutsByDefault') || load_checkouts ) %]
                                 [% ELSE %]
                                     <h3>You currently have nothing checked out.</h3>
                                 [% END # / IF issues_count %]

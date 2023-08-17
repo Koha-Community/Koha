@@ -93,13 +93,14 @@ if (defined C4::Context->preference('SCOAllowCheckin')) {
 }
 
 my $issuerid = $loggedinuser;
-my ($op, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) = (
-    $query->param("op")         || '',
-    $query->param("patronlogin")|| '',
-    $query->param("patronpw")   || '',
-    $query->param("barcode")    || '',
-    $query->param("confirmed")  || '',
-    $query->param("newissues")  || '',
+my ( $op, $patronlogin, $patronpw, $barcode, $confirmed, $newissues, $load_checkouts ) = (
+    $query->param("op")             || '',
+    $query->param("patronlogin")    || '',
+    $query->param("patronpw")       || '',
+    $query->param("barcode")        || '',
+    $query->param("confirmed")      || '',
+    $query->param("newissues")      || '',
+    $query->param("load_checkouts") || '',
 );
 
 my $jwt = $query->cookie('JWT');
@@ -245,8 +246,8 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
                 )->count;
             }
 
-            AddIssue( $patron, $barcode );
-            $template->param( issued => 1 );
+            my $new_issue = AddIssue( $patron, $barcode );
+            $template->param( issued => 1, new_issue => $new_issue );
             push @newissueslist, $barcode;
 
             if ( $hold_existed ) {
@@ -298,15 +299,17 @@ if ( $patron && ( $op eq 'renew' ) ) {
 
 if ( $patron) {
     my $borrowername = sprintf "%s %s", ($patron->firstname || ''), ($patron->surname || '');
-    my $pending_checkouts = $patron->pending_checkouts;
     my @checkouts;
-    while ( my $c = $pending_checkouts->next ) {
-        my $checkout = $c->unblessed_all_relateds;
-        my ($can_be_renewed, $renew_error) = CanBookBeRenewed( $patron, $c );
-        $checkout->{can_be_renewed} = $can_be_renewed; # In the future this will be $checkout->can_be_renewed
-        $checkout->{renew_error} = $renew_error;
-        $checkout->{overdue} = $c->is_overdue;
-        push @checkouts, $checkout;
+    my $pending_checkouts = $patron->pending_checkouts;
+    if ( C4::Context->preference('SCOLoadCheckoutsByDefault') || $load_checkouts ) {
+        while ( my $c = $pending_checkouts->next ) {
+            my $checkout = $c->unblessed_all_relateds;
+            my ( $can_be_renewed, $renew_error ) = CanBookBeRenewed( $patron, $c );
+            $checkout->{can_be_renewed} = $can_be_renewed;    # In the future this will be $checkout->can_be_renewed
+            $checkout->{renew_error}    = $renew_error;
+            $checkout->{overdue}        = $c->is_overdue;
+            push @checkouts, $checkout;
+        }
     }
 
     my $show_priority;
@@ -328,7 +331,7 @@ if ( $patron) {
     $template->param(
         validuser => 1,
         borrowername => $borrowername,
-        issues_count => scalar(@checkouts),
+        issues_count => scalar(@checkouts) || $pending_checkouts->count(),
         ISSUES => \@checkouts,
         HOLDS => $holds,
         newissues => join(',',@newissueslist),
@@ -336,6 +339,7 @@ if ( $patron) {
         patronpw => $patronpw,
         waiting_holds_count => $waiting_holds_count,
         noitemlinks => 1 ,
+        load_checkouts => $load_checkouts,
         borrowernumber => $patron->borrowernumber,
         SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
         AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
