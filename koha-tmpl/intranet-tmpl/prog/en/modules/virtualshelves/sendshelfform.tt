@@ -8,19 +8,26 @@
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
-<body id="lists_sendshelfform" class="lists" style="padding: 1em;">
+<body id="lists_sendshelfform" class="lists">
 [% INCLUDE 'blocking_errors.inc' %]
-<div class="container">[% IF ( email ) %]
+<div class="container-fluid">[% IF ( email ) %]
 
     [% IF ( SENT ) %]
         <h3>Message sent</h3>
         <p>The list was sent to: [% email | html %]</p>
-        <p><a class="close focus" href="#">Close window</a></p>
     [% END %]
     [% IF ( error ) %]
-    <p>Problem sending the list...</p>
+        <p>Problem sending the list...</p>
     [% END %]
-    
+
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <button class="btn btn-default close_window focus">Close window</button>
+            </fieldset>
+        </div>
+    </nav>
+
 [% ELSE %]
 
 <form action="/cgi-bin/koha/virtualshelves/sendshelf.pl" method="post">
@@ -38,7 +45,15 @@
     <li>
         <input type="hidden" name="shelfid" value="[% shelfid | html %]" />
     </li></ol></fieldset>
-       <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Send" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
+
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Send" />
+                <button class="btn btn-default close_window">Cancel</button>
+            </fieldset>
+        </div>
+    </nav>
 </form>
 
 [% END %]</div>

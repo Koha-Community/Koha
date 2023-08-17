@@ -7,18 +7,27 @@
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
-<body style="padding: 1em;" id="cart_sendbasketform" class="cart">
+<body id="cart_sendbasketform" class="cart">
 <div class="container">[% IF ( email_add ) %]
 
 	[% IF ( SENT ) %]
-        <h3>Message sent</h3>
-        <p>The cart was sent to: [% email_add | html %]</p>
-		<p><a class="focus close" href="#">Close window</a></p>
+        <div class="dialog message">
+            <h1>Message sent</h1>
+            <p>The cart was sent to: [% email_add | html %]</p>
+        </div>
 	[% END %]
 	[% IF ( error ) %]
-	<p>Problem sending the cart...</p>
+        <div class="dialog alert">Problem sending the cart...</div>
 	[% END %]
-	
+
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <button type="button" class="btn btn-default close_window focus">Close window</button>
+            </fieldset>
+        </div>
+    </nav>
+
 [% ELSE %]
 
 [% INCLUDE 'blocking_errors.inc' %]
@@ -36,9 +45,17 @@
     </li>
     </ol>
     </fieldset>
-    <fieldset class="action"> <input type="submit" class="btn btn-primary" value="Send" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
     <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Send" />
+                <button type="button" class="btn btn-default close_window">Cancel</button>
+            </fieldset>
+        </div>
+    </nav>
 </form>
 
 [% END %]</div>

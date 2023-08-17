@@ -945,7 +945,7 @@
         [% IF op == 'view' %]
 
             function sendList(){
-                open(CGIBIN+'virtualshelves/sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
+                openWindow( CGIBIN + 'virtualshelves/sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]' );
              }
 
              $(document).ready(function() {
