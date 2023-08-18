@@ -435,7 +435,8 @@ function AutomaticLinker() {
 }
 
 
-function PopupMARCFieldDoc(field) {
+function PopupMARCFieldDoc() {
+    let field = this.dataset.tag;
     [% IF Koha.Preference('marcfielddocurl') %]
         var docurl = "[% Koha.Preference('marcfielddocurl').replace('"','&quot;') | html %]";
         docurl = docurl.replace("{MARC}", "[% marcflavour | html %]");
@@ -447,7 +448,13 @@ function PopupMARCFieldDoc(field) {
     [% ELSIF ( marcflavour == 'UNIMARC' ) %]
         _UNIMARCFieldDoc(field);
     [% END %]
+    return false;
 }
+[%# Attach to body, so that cloned nodes will still have the event listener %]
+$(document).ready(function(){
+    $('body').on('click','.marcdocs',PopupMARCFieldDoc);
+});
+
     function confirmnotdup(redirect){
         $("#confirm_not_duplicate").attr("value","1");
         $("#redirect").attr("value",redirect);
@@ -1039,7 +1046,7 @@ function PopupMARCFieldDoc(field) {
                                                     <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to expand this tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
                                                 [% ELSE %]
                                                     <span class="tagnum" title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
-                                                    <a href="#" class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag | html %]'); return false;">&nbsp;?</a>
+                                                    <a href="#" class="marcdocs" data-tag="[% innerloo.tag | html %]">&nbsp;?</a>
                                                 [% END %]
 
                                                 [% IF ( innerloo.fixedfield ) %]
