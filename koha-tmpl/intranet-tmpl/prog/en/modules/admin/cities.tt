@@ -7,13 +7,13 @@
 <title>[% FILTER collapse %]
     [% IF op =='add_form' %]
         [% IF city.cityid %]
-            [% t("Modify city") | html %]
+            [% tx("Modify city '{city}'", { city = city.city_name }) | html %]
         [% ELSE %]
             [% t("New city") | html %]
         [% END %] &rsaquo;
     [% ELSE %]
         [% IF op == 'delete_confirm' %]
-            [% t("Confirm deletion of city") | html %] &rsaquo;
+            [% tx("Confirm deletion of city '{city}'", { city = city.city_name }) | html %] &rsaquo;
         [% END %]
     [% END %]
     [% t("Cities") | html %] &rsaquo;
@@ -40,7 +40,7 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active = 1 %]
                 [% IF city.cityid %]
-                    <span>Modify city</span>
+                    [% tx("Modify city '{city}'", { city = city.city_name }) | html %]
                 [% ELSE %]
                     <span>New city</span>
                 [% END %]
@@ -51,7 +51,7 @@
                 <a href="/cgi-bin/koha/admin/cities.pl">Cities</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active = 1 %]
-                <span>Confirm deletion of city</span>
+                [% tx("Confirm deletion of city '{city}'", { city = city.city_name }) | html %]
             [% END %]
 
         [% ELSE %]
@@ -93,7 +93,9 @@
 
 [% IF op == 'add_form' %]
     [% IF city %]
-        <h1>Modify a city</h1>
+        <h1>
+            [% tx("Modify city '{city}'", { city = city.city_name }) | html %]
+        </h1>
     [% ELSE %]
         <h1>New city</h1>
     [% END %]
@@ -135,7 +137,9 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h1>Delete city "[% city.city_name | html %]?"</h1>
+        <h1>
+            [% tx("Confirm deletion of city '{city}'", { city = city.city_name }) | html %]
+        </h1>
         <table>
             <tr><th>City id</th>
                 <td>[% city.cityid | html %]</td>
