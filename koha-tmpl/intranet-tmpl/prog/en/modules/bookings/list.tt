@@ -171,7 +171,7 @@
                         });
 
                         putting.done(function(data) {
-                            alert("It worked");
+                            bookings_table.api().ajax.reload();
                             callback(item);
                         });
 
