@@ -76,6 +76,7 @@
         });
         var bookings = $.ajax({
             url: '/api/v1/biblios/[% biblionumber | uri %]/bookings',
+            headers: { 'x-koha-embed': 'patron' },
             dataType: 'json',
             type: 'GET',
         });
@@ -101,7 +102,10 @@
                         patron: booking.patron_id,
                         start: dayjs(booking.start_date).toDate(),
                         end: dayjs(booking.end_date).toDate(),
-                        content: 'Booking: ' + booking.booking_id,
+                        content: $patron_to_html(booking.patron, {
+                            display_cardnumber: true,
+                            url: false
+                        }),
                         editable: { remove: true, updateTime: true },
                         type: 'range',
                         group: booking.item_id ? booking.item_id : 0
