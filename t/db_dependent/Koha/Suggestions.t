@@ -49,7 +49,7 @@ my $new_suggestion_2 = Koha::Suggestion->new(
 )->store;
 
 subtest 'store' => sub {
-    plan tests => 3;
+    plan tests => 5;
     my $suggestion  = Koha::Suggestion->new(
         {   suggestedby  => $patron->{borrowernumber},
             biblionumber => $biblio_1->biblionumber,
@@ -65,6 +65,21 @@ subtest 'store' => sub {
     $suggestion->reason('because!')->store;
     $suggestion = Koha::Suggestions->find( $suggestion->suggestionid );
     is( $suggestion->suggesteddate, $two_days_ago_sql, 'If suggestion id modified, suggesteddate should not be modified' );
+
+    throws_ok {
+        $suggestion->STATUS('UNKNOWN')->store;
+    }
+    'Koha::Exceptions::Suggestion::StatusForbidden',
+        'store raises an exception on invalid STATUS';
+
+    my $authorised_value = Koha::AuthorisedValue->new(
+        {
+            category         => 'SUGGEST_STATUS',
+            authorised_value => 'UNKNOWN'
+        }
+    )->store;
+    $suggestion->STATUS('UNKNOWN')->store;
+    is( $suggestion->STATUS, 'UNKNOWN', "UNKNOWN status stored" );
     $suggestion->delete;
 };
 
