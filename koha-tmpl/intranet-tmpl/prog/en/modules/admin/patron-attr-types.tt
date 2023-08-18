@@ -10,9 +10,9 @@
 <title>[% FILTER collapse %]
     [% IF ( attribute_type_form ) %]
         [% IF ( edit_attribute_type ) %]
-            [% t("Modify patron attribute type") | html %] &rsaquo;
+            [% tx("Modify patron attribute type '{code}'", { code = attribute_type.code }) | html %] &rsaquo;
         [% ELSE %]
-            [% t("Add patron attribute type") | html %] &rsaquo;
+            [% t("New patron attribute type") | html %] &rsaquo;
         [% END %]
     [% END %]
     [% IF ( delete_attribute_type_form ) %]
@@ -45,15 +45,15 @@
         [% IF ( attribute_type_form ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ( edit_attribute_type ) %]
-                    <span>Modify patron attribute type</span>
+                    [% tx("Modify patron attribute type '{code}'", { code = attribute_type.code }) | html %]
                 [% ELSE %]
-                    <span>Add patron attribute type</span>
+                    <span>New patron attribute type</span>
                 [% END %]
             [% END %]
 
         [% ELSIF ( delete_attribute_type_form ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of patron attribute type '[% code | html %]'</span>
+                [% tx("Confirm deletion of patron attribute type '{code}'", { code = code }) | html %]
             [% END %]
 
         [% ELSE %]
@@ -75,9 +75,9 @@
 
 [% IF ( attribute_type_form ) %]
   [% IF ( edit_attribute_type ) %]
-<h1>Modify patron attribute type</h1>
+<h1>[% tx("Modify patron attribute type '{code}'", { code = attribute_type.code }) | html %]</h1>
   [% ELSE %]
-<h1>Add patron attribute type</h1>
+<h1>New patron attribute type</h1>
   [% END %]
 [% IF ( duplicate_code_error ) %]
 <div class="dialog message">Could not add patron attribute type &quot;[% duplicate_code_error | html %]&quot; 
@@ -247,7 +247,9 @@
 
 [% IF ( delete_attribute_type_form ) %]
     <div class="dialog alert">
-        <h1>Confirm deletion of patron attribute type <span class="ex">'[% code | html %]' ([% description | html %])</span>?</h1>
+        <h1>
+            [% tx("Confirm deletion of patron attribute type '{code}' ({description})?", { code = code, description = description }) | html %]
+        </h1>
         <form action="[% script_name | html %]" name="Aform" method="post">
             <input type="hidden" name="op" value="[% confirm_op | html %]" />
             <input type="hidden" name="code" value="[% code | html %]" />
