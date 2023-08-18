@@ -228,7 +228,7 @@
 
             [% WRAPPER tab_panel tabname="bookings" %]
                 [% IF ( bookings_count ) %]
-                    <table id="bookings-table" style="width: 100% !Important;"></table>
+                    <table id="bookings_table" style="width: 100% !Important;"></table>
                 [% ELSE %]
                     <p>Patron has nothing booked.</p>
                 [% END %]
