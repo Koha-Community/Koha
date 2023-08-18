@@ -5,7 +5,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% t("Library checkin and transfer policy") | html %] &rsaquo;
+    [% tx("Library transfer limits for {library_name} ({library_code})", { library_name = Branches.GetName( branchcode), library_code = branchcode } ) | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -24,7 +24,7 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Set library checkin and transfer policy</span>
+            [% tx("Library transfer limits for {library_name} ({library_code})", { library_name = Branches.GetName( branchcode), library_code = branchcode } ) | html %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -34,7 +34,9 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-<h1>Library [% branchcode | html %] - [% Branches.GetName( branchcode ) | html %] Checkin and transfer policy</h1>
+    <h1>
+        [% tx("Library transfer limits for {library_name} ({library_code})", { library_name = Branches.GetName( branchcode), library_code = branchcode } ) | html %]
+    </h1>
     <form method="get" action="/cgi-bin/koha/admin/branch_transfer_limits.pl" id="selectlibrary">
         <label for="branchselect">Select a library :</label>
         <select name="branchcode" id="branchselect">

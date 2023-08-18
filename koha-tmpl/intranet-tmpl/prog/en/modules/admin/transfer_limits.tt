@@ -9,7 +9,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% t("Library checkin and transfer policy") | html %] &rsaquo;
+    [% t("Library transfer limits") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -31,7 +31,7 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Set library checkin and transfer policy</span>
+            <span>Library transfer limits</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -40,7 +40,7 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
-                <h1>Checkin and transfer policy</h1>
+                <h1>Library transfer limits</h1>
 
                 <p>
                     [% IF BranchTransferLimitsType == "itemtype" %]
