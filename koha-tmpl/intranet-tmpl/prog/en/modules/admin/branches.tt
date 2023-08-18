@@ -11,9 +11,9 @@
 <title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
         [% IF library %]
-            [% t("Modify library") | html %]
+            [% tx("Modify library '{library}'", { library = library.branchcode }) | html %]
         [% ELSE %]
-            [% tx("New library {library}", { library = library.branchcode }) | html %]
+            [% t("New library") | html %]
         [% END %] &rsaquo;
     [% ELSIF op == 'delete_confirm' %]
         [% tx("Confirm deletion of library '{library}'", { library = library.branchcode }) | html %] &rsaquo;
@@ -49,17 +49,17 @@
         [% IF op == 'add_form'  %]
             [% IF library %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify library</span>
+                    [% tx("Modify library '{library}'", { library = library.branchcode }) | html %]
                 [% END %]
             [% ELSE %]
                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>New library [% library.branchcode | html %]</span>
+                    <span>New library</span>
                 [% END %]
             [% END %]
 
         [% ELSIF op == 'delete_confirm' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of library '[% library.branchcode | html %]'</span>
+                [% tx("Confirm deletion of library '{library}'", { library = library.branchcode }) | html %]
             [% END %]
 
         [% ELSIF op == 'view' %]
@@ -116,7 +116,13 @@
 [% END %]
 
 [% IF op == 'add_form' %]
-    <h1>[% IF library %]Modify library[% ELSE %]New library[% END %]</h1>
+    <h1>
+        [% IF library %]
+            [% tx("Modify library '{library}'", { library = library.branchcode }) | html %]
+        [% ELSE %]
+            New library
+        [% END %]
+    </h1>
     <form action="/cgi-bin/koha/admin/branches.pl" id="Aform" name="Aform" class="validated" method="post">
         <fieldset class="rows">
             <input type="hidden" name="op" value="add_validate" />
