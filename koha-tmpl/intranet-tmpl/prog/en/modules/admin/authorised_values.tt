@@ -5,19 +5,23 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
-        [% IF ( action_modify ) %]
-            [% t("Modify authorized value") | html %] &rsaquo;
-        [% END %]
-        [% IF ( action_add_value ) %]
-            [% t("New authorized value") | html %] &rsaquo;
+        [% IF ( action_modify || action_add_value ) %]
+            [% IF ( action_modify ) %]
+                [% t("Modify authorized value") | html %] &rsaquo;
+            [% END %]
+            [% IF ( action_add_value ) %]
+                [% t("New authorized value") | html %] &rsaquo;
+            [% END %]
+            [% tx("Authorized values for category {category_name}", { category_name = category_name }) | html %] &rsaquo;
         [% END %]
         [% IF ( action_add_category ) %]
             [% t("New category") | html %] &rsaquo;
         [% END %]
-        [% IF ( action_modify || action_add_value ) %]
-            [% tx("Authorized values for category  {category_name}", { category_name = category_name }) | html %] &rsaquo;
-        [% END %]
-    [% END %]
+
+    [% ELSIF ( loop || searchfield ) %]
+        [% tx("Authorized values for category {category_name}", { category_name = category.category_name }) | html %] &rsaquo;
+    [% END # /IF op == 'add_form' %]
+
     [% t("Authorized values") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
