@@ -151,36 +151,21 @@
                     },
 
                     // action events
-                    onMove: function (item, callback) {
-
-                        let startDate = new Date(item.start);
+                    onMove: function (data, callback) {
+                        let startDate = new Date(data.start);
                         
                         // set end datetime hours and minutes to the end of the day
-                        let endDate = new Date(item.end);
+                        let endDate = new Date(data.end);
                         endDate.setHours(endDate.getHours()+23);
                         endDate.setMinutes(endDate.getMinutes()+59);
+                        endDate.setTime(endDate.getTime()-86400000);
 
-                        let url = '/api/v1/bookings/'+item.booking;
-                        var putting = $.ajax({
-                            method: 'PUT',
-                            url: url,
-                            data: JSON.stringify({
-                                "booking_id": item.booking,
-                                "start_date": startDate.toISOString(),
-                                "end_date": endDate.toISOString(),
-                                "biblio_id": [% biblionumber | uri %],
-                                "item_id": item.group != 0 ? item.group : null,
-                                "patron_id": item.patron
-                            })
-                        });
-
-                        putting.done(function(data) {
-                            bookings_table.api().ajax.reload();
-                            callback(item);
-                        });
-
-                        putting.fail(function(data) {
-                            $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">Failure</div>');
+                        $('#placeBookingModal').modal('show', $('<button data-booking="'+data.id+'"  data-biblionumber="[% biblionumber | uri %]"  data-itemnumber="'+data.group+'" data-patron="'+data.patron+'" data-start_date="'+startDate.toISOString()+'" data-end_date="'+endDate.toISOString()+'">'));
+                        $('#placeBookingModal').on('hide.bs.modal', function(e) {
+                            if (update_success) {
+                                update_success = 0;
+                                callback(data);
+                            }
                         });
                     },
                     onRemove: function (item, callback) {
@@ -261,10 +246,12 @@
             {
                 "data": "",
                 "title": "Actions",
+                "class": "actions",
                 "searchable": false,
                 "orderable": false,
                 "render": function(data, type, row, meta) {
-                    var result = '<button type="button" class="btn btn-default btn-xs cancel-action" data-toggle="modal" data-target="#cancelBookingModal" data-booking="'+row.booking_id+'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</button>';
+                    var result = '<button type="button" class="btn btn-default btn-xs edit-action" data-toggle="modal" data-target="#placeBookingModal" data-booking="'+row.booking_id+'" data-biblionumber="[% biblionumber | uri %]" data-itemnumber="'+row.item_id+'" data-patron="'+row.patron_id+'" data-start_date="'+row.start_date+'" data-end_date="'+row.end_date+'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</button>';
+                    result += '<button type="button" class="btn btn-default btn-xs cancel-action" data-toggle="modal" data-target="#cancelBookingModal" data-booking="'+row.booking_id+'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</button>';
                     return result;
                 }
             }]

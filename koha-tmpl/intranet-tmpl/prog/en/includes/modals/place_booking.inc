@@ -5,11 +5,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="placeBookingLabel">Place booking</h4>
+                    <h4 class="modal-title" id="placeBookingLabel"></h4>
                 </div>
                 <div class="modal-body">
                     <div id="booking_result"></div>
                     <fieldset class="rows">
+                        <input type="hidden" name="biblio_id" id="booking_id">
                         <input type="hidden" name="biblio_id" id="booking_biblio_id">
                         <input type="hidden" name="start_date" id="booking_start_date">
                         <input type="hidden" name="end_date" id="booking_end_date">
@@ -29,7 +30,6 @@
                                     <option value="0">Any item</option>
                                 </select>
                             </li>
-
                             <li>
                                 <div id="period_fields">
                                     <label class="required" for="period">Period: </label>

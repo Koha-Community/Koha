@@ -4,6 +4,17 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
     var itemnumber = button.data('itemnumber') || 0;
     $('#booking_biblio_id').val(biblionumber);
 
+    // Get booking id if this is an edit
+    var booking_id = button.data('booking');
+    if (booking_id) {
+        $('#placeBookingLabel').html('Edit booking');
+        $('#booking_id').val(booking_id);
+    } else {
+        $('#placeBookingLabel').html('Place booking');
+        // Ensure we don't accidentally update a booking
+        $('#booking_id').val('');
+    }
+
     // Patron select2
     $("#booking_patron_id").kohaSelect({
         dropdownParent: $(".modal-content", "#placeBookingModal"),
@@ -86,13 +97,14 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
             return $patron;
         },
         templateSelection: function (patron) {
-            if (!patron.id) {
+            if (!patron.surname) {
                 return patron.text;
             }
             return (
                 escape_str(patron.surname) + ", " + escape_str(patron.firstname)
             );
-        },        placeholder: "Search for a patron"
+        },
+        placeholder: "Search for a patron"
     });
 
     // If passed patron, pre-select
@@ -106,8 +118,19 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
 
         $.when(patron).then(
             function(patron){
-                var newOption = new Option(escape_str(patron.firstname) + " " + escape_str(patron.surname) + " (" + escape_str(patron.cardnumber) + ")", patron.patron_id, true, true);
+                var newOption = new Option(escape_str(patron.surname) + ", " + escape_str(patron.firstname), patron.patron_id, true, true);
                 $('#booking_patron_id').append(newOption).trigger('change');
+
+                // clone patron_id to id (select2 expects an id field)
+                patron.id = patron.patron_id;
+
+                // manually trigger the `select2:select` event
+                $('#booking_patron_id').trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: patron
+                    }
+                });
             }
         );
     }
@@ -253,7 +276,10 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
 
                         // same item, disable date
                         if (booking.item_id && booking.item_id == itemnumber) {
-                            return true;
+                            // Ignore if we're updating an existing booking
+                            if (!(booking_id && booking_id == booking.booking_id)){ 
+                                return true;
+                            }
                         }
 
                         // count all clashes, both item and biblio level
@@ -276,11 +302,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                     }
                 }
             });
-
-            // Enable flatpickr now we have date function populated
-            periodPicker.redraw();
-            $("#period_fields :input").prop('disabled', false);
-
+            
             // Setup listener for item select2
             $('#booking_item_id').on('select2:select', function(e) {
                 itemnumber = e.params.data.id ? e.params.data.id : null;
@@ -289,47 +311,68 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                 periodPicker.redraw();
             });
 
-            // Set onClose for flatpickr
-            periodPicker.config.onClose.push(function(selectedDates, dateStr, instance) {
+            // Set onChange for flatpickr
+            let exists = periodPicker.config.onChange.filter(f => f.name ==='periodChange');
+            if(exists.length === 0) {
+                periodPicker.config.onChange.push(function periodChange(selectedDates, dateStr, instance) {
+                    if ( selectedDates[0] && selectedDates[1] ) {
+                        // set form fields from picker
+                        let picker_start = new Date(selectedDates[0]);
+                        let picker_end = new Date(selectedDates[1]);
+                        picker_end.setHours(picker_end.getHours()+23);
+                        picker_end.setMinutes(picker_end.getMinutes()+59);
+                        $('#booking_start_date').val(picker_start.toISOString());
+                        $('#booking_end_date').val(picker_end.toISOString());
+    
+                        // set available items in select2
+                        var booked_items = bookings[0].filter(function(booking) {
+                            let start_date = flatpickr.parseDate(booking.start_date);
+                            let end_date = flatpickr.parseDate(booking.end_date);
+                            // This booking ends before the start of the new booking
+                            if ( end_date <= selectedDates[0] ) {
+                                return false;
+                            }
+                            // This booking starts after then end of the new booking
+                            if ( start_date >= selectedDates[1] ) {
+                                return false;
+                            }
+                            // This booking overlaps
+                            return true;
+                        });
+                        $("#booking_item_id > option").each(function() {
+                            let option = $(this);
+                            if ( itemnumber && itemnumber == option.val() ) {
+                                console.log("itemnumber defined and equal to value");
+                            } else if ( booked_items.some(function(booked_item){
+                                return option.val() == booked_item.item_id;
+                            }) ) {
+                                option.prop('disabled',true);
+                            } else {
+                                option.prop('disabled',false);
+                            }
+                        });
+                    }
+                });
+            };
 
-                if ( selectedDates[0] && selectedDates[1] ) {
-                    // set form fields from picker
-                    let picker_start = new Date(selectedDates[0]);
-                    let picker_end = new Date(selectedDates[1]);
-                    picker_end.setHours(picker_end.getHours()+23);
-                    picker_end.setMinutes(picker_end.getMinutes()+59);
-                    $('#booking_start_date').val(picker_start.toISOString());
-                    $('#booking_end_date').val(picker_end.toISOString());
+            // Set booking start & end if this is an edit
+            var start_date = button.data('start_date');
+            var end_date = button.data('end_date');
+            if ( start_date ) {
+                // Allow invalid pre-load so setDate can set date range
+                //periodPicker.set('allowInvalidPreload', true);
+                // FIXME: Why is this the case.. we're passing two valid Date objects
 
-                    // set available items in select2
-                    var booked_items = bookings[0].filter(function(booking) {
-                        let start_date = flatpickr.parseDate(booking.start_date);
-                        let end_date = flatpickr.parseDate(booking.end_date);
-                        // This booking ends before the start of the new booking
-                        if ( end_date <= selectedDates[0] ) {
-                            return false;
-                        }
-                        // This booking starts after then end of the new booking
-                        if ( start_date >= selectedDates[1] ) {
-                            return false;
-                        }
-                        // This booking overlaps
-                        return true;
-                    });
-                    $("#booking_item_id > option").each(function() {
-                        let option = $(this);
-                        if ( itemnumber && itemnumber == option.val() ) {
-                            console.log("itemnumber defined and equal to value");
-                        } else if ( booked_items.some(function(booked_item){
-                            return option.val() == booked_item.item_id;
-                        }) ) {
-                            option.prop('disabled',true);
-                        } else {
-                            option.prop('disabled',false);
-                        }
-                    });
-                }
-            });
+                console.log("Calling setDate with");
+                console.log(start_date);
+                console.log(end_date);
+                let dates = [ new Date(start_date), new Date(end_date) ];
+                periodPicker.setDate(dates, true);
+            };
+
+            // Enable flatpickr now we have date function populated
+            periodPicker.redraw();
+            $("#period_fields :input").prop('disabled', false);
         },
         function(jqXHR, textStatus, errorThrown){
             console.log("Fetch failed");
@@ -342,55 +385,108 @@ $("#placeBookingForm").on('submit', function(e) {
 
     var url = '/api/v1/bookings';
 
+    var booking_id = $('#booking_id').val();
     var start_date = $('#booking_start_date').val();
     var end_date = $('#booking_end_date').val();
     var item_id = $('#booking_item_id').val();
 
-    var posting = $.post(
-        url,
-        JSON.stringify({
-            "start_date": start_date,
-            "end_date": end_date,
-            "biblio_id": $('#booking_biblio_id').val(),
-            "item_id": item_id != 0 ? item_id : null,
-            "patron_id": $('#booking_patron_id').find(':selected').val()
-        })
-    );
+    if (!booking_id) {
+        var posting = $.post(
+            url,
+            JSON.stringify({
+                "start_date": start_date,
+                "end_date": end_date,
+                "biblio_id": $('#booking_biblio_id').val(),
+                "item_id": item_id != 0 ? item_id : null,
+                "patron_id": $('#booking_patron_id').find(':selected').val()
+            })
+        );
+    
+        posting.done(function(data) {
+            // Update bookings page as required
+            if (typeof bookings_table !== 'undefined' && bookings_table !== null) {
+                bookings_table.api().ajax.reload();
+            }
+            if (typeof timeline !== 'undefined' && timeline !== null) {
+                timeline.itemsData.add({
+                    id: data.booking_id,
+                    booking: data.booking_id,
+                    patron: data.patron_id,
+                    start: dayjs(data.start_date).toDate(),
+                    end: dayjs(data.end_date).toDate(),
+                    content: 'Booking: ' + data.booking_id,
+                    editable: { remove: true, updateTime: true },
+                    type: 'range',
+                    group: data.item_id ? data.item_id : 0
+                });
+            }
+    
+            // Update bookings counts
+            $('.bookings_count').html(parseInt($('.bookings_count').html(), 10)+1);
+    
+            // Close modal
+            $('#placeBookingModal').modal('hide');
+    
+            // Reset form
+            $('#booking_patron_id').val(null).trigger('change');
+            $('#booking_item_id').val(null).trigger('change');
+            $("#period").get(0)._flatpickr.clear();
+            $('#booking_start_date').val('');
+            $('#booking_end_date').val('');
+        });
+    
+        posting.fail(function(data) {
+            $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">Failure</div>');
+        });
+    } else {
+        url += '/' + booking_id;
+        var putting = $.ajax({
+            'method': 'PUT',
+            'url': url,
+            'data': JSON.stringify({
+                "booking_id": booking_id,
+                "start_date": start_date,
+                "end_date": end_date,
+                "biblio_id": $('#booking_biblio_id').val(),
+                "item_id": item_id != 0 ? item_id : null,
+                "patron_id": $('#booking_patron_id').find(':selected').val()
+            })
+        });
+    
+        putting.done(function(data) {
+            update_success = 1;
 
-    posting.done(function(data) {
-        // Update bookings page as required
-        if (typeof bookings_table !== 'undefined' && bookings_table !== null) {
-            bookings_table.api().ajax.reload();
-        }
-        if (typeof timeline !== 'undefined' && timeline !== null) {
-            timeline.itemsData.add({
-                id: data.booking_id,
-                booking: data.booking_id,
-                patron: data.patron_id,
-                start: dayjs(data.start_date).toDate(),
-                end: dayjs(data.end_date).toDate(),
-                content: 'Booking: ' + data.booking_id,
-                editable: { remove: true, updateTime: true },
-                type: 'range',
-                group: data.item_id ? data.item_id : 0
-            });
-        }
-
-        // Update bookings counts
-        $('.bookings_count').html(parseInt($('.bookings_count').html(), 10)+1);
-
-        // Close modal
-        $('#placeBookingModal').modal('hide');
-
-        // Reset form
-        $('#booking_patron_id').val(null).trigger('change');
-        $('#booking_item_id').val(null).trigger('change');
-        $("#period").get(0)._flatpickr.clear();
-        $('#booking_start_date').val('');
-        $('#booking_end_date').val('');
-    });
-
-    posting.fail(function(data) {
-        $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">Failure</div>');
-    });
+            // Update bookings page as required
+            if (typeof bookings_table !== 'undefined' && bookings_table !== null) {
+                bookings_table.api().ajax.reload();
+            }
+            if (typeof timeline !== 'undefined' && timeline !== null) {
+                timeline.itemsData.update({
+                    id: data.booking_id,
+                    booking: data.booking_id,
+                    patron: data.patron_id,
+                    start: dayjs(data.start_date).toDate(),
+                    end: dayjs(data.end_date).toDate(),
+                    content: 'Booking: ' + data.booking_id,
+                    editable: { remove: true, updateTime: true },
+                    type: 'range',
+                    group: data.item_id ? data.item_id : 0
+                });
+            }
+    
+            // Close modal
+            $('#placeBookingModal').modal('hide');
+    
+            // Reset form
+            $('#booking_patron_id').val(null).trigger('change');
+            $('#booking_item_id').val(null).trigger('change');
+            $("#period").get(0)._flatpickr.clear();
+            $('#booking_start_date').val('');
+            $('#booking_end_date').val('');
+        });
+    
+        putting.fail(function(data) {
+            $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">Failure</div>');
+        });
+    }
 });
