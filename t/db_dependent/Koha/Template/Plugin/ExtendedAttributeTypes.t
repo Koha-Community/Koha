@@ -42,34 +42,34 @@ my $typeA = $builder->build_object(
         class => 'Koha::Patron::Attribute::Types',
         value => {
             staff_searchable => 0,
-            description => "Desc type A",
+            description      => "Desc type A",
         }
     }
 );
 my $typeB = $builder->build_object(
     {
-        class  => 'Koha::Patron::Attribute::Types',
+        class => 'Koha::Patron::Attribute::Types',
         value => {
             staff_searchable => 1,
-            description => "Desc type B",
+            description      => "Desc type B",
         }
     }
 );
 
-my $all_plugin = $plugin->all();
+my $all_plugin  = $plugin->all();
 my $all_objects = Koha::Patron::Attribute::Types->search();
 
-is_deeply( $all_plugin->unblessed, $all_objects->unblessed, "all method returns all the types correctly");
+is_deeply( $all_plugin->unblessed, $all_objects->unblessed, "all method returns all the types correctly" );
 
 my $all_plugin_codes = $plugin->codes();
 my $all_object_codes = Koha::Patron::Attribute::Types->search()->get_column('code');
 
-is_deeply( $all_plugin_codes, $all_object_codes, "codes method returns the codes as expected");
+is_deeply( $all_plugin_codes, $all_object_codes, "codes method returns the codes as expected" );
 
-my $searchable_plugin_codes = $plugin->codes({ staff_searchable => 1 });
-my $searchable_object_codes = Koha::Patron::Attribute::Types->search({ staff_searchable => 1 })->get_column('code');
+my $searchable_plugin_codes = $plugin->codes( { staff_searchable => 1 } );
+my $searchable_object_codes = Koha::Patron::Attribute::Types->search( { staff_searchable => 1 } )->get_column('code');
 
-is_deeply( $searchable_plugin_codes, $searchable_object_codes, "searching plugin method works as expected");
+is_deeply( $searchable_plugin_codes, $searchable_object_codes, "searching plugin method works as expected" );
 
 $schema->storage->txn_rollback;
 

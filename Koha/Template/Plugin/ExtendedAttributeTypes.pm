@@ -55,14 +55,14 @@ Koha::Template::Plugin::ExtendedAttributeTypes - TT Plugin for retrieving patron
 In a template, you can get the searchable attribute types with
 the following TT code: [% ExtendedAttributes.all( staff_searchable => 1 ) %]
 
-The function returns the Koha::Patron::Atribute::Type objects
+The function returns the Koha::Patron::Attribute::Type objects
 
 =head2 codes
 
 In a template, you can get the searchable attribute type codes with
 the following TT code: [% ExtendedAttributes.codes( staff_searchable => 1 ) %]
 
-The function returns the Koha::Patron::Atribute::Type codes as an array
+The function returns the Koha::Patron::Attribute::Type codes as an array
 
 =head1 AUTHOR
 
