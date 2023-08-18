@@ -23,6 +23,8 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
+use Koha::AuthorisedValues;
+use Koha::Exceptions::Suggestion;
 
 use base qw(Koha::Object);
 
@@ -46,6 +48,18 @@ a suggesteddate of today
 sub store {
     my ($self) = @_;
 
+    $self->STATUS("ASKED") unless $self->STATUS;
+    my @status_constants = qw(ASKED CHECKED ACCEPTED REJECTED);
+    Koha::Exceptions::Suggestion::StatusForbidden->throw( STATUS => $self->STATUS )
+        unless ( grep { $self->STATUS eq $_ } @status_constants )
+        || Koha::AuthorisedValues->search(
+        {
+            category         => 'SUGGEST_STATUS',
+            authorised_value => $self->STATUS
+        }
+    )->count;
+
+    $self->branchcode(undef) if defined $self->branchcode && $self->branchcode eq '';
     unless ( $self->suggesteddate() ) {
         $self->suggesteddate( dt_from_string()->ymd );
     }
