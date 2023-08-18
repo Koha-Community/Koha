@@ -302,7 +302,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" href="#holds-tab" id="holds" aria-controls="home" aria-selected="false" data-toggle="tab">
                                 [% IF waiting_holds_count %]
-                                    <i class="fa fa-exclamation" aria-hidden="true"></i>
+                                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                                 [% END %]
                                 Holds ([% HOLDS.count | html %])
                             </a>
@@ -422,7 +422,7 @@
                                         </tbody>
                                     </table>
                                     [% ELSE %]
-                                        <a href="?load_checkouts=1">Load your checkouts</a>
+                                        <a class="btn btn-secondary" href="?load_checkouts=1#scan_form"><i class="fa fa-book" aria-hidden="true"></i> Show your checkouts</a>
                                     [% END # / IF ( Koha.preference('SCOLoadCheckoutsByDefault') || load_checkouts ) %]
                                 [% ELSE %]
                                     <h3>You currently have nothing checked out.</h3>
