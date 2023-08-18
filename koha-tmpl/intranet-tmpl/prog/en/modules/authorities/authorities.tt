@@ -243,6 +243,14 @@
         $("#confirm_not_duplicate").attr("value","1");
         Check();
     }
+    /* Wrap a value in HTML without putting HTML in translatable string */
+    function formatFieldName( string ){
+        return "<strong><em>" + string + "</em></strong>";
+    }
+
+    $(document).ready(function(){
+        $('body').on('click','.expandfield',ExpandField);
+    });
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
 
@@ -398,7 +406,7 @@
                                                 <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
                                                     [% UNLESS hide_marc %]
                                                         [% IF advancedMARCEditor %]
-                                                            <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to expand this tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
+                                                            <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to expand this tag" data-field_id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'">[% innerloo.tag | html %]</a>
                                                         [% ELSE %]
                                                             <span class="tagnum" title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
                                                         [% END %]
@@ -458,7 +466,7 @@
                                                     [% END # /UNLESS hide_marc %]
 
                                                     [% UNLESS advancedMARCEditor %]
-                                                        <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Click to expand this tag">[% innerloo.tag_lib | html %]</a>
+                                                        <a href="#" tabindex="1" class="expandfield" data-field_id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" title="Click to expand this tag">[% innerloo.tag_lib | html %]</a>
                                                     [% END %]
                                                     <span class="field_controls">
                                                         [% IF ( innerloo.repeatable ) %]
