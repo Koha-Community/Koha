@@ -283,6 +283,7 @@ if ($op eq "show"){
             ignore_not_allowed_subfields => 1,
             kohafields_to_ignore         => ['items.barcode'],
             prefill_with_default_values => $use_default_values,
+            branch_limit => C4::Context->userenv->{"branch"},
             default_branches_empty      => 1,
         }
     );
