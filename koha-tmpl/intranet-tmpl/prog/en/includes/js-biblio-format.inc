@@ -41,6 +41,8 @@
                     title = '<a href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=' + encodeURIComponent(biblio.biblio_id) + '" class="title">' + title + '</a>';
                 } else if (config.link === 'isbd') {
                     title = '<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=' + encodeURIComponent(biblio.biblio_id) + '" class="title">' + title + '</a>';
+                } else if (config.link === 'bookings') {
+                    title = '<a href="/cgi-bin/koha/bookings/list.pl?biblionumber=' + encodeURIComponent(biblio.biblio_id) + '" class="title">' + title + '</a>';
                 } else {
                     title = '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + encodeURIComponent(biblio.biblio_id) + '" class="title">' + title + '</a>';
                 }
