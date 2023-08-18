@@ -319,7 +319,7 @@
                     let filters = [];
 
                     let search_type = $("#searchtype_filter").val() || "contains";
-                    let search_fields = $("#searchfieldstype_filter").val();
+                    let search_fields = $("#searchfieldstype_filter").val() || "standard";
                     let pattern = $("#search_patron_filter").val();
 
                     filters = buildPatronSearchQuery(
