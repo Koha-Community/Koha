@@ -93,10 +93,6 @@ sub add {
 
     my $body = $c->req->json;
 
-    # FIXME: This should be handled in Koha::Suggestion->store
-    $body->{'status'} = 'ASKED'
-        unless defined $body->{'status'};
-
     my $overrides = $c->stash('koha.overrides');
 
     unless ( $overrides->{any} ) {
