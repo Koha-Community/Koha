@@ -18,7 +18,7 @@
     [% END %]
     [% IF op == 'delete_confirm' %]
         [% IF ( patrons_in_category > 0 ) %]
-            [% tx("Cannot delete: category '{categorycode}'", { categorycode = categorycode }) | html %]
+            [% tx("Cannot delete category '{categorycode}'", { categorycode = categorycode }) | html %]
         [% ELSE %]
             [% tx("Confirm deletion of category '{categorycode}'", { categorycode = categorycode }) | html %]
         [% END %] &rsaquo;
@@ -55,7 +55,7 @@
         [% IF op == 'add_form' %]
             [% IF ( categorycode ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify category '[% categorycode | html %]'</span>
+                   [% tx("Modify category '{categorycode}'", { categorycode = categorycode }) | html %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -67,11 +67,11 @@
         [% IF op == 'delete_confirm' %]
             [% IF ( patrons_in_category > 0 ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Cannot delete: Category [% categorycode | html %] in use</span>
+                    [% tx("Cannot delete category '{categorycode}'", { categorycode = categorycode }) | html %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Confirm deletion of category '[% categorycode | html %]'</span>
+                    [% tx("Confirm deletion of category '{categorycode}'", { categorycode = categorycode }) | html %]
                 [% END %]
             [% END %]
         [% END %]
@@ -117,7 +117,7 @@
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="checked" value="0" />
         [% IF category %]
-            <h1>Modify category [% categorycode | html %]</h1>
+            <h1>[% tx("Modify category '{categorycode}'", { categorycode = categorycode }) | html %]</h1>
         [% ELSE %]
             <h1>New category</h1>
         [% END %]
@@ -436,83 +436,83 @@
 [% END %]
 
 [% IF op == 'delete_confirm' %]
-    <form action="/cgi-bin/koha/admin/categories.pl" method="post">
-        <fieldset>
-            <legend>
-                <h1>
-                    [% IF patrons_in_category > 0 %]
-                        <span>Category [% categorycode | html %] is in use. Deletion not possible!</span>
+    <h1>
+        [% IF patrons_in_category > 0 %]
+            [% tx("Cannot delete category '{categorycode}'", { categorycode = categorycode }) | html %]
+        [% ELSE %]
+            [% tx("Confirm deletion of category '{categorycode}'", { categorycode = categorycode }) | html %]
+        [% END %]
+    </h1>
+
+    [% IF patrons_in_category > 0  %]
+        <div class="dialog alert">
+            <strong>This category is used [% patrons_in_category | html %] times</strong>. Deletion not possible
+        </div>
+    [% END %]
+
+    <div class="page-section">
+        <table>
+            <tr><th scope="row">Category code: </th><td>[% category.categorycode | html %]</td></tr>
+            <tr><th scope="row">Description: </th><td>[% category.description | html %]</td></tr>
+            <tr><th scope="row">Enrollment period: </th>
+                <td>
+                    [% IF category.enrolmentperiod %]
+                        [% category.enrolmentperiod | html %] months
                     [% ELSE %]
-                        <span>Confirm deletion of category [% categorycode | html %]</span>
+                        until [% category.enrolmentperioddate | $KohaDates %]
                     [% END %]
-            </h1>
-            </legend>
+                </td>
+            </tr>
+            <tr><th scope="row">Password expiration: </th><td>[% category.password_expiry_days | html %] days</td></tr>
+            <tr><th scope="row">Age required: </th><td>[% category.dateofbirthrequired | html %] years</td></tr>
+            <tr><th scope="row">Upperage limit: </th><td>[% category.upperagelimit | html %] years</td></tr>
+            <tr><th scope="row">Enrollment fee: </th><td>[% category.enrolmentfee | $Price %]</td></tr>
+            <tr><th scope="row">Receives overdue notices: </th><td>[% IF category. overduenoticerequired %]Yes[% ELSE %]No[% END %]</td></tr>
+            <tr><th scope="row">Lost items in staff interface</th><td>[% IF category.hidelostitems %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
+            <tr><th scope="row">Hold fee: </th><td>[% category.reservefee | $Price %]</td></tr>
 
-            [% IF patrons_in_category > 0  %]
-                <div class="dialog alert">
-                    <strong>This category is used [% patrons_in_category | html %] times</strong>. Deletion not possible
-                </div>
+            [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
+            <tr>
+                <th scope="row">Check previous checkouts: </th>
+                <td>
+                    [% SWITCH category.checkprevcheckout %]
+                    [% CASE 'yes' %]
+                        <span>Yes</span>
+                    [% CASE 'no' %]
+                        <span>No</span>
+                    [% CASE 'inherit' %]
+                        <span>Inherit</span>
+                    [% END %]
+                </td>
+            </tr>
             [% END %]
-            <table>
-                <tr><th scope="row">Category code: </th><td>[% category.categorycode | html %]</td></tr>
-                <tr><th scope="row">Description: </th><td>[% category.description | html %]</td></tr>
-                <tr><th scope="row">Enrollment period: </th>
-                    <td>
-                        [% IF category.enrolmentperiod %]
-                            [% category.enrolmentperiod | html %] months
-                        [% ELSE %]
-                            until [% category.enrolmentperioddate | $KohaDates %]
-                        [% END %]
-                    </td>
-                </tr>
-                <tr><th scope="row">Password expiration: </th><td>[% category.password_expiry_days | html %] days</td></tr>
-                <tr><th scope="row">Age required: </th><td>[% category.dateofbirthrequired | html %] years</td></tr>
-                <tr><th scope="row">Upperage limit: </th><td>[% category.upperagelimit | html %] years</td></tr>
-                <tr><th scope="row">Enrollment fee: </th><td>[% category.enrolmentfee | $Price %]</td></tr>
-                <tr><th scope="row">Receives overdue notices: </th><td>[% IF category. overduenoticerequired %]Yes[% ELSE %]No[% END %]</td></tr>
-                <tr><th scope="row">Lost items in staff interface</th><td>[% IF category.hidelostitems %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
-                <tr><th scope="row">Hold fee: </th><td>[% category.reservefee | $Price %]</td></tr>
+            <tr><th scope="row">Can be guarantee</th><td>[% IF category.can_be_guarantee %]Yes[% ELSE %]No[% END %]</td></tr>
+            <tr>
+                <th scope="row">Default privacy: </th>
+                <td>
+                    [% SWITCH category.default_privacy %]
+                    [% CASE 'default' %]
+                        <span>Default</span>
+                    [% CASE 'never' %]
+                        <span>Never</span>
+                    [% CASE 'forever' %]
+                        <span>Forever</span>
+                    [% END %]
+                </td>
+            </tr>
+        </table>
+    </div> <!-- /.page-section -->
 
-                [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
-                  <tr>
-                      <th scope="row">Check previous checkouts: </th>
-                      <td>
-                          [% SWITCH category.checkprevcheckout %]
-                          [% CASE 'yes' %]
-                              <span>Yes</span>
-                          [% CASE 'no' %]
-                              <span>No</span>
-                          [% CASE 'inherit' %]
-                              <span>Inherit</span>
-                          [% END %]
-                      </td>
-                  </tr>
-                [% END %]
-                <tr><th scope="row">Can be guarantee</th><td>[% IF category.can_be_guarantee %]Yes[% ELSE %]No[% END %]</td></tr>
-                <tr>
-                    <th scope="row">Default privacy: </th>
-                    <td>
-                        [% SWITCH category.default_privacy %]
-                        [% CASE 'default' %]
-                            <span>Default</span>
-                        [% CASE 'never' %]
-                            <span>Never</span>
-                        [% CASE 'forever' %]
-                            <span>Forever</span>
-                        [% END %]
-                    </td>
-                </tr>
-            </table>
-            <fieldset class="action">
-                [% IF patrons_in_category > 0 %]
-                    <input type="submit" class="btn btn-primary" value="OK" />
-                [% ELSE %]
-                    <input type="hidden" name="op" value="delete_confirmed" />
-                    <input type="hidden" name="categorycode" value="[% categorycode | html %]" />
-                    <input type="submit" class="btn btn-primary" value="Delete this category" />
-                    <a class="cancel" href="/cgi-bin/koha/admin/categories.pl">Cancel</a>
-                [% END %]
-            </fieldset>
+    <form action="/cgi-bin/koha/admin/categories.pl" method="post">
+        <fieldset class="action">
+            [% IF patrons_in_category > 0 %]
+                <input type="submit" class="btn btn-primary" value="OK" />
+            [% ELSE %]
+                <input type="hidden" name="op" value="delete_confirmed" />
+                <input type="hidden" name="categorycode" value="[% categorycode | html %]" />
+                <input type="submit" class="btn btn-primary" value="Delete this category" />
+                <a class="cancel" href="/cgi-bin/koha/admin/categories.pl">Cancel</a>
+            [% END %]
         </fieldset>
     </form>
 [% END %]
