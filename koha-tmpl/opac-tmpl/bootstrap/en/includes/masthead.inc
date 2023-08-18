@@ -91,7 +91,7 @@
                     <li class="nav-item dropdown">
                         [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                             [% IF ( loggedinusername ) %]
-                                <a href="/cgi-bin/koha/opac-user.pl" class="dropdown-toggle" id="user-menu" data-toggle="dropdown" role="button">
+                                <a href="/cgi-bin/koha/opac-user.pl" class="dropdown-toggle" id="user-menu" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i>
                                     <span class="userlabel">Welcome, [% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span>
                                 </a>
