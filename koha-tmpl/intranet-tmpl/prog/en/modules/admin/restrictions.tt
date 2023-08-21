@@ -96,7 +96,7 @@
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="checked" value="0" />
         [% IF restriction %]
-            <h1>Modify restriction type [% PROCESS restriction_type_description restriction_type=restriction %]</h1>
+            <h1>Modify restriction type '[% PROCESS restriction_type_description restriction_type=restriction %]'</h1>
             <input type="hidden" name="is_a_modif" value="1" />
         [% ELSE %]
             <h1>New restriction type</h1>
@@ -136,22 +136,18 @@
 [% END %]
 
 [% IF op == 'delete_confirm' %]
-    <form action="/cgi-bin/koha/admin/restrictions.pl" method="post">
-        <fieldset>
-            <legend>
-                Confirm restriction type deletion
-            </legend>
-
-            <p>Are you sure you want to delete '[% PROCESS restriction_type_description restriction_type=restriction %]'?</p>
-
-            <fieldset class="action">
-                <input type="hidden" name="op" value="delete_confirmed" />
-                <input type="hidden" name="code" value="[% restriction.code | html %]" />
-                <input type="submit" class="btn btn-primary" value="Delete this restriction type" />
-                <a class="cancel" href="/cgi-bin/koha/admin/restrictions.pl">Cancel</a>
-            </fieldset>
-        </fieldset>
-    </form>
+    <div class="dialog alert">
+        <h1>Confirm restriction type deletion</h1>
+        <p>Are you sure you want to delete '[% PROCESS restriction_type_description restriction_type=restriction %]'?</p>
+        <form action="/cgi-bin/koha/admin/restrictions.pl" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="code" value="[% restriction.code | html %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+        </form>
+        <form action="/cgi-bin/koha/admin/restrictions.pl" method="get">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+        </form>
+    </div>
 [% END %]
 
 [% IF op == 'list' %]
