@@ -81,7 +81,6 @@ Receive background_job_callbacks to be able to update job progress
 sub store {
     my ( $self, $background_job_callbacks ) = @_;
 
-    $self->_validate;
     $self->_set_report_type_from_file;
 
     my $result = $self->SUPER::store;
@@ -275,7 +274,7 @@ sub _add_yearly_usage_entries {
     }
 }
 
-=head3 _validate
+=head3 validate
 
 Verifies if the given file_content is a valid COUNTER file or not
 
@@ -284,7 +283,7 @@ A I <Koha::Exceptions::ERM::CounterFile> exception is thrown
 
 =cut
 
-sub _validate {
+sub validate {
     my ($self) = @_;
 
     open my $fh, "<", \$self->file_content or die;

@@ -19,6 +19,7 @@ package Koha::REST::V1::ERM::UsageDataProviders;
 
 use Modern::Perl;
 
+use MIME::Base64 qw( decode_base64 );
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ERM::UsageDataProviders;
@@ -307,11 +308,113 @@ sub delete {
     };
 }
 
-=head3 run
+=head3 process_COUNTER_file
+
+Controller function that handles processing of the COUNTER file
+It will->enqueue_counter_file_processing_job for its respective usage data provider
 
 =cut
 
-sub run {
+sub process_COUNTER_file {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        Koha::Database->new->schema->txn_do(
+            sub {
+
+                my $body = $c->validation->param('body');
+
+                my $file_content =
+                  defined( $body->{file_content} )
+                  ? decode_base64( $body->{file_content} )
+                  : "";
+
+   # Validate the file_content without storing, it'll throw an exception if fail
+                my $counter_file_validation =
+                  Koha::ERM::CounterFile->new(
+                    { file_content => $file_content } );
+                $counter_file_validation->validate;
+
+                # Validation was successful, enqueue the job
+                my $udprovider =
+                  Koha::ERM::UsageDataProviders->find(
+                    $c->validation->param('erm_usage_data_provider_id') );
+
+                my $jobs = $udprovider->enqueue_counter_file_processing_job(
+                    {
+                        file_content => $file_content,
+                    }
+                );
+
+                return $c->render(
+                    status  => 200,
+                    openapi => { jobs => [ @{$jobs} ] }
+                );
+            }
+        );
+    }
+    catch {
+
+        my $to_api_mapping = Koha::ERM::CounterFile->new->to_api_mapping;
+
+        if ( blessed $_ ) {
+            if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+                return $c->render(
+                    status  => 409,
+                    openapi =>
+                      { error => $_->error, conflict => $_->duplicate_id }
+                );
+            }
+            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => {
+                            error => "Given "
+                          . $to_api_mapping->{ $_->broken_fk }
+                          . " does not exist"
+                    }
+                );
+            }
+            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+                return $c->render(
+                    status  => 400,
+                    openapi => {
+                            error => "Given "
+                          . $to_api_mapping->{ $_->parameter }
+                          . " does not exist"
+                    }
+                );
+            }
+            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+                return $c->render(
+                    status  => 413,
+                    openapi => { error => $_->error }
+                );
+            }
+            elsif (
+                $_->isa(
+                    'Koha::Exceptions::ERM::CounterFile::UnsupportedRelease')
+              )
+            {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => $_->description }
+                );
+            }
+        }
+
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 process_SUSHI_response
+
+Controller function that handles processing of the SUSHI response
+It will ->enqueue_sushi_harvest_jobs for this usage data provider
+
+=cut
+
+sub process_SUSHI_response {
     my $c = shift->openapi->valid_input or return;
 
     my $body       = $c->validation->param('body');
@@ -325,7 +428,8 @@ sub run {
         );
     }
 
-    my $udprovider = Koha::ERM::UsageDataProviders->find( $c->validation->param('erm_usage_data_provider_id') );
+    my $udprovider = Koha::ERM::UsageDataProviders->find(
+        $c->validation->param('erm_usage_data_provider_id') );
 
     unless ($udprovider) {
         return $c->render(
@@ -335,7 +439,12 @@ sub run {
     }
 
     return try {
-        my $jobs = $udprovider->run( { begin_date => $begin_date, end_date => $end_date } );
+        my $jobs = $udprovider->enqueue_sushi_harvest_jobs(
+            {
+                begin_date => $begin_date,
+                end_date   => $end_date
+            }
+        );
 
         return $c->render(
             status  => 200,
@@ -354,7 +463,8 @@ sub run {
 sub test_connection {
     my $c = shift->openapi->valid_input or return;
 
-    my $udprovider = Koha::ERM::UsageDataProviders->find( $c->validation->param('erm_usage_data_provider_id') );
+    my $udprovider = Koha::ERM::UsageDataProviders->find(
+        $c->validation->param('erm_usage_data_provider_id') );
 
     unless ($udprovider) {
         return $c->render(

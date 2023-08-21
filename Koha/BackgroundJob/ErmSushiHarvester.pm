@@ -75,10 +75,7 @@ sub process {
     my $ud_provider =
       Koha::ERM::UsageDataProviders->find( $args->{ud_provider_id} );
 
-    $ud_provider->harvest(
-        $args->{begin_date},
-        $args->{end_date},
-        $args->{report_type},
+    $ud_provider->set_background_job_callbacks(
         {
             report_info_callback => sub { $self->report_info(@_); },
             step_callback        => sub { $self->step; },
@@ -87,9 +84,34 @@ sub process {
         }
     );
 
+    my $counter_file;
+    if ( $args->{file_content} ) {
+        my $counter_files_rs = $ud_provider->counter_files(
+            [
+                {
+                    usage_data_provider_id => $ud_provider->erm_usage_data_provider_id,
+                    file_content           => $args->{file_content},
+                    date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
+                    filename               => $ud_provider->name . "_" . $ud_provider->{report_type},
+                }
+            ]
+        );
+        $counter_file = $counter_files_rs->last;
+    } else {
+        $ud_provider->harvest_sushi(
+            {
+                begin_date  => $args->{begin_date},
+                end_date    => $args->{end_date},
+                report_type => $args->{report_type}
+            }
+        );
+    }
+
+    my $job_report_report_type = $ud_provider->{report_type} || $counter_file->type;
+
     # Prepare job report
     my $report = {
-        report_type      => $ud_provider->{report_type},
+        report_type      => $job_report_report_type,
         total_records    => $ud_provider->{total_records},
         us_report_info   => $self->{us_report_info},
         ud_provider_id   => $ud_provider->erm_usage_data_provider_id,

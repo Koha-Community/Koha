@@ -35,11 +35,21 @@
 </template>
 
 <script>
+import { inject } from "vue"
 import ButtonSubmit from "../ButtonSubmit.vue"
-import { setMessage } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 
 export default {
+    setup() {
+        const AVStore = inject("AVStore") // Left in for future permissions fixes
+        const { get_lib_from_av, map_av_dt_filter } = AVStore
+
+        const { setMessage } = inject("mainStore")
+
+        return {
+            setMessage,
+        }
+    },
     data() {
         return {
             file: {
@@ -69,15 +79,21 @@ export default {
         addDocument(e) {
             e.preventDefault()
             const client = APIClient.erm
-            client.counter_files
-                .create({
+            client.usage_data_providers
+                .process_COUNTER_file(this.file.usage_data_provider_id, {
                     usage_data_provider_id: this.file.usage_data_provider_id,
                     filename: this.file.filename,
                     file_content: this.file.file_content,
                 })
                 .then(
                     success => {
-                        setMessage(this.$__("COUNTER file uploaded"))
+                        let message = ""
+                        success.jobs.forEach((job, i) => {
+                            message += this.$__(
+                                '<li>Job for uploaded file has been queued, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">click here</a> to check its progress.</li>'
+                            ).format(job.job_id)
+                        })
+                        this.setMessage(message, true)
                     },
                     error => {}
                 )

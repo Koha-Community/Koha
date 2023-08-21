@@ -277,9 +277,18 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "usage_data_providers/" + id,
                     body: usage_data_provider,
                 }),
-            run: (id, body) =>
+            process_SUSHI_response: (id, body) =>
                 this.post({
-                    endpoint: "usage_data_providers/" + id + "/run",
+                    endpoint:
+                        "usage_data_providers/" +
+                        id +
+                        "/process_SUSHI_response",
+                    body: body,
+                }),
+            process_COUNTER_file: (id, body) =>
+                this.post({
+                    endpoint:
+                        "usage_data_providers/" + id + "/process_COUNTER_file",
                     body: body,
                 }),
             test: id =>

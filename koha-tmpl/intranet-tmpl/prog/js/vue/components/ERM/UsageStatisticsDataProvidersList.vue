@@ -223,7 +223,7 @@ export default {
                     callback_result => {
                         const client = APIClient.erm
                         client.usage_data_providers
-                            .run(id, {
+                            .process_SUSHI_response(id, {
                                 begin_date: callback_result.inputs.find(
                                     input => {
                                         return input.id == "begin_date"

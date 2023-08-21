@@ -19,7 +19,6 @@ package Koha::REST::V1::ERM::CounterFiles;
 
 use Modern::Perl;
 
-use MIME::Base64 qw( decode_base64 );
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ERM::CounterFiles;
