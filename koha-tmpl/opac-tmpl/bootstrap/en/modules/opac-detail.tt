@@ -1090,8 +1090,6 @@
                                         <div><a id="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a></div>
                                     [% CASE "email" -%]
                                         <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %]%20([% current_url |url %])" title="Share by email"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a></div>
-                                    [% CASE "twitter" -%]
-                                        <div><a id="twitter" href="https://twitter.com/share?url=[% current_url|url %]&text=[% title | uri %]" class="twitter-share-button" data-count="none" data-lang="[% lang | html %]" title="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a></div>
                                 [% END # /SWITCH network -%]
                             [% END # /FOREACH network %]
                         </div> <!-- /#social_networks -->
