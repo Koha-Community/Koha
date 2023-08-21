@@ -1,19 +1,22 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( ! method ) %]
-[% method = 'tool'; %]
+    [% method = 'tool'; %]
 [% END %]
-<title>
-    [% IF ( plugin_title ) %][% plugin_title | html %] &rsaquo; [% END %]
-    Plugins &rsaquo;
-    [% IF ( method == 'tool' ) %]
-        Tools
-    [% ELSE %]
-        Administration
+<title>[% FILTER collapse %]
+    [% IF ( plugin_title ) %]
+        [% plugin_title | html %] &rsaquo;
     [% END %]
-    &rsaquo; Koha
- </title>
+    [% t("Plugins") | html %] &rsaquo;
+    [% IF ( method == 'tool' ) %]
+        [% t("Tools") | html %]
+    [% ELSE %]
+        [% t("Administration") | html %]
+    [% END %] &rsaquo;
+    [% t("Koha") | html %]
+ [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -35,7 +38,7 @@
             <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>[% IF ( plugin_title ) %][% plugin_title | html %][% ELSE %]<span>Plugin</span>[% END %]</span>
+            [% IF ( plugin_title ) %][% plugin_title | html %][% ELSE %]<span>Plugin</span>[% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
