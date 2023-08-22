@@ -291,7 +291,13 @@
                                                 <td>[% decreaseloanholds | html %]</td>
                                                 <td>[% fine | $Price %]</td>
                                                 <td>[% chargeperiod | html %]</td>
-                                                <td>[% IF chargeperiod_charge_at %]Start of interval[% ELSE %]End of interval[% END %]</td>
+                                                <td data-code="[% chargeperiod_charge_at | html %]">
+                                                  [% IF chargeperiod_charge_at %]
+                                                    Start of interval
+                                                  [% ELSE %]
+                                                    End of interval
+                                                  [% END %]
+                                                </td>
                                                 <td>[% firstremind | html %]</td>
                                                 <td>[% IF overduefinescap %][% overduefinescap | $Price %][% ELSE %][% END %]</td>
                                                 <td>
