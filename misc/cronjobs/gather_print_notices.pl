@@ -320,6 +320,7 @@ sub send_files {
             $email->attach_file(
                 $filepath,
                 content_type => $mimetype,
+                charset      => 'UTF-8',
                 name         => $filename,
                 disposition  => 'attachment',
             );
