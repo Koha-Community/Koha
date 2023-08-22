@@ -1,7 +1,7 @@
 $('#placeBookingModal').on('show.bs.modal', function(e) {
     var button = $(e.relatedTarget);
     var biblionumber = button.data('biblionumber');
-    var itemnumber = button.data('itemnumber') || 0;
+    var itemnumber = button.data('itemnumber');
     $('#booking_biblio_id').val(biblionumber);
 
     // Get booking id if this is an edit
@@ -173,18 +173,16 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                 bookable++;
                 // Populate item select
                 if (!($('#booking_item_id').find("option[value='" + item.item_id + "']").length)) {
-                    if (itemnumber && itemnumber == item.item_id) {
-                        // Create a DOM Option and pre-select by default
-                        var newOption = new Option(escape_str(item.external_id), item.item_id, true, true);
-                        // Append it to the select
-                        $('#booking_item_id').append(newOption);
-                    } else {
-                        // Create a DOM Option and de-select by default
-                        var newOption = new Option(escape_str(item.external_id), item.item_id, false, false);
-                        // Append it to the select
-                        $('#booking_item_id').append(newOption);
-                    }
+                    // Create a DOM Option and de-select by default
+                    var newOption = new Option(escape_str(item.external_id), item.item_id, false, false);
+                    // Append it to the select
+                    $('#booking_item_id').append(newOption);
                 }
+            }
+
+            // If passed an itemnumber, pre-select
+            if (itemnumber) {
+                $('#booking_item_id').val(itemnumber);
             }
 
             // Redraw select with new options and enable
@@ -426,13 +424,6 @@ $("#placeBookingForm").on('submit', function(e) {
     
             // Close modal
             $('#placeBookingModal').modal('hide');
-    
-            // Reset form
-            $('#booking_patron_id').val(null).trigger('change');
-            $('#booking_item_id').val(null).trigger('change');
-            $("#period").get(0)._flatpickr.clear();
-            $('#booking_start_date').val('');
-            $('#booking_end_date').val('');
         });
     
         posting.fail(function(data) {
@@ -476,13 +467,6 @@ $("#placeBookingForm").on('submit', function(e) {
     
             // Close modal
             $('#placeBookingModal').modal('hide');
-    
-            // Reset form
-            $('#booking_patron_id').val(null).trigger('change');
-            $('#booking_item_id').val(null).trigger('change');
-            $("#period").get(0)._flatpickr.clear();
-            $('#booking_start_date').val('');
-            $('#booking_end_date').val('');
         });
     
         putting.fail(function(data) {
@@ -490,3 +474,12 @@ $("#placeBookingForm").on('submit', function(e) {
         });
     }
 });
+
+$('#placeBookingModal').on('hidden.bs.modal', function (e) {
+    $('#booking_patron_id').val(null).trigger('change');
+    $('#booking_item_id').val(null).trigger('change');
+    $("#period").get(0)._flatpickr.clear();
+    $('#booking_start_date').val('');
+    $('#booking_end_date').val('');
+    $('#booking_id').val('');
+})
