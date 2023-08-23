@@ -426,13 +426,18 @@ sub _COUNTER_item_report_row {
 
     return (
         [
-            $item_row->{Item}      || "",
-            $item_row->{Publisher} || "",
+            $item_row->{Item}
+              || "",
+            $item_row->{Publisher}
+              || "",
             $self->_get_SUSHI_Type_Value( $item_row->{Publisher_ID}, "ISNI" )
               || "",
-            $item_row->{Platform}                                       || "",
-            $self->_get_SUSHI_Type_Value( $item_row->{Item_ID}, "DOI" ) || "",
-            $item_row->{Proprietary_ID}                                 || "",
+            $item_row->{Platform}
+              || "",
+            $self->_get_SUSHI_Type_Value( $item_row->{Item_ID}, "DOI" )
+              || "",
+            $item_row->{Proprietary_ID}
+              || "",
             "",    #FIXME: What goes in URI?
             $metric_type,
             $total_usage,
@@ -967,7 +972,7 @@ sub test_connection {
     my ($self) = @_;
 
     my $url = $self->service_url;
-    $url .= '/status';
+    $url .= 'status';
     $url .= '?customer_id=' . $self->customer_id;
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
     $url .= '&api_key=' . $self->api_key           if $self->api_key;
@@ -976,14 +981,38 @@ sub test_connection {
     my $ua       = LWP::UserAgent->new;
     my $response = $ua->simple_request($request);
 
-    my @result = decode_json( $response->decoded_content );
-    if ( $result[0][0]->{Service_Active} ) {
+    if ( $response->{_rc} >= 400 ) {
+        my $message = $response->{_msg};
+        if ( $response->{_rc} == 404 ) {
+            Koha::Exceptions::ObjectNotFound->throw($message);
+        }
+        elsif ( $response->{_rc} == 401 ) {
+            Koha::Exceptions::Authorization::Unauthorized->throw($message);
+        }
+        else {
+            die sprintf "ERROR testing SUSHI service\n%s\ncode %s: %s\n",
+              $url, $response->{_rc},
+              $message;
+        }
+    }
+
+    my $result = decode_json( $response->decoded_content );
+    my $status;
+    if ( ref($result) eq 'ARRAY' ) {
+        for my $r (@$result) {
+            $status = $r->{Service_Active};
+        }
+    }
+    else {
+        $status = $result->{Service_Active};
+    }
+
+    if ($status) {
         return 1;
     }
     else {
         return 0;
     }
-
 }
 
 =head3 erm_usage_titles
