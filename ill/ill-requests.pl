@@ -22,7 +22,7 @@ use Modern::Perl;
 use CGI;
 
 use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output qw( output_and_exit output_html_with_http_headers );
 use Koha::Notice::Templates;
 use Koha::AuthorisedValues;
 use Koha::Illcomment;
@@ -96,6 +96,8 @@ if ( $backends_available ) {
             ( $params->{tran_success} ?
                 ( tran_success => $params->{tran_success} ) : () ),
         );
+
+        output_and_exit( $cgi, $cookie, $template, 'unknown_ill_request' ) if !$request;
 
         my $backend_result = $request->backend_illview($params);
         $template->param(

@@ -13,6 +13,8 @@
         <div class="dialog message">Basket not found.</div>
     [% CASE 'unknown_vendor' %]
         <div class="dialog message">Vendor not found.</div>
+    [% CASE 'unknown_ill_request' %]
+        <div class="dialog message">ILL request not found.</div>
     [% CASE 'order_cannot_be_edited' %]
         <div class="dialog message">This order cannot be edited, the basket is closed or the order was already received.</div>
     [% CASE 'wrong_csrf_token' %]
