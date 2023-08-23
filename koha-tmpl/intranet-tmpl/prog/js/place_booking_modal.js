@@ -406,13 +406,17 @@ $("#placeBookingForm").on('submit', function(e) {
                 bookings_table.api().ajax.reload();
             }
             if (typeof timeline !== 'undefined' && timeline !== null) {
+                let selected_patron = $("#booking_patron_id").select2('data')[0];
                 timeline.itemsData.add({
                     id: data.booking_id,
                     booking: data.booking_id,
                     patron: data.patron_id,
                     start: dayjs(data.start_date).toDate(),
                     end: dayjs(data.end_date).toDate(),
-                    content: 'Booking: ' + data.booking_id,
+                    content: $patron_to_html(selected_patron, {
+                        display_cardnumber: true,
+                        url: false
+                    }),
                     editable: { remove: true, updateTime: true },
                     type: 'range',
                     group: data.item_id ? data.item_id : 0
@@ -452,13 +456,17 @@ $("#placeBookingForm").on('submit', function(e) {
                 bookings_table.api().ajax.reload();
             }
             if (typeof timeline !== 'undefined' && timeline !== null) {
+                let selected_patron = $("#booking_patron_id").select2('data')[0];
                 timeline.itemsData.update({
                     id: data.booking_id,
                     booking: data.booking_id,
                     patron: data.patron_id,
                     start: dayjs(data.start_date).toDate(),
                     end: dayjs(data.end_date).toDate(),
-                    content: 'Booking: ' + data.booking_id,
+                    content: $patron_to_html(selected_patron, {
+                        display_cardnumber: true,
+                        url: false
+                    }),
                     editable: { remove: true, updateTime: true },
                     type: 'range',
                     group: data.item_id ? data.item_id : 0
