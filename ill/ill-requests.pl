@@ -133,7 +133,7 @@ if ( $backends_available ) {
             my $backend_result = $request->backend_create($params);
 
             # After creation actions
-            if ( $params->{type_disclaimer_submitted} ) {
+            if ( $params->{type_disclaimer_submitted} && $request->illrequest_id ) {
                 $type_disclaimer->after_request_created($params, $request);
             }
 
