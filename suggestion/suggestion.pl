@@ -32,6 +32,7 @@ use Koha::AuthorisedValues;
 use Koha::Acquisition::Currencies;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Token;
 
 use URI::Escape qw( uri_escape );
 
@@ -530,10 +531,15 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }
 
+my $csrf_token = Koha::Token->new->generate_csrf({
+    session_id => scalar $input->cookie('CGISESSID'),
+});
+
 $template->param(
     %hashlists,
     borrowernumber           => ($input->param('borrowernumber') // undef),
     SuggestionStatuses       => GetAuthorisedValues('SUGGEST_STATUS'),
+    csrf_token               => $csrf_token,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 
