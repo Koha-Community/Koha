@@ -153,29 +153,31 @@ subtest 'checkauth() tests' => sub {
     };
 
     subtest 'Reset auth state when changing users' => sub {
+
         #NOTE: It's easiest to detect this when changing to a non-existent user, since
         #that should trigger a redirect to login (instead of returning a session cookie)
         plan tests => 2;
-        my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
+        my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => undef } } );
 
         my $session = C4::Auth::get_session();
-        $session->param( 'number',       $patron->id );
-        $session->param( 'id',           $patron->userid );
-        $session->param( 'ip',           '1.2.3.4' );
-        $session->param( 'lasttime',     time() );
-        $session->param( 'interface',    'intranet' );
+        $session->param( 'number',    $patron->id );
+        $session->param( 'id',        $patron->userid );
+        $session->param( 'ip',        '1.2.3.4' );
+        $session->param( 'lasttime',  time() );
+        $session->param( 'interface', 'intranet' );
         $session->flush;
         my $sessionID = $session->id;
         C4::Context->_new_userenv($sessionID);
 
-        my ( $return ) = C4::Auth::check_cookie_auth( $sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
+        my ($return) =
+            C4::Auth::check_cookie_auth( $sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
         is( $return, 'ok', 'Patron authenticated' );
 
         my $mock1 = Test::MockModule->new('C4::Auth');
-        $mock1->mock( 'safe_exit', sub {return 'safe_exit_redirect'} );
+        $mock1->mock( 'safe_exit', sub { return 'safe_exit_redirect' } );
         my $mock2 = Test::MockModule->new('CGI');
         $mock2->mock( 'request_method', 'POST' );
-        $mock2->mock( 'cookie', sub { return $sessionID; } ); # oversimplified..
+        $mock2->mock( 'cookie',         sub { return $sessionID; } );    # oversimplified..
         my $cgi = CGI->new;
 
         $cgi->param( -name => 'userid',             -value => 'Bond' );
@@ -190,7 +192,7 @@ subtest 'checkauth() tests' => sub {
             @return = C4::Auth::checkauth( $cgi, 0, {} );
             close STDOUT;
         }
-        is( $return[0], 'safe_exit_redirect', 'Changing to non-existent user causes a redirect to login');
+        is( $return[0], 'safe_exit_redirect', 'Changing to non-existent user causes a redirect to login' );
     };
 
 
