@@ -178,6 +178,8 @@
                             [% CASE 'phone' %]<th>Phone</th>
                             [% CASE 'checkouts' %]<th>Checkouts</th>
                             [% CASE 'account_balance' %]<th>Fines</th>
+                            [% CASE 'sort1' %]<th>Sort 1</th>
+                            [% CASE 'sort2' %]<th>Sort 2</th>
                             [% CASE 'action' %]<th class="noExport">&nbsp;</th>
                         [% END %]
                     [% END %]
@@ -209,7 +211,7 @@
 [%# - redirect_if_attribute_equal: Name of the attribute to use for the redirect. Query using this attribute, before the normal search %]
 [%# filter: Same as patron_search_table %]
 [%# open_on_row_click: boolean, default off. Will allow to select a patron by clicking on the whole tr element %]
-[%# columns: list of columns that will be displayed. Possible values are: 'checkbox', 'cardnumber', 'dateofbirth', 'address', 'name', 'name-address', 'branch', 'category', 'dateexpiry', 'borrowernotes, 'phone', 'checkouts', 'account_balance', 'action' %]
+[%# columns: list of columns that will be displayed. Possible values are: 'checkbox', 'cardnumber', 'dateofbirth', 'address', 'name', 'name-address', 'branch', 'category', 'dateexpiry', 'borrowernotes, 'phone', 'checkouts', 'account_balance', 'sort1', 'sort2', 'action' %]
 [%# preview_on_name_click: Open a modal window with patron's info when the name is clicked %]
 [%# actions: list of buttons to display in the action column. Possible values are: 'select', 'add', 'edit', 'checkout' %]
 [%# sticky_header and sticky_to: If we need a sticky header %]
@@ -613,6 +615,28 @@
                                     return r;
                                 }
                             }
+
+
+                            [% CASE 'sort1' %]
+                            {
+                                "data": "statistics_1",
+                                "searchable": true,
+                                "orderable": true,
+                                "render": function( data, type, row, meta ) {
+                                    return escape_str(data);
+                                }
+                            }
+
+                            [% CASE 'sort2' %]
+                            {
+                                "data": "statistics_2",
+                                "searchable": true,
+                                "orderable": true,
+                                "render": function( data, type, row, meta ) {
+                                    return escape_str(data);
+                                }
+                            }
+
 
                             [% CASE 'action' %]
                             {
