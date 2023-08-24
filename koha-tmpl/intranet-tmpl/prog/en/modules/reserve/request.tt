@@ -20,7 +20,8 @@
 [% PROCESS "patron-search.inc" %]
 <title>[% FILTER collapse %]
     [% UNLESS ( multi_hold ) %]
-        [% t("Place a hold on") | html %] [% INCLUDE 'biblio-title-head.inc' %] &rsaquo;
+        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+        [% tx("Place a hold on {title}", { title = title_in_title }) | html %] &rsaquo;
     [% ELSE %]
         [% t("Confirm holds") | html %] &rsaquo;
     [% END %]

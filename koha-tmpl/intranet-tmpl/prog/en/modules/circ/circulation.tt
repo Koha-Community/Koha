@@ -16,7 +16,8 @@
 [% SET destination = "circ" %]
 <title>[% FILTER collapse %]
     [% IF patron %]
-        [% t("Checking out to") | html %] [% INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 %] &rsaquo;
+        [% patron_in_title = INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 %]
+        [% tx("Checking out to {patron}", { patron = patron_in_title }) | html %]  &rsaquo;
     [% END %]
     [% t("Circulation") | html %] &rsaquo;
     [% t("Koha") | html %]

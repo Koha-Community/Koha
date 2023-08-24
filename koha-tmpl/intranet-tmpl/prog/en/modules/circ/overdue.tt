@@ -13,7 +13,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% PROCESS 'modal-claims.inc' %]
 <title>[% FILTER collapse %]
-    [% t("Items overdue as of") | html %] [% todaysdate | $KohaDates %] &rsaquo;
+    [% date_in_title = todaysdate | $KohaDates %]
+    [% tx("Items overdue as of {date}", { date = date_in_title }) | html %] &rsaquo;
     [% t("Circulation") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
