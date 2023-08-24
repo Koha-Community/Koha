@@ -43,7 +43,7 @@ my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 my $schema = Koha::Database->new->schema;
 
 my $library_id = C4::Context->userenv->{'branch'};
-my $registerid = $input->param('registerid');
+my $registerid = $input->param('registerid') // C4::Context->userenv->{'register_id'};
 my $registers  = Koha::Cash::Registers->search(
     { branch   => $library_id, archived => 0 },
     { order_by => { '-asc' => 'name' } }
