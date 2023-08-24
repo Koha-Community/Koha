@@ -515,6 +515,10 @@
                                 [% IF ( RECALLED_INTRANSIT ) %]
                                     <li>Item has been recalled and is in transit for pickup at [% Branches.GetName( RECALLED_INTRANSIT ) | html %].</li>
                                 [% END %]
+
+                                [% IF NO_OPEN_DAYS %]
+                                    <li>No open days found while calculating the due date. Check the library calendar.</li>
+                                [% END %]
                                 </ul>
 
                                 [% IF (forceallow) %]
