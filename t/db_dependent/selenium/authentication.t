@@ -57,8 +57,11 @@ SKIP: {
         like( $driver->get_title, qr(Access denied), 'Patron without permission should be redirected to the login form' );
 
         # Try logging in as someone else (even a non-existent patron) and you should still be denied access
-        $s->auth('Bond','James Bond');
-        like( $driver->get_title, qr(Invalid username or password), 'Trying to change to a non-existent user should fail login' );
+        $s->auth( 'Bond', 'James Bond' );
+        like(
+            $driver->get_title, qr(Invalid username or password),
+            'Trying to change to a non-existent user should fail login'
+        );
 
         $driver->get($mainpage . q|?logout.x=1|);
         $patron->flags(4)->store; # catalogue permission
