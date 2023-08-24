@@ -29,7 +29,8 @@ use CGI qw ( -utf8 );
 use URI::Escape qw( uri_escape_utf8 );
 use DateTime;
 use DateTime::Duration;
-use Scalar::Util qw( looks_like_number );
+use Scalar::Util qw( blessed looks_like_number );
+use Try::Tiny;
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Auth qw( get_session get_template_and_user );
 use C4::Koha;
@@ -298,16 +299,27 @@ if (@$barcodes) {
     };
 
     # always check for blockers on issuing
-    my ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
-        $patron,
-        $barcode, $datedue,
-        $inprocess,
-        undef,
-        {
-            onsite_checkout     => $onsite_checkout,
-            override_high_holds => $override_high_holds || $override_high_holds_tmp || 0,
+    my ( $error, $question, $alerts, $messages );
+    try {
+        ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
+            $patron,
+            $barcode, $datedue,
+            $inprocess,
+            undef,
+            {
+                onsite_checkout     => $onsite_checkout,
+                override_high_holds => $override_high_holds || $override_high_holds_tmp || 0,
+            }
+        );
+    } catch {
+        die $_ unless blessed $_ && $_->can('rethrow');
+
+        if ($_->isa('Koha::Exceptions::Calendar::NoOpenDays')) {
+            $error = { NO_OPEN_DAYS => 1 };
+        } else {
+            $_->rethrow;
         }
-    );
+    };
 
     my $blocker = $invalidduedate ? 1 : 0;
 
@@ -354,7 +366,7 @@ if (@$barcodes) {
     # Only some errors will block when performing forced onsite checkout,
     # for other cases all errors will block
     my @blocking_error_codes = ($onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce")) ?
-        qw( UNKNOWN_BARCODE ) : (keys %$error);
+        qw( UNKNOWN_BARCODE NO_OPEN_DAYS ) : (keys %$error);
 
     foreach my $code ( @blocking_error_codes ) {
         if ($error->{$code}) {
