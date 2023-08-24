@@ -534,7 +534,7 @@ function buildPatronSearchQuery(term, options) {
 
     // Bail if no patterns
     if (patterns.length == 0) {
-        return;
+        return q;
     }
 
     // Leading wildcard: If search_type option exists, we use that
