@@ -1,0 +1,57 @@
+---
+type: object
+properties:
+  id:
+    description: internally assigned identifier
+    type: string
+  name:
+    description: name of the platform
+    type: string
+  abbrev:
+    description: abbrev of the platform
+    type:
+      - string
+      - "null"
+  content_provider_name:
+    description: current content_provider_name of the platform
+    type:
+      - string
+      - "null"
+  host_types:
+    description: host_types for the platform
+    type: array
+    items:
+      type: object
+  address:
+    description: current address of the platform
+    type:
+      - string
+      - "null"
+  address_country:
+    description: current address country of the platform
+    type: 
+      - object
+      - string
+  website:
+    description: current website of the platform
+    type:
+      - string
+      - "null"
+  contact:
+    description: current contact of the platform
+    type:
+      - object
+      - "null"
+  reports:
+    description: reports for the platform
+    type: array
+    items:
+      type: object
+  sushi_services:
+    description: sushi_services for the platform
+    type: array
+    items:
+      type: object
+
+additionalProperties: false
+

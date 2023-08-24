@@ -425,6 +425,25 @@ export class ERMAPIClient extends HttpClient {
                 }),
         };
     }
+
+    get counter_registry() {
+        return {
+            getAll: query =>
+                this.getAll({
+                    endpoint: "counter_registry",
+                    query,
+                }),
+        };
+    }
+    get sushi_service() {
+        return {
+            getAll: query =>
+                this.getAll({
+                    endpoint: "sushi_service",
+                    query,
+                }),
+        };
+    }
 }
 
 export default ERMAPIClient;

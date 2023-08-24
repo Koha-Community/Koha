@@ -22,12 +22,55 @@
                                 >{{ $__("Data provider name") }}:</label
                             >
                             <input
+                                v-if="manual_form"
                                 id="usage_data_provider_name"
                                 v-model="usage_data_provider.name"
                                 :placeholder="$__('Data provider name')"
                                 required
                             />
+                            <v-select
+                                v-else
+                                id="usage_data_provider_name"
+                                v-model="selected_provider"
+                                label="name"
+                                :options="registry_data"
+                                @input="getPlatformData($event)"
+                                @update:modelValue="setPlatformData($event)"
+                                :required="!usage_data_provider.name"
+                                :placeholder="
+                                    $__(
+                                        'Type at least two characters to search'
+                                    )
+                                "
+                            >
+                                <template v-if="searching" v-slot:no-options
+                                    >{{ $__("Searching...") }}
+                                </template>
+                                <template v-else v-slot:no-options
+                                    >{{
+                                        $__(
+                                            "Type at least two characters to search"
+                                        )
+                                    }}
+                                </template>
+                                <template #search="{ attributes, events }">
+                                    <input
+                                        :required="!usage_data_provider.name"
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                    />
+                                </template>
+                            </v-select>
                             <span class="required">{{ $__("Required") }}</span>
+                            <button
+                                v-if="!manual_form"
+                                type="button"
+                                style="margin-left: 1em"
+                                @click="createManualProvider()"
+                            >
+                                {{ $__("Create manually") }}
+                            </button>
                         </li>
                         <li>
                             <label for="usage_data_provider_description"
@@ -39,6 +82,7 @@
                                 :placeholder="$__('Description')"
                                 rows="10"
                                 cols="50"
+                                :disabled="!selected_provider && !manual_form"
                             />
                         </li>
                         <li>
@@ -51,6 +95,7 @@
                                 label="description"
                                 :reduce="status => status.value"
                                 :options="statuses"
+                                :disabled="!selected_provider && !manual_form"
                             />
                         </li>
                         <!-- <li>
@@ -60,6 +105,7 @@
                             <input
                                 id="usage_data_provider_method"
                                 v-model="usage_data_provider.method"
+                                :disabled="!selected_provider && !manual_form"
                             />
                         </li>
                         <li>
@@ -69,6 +115,7 @@
                             <input
                                 id="usage_data_provider_aggregator"
                                 v-model="usage_data_provider.aggregator"
+                                :disabled="!selected_provider && !manual_form"
                             />
                         </li> -->
                         <li>
@@ -78,6 +125,7 @@
                             <input
                                 id="usage_data_provider_service_type"
                                 v-model="usage_data_provider.service_type"
+                                :disabled="!selected_provider && !manual_form"
                             />
                         </li>
                         <li>
@@ -91,12 +139,29 @@
                                 v-model="usage_data_provider.report_types"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_report_types"
+                                :options="valid_report_types"
                                 multiple
+                                :disabled="!selected_provider && !manual_form"
                                 :required="
                                     !usage_data_provider.report_types.length
                                 "
                             >
+                                <template #list-header>
+                                    <button
+                                        type="button"
+                                        @click="selectAll()"
+                                        class="list-header-btns"
+                                    >
+                                        {{ $__("Select all") }}
+                                    </button>
+                                    <button
+                                        class="list-header-btns"
+                                        type="button"
+                                        @click="unselectAll()"
+                                    >
+                                        {{ $__("Unselect all") }}
+                                    </button>
+                                </template>
                                 <template #search="{ attributes, events }">
                                     <input
                                         :required="
@@ -114,8 +179,8 @@
                     </ol>
                 </fieldset>
                 <legend>{{ $__("Sushi credentials") }}</legend>
-                <fieldset class="rows">
-                    <ol>
+                <fieldset class="rows credentials">
+                    <ol class="credentials_form">
                         <li>
                             <label
                                 class="required"
@@ -124,8 +189,10 @@
                             </label>
                             <input
                                 id="usage_data_provider_service_url"
+                                style="min-width: 60%"
                                 v-model="usage_data_provider.service_url"
                                 required
+                                :disabled="!selected_provider && !manual_form"
                             />
                             <span class="required">{{ $__("Required") }}</span>
                         </li>
@@ -137,8 +204,10 @@
                             </label>
                             <input
                                 id="usage_data_provider_report_release"
+                                style="min-width: 60%"
                                 v-model="usage_data_provider.report_release"
                                 required
+                                :disabled="!selected_provider && !manual_form"
                             />
                             <span class="required">{{ $__("Required") }}</span>
                         </li>
@@ -150,32 +219,60 @@
                             </label>
                             <input
                                 id="usage_data_provider_customer_id"
+                                style="min-width: 60%"
                                 v-model="usage_data_provider.customer_id"
                                 required
+                                :disabled="!selected_provider && !manual_form"
                             />
                             <span class="required">{{ $__("Required") }}</span>
                         </li>
                         <li>
                             <label
-                                class="required"
+                                :class="
+                                    required_fields.includes('Requestor')
+                                        ? 'required'
+                                        : ''
+                                "
                                 for="usage_data_provider_requestor_id"
                                 >{{ $__("Requestor Id") }}:
                             </label>
                             <input
                                 id="usage_data_provider_requestor_id"
+                                style="min-width: 60%"
                                 v-model="usage_data_provider.requestor_id"
-                                required
+                                :required="
+                                    required_fields.includes('Requestor')
+                                "
+                                :disabled="!selected_provider && !manual_form"
                             />
-                            <span class="required">{{ $__("Required") }}</span>
+                            <span
+                                class="required"
+                                v-if="required_fields.includes('Requestor')"
+                                >{{ $__("Required") }}
+                            </span>
                         </li>
                         <li>
-                            <label for="usage_data_provider_api_key"
+                            <label
+                                for="usage_data_provider_api_key"
+                                :class="
+                                    required_fields.includes('API')
+                                        ? 'required'
+                                        : ''
+                                "
                                 >{{ $__("API key") }}:
                             </label>
                             <input
                                 id="usage_data_provider_api_key"
+                                style="min-width: 60%"
                                 v-model="usage_data_provider.api_key"
+                                :disabled="!selected_provider && !manual_form"
+                                :required="required_fields.includes('API')"
                             />
+                            <span
+                                class="required"
+                                v-if="required_fields.includes('API')"
+                                >{{ $__("Required") }}
+                            </span>
                         </li>
                         <li>
                             <label for="usage_data_provider_requestor_name"
@@ -183,7 +280,9 @@
                             </label>
                             <input
                                 id="usage_data_provider_requestor_name"
+                                style="min-width: 60%"
                                 v-model="usage_data_provider.requestor_name"
+                                :disabled="!selected_provider && !manual_form"
                             />
                         </li>
                         <li>
@@ -192,9 +291,51 @@
                             </label>
                             <input
                                 id="usage_data_provider_requestor_email"
+                                style="min-width: 60%"
                                 v-model="usage_data_provider.requestor_email"
+                                :disabled="!selected_provider && !manual_form"
                             />
                         </li>
+                    </ol>
+                    <ol class="credentials_form" v-if="sushi_service">
+                        <h3>{{ $__("Credentials information") }}</h3>
+                        <li>
+                            <label for="customer_id_info"
+                                >{{ $__("Customer id info") }}:
+                            </label>
+                            <span id="customer_id_info">{{
+                                sushi_service.customer_id_info
+                                    ? $__(sushi_service.customer_id_info)
+                                    : "No information provided"
+                            }}</span>
+                        </li>
+                        <li>
+                            <label for="requestor_id_info"
+                                >{{ $__("Requestor id info") }}:
+                            </label>
+                            <span id="requestor_id_info">{{
+                                sushi_service.requestor_id_info
+                                    ? $__(sushi_service.requestor_id_info)
+                                    : "No information provided"
+                            }}</span>
+                        </li>
+                        <li>
+                            <label for="api_key_info"
+                                >{{ $__("API key info") }}:
+                            </label>
+                            <span id="api_key_info">{{
+                                sushi_service.api_key_info
+                                    ? $__(sushi_service.api_key_info)
+                                    : "No information provided"
+                            }}</span>
+                        </li>
+                        <span
+                            >{{ $__("Please refer to the ") }}
+                            <a href="https://registry.projectcounter.org/">{{
+                                $__("counter registry")
+                            }}</a>
+                            {{ $__("for more information.") }}</span
+                        >
                     </ol>
                 </fieldset>
                 <fieldset class="action">
@@ -221,7 +362,7 @@
 
 <script>
 import ButtonSubmit from "../ButtonSubmit.vue"
-import { setMessage } from "../../messages"
+import { setMessage, setWarning } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
@@ -262,6 +403,13 @@ export default {
                 { description: "Inactive", value: 0 },
             ],
             fp_config: flatpickr_defaults,
+            registry_data: [],
+            valid_report_types: [...this.av_report_types],
+            selected_provider: null,
+            manual_form: false,
+            required_fields: [],
+            sushi_service: null,
+            searching: false,
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -286,10 +434,90 @@ export default {
                     this.usage_data_provider = usage_data_provider
                     this.usage_data_provider.report_types =
                         this.formatReportTypes(usage_data_provider.report_types)
+                    this.getCounterRegistry(usage_data_provider.name, "edit")
                     this.initialized = true
                 },
                 error => {}
             )
+        },
+        async getCounterRegistry(query, caller) {
+            const client = APIClient.erm
+            client.counter_registry.getAll({ name: query }).then(
+                registry_data => {
+                    this.registry_data = registry_data
+                    if (caller === "edit") {
+                        this.selected_provider = registry_data.find(
+                            platform =>
+                                platform.name === this.usage_data_provider.name
+                        )
+                        this.valid_report_types =
+                            this.valid_report_types.filter(report =>
+                                this.selected_provider.reports.some(
+                                    r => r.report_id === report.value
+                                )
+                            )
+                    }
+                    this.searching = false
+                },
+                error => {}
+            )
+        },
+        async getSushiService(url) {
+            const client = APIClient.erm
+            client.sushi_service.getAll({ url }).then(
+                sushi_service => {
+                    const { url, api_key_required, requestor_id_required } =
+                        sushi_service
+                    this.usage_data_provider.service_url = url
+                    this.required_fields = []
+                    api_key_required && this.required_fields.push("API")
+                    requestor_id_required &&
+                        this.required_fields.push("Requestor")
+                    this.sushi_service = sushi_service
+                },
+                error => {}
+            )
+        },
+        getPlatformData(e) {
+            if (e.target.value.length > 1) {
+                this.searching = true
+                this.getCounterRegistry(e.target.value, "search")
+            }
+        },
+        async setPlatformData(e) {
+            const { sushi_services, reports, name } = e
+            this.valid_report_types = this.valid_report_types.filter(report =>
+                reports.some(r => r.report_id === report.value)
+            )
+            if (this.valid_report_types.length === 0) {
+                setWarning(
+                    this.$__(
+                        "This provider does not currently support any counter 5 reports via SUSHI."
+                    )
+                )
+            }
+
+            this.selected_provider = e
+            this.usage_data_provider.name = name
+            await this.getSushiService(sushi_services[0].url)
+            this.usage_data_provider.report_release =
+                sushi_services[0].counter_release
+        },
+        createManualProvider() {
+            this.manual_form = true
+            this.selected_provider = null
+            this.sushi_service = null
+            this.required_fields = ["API", "Requestor"]
+        },
+        selectAll() {
+            this.usage_data_provider.report_types = this.valid_report_types.map(
+                report => {
+                    return report.value
+                }
+            )
+        },
+        unselectAll() {
+            this.usage_data_provider.report_types = []
         },
         formatReportTypes(reportTypes) {
             const dataType =
@@ -366,3 +594,15 @@ export default {
     name: "UsageStatisticsDataProvidersFormAdd",
 }
 </script>
+
+<style scoped>
+.credentials {
+    display: flex;
+}
+.credentials_form {
+    width: 50%;
+}
+.list-header-btns {
+    margin: 0.5em 0 0.5em 0.5em;
+}
+</style>

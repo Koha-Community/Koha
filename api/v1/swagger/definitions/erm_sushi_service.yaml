@@ -1,0 +1,114 @@
+---
+type: object
+properties:
+  id:
+    description: internally assigned identifier
+    type: string
+  data_host:
+    description: data_host of the sushi service
+    type:
+      - string
+      - "null"
+  counter_release:
+    description: counter_release of the sushi service
+    type:
+      - string
+      - "null"
+  contact:
+    description: contact for the sushi service
+    type: array
+    items:
+      type: object
+  url:
+    description: url of the sushi service
+    type:
+      - string
+      - "null"
+  customer_id_info:
+    description: customer_id_info of the sushi service
+    type:
+      - string
+      - "null"
+  requestor_id_required:
+    description: is requestor_id required
+    type:
+      - boolean
+      - "null"
+  requestor_id_info:
+    description: requestor_id_info of the sushi service
+    type:
+      - string
+      - "null"
+  api_key_required:
+    description: is api_key required
+    type:
+      - boolean
+      - "null"
+  api_key_info:
+    description: api_key_info of the sushi service
+    type:
+      - string
+      - "null"
+  platform_specific_info:
+    description: platform_specific_info of the sushi service
+    type:
+      - string
+      - "null"
+  platform_attr_required:
+    description: is platform_attr required
+    type:
+      - boolean
+      - "null"
+  credentials_auto_expire:
+    description: do the credentials expire
+    type:
+      - boolean
+      - "null"
+  credentials_auto_expire_info:
+    description: credentials_auto_expire_info of the sushi service
+    type:
+      - string
+      - "null"
+  request_volume_limits_applied:
+    description: are limits applied
+    type:
+      - boolean
+      - "null"
+  request_volume_limits_info:
+    description: request_volume_limits_info of the sushi service
+    type:
+      - string
+      - "null"
+  ip_address_authorization:
+    description: is ip address auth required
+    type:
+      - boolean
+      - "null"
+  ip_address_authorization_info:
+    description: ip_address_authorization_info of the sushi service
+    type:
+      - string
+      - "null"
+  customizations_in_place:
+    description: are any customizations in place
+    type:
+      - boolean
+      - "null"
+  customizations_info:
+    description: customizations_info of the sushi service
+    type:
+      - string
+      - "null"
+  notification_count:
+    description: notification count
+    type:
+      - integer
+      - "null"
+  notifications_url:
+    description: notifications_url of the sushi service
+    type:
+      - string
+      - "null"
+
+additionalProperties: false
+
