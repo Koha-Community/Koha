@@ -680,7 +680,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free'),
 ('SMSSendPassword', '', '', 'Password used to send SMS messages', 'free'),
 ('SMSSendUsername', '', '', 'Username/Login used to send SMS messages', 'free'),
-('SocialNetworks','0','','Enable/Disable social networks links in opac detail pages','YesNo'),
+('SocialNetworks','','facebook|linkedin|email','Enable/Disable social networks links in opac detail pages','Choice'),
 ('SpecifyDueDate','1','','Define whether to display \"Specify Due Date\" form in Circulation','YesNo'),
 ('SpecifyReturnDate',1,'','Define whether to display \"Specify Return Date\" form in Circulation','YesNo'),
 ('SpineLabelAutoPrint','0','','If this setting is turned on, a print dialog will automatically pop up for the quick spine label printer.','YesNo'),
