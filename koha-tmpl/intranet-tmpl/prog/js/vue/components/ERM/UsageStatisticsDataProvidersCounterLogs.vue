@@ -69,7 +69,6 @@ export default {
                         this.$route.params.usage_data_provider_id,
                 })
                 .then(
-                    // paginated as this request is just to check if there are any counter_files and set this.initialized
                     count => {
                         this.counter_files_count = count
                         this.initialized = true
@@ -130,6 +129,17 @@ export default {
                         const date = row.date_uploaded.substr(0, 10)
                         const time = row.date_uploaded.substr(11, 8)
                         return `${date} ${time}`
+                    },
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Imported by"),
+                    render: function (data, type, row, meta) {
+                        const importer = row.counter_logs[0].borrowernumber
+                            ? `<a href="http://localhost:8081/cgi-bin/koha/members/moremember.pl?borrowernumber=${row.counter_logs[0].borrowernumber}">Borrowernumber ${row.counter_logs[0].borrowernumber}</a>`
+                            : "Cronjob"
+                        return importer
                     },
                     searchable: true,
                     orderable: true,
