@@ -98,8 +98,8 @@
                 <div class="col-md-8 col-md-offset-2">
 
                     <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="btn btn-default deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a>
+                        <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit&amp;csrf_token=[% csrf_token | html %]&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                        <a class="btn btn-default deletesuggestion" href="suggestion.pl?op=delete&amp;csrf_token=[% csrf_token | html %]&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a>
                     </div>
 
                     <fieldset class="rows">
