@@ -5,48 +5,48 @@
         <div id="agreement_search" role="tabpanel" class="tab-pane active">
             <form action="/cgi-bin/koha/erm/agreements" method="get">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Agreement search</span> <i class="fa fa-fw fa-check-circle" aria-hidden="true"></i></label>
+                    <label class="control-label" for="agreement_filter"><span class="control-text">Agreement search</span> <i class="fa fa-fw fa-check-circle" aria-hidden="true"></i></label>
                 </div>
                 <div class="form-content">
                     <input type="text" name="q" id="agreement_filter" class="head-searchbox form-control" placeholder="Enter search keywords" size="40" />
                 </div>
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 
         <div id="license_search" role="tabpanel" class="tab-pane">
             <form action="/cgi-bin/koha/erm/licenses" method="get">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">License search</span> <i class="fa fa-fw fa-gavel" aria-hidden="true"></i></label>
+                    <label class="control-label" for="license_filter"><span class="control-text">License search</span> <i class="fa fa-fw fa-gavel" aria-hidden="true"></i></label>
                 </div>
                 <div class="form-content">
                     <input type="text" name="q" id="license_filter" class="head-searchbox form-control" placeholder="Enter search keywords" size="40" />
                 </div>
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 
         <div id="package_search" role="tabpanel" class="tab-pane">
             <form action="/cgi-bin/koha/erm/eholdings/local/packages" method="get">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Package search</span> <i class="fa fa-fw fa-archive" aria-hidden="true"></i></label>
+                    <label class="control-label" for="package_name_filter"><span class="control-text">Package search</span> <i class="fa fa-fw fa-archive" aria-hidden="true"></i></label>
                 </div>
                 <div class="form-content">
                     <input type="text" name="package_name" id="package_name_filter" class="head-searchbox form-control" placeholder="Enter search keywords" size="40" />
                 </div>
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 
         <div id="title_search" role="tabpanel" class="tab-pane">
             <form action="/cgi-bin/koha/erm/eholdings/local/titles" method="get">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Title search</span> <i class="fa-solid fa-fw fa-arrow-down-a-z" aria-hidden="true"></i></label>
+                    <label class="control-label" for="title_filter"><span class="control-text">Title search</span> <i class="fa-solid fa-fw fa-arrow-down-a-z" aria-hidden="true"></i></label>
                 </div>
                 <div class="form-content">
                     <input type="text" name="publication_title" id="title_filter" class="head-searchbox form-control" placeholder="Enter search keywords" size="40" />
                 </div>
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
     </div><!-- /.tab-content -->

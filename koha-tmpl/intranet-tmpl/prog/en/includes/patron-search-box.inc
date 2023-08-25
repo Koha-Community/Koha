@@ -19,7 +19,7 @@
                 [% END %]
             </div>
 
-            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+            <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
         </form>
     </div>
     <!-- /patron-search-box.inc -->

@@ -5,14 +5,14 @@
         <div id="contract_description_search" role="tabpanel" class="tab-pane active">
             <form action="[% script_name | html %]" method="post">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search contracts</span> <i class="fa-solid fa-fw fa-pen-to-square" aria-hidden="true"></i></label>
+                    <label class="control-label" for="searchfield"><span class="control-text">Search contracts</span> <i class="fa-solid fa-fw fa-pen-to-square" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Search by contract name or/and description:" size="40"/>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 

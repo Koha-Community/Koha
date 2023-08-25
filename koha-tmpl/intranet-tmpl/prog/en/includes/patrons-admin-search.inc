@@ -5,14 +5,14 @@
         <div id="patron_category_search" role="tabpanel" class="tab-pane active">
             <form action="[% script_name | html %]" method="post">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search patron categories</span> <i class="fa fa-fw fa-id-card" aria-hidden="true"></i></label>
+                    <label class="control-label" for="category_search"><span class="control-text">Search patron categories</span> <i class="fa fa-fw fa-id-card" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
-                    <input class="head-searchbox form-control" type="text" name="description" value="[% searchfield | html %]" placeholder="Search by patron category name" />
+                    <input class="head-searchbox form-control" type="text" name="description" id="category_search" value="[% searchfield | html %]" placeholder="Search by patron category name" />
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 

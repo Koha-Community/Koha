@@ -14,7 +14,7 @@
             <input type="hidden" name="quicksearch" value="1" />
 
             <div class="form-title">
-                <label class="control-label"><span class="control-text">Search patrons</span> <i class="fa fa-fw fa-id-card" aria-hidden="true"></i></label>
+                <label class="control-label" for="searchmember"><span class="control-text">Search patrons</span> <i class="fa fa-fw fa-id-card" aria-hidden="true"></i></label>
             </div>
 
             <div class="form-content">
@@ -27,7 +27,7 @@
                 <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
             </div>
 
-            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+            <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
             <div class="form-extra-content">
                 <div>

@@ -9,7 +9,7 @@
                 <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
 
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search funds</span> <i class="fa-solid fa-fw fa-credit-card"></i></label>
+                    <label class="control-label" for="filter_budgetname"><span class="control-text">Search funds</span> <i class="fa-solid fa-fw fa-credit-card"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -18,7 +18,7 @@
                     <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
                 <div class="form-extra-content">
                     <label for="filter_budgetbranch">Library</label>

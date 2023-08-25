@@ -5,14 +5,14 @@
         <div id="currency_search" role="tabpanel" class="tab-pane active">
             <form action="[% script_name | html %]" method="post">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search currencies</span> <i class="fa-solid fa-fw fa-dollar-sign" aria-hidden="true"></i></label>
+                    <label class="control-label" for="description"><span class="control-text">Search currencies</span> <i class="fa-solid fa-fw fa-dollar-sign" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="description" id="description" value="[% searchfield | html %]" placeholder="Currencies search" />
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 

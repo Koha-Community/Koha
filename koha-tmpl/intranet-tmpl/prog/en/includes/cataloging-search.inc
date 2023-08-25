@@ -8,14 +8,14 @@
         <div id="addbooks_search" role="tabpanel" class="tab-pane active">
             <form name="search" action="addbooks.pl">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Cataloging search</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
+                    <label class="control-label" for="cat_search"><span class="control-text">Cataloging search</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="q" id="cat_search" placeholder="Search the catalog and the reservoir" size="40" />
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 

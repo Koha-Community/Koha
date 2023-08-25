@@ -5,14 +5,14 @@
         <div id="notices_search" role="tabpanel" class="tab-pane active">
             <form action="/cgi-bin/koha/tools/letter.pl" method="post">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search notices</span> <i class="fa-solid fa-fw fa-comment-dots" aria-hidden="true"></i></label>
+                    <label class="control-label" for="searchfield"><span class="control-text">Search notices</span> <i class="fa-solid fa-fw fa-comment-dots" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="" placeholder="Search existing notices"/>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 

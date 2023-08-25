@@ -25,7 +25,7 @@
 
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
                 <div class="form-extra-content">
                     <div>
                         <label for="callnumber_filter">Call number:</label>

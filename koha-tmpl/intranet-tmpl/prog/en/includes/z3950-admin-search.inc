@@ -5,14 +5,14 @@
         <div id="z3950_search" role="tabpanel" class="tab-pane active">
             <form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search Z39.50/SRU servers</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
+                    <label class="control-label" for="searchfield"><span class="control-text">Search Z39.50/SRU servers</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Z39.50/SRU server search" />
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 

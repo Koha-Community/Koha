@@ -81,7 +81,7 @@
                 <input type="hidden" name="excluding" value="" />
 
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search main heading</span> <i class="fa fa-fw fa-main-heading-a" aria-hidden="true"></i></label>
+                    <label class="control-label" for="value_mainentry"><span class="control-text">Search main heading</span> <i class="fa fa-fw fa-main-heading-a" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -89,13 +89,13 @@
                     <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
-                <span class="form-extra-content">
+                <div class="form-extra-content">
                     [% INCLUDE authtype %]
                     [% INCLUDE operator %]
                     [% INCLUDE orderby %]
-                </span>
+                </div>
             </form>
         </div>
 
@@ -108,7 +108,7 @@
                 <input type="hidden" name="type" value="intranet" />
 
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search main heading</span> <i class="fa fa-fw fa-header" aria-hidden="true"></i></label>
+                    <label class="control-label" for="value_mainheading"><span class="control-text">Search main heading</span> <i class="fa fa-fw fa-header" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -116,13 +116,13 @@
                     <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
-                <span class="form-extra-content">
+                <div class="form-extra-content">
                     [% INCLUDE authtype %]
                     [% INCLUDE operator %]
                     [% INCLUDE orderby %]
-                </span>
+                </div>
             </form>
         </div>
 
@@ -133,7 +133,7 @@
                 <input type="hidden" name="marclist" value="match" />
 
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search all headings</span> <i class="fa fa-fw fa-align-center" aria-hidden="true"></i></label>
+                    <label class="control-label" for="value_matchheading"><span class="control-text">Search all headings</span> <i class="fa fa-fw fa-align-center" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -141,13 +141,13 @@
                     <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
-                <span class="form-extra-content">
+                <div class="form-extra-content">
                     [% INCLUDE authtype %]
                     [% INCLUDE operator %]
                     [% INCLUDE orderby %]
-                </span>
+                </div>
             </form>
         </div>
 
@@ -160,7 +160,7 @@
                 <input type="hidden" name="excluding" value="" />
 
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search entire record</span> <i class="fa-solid fa-fw fa-folder-open" aria-hidden="true"></i></label>
+                    <label class="control-label" for="value_anywhere"><span class="control-text">Search entire record</span> <i class="fa-solid fa-fw fa-folder-open" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
@@ -168,13 +168,13 @@
                     <button type="button" class="form-extra-content-toggle" title="More options"><i class="form-extra-content-icon fa-solid fa-sliders" aria-hidden="true"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
-                <span class="form-extra-content">
+                <div class="form-extra-content">
                     [% INCLUDE authtype %]
                     [% INCLUDE operator %]
                     [% INCLUDE orderby %]
-                </span>
+                </div>
             </form>
         </div>
 
