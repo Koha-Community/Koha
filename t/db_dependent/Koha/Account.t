@@ -665,7 +665,7 @@ subtest 'reconcile_balance' => sub {
 
 subtest 'pay() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -700,6 +700,16 @@ subtest 'pay() tests' => sub {
     }
     'Koha::Exceptions::Account::InvalidPaymentType',
       'Exception thrown for InvalidPaymentType:1 + payment_type:FOOBAR';
+
+    my $writeoff_id = $account->pay(
+        {
+            amount    => 10,
+            interface => 'intranet',
+            type      => 'WRITEOFF',
+        }
+    )->{payment_id};
+    my $writeoff = Koha::Account::Lines->find($writeoff_id);
+    is( $writeoff->payment_type, undef, "Writeoff should not have a payment_type " );
 
     t::lib::Mocks::mock_preference( 'RequirePaymentType', 0 );
     my $context = Test::MockModule->new('C4::Context');
