@@ -40,6 +40,7 @@ my $help;
 my @preserve_fields;
 my $update_dateexpiry;
 my $update_dateexpiry_from_today;
+my $update_dateexpiry_from_existing;
 
 my $command_line_options = join( " ", @ARGV );
 
@@ -52,6 +53,7 @@ GetOptions(
     'op|overwrite_passwords'         => \$overwrite_passwords,
     'ue|update-expiration'           => \$update_dateexpiry,
     'et|expiration-from-today'       => \$update_dateexpiry_from_today,
+    'ee|expiration-from-existing'    => \$update_dateexpiry_from_existing,
     'en|email-new'                   => \$welcome_new,
     'p|preserve-extended-attributes' => \$ext_preserve,
     'pf|preserve-field=s'            => \@preserve_fields,
@@ -60,6 +62,7 @@ GetOptions(
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
+pod2usage(q|--ee and --et are mutually exclusive|) if $update_dateexpiry_from_today && $update_dateexpiry_from_existing;
 pod2usage(q|--file is required|) unless $csv_file;
 pod2usage(q|--matchpoint is required|) unless $matchpoint;
 
@@ -74,17 +77,18 @@ open( $handle, "<", $csv_file ) or die $!;
 
 my $return = $Import->import_patrons(
     {
-        file                         => $handle,
-        defaults                     => \%defaults,
-        matchpoint                   => $matchpoint,
-        overwrite_cardnumber         => $overwrite_cardnumber,
-        overwrite_passwords          => $overwrite_passwords,
-        preserve_extended_attributes => $ext_preserve,
-        preserve_fields              => \@preserve_fields,
-        update_dateexpiry            => $update_dateexpiry,
-        update_dateexpiry_from_today => $update_dateexpiry_from_today,
-        send_welcome                 => $welcome_new,
-        dry_run                      => !$confirm,
+        file                            => $handle,
+        defaults                        => \%defaults,
+        matchpoint                      => $matchpoint,
+        overwrite_cardnumber            => $overwrite_cardnumber,
+        overwrite_passwords             => $overwrite_passwords,
+        preserve_extended_attributes    => $ext_preserve,
+        preserve_fields                 => \@preserve_fields,
+        update_dateexpiry               => $update_dateexpiry,
+        update_dateexpiry_from_today    => $update_dateexpiry_from_today,
+        update_dateexpiry_from_existing => $update_dateexpiry_from_existing,
+        send_welcome                    => $welcome_new,
+        dry_run                         => !$confirm,
     }
 );
 
@@ -189,6 +193,12 @@ If a matching patron is found, extend the expiration date of their account using
 =item B<-et|--expiration-from-today>
 
 If a matching patron is found, extend the expiration date of their account using today's date as the base
+Cannot by used in conjunction with --expiration-from-existing
+
+=item B<-ee|--expiration-from-existing>
+
+If a matching patron is found, extend the expiration date of their account using the patron's current expiration date as the base
+Cannot by used in conjunction with --expiration-from-today
 
 =item B<-v|--verbose>
 

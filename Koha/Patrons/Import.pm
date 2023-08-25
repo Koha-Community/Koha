@@ -69,18 +69,20 @@ sub import_patrons {
     my $handle = $params->{file};
     unless( $handle ) { carp('No file handle passed in!'); return; }
 
-    my $matchpoint           = $params->{matchpoint};
-    my $defaults             = $params->{defaults};
-    my $preserve_fields      = $params->{preserve_fields};
-    my $ext_preserve         = $params->{preserve_extended_attributes};
-    my $overwrite_cardnumber = $params->{overwrite_cardnumber};
-    my $overwrite_passwords  = $params->{overwrite_passwords};
-    my $dry_run              = $params->{dry_run};
-    my $send_welcome         = $params->{send_welcome};
-    my $extended             = C4::Context->preference('ExtendedPatronAttributes');
-    my $set_messaging_prefs  = C4::Context->preference('EnhancedMessagingPreferences');
-    my $update_dateexpiry            = $params->{update_dateexpiry};
-    my $update_dateexpiry_from_today = $params->{update_dateexpiry_from_today};
+    my $matchpoint                      = $params->{matchpoint};
+    my $defaults                        = $params->{defaults};
+    my $preserve_fields                 = $params->{preserve_fields};
+    my $ext_preserve                    = $params->{preserve_extended_attributes};
+    my $overwrite_cardnumber            = $params->{overwrite_cardnumber};
+    my $overwrite_passwords             = $params->{overwrite_passwords};
+    my $dry_run                         = $params->{dry_run};
+    my $send_welcome                    = $params->{send_welcome};
+    my $update_dateexpiry               = $params->{update_dateexpiry};
+    my $update_dateexpiry_from_today    = $params->{update_dateexpiry_from_today};
+    my $update_dateexpiry_from_existing = $params->{update_dateexpiry_from_existing};
+
+    my $extended            = C4::Context->preference('ExtendedPatronAttributes');
+    my $set_messaging_prefs = C4::Context->preference('EnhancedMessagingPreferences');
 
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin if $dry_run;
@@ -203,6 +205,11 @@ sub import_patrons {
                     }
                 }
             }
+        }
+
+        if ( $patron && $update_dateexpiry_from_existing ) {
+            $patron->dateexpiry( Koha::Patron::Categories->find( $borrower{categorycode} )->get_expiry_date( $patron->dateexpiry ) );
+            delete $borrower{dateexpiry};
         }
 
         my $is_new = 0;

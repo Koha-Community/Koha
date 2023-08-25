@@ -113,16 +113,17 @@ if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
     my $update_dateexpiry = $input->param('update_dateexpiry');
     my $return = $Import->import_patrons(
         {
-            file                         => $handle,
-            defaults                     => \%defaults,
-            matchpoint                   => $matchpoint,
-            overwrite_cardnumber         => scalar $input->param( 'overwrite_cardnumber' ),
-            overwrite_passwords          => $overwrite_passwords,
-            preserve_extended_attributes => scalar $input->param( 'ext_preserve' ) || 0,
-            preserve_fields              => \@preserve_fields,
-            update_dateexpiry            => $update_dateexpiry ? 1 : 0,
-            update_dateexpiry_from_today => $update_dateexpiry eq "now" ? 1 : 0,
-            send_welcome                 => $welcome_new,
+            file                            => $handle,
+            defaults                        => \%defaults,
+            matchpoint                      => $matchpoint,
+            overwrite_cardnumber            => scalar $input->param('overwrite_cardnumber'),
+            overwrite_passwords             => $overwrite_passwords,
+            preserve_extended_attributes    => scalar $input->param('ext_preserve') || 0,
+            preserve_fields                 => \@preserve_fields,
+            update_dateexpiry               => $update_dateexpiry ? 1 : 0,
+            update_dateexpiry_from_today    => $update_dateexpiry eq "now" ? 1 : 0,
+            update_dateexpiry_from_existing => $update_dateexpiry eq "dateexpiry" ? 1 : 0,
+            send_welcome                    => $welcome_new,
         }
     );
 
