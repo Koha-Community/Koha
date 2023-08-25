@@ -279,7 +279,8 @@ sub import_patrons {
                 # FIXME : You cannot update a field with a  perl-evaluated false value using the defaults.
 
                 # The password is always encrypted, skip it unless we are forcing overwrite!
-                next if $col eq 'password' && !$overwrite_passwords;
+                next if $col eq 'password'   && !$overwrite_passwords;
+                next if $col eq 'dateexpiry' && $update_dateexpiry;
 
                 unless ( exists( $csvkeycol{$col} ) || $defaults->{$col} ) {
                     $borrower{$col} = $member->{$col} if ( $member->{$col} );
