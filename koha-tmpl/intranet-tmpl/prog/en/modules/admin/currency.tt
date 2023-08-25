@@ -9,16 +9,13 @@
 <title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
         [% IF currency %]
-            [% tx("Modify currency '{currency}'", { currency = currency.currency }) | html %] &rsaquo;
+            [% tx("Modify currency '{currency_name}'", { currency_name = currency.currency }) | html %] &rsaquo;
         [% ELSE %]
             [% t("New currency") | html %] &rsaquo;
         [% END %]
     [% END %]
     [% IF op == 'delete_confirm' %]
-        [% tx("Confirm deletion of currency '{currency}'", { currency = currency.currency }) | html %] &rsaquo;
-    [% END %]
-    [% IF op == 'list' %]
-        [% t("Currencies") | html %] &rsaquo;
+        [% tx("Confirm deletion of currency '{currency_name}'", { currency_name = currency.currency }) | html %] &rsaquo;
     [% END %]
     [% t("Currencies and exchange rates") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -37,14 +34,20 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
-        [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a>
+        [% IF op == 'add_form' || op == 'delete_confirm' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a>
+            [% END %]
+        [% ELSIF op == 'list' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Currencies and exchange rates</span>
+            [% END %]
         [% END %]
 
         [% IF op == 'add_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF currency %]
-                    <span>Modify currency '[% currency.currency | html %]'</span>
+                    [% tx("Modify currency '{currency_name}'", { currency_name = currency.currency }) | html %]
                 [% ELSE %]
                     <span>New currency</span>
                 [% END %]
@@ -53,14 +56,11 @@
 
         [% IF op == 'delete_confirm' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</span>
-            [% END %]
-
-        [% ELSIF op == 'list' %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Currencies</span>
+                [% tx("Confirm deletion of currency '{currency_name}'", { currency_name = currency.currency }) | html %]
             [% END %]
         [% END %]
+
+
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
@@ -100,18 +100,18 @@
 
 [% IF op == 'add_form' %]
 
+<h1>
+    [% IF currency %]
+        [% tx("Modify currency '{currency_name}'", { currency_name = currency.currency }) | html %]
+    [% ELSE %]
+        <span>New currency</span>
+    [% END %]
+</h1>
+
 <form action="/cgi-bin/koha/admin/currency.pl" name="Aform" method="post" class="validated">
     <input type="hidden" name="op" value="add_validate" />
     <fieldset class="rows">
-        <legend>
-            <h1>
-                [% IF currency %]
-                    <span>Modify currency</span>
-                [% ELSE %]
-                    <span>New currency</span>
-                [% END %]
-            </h1>
-        </legend>
+        <legend class="sr-only">New currency entry form</legend>
         <ol>
             <li>
                 [% IF currency %]
@@ -184,7 +184,7 @@
     </div>
     [% ELSE %]
     <div class="dialog alert">
-        <h1>Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h1>
+        <h1>[% tx("Confirm deletion of currency '{currency_name}'", { currency_name = currency.currency }) | html %]</h1>
         <table>
             <tr><th>Currency</th>
                 <td>[% currency.currency | html %]</td>
