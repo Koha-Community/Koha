@@ -83,7 +83,7 @@ if ($do_it) {
     }
 
     if ( $transaction_type eq 'PAYMENT' || $transaction_type eq 'ACT' ) {
-        $whereTType .= q{ AND status != 'VOID' };
+        $whereTType .= q{ AND (status != 'VOID' OR status IS NULL)  };
     }
 
     my $whereBranchCode = q{};
