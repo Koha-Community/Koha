@@ -44,9 +44,9 @@ sub store {
 
     $self->_result->result_source->schema->txn_do(
         sub {
-            Koha::SMTP::Servers->search->update( { is_default => 0 },
-                { no_triggers => 1 } )
-              if $self->is_default;
+            Koha::SMTP::Servers->search( { id => { '!=' => $self->id } } )
+                ->update( { is_default => 0 }, { no_triggers => 1 } )
+                if $self->is_default;
 
             $self = $self->SUPER::store;
         }
