@@ -142,6 +142,9 @@
 
 [% IF op == 'edit_form' %]
     <h1>Edit SMTP server</h1>
+    [% UNLESS smtp_server.is_default %]
+        [% PROCESS default_server_info %]
+    [% END %]
     <form action="/cgi-bin/koha/admin/smtp_servers.pl" id="edit_save" name="edit_save" class="validated" method="post">
         <input type="hidden" name="op" value="edit_save" />
         <input type="hidden" name="smtp_server_id" value="[%- smtp_server.id | html -%]" />
@@ -222,19 +225,6 @@
                     [% END %]
                     <span>Sets this SMTP server as the default SMTP server.</span>
                 </li>
-                [% UNLESS smtp_server.is_default %]
-                    <div class="dialog message" id="default_server_message">
-                        <p>Current default configuration:</p>
-
-                        <ul>
-                            <li><strong>Host</strong>: [%- default_config.host | html -%]</li>
-                            <li><strong>Port</strong>: [%- default_config.port | html -%]</li>
-                            <li><strong>Timeout (secs)</strong>: [%- default_config.timeout | html -%]</li>
-                            <li><strong>SSL</strong>: [%- IF default_config.ssl_mode == 'disabled' -%]<span>Disabled</span>[%- ELSIF default_config.ssl_mode == 'ssl' -%]<span>SSL</span>[%- ELSE -%]<span>STARTTLS</span>[%- END -%]</li>
-                            <li><strong>Debug mode</strong>: [%- IF default_config.debug -%]Yes[%- ELSE -%]No[%- END -%]</li>
-                        </ul>
-                    </div>
-                [% END %]
             </ol>
         </fieldset>
         <fieldset class="action">
@@ -252,17 +242,7 @@
 
     <h1>SMTP servers</h1>
 
-    <div class="dialog message" id="default_server_message">
-        <p>Default configuration:</p>
-
-        <ul>
-            <li><strong>Host</strong>: [%- default_config.host | html -%]</li>
-            <li><strong>Port</strong>: [%- default_config.port | html -%]</li>
-            <li><strong>Timeout (secs)</strong>: [%- default_config.timeout | html -%]</li>
-            <li><strong>SSL</strong>: [%- IF default_config.ssl_mode == 'disabled' -%]<span>Disabled</span>[%- ELSIF default_config.ssl_mode == 'ssl' -%]<span>SSL</span>[%- ELSE -%]<span>STARTTLS</span>[%- END -%]</li>
-            <li><strong>Debug mode</strong>: [%- IF default_config.debug -%]Yes[%- ELSE -%]No[%- END -%]</li>
-        </ul>
-    </div>
+    [% PROCESS default_server_info %]
 
     [% IF servers_count > 0 %]
         <div class="page-section">
@@ -483,6 +463,20 @@
             });
         });
     </script>
+[% END %]
+
+[% BLOCK default_server_info %]
+    <div class="dialog message" id="default_server_message">
+        <p>Current default configuration:</p>
+
+        <ul>
+            <li><strong>Host</strong>: [%- default_config.host | html -%]</li>
+            <li><strong>Port</strong>: [%- default_config.port | html -%]</li>
+            <li><strong>Timeout (secs)</strong>: [%- default_config.timeout | html -%]</li>
+            <li><strong>SSL</strong>: [%- IF default_config.ssl_mode == 'disabled' -%]<span>Disabled</span>[%- ELSIF default_config.ssl_mode == 'ssl' -%]<span>SSL</span>[%- ELSE -%]<span>STARTTLS</span>[%- END -%]</li>
+            <li><strong>Debug mode</strong>: [%- IF default_config.debug -%]Yes[%- ELSE -%]No[%- END -%]</li>
+        </ul>
+    </div>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
