@@ -4,11 +4,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% IF ( total ) %]
-        [% tx("MARC check: {total} errors found", { total = total }) | html %]
-    [% ELSE %]
-        [% t("MARC check: Configuration OK!") | html %]
-    [% END %] &rsaquo;
+    [% t("MARC bibliographic framework test") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -25,11 +21,7 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            [% IF ( total ) %]
-                <span>MARC check: [% total | html %] errors found</span>
-            [% ELSE %]
-                <span>MARC check: Configuration OK!</span>
-            [% END %]
+            <span>MARC bibliographic framework test</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -41,6 +33,17 @@
 
 <h1>MARC bibliographic framework test</h1>
 
+[% IF ( total ) %]
+    <div class="dialog alert">
+        <h2>Configuration errors found</h2>
+        You have [% total | html %] error(s) in your MARC configuration. Please fix them before using Koha
+    </div>
+[% ELSE %]
+    <div class="dialog message">
+        <h2>Configuration okay</h2> You don't have errors in your MARC configuration
+    </div>
+[% END %]
+
 <div class="page-section">
 <table>
     <tr>
@@ -50,14 +53,14 @@
 <!-- -->
 [% IF ( itemnum ) %]
     <tr>
-        <td>itemnum</td>
-        <td><ul><li>The field itemnum MUST be mapped </li>
+        <td>itemnumber</td>
+        <td><ul><li>The field itemnumber MUST be mapped </li>
             <li>The corresponding subfield MUST be in with -1 (ignore) tab</li></ul></td>
     </tr>
 [% ELSE %]
     <tr>
         <td>OK</td>
-        <td>itemnum : the field itemnumber is mapped to a field in tab -1</td>
+        <td>itemnumber : the field itemnumber is mapped to a field in tab -1</td>
     </tr>
 [% END %]
 <!-- -->
@@ -290,7 +293,6 @@
 </table>
 [% ELSE %]
     </table>
-        <p><strong>Configuration OK, you don't have errors in your MARC parameters table</strong></p>
     </div> <!-- /.page-section -->
 [% END %]
 
