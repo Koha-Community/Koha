@@ -5,9 +5,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF ( op_new ) %]
-        [% t("Add a new OAI set") | html %] &rsaquo;
+        [% t("New OAI set") | html %] &rsaquo;
+    [% ELSIF ( op_mod ) %]
+        [% tx("Modify OAI set '{oai_set}'", { oai_set = spec }) | html %] &rsaquo;
     [% END %]
-    [% t("OAI sets configuration") | html %] &rsaquo;
+    [% t("OAI sets") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -27,23 +29,23 @@
 
         [% IF ( op_new || op_mod ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a>
+                <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets</a>
             [% END %]
         [% END %]
 
         [% IF ( op_new ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Add a new OAI set</span>
+                <span>New OAI set</span>
             [% END %]
 
         [% ELSIF ( op_mod ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Edit OAI set '[% spec | html %]'</span>
+                [% tx("Modify OAI set '{oai_set}'", { oai_set = spec }) | html %]
             [% END %]
 
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>OAI sets configuration</span>
+                <span>OAI sets</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -57,10 +59,10 @@
         [% IF ( op_new || op_mod ) %]
             <form method="post" action="/cgi-bin/koha/admin/oai_sets.pl" class="validated">
             [% IF ( op_new ) %]
-                <h1>Add a new OAI set</h1>
+                <h1>New OAI set</h1>
                 <input type="hidden" name="op" value="savenew" />
             [% ELSIF ( op_mod ) %]
-                <h1>Edit OAI set '[% spec | html %]'</h1>
+                <h1>[% tx("Modify OAI set '{oai_set}'", { oai_set = spec }) | html %]</h1>
                     <input type="hidden" name="op" value="savemod" />
                     <input type="hidden" name="id" value="[% id | html %]" />
             [% END %]

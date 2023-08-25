@@ -4,7 +4,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% t("OAI set mappings") | html %] &rsaquo;
+    [% tx("Mappings for set '{oai_set}'", { oai_set = setSpec }) | html %] &rsaquo;
     [% t("OAI sets") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
@@ -23,10 +23,10 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a>
+            <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>OAI set mappings</span>
+            [% tx("Mappings for set '{oai_set}'", { oai_set = setSpec }) | html %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -42,13 +42,13 @@
           <p><a href="/cgi-bin/koha/admin/oai_sets.pl">Return to sets management</a></p>
         </div>
       [% END %]
-      <h1>Mappings for set '[% setName | html %]' ([% setSpec | html %])</h1>
+      <h1>[% tx("Mappings for set '{oai_set}'", { oai_set = setSpec }) | html %]</h1>
       [% UNLESS ( mappings ) %]
         <div class="dialog alert"><p><strong>Warning:</strong> No mappings have been defined for this set</p></div>
       [% END %]
 
-        <div class="page-section">
-            <form action="/cgi-bin/koha/admin/oai_set_mappings.pl" method="post" id="mappingform">
+        <form action="/cgi-bin/koha/admin/oai_set_mappings.pl" method="post" id="mappingform">
+            <div class="page-section">
                 <table id="mappings">
                     <thead>
                         <tr>
@@ -132,11 +132,11 @@
                 </table>
                 <input type="hidden" name="id" value="[% id | html %]" />
                 <input type="hidden" name="op" value="save" />
-                <fieldset class="action">
-                    <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_sets.pl">Cancel</a>
-                </fieldset>
-            </form>
-        </div> <!-- /.page-section -->
+            </div> <!-- /.page-section -->
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_sets.pl">Cancel</a>
+            </fieldset>
+        </form>
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
