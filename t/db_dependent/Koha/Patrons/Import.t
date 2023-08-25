@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 178;
+use Test::More tests => 180;
 use Test::Warn;
 use Test::Exception;
 use Encode qw( encode_utf8 );
@@ -219,6 +219,18 @@ is( $patron_3c->dateexpiry, dt_from_string->add( months => 99, end_of_month => '
 
 is( $patron_3c->surname, "Nancy2", "Surname field is preserved from original" );
 is( $patron_3c->firstname, "Jenkins", "Firstname field is overwritten" );
+
+# test update_dateexpiry_from_current
+my $filename_3d = make_csv($temp_dir, $csv_headers, $csv_one_line_b);
+open(my $handle_3d, "<", $filename_3d) or die "cannot open < $filename_3: $!";
+$patron_3c->dateexpiry('1980-01-01')->store();
+my $params_3d = { file => $handle_3d, matchpoint => 'cardnumber', overwrite_cardnumber => 1, preserve_fields => [ 'firstname' ], update_dateexpiry => 1, update_dateexpiry_from_existing => 1 };
+warning_is { $patrons_import->import_patrons($params_3d) }
+    undef,
+    "No warning raised by import_patrons";
+$patron_3c = Koha::Patrons->find({ cardnumber => '1000' });
+is( $patron_3c->dateexpiry, '1988-04-01', "Expiration date is correct with update_dateexpiry_from_existing => 1" );
+# /test update_dateexpiry_from_current
 
 # Given ... valid file handle, good matchpoint that does not match and conflicting userid.
 my $filename_3b = make_csv($temp_dir, $csv_headers, $csv_one_line_a);
