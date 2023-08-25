@@ -377,13 +377,19 @@ function runConversion() {
         };
 
         // Create the player
+        var play_button = $("<a class=\"icon play\" id=\"midiPlayer_play\"></a>");
+        play_button.on("click",play);
+        var pause_button = $("<a class=\"icon pause\" id=\"midiPlayer_pause\"></a>");
+        pause_button.on("click",pause);
+        var stop_button = $("<a class=\"icon stop\" id=\"midiPlayer_stop\"></a>");
+        stop_button.on("click",stop);
         this.append("<div id=\"midiPlayer_div\"></div>");
         $("#midiPlayer_div").append("<div id=\"midiPlayer_playingTime\">0:00</div>")
             .append("<div id=\"midiPlayer_bar\"><div id=\"midiPlayer_progress\"></div></div>")
             .append("<div id=\"midiPlayer_totalTime\">0:00</div>")
-            .append("<a class=\"icon play\" id=\"midiPlayer_play\" onclick=\"play()\"></a>")
-            .append("<a class=\"icon pause\" id=\"midiPlayer_pause\" onclick=\"pause()\"></a>")
-            .append("<a class=\"icon stop\" id=\"midiPlayer_stop\" onclick=\"stop()\"></a>");
+            .append(play_button)
+            .append(pause_button)
+            .append(stop_button);
 
         $("#midiPlayer_div").css("width", options.width + 200);
         $("#midiPlayer_bar").css("width", options.width);
