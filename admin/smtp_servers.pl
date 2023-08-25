@@ -42,6 +42,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my @messages;
 
+my $smtp_servers = Koha::SMTP::Servers->search;
+
 if ( $op eq 'add' ) {
 
     my $name       = $input->param('smtp_name');
@@ -95,7 +97,8 @@ elsif ( $op eq 'edit_form' ) {
 
     if ( $smtp_server ) {
         $template->param(
-            smtp_server => $smtp_server
+            smtp_server => $smtp_server,
+            default_config => $smtp_servers->get_default,
         );
     }
     else {
@@ -174,7 +177,6 @@ elsif ( $op eq 'edit_save' ) {
 }
 
 if ( $op eq 'list' ) {
-    my $smtp_servers = Koha::SMTP::Servers->search;
     $template->param(
         servers_count  => $smtp_servers->count,
         default_config => $smtp_servers->get_default,
