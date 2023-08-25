@@ -84,6 +84,7 @@ export default {
                     className: "noExport",
                     title: this.$__("Actions"),
                     searchable: false,
+                    sortable: false,
                     render: (data, type, row) => {
                         let content = []
                         this.actions["-1"].forEach(action => {
