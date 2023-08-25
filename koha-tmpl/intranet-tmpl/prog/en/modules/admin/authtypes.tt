@@ -6,12 +6,20 @@
 <title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
         [% IF authority_type.authtypecode.defined %]
-            [% t("Modify authority type") | html %]
+            [% IF authority_type.authtypecode %]
+                [% tx("Modify authority type '{authority_type_code}'", { authority_type_code= authority_type.authtypecode }) | html %]
+            [% ELSE %]
+                [% t("Modify default authority type") | html %]
+            [% END %]
         [% ELSE %]
             [% t("New authority type") | html %]
         [% END %] &rsaquo;
     [% ELSIF op == 'delete_confirm' %]
-        [% t("Confirm deletion of authority type") | html %] &rsaquo;
+        [% IF authorities_using_it %]
+            [% t("Authority type cannot be deleted") | html %]
+        [% ELSE %]
+            [% tx("Confirm deletion of authority type '{authority_type_code}'", { authority_type_code= authority_type.authtypecode } ) | html %]
+        [% END %] &rsaquo;
     [% END %]
     [% t("Authority types") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -44,7 +52,11 @@
         [% IF op == 'add_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF authority_type.authtypecode.defined %]
-                    <span>Modify authority type</span>
+                    [% IF authority_type.authtypecode %]
+                        [% tx("Modify authority type '{authority_type_code}'", { authority_type_code= authority_type.authtypecode }) | html %]
+                    [% ELSE %]
+                        [% t("Modify default authority type") | html %]
+                    [% END %]
                 [% ELSE %]
                     <span>New authority type</span>
                 [% END %]
@@ -52,7 +64,11 @@
 
         [% ELSIF op == 'delete_confirm' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of authority type</span>
+                [% IF authorities_using_it %]
+                    [% t("Authority type cannot be deleted") | html %]
+                [% ELSE %]
+                    [% tx("Confirm deletion of authority type '{authority_type_code}'", { authority_type_code= authority_type.authtypecode } ) | html %]
+                [% END %]
             [% END %]
 
         [% END %]
@@ -89,16 +105,19 @@
 
 [% IF op == 'add_form' %]
     <form action="/cgi-bin/koha/admin/authtypes.pl" name="Aform" method="post" class="validated">
-        <fieldset class="rows">
-            <legend>
-                <h1>
-                [% IF authority_type.authtypecode.defined %]
-                    Modify authority type
+        <h1>
+            [% IF authority_type.authtypecode.defined %]
+                [% IF authority_type.authtypecode %]
+                    [% tx("Modify authority type '{authority_type_code}'", { authority_type_code= authority_type.authtypecode }) | html %]
                 [% ELSE %]
-                    New authority type
+                    [% t("Modify default authority type") | html %]
                 [% END %]
-                </h1>
-            </legend>
+            [% ELSE %]
+                <span>New authority type</span>
+            [% END %]
+        </h1>
+        <fieldset class="rows">
+            <legend class="sr-only">Enter authority type details</legend>
             <ol>
                 <li>
                     [% IF authority_type.authtypecode.defined %]
@@ -107,10 +126,10 @@
                             <input type="hidden" name="checked" value="0" />
                             <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />[% authority_type.authtypecode | html %]
                     [% ELSE %]
-                            <div class="hint">10 characters maximum</div>
                             <label for="authtypecode" class="required">Authority type: </label>
                             <input id="authtypecode" type="text" class="required focus" required="required" name="authtypecode" size="20" maxlength="10" />
                             <span class="required">Required</span>
+                            <div class="hint">10 characters maximum</div>
                     [% END %]
                 </li>
                 <li>
@@ -123,9 +142,9 @@
                     <textarea id="summary" name="summary" cols="55" rows="7">[% authority_type.summary | html %]</textarea>
                 </li>
                 <li>
-                    <div class="hint">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</div>
                     <label for="auth_tag_to_report">Authority field to copy: </label>
                     <input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="[% authority_type.auth_tag_to_report | html %]" />
+                    <div class="hint">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</div>
                     <input type="hidden" name="op" value="add_validate" />
                     [% IF authority_type.authtypecode.defined %]
                         <input type="hidden" name="is_a_modif" value="1" />
@@ -144,8 +163,11 @@
     <div class="dialog alert">
         [% IF authorities_using_it %]
             <h1>This authority type cannot be deleted</h1>
-            <p>This record is used <strong>[% authorities_using_it | html %]</strong> times</p>
-            <a class="cancel" href="/cgi-bin/koha/admin/authtypes.pl">Back to the list</a>
+            <p><strong><span class="ex">[% authority_type.authtypecode | html %]</span></strong></p>
+            <p>[% tnx('This authority type is used {count} time.', 'This authority type is used {count} times', authorities_using_it, { count = authorities_using_it }) %]</p>
+            <form action="/cgi-bin/koha/admin/authtypes.pl" method="get">
+                <button type="submit"><i class="fa fa-fw fa-arrow-left"></i> Return to authority types</button>
+            </form>
         [% ELSE %]
             <h1>Confirm deletion of authority structure definition for <span class="ex">'[% authority_type.authtypetext | html %]' ([% authority_type.authtypecode | html %])</span></h1>
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="post">

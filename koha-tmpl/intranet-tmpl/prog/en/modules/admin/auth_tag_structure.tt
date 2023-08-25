@@ -6,44 +6,25 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF ( add_form ) %]
-        [% IF ( use_heading_flags_p ) %]
-            [% IF ( heading_modify_tag_p ) %]
-                [% t("Modify tag ") | html %] &rsaquo;
-                [% IF ( authtypecode ) %]
-                    [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
-                [% ELSE %]
-                    [% t("Default framework") | html %]
-                [% END %] &rsaquo;
-            [% END %]
-            [% IF ( heading_add_tag_p ) %]
-                [% t("New tag") | html %] &rsaquo;
-                [% IF ( authtypecode ) %]
-                    [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
-                [% ELSE %]
-                    [% t("Default framework") | html %]
-                [% END %] &rsaquo;
-            [% END %]
-        [% ELSE %]
-           [% action | html %] &rsaquo;
+        [% IF ( heading_modify_tag_p ) %]
+            [% tx("Modify tag '{searchfield}'", { searchfield = searchfield }) | html %] &rsaquo;
+        [% END %]
+        [% IF ( heading_add_tag_p ) %]
+            [% t("New tag") | html %] &rsaquo;
         [% END %]
     [% END %]
     [% IF ( delete_confirm ) %]
-        [% t("Confirm deletion") | html %] &rsaquo;
-        [% IF ( authtypecode ) %]
-            [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
-        [% ELSE %]
-            [% t("Default framework") | html %]
-        [% END %] &rsaquo;
+        [% tx("Confirm deletion of tag '{searchfield}'", { searchfield = searchfield }) | html %] &rsaquo;
     [% END %]
     [% IF ( delete_confirmed ) %]
         [% t("Data deleted") | html %] &rsaquo;
-        [% IF ( authtypecode ) %]
-            [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
-        [% ELSE %]
-            [% t("Default framework") | html %]
-        [% END %] &rsaquo;
     [% END %]
-    [% t("Authority MARC framework") | html %] &rsaquo;
+    [% IF ( authtypecode ) %]
+        [% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]
+    [% ELSE %]
+        [% t("Default framework") | html %]
+    [% END %] &rsaquo;
+    [% t("Authority types") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -68,7 +49,7 @@
         [% IF ( add_form || delete_confirm || delete_confirmed ) %]
             [% IF ( authtypecode ) %]
                 [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] Framework</a>
+                    <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]</a>
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item %]
@@ -81,7 +62,7 @@
             [% IF ( use_heading_flags_p ) %]
                 [% IF ( heading_modify_tag_p ) %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Modify tag</span>
+                        [% tx("Modify tag {searchfield}", { searchfield = searchfield }) | html %]
                     [% END %]
                 [% END %]
 
@@ -100,7 +81,7 @@
         [% ELSE %]
             [% IF ( delete_confirm ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Confirm deletion</span>
+                    [% tx("Confirm deletion of tag '{searchfield}'", { searchfield = searchfield }) | html %]
                 [% END %]
             [% ELSE %]
                 [% IF ( delete_confirmed ) %]
@@ -110,7 +91,7 @@
                 [% ELSE %]
                     [% IF ( authtypecode ) %]
                         [% WRAPPER breadcrumb_item bc_active= 1 %]
-                            [% authtypecode | html %] Framework
+                            [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
                         [% END %]
                     [% ELSE %]
                         [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -129,14 +110,27 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-<h1>Authority MARC framework for [% IF ( authtypecode ) %][% authtypecode | html %][% ELSE %]default framework[% END %]</h1>
+                [% IF ( else ) %]
+                    <div id="toolbar" class="btn-toolbar">
+                        <div class="btn-group"><a class="btn btn-default" id="newtag" href="/cgi-bin/koha/admin/auth_tag_structure.pl?op=add_form&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-plus"></i> New tag</a></div>
+                        <a class="btn btn-default" id="edit_authtype" href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&authtypecode=[% authtypecode | uri %]"><i class="fa fa-pencil"></i> Edit authority type</a>
+                    </div>
+                [% END %]
+
+<h1>
+    [% IF ( authtypecode ) %]
+        [% tx("Authority MARC framework for '{authtypecode}'", { authtypecode = authtypecode }) | html %]
+    [% ELSE %]
+        [% t("Default authority MARC framework") | html %]
+    [% END %]
+</h1>
 
 
 [% IF ( add_form ) %]
 
     <h2>
         [% IF ( heading_modify_tag_p ) %]
-            <span>Modify tag</span>
+            [% tx("Modify tag '{searchfield}'", { searchfield = searchfield }) | html %]
         [% END %]
         [% IF ( heading_add_tag_p ) %]
             <span>New tag</span>
@@ -196,7 +190,7 @@
 
 [% IF ( delete_confirm ) %]
     <div class="dialog alert">
-        <h3>Confirm deletion</h3>
+        <h3>[% tx("Confirm deletion of tag '{searchfield}'", { searchfield = searchfield }) | html %]</h3>
         <form action="[% script_name | html %]" method="post">
             <table>
                 <tr><th scope="row">Tag: </th><td>[% searchfield | html %] [% liblibrarian | html %]</td></tr>
@@ -243,24 +237,24 @@
 
 [% IF ( else ) %]
 
-<div id="toolbar" class="btn-toolbar">
-    <div class="btn-group"><a class="btn btn-default" id="newtag" href="/cgi-bin/koha/admin/auth_tag_structure.pl?op=add_form&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-plus"></i> New tag</a></div>
-</div>
-
-<h2>Select an authority framework</h2>
 <form action="[% script_name | html %]" method="post">
-    <select name="authtypecode">
-    [% FOREACH authority_type IN authority_types%]
-        [% IF authority_type.authtypecode == authtypecode%]
-        <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
-        [% ELSE %]
-        <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
-        [% END %]
-    [% END %]
-    </select>
-    <input type="text" name="searchfield" value="[% searchfield | html %]" />
-    <input type="submit" value="OK" class="btn btn-primary" />
-</form><br />
+    <fieldset>
+        <label for="searchfield"><strong>Search for tag:</strong></label>
+        <input type="text" id="searchfield" name="searchfield" size="4" value="[% searchfield | html %]" />
+        <label for="authtypecode"><strong>In framework:</strong> </label>
+        <select id="authtypecode" name="authtypecode">
+            [% FOREACH authority_type IN authority_types%]
+                [% IF authority_type.authtypecode == authtypecode%]
+                    <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
+                [% ELSE %]
+                    <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
+                [% END %]
+            [% END %]
+        </select>
+        <input type="submit" class="btn btn-primary" value="Search" />
+    </fieldset>
+</form>
+
 <div id="pagertable_authtagstructure">
 </div>
 

@@ -4,10 +4,28 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% t("Authority MARC subfield structure") | html %] &rsaquo;
+    [% IF ( add_form ) %]
+        [% t("Edit subfields constraints") | html %] &rsaquo;
+    [% END %]
+
+    [% IF ( delete_confirm ) %]
+        [% tx("Confirm deletion of subfield '{subfield}'", {subfield = ass.tagsubfield }) | html %] &rsaquo;
+    [% END %]
+
+    [% IF ( add_form || delete_confirm || else ) %]
+        [% tx("Tag {tag}", { tag = tagfield}) | html %] &rsaquo;
+    [% END %]
+
+    [% IF ( authtypecode ) %]
+        [% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]
+    [% ELSE %]
+        [% t("Default framework") | html %]
+    [% END %] &rsaquo;
+    [% t("Authority types") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
+
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -30,7 +48,7 @@
 
         [% IF ( authtypecode ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri%]">[% authtypecode | html %] framework</a>
+                <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri%]">[% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]</a>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
@@ -40,17 +58,17 @@
 
         [% IF ( else ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Authority MARC subfield structure for [% tagfield | html %]</span>
+                [% tx("Tag {tag}", { tag = tagfield}) | html %]
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;tagsubfield=[% tagsubfield | uri %]&amp;authtypecode=[% authtypecode |uri %]">Authority MARC subfield structure for [% tagfield | html %]</a>
+                <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;tagsubfield=[% tagsubfield | uri %]&amp;authtypecode=[% authtypecode |uri %]">[% tx("Tag {tag}", { tag = tagfield}) | html %]</a>
             [% END %]
         [% END %]
 
         [% IF ( delete_confirm ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of subfield [% tagsubfield | html %]?</span>
+                [% tx("Confirm deletion of subfield '{tagsubfield}'", { tagsubfield = ass.tagsubfield }) | html %]
             [% END %]
         [% END %]
 
@@ -58,7 +76,7 @@
             [% IF ( use_heading_flags_p ) %]
                 [% IF ( heading_edit_subfields_p ) %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Edit MARC subfields constraints</span>
+                        <span>Edit subfields constraints</span>
                     [% END %]
                 [% END %]
             [% ELSE %]
@@ -282,7 +300,7 @@
 [% IF ( delete_confirm ) %]
 
     <div class="dialog alert">
-        <h1>Delete subfield <span class="ex">'[% ass.tagsubfield | html %]'?</span></h1>
+        <h1>Confirm deletion of subfield <span class="ex">'[% ass.tagsubfield | html %]'?</span></h1>
         <form action="[% delete_link | html %]" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
             <table>
