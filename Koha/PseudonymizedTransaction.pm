@@ -17,6 +17,7 @@ package Koha::PseudonymizedTransaction;
 use Modern::Perl;
 
 use Crypt::Eksblowfish::Bcrypt qw( bcrypt );
+use List::MoreUtils            qw(any);
 
 use Koha::Database;
 use Koha::Exceptions::Config;
@@ -47,23 +48,30 @@ sub new_from_statistic {
 
     my @t_fields_to_copy = split ',', C4::Context->preference('PseudonymizationTransactionFields') || '';
 
-    if ( grep { $_ eq 'transaction_branchcode' } @t_fields_to_copy ) {
+    my $statistic_item = $statistic->item;
+
+    # These fields are treated separately as the column names do not match
+    if ( any { $_ eq 'transaction_branchcode' } @t_fields_to_copy ) {
         $values->{transaction_branchcode} = $statistic->branch;
     }
-    if ( grep { $_ eq 'holdingbranch' } @t_fields_to_copy ) {
-        $values->{holdingbranch} = $statistic->item->holdingbranch;
-    }
-    if ( grep { $_ eq 'homebranch' } @t_fields_to_copy ) {
-        $values->{homebranch} = $statistic->item->homebranch;
-    }
-    if ( grep { $_ eq 'transaction_type' } @t_fields_to_copy ) {
+    if ( any { $_ eq 'transaction_type' } @t_fields_to_copy ) {
         $values->{transaction_type} = $statistic->type;
     }
-    if ( grep { $_ eq 'itemcallnumber' } @t_fields_to_copy ) {
-        $values->{itemcallnumber} = $statistic->item->itemcallnumber;
+
+    # These fields are not captured in the statistic so must be pulled from the item
+    if ($statistic_item) {
+        if ( any { $_ eq 'homebranch' } @t_fields_to_copy ) {
+            $values->{homebranch} = $statistic_item->homebranch;
+        }
+        if ( any { $_ eq 'holdingbranch' } @t_fields_to_copy ) {
+            $values->{holdingbranch} = $statistic_item->holdingbranch;
+        }
+        if ( any { $_ eq 'itemcallnumber' } @t_fields_to_copy ) {
+            $values->{itemcallnumber} = $statistic_item->itemcallnumber;
+        }
     }
 
-
+    # Remove fields we have already handled from the list
     @t_fields_to_copy = grep {
              $_ ne 'transaction_branchcode'
           && $_ ne 'holdingbranch'
@@ -72,28 +80,32 @@ sub new_from_statistic {
           && $_ ne 'itemcallnumber'
     } @t_fields_to_copy;
 
+    # Populate the remaining columns
     $values = { %$values, map { $_ => $statistic->$_ } @t_fields_to_copy };
 
-    my $patron = Koha::Patrons->find($statistic->borrowernumber);
-    my @p_fields_to_copy = split ',', C4::Context->preference('PseudonymizationPatronFields') || '';
-    $values = { %$values, map { $_ => $patron->$_ } @p_fields_to_copy };
+    my $patron = Koha::Patrons->find( $statistic->borrowernumber );
+    if ($patron) {
+        my @p_fields_to_copy = split ',', C4::Context->preference('PseudonymizationPatronFields') || '';
+        $values = { %$values, map { $_ => $patron->$_ } @p_fields_to_copy };
 
-    $values->{branchcode} = $patron->branchcode; # FIXME Must be removed from the pref options, or FK removed (?)
-    $values->{categorycode} = $patron->categorycode;
+        $values->{branchcode}   = $patron->branchcode;  # FIXME Must be removed from the pref options, or FK removed (?)
+        $values->{categorycode} = $patron->categorycode;
 
-    $values->{has_cardnumber} = $patron->cardnumber ? 1 : 0;
+        $values->{has_cardnumber} = $patron->cardnumber ? 1 : 0;
+    }
 
     my $self = $class->SUPER::new($values);
 
-    my $extended_attributes = $patron->extended_attributes->unblessed;
-    for my $attribute (@$extended_attributes) {
-        next unless Koha::Patron::Attribute::Types->find(
-            $attribute->{code} )->keep_for_pseudonymization;
+    if ($patron) {
+        my $extended_attributes = $patron->extended_attributes->unblessed;
+        for my $attribute (@$extended_attributes) {
+            next unless Koha::Patron::Attribute::Types->find( $attribute->{code} )->keep_for_pseudonymization;
 
-        delete $attribute->{id};
-        delete $attribute->{borrowernumber};
+            delete $attribute->{id};
+            delete $attribute->{borrowernumber};
 
-        $self->_result->create_related('pseudonymized_borrower_attributes', $attribute);
+            $self->_result->create_related( 'pseudonymized_borrower_attributes', $attribute );
+        }
     }
 
     return $self;

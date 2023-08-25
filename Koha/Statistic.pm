@@ -121,11 +121,7 @@ sub new {
 sub store {
     my ($self) = @_;
     $self->SUPER::store;
-    Koha::BackgroundJob::PseudonymizeStatistic->new->enqueue( { statistic => $self->unblessed } )
-        if C4::Context->preference('Pseudonymization')
-        && $self->borrowernumber    # Not a real transaction if the patron does not exist
-                                    # For instance can be a transfer, or hold trigger
-        && grep { $_ eq $self->type } qw(renew issue return onsite_checkout);
+    $self->pseudonymize() if C4::Context->preference('Pseudonymization');
     return $self;
 }
 
@@ -140,6 +136,22 @@ sub store {
 sub item {
     my ( $self ) = @_;
     return Koha::Items->find( $self->itemnumber );
+}
+
+=head3 pseudonymize
+
+my $pseudonymized_stat = $statistic->pseudonymize;
+
+Generate a pesudonymized version of the statistic.
+
+=cut
+
+sub pseudonymize {
+    my ($self) = @_;
+
+    return unless ( $self->borrowernumber && grep { $_ eq $self->type } qw(renew issue return onsite_checkout) );
+    Koha::BackgroundJob::PseudonymizeStatistic->new->enqueue( { statistic => $self->unblessed } );
+
 }
 
 =head2 Internal methods
