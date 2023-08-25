@@ -7,7 +7,7 @@
     [% IF op == 'add_form' %]
         [% t("New SMTP server") | html %] &rsaquo;
     [% ELSIF op == 'edit_form' %]
-        [% t("Edit SMTP server") | html %] &rsaquo;
+        [% tx("Modify SMTP server '{smtp_server}'", { smtp_server = smtp_server.name }) | html %] &rsaquo;
     [% END %]
     [% t("SMTP servers") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -35,12 +35,12 @@
 
         [% IF op == 'add_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>New</span>
+                <span>New SMTP server</span>
             [% END %]
 
         [% ELSIF op == 'edit_form' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Edit</span>
+                [% tx("Modify SMTP server '{smtp_server}'", { smtp_server = smtp_server.name }) | html %]
             [% END %]
 
         [% ELSE %]
@@ -145,10 +145,12 @@
 [% END %]
 
 [% IF op == 'edit_form' %]
-    <h1>Edit SMTP server</h1>
+    <h1>[% tx("Modify SMTP server '{smtp_server}'", { smtp_server = smtp_server.name }) | html %]</h1>
+
     [% UNLESS smtp_server.is_default %]
         [% PROCESS default_server_info %]
     [% END %]
+
     <form action="/cgi-bin/koha/admin/smtp_servers.pl" id="edit_save" name="edit_save" class="validated" method="post">
         <input type="hidden" name="op" value="edit_save" />
         <input type="hidden" name="smtp_server_id" value="[%- smtp_server.id | html -%]" />
@@ -407,7 +409,7 @@
                     {
                         "data": function( row, type, val, meta ) {
                             var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/smtp_servers.pl?op=edit_form&amp;smtp_server_id='+ encodeURIComponent(row.smtp_server_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
-                            result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-smtp-server-id="'+ encodeURIComponent(row.smtp_server_id) +'" data-smtp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i>'+_("Delete")+'</a>';
+                            result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-smtp-server-id="'+ encodeURIComponent(row.smtp_server_id) +'" data-smtp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
                             return result;
                         },
                         "searchable": false,
