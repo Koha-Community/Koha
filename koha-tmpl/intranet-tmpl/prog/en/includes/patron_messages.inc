@@ -212,11 +212,14 @@
                             ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
                             [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
                             [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
-                            <span>Hold placed on [% w.reservedate | $KohaDates %].</span>
+                            <span class="holddate">Hold placed on [% w.reservedate | $KohaDates %].</span>
                             <br />
                             <strong class="waitinghere">
                                 [% SET expires_on = w.expirationdate %]
-                                Waiting here [% IF expires_on %] until [% expires_on | $KohaDates %] [% END %]
+                                Waiting here [% IF expires_on %] until [% expires_on | $KohaDates %][% END %].
+                            </strong>
+                            <strong class="waitingsince">
+                                Waiting here since [% w.waitingdate | $KohaDates %].
                             </strong>
                         </li>
                     [% END %]
