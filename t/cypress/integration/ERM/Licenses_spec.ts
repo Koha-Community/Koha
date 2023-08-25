@@ -18,6 +18,8 @@ function get_license() {
         started_on: dates["today_iso"],
         ended_on: dates["tomorrow_iso"],
         user_roles: [],
+        vendor_id: 1,
+        vendor: [cy.get_vendors_to_relate()[0]],
         documents: [
             {
                 license_id: 1,
@@ -86,6 +88,7 @@ describe("License CRUD operations", () => {
 
         // Fill in the form for normal attributes
         let license = get_license();
+        let vendors = cy.get_vendors_to_relate();
 
         cy.get("#licenses_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
@@ -101,6 +104,15 @@ describe("License CRUD operations", () => {
         cy.get("#license_status .vs__search").type(license.status + "{enter}", {
             force: true,
         });
+
+        // vendors
+        cy.get("#license_vendor_id .vs__selected").should("not.exist"); //no vendor pre-selected for new license
+
+        cy.get("#license_vendor_id .vs__search").type(
+            vendors[0].name + "{enter}",
+            { force: true }
+        );
+        cy.get("#license_vendor_id .vs__selected").contains(vendors[0].name);
 
         cy.get("#started_on+input").click();
         cy.get(".flatpickr-calendar")
@@ -153,6 +165,14 @@ describe("License CRUD operations", () => {
     it("Edit license", () => {
         let license = get_license();
         let licenses = [license];
+        let vendors = cy.get_vendors_to_relate();
+
+        // Intercept vendors request
+        cy.intercept("GET", "/api/v1/acquisitions/vendors?_per_page=-1", {
+            statusCode: 200,
+            body: vendors,
+        }).as("get-vendor-options");
+
         // Click the 'Edit' button from the list
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
@@ -174,6 +194,16 @@ describe("License CRUD operations", () => {
 
         // Form has been correctly filled in
         cy.get("#license_name").should("have.value", license.name);
+
+        cy.get("#license_vendor_id .vs__selected").contains(
+            license.vendor[0].name
+        );
+
+        cy.get("#license_vendor_id .vs__search").type(
+            vendors[1].name + "{enter}",
+            { force: true }
+        );
+
         cy.get("#license_description").should(
             "have.value",
             license.description
