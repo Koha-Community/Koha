@@ -317,8 +317,8 @@
                             <div id="default_confirm_dialog">Are you sure you want to change the default SMTP server?</div>
                         </div>
                         <div class="modal-footer">
-                            <a id="default_confirm_dialog" href="#" class="btn btn-default default_confirm_modal_yes" id="default_confirm_modal_button" role="button" data-toggle="modal">Yes</a>
-                            <button class="btn btn-link default_confirm_modal_no" data-dismiss="modal" aria-hidden="true">No</button>
+                            <a id="default_confirm_dialog" href="#" class="btn btn-primary default_confirm_modal_yes" id="default_confirm_modal_button" role="button" data-toggle="modal">Yes</a>
+                            <button class="btn btn-default default_confirm_modal_no" data-dismiss="modal" aria-hidden="true">No</button>
                         </div>
                     </div> <!-- /.modal-content -->
                 </div> <!-- /.modal-dialog -->
@@ -456,14 +456,14 @@
             });
 
             $('#smtp_default').on( "click", function () {
-                $("#default_confirm_modal").show();
+                $("#default_confirm_modal").modal('show');
             });
             $('.default_confirm_modal_yes').on( "click", function () {
-                $("#default_confirm_modal").hide();
+                $("#default_confirm_modal").modal('hide');
             });
             $('.default_confirm_modal_no').on( "click", function () {
                 $("#smtp_default").prop('checked', !$("#smtp_default").prop('checked') );
-                $("#default_confirm_modal").hide();
+                $("#default_confirm_modal").modal('hide');
             });
 
             $("#delete_confirm_modal_button").on( "click", function () {
