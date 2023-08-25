@@ -40,6 +40,7 @@ use Koha::Patrons;
 use Koha::SMS::Providers;
 use Koha::SMTP::Servers;
 use Koha::Subscriptions;
+use Data::Dumper;
 
 use constant SERIALIZED_EMAIL_CONTENT_TYPE => 'message/rfc822';
 
@@ -1317,12 +1318,23 @@ sub _send_message_by_email {
     my $message = shift or return;
     my ( $username, $password, $method, $smtp_transports ) = @_;
 
-    my $patron;
+    my $patron = Koha::Patrons->find( $message->{borrowernumber} );
     my $to_address = $message->{'to_address'};
-    my $use_garantor = C4::Context->preference('RedirectGuaranteeEmail');
-    if($use_garantor eq 'yes' || !$to_address) {
-        $patron = Koha::Patrons->find( $message->{borrowernumber} );
-        unless ($patron or $to_address) {
+    my $cc_address;
+    my @guarantor_address;
+    my $count_guarantor_address;
+    if (C4::Context->preference('RedirectGuaranteeEmail') eq 'yes' && $patron) {
+        #Get guanrantor adresses
+        my $guarantor_relationships = $patron->guarantor_relationships;
+        my @guarantors              = $guarantor_relationships->guarantors->as_list;
+        foreach my $guarantor (@guarantors) {
+            my $address = $guarantor->notice_email_address;
+            push( @guarantor_address, $address ) if $address;
+        }
+        $count_guarantor_address = scalar @guarantor_address;
+    }
+    unless ($to_address) {
+        if (!$patron && !$count_guarantor_address) {
             warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
             _set_message_status(
                 {
@@ -1336,7 +1348,7 @@ sub _send_message_by_email {
         if ($patron) {
             $to_address = $patron->notice_email_address;
         }
-        unless ($to_address) {  
+        if (!$to_address && !$count_guarantor_address) {
             # warn "FAIL: No 'to_address' and no email for " . ($member->{surname} ||'') . ", borrowernumber ($message->{borrowernumber})";
             # warning too verbose for this more common case?
             _set_message_status(
@@ -1348,8 +1360,12 @@ sub _send_message_by_email {
             );
             return;
         }
+        if (!$to_address && $count_guarantor_address) {
+            $to_address = shift @guarantor_address;
+        }
     }
 
+    $cc_address = join( ',', @guarantor_address );
     # Skip this message if we exceed domain limits in this run
     if( Koha::Notice::Util->exceeds_limit({ to => $to_address, limits => $domain_limits }) ) {
         # Save the to_address if you delay the message so that we dont need to look it up again
@@ -1402,6 +1418,11 @@ sub _send_message_by_email {
             (
                 C4::Context->preference('NoticeBcc')
                 ? ( bcc => C4::Context->preference('NoticeBcc') )
+                : ()
+            ),
+            (
+                $cc_address
+                ? ( cc => $cc_address )
                 : ()
             ),
             from     => $from_address,

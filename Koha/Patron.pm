@@ -1579,36 +1579,16 @@ Returns the empty string if no email address.
 
 =cut
 
-sub notice_email_address {
-    my ($self) = @_;
-    my $address;
-    my $guarantor_address;
+sub notice_email_address{
+    my ( $self ) = @_;
 
     my $which_address = C4::Context->preference("EmailFieldPrimary");
-
     # if syspref is set to 'first valid' (value == OFF), look up email address
     if ( $which_address eq 'OFF' ) {
-        $address = $self->first_valid_email_address;
-    }
-    else {
-        $address = $self->$which_address || '';
+        return $self->first_valid_email_address;
     }
 
-    my $use_guarantor = C4::Context->preference('RedirectGuaranteeEmail');
-    if ($use_guarantor) {
-        my @guarantors =
-          map { $_->guarantors->as_list } $self->guarantor_relationships();
-        if (@guarantors) {
-            foreach my $guarantor (@guarantors) {
-                $guarantor_address = $guarantor->notice_email_address;
-                if ($address) {
-                    $address .= ', ';
-                }
-                $address .= $guarantor_address if $guarantor_address;
-            }
-        }
-    }
-    return $address;
+    return $self->$which_address || '';
 }
 
 =head3 first_valid_email_address
