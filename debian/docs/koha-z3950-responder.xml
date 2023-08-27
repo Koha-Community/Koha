@@ -1,0 +1,141 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-z3950-responder</title>
+<info>
+    <productname>Koha</productname> is the first free software library automation package.
+    <author>
+        <orgname>The Koha Community</orgname>
+        <uri>https://koha-community.org/</uri>
+    </author>
+</info>
+
+<refentry xml:id="koha-z3950-responder">
+
+    <refmeta>
+        <refentrytitle>koha-z3950-responder</refentrytitle>
+        <manvolnum>8</manvolnum>
+    </refmeta>
+
+    <refnamediv>
+        <refname>koha-z3950-responder</refname>
+        <refpurpose>Manage the Z39.50/SRU daemons for your Koha instances</refpurpose>
+        <refclass>UNIX/Linux</refclass>
+    </refnamediv>
+
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>koha-z3950-responder</command>
+            <group choice="opt">
+                <arg choice="plain">--start</arg>
+                <arg choice="plain">--stop</arg>
+                <arg choice="plain">--restart</arg>
+            </group>
+            <group choice="opt">
+                <arg choice="plain">--enable</arg>
+                <arg choice="plain">--disable</arg>
+            </group>
+            <group choice="opt">
+                <arg choice="plain">--debugger</arg>
+                <arg choice="plain">--debugger-key <replaceable>key</replaceable></arg>
+                <arg choice="plain">--debugger-location <replaceable>host</replaceable>:<replaceable>port</replaceable></arg>
+                <arg choice="plain">--debugger-path <replaceable>path</replaceable></arg>
+            </group>
+            <group choice="opt">
+                <arg choice="plain">--quiet</arg>
+                <arg choice="plain">-q</arg>
+            </group>
+            <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+        </cmdsynopsis>
+        <cmdsynopsis>
+            <command>koha-z3950-responder</command>
+            <group choice="opt">
+                <arg choice="plain">--help</arg>
+                <arg choice="plain">-h</arg>
+            </group>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+
+    <refsect1><title>Options</title>
+        <variablelist>
+            <varlistentry>
+                <term><option>--start</option></term>
+                <listitem>
+                    <para>Start the Z39.50/SRU daemon for the specified instance(s)</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--stop</option></term>
+                <listitem>
+                    <para>Stop the Z39.50/SRU daemon for the specified instance(s)</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--restart</option></term>
+                <listitem>
+                    <para>Restart the Z39.50/SRU daemon for the specified instance(s)</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--enable</option></term>
+                <listitem>
+                    <para>Enable Z39.50/SRU for the specified instance(s)</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--disable</option></term>
+                <listitem>
+                    <para>Disable Z39.50/SRU for the specified instance(s)</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--debugger</option></term>
+                <listitem>
+                    <para>Enable running Z39.50/SRU in debug mode</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--debugger-key <replaceable>key</replaceable></option></term>
+                <listitem>
+                    <para>Specify the debugger key the IDE is expecting</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--debugger-location <replaceable>host</replaceable>:<replaceable>port</replaceable></option></term>
+                <listitem>
+                    <para>Specify the host:port for your debugger tool (defaults to localhost:9000)</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--debugger-path <replaceable>path</replaceable></option></term>
+                <listitem>
+                    <para>Specify the path for the debugger library</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--quiet</option> | <option>-q</option></term>
+                <listitem>
+                    <para>Make the script quiet about non existent instance names (useful for calling from other scripts)</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--help</option> | <option>-h</option></term>
+                <listitem>
+                    <para>Display help for this command</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
+
+    <refsect1><title>Description</title>
+        <para>This script lets you manage the Z39.50/SRU daemons for your Koha instances.</para>
+    </refsect1>
+
+    <refsect1><title>See also</title>
+        <simplelist type="inline">
+            <member><command>koha-rebuild-zebra(8)</command></member>
+            <member><command>koha-zebra(8)</command></member>
+        </simplelist>
+    </refsect1>
+
+</refentry>
+
+</article>
