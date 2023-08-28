@@ -32,40 +32,36 @@
 
     <div class="container-fluid">
         <div class="row">
-            [% IF ( OpacNav || OpacNavBottom ) %]
-                <div class="col-12 col-lg-2 order-3 order-lg-1">
+            [% IF ( OpacNav ||  OpacNavBottom ) %]
+                <div class="col-lg-2">
                     <div id="navigation">
-                        [% IF ( OpacNav || OpacNavBottom ) %]
-                            [% INCLUDE 'navigation.inc' %]
-                        [% END %]
+                        [% INCLUDE 'navigation.inc' %]
                     </div>
                 </div>
-                <div class="col-12 col-lg-10 order-md-1 maincontent">
+                <div class="col-10 order-first order-md-first order-lg-2">
             [% ELSE %]
-                <div class="col order-md-1 maincontent">
+                <div class="col order-first order-md-first order-lg-2">
             [% END %]
-                <div id="page_[% page.idnew | html %]" class="maincontent">
 
             [% IF page %]
+                <div class="maincontent">
+                    <h1>[% page.title | html %]</h1>
 
-            <h1>[% page.title | html %]</h1>
+                        <div class="page_content">
+                            [% page.content | $raw %]
+                        </div>
 
-            <div class="page_content">
-                [% page.content | $raw %]
-            </div>
+                    [% ELSE %]
 
-            [% ELSE %]
+                        <div class="alert alert-error">
+                            This page does not exist.
+                        </div>
 
-            <div class="alert alert-error">
-                This page does not exist.
-            </div>
-
-            [% END %]
-
-        </div> <!-- / .col 6/8 -->
-
-        </div> <!-- /.container-fluid -->
-    </div> <!-- /.row -->
+                    [% END %]
+                </div> <!-- /.maincontent -->
+            </div> <!-- / .col -->
+        </div> <!-- /.row -->
+    </div> <!-- /.container-fluid -->
 </div> <!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
