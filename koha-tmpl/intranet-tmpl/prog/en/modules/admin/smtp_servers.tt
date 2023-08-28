@@ -261,6 +261,7 @@
                         <th>Timeout (secs)</th>
                         <th>SSL</th>
                         <th>Authenticated</th>
+                        <th>Debug mode</th>
                         <th>Is default</th>
                         <th data-class-name="actions noExport">Actions</th>
                     </tr>
@@ -389,6 +390,18 @@
                             }
                             else {
                                 return _("No");
+                            }
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            if ( row.debug ) {
+                                return _("On");
+                            }
+                            else {
+                                return _("Off");
                             }
                         },
                         "searchable": false,
