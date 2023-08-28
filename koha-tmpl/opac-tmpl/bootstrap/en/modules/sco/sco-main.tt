@@ -131,7 +131,7 @@
                         <div class="alert alert-warning"><h2>Please confirm the checkout:</h2>
                             <span class="sco-alert-warning confirm"></span>
                             [% IF ( confirm_renew_issue ) %]
-                                <p>This item is already checked out to you.</p>
+                                <p>This item is already checked out to you: <b>[% confirm | html %]</b> <i>([% barcode | html %])</i></p>
                             [% END %]
 
                             [% IF ( renew && Koha.Preference('SCOAllowCheckin') ) %]
@@ -213,14 +213,16 @@
                     [% END %]
 
                     [% IF ( issued ) %]
+                        [% FOREACH barcode IN newissues.split(',') %]
                         <span class="sco-alert-success issue"></span>
                         <div class="alert alert-info">
-                            <p>Item checked out</p>
+                            <p>Item checked out <i>([% barcode | html %])</i></p>
                         </div>
+                        [% END %]
                     [% ELSIF ( renewed ) %]
                         <span class="sco-alert-success renew"></span>
                         <div class="alert alert-info">
-                            <p>Item renewed</p>
+                            <p>Item renewed <i>([% barcode | html %])</i></p>
                         </div>
                     [% ELSIF ( renewed == 0) %]
                         <span class="sco-alert-warning renew"></span>
@@ -235,7 +237,7 @@
                     [% ELSIF ( returned == 1 ) %]
                         <span class="sco-alert-success return"></span>
                         <div class="alert alert-info">
-                            <p>Item checked in</p>
+                            <p>Item checked in <i>([% barcode | html %])</i></p>
                         </div>
                     [% END %]
 
@@ -272,10 +274,14 @@
                                         </h2></legend>
                                     <div class="row">
                                         <div class="col">
-                                            <label for="barcode">Scan a new item or enter its barcode:</label>
+                                            <label for="barcode">Scan a new item or enter its barcode[% IF Koha.Preference('BatchCheckouts') %]<br>(or enter a barcode list, one barcode per line)[% END %]:</label>
                                         </div>
                                         <div class="col-3">
-                                            <input id="barcode" name="barcode" size="20" type="text" class="focus form-control" autocomplete="off" />
+                                            [% IF Koha.Preference('BatchCheckouts') %]
+                                                <textarea id="barcode" name="barcode" rows="10" cols="30" class="focus form-control"></textarea>
+                                            [% ELSE %]
+                                                <input id="barcode" name="barcode" size="20" type="text" class="focus form-control" autocomplete="off" />
+                                            [% END %]
                                         </div>
                                         <div class="col-auto">
                                             <button type="submit" class="btn btn-primary">Submit</button>

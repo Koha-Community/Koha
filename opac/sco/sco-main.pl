@@ -86,7 +86,7 @@ if (defined C4::Context->preference('SCOAllowCheckin')) {
 }
 
 my $issuerid = $loggedinuser;
-my ( $op, $patronlogin, $patronpw, $barcode, $confirmed, $newissues, $load_checkouts ) = (
+my ( $op, $patronlogin, $patronpw, $barcodestr, $confirmed, $newissues, $load_checkouts ) = (
     $query->param("op")             || '',
     $query->param("patronlogin")    || '',
     $query->param("patronpw")       || '',
@@ -104,7 +104,11 @@ if ($op eq "logout") {
     undef $jwt;
 }
 
-$barcode = barcodedecode( $barcode ) if $barcode;
+my $barcodes = [];
+if ( $barcodestr ) {
+    push @$barcodes, split( /\s\n/, $barcodestr );
+    $barcodes = [ map { $_ =~ /^\s*$/ ? () : barcodedecode( $_ ) } @$barcodes ];
+}
 
 my @newissueslist = split /,/, $newissues;
 my $issuenoconfirm = 1; #don't need to confirm on issue.
@@ -134,10 +138,28 @@ my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
 
+if ( C4::Context->preference('BatchCheckouts') ) {
+    my @batch_category_codes = split ',', C4::Context->preference('BatchCheckoutsValidCategories');
+    my $categorycode = $issuer->{categorycode};
+    if ( $categorycode && grep { $_ eq $categorycode } @batch_category_codes ) {
+        # do nothing - logged in patron is allowed to do batch checkouts
+    } else {
+        # patron category not allowed to do batch checkouts, only allow first barcode
+        while ( scalar @$barcodes > 1 ) {
+            pop @$barcodes;
+        }
+    }
+} else {
+    # batch checkouts not enabled, only allow first barcode
+    while ( scalar @$barcodes > 1 ) {
+        pop @$barcodes;
+    }
+}
+
 if ( $patron && $op eq "cud-returnbook" && $allowselfcheckreturns ) {
     my $success = 1;
 
-
+  foreach my $barcode ( @$barcodes ) {
     my $item = Koha::Items->find( { barcode => $barcode } );
     if ( $success && C4::Context->preference("CircConfirmItemParts") ) {
         if ( defined($item)
@@ -157,10 +179,15 @@ if ( $patron && $op eq "cud-returnbook" && $allowselfcheckreturns ) {
         ($success) = AddReturn( $barcode, $branch )
     }
 
-    $template->param( returned => $success );
+    $template->param(
+        returned => $success,
+        barcode => $barcode
+    );
+  } # foreach barcode in barcodes
 }
-elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
 
+elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
+  foreach my $barcode ( @$barcodes ) {
     my $item = Koha::Items->find( { barcode => $barcode } );
     my $impossible  = {};
     my $needconfirm = {};
@@ -203,14 +230,16 @@ elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
                 barcode    => $barcode,
             );
         }
+        last;
     } elsif ( $needconfirm->{RENEW_ISSUE} ){
         $template->param(
                 renew               => 1,
                 barcode             => $barcode,
-                confirm             => 1,
+                confirm             => $item->biblio->title,
                 confirm_renew_issue => 1,
                 hide_main           => 1,
         );
+        last;
     } elsif ( $confirm_required && !$confirmed ) {
         $template->param(
             impossible                => 1,
@@ -220,6 +249,7 @@ elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
         if ($issue_error eq 'DEBT') {
             $template->param(DEBT => $needconfirm->{DEBT});
         }
+        last;
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
             my ( $hold_existed, $item );
@@ -242,7 +272,7 @@ elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
 
             my $new_issue = AddIssue( $patron, $barcode );
             $template->param( issued => 1, new_issue => $new_issue );
-            push @newissueslist, $barcode;
+            push @newissueslist, $barcode unless ( grep /^$barcode$/, @newissueslist );
 
             if ( $hold_existed ) {
                 my $dtf = Koha::Database->new->schema->storage->datetime_parser;
@@ -268,9 +298,11 @@ elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
             );
         }
     }
+  } # foreach barcode in barcodes
 } # $op
 
 if ( $patron && ( $op eq 'cud-renew' ) ) {
+  foreach my $barcode ( @$barcodes ) {
     my $item = Koha::Items->find({ barcode => $barcode });
 
     if ( $patron->checkouts->find( { itemnumber => $item->itemnumber } ) ) {
@@ -284,11 +316,15 @@ if ( $patron && ( $op eq 'cud-renew' ) ) {
                 }
             );
             push @newissueslist, $barcode;
-            $template->param( renewed => 1 );
+            $template->param(
+                renewed => 1,
+                barcode => $barcode
+            );
         }
     } else {
         $template->param( renewed => 0 );
     }
+  } # foreach barcode in barcodes
 }
 
 if ( $patron) {
