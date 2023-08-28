@@ -129,7 +129,11 @@
                 [% END %]
             </td>
             <td>
-                <input type="text" class="flatpickr" data-flatpickr-futuredate="true" value="[% hold.expirationdate | html %]" size="10" name="expirationdate" />
+                [% UNLESS hold.expired %]
+                    <input type="text" class="flatpickr" data-flatpickr-futuredate="true" value="[% hold.expirationdate | html %]" size="10" name="expirationdate" />
+                [% ELSE %]
+                    <span class="expiredon"><label>Expired:</label> [% hold.expirationdate | $KohaDates %]</span>
+                [% END %]
             </td>
             <td>
                 [%- IF ( hold.found ) -%]
