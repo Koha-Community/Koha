@@ -603,6 +603,11 @@ sub delete_holiday_range_repeatable {
     my $dbh = C4::Context->dbh();
     my $sth = $dbh->prepare("DELETE FROM repeatable_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?)");
     $sth->execute($self->{branchcode}, $options{day}, $options{month});
+
+    # changed the 'single_holidays' table, lets force/reset its cache
+    my $cache = Koha::Caches->get_instance();
+    my $key   = $self->{branchcode} . "_holidays";
+    $cache->clear_from_cache($key);
 }
 
 =head2 delete_exception_holiday_range
