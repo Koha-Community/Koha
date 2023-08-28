@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2023-06-23 12:46+0000\n"
-"Last-Translator: ashimema <martin.renvoize@ptfs-europe.com>\n"
+"PO-Revision-Date: 2023-08-08 09:17+0000\n"
+"Last-Translator: Aude Charillon <aude.charillon@ptfs-europe.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /en_GB/22.11/en-GB-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1687524412.823851\n"
+"X-POOTLE-MTIME: 1691486253.856367\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -1002,8 +1002,8 @@ msgid ""
 "modifying objects (holds, items, patrons, etc.) belonging to other "
 "libraries: "
 msgstr ""
-"Prevent staff (but not superlibrarians) from modifying objects (holds, "
-"items, users, etc.) belonging to other libraries: "
+"Prevent staff (but not superlibrarians) from modifying objects ("
+"reservations, items, users, etc.) belonging to other libraries: "
 
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# Yes"
@@ -3735,7 +3735,7 @@ msgstr "Fines Policy"
 
 # Circulation > Holds policy
 msgid "circulation.pref Holds policy"
-msgstr "Holds policy"
+msgstr "Reservations policy"
 
 # Circulation > Housebound module
 msgid "circulation.pref Housebound module"
@@ -3894,7 +3894,7 @@ msgid ""
 "circulation.pref#AllowHoldDateInFuture# hold requests to be placed that do "
 "not enter the waiting list until a certain future date."
 msgstr ""
-"hold requests to be placed that do not enter the waiting list until a "
+"reservation requests to be placed that do not enter the waiting list until a "
 "certain future date."
 
 # Circulation > Holds Policy
@@ -3909,7 +3909,7 @@ msgstr "Don't allow"
 msgid ""
 "circulation.pref#AllowHoldItemTypeSelection# hold fulfillment to be limited "
 "by item type."
-msgstr "hold fulfillment to be limited by item type."
+msgstr "reservation fulfillment to be limited by item type."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# Allow"
@@ -3923,7 +3923,7 @@ msgstr "Don't allow"
 msgid ""
 "circulation.pref#AllowHoldPolicyOverride# staff to override hold policies "
 "when placing holds."
-msgstr "staff to override hold policies when placing holds."
+msgstr "staff to override reservation policies when placing holds."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# Allow"
@@ -3937,7 +3937,7 @@ msgstr "Don't allow"
 msgid ""
 "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on and "
 "filled by damaged items."
-msgstr "hold requests to be placed on and filled by damaged items."
+msgstr "reservation requests to be placed on and filled by damaged items."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Allow"
@@ -3953,8 +3953,8 @@ msgid ""
 "a record where the patron already has one or more items attached to that "
 "record checked out."
 msgstr ""
-"a user to place a hold on a record where the user already has one or more "
-"items attached to that record checked out."
+"a user to place a reservation on a record where the user already has one or "
+"more items attached to that record issued."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
@@ -3994,9 +3994,9 @@ msgid ""
 "those items. If using the holds queue items with pending holds will be "
 "marked as \"unavailable\" if this set to \"Don't allow\"."
 msgstr ""
-"This allows self checkouts for those items. If using the holds queue items "
-"with pending holds will be marked as \"unavailable\" if this set to \"Don't "
-"allow\"."
+"This allows self issues for those items. If using the reservations queue "
+"items with pending reservations will be marked as \"unavailable\" if this "
+"set to \"Don't allow\"."
 
 # Circulation > Checkout policy
 msgid ""
@@ -4066,8 +4066,8 @@ msgid ""
 "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an "
 "item with unfilled holds if other available items can fill that hold."
 msgstr ""
-"a user to renew an item with unfilled holds if other available items can "
-"fill that hold."
+"a user to renew an item with unfilled reservations if other available items "
+"can fill that reservation."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
@@ -4102,7 +4102,7 @@ msgid ""
 "circulation.pref#AllowRenewalOnHoldOverride# staff to renew items that are "
 "on hold by manually specifying a due date."
 msgstr ""
-"staff to renew items that are on hold by manually specifying a due date."
+"staff to renew items that are reserved by manually specifying a due date."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowReturnToBranch# Allow items to be checked in"
@@ -4370,7 +4370,7 @@ msgstr "Don't allow"
 msgid ""
 "circulation.pref#AutoResumeSuspendedHolds# suspended holds to be "
 "automatically resumed by a set date."
-msgstr "suspended holds to be automatically resumed by a set date."
+msgstr "suspended reservations to be automatically resumed by a set date."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutoReturnCheckedOutItems# Do"
@@ -4617,10 +4617,9 @@ msgid ""
 "preferences.pl?op=search&searchfield=UpdateItemWhenLostFromHoldList"
 "\">UpdateItemWhenLostFromHoldList</a>."
 msgstr ""
-"from the 'Holds to pull' page. Values to be applied must be defined in <a "
-"href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=UpdateItemWhenLostFromHoldList"
-"\">UpdateItemWhenLostFromHoldList</a>."
+"from the 'Reservations to pull' page. Values to be applied must be defined "
+"in <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"UpdateItemWhenLostFromHoldList\">UpdateItemWhenLostFromHoldList</a>."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -4786,7 +4785,7 @@ msgstr "days."
 msgid ""
 "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting "
 "no later than"
-msgstr "Confirm future hold requests (starting no later than"
+msgstr "Confirm future reservation requests (starting no later than"
 
 # Circulation > Holds policy
 msgid ""
@@ -4796,8 +4795,8 @@ msgid ""
 "renewing or transferring items."
 msgstr ""
 "days from now) at checkin time. Note that this number of days will be used "
-"too in calculating the default end date for the Holds to pull-report. But it "
-"does not interfere with issuing, renewing or transferring items."
+"too in calculating the default end date for the Reservations to pull-report. "
+"But it does not interfere with issuing, renewing or transferring items."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Consider"
@@ -4874,7 +4873,7 @@ msgstr "days"
 msgid ""
 "circulation.pref#DefaultHoldExpirationdate# default expiration date for "
 "holds automatically."
-msgstr "default expiration date for holds automatically."
+msgstr "default expiration date for reservations automatically."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#DefaultHoldExpirationdate# from reserve date."
@@ -4897,8 +4896,8 @@ msgid ""
 "circulation.pref#DefaultHoldPickupLocation# When placing a hold via the "
 "staff interface default the pickup location to the"
 msgstr ""
-"When placing a hold via the staff interface default the pickup location to "
-"the"
+"When placing a reservation via the staff interface default the pickup "
+"location to the"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
@@ -5058,8 +5057,8 @@ msgid ""
 "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on "
 "multiple bibliographic records from the search results"
 msgstr ""
-"the ability to place holds on multiple bibliographic records from the search "
-"results"
+"the ability to place reservations on multiple bibliographic records from the "
+"search results"
 
 # Circulation > Holds policy
 msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
@@ -5073,7 +5072,7 @@ msgstr "Enable"
 msgid ""
 "circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
 "groups."
-msgstr "the ability to place holds on item groups."
+msgstr "the ability to place reservations on item groups."
 
 # Circulation > Article requests
 msgid "circulation.pref#EnableItemGroups# Don't enable"
@@ -5103,7 +5102,7 @@ msgstr "Use the calendar"
 msgid ""
 "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the "
 "period for a hold's max pickup delay."
-msgstr "when calculating the period for a hold's max pickup delay."
+msgstr "when calculating the period for a reservation's max pickup delay."
 
 # Circulation > Holds policy > ExpireReservesMaxPickUpDelay
 msgid ""
@@ -5144,13 +5143,14 @@ msgstr "Don't allow"
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# Send email notification of "
 "the new hold filled with a canceled item to"
-msgstr "Send email notification of the new hold filled with a canceled item to"
+msgstr ""
+"Send email notification of the new reservation filled with a canceled item to"
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ExpireReservesMaxPickUpDelay# automatically fill the next "
 "hold using the item."
-msgstr "automatically fill the next hold using the item."
+msgstr "automatically fill the next reservation using the item."
 
 # Circulation > Holds policy
 msgid ""
@@ -5160,10 +5160,10 @@ msgid ""
 "op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
 "system preference.</br>"
 msgstr ""
-"holds to expire automatically if they have not been picked by within the "
-"time period specified in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=ReservesMaxPickUpDelay\">ReservesMaxPickUpDelay</a> "
-"system preference.</br>"
+"reservations to expire automatically if they have not been picked by within "
+"the time period specified in the <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay\""
+">ReservesMaxPickUpDelay</a> system preference.</br>"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -5177,10 +5177,9 @@ msgid ""
 "\">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their "
 "waiting hold to expire a fee of"
 msgstr ""
-"If using <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=ExpireReservesMaxPickUpDelay"
-"\">ExpireReservesMaxPickUpDelay</a>, charge a user who allows their waiting "
-"hold to expire a fee of"
+"If using <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"ExpireReservesMaxPickUpDelay\">ExpireReservesMaxPickUpDelay</a>, charge a "
+"user who allows their waiting reservation to expire a fee of"
 
 # Circulation > Holds policy
 msgid ""
@@ -5205,7 +5204,8 @@ msgid ""
 "circulation.pref#ExpireReservesOnHolidays# expired holds to be canceled on "
 "days the library is closed per the calendar."
 msgstr ""
-"expired holds to be canceled on days the library is closed per the calendar."
+"expired reservations to be canceled on days the library is closed per the "
+"calendar."
 
 # Circulation > Interface
 msgid "circulation.pref#ExportCircHistory# Don't show"
@@ -5296,22 +5296,22 @@ msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#HoldFeeMode# Charge a hold fee"
-msgstr "Charge a hold fee"
+msgstr "Charge a reservation fee"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#HoldFeeMode# any time a hold is collected."
-msgstr "any time a hold is collected."
+msgstr "any time a reservation is collected."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#HoldFeeMode# any time a hold is placed."
-msgstr "any time a hold is placed."
+msgstr "any time a reservation is placed."
 
 # Circulation > Fines Policy
 msgid ""
 "circulation.pref#HoldFeeMode# only if all items are checked out and the "
 "record has at least one hold already."
 msgstr ""
-"only if all items are checked out and the record has at least one hold "
+"only if all items are issued and the record has at least one reservation "
 "already."
 
 # Circulation > Holds Policy
@@ -5326,7 +5326,7 @@ msgstr "Don't"
 msgid ""
 "circulation.pref#HoldsAutoFill# automatically fill holds instead of asking "
 "the librarian."
-msgstr "automatically fill holds instead of asking the librarian."
+msgstr "automatically fill reservations instead of asking the librarian."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsAutoFillPrintSlip# Do"
@@ -5340,7 +5340,8 @@ msgstr "Don't"
 msgid ""
 "circulation.pref#HoldsAutoFillPrintSlip# automatically display the hold slip "
 "dialog for auto-filled holds."
-msgstr "automatically display the hold slip dialog for auto-filled holds."
+msgstr ""
+"automatically display the hold slip dialog for auto-filled reservations."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#HoldsInNoissuesCharge# Don't include"
@@ -5356,9 +5357,9 @@ msgid ""
 "for limit set in the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=noissuescharge\">noissuescharge</a> system preference."
 msgstr ""
-"hold charges when summing up charges for limit set in the <a href=\"/cgi-bin/"
-"koha/admin/preferences.pl?op=search&searchfield=noissuescharge"
-"\">noissuescharge</a> system preference."
+"reservation charges when summing up charges for limit set in the <a href"
+"=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge\""
+">noissuescharge</a> system preference."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Don't fulfill"
@@ -5372,7 +5373,8 @@ msgstr "Fulfill"
 msgid ""
 "circulation.pref#HoldsNeedProcessingSIP# holds automatically if matching "
 "item is returned via SIP protocol."
-msgstr "holds automatically if matching item is returned via SIP protocol."
+msgstr ""
+"reservations automatically if matching item is returned via SIP protocol."
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# ."
@@ -5382,11 +5384,12 @@ msgstr "."
 msgid ""
 "circulation.pref#HoldsSplitQueue# In the staff interface, split the holds "
 "queue into separate tables by"
-msgstr "In the staff interface, split the holds queue into separate tables by"
+msgstr ""
+"In the staff interface, split the reservations queue into separate tables by"
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# hold item type"
-msgstr "hold item type"
+msgstr "reservation item type"
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# nothing"
@@ -5414,7 +5417,7 @@ msgstr "."
 msgid ""
 "circulation.pref#HoldsSplitQueueNumbering# If the holds queue is split, show "
 "librarians"
-msgstr "If the holds queue is split, show librarians"
+msgstr "If the reservations queue is split, show librarians"
 
 # Circulation > Holds policy
 msgid ""
@@ -5426,7 +5429,7 @@ msgstr "the actual priority, which may be out of order"
 msgid ""
 "circulation.pref#HoldsToPullStartDate# Set the default start date for the "
 "Holds to pull list to"
-msgstr "Set the default start date for the Holds to pull list to"
+msgstr "Set the default start date for the Reservations to pull list to"
 
 # Circulation > Holds policy
 msgid ""
@@ -5577,7 +5580,7 @@ msgstr "pickup library"
 msgid ""
 "circulation.pref#LocalHoldsPriority# priority for filling holds to patrons "
 "whose"
-msgstr "priority for filling holds to users whose"
+msgstr "priority for filling reservations to users whose"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#ManInvInNoissuesCharge# Don't include"
@@ -5610,7 +5613,7 @@ msgstr "Mark items as returned when flagged as lost "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# from the 'Holds to pull' list"
-msgstr "from the 'Holds to pull' list"
+msgstr "from the 'Reservations to pull' list"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5736,17 +5739,18 @@ msgid ""
 "bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture"
 "\">AllowHoldDateInFuture</a> must also be enabled)."
 msgstr ""
-"users to place holds that don't enter the waiting list until a certain "
-"future date. (<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> must "
-"also be enabled)."
+"users to place reservations that don't enter the waiting list until a "
+"certain future date. (<a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture\""
+">AllowHoldDateInFuture</a> must also be enabled)."
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#OPACAllowUserToChangeBranch# Allow users to change the "
 "library to pick up a hold for these statuses:"
 msgstr ""
-"Allow users to change the library to pick up a hold for these statuses:"
+"Allow users to change the library to pick up a reservation for these "
+"statuses:"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACAllowUserToChangeBranch# In transit"
@@ -5772,7 +5776,7 @@ msgstr "Don't allow"
 msgid ""
 "circulation.pref#OPACAllowUserToChooseBranch# a user to choose the library "
 "to pick up a hold from."
-msgstr "a user to choose the library to pick up a hold from."
+msgstr "a user to choose the library to pick up a reservation from."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5808,7 +5812,7 @@ msgstr "Don't allow"
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickup# to pickup holds at libraries "
 "where the item is available."
-msgstr "to pickup holds at libraries where the item is available."
+msgstr "to pickup reservations at libraries where the item is available."
 
 # Circulation > Holds policy
 msgid ""
@@ -5831,30 +5835,30 @@ msgid ""
 "op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
 "a> are enabled."
 msgstr ""
-"<br><strong>NOTE:</strong> The hold start date option is only effective and "
-"shown on the hold form when <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AllowHoldDateInFuture\">AllowHoldDateInFuture</a> and "
-"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</"
-"a> are enabled."
+"<br><strong>NOTE:</strong> The reservation start date option is only "
+"effective and shown on the reservation form when <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture\""
+">AllowHoldDateInFuture</a> and <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"OPACAllowHoldDateInFuture\">OPACAllowHoldDateInFuture</a> are enabled."
 
 # Circulation > Holds Policy
 msgid ""
 "circulation.pref#OPACMandatoryHoldDates# When placing a hold from the OPAC, "
 "make"
-msgstr "When placing a hold from the OPAC, make"
+msgstr "When placing a reservation from the OPAC, make"
 
 # Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# both hold dates"
-msgstr "both hold dates"
+msgstr "both reservation dates"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACMandatoryHoldDates# hold end date"
-msgstr "hold end date"
+msgstr "reservation end date"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
-msgstr "hold start date"
+msgstr "reservation start date"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
@@ -5862,7 +5866,7 @@ msgstr "mandatory."
 
 # Circulation > Article requests
 msgid "circulation.pref#OPACMandatoryHoldDates# no hold dates"
-msgstr "no hold dates"
+msgstr "no reservation dates"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -6052,7 +6056,7 @@ msgstr "Enable"
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#RealTimeHoldsQueue# updating the holds queue in real time."
-msgstr "updating the holds queue in real time."
+msgstr "updating the reservations queue in real time."
 
 # Circulation > Holds policy
 msgid ""
@@ -6252,13 +6256,13 @@ msgstr "user's home library"
 msgid ""
 "circulation.pref#ReservesControlBranch# to see if the patron can place a "
 "hold on the item."
-msgstr "to see if the user can place a hold on the item."
+msgstr "to see if the user can place a reservation on the item."
 
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#ReservesMaxPickUpDelay# Mark a hold as problematic if it "
 "has been waiting for more than"
-msgstr "Mark a hold as problematic if it has been waiting for more than"
+msgstr "Mark a reservation as problematic if it has been waiting for more than"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ReservesMaxPickUpDelay# days."
@@ -6277,8 +6281,8 @@ msgid ""
 "circulation.pref#ReservesNeedReturns# mark a hold as found and waiting when "
 "a hold is placed on a specific item and that item is already checked in."
 msgstr ""
-"mark a hold as found and waiting when a hold is placed on a specific item "
-"and that item is already checked in."
+"mark a reservation as found and waiting when a reservation is placed on a "
+"specific item and that item is already returned."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RestrictionBlockRenewing# If a patron is restricted,"
@@ -6612,7 +6616,7 @@ msgstr "Never trap items with 'not for loan' values of"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#SkipHoldTrapOnNotForLoanValue# to fill holds."
-msgstr "to fill holds."
+msgstr "to fill reservations."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#SpecifyDueDate# Allow"
@@ -6679,7 +6683,7 @@ msgstr ""
 msgid ""
 "circulation.pref#StaticHoldsQueueWeight# Satisfy holds using items from the "
 "libraries"
-msgstr "Satisfy holds using items from the libraries"
+msgstr "Satisfy reservations using items from the libraries"
 
 # Circulation > Holds policy
 msgid "circulation.pref#StaticHoldsQueueWeight# in random order."
@@ -6748,7 +6752,7 @@ msgstr "Don't allow"
 msgid ""
 "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the staff "
 "interface."
-msgstr "holds to be suspended from the staff interface."
+msgstr "reservations to be suspended from the staff interface."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsOpac# Allow"
@@ -6760,7 +6764,7 @@ msgstr "Don't allow"
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
-msgstr "holds to be suspended from the OPAC."
+msgstr "reservations to be suspended from the OPAC."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#SuspensionsCalendar# Ignore the calendar"
@@ -6802,7 +6806,7 @@ msgstr "Transfer"
 msgid ""
 "circulation.pref#TransferWhenCancelAllWaitingHolds# items when cancelling "
 "all waiting holds."
-msgstr "items when cancelling all waiting holds."
+msgstr "items when cancelling all waiting reservations."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TransfersBlockCirc# Block"
@@ -6843,7 +6847,8 @@ msgid ""
 "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable "
 "( notforloan < 0 ) to fill holds."
 msgstr ""
-"items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
+"items that are not for loan but reservable ( notforloan < 0 ) to fill "
+"reservations."
 
 # Circulation > Holds policy
 msgid "circulation.pref#UnseenRenewals# Allow"
@@ -6974,7 +6979,7 @@ msgid ""
 "page."
 msgstr ""
 "A list of values to update an item's values with when it is marked as lost "
-"from the 'Holds to pull' page."
+"from the 'Reservations to pull' page."
 
 # Circulation > Holds policy
 msgid ""
@@ -7137,8 +7142,8 @@ msgid ""
 "circulation.pref#UseTransportCostMatrix# the transport cost matrix for "
 "calculating optimal holds filling between libraries."
 msgstr ""
-"the transport cost matrix for calculating optimal holds filling between "
-"libraries."
+"the transport cost matrix for calculating optimal reservations filling "
+"between libraries."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#WaitingNotifyAtCheckin# Don't notify"
@@ -7153,7 +7158,8 @@ msgid ""
 "circulation.pref#WaitingNotifyAtCheckin# librarians of waiting holds for the "
 "patron whose items they are checking in."
 msgstr ""
-"librarians of waiting holds for the user whose items they are checking in."
+"librarians of waiting reservations for the user whose items they are "
+"returning."
 
 # Circulation > Self Checkout
 msgid "circulation.pref#WebBasedSelfCheck# Don't enable"
@@ -7214,7 +7220,8 @@ msgid ""
 "circulation.pref#canreservefromotherbranches# a user from one library to "
 "place a hold on an item from another library"
 msgstr ""
-"a user from one library to place a hold on an item from another library"
+"a user from one library to place a reservation on an item from another "
+"library"
 
 # Circulation > Holds policy
 msgid ""
@@ -7263,7 +7270,7 @@ msgstr "days for high demand items with more than"
 
 # Circulation > Holds policy
 msgid "circulation.pref#decreaseLoanHighHolds# holds"
-msgstr "holds"
+msgstr "reservations"
 
 # Circulation > Holds policy
 msgid "circulation.pref#decreaseLoanHighHolds# on the record"
@@ -7273,7 +7280,7 @@ msgstr "on the record"
 msgid ""
 "circulation.pref#decreaseLoanHighHolds# over the number of holdable items on "
 "the record"
-msgstr "over the number of holdable items on the record"
+msgstr "over the number of reservable items on the record"
 
 # Circulation > Holds policy
 msgid "circulation.pref#decreaseLoanHighHolds# the reduction of loan period to"
@@ -7292,8 +7299,8 @@ msgid ""
 "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the "
 "Koha administrator email address whenever a hold request is placed."
 msgstr ""
-"sending an email to the Koha administrator email address whenever a hold "
-"request is placed."
+"sending an email to the Koha administrator email address whenever a "
+"reservation request is placed."
 
 # Circulation > Holds policy
 msgid "circulation.pref#finesCalendar# Ignore the calendar"
@@ -7411,7 +7418,8 @@ msgstr ""
 msgid ""
 "circulation.pref#maxoutstanding# Prevent patrons from making holds on the "
 "OPAC if they owe more than"
-msgstr "Prevent users from making holds on the OPAC if they owe more than"
+msgstr ""
+"Prevent users from making reservations on the OPAC if they owe more than"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
@@ -7426,8 +7434,8 @@ msgid ""
 "circulation.pref#maxreserves# holds at once (leave blank or set to 0 to "
 "disable). Additional limits may apply based on circulation rules."
 msgstr ""
-"holds at once (leave blank or set to 0 to disable). Additional limits may "
-"apply based on circulation rules."
+"reservations at once (leave blank or set to 0 to disable). Additional limits "
+"may apply based on circulation rules."
 
 # Circulation > Checkout policy
 msgid ""
@@ -9235,7 +9243,7 @@ msgstr "Log"
 msgid ""
 "logs.pref#HoldsLog# any actions on holds (create, cancel, suspend, resume, "
 "etc)."
-msgstr "any actions on holds (create, cancel, suspend, resume, etc)."
+msgstr "any actions on reservations (create, cancel, suspend, resume, etc)."
 
 # Logging > Logging
 msgid "logs.pref#IllLog# Don't log"
@@ -9538,8 +9546,8 @@ msgid ""
 "such as placing a hold or renewing. Note that the setting for a patron "
 "category takes priority over this system preference."
 msgstr ""
-"expired users from OPAC actions such as placing a hold or renewing. Note "
-"that the setting for a user category takes priority over this system "
+"expired users from OPAC actions such as placing a reservation or renewing. "
+"Note that the setting for a user category takes priority over this system "
 "preference."
 
 # OPAC > Appearance > COinSinOPACResults
@@ -9871,7 +9879,7 @@ msgstr "Don't allow"
 # OPAC > Features
 msgid ""
 "opac.pref#OPACHoldRequests# patrons to place holds on items from the OPAC."
-msgstr "users to place holds on items from the OPAC."
+msgstr "users to place reservations on items from the OPAC."
 
 # Searching > Results display
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -9902,7 +9910,7 @@ msgstr "Don't allow"
 # OPAC > Privacy
 msgid ""
 "opac.pref#OPACHoldsHistory# patrons to see the list of their past holds."
-msgstr "users to see the list of their past holds."
+msgstr "users to see the list of their past reservations."
 
 # OPAC > Features
 msgid "opac.pref#OPACISBD# Use the following as the OPAC ISBD template:"
@@ -10117,8 +10125,8 @@ msgid ""
 "opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
 "and category (like Checked out, Damaged, On hold, etc.)<br>"
 msgstr ""
-"individual (unavailable) items per library and category (like Checked out, "
-"Damaged, On hold, etc.)<br>"
+"individual (unavailable) items per library and category (like On loan, "
+"Damaged, Reserved, etc.)<br>"
 
 # OPAC > Policy
 msgid "opac.pref#OPACResultsMaxItems# library and substatus"
@@ -10208,15 +10216,15 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowHoldQueueDetails# Don't show any hold details"
-msgstr "Don't show any hold details"
+msgstr "Don't show any reservation details"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowHoldQueueDetails# Show holds"
-msgstr "Show holds"
+msgstr "Show reservations"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowHoldQueueDetails# Show holds and their priority level"
-msgstr "Show holds and their priority level"
+msgstr "Show reservations and their priority level"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowHoldQueueDetails# Show priority level"
@@ -10358,7 +10366,7 @@ msgid ""
 "opac.pref#OPACUserSummary# a summary of a logged in patron's checkouts, "
 "overdues, holds and charges on the OPAC start page."
 msgstr ""
-"a summary of a logged in user's checkouts, overdues, holds and charges on "
+"a summary of a logged in user's loans, overdues, reservations and charges on "
 "the OPAC start page."
 
 # OPAC > Policy
@@ -10819,7 +10827,7 @@ msgstr "Don't allow"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
-msgstr "users to add a note when placing a hold."
+msgstr "users to add a note when placing a reservation."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -11725,7 +11733,7 @@ msgstr "Don't allow"
 msgid ""
 "opac.pref#opacbookbag# patrons to store items in a temporary \"Cart\" on the "
 "OPAC."
-msgstr "users to store items in a temporary \"Cart\" on the OPAC."
+msgstr "users to store items in a temporary \"Folder\" on the OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#opaclayoutstylesheet# Use the CSS stylesheet"
@@ -13037,7 +13045,7 @@ msgid ""
 "supported)."
 msgstr ""
 "user phone notifications using Talking Tech i-tiva (overdues, predues and "
-"holds notices currently supported)."
+"reservations notices currently supported)."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# Do"
@@ -13166,8 +13174,8 @@ msgid ""
 "hold history (checkout history is still stored, regardless of staff being "
 "allowed access or not)."
 msgstr ""
-"staff to access a user's checkout and hold history (checkout history is "
-"still stored, regardless of staff being allowed access or not)."
+"staff to access a user's borrowing and reservation history (borrowing "
+"history is still stored, regardless of staff being allowed access or not)."
 
 # Patrons > Security
 msgid ""
@@ -14101,7 +14109,7 @@ msgstr "Place"
 msgid ""
 "serials.pref#RoutingListAddReserves# received serials on hold if they are on "
 "a routing list."
-msgstr "received serials on hold if they are on a routing list."
+msgstr "received reserved serials if they are on a routing list."
 
 # Serials
 msgid ""
@@ -14318,8 +14326,8 @@ msgid ""
 "staff_interface.pref#HidePatronName# the names of patrons that have items "
 "checked out or on hold on detail pages or the \"Place Hold\" screen."
 msgstr ""
-"the names of users that have items checked out or on hold on detail pages or "
-"the \"Place Hold\" screen."
+"the names of users that have items issued or reserved on detail pages or the "
+"\"Place Reservation\" screen."
 
 # Staff interface > Options
 msgid "staff_interface.pref#IntranetAddMastheadLibraryPulldown# Don't show"
@@ -14429,8 +14437,8 @@ msgid ""
 "staff_interface.pref#SlipCSS# on Issue and Hold Slips. (This should be a "
 "complete URL, starting with <code>http://</code>.)"
 msgstr ""
-"on Issue and Hold Slips. (This should be a complete URL, starting with "
-"<code>http://</code>.)"
+"on Issue and Reservation Slips. (This should be a complete URL, starting "
+"with <code>http://</code>.)"
 
 # Staff interface > Options
 msgid "staff_interface.pref#StaffDetailItemSelection# Disable"
@@ -14612,7 +14620,7 @@ msgstr "Show"
 # Staff Client > Options
 msgid ""
 "staff_interface.pref#intranetbookbag# the cart option in the staff interface."
-msgstr "the cart option in the staff interface."
+msgstr "the folder option in the staff interface."
 
 # Staff interface > Appearance
 msgid ""
