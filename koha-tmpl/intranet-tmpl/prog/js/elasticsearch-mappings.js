@@ -42,8 +42,8 @@ $(document).ready(function () {
     tableInit( "", "search_fields");
 
     $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
-        var oldtabid = $(e.relatedTarget).data("tab");
-        var newtabid = $(e.target).data("tab");
+        var oldtabid = $(e.relatedTarget).data("tabname");
+        var newtabid = $(e.target).data("tabname");
         tableInit( oldtabid, newtabid );
     });
 
