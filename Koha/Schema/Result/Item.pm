@@ -975,11 +975,15 @@ __PACKAGE__->many_to_many(
 __PACKAGE__->has_many(
   "current_branchtransfers",
   "Koha::Schema::Result::Branchtransfer",
-  { 'foreign.itemnumber' => 'self.itemnumber' },
-  {
-      where => { datearrived => undef, datecancelled => undef },
-      order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ]
-  }
+    sub {
+        my $args = shift;
+
+        return {
+            "$args->{foreign_alias}.itemnumber"    => { -ident => "$args->{self_alias}.itemnumber" },
+            "$args->{foreign_alias}.datearrived"   => undef,
+            "$args->{foreign_alias}.datecancelled" => undef,
+        };
+    },
 );
 
 # Relationship with bundled items
