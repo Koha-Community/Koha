@@ -31,6 +31,7 @@ use Koha::ERM::EUsage::UsageItems;
 use Koha::ERM::EUsage::UsageTitle;
 use Koha::ERM::EUsage::UsageTitles;
 use Koha::ERM::EUsage::UsageDataProvider;
+use Koha::ERM::EUsage::SushiCounter;
 use Koha::Exceptions::ERM::EUsage::CounterFile;
 
 use base qw(Koha::Object);
@@ -214,7 +215,7 @@ sub _add_monthly_usage_entries {
 
     my $usage_data_provider = $self->get_usage_data_provider;
     my $usage_object_info   = $self->_get_usage_object_id_hash($usage_object);
-    my $specific_fields     = $usage_data_provider->get_report_type_specific_fields( $self->type );
+    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields( $self->type );
 
     $usage_object->monthly_usages(
         [
@@ -246,7 +247,7 @@ sub _add_yearly_usage_entries {
 
     my $usage_data_provider = $self->get_usage_data_provider;
     my $usage_object_info   = $self->_get_usage_object_id_hash($usage_object);
-    my $specific_fields     = $usage_data_provider->get_report_type_specific_fields( $self->type );
+    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields( $self->type );
 
     while ( my ( $year, $usage ) = each( %{$yearly_usages} ) ) {
 
@@ -529,7 +530,7 @@ sub _add_usage_object_entry {
     my ( $self, $row ) = @_;
 
     my $usage_data_provider = $self->get_usage_data_provider;
-    my $specific_fields     = $usage_data_provider->get_report_type_specific_fields( $self->type );
+    my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields( $self->type );
 
     if ( $self->type =~ /PR/i ) {
         return Koha::ERM::EUsage::UsagePlatform->new(
