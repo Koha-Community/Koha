@@ -84,6 +84,7 @@ Acquisitions:
               syntax: text/x-yaml
             - "You can use the following fields: homebranch, holdingbranch, itype, nonpublic_note, public_note, loc, ccode, notforloan, uri, copyno, price, replacementprice and itemcallnumber. Special fields: quantity and budget_code"
             - "<br/>For example:<br/>holdingbranch: 975$b<br/>itype: 975$9|975$z"
+            - If a field is missing or not mapped, MarcFieldsToOrder will be checked and used for that field ( except quantity ).
         -
             - pref: ClaimsBccCopy
               default: no
