@@ -967,10 +967,10 @@
                         [% END %]
 
                         [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && ( normalized_isbn || normalized_upc ) ) %]
-                            [% WRAPPER tab_panel tabname="NovelistSelect" %]
-                                <h2>Novelist Select</h2>
-                                <div data-novelist-novelistselect="[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]"></div>
-                            [% END # /tab_panel#NovelistSelect %]
+                            <span class="results_summary NovelistSelect" style="display:none;">
+                                <span class="label">Novelist Select: </span>
+                                <div data-novelist-novelistselect=[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]></div>
+                            </span>
                         [% END %]
                     [% END # /WRAPPER tab_panels %]
                 [% END # /WRAPPER tabs#bibliodescriptions %]
