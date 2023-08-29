@@ -20,7 +20,7 @@
                             [% ELSE %]
                                 [% IF ( languages_loo.group_enabled ) %]
                                     [% IF ( languages_loo.current ) %]
-                                        <a class="dropdown-item" href="#" tabindex="-1" class="menu-inactive" role="menuitem">
+                                        <a class="dropdown-item menu-inactive" href="#" tabindex="-1" role="menuitem">
                                             [% IF ( languages_loo.native_description ) %]
                                                 [% languages_loo.native_description | html %]
                                             [% ELSE %]
