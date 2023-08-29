@@ -984,6 +984,7 @@ __PACKAGE__->has_many(
             "$args->{foreign_alias}.datecancelled" => undef,
         };
     },
+    { order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ] }
 );
 
 # Relationship with bundled items
