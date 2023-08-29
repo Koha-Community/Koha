@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 07:28-0300\n"
-"PO-Revision-Date: 2022-10-25 10:31+0000\n"
-"Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
+"PO-Revision-Date: 2023-08-25 10:00+0000\n"
+"Last-Translator: Urszula <matoga@biblos.pk.edu.pl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /pl/22.11/pl-PL-pref.po\n"
-"X-POOTLE-MTIME: 1666693909.797398\n"
+"X-POOTLE-MTIME: 1692957635.026950\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -171,7 +171,6 @@ msgstr "Wymagaj"
 
 # Accounting > Policy > RequirePaymentType
 # Administration > Share anonymous usage statistics
-#, fuzzy
 msgid ""
 "accounting.pref#RequirePaymentType# This preference has no effect when <a "
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -180,9 +179,12 @@ msgid ""
 "authorised_values.pl?searchfield=PAYMENT_TYPE\">PAYMENT_TYPE</a> authorized "
 "value category."
 msgstr ""
-"Opcja nie działa, jeśli <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a> jest włączona "
-"lub nie jest zdefiniowana żadna dopuszczona wartość w kategorii PAYMENT_TYPE."
+"Opcja nie działa, jeśli <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
+">UseCashRegisters</a> jest włączona lub nie jest zdefiniowana żadna "
+"dopuszczona wartość w kategorii <a href=\"/cgi-"
+"bin/koha/admin/authorised_values.pl?searchfield=PAYMENT_TYPE\""
+">PAYMENT_TYPE</a>."
 
 # Accounting > Policy > RequirePaymentType
 # Accounting > Policy
@@ -475,16 +477,16 @@ msgstr "lokalizacji"
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#EmailPurchaseSuggestions# <br>If you choose <a href=\"/cgi-"
 "bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailAddressForSuggestions"
 "\">EmailAddressForSuggestions</a> you have to enter a valid email address:"
 msgstr ""
-"Jeśli wybierzesz <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailAddressForSuggestions"
-"\">EmailAddressForSuggestions</a>, musisz wprowadzić poprawny adres e-mail:"
+"<br>Jeśli wybierzesz <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"EmailAddressForSuggestions\">EmailAddressForSuggestions</a>, musisz "
+"wprowadzić poprawny adres e-mail:"
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
 # Acquisitions > Policy
@@ -677,14 +679,13 @@ msgstr ""
 
 # Acquisitions > Policy > TaxRates
 # Acquisitions > Policy
-#, fuzzy
 msgid ""
 "acquisitions.pref#TaxRates# <br/><strong>NOTE:</strong> The database will "
 "only accept values up to 4 decimals precision, further values will be "
 "rounded."
 msgstr ""
-"Uwaga: Baza danych akceptuje jedynie wartości do 4 miejsc po przecinku, "
-"dalsze wartości będą zaokrąglane."
+"<br/><strong>Uwaga:</strong> Baza danych akceptuje jedynie wartości do 4 "
+"miejsc po przecinku, dalsze wartości będą zaokrąglane."
 
 # Acquisitions > Policy > TaxRates
 msgid ""
@@ -2848,7 +2849,6 @@ msgstr "Gdy modyfikujesz rekordy,"
 
 # Authorities > General > AutoCreateAuthorities
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#AutoCreateAuthorities# authority records that are missing "
 "(<a href=\"/cgi-bin/koha/admin/preferences.pl?"
@@ -2856,9 +2856,10 @@ msgid ""
 "\">RequireChoosingExistingAuthority</a> must be set to \"don't require\" for "
 "this to have any effect)."
 msgstr ""
-"haseł wzorcowych (ustaw opcję <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities\">BiblioAddsAuthorities</a> na "
-"wartość 'Zezwalaj')."
+"haseł wzorcowych (ustaw opcję <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield="
+"RequireChoosingExistingAuthority\">RequireChoosingExistingAuthority</a> na "
+"wartość \"nie wymagaj\")."
 
 # Authorities > General > AutoCreateAuthorities
 # Authorities > General
@@ -2884,7 +2885,6 @@ msgstr "Nie uaktualniaj linków"
 
 # Authorities > Linker > AutoLinkBiblios
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "authorities.pref#AutoLinkBiblios# attempt to automatically link headings "
 "when saving records in the cataloging module, obeys <a href='/cgi-bin/koha/"
@@ -2893,11 +2893,11 @@ msgid ""
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
 "record edits."
 msgstr ""
-"ostatniego użytkownika zwracającego egzemplarz. Ustawienie jest niezależne "
-"od <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=opacreadinghistory\">opacreadinghistory</a> i <a href="
-"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron"
-"\">AnonymousPatron</a>."
+"haseł podczas zapisywania rekordów w module katalogowania. Linki są "
+"aktualizowane zgodnie z ustawieniami <a href='/cgi-bin/koha/admin/preferences"
+".pl?op=search&searchfield=LinkerRelink'>LinkerRelink</a> i <a href='/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=CatalogModuleRelink'>CatalogM"
+"oduleRelink</a>."
 
 # Authorities > Linker > CatalogModuleRelink
 # Authorities > Linker
@@ -2911,19 +2911,18 @@ msgstr "Nie uaktualniaj automatycznie linków"
 
 # Authorities > Linker > CatalogModuleRelink
 # Authorities > Linker
-#, fuzzy
 msgid ""
 "authorities.pref#CatalogModuleRelink# automatically relink headings that "
 "have previously been linked when saving records in the cataloging module "
 "(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
-"haseł, które wcześniej były połączone, gdy zapisywano rekordy w module "
-"katalogowania."
+"haseł, które wcześniej były połączone, podczas zapisywania rekordów w module "
+"katalogowania (wymaga <a href='/cgi-bin/koha/admin/preferences.pl?op=search&s"
+"earchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 
 # Authorities > General > GenerateAuthorityField667
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField667# Use the following text as "
 "default value for the 667$a field of MARC21 authority records (must not "
@@ -2933,14 +2932,13 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Wyświetl tekst dla zawartości pola 667$a MARC21 hasła wzorcowego (wymaga <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> i <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+"href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RequireChoosin"
+"gExistingAuthority'>RequireChoosingExistingAuthority</a> i <a href='/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCr"
+"eateAuthorities</a>):"
 
 # Authorities > General > GenerateAuthorityField670
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "authorities.pref#GenerateAuthorityField670# Use the following text as "
 "default value for the 670$a field of MARC21 authority records (must not "
@@ -2950,10 +2948,10 @@ msgid ""
 "op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
 msgstr ""
 "Wyświetl tekst dla zawartości pola 670$a MARC21 hasła wzorcowego (wymaga <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=BiblioAddsAuthorities'>BiblioAddsAuthorities</a> i <a "
-"href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=AutoCreateAuthorities'>AutoCreateAuthorities</a>):"
+"href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RequireChoosin"
+"gExistingAuthority'>RequireChoosingExistingAuthority</a> i <a href='/cgi-bin/"
+"koha/admin/preferences.pl?op=search&searchfield=AutoCreateAuthorities'>AutoCr"
+"eateAuthorities</a>):"
 
 # Authorities > Linker > LinkerKeepStale
 # Authorities > Linker
@@ -3366,11 +3364,15 @@ msgstr ""
 msgid "cataloguing.pref#CatalogConcerns# Don't allow"
 msgstr ""
 
-# Cataloging > Interface > CatalogConcerns
+# Logging > Logging > CataloguingLog
+# Logging > Logging
+#, fuzzy
 msgid ""
-"cataloguing.pref#CatalogConcerns# staff to report concerns about catalog "
-"records."
+"cataloguing.pref#CatalogConcerns# staff to report concerns about "
+"bibliographic records."
 msgstr ""
+"o wszystkich zmianach w rekordach bibliograficznych lub rekordach "
+"egzemplarza."
 
 # Cataloging > Interface > CatalogerEmails
 msgid ""
@@ -5467,11 +5469,12 @@ msgstr "zwracany egzemplarz, który ma status 'Wycofany'."
 
 # Circulation > Item bundles > BundleLostValue
 # Circulation > Return claims
-#, fuzzy
 msgid ""
 "circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
 "authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
-msgstr "Użyj domyślnej wartości LOST"
+msgstr ""
+"Użyj domyślnej wartości <a href=\"/cgi-"
+"bin/koha/admin/authorised_values.pl?searchfield=LOST\">LOST</a>"
 
 # Circulation > Item bundles > BundleLostValue
 # Circulation > Return claims
@@ -5483,11 +5486,12 @@ msgstr "do oznaczania 'reklamacji zwrotu'."
 
 # Circulation > Item bundles > BundleNotLoanValue
 # Circulation > Return claims
-#, fuzzy
 msgid ""
 "circulation.pref#BundleNotLoanValue# Use the <a href=\"/cgi-bin/koha/admin/"
 "authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a> authorized value"
-msgstr "Użyj domyślnej wartości LOST"
+msgstr ""
+"Użyj domyślnej wartości <a href=\"/cgi-"
+"bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN\">NOT_LOAN</a>"
 
 # Circulation > Item bundles > BundleNotLoanValue
 # Circulation > Return claims
@@ -5736,11 +5740,12 @@ msgstr "nie naliczaj opłaty za zgubienie"
 
 # Circulation > Return claims > ClaimReturnedLostValue
 # Circulation > Return claims
-#, fuzzy
 msgid ""
 "circulation.pref#ClaimReturnedLostValue# Use the <a href=\"/cgi-bin/koha/"
 "admin/authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
-msgstr "Użyj domyślnej wartości LOST"
+msgstr ""
+"Użyj domyślnej wartości <a href=\"/cgi-"
+"bin/koha/admin/authorised_values.pl?searchfield=LOST\">LOST</a>"
 
 # Circulation > Return claims > ClaimReturnedLostValue
 # Circulation > Return claims
@@ -12936,8 +12941,8 @@ msgstr ""
 
 # OPAC > Features > OpacCatalogConcerns
 msgid ""
-"opac.pref#OpacCatalogConcerns# OPAC users to report concerns about catalog "
-"records."
+"opac.pref#OpacCatalogConcerns# OPAC users to report concerns about "
+"bibliographic records."
 msgstr ""
 
 # OPAC > Features > OpacCloud

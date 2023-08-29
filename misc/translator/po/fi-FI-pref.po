@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 07:12-0300\n"
-"PO-Revision-Date: 2023-06-06 09:51+0000\n"
-"Last-Translator: Katariina Hanhisalo <katariina.hanhisalo@xamk.fi>\n"
+"PO-Revision-Date: 2023-08-22 11:36+0000\n"
+"Last-Translator: pknuuti <paivi.knuutinen@joensuu.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /fi/22.11/fi-FI-pref.po\n"
-"X-POOTLE-MTIME: 1686045074.480295\n"
+"X-POOTLE-MTIME: 1692704170.676094\n"
 
 # Accounting > Policy
 msgid "accounting.pref"
@@ -2953,6 +2953,9 @@ msgid ""
 "Enabling this preference may require a reindex, and may generate new "
 "authority records if AutoCreateAuthorities is enabled."
 msgstr ""
+"6XX-termien lähteitä auktoriteetti-tesaurukseen, kun tietueita linkitetään. "
+"Tämän laittaminen päälle voi vaatia uudelleenindeksoinnin ja saattaa luoda "
+"uusia auktoriteettitietueita, jos AutoCreateAuthorities on päällä."
 
 # Authorities > Linker > LinkerKeepStale
 # Authorities > Linker
@@ -3350,15 +3353,15 @@ msgstr "Älä salli"
 
 # Cataloging > Interface > CatalogConcerns
 msgid ""
-"cataloguing.pref#CatalogConcerns# staff to report concerns about catalog "
-"records."
-msgstr "henkilökunnan raportoida kuvailutietueissa olevista ongelmista."
+"cataloguing.pref#CatalogConcerns# staff to report concerns about "
+"bibliographic records."
+msgstr "henkilökunnan raportoida kuvailutietueissa olevista virheistä."
 
 # Cataloging > Interface > CatalogerEmails
 msgid ""
 "cataloguing.pref#CatalogerEmails#  as the notification address for catalog "
 "concerns."
-msgstr " osoitteena, johon raportit kuvailutietuiden ongelmista lähetetään."
+msgstr " osoitteena, johon raportit kuvailutietuiden virheistä lähetetään."
 
 # Cataloging > Interface > CatalogerEmails
 msgid "cataloguing.pref#CatalogerEmails# Use "
@@ -6575,13 +6578,12 @@ msgstr ""
 
 # Circulation > Checkout policy > ItemsDeniedRenewal
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#ItemsDeniedRenewal# <br /> <strong>NOTE:</strong> The word "
 "'null' can be used to block renewal on undefined fields, while an empty "
 "string \"\" will block on an empty (but defined) field."
 msgstr ""
-"<br /> <strong>HUOM:</strong> Sanaa 'NULL' käytetään estämään uusinta "
+"<br /> <strong>HUOM:</strong> Sanaa 'null' käytetään estämään uusinta "
 "määrittelemättömissä kentissä, kun tyhjä merkki \"\" estää tyhjän (mutta "
 "määritellyn) kentän."
 
@@ -6596,9 +6598,8 @@ msgstr ""
 
 # Circulation > Checkout policy > ItemsDeniedRenewal
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,null,DVD]"
-msgstr "<br />ccode: [NEWFIC,NULL,DVD]"
+msgstr "<br />ccode: [NEWFIC,null,DVD]"
 
 # Circulation > Checkout policy > ItemsDeniedRenewal
 # Circulation > Checkout policy
@@ -12020,16 +12021,16 @@ msgid "opac.pref#OPACResultsLibrary# home library"
 msgstr "kotikirjasto"
 
 # OPAC > Appearance > OPACResultsMaxItems
-#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# . (NOTE: For large consortia we recommend to "
 "group unavailable items by 'substatus only', listing item counts per "
 "substatus. Similarly the option 'library only' results in unavailable item "
 "counts per library.)"
 msgstr ""
-"mukaan. HUOM: Suurille yhteenliittymille suosittelemme ei saatavana olevien "
+". (HUOM: Suurille yhteenliittymille suosittelemme ei saatavana olevien "
 "niteiden ryhmittämistä osatilan (substatus) mukaan, jolloin näytetään vain "
-"niteiden määrä.)"
+"niteiden määrä per osatila. Samantapaisesti vaihtoehdoll 'vain kirjasto' "
+"laskee ei saatavana olevat kirjaston mukaisesti.)"
 
 # OPAC > Appearance > OPACResultsMaxItems
 # OPAC > Appearance
@@ -12043,6 +12044,10 @@ msgid ""
 "\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
 "show no more than"
 msgstr ""
+"Jos <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> -asetukseen on asetettu \"kirjasto "
+"ja osatila\", ei näytetä enempää kuin"
 
 # OPAC > Appearance > OPACResultsMaxItems
 # OPAC > Appearance
@@ -12056,13 +12061,12 @@ msgid ""
 msgstr "(saatavana olevaa) yksittäistä nidettä OPAC XSLT hakutuloksissa. <br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
-#, fuzzy
 msgid ""
 "opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
 "and category (like Checked out, Damaged, On hold, etc.)<br>"
 msgstr ""
-"(ei saatavana olevaa) yksittäistä nidettä kategorioille Lainassa, "
-"Vahingoittunut, Varattu, mutta vain, jos ne ryhmitetään kirjaston mukaan.<br>"
+"(ei saatavana olevaa) yksittäistä nidettä per kirjasto ja kategoria (kuten "
+"Lainassa, Vahingoittunut, Varattu jne.) <br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 # OPAC > Appearance
@@ -12763,7 +12767,7 @@ msgid ""
 msgstr ""
 "<p><strong>HUOM:</strong> Järjestelmäasetus '<a href=\"/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=CatalogConcerns\">CatalogConcerns</a>' "
-"sallii kuvailutietueiden ongelmien raportoinnin virkailijaliittymässä.</p>"
+"sallii kuvailutietueiden virheiden raportoinnin virkailijaliittymässä.</p>"
 
 # OPAC > Features > OpacCatalogConcerns
 msgid "opac.pref#OpacCatalogConcerns# Allow"
@@ -12775,9 +12779,9 @@ msgstr "Älä salli"
 
 # OPAC > Features > OpacCatalogConcerns
 msgid ""
-"opac.pref#OpacCatalogConcerns# OPAC users to report concerns about catalog "
-"records."
-msgstr "asiakkaiden raportoida kuvailutietueiden ongelmista verkkokirjastossa."
+"opac.pref#OpacCatalogConcerns# OPAC users to report concerns about "
+"bibliographic records."
+msgstr "asiakkaiden raportoida kuvailutietueiden virheistä verkkokirjastossa."
 
 # OPAC > Features > OpacCloud
 # Circulation > Holds policy
@@ -14552,12 +14556,13 @@ msgstr ""
 
 # Patrons > General > DefaultPatronSearchFields
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
 "option in the patrons or circulation module:"
-msgstr "Pilkulla erotettu lista oletuskentistä, joita käytetään asiakashaussa:"
+msgstr ""
+"Pilkulla erotettu lista oletuskentistä, joita käytetään asiakashaussa "
+"perushakua käytettäessä:"
 
 # Patrons > General > DefaultPatronSearchFields
 # Patrons > General
@@ -14573,9 +14578,8 @@ msgstr ""
 
 # Searching > Results display > RetainPatronsSearchTerms
 # Searching > Features
-#, fuzzy
 msgid "patrons.pref#DefaultPatronSearchMethod# Contains"
-msgstr "Älä säilytä"
+msgstr "Sisältää"
 
 # Patrons > General > DefaultPatronSearchMethod
 msgid ""
@@ -14583,10 +14587,12 @@ msgid ""
 "determine whether to use Starts with or Contains for autocomplete patron "
 "searches."
 msgstr ""
+"Määritä, käytetäänkö asiakashakutoiminnossa Alkaa vai Sisältää -tyyppistä "
+"hakua."
 
 # Patrons > General > DefaultPatronSearchMethod
 msgid "patrons.pref#DefaultPatronSearchMethod# Starts with"
-msgstr ""
+msgstr "Alkaa"
 
 # Patrons > Notices and notifications > EmailFieldPrecedence
 msgid ""
