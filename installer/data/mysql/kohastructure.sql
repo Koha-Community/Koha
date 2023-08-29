@@ -4690,7 +4690,7 @@ DROP TABLE IF EXISTS `patron_consent`;
 CREATE TABLE `patron_consent` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `borrowernumber` int(11) NOT NULL,
-  `type` enum('GDPR_PROCESSING') DEFAULT NULL COMMENT 'allows for future extension',
+  `type` tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'consent type, could be custom type',
   `given_on` datetime DEFAULT NULL,
   `refused_on` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
