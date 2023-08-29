@@ -319,10 +319,10 @@ __PACKAGE__->has_many(
 # );
 
 sub koha_object_class {
-    'Koha::ERM::UsageDataProvider';
+    'Koha::ERM::EUsage::UsageDataProvider';
 }
 sub koha_objects_class {
-    'Koha::ERM::UsageDataProviders';
+    'Koha::ERM::EUsage::UsageDataProviders';
 }
 
 1;

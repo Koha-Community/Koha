@@ -153,9 +153,9 @@ __PACKAGE__->belongs_to(
 
 
 sub koha_object_class {
-    'Koha::ERM::CounterLog';
+    'Koha::ERM::EUsage::CounterLog';
 }
 sub koha_objects_class {
-    'Koha::ERM::CounterLogs';
+    'Koha::ERM::EUsage::CounterLogs';
 }
 1;

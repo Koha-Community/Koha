@@ -1,7 +1,7 @@
 ---
 /erm/default_usage_reports:
   get:
-    x-mojo-to: ERM::DefaultUsageReports#list
+    x-mojo-to: ERM::EUsage::DefaultUsageReports#list
     operationId: listErmDefaultUsageReports
     tags:
       - default_usage_report
@@ -59,7 +59,7 @@
       permissions:
         erm: 1
   post:
-    x-mojo-to: ERM::DefaultUsageReports#add
+    x-mojo-to: ERM::EUsage::DefaultUsageReports#add
     operationId: addErmDefaultUsageReports
     tags:
       - default_usage_report
@@ -120,7 +120,7 @@
         erm: 1
 "/erm/default_usage_reports/{erm_default_usage_report_id}":
   get:
-    x-mojo-to: ERM::DefaultUsageReports#get
+    x-mojo-to: ERM::EUsage::DefaultUsageReports#get
     operationId: getERMDefaultUsageReport
     tags:
       - default_usage_report
@@ -161,7 +161,7 @@
       permissions:
         erm: 1
   put:
-    x-mojo-to: ERM::DefaultUsageReports#update
+    x-mojo-to: ERM::EUsage::DefaultUsageReports#update
     operationId: updateERMDefaultUsageReports
     tags:
       - default_usage_report
@@ -218,7 +218,7 @@
       permissions:
         erm: 1
   delete:
-    x-mojo-to: ERM::DefaultUsageReports#delete
+    x-mojo-to: ERM::EUsage::DefaultUsageReports#delete
     operationId: deleteERMDefaultUsageReports
     tags:
       - default_usage_report

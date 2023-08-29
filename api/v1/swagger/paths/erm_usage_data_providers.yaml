@@ -1,7 +1,7 @@
 ---
 /erm/usage_data_providers:
   get:
-    x-mojo-to: ERM::UsageDataProviders#list
+    x-mojo-to: ERM::EUsage::UsageDataProviders#list
     operationId: listErmUsageDataProviders
     tags:
       - usage_data_provider
@@ -129,7 +129,7 @@
       permissions:
         erm: 1
   post:
-    x-mojo-to: ERM::UsageDataProviders#add
+    x-mojo-to: ERM::EUsage::UsageDataProviders#add
     operationId: addErmUsageDataProviders
     tags:
       - usage_data_provider
@@ -190,7 +190,7 @@
         erm: 1
 "/erm/usage_data_providers/{erm_usage_data_provider_id}":
   get:
-    x-mojo-to: ERM::UsageDataProviders#get
+    x-mojo-to: ERM::EUsage::UsageDataProviders#get
     operationId: getERMUsageDataProvider
     tags:
       - usage_data_provider
@@ -242,7 +242,7 @@
       permissions:
         erm: 1
   put:
-    x-mojo-to: ERM::UsageDataProviders#update
+    x-mojo-to: ERM::EUsage::UsageDataProviders#update
     operationId: updateERMUsageDataProviders
     tags:
       - usage_data_provider
@@ -307,7 +307,7 @@
       permissions:
         erm: 1
   delete:
-    x-mojo-to: ERM::UsageDataProviders#delete
+    x-mojo-to: ERM::EUsage::UsageDataProviders#delete
     operationId: deleteERMUsageDataProviders
     tags:
       - usage_data_provider
@@ -354,7 +354,7 @@
         erm: 1
 "/erm/usage_data_providers/{erm_usage_data_provider_id}/process_SUSHI_response":
   post:
-    x-mojo-to: ERM::UsageDataProviders#process_SUSHI_response
+    x-mojo-to: ERM::EUsage::UsageDataProviders#process_SUSHI_response
     operationId: processSUSHICounterUsageDataProviderHarvester
     tags:
       - usage data provider harvester
@@ -408,7 +408,7 @@
         erm: 1
 "/erm/usage_data_providers/{erm_usage_data_provider_id}/process_COUNTER_file":
   post:
-    x-mojo-to: ERM::UsageDataProviders#process_COUNTER_file
+    x-mojo-to: ERM::EUsage::UsageDataProviders#process_COUNTER_file
     operationId: processCOUNTERFileUsageDataProviderHarvester
     tags:
       - usage data provider harvester
@@ -452,7 +452,7 @@
         erm: 1
 "/erm/usage_data_providers/{erm_usage_data_provider_id}/test_connection":
   get:
-    x-mojo-to: ERM::UsageDataProviders#test_connection
+    x-mojo-to: ERM::EUsage::UsageDataProviders#test_connection
     operationId: testUsageDataProviderHarvester
     tags:
       - usage data provider harvester
@@ -490,7 +490,7 @@
         erm: 1
 "/erm/usage_data_providers/report":
   get:
-    x-mojo-to: ERM::UsageDataProviders#providers_report
+    x-mojo-to: ERM::EUsage::UsageDataProviders#providers_report
     operationId: reportUsageDataProvider
     tags:
       - usage data provider report

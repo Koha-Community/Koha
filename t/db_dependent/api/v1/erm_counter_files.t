@@ -25,7 +25,7 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::ERM::CounterFiles;
+use Koha::ERM::EUsage::CounterFiles;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -40,7 +40,7 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::ERM::CounterFiles->search->delete;
+    Koha::ERM::EUsage::CounterFiles->search->delete;
 
     my $librarian = $builder->build_object(
         {
@@ -68,7 +68,7 @@ subtest 'list() tests' => sub {
       ->json_is( [] );
 
     my $counter_file =
-      $builder->build_object( { class => 'Koha::ERM::CounterFiles' } );
+      $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
 
     # One counter_file created, should get returned
     $t->get_ok("//$userid:$password@/api/v1/erm/counter_files")->status_is(200)
@@ -76,7 +76,7 @@ subtest 'list() tests' => sub {
 
     my $another_counter_file = $builder->build_object(
         {
-            class => 'Koha::ERM::CounterFiles',
+            class => 'Koha::ERM::EUsage::CounterFiles',
         }
     );
 
@@ -93,7 +93,7 @@ qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]
 
     my $counter_file_to_search = $builder->build_object(
         {
-            class => 'Koha::ERM::CounterFiles',
+            class => 'Koha::ERM::EUsage::CounterFiles',
             value => {
                 type => 'koha',
             }
@@ -125,7 +125,7 @@ subtest 'get() tests' => sub {
     $schema->storage->txn_begin;
 
     my $counter_file =
-      $builder->build_object( { class => 'Koha::ERM::CounterFiles' } );
+      $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -156,7 +156,7 @@ subtest 'get() tests' => sub {
 
     # Attempt to get non-existent counter_file
     my $counter_file_to_delete =
-      $builder->build_object( { class => 'Koha::ERM::CounterFiles' } );
+      $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
     my $non_existent_id = $counter_file_to_delete->erm_counter_files_id;
     $counter_file_to_delete->delete;
 
@@ -193,7 +193,7 @@ subtest 'delete() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     my $counter_file_id =
-      $builder->build_object( { class => 'Koha::ERM::CounterFiles' } )
+      $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } )
       ->erm_counter_files_id;
 
     # Unauthorized attempt to delete

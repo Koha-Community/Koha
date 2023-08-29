@@ -18,12 +18,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Getopt::Long qw( GetOptions );
+use Getopt::Long    qw( GetOptions );
 use Koha::DateUtils qw( dt_from_string );
 use POSIX;
 
 use Koha::Script;
-use Koha::ERM::UsageDataProviders;
+use Koha::ERM::EUsage::UsageDataProviders;
 
 # Command line option values
 my $get_help   = 0;
@@ -45,12 +45,12 @@ if ($get_help) {
     exit 1;
 }
 
-my $udproviders = Koha::ERM::UsageDataProviders->search( { active => 1 } );
+my $udproviders = Koha::ERM::EUsage::UsageDataProviders->search( { active => 1 } );
 unless ( scalar @{ $udproviders->as_list() } ) {
     die "ERROR: No usage data providers found.";
 }
 
-unless ( $begin_date ) {
+unless ($begin_date) {
     die "ERROR: Please specify a begin-date";
 }
 
@@ -91,7 +91,6 @@ while ( my $udprovider = $udproviders->next ) {
             )
         );
     }
-
 
 }
 

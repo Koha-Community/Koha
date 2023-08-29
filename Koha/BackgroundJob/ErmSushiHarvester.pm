@@ -20,7 +20,7 @@ use Modern::Perl;
 use Try::Tiny;
 
 use Koha::DateUtils qw( dt_from_string );
-use Koha::ERM::UsageDataProviders;
+use Koha::ERM::EUsage::UsageDataProviders;
 
 use base 'Koha::BackgroundJob';
 
@@ -67,13 +67,12 @@ sub process {
         added_yus   => 0
     };
 
-# FIXME If the job has already been started, but started again (worker has been restart for instance)
-# Then we will start from scratch and so double process the same records
+    # FIXME If the job has already been started, but started again (worker has been restart for instance)
+    # Then we will start from scratch and so double process the same records
 
     $self->start;
 
-    my $ud_provider =
-      Koha::ERM::UsageDataProviders->find( $args->{ud_provider_id} );
+    my $ud_provider = Koha::ERM::EUsage::UsageDataProviders->find( $args->{ud_provider_id} );
 
     $ud_provider->set_background_job_callbacks(
         {

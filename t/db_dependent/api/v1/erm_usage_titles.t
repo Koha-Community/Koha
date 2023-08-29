@@ -25,7 +25,7 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::ERM::UsageTitles;
+use Koha::ERM::EUsage::UsageTitles;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -40,7 +40,7 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::ERM::UsageTitles->search->delete;
+    Koha::ERM::EUsage::UsageTitles->search->delete;
 
     my $librarian = $builder->build_object(
         {
@@ -68,7 +68,7 @@ subtest 'list() tests' => sub {
       ->json_is( [] );
 
     my $usage_title =
-      $builder->build_object( { class => 'Koha::ERM::UsageTitles' } );
+      $builder->build_object( { class => 'Koha::ERM::EUsage::UsageTitles' } );
 
     # One usage_title created, should get returned
     $t->get_ok("//$userid:$password@/api/v1/erm/usage_titles")->status_is(200)
@@ -76,7 +76,7 @@ subtest 'list() tests' => sub {
 
     my $another_usage_title = $builder->build_object(
         {
-            class => 'Koha::ERM::UsageTitles',
+            class => 'Koha::ERM::EUsage::UsageTitles',
         }
     );
 
@@ -93,7 +93,7 @@ qq~//$userid:$password@/api/v1/erm/usage_titles?q=[{"me.title":{"like":"%ko%"}}]
 
     my $usage_title_to_search = $builder->build_object(
         {
-            class => 'Koha::ERM::UsageTitles',
+            class => 'Koha::ERM::EUsage::UsageTitles',
             value => {
                 title => 'koha',
             }

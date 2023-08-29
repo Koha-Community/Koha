@@ -123,11 +123,11 @@ __PACKAGE__->belongs_to(
 
 
 sub koha_object_class {
-    'Koha::ERM::UsagePlatform';
+    'Koha::ERM::EUsage::UsagePlatform';
 }
 
 sub koha_objects_class {
-    'Koha::ERM::UsagePlatforms';
+    'Koha::ERM::EUsage::UsagePlatforms';
 }
 
 1;

@@ -1,7 +1,7 @@
 ---
 "/erm/counter_files/{erm_counter_files_id}/file/content":
   get:
-    x-mojo-to: ERM::CounterFiles#get
+    x-mojo-to: ERM::EUsage::CounterFiles#get
     operationId: downloadCounterFile
     tags:
       - counter_file
@@ -46,7 +46,7 @@
         erm: 1
 /erm/counter_files:
   get:
-    x-mojo-to: ERM::CounterFiles#list
+    x-mojo-to: ERM::EUsage::CounterFiles#list
     operationId: listErmCounterFiles
     tags:
       - counter_file
@@ -130,7 +130,7 @@
         erm: 1
 "/erm/counter_files/{erm_counter_files_id}":
   delete:
-    x-mojo-to: ERM::CounterFiles#delete
+    x-mojo-to: ERM::EUsage::CounterFiles#delete
     operationId: deleteERMCounterFiles
     tags:
       - counter_file

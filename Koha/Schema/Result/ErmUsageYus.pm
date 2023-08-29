@@ -256,10 +256,10 @@ __PACKAGE__->belongs_to(
 
 
 sub koha_object_class {
-    'Koha::ERM::YearlyUsage';
+    'Koha::ERM::EUsage::YearlyUsage';
 }
 sub koha_objects_class {
-    'Koha::ERM::YearlyUsages';
+    'Koha::ERM::EUsage::YearlyUsages';
 }
 
 1;

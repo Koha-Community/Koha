@@ -148,10 +148,10 @@ __PACKAGE__->belongs_to(
 
 
 sub koha_object_class {
-    'Koha::ERM::CounterFile';
+    'Koha::ERM::EUsage::CounterFile';
 }
 sub koha_objects_class {
-    'Koha::ERM::CounterFiles';
+    'Koha::ERM::EUsage::CounterFiles';
 }
 
 1;

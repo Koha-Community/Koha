@@ -1,6 +1,6 @@
 "/erm/eUsage/monthly_report/{data_type}":
   get:
-    x-mojo-to: ERM::CustomReports#monthly_report
+    x-mojo-to: ERM::EUsage::CustomReports#monthly_report
     operationId: getERMUsageMonthlyReport
     tags:
       - usage_report
@@ -59,7 +59,7 @@
         erm: 1
 "/erm/eUsage/yearly_report/{data_type}":
   get:
-    x-mojo-to: ERM::CustomReports#yearly_report
+    x-mojo-to: ERM::EUsage::CustomReports#yearly_report
     operationId: getERMUsageYearlyReport
     tags:
       - usage_report
@@ -118,7 +118,7 @@
         erm: 1
 "/erm/eUsage/metric_types_report/{data_type}":
   get:
-    x-mojo-to: ERM::CustomReports#metric_types_report
+    x-mojo-to: ERM::EUsage::CustomReports#metric_types_report
     operationId: getERMUsageMetricTypesReport
     tags:
       - usage_report
@@ -177,7 +177,7 @@
         erm: 1
 "/erm/eUsage/provider_rollup_report/{data_type}":
   get:
-    x-mojo-to: ERM::CustomReports#provider_rollup_report
+    x-mojo-to: ERM::EUsage::CustomReports#provider_rollup_report
     operationId: getERMUsageProviderRollupReport
     tags:
       - usage_report

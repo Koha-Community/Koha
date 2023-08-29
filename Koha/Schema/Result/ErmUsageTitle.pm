@@ -203,10 +203,10 @@ __PACKAGE__->belongs_to(
 
 
 sub koha_object_class {
-    'Koha::ERM::UsageTitle';
+    'Koha::ERM::EUsage::UsageTitle';
 }
 sub koha_objects_class {
-    'Koha::ERM::UsageTitles';
+    'Koha::ERM::EUsage::UsageTitles';
 }
 
 1;

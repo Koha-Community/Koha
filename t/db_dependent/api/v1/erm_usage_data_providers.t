@@ -25,7 +25,7 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::ERM::UsageDataProviders;
+use Koha::ERM::EUsage::UsageDataProviders;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -40,7 +40,7 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::ERM::UsageDataProviders->search->delete;
+    Koha::ERM::EUsage::UsageDataProviders->search->delete;
 
     my $librarian = $builder->build_object(
         {
@@ -87,7 +87,7 @@ subtest 'list() tests' => sub {
 
     my $another_usage_data_provider = $builder->build_object(
         {
-            class => 'Koha::ERM::UsageDataProviders',
+            class => 'Koha::ERM::EUsage::UsageDataProviders',
         }
     );
     my $another_udp_result = { %{ $another_usage_data_provider->to_api }, %additional_fields };
@@ -108,7 +108,7 @@ subtest 'list() tests' => sub {
 
     my $usage_data_provider_to_search = $builder->build_object(
         {
-            class => 'Koha::ERM::UsageDataProviders',
+            class => 'Koha::ERM::EUsage::UsageDataProviders',
             value => {
                 name => 'koha',
             }
