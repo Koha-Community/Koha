@@ -361,6 +361,14 @@
                                             </span>
                                         [% END %]
 
+                                        [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
+                                            <a href="#" class="btn btn-link listaddtocart disabled"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart</a>
+                                        [% END %]
+
+                                        [% IF Koha.Preference('virtualshelves') %]
+                                            <a href="#" class="btn btn-link addtolist disabled"><i class="fa fa-list" aria-hidden="true"></i> Add to list</a>
+                                        [% END %]
+
                                         [% IF ( TagsInputEnabled && loggedinusername ) %]
                                             <span id="addtags">
                                                 <a id="tagsel_tag" href="#" class="btn btn-link disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
@@ -379,7 +387,7 @@
                                 </div> <!-- / .selections-toolbar -->
                             </div> <!-- /#floating -->
 
-                            <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform">
+                            <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="bookbag_form">
                                 [% IF can_manage_shelf %]
                                     <input type="hidden" name="op" value="remove_biblios" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -1076,6 +1084,27 @@ $(function() {
         let link = this.href;
         Dopop( link );
     });
+
+    $(".listaddtocart").on("click", function(e){
+        e.preventDefault();
+        addMultiple();
+    });
+
+    $(".addtolist").on("click", function(e){
+        e.preventDefault();
+        cartList();
+    });
+
+    function cartList(){
+        [% IF ( loggedinusername ) %]
+            if (vShelfAdd()) {
+                Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?' + vShelfAdd());
+            }
+        [% ELSE %]
+            alert(_("You must be logged in to create or add to lists"));
+        [% END %]
+        return false;
+    }
 
 }); // document.ready
 
