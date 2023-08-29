@@ -476,6 +476,8 @@
                                                     <th>GST</th>
                                                     <th>Fund</th>
                                                     <th>Estimated delivery date</th>
+                                                    <th>Statistic 1</th>
+                                                    <th>Statistic 2</th>
                                                     [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                         <th>Supplier report</th>
                                                     [% END %]
@@ -506,6 +508,8 @@
                                                         <th>[% foot_loo.tax_value | $Price %]</th>
                                                         <th>&nbsp;</th>
                                                         <th>&nbsp;</th>
+                                                        <th>&nbsp;</th>
+                                                        <th>&nbsp;</th>
                                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                             <th>&nbsp;</th>
                                                         [% END %]
@@ -532,6 +536,8 @@
                                                     <th>[% total_tax_included | $Price %]</th>
                                                     <th>&nbsp;</th>
                                                     <th>[% total_tax_value | $Price %]</th>
+                                                    <th>&nbsp;</th>
+                                                    <th>&nbsp;</th>
                                                     <th>&nbsp;</th>
                                                     <th>&nbsp;</th>
                                                     [% IF Koha.Preference('EDIFACT') && ediaccount %]
@@ -654,6 +660,8 @@
                                                                     <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                                             [% END %]
                                                         </td>
+                                                        <td>[% books_loo.sort1 | html %]</td>
+                                                        <td>[% books_loo.sort2 | html %]</td>
                                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                             <td>[% books_loo.suppliers_report | html %]</td>
                                                         [% END %]
@@ -1079,12 +1087,12 @@
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
             [% IF !(Koha.Preference('EDIFACT') && ediaccount) %]
-                table_settings['columns'].splice(16, 1);
+                table_settings['columns'].splice(18, 1);
             [% END %]
             KohaTable("orders", {
                 "sPaginationType": "full",
                 "autoWidth": false,
-                "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15[% IF (Koha.Preference('EDIFACT') && ediaccount) %],16[% END %]],
+                "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17[% IF (Koha.Preference('EDIFACT') && ediaccount) %],18[% END %]],
             }, table_settings);
 
             var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
