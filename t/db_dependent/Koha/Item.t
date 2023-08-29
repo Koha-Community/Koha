@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Test::Exception;
 use Test::MockModule;
 
@@ -1171,6 +1171,73 @@ subtest 'get_transfers' => sub {
     is($transfers->count, 1, 'Once a transfer is cancelled, it no longer appears in the list from ->get_transfers()');
     $result_1 = $transfers->next;
     is( $result_1->branchtransfer_id, $transfer_3->branchtransfer_id, 'Koha::Item->get_transfers returns the only transfer that remains');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Test for relationship between item and current_branchtransfers' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $item     = $builder->build_sample_item();
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $item->itemnumber,
+                datesent      => dt_from_string,
+                datearrived   => dt_from_string,
+                datecancelled => undef,
+            }
+        }
+    );
+
+    my $transfer_item = $transfer->item;
+    my $biblio        = Koha::Biblios->find( $transfer_item->biblionumber );
+
+    my $current_branchtransfers = Koha::Items->search(
+        { 'me.itemnumber' => $transfer_item->itemnumber },
+        { prefetch        => ['current_branchtransfers'] }
+    );
+
+    my $item_with_branchtransfers = $current_branchtransfers->next;
+
+    is(
+        $transfer_item->itemnumber,
+        $item_with_branchtransfers->itemnumber,
+        'following two items are the same'
+    );
+
+    # following two tests should produce the same result
+    is(
+        $transfer_item->get_transfer,
+        undef,
+        'Koha::Item->get_transfer returns undef with no active transfers'
+    );
+    is(
+        $item_with_branchtransfers->get_transfer, undef,
+        'prefetched result->get_transfer returns undef with no active transfers'
+    );
+
+    $transfer->set(
+        {
+            datearrived => undef,
+        }
+    )->store;
+
+    $current_branchtransfers = Koha::Items->search(
+        { 'me.itemnumber' => $transfer_item->itemnumber },
+        { prefetch        => ['current_branchtransfers'] }
+    );
+
+    $item_with_branchtransfers = $current_branchtransfers->next;
+
+    is(
+        $transfer_item->get_transfer->branchtransfer_id,
+        $item_with_branchtransfers->get_transfer->branchtransfer_id,
+        'an active transfer produces same branchtransfer_id for both methods'
+    );
 
     $schema->storage->txn_rollback;
 };
