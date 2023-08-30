@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 use Koha::Database;
@@ -77,6 +77,44 @@ subtest 'anonymize() tests' => sub {
     $hold_2->discard_changes;
     is( $hold_2->borrowernumber, $anonymous_patron->id,
         'Anonymized hold linked to anonymouspatron' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'biblio() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $hold_1 = $builder->build_object(
+        {
+            class => 'Koha::Old::Holds',
+            value => { biblionumber => undef }
+        }
+    );
+
+    is( $hold_1->biblio, undef, 'Old hold has no biblionumber, returns undef' );
+
+    my $hold_2 = $builder->build_object(
+        {
+            class => 'Koha::Old::Holds',
+            value => { biblionumber => '' }
+        }
+    );
+
+    is( $hold_1->biblio, undef, 'Old hold has empty biblionumber, returns undef' );
+
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
+
+    my $hold_3 = $builder->build_object(
+        {
+            class => 'Koha::Old::Holds',
+            value => { biblionumber => $biblio->biblionumber }
+        }
+    );
+
+    is_deeply( $hold_3->biblio->unblessed, $biblio->unblessed, 'Old hold has a biblionumber, returns a biblio object' );
 
     $schema->storage->txn_rollback;
 };
