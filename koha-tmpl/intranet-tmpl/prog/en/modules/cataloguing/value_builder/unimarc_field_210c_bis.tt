@@ -8,9 +8,6 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-    #custom-doc { width:37.85em;*width:36.93em;min-width:492px; margin:auto; text-align:left; }
-</style>
 </head>
 
 <body id="cat_unimarc_field_210c_bis" class="cat value_builder">
@@ -21,12 +18,19 @@
         <form name="f_pop" onsubmit="javascript:report()" action="">
             <div id="fieldautocomplete" class="autocomplete">
                 <fieldset>
-                <input autocomplete="off" id="findvalue" name="findvalue" size="40" class="focus" type="text" />
-                    <fieldset class="action">
-                    <input type="submit" class="btn btn-primary" value="Choose" />
-                    </fieldset>
+                    <input autocomplete="off" id="findvalue" name="findvalue" size="40" class="focus" type="text" />
                 </fieldset>
             </div>
+
+            <nav class="navbar navbar-default navbar-fixed-bottom">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <button class="btn btn-default close_window">Cancel</button>
+                    </fieldset>
+                </div>
+            </nav>
+
         </form>
     </div>
 

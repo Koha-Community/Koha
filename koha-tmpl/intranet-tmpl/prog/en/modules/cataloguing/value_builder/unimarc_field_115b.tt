@@ -12,8 +12,8 @@
 
 <body id="cat_unimarc_field_115b" class="cat value_builder">
     <h1>UNIMARC field 115b builder</h1>
-    <div class="page-section">
-        <form name="f_pop" action="">
+    <form name="f_pop" action="">
+        <div class="page-section">
             <table>
                 <tr>
                     <td><label for="f1">Generation</label></td>
@@ -642,9 +642,17 @@
                     <td><label for="f10">Year</label> <input type="text" name="f10" id="f10" maxlength="4" size="5" value="[% f10 | html %]" /> <label for="f11">Month</label> <input type="text" name="f11" id="f11" maxlength="2" size="3" value="[% f11 | html %]" /></td>
                 </tr>
             </table>
-            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-        </form>
-    </div> <!-- /.page-section -->
+        </div> <!-- /.page-section -->
+
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
+                    <button class="btn btn-default close_window">Cancel</button>
+                </fieldset>
+            </div>
+        </nav>
+    </form>
 
 [% MACRO jsinclude BLOCK %]
     <script>

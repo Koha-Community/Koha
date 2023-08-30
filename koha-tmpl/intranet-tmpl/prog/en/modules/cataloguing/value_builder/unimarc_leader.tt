@@ -12,8 +12,8 @@
 
 <body id="cat_unimarc_leader" class="cat value_builder">
     <h1>UNIMARC leader builder</h1>
-    <div class="page-section">
-        <form name="f_pop" action="">
+    <form name="f_pop" action="">
+        <div class="page-section">
             <table>
                 <tr>
                     <td>1-4 Record length</td>
@@ -296,9 +296,18 @@
                     <td>(auto-filled)</td>
                 </tr>
             </table>
-            <fieldset class="action"><input type="button" class="btn btn-primary" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-        </form>
-    </div> <!-- /.page-section -->
+        </div> <!-- /.page-section -->
+
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="button" class="btn btn-primary" onclick="report();" value="Save" />
+                    <button class="btn btn-default close_window">Cancel</button>
+                </fieldset>
+            </div>
+        </nav>
+
+    </form>
 
 [% MACRO jsinclude BLOCK %]
     <script>

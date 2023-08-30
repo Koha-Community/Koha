@@ -13,8 +13,8 @@
     <div class="container-fluid">
         <h1>Framework plugin for UNIMARC 146$a</h1>
 
-        <div class="page-section">
-            <form class="form-horizontal" id="form">
+        <form class="form-horizontal" id="form">
+            <div class="page-section">
                 <input type="hidden" id="id" name="id" value="[% id | html %]">
 
                 <div class="form-group">
@@ -31,15 +31,18 @@
                         </select>
                     </div>
                 </div>
+            </div> <!-- /.page-section -->
 
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary">OK</button>
-                        <a href="#" class="cancel close">Cancel</a>
-                    </div>
+            <nav class="navbar navbar-default navbar-fixed-bottom">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <button class="btn btn-default close_window">Cancel</button>
+                    </fieldset>
                 </div>
-            </form>
-        </div> <!-- /.page-section -->
+            </nav>
+
+        </form>
     </div>
 
     <script>

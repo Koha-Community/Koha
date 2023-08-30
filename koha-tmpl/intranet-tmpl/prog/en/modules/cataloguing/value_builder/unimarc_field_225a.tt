@@ -10,8 +10,8 @@
 
 <body id="cat_unimarc_field_225a" class="cat value_builder">
     <h1>UNIMARC field 225a builder</h1>
-        <div id="mainbloc" class="page-section">
-            <form name="f_pop" onsubmit="report()" action="">
+        <form name="f_pop" onsubmit="report()" action="">
+            <div id="mainbloc" class="page-section">
                 <h2 class="authority">Collection</h2>
                 <p><label>Select a collection</label>
                     <select name="f1" id="f1">
@@ -26,9 +26,18 @@
                 </p>
                 OR new collection: <input type="text" value="" name="f2"/>
                 <br/>
-                <input type="submit" value="OK" class="button authority" />
-            </form>
-        </div>
+            </div>
+
+            <nav class="navbar navbar-default navbar-fixed-bottom">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <button class="btn btn-default close_window">Cancel</button>
+                    </fieldset>
+                </div>
+            </nav>
+
+        </form>
 
 
 [% MACRO jsinclude BLOCK %]

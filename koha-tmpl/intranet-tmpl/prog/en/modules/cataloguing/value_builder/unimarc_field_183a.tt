@@ -12,8 +12,8 @@
 <body id="cat_unimarc_field_183a" class="cat value_builder">
 
     <h3>UNIMARC field 183a builder</h3>
-    <div class="page-section">
-        <form name="f_pop" action="">
+    <form name="f_pop" action="">
+        <div class="page-section">
             <table>
                 <tr>
                     <td>
@@ -382,9 +382,18 @@
                     </td>
                 </tr>
             </table>
-            <p><input type="button" class="btn btn-primary" value="OK" onclick="submitMyForm();" /> <a href="#" class="cancel close">Cancel</a> </p>
-        </form>
-    </div> <!-- /.page-section -->
+        </div> <!-- /.page-section -->
+
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="button" class="btn btn-primary" onclick="submitMyForm();" value="Save" />
+                    <button class="btn btn-default close_window">Cancel</button>
+                </fieldset>
+            </div>
+        </nav>
+
+    </form>
 
 <script>
 
