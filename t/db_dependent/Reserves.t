@@ -1776,12 +1776,13 @@ subtest 'DefaultHoldExpiration tests' => sub {
 };
 
 subtest '_Findgroupreserves' => sub {
-    plan tests => 1;
+    plan tests => 4;
     $schema->storage->txn_begin;
 
     my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item     = $builder->build_sample_item();
+    my $item_2 = $builder->build_sample_item( { biblionumber => $item->biblionumber } );
 
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
     my $reserve_id_1 = AddReserve(
@@ -1810,6 +1811,22 @@ subtest '_Findgroupreserves' => sub {
 
     # When the hold is title level and in the hold fill targets we expect this to be the only hold returned
     my @reserves = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item->id, 0, [] );
-    is( scalar @reserves, 1, "We should only get the hold that is in the map" );
+    is( scalar @reserves,           1,             "We should only get the hold that is in the map" );
+    is( $reserves[0]->{reserve_id}, $reserve_id_1, "We got the expected reserve" );
+
+    C4::HoldsQueue::AddToHoldTargetMap(
+        {
+            $item_2->id => {
+                borrowernumber => $patron_2->id,        biblionumber => $item->biblionumber,
+                holdingbranch  => $item->holdingbranch, item_level   => 1, reserve_id => $reserve_id_2
+            }
+        }
+    );
+
+    # When the hold is title level and in the hold fill targets we expect this to be the only hold returned
+    @reserves = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item_2->id, 0, [] );
+    is( scalar @reserves,           1,             "We should only get the item level hold that is in the map" );
+    is( $reserves[0]->{reserve_id}, $reserve_id_2, "We got the expected reserve" );
+
     $schema->txn_rollback;
 };
