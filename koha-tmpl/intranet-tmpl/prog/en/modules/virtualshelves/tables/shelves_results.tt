@@ -39,7 +39,6 @@
     [%~ public      = public | html ~%]
     [%~ IF can_manage_shelf ~%]
         [%~ action_block =                '<form action="shelves.pl" method="get">' ~%]
-        [%~ action_block = BLOCK ~%][%~ action_block | $raw ~%][%~ INCLUDE 'csrf-token.inc' | trim ~%][%~ END ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelfnumber" value="' _ shelfnumber  _ '" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="op" value="edit_form" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="public" value="' _ public _ '" />' ~%]
