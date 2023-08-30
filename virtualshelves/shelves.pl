@@ -63,7 +63,6 @@ if ( $op eq 'add_form' ) {
     # Only pass default
     $shelf = { allow_change_from_owner => 1 };
 } elsif ( $op eq 'edit_form' ) {
-    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
