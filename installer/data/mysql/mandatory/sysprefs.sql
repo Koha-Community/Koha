@@ -449,6 +449,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacCloud','0',NULL,'If ON, enables subject cloud on OPAC','YesNo'),
 ('OpacAdditionalStylesheet','','','Define an auxiliary stylesheet for OPAC use, to override specified settings from the primary opac.css stylesheet. Enter the filename (if the file is in the server\'s css directory) or a complete URL beginning with http (if the file lives on a remote server).','free'),
 ('OpacCoce','0', NULL, 'If on, enables cover retrieval from the configured Coce server in the OPAC', 'YesNo'),
+('OPACCustomConsentTypes', '0', NULL, 'If enabled, custom consent types can be registered on account page', 'YesNo'),
 ('OPACCustomCoverImages','0',NULL,'If enabled, the custom cover images will be displayed at the OPAC. CustomCoverImagesURL must be defined.','YesNo'),
 ('OPACdefaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
 ('OPACdefaultSortOrder','dsc','asc|dsc|za|az','Specify the default sort order','Choice'),

@@ -553,6 +553,15 @@ OPAC:
                   summary: "in user summary box on OPAC homepage (the system preference 'OPACUserSummary' must be enabled)"
                   user: "on patron's 'your summary' page"
             - ". Note that displayed savings may be inaccurate if checkout history is anonymized."
+        -
+            - pref: OPACCustomConsentTypes
+              default: 0
+              choices:
+                  1: Allow
+                  0: "Don't allow"
+            - "users to register consents for custom (plugin based) consent types on the user account page."
+            - "<br>Note: The consents tab is also visible when you enabled PrivacyPolicyConsent."
+
     OpenURL:
         -
             - 'Complete URL of OpenURL resolver (starting with <code>http://</code> or <code>https://</code>):'
