@@ -1734,9 +1734,8 @@ sub _Findgroupreserve {
     my ( $bibitem, $biblio, $itemnumber, $lookahead, $ignore_borrowers) = @_;
     my $dbh   = C4::Context->dbh;
 
-    # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
-    # check for exact targeted match
-    my $item_level_target_query = qq{
+    # check for targeted match form the holds queue
+    my $hold_target_query = qq{
         SELECT reserves.biblionumber        AS biblionumber,
                reserves.borrowernumber      AS borrowernumber,
                reserves.reservedate         AS reservedate,
@@ -1757,54 +1756,14 @@ sub _Findgroupreserve {
         JOIN hold_fill_targets USING (reserve_id)
         WHERE found IS NULL
         AND priority > 0
-        AND item_level_request = 1
         AND hold_fill_targets.itemnumber = ?
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
         ORDER BY priority
     };
-    my $sth = $dbh->prepare($item_level_target_query);
+    my $sth = $dbh->prepare($hold_target_query);
     $sth->execute($itemnumber, $lookahead||0);
     my @results;
-    if ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data )
-          unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
-    }
-    return @results if @results;
-
-    # check for title-level targeted match
-    my $title_level_target_query = qq{
-        SELECT reserves.biblionumber        AS biblionumber,
-               reserves.borrowernumber      AS borrowernumber,
-               reserves.reservedate         AS reservedate,
-               reserves.branchcode          AS branchcode,
-               reserves.cancellationdate    AS cancellationdate,
-               reserves.found               AS found,
-               reserves.reservenotes        AS reservenotes,
-               reserves.priority            AS priority,
-               reserves.timestamp           AS timestamp,
-               biblioitems.biblioitemnumber AS biblioitemnumber,
-               reserves.itemnumber          AS itemnumber,
-               reserves.reserve_id          AS reserve_id,
-               reserves.itemtype            AS itemtype,
-               reserves.non_priority        AS non_priority,
-               reserves.item_group_id           AS item_group_id
-        FROM reserves
-        JOIN biblioitems USING (biblionumber)
-        JOIN hold_fill_targets USING (reserve_id)
-        LEFT JOIN item_group_items ON ( item_group_items.item_id = hold_fill_targets.itemnumber )
-        WHERE found IS NULL
-        AND priority > 0
-        AND item_level_request = 0
-        AND hold_fill_targets.itemnumber = ?
-        AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
-        AND suspend = 0
-        AND (reserves.item_group_id = item_group_items.item_group_id OR reserves.item_group_id IS NULL)
-        ORDER BY priority
-    };
-    $sth = $dbh->prepare($title_level_target_query);
-    $sth->execute($itemnumber, $lookahead||0);
-    @results = ();
     if ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data )
           unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
