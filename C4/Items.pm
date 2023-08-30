@@ -125,7 +125,7 @@ sub CartToShelf {
 
     my $item = Koha::Items->find($itemnumber);
     if ( $item->location eq 'CART' ) {
-        $item->location($item->permanent_location)->store;
+        $item->location($item->permanent_location)->store({ skip_holds_queue => 1 });
     }
 }
 
