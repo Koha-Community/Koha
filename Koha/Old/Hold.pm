@@ -34,6 +34,19 @@ This object represents a hold that has been filled or canceled
 
 =head2 Class methods
 
+=head3 biblio
+
+Returns the related Koha::Biblio object for this old hold
+
+=cut
+
+sub biblio {
+    my ($self) = @_;
+    my $rs = $self->_result->biblionumber;
+    return unless $rs;
+    return Koha::Biblio->_new_from_dbic($rs);
+}
+
 =head3 anonymize
 
     $old_hold->anonymize();
