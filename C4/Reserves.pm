@@ -1799,7 +1799,7 @@ sub _Findgroupreserve {
         AND hold_fill_targets.itemnumber = ?
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
-        AND reserves.item_group_id = item_group_items.item_group_id
+        AND (reserves.item_group_id = item_group_items.item_group_id OR reserves.item_group_id IS NULL)
         ORDER BY priority
     };
     $sth = $dbh->prepare($title_level_target_query);
