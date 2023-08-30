@@ -31,7 +31,7 @@ return {
             $dbh->do(q{
                 ALTER TABLE illrequests
                     ADD KEY `illrequests_bibfk` (`biblio_id`),
-                    ADD FOREIGN KEY illrequests_bibfk (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE;
+                    ADD CONSTRAINT illrequests_bibfk FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE;
             });
 
             say $out "Added foreign key constraint 'illrequests.illrequests_bibfk'";
