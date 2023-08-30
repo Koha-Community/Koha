@@ -957,6 +957,14 @@
                         e.preventDefault();
                     }
                 });
+                $("#deleteshelf_toolbar").on('click',function(e){
+                    if(confirm(_("Are you sure you want to delete this list?"))){
+                        $("#deleteshelf_toolbar_form").submit();
+                        return false;
+                    } else {
+                        e.preventDefault();
+                    }
+                });
              });
 
         [% END %]
