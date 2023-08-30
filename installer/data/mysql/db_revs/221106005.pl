@@ -27,11 +27,33 @@ return {
                   AND illrequests.biblio_id IS NOT NULL
         });
 
-        unless ( foreign_key_exists( 'illrequests', 'illrequests_bibfk' ) ) {
+        if ( foreign_key_exists( 'illrequests', 'illrequests_ibfk_1' ) ) {
+            $dbh->do(q{
+                ALTER TABLE illrequests
+                DROP FOREIGN KEY illrequests_ibfk_1
+            });
+        }
+
+        if (   !foreign_key_exists( 'illrequests', 'illrequests_bibfk' )
+            || !index_exists('illrequests', 'illrequests_bibfk') ) {
+
+            if ( foreign_key_exists( 'illrequests', 'illrequests_bibfk' ) ) {
+                $dbh->do(q{
+                    ALTER TABLE illrequests
+                    DROP FOREIGN KEY illrequests_bibfk
+                });
+            }
+            if (index_exists('illrequests', 'illrequests_bibfk')) {
+                $dbh->do(q{
+                    ALTER TABLE illrequests
+                    DROP INDEX illrequests_bibfk
+                });
+            }
+
             $dbh->do(q{
                 ALTER TABLE illrequests
                     ADD KEY `illrequests_bibfk` (`biblio_id`),
-                    ADD FOREIGN KEY illrequests_bibfk (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE;
+                    ADD CONSTRAINT illrequests_bibfk FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE;
             });
 
             say $out "Added foreign key constraint 'illrequests.illrequests_bibfk'";
