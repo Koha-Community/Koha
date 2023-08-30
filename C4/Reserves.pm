@@ -1848,23 +1848,40 @@ sub _koha_notify_reserve {
     );
 
     my $notification_sent = 0; #Keeping track if a Hold_filled message is sent. If no message can be sent, then default to a print message.
+    my $do_not_lock = ( exists $ENV{_} && $ENV{_} =~ m|prove| ) || $ENV{KOHA_TESTING};
     my $send_notification = sub {
-        my ( $mtt, $letter_code ) = (@_);
+        my ( $mtt, $letter_code, $wants_digest ) = (@_);
         return unless defined $letter_code;
-        $letter_params{letter_code} = $letter_code;
+        $letter_params{letter_code}            = $letter_code;
         $letter_params{message_transport_type} = $mtt;
-        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params );
+        my $letter = C4::Letters::GetPreparedLetter(%letter_params);
         unless ($letter) {
             warn "Could not find a letter called '$letter_params{'letter_code'}' for $mtt in the 'reserves' module";
             return;
         }
 
-        C4::Letters::EnqueueLetter( {
-            letter => $letter,
-            borrowernumber => $borrowernumber,
-            from_address => $from_email_address,
-            message_transport_type => $mtt,
-        } );
+        unless ($wants_digest) {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $borrowernumber,
+                    from_address           => $from_email_address,
+                    message_transport_type => $mtt,
+                }
+            );
+        } else {
+            C4::Context->dbh->do(q|LOCK TABLE message_queue READ|)  unless $do_not_lock;
+            C4::Context->dbh->do(q|LOCK TABLE message_queue WRITE|) unless $do_not_lock;
+            my $message = C4::Message->find_last_message( $patron->unblessed, $letter_code, $mtt );
+            unless ($message) {
+                C4::Context->dbh->do(q|UNLOCK TABLES|) unless $do_not_lock;
+                C4::Message->enqueue( $letter, $patron, $mtt );
+            } else {
+                $message->append($letter);
+                $message->update;
+            }
+            C4::Context->dbh->do(q|UNLOCK TABLES|) unless $do_not_lock;
+        }
     };
 
     while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
@@ -1875,7 +1892,7 @@ sub _koha_notify_reserve {
             or ( $mtt eq 'phone' and not $patron->phone ) # No phone number to call
         );
 
-        &$send_notification($mtt, $letter_code);
+        &$send_notification($mtt, $letter_code, $messagingprefs->{wants_digest});
         $notification_sent++;
     }
     #Making sure that a print notification is sent if no other transport types can be utilized.

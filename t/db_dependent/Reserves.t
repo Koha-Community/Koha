@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 76;
+use Test::More tests => 79;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1815,6 +1815,109 @@ subtest '_Findgroupreserves' => sub {
     @reserves = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item_2->id, 0, [] );
     is( scalar @reserves,           1,             "We should only get the item level hold that is in the map" );
     is( $reserves[0]->{reserve_id}, $reserve_id_2, "We got the expected reserve" );
+
+    $schema->txn_rollback;
+};
+
+subtest 'HOLDDGST tests' => sub {
+
+    plan tests => 2;
+    $schema->storage->txn_begin;
+
+    my $branch = $builder->build_object({
+        class => 'Koha::Libraries',
+        value => {
+            branchemail => 'branch@e.mail',
+            branchreplyto => 'branch@reply.to',
+            pickup_location => 1
+        }
+    });
+    my $item = $builder->build_sample_item({
+        homebranch => $branch->branchcode,
+        holdingbranch => $branch->branchcode
+    });
+    my $item2 = $builder->build_sample_item({
+        homebranch => $branch->branchcode,
+        holdingbranch => $branch->branchcode
+    });
+
+    my $wants_hold_and_email = {
+        wants_digest => '1',
+        transports => {
+            sms => 'HOLDDGST',
+            email => 'HOLDDGST',
+            },
+        letter_code => 'HOLDDGST'
+    };
+
+    my $mp = Test::MockModule->new( 'C4::Members::Messaging' );
+
+    $mp->mock("GetMessagingPreferences",$wants_hold_and_email);
+
+    $dbh->do('DELETE FROM letter');
+
+    my $email_hold_notice = $builder->build({
+            source => 'Letter',
+            value => {
+                message_transport_type => 'email',
+                branchcode => '',
+                code => 'HOLDDGST',
+                module => 'reserves',
+                lang => 'default',
+            }
+        });
+
+    my $sms_hold_notice = $builder->build({
+            source => 'Letter',
+            value => {
+                message_transport_type => 'sms',
+                branchcode => '',
+                code => 'HOLDDGST',
+                module => 'reserves',
+                lang=>'default',
+            }
+        });
+
+    my $hold_borrower = $builder->build({
+            source => 'Borrower',
+            value => {
+                smsalertnumber=>'5555555551',
+                email=>'a@c.com',
+            }
+        })->{borrowernumber};
+
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $hold_borrower,
+            biblionumber   => $item->biblionumber,
+        }
+    );
+
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $item2->homebranch,
+            borrowernumber => $hold_borrower,
+            biblionumber   => $item2->biblionumber,
+        }
+    );
+
+    ModReserveAffect($item->itemnumber, $hold_borrower, 0);
+    ModReserveAffect($item2->itemnumber, $hold_borrower, 0);
+
+    my $sms_count = $schema->resultset('MessageQueue')->search({
+            letter_code     => 'HOLDDGST',
+            message_transport_type => 'sms',
+            borrowernumber => $hold_borrower,
+        })->count;
+    is($sms_count, 1 ,"Only one sms hold digest message created for two holds");
+
+    my $email_count = $schema->resultset('MessageQueue')->search({
+            letter_code     => 'HOLDDGST',
+            message_transport_type => 'email',
+            borrowernumber => $hold_borrower,
+        })->count;
+    is($email_count, 1 ,"Only one email hold digest message created for two holds");
 
     $schema->txn_rollback;
 };

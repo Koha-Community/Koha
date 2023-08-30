@@ -1795,6 +1795,29 @@ tables:
             - "<<branches.branchcity>> <<branches.branchzip>>"
 
         - module: reserves
+          code: HOLDDGST
+          branchcode: ""
+          name: "Hold(s) available for pickup"
+          is_html: 0
+          title: "Hold(s) available for pickup"
+          message_transport_type: email
+          lang: default
+          content:
+            - "You have one or more holds available for pickup:"
+            - "----"
+            - "Title: [% hold.biblio.title %]"
+            - "Author: [% hold.biblio.author %]"
+            - "Copy: [% hold.item.copynumber %]"
+            - "Waiting since: [% hold.waitingdate %]"
+            - "Waitng at: [% hold.branch.branchname %]"
+            - "[% hold.branch.branchaddress1 %]"
+            - "[% hold.branch.branchaddress2 %]"
+            - "[% hold.branch.branchaddress3 %]"
+            - "[% hold.branch.branchcity %] [% hold.branch.branchzip %]"
+            - "----"
+            - "Thank you!"
+
+        - module: reserves
           code: HOLD
           branchcode: ""
           name: "Hold available for pickup"
