@@ -35,7 +35,7 @@ my $res="
 function Clic$function_name(event) {
     event.preventDefault();
     defaultvalue=document.getElementById(event.data.id).value;
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_123g.pl&index=\" + event.data.id + \"&result=\"+defaultvalue,\"unimarc_field_123g\",'width=1000,height=375,toolbar=false,scrollbars=yes');
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_123defg.pl&index=\" + event.data.id + \"&result=\"+defaultvalue,\"unimarc_field_123defg\",'width=1000,height=375,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -52,7 +52,7 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_123g.tt",
+    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_123defg.tt",
 			     query => $input,
 			     type => "intranet",
 			     flagsrequired => {editcatalogue => '*'},
