@@ -18,11 +18,18 @@
 <input type="text" id="received" value="[% result | html %]" disabled />
 
 <p>I will pass back what you type here, if you press OK.</p>
+
 <input type="text" id="return" value="[% result | html %]" />
-<p>
-    <input type="button" value="OK"  onclick="submitMyForm();" />
-    <a href="#" class="cancel close">Cancel</a>
-</p>
+
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid">
+        <fieldset class="action">
+            <input type="button" class="btn btn-primary" value="OK"  onclick="submitMyForm();" />
+            <button class="btn btn-default close_window">Cancel</button>
+        </fieldset>
+    </div>
+</nav>
+
 </form>
 
 <script>

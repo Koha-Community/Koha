@@ -12,198 +12,209 @@
 
 <body id="cat_marc21_field_008_classifications" class="cat value_builder">
 <h1> 008 Fixed-length data elements</h1>
-<form name="f_pop" onsubmit="report()" action="">
-<input type="hidden" name="plugin_name" value="marc21_field_008_classifications.pl" />
-<input name="f1" value="[% f1 | html %]" type="hidden" />
-<table>
-    <tr>
-        <td>00-05- Date entered on file</td>
-        <td>[% f1 | html %]</td>
-    </tr>
-    <tr>
-        <td><label for="f6">06- Kind of record</label></td>
-        <td>
-            <select name="f6" id="f6">
-            [% IF ( f6a ) %]
-                <option value="a" selected="selected">a- Schedule record</option>
-            [% ELSE %]
-                <option value="a">a- Schedule record</option>
-            [% END %]
-            [% IF ( f6b ) %]
-                <option value="b" selected="selected">b- Table record</option>
-            [% ELSE %]
-                <option value="b">b- Table record</option>
-            [% END %]
-            [% IF ( f6c ) %]
-                <option value="c" selected="selected">c- Index term record</option>
-            [% ELSE %]
-                <option value="c">c- Index term record</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f7">07- Type of number</label></td>
-        <td>
-            <select name="f7" id="f7">
-            [% IF ( f7a ) %]
-                <option value="a" selected="selected">a- Single number</option>
-            [% ELSE %]
-                <option value="a">a- Single number</option>
-            [% END %]
-            [% IF ( f7b ) %]
-                <option value="b" selected="selected">b- Defined number span</option>
-            [% ELSE %]
-                <option value="b">b- Defined number span</option>
-            [% END %]
-            [% IF ( f7c ) %]
-                <option value="c" selected="selected">c- Summary number span</option>
-            [% ELSE %]
-                <option value="c">c- Summary number span</option>
-            [% END %]
-            [% IF ( f7n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n - Not applicable</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f8">08- Classification validity</label></td>
-        <td>
-            <select name="f8" id="f8">
-            [% IF ( f8a ) %]
-                <option value="a" selected="selected">a- Valid</option>
-            [% ELSE %]
-                <option value="a">a- Valid</option>
-            [% END %]
-            [% IF ( f8b ) %]
-                <option value="b" selected="selected">b- First number of span invalid</option>
-            [% ELSE %]
-                <option value="b">b- First number of span invalid</option>
-            [% END %]
-            [% IF ( f8c ) %]
-                <option value="c" selected="selected">c- Last number of span invalid</option>
-            [% ELSE %]
-                <option value="c">c- Last number of span invalid</option>
-            [% END %]
-            [% IF ( f8d ) %]
-                <option value="d" selected="selected">d- Completely invalid</option>
-            [% ELSE %]
-                <option value="d">d- Completely invalid</option>
-            [% END %]
-            [% IF ( f8e ) %]
-                <option value="e" selected="selected">e- Obsolete</option>
-            [% ELSE %]
-                <option value="e">e- Obsolete</option>
-            [% END %]
-            [% IF ( f8n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n - Not applicable</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f9">09- Standard or optional designation</label></td>
-        <td>
-            <select name="f9" id="f9">
-            [% IF ( f9a ) %]
-                <option value="a" selected="selected">a- Standard</option>
-            [% ELSE %]
-                <option value="a">a- Standard</option>
-            [% END %]
-            [% IF ( f9b ) %]
-                <option value="b" selected="selected">b- Optional</option>
-            [% ELSE %]
-                <option value="b">b- Optional</option>
-            [% END %]
-            [% IF ( f9n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n - Not applicable</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f10">10- Record update in process</label></td>
-        <td>
-            <select name="f10" id="f10">
-            [% IF ( f10a ) %]
-                <option value="a" selected="selected">a- Record can be used</option>
-            [% ELSE %]
-                <option value="a">a- Record can be used</option>
-            [% END %]
-            [% IF ( f10b ) %]
-                <option value="b" selected="selected">b- Record is being updated</option>
-            [% ELSE %]
-                <option value="b">b- Record is being updated</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f11">11- Level of establishment</label></td>
-        <td>
-            <select name="f11" id="f11">
-            [% IF ( f11a ) %]
-                <option value="a" selected="selected">a- Fully established</option>
-            [% ELSE %]
-                <option value="a">a- Fully established</option>
-            [% END %]
-            [% IF ( f11c ) %]
-                <option value="c" selected="selected">c- Provisional</option>
-            [% ELSE %]
-                <option value="c">c- Provisional</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f12">12- Synthesized number indication</label></td>
-        <td>
-            <select name="f12" id="f12">
-            [% IF ( f12a ) %]
-                <option value="a" selected="selected">a- Not synthesized</option>
-            [% ELSE %]
-                <option value="a">a- Not synthesized</option>
-            [% END %]
-            [% IF ( f12b ) %]
-                <option value="b" selected="selected">b- Synthesized</option>
-            [% ELSE %]
-                <option value="b">b- Synthesized</option>
-            [% END %]
-            [% IF ( f12n ) %]
-                <option value="n" selected="selected">n- Not applicable</option>
-            [% ELSE %]
-                <option value="n">n - Not applicable</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><label for="f13">13- Display controller</label></td>
-        <td>
-            <select name="f13" id="f13">
-            [% IF ( f13a ) %]
-                <option value="a" selected="selected">a- Displayed in standard schedules or tables</option>
-            [% ELSE %]
-                <option value="a">a- Displayed in standard schedules or tables</option>
-            [% END %]
-            [% IF ( f13b ) %]
-                <option value="b" selected="selected">b- Extended display</option>
-            [% ELSE %]
-                <option value="b">b- Extended display</option>
-            [% END %]
-            </select>
-        </td>
-    </tr>
-</table>
-<fieldset class="action"><input type="submit" class="btn btn-primary" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-</form>
+
+<div class="page-section">
+    <form name="f_pop" onsubmit="report()" action="">
+    <input type="hidden" name="plugin_name" value="marc21_field_008_classifications.pl" />
+    <input name="f1" value="[% f1 | html %]" type="hidden" />
+    <table>
+        <tr>
+            <td>00-05- Date entered on file</td>
+            <td>[% f1 | html %]</td>
+        </tr>
+        <tr>
+            <td><label for="f6">06- Kind of record</label></td>
+            <td>
+                <select name="f6" id="f6">
+                [% IF ( f6a ) %]
+                    <option value="a" selected="selected">a- Schedule record</option>
+                [% ELSE %]
+                    <option value="a">a- Schedule record</option>
+                [% END %]
+                [% IF ( f6b ) %]
+                    <option value="b" selected="selected">b- Table record</option>
+                [% ELSE %]
+                    <option value="b">b- Table record</option>
+                [% END %]
+                [% IF ( f6c ) %]
+                    <option value="c" selected="selected">c- Index term record</option>
+                [% ELSE %]
+                    <option value="c">c- Index term record</option>
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="f7">07- Type of number</label></td>
+            <td>
+                <select name="f7" id="f7">
+                [% IF ( f7a ) %]
+                    <option value="a" selected="selected">a- Single number</option>
+                [% ELSE %]
+                    <option value="a">a- Single number</option>
+                [% END %]
+                [% IF ( f7b ) %]
+                    <option value="b" selected="selected">b- Defined number span</option>
+                [% ELSE %]
+                    <option value="b">b- Defined number span</option>
+                [% END %]
+                [% IF ( f7c ) %]
+                    <option value="c" selected="selected">c- Summary number span</option>
+                [% ELSE %]
+                    <option value="c">c- Summary number span</option>
+                [% END %]
+                [% IF ( f7n ) %]
+                    <option value="n" selected="selected">n- Not applicable</option>
+                [% ELSE %]
+                    <option value="n">n - Not applicable</option>
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="f8">08- Classification validity</label></td>
+            <td>
+                <select name="f8" id="f8">
+                [% IF ( f8a ) %]
+                    <option value="a" selected="selected">a- Valid</option>
+                [% ELSE %]
+                    <option value="a">a- Valid</option>
+                [% END %]
+                [% IF ( f8b ) %]
+                    <option value="b" selected="selected">b- First number of span invalid</option>
+                [% ELSE %]
+                    <option value="b">b- First number of span invalid</option>
+                [% END %]
+                [% IF ( f8c ) %]
+                    <option value="c" selected="selected">c- Last number of span invalid</option>
+                [% ELSE %]
+                    <option value="c">c- Last number of span invalid</option>
+                [% END %]
+                [% IF ( f8d ) %]
+                    <option value="d" selected="selected">d- Completely invalid</option>
+                [% ELSE %]
+                    <option value="d">d- Completely invalid</option>
+                [% END %]
+                [% IF ( f8e ) %]
+                    <option value="e" selected="selected">e- Obsolete</option>
+                [% ELSE %]
+                    <option value="e">e- Obsolete</option>
+                [% END %]
+                [% IF ( f8n ) %]
+                    <option value="n" selected="selected">n- Not applicable</option>
+                [% ELSE %]
+                    <option value="n">n - Not applicable</option>
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="f9">09- Standard or optional designation</label></td>
+            <td>
+                <select name="f9" id="f9">
+                [% IF ( f9a ) %]
+                    <option value="a" selected="selected">a- Standard</option>
+                [% ELSE %]
+                    <option value="a">a- Standard</option>
+                [% END %]
+                [% IF ( f9b ) %]
+                    <option value="b" selected="selected">b- Optional</option>
+                [% ELSE %]
+                    <option value="b">b- Optional</option>
+                [% END %]
+                [% IF ( f9n ) %]
+                    <option value="n" selected="selected">n- Not applicable</option>
+                [% ELSE %]
+                    <option value="n">n - Not applicable</option>
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="f10">10- Record update in process</label></td>
+            <td>
+                <select name="f10" id="f10">
+                [% IF ( f10a ) %]
+                    <option value="a" selected="selected">a- Record can be used</option>
+                [% ELSE %]
+                    <option value="a">a- Record can be used</option>
+                [% END %]
+                [% IF ( f10b ) %]
+                    <option value="b" selected="selected">b- Record is being updated</option>
+                [% ELSE %]
+                    <option value="b">b- Record is being updated</option>
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="f11">11- Level of establishment</label></td>
+            <td>
+                <select name="f11" id="f11">
+                [% IF ( f11a ) %]
+                    <option value="a" selected="selected">a- Fully established</option>
+                [% ELSE %]
+                    <option value="a">a- Fully established</option>
+                [% END %]
+                [% IF ( f11c ) %]
+                    <option value="c" selected="selected">c- Provisional</option>
+                [% ELSE %]
+                    <option value="c">c- Provisional</option>
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="f12">12- Synthesized number indication</label></td>
+            <td>
+                <select name="f12" id="f12">
+                [% IF ( f12a ) %]
+                    <option value="a" selected="selected">a- Not synthesized</option>
+                [% ELSE %]
+                    <option value="a">a- Not synthesized</option>
+                [% END %]
+                [% IF ( f12b ) %]
+                    <option value="b" selected="selected">b- Synthesized</option>
+                [% ELSE %]
+                    <option value="b">b- Synthesized</option>
+                [% END %]
+                [% IF ( f12n ) %]
+                    <option value="n" selected="selected">n- Not applicable</option>
+                [% ELSE %]
+                    <option value="n">n - Not applicable</option>
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="f13">13- Display controller</label></td>
+            <td>
+                <select name="f13" id="f13">
+                [% IF ( f13a ) %]
+                    <option value="a" selected="selected">a- Displayed in standard schedules or tables</option>
+                [% ELSE %]
+                    <option value="a">a- Displayed in standard schedules or tables</option>
+                [% END %]
+                [% IF ( f13b ) %]
+                    <option value="b" selected="selected">b- Extended display</option>
+                [% ELSE %]
+                    <option value="b">b- Extended display</option>
+                [% END %]
+                </select>
+            </td>
+        </tr>
+    </table>
+
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                    <button class="btn btn-default close_window">Cancel</button>
+                </fieldset>
+            </div>
+        </nav>
+    </form>
+</div> <!-- /.page-section -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

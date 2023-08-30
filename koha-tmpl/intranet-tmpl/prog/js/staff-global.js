@@ -59,7 +59,10 @@ $(document).ready(function() {
         $( e.target.hash ).find("input:text:first").focus();
     });
 
-    $(".close, .close_window").click(function(){ window.close(); });
+    $(".close, .close_window").on("click", function(e){
+        e.preventDefault();
+        window.close();
+    });
 
     $("#checkin_search form").preventDoubleFormSubmit();
 
