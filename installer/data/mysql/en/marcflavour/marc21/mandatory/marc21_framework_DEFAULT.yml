@@ -21,7 +21,7 @@
 # *************************************************************
 #     KOHA MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK
 #
-#           Revised to Update No. 32 (June 2021)
+#           Revised to Update No. 33 (November 2021)
 # *************************************************************
 
 description:
@@ -18501,6 +18501,24 @@ tables:
           defaultvalue:
 
         - tagfield: "340"
+          tagsubfield: "l"
+          liblibrarian: "Binding"
+          libopac: "Binding"
+          repeatable: 1
+          mandatory: 0
+          kohafield: ""
+          tab: 3
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "340"
           tagsubfield: "m"
           liblibrarian: "Book format"
           libopac: "Book format"
@@ -19656,6 +19674,24 @@ tables:
           tagsubfield: "i"
           liblibrarian: "Sound content"
           libopac: "Sound content"
+          repeatable: 1
+          mandatory: 0
+          kohafield: ""
+          tab: 3
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "344"
+          tagsubfield: "j"
+          liblibrarian: "Original capture and storage technique"
+          libopac: "Original capture and storage technique"
           repeatable: 1
           mandatory: 0
           kohafield: ""
@@ -25281,6 +25317,42 @@ tables:
           value_builder: ""
           isurl:
           hidden: 0
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "490"
+          tagsubfield: "y"
+          liblibrarian: "Incorrect ISSN"
+          libopac: "Incorrect ISSN"
+          repeatable: 1
+          mandatory: 0
+          kohafield: ""
+          tab: 4
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl:
+          hidden: -1
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "490"
+          tagsubfield: "z"
+          liblibrarian: "Canceled ISSN"
+          libopac: "Canceled ISSN"
+          repeatable: 1
+          mandatory: 0
+          kohafield: ""
+          tab: 4
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl:
+          hidden: -1
           frameworkcode: ""
           seealso: ""
           link: ""
