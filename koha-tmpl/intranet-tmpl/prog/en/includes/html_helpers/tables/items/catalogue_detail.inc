@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
+[% USE ItemTypes %]
 [% USE raw %]
 
 [% BLOCK build_table %]
@@ -171,6 +172,13 @@
                 e["_str"] = e["branchname"];
                 return e;
             });
+    const all_item_types = [% To.json(ItemTypes.Get) | $raw %];
+    const item_types_filters = all_item_types.map(e => {
+                e["_id"] = e["itemtype"];
+                e["_str"] = e["translated_description"];
+                return e;
+            });
+    const item_types_notforloan = new Map(all_item_types.map( it => [it.itemtype, it.notforloan] ));
 
     const can_edit_items_from = [% To.json(can_edit_items_from || {}) | $raw %];
     const item_type_image_locations = [% To.json(item_type_image_locations) | $raw %];
@@ -192,7 +200,7 @@
     [%# In case or SeparateHoldings we may need to display the number of biblios in each tab %]
     [%# Do we need separate/new endpoints or do we hack the somewhere client-side? %]
     let item_table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
-    let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk,item_type"];
+    let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
     [% IF Koha.Preference('LocalCoverImages') %]
         embed.push('cover_image_ids');
     [% END %]
@@ -257,6 +265,7 @@
         }
 
         let filters_options = {
+            2: () => all_item_types,
             3: () => all_libraries,
             4: () => all_libraries,
         };
@@ -313,7 +322,6 @@
             [% IF ( item_level_itypes ) %]
             {
                 data: "me.item_type_id", // FIXME Cannot filter by biblioitem.itemtype
-                                         // FIXME Cannot filter on item type description
                 className: "itype",
                 searchable: true,
                 orderable: true,
@@ -464,7 +472,7 @@
                         nodes += '<span class="dmg">%s</span>'.format(escape_str(damaged_lib));
                     }
 
-                    if ( row.not_for_loan_status || row.item_type.notforloan ) {
+                    if ( row.not_for_loan_status || item_types_notforloan[row.item_type_id] ) {
                         let not_for_loan_lib = av_not_for_loan.get(row.not_for_loan_status.toString());
                         nodes += '<span class="notforloan">%s'.format(_("Not for loan")) + ( not_for_loan_lib ? '<span class="reason"> (%s)</span>'.format(escape_str(not_for_loan_lib)) : '' ) + '</span>';
                     }
@@ -498,7 +506,7 @@
                         }
                     [% END %]
 
-                    if ( ! ( row.not_for_loan_status || row.item_type.notforloan || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged || row.transfer || row.first_hold || row.recall ) ) {
+                    if ( ! ( row.not_for_loan_status || item_types_notforloan[row.item_type_id] || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged || row.transfer || row.first_hold || row.recall ) ) {
                         nodes += ' <span>%s</span>'.format(_("Available"))
                     }
 
