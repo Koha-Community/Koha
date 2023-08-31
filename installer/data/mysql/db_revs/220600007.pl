@@ -13,7 +13,7 @@ return {
                 options = 'no|issueslip|issueqslip',
                    type = 'Choice',
                   value = CASE value
-                              WHEN 1 THEN 'issueslip'
+                              WHEN "1" THEN 'issueslip'
                               ELSE 'no'
                           END
             WHERE variable = 'DisplayClearScreenButton';
