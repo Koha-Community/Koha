@@ -828,6 +828,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('viewMARC','1','','Allow display of MARC view of bibiographic records','YesNo'),
 ('virtualshelves','1','','If ON, enables Lists management','YesNo'),
 ('WaitingNotifyAtCheckin','0',NULL,'If ON, notify librarians of waiting holds for the patron whose items they are checking in.','YesNo'),
+('WaitingNotifyAtCheckout','0',NULL,'If ON, notify librarians of waiting holds for the patron whose items they are checking out.','YesNo'),
 ('WebBasedSelfCheck','0',NULL,'If ON, enables the web-based self-check system','YesNo'),
 ('WhenLostChargeReplacementFee','1',NULL,'If ON, Charge the replacement price when a patron loses an item.','YesNo'),
 ('WhenLostForgiveFine','0',NULL,'If ON, Forgives the fines on an item when it is lost.','YesNo'),
