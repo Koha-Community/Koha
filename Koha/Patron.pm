@@ -2279,7 +2279,7 @@ sub set_default_messaging_preferences {
 
     if ( $patron->is_accessible({ user => $logged_in_user }) ) { ... }
 
-This overloaded method validates wether the current I<Koha::Patron> object can be accessed
+This overloaded method validates whether the current I<Koha::Patron> object can be accessed
 by the logged in user.
 
 Returns 0 if the I<user> parameter is missing.
@@ -2295,6 +2295,17 @@ sub is_accessible {
 
     my $consumer = $params->{user};
     return $consumer->can_see_patron_infos($self);
+}
+
+=head3 unredact_list
+
+This method returns the list of database fields that should be visible, even for restricted users,
+for both API and UI output purposes
+
+=cut
+
+sub unredact_list {
+    return ['branchcode'];
 }
 
 =head3 to_api

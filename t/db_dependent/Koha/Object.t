@@ -554,7 +554,6 @@ subtest "to_api() tests" => sub {
             }
         );
 
-
         my $patron_1 = $builder->build_object(
             { class => 'Koha::Patrons', value => { branchcode => $library_1->id } }
         );
@@ -564,8 +563,11 @@ subtest "to_api() tests" => sub {
 
         t::lib::Mocks::mock_userenv( { patron => $patron } );
 
-        is( ref($patron_1->to_api({ user => $patron })), 'HASH', 'Returns the object hash' );
-        is( $patron_2->to_api({ user => $patron }), undef, 'Not accessible, returns undef' );
+        is(
+            $patron_1->to_api( { user => $patron } )->{firstname}, $patron_1->firstname,
+            'Returns unredacted object hash'
+        );
+        is( $patron_2->to_api( { user => $patron } )->{firstname}, undef, 'Returns redacted object hash' );
 
         $schema->storage->txn_rollback;
     };

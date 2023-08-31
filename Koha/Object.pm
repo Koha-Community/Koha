@@ -405,7 +405,6 @@ sub TO_JSON {
         elsif ( _numeric_column_type( $columns_info->{$col}->{data_type} )
             and looks_like_number( $unblessed->{$col} )
         ) {
-
             # TODO: Remove once the solution for
             # https://github.com/perl5-dbi/DBD-mysql/issues/212
             # is ported to whatever distro we support by that time
@@ -415,7 +414,6 @@ sub TO_JSON {
         elsif ( _decimal_column_type( $columns_info->{$col}->{data_type} )
             and looks_like_number( $unblessed->{$col} )
         ) {
-
             # TODO: Remove once the solution for
             # https://github.com/perl5-dbi/DBD-mysql/issues/212
             # is ported to whatever distro we support by that time
@@ -552,8 +550,6 @@ Returns a representation of the object, suitable for API output.
 sub to_api {
     my ( $self, $params ) = @_;
 
-    return unless $self->is_accessible($params);
-
     my $json_object = $self->TO_JSON;
 
     # Make sure we duplicate the $params variable to avoid
@@ -581,6 +577,23 @@ sub to_api {
             foreach my $field ( keys %{$string_map} ) {
                 delete $string_map->{$field}
                   unless any { $_ eq $field } @{ $self->public_read_list };
+            }
+        }
+    }
+
+    # Remove forbidden attributes if required (including their coded values)
+    if ( !$self->is_accessible($params) ) {
+        for my $field ( keys %{$json_object} ) {
+            unless ( any { $_ eq $field } @{ $self->unredact_list } ) {
+                $json_object->{$field} = undef;
+            }
+        }
+
+        if ($strings) {
+            foreach my $field ( keys %{$string_map} ) {
+                unless ( any { $_ eq $field } @{ $self->unredact_list } ) {
+                    $string_map->{$field} = undef;
+                }
             }
         }
     }
@@ -714,6 +727,23 @@ own implementation.
 
 sub public_read_list
  {
+    return [];
+}
+
+=head3 unredact_list
+
+    my @unredact_list = @{$object->unredact_list};
+
+Generic method that returns the list of database columns that are allowed to
+be passed to render objects on the API when the user making the request should
+not ordinarily have unrestricted access to the data (as returned by the is_accesible method).
+
+Note: this only returns an empty I<arrayref>. Each class should have its
+own implementation.
+
+=cut
+
+sub unredact_list {
     return [];
 }
 
