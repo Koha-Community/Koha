@@ -1,5 +1,6 @@
 [% USE To %]
 [% USE Koha %]
+[% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE raw %]
 
@@ -164,6 +165,13 @@
     [% END %]
 
 
+    const all_libraries = [% To.json(Branches.all) | $raw %];
+    const libraries_filters = all_libraries.map(e => {
+                e["_id"] = e["branchcode"];
+                e["_str"] = e["branchname"];
+                return e;
+            });
+
     const can_edit_items_from = [% To.json(can_edit_items_from || {}) | $raw %];
     const item_type_image_locations = [% To.json(item_type_image_locations) | $raw %];
     const av_loc = new Map([% To.json(AuthorisedValues.Get('LOC')) | $raw %].map( av => [av.authorised_value, av.lib]));
@@ -185,7 +193,6 @@
     [%# Do we need separate/new endpoints or do we hack the somewhere client-side? %]
     let item_table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
     let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk,item_type"];
-    embed.push('home_library', 'holding_library');
     [% IF Koha.Preference('LocalCoverImages') %]
         embed.push('cover_image_ids');
     [% END %]
@@ -248,6 +255,11 @@
         if ( !items_selection.hasOwnProperty(tab_id) ){
             items_selection[tab_id] = [];
         }
+
+        let filters_options = {
+            3: () => all_libraries,
+            4: () => all_libraries,
+        };
         var items_table = $("#" + tab_id + '_table').kohaTable({
             ajax: { url: item_table_url },
             order: [[ 0, "asc" ]],
@@ -320,7 +332,7 @@
             },
             [% END %]
             {
-                data: "me.holding_library_id:holding_library.name",
+                data: "me.holding_library_id",
                 className: "location",
                 searchable: true,
                 orderable: true,
@@ -329,7 +341,7 @@
                 }
             },
             {
-                data: "me.home_library_id:home_library.name",
+                data: "me.home_library_id",
                 className: "homebranch",
                 searchable: true,
                 orderable: true,
@@ -768,6 +780,7 @@
         items_table_settings[tab_id],
         add_filters,
         default_filters,
+        filters_options,
         );
 
         return items_table;

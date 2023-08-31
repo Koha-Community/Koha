@@ -947,7 +947,7 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
     * @param  {Object}  default_filters              Add a set of default search filters to apply at table initialisation
     * @return {Object}                               The dataTables instance
     */
-    $.fn.kohaTable = function(options, table_settings, add_filters, default_filters) {
+    $.fn.kohaTable = function(options, table_settings, add_filters, default_filters, filters_options) {
         var settings = null;
 
         if(options) {
@@ -998,7 +998,7 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
 
         var table_dt = table.DataTable();
         if ( add_filters ) {
-            _dt_add_filters(this, table_dt);
+            _dt_add_filters(this, table_dt, filters_options);
         }
 
         table.DataTable().on("column-visibility.dt", function(){_dt_on_visibility(add_filters, table, table_dt);})
