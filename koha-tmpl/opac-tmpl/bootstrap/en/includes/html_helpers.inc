@@ -183,7 +183,7 @@
     [%- IF preference_value == "username" %]
         [%- SET label = "Username" %]
     [%- ELSIF preference_value == "cardnumberorusername" %]
-        [%- SET label = "Cardnumber or Username" %]
+        [%- SET label = "Cardnumber or username" %]
     [%- END %]
     <label for="[% for | html %]">[% label | html %]:</label>
 [% END %]
