@@ -153,6 +153,13 @@ export default {
             .columns(this.hidden_ids)
             .visible(false)
 
+        dt.on("search.dt", function (e, settings) {
+            toggledClearFilter(
+                settings.oPreviousSearch.sSearch,
+                settings.nTable.id
+            )
+        })
+
         if (Object.keys(this.actions).length) {
             const self = this
             dt.on("draw", () => {
