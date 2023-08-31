@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use Test::Exception;
 use Test::MockModule;
@@ -63,6 +63,26 @@ subtest 'store() tests' => sub {
     }
     'Koha::Exceptions::Hold::MissingPickupLocation',
       'Exception thrown if one tries to set branchcode to null';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'biblio() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+        }
+    );
+
+    local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /cannot be null/ };
+    throws_ok { $hold->biblionumber(undef)->store; }
+    'DBIx::Class::Exception',
+        'reserves.biblionumber cannot be null, exception thrown';
 
     $schema->storage->txn_rollback;
 };
