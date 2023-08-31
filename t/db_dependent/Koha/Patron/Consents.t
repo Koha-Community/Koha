@@ -18,9 +18,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Data::Dumper qw/Dumper/;
+use Test::More tests => 2;
+use Test::MockModule;
+use Test::MockObject;
 
-use Test::More tests => 1;
-
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Koha::Database;
@@ -43,6 +46,44 @@ subtest 'Basic tests for Koha::Patron::Consent' => sub {
     is( Koha::Patron::Consents->search({ borrowernumber => $patron1->borrowernumber })->count, 1, 'One consent for new borrower' );
     $consent1->delete;
     is( Koha::Patron::Consents->search({ borrowernumber => $patron1->borrowernumber })->count, 0, 'No consents left for new borrower' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Method available_types' => sub {
+    plan tests => 7;
+    $schema->storage->txn_begin;
+
+    # Mock get_enabled_plugins
+    my $plugins        = [];
+    my $plugins_module = Test::MockModule->new('Koha::Plugins');
+    $plugins_module->mock( 'get_enabled_plugins', sub { return @$plugins } );
+    my $plugin_1 = Test::MockObject->new;
+    my $data_1   = [ 'plugin_1', { title => { en => 'Title1' }, description => { en => 'Desc1' } } ];
+    $plugin_1->mock( 'patron_consent_type', sub { return $data_1; } );
+    my $plugin_2 = Test::MockObject->new;
+    my $data_2   = [ 'plugin_2', { title => { en => 'Title2' }, description => { en => 'Desc2' } } ];
+    $plugin_2->mock( 'patron_consent_type', sub { return $data_2; } );
+    $plugins = [ $plugin_1, $plugin_2 ];
+
+    t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent',   'Enforced' );
+    t::lib::Mocks::mock_preference( 'OPACCustomConsentTypes', 0 );
+    my $types = Koha::Patron::Consents->available_types;
+    is( keys %$types, 1, 'Expect one plugin for privacy policy' );
+    t::lib::Mocks::mock_preference( 'OPACCustomConsentTypes', 1 );
+    $types = Koha::Patron::Consents->available_types;
+    is( keys %$types, 3, 'Expect three plugins when allowing custom consents' );
+    t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent', '' );
+    $types = Koha::Patron::Consents->available_types;
+    is( keys %$types,              2,     'Expect two plugins, when pref disabled' );
+    is( $types->{GDPR_PROCESSING}, undef, 'GDPR key should not be found' );
+    is_deeply( $types->{plugin_2}, $data_2->[1], 'Check type hash' );
+
+    # Let plugin_2 return bad data (hashref)
+    $data_2 = { not_expected => 1 };
+    $types  = Koha::Patron::Consents->available_types;
+    is( keys %$types, 1, 'Expect one plugin, when plugin_2 fails' );
+    is_deeply( $types->{plugin_1}, $data_1->[1], 'Check type hash' );
 
     $schema->storage->txn_rollback;
 };

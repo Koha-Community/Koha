@@ -47,6 +47,7 @@ use Koha::Old::Checkouts;
 use Koha::OverdueRules;
 use Koha::Patron::Attributes;
 use Koha::Patron::Categories;
+use Koha::Patron::Consents;
 use Koha::Patron::Debarments;
 use Koha::Patron::HouseboundProfile;
 use Koha::Patron::HouseboundRole;
@@ -2702,6 +2703,29 @@ sub alert_subscriptions {
     my @subscription_ids = map { $_->externalid } @alerts;
 
     return Koha::Subscriptions->search( { subscriptionid => \@subscription_ids } );
+}
+
+=head3 consent
+
+    my $consent = $patron->consent(TYPE);
+
+    Returns the first consent of type TYPE (there should be only one) or a new instance
+    of Koha::Patron::Consent.
+
+=cut
+
+sub consent {
+    my ( $self, $type ) = @_;
+    Koha::Exceptions::MissingParameter->throw('Missing consent type') if !$type;
+    my $consents = Koha::Patron::Consents->search(
+        {
+            borrowernumber => $self->borrowernumber,
+            type           => $type,
+        }
+    );
+    return $consents && $consents->count
+        ? $consents->next
+        : Koha::Patron::Consent->new( { borrowernumber => $self->borrowernumber, type => $type } );
 }
 
 =head2 Internal methods

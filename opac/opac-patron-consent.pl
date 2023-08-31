@@ -23,14 +23,12 @@ use CGI qw/-utf8/;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::DateUtils qw( dt_from_string );
-use Koha::Patron::Consents;
+use Koha::Exceptions::Patron;
 use Koha::Patrons;
-
-use constant GDPR_PROCESSING => 'GDPR_PROCESSING';
 
 my $query = CGI->new;
 my $op = $query->param('op') // q{};
-my $gdpr_check = $query->param('gdpr_processing') // q{};
+my $vars = $query->Vars;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user({
     template_name   => "opac-patron-consent.tt",
@@ -38,44 +36,37 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user({
     type            => "opac",
 });
 
-my $patron = Koha::Patrons->find($borrowernumber);
-my $gdpr_proc_consent;
-if( C4::Context->preference('PrivacyPolicyConsent') ) {
-    $gdpr_proc_consent = Koha::Patron::Consents->search({
-        borrowernumber => $borrowernumber,
-        type => GDPR_PROCESSING,
-    })->next;
-    $gdpr_proc_consent //= Koha::Patron::Consent->new({
-        borrowernumber => $borrowernumber,
-        type => GDPR_PROCESSING,
-    });
+my $patron = Koha::Patrons->find($borrowernumber)
+    or Koha::Exceptions::Patron->throw("Patron id $borrowernumber not found");
+
+# Get consent types and values
+my @consents;
+my $consent_types = Koha::Patron::Consents->available_types;
+foreach my $consent_type ( sort keys %$consent_types) {
+    push @consents, $patron->consent($consent_type);
 }
 
 # Handle saves here
-if( $op eq 'gdpr_proc_save' && $gdpr_proc_consent ) {
-    if( $gdpr_check eq 'agreed' ) {
-        $gdpr_proc_consent->given_on( dt_from_string() );
-        $gdpr_proc_consent->refused_on( undef );
-    } elsif( $gdpr_check eq 'disagreed' ) {
-        $gdpr_proc_consent->given_on( undef );
-        $gdpr_proc_consent->refused_on( dt_from_string() );
-    }
-    $gdpr_proc_consent->store;
+my $needs_redirect;
+foreach my $consent ( @consents ) {
+    my $check = $vars->{ "check_".$consent->type };
+    next if !defined($check);    # no choice made
+    $needs_redirect = 1
+        if $consent->type eq q/GDPR_PROCESSING/ && !$check && C4::Context->preference('PrivacyPolicyConsent') eq 'Enforced';
+    next if $consent->given_on && $check || $consent->refused_on && !$check;
+        # No update if no consent change
+    $consent->set({
+        given_on => $check ? dt_from_string() : undef,
+        refused_on => $check ? undef : dt_from_string(),
+    })->store;
 }
 
 # If user refused GDPR consent and we enforce GDPR, logout (when saving)
-if( $op =~ /save/ && C4::Context->preference('PrivacyPolicyConsent') eq 'Enforced' && $gdpr_proc_consent->refused_on )
-{
+if( $needs_redirect ) {
     print $query->redirect('/cgi-bin/koha/opac-main.pl?logout.x=1');
     exit;
 }
 
-$template->param( patron => $patron );
-if( $gdpr_proc_consent ) {
-    $template->param(
-        gdpr_proc_consent => $gdpr_proc_consent->given_on // q{},
-        gdpr_proc_refusal => $gdpr_proc_consent->refused_on // q{},
-    );
-}
+$template->param( patron => $patron, consents => \@consents, consent_types => $consent_types );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

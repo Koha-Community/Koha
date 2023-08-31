@@ -20,7 +20,10 @@ package Koha::Patron::Consents;
 use Modern::Perl;
 
 use base qw(Koha::Objects);
+
+use C4::Context;
 use Koha::Patron::Consent;
+use Koha::Plugins;
 
 =head1 NAME
 
@@ -34,7 +37,31 @@ Koha::Objects class for handling patron consents
 
 =head2 Class Methods
 
+=head3 available_types
+
+    Returns an HASHref of available consent types like:
+        { type1 => {}, type2 => {}, .. }
+
+    Checks preferences OPACCustomConsentTypes and PrivacyPolicyConsent.
+    Calls patron_consent_type plugins (if pref enabled).
+
+    Note: The plugins return an ARRAYref with type, title and description like:
+        [ my_type => { title => { lang => 1, .. }, description => { lang => 2, .. } } ]
+
 =cut
+
+sub available_types {
+    my ($self) = shift;
+    my $response = {};
+    $response->{GDPR_PROCESSING} = 1 if C4::Context->preference('PrivacyPolicyConsent');
+    if ( C4::Context->preference('OPACCustomConsentTypes') ) {
+        foreach my $return ( Koha::Plugins->call('patron_consent_type') ) {
+            next if ref($return) ne 'ARRAY' or @$return != 2;    # ignoring bad input
+            $response->{ $return->[0] } = $return->[1];
+        }
+    }
+    return $response;
+}
 
 =head3 _type
 

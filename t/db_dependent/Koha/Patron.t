@@ -1859,6 +1859,7 @@ subtest 'update privacy tests' => sub {
 
     plan tests => 5;
 
+    $schema->storage->txn_begin;
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { privacy => 1 } });
 
     my $old_checkout = $builder->build_object({ class => 'Koha::Old::Checkouts', value => { borrowernumber => $patron->id } });
@@ -1892,6 +1893,7 @@ subtest 'update privacy tests' => sub {
 subtest 'alert_subscriptions tests' => sub {
 
     plan tests => 3;
+    $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
@@ -1908,6 +1910,25 @@ subtest 'alert_subscriptions tests' => sub {
     is( $subscriptions[1]->subscriptionid, $subscription2->subscriptionid, "Second subscribed alert is correct" );
 
     $patron->discard_changes;
+    $schema->storage->txn_rollback;
+};
+
+subtest 'test patron_consent' => sub {
+    plan tests => 4;
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    throws_ok { $patron->consent } 'Koha::Exceptions::MissingParameter', 'missing type';
+
+    my $consent = $patron->consent('GDPR_PROCESSING');
+    is( ref $consent, 'Koha::Patron::Consent', 'return type check' );
+    $consent->given_on('2021-02-03')->store;
+    undef $consent;
+    is( $patron->consent('GDPR_PROCESSING')->given_on, '2021-02-03 00:00:00', 'check date' );
+
+    is( $patron->consent('NOT_EXIST')->refused_on, undef, 'New empty object for new type' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'update_lastseen tests' => sub {
