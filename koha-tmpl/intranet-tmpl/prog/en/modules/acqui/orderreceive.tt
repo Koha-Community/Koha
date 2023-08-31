@@ -1367,11 +1367,7 @@
             });
 
             $("#order_edit").on("hide.bs.modal", function() {
-            [% IF only_one_order %] [%# On the single case, dismissing the modal equals to cancelling %]
-                location.href = "/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1";
-            [% ELSE %]
                 $("#child_orders_table").DataTable().off('preDraw').destroy();
-            [% END %]
             });
         });
     </script>
