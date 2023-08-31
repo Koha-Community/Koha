@@ -897,7 +897,7 @@ sub test_checkin_v2 {
     is( substr($response,2,1), '0', 'OK flag is false' );
     is( substr($response,5,1), 'Y', 'Alert flag is set' );
     check_field( $respcode, $response, FID_SCREEN_MSG, 'Invalid Item', 'Check screen msg', 'regex' );
-    check_field( $respcode, $response, FID_PERM_LOCN, '', 'Check that AQ is in the response');
+    check_field( $respcode, $response, FID_PERM_LOCN, '', 'Check that AQ is in the response' );
 
     # Not checked out, toggle option checked_in_ok
     $siprequest = CHECKIN . 'N' . 'YYYYMMDDZZZZHHMMSS' .
