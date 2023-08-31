@@ -19,7 +19,8 @@ use Modern::Perl;
 use Data::Dumper;
 
 use MARC::Record;
-use C4::Items qw( ModItemTransfer SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc ModDateLastSeen CartToShelf );
+use C4::Items
+    qw( ModItemTransfer SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc ModDateLastSeen CartToShelf );
 use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
 use C4::Circulation qw( AddIssue );
 use Koha::BackgroundJobs;
@@ -978,7 +979,7 @@ subtest 'CartToShelf test' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
-    my $dbh = C4::Context->dbh;
+    my $dbh     = C4::Context->dbh;
     my $builder = t::lib::TestBuilder->new;
 
     my $item = $builder->build_sample_item();
@@ -989,17 +990,17 @@ subtest 'CartToShelf test' => sub {
 
     $item->discard_changes;
 
-    is( $item->location, 'BANANA', 'Item is correctly returned to permanent location');
-
+    is( $item->location, 'BANANA', 'Item is correctly returned to permanent location' );
 
     my $mock_RTHQ = Test::MockModule->new("Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue");
     $mock_RTHQ->mock( enqueue => sub { warn "RTHQ" } );
-    t::lib::Mocks::mock_preference('RealTimeHoldsQueue', '1');
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', '1' );
 
-    $item->location('CART')->store({ skip_holds_queue => 1 });
-    warnings_are{
+    $item->location('CART')->store( { skip_holds_queue => 1 } );
+    warnings_are {
         CartToShelf( $item->id );
-    } [], 'No RTHQ update triggered by CartToShelf';
+    }
+    [], 'No RTHQ update triggered by CartToShelf';
 
     $schema->storage->txn_rollback;
 
