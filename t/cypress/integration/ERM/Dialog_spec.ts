@@ -82,6 +82,14 @@ describe("Dialog operations", () => {
             statusCode: 201,
             body: erm_package,
         });
+        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
+            statusCode: 200,
+            body: [erm_package],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog message']").contains("Package created");
         cy.get("#package_list_result").should("exist");
