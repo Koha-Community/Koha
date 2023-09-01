@@ -682,7 +682,7 @@ else {
         $item_info->{holding_library_info} = $opac_info_holding->content if $opac_info_holding;
         $item_info->{home_library_info} = $opac_info_home->content if $opac_info_home;
 
-        $can_item_be_reserved = $can_item_be_reserved || IsAvailableForItemLevelRequest($item, $patron, undef);
+        $can_item_be_reserved = $can_item_be_reserved || $patron && IsAvailableForItemLevelRequest($item, $patron, undef);
 
         # get collection code description, too
         my $ccode = $item->ccode;
