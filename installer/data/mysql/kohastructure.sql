@@ -5392,6 +5392,7 @@ DROP TABLE IF EXISTS `search_marc_to_field`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `search_marc_to_field` (
   `search` tinyint(1) NOT NULL DEFAULT 1,
+  `filter` varchar(100) NOT NULL DEFAULT '' COMMENT 'specify a filter to be applied to field',
   `search_marc_map_id` int(11) NOT NULL,
   `search_field_id` int(11) NOT NULL,
   `facet` tinyint(1) DEFAULT 0 COMMENT 'true if a facet field should be generated for this',
