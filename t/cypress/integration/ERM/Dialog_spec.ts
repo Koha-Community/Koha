@@ -84,6 +84,7 @@ describe("Dialog operations", () => {
         });
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog message']").contains("Package created");
+        cy.get("#package_list_result").should("exist");
         cy.get("main div[class='dialog message']").should("have.length", 1);
 
         cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {
