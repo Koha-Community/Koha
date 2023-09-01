@@ -51,6 +51,7 @@ do
     shift
 done
 
+rv=0
 for name in $(koha-list $listopts)
 do
     # Replace the __instancename__ placeholder for the instance name (Bug 8566)
@@ -64,8 +65,8 @@ do
         if koha-shell ${name} -c "${cmd}"; then
             : #noop
         else
-            rv=$?
-            echo "${name}: $rv status returned by \"${cmd}\""
+            echo "${name}: $? status returned by \"${cmd}\""
+            rv=1
         fi
 
         # Go back to the original dir if required
@@ -73,4 +74,4 @@ do
     fi
 done
 
-exit 0
+exit $rv
