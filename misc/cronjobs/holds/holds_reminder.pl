@@ -179,17 +179,17 @@ my @mtts;
 my $command_line_options = join(" ",@ARGV);
 
 GetOptions(
-    'help|?'         => \$help,
-    'man'            => \$man,
-    'v'              => \$verbose,
-    'c|confirm'      => \$confirm,
-    'days=s'         => \$days,
-    't|triggered'      => \$triggered,
-    'lettercode=s'   => \$lettercode,
-    'library=s'      => \@branchcodes,
-    'date=s'         => \$date_input,
-    'holidays'       => \$use_calendar,
-    'mtt=s'          => \@mtts
+    'help|?'       => \$help,
+    'man'          => \$man,
+    'v'            => \$verbose,
+    'c|confirm'    => \$confirm,
+    'days=s'       => \$days,
+    't|triggered'  => \$triggered,
+    'lettercode=s' => \$lettercode,
+    'library=s'    => \@branchcodes,
+    'date=s'       => \$date_input,
+    'holidays'     => \$use_calendar,
+    'mtt=s'        => \@mtts
 );
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
