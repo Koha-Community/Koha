@@ -47,6 +47,7 @@ describe("Title CRUD operations", () => {
         cy.wait(500);
         cy.get("#toolbar a").contains("Import from list").click();
         cy.get("h2").contains("Import from a list");
+        cy.left_menu_active_item_is("Titles");
         cy.get("#package_list .vs__selected").should("not.exist");
 
         // Make sure packages are returned
@@ -127,6 +128,7 @@ describe("Title CRUD operations", () => {
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.contains("New title").click();
         cy.get("#titles_add h2").contains("New title");
+        cy.left_menu_active_item_is("Titles");
 
         // Fill in the form for normal attributes
         let erm_title = cy.get_title();
@@ -249,6 +251,7 @@ describe("Title CRUD operations", () => {
         cy.wait("@get-title");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#titles_add h2").contains("Edit title");
+        cy.left_menu_active_item_is("Titles");
 
         // Form has been correctly filled in
         cy.get("#title_publication_title").should(
@@ -402,6 +405,7 @@ describe("Title CRUD operations", () => {
         cy.get("#eholdings_title_show h2").contains(
             "Title #" + erm_title.title_id
         );
+        cy.left_menu_active_item_is("Titles");
         // There are no packages, the table should not be displayed
         cy.contains("Packages (0)");
         cy.get("#table#package_list").should("not.exist");

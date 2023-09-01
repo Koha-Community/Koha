@@ -255,6 +255,7 @@ describe("Agreement CRUD operations", () => {
         cy.visit("/cgi-bin/koha/erm/agreements");
         cy.contains("New agreement").click();
         cy.get("#agreements_add h2").contains("New agreement");
+        cy.left_menu_active_item_is("Agreements");
 
         // Fill in the form for normal attributes
         let agreement = get_agreement();
@@ -492,6 +493,7 @@ describe("Agreement CRUD operations", () => {
         cy.wait("@get-agreement");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#agreements_add h2").contains("Edit agreement");
+        cy.left_menu_active_item_is("Agreements");
 
         // Form has been correctly filled in
         cy.get("#agreement_name").should("have.value", agreements[0].name);
@@ -579,6 +581,7 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_show h2").contains(
             "Agreement #" + agreement.agreement_id
         );
+        cy.left_menu_active_item_is("Agreements");
 
         // TODO There are more to test here:
         // Dates correctly formatted

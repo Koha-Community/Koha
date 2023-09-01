@@ -19,6 +19,10 @@ import './commands';
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
+Cypress.Commands.add('left_menu_active_item_is', (label) => {
+    cy.get("#navmenulist a.current:not(.disabled)").should('have.length',1).contains(label);
+})
+
 cy.get_title = () => {
     return {
         access_type: "access type",

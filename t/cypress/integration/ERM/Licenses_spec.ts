@@ -82,6 +82,7 @@ describe("License CRUD operations", () => {
         cy.visit("/cgi-bin/koha/erm/licenses");
         cy.contains("New license").click();
         cy.get("#licenses_add h2").contains("New license");
+        cy.left_menu_active_item_is("Licenses");
 
         // Fill in the form for normal attributes
         let license = get_license();
@@ -169,6 +170,7 @@ describe("License CRUD operations", () => {
         cy.wait("@get-license");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#licenses_add h2").contains("Edit license");
+        cy.left_menu_active_item_is("Licenses");
 
         // Form has been correctly filled in
         cy.get("#license_name").should("have.value", license.name);
@@ -230,6 +232,7 @@ describe("License CRUD operations", () => {
         cy.wait("@get-license");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#licenses_show h2").contains("License #" + license.license_id);
+        cy.left_menu_active_item_is("Licenses");
     });
 
     it("Delete license", () => {

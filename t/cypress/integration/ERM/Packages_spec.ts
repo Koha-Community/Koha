@@ -86,6 +86,7 @@ describe("Package CRUD operations", () => {
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.contains("New package").click();
         cy.get("#packages_add h2").contains("New package");
+        cy.left_menu_active_item_is("Packages");
 
         // Fill in the form for normal attributes
         let erm_package = get_package();
@@ -171,6 +172,7 @@ describe("Package CRUD operations", () => {
         cy.wait("@get-package");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#packages_add h2").contains("Edit package");
+        cy.left_menu_active_item_is("Packages");
 
         // Form has been correctly filled in
         cy.get("#package_name").should("have.value", erm_package.name);
@@ -232,6 +234,8 @@ describe("Package CRUD operations", () => {
         cy.get("#packages_show h2").contains(
             "Package #" + erm_package.package_id
         );
+        cy.left_menu_active_item_is("Packages");
+
         // There are no resources, the table should not be displayed
         cy.contains("Titles (0)");
         cy.get("#title_list_result table").should("not.exist");
