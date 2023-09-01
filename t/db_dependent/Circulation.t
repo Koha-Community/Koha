@@ -5777,7 +5777,7 @@ subtest "GetSoonestRenewDate tests" => sub {
     );
     $issue->date_due( dt_from_string )->store;
     is(
-        GetSoonestRenewDate( $patron, $issue ),
+        GetSoonestRenewDate( $issue ),
         dt_from_string->subtract( days => 1 )->truncate( to => 'day' ),
         'Checkouts with auto-renewal can be renewed 1 day before due date if no renewalbefore = 1 and precision = "date"'
     );
