@@ -24295,12 +24295,14 @@ unless ( $ENV{HTTP_HOST} ) { # Is that correct?
     my $files = get_db_entries;
     my $report = update( $files, { force => $force } );
 
+    my $error_code = 0;
     for my $s ( @{ $report->{success} } ) {
         say Encode::encode_utf8(join "\n", @{$s->{output}});
     }
     for my $e ( @{ $report->{error} } ) {
         say Encode::encode_utf8(join "\n", @{$e->{output}});
         say Encode::encode_utf8("ERROR - " . $e->{error});
+        $error_code = 1;
     }
 
     my $atomic_update_files = get_atomic_updates;
@@ -24311,9 +24313,9 @@ unless ( $ENV{HTTP_HOST} ) { # Is that correct?
     for my $e ( @{ $report->{error} } ) {
         say Encode::encode_utf8(join "\n", @{$e->{output}});
         say Encode::encode_utf8("ERROR - " . $e->{error});
+        $error_code = 1;
     }
-
-
+    exit $error_code;
 }
 
 exit;
