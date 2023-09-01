@@ -103,6 +103,7 @@ if ( $op eq 'edit' ) {
     my @mapping_facet       = $input->multi_param('mapping_facet');
     my @mapping_suggestible = $input->multi_param('mapping_suggestible');
     my @mapping_search      = $input->multi_param('mapping_search');
+    my @mapping_filter      = $input->multi_param('mapping_filter');
     my @mapping_marc_field  = $input->multi_param('mapping_marc_field');
     my @faceted_field_names = $input->multi_param('display_facet');
 
@@ -153,6 +154,7 @@ if ( $op eq 'edit' ) {
             my $mapping_suggestible = $mapping_suggestible[$i];
             my $mapping_sort        = $mapping_sort[$i];
             my $mapping_search      = $mapping_search[$i];
+            my $mapping_filter      = $mapping_filter[$i];
 
             my $search_field = Koha::SearchFields->find({ name => $search_field_name }, { key => 'name' });
             $mandatory_after++ if $search_field->mandatory && !defined $seen_fields{$search_field_name};
@@ -166,12 +168,16 @@ if ( $op eq 'edit' ) {
                 marc_type => $marc_type,
                 marc_field => $mapping_marc_field
             });
-            $search_field->add_to_search_marc_maps($marc_field, {
-                facet => $mapping_facet,
-                suggestible => $mapping_suggestible,
-                sort => $mapping_sort,
-                search => $mapping_search
-            });
+            $search_field->add_to_search_marc_maps(
+                $marc_field,
+                {
+                    facet       => $mapping_facet,
+                    suggestible => $mapping_suggestible,
+                    sort        => $mapping_sort,
+                    search      => $mapping_search,
+                    filter      => $mapping_filter
+                }
+            );
         }
         push @errors, { type => 'error', code => 'missing_mandatory_fields' } if $mandatory_after < $mandatory_before;
     };
@@ -227,15 +233,16 @@ for my $index_name (@index_names) {
     my $search_fields = Koha::SearchFields->search(
         {
             'search_marc_map.index_name' => $index_name,
-            'search_marc_map.marc_type' => $marc_type,
+            'search_marc_map.marc_type'  => $marc_type,
         },
         {
-            join => { search_marc_to_fields => 'search_marc_map' },
+            join      => { search_marc_to_fields => 'search_marc_map' },
             '+select' => [
                 'search_marc_to_fields.facet',
                 'search_marc_to_fields.suggestible',
                 'search_marc_to_fields.sort',
                 'search_marc_to_fields.search',
+                'search_marc_to_fields.filter',
                 'search_marc_map.marc_field'
             ],
             '+as' => [
@@ -243,11 +250,12 @@ for my $index_name (@index_names) {
                 'suggestible',
                 'sort',
                 'search',
+                'filter',
                 'marc_field'
             ],
             order_by => { -asc => [qw/name marc_field/] }
-         }
-     );
+        }
+    );
 
     my @mappings;
     my @facetable_field_names = map { $_->name } @facetable_fields;
@@ -263,6 +271,7 @@ for my $index_name (@index_names) {
             sort               => $s->get_column('sort') // 'undef', # To avoid warnings "Use of uninitialized value in lc"
             suggestible        => $s->get_column('suggestible'),
             search             => $s->get_column('search'),
+            filter             => $s->get_column('filter'),
             facet              => $s->get_column('facet'),
             is_facetable       => ( grep { $_ eq $name } @facetable_field_names ) ? 1 : 0,
         };

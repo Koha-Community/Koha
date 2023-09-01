@@ -267,6 +267,7 @@ a.add, a.delete {
                                 <th>Facetable</th>
                                 <th>Suggestible</th>
                                 <th>Searchable</th>
+                                <th>Filter</th>
                                 <th>Mapping</th>
                                 <th>&nbsp;</th>
                                 </tr>
@@ -296,6 +297,9 @@ a.add, a.delete {
                                             </td>
                                             <td>
                                                 <input type="hidden" name="mapping_search" value="[% mapping.search | html %]" readonly />[% IF mapping.search == 1 %]Yes[% ELSE %]No[% END %]
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="mapping_filter" value="[% mapping.filter | html %]" readonly />[% IF mapping.filter == 'punctuation' %]Punctuation[% END %]
                                             </td>
                                             <td data-search="[% mapping.marc_field | html %]">
                                                 <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
@@ -359,6 +363,17 @@ a.add, a.delete {
                                                 [% END %]
                                             </select>
                                             </td>
+                                            <td>
+                                                <select name="mapping_filter">
+                                                    [% IF mapping.filter == 'punctuation' %]
+                                                        <option value="">None</option>
+                                                        <option value="punctuation" selected="selected">Punctuation</option>
+                                                    [% ELSE %]
+                                                        <option value="" selected="selected">None</option>
+                                                        <option value="punctuation">Punctuation</option>
+                                                    [% END %]
+                                                </select>
+                                            </td>
                                             <td data-search="[% mapping.marc_field | html %]">
                                                 <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
                                             </td>
@@ -417,6 +432,17 @@ a.add, a.delete {
                                             [% ELSE %]
                                                 <option value="0" selected="selected">No</option>
                                                 <option value="1">Yes</option>
+                                            [% END %]
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="mapping_filter">
+                                            [% IF mapping.filter == 'punctuation' %]
+                                                <option value="">None</option>
+                                                <option value="punctuation" selected="selected">Punctuation</option>
+                                            [% ELSE %]
+                                                <option value="" selected="selected">None</option>
+                                                <option value="punctuation">Punctuation</option>
                                             [% END %]
                                         </select>
                                     </td>
