@@ -194,7 +194,7 @@ sub get_elasticsearch_mappings {
         my $marcflavour = lc C4::Context->preference('marcflavour');
         $self->_foreach_mapping(
             sub {
-                my ( $name, $type, $facet, $suggestible, $sort, $search, $marc_type ) = @_;
+                my ( $name, $type, $facet, $suggestible, $sort, $search, $filter, $marc_type ) = @_;
                 return if $marc_type ne $marcflavour;
                 # TODO if this gets any sort of complexity to it, it should
                 # be broken out into its own function.
@@ -291,7 +291,8 @@ sub raw_elasticsearch_mappings {
                     marc_type => $marc_map->marc_type,
                     marc_field => $marc_map->marc_field,
                     sort        => $marc_to_field->sort,
-                    suggestible => $marc_to_field->suggestible || ''
+                    suggestible => $marc_to_field->suggestible || '',
+                    filter => $marc_to_field->filter || ''
                 });
 
         }
@@ -381,7 +382,8 @@ sub reset_elasticsearch_mappings {
                     facet => $mapping->{facet} || 0,
                     suggestible => $mapping->{suggestible} || 0,
                     sort => $mapping->{sort} // 1,
-                    search => $mapping->{search} // 1
+                    search => $mapping->{search} // 1,
+                    filter => $mapping->{filter} // ''
                 });
             }
         }
@@ -887,9 +889,9 @@ sub _array_to_marc {
     return $record;
 }
 
-=head2 _field_mappings($facet, $suggestible, $sort, $search, $target_name, $target_type, $range)
+=head2 _field_mappings($facet, $suggestible, $sort, $search, $filter, $target_name, $target_type, $range)
 
-    my @mappings = _field_mappings($facet, $suggestible, $sort, $search, $target_name, $target_type, $range)
+    my @mappings = _field_mappings( $facet, $suggestible, $sort, $search, $filter, $target_name, $target_type, $range )
 
 Get mappings, an internal data structure later used by
 L<_process_mappings($mappings, $data, $record_document, $meta)> to process MARC target
@@ -947,7 +949,7 @@ be extracted.
 =cut
 
 sub _field_mappings {
-    my ($_self, $facet, $suggestible, $sort, $search, $target_name, $target_type, $range) = @_;
+    my ( $_self, $facet, $suggestible, $sort, $search, $filter, $target_name, $target_type, $range ) = @_;
     my %mapping_defaults = ();
     my @mappings;
 
@@ -981,6 +983,18 @@ sub _field_mappings {
             my ($value) = @_;
             # Replace "u" with "0" for sorting
             return map { s/[u\s]/0/gr } ( $value =~ /[0-9u\s]{4}/g );
+        };
+    }
+
+    if ( defined $filter && $filter eq 'punctuation' ) {
+        $default_options->{value_callbacks} //= [];
+        push @{ $default_options->{value_callbacks} }, sub {
+            my ($value) = @_;
+
+            # Trim punctuation marks from field
+            $value =~
+                s/[\x00-\x1F,\x21-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x89,\x8B,\x8D,\x8F,\x90-\x99,\x9B,\x9D,\xA0-\xBF,\xD7,\xF7]//g;
+            return $value;
         };
     }
 
@@ -1046,7 +1060,7 @@ sub _get_marc_mapping_rules {
     };
 
     $self->_foreach_mapping(sub {
-        my ($name, $type, $facet, $suggestible, $sort, $search, $marc_type, $marc_field) = @_;
+        my ($name, $type, $facet, $suggestible, $sort, $search, $filter, $marc_type, $marc_field) = @_;
         return if $marc_type ne $marcflavour;
 
         if ($type eq 'sum') {
@@ -1110,7 +1124,7 @@ sub _get_marc_mapping_rules {
             }
 
             my $range = defined $3 ? $3 : undef;
-            my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $name, $type, $range);
+            my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $filter, $name, $type, $range);
             if ($field_tag < 10) {
                 $rules->{control_fields}->{$field_tag} //= [];
                 push @{$rules->{control_fields}->{$field_tag}}, @{clone(\@mappings)};
@@ -1129,7 +1143,7 @@ sub _get_marc_mapping_rules {
         }
         elsif ($marc_field =~ $leader_regexp) {
             my $range = defined $1 ? $1 : undef;
-            my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $name, $type, $range);
+            my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $filter, $name, $type, $range);
             push @{$rules->{leader}}, @{clone(\@mappings)};
         }
         else {
@@ -1182,7 +1196,7 @@ sub _get_marc_mapping_rules {
 
     $self->_foreach_mapping(
         sub {
-            my ( $name, $type, $facet, $suggestible, $sort, $marc_type,
+            my ( $name, $type, $facet, $suggestible, $sort, $search, $filter, $marc_type,
                 $marc_field )
               = @_;
             return unless $marc_type eq 'marc21';
@@ -1218,6 +1232,15 @@ should be sorted on. False if a) but not b). Undef if not a). This allows,
 for example, author to be sorted on but not everything marked with "author"
 to be included in that sort.
 
+=item C<$search>
+
+True if this value should be searchable.
+
+=item C<$filter>
+
+Contains a string that represents a filter defined in the indexing code. Currently supports
+the option 'punctuation'
+
 =item C<$marc_type>
 
 A string that indicates the MARC type that this mapping is for, e.g. 'marc21',
@@ -1245,6 +1268,7 @@ sub _foreach_mapping {
                 'search_marc_to_fields.suggestible',
                 'search_marc_to_fields.sort',
                 'search_marc_to_fields.search',
+                'search_marc_to_fields.filter',
                 'search_marc_map.marc_type',
                 'search_marc_map.marc_field',
             ],
@@ -1253,6 +1277,7 @@ sub _foreach_mapping {
                 'suggestible',
                 'sort',
                 'search',
+                'filter',
                 'marc_type',
                 'marc_field',
             ],
@@ -1269,6 +1294,7 @@ sub _foreach_mapping {
             $search_field->get_column('suggestible'),
             $search_field->get_column('sort'),
             $search_field->get_column('search'),
+            $search_field->get_column('filter'),
             $search_field->get_column('marc_type'),
             $search_field->get_column('marc_field'),
         );

@@ -145,14 +145,15 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
             marc_field => '001',
         },
         {
-            name => 'isbn',
-            type => 'string',
-            facet => 0,
+            name        => 'isbn',
+            type        => 'string',
+            facet       => 0,
             suggestible => 0,
-            searchable => 1,
-            sort => 1,
-            marc_type => 'marc21',
-            marc_field => '020a',
+            searchable  => 1,
+            filter      => 'punctuation',
+            sort        => 1,
+            marc_type   => 'marc21',
+            marc_field  => '020a',
         },
     );
     my $search_engine_module = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
@@ -167,6 +168,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
                 $map->{suggestible},
                 $map->{sort},
                 $map->{searchable},
+                $map->{filter},
                 $map->{marc_type},
                 $map->{marc_field}
             );
@@ -184,7 +186,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 65;
+    plan tests => 66;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -239,6 +241,17 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             sort => 1,
             marc_type => 'marc21',
             marc_field => '245(ab)ab',
+        },
+        {
+            name        => 'title-no-punctuation',
+            type        => 'string',
+            facet       => 0,
+            suggestible => 1,
+            searchable  => 1,
+            sort        => undef,
+            filter      => 'punctuation',
+            marc_type   => 'marc21',
+            marc_field  => '245(ab)ab',
         },
         {
             name => 'unimarc_title',
@@ -394,6 +407,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
                 $map->{suggestible},
                 $map->{sort},
                 $map->{searchable},
+                $map->{filter},
                 $map->{marc_type},
                 $map->{marc_field}
             );
@@ -454,11 +468,11 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     my $marc_record_4 = MARC::Record->new();
     $marc_record_4->leader('     cam  22      a 4500');
     $marc_record_4->append_fields(
-        MARC::Field->new('008', '901111s19uu xxk|||| |00| ||eng c'),
-        MARC::Field->new('100', '', '', a => 'Author 2'),
-        MARC::Field->new('245', '', '4', a => 'The Title :', b => 'fourth record'),
-        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => ' 89 '),
-        MARC::Field->new('999', '', '', c => '1234568'),
+        MARC::Field->new( '008', '901111s19uu xxk|||| |00| ||eng c' ),
+        MARC::Field->new( '100', '', '', a => 'Author 2' ),
+        MARC::Field->new( '245', '', '4', a => 'The Title\'s the thing :', b => 'fourth record' ),
+        MARC::Field->new( '260', '', '', a => 'New York :', b => 'Ace ,', c => ' 89 ' ),
+        MARC::Field->new( '999', '', '', c => '1234568' ),
     );
 
     my $records = [$marc_record_1, $marc_record_2, $marc_record_3, $marc_record_4];
@@ -487,7 +501,15 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     is_deeply($docs->[0]->{title__sort}, ['Title: first record Title: first record'], 'First document title__sort field should be set correctly');
 
     is(scalar @{$docs->[3]->{title__sort}}, 1, 'First document title__sort field should have a single');
-    is_deeply($docs->[3]->{title__sort}, ['Title : fourth record The Title : fourth record'], 'Fourth document title__sort field should be set correctly');
+    is_deeply(
+        $docs->[3]->{title__sort}, ['Title\'s the thing : fourth record The Title\'s the thing : fourth record'],
+        'Fourth document title__sort field should be set correctly'
+    );
+    is_deeply(
+        $docs->[3]->{'title-no-punctuation'},
+        [ 'The Titles the thing ', 'fourth record', 'The Titles the thing  fourth record' ],
+        'Fourth document title-no-punctuation field should be set correctly'
+    );
 
     is($docs->[0]->{issues}, 6, 'Issues field should be sum of the issues for each item');
     is($docs->[0]->{issues__sort}, 6, 'Issues sort field should also be a sum of the issues');
@@ -764,6 +786,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
                 $map->{suggestible},
                 $map->{sort},
                 $map->{searchable},
+                $map->{filter},
                 $map->{marc_type},
                 $map->{marc_field}
             );
@@ -859,6 +882,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
                 $map->{suggestible},
                 $map->{sort},
                 $map->{searchable},
+                $map->{filter},
                 $map->{marc_type},
                 $map->{marc_field}
             );
@@ -959,6 +983,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents with Inclu
                 $map->{suggestible},
                 $map->{sort},
                 $map->{searchable},
+                $map->{filter},
                 $map->{marc_type},
                 $map->{marc_field}
             );
