@@ -139,7 +139,7 @@ Will only update patrons in the category specified.
 
 =item B<--library>
 
-Will only update patrons in the library specified.
+Will only update patrons whose home library matches the given library id
 
 =item B<--since>
 
