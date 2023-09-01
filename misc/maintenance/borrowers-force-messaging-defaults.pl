@@ -78,14 +78,14 @@ WHERE 1|;
 
 my ( $doit, $since, $help, $not_expired, $no_overwrite, $category, $branchcode, $message_name );
 my $result = GetOptions(
-    'doit'        => \$doit,
-    'since:s'     => \$since,
-    'not-expired' => \$not_expired,
-    'no-overwrite'  => \$no_overwrite,
-    'category:s'  => \$category,
-    'library:s'   => \$branchcode,
+    'doit'           => \$doit,
+    'since:s'        => \$since,
+    'not-expired'    => \$not_expired,
+    'no-overwrite'   => \$no_overwrite,
+    'category:s'     => \$category,
+    'library:s'      => \$branchcode,
     'message-name:s' => \$message_name,
-    'help|h'      => \$help,
+    'help|h'         => \$help,
 );
 
 usage() if $help;
@@ -143,12 +143,13 @@ Will only update patrons in the category specified.
 
 =item B<--library>
 
-Will only update patrons whose home library matches the given library id
+Will only update patrons whose home library matches the given library id.
 
 =item B<--message-name>
 
 Will only update the specified message name.
 List of values can be found in installer/data/mysql/mandatory/sample_notices_message_attributes.sql
+or in message_attributes.message_name in the database.
 
 =item B<--since>
 
