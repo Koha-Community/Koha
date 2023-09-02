@@ -191,7 +191,7 @@ GetOptions(
 
 pod2usage( -verbose => 2 ) if $man;
 pod2usage(1) if $help || !$confirm;
-if( defined($active) && defined($inactive) ) {
+if ( defined($active) && defined($inactive) ) {
     print "Sorry, it is not possible to pass both -active as well as -inactive.\n";
     exit;
 }
@@ -223,14 +223,13 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
 
 # main loop
 $letter_type = 'MEMBERSHIP_EXPIRY' if !$letter_type;
-my ( $count_active, $count_inactive, $count_enqueued ) = ( 0, 0, 0 );
+my ( $count_skipped, $count_enqueued ) = ( 0, 0 );
 while ( my $recent = $upcoming_mem_expires->next ) {
-    my $patron_active = $recent->is_active({ months => $active // $inactive }); # checked already that only one is defined
-    if( defined($active) && !$patron_active ) {
-        $count_inactive++;
+    if ( $active && !$recent->is_active( { months => $active } ) ) {
+        $count_skipped++;
         next;
-    } elsif( defined($inactive) && $patron_active ) {
-        $count_active++;
+    } elsif ( $inactive && $recent->is_active( { months => $inactive } ) ) {
+        $count_skipped++;
         next;
     }
     my $from_address = $recent->library->from_email_address;
@@ -280,10 +279,10 @@ while ( my $recent = $upcoming_mem_expires->next ) {
     }
 }
 
-if( $verbose ) {
+if ($verbose) {
     print "Enqueued notices for $count_enqueued patrons\n";
-    print "Skipped $count_active active patrons\n" if $count_active;
-    print "Skipped $count_inactive inactive patrons\n" if $count_inactive;
+    print "Skipped $count_skipped inactive patrons\n" if $active;
+    print "Skipped $count_skipped active patrons\n"   if $inactive;
 }
 
 cronlogaction({ action => 'End', info => "COMPLETED" });
