@@ -24,41 +24,65 @@ use t::lib::Mocks;
 use_ok('Koha::SearchEngine::Elasticsearch::Search');
 
 subtest 'search_auth_compat' => sub {
-    plan tests => 2;
+    plan tests => 4;
 
-    t::lib::Mocks::mock_preference('QueryRegexEscapeOptions', 'dont_escape');
+    t::lib::Mocks::mock_preference( 'QueryRegexEscapeOptions', 'dont_escape' );
 
-    my $module = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
-    $module->mock('count_auth_use', sub { return 1 });
-    $module->mock('search', sub {
-        # While the 001 and the authid should be the same, it is not always the case
-        # The _id is always the authid and so should be our source of trutch
-        my $marc_record = MARC::Record->new();
-        $marc_record->append_fields(
-            MARC::Field->new('001', 'Wrong001Number'),
-        );
-        return {
-                   hits => {
-                   hits => [{
-                   '_id' => 8675309,
-                   '_source' => {
-                       'local-number' => ['Wrong001Number'],
-                       'marc_data' => $marc_record,
-                       'marc_format' => 'base64ISO2709',
-                   },
-                   }]
-                   }
-               };
-    });
     my $search;
     ok(
-        $search = Koha::SearchEngine::Elasticsearch::Search->new({ 'index' => $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX }),
+        $search = Koha::SearchEngine::Elasticsearch::Search->new(
+            { index => $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX }
+        ),
         'Creating a new Search object'
+    );
+
+    my $builder;
+    ok(
+        $builder =
+            Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX } ),
+        'Creating a new Builder object'
+    );
+
+    my $search_query = $builder->build_authorities_query_compat(
+        ['mainmainentry'], ['and'], [''], ['contains'],
+        ['Donald - Duck'], '',      'HeadingAsc'
+    );
+
+    my ( $bad_results, undef ) = $search->search_auth_compat( $search_query, 0, 20, undef );
+
+    is( @$bad_results[0], undef, 'We expect no record because it doesnt exist' );
+
+    my $module = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
+    $module->mock( 'count_auth_use', sub { return 1 } );
+    $module->mock(
+        'search',
+        sub {
+            # While the 001 and the authid should be the same, it is not always the case
+            # The _id is always the authid and so should be our source of trutch
+            my $marc_record = MARC::Record->new();
+            $marc_record->append_fields(
+                MARC::Field->new( '001', 'Wrong001Number' ),
+            );
+            return {
+                hits => {
+                    hits => [
+                        {
+                            '_id'     => 8675309,
+                            '_source' => {
+                                'local-number' => ['Wrong001Number'],
+                                'marc_data'    => $marc_record,
+                                'marc_format'  => 'base64ISO2709',
+                            },
+                        }
+                    ]
+                }
+            };
+        }
     );
 
     my ( $results, undef ) = $search->search_auth_compat('faked');
 
-    is( @$results[0]->{authid}, '8675309', 'We get the expected record _id and not the 001');
+    is( @$results[0]->{authid}, '8675309', 'We get the expected record _id and not the 001' );
 
 };
 
