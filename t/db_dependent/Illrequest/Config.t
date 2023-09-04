@@ -193,7 +193,7 @@ subtest '_load_unit_config' => sub {
 
 subtest '_load_configuration' => sub {
 
-    plan tests => 9;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -388,20 +388,39 @@ subtest '_load_configuration' => sub {
 
     # Partner library category
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration({ partner_code => 'FOOBAR' }),
+        Koha::Illrequest::Config::_load_configuration( { partner_code => 'FOOBAR' } ),
         {
-            backend_directory  => undef,
-            censorship         => {
+            backend_directory => undef,
+            censorship        => {
                 censor_notes_staff => 0,
-                censor_reply_date => 0,
+                censor_reply_date  => 0,
+            },
+            limits             => {},
+            digital_recipients => {},
+            prefixes           => {},
+            partner_code       => 'IL',
+            raw_config         => { partner_code => 'FOOBAR' },
+        },
+        q{'partner_code' not read from the config file, default value 'IL' used instead}
+    );
+
+    t::lib::Mocks::mock_preference( 'ILLPartnerCode', 'FOOBAR' );
+
+    is_deeply(
+        Koha::Illrequest::Config::_load_configuration(),
+        {
+            backend_directory => undef,
+            censorship        => {
+                censor_notes_staff => 0,
+                censor_reply_date  => 0,
             },
             limits             => {},
             digital_recipients => {},
             prefixes           => {},
             partner_code       => 'FOOBAR',
-            raw_config         => { partner_code => 'FOOBAR' },
+            raw_config         => {},
         },
-        "load_configuration: Set partner code."
+        q{'ILLPartnerCode' takes precedence over default value for 'partner_code'}
     );
 
     $schema->storage->txn_rollback;
