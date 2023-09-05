@@ -1785,7 +1785,7 @@ subtest '_Findgroupreserves' => sub {
     my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item     = $builder->build_sample_item();
-    my $item_2 = $builder->build_sample_item( { biblionumber => $item->biblionumber } );
+    my $item_2   = $builder->build_sample_item( { biblionumber => $item->biblionumber } );
 
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
     my $reserve_id_1 = AddReserve(
@@ -1806,8 +1806,8 @@ subtest '_Findgroupreserves' => sub {
     C4::HoldsQueue::AddToHoldTargetMap(
         {
             $item->id => {
-                borrowernumber => $patron_1->id,        biblionumber => $item->biblionumber,
-                holdingbranch  => $item->holdingbranch, item_level   => 0, reserve_id => $reserve_id_1
+                borrowernumber => $patron_1->id, biblionumber => $item->biblionumber,
+                holdingbranch  => $item->holdingbranch, item_level => 0, reserve_id => $reserve_id_1
             }
         }
     );
@@ -1820,8 +1820,8 @@ subtest '_Findgroupreserves' => sub {
     C4::HoldsQueue::AddToHoldTargetMap(
         {
             $item_2->id => {
-                borrowernumber => $patron_2->id,        biblionumber => $item->biblionumber,
-                holdingbranch  => $item->holdingbranch, item_level   => 1, reserve_id => $reserve_id_2
+                borrowernumber => $patron_2->id, biblionumber => $item->biblionumber,
+                holdingbranch  => $item->holdingbranch, item_level => 1, reserve_id => $reserve_id_2
             }
         }
     );
