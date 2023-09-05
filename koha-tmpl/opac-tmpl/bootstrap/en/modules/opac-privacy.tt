@@ -175,7 +175,7 @@
                                 <td colspan=7>Immediately delete my checkout history. This action cannot be undone.</td>
                                 <td colspan=1>
                                     <fieldset class="action">
-                                        <input type="submit" value="Delete checkout history" form="opac-privacy-delete-checkouts" class="btn btn-danger btn-block" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                                        <input type="submit" value="Delete checkout history" form="opac-privacy-delete-checkouts" class="btn btn-danger btn-block privacy-confirm-delete" />
                                     </fieldset>
                                 </td>
                             </tr>
@@ -183,7 +183,7 @@
                                 <td colspan=7>Immediately delete my hold history. This action cannot be undone.</td>
                                 <td colspan=1>
                                     <fieldset class="action">
-                                        <input type="submit" value="Delete hold history" form="opac-privacy-delete-holds" class="btn btn-danger btn-block" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                                        <input type="submit" value="Delete hold history" form="opac-privacy-delete-holds" class="btn btn-danger btn-block privacy-confirm-delete" />
                                     </fieldset>
                                 </td>
                             </tr>
@@ -191,7 +191,7 @@
                                 <td colspan=7>Immediately delete my checkout history & my hold history. This action cannot be undone.</td>
                                 <td colspan=1>
                                     <fieldset class="action">
-                                        <input type="submit" value="Delete checkout and hold history" form="opac-privacy-delete-all" class="btn btn-danger btn-block" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
+                                        <input type="submit" value="Delete checkout and hold history" form="opac-privacy-delete-all" class="btn btn-danger btn-block privacy-confirm-delete" />
                                     </fieldset>
                                 </td>
                             </tr>
@@ -208,4 +208,6 @@
 </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+    [% Asset.js('js/privacy.js') | $raw %]
+[% END %]
