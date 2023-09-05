@@ -13,14 +13,14 @@
         [% IF ( itemtype ) %]
             [% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
         [% ELSE %]
-            [% t("Add item type") | html %]
+            [% t("New item type") | html %]
         [% END %] &rsaquo;
     [% END %]
     [% IF op == 'delete_confirm' %]
         [% IF ( total ) %]
             [% tx("Cannot delete item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
         [% ELSE %]
-            [% tx("Delete item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]
+            [% tx("Confirm deletion of item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]
         [% END %] &rsaquo;
     [% END %]
     [% IF op == 'delete_confirmed' %]
@@ -72,11 +72,11 @@
         [% IF op == 'add_form' %]
             [% IF itemtype %]
                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify item type '[% itemtype.itemtype | html %]'</span>
+                    [% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
                 [% END %]
             [% ELSE %]
                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Add item type</span>
+                    <span>New item type</span>
                 [% END %]
             [% END %]
         [% END %]
@@ -84,11 +84,11 @@
         [% IF op == 'delete_confirm' %]
             [% IF total %]
                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Cannot delete item type '[% itemtype.itemtype | html %]'</span>
+                    [% tx("Cannot delete item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]
                 [% END %]
             [% ELSE %]
                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Delete item type '[% itemtype.itemtype | html %]'?</span>
+                    [% tx("Confirm deletion of item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]
                 [% END %]
             [% END %]
         [% END %]
@@ -144,9 +144,9 @@
 
 [% IF op == 'add_form' %]
     [% IF itemtype %]
-        <h1>Modify item type</h1>
+        <h1>[% tx("Modify item type '{item_type}'", { item_type = itemtype.itemtype }) | html %]</h1>
     [% ELSE %]
-        <h1>Add item type</h1>
+        <h1>New item type</h1>
     [% END %]
     <form action="/cgi-bin/koha/admin/itemtypes.pl" name="Aform" method="post" id="itemtypeentry">
         <input type="hidden" name="op" value="add_validate" />
@@ -354,7 +354,7 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h1>Delete item type '[% itemtype.itemtype | html %]'?</h1>
+        <h1>[% tx("Are you sure you want to delete item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]</h1>
         <table>
             <tr>
                 <th scope="row">Item type</th>
