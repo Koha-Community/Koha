@@ -5398,7 +5398,7 @@ CREATE TABLE `search_marc_to_field` (
   `facet` tinyint(1) DEFAULT 0 COMMENT 'true if a facet field should be generated for this',
   `suggestible` tinyint(1) DEFAULT 0 COMMENT 'true if this field can be used to generate suggestions for browse',
   `sort` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Sort defaults to 1 (Yes) and creates sort fields in the index, 0 (no) will prevent this',
-  PRIMARY KEY (`search_marc_map_id`,`search_field_id`),
+  PRIMARY KEY (`search_marc_map_id`,`search_field_id`,`filter`),
   KEY `search_field_id` (`search_field_id`),
   CONSTRAINT `search_marc_to_field_ibfk_1` FOREIGN KEY (`search_marc_map_id`) REFERENCES `search_marc_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `search_marc_to_field_ibfk_2` FOREIGN KEY (`search_field_id`) REFERENCES `search_field` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
