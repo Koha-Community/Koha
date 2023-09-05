@@ -7,21 +7,21 @@
 <title>[% FILTER collapse %]
     [% IF ( add_form ) %]
         [% IF ( modify ) %]
-            [% tx("Modify system preference '{searchfield}'", { searchfield = searchfield }) | html %]
+            [% tx("Modify preference '{searchfield}'", { searchfield = searchfield }) | html %]
         [% ELSE %]
-            [% t("Add a system preference") | html %]
+            [% t("New preference") | html %]
         [% END %] &rsaquo;
     [% END %]
     [% IF ( add_validate ) %]
-        [% t("Data added") | html %] &rsaquo;
+        [% t("Preference added") | html %] &rsaquo;
     [% END %]
     [% IF ( delete_confirm ) %]
-        [% tx("Confirm deletion of parameter '{searchfield}'", { searchfield = searchfield }) | html %] &rsaquo;
+        [% tx("Confirm deletion of preference '{searchfield}'", { searchfield = searchfield }) | html %] &rsaquo;
     [% END %]
     [% IF ( delete_confirmed ) %]
-        [% t("Parameter deleted") | html %] &rsaquo;
+        [% t("Preference deleted") | html %] &rsaquo;
     [% END %]
-    [% t("System preferences") | html %] &rsaquo;
+    [% t("Local use system preferences") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -41,16 +41,16 @@
 
         [% IF ( add_form || add_validate || delete_confirm || delete_confirmed ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a>
+                <a href="/cgi-bin/koha/admin/systempreferences.pl">Local use system preferences</a>
             [% END %]
         [% END %]
 
         [% IF ( add_form ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ( modify ) %]
-                    <span>Modify system preference '[% searchfield | html %]'</span>
+                    <span>Modify preference '[% searchfield | html %]'</span>
                 [% ELSE %]
-                    <span>Add a system preference</span>
+                    <span>New preference</span>
                 [% END %]
             [% END %]
         [% END %]
@@ -66,19 +66,19 @@
                 <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield | uri %]">[% searchfield | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of parameter '[% searchfield | html %]'</span>
+                <span>Confirm deletion of preference '[% searchfield | html %]'</span>
             [% END %]
         [% END %]
 
         [% IF ( delete_confirmed ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Parameter deleted</span>
+                <span>Preference deleted</span>
             [% END %]
         [% END %]
 
         [% IF ( else ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>System preferences</span>
+                <span>Local use system preferences</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -90,18 +90,22 @@
             <main>
 
 [% IF ( add_form ) %]
+        <h1>
+            [% IF ( modify ) %]
+                Modify a local use system preference
+            [% ELSE %]
+                New local use system preference
+            [% END %]
+        </h1>
+
         [% IF ( type_upload ) %]
             <form action="[% script_name | html %]" name="Aform" method="post" enctype="multipart/form-data">
         [% ELSE %]
             <form action="[% script_name | html %]" name="Aform" method="post">
         [% END %]
-        <fieldset class="rows"><legend>
-        <h1>
-        [% IF ( modify ) %]Modify
-        [% ELSE %]Add
-        [% END %] a system preference
-        </h1>
-            </legend><ol>
+        <fieldset class="rows">
+            <legend class="sr-only">Preference details</legend>
+            <ol>
             <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation | html %]" /><input type="hidden" name="op" value="add_validate" /></li>
             <li>[% IF ( searchfield ) %]<span class="label">Variable: </span>[% searchfield | html %]<input type="hidden" name="variable" value="[% searchfield | html %]" />
             [% ELSE %]<label for="variable">Variable: </label><input type="text" name="variable" id="variable" size="60" />[% END %]</li>
@@ -192,19 +196,7 @@
                     <label for="value-no" class="yesno">OFF</label>
                 [% END %]
                 </li>
-        </ol></fieldset>
-        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" />
-          [% IF ( return_tab ) %]
-            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl?tab=[% return_tab | html %]">Cancel</a>
-          [% ELSE %]
-            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl">Cancel</a>
-          [% END %]
-        </fieldset>
-        
-        <fieldset class="brief">
-        <legend>Koha internal</legend>
-        <div class="hint">Note: change the variable type to one of the dropdown values as needed</div>
-        <ol>
+
         <li><label for="preftype">Variable type:</label>
         <select name="preftype" id="preftype">
         [%- IF (preftype && preftype == 'Free') || !preftype -%]
@@ -263,11 +255,22 @@
             <option value="ClassSources">ClassSources</option>
         [% END %]
         </select>
+        <div class="hint">Note: change the variable type to one of the dropdown values as needed</div>
         <li><label for="prefoptions">Variable options:</label>
-        <div class="hint">(a choice list for choice (separated by |) or cols|rows for texarea)</div>
-        <input type="text" name="prefoptions" id="prefoptions" value="[% prefoptions | html %]" size="60" maxlength="80" /></li>
+        <input type="text" name="prefoptions" id="prefoptions" value="[% prefoptions | html %]" size="60" maxlength="80" />
+            <div class="hint">(a choice list for choice (separated by |) or cols|rows for texarea)</div>
+        </li>
         </ol>
         </fieldset>
+
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" />
+          [% IF ( return_tab ) %]
+            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl?tab=[% return_tab | html %]">Cancel</a>
+          [% ELSE %]
+            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl">Cancel</a>
+          [% END %]
+        </fieldset>
+
         </form>
     [% END %]
     
@@ -280,30 +283,39 @@
     [% END %]
     
     [% IF ( delete_confirm ) %]
-    <table>
-        <caption><h1>Confirm deletion of [% searchfield | html %]?</h1></caption>
-        <tr>
-            <th>Variable name:</th>
-            <td>[% searchfield | html %]</td>
-        </tr>
-        <tr><th>Value: </th><td>
-        [% Tvalue | html %]
-        </td></tr></table>
-        <form class="inline" action="[% script_name | html %]" method="post">
-        <input type="hidden" name="op" value="delete_confirmed" />
-        <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-        <input type="hidden" name="Tvalue" value="[% Tvalue | html %]" />
-        <input type="submit"  value="Yes, delete" /></form>
-        <form class="inline" action="[% script_name | html %]" method="post"><input type="submit" value="No, do not delete" /></form>
+        <div class="dialog alert">
+            <h1>Confirm deletion of [% searchfield | html %]?</h1>
+            <table>
+                <tr>
+                    <th>Variable name:</th>
+                    <td>[% searchfield | html %]</td>
+                </tr>
+                <tr>
+                    <th>Value: </th>
+                    <td>[% Tvalue | html %]</td>
+                </tr>
+            </table>
+            <form class="inline" action="[% script_name | html %]" method="post">
+                <input type="hidden" name="op" value="delete_confirmed" />
+                <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
+                <input type="hidden" name="Tvalue" value="[% Tvalue | html %]" />
+                <button type="submit" class="approve"><i class="fa fa-check" aria-hidden="true"></i> Yes, delete</button>
+            </form>
+            <form class="inline" action="[% script_name | html %]" method="post">
+                <button type="submit" class="deny"><i class="fa fa-remove" aria-hidden="true"></i> No, do not delete</button>
+            </form>
+        </div>
     [% END %]
-    
+
     [% IF ( delete_confirmed ) %]
-        <h1>Data deleted</h1>
-        <form action="[% script_name | html %]" method="post">
-            <input type="submit" class="btn btn-primary" value="Back to system preferences" />
-        </form>
+        <div class="dialog message">
+            <h1>Data deleted</h1>
+            <form action="[% script_name | html %]" method="post">
+                <button type="submit">Back to system preferences</button>
+            </form>
+        </div>
     [% END %]
-   
+
     [% IF ( else ) %]
 
     <div id="toolbar" class="btn-toolbar">
@@ -314,7 +326,7 @@
         <p>Please click on one of the tabs at the left side of this form.</p>
         <table>
     [% ELSE %]
-        <h1>Local use preferences</h1>
+        <h1>Local use system preferences</h1>
         <div class="page-section">
         <table id="sysprefst">
         <thead><tr>
