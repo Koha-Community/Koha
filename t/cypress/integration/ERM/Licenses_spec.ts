@@ -80,6 +80,13 @@ describe("License CRUD operations", () => {
     });
 
     it("Add license", () => {
+        let license = get_license();
+        let vendors = cy.get_vendors_to_relate();
+        //Intercept vendors request
+        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
+            statusCode: 200,
+            body: vendors,
+        });
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/licenses");
         cy.contains("New license").click();
@@ -87,9 +94,6 @@ describe("License CRUD operations", () => {
         cy.left_menu_active_item_is("Licenses");
 
         // Fill in the form for normal attributes
-        let license = get_license();
-        let vendors = cy.get_vendors_to_relate();
-
         cy.get("#licenses_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
@@ -107,6 +111,11 @@ describe("License CRUD operations", () => {
 
         // vendors
         cy.get("#license_vendor_id .vs__selected").should("not.exist"); //no vendor pre-selected for new license
+
+        // vendor aliases
+        cy.get("#license_vendor_id .vs__search").click();
+        cy.get("#license_vendor_id #vs1__option-1").contains(vendors[1].name);
+        cy.get("#license_vendor_id #vs1__option-1 cite").contains(vendors[1].aliases[0].alias);
 
         cy.get("#license_vendor_id .vs__search").type(
             vendors[0].name + "{enter}",
@@ -168,7 +177,7 @@ describe("License CRUD operations", () => {
         let vendors = cy.get_vendors_to_relate();
 
         // Intercept vendors request
-        cy.intercept("GET", "/api/v1/acquisitions/vendors?_per_page=-1", {
+        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
             statusCode: 200,
             body: vendors,
         }).as("get-vendor-options");
@@ -195,6 +204,7 @@ describe("License CRUD operations", () => {
         // Form has been correctly filled in
         cy.get("#license_name").should("have.value", license.name);
 
+        //vendors
         cy.get("#license_vendor_id .vs__selected").contains(
             license.vendor[0].name
         );
@@ -203,6 +213,11 @@ describe("License CRUD operations", () => {
             vendors[1].name + "{enter}",
             { force: true }
         );
+
+        //vendor aliases
+        cy.get("#license_vendor_id .vs__search").click();
+        cy.get("#license_vendor_id #vs1__option-1").contains(vendors[1].name);
+        cy.get("#license_vendor_id #vs1__option-1 cite").contains(vendors[1].aliases[0].alias);
 
         cy.get("#license_description").should(
             "have.value",

@@ -242,6 +242,8 @@ describe("Agreement CRUD operations", () => {
     });
 
     it("Add agreement", () => {
+        let agreement = get_agreement();
+        let vendors = cy.get_vendors_to_relate();
         // No agreement, no license yet
         cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
@@ -251,6 +253,11 @@ describe("Agreement CRUD operations", () => {
             statusCode: 200,
             body: [],
         });
+        //Intercept vendors request
+        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
+            statusCode: 200,
+            body: vendors,
+        });
 
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/agreements");
@@ -259,9 +266,6 @@ describe("Agreement CRUD operations", () => {
         cy.left_menu_active_item_is("Agreements");
 
         // Fill in the form for normal attributes
-        let agreement = get_agreement();
-        let vendors = cy.get_vendors_to_relate();
-
         cy.get("#agreements_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
             "have.length",
@@ -287,6 +291,11 @@ describe("Agreement CRUD operations", () => {
             { force: true }
         );
         cy.get("#agreement_vendor_id .vs__selected").contains(vendors[0].name);
+
+        // vendor aliases
+        cy.get("#agreement_vendor_id .vs__search").click();
+        cy.get("#agreement_vendor_id #vs1__option-1").contains(vendors[1].name);
+        cy.get("#agreement_vendor_id #vs1__option-1 cite").contains(vendors[1].aliases[0].alias);
 
         cy.contains("Add new period").click();
         cy.get("#agreements_add").contains("Submit").click();
@@ -460,7 +469,7 @@ describe("Agreement CRUD operations", () => {
         let vendors = cy.get_vendors_to_relate();
 
         // Intercept vendors request
-        cy.intercept("GET", "/api/v1/acquisitions/vendors?_per_page=-1", {
+        cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
             statusCode: 200,
             body: vendors,
         }).as("get-vendor-options");
@@ -520,6 +529,8 @@ describe("Agreement CRUD operations", () => {
             agreements[0].description
         );
         cy.get("#agreement_status .vs__selected").contains("Active");
+
+        //vendors
         cy.get("#agreement_vendor_id .vs__selected").contains(
             agreement.vendor[0].name
         );
@@ -528,6 +539,11 @@ describe("Agreement CRUD operations", () => {
             vendors[1].name + "{enter}",
             { force: true }
         );
+
+        //vendor aliases
+        cy.get("#agreement_vendor_id .vs__search").click();
+        cy.get("#agreement_vendor_id #vs1__option-1").contains(vendors[1].name);
+        cy.get("#agreement_vendor_id #vs1__option-1 cite").contains(vendors[1].aliases[0].alias);
 
         cy.get("#agreement_is_perpetual_no").should("be.checked");
         cy.get("#started_on_0").invoke("val").should("eq", dates["today_iso"]);
