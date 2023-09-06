@@ -139,7 +139,7 @@ sub verification {
 
         my $verified = $auth->verify(
             $pin_code,
-            1,        # range
+            undef,    # range (default to 1 or mfa_range in koha-conf.xml)
             $secret32,
             undef,    # timestamp (defaults to now)
             30,       # interval (default 30)
