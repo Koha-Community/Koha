@@ -313,7 +313,6 @@ my $target_map = {
   './clubs'                     => 'INTRANET_CGI_DIR',
   './course_reserves'           => 'INTRANET_CGI_DIR',
   './cpanfile'                  => 'PERL_MODULE_DIR',
-  './cypress.config.ts'         => 'NONE',
   './docs/history.txt'          => { target => 'DOC_DIR', trimdir => -1 },
   './docs/contributors.yaml'    => { target => 'DOC_DIR', trimdir => -1 },
   './docs/teams.yaml'           => { target => 'DOC_DIR', trimdir => -1 },
@@ -398,7 +397,7 @@ my $target_map = {
   'gulpfile.js'                 => 'NONE',
   'package.json'                => 'NONE',
   'yarn.lock'                   => 'NONE',
-  'cypress.json'                => 'NONE',
+  'cypress.config.ts'           => 'NONE',
   'tsconfig.json'               => 'NONE',
   'webpack.config.js'           => 'NONE',
 };
