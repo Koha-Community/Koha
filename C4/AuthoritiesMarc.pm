@@ -1571,7 +1571,7 @@ sub merge {
             }
         }
         next if !$update;
-        ModBiblio($marcrecord, $biblio->biblionumber, $biblio->frameworkcode);
+        ModBiblio( $marcrecord, $biblio->biblionumber, $biblio->frameworkcode, { disable_autolink => 1 } );
         $counteditedbiblio++;
     }
     return $counteditedbiblio;
