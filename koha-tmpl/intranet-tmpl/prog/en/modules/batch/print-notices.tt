@@ -20,7 +20,11 @@
 <body id="batch_print-notices" class="batch">
     [% FOREACH message IN messages %]
     <div class="dialog message">
-        <pre>[% message.content | $raw %]</pre>
+        [% IF ( message.is_html ) %]
+            [% message.content | $raw %]
+        [% ELSE %]
+            <pre>[% message.content | $raw %]</pre>
+        [% END %]
     </div>
     [% END %]
 </body>
