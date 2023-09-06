@@ -295,7 +295,9 @@ describe("Agreement CRUD operations", () => {
         // vendor aliases
         cy.get("#agreement_vendor_id .vs__search").click();
         cy.get("#agreement_vendor_id #vs1__option-1").contains(vendors[1].name);
-        cy.get("#agreement_vendor_id #vs1__option-1 cite").contains(vendors[1].aliases[0].alias);
+        cy.get("#agreement_vendor_id #vs1__option-1 cite").contains(
+            vendors[1].aliases[0].alias
+        );
 
         cy.contains("Add new period").click();
         cy.get("#agreements_add").contains("Submit").click();
@@ -543,7 +545,9 @@ describe("Agreement CRUD operations", () => {
         //vendor aliases
         cy.get("#agreement_vendor_id .vs__search").click();
         cy.get("#agreement_vendor_id #vs1__option-1").contains(vendors[1].name);
-        cy.get("#agreement_vendor_id #vs1__option-1 cite").contains(vendors[1].aliases[0].alias);
+        cy.get("#agreement_vendor_id #vs1__option-1 cite").contains(
+            vendors[1].aliases[0].alias
+        );
 
         cy.get("#agreement_is_perpetual_no").should("be.checked");
         cy.get("#started_on_0").invoke("val").should("eq", dates["today_iso"]);

@@ -115,7 +115,9 @@ describe("License CRUD operations", () => {
         // vendor aliases
         cy.get("#license_vendor_id .vs__search").click();
         cy.get("#license_vendor_id #vs1__option-1").contains(vendors[1].name);
-        cy.get("#license_vendor_id #vs1__option-1 cite").contains(vendors[1].aliases[0].alias);
+        cy.get("#license_vendor_id #vs1__option-1 cite").contains(
+            vendors[1].aliases[0].alias
+        );
 
         cy.get("#license_vendor_id .vs__search").type(
             vendors[0].name + "{enter}",
@@ -217,7 +219,9 @@ describe("License CRUD operations", () => {
         //vendor aliases
         cy.get("#license_vendor_id .vs__search").click();
         cy.get("#license_vendor_id #vs1__option-1").contains(vendors[1].name);
-        cy.get("#license_vendor_id #vs1__option-1 cite").contains(vendors[1].aliases[0].alias);
+        cy.get("#license_vendor_id #vs1__option-1 cite").contains(
+            vendors[1].aliases[0].alias
+        );
 
         cy.get("#license_description").should(
             "have.value",
