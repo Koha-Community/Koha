@@ -12,9 +12,6 @@
             [% t("New preference") | html %]
         [% END %] &rsaquo;
     [% END %]
-    [% IF ( add_validate ) %]
-        [% t("Preference added") | html %] &rsaquo;
-    [% END %]
     [% IF ( delete_confirm ) %]
         [% tx("Confirm deletion of preference '{searchfield}'", { searchfield = searchfield }) | html %] &rsaquo;
     [% END %]
@@ -39,7 +36,7 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
 
-        [% IF ( add_form || add_validate || delete_confirm || delete_confirmed ) %]
+        [% IF ( add_form || delete_confirm || delete_confirmed ) %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/systempreferences.pl">Local use system preferences</a>
             [% END %]
@@ -52,12 +49,6 @@
                 [% ELSE %]
                     <span>New preference</span>
                 [% END %]
-            [% END %]
-        [% END %]
-
-        [% IF ( add_validate ) %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Data added</span>
             [% END %]
         [% END %]
 
@@ -92,7 +83,7 @@
 [% IF ( add_form ) %]
         <h1>
             [% IF ( modify ) %]
-                Modify a local use system preference
+                [% tx("Modify preference '{searchfield}'", { searchfield = searchfield }) | html %]
             [% ELSE %]
                 New local use system preference
             [% END %]
@@ -273,15 +264,7 @@
 
         </form>
     [% END %]
-    
-    [% IF ( add_validate ) %]
-        <h1>Data recorded</h1>
-        
-        <form action="[% script_name | html %]" method="post">
-        <input type="submit" class="btn btn-primary" value="OK" />
-        </form>
-    [% END %]
-    
+
     [% IF ( delete_confirm ) %]
         <div class="dialog alert">
             <h1>Confirm deletion of [% searchfield | html %]?</h1>
