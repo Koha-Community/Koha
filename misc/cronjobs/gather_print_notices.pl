@@ -214,6 +214,12 @@ sub generate_html {
       C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet',
         CGI->new );
 
+    foreach my $message (@{ $messages }) {
+        my $content_type = $message->{'content_type'} || 'text/plain; charset="UTF-8"';
+        my $is_html      = $content_type =~ m/html/io;
+        $message->{'is_html'} = $is_html;
+    }
+
     $template->param(
         stylesheet => C4::Context->preference("NoticeCSS"),
         today      => $today_syspref,
