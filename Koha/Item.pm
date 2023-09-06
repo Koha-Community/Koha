@@ -1834,7 +1834,7 @@ Return the relevant recall for this item
 =cut
 
 sub recall {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my @recalls = Koha::Recalls->search(
         {
             biblio_id => $self->biblionumber,
@@ -1842,11 +1842,23 @@ sub recall {
         },
         { order_by => { -asc => 'created_date' } }
     )->as_list;
+
+    my $item_level_recall;
     foreach my $recall (@recalls) {
-        if ( $recall->item_level and $recall->item_id == $self->itemnumber ){
-            return $recall;
+        if ( $recall->item_level ) {
+            $item_level_recall = 1;
+            if ( $recall->item_id == $self->itemnumber ) {
+                return $recall;
+            }
         }
     }
+    if ($item_level_recall) {
+
+        # recall needs to be filled be a specific item only
+        # no other item is relevant to return
+        return;
+    }
+
     # no item-level recall to return, so return earliest biblio-level
     # FIXME: eventually this will be based on priority
     return $recalls[0];
