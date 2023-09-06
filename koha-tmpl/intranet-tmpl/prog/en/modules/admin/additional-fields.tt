@@ -7,13 +7,15 @@
     [% SWITCH op %]
         [% CASE 'add_form' %]
             [% IF field %]
-                [% tx("Modify additional field '{field_name}'", { field_name = field.name }) | html %]
+                [% tx("Modify field '{field_name}'", { field_name = field.name }) | html %] &rsaquo;
             [% ELSE %]
-                [% t("Add additional field") | html %]
+                [% t("New field") | html %] &rsaquo;
             [% END %]
-        [% CASE %]
-            [% t("Manage additional fields") | html %]
+            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
+        [% CASE 'list' %]
+            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
     [% END %] &rsaquo;
+    [% t("Additional fields") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -38,29 +40,35 @@
         [% SWITCH op %]
             [% CASE 'add_form' %]
                 [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
+                    <a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a>
                 [% END %]
                 [% IF field %]
+                    [% WRAPPER breadcrumb_item %]
+                        <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=[% tablename | uri %]">[% tx("Table '{table_name}'", { table_name = tablename } ) | html %]</a>
+                    [% END %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Modify field '[% field.name | html %]'</span>
+                        [% tx("Modify field '{field_name}'", { field_name = field.name }) | html %]
                     [% END %]
                 [% ELSE %]
+                    [% WRAPPER breadcrumb_item %]
+                        <a href="/cgi-bin/koha/admin/additional-fields.pl?tablename=[% tablename | uri %]">[% tx("Table '{table_name}'", { table_name = tablename } ) | html %]</a>
+                    [% END %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Add field</span>
+                        [% t("New field" ) | html %]
                     [% END %]
                 [% END %]
 
             [% CASE 'list' %]
                 [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a>
+                    <a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify fields for '[% tablename | html %]'</span>
+                    [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
                 [% END %]
 
             [% CASE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Manage additional fields</span>
+                    <span>Additional fields</span>
                 [% END %]
 
         [% END %]
@@ -74,7 +82,7 @@
 
     [% IF op == 'list' %]
         <div id="toolbar" class="btn-toolbar">
-            <a class="btn btn-default" id="newfields" href="?op=add_form&amp;tablename=[% tablename | uri %]"><i class="fa fa-plus"></i> Create field</a>
+            <a class="btn btn-default" id="newfields" href="?op=add_form&amp;tablename=[% tablename | uri %]"><i class="fa fa-plus"></i> New field</a>
         </div>
     [% END %]
 
@@ -82,9 +90,9 @@
         [% FOR message IN messages %]
             [% IF message.code == 'insert' %]
                 [% IF message.number > 0 %]
-                    <div class="dialog message">The field has been inserted</div>
+                    <div class="dialog message">The field has been added</div>
                 [% ELSE %]
-                    <div class="dialog alert">The field could not be inserted. Perhaps the name already exists?</div>
+                    <div class="dialog alert">The field could not be added. Perhaps the name already exists?</div>
                 [% END %]
             [% ELSIF message.code == 'update' %]
                 [% IF message.number > 0 %]
@@ -107,7 +115,7 @@
         <h1>Additional fields</h1>
 
         <div class="page-section">
-            <p>Select a table:</p>
+            <h2>Select a table:</h2>
             [% BLOCK table_option %]
                 <li><a href="?tablename=[% value | uri %]">[% content | $raw %] (<span class="ex">[% value | html %]</span>)</a></li>
             [% END %]
@@ -183,9 +191,9 @@
         [% END %]
     [% ELSIF op == 'add_form' %]
         [% IF field %]
-            <h1>Modify field</h1>
+            <h1>[% tx("Modify field '{field_name}' for table '{table_name}'", { field_name = field.name, table_name = tablename }) | html %]</h1>
         [% ELSE %]
-            <h1>Add field</h1>
+            <h1>[% tx("New field for table '{table_name}'", { table_name = tablename } ) | html %]</h1>
         [% END %]
         <form action="" name="add_form" id="add_field" method="post">
             <fieldset class="rows">
