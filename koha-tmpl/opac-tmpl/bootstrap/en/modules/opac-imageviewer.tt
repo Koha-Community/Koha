@@ -87,7 +87,7 @@
                                 <div class="col-lg-3">
                                     <div id="thumbnails">
                                         [% FOREACH image IN images %]
-                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% image.imagenumber| uri %]" onclick="showCover([% image.imagenumber| html %]); return false;">
+                                            <a class="cover_thumbnail" data-imagenumber="[% image.imagenumber| html %]" href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% image.imagenumber| uri %]">
                                             [% IF loop.first %]
                                                 <img class="thumbnail selected" id="[% image.imagenumber| html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail"/>
                                             [% ELSE %]
@@ -113,6 +113,13 @@
         $(document).ready(function(){
             $("#largeCoverImg").attr("src","[% interface | html %]/[% theme | html %]/images/loading.gif");
             showCover([% imagenumber | html %]);
+            $("a.cover_thumbnail").on('click',function(){
+                let imagenumber = this.dataset.imagenumber;
+                if (imagenumber){
+                    showCover(imagenumber);
+                }
+                return false;
+            });
         });
 
         function showCover(img) {
