@@ -303,7 +303,7 @@
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
                                                 </td>
                                             <td>
-                                                <a href="#" onclick="openBiblio('[% PROCESS biblio_a_href biblionumber => BIBLIO_RESULT.biblionumber %]',[% BIBLIO_RESULT.biblionumber | html %])">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]</a>
+                                                <a href="#" class="bib_opener" data-link="[% PROCESS biblio_a_href biblionumber => BIBLIO_RESULT.biblionumber %]" data-biblionumber="[% BIBLIO_RESULT.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]</a>
                                                 <!-- COinS / Openurl -->
                                                 <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
                                                 [% IF ( TagsInputEnabled && loggedinusername ) %]
@@ -411,6 +411,12 @@
             [% END # / TagsInputEnabled && loggedinusername %]
 
             $(document).ready(function(){
+                $("a.bib_opener").on('click',function(){
+                    let link = this.dataset.link;
+                    let biblionumber = this.dataset.biblionumber;
+                    openBiblio(link,biblionumber)
+                });
+
                 $(".brief").click(function(e){
                     e.preventDefault();
                     showLess();
