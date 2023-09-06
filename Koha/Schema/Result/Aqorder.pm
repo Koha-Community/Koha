@@ -757,7 +757,7 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
+    on_delete     => "SET NULL",
     on_update     => "CASCADE",
   },
 );
@@ -773,8 +773,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-12 13:58:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:InHa9wNjnhz0LS0TzVVPNg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-06 17:56:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aaj6mc1M13YFx5P0aXMiEQ
 
 __PACKAGE__->belongs_to(
   "basket",
