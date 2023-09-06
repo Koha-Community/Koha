@@ -1919,7 +1919,7 @@ subtest 'store() tests' => sub {
 
 subtest 'Recalls tests' => sub {
 
-    plan tests => 22;
+    plan tests => 23;
 
     $schema->storage->txn_begin;
 
@@ -1960,6 +1960,7 @@ subtest 'Recalls tests' => sub {
     )->store;
 
     is( $item1->recall->patron_id, $patron1->borrowernumber, 'Correctly returns most relevant recall' );
+    is( $item2->recall,            undef,                    'Other items are not returned for item-level recalls' );
 
     $recall2->set_cancelled;
 
