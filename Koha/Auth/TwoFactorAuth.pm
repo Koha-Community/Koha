@@ -19,6 +19,7 @@ use Modern::Perl;
 use GD::Barcode;
 use MIME::Base64 qw( encode_base64 );
 
+use C4::Context;
 use C4::Letters;
 use Koha::Exceptions;
 use Koha::Exceptions::Patron;
@@ -104,6 +105,26 @@ sub qr_code {
     my $qrcode = GD::Barcode->new( 'QRcode', $otpauth, { Ecc => 'M', ModuleSize => 4 } );
     my $data = $qrcode->plot->png;
     return "data:image/png;base64,". encode_base64( $data, q{} ); # does not contain newlines
+}
+
+=head3 verify
+
+    my $verified = $auth->verify($otp_token);
+
+    Replacement for Auth::GoogleAuth::verify.
+    This uses a system wide default for range.
+
+=cut
+
+sub verify {
+    my ( $self, $code, $range, $secret32, $timestamp, $interval ) = @_;
+    if ( !defined $range ) {
+        my $mfa_range = C4::Context->config('mfa_range') ? int( C4::Context->config('mfa_range') ) : 1;
+        if ($mfa_range) {
+            $range = $mfa_range;
+        }
+    }
+    return $self->SUPER::verify( $code, $range, $secret32, $timestamp, $interval );
 }
 
 1;

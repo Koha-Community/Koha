@@ -883,7 +883,7 @@ sub checkauth {
         {
             my $patron    = Koha::Patrons->find( { userid => $userid } );
             my $auth      = Koha::Auth::TwoFactorAuth->new( { patron => $patron } );
-            my $verified = $auth->verify($otp_token, 1);
+            my $verified = $auth->verify($otp_token);
             $auth->clear;
             if ( $verified ) {
                 # The token is correct, the user is fully logged in!
