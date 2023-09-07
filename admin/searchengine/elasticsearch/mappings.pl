@@ -151,7 +151,7 @@ if ( $op eq 'edit' ) {
             my $mapping_facet       = $mapping_facet[$i];
             $mapping_facet = ( grep { $_ eq $search_field_name } @facetable_field_names ) ? $mapping_facet : 0;
             my $mapping_suggestible = $mapping_suggestible[$i];
-            my $mapping_sort        = $mapping_sort[$i] eq 'undef' ? undef : $mapping_sort[$i];
+            my $mapping_sort        = $mapping_sort[$i];
             my $mapping_search      = $mapping_search[$i];
 
             my $search_field = Koha::SearchFields->find({ name => $search_field_name }, { key => 'name' });
