@@ -211,7 +211,7 @@ if ( $action eq 'create' ) {
                       C4::Context->preference('KohaAdminEmailAddress'),
                 }
             );
-            C4::Letters::SendQueuedMessages({ message_id => $message_id });
+            C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
         }
         else {
             $borrower{password}         ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($borrower{categorycode}));
@@ -279,7 +279,7 @@ if ( $action eq 'create' ) {
                                     message_transport_type => 'email'
                                 }
                             );
-                            SendQueuedMessages({ message_id => $message_id });
+                            SendQueuedMessages( { message_id => $message_id } ) if $message_id;
                         };
                     }
                 }

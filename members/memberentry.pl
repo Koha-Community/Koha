@@ -450,7 +450,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                             message_transport_type => 'email'
                         }
                     );
-                    SendQueuedMessages({ message_id => $message_id });
+                    SendQueuedMessages( { message_id => $message_id } ) if $message_id;
                 };
                 if ($@) {
                     $template->param( error_alert => $@ );

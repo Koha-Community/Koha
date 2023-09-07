@@ -110,7 +110,7 @@ if ( $email_add ) {
             }
         );
 
-        C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+        C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
 
         $template->param( SENT => 1 );
     }

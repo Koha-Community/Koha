@@ -207,8 +207,8 @@ if ( $action eq 'send_receipt' ) {
                 message_transport_type => 'email',
             }
         );
-        C4::Letters::SendQueuedMessages( { message_id => $message_id } );
-        $receipt_sent = 1;
+        C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
+        $receipt_sent = $message_id ? 1 : -1;
     }
     else {
         $receipt_sent = -1;

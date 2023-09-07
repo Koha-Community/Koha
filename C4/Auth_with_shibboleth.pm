@@ -169,7 +169,7 @@ sub _autocreate {
                     message_transport_type => 'email'
                 }
             );
-            C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+            C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
         }
     }
     return ( 1, $patron->cardnumber, $patron->userid );
