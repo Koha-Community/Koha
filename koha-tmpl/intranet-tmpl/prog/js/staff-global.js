@@ -495,6 +495,7 @@ function patron_autocomplete(node, options) {
                     + (item.link ? "<a href=\"" + item.link + "\">" : "<a>")
                     + (item.surname ? item.surname.escapeHtml() : "") + ", "
                     + (item.firstname ? item.firstname.escapeHtml() : "")
+                    + " " + (item.middle_name ? item.middle_name.escapeHtml() : "")
                     + cardnumber.escapeHtml()
                     + " <small>"
                     + (item.date_of_birth
