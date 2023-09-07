@@ -42,12 +42,3 @@ export default {
     },
 }
 </script>
-
-<style>
-#breadcrumbs .disabled {
-    padding: 0.6em 0.3em;
-    text-decoration: none;
-    color: #696969;
-    pointer-events: none;
-}
-</style>
