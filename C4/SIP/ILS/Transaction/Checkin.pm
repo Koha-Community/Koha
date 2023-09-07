@@ -216,11 +216,16 @@ The mapping should be:
 
  <branchcode>:<item field>:<comparator>:<item field value>:<sort bin number>
 
+The field comparison triplet is repeatable, so you may include multiple sections
+
+ :<item field>:<comparator>:<item field value>:
+
 For example:
 
  CPL:itype:eq:BOOK:1
  CPL:location:eq:OFFICE:2
  CPL:classmark:<:339.6:3
+ CPL:itype:eq:BOOK:ccode:eq:TEEN:4
 
 This will give:
 
@@ -231,6 +236,8 @@ This will give:
 =item * sort_bin = "2" for items at the CPL branch with a location of OFFICE
 
 =item * sort_bin = "3" for items at the CPL branch with a classmark less than 339.6
+
+=item * sort_bin = "4" for items at the CPL branch with an itype of BOOK and a ccode of TEEN
 
 =back
 
@@ -245,11 +252,12 @@ sub _get_sort_bin {
     return unless $item;
 
     my @lines;
+
     # Mapping in SIP config takes precedence over syspref
     if ( my $mapping = $account->{sort_bin_mapping} ) {
         @lines = map { $_->{mapping} } @$mapping;
-    }
-    else {
+    } else {
+
         # Get the mapping and split on newlines
         my $raw_map = C4::Context->preference('SIP2SortBinMapping');
         return unless $raw_map;
@@ -258,36 +266,54 @@ sub _get_sort_bin {
 
     # Iterate over the mapping. The first hit wins.
     my $rule = 0;
-    foreach my $line (@lines) {
+    RULE: foreach my $line (@lines) {
+
+        my $match = 0;
 
         # Split the line into fields
-        my ( $branchcode, $item_property, $comparator, $value, $sort_bin ) =
-          split /:/, $line;
-        if ( $value =~ s/^\$// ) {
-            $value = $item->$value;
-        }
-        # Check the fields against values in the item
-        if ( $branch eq $branchcode ) {
+        my @fields = split /:/, $line;
+
+        # Capture branchcode from first field
+        my $branchcode = shift @fields;
+        next RULE unless ( $branch eq $branchcode );
+
+        # Capture sort_bin from last field
+        my $sort_bin = pop @fields;
+
+        # Capture rule sets
+        while ( my ( $item_property, $comparator, $value ) = splice( @fields, 0, 3 ) ) {
+
+            # Skip badly formed rules
+            next RULE if ( !defined($item_property) || !defined($comparator) || !defined($value) );
+
+            if ( $value =~ s/^\$// ) {
+                $value = $item->$value;
+            }
+
+            # Check the fields against values in the item
             my $property = $item->$item_property;
             if ( ( $comparator eq 'eq' || $comparator eq '=' ) && ( $property eq $value ) ) {
-                return $sort_bin;
-            }
-            if ( ( $comparator eq 'ne' || $comparator eq '!=' ) && ( $property ne $value ) ) {
-                return $sort_bin;
-            }
-            if ( ( $comparator eq '<' ) && ( $property < $value ) ) {
-                return $sort_bin;
-            }
-            if ( ( $comparator eq '>' ) && ( $property > $value ) ) {
-                return $sort_bin;
-            }
-            if ( ( $comparator eq '<=' ) && ( $property <= $value ) ) {
-                return $sort_bin;
-            }
-            if ( ( $comparator eq '>=' ) && ( $property >= $value ) ) {
-                return $sort_bin;
+                $match = 1;
+            } elsif ( ( $comparator eq 'ne' || $comparator eq '!=' ) && ( $property ne $value ) ) {
+                $match = 1;
+            } elsif ( ( $comparator eq '<' ) && ( $property < $value ) ) {
+                $match = 1;
+            } elsif ( ( $comparator eq '>' ) && ( $property > $value ) ) {
+                $match = 1;
+            } elsif ( ( $comparator eq '<=' ) && ( $property <= $value ) ) {
+                $match = 1;
+            } elsif ( ( $comparator eq '>=' ) && ( $property >= $value ) ) {
+                $match = 1;
+            } else {
+
+                # No match, skip to next rule
+                next RULE;
             }
         }
+
+        # Return sort bin if match
+        return $sort_bin if $match;
+
     }
 
     # Return undef if no hits were found

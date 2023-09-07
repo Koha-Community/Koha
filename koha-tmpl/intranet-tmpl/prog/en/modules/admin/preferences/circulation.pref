@@ -1336,12 +1336,14 @@ Circulation:
             - "- 'comparator' is the type of comparison, possible values are: eq,<,<=,>,>=,ne<br/>"
             - "- 'item field value' is the value to compare against the value in the specified 'item field'<br/>"
             - "- 'sort bin number' is the expected return value in the CL field of the SIP response for an item matching a rule<br/><br/>"
+            - "The field comparison triplet, 'item field:comparator:item field value', is repeatable within a single line to allow for more complex cases"
             - "NOTE: Specifying 'item_field_value' with a leading '\\$' and an item field name will use the value of that field in the item for comparison:<br/>"
             - "i.e. \\$holdingbranch<br/></br>"
             - "Examples:<br/>"
             - "CPL:itype:eq:BOOK:1 - Will return sort bin 1 for an item of itemtype 'BOOK' returned to CPL.<br/>"
-            - "CPL:itemcallnumber:<:339.6:3 - Will return sort bin 3 for an item with a callnumber less than 339.6 returned to CPL .<br/>"
-            - "CPL:homebranch:ne:\\$holdingbranch:X - Will return sort bin 'X' for an item returned to CPL where the holdingbranch is not equal to the homebranch (i.e. any item belonging to a different branch than CPL).<br/><br/>"
+            - "CPL:itemcallnumber:<:339.6:3 - Will return sort bin 3 for an item with a callnumber less than 339.6 returned to CPL.<br/>"
+            - "CPL:homebranch:ne:\\$holdingbranch:X - Will return sort bin 'X' for an item returned to CPL where the holdingbranch is not equal to the homebranch (i.e. any item belonging to a different branch than CPL).<br/>"
+            - "CPL:itype:eq:BOOK:ccode:eq:TEEN:5 - Will return sort bin 5 for an item of itemtype 'BOOK' and a ccode 'TEEN' returned to CPL.<br/><br/>"
             - pref: SIP2SortBinMapping
               type: textarea
               class: long
