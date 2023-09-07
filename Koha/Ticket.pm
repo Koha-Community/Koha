@@ -131,8 +131,8 @@ sub store {
                     borrowernumber         => $self->reporter_id,
                 }
             );
-            C4::Letters::SendQueuedMessages(
-                { message_id => $acknowledgement_message_id } );
+            C4::Letters::SendQueuedMessages( { message_id => $acknowledgement_message_id } )
+                if $acknowledgement_message_id;
         }
 
         # Notify cataloger by email
@@ -156,8 +156,7 @@ sub store {
                         reply_address => $self->reporter->notice_email_address,
                     }
                 );
-                C4::Letters::SendQueuedMessages(
-                    { message_id => $message_id } );
+                C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
             }
         }
     }

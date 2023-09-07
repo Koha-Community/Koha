@@ -62,7 +62,7 @@ sub send_otp_token {
                 message_transport_type => 'email'
             }
         );
-        C4::Letters::SendQueuedMessages({message_id => $message_id});
+        C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
 
         my $message = C4::Letters::GetMessage($message_id);
 

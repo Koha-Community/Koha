@@ -261,7 +261,7 @@ sub checkpw_ldap {
                     }
                 );
 
-                C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+                C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
             }
         }
    } else {

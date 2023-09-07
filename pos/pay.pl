@@ -116,7 +116,7 @@ if ( $action eq 'send' ) {
     );
 
     # Send immediately
-    SendQueuedMessages( { message_id => $message_id } );
+    SendQueuedMessages( { message_id => $message_id } ) if $message_id;
 
     # Set variables for template to allow printing still
     $template->param(

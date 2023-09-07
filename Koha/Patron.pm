@@ -932,7 +932,7 @@ sub set_password {
                         message_transport_type => 'email'
                     }
                 );
-                C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+                C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
             }
         }
     }

@@ -120,7 +120,7 @@ if (
                             message_transport_type => 'email'
                         }
                     );
-                    SendQueuedMessages({ message_id => $message_id });
+                    SendQueuedMessages( { message_id => $message_id } ) if $message_id;
                 };
             }
         }

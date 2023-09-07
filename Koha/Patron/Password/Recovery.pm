@@ -158,8 +158,7 @@ sub SendPasswordRecoveryEmail {
         }
     );
 
-    my $num_letters_attempted =
-      C4::Letters::SendQueuedMessages( { message_id => $message_id } );
+    my $num_letters_attempted = C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
 
     return ($num_letters_attempted > 0);
 }
