@@ -8,7 +8,7 @@
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
 
                 <div class="form-title">
-                    <label class="control-label" for="searchtitle">span class="control-text">Search suggestions</span> <i class="fa-solid fa-fw fa-comment" aria-hidden="true"></i></label>
+                    <label class="control-label" for="searchtitle"><span class="control-text">Search suggestions</span> <i class="fa-solid fa-fw fa-comment" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
