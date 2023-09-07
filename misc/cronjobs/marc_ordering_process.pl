@@ -127,7 +127,7 @@ foreach my $acct (@accounts) {
             }
         }
     }
-    say sprintf "%s files processed", $files_processed unless $files_processed == 0;
+    say sprintf "%s file(s) processed", $files_processed unless $files_processed == 0;
     print "Moving to next account\n\n";
 }
 print "Process complete\n";

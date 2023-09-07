@@ -126,15 +126,18 @@ sub create_order_lines_from_file {
             }
         );
 
-        while( my $import_record = $import_records->next ){
-            my $result = add_biblio_from_import_record({
-                import_batch_id => $import_batch_id,
-                import_record   => $import_record,
-                matcher_id      => $params->{matcher_id},
-                overlay_action  => $params->{overlay_action},
-                agent           => $agent,
-            });
-            warn "Duplicates found in $result->{duplicates_in_batch}, record was skipped." if $result->{duplicates_in_batch};
+        while ( my $import_record = $import_records->next ) {
+            my $result = add_biblio_from_import_record(
+                {
+                    import_batch_id => $import_batch_id,
+                    import_record   => $import_record,
+                    matcher_id      => $params->{matcher_id},
+                    overlay_action  => $params->{overlay_action},
+                    agent           => $agent,
+                }
+            );
+            warn "Duplicates found in $result->{duplicates_in_batch}, record was skipped."
+                if $result->{duplicates_in_batch};
             next if $result->{skip};
 
             my $order_line_details = add_items_from_import_record(
@@ -594,6 +597,50 @@ sub add_items_from_import_record {
     }
 }
 
+
+=head3 match_file_to_account
+
+    my $file_match = Koha::MarcOrder->match_file_to_account({
+        filename => $filename,
+        filepath => $filepath,
+        profile  => $profile
+    });
+
+    Used by the cronjob to detect whether a file matches the account and should be processed
+
+=cut
+
+sub match_file_to_account {
+    my ( $self, $args ) = @_;
+
+    my $match    = 0;
+    my $filename = $args->{filename};
+    my $filepath = $args->{filepath};
+    my $profile  = $args->{profile};
+    my $format   = index( $filename, '.mrc' ) != -1 ? 'ISO2709' : 'MARCXML';
+
+    my ( $errors, $marcrecords );
+    if ( $format eq 'MARCXML' ) {
+        ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromMARCXMLFile( $filepath, $profile->encoding );
+    } elsif ( $format eq 'ISO2709' ) {
+        ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromISO2709File(
+            $filepath, $profile->record_type,
+            $profile->encoding
+        );
+    }
+
+    my $match_record = @{$marcrecords}[0];
+    my ( $field, $subfield ) = split /\$/, $profile->match_field;
+
+    my $field_value = $match_record->subfield( $field, $subfield ) || '';
+    my $match_value = $profile->match_value                        || '';
+
+    if ( $field_value eq $match_value ) {
+        $match = 1;
+    }
+
+    return $match;
+}
 
 =head3 import_batches_list
 

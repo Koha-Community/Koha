@@ -127,6 +127,16 @@ MARC Order Accounts
                                     <input type="text" name="download_directory" id="download_directory" size="20" value="[% account.download_directory | html %]" />
                                     <div class="hint">The download directory specifies the directory in your koha installation that should be searched for new files.</div>
                                 </li>
+                                <li>
+                                    <label for="match_field">Match field: </label>
+                                    <input type="text" name="match_field" id="match_field" size="20" value="[% account.match_field | html %]" />
+                                    <div class="hint">(Optional): If you have files from multiple vendors in the same file directory, the match field is the field in the marc record that will be checked to see if the file should be processed by this account.</div>
+                                </li>
+                                <li>
+                                    <label for="match_value">Match value: </label>
+                                    <input type="text" name="match_value" id="match_value" size="20" value="[% account.match_value | html %]" />
+                                    <div class="hint">(Optional): This is the value that will be checked against the match field to see if the file matches this account. If it does it will be processed by this account, if not it will be skipped.</div>
+                                </li>
                             </ol>
                         </fieldset>
                         <fieldset class="rows">

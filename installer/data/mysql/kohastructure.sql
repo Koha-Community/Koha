@@ -4499,6 +4499,8 @@ CREATE TABLE `marc_order_accounts` (
   `parse_items` tinyint(1) DEFAULT NULL COMMENT 'should items be parsed',
   `record_type` varchar(50) DEFAULT NULL COMMENT 'type of record in the file',
   `encoding` varchar(50) DEFAULT NULL COMMENT 'file encoding',
+  `match_field` varchar(10) DEFAULT NULL COMMENT 'the field that a vendor account has been mapped to in a marc record',
+  `match_value` varchar(50) DEFAULT NULL COMMENT 'the value to be matched against the marc record',
   PRIMARY KEY (`id`),
   CONSTRAINT `marc_ordering_account_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `marc_ordering_account_ibfk_2` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE

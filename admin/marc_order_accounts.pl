@@ -88,6 +88,8 @@ if ( $op eq 'acct_form' ) {
             item_action        => scalar $input->param('item_action'),
             record_type        => scalar $input->param('record_type'),
             encoding           => scalar $input->param('encoding') || 'UTF-8',
+            match_field        => scalar $input->param('match_field'),
+            match_value        => scalar $input->param('match_value'),
         };
 
         if ( scalar $input->param('id') ) {
