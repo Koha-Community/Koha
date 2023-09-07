@@ -13,10 +13,11 @@
 
 <title>[% FILTER collapse %]
     [% IF op == 'edit' %]
-        [% tx("Modify {servertype} server {servername}", { servertype = servertype, servername = server.servername }) | html %] &rsaquo;
-    [% END %]
-    [% IF op ==  'add' %]
+        [% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %] &rsaquo;
+    [% ELSIF op ==  'add' %]
         [% tx("New {servertype} server", { servertype = servertype }) | html %] &rsaquo;
+    [% ELSIF searchfield %]
+        [% tx("Search results for '{search_keyword}'", { search_keyword = searchfield }) | html %] &rsaquo;
     [% END %]
     [% t("Z39.50/SRU servers") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -36,26 +37,30 @@
             <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
         [% END %]
 
-        [% IF op == 'edit' || op == 'add' %]
+        [% IF op == 'edit' || op == 'add' || searchfield %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a>
-           [% END %]
+            [% END %]
         [% END %]
 
         [% IF op == 'edit' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Modify [% servertype | html %] server [% server.servername | html %]</span>
-           [% END %]
+                [% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]
+            [% END %]
 
         [% ELSIF op == 'add' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>New [% servertype | html %] server</span>
-           [% END %]
+                [% tx("New {servertype} server", { servertype = servertype }) | html %]
+            [% END %]
 
+        [% ELSIF searchfield %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% tx("Search results for '{search_keyword}'", { search_keyword = searchfield }) | html %]
+            [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Z39.50/SRU servers</span>
-           [% END %]
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -77,14 +82,15 @@
 
 [% IF ( add_form ) %]
     <form action="[% script_name | html %]" name="Aform" method="post" id="serverentry">
-        <input type="hidden" name="op" value="add_validated" />
-        <input type="hidden" name="servertype" value="[% server.servertype||type||'zed' | html %]"/>
         [% IF op == 'edit' %]
-            <h1>Modify [% servertype | html %] server</h1>
+            <h1>[% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]</h1>
             <input type="hidden" name="id" value="[% server.id | html %]" />
         [% ELSE %]
-            <h1>New [% servertype | html %] server</h1>
+            <h1>[% tx("New {servertype} server", { servertype = servertype }) | html %]</h1>
         [% END %]
+
+        <input type="hidden" name="op" value="add_validated" />
+        <input type="hidden" name="servertype" value="[% server.servertype||type||'zed' | html %]"/>
         <fieldset class="rows">
         <ol>
         <li><label for="name" class="required">Server name: </label>
@@ -205,11 +211,11 @@
         <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=zed"><i class="fa fa-plus"></i> New Z39.50 server</a>
         <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=sru"><i class="fa fa-plus"></i> New SRU server</a>
     </div>
-    <h1>Z39.50/SRU servers administration</h1>
-    [% IF id %]
-        You searched for record [% id | html %]
-    [% ELSIF searchfield %]
-        You searched for [% searchfield | html %]
+    <h1>Z39.50/SRU servers</h1>
+    [% IF searchfield %]
+        <h2>
+            [% tx("Searching by target starting with '{search_keyword}'", { search_keyword = searchfield }) | html %]
+        </h2>
     [% END %]
 
     <div class="page-section">
