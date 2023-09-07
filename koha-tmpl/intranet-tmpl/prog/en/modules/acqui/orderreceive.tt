@@ -1182,8 +1182,7 @@
                 }
                 $("#quantity_to_receive").val(row.quantity).prop('readonly', !row.subscription_id);
                 $("#quantity").val( effective_create_items == 'cataloguing' ? row.quantity_received || 1 : row.quantity_received )
-                              .prop('readonly', !row.subscription_id && effective_create_items == 'receiving')
-                              .change();
+                              .prop('readonly', !row.subscription_id && effective_create_items == 'receiving');
                 [% IF only_one_order %]
                     $(".modal-save").prop('disabled', $("#quantity").val() == 0);
                 [% END %]
