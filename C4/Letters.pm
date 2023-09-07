@@ -25,18 +25,20 @@ use Module::Load::Conditional qw( can_load );
 
 use Try::Tiny;
 
-use C4::Members;
 use C4::Log qw( logaction );
+use C4::Members;
 use C4::SMS;
 use C4::Templates;
-use Koha::SMS::Providers;
-
+use Koha::Auth::TwoFactorAuth;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Email;
+use Koha::Exceptions;
 use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Auth::TwoFactorAuth;
 use Koha::Patrons;
+use Koha::SMS::Providers;
 use Koha::SMTP::Servers;
 use Koha::Subscriptions;
 
@@ -972,6 +974,9 @@ Returns number of messages sent.
 
 sub SendQueuedMessages {
     my $params = shift;
+
+    Koha::Exceptions::BadParameter->throw("Parameter message_id cannot be empty if passed.")
+        if ( exists( $params->{message_id} ) && !$params->{message_id} );
 
     my $which_unsent_messages  = {
         'message_id'     => $params->{'message_id'},
