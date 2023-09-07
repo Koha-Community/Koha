@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 87;
+use Test::More tests => 90;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -158,6 +158,22 @@ my $yesterday = dt_from_string->subtract( days => 1 );
 Koha::Notice::Messages->find($messages->[0]->{message_id})->time_queued($yesterday)->store;
 
 # SendQueuedMessages
+
+throws_ok {
+    C4::Letters::SendQueuedMessages( { message_id => undef } );
+}
+'Koha::Exceptions::BadParameter', 'Undef message_id throws an exception';
+
+throws_ok {
+    C4::Letters::SendQueuedMessages( { message_id => 0 } );
+}
+'Koha::Exceptions::BadParameter', 'message_id of 0 throws an exception';
+
+throws_ok {
+    C4::Letters::SendQueuedMessages( { message_id => q{} } );
+}
+'Koha::Exceptions::BadParameter', 'Empty string message_id throws an exception';
+
 my $messages_processed = C4::Letters::SendQueuedMessages( { type => 'email' });
 is($messages_processed, 0, 'No queued messages processed if type limit passed with unused type');
 $messages_processed = C4::Letters::SendQueuedMessages( { type => 'sms' });
