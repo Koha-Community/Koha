@@ -25,19 +25,19 @@ use Module::Load::Conditional qw( can_load );
 
 use Try::Tiny;
 
-use C4::Members;
 use C4::Log qw( logaction );
+use C4::Members;
 use C4::SMS;
 use C4::Templates;
-use Koha::SMS::Providers;
-
+use Koha::Auth::TwoFactorAuth;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Email;
+use Koha::Exceptions;
 use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::Notice::Util;
-use Koha::DateUtils qw( dt_from_string output_pref );
-use Koha::Auth::TwoFactorAuth;
 use Koha::Patrons;
+use Koha::SMS::Providers;
 use Koha::SMTP::Servers;
 use Koha::Subscriptions;
 
@@ -979,6 +979,9 @@ sub SendQueuedMessages {
     my $params = shift;
     my $limit = $params->{limit};
     my $where = $params->{where};
+
+    Koha::Exceptions::BadParameter->throw("Parameter message_id cannot be empty if passed.")
+        if ( exists( $params->{message_id} ) && !$params->{message_id} );
 
     my $smtp_transports = {};
 
