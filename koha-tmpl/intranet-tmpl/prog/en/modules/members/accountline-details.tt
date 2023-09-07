@@ -88,6 +88,7 @@
                                 [% END %]
                                 <th>Amount</th>
                                 <th>Outstanding</th>
+                                <th>Librarian</th>
                             </tr>
                         </thead>
 
@@ -151,6 +152,16 @@
                                 <td>
                                     [% accountline.amountoutstanding | $Price %]
                                 </td>
+                                <td>
+                                    [% IF accountline.manager_id %]
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% accountline.manager_id | uri %]">
+                                            [% IF accountline.manager.firstname %]
+                                                [% accountline.manager.firstname | html %] [% accountline.manager.surname | html %]
+                                            [% ELSE %]
+                                                [% accountline.manager.surname | html %]
+                                            [% END %]
+                                        </a>
+                                    [% END %]
                             </tr>
                         </tbody>
                     </table>
