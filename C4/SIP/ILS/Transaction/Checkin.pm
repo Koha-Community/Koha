@@ -292,6 +292,7 @@ sub _get_sort_bin {
 
             # Check the fields against values in the item
             my $property = $item->$item_property;
+            next RULE unless defined($property);
             if ( ( $comparator eq 'eq' || $comparator eq '=' ) && ( $property eq $value ) ) {
                 $match = 1;
             } elsif ( ( $comparator eq 'ne' || $comparator eq '!=' ) && ( $property ne $value ) ) {
