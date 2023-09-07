@@ -925,30 +925,25 @@ sub EnqueueLetter {
         );
     }
 
-    my $dbh       = C4::Context->dbh();
-    my $statement = << 'ENDSQL';
-INSERT INTO message_queue
-( letter_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, reply_address, content_type, failure_code )
-VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, CAST(NOW() AS DATETIME), ?, ?, ?, ?, ? )
-ENDSQL
-
-    my $sth    = $dbh->prepare($statement);
-    my $result = $sth->execute(
-        $params->{letter}->{id} || undef,         # letter.id
-        $params->{'borrowernumber'},              # borrowernumber
-        $params->{'letter'}->{'title'},           # subject
-        $params->{'letter'}->{'content'},         # content
-        $params->{'letter'}->{'metadata'} || '',  # metadata
-        $params->{'letter'}->{'code'}     || '',  # letter_code
-        $params->{'message_transport_type'},      # message_transport_type
-        'pending',                                # status
-        $params->{'to_address'},                  # to_address
-        $params->{'from_address'},                # from_address
-        $params->{'reply_address'},               # reply_address
-        $params->{'letter'}->{'content-type'},    # content_type
-        $params->{'failure_code'}        || '',   # failure_code
-    );
-    return $dbh->last_insert_id(undef,undef,'message_queue', undef);
+    my $message = Koha::Notice::Message->new(
+        {
+            letter_id              => $params->{letter}->{id} || undef,
+            borrowernumber         => $params->{borrowernumber},
+            subject                => $params->{letter}->{title},
+            content                => $params->{letter}->{content},
+            metadata               => $params->{letter}->{metadata} || q{},
+            letter_code            => $params->{letter}->{code} || q{},
+            message_transport_type => $params->{message_transport_type},
+            status                 => 'pending',
+            time_queued            => dt_from_string(),
+            to_address             => $params->{to_address},
+            from_address           => $params->{from_address},
+            reply_address          => $params->{reply_address},
+            content_type           => $params->{letter}->{'content-type'},
+            failure_code           => $params->{failure_code} || q{},
+        }
+    )->store();
+    return $message->id;
 }
 
 =head2 SendQueuedMessages ([$hashref]) 
