@@ -912,7 +912,7 @@ subtest checkin_withdrawn => sub {
 };
 
 subtest _get_sort_bin => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch   = $library->branchcode;
@@ -928,6 +928,7 @@ $branch:itemcallnumber:<:600:3\r
 $branch2:homebranch:ne:\$holdingbranch:X\r
 $branch2:effective_itemtype:eq:CD:4\r
 $branch2:itemcallnumber:>:600:5\r
+$branch2:effective_itemtype:eq:BOOK:ccode:eq:TEEN:6\r
 RULES
     t::lib::Mocks::mock_preference('SIP2SortBinMapping', $rules);
 
@@ -943,6 +944,14 @@ RULES
             library        => $library->branchcode,
             itype          => 'BOOK',
             itemcallnumber => '200.01'
+        }
+    );
+
+    my $item_book2 = $builder->build_sample_item(
+        {
+            library => $library2->branchcode,
+            itype   => 'BOOK',
+            ccode   => 'TEEN'
         }
     );
 
@@ -962,6 +971,9 @@ RULES
     $item_book->itemcallnumber('350.20')->store();
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book, $library->branchcode );
     is($bin, '2', "Rules applied in order (< comparator)");
+
+    $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book2, $library2->branchcode );
+    is($bin, '6', "Rules with multiple field matches");
 };
 
 subtest item_circulation_status => sub {
