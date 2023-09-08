@@ -270,7 +270,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'staff' ) {
 }
 
 # Display volumes link
-my $show_volumes = 1 if @{$biblio->get_marc_volumes(1)};
+my $show_volumes = @{ $biblio->get_marc_volumes(1) } ? 1 : 0;
 
 # XSLT processing of some stuff
 my $xslt_variables = {

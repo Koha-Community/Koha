@@ -621,7 +621,7 @@ if ( $showcomp eq 'both' || $showcomp eq 'opac' ) {
 }
 
 # Display volumes link
-my $show_volumes = 1 if @{$biblio->get_marc_volumes(1)};
+my $show_volumes = @{ $biblio->get_marc_volumes(1) } ? 1 : 0;
 
 # XSLT processing of some stuff
 my $variables = {};
@@ -637,9 +637,9 @@ my @plugin_responses = Koha::Plugins->call(
 for my $plugin_variables ( @plugin_responses ) {
     $variables = { %$variables, %$plugin_variables };
 }
-$variables->{anonymous_session} = $borrowernumber ? 0 : 1;
+$variables->{anonymous_session}   = $borrowernumber ? 0 : 1;
 $variables->{show_analytics_link} = $show_analytics;
-$variables->{show_volumes_link} = $show_volumes;
+$variables->{show_volumes_link}   = $show_volumes;
 $template->param(
     XSLTBloc => XSLTParse4Display({
         biblionumber   => $biblionumber,
