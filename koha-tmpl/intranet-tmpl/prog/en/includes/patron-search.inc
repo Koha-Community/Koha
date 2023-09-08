@@ -61,12 +61,12 @@
                         </li>
                     [% CASE 'sort1' %]
                         <li>
-                            <label for="sort1_filter">Sort1:</label>
+                            <label for="sort1_filter">Sort 1:</label>
                             [% PROCESS 'av-build-dropbox.inc' name="sort1_filter", category="Bsort1", empty=1, size = 20 %]
                         </li>
                     [% CASE 'sort2' %]
                         <li>
-                            <label for="sort2_filter">Sort2:</label>
+                            <label for="sort2_filter">Sort 2:</label>
                             [% PROCESS 'av-build-dropbox.inc' name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
                         </li>
                     [% CASE 'search_field' %]
