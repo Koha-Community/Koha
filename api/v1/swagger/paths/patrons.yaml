@@ -405,11 +405,17 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/patron"
-      - name: x-koha-welcome
+      - name: x-koha-override
         in: header
         required: false
-        description: If set to 'email' triggers the sending of a welcome email
-        type: string
+        description: Overrides list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - welcome_yes
+            - welcome_no
+        collectionFormat: csv
     consumes:
       - application/json
     produces:

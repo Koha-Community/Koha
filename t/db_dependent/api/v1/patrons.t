@@ -408,8 +408,10 @@ subtest 'add() tests' => sub {
         # Set a date-time field
         $newpatron->{last_seen} = output_pref({ dt => dt_from_string->add( days => -1 ), dateformat => 'rfc3339' });
 
+        t::lib::Mocks::mock_preference( 'AutoEmailNewUser', 0 );
         $letter_enqueued = 0;
-        $t->post_ok("//$userid:$password@/api/v1/patrons" => { 'x-koha-welcome' => 'email' } => json => $newpatron)
+        $t->post_ok(
+            "//$userid:$password@/api/v1/patrons" => { 'x-koha-override' => 'welcome_yes' } => json => $newpatron )
           ->status_is(201, 'Patron created successfully')
           ->header_like(
             Location => qr|^\/api\/v1\/patrons/\d*|,

@@ -116,7 +116,10 @@ sub add {
 
                 my $patron = Koha::Patron->new_from_api($body)->store;
 
-                if ( $c->req->headers->header('x-koha-welcome') ) {
+                my $overrides = $c->stash('koha.overrides');
+                if ( $overrides->{welcome_yes}
+                    || ( C4::Context->preference("AutoEmailNewUser") && !$overrides->{welcome_no} ) )
+                {
 
                     # if we manage to find a valid email address, send notice
                     if ( $patron->notice_email_address ) {
