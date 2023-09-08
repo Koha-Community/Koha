@@ -49,6 +49,7 @@ my $start_card = $cgi->param('start_card') || 1;
 my @label_ids   = $cgi->multi_param('label_id');
 my @borrower_numbers  = $cgi->multi_param('borrower_number');
 my $patronlist_id = $cgi->param('patronlist_id');
+my $order_by = $cgi->param('order_by') || undef;
 
 my $items = undef; # items = cards
 my $new_page = 0;
@@ -99,6 +100,7 @@ elsif ( $patronlist_id  ) {
     my ($list) = GetPatronLists( { patron_list_id => $patronlist_id } );
     my @borrowerlist = $list->patron_list_patrons()->search_related('borrowernumber')
     ->get_column('borrowernumber')->all();
+    @borrowerlist =  map { $_->borrowernumber } Koha::Patrons->search( {borrowernumber => { -in => \@borrowerlist }}, { order_by => [$order_by]} )->as_list if($order_by);
     grep {
         push(@{$items}, {borrower_number => $_});
     } @borrowerlist;

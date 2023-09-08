@@ -47,6 +47,7 @@ my $start_card = $cgi->param('start_card') || 1;
 my @borrower_numbers = $cgi->multi_param('borrower_number');
 my $output_format = $cgi->param('output_format') || 'pdf';
 my $referer = $cgi->param('referer') || undef;
+my $order_by = $cgi->param('order_by') || undef;
 
 my $layouts = undef;
 my $templates = undef;
@@ -113,6 +114,7 @@ if ($op eq 'export') {
                          layout_back_id  => $layout_back_id,
                          start_card      => $start_card,
                          referer         => $referer,
+                         order_by        => $order_by,
                         );
     }
 }
