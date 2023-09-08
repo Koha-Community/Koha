@@ -7,16 +7,16 @@
 <title>[% FILTER collapse %]
     [% IF ( add_form ) %]
         [% IF ( modify ) %]
-            [% tx("Modify preference '{searchfield}'", { searchfield = searchfield }) | html %]
+            [% tx("Modify system preference '{system_preference}'", { system_preference = searchfield }) | html %]
         [% ELSE %]
-            [% t("New preference") | html %]
+            [% t("New system preference") | html %]
         [% END %] &rsaquo;
     [% END %]
     [% IF ( delete_confirm ) %]
-        [% tx("Confirm deletion of preference '{searchfield}'", { searchfield = searchfield }) | html %] &rsaquo;
+        [% tx("Confirm deletion of system preference '{system_preference}'", { system_preference = searchfield }) | html %] &rsaquo;
     [% END %]
     [% IF ( delete_confirmed ) %]
-        [% t("Preference deleted") | html %] &rsaquo;
+        [% t("System preference deleted") | html %] &rsaquo;
     [% END %]
     [% t("Local use system preferences") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -45,9 +45,9 @@
         [% IF ( add_form ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF ( modify ) %]
-                    <span>Modify preference '[% searchfield | html %]'</span>
+                    [% tx("Modify system preference '{system_preference}'", { system_preference = searchfield }) | html %]
                 [% ELSE %]
-                    <span>New preference</span>
+                    <span>New system preference</span>
                 [% END %]
             [% END %]
         [% END %]
@@ -57,13 +57,13 @@
                 <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield | uri %]">[% searchfield | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of preference '[% searchfield | html %]'</span>
+                [% tx("Confirm deletion of system preference '{system_preference}'", { system_preference = searchfield }) | html %]
             [% END %]
         [% END %]
 
         [% IF ( delete_confirmed ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Preference deleted</span>
+                <span>System preference deleted</span>
             [% END %]
         [% END %]
 
@@ -83,7 +83,7 @@
 [% IF ( add_form ) %]
         <h1>
             [% IF ( modify ) %]
-                [% tx("Modify preference '{searchfield}'", { searchfield = searchfield }) | html %]
+                [% tx("Modify system preference '{searchfield}'", { searchfield = searchfield }) | html %]
             [% ELSE %]
                 New local use system preference
             [% END %]
@@ -95,7 +95,7 @@
             <form action="[% script_name | html %]" name="Aform" method="post">
         [% END %]
         <fieldset class="rows">
-            <legend class="sr-only">Preference details</legend>
+            <legend class="sr-only">System preference details</legend>
             <ol>
             <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation | html %]" /><input type="hidden" name="op" value="add_validate" /></li>
             <li>[% IF ( searchfield ) %]<span class="label">Variable: </span>[% searchfield | html %]<input type="hidden" name="variable" value="[% searchfield | html %]" />
@@ -267,7 +267,7 @@
 
     [% IF ( delete_confirm ) %]
         <div class="dialog alert">
-            <h1>Confirm deletion of [% searchfield | html %]?</h1>
+            <h1>[% tx("Confirm deletion of system preference '{system_preference}'?", { system_preference = searchfield }) | html %]</h1>
             <table>
                 <tr>
                     <th>Variable name:</th>
@@ -302,7 +302,7 @@
     [% IF ( else ) %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default" id="newstopword" href="[% script_name | url %]?op=add_form"><i class="fa fa-plus"></i> New preference</a>
+        <a class="btn btn-default" id="newstopword" href="[% script_name | url %]?op=add_form"><i class="fa fa-plus"></i> New system preference</a>
     </div>
 
     [% IF ( tab != 'local_use' ) %]
