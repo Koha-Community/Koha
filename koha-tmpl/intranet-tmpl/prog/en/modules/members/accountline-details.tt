@@ -154,14 +154,9 @@
                                 </td>
                                 <td>
                                     [% IF accountline.manager_id %]
-                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% accountline.manager_id | uri %]">
-                                            [% IF accountline.manager.firstname %]
-                                                [% accountline.manager.firstname | html %] [% accountline.manager.surname | html %]
-                                            [% ELSE %]
-                                                [% accountline.manager.surname | html %]
-                                            [% END %]
-                                        </a>
+                                        [% INCLUDE 'patron-title.inc' patron => accountline.manager, hide_patron_infos_if_needed => 1, no_cardnumber => 1 %]
                                     [% END %]
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -222,13 +217,7 @@
                                         </td>
                                         <td>
                                             [% IF offset_accountline.manager_id %]
-                                            <a href="moremember.pl?borrowernumber=[% offset_accountline.manager_id | uri %]">
-                                                [% IF offset_accountline.manager.firstname %]
-                                                    [% offset_accountline.manager.firstname | html %] [% offest_accountline.manager.surname | html %]
-                                                [% ELSE %]
-                                                    [% offset_accountline.manager.surname | html %]
-                                                [% END %]
-                                            </a>
+                                                [% INCLUDE 'patron-title.inc' patron => offset_accountline.manager, hide_patron_infos_if_needed => 1, no_cardnumber => 1 %]
                                             [% END %]
                                         </td>
                                         [%- ELSE -%]
