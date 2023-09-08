@@ -10,7 +10,7 @@
                 <input type="hidden" name="searched" value="1" />
 
                 <div class="form-title">
-                    <label class="control-label"><span class="control-text">Search subscriptions</span> <i class="fa fa-fw fa-book" aria-hidden="true"></i></label>
+                    <label class="control-label" for="ISSN_filter"><span class="control-text">Search subscriptions</span> <i class="fa fa-fw fa-book" aria-hidden="true"></i></label>
                 </div>
 
                 <div class="form-content">
