@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 use Test::MockModule;
 
@@ -86,6 +86,39 @@ subtest 'qr_code' => sub {
     my $img_data02 = $auth->qr_code;
     is( length($img_data02) > 22, 1, 'More characters than prefix' );
     isnt( $img_data02, $img_data, 'Another secret, another image' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'verify' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'TwoFactorAuthentication', 'enabled' );
+    t::lib::Mocks::mock_config( 'encryption_key', 'bad_example' );
+    t::lib::Mocks::mock_config( 'mfa_range',      undef );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    $patron->encode_secret('6557s35ui2gyhkmuuvei6rpk44');    # this is base32 btw
+    $patron->auth_method('two-factor');
+    $patron->store;
+
+    my $auth      = Koha::Auth::TwoFactorAuth->new( { patron => $patron } );
+    my $code      = 394342;
+    my $timestamp = 1694137671;
+    my $verified;
+    $verified = $auth->verify( $code, undef, undef, $timestamp, undef );
+    is( $verified, 1, "code valid within 1 minute" );
+
+    $verified = $auth->verify( $code, undef, undef, ( $timestamp + 60 ), undef );
+    is( $verified, 0, "code invalid within 2 minutes" );
+
+    t::lib::Mocks::mock_config( 'mfa_range', 10 );
+    $verified = $auth->verify( $code, undef, undef, ( $timestamp + 300 ), undef );
+    is( $verified, 1, "code valid within 5 minutes" );
+
+    $verified = $auth->verify( $code, undef, undef, ( $timestamp + 330 ), undef );
+    is( $verified, 0, "code valid within 5.5 minutes" );
 
     $schema->storage->txn_rollback;
 };
