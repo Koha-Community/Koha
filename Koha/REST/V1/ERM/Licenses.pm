@@ -55,7 +55,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $license = $c->objects->find( Koha::ERM::Licenses->new, $c->param('license_id') );
+        my $license = $c->objects->find( Koha::ERM::Licenses->search, $c->param('license_id') );
 
         unless ($license) {
             return $c->render(
