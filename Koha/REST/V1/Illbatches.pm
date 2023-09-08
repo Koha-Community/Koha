@@ -106,7 +106,7 @@ Get one batch
 sub get {
     my $c = shift->openapi->valid_input;
 
-    my $batchid = $c->validation->param('illbatch_id');
+    my $batchid = $c->param('illbatch_id');
 
     my $batch = Koha::Illbatches->find($batchid);
 
@@ -143,7 +143,7 @@ Add a new batch
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $body = $c->validation->param('body');
+    my $body = $c->req->json;
 
     # We receive cardnumber, so we need to look up the corresponding
     # borrowernumber
@@ -204,7 +204,7 @@ Update a batch
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $batch = Koha::Illbatches->find( $c->validation->param('illbatch_id') );
+    my $batch = Koha::Illbatches->find( $c->param('illbatch_id') );
 
     if ( not defined $batch ) {
         return $c->render(
@@ -253,7 +253,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $batch = Koha::Illbatches->find( $c->validation->param('illbatch_id') );
+    my $batch = Koha::Illbatches->find( $c->param('illbatch_id') );
 
     if ( not defined $batch ) {
         return $c->render( status => 404, openapi => { error => "ILL batch not found" } );

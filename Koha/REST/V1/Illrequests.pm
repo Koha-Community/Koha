@@ -72,7 +72,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
                 $body->{backend} = delete $body->{ill_backend_id};
                 $body->{borrowernumber} = delete $body->{patron_id};
                 $body->{branchcode} = delete $body->{library_id};
