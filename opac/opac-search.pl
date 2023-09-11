@@ -717,24 +717,29 @@ for (my $i=0;$i<@servers;$i++) {
                 $query_cgi_history =~ s/;/&/g;
                 my $query_desc_history = join ", ", grep { defined $_ } $query_desc, $limit_desc;
 
-                unless ( $borrowernumber ) {
-                    my $new_searches = C4::Search::History::add_to_session({
-                            cgi => $cgi,
-                            query_desc => $query_desc_history,
-                            query_cgi => $query_cgi_history,
-                            total => $total,
-                            type => "biblio",
-                    });
-                } else {
+                if ( $borrowernumber and $cgi->cookie("CGISESSID") ) {
+
                     # To the session (the user is logged in)
-                    C4::Search::History::add({
-                        userid => $borrowernumber,
-                        sessionid => $cgi->cookie("CGISESSID"),
-                        query_desc => $query_desc_history,
-                        query_cgi => $query_cgi_history,
-                        total => $total,
-                        type => "biblio",
-                    });
+                    C4::Search::History::add(
+                        {
+                            userid     => $borrowernumber,
+                            sessionid  => $cgi->cookie("CGISESSID"),
+                            query_desc => $query_desc_history,
+                            query_cgi  => $query_cgi_history,
+                            total      => $total,
+                            type       => "biblio",
+                        }
+                    );
+                } else {
+                    my $new_searches = C4::Search::History::add_to_session(
+                        {
+                            cgi        => $cgi,
+                            query_desc => $query_desc_history,
+                            query_cgi  => $query_cgi_history,
+                            total      => $total,
+                            type       => "biblio",
+                        }
+                    );
                 }
             }
             $template->param( EnableOpacSearchHistory => 1 );
