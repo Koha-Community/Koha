@@ -5,6 +5,7 @@
 [% USE Price %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
+[% USE Branches %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
@@ -132,6 +133,10 @@
         }
 
         $(document).ready(function(){
+            [% UNLESS ordernumber %]
+                $("#items_list").hide();
+            [% END %]
+
             [% IF AcqCreateItemOrdering and not basket.is_standing %]
                 cloneItemBlock(0, '[% UniqueItemFields | html %]');
             [% END %]
@@ -490,7 +495,7 @@
     [% UNLESS subscriptionid || basket.is_standing %][% # it is a suggestion, we have not items %]
       [% IF (AcqCreateItemOrdering) %]
 
-      <div id="items_list" class="page-section" style="display:none">
+      <div id="items_list" class="page-section">
           <p><strong>Items list</strong></p>
           <div style="width:100%;overflow:auto;">
               <table>
@@ -513,6 +518,24 @@
                       </tr>
                   </thead>
                   <tbody>
+                    [% FOREACH item IN items %]
+                        <tr idblock="itemblock[% item.id | html %]">
+                            <td>&nbsp;</td>
+                            <td>[% item.barcode | html %]</td>
+                            <td>[% Branches.GetName(item.homebranch) | html %]</td>
+                            <td>[% Branches.GetName(item.holdingbranch) | html %]</td>
+                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) | html %]</td>
+                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.restricted', authorised_value => item.restricted ) | html %]</td>
+                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</td>
+                            <td>[% item.itemcallnumber | html %]</td>
+                            <td>[% item.copynumber | html %]</td>
+                            <td>[% item.stocknumber | html %]</td>
+                            <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]</td>
+                            <td>[% ItemTypes.GetDescription( item.itype ) | html %]</td>
+                            <td>[% item.materials | html %]</td>
+                            <td>[% item.itemnotes | html %]</td>
+                        </tr>
+                    [% END %]
                   </tbody>
               </table>
           </div>
@@ -544,7 +567,7 @@
                     [% IF basket.is_standing %]
                         <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
                     [% ELSE %]
-                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
+                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="[% quantityrec | html %]" />
                     [% END %]
                 [% ELSE %]
                     [% IF basket.is_standing %]

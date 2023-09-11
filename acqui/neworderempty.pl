@@ -349,15 +349,15 @@ foreach my $r (@{$budgets}) {
 $template->param( sort1 => $data->{'sort1'} );
 $template->param( sort2 => $data->{'sort2'} );
 
-if ($basketobj->effective_create_items eq 'ordering' && !$ordernumber) {
+if ( $basketobj->effective_create_items eq 'ordering' ) {
     # Check if ACQ framework exists
-    my $marc = GetMarcStructure(1, 'ACQ', { unsafe => 1 } );
-    unless($marc) {
-        $template->param('NoACQframework' => 1);
+    my $marc = GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
+    unless ($marc) {
+        $template->param( 'NoACQframework' => 1 );
     }
     $template->param(
         AcqCreateItemOrdering => 1,
-        UniqueItemFields => C4::Context->preference('UniqueItemFields'),
+        UniqueItemFields      => C4::Context->preference('UniqueItemFields'),
     );
 }
 
@@ -420,11 +420,13 @@ $quantity //= 0;
 my $record;
 my @additional_fields = Koha::AdditionalFields->search({ tablename => 'aqorders' })->as_list;
 my %additional_field_values;
+my $items;
 if ($ordernumber) {
     my $order = Koha::Acquisition::Orders->find($ordernumber);
     foreach my $value ($order->additional_field_values->as_list) {
         $additional_field_values{$value->field_id} = $value->value;
     }
+    $items = $order->items;
 } elsif ( $biblionumber ) {
     foreach my $af (@additional_fields) {
         if ($af->marcfield) {
@@ -437,6 +439,7 @@ if ($ordernumber) {
 $template->param(
     additional_fields => \@additional_fields,
     additional_field_values => \%additional_field_values,
+    items => $items,
 );
 
 # fill template
