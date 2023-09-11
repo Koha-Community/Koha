@@ -61,6 +61,7 @@ sub existing_statuses {
             select   => [ 'status', \'MAX(illrequest_id)', 'backend' ],
             as       => [qw/ status illrequest_id backend /],
             group_by => [qw/status backend/],
+            order_by => [qw/status backend/],
         }
     );
     while ( my $request = $ill_requests->next ) {
@@ -83,6 +84,7 @@ sub existing_statuses {
             select   => [ 'status_alias', \'MAX(illrequest_id)', 'backend' ],
             as       => [qw/ status_alias illrequest_id backend /],
             group_by => [qw/status_alias backend/],
+            order_by => [qw/status_alias backend/],
         }
     );
     while ( my $request = $ill_requests->next ) {
