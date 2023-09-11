@@ -664,8 +664,8 @@
                                                                     <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                                             [% END %]
                                                         </td>
-                                                        <td>[% books_loo.sort1 | html %]</td>
-                                                        <td>[% books_loo.sort2 | html %]</td>
+                                                        <td>[% AuthorisedValues.GetByCode( books_loo.sort1_authcat, books_loo.sort1 ) | html %]</td>
+                                                        <td>[% AuthorisedValues.GetByCode( books_loo.sort2_authcat, books_loo.sort2 ) | html %]</td>
                                                         <td>
                                                             [% IF CAN_user_acquisition_edit_invoices %]
                                                                 <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% books_loo.invoice_object.invoiceid | url %]" class="invoice">[% books_loo.invoice_object.invoicenumber | html %]</a>
@@ -673,6 +673,7 @@
                                                                 [% books_loo.invoice_object.invoicenumber | html %]
                                                             [% END %]
                                                         </td>
+
                                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                                             <td>[% books_loo.suppliers_report | html %]</td>
                                                         [% END %]

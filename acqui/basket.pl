@@ -448,8 +448,10 @@ sub get_order_infos {
     my %line = %{ $order };
     # Don't show unreceived standing orders as received
     $line{order_received} = ( $qty == $order->{'quantityreceived'} && ( $basket->{is_standing} ? $qty : 1 ) );
-    $line{basketno}       = $basketno;
-    $line{budget_name}    = $budget->{budget_name};
+    $line{basketno}      = $basketno;
+    $line{budget_name}   = $budget->{budget_name};
+    $line{sort1_authcat} = $budget->{sort1_authcat};
+    $line{sort2_authcat} = $budget->{sort2_authcat};
 
     # If we have an actual cost that should be the total, otherwise use the ecost
     $line{unitprice_tax_included} += 0;
