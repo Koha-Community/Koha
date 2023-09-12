@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF list.patron_list_id %]
-        [% t("Modify patron list") | html %]
+        [% tx("Modify patron list '{list_name}'", { list_name = list.name }) | html %]
     [% ELSE %]
         [% t("New patron list") | html %]
     [% END %] &rsaquo;
@@ -31,7 +31,7 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF list.patron_list_id %]
-                    <span>Modify patron list</span>
+                    [% tx("Modify patron list '{list_name}'", { list_name = list.name }) | html %]
                 [% ELSE %]
                     <span>New patron list</span>
                 [% END %]
@@ -44,7 +44,7 @@
             <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
         <h1>
             [% IF list.patron_list_id %]
-                <span>Modify patron list</span>
+                [% tx("Modify patron list '{list_name}'", { list_name = list.name }) | html %]
             [% ELSE %]
                 <span>New patron list</span>
             [% END %]
@@ -53,13 +53,7 @@
         <form method="post" action="/cgi-bin/koha/patron_lists/add-modify.pl" class="validated">
             <fieldset class="rows">
 
-                <legend>
-                    [% IF list.patron_list_id %]
-                    <span>Modify patron list</span>
-                    [% ELSE %]
-                    <span>Create a new patron list</span>
-                    [% END %]
-                </legend>
+                <legend class="sr-only">Patron list details</legend>
 
                 <ol>
                     <li>

@@ -7,7 +7,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
 <title>[% FILTER collapse %]
-    [% t("Add patrons") | html %] &rsaquo;
     [% list.name | html %] &rsaquo;
     [% t("Patron lists") | html %] &rsaquo;
     [% t("Tools") | html %] &rsaquo;
@@ -44,11 +43,8 @@
         [% WRAPPER breadcrumb_item %]
             <a href="lists.pl">Patron lists</a>
         [% END %]
-        [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% list.id | uri %]">[% list.name | html %]</a>
-        [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Add patrons</span>
+            [% list.name | html %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
