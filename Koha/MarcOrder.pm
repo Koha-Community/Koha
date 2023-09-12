@@ -60,6 +60,7 @@ use Koha::Import::Records;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Baskets;
+use Koha::Plugins;
 
 =head1 NAME
 
@@ -1105,6 +1106,14 @@ sub create_items_and_generate_order_hash {
 
                 # Remove uncertainprice flag if we have found a price in the MARC record
                 $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
+                Koha::Plugins->call(
+                    'before_orderline_create',
+                    {
+                        marcrecord => $fields->{marcrecord},
+                        orderline  => \%orderinfo,
+                        marcfields => $fields
+                    }
+                );
 
                 my $order = Koha::Acquisition::Order->new( \%orderinfo );
                 $order->populate_with_prices_for_ordering();
@@ -1152,6 +1161,14 @@ sub create_items_and_generate_order_hash {
 
         # Remove uncertainprice flag if we have found a price in the MARC record
         $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
+        Koha::Plugins->call(
+            'before_orderline_create',
+            {
+                marcrecord => $fields->{marcrecord},
+                orderline  => \%orderinfo,
+                marcfields => $fields
+            }
+        );
 
         my $order = Koha::Acquisition::Order->new( \%orderinfo );
         $order->populate_with_prices_for_ordering();
