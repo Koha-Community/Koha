@@ -328,7 +328,7 @@
                                             <thead>
                                                 <tr>
                                                     [% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
-                                                    <th class="anti-the">Title</th>
+                                                    <th class="all anti-the">Title</th>
                                                     <th>Author</th>
                                                     <th class="psort">Due</th>
                                                     [% UNLESS ( item_level_itypes ) %]
@@ -670,7 +670,7 @@
                                         <caption class="sr-only">Relatives' checkouts</caption>
                                         <thead>
                                             <tr>
-                                                <th class="anti-the">Title</th>
+                                                <th class="all anti-the">Title</th>
                                                 <th>Due</th>
                                                 <th>Barcode</th>
                                                 <th>Call number</th>
@@ -721,7 +721,7 @@
                                         <thead>
                                             <tr>
                                                 [% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
-                                                <th class="anti-the">Title</th>
+                                                <th class="all anti-the">Title</th>
                                                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th> [% END %]
                                                 [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
                                                 <th>Call number</th>
@@ -846,7 +846,7 @@
                                         <caption>Recalls <span class="count">([% RECALLS.count | html %])</span></caption>
                                         <thead>
                                             <tr>
-                                                <th class="anti-the">Title</th>
+                                                <th class="all anti-the">Title</th>
                                                 <th class="psort">Placed on</th>
                                                 <th>Expires on</th>
                                                 <th>Pickup location</th>
@@ -922,7 +922,7 @@
                                             <caption>Article requests <span class="count"></span></caption>
                                             <thead>
                                                 <tr>
-                                                    <th class="anti-the article-request-record-title">Record title</th>
+                                                    <th class="all anti-the article-request-record-title">Record title</th>
                                                     <th class="psort article-request-created-on">Placed on</th>
                                                     <th class="anti-the article-request-title">Title</th>
                                                     <th class="article-request-author">Author</th>
