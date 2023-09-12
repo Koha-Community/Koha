@@ -91,10 +91,9 @@
     [% FOREACH r IN relatives %]
         <h3 id="g[% r.patron.id | html %]">[% r.patron.firstname | html %] [% r.patron.surname | html %]'s fines and charges</h3>
 
-        <table class="table table-bordered table-striped finestable" id="finestable-[% r.id | html %]">
+        <table class="table table-bordered table-striped finestable" id="finestable-[% r.patron.id | html %]">
             <thead>
                 <tr>
-                    [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
                     <th>Created</th>
                     <th>Updated</th>
                     <th>Description</th>
@@ -109,15 +108,6 @@
                 [% FOREACH a IN r.accountlines %]
                     [% SET account_sum = account_sum + a.amountoutstanding %]
                     <tr>
-                        [% IF ENABLE_OPAC_PAYMENTS %]
-                            <td>
-                                [% IF a.amountoutstanding > 0 %]
-                                    [% SET DISPLAY_PAYMENT_BLOCK = 1 %]
-                                    <input class="checkbox-pay pay-online hidden" name="accountline" type="checkbox" id="checkbox-pay-[% a.accountlines_id | html %]" value="[% a.accountlines_id | html %]">
-                                    <input type="hidden" id="amount-[% a.accountlines_id | html %]" value="[% a.amountoutstanding | html %]" />
-                                [% END %]
-                            </td>
-                        [% END %]
                         <td data-order="[% a.date | html %]">[% a.date | $KohaDates %]</td>
                         <td data-order="[% a.timestamp | html %]">[% a.timestamp | $KohaDates with_hours = 1 %]</td>
                         <td>
