@@ -44,7 +44,7 @@ my $summary;
 
 my $item_identifier;
 
-my $fee_acknowledged = 0;
+my $fee_acknowledged;
 
 my $fee_type;
 my $payment_type;
@@ -72,7 +72,7 @@ GetOptions(
 
     "i|item=s" => \$item_identifier,
 
-    "fa|fee-acknowledged" => \$fee_acknowledged,
+    "fa|fee-acknowledged=s" => \$fee_acknowledged,
 
     "s|summary=s" => \$summary,
 
@@ -449,12 +449,11 @@ sub build_checkout_command_message {
     my $terminal_password = $params->{terminal_password};
     my $item_properties   = $params->{item_properties};
     my $patron_password   = $params->{patron_password};
-    my $fee_acknowledged  = $params->{fee_acknowledged} || 'N';
+    my $fee_acknowledged  = $params->{fee_acknowledged};
     my $cancel            = $params->{cancel} || 'N';
 
     $SC_renewal_policy = $SC_renewal_policy eq 'Y' ? 'Y' : 'N';
     $no_block          = $no_block          eq 'Y' ? 'Y' : 'N';
-    $fee_acknowledged  = $fee_acknowledged  eq 'Y' ? 'Y' : 'N';
     $cancel            = $cancel            eq 'Y' ? 'Y' : 'N';
 
     $nb_due_date ||= $transaction_date;
@@ -520,7 +519,7 @@ sub build_hold_command_message {
     my $item_identifier   = $params->{item_identifier};
     my $title_identifier  = $params->{title_identifier};
     my $terminal_password = $params->{terminal_password};
-    my $fee_acknowledged  = $params->{fee_acknowledged} || 'N';
+    my $fee_acknowledged  = $params->{fee_acknowledged};
 
     return
         HOLD
@@ -552,11 +551,10 @@ sub build_renew_command_message {
     my $title_identifier    = $params->{title_identifier};
     my $terminal_password   = $params->{terminal_password};
     my $item_properties     = $params->{item_properties};
-    my $fee_acknowledged    = $params->{fee_acknowledged}    || 'N';
+    my $fee_acknowledged    = $params->{fee_acknowledged};
 
     $third_party_allowed = $third_party_allowed eq 'Y' ? 'Y' : 'N';
     $no_block            = $no_block            eq 'Y' ? 'Y' : 'N';
-    $fee_acknowledged    = $fee_acknowledged    eq 'Y' ? 'Y' : 'N';
 
     $nb_due_date ||= $transaction_date;
 
@@ -647,7 +645,7 @@ Options:
   -t --terminator  SIP2 message terminator, either CR, or CRLF
                    (defaults to CRLF)
 
-  -fa --fee-acknowledged Sends a confirmation of checkout fee
+  -fa --fee-acknowledged Accepts "Y" to acknowledge a fee, "N" to not acknowledge it
 
   --fee-type        Fee type for Fee Paid message, defaults to '01'
   --payment-type    Payment type for Fee Paid message, default to '00'
