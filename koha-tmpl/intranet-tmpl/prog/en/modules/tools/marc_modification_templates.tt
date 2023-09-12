@@ -2,9 +2,24 @@
 [% USE JSON.Escape %]
 [% USE Asset %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>MARC modification templates &rsaquo; Cataloging &rsaquo; Koha</title>
+[% IF ( TemplatesLoop ) %]
+    [% FOREACH TemplatesLoo IN TemplatesLoop %]
+        [% IF ( TemplatesLoo.selected ) %]
+            [% SET template_name = TemplatesLoo.name %]
+        [% END %]
+    [% END %]
+[% END %]
+<title>[% FILTER collapse %]
+    [% IF ( template_name ) %]
+        [% tx("Actions for template '{template_name}'", template_name = template_name ) | html %] &rsaquo;
+    [% END %]
+    [% t("MARC modification templates") | html %] &rsaquo;
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
@@ -24,14 +39,6 @@
     [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-[% IF ( TemplatesLoop ) %]
-    [% FOREACH TemplatesLoo IN TemplatesLoop %]
-        [% IF ( TemplatesLoo.selected ) %]
-            [% SET template_name = TemplatesLoo.name %]
-        [% END %]
-    [% END %]
-[% END %]
-
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
@@ -43,7 +50,7 @@
                 <a href="/cgi-bin/koha/tools/marc_modification_templates.pl">MARC modification templates</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                [% template_name | html %]
+                [% tx("Actions for template '{template_name}'", template_name = template_name ) | html %]
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -105,7 +112,7 @@
 
                 [% ELSE %]
 
-                    <h1>Actions for <em>[% template_name | html %]</em></h1>
+                    <h1>[% tx("Actions for template '{template_name}'", template_name = template_name ) | html %]</em></h1>
 
                     [% IF ( ActionsLoop ) %]
                         <div class="page-section">

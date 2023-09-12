@@ -1,8 +1,16 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Stage MARC records for import &rsaquo; Cataloging &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( job_enqueued ) %]
+        [% t("Job enqueued") | html %] &rsaquo;
+    [% END %]
+    [% t("Stage MARC records for import") | html %] &rsaquo;
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     #fileuploadstatus,#fileuploadfailed,#fileuploadcancel { display : none; }
@@ -22,18 +30,18 @@
             <a href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cataloging</a>
         [% END %]
 
-        [% IF ( uploadmarc ) %]
+        [% IF ( job_enqueued ) %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC records for import</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>MARC staging results</span>
+                [% t("Job enqueued") | html %]
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Stage MARC records for import</span>
             [% END %]
-        [% END # /IF ( uploadmarc ) %]
+        [% END # /IF ( job_enqueued ) %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
@@ -67,7 +75,8 @@
 
             <h1>MARC staging</h1>
             <div class="dialog message">
-              <p>The job has been enqueued! It will be processed as soon as possible.</p>
+                <h1>The job has been enqueued!</h1>
+                <p>It will be processed as soon as possible.</p>
                [% INCLUDE "job_progress.inc" job_id=job_id %]
               <p><a class="job_details" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>
               <div id="job_callback"></div>

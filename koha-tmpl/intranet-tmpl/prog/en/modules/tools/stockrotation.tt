@@ -4,9 +4,31 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Stock rotation &rsaquo; Cataloging &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF (op == 'create_edit_rota' && rota.rota_id) %]
+        [% tx("Modify rota '{rota_title}'", rota_title = rota.title ) %] &rsaquo;
+    [% ELSIF (op == 'create_edit_rota' && !rota.rota_id) %]
+        [% t("New rota") | html %] &rsaquo;
+    [% ELSIF (op == 'manage_stages') %]
+        [% tx("Manage stages for '{rota_title}'", rota_title = rota.title ) %] &rsaquo;
+    [% ELSIF (op == 'create_edit_stage' && stage.id) %]
+        [% tx("Modify {library} stage", library = Branches.GetName(stage.branchcode_id) ) %] &rsaquo;
+        [% tx("Manage stages for '{rota_title}'", rota_title = rota.title ) %] &rsaquo;
+    [% ELSIF (op == 'create_edit_stage' && !stage.id) %]
+        [% t("New stage") | html %] &rsaquo;
+    [% ELSIF (op == 'manage_items') %]
+        [% tx("Manage items for '{rota_title}'", rota_title = rota.title ) %] &rsaquo;
+    [% ELSIF op == 'add_items_to_rota' %]
+        [% t("Add items" ) | html %] &rsaquo;
+        [% tx("Manage items for '{rota_title}'", rota_title = rota.title ) %] &rsaquo;
+    [% END # /IF (op == 'create_edit_rota' %]
+    [% t("Stock rotation") | html %] &rsaquo;
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>i.drag_handle{ color: #999; }</style>
 </head>
@@ -34,33 +56,40 @@
 
         [% IF (op == 'create_edit_rota' && rota.rota_id) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Edit rota</span>
+                [% tx("Modify rota '{rota_title}'", rota_title = rota.title ) %]
             [% END %]
         [% ELSIF (op == 'create_edit_rota' && !rota.rota_id) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Create rota</span>
+                <span>New rota</span>
             [% END %]
         [% ELSIF (op == 'manage_stages') %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Manage stages</span>
+                [% tx("Manage stages for '{rota_title}'", rota_title = rota.title ) %]
             [% END %]
         [% ELSIF (op == 'create_edit_stage' && stage.id) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="?op=manage_stages&amp;rota_id=[% rota_id | uri %]">Manage stages</a>
+                <a href="?op=manage_stages&amp;rota_id=[% rota_id | uri %]">[% tx("Manage stages for '{rota_title}'", rota_title = rota.title ) %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Edit stage</span>
+                [% tx("Modify {library} stage", library = Branches.GetName(stage.branchcode_id) ) %]
             [% END %]
         [% ELSIF (op == 'create_edit_stage' && !stage.id) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="?op=manage_stages&amp;rota_id=[% rota_id | uri %]">Manage stages</a>
+                <a href="?op=manage_stages&amp;rota_id=[% rota_id | uri %]">[% tx("Manage stages for '{rota_title}'", rota_title = rota.title ) %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Create stage</span>
+                <span>New stage</span>
+            [% END %]
+        [% ELSIF op == 'add_items_to_rota' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/tools/stockrotation.pl?op=manage_items&rota_id=[% rota_id | uri %]">[% tx("Manage items for '{rota_title}'", rota_title = rota.title ) %]</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% t("Add items") | html %]
             [% END %]
         [% ELSIF (op == 'manage_items') %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Manage items</span>
+                [% tx("Manage items for '{rota_title}'", rota_title = rota.title ) %]
             [% END %]
         [% END # /IF (op == 'create_edit_rota' %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -140,9 +169,9 @@
                 [% ELSIF (op == 'create_edit_rota') %]
 
                     [% IF rota.rota_id %]
-                        <h1>Edit "[% rota.title | html %]"</h1>
+                        <h1>[% tx("Modify rota '{rota_title}'", rota_title = rota.title ) %]</h1>
                     [% ELSE %]
-                        <h1>Create new rota</h1>
+                        <h1>New rota</h1>
                     [% END %]
 
                     [% IF error == 'invalid_form' %]
@@ -197,7 +226,7 @@
                     </div>
                     [% END %]
 
-                    <h1>Manage <em>[% rota.title | html %]</em> stages</h1>
+                    <h1>[% tx("Manage stages for '{rota_title}'", rota_title = rota.title ) %]</h1>
                     <div id="ajax_status"
                         data-saving-msg="Saving changes..."
                         data-success-msg=""
@@ -300,9 +329,9 @@
                 [% ELSIF (op == 'create_edit_stage') %]
 
                     [% IF stage.id %]
-                        <h1>Edit "[% Branches.GetName(stage.branchcode_id) | html %]"</h1>
+                        <h1>[% tx("Modify {library} stage", library = Branches.GetName(stage.branchcode_id) ) %]</h1>
                     [% ELSE %]
-                        <h1>Create new stage</h1>
+                        <h1>New stage</h1>
                     [% END %]
 
                     [% IF error == 'invalid_form' %]
@@ -398,7 +427,7 @@
                         </div>
                     [% END %]
 
-                    <h1>Manage items assigned to <em>[% rota.title | html %]</em></h1>
+                    <h1>[% tx("Manage items for '{rota_title}'", rota_title = rota.title ) %]</h1>
 
                     <!-- Add items modal -->
                     <div class="modal" id="addItemsModal" tabindex="-1" role="dialog" aria-labelledby="addItemsLabel">
@@ -407,7 +436,9 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="addItemsLabel">Add item to <em>[% rota.title | html %]</em></h4>
+                                        <h1 class="modal-title" id="addItemsLabel">
+                                            [% tx("Add items to rota '{rota_title}'", rota_title = rota.title ) %]
+                                        </h1>
                                     </div>
                                     <div class="modal-body">
                                         <fieldset class="rows">
@@ -528,8 +559,8 @@
 
                 [% ELSIF op == 'add_items_to_rota' %]
 
-                    <h1>Add items to rota report</h1>
-
+                    <h1>[% tx("Add items to rota '{rota_title}'", rota_title = rota.title ) %]</h1>
+                    <h2>Results</h2>
                     <div class="page-section">
                         [% IF barcode_status.ok.size > 0 %]
                             <h4>Items added to rota:</h4>

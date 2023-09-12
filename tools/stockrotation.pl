@@ -161,10 +161,12 @@ if (!defined $op) {
 
     if (!defined $stage_id) {
 
+        my $rota = Koha::StockRotationRotas->find($rota_id);
         # No ID supplied, we're creating a new stage
         $template->param(
             branches => get_branches(),
             stage    => {},
+            rota     => $rota,
             rota_id  => $rota_id,
             op       => $op
         );
@@ -173,10 +175,12 @@ if (!defined $op) {
 
         # ID supplied, we're editing an existing stage
         my $stage = Koha::StockRotationStages->find($stage_id);
+        my $rota  = Koha::StockRotationRotas->find( $stage->rota->rota_id );
 
         $template->param(
             branches => get_branches(),
             stage    => $stage,
+            rota     => $rota,
             rota_id  => $stage->rota->rota_id,
             op       => $op
         );
@@ -342,6 +346,7 @@ if (!defined $op) {
 
     # The rota we're adding the item to
     my $rota_id = $params{rota_id};
+    my $rota    = Koha::StockRotationRotas->find($rota_id);
 
     # The uploaded file filehandle,
     # which we may or may not have been passed
@@ -404,6 +409,7 @@ if (!defined $op) {
         $template->param(
             barcode_status => $barcode_status,
             rota_id        => $rota_id,
+            rota           => $rota,
             op             => $op
         );
 
