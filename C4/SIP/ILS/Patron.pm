@@ -152,9 +152,11 @@ sub new {
     if ( $patron->is_debarred and $patron->debarredcomment ) {
         $ilspatron{screen_msg} .= " -- " . $patron->debarredcomment;
     }
+
     if ( $circ_blocked ) {
         $ilspatron{screen_msg} .= " -- " . "Patron has overdues";
     }
+
     for (qw(EXPIRED CHARGES CREDITS GNA LOST NOTES)) {
         ($flags->{$_}) or next;
         if ($_ ne 'NOTES' and $flags->{$_}->{message}) {
@@ -166,20 +168,23 @@ sub new {
             }
         }
     }
-    my $patron_messages = Koha::Patron::Messages->search(
-        {
-            borrowernumber => $kp->{borrowernumber},
-            message_type => 'B',
+
+    if ( C4::Context->preference('SIP2AddOpacMessagesToScreenMessage') ) {
+        my $patron_messages = Koha::Patron::Messages->search(
+            {
+                borrowernumber => $kp->{borrowernumber},
+                message_type   => 'B',
+            }
+        );
+        my @messages_array;
+        while ( my $message = $patron_messages->next ) {
+            my $messagedt      = dt_from_string( $message->message_date, 'iso' );
+            my $formatted_date = output_pref( { dt => $messagedt, dateonly => 1 } );
+            push @messages_array, $formatted_date . ": " . $message->message;
         }
-    );
-    my @messages_array;
-    while ( my $message = $patron_messages->next ) {
-        my $messagedt = dt_from_string( $message->message_date, 'iso' );
-        my $formatted_date = output_pref({ dt => $messagedt, dateonly => 1});
-        push @messages_array, $formatted_date . ": " . $message->message;
-    }
-    if (@messages_array) {
-        $ilspatron{screen_msg} .= ". Messages for you: " . join(' / ', @messages_array);
+        if (@messages_array) {
+            $ilspatron{screen_msg} .= " Messages for you: " . join( ' / ', @messages_array );
+        }
     }
 
     # FIXME: populate fine_items recall_items

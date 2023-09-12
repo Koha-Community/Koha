@@ -407,28 +407,39 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
 };
 
 subtest "Patron messages tests" => sub {
-    plan tests => 1;
+    plan tests => 2;
     $schema->storage->txn_begin;
-    my $today = output_pref({ dt => dt_from_string(), dateonly => 1});
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
-    my $new_message_1  = Koha::Patron::Message->new(
-        { borrowernumber => $patron->id,
-          branchcode     => $library->branchcode,
-          message_type   => 'B',
-          message        => 'my message 1',
-        })->store;
+    my $today         = output_pref( { dt => dt_from_string(), dateonly => 1 } );
+    my $patron        = $builder->build_object( { class => 'Koha::Patrons', value => { opacnote => q{} } } );
+    my $library       = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $new_message_1 = Koha::Patron::Message->new(
+        {
+            borrowernumber => $patron->id,
+            branchcode     => $library->branchcode,
+            message_type   => 'B',
+            message        => 'my message 1',
+        }
+    )->store;
 
-    my $new_message_2  = Koha::Patron::Message->new(
-        { borrowernumber => $patron->id,
-          branchcode     => $library->branchcode,
-          message_type   => 'B',
-          message        => 'my message 2',
-        })->store;
+    my $new_message_2 = Koha::Patron::Message->new(
+        {
+            borrowernumber => $patron->id,
+            branchcode     => $library->branchcode,
+            message_type   => 'B',
+            message        => 'my message 2',
+        }
+    )->store;
 
-
+    t::lib::Mocks::mock_preference( 'SIP2AddOpacMessagesToScreenMessage', 0 );
     my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
-    like( $sip_patron->screen_msg, qr/Messages for you: $today: my message 1 \/ $today: my message 2/,"Screen message includes patron messages");
+    is( $sip_patron->screen_msg, 'Greetings from Koha. ' );
+
+    t::lib::Mocks::mock_preference( 'SIP2AddOpacMessagesToScreenMessage', 1 );
+    $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    like(
+        $sip_patron->screen_msg, qr/Messages for you: $today: my message 1 \/ $today: my message 2/,
+        "Screen message includes patron messages"
+    );
 
     $schema->storage->txn_rollback;
 };
