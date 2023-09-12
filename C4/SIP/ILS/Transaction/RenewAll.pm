@@ -33,6 +33,7 @@ sub new {
 
 sub do_renew_all {
     my $self     = shift;
+    siplog('LOG_DEBUG', "ILS::Transaction::RenewAll performing renewals...");
     my $patron   = $self->{patron};                           # SIP's  patron
     my $borrower = Koha::Patrons->find( { cardnumber => $patron->id } )->unblessed;    # Koha's patron
     my $all_ok   = 1;
