@@ -139,8 +139,9 @@
                                     <tr>
                                         <th>&nbsp;</th>
                                         <th>Term</th>
-                                        <th class="anti-the">Title</th>
+                                        <th class="all anti-the">Title</th>
                                         <th>Date added</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -175,6 +176,7 @@
                                                 <span class="tdlabel">Date added:</span>
                                                 [% MY_TAG.date_created | $KohaDates %]
                                             </td>
+                                            <td></td>
                                         </tr>
                                         [% END %]
                                     [% END %]
@@ -215,10 +217,19 @@
 
         $("#mytagst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sorting": [[ 2, "asc" ]],
+            "autoWidth": false,
             "columnDefs": [
                 { "targets": [ 0 ], "sortable": false, "searchable": false },
-                { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
-            ]
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "className": 'dtr-control', "orderable": false, "targets": -1 },
+                { responsivePriority: 1, targets: 2 }
+            ],
+            "responsive": {
+                details: {
+                    type: 'column',
+                    target: -1
+                }
+            },
         }));
     });
 

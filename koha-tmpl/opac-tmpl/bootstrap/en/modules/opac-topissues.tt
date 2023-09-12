@@ -87,13 +87,14 @@
                                 </caption>
                                 <thead>
                                     <tr>
-                                        <th class="anti-the">Title</th>
+                                        <th class="all anti-the">Title</th>
                                         <th>Item type</th>
                                         <th>Collection</th>
                                         <th>Checkouts</th>
                                         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                             <th class="NoSort">&nbsp;</th>
                                         [% END %]
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -132,6 +133,7 @@
                                                     [% END %]
                                                 </td>
                                             [% END %]
+                                            <td></td>
                                         </tr>
                                     [% END %]
                                 </tbody>
@@ -151,11 +153,19 @@
     <script>
         $(function() {
             $("#topissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "autoWidth": false,
                 "sorting": [[3, "desc"]],
                 "columnDefs": [
                     { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
-                    { "type": "anti-the", "targets" : [ "anti-the" ] }
-                ]
+                    { "type": "anti-the", "targets" : [ "anti-the" ] },
+                    { "className": 'dtr-control', "orderable": false, "targets": -1 },
+                ],
+                "responsive": {
+                    details: {
+                        type: 'column',
+                        target: -1
+                    }
+                },
             }));
         });
         function Dopop(link) {

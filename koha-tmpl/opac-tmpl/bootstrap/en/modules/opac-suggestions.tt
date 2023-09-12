@@ -401,12 +401,13 @@
                                         <thead>
                                             <tr>
                                                 [% IF ( loggedinusername ) %]<th>&nbsp;</th>[% END %]
-                                                <th>Summary</th>
+                                                <th class="all">Summary</th>
                                                 <th>Suggested on</th>
                                                 <th>Note</th>
                                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]<th>Suggested for</th>[% END %]
                                                 [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]<th>Managed by</th>[% END %]
                                                 <th>Status</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -475,6 +476,7 @@
                                                         [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS, 1 ) | html %] [% END %]
                                                         [% IF ( suggestion.reason ) %]([% suggestion.reason | html %])[% END %]
                                                     </td>
+                                                    <td></td>
                                                 </tr>
                                             [% END # / FOREACH suggestions %]
                                         </tbody>
@@ -565,7 +567,9 @@
             "order": [[ 1, "asc" ]],
             "autoWidth": false,
             "columnDefs": [
-              [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %]
+              [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %],
+                { "className": 'dtr-control', "orderable": false, "targets": -1 },
+                { responsivePriority: 1, targets: 1 }
             ],
             "columns": [
                 [% IF ( loggedinusername ) %]null,[% END %]
@@ -574,8 +578,15 @@
                 null,
                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]null,[% END %]
                 [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]null,[% END %]
+                null,
                 null
-            ]
+            ],
+            "responsive": {
+                details: {
+                    type: 'column',
+                    target: -1
+                }
+            },
         }));
         [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Clear all")+"<\/a>");
         $("span.checkall").html("<a id=\"CheckAll\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Select all")+"<\/a>");
