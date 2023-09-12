@@ -469,7 +469,6 @@ sub renew {
 
     $trans = C4::SIP::ILS::Transaction::Renew->new();
     $trans->patron($patron = C4::SIP::ILS::Patron->new( $patron_id ));
-
     if (!$patron) {
 		$trans->screen_msg("Invalid patron barcode.");
 		return $trans;
@@ -505,6 +504,9 @@ sub renew {
     # }
 
     $trans->item($item);
+    if ($fee_ack) {
+        $trans->fee_ack($fee_ack);
+    }
 
     if (!defined($item)) {
 		$trans->screen_msg("Item not checked out to " . $patron->name);     # not checked out to $patron_id
@@ -526,6 +528,9 @@ sub renew_all {
     my $trans;
 
     $trans = C4::SIP::ILS::Transaction::RenewAll->new();
+    if ($fee_ack) {
+        $trans->fee_ack($fee_ack);
+    }
 
     $trans->patron($patron = C4::SIP::ILS::Patron->new( $patron_id ));
     if (defined $patron) {

@@ -6,6 +6,7 @@ package C4::SIP::ILS::Transaction::Renew;
 
 use warnings;
 use strict;
+use C4::SIP::Sip qw( siplog );
 
 use C4::Circulation qw( CanBookBeRenewed GetIssuingCharges AddIssue );
 use Koha::Patrons;
@@ -64,6 +65,7 @@ sub do_renew_for  {
 
 sub do_renew {
     my $self = shift;
+    siplog('LOG_DEBUG', "ILS::Transaction::Renew performing renewal...");
     my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
     $patron or return; # FIXME we should log that
     return $self->do_renew_for($patron);
