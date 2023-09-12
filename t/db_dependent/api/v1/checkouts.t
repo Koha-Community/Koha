@@ -342,9 +342,8 @@ subtest 'get_availability' => sub {
         $t->get_ok("/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")->status_is(401);
 
         # Only allow availability lookup for self
-        $t->get_ok(
-            "//$userid:$password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
-        )->status_is(403);
+        $t->get_ok("//$userid:$password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")
+            ->status_is(403);
 
         # All ok
         $t->get_ok(
