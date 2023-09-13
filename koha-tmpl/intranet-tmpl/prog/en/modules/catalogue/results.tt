@@ -771,6 +771,8 @@
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
 
+<input type="hidden" id="query_json" value="[% query_json | html %]">
+<input type="hidden" id="limit_json" value="[% limit_json | html %]">
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
@@ -811,8 +813,8 @@
             query_desc: "[% To.json( query_desc ) | html %]",
             query_cgi: "[% query_cgi | html %]",
             limit_cgi: "[% limit_cgi | html %]",
-            query_json: [% query_json | $raw %],
-            limit_json: [% limit_json | $raw %],
+            query_json: JSON.parse($('#query_json').val()),
+            limit_json: JSON.parse($('#limit_json').val()),
             sort_by: "[% sort_by | html %]",
             gotoPage: "[% gotoPage | html %]",
             gotoNumber: "[% gotoNumber | html %]",
