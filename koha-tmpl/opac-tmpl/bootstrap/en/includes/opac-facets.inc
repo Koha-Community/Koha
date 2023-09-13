@@ -11,11 +11,12 @@
             <ul>
                 [% SET base_url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi _ limit_cgi %]
                 [% FOREACH search_filter IN search_filters %]
+                    [% SET search_filter_id = search_filter.id | uri %]
                 <li>
                     [% IF active_filters.${search_filter.id} %]
-                        <span class="filter_label">[% search_filter.name | html %]<a href="[% base_url _ '&nolimit=search_filter:' _ search_filter.id | url %]">[x]</a></span>
+                        <span class="filter_label">[% search_filter.name | html %]<a href="[% base_url _ '&nolimit=search_filter:' _ search_filter_id | $raw %]">[x]</a></span>
                     [% ELSE %]
-                        <span class="filter_label"><a href="[% base_url _ '&limit=search_filter:' _ search_filter.id | url %]">[% search_filter.name | html %]</a></span>
+                        <span class="filter_label"><a href="[% base_url _ '&limit=search_filter:' _ search_filter_id | $raw %]">[% search_filter.name | html %]</a></span>
                     [% END %]
                 </li>
                 [% END %]
