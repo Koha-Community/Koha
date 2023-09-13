@@ -789,18 +789,25 @@ sub CreatePicklistFromItemMap {
 sub AddToHoldTargetMap {
     my $item_map = shift;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh    = C4::Context->dbh;
+    my $schema = Koha::Database->new->schema;
 
     my $insert_sql = q(
-        INSERT INTO hold_fill_targets (borrowernumber, biblionumber, itemnumber, source_branchcode, item_level_request, reserve_id)
-                               VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO hold_fill_targets (borrowernumber, biblionumber, itemnumber, source_branchcode, item_level_request, reserve_id) VALUES (?, ?, ?, ?, ?, ?)
     );
     my $sth_insert = $dbh->prepare($insert_sql);
 
-    foreach my $itemnumber (keys %$item_map) {
+    foreach my $itemnumber ( keys %$item_map ) {
         my $mapped_item = $item_map->{$itemnumber};
-        $sth_insert->execute($mapped_item->{borrowernumber}, $mapped_item->{biblionumber}, $itemnumber,
-                             $mapped_item->{holdingbranch}, $mapped_item->{item_level}, $mapped_item->{reserve_id});
+        $schema->txn_do(
+            sub {
+                $dbh->do( 'DELETE FROM hold_fill_targets WHERE itemnumber = ?', {}, $itemnumber );
+                $sth_insert->execute(
+                    $mapped_item->{borrowernumber}, $mapped_item->{biblionumber}, $itemnumber,
+                    $mapped_item->{holdingbranch},  $mapped_item->{item_level},   $mapped_item->{reserve_id}
+                );
+            }
+        );
     }
 }
 
