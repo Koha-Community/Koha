@@ -1776,7 +1776,7 @@ subtest 'DefaultHoldExpiration tests' => sub {
 };
 
 subtest '_Findgroupreserves' => sub {
-    plan tests => 4;
+    plan tests => 6;
     $schema->storage->txn_begin;
 
     my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -1803,8 +1803,8 @@ subtest '_Findgroupreserves' => sub {
     C4::HoldsQueue::AddToHoldTargetMap(
         {
             $item->id => {
-                borrowernumber => $patron_1->id, biblionumber => $item->biblionumber,
-                holdingbranch  => $item->holdingbranch, item_level => 0, reserve_id => $reserve_id_1
+                borrowernumber => $patron_1->id,        biblionumber => $item->biblionumber,
+                holdingbranch  => $item->holdingbranch, item_level   => 0, reserve_id => $reserve_id_1
             }
         }
     );
@@ -1827,6 +1827,22 @@ subtest '_Findgroupreserves' => sub {
     @reserves = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item_2->id, 0, [] );
     is( scalar @reserves,           1,             "We should only get the item level hold that is in the map" );
     is( $reserves[0]->{reserve_id}, $reserve_id_2, "We got the expected reserve" );
+
+    C4::HoldsQueue::AddToHoldTargetMap(
+        {
+            $item_2->id => {
+                borrowernumber => $patron_2->id, biblionumber => $item->biblionumber,
+                holdingbranch  => $item->holdingbranch, item_level => 1, reserve_id => $reserve_id_1
+            }
+        }
+    );
+
+    # When the hold is title level and in the hold fill targets we expect this to be the only hold returned
+    @reserves = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item_2->id, 0, [] );
+    is( scalar @reserves,           1,             "We should still only get the item level hold that is in the map" );
+    is( $reserves[0]->{reserve_id}, $reserve_id_1, "We got the expected reserve which has been updated" );
+
+
 
     $schema->txn_rollback;
 };
