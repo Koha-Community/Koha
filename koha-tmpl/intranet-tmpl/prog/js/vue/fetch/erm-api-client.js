@@ -189,6 +189,11 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "eholdings/local/titles/import",
                     body,
                 }),
+            import_kbart: body =>
+                this.post({
+                    endpoint: "eholdings/local/titles/import_kbart",
+                    body,
+                }),
         };
     }
 

@@ -102,6 +102,23 @@ export default {
                 },
             },
             cannot_search: false,
+            toolbar_options: [
+                {
+                    to: "EHoldingsLocalTitlesFormAdd",
+                    icon: "plus",
+                    button_title: this.$__("New title"),
+                },
+                {
+                    to: "EHoldingsLocalTitlesFormImport",
+                    icon: "plus",
+                    button_title: this.$__("Import from list"),
+                },
+                {
+                    to: "EHoldingsLocalTitlesKBARTImport",
+                    icon: "plus",
+                    button_title: this.$__("Import from KBART file"),
+                },
+            ],
         }
     },
     beforeRouteEnter(to, from, next) {

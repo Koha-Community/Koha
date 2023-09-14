@@ -7,6 +7,7 @@ import AgreementsFormAdd from "../components/ERM/AgreementsFormAdd.vue";
 import EHoldingsLocalPackagesFormAdd from "../components/ERM/EHoldingsLocalPackagesFormAdd.vue";
 import EHoldingsLocalTitlesFormAdd from "../components/ERM/EHoldingsLocalTitlesFormAdd.vue";
 import EHoldingsLocalTitlesFormImport from "../components/ERM/EHoldingsLocalTitlesFormImport.vue";
+import EHoldingsLocalTitlesKBARTImport from "../components/ERM/EHoldingsLocalTitlesKBARTImport.vue";
 import EHoldingsLocalPackagesList from "../components/ERM/EHoldingsLocalPackagesList.vue";
 import EHoldingsLocalPackagesShow from "../components/ERM/EHoldingsLocalPackagesShow.vue";
 import EHoldingsLocalResourcesShow from "../components/ERM/EHoldingsLocalResourcesShow.vue";
@@ -199,6 +200,14 @@ export const routes = [
                                             EHoldingsLocalTitlesFormImport
                                         ),
                                         title: $__("Import from a list"),
+                                    },
+                                    {
+                                        path: "kbart-import",
+                                        name: "EHoldingsLocalTitlesKBARTImport",
+                                        component: markRaw(
+                                            EHoldingsLocalTitlesKBARTImport
+                                        ),
+                                        title: $__("Import from a KBART file"),
                                     },
                                     {
                                         path: "/cgi-bin/koha/erm/eholdings/local/resources/:resource_id",
