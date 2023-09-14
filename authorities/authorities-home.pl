@@ -97,25 +97,19 @@ if ( $op eq "do_search" ) {
         }
     );
 
-    my $builder = Koha::SearchEngine::QueryBuilder->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
-    my $searcher = Koha::SearchEngine::Search->new(
-        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $builder  = Koha::SearchEngine::QueryBuilder->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $searcher = Koha::SearchEngine::Search->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
 
     my $search_query = $builder->build_authorities_query_compat(
         [$marclist], [$and_or], [$excluding], [$operator],
         [$value], $authtypecode, $orderby
     );
     my ( $results, $total );
-    eval {
-        ( $results, $total ) = $searcher->search_auth_compat(
-            $search_query, $offset, $resultsperpage
-        );
-    };
+    eval { ( $results, $total ) = $searcher->search_auth_compat( $search_query, $offset, $resultsperpage ); };
     if ($@) {
         my $query_error = q{};
         $query_error .= $@ if $@;
-        $template->param(query_error => $query_error);
+        $template->param( query_error => $query_error );
     }
 
     $template->param( search_query => $search_query ) if C4::Context->preference('DumpSearchQueryTemplate');

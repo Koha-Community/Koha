@@ -45,12 +45,13 @@ subtest 'search_auth_compat' => sub {
 
     my $search_query = $builder->build_authorities_query_compat(
         ['mainmainentry'], ['and'], [''], ['contains'],
-        ['Donald - Duck'], '',      'HeadingAsc'
+        ['Donald - ^ \ ~ + Duck'], '', 'HeadingAsc'
     );
 
-    my ( $bad_results, undef ) = $search->search_auth_compat( $search_query, 0, 20, undef );
-
-    is( @$bad_results[0], undef, 'We expect no record because it doesnt exist' );
+    is(
+        $search_query->{query}->{bool}->{must}->[0]->{query_string}->{query}, '(Donald*) AND (Duck*)',
+        "Reserved characters -, ^, \\, ~, + have been removed from search query"
+    );
 
     my $module = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
     $module->mock( 'count_auth_use', sub { return 1 } );
