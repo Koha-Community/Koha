@@ -3169,9 +3169,9 @@ sub _after_biblio_action_hooks {
     my ( $args ) = @_;
 
     my $biblio_id = $args->{biblio_id};
-    my $action    = $args->{action};
+    my $action    = $args->{action} // q{};
 
-    my $biblio = Koha::Biblios->find( $biblio_id );
+    my $biblio = $action ne 'delete' ? Koha::Biblios->find($biblio_id) : undef;
     Koha::Plugins->call(
         'after_biblio_action',
         {
