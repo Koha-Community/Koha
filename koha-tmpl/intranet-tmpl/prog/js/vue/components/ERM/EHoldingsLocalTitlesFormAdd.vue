@@ -333,7 +333,7 @@
                         </li>
 
                         <li>
-                            <label for="title_preceeding_publication_title_id"
+                            <label for="title_preceding_publication_title_id"
                                 >{{
                                     $__(
                                         "Title identifier of any preceding publication title"
@@ -341,8 +341,8 @@
                                 }}:</label
                             >
                             <input
-                                id="title_preceeding_publication_title_id"
-                                v-model="title.preceeding_publication_title_id"
+                                id="title_preceding_publication_title_id"
+                                v-model="title.preceding_publication_title_id"
                                 :placeholder="
                                     $__(
                                         'Title identifier of any preceding publication title'
@@ -426,7 +426,7 @@ export default {
                 monograph_edition: "",
                 first_editor: "",
                 parent_publication_title_id: "",
-                preceeding_publication_title_id: "",
+                preceding_publication_title_id: "",
                 access_type: "",
                 resources: [],
             },
