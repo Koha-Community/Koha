@@ -232,7 +232,7 @@ sub delete {
 
     my $result = $self->SUPER::delete;
 
-    # Delete the item gorup if it has no items left
+    # Delete the item group if it has no items left
     $item_group->delete if ( $item_group && $item_group->items->count == 0 );
 
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
