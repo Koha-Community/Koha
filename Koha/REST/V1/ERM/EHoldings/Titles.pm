@@ -122,4 +122,17 @@ sub import_from_list {
 
     return Koha::REST::V1::ERM::EHoldings::Titles::Local::import_from_list($c);
 }
+
+=head3 import_from_kbart_file
+
+Controller function that handles importing a kbart file
+
+=cut
+
+sub import_from_kbart_file {
+    my $c = shift->openapi->valid_input or return;
+
+    return Koha::REST::V1::ERM::EHoldings::Titles::Local::import_from_kbart_file($c);
+}
+
 1;
