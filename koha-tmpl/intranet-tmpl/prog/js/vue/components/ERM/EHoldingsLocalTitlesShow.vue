@@ -219,7 +219,7 @@
                             {{ title.parent_publication_title_id }}
                         </span>
                     </li>
-                    <li v-if="title.preceeding_publication_title_id">
+                    <li v-if="title.preceding_publication_title_id">
                         <label
                             >{{
                                 $__(
@@ -228,7 +228,7 @@
                             }}:</label
                         >
                         <span>
-                            {{ title.preceeding_publication_title_id }}
+                            {{ title.preceding_publication_title_id }}
                         </span>
                     </li>
                     <li v-if="title.access_type">
@@ -303,7 +303,7 @@ export default {
                 monograph_edition: "",
                 first_editor: "",
                 parent_publication_title_id: "",
-                preceeding_publication_title_id: "",
+                preceding_publication_title_id: "",
                 access_type: "",
                 resources: [],
             },
