@@ -47,7 +47,7 @@ sub build_title {
         # monograph_edition => ?,
         # first_editor => ?,
         # parent_publication_title_id => ?,
-        # preceeding_publication_title_id => ?,
+        # preceding_publication_title_id => ?,
         # access_type => ?,
     };
     if ( $result->{contributorsList} ) {

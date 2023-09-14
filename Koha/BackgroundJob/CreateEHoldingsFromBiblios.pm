@@ -85,7 +85,7 @@ sub _get_unimarc_mapping {
     my $monograph_edition               = $record->subfield( '205', 'a' );
     my $first_editor                    = $publisher_name;
     my $parent_publication_title_id     = '';                                  # FIXME ?
-    my $preceeding_publication_title_id = '';                                  # FIXME ?
+    my $preceding_publication_title_id  = '';                                  # FIXME ?
     my $access_type                     = $record->subfield( '856', 'y' );
 
     return {
@@ -112,7 +112,7 @@ sub _get_unimarc_mapping {
         monograph_edition               => $monograph_edition,
         first_editor                    => $first_editor,
         parent_publication_title_id     => $parent_publication_title_id,
-        preceeding_publication_title_id => $preceeding_publication_title_id,
+        preceding_publication_title_id  => $preceding_publication_title_id,
         access_type                     => $access_type,
     };
 }
@@ -146,7 +146,7 @@ sub _get_marc21_mapping {
     my $monograph_edition               = '';                                  # FIXME ?
     my $first_editor                    = '';                                  # FIXME ?
     my $parent_publication_title_id     = '';                                  # FIXME ?
-    my $preceeding_publication_title_id = '';                                  # FIXME ?
+    my $preceding_publication_title_id  = '';                                  # FIXME ?
     my $access_type                     = '';                                  # FIXME ?
 
     return {
@@ -173,7 +173,7 @@ sub _get_marc21_mapping {
         monograph_edition               => $monograph_edition,
         first_editor                    => $first_editor,
         parent_publication_title_id     => $parent_publication_title_id,
-        preceeding_publication_title_id => $preceeding_publication_title_id,
+        preceding_publication_title_id  => $preceding_publication_title_id,
         access_type                     => $access_type,
     };
 }
