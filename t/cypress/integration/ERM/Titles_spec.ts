@@ -184,8 +184,8 @@ describe("Title CRUD operations", () => {
         cy.get("#title_parent_publication_title_id").type(
             erm_title.parent_publication_title_id
         );
-        cy.get("#title_preceeding_publication_title_id").type(
-            erm_title.preceeding_publication_title_id
+        cy.get("#title_preceding_publication_title_id").type(
+            erm_title.preceding_publication_title_id
         );
         cy.get("#title_access_type").type(erm_title.access_type);
 
@@ -335,9 +335,9 @@ describe("Title CRUD operations", () => {
             "have.value",
             erm_title.parent_publication_title_id
         );
-        cy.get("#title_preceeding_publication_title_id").should(
+        cy.get("#title_preceding_publication_title_id").should(
             "have.value",
-            erm_title.preceeding_publication_title_id
+            erm_title.preceding_publication_title_id
         );
         cy.get("#title_access_type").should(
             "have.value",

@@ -41,7 +41,7 @@ cy.get_title = () => {
         num_last_vol_online: "num last vol",
         online_identifier: "online identifier",
         parent_publication_title_id: "parent id",
-        preceeding_publication_title_id: "preceeding id",
+        preceding_publication_title_id: "preceeding id",
         print_identifier: "print identifier",
         publication_title: "publication title",
         publication_type: "journal",
