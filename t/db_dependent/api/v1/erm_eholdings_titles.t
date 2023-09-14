@@ -241,7 +241,7 @@ subtest 'add() tests' => sub {
         first_editor      => "First editor",
         parent_publication_title_id =>
           "Title identifier of the parent publication",
-        preceeding_publication_title_id =>
+        preceding_publication_title_id =>
           "Title identifier of any preceding publication title",
         access_type => "Access type"
     };
@@ -415,7 +415,7 @@ subtest 'update() tests' => sub {
         first_editor      => "First editor",
         parent_publication_title_id =>
           "Title identifier of the parent publication",
-        preceeding_publication_title_id =>
+        preceding_publication_title_id =>
           "Title identifier of any preceding publication title",
         access_type => "Access type"
     };
