@@ -2,9 +2,14 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% Branches.GetName( branch ) | html %] calendar &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("{library} calendar", { library = Branches.GetName( branch ) }) | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/calendar.css") | $raw %]
 </head>
@@ -19,7 +24,7 @@
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>[% Branches.GetName( branch ) | html %] calendar</span>
+            [% tx("{library} calendar", { library = Branches.GetName( branch ) }) | html %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -29,7 +34,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-                <h1>[% Branches.GetName( branch ) | html %] calendar</h1>
+                <h1>[% tx("{library} calendar", { library = Branches.GetName( branch ) }) | html %]</h1>
 
                 <div class="row">
                     <div class="col-sm-6">

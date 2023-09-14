@@ -5,14 +5,17 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF ( do_it ) %]
-        Results &rsaquo; [% END %]
-
-    Logs &rsaquo; Tools &rsaquo; Koha
-</title>
+        [% t("Results") | html %] &rsaquo;
+    [% END %]
+    [% t("Log viewer") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 [% FILTER collapse %]
@@ -174,14 +177,14 @@
         [% END %]
         [% IF ( do_it ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/tools/viewlog.pl">Logs</a>
+                <a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Results</span>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Logs</span>
+                <span>Log viewer</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -192,7 +195,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-				<h1>Browse system logs</h1>
+                <h1>Log viewer</h1>
 				<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
 					[% IF ( do_it ) %]
 						<input type="hidden" name="do_it" value="[% do_it | html %]" />

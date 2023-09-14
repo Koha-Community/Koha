@@ -5,13 +5,21 @@
 [% USE TablesSettings %]
 [% USE AuthorisedValues %]
 [%- USE KohaSpan -%]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF plugin %]
-    <title>Upload plugin</title>
-[% ELSE %]
-    <title>Upload &rsaquo; Tools &rsaquo; Koha</title>
-[% END %]
+<title>[% FILTER collapse %]
+    [% IF mode == 'new' || mode == 'deleted' %]
+        [% t("Uploads") | html %] &rsaquo;
+    [% ELSE %]
+    [% END %]
+    [% IF mode == 'report' %]
+        [% t("Results") | html %] &rsaquo;
+        [% t("Uploads") | html %] &rsaquo;
+    [% END %]
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% BLOCK plugin_pars %]
@@ -75,7 +83,7 @@
         </fieldset>
         <fieldset class="action">
             <button id="fileuploadbutton" class="btn btn-primary">Upload</button>
-            <button id="fileuploadcancel">Cancel</button>
+            <button id="fileuploadcancel" class="btn btn-link">Cancel</button>
         </fieldset>
         <div id="fileuploadpanel">
             <div id="fileuploadstatus" class="progress_panel">Upload progress:
@@ -156,7 +164,7 @@
     [% IF !plugin %]
         <form id="back">
             <fieldset class="action">
-                <button class="submit">Back</button>
+                <button class="btn btn-default">Back</button>
             </fieldset>
         </form>
     [% END %]
@@ -165,7 +173,7 @@
 [% BLOCK newsearch %]
     <form id="newsearch">
         <fieldset class="action">
-            <button id="new_search">New search</button>
+            <button id="new_search" class="btn btn-default">New search</button>
         </fieldset>
     </form>
     [% IF plugin %]
@@ -249,17 +257,19 @@
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
             [% END %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/tools/upload.pl">Upload</a>
+            [% IF mode == 'new' || mode == 'deleted' %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Uploads</span>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/tools/upload.pl">Uploads</a>
+                [% END %]
             [% END %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="#" aria-current="page">
-                    [% IF mode=='new' || mode =='deleted'%]
-                        <span>Add new upload or search</span>
-                    [% ELSE %]
-                        <span>Results</span>
-                    [% END %]
-                </a>
+            [% IF mode == 'report' %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Results</span>
+                [% END %]
             [% END %]
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
@@ -270,7 +280,7 @@
                 <main>
 [% END %]
 
-<h1>Upload</h1>
+<h1>Uploads</h1>
 <div class="dialog alert" id="myalerts" style="display:none;"></div>
 
 [% PROCESS submitter %]

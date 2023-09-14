@@ -3,9 +3,46 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Additional contents &rsaquo; Tools &rsaquo; Koha</title>
+[% BLOCK page_heading %]
+    [% IF additional_content.idnew %]
+        [% IF category == 'news' %]
+            [% t("Modify news item") | html %]
+        [% ELSIF category == 'pages' %]
+            [% t("Modify page") | html %]
+        [% ELSE %]
+            [% t("Modify HTML customization") | html %]
+        [% END %]
+    [% ELSE %]
+        [% IF category == 'news' %]
+            [% t("New news item") | html %]
+        [% ELSIF category == 'pages' %]
+            [% t("New page") | html %]
+        [% ELSE %]
+            [% t("New HTML customization") | html %]
+        [% END %]
+    [% END %]
+[% END %]
+[% BLOCK page_section %]
+    [% IF category == 'news' %]
+        [% t("News") | html %]
+    [% ELSIF category == 'pages' %]
+        [% t("Pages") | html %]
+    [% ELSE %]
+        [% t("HTML customizations") | html %]
+    [% END %]
+[% END %]
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% PROCESS page_heading %] &rsaquo;
+    [% END %]
+    [% PROCESS page_section %] &rsaquo;
+    [% t("Additional content") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( wysiwyg ) %]
     [% SET editmode = "wysiwyg" %]
@@ -24,10 +61,10 @@
         .syspref-link::before {
             content: " | ";
         }
-        .customisation-link::before {
+        .customization-link::before {
             content: " | ";
         }
-        .customisation-link:first-child::before {
+        .customization-link:first-child::before {
             content: none;
         }
         label[for^="title_"],
@@ -47,7 +84,9 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
         [% END %]
-
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/tools/additional-contents.pl">Additional content</a>
+        [% END %]
         [% IF op == 'add_form' %]
             [% WRAPPER breadcrumb_item %]
                 [% IF category == 'news' %]
@@ -58,29 +97,12 @@
                     <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
                 [% END %]
             [% END %]
-                [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    [% IF additional_content.idnew %]
-                        <span>Modify additional content</span>
-                    [% ELSE %]
-                        <span>Add additional content</span>
-                    [% END %]
-                    [% IF category == 'news' %]
-                        <span>(News)</span>
-                    [% ELSIF category == 'pages' %]
-                        <span>(Pages)</span>
-                    [% ELSE %]
-                        <span>(HTML customizations)</span>
-                    [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% PROCESS page_heading %]
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                [% IF category == 'news' %]
-                    <span>News</span>
-                [% ELSIF category == 'pages' %]
-                    <span>Pages</span>
-                [% ELSE %]
-                    <span>HTML customizations</span>
-                [% END %]
+                [% PROCESS page_section %]
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -175,11 +197,7 @@
 </div> <!-- /.main.container-fluid -->
 
 [% BLOCK add_form %]
-    [% IF additional_content %]
-        <h1>Modify an additional content</h1>
-    [% ELSE %]
-        <h1>New additional content ([% IF category == 'news' %]News[% ELSIF category == 'pages' %]Pages[% ELSE %]HTML customizations[% END %])</h1>
-    [% END %]
+    <h1>[% PROCESS page_heading %]</h1>
 
     <div id="toolbar" class="btn-toolbar">
         <div class="btn-group">
@@ -329,12 +347,21 @@
         </div>
     </div>
 
-    <h2>Additional contents ([% IF category == 'news' %]News[% ELSIF category == 'pages' %]Pages[% ELSE %]HTML customizations[% END %])</h2>
+    <h2>
+        Additional content:
+        [% IF category == 'news' %]
+            [% t("News") | html %]
+        [% ELSIF category == 'pages' %]
+            [% t("Pages") | html %]
+        [% ELSE %]
+            [% t("HTML customizations") | html %]
+        [% END %]
+    </h2>
     <span id="additional_contents_links">
         See
-        <a class="customisation-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
-        <a class="customisation-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
-        <a class="customisation-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a>
+        <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=news">News</a>
+        <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations">HTML customizations</a>
+        <a class="customization-link" href="/cgi-bin/koha/tools/additional-contents.pl?category=pages">Pages</a>
         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
             <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserJS'>OPACUserJS</a>
             <a class="syspref-link" href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACUserCSS'>OPACUserCSS</a>

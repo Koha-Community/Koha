@@ -1,8 +1,13 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Task scheduler &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Task scheduler") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -74,7 +79,7 @@
 <fieldset class="action"><input class="btn btn-primary" type="submit" value="Save" /></fieldset>
 </form>
 
-[% IF ( JOBS ) %]<h2>Jobs already entered</h2>
+[% IF ( JOBS ) %]<h2>Scheduled tasks</h2>
 <table>
 <tr>
 <th>Date/Time</th>
@@ -88,7 +93,7 @@
 <tr>
 <td>[% JOB.TIME | html %]</td>
 <td>[% JOB.TAG | html %]</td>
-<td><input type="submit" name="delete" class="btn btn-primary" value="Delete" /></td>
+<td><input type="submit" name="delete" class="btn btn-xs btn-default" value="Delete" /></td>
 </tr>
 <input type="hidden" name="jobid" value="[% JOB.JOBID | html %]" />
 </form>

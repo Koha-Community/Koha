@@ -1,8 +1,20 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Quote editor &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% IF ( quote ) %]
+            [% t("Modify quote") | html %]
+        [% ELSE %]
+            [% t("New quote") | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% t("Quote editor") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -21,7 +33,11 @@
                 <a href="/cgi-bin/koha/tools/quotes.pl">Quote editor</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Add quote</span>
+                [% IF ( quote ) %]
+                    [% t("Modify quote") | html %]
+                [% ELSE %]
+                    [% t("New quote") | html %]
+                [% END %]
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
