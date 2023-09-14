@@ -39,9 +39,8 @@ primary key
 
 =head2 publication_title
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 external_id
 
@@ -123,9 +122,8 @@ primary key
 
 =head2 notes
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 publisher_name
 
@@ -175,7 +173,7 @@ primary key
   is_nullable: 1
   size: 255
 
-=head2 preceeding_publication_title_id
+=head2 preceding_publication_title_id
 
   data_type: 'varchar'
   is_nullable: 1
@@ -195,7 +193,7 @@ __PACKAGE__->add_columns(
   "biblio_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "publication_title",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "external_id",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "print_identifier",
@@ -223,7 +221,7 @@ __PACKAGE__->add_columns(
   "coverage_depth",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "notes",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "publisher_name",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "publication_type",
@@ -240,7 +238,7 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "parent_publication_title_id",
   { data_type => "varchar", is_nullable => 1, size => 255 },
-  "preceeding_publication_title_id",
+  "preceding_publication_title_id",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "access_type",
   { data_type => "varchar", is_nullable => 1, size => 255 },
@@ -296,8 +294,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-06-22 11:41:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+DZRDExmVLe+MBtk+TEhJw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-13 11:06:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SOFpN45kBTi/qvW5OBnYDA
 
 sub koha_objects_class {
     'Koha::ERM::EHoldings::Titles';
