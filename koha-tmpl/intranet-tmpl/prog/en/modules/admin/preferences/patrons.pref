@@ -412,12 +412,14 @@ Patrons:
                1: Require
                0: "Don't require"
          - cookie consent to be displayed in the OPAC and staff interface.
+         - '<br><strong>NOTE:</strong> The cookie banner can be customised using the <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations" target="_blank">CookieConsentBar</a> html customisation.'
      -
          - Run the following JavaScript if cookie consent is provided (e.g. tracking code).
          - pref: CookieConsentedJS
            type: modaljs
            initiator: populateCookieConsentedJS
            processor: prepareCookieConsentedJS
+         - '<br><strong>NOTE:</strong> The cookie consent modal can be customised using the <a href="/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations" target="_blank">CookieConsentPopup</a> html customisation.'
     Security:
      -
          - Login passwords for staff and patrons must be at least
