@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 78;
+use Test::More tests => 79;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1813,7 +1813,7 @@ subtest '_Findgroupreserves' => sub {
     );
 
     # When the hold is title level and in the hold fill targets we expect this to be the only hold returned
-    my @reserves = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item->id, 0, [] );
+    my @reserves = C4::Reserves::_Findgroupreserve( undef, $item->biblionumber, $item->id, 0, [] );
     is( scalar @reserves,           1,             "We should only get the hold that is in the map" );
     is( $reserves[0]->{reserve_id}, $reserve_id_1, "We got the expected reserve" );
 
@@ -1827,7 +1827,7 @@ subtest '_Findgroupreserves' => sub {
     );
 
     # When the hold is title level and in the hold fill targets we expect this to be the only hold returned
-    @reserves = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item_2->id, 0, [] );
+    @reserves = C4::Reserves::_Findgroupreserve( undef, $item->biblionumber, $item_2->id, 0, [] );
     is( scalar @reserves,           1,             "We should only get the item level hold that is in the map" );
     is( $reserves[0]->{reserve_id}, $reserve_id_2, "We got the expected reserve" );
 
