@@ -106,7 +106,7 @@ my $height = $input->param('height') || 50;
 my $qrcode_modulesize = $input->param('modulesize') || "5"; # 1+
 my $image;
 
-if ($type eq 'Code39'){
+if ( $type eq 'Code39' ) {
     $barcode = '*' . $barcode unless $barcode =~ /^\*/;
     $barcode = $barcode . '*' unless $barcode =~ /\*$/;
 }
