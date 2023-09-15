@@ -1,8 +1,15 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Compare matched records &rsaquo; Manage staged MARC records &rsaquo; Cataloging &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Compare matched records") | html %] &rsaquo;
+    [% tx("Batch {batch_id}", { batch_id = batchid }) | html %] &rsaquo;
+    [% t("Manage staged MARC records") | html %] &rsaquo;
+    [% t("Cataloging") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     ins { background-color: #e6ffe6; }
@@ -25,7 +32,7 @@
             <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | uri %]">Batch [% batchid | html %]</a>
+            <a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | uri %]">[% tx("Batch {batch_id}", { batch_id = batchid }) | html %]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Compare matched records</span>
@@ -45,7 +52,7 @@
                     <p>The record ID <em>[% RECORDID | html %]</em> doesn't match any existing record.</p>
                 </div>
             [% ELSE %]
-                <h2>[% RECORDTITLE | html %]</h2>
+                <h3>[% RECORDTITLE | html %]</h3>
                 <pre>[% MARC_FORMATTED1 | html %]</pre>
             [% END %]
         </div>
@@ -56,7 +63,7 @@
                     <p>The import ID number <em>[% IMPORTID | html %]</em> doesn't match any existing record.</p>
                 </div>
             [% ELSE %]
-                <h2>[% IMPORTTITLE | html %]</h2>
+                <h3>[% IMPORTTITLE | html %]</h3>
                 <pre>[% MARC_FORMATTED2 | html %] </pre>
             [% END %]
         </div>
