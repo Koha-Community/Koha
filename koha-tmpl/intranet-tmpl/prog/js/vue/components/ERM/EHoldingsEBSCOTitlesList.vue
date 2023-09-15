@@ -270,14 +270,14 @@ export default {
                         return (
                             (print_identifier
                                 ? escape_str(
-                                      _("ISBN (Print): %s").format(
+                                      __("ISBN (Print): %s").format(
                                           print_identifier
                                       )
                                   )
                                 : "") +
                             (online_identifier
                                 ? escape_str(
-                                      _("ISBN (Online): %s").format(
+                                      __("ISBN (Online): %s").format(
                                           online_identifier
                                       )
                                   )
