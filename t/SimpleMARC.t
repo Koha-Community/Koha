@@ -386,7 +386,7 @@ subtest 'copy_field' => sub {
           read_field( { record => $record, field => '651', subfield => 'a' } );
         is_deeply(
             \@fields_651a,
-            [ 'Computer algorithms.' , 'Computer programming.' ],
+            [ 'Computer algorithms.', 'Computer programming.' ],
             'Copy multivalued field'
         );
         delete_field( { record => $record, field => '651' } );
@@ -904,7 +904,7 @@ subtest 'copy_field' => sub {
                     { record => $record, field => '650', field_numbers => [2] }
                 )
             ],
-            [ 'The art of computer programming', 'Donald E. Knuth.' ],
+            [ 'Computer programming.', '462' ],
             'Copy a field to existent fields should create a new field'
         );
         is_deeply(
@@ -913,7 +913,7 @@ subtest 'copy_field' => sub {
                     { record => $record, field => '650', field_numbers => [1] }
                 )
             ],
-            [ 'Computer programming.', '462' ],
+            [ 'The art of computer programming', 'Donald E. Knuth.' ],
             'Copy a field to existent fields should create a new field, the original one should not have been updated'
         );
     };

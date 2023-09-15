@@ -282,8 +282,8 @@ my @fields_245a = Koha::SimpleMARC::read_field({
     subfield => 'a',
 });
 is_deeply( \@fields_245a, [
-        'The art of computer programming',
         'Bad title',
+        'The art of computer programming',
         'Bad title',
     ], 'Copy field has copied the "Bad title"' );
 
@@ -305,8 +305,8 @@ is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordW
     subfield => 'a',
 });
 is_deeply( \@fields_245a, [
-        'The art of computer programming',
         'Bad title updated',
+        'The art of computer programming',
         'Bad title',
     ], 'update_field has update first the "Bad title"' );
 
@@ -328,10 +328,10 @@ is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordW
     subfield => 'a',
 });
 is_deeply( \@fields_245a, [
+        'Bad title updated',
+        'Bad title updated',
         'The art of computer programming',
-        'Bad title updated',
         'Bad title',
-        'Bad title updated',
     ], 'Copy field has copied first "^Bad title"' );
 
 # Delete first ^Bad title
@@ -351,9 +351,9 @@ is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordW
     subfield => 'a',
 });
 is_deeply( \@fields_245a, [
+        'Bad title updated',
         'The art of computer programming',
         'Bad title',
-        'Bad title updated',
     ], 'delete field has been deleted the right field"' );
 
 is( AddModificationTemplateAction(
@@ -740,12 +740,12 @@ sub expected_record_0 {
             a => 'Appolo',
         ),
         MARC::Field->new(
-            690, ' ', ' ',
+            690, ' ', '0',
             0 => 'Zeroth',
             a => 'Appolo',
         ),
         MARC::Field->new(
-            690, ' ', '0',
+            690, ' ', ' ',
             0 => 'Zeroth',
             a => 'Appolo',
         ),
