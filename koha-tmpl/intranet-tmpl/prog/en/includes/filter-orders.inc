@@ -51,7 +51,12 @@
             [% IF filters.orderstatus == "" %]
               <option value="">Any status except cancelled</option>
             [% ELSE %]
-              <option value="" selected="selected"></option>
+              <option value="" selected="selected">Any status except cancelled</option>
+            [% END %]
+            [% IF filters.orderstatus == "any" %]
+              <option value="any" selected="selected">Any status</option>
+            [% ELSE %]
+              <option value="any">Any status</option>
             [% END %]
             [% IF filters.orderstatus == "new" %]
               <option value="new" selected="selected">New</option>

@@ -82,10 +82,22 @@ $filters->{to_placed_on}   = $to_placed_on;
   my ( @result_order_loop, @selected_order_loop );
 my @ordernumbers = split ',', scalar $input->param('ordernumbers') || '';
 if ( $op eq 'select' ) {
+
+    # Set filter for 'all status'
+    if ( $filters->{orderstatus} eq "any" ) {
+        delete( $filters->{orderstatus} );
+        $filters->{get_canceled_order} = 1;
+    }
+
     @result_order_loop = map {
         my $order = $_;
         ( grep {$_ eq $order->{ordernumber}} @ordernumbers ) ? () : $order
     } @{ C4::Acquisition::GetHistory(%$filters) };
+
+    # Reset order status for 'all status'
+    if ( $filters->{get_canceled_order} ) {
+        $filters->{orderstatus} = "any";
+    }
 
     @selected_order_loop =
       scalar @ordernumbers
