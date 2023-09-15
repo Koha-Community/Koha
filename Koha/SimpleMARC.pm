@@ -575,13 +575,7 @@ sub _copy_move_field {
         @from_fields = map { $_ <= @from_fields ? $from_fields[ $_ - 1 ] : () } @$field_numbers;
     }
 
-    if ( $action eq 'replace' ) {
-        my @to_fields = $record->field( $toFieldName );
-        for my $to_field ( @to_fields ) {
-            $record->delete_field( $to_field );
-        }
-    }
-
+    my @new_fields;
     for my $from_field ( @from_fields ) {
         my $new_field = $from_field->clone;
         $new_field->{_tag} = $toFieldName; # Should be replaced by set_tag, introduced by MARC::Field 2.0.4
@@ -595,8 +589,15 @@ sub _copy_move_field {
         if ( $action eq 'move' ) {
             $record->delete_field( $from_field )
         }
-        $record->insert_grouped_field( $new_field );
+        elsif ( $action eq 'replace' ) {
+            my @to_fields = $record->field( $toFieldName );
+            if( @to_fields ) {
+                $record->delete_field( $to_fields[0] );
+            }
+        }
+        unshift @new_fields, $new_field;
     }
+    $record->insert_fields_ordered( @new_fields );
 }
 
 sub _copy_move_subfield {
