@@ -36,14 +36,15 @@
                         <input type="hidden" name="op" value="save"/>
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
                         <h1>Your consents</h1>
-                        <br>
                         [% FOREACH consent IN consents %]
                             [% SET consent_type = consent.type %]
                             [% IF consent_type == 'GDPR_PROCESSING' %]
                                 <legend><h2>Privacy policy consent</h2></legend>
-                                <p>Please read the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') | url %]">privacy policy</a>.</p>
-                                <p>In order to keep you logged in, we need your consent to process personal data as specified in the EU General Data Protection Regulation of May 25, 2018. If you would not agree, we will need to <strong>remove</strong> your account within a reasonable time.</p>
-                                <p>Do you agree with our processing of your personal data as outlined in the policy?</p>
+                                <div class="alert alert-warning">
+                                    <p>In order to keep you logged in, we need your consent to process personal data as specified in the privacy policy linked below.</p>
+                                    <p>If you choose to withdraw your consent we will <strong>remove your account</strong> within a reasonable time and you should log out now.</p>
+                                </div>
+                                <p>I have read the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') | url %]">privacy policy</a> and agree with your processing of my personal data as outlined therein.</p>
                             [% ELSIF consent_types.$consent_type %]
                                 [% SET consent_title = ( consent_types.$consent_type.title.$lang || consent_types.$consent_type.title.en ) %]
                                 [% SET consent_desc  = ( consent_types.$consent_type.description.$lang || consent_types.$consent_type.description.en )  %]
@@ -55,15 +56,22 @@
                                 <p>Do you agree?</p>
                             [% END %]
                             <fieldset>
-                                <input type="radio" name="check_[% consent_type | html %]" value="1"> Yes<br>
-                                <input type="radio" name="check_[% consent_type | html %]" value="0"> No
+                                [% IF consent.given_on %]
+                                    <input type="radio" name="check_[% consent_type | html %]" value="1" checked="checked"> Yes<br>
+                                    <input type="radio" name="check_[% consent_type | html %]" value="0"> No
+                                [% ELSIF consent.refused_on %]
+                                    <input type="radio" name="check_[% consent_type | html %]" value="1"> Yes<br>
+                                    <input type="radio" name="check_[% consent_type | html %]" value="0" checked="checked"> No
+                                [% ELSE %]
+                                    <input type="radio" name="check_[% consent_type | html %]" value="1"> Yes<br>
+                                    <input type="radio" name="check_[% consent_type | html %]" value="0"> No
+                                [% END %]
+                                [% IF consent.given_on %]
+                                    <p class="consent_info"><strong>Your consent was registered on [% consent.given_on | html %].</strong></p>
+                                [% ELSIF consent.refused_on %]
+                                    <p class="dissent_info"><strong>We registered that you did not consent on [% consent.refused_on | html %].</strong></p>
+                                [% END %]
                             </fieldset>
-                            [% IF consent.given_on %]
-                                <p class="consent_info">Your consent was registered on [% consent.given_on | html %].</p>
-                            [% ELSIF consent.refused_on %]
-                                <p class="dissent_info">We registered that you did not consent on [% consent.refused_on | html %].</p>
-                            [% END %]
-                            <br>
                         [% END %]
                         <fieldset class="action">
                             <input id="saveconsent" type="submit" value="Save" class="btn btn-primary" />
@@ -85,13 +93,6 @@
 [% BLOCK jsinclude %]
     <script>
         $(document).ready(function() {
-            [% FOREACH consent IN consents %]
-                [% IF consent.given_on %]
-                    $("input[type='radio'][name='check_[% consent.type | html %]'][value='1']").prop('checked',true);
-                [% ELSIF consent.refused_on %]
-                    $("input[type='radio'][name='check_[% consent.type | html %]'][value='0']").prop('checked',true);
-                 [% END %]
-            [% END %]
             // Initially no choice is made or no change, so disable button
             $("#saveconsent").prop('disabled', true);
 
@@ -100,11 +101,11 @@
                 var v = $(this).val();
                 // If former registration info present, toggle
                 if( v == 1 ) {
-                    $(this).parent().siblings('.consent_info').show();
-                    $(this).parent().siblings('.dissent_info').hide();
+                    $(this).siblings('.consent_info').show();
+                    $(this).siblings('.dissent_info').hide();
                 } else {
-                    $(this).parent().siblings('.consent_info').hide();
-                    $(this).parent().siblings('.dissent_info').show();
+                    $(this).siblings('.consent_info').hide();
+                    $(this).siblings('.dissent_info').show();
                 }
             });
         });
