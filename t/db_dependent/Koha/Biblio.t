@@ -630,13 +630,18 @@ subtest 'get_volumes_query' => sub {
     $biblio = Koha::Biblios->find( $biblio->biblionumber );
 
     t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
-    is( $biblio->get_volumes_query, "ti,phr:(Some boring read)", "UseControlNumber disabled" );
+    is(
+        $biblio->get_volumes_query,
+        "(title-series,phr:(\"Some boring read\") OR Host-item,phr:(\"Some boring read\") NOT (bib-level:a OR bib-level:b))",
+        "UseControlNumber disabled"
+    );
 
     t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
     my $marc_001_field = MARC::Field->new( '001', $biblionumber );
     $record->append_fields($marc_001_field);
     C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
     $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
 
     is(
         $biblio->get_volumes_query, "(rcn:$biblionumber NOT (bib-level:a OR bib-level:b))",

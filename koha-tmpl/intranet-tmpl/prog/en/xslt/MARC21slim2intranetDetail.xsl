@@ -232,6 +232,7 @@
 
         <!-- Volumes of sets and traced series -->
         <xsl:variable name="show_volumes_link" select="marc:variables/marc:variable[@name='show_volumes_link']" />
+        <xsl:variable name="title" select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())" />
         <xsl:if test="$show_volumes_link='1' and ($materialTypeCode='ST' or substring($controlField008,22,1)='m')">
         <span class="results_summary volumes"><span class="label">Volumes: </span>
             <a>
@@ -240,7 +241,7 @@
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+NOT+(bib-level:a+OR+bib-level:b)</xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=title-series,phr:"<xsl:value-of select="$title"/>"+OR+host-item,phr="<xsl:value-of select="$title"/>"+NOT+(bib-level:a+OR+bib-level:b)</xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:text>Show volumes</xsl:text>

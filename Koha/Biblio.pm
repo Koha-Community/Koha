@@ -721,7 +721,7 @@ sub get_components_query {
   my $volumes = $self->get_marc_volumes();
 
 Returns an array of MARCXML data, which are volumes parts of
-this object (MARC21 773$w points to this)
+this object (MARC21 773$w or 8xx$w point to this)
 
 =cut
 
@@ -760,6 +760,7 @@ sub get_volumes_query {
 
     # Only build volumes query if we're in a 'Set' record
     # or we have a monographic series.
+    # For monographic series the check on LDR 7 in (b or i or s) is omitted
     my $leader19 = substr( $marc->leader, 19, 1 );
     my $pf008    = $marc->field('008') || '';
     my $mseries  = ( $pf008 && substr( $pf008->data(), 21, 1 ) eq 'm' ) ? 1 : 0;
@@ -777,12 +778,12 @@ sub get_volumes_query {
 
             if ( !defined($pf003) ) {
 
-                # search for 773$w='Host001'
+                # search for linking_field$w='Host001'
                 $searchstr .= "rcn:" . $pf001->data();
             } else {
                 $searchstr .= "(";
 
-                # search for (773$w='Host001' and 003='Host003') or 773$w='(Host003)Host001'
+                # search for (linking_field$w='Host001' and 003='Host003') or linking_field$w='(Host003)Host001'
                 $searchstr .= "(rcn:" . $pf001->data() . " AND cni:" . $pf003->data() . ")";
                 $searchstr .= " OR rcn:\"" . $pf003->data() . " " . $pf001->data() . "\"";
                 $searchstr .= ")";
@@ -796,7 +797,8 @@ sub get_volumes_query {
         my $cleaned_title = $marc->subfield( '245', "a" );
         $cleaned_title =~ tr|/||;
         $cleaned_title = $builder->clean_search_term($cleaned_title);
-        $searchstr     = "ti,phr:($cleaned_title)";
+        $searchstr     = qq#(title-series,phr:("$cleaned_title") OR Host-item,phr:("$cleaned_title")#;
+        $searchstr .= " NOT (bib-level:a OR bib-level:b))";
     }
 
     return $searchstr;
