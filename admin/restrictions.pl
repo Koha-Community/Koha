@@ -66,7 +66,7 @@ if ( $op eq 'add_form') {
                 display_text => $display_text,
             }
         );
-        if ($dupe->count && $dupe->unblessed->{code} ne $code) {
+        if ( $dupe->count ) {
             push @messages, {
                 type => 'error', code => 'duplicate_display_text'
             };

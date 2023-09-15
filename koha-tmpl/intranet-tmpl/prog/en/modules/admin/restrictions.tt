@@ -214,7 +214,7 @@
                                 [% IF restriction.lift_after_payment %]Yes[% END %]
                             </td>
                             <td>
-                                [% IF restriction.fee_limit %][% restriction.fee_limit %][% END %]
+                                [% IF restriction.fee_limit %][% restriction.fee_limit | html %][% END %]
                             </td>
                             <td class="actions">
                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
