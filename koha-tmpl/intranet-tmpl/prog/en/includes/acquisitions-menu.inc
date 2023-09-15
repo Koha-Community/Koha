@@ -4,6 +4,7 @@
         <h5>Acquisitions</h5>
         <ul>
             <li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions home</a></li>
+            <li><a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced search</a></li>
             [% IF ( CAN_user_acquisition_order_receive ) %]<li><a href="/cgi-bin/koha/acqui/lateorders.pl">Late orders</a></li>[% END %]
             [% IF ( CAN_user_suggestions_suggestions_manage ) %]<li><a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a></li>[% END %]
             <li><a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a></li>
