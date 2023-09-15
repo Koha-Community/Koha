@@ -2,9 +2,15 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( do_it ) %]Review[% ELSE %]Review tags[% END %] &rsaquo; Tags &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Results for tag '{tag}'", { tag = tag }) | html %] &rsaquo;
+    [% t("Tags") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
 tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }</style>
@@ -24,7 +30,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             <a href="/cgi-bin/koha/tags/review.pl">Tags</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Results for tag <em>[% tag | html %]</em></span>
+            [% tx("Results for tag '{tag}'", { tag = tag }) | html %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -34,10 +40,9 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-                <h1>Results for tag <em>[% tag | html %]</em></h1>
+                <h1>[% tx("Results for tag '{tag}'", { tag = tag }) | html %]</h1>
 
 [% IF ( titles ) %]
-<h3>Titles tagged with the term <em>[% tag | html %]</em></h3>
     <div class="page-section">
         <table id="itemst">
             <thead><tr>
@@ -89,12 +94,14 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                <ul>
-                    <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a></li>
-                    <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a></li>
-                    <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a></li>
-                    <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a></li>
-                </ul>
+                <div id="menu">
+                    <ul>
+                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a></li>
+                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a></li>
+                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a></li>
+                        <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a></li>
+                    </ul>
+                </div>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->

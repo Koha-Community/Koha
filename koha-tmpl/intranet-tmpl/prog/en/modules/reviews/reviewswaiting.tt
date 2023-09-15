@@ -1,8 +1,18 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( status ) %]Approved comments[% ELSE %]Comments awaiting moderation[% END %] &rsaquo; Comments &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF( status ) %]
+        [% t("Approved comments") | html %]
+    [% ELSE %]
+        [% t("Comments awaiting moderation") | html %]
+    [% END %] &rsaquo;
+    [% t("Comments") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="tools_reviewswaiting" class="tools">

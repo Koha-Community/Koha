@@ -4,7 +4,18 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( do_it ) %]Review[% ELSE %]Review tags[% END %] &rsaquo; Tags &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( filter_approved_ok ) %]
+        [% t("Approved") | html %] &rsaquo;
+    [% ELSIF ( filter_approved_pending ) %]
+        [% t("Pending") | html %] &rsaquo;
+    [% ELSIF ( filter_approved_rej ) %]
+        [% t("Rejected") | html %] &rsaquo;
+    [% END %]
+    [% t("Tags") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
 .setlabel {width: 6em; font-family: courier; background-color:#E8E8E8;}
@@ -25,8 +36,27 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
         [% END %]
-        [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Tags</span>
+        [% IF ( filter_approved_ok || filter_approved_pending || filter_approved_rej ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/tags/review.pl">Tags</a>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Tags</span>
+            [% END %]
+        [% END %]
+        [% IF ( filter_approved_ok ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% t("Approved") | html %]
+            [% END %]
+        [% ELSIF ( filter_approved_pending ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% t("Pending") | html %]
+            [% END %]
+        [% ELSIF ( filter_approved_rej ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% t("Rejected") | html %]
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
