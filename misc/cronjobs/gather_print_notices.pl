@@ -214,10 +214,8 @@ sub generate_html {
       C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet',
         CGI->new );
 
-    foreach my $message (@{ $messages }) {
-        my $content_type = $message->{'content_type'} || 'text/plain; charset="UTF-8"';
-        my $is_html      = $content_type =~ m/html/io;
-        $message->{'is_html'} = $is_html;
+    foreach my $message (@$messages) {
+        $message->{is_html} = $message->{content_type} && $message->{content_type} =~ /html/i;
     }
 
     $template->param(
