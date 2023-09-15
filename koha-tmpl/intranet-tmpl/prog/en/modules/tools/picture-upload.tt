@@ -1,8 +1,16 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Upload patron images &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( TOTAL ) %]
+        [% t("Results") | html %] &rsaquo;
+    [% END %]
+    [% t("Upload patron images") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

@@ -7,21 +7,27 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF ( add_form or copy_form ) %]
         [% IF ( modify ) %]
-            Modify notice &rsaquo; [% ELSE %]
-            Add notice &rsaquo; [% END %]
+            [% t("Modify notice") | html %] &rsaquo;
+        [% ELSE %]
+            [% t("New notice") | html %] &rsaquo;
+        [% END %]
     [% END %]
-
     [% IF ( add_validate or copy_validate) %]
-        Notice added &rsaquo; [% END %]
-
+        [% t("Notice added") | html %] &rsaquo;
+    [% END %]
     [% IF ( delete_confirm ) %]
-        Confirm deletion &rsaquo; [% END %]
-
-    Notices &rsaquo; Tools &rsaquo; Koha
-</title>
+        [% t("Confirm deletion") | html %] &rsaquo;
+    [% END %]
+    [% IF ( branchcode ) %]
+        [% Branches.GetName( branchcode ) | html %] &rsaquo;
+    [% END %]
+    [% t("Notices and slips") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% FILTER collapse %]
     <style>
@@ -60,7 +66,7 @@
                 <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
             [% END %]
 
-            [% IF ( add_form OR copy_form OR add_validate OR copy_validate OR delete_confirm ) %]
+            [% IF ( add_form OR copy_form OR add_validate OR copy_validate OR delete_confirm OR branchcode ) %]
                 [% WRAPPER breadcrumb_item %]
                     <a href="/cgi-bin/koha/tools/letter.pl">Notices and slips</a>
                 [% END %]
@@ -73,9 +79,13 @@
                     [% END %]
                 [% ELSE %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Add notice</span>
+                        <span>New notice</span>
                     [% END %]
                 [% END # /IF modify %]
+            [% ELSIF ( branchcode ) %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    [% Branches.GetName( branchcode ) | html %]
+                [% END %]
             [% ELSE %]
                 [% IF ( add_validate or copy_validate) %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -129,6 +139,9 @@
 
                 [% IF ( no_op_set ) %]
                     <h1>Notices and slips</h1>
+                    [% IF ( branchcode ) %]
+                        <h2>[% Branches.GetName( branchcode ) | html %]</h2>
+                    [% END %]
                     <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
                         <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
                         [% UNLESS independant_branch %]
@@ -266,7 +279,7 @@
                         [% IF ( modify ) %]
                             <span>Modify notice</span>
                         [% ELSE %]
-                            <span>Add notice</span>
+                            <span>New notice</span>
                         [% END %]
                     </h1>
 

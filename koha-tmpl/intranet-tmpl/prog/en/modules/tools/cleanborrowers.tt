@@ -3,15 +3,20 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF step == 2 %]
-        Confirm &rsaquo; [% END %]
+        [% t("Confirm") | html %] &rsaquo;
+    [% END %]
     [% IF step == 3 %]
-        Finished &rsaquo; [% END %]
-    Batch patron deletion and anonymization &rsaquo; Tools &rsaquo; Koha
-</title>
+        [% t("Finished") | html %] &rsaquo;
+    [% END %]
+    [% t("Batch patron deletion and anonymization") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 

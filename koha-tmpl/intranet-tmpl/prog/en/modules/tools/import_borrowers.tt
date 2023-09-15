@@ -2,13 +2,17 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF ( uploadborrowers ) %]
-        Results &rsaquo; [% END %]
-    Import patrons &rsaquo; Tools &rsaquo; Koha
-</title>
+        [% t("Results") | html %] &rsaquo;
+    [% END %]
+    [% t("Import patrons") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     label.description { width: 20em; }
@@ -52,7 +56,7 @@
      <div class="col-sm-6">
 <h1>Import patrons</h1>
 [% IF ( uploadborrowers ) %]
-    <h5>Import results :</h5>
+    <h2>Import results</h2>
     <ul>
         <li>[% imported | html %] imported records [% IF ( lastimported ) %](last was [% lastimported | html %])[% END %]</li>
         [% IF imported and patronlistname %]
@@ -69,7 +73,7 @@
         <br /><br />
 
         <div>
-            <h5>Feedback:</h5>
+            <h2>Feedback</h2>
                 <ul class="feedback">
                     [% FOREACH f IN feedback %]
                         <li>
@@ -94,7 +98,7 @@
         <br /><br />
 
         <div>
-            <h5>Error analysis:</h5>
+            <h2>Error analysis</h2>
             <ul>
                 [% FOREACH e IN errors %]
                     [% IF ( e.badheader ) %]<li>Header row could not be parsed</li>[% END %]

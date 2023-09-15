@@ -1,14 +1,23 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% USE Branches %]
 [% USE Categories %]
 [% USE KohaDates %]
 [% USE ItemTypes %]
 [% PROCESS 'html_helpers.inc' %]
-
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Batch extend due dates &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( view == 'list' ) %]
+        [% t("Confirm selection") | html %] &rsaquo;
+    [% ELSIF ( view == 'report' ) %]
+        [% t("Results") | html %] &rsaquo;
+    [% END %]
+    [% t("Batch extend due dates") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 </head>
@@ -23,8 +32,23 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
         [% END %]
-        [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Batch extend due dates</span>
+        [% IF ( view == 'list' || view == 'report' ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Batch extend due dates</a>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Batch extend due dates</span>
+            [% END %]
+        [% END %]
+        [% IF ( view == 'list' ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% t("Confirm selection") | html %]
+            [% END %]
+        [% ELSIF ( view == 'report' ) %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% t("Results") | html %]
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -173,6 +197,8 @@
                             </div>
                         [% END %]
                     [% ELSIF view == 'report' %]
+                        <h2>Results</h2>
+
                         <div class="dialog message">
                             Due dates have been modified!
                         </div>

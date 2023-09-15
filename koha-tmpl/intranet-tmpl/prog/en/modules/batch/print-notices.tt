@@ -1,10 +1,13 @@
-[% INCLUDE 'doc-head-open.inc' %]
 [% USE raw %]
-    <title>Print notices for [% today | html %]</title>
+[% PROCESS 'i18n.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+    <title>[% FILTER collapse %]
+        [% tx("Print notices for {today}", { today = today }) | html %]
+    [% END %]</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
-        <!-- 
+        <!--
         .message { page-break-after: always }
         pre { font-family: monospace }
         pre {white-space: pre-wrap;}

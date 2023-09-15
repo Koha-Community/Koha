@@ -5,9 +5,21 @@
 [% USE Branches %]
 [% USE Categories %]
 [% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Batch patron modification &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% IF ( op == 'show' or op == 'show_results' ) %]
+        [% IF ( op == 'show' ) %]
+            [% t("Modifications") | html %] &rsaquo;
+        [% ELSE %]
+            [% t("Results") | html %] &rsaquo;
+        [% END %]
+    [% END %]
+    [% t("Batch patron modification") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -21,8 +33,23 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
         [% END %]
-        [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Batch patron modification</span>
+        [% IF ( op == 'show' or op == 'show_results' ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a>
+            [% END %]
+            [% IF ( op == 'show' ) %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    [% t("Modifications") | html %]
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    [% t("Results")| html %]
+                [% END %]
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Batch patron modification</span>
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -142,10 +169,9 @@
                 [% END #Alert if no patrons %]
 
                 [% IF ( op == 'show' or op == 'show_results' ) %]
-                    [% IF ( op == 'show' ) %]
-                        <h1>Batch patrons modification</h1>
-                    [% ELSE %]
-                        <h1>Batch patrons results</h1>
+                    <h1>Batch patron modification</h1>
+                    [% UNLESS ( op == 'show' ) %]
+                        <h2>Results</h2>
                     [% END %]
                     [% IF ( notfoundcardnumbers ) %]
                         [% IF ( useborrowernumbers ) -%]

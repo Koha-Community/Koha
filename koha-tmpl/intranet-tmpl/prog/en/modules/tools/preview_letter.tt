@@ -1,5 +1,12 @@
+[% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Preview notice template &rsaquo; Tools &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Preview notice template") | html %] &rsaquo;
+    [% t("Notices") | html %] &rsaquo;
+    [% t("Tools") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body id="preview_letter" class="catalog">
