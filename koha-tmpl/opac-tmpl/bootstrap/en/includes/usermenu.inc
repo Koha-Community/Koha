@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE KohaPlugins %]
 [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
     <div id="menu">
         <ul>
@@ -24,7 +25,7 @@
             [% END %]
                 <a href="/cgi-bin/koha/opac-memberentry.pl">Personal details</a></li>
 
-            [% IF Koha.Preference('PrivacyPolicyConsent') || Koha.Preference('CookieConsent') || Koha.Preference('OPACCustomConsentTypes') %]
+            [% IF Koha.Preference('PrivacyPolicyConsent') || Koha.Preference('CookieConsent') || KohaPlugins.feature_enabled('patron_consent_type') %]
                 [% IF consentview %]<li class="active">[% ELSE %]<li>[% END %]
                     <a href="/cgi-bin/koha/opac-patron-consent.pl">Consents</a>
                 </li>
