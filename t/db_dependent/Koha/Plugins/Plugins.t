@@ -25,7 +25,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 61;
+use Test::More tests => 62;
 use Test::Warn;
 
 use C4::Context;
@@ -125,6 +125,38 @@ subtest 'more call() tests' => sub {
     $bc = 1;
     Koha::Plugins->call('item_barcode_transform', \$bc);
     is( $bc, 1, "call should return the original arguments if plugins are disabled" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'feature_enabled tests' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Temporarily remove any installed plugins data
+    Koha::Plugins::Methods->delete;
+    $schema->resultset('PluginData')->delete();
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+    my $enabled = Koha::Plugins->feature_enabled('check_password');
+    ok( !$enabled, "check_password not available when plugins are disabled" );
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    my $plugins = Koha::Plugins->new( { enable_plugins => 1 } );
+
+    my @plugins;
+    warning_is { @plugins = $plugins->InstallPlugins; } undef;
+
+    $enabled = Koha::Plugins->feature_enabled('check_password');
+    ok( !$enabled, "check_password not available when plugins are installed but not enabled" );
+
+    foreach my $plugin (@plugins) {
+        $plugin->enable();
+    }
+
+    $enabled = Koha::Plugins->feature_enabled('check_password');
+    ok( $enabled, "check_password is available when at least one enabled plugin supports it" );
 
     $schema->storage->txn_rollback;
 };

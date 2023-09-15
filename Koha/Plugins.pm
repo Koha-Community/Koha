@@ -139,6 +139,30 @@ sub get_enabled_plugins {
     return @$enabled_plugins;
 }
 
+
+=head2 feature_enabled
+
+Returns a boolean denoting whether a plugin based feature is enabled or not.
+
+    $enabled = Koha::Plugins->feature_enabled('method_name');
+
+=cut
+
+sub feature_enabled {
+    my ( $class, $method ) = @_;
+
+    return 0 unless C4::Context->config('enable_plugins');
+
+    my $key     = "ENABLED_PLUGIN_FEATURE_" . $method;
+    my $feature = Koha::Cache::Memory::Lite->get_from_cache($key);
+    unless ( defined($feature) ) {
+        my @plugins = $class->get_enabled_plugins();
+        my $enabled = any { $_->can($method) } @plugins;
+        Koha::Cache::Memory::Lite->set_in_cache( $key, $enabled );
+    }
+    return $feature;
+}
+
 =head2 GetPlugins
 
 This will return a list of all available plugins, optionally limited by

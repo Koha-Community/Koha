@@ -282,4 +282,21 @@ sub get_plugins_opac_cover_images {
     return join( "\n", @data );
 }
 
+=head3 feature_enabled
+
+  [% KohaPlugins.feature_enabled('method_name') %]
+
+This method returns true if the passed plugin hook method name is found to be installed and enabled as part of a plugin.
+
+=cut
+
+sub feature_enabled {
+    my ( $self, $method ) = @_;
+
+    my $p = Koha::Plugins->new;
+    return 0 unless $p;
+
+    return $p->feature_enabled($method);
+}
+
 1;
