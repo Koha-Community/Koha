@@ -1,0 +1,96 @@
+---
+type: object
+properties:
+  item_type:
+    type: string
+    description: Unique key, a code associated with the item type
+    readOnly: true
+  parent_type:
+    description: Unique key, a code associated with the parent item type
+    type:
+      - string
+      - "null"
+  description:
+    description: A plain text explanation of the item type
+    type: string
+  rentalcharge:
+    description: The amount charged when this item is checked out/issued
+    type:
+      - number
+      - "null"
+  rentalcharge_daily:
+    description: The amount charged for each day between checkout date and due date
+    type:
+      - number
+      - "null"
+  rentalcharge_daily_calendar:
+    description: Controls if the daily rental fee is calculated directly or using finesCalendar
+    type: boolean
+  rentalcharge_hourly:
+    description: The amount charged for each hour between checkout date and due date
+    type:
+      - number
+      - "null"
+  rentalcharge_hourly_calendar:
+    description: Controls if the hourly rental fee is calculated directly or using finesCalendar
+    type: boolean
+  defaultreplacecost:
+    description: Default replacement cost
+    type:
+      - number
+      - "null"
+  processfee:
+    description: Default text be recorded in the column note when the processing fee is applied
+    type:
+      - number
+      - "null"
+  notforloan:
+    description: Controls if the item is available for loan
+    type:
+      - boolean
+      - "null"
+  imageurl:
+    description: URL for the item type icon
+    type:
+      - string
+      - "null"
+  summary:
+    description: Information from the summary field, may include HTML
+    type:
+      - string
+      - "null"
+  checkinmsg:
+    description: Message that is displayed when an item with the given item type is checked in
+    type:
+      - string
+      - "null"
+  checkinmsgtype:
+    description: Type (CSS class) for the checkinmsg, can be 'alert' or 'message'
+    type:
+      - string
+      - "null"
+  sip_media_type:
+    description: SIP2 protocol media type for this item type
+    type:
+      - string
+      - "null"
+  hideinopac:
+    description: Hide the item type from the search options in OPAC
+    type: boolean
+  searchcategory:
+    description: Group this item type with others with the same value on OPAC search options
+    type:
+      - string
+      - "null"
+  automatic_checkin:
+    description: Controls if automatic checkin is enabled for items of this type
+    type: boolean
+  translated_descriptions:
+    description: Translations of description plain text
+    type: array
+    items:
+      $ref: "item_type_translated_description.yaml"
+
+additionalProperties: false
+required:
+  - item_type

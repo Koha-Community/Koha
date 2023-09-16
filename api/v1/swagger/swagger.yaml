@@ -74,6 +74,8 @@ definitions:
     $ref: ./definitions/item.yaml
   item_group:
     $ref: ./definitions/item_group.yaml
+  item_type:
+    $ref: ./definitions/item_type.yaml
   job:
     $ref: ./definitions/job.yaml
   library:
@@ -267,6 +269,8 @@ paths:
     $ref: ./paths/import_batch_profiles.yaml#/~1import_batch_profiles
   "/import_batch_profiles/{import_batch_profile_id}":
     $ref: "./paths/import_batch_profiles.yaml#/~1import_batch_profiles~1{import_batch_profile_id}"
+  /item_types:
+    $ref: ./paths/item_types.yaml#/~1item_types
   /items:
     $ref: ./paths/items.yaml#/~1items
   "/items/{item_id}":
@@ -850,6 +854,9 @@ tags:
   - description: "Manage items\n"
     name: items
     x-displayName: Items
+  - description: "Manage item types\n"
+    name: item_types
+    x-displayName: Item Types
   - description: "Manage jobs\n"
     name: jobs
     x-displayName: Jobs
