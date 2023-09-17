@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "34789",
-    description => "A single line description",
+    description => "Correct datatypes and column name in table erm_eholdings_titles",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -13,7 +13,7 @@ return {
                 ALTER TABLE erm_eholdings_titles RENAME COLUMN preceeding_publication_title_id TO preceding_publication_title_id
             }
             );
-            say $out 'Column renamed to preceding_publication_title_id';
+            say $out 'Column preceeding_publication_title renamed to preceding_publication_title_id';
         }
         if ( column_exists( 'erm_eholdings_titles', 'publication_title' ) ) {
             $dbh->do(
@@ -21,7 +21,7 @@ return {
                 ALTER TABLE erm_eholdings_titles MODIFY COLUMN publication_title mediumtext
             }
             );
-            say $out 'Column datatype amended to mediumtext';
+            say $out 'Column publication_title datatype amended to mediumtext';
         }
         if ( column_exists( 'erm_eholdings_titles', 'notes' ) ) {
             $dbh->do(
@@ -29,7 +29,7 @@ return {
                 ALTER TABLE erm_eholdings_titles MODIFY COLUMN notes mediumtext
             }
             );
-            say $out 'Column datatype amended to mediumtext';
+            say $out 'Column notes datatype amended to mediumtext';
         }
     },
 };
