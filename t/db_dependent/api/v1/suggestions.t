@@ -133,6 +133,12 @@ subtest 'get() tests' => sub {
         "//$userid:$password@/api/v1/suggestions/" . $suggestion->id )
       ->status_is(200)->json_is( $suggestion->to_api );
 
+    my $authorised_value = Koha::AuthorisedValue->new(
+        {
+            category         => 'SUGGEST_STATUS',
+            authorised_value => 'FREDERIC'
+        }
+    )->store;
     $suggestion->STATUS('FREDERIC')->store->discard_changes;
 
     $t->get_ok( "//$userid:$password@/api/v1/suggestions/" . $suggestion->id )->status_is(200)
