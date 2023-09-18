@@ -83,7 +83,7 @@ URI number for the title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 Publisher for the title
 
@@ -129,7 +129,7 @@ __PACKAGE__->add_columns(
   "title_uri",
   { data_type => "varchar", is_nullable => 1, size => 24 },
   "publisher",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "publisher_id",
   { data_type => "varchar", is_nullable => 1, size => 24 },
   "yop",
@@ -198,8 +198,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-06-01 16:24:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Pd0jk01S8AGLjLWoLGWwZA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-18 15:59:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mgP48bpl+C3oD/7IHLgQTw
 
 
 sub koha_object_class {

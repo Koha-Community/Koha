@@ -3209,7 +3209,7 @@ CREATE TABLE `erm_usage_titles` (
   `print_issn` varchar(24) DEFAULT NULL COMMENT 'Print ISSN number for the title',
   `online_issn` varchar(24) DEFAULT NULL COMMENT 'Online ISSN number for the title',
   `title_uri` varchar(24) DEFAULT NULL COMMENT 'URI number for the title',
-  `publisher` varchar(24) DEFAULT NULL COMMENT 'Publisher for the title',
+  `publisher` varchar(255) DEFAULT NULL COMMENT 'Publisher for the title',
   `publisher_id` varchar(24) DEFAULT NULL COMMENT 'Publisher ID for the title',
   `yop` varchar(24) DEFAULT NULL COMMENT 'year of publication of the title',
   `isbn` varchar(24) DEFAULT NULL COMMENT 'ISBN of the title',
@@ -3244,8 +3244,8 @@ DROP TABLE IF EXISTS `erm_usage_databases`;
 CREATE TABLE `erm_usage_databases` (
   `database_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `database` varchar(255) DEFAULT NULL COMMENT 'item title',
-  `platform` varchar(24) DEFAULT NULL COMMENT 'database platform',
-  `publisher` varchar(24) DEFAULT NULL COMMENT 'Publisher for the database',
+  `platform` varchar(255) DEFAULT NULL COMMENT 'database platform',
+  `publisher` varchar(255) DEFAULT NULL COMMENT 'Publisher for the database',
   `publisher_id` varchar(24) DEFAULT NULL COMMENT 'Publisher ID for the database',
   `usage_data_provider_id` int(11) NOT NULL COMMENT 'data provider the database is harvested by',
   PRIMARY KEY (`database_id`),
@@ -3262,9 +3262,9 @@ DROP TABLE IF EXISTS `erm_usage_items`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `erm_usage_items` (
   `item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `item` varchar(255) DEFAULT NULL COMMENT 'item title',
-  `platform` varchar(80) DEFAULT NULL COMMENT 'item platform',
-  `publisher` varchar(80) DEFAULT NULL COMMENT 'Publisher for the item',
+  `item` varchar(500) DEFAULT NULL COMMENT 'item title',
+  `platform` varchar(255) DEFAULT NULL COMMENT 'item platform',
+  `publisher` varchar(255) DEFAULT NULL COMMENT 'Publisher for the item',
   `usage_data_provider_id` int(11) NOT NULL COMMENT 'data provider the database is harvested by',
   PRIMARY KEY (`item_id`),
   CONSTRAINT `erm_usage_items_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE

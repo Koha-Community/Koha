@@ -35,7 +35,7 @@ primary key
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 255
+  size: 500
 
 item title
 
@@ -43,7 +43,7 @@ item title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 80
+  size: 255
 
 item platform
 
@@ -51,7 +51,7 @@ item platform
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 80
+  size: 255
 
 Publisher for the item
 
@@ -69,11 +69,11 @@ __PACKAGE__->add_columns(
   "item_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "item",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 1, size => 500 },
   "platform",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "publisher",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "usage_data_provider_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
@@ -138,8 +138,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-08-02 12:15:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ovoxM438smZou+pFm85igw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-19 14:47:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:quaq96wxTCK9Glzt0zVDEw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

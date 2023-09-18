@@ -43,7 +43,7 @@ item title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 database platform
 
@@ -51,7 +51,7 @@ database platform
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 Publisher for the database
 
@@ -79,9 +79,9 @@ __PACKAGE__->add_columns(
   "database",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "platform",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "publisher",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "publisher_id",
   { data_type => "varchar", is_nullable => 1, size => 24 },
   "usage_data_provider_id",
@@ -148,8 +148,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-26 11:45:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N/qxjz0Jz0NOI6lFVkUXhg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-18 15:59:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aKPQT+piqnU4mqUHDXTXQw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
