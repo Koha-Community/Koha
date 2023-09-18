@@ -1322,8 +1322,8 @@ sub _send_message_by_email {
     my $cc_address;
     my @guarantor_address;
     my $count_guarantor_address;
-    if (C4::Context->preference('RedirectGuaranteeEmail') eq 'yes' && $patron) {
-        #Get guanrantor addresses
+    if (C4::Context->preference('RedirectGuaranteeEmail') && $patron) {
+        # Get guarantor addresses
         my $guarantor_relationships = $patron->guarantor_relationships;
         my @guarantors              = $guarantor_relationships->guarantors->as_list;
         foreach my $guarantor (@guarantors) {
@@ -1348,7 +1348,7 @@ sub _send_message_by_email {
             $to_address = $patron->notice_email_address;
         }
         if (!$to_address && !$count_guarantor_address) {
-            warn "FAIL: No 'to_address', email address or guantors email address for borrowernumber ($message->{borrowernumber})";
+            warn "FAIL: No 'to_address', email address or guarantors email address for borrowernumber ($message->{borrowernumber})";
             _set_message_status(
                 {
                     message_id   => $message->{'message_id'},
@@ -1364,6 +1364,7 @@ sub _send_message_by_email {
     }
 
     $cc_address = join( ',', @guarantor_address );
+    _update_message_cc_address( $message->{'message_id'}, $cc_address );
     # Skip this message if we exceed domain limits in this run
     if( Koha::Notice::Util->exceeds_limit({ to => $to_address, limits => $domain_limits }) ) {
         # Save the to_address if you delay the message so that we dont need to look it up again
@@ -1621,6 +1622,12 @@ sub _update_message_from_address {
     my ($message_id, $from_address) = @_;
     my $dbh = C4::Context->dbh();
     $dbh->do('UPDATE message_queue SET from_address = ? WHERE message_id = ?', undef, ($from_address, $message_id));
+}
+
+sub _update_message_cc_address {
+    my ($message_id, $cc_address) = @_;
+    my $dbh = C4::Context->dbh();
+    $dbh->do('UPDATE message_queue SET cc_address = ? WHERE message_id = ?', undef, ($cc_address, $message_id));
 }
 
 sub _set_message_status {
