@@ -4301,6 +4301,7 @@ CREATE TABLE `message_queue` (
   `time_queued` timestamp NULL DEFAULT NULL,
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `to_address` longtext DEFAULT NULL,
+  `cc_address` longtext DEFAULT NULL,
   `from_address` longtext DEFAULT NULL,
   `reply_address` longtext DEFAULT NULL,
   `content_type` mediumtext DEFAULT NULL,
