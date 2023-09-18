@@ -40,7 +40,6 @@ use Koha::Patrons;
 use Koha::SMS::Providers;
 use Koha::SMTP::Servers;
 use Koha::Subscriptions;
-use Data::Dumper;
 
 use constant SERIALIZED_EMAIL_CONTENT_TYPE => 'message/rfc822';
 
@@ -1324,7 +1323,7 @@ sub _send_message_by_email {
     my @guarantor_address;
     my $count_guarantor_address;
     if (C4::Context->preference('RedirectGuaranteeEmail') eq 'yes' && $patron) {
-        #Get guanrantor adresses
+        #Get guanrantor addresses
         my $guarantor_relationships = $patron->guarantor_relationships;
         my @guarantors              = $guarantor_relationships->guarantors->as_list;
         foreach my $guarantor (@guarantors) {
@@ -1334,7 +1333,7 @@ sub _send_message_by_email {
         $count_guarantor_address = scalar @guarantor_address;
     }
     unless ($to_address) {
-        if (!$patron && !$count_guarantor_address) {
+        if (!$patron) {
             warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
             _set_message_status(
                 {
@@ -1349,8 +1348,7 @@ sub _send_message_by_email {
             $to_address = $patron->notice_email_address;
         }
         if (!$to_address && !$count_guarantor_address) {
-            # warn "FAIL: No 'to_address' and no email for " . ($member->{surname} ||'') . ", borrowernumber ($message->{borrowernumber})";
-            # warning too verbose for this more common case?
+            warn "FAIL: No 'to_address', email address or guantors email address for borrowernumber ($message->{borrowernumber})";
             _set_message_status(
                 {
                     message_id   => $message->{'message_id'},
@@ -1360,7 +1358,7 @@ sub _send_message_by_email {
             );
             return;
         }
-        if (!$to_address && $count_guarantor_address) {
+        if ( !$to_address && $count_guarantor_address ) {
             $to_address = shift @guarantor_address;
         }
     }
@@ -1494,9 +1492,9 @@ sub _send_message_by_email {
     $smtp_transports->{ $smtp_server->id // 'default' } ||= $smtp_server->transport;
     my $smtp_transport = $smtp_transports->{ $smtp_server->id // 'default' };
 
-    _update_message_from_address($message->{'message_id'},$email->email->header('From') )
-      if !$message->{from_address}
-      || $message->{from_address} ne $email->email->header('From');
+    _update_message_from_address( $message->{'message_id'}, $email->email->header('From') )
+        if !$message->{from_address}
+        || $message->{from_address} ne $email->email->header('From');
 
     try {
         $email->send_or_die({ transport => $smtp_transport });
