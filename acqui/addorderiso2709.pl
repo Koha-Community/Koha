@@ -576,17 +576,20 @@ sub import_biblios_list {
         }
         push @list, \%cellrecord;
 
+        # If MarcItemFieldsToOrder is not set, we use MarcFieldsToOrder to populate the order form.
         if ($alliteminfos == -1 || scalar(@$alliteminfos) == 0) {
             $cellrecord{price} = $price || '';
             $cellrecord{replacementprice} = $replacementprice || '';
             $cellrecord{quantity} = $quantity || '';
             $cellrecord{budget_id} = $budget_id || '';
-            $cellrecord{discount} = $discount || '';
-            $cellrecord{sort1} = $sort1 || '';
-            $cellrecord{sort2} = $sort2 || '';
         } else {
+            # When using MarcItemFields to order we want the order to have the same quantity as total items
             $cellrecord{quantity} = $all_items_quantity;
         }
+        # The fields discount, sort1, and sort2 only exist at the order level, so always use MarcItemFieldsToOrder
+        $cellrecord{discount} = $discount || '';
+        $cellrecord{sort1} = $sort1 || '';
+        $cellrecord{sort2} = $sort2 || '';
 
     }
     my $num_records = $batch->{'num_records'};
