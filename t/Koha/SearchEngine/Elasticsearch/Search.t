@@ -27,6 +27,7 @@ subtest 'search_auth_compat' => sub {
     plan tests => 4;
 
     t::lib::Mocks::mock_preference( 'QueryRegexEscapeOptions', 'dont_escape' );
+    t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
 
     my $search;
     ok(
