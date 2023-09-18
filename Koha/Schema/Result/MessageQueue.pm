@@ -96,6 +96,11 @@ Foreign key to the letters table
   data_type: 'longtext'
   is_nullable: 1
 
+=head2 cc_address
+
+  data_type: 'longtext'
+  is_nullable: 1
+
 =head2 from_address
 
   data_type: 'longtext'
@@ -156,6 +161,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "to_address",
+  { data_type => "longtext", is_nullable => 1 },
+  "cc_address",
   { data_type => "longtext", is_nullable => 1 },
   "from_address",
   { data_type => "longtext", is_nullable => 1 },
@@ -237,8 +244,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-18 12:50:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PX9JzZw0v134xuHqNbB0cA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-18 14:26:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eJFHJ3sXu+kLt+uW4ILPIA
 
 sub koha_object_class {
     'Koha::Notice::Message';
