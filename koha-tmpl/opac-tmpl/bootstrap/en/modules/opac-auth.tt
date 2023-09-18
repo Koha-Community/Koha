@@ -3,17 +3,18 @@
 [% USE Categories %]
 [% USE AdditionalContents %]
 [% USE AuthClient %]
+[% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode || default_branch ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-[% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-    Log in to your account
-[% ELSE %]
-    Catalog login disabled
-[% END %] &rsaquo;
- [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog
-</title>
+<title>[% FILTER collapse %]
+    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+        [% t("Log in to your account") | html %]
+    [% ELSE %]
+        [% t("Catalog login disabled") | html %]
+    [% END %] &rsaquo;
+    [% PROCESS 'library_name_title' %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -23,7 +24,11 @@
 <div class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Log in</span>
+            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                <span>Log in to your account</span>
+            [% ELSE %]
+                <span>Catalog login disabled</span>
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 

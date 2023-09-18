@@ -4,9 +4,12 @@
 [% USE AuthorisedValues %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
-
+[% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Courses &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title>[% FILTER collapse %]
+    [% t("Course reserves") | html %] &rsaquo;
+    [% PROCESS 'library_name_title' %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 
@@ -25,7 +28,7 @@
         <div class="row">
             <div class="col order-first order-md-first order-lg-2">
                 <div id="courses" class="maincontent">
-                    <h1>Courses</h1>
+                    <h1>Courses reserves</h1>
 
                     <table id="course_reserves_table" class="table table-bordered table-striped table-condensed">
                         <caption class="sr-only">Courses</caption>

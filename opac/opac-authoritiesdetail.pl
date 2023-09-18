@@ -167,6 +167,8 @@ if ($show_marc) {
         }
     }
     $template->param( "Tab0XX" => \@loop_data );
+    my $summary = BuildSummary( $record, $authid, $authtypecode );
+    $template->param( summary => $summary );
 } else {
     my $AuthorityXSLTOpacDetailsDisplay = C4::Context->preference('AuthorityXSLTOpacDetailsDisplay');
     if ($AuthorityXSLTOpacDetailsDisplay) {

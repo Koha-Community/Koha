@@ -1,15 +1,13 @@
 [% USE raw %]
 [% USE AdditionalContents %]
 [% SET OpacSuppressionMessage = AdditionalContents.get( location => "OpacSuppressionMessage", lang => lang, library => branchcode || default_branch ) %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
-    Record blocked &rsaquo;
-    [% IF ( LibraryNameTitle ) %]
-        [% LibraryNameTitle | html %]
-    [% ELSE %]
-        Koha online
-    [% END %] catalog
-</title>
+<title>[% FILTER collapse %]
+    [% t("Record blocked") | html %] &rsaquo;
+    [% PROCESS 'library_name_title' %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -18,7 +16,7 @@
 <div class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Blocked record</span>
+            <span>Record blocked</span>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 
@@ -26,7 +24,7 @@
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-6">
                 <div id="opac-blocked-message" class="maincontent">
-                    <h1>Blocked</h1>
+                    <h1>Record blocked</h1>
                     <p>You are not authorized to view this record.</p>
                     [% IF ( OpacSuppressionMessage ) %]
                         <div id="opacsuppressionmessage">

@@ -168,3 +168,11 @@
         </li>
     [% END %]
 [% END %]
+
+[% BLOCK library_name_title %]
+    [% IF ( LibraryNameTitle ) %]
+        [% tx("{library} catalog", { library = LibraryNameTitle }) | html %]
+    [% ELSE %]
+        [% t("Koha online catalog") | html %]
+    [% END %]
+[% END %]

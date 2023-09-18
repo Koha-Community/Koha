@@ -1,38 +1,39 @@
 [% USE raw %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF ( GetAvailability ) %]
-        ILS-DI &rsaquo; GetAvailability
+        [% t("GetAvailability") | html %] &rsaquo;
     [% ELSIF ( GetRecords ) %]
-        ILS-DI &rsaquo; GetRecords
+        [% t("GetRecords") | html %] &rsaquo;
     [% ELSIF ( GetAuthorityRecords ) %]
-        ILS-DI &rsaquo; GetAuthorityRecords
+        [% t("GetAuthorityRecords") | html %] &rsaquo;
     [% ELSIF ( LookupPatron ) %]
-        ILS-DI &rsaquo; LookupPatron
+        [% t("LookupPatron") | html %] &rsaquo;
     [% ELSIF ( AuthenticatePatron ) %]
-        ILS-DI &rsaquo; AuthenticatePatron
+        [% t("AuthenticatePatron") | html %] &rsaquo;
     [% ELSIF ( GetPatronInfo ) %]
-        ILS-DI &rsaquo; GetPatronInfo
+        [% t("GetPatronInfo") | html %] &rsaquo;
     [% ELSIF ( GetPatronStatus ) %]
-        ILS-DI &rsaquo; GetPatronStatus
+        [% t("GetPatronStatus") | html %] &rsaquo;
     [% ELSIF ( GetServices ) %]
-        ILS-DI &rsaquo; GetServices
+        [% t("GetServices") | html %] &rsaquo;
     [% ELSIF ( RenewLoan ) %]
-        ILS-DI &rsaquo; RenewLoan
+        [% t("RenewLoan") | html %] &rsaquo;
     [% ELSIF ( HoldTitle ) %]
-        ILS-DI &rsaquo; HoldTitle
+        [% t("HoldTitle") | html %] &rsaquo;
     [% ELSIF ( HoldItem ) %]
-        ILS-DI &rsaquo; HoldItem
+        [% t("HoldItem") | html %] &rsaquo;
     [% ELSIF ( CancelHold ) %]
-        ILS-DI &rsaquo; CancelHold
-    [% ELSE %]
-        ILS-DI
+        [% t("CancelHold") | html %] &rsaquo;
     [% END %]
- &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog
-</title>
+    [% t("ILS-DI") | html %] &rsaquo;
+    [% PROCESS 'library_name_title' %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
