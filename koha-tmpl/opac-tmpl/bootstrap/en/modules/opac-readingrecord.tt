@@ -42,6 +42,8 @@
 
                 <div id="userreadingrecord" class="maincontent">
                     <h1>Checkout history</h1>
+                    [% UNLESS checkouts %][% checkouts = [] %][% END %]
+                    [% UNLESS old_checkouts %][% old_checkouts = [] %][% END %]
                     [% SET all_checkouts = checkouts.merge(old_checkouts) %]
                     [% IF all_checkouts.size == 0 %]
                         You have never borrowed anything from this library.
