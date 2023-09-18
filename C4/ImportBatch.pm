@@ -34,6 +34,7 @@ use C4::Items qw( AddItemFromMarc ModItemFromMarc );
 use C4::Charset qw( MarcToUTF8Record SetUTF8Flag StripNonXmlChars );
 use C4::AuthoritiesMarc qw( AddAuthority GuessAuthTypeCode GetAuthorityXML ModAuthority DelAuthority GetAuthorizedHeading );
 use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
+use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::Items;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
@@ -568,6 +569,7 @@ sub BatchCommitRecords {
 
     my $rec_num = 0;
     my @biblio_ids;
+    my @updated_ids;
     while (my $rowref = $sth->fetchrow_hashref) {
         $record_type = $rowref->{'record_type'};
 
@@ -662,10 +664,12 @@ sub BatchCommitRecords {
                     $overlay_framework // $oldbiblio->frameworkcode,
                     {
                         overlay_context   => $context,
-                        skip_record_index => 1
+                        skip_record_index => 1,
+                        skip_holds_queue  => 1,
                     }
                 );
                 push @biblio_ids, $recordid;
+                push @updated_ids, $recordid;
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
 
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
@@ -717,10 +721,12 @@ sub BatchCommitRecords {
     # final commit should be before Elastic background indexing in order to find job data
     $schema->txn_commit;
 
-    if ( @biblio_ids ) {
-        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    if (@biblio_ids) {
+        my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
         $indexer->index_records( \@biblio_ids, "specialUpdate", "biblioserver" );
     }
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => \@updated_ids } )
+        if ( @updated_ids && C4::Context->preference('RealTimeHoldsQueue') );
 
     return ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored);
 }
