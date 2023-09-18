@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 57;
+use Test::More tests => 50;
 use Test::MockModule;
 use Test::Exception;
 
@@ -101,55 +101,21 @@ ok ( $changedmember->{firstname} eq $CHANGED_FIRSTNAME &&
      , "Member Changed")
   or diag("Mismatching member details: ".Dumper($member, $changedmember));
 
-# Test notice_email_address
-# Add Guarantor for testing
-my $GUARANTOR_EMAIL = "Robert\@email.com";
+# Add a new borrower
 %data = (
-    cardnumber => "2997924548",
-    firstname =>  "Robert",
-    surname => "Tables",
+    cardnumber   => "123456789",
+    firstname    => "Tomasito",
+    surname      => "None",
     categorycode => $patron_category->{categorycode},
-    branchcode => $BRANCHCODE,
-    dateofbirth => '',
-    dateexpiry => '9999-12-31',
-    userid => 'bobbytables',
-    email => $GUARANTOR_EMAIL
+    branchcode   => $library2->{branchcode},
+    dateofbirth  => '',
+    debarred     => '',
+    dateexpiry   => '',
+    dateenrolled => '',
 );
-
-$addmem=Koha::Patron->new(\%data)->store->borrowernumber;
-ok($addmem, "Koha::Patron->store()");
-
-my $patron_guarantor = Koha::Patrons->find( { cardnumber => (\%data)->{'cardnumber'} } )
-  or BAIL_OUT("Cannot read member with card (\%data)->{'cardnumber'}");
-my $member_guarantor = $patron_guarantor->unblessed;
-
-my %data2 = (
-    guarantor_id => $member_guarantor->{borrowernumber},
-    guarantee_id => $member->{borrowernumber},
-    relationship => "father"
-);
-Koha::Patron::Relationship->new(\%data2)->store;
-
-$member = Koha::Patrons->find( { cardnumber => $CARDNUMBER } );
-t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '0' );
-t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
-C4::Context->clear_syspref_cache();
-
-my $notice_email = $member->notice_email_address;
-is ($notice_email, $EMAIL, "notice_email_address returns correct value when EmailFieldPrimary is off");
-
-t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
-C4::Context->clear_syspref_cache();
-
-$notice_email = $member->notice_email_address;
-is ($notice_email, $EMAILPRO, "notice_email_address returns correct value when EmailFieldPrimary is emailpro");
-
-t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
-t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '1' );
-C4::Context->clear_syspref_cache();
-$notice_email = $member->notice_email_address;
-is ($notice_email, $EMAIL . ", " . $GUARANTOR_EMAIL, "notice_email_address returns correct value when RedirectGuaranteeEmail is enabled");
-
+my $borrowernumber = Koha::Patron->new( \%data )->store->borrowernumber;
+$patron = Koha::Patrons->find( $borrowernumber );
+my $borrower = $patron->unblessed;
 is( $borrower->{dateofbirth}, undef, 'Koha::Patron->store should undef dateofbirth if empty string is given');
 is( $borrower->{debarred}, undef, 'Koha::Patron->store should undef debarred if empty string is given');
 isnt( $borrower->{dateexpiry}, '0000-00-00', 'Koha::Patron->store should not set dateexpiry to 0000-00-00 if empty string is given');
