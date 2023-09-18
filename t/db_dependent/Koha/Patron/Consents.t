@@ -54,6 +54,10 @@ subtest 'Method available_types' => sub {
     plan tests => 7;
     $schema->storage->txn_begin;
 
+    t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent',   'Enforced' );
+    my $types = Koha::Patron::Consents->available_types;
+    is( keys %$types, 1, 'Expect one type for privacy policy' );
+
     # Mock get_enabled_plugins
     my $plugins        = [];
     my $plugins_module = Test::MockModule->new('Koha::Plugins');
@@ -66,16 +70,11 @@ subtest 'Method available_types' => sub {
     $plugin_2->mock( 'patron_consent_type', sub { return $data_2; } );
     $plugins = [ $plugin_1, $plugin_2 ];
 
-    t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent',   'Enforced' );
-    t::lib::Mocks::mock_preference( 'OPACCustomConsentTypes', 0 );
-    my $types = Koha::Patron::Consents->available_types;
-    is( keys %$types, 1, 'Expect one plugin for privacy policy' );
-    t::lib::Mocks::mock_preference( 'OPACCustomConsentTypes', 1 );
     $types = Koha::Patron::Consents->available_types;
-    is( keys %$types, 3, 'Expect three plugins when allowing custom consents' );
+    is( keys %$types, 3, 'Expect three types when plugins installed and enabled' );
     t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent', '' );
     $types = Koha::Patron::Consents->available_types;
-    is( keys %$types,              2,     'Expect two plugins, when pref disabled' );
+    is( keys %$types,              2,     'Expect two types, when plugins enabled but PrivacyPolicyConsent disabled' );
     is( $types->{GDPR_PROCESSING}, undef, 'GDPR key should not be found' );
     is_deeply( $types->{plugin_2}, $data_2->[1], 'Check type hash' );
 
