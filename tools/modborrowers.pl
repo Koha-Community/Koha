@@ -403,6 +403,9 @@ if ( $op eq 'do' ) {
 
         for my $code ( keys %$attributes ) {
             my $attr_type = Koha::Patron::Attribute::Types->find($code);
+
+            next unless $attr_type;
+
             # If this borrower is not in the category of this attribute, we don't want to modify this attribute
             next if $attr_type->category_code and $attr_type->category_code ne $patron->categorycode;
 
