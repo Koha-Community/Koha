@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 93;
+use Test::More tests => 94;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -894,7 +894,6 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', '');
 
-    t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '0' );
     my $patron = Koha::Patrons->find($borrowernumber);
     $dbh->do(q|
         INSERT INTO message_queue(borrowernumber, subject, content, message_transport_type, status, letter_code)
@@ -978,6 +977,78 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
     })->next()->to_address();
     is( $sms_message_address, '5555555555', 'SendQueuedMessages populates the to address correctly for SMS by SMS::Send driver to smsalertnumber when to_address is set incorrectly' );
 
+    $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber, status => 'sent'})->delete(); #clear borrower queue
+};
+
+subtest 'Test guarantor handling in SendQueuedMessages' => sub {
+
+    plan tests => 8;
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
+
+    my $patron     = Koha::Patrons->find($borrowernumber);
+    my $guarantor1 = $builder->build_object( { class => 'Koha::Patrons', value => { email => 'g1@email.com' } } );
+    my $guarantor2 = $builder->build_object( { class => 'Koha::Patrons', value => { email => 'g2@email.com' } } );
+    $patron->add_guarantor( { guarantor_id => $guarantor1->borrowernumber, relationship => 'test' } );
+    $patron->add_guarantor( { guarantor_id => $guarantor2->borrowernumber, relationship => 'test' } );
+
+    $my_message = {
+        'letter' => {
+            'content'      => 'a message',
+            'metadata'     => 'metadata',
+            'code'         => 'TEST_MESSAGE',
+            'content_type' => 'text/plain',
+            'title'        => 'message title'
+        },
+        'borrowernumber'         => $borrowernumber,
+        'to_address'             => undef,
+        'message_transport_type' => 'email',
+        'from_address'           => 'from@example.com'
+    };
+    $message_id = C4::Letters::EnqueueLetter($my_message);
+
+    # feature enabled
+    t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '1' );
+
+    warning_like { C4::Letters::SendQueuedMessages(); }
+    qr|Fake send_or_die|,
+        "SendQueuedMessages is using the mocked send_or_die routine";
+
+    $message = $schema->resultset('MessageQueue')->search(
+        {
+            borrowernumber => $borrowernumber,
+            status         => 'sent'
+        }
+    )->next();
+
+    is(
+        $message->to_address(),
+        $guarantor1->email,
+        'SendQueuedMessages uses first guarantor email for "to" when patron has no email'
+    );
+
+    is(
+        $message->cc_address(),
+        $guarantor2->email,
+        'SendQueuedMessages sets cc address to second guarantor email when "to" takes first guarantor email'
+    );
+
+    is( $email_object->email->header('To'), $guarantor1->email, "mailto correctly uses first guarantor" );
+    is( $email_object->email->header('Cc'), $guarantor2->email, "cc correctly uses second guarantor" );
+
+    # feature disabled
+    t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '0' ); #FIXME: This mock is failing!?
+
+    # reset message
+    $schema->resultset('MessageQueue')->search( { borrowernumber => $borrowernumber, status => 'sent' } )
+        ->update( { status => 'pending', failure_code => undef } );
+
+    warning_like { C4::Letters::SendQueuedMessages(); }
+    qr|No 'to_address', email address or guarantors email address for borrowernumber|,
+        "SendQueuedMessages fails when no to_address, patron notice email and RedirectGuaranteeEmail is not set";
+
+    # clear borrower queue
+    $schema->resultset('MessageQueue')->search( { borrowernumber => $borrowernumber, status => 'sent' } )->delete();
 };
 
 subtest 'get_item_content' => sub {
