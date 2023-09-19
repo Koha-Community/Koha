@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 90;
+use Test::More tests => 93;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -232,6 +232,17 @@ is( @$letters, 1, 'GetLetters returns the correct number of letters' );
 is( $letters->[0]->{module}, 'my module', 'GetLetters gets the module correctly' );
 is( $letters->[0]->{code}, 'my code', 'GetLetters gets the code correctly' );
 is( $letters->[0]->{name}, 'my name', 'GetLetters gets the name correctly' );
+
+my $data_1 = { module => 'blah', code => 'ISBN', name => 'book' };
+my $data_2 = { module => 'blah', code => 'ISSN' };
+$builder->build_object( { class => 'Koha::Notice::Templates', value => $data_1 } );
+$builder->build_object( { class => 'Koha::Notice::Templates', value => $data_2 } );
+
+$letters = GetLetters( { module => 'blah' } );
+is( scalar(@$letters), 2, 'GetLetters returns the 2 inserted letters' );
+
+my ($ISBN_letter) = grep { $_->{code} eq 'ISBN' } @$letters;
+is( $ISBN_letter->{name}, 'book', 'letter name for "ISBN" letter is book' );
 
 # GetPreparedLetter
 t::lib::Mocks::mock_preference('OPACBaseURL', 'http://thisisatest.com');
@@ -629,6 +640,20 @@ is($err->{error}, 'something went wrong', "Send exception, error message returne
 
 }
 t::lib::Mocks::mock_preference( 'SendAllEmailsTo', '' );
+
+subtest '_parseletter' => sub {
+    plan tests => 2;
+
+    # Regression test for bug 10843
+    # $dt->add takes a scalar, not undef
+    my $letter;
+    t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', undef );
+    $letter = C4::Letters::_parseletter( undef, 'reserves', { waitingdate => "2013-01-01" } );
+    is( ref($letter), 'HASH' );
+    t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', 1 );
+    $letter = C4::Letters::_parseletter( undef, 'reserves', { waitingdate => "2013-01-01" } );
+    is( ref($letter), 'HASH' );
+};
 
 subtest 'SendAlerts - claimissue' => sub {
     plan tests => 13;
