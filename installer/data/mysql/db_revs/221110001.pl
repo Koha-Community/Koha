@@ -10,7 +10,7 @@ return {
         if ( column_exists( 'erm_eholdings_titles', 'preceeding_publication_title_id' ) ) {
             $dbh->do(
                 q{
-                ALTER TABLE erm_eholdings_titles RENAME COLUMN preceeding_publication_title_id TO preceding_publication_title_id
+                ALTER TABLE erm_eholdings_titles CHANGE COLUMN preceeding_publication_title_id preceding_publication_title_id varchar(255) DEFAULT NULL
             }
             );
             say $out 'Column preceeding_publication_title renamed to preceding_publication_title_id';
