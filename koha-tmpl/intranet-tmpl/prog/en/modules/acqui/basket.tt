@@ -1002,7 +1002,8 @@
                 e.preventDefault();
                 var ordernumber = $(this).data("ordernumber");
                 var note_type = $(this).data("note_type");
-                var modalTitle = $(this).attr("title") + " (order number " + ordernumber + ")";
+                var order_number_text = _(" (order number %s)").format(ordernumber);
+                var modalTitle = $(this).attr("title") + " " + order_number_text;
                 var note_text = $( "#" + note_type + "-note-" + ordernumber ).html();
                 $("#noteEditor .modal-title").text(modalTitle);
                 $("#ordernumber").val( ordernumber );
@@ -1131,7 +1132,8 @@
             $(".edit_delivery_date").on("click", function(e) {
                 e.preventDefault();
                 var ordernumber = $(this).data("ordernumber");
-                var modalTitle = $(this).attr("title") + " (order number " + ordernumber + ")";
+                var order_number_text = _(" (order number %s)").format(ordernumber);
+                var modalTitle = $(this).attr("title") + " " + order_number_text;
                 var delivery_date = $( "#delivery_date_" + ordernumber ).data("delivery_date");
                 const estimated_delivery_date = document.querySelector("#estimated_delivery_date")._flatpickr;
                 estimated_delivery_date.setDate( delivery_date );
