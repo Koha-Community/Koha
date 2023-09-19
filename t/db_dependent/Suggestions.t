@@ -205,6 +205,12 @@ my $messages = C4::Letters::GetQueuedMessages({
 });
 is( @$messages, 0, 'ModSuggestions does not send an email if the status is not updated' );
 
+my $authorised_value = Koha::AuthorisedValue->new(
+    {
+        category         => 'SUGGEST_STATUS',
+        authorised_value => 'STALLED'
+    }
+)->store;
 my $mod_suggestion2 = {
     STATUS       => 'STALLED',
     suggestionid => $my_suggestionid,
