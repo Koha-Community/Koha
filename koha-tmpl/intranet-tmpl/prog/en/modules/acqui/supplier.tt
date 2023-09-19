@@ -12,13 +12,13 @@
         <li><label for="contact_position[% contact.id | html %]">Position: </label>
             <input type="text" size="40" id="contact_position[% contact.id | html %]" name="contact_position" value="[% contact.position | html %]" /></li>
         <li><label for="contact_phone[% contact.id | html %]">Phone: </label>
-                <input type="text" size="20" id="contact_phone[% contact.id | html %]" name="contact_phone" value="[% contact.phone | html %]" /> </li>
+                <input type="tel" size="20" id="contact_phone[% contact.id | html %]" name="contact_phone" value="[% contact.phone | html %]" /> </li>
         <li><label for="contact_altphone[% contact.id | html %]">Alternative phone: </label>
-            <input type="text" size="20" id="contact_altphone[% contact.id | html %]" name="contact_altphone" value="[% contact.altphone | html %]" /></li>
+            <input type="tel" size="20" id="contact_altphone[% contact.id | html %]" name="contact_altphone" value="[% contact.altphone | html %]" /></li>
         <li><label for="contact_fax[% contact.id | html %]">Fax: </label>
-            <input type="text" size="20" id="contact_fax[% contact.id | html %]" name="contact_fax" value="[% contact.fax | html %]" /></li>
+            <input type="tel" size="20" id="contact_fax[% contact.id | html %]" name="contact_fax" value="[% contact.fax | html %]" /></li>
         <li><label for="contact_email[% contact.id | html %]">Email: </label>
-            <input type="text" size="40" id="contact_email[% contact.id | html %]" name="contact_email" value="[% contact.email | html %]" class="email" /></li>
+            <input type="email" size="40" id="contact_email[% contact.id | html %]" name="contact_email" value="[% contact.email | html %]" class="email" /></li>
         <li><label for="contact_notes[% contact.id | html %]">Notes: </label>
             <textarea id="contact_notes[% contact.id | html %]" name="contact_notes" cols="40" rows="4">[% contact.notes | html %]</textarea></li>
     </ol>
@@ -221,11 +221,11 @@ div.rows { padding: 1rem; }
             <li><label for="physical">Physical address: </label>
                 <textarea id="physical" name="physical" cols="40" rows="3">[% address1 | html %][% address2 | html %][% address3 | html %][% address4 | html %]</textarea></li>
             <li><label for="company_phone">Phone: </label>
-                <input type="text" size="20" id="company_phone" name="company_phone" value="[% phone | html %]" /></li>
+                <input type="tel" size="20" id="company_phone" name="company_phone" value="[% phone | html %]" /></li>
             <li><label for="company_fax">Fax: </label>
-                <input type="text" size="20" id="company_fax" name="company_fax" value="[% fax | html %]" /></li>
+                <input type="tel" size="20" id="company_fax" name="company_fax" value="[% fax | html %]" /></li>
             <li><label for="website">Website: </label>
-                <input type="text" size="40" id="website" name="website" value="[% url | html %]" class="url" /></li>
+                <input type="url" size="40" id="website" name="website" value="[% url | html %]" class="url" /></li>
             <li><label for="accountnumber">Account number: </label>
                 <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber | html %]" /></li>
                 <li>
@@ -644,19 +644,19 @@ div.rows { padding: 1rem; }
                 n.append(`<input type="hidden" name="interface_counter" value="${i}" />`);
                 let ol = $('<ol class="interface-form"></ol>');
                 let attributes = [
-                    { label: _("Name:"),          name: 'name',          node: 'input' },
-                    { label: _("Type:"),          name: 'type',          node: 'av_select', av_cat: 'VENDOR_INTERFACE_TYPE' },
-                    { label: _("URI:"),           name: 'uri',           node: 'input' },
-                    { label: _("Login:"),         name: 'login',         node: 'input' },
-                    { label: _("Password:"),      name: 'password',      node: 'input' },
-                    { label: _("Account email:"), name: 'account_email', node: 'input' },
-                    { label: _("Notes:"),         name: 'notes',         node: 'textarea' }
+                    { label: _("Name:"),          name: 'name',          type: 'text',     node: 'input' },
+                    { label: _("Type:"),          name: 'type',          type: 'select',   node: 'av_select', av_cat: 'VENDOR_INTERFACE_TYPE' },
+                    { label: _("URI:"),           name: 'uri',           type: 'url',      node: 'input' },
+                    { label: _("Login:"),         name: 'login',         type: 'text',     node: 'input' },
+                    { label: _("Password:"),      name: 'password',      type: 'text',     node: 'input' },
+                    { label: _("Account email:"), name: 'account_email', type: 'email',    node: 'input' },
+                    { label: _("Notes:"),         name: 'notes',         type: 'textarea', node: 'textarea' }
                 ];
                 attributes.forEach((attribute, ii) => {
                     let li = $('<li></li>');
                     li.append(`<label for="interface_${attribute.name}_${i}">${attribute.label}</label>`);
                     if( attribute.node == 'input' ) {
-                        li.append(`<input type="text" size="40" id="interface_${attribute.name}_${i}" name="interface_${attribute.name}_${i}" value="${interface[attribute.name]}" />`);
+                        li.append(`<input type="${attribute.type}" size="40" id="interface_${attribute.name}_${i}" name="interface_${attribute.name}_${i}" value="${interface[attribute.name]}" />`);
                     } else if ( attribute.node == 'textarea' ) {
                         li.append(`<textarea cols="40" rows="3" id="interface_${attribute.name}_${i}" name="interface_${attribute.name}_${i}">${interface[attribute.name]}</textarea>`);
                     } else if ( attribute.node == 'av_select' ) {
