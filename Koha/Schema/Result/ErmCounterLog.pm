@@ -47,6 +47,14 @@ foreign key to borrowers
 
 foreign key to erm_counter_files
 
+=head2 usage_data_provider_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+foreign key to erm_usage_data_providers
+
 =head2 importdate
 
   data_type: 'timestamp'
@@ -79,6 +87,8 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "counter_files_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "usage_data_provider_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "importdate",
   {
@@ -147,9 +157,29 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 usage_data_provider
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-16 17:38:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:v22verlpwR3+7qLwsxJjtw
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::ErmUsageDataProvider>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "usage_data_provider",
+  "Koha::Schema::Result::ErmUsageDataProvider",
+  { erm_usage_data_provider_id => "usage_data_provider_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-11 10:09:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5tmoa4Our5qmolU0OWXjcQ
 
 
 sub koha_object_class {

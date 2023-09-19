@@ -515,7 +515,10 @@ sub _add_counter_log_entry {
             filename         => $self->filename,
 
             #TODO: add eventual exceptions coming from the COUNTER report to logdetails?
-            logdetails => undef
+            logdetails => undef,
+
+            # TEST: retrieving counter logs directly rather than embedding them in counter files requires the provider id
+            usage_data_provider_id => $self->usage_data_provider_id
         }
     )->store;
 }

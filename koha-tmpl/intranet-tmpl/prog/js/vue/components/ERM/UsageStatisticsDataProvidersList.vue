@@ -66,7 +66,7 @@ export default {
             building_table: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                options: { embed: "counter_files" },
+                options: {},
                 url: () => this.table_url(),
                 table_settings: this.usage_data_provider_table_settings,
                 add_filters: true,
@@ -172,8 +172,16 @@ export default {
                     () => {
                         usage_data_provider.active = 1
                         delete usage_data_provider.erm_usage_data_provider_id
-                        const counter_files = usage_data_provider.counter_files
-                        delete usage_data_provider.counter_files
+                        // const counter_files = usage_data_provider.counter_files
+                        // delete usage_data_provider.counter_files
+                        delete usage_data_provider.earliest_platform
+                        delete usage_data_provider.latest_platform
+                        delete usage_data_provider.earliest_title
+                        delete usage_data_provider.latest_title
+                        delete usage_data_provider.earliest_database
+                        delete usage_data_provider.latest_database
+                        delete usage_data_provider.earliest_item
+                        delete usage_data_provider.latest_item
                         const client = APIClient.erm
                         client.usage_data_providers
                             .update(usage_data_provider, id)
@@ -185,8 +193,8 @@ export default {
                                         ).format(name),
                                         true
                                     )
-                                    usage_data_provider.counter_files =
-                                        counter_files
+                                    // usage_data_provider.counter_files =
+                                    // counter_files
                                     dt.draw()
                                 },
                                 error => {}
@@ -319,26 +327,7 @@ export default {
                 },
                 {
                     title: __("Last run"),
-                    render: function (data, type, row, meta) {
-                        const counter_files = row.counter_files
-                        if (counter_files.length === 0) {
-                            return "No run history found"
-                        }
-                        const findMostRecent = counter_files.sort(
-                            (a, b) =>
-                                new Date(b.date_uploaded) -
-                                new Date(a.date_uploaded)
-                        )
-                        const date = findMostRecent[0].date_uploaded.substr(
-                            0,
-                            10
-                        )
-                        const time = findMostRecent[0].date_uploaded.substr(
-                            11,
-                            8
-                        )
-                        return `${date} ${time}`
-                    },
+                    data: "last_run",
                     searchable: true,
                     orderable: true,
                 },

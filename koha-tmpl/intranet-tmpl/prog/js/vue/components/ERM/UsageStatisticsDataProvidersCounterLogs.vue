@@ -40,7 +40,7 @@ export default {
             building_table: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                options: { embed: "counter_logs" },
+                options: {},
                 url: () => this.table_url(),
                 table_settings: this.counter_log_table_settings,
                 add_filters: true,
@@ -77,7 +77,7 @@ export default {
                 )
         },
         table_url() {
-            let url = `/api/v1/erm/counter_files?usage_data_provider_id=${this.$route.params.usage_data_provider_id}`
+            let url = `/api/v1/erm/counter_logs?usage_data_provider_id=${this.$route.params.usage_data_provider_id}`
             return url
         },
         download_counter_file(counter_log, dt, event) {
@@ -86,25 +86,25 @@ export default {
                 counter_log.counter_files_id +
                 "/file/content"
         },
-        delete_counter_file(counter_file, dt, event) {
+        delete_counter_file(counter_log, dt, event) {
             this.setConfirmationDialog(
                 {
                     title: this.$__(
                         "Are you sure you want to remove this file?"
                     ),
-                    message: counter_file.filename,
+                    message: counter_log.filename,
                     accept_label: this.$__("Yes, delete"),
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
                     const client = APIClient.erm
                     client.counter_files
-                        .delete(counter_file.erm_counter_files_id)
+                        .delete(counter_log.counter_files_id)
                         .then(
                             success => {
                                 this.setMessage(
                                     this.$__("File %s deleted").format(
-                                        counter_file.filename
+                                        counter_log.filename
                                     ),
                                     true
                                 )
@@ -126,8 +126,8 @@ export default {
                 {
                     title: __("Import date"),
                     render: function (data, type, row, meta) {
-                        const date = row.date_uploaded.substr(0, 10)
-                        const time = row.date_uploaded.substr(11, 8)
+                        const date = row.importdate.substr(0, 10)
+                        const time = row.importdate.substr(11, 8)
                         return `${date} ${time}`
                     },
                     searchable: true,
@@ -136,8 +136,8 @@ export default {
                 {
                     title: __("Imported by"),
                     render: function (data, type, row, meta) {
-                        const importer = row.counter_logs[0].borrowernumber
-                            ? `<a href="http://localhost:8081/cgi-bin/koha/members/moremember.pl?borrowernumber=${row.counter_logs[0].borrowernumber}">Borrowernumber ${row.counter_logs[0].borrowernumber}</a>`
+                        const importer = row.borrowernumber
+                            ? `<a href="http://localhost:8081/cgi-bin/koha/members/moremember.pl?borrowernumber=${row.borrowernumber}">Borrowernumber ${row.borrowernumber}</a>`
                             : "Cronjob"
                         return importer
                     },

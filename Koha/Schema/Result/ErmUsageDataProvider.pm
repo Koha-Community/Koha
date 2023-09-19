@@ -208,6 +208,23 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 erm_counter_logs
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ErmCounterLog>
+
+=cut
+
+__PACKAGE__->has_many(
+  "erm_counter_logs",
+  "Koha::Schema::Result::ErmCounterLog",
+  {
+    "foreign.usage_data_provider_id" => "self.erm_usage_data_provider_id",
+  },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 erm_usage_databases
 
 Type: has_many
@@ -311,8 +328,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-08-09 11:00:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B99vhhVjbyR/7VoGHcrnFA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-11 10:09:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MSvyv/Abt3S3fqZF21v/7w
 
 # __PACKAGE__->add_columns(
 #     '+active' => { is_boolean => 1 }

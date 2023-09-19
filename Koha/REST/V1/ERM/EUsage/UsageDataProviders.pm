@@ -24,6 +24,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ERM::EUsage::UsageDataProviders;
 use Koha::ERM::EUsage::MonthlyUsages;
+use Koha::ERM::EUsage::CounterFiles;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny    qw( catch try );
@@ -38,14 +39,13 @@ use Try::Tiny    qw( catch try );
 
 sub list {
     my $c = shift->openapi->valid_input or return;
-    use Data::Dumper;
 
     return try {
         my $usage_data_providers_set = Koha::ERM::EUsage::UsageDataProviders->new;
         my $usage_data_providers     = $c->objects->search($usage_data_providers_set);
-        if (   $c->validation->output->{"x-koha-embed"}[0]
-            && $c->validation->output->{"x-koha-embed"}[0] eq 'counter_files' )
-        {
+        # if (   $c->validation->output->{"x-koha-embed"}[0]
+        #     && $c->validation->output->{"x-koha-embed"}[0] eq 'counter_files' )
+        # {
             foreach my $provider (@$usage_data_providers) {
                 my $title_dates = _get_earliest_and_latest_dates(
                     'TR',
@@ -96,8 +96,17 @@ sub list {
                       $database_dates->{latest_date}
                     ? $database_dates->{latest_date}
                     : '';
+
+                my @last_run = Koha::ERM::EUsage::CounterFiles->search(
+                    {
+                        usage_data_provider_id => $provider->{erm_usage_data_provider_id},
+                    },
+                    { columns => [ { date_uploaded => { max => "date_uploaded" } }, ] }
+                )->unblessed;
+                $provider->{last_run} = $last_run[0][0]->{date_uploaded} ? $last_run[0][0]->{date_uploaded} : '';
+
             }
-        }
+        # }
 
         return $c->render( status => 200, openapi => $usage_data_providers );
     } catch {

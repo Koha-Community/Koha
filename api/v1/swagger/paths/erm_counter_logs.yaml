@@ -1,0 +1,49 @@
+/erm/counter_logs:
+  get:
+    x-mojo-to: ERM::EUsage::CounterLogs#list
+    operationId: listErmCounterLogs
+    tags:
+      - counter_log
+    summary: List counter_logs
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on counter_log usage_data_provider_id
+        in: query
+        name: usage_data_provider_id
+        required: false
+        type: integer
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+    responses:
+      200:
+        description: A list of counter_logs
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/erm_counter_log"
+          type: array
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        erm: 1

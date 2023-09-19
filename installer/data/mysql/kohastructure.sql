@@ -2959,12 +2959,14 @@ CREATE TABLE `erm_counter_logs` (
   `erm_counter_log_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key to borrowers',
   `counter_files_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_counter_files',
+  `usage_data_provider_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_usage_data_providers',
   `importdate` timestamp DEFAULT NULL DEFAULT current_timestamp() COMMENT 'counter file import date',
   `filename` varchar(80) DEFAULT NULL COMMENT 'name of the counter file',
   `logdetails` longtext DEFAULT NULL COMMENT 'details from the counter log',
   PRIMARY KEY (`erm_counter_log_id`),
   CONSTRAINT `erm_counter_log_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `erm_counter_log_ibfk_2` FOREIGN KEY (`counter_files_id`) REFERENCES `erm_counter_files` (`erm_counter_files_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `erm_counter_log_ibfk_2` FOREIGN KEY (`counter_files_id`) REFERENCES `erm_counter_files` (`erm_counter_files_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `erm_counter_log_ibfk_3` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
