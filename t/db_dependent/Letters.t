@@ -982,7 +982,7 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
 
 subtest 'Test guarantor handling in SendQueuedMessages' => sub {
 
-    plan tests => 8;
+    plan tests => 7;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
 
@@ -1037,18 +1037,18 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
     is( $email_object->email->header('Cc'), $guarantor2->email, "cc correctly uses second guarantor" );
 
     # feature disabled
-    t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '0' ); #FIXME: This mock is failing!?
+    t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '0' );
 
     # reset message
-    $schema->resultset('MessageQueue')->search( { borrowernumber => $borrowernumber, status => 'sent' } )
-        ->update( { status => 'pending', failure_code => undef } );
+    Koha::Notice::Messages->find($message_id)->delete;
 
+    $message_id = C4::Letters::EnqueueLetter($my_message);
     warning_like { C4::Letters::SendQueuedMessages(); }
     qr|No 'to_address', email address or guarantors email address for borrowernumber|,
         "SendQueuedMessages fails when no to_address, patron notice email and RedirectGuaranteeEmail is not set";
 
     # clear borrower queue
-    $schema->resultset('MessageQueue')->search( { borrowernumber => $borrowernumber, status => 'sent' } )->delete();
+    Koha::Notice::Messages->find($message_id)->delete;
 };
 
 subtest 'get_item_content' => sub {
