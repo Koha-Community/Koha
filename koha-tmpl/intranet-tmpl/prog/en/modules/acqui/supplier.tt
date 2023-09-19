@@ -377,7 +377,7 @@ div.rows { padding: 1rem; }
                     <li><span class="label">Phone: </span>[% phone | html %]</li>
                     <li><span class="label">Fax: </span>[% fax | html %]</li>
                     [% IF ( url ) %]
-                        <li><span class="label">Website: </span><a href="[% url | url %]">[% url | html %]</a></li>
+                        <li><span class="label">Website: </span><a href="[% url | url %]" target="_blank">[% url | html %]</a></li>
                     [% END %]
                     [% IF ( accountnumber ) %]
                         <li><span class="label">Account number: </span>[% accountnumber | html %]</li>
@@ -425,8 +425,7 @@ div.rows { padding: 1rem; }
                         [% END %]
                         [% IF i.uri %]
                             <li>
-                                <span class="label">URI: </span>
-                                <a href="[% i.uri | url %]">[% i.uri | html %]</a>
+                                <span class="label">URI: </span><a href="[% i.uri | url %]" target="_blank">[% i.uri | html %]</a>
                             </li>
                         [% END %]
                         [% IF i.login %]
