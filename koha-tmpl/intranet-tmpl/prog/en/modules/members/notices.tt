@@ -106,6 +106,9 @@
                                                     [% ELSE %]<span>Error occurred while sending email.</span>
                                                     [% END %]
                                                 [% END %]
+                                                [% IF ( QUEUED_MESSAGE.cc_address ) %]
+                                                    <span>Notice copied to: [% QUEUED_MESSAGE.cc_address | html %]</span>
+                                                [% END %]
                                             </td>
                                         </tr>
                                     [% END %]
