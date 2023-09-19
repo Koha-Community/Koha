@@ -424,7 +424,10 @@ div.rows { padding: 1rem; }
                             <li><span class="label">Type: </span>[% AuthorisedValues.GetByCode( 'VENDOR_INTERFACE_TYPE', i.type) | html %]</li>
                         [% END %]
                         [% IF i.uri %]
-                            <li><span class="label">URI: </span>[% i.uri | html %]</li>
+                            <li>
+                                <span class="label">URI: </span>
+                                <a href="[% i.uri | url %]">[% i.uri | html %]</a>
+                            </li>
                         [% END %]
                         [% IF i.login %]
                             <li><span class="label">Login: </span>[% i.login | html %]</li>
