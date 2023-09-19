@@ -51,7 +51,7 @@ sub store {
     my ($self) = @_;
 
     $self->STATUS("ASKED") unless $self->STATUS;
-    my @status_constants = qw(ASKED CHECKED ACCEPTED REJECTED);
+    my @status_constants = qw(ASKED CHECKED ACCEPTED REJECTED ORDERED AVAILABLE);
     Koha::Exceptions::Suggestion::StatusForbidden->throw( STATUS => $self->STATUS )
         unless ( grep { $self->STATUS eq $_ } @status_constants )
         || Koha::AuthorisedValues->search(
