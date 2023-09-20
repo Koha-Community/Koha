@@ -65,68 +65,64 @@
 
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-            </li>
-            [% IF ( loggedinusername ) %]
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
-                </li>
-            [% END %]
 
-            [% IF op != 'list' %]
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-shelves.pl">Lists</a>
-                </li>
+    [% WRAPPER breadcrumbs %]
+        [% IF ( loggedinusername ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+            [% END %]
+        [% END %]
+
+        [% IF op != 'list' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-shelves.pl">Lists</a>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Lists</span>
+            [% END %]
+        [% END %]
+
+        [% IF shelf and shelf.is_private %]
+            [% IF op == 'view' OR op == 'edit_form' %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0">Your lists</a>
+                [% END %]
             [% ELSE %]
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Lists</a>
-                </li>
-            [% END %]
-
-            [% IF shelf and shelf.is_private %]
-                [% IF op == 'view' OR op == 'edit_form' %]
-                    <li class="breadcrumb-item">
-                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0">Your lists</a>
-                    </li>
-                [% ELSE %]
-                    <li class="breadcrumb-item active">
-                        <a href="#" aria-current="page">Your lists</a>
-                    </li>
-                [% END %]
-            [% ELSIF shelf AND shelf.is_public %]
-                [% IF op == 'view' %]
-                    <li class="breadcrumb-item">
-                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1">Public lists</a>
-                    </li>
-                [% ELSE %]
-                    <li class="breadcrumb-item active">
-                        <a href="#" aria-current="page">Public lists</a>
-                    </li>
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Your lists</span>
                 [% END %]
             [% END %]
-
+        [% ELSIF shelf AND shelf.is_public %]
             [% IF op == 'view' %]
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Contents of &nbsp;<em>[% shelf.shelfname | html %]</em></a>
-                </li>
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1">Public lists</a>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Public lists</span>
+                [% END %]
             [% END %]
+        [% END %]
 
-            [% IF op == 'add_form' %]
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Create new list</a>
-                </li>
+        [% IF op == 'view' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Contents of <em>[% shelf.shelfname | html %]</em></span>
             [% END %]
+        [% END %]
 
-            [% IF op == 'edit_form' %]
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Edit list &nbsp;<em>[% shelf.shelfname | html %]</em></a>
-                </li>
+        [% IF op == 'add_form' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Create new list</span>
             [% END %]
-        </ol> <!-- / .breadcrumb -->
-    </nav> <!-- /#breadcrumbs -->
+        [% END %]
+
+        [% IF op == 'edit_form' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Edit list <em>[% shelf.shelfname | html %]</em></span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     <div class="container-fluid">
         <div class="row">

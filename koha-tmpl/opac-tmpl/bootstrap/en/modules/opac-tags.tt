@@ -30,21 +30,16 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-            </li>
-            [% IF ( loggedinusername ) %]
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
-                </li>
+    [% WRAPPER breadcrumbs %]
+        [% IF ( loggedinusername ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
             [% END %]
-            <li class="breadcrumb-item active">
-                <a href="#" aria-current="page">Tags</a>
-            </li>
-        </ol>
-    </nav> <!-- /#breadcrumbs -->
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Tags</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     <div class="container-fluid">
         <div class="row">

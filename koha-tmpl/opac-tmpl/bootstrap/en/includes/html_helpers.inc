@@ -103,3 +103,62 @@
         [% content| $raw %]
     </div>
 [% END %]
+
+[% # BOOTSTRAP BREADCRUMBS WRAPPER USAGE                                       %]
+[% #    [ WRAPPER breadcrumbs ]                                                %]
+[% #        [ Home breadcrumb automatically included ]                         %]
+[% #        [ WRAPPER breadcrumb_item ]                                        %]
+[% #            <a href="/cgi-bin/koha/module/module-home.pl"> Module </a>     %]
+[% #        [ END ]                                                            %]
+
+[% #        [ IF op == 'add_form' ]                                            %]
+[% #            [ WRAPPER breadcrumb_item ]                                    %]
+[% #                <a href="/cgi-bin/koha/module/page.pl"> Module page </a>   %]
+[% #            [ END ]                                                        %]
+[% #            [ WRAPPER breadcrumb_item bc_active = 1 ]                      %]
+[% #                <span>Add form</span>                                      %]
+[% #            [ END ]                                                        %]
+
+[% #        [ ELSIF op == 'delete_confirm' ]                                   %]
+[% #            [ WRAPPER breadcrumb_item ]                                    %]
+[% #                <a href="/cgi-bin/koha/module/page.pl"> Module page </a>   %]
+[% #            [ END ]                                                        %]
+[% #            [ WRAPPER breadcrumb_item bc_active = 1 ]                      %]
+[% #                <span>Confirm deletion</span>                              %]
+[% #            [ END ]                                                        %]
+
+[% #        [ ELSE ]                                                           %]
+[% #            [ WRAPPER breadcrumb_item bc_active = 1 ]                      %]
+[% #                <span>Module page</span>                                   %]
+[% #            [ END ]                                                        %]
+[% #        [ END #/IF op = add_form ]                                         %]
+
+[% #    [ END #/ WRAPPER breadcrumbs ]                                         %]
+
+[% # Used to build breadcrumb navigation nav %]
+[% BLOCK breadcrumbs %]
+    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
+        <ol class="breadcrumb">
+            [%# Include the Home link every time %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-main.pl" title="Home">Home</a>
+            [% END %]
+            [% content | $raw %]
+        </ol>
+    </nav>
+[% END %]
+
+[%# Used to build individual breadcrumb items in the breadcrumb nav %]
+[% BLOCK breadcrumb_item %]
+    [% IF ( bc_active ) %]
+        <li class="breadcrumb-item active">
+            <a href="#" aria-current="page">
+                [% content | $raw %]
+            </a>
+        </li>
+    [% ELSE %]
+        <li class="breadcrumb-item">
+            [% content | $raw %]
+        </li>
+    [% END %]
+[% END %]

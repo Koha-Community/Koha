@@ -21,41 +21,36 @@
 [% END %]
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-            </li>
-            [% IF ( logged_in_user ) %]
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
-                </li>
+    [% WRAPPER breadcrumbs %]
+        [% IF ( logged_in_user ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
             [% END %]
+        [% END %]
 
-            [% IF method != 'list' %]
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-illrequests.pl">Interlibrary loan requests</a>
-                </li>
-                [% IF method == 'create' %]
-                    <li class="breadcrumb-item active">
-                        <a href="#" aria-current="page">New interlibrary loan request</a>
-                    </li>
-                [% ELSIF method == 'view' %]
-                    <li class="breadcrumb-item active">
-                        <a href="#" aria-current="page">View interlibrary loan request</a>
-                    </li>
-                [% ELSIF method == 'typedisclaimer' %]
-                    <li class="breadcrumb-item active">
-                        <a href="#" aria-current="page">ILL request disclaimer</a>
-                    </li>
-                [% END %]
-            [% ELSE %]
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Interlibrary loan requests</a>
-                </li>
+        [% IF method != 'list' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-illrequests.pl">Interlibrary loan requests</a>
             [% END %]
-        </ol> <!-- / .breadcrumb -->
-    </nav> <!-- /#breadcrumbs -->
+            [% IF method == 'create' %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>New interlibrary loan request</span>
+                [% END %]
+            [% ELSIF method == 'view' %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>View interlibrary loan request</span>
+                [% END %]
+            [% ELSIF method == 'typedisclaimer' %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Ill request disclaimer</span>
+                [% END %]
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <a href="#" aria-current="page">Interlibrary loan requests</a>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     <div class="container-fluid">
         <div class="row">
