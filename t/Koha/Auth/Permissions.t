@@ -158,6 +158,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_editcatalogue_edit_items'                         => 1,
         'CAN_user_editcatalogue_fast_cataloging'                    => 1,
         'CAN_user_editcatalogue_manage_item_groups'                 => 1,
+        'CAN_user_editcatalogue_manage_item_editor_templates'       => 1,
         'CAN_user_editcatalogue'                                    => 1,
         'CAN_user_ill'                                              => 1,
         'CAN_user_lists_delete_public_lists'                        => 1,
