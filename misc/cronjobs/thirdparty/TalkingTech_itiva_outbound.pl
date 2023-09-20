@@ -53,6 +53,7 @@ my $help;
 my $outfile;
 my $skip_patrons_with_email;
 my $patron_branchcode;
+my $if_patron_field_equals;
 
 # maps to convert I-tiva terms to Koha terms
 my $type_module_map = {
@@ -68,15 +69,16 @@ my $type_notice_map = {
 };
 
 GetOptions(
-    'o|output:s'             => \$outfile,
-    'v'                      => \$verbose,
-    'lang:s'                 => \$language,
-    'type:s'                 => \@types,
-    'w|waiting-hold-day:s'   => \@holds_waiting_days_to_call,
-    'c|code|library-code:s'  => \$library_code,
-    's|skip-patrons-with-email' => \$skip_patrons_with_email,
-    'pb|patron-branchcode:s' => \$patron_branchcode,
-    'h|help'                 => \$help,
+    'o|output:s'                 => \$outfile,
+    'v'                          => \$verbose,
+    'lang:s'                     => \$language,
+    'type:s'                     => \@types,
+    'w|waiting-hold-day:s'       => \@holds_waiting_days_to_call,
+    'c|code|library-code:s'      => \$library_code,
+    's|skip-patrons-with-email'  => \$skip_patrons_with_email,
+    'i|if-patron-field-equals:s' => \$if_patron_field_equals,
+    'pb|patron-branchcode:s'     => \$patron_branchcode,
+    'h|help'                     => \$help,
 );
 
 $language = uc($language);
@@ -101,6 +103,10 @@ if ( defined $outfile ) {
 
 my $format = 'V';    # format for phone notifications
 
+my ( $if_patron_field_equals_field, $if_patron_field_equals_value );
+( $if_patron_field_equals_field, $if_patron_field_equals_value ) = split( /:/, $if_patron_field_equals )
+    if $if_patron_field_equals;
+
 foreach my $type (@types) {
     $type = uc($type);    #just in case lower or mixed-case was supplied
     my $module = $type_module_map->{$type};    #since the module is required to get the letter
@@ -122,7 +128,10 @@ foreach my $type (@types) {
     my $patrons;
     foreach my $issues (@loop) {
         $patrons->{$issues->{borrowernumber}} ||= Koha::Patrons->find( $issues->{borrowernumber} ) if $skip_patrons_with_email;
-        next if $skip_patrons_with_email && $patrons->{$issues->{borrowernumber}}->notice_email_address;
+        next if $skip_patrons_with_email && $patrons->{ $issues->{borrowernumber} }->notice_email_address;
+        next
+            if $if_patron_field_equals
+            && $patrons->{ $issues->{borrowernumber} }->$if_patron_field_equals_field eq $if_patron_field_equals_value;
 
         my $date_dt = dt_from_string ( $issues->{'date_due'} );
         my $due_date = output_pref( { dt => $date_dt, dateonly => 1, dateformat =>'metric' } );
