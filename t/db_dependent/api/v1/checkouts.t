@@ -336,18 +336,28 @@ subtest 'get_availability' => sub {
     %needsconfirmation = ();
 
     subtest 'public availability' => sub {
-        plan tests => 18;
+        plan tests => 22;
 
-        # Available, Not authentication required
-        $t->get_ok("/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")->status_is(200)
-            ->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+        # Authentication required
+        $t->get_ok("/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")->status_is(401);
+
+        # Only allow availability lookup for self
+        $t->get_ok(
+            "//$userid:$password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+        )->status_is(403);
+
+        # All ok
+        $t->get_ok(
+            "//$unauth_userid:$unauth_password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+        )->status_is(200)->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
             ->json_has('/confirmation_token');
 
         # Needs confirmation upgrade to blocker
         %needsconfirmation = ( TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 );
-        $t->get_ok("/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")->status_is(200)
-            ->json_is( '/blockers' => { TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 } )->json_is( '/confirms' => {} )
-            ->json_is( '/warnings' => {} )->json_has('/confirmation_token');
+        $t->get_ok(
+            "//$unauth_userid:$unauth_password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+        )->status_is(200)->json_is( '/blockers' => { TOO_MANY => 1, ISSUED_TO_ANOTHER => 1 } )
+            ->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )->json_has('/confirmation_token');
         %needsconfirmation = ();
 
         # Remove personal information from public endpoint
@@ -394,8 +404,9 @@ subtest 'get_availability' => sub {
             ressurname            => 'private',
             item_notforloan       => 'private'
         );
-        $t->get_ok("/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id")->status_is(200)
-            ->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
+        $t->get_ok(
+            "//$unauth_userid:$unauth_password@/api/v1/public/checkouts/availability?item_id=$item1_id&patron_id=$patron_id"
+        )->status_is(200)->json_is( '/blockers' => {} )->json_is( '/confirms' => {} )->json_is( '/warnings' => {} )
             ->json_has('/confirmation_token');
         %issuingimpossible = ();
         %alerts            = ();
