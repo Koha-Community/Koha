@@ -35,6 +35,7 @@ use C4::Circulation qw( AddIssue AddReturn );
 use Koha::Database;
 use Koha::AuthUtils qw(hash_password);
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::CirculationRules;
 use Koha::Items;
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
@@ -380,6 +381,9 @@ subtest "Test build_custom_field_string" => sub {
 };
 
 subtest "Test cr_item_field" => sub {
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
     plan tests => 8;
 
     my $builder = t::lib::TestBuilder->new();
@@ -483,6 +487,8 @@ subtest "Test cr_item_field" => sub {
     $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
     $msg->handle_item_information( $server );
     ok( $response =~ m/AH1999-01-01 12:59/, "Found correct CR field in response");
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Patron info summary > 5 should not crash server' => sub {
@@ -575,6 +581,7 @@ subtest 'SC status tests' => sub {
 
     dies_ok{ $msg->handle_sc_status( $server ) } ,"Dies if sip user cannot be found";
 
+    $schema->storage->txn_rollback;
 };
 
 # Here is room for some more subtests
@@ -760,6 +767,8 @@ sub test_checkout_v2 {
     my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
     my ( $response, $findpatron );
     my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+
+
 
     # create some data
     my $patron1 = $builder->build({
@@ -1261,6 +1270,16 @@ sub create_mocks {
     $mockILS->mock( 'check_inst_id', sub {} );
     $mockILS->mock( 'institution_id', sub { $$branchcode; } );
     $mockILS->mock( 'find_patron', sub { $$findpatron; } );
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rule_name    => 'renewalsallowed',
+            rule_value   => '5',
+        }
+    );
 
     return { ils => $mockILS, message => $mockMsg };
 }
