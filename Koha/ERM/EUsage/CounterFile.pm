@@ -20,6 +20,7 @@ package Koha::ERM::EUsage::CounterFile;
 use Modern::Perl;
 
 use Text::CSV_XS qw( csv );
+use Try::Tiny;
 
 use Koha::ERM::EUsage::CounterLog;
 use Koha::ERM::EUsage::UsagePlatform;
@@ -130,77 +131,86 @@ sub _add_usage_objects {
     # Set job size to the amount of rows we're processing
     $self->{job_callbacks}->{set_size_callback}->( scalar( @{$rows} ) )
         if $self->{job_callbacks};
-
     foreach my $row ( @{$rows} ) {
+        try {
+            # INFO: A single row may have multiple instances in the COUNTER report, one for each metric_type or access_type
+            # If we're on a row that we've already gone through, use the same usage object
+            # and add usage statistics for the different metric_type or access_type
+            if ( $self->_is_same_usage_object( $previous_object, $row ) ) {
+                $usage_object = $previous_object;
+            } else {
 
-        # INFO: A single row may have multiple instances in the COUNTER report, one for each metric_type or access_type
-        # If we're on a row that we've already gone through, use the same usage object
-        # and add usage statistics for the different metric_type or access_type
-        if ( $self->_is_same_usage_object( $previous_object, $row ) ) {
-            $usage_object = $previous_object;
-        } else {
+                # Check if usage object already exists in this data provider, e.g. from a previous harvest
+                $usage_object = $self->_search_for_usage_object($row);
 
-            # Check if usage object already exists in this data provider, e.g. from a previous harvest
-            $usage_object = $self->_search_for_usage_object($row);
+                if ($usage_object) {
 
-            if ($usage_object) {
+                    # Usage object already exists, add job warning message and do nothing else
+                    $self->_add_job_message(
+                        'warning', 'object_already_exists',
+                        $row
+                    );
+                } else {
+                    try {
+                        # Fresh usage object, create it
+                        $usage_object = $self->_add_usage_object_entry($row);
 
-                # Usage object already exists, add job warning message and do nothing else
-                $self->_add_job_message(
-                    'warning', 'object_already_exists',
-                    $row
+                        # Usage object created, add job success message
+                        $self->_add_job_message( 'success', 'object_added', $row );
+                    } catch {
+                        $self->_add_job_message(
+                            'error', 'object_could_not_be_added',
+                            $row
+                        );
+                        $self->{job_callbacks}->{step_callback}->() if $self->{job_callbacks};
+                    };
+                }
+            }
+
+            # Regex match for Mmm-yyyy expected format, e.g. "Jan 2022"
+            my @date_fields =
+                map( $_ =~ /\b[A-Z][a-z][a-z]\b [0-9]{4}\b/ ? $_ : (), keys %{$row} );
+
+            unless (@date_fields) {
+                warn "No monthly usage fields retrieved";
+            }
+
+            # Add monthly usage statistics for this usage object
+            my %yearly_usages = ();
+            foreach my $year_month (@date_fields) {
+                my $usage = %{$row}{$year_month};
+
+                # Skip this monthly usage entry if it's 0
+                next if $usage eq "0";
+
+                my $month = substr( $year_month, 0, 3 );
+                my $year  = substr( $year_month, 4, 4 );
+
+                if ( !exists $yearly_usages{$year} ) {
+                    $yearly_usages{$year} = $usage;
+                } else {
+                    $yearly_usages{$year} += $usage;
+                }
+
+                $self->_add_monthly_usage_entries(
+                    $usage_object,
+                    $row->{Metric_Type}, $row, $year, $month, $usage
                 );
-            } else {
-
-                # Fresh usage object, create it
-                $usage_object = $self->_add_usage_object_entry($row);
-
-                # Usage object created, add job success message
-                $self->_add_job_message( 'success', 'object_added', $row );
-            }
-        }
-
-        # Regex match for Mmm-yyyy expected format, e.g. "Jan 2022"
-        my @date_fields =
-            map( $_ =~ /\b[A-Z][a-z][a-z]\b [0-9]{4}\b/ ? $_ : (), keys %{$row} );
-
-        unless (@date_fields) {
-            warn "No monthly usage fields retrieved";
-        }
-
-        # Add monthly usage statistics for this usage object
-        my %yearly_usages = ();
-        foreach my $year_month (@date_fields) {
-            my $usage = %{$row}{$year_month};
-
-            # Skip this monthly usage entry if it's 0
-            next if $usage eq "0";
-
-            my $month = substr( $year_month, 0, 3 );
-            my $year  = substr( $year_month, 4, 4 );
-
-            if ( !exists $yearly_usages{$year} ) {
-                $yearly_usages{$year} = $usage;
-            } else {
-                $yearly_usages{$year} += $usage;
             }
 
-            $self->_add_monthly_usage_entries(
-                $usage_object,
-                $row->{Metric_Type}, $row, $year, $month, $usage
+            # Add yearly usage statistics for this usage object
+            $self->_add_yearly_usage_entries(
+                $usage_object, $row->{Metric_Type},
+                $row,          \%yearly_usages
             );
+
+            $previous_object = $usage_object;
+
+            # Update background job step
+            $self->{job_callbacks}->{step_callback}->() if $self->{job_callbacks};
+        } catch {
+            warn $_;
         }
-
-        # Add yearly usage statistics for this usage object
-        $self->_add_yearly_usage_entries(
-            $usage_object, $row->{Metric_Type},
-            $row,          \%yearly_usages
-        );
-
-        $previous_object = $usage_object;
-
-        # Update background job step
-        $self->{job_callbacks}->{step_callback}->() if $self->{job_callbacks};
     }
 }
 

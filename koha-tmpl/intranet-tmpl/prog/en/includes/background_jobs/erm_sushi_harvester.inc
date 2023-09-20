@@ -79,6 +79,8 @@
                 <span><strong>[% m.title %]</strong> already exists in this data provider and was not created. New usage statistics were verified anyway</span>
             [% CASE 'object_added' %]
                 <span><strong>[% m.title %]</strong> successfully added</span>
+            [% CASE 'object_could_not_be_added' %]
+                <span><strong>[% m.title %]</strong> could not be processed - please check the logs</span>
             [% END %]
         </div>
     [% END %]
