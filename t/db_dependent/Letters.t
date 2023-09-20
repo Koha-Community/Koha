@@ -982,7 +982,7 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
 
 subtest 'Test guarantor handling in SendQueuedMessages' => sub {
 
-    plan tests => 7;
+    plan tests => 19;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
 
@@ -1007,8 +1007,19 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
     };
     $message_id = C4::Letters::EnqueueLetter($my_message);
 
+    # feature disabled
+    t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '0' );
+
+    warning_like { C4::Letters::SendQueuedMessages(); }
+    qr|No 'to_address', email address or guarantors email address for borrowernumber|,
+        "SendQueuedMessages fails when no to_address, patron notice email and RedirectGuaranteeEmail is not set";
+
     # feature enabled
     t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '1' );
+
+    # reset message - testing without to or borrower valid email
+    Koha::Notice::Messages->find($message_id)->delete;
+    $message_id = C4::Letters::EnqueueLetter($my_message);
 
     warning_like { C4::Letters::SendQueuedMessages(); }
     qr|Fake send_or_die|,
@@ -1036,16 +1047,69 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
     is( $email_object->email->header('To'), $guarantor1->email, "mailto correctly uses first guarantor" );
     is( $email_object->email->header('Cc'), $guarantor2->email, "cc correctly uses second guarantor" );
 
-    # feature disabled
-    t::lib::Mocks::mock_preference( 'RedirectGuaranteeEmail', '0' );
-
-    # reset message
+    # reset message - testing borrower with valid email
     Koha::Notice::Messages->find($message_id)->delete;
-
     $message_id = C4::Letters::EnqueueLetter($my_message);
+
+    $patron->email('patron@example.com')->store();
+
     warning_like { C4::Letters::SendQueuedMessages(); }
-    qr|No 'to_address', email address or guarantors email address for borrowernumber|,
-        "SendQueuedMessages fails when no to_address, patron notice email and RedirectGuaranteeEmail is not set";
+    qr|Fake send_or_die|,
+        "SendQueuedMessages is using the mocked send_or_die routine";
+
+    $message = $schema->resultset('MessageQueue')->search(
+        {
+            borrowernumber => $borrowernumber,
+            status         => 'sent'
+        }
+    )->next();
+
+    is(
+        $message->to_address(),
+        $patron->email,
+        'SendQueuedMessages uses patron email when defined'
+    );
+
+    is(
+        $message->cc_address(),
+        $guarantor1->email.",".$guarantor2->email,
+        'SendQueuedMessages sets cc address to both guarantor emails when patron has email defined'
+    );
+
+    is( $email_object->email->header('To'), $patron->email, "mailto correctly uses patrons email address" );
+    is( $email_object->email->header('Cc'), $guarantor1->email.", ".$guarantor2->email, "cc correctly uses both guarantors" );
+
+
+    # reset message - testing explicit to passed to enqueue
+    Koha::Notice::Messages->find($message_id)->delete;
+    $my_message->{'to_address'} = 'to@example.com';
+    $message_id = C4::Letters::EnqueueLetter($my_message);
+
+    warning_like { C4::Letters::SendQueuedMessages(); }
+    qr|Fake send_or_die|,
+        "SendQueuedMessages is using the mocked send_or_die routine";
+
+    $message = $schema->resultset('MessageQueue')->search(
+        {
+            borrowernumber => $borrowernumber,
+            status         => 'sent'
+        }
+    )->next();
+
+    is(
+        $message->to_address(),
+        'to@example.com',
+        'SendQueuedMessages uses to_address if it was specified at enqueue time'
+    );
+
+    is(
+        $message->cc_address(),
+        $guarantor1->email.",".$guarantor2->email,
+        'SendQueuedMessages sets cc address to both guarantor emails when "to" is already specified'
+    );
+
+    is( $email_object->email->header('To'), 'to@example.com', "mailto correctly uses passed email" );
+    is( $email_object->email->header('Cc'), $guarantor1->email.", ".$guarantor2->email, "cc correctly uses both guarantors" );
 
     # clear borrower queue
     Koha::Notice::Messages->find($message_id)->delete;
