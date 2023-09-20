@@ -17,8 +17,17 @@
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
         [% END %]
-        [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Change your password</span>
+        [% IF ( password_updated ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-passwd.pl">Change your password</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Password updated</span>
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Change your password</span>
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 

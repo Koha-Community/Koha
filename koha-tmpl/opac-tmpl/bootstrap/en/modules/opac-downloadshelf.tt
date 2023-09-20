@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
@@ -10,26 +11,23 @@
     [% INCLUDE 'bodytag.inc' bodyid='opac-downloadlist' %]
         [% INCLUDE 'masthead.inc' %]
         <div class="main">
-            <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-                    </li>
-                    [% IF ( logged_in_user ) %]
-                        <li class="breadcrumb-item"><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a></li>
+            [% WRAPPER breadcrumbs %]
+                [% IF ( logged_in_user ) %]
+                    [% WRAPPER breadcrumb_item %]
+                        <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
                     [% END %]
-                    <li class="breadcrumb-item">
-                        [% IF shelf.public %]
-                            <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1">Public lists</a>
-                        [% ELSE %]
-                            <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0">Your lists</a>
-                        [% END %]
-                    </li>
-                    <li class="breadcrumb-item active">
-                        <a href="#" aria-current="page">Download list <em>[% shelf.shelfname | html %]</em></a>
-                    </li>
-                </ul>
-            </nav> <!-- /#breadcrumbs -->
+                [% END %]
+                [% WRAPPER breadcrumb_item %]
+                    [% IF shelf.public %]
+                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=1">Public lists</a>
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0">Your lists</a>
+                    [% END %]
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Download list '[% shelf.shelfname | html %]'</span>
+                [% END %]
+            [% END #/ WRAPPER breadcrumbs %]
 
             <div class="container-fluid">
                 <div class="row">

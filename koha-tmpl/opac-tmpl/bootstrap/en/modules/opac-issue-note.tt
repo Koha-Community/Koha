@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -22,7 +23,7 @@
                 <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
             </li>
             <li class="breadcrumb-item active">
-                <a href="#" aria-current="page">Editing issue note for [% title | html %] [% author | html %]</a>
+                <a href="#" aria-current="page">Editing issue note for '[% title | html %]' [% author | html %]</a>
             </li>
         </ol>
     </nav> <!-- /#breadcrumbs -->

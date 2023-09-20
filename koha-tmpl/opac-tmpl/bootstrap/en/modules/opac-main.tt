@@ -21,22 +21,14 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-        <ol class="breadcrumb">
-            [% IF news_item %]
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-                </li>
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">[% news_item.title | html %]</a>
-                </li>
-            [% ELSE %]
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Home</a>
-                </li>
+    [% WRAPPER breadcrumbs %]
+        [% IF news_item %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% news_item.title | html %]
             [% END %]
-        </ol>
-    </nav> <!-- /#breadcrumbs -->
+        [% ELSE %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF ( loggedinusername ) %]

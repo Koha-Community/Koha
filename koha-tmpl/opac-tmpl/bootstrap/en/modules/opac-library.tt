@@ -61,25 +61,20 @@
 [% END %]
 
 <div class="main">
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-            </li>
-            [% IF ( library ) %]
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-library.pl">Libraries</a>
-                </li>
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">[% library.branchname | html %]</a>
-                </li>
-            [% ELSE %]
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Libraries</a>
-                </li>
+    [% WRAPPER breadcrumbs %]
+        [% IF ( library ) %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-library.pl">Libraries</a>
             [% END %]
-        </ol>
-    </nav> <!-- /#breadcrumbs -->
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% library.branchname | html %]
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Libraries</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     <div class="container-fluid">
         <div class="row">

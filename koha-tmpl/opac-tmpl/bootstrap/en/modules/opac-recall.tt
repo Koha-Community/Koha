@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -13,19 +14,14 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <nav aria-label="breadcrumb">
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Details for: [% biblio.title | html %]</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% biblio.biblionumber | uri %]">Place recall</a>
-            </li>
-        </ul>
-    </nav>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Details for: [% biblio.title | html %]</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Place recall</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     <div class="container-fluid">
         <div class="row">

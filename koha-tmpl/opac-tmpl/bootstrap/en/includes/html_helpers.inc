@@ -140,10 +140,16 @@
     <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
         <ol class="breadcrumb">
             [%# Include the Home link every time %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/opac-main.pl" title="Home">Home</a>
+            [% IF ( content.trim == "") # There are no other breadcrumb items, Home is the only link %]
+                [% WRAPPER breadcrumb_item bc_active = 1 %]
+                    <span>Home</span>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/opac-main.pl" title="Home">Home</a>
+                [% END %]
+                [% content | $raw %]
             [% END %]
-            [% content | $raw %]
         </ol>
     </nav>
 [% END %]
