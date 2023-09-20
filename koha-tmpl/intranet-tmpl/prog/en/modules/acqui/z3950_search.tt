@@ -218,7 +218,7 @@ tr.selected td {
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="z3950preview[% breeding_loo.breedingid | html %]">
                         <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC</a></li>
                         <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData" data-action="show_card"><i class="fa-solid fa-eye"></i> Card</a></li>
-                        <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]" class="chosen" title="Order" data-action="order"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a></li>
+                        <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]" class="chosen" title="[% tp('verb', 'Order') | html %]" data-action="order"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a></li>
                     </ul>
                 </div>
             </td>

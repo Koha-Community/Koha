@@ -532,7 +532,7 @@
                                 result += ' <span class="caret"></span> ';
                             result += '</button>';
                             result += '<ul class="dropdown-menu" aria-labelledby="view' + row.order_id + '">';
-                                result += '<li><a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '" class="previewData">' + _("Order") + '</a></li>';
+                                result += '<li><a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '" class="previewData">[% tp("noun", "Order") | html %]</a></li>';
                                 result += '<li><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("MARC") + '</a></li>';
                                 result += '<li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("Card") + '</a></li>';
                             result += '</ul>';
