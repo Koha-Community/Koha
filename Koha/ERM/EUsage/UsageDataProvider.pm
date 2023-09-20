@@ -104,10 +104,11 @@ sub enqueue_sushi_harvest_jobs {
 
         my $job_id = Koha::BackgroundJob::ErmSushiHarvester->new->enqueue(
             {
-                ud_provider_id => $self->erm_usage_data_provider_id,
-                report_type    => $report_type,
-                begin_date     => $args->{begin_date},
-                end_date       => $args->{end_date},
+                ud_provider_id       => $self->erm_usage_data_provider_id,
+                report_type          => $report_type,
+                begin_date           => $args->{begin_date},
+                end_date             => $args->{end_date},
+                ud_provider_name     => $self->name,
             }
         );
 
@@ -172,7 +173,6 @@ sub harvest_sushi {
     $self->{report_type} = $args->{report_type};
     $self->{begin_date}  = $args->{begin_date};
     $self->{end_date}    = $args->{end_date};
-
     my $url      = $self->_build_url_query;
     my $request  = HTTP::Request->new( 'GET' => $url );
     my $ua       = LWP::UserAgent->new;

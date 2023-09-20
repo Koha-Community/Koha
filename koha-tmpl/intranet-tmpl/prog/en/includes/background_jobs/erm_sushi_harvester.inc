@@ -51,6 +51,17 @@
                 </table>
             [% ELSIF job.status == 'started' %]
                 <p id="jobactionlabel"></p>
+            [% ELSIF job.status == 'failed' %]
+                <table id="finishedtable">
+                    <tr>
+                        <td>Usage data provider</td>
+                        <td><a id="failed_provider_name" href="/cgi-bin/koha/erm/eusage/usage_data_providers/[% report.ud_provider_id %]" title="Visit usage data provider"></a></td>
+                    </tr>
+                    <tr>
+                        <td>Report type</td>
+                        <td id="failed_report_type"></td>
+                    </tr>
+                </table>
             [% END %]
             [% IF job.status != 'finished' %]
                 [% INCLUDE "job_progress.inc" job_id=job.id %]
@@ -111,6 +122,12 @@
                     });
                 }
             });
+            
+            let job_data = [% job.data %];
+            let report_type = job_data.report_type;
+            let ud_provider_name = job_data.ud_provider_name;
+            $('#failed_report_type').text(report_type);
+            $('#failed_provider_name').text(ud_provider_name);
         });
 
 </script>
