@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
@@ -39,50 +40,97 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/cgi-bin/koha/opac-main.pl">Home</a></li>
-                [% IF ( GetAvailability ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetAvailability</a></li>
-                [% ELSIF ( GetRecords ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetRecords</a></li>
-                [% ELSIF ( GetAuthorityRecords ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetAuthorityRecords</a></li>
-                [% ELSIF ( LookupPatron ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">LookupPatron</a></li>
-                [% ELSIF ( AuthenticatePatron ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">AuthenticatePatron</a></li>
-                [% ELSIF ( GetPatronInfo ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetPatronInfo</a></li>
-                [% ELSIF ( GetPatronStatus ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetPatronStatus</a></li>
-                [% ELSIF ( GetServices ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">GetServices</a></li>
-                [% ELSIF ( RenewLoan ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">RenewLoan</a></li>
-                [% ELSIF ( HoldTitle ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">HoldTitle</a></li>
-                [% ELSIF ( HoldItem ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">HoldItem</a></li>
-                [% ELSIF ( CancelHold ) %]
-                    <li class="breadcrumb-item"><a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a></li>
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">CancelHold</a></li>
-                [% ELSE %]
-                    <li class="breadcrumb-item active"><a href="#" aria-current="page">ILS-DI</a></li>
+        [% WRAPPER breadcrumbs %]
+            [% IF ( GetAvailability ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
                 [% END %]
-            </ol>
-        </nav> <!-- /#breadcrumbs -->
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>GetAvailability</span>
+                [% END %]
+            [% ELSIF ( GetRecords ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>GetRecords</span>
+                [% END %]
+            [% ELSIF ( GetAuthorityRecords ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>GetAuthorityRecords</span>
+                [% END %]
+            [% ELSIF ( LookupPatron ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>LookupPatron</span>
+                [% END %]
+            [% ELSIF ( AuthenticatePatron ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>AuthenticatePatron</span>
+                [% END %]
+            [% ELSIF ( GetPatronInfo ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>GetPatronInfo</span>
+                [% END %]
+            [% ELSIF ( GetPatronStatus ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>GetPatronStatus</span>
+                [% END %]
+            [% ELSIF ( GetServices ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>GetServices</span>
+                [% END %]
+            [% ELSIF ( RenewLoan ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>RenewLoan</span>
+                [% END %]
+            [% ELSIF ( HoldTitle ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>HoldTitle</span>
+                [% END %]
+            [% ELSIF ( HoldItem ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>HoldItem</span>
+                [% END %]
+            [% ELSIF ( CancelHold ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/ilsdi.pl">ILS-DI</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>CancelHold</span>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>ILS-DI</span>
+                [% END %]
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
 
         <div class="container-fluid">
             <div class="row">

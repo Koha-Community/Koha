@@ -12,16 +12,11 @@
 <form id="advsearch_form" action="/cgi-bin/koha/opac-search.pl" method="get">
     <input type="hidden" name="advsearch" value="1"/>
     <div class="main">
-        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-                </li>
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">Advanced search</a>
-                </li>
-            </ol>
-        </nav> <!-- /#breadcrumbs -->
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Advanced search</span>
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
 
         <div class="container-fluid">
             <div class="row">

@@ -21,19 +21,14 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
-                </li>
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">[% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]</a>
-                </li>
-            </ol>
-        </nav> <!-- /#breadcrumbs -->
+        [% WRAPPER breadcrumbs %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
 
         <div class="container-fluid">
             <div class="row">
