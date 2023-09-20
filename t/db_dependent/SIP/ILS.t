@@ -329,6 +329,16 @@ subtest renew => sub {
     );
     t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
 
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rule_name    => 'renewalsallowed',
+            rule_value   => '5',
+        }
+    );
+
     my $item = $builder->build_sample_item(
         {
             library => $library->branchcode,
