@@ -149,7 +149,7 @@
 
     <fieldset class="rows" id="optionalfilters">
             <legend>Optional filters for inventory list or comparing barcodes</legend>
-            <span class="hint">Scanned items are expected to match one of the selected <em>not for loan</em> critera if any are checked.</span>
+            <span class="hint">Scanned items are expected to match one of the selected <em>not for loan</em> criteria if any are checked.</span>
             <br/>
             <div id="statuses" style="display: block;">
                   [% FOREACH status IN statuses %]
@@ -313,7 +313,7 @@
                     <span>Found in wrong place</span><br/>
                 [% ELSIF problem.key == 'changestatus' %]
                     [% IF result.notforloan %]
-                        <span>Item has unselected <em>Not for loan</em> status <em>[% result.notforloan %]</em></span><br/>
+                        <span>Item has unselected <em>Not for loan</em> status <em>[% result.notforloan | html %]</em></span><br/>
                     [% ELSE %]
                         <span>Items has no <em>not for loan</em> status</span><br/>
                     [% END %]

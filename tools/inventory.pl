@@ -411,7 +411,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
             if( $key eq 'wrongplace' ) {
                 $errstr .= "wrong place,";
             } elsif( $key eq 'changestatus' ) {
-                $errstr .= "unknown notforloan status,";
+                $errstr .= "unselected notforloan status $item->{notforloan},";
             } elsif( $key eq 'not_scanned' ) {
                 $errstr .= "missing,";
             } elsif( $key eq 'no_barcode' ) {
