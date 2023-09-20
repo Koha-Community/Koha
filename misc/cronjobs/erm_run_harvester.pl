@@ -54,7 +54,7 @@ unless ($begin_date) {
     die "ERROR: Please specify a begin-date";
 }
 
-debug_msg("Dry run: Harvests will not be enqueued");
+debug_msg("Dry run: Harvests will not be enqueued") if $dry_run;
 while ( my $udprovider = $udproviders->next ) {
     debug_msg(
         sprintf(
@@ -63,7 +63,7 @@ while ( my $udprovider = $udproviders->next ) {
     );
 
     my $harvest_begin_date = dt_from_string($begin_date);
-    my $harvest_end_date   = $end_date || dt_from_string();
+    my $harvest_end_date   = dt_from_string($end_date) || dt_from_string();
 
     if ( $harvest_begin_date > $harvest_end_date ) {
         die sprintf(
