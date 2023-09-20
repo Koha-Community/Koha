@@ -599,64 +599,89 @@ subtest 'test_allow_additional_materials_checkout' => sub {
 
     plan tests => 4;
 
-    my $builder = t::lib::TestBuilder->new();
-    my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
-    my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
+    my $builder     = t::lib::TestBuilder->new();
+    my $branchcode  = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $branchcode2 = $builder->build( { source => 'Branch' } )->{branchcode};
     my ( $response, $findpatron );
     my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
 
     # create some data
-    my $patron1 = $builder->build({
-        source => 'Borrower',
-        value  => {
-            password => hash_password( PATRON_PW ),
-        },
-    });
-    my $card1 = $patron1->{cardnumber};
-    my $sip_patron1 = C4::SIP::ILS::Patron->new( $card1 );
+    my $patron1 = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                password => hash_password(PATRON_PW),
+            },
+        }
+    );
+    my $card1       = $patron1->{cardnumber};
+    my $sip_patron1 = C4::SIP::ILS::Patron->new($card1);
     $findpatron = $sip_patron1;
-    my $item_object = $builder->build_sample_item({
-        damaged => 0,
-        withdrawn => 0,
-        itemlost => 0,
-        restricted => 0,
-        homebranch => $branchcode,
-        holdingbranch => $branchcode,
-        materials => "This is a materials note",
-    });
+    my $item_object = $builder->build_sample_item(
+        {
+            damaged       => 0,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode,
+            materials     => "This is a materials note",
+        }
+    );
 
     my $mockILS = $mocks->{ils};
-    my $server = { ils => $mockILS, account => {} };
+    my $server  = { ils => $mockILS, account => {} };
     $mockILS->mock( 'institution', sub { $branchcode; } );
-    $mockILS->mock( 'supports', sub { return; } );
-    $mockILS->mock( 'checkout', sub {
-        shift;
-        return C4::SIP::ILS->checkout(@_);
-    });
+    $mockILS->mock( 'supports',    sub { return; } );
+    $mockILS->mock(
+        'checkout',
+        sub {
+            shift;
+            return C4::SIP::ILS->checkout(@_);
+        }
+    );
     my $today = dt_from_string;
-    t::lib::Mocks::mock_userenv({ branchcode => $branchcode, flags => 1 });
-    t::lib::Mocks::mock_preference( 'CircConfirmItemParts',  '1' );
+    t::lib::Mocks::mock_userenv( { branchcode => $branchcode, flags => 1 } );
+    t::lib::Mocks::mock_preference( 'CircConfirmItemParts', '1' );
 
-    my $siprequest = CHECKOUT . 'YN' . siprequestdate($today) .
-    siprequestdate( $today->clone->add( days => 1) ) .
-    FID_INST_ID . $branchcode . '|'.
-    FID_PATRON_ID . $sip_patron1->id . '|' .
-    FID_ITEM_ID . $item_object->barcode . '|' .
-    FID_TERMINAL_PWD . 'ignored' . '|';
+    my $siprequest =
+          CHECKOUT . 'YN'
+        . siprequestdate($today)
+        . siprequestdate( $today->clone->add( days => 1 ) )
+        . FID_INST_ID
+        . $branchcode . '|'
+        . FID_PATRON_ID
+        . $sip_patron1->id . '|'
+        . FID_ITEM_ID
+        . $item_object->barcode . '|'
+        . FID_TERMINAL_PWD
+        . 'ignored' . '|';
     undef $response;
 
     my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
     $server->{account}->{allow_additional_materials_checkout} = 0;
-    $msg->handle_checkout( $server );
+    $msg->handle_checkout($server);
     my $respcode = substr( $response, 0, 2 );
-    check_field( $respcode, $response, FID_SCREEN_MSG, 'Item must be checked out at a circulation desk', 'Check screen msg', 'equals' );
-    is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 0, "Item was not checked out (allow_additional_materials_checkout disabled)");
+    check_field(
+        $respcode,          $response, FID_SCREEN_MSG, 'Item must be checked out at a circulation desk',
+        'Check screen msg', 'equals'
+    );
+    is(
+        Koha::Checkouts->search( { itemnumber => $item_object->id } )->count, 0,
+        "Item was not checked out (allow_additional_materials_checkout disabled)"
+    );
 
     $server->{account}->{allow_additional_materials_checkout} = 1;
-    $msg->handle_checkout( $server );
+    $msg->handle_checkout($server);
     $respcode = substr( $response, 0, 2 );
-    check_field( $respcode, $response, FID_SCREEN_MSG, 'Item has additional materials: This is a materials note', 'Check screen msg', 'equals' );
-    is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 1, "Item was checked out (allow_additional_materials_checkout enabled");
+    check_field(
+        $respcode,          $response, FID_SCREEN_MSG, 'Item has additional materials: This is a materials note',
+        'Check screen msg', 'equals'
+    );
+    is(
+        Koha::Checkouts->search( { itemnumber => $item_object->id } )->count, 1,
+        "Item was checked out (allow_additional_materials_checkout enabled"
+    );
 };
 
 # Here is room for some more subtests

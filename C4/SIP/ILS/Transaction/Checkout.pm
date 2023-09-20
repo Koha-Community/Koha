@@ -40,17 +40,17 @@ sub new {
 }
 
 sub do_checkout {
-	my $self = shift;
-    my $account = shift;
-    my $no_block_due_date = shift;
-	siplog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
-    my $shelf          = $self->{item}->hold_attached;
-	my $barcode        = $self->{item}->id;
-    my $patron         = Koha::Patrons->find($self->{patron}->{borrowernumber});
-    my $overridden_duedate; # usually passed as undef to AddIssue
-    my $prevcheckout_block_checkout  = $account->{prevcheckout_block_checkout};
-    my $allow_additional_materials_checkout = $account->{allow_additional_materials_checkout};
-    my ($issuingimpossible, $needsconfirmation, $messages) = _can_we_issue($patron, $barcode, 0);
+        my $self              = shift;
+        my $account           = shift;
+        my $no_block_due_date = shift;
+        siplog( 'LOG_DEBUG', "ILS::Transaction::Checkout performing checkout..." );
+        my $shelf   = $self->{item}->hold_attached;
+        my $barcode = $self->{item}->id;
+        my $patron  = Koha::Patrons->find( $self->{patron}->{borrowernumber} );
+        my $overridden_duedate;    # usually passed as undef to AddIssue
+        my $prevcheckout_block_checkout         = $account->{prevcheckout_block_checkout};
+        my $allow_additional_materials_checkout = $account->{allow_additional_materials_checkout};
+        my ( $issuingimpossible, $needsconfirmation, $messages ) = _can_we_issue( $patron, $barcode, 0 );
 
     if ( $no_block_due_date ) {
         my $year = substr($no_block_due_date,0,4);
@@ -65,50 +65,52 @@ sub do_checkout {
     }
 
     my $noerror=1;  # If set to zero we block the issue
-    if (keys %{$issuingimpossible}) {
-        foreach (keys %{$issuingimpossible}) {
+    if ( keys %{$issuingimpossible} ) {
+        foreach ( keys %{$issuingimpossible} ) {
+
             # do something here so we pass these errors
             $self->screen_msg("Issue failed : $_");
             $noerror = 0;
             last;
         }
     } else {
-        foreach my $confirmation (keys %{$needsconfirmation}) {
-            if ($confirmation eq 'RENEW_ISSUE'){
+        foreach my $confirmation ( keys %{$needsconfirmation} ) {
+            if ( $confirmation eq 'RENEW_ISSUE' ) {
                 $self->screen_msg("Item already checked out to you: renewing item.");
-            } elsif ($confirmation eq 'RESERVED' and !C4::Context->preference("AllowItemsOnHoldCheckoutSIP")) {
+            } elsif ( $confirmation eq 'RESERVED' and !C4::Context->preference("AllowItemsOnHoldCheckoutSIP") ) {
                 $self->screen_msg("Item is reserved for another patron upon return.");
                 $noerror = 0;
-            } elsif ($confirmation eq 'RESERVED' and C4::Context->preference("AllowItemsOnHoldCheckoutSIP")) {
+            } elsif ( $confirmation eq 'RESERVED' and C4::Context->preference("AllowItemsOnHoldCheckoutSIP") ) {
                 next;
-            } elsif ($confirmation eq 'RESERVE_WAITING'
-                      or $confirmation eq 'TRANSFERRED'
-                      or $confirmation eq 'PROCESSING') {
-               $self->screen_msg("Item is on hold for another patron.");
-               $noerror = 0;
-            } elsif ($confirmation eq 'ISSUED_TO_ANOTHER') {
+            } elsif ( $confirmation eq 'RESERVE_WAITING'
+                or $confirmation eq 'TRANSFERRED'
+                or $confirmation eq 'PROCESSING' )
+            {
+                $self->screen_msg("Item is on hold for another patron.");
+                $noerror = 0;
+            } elsif ( $confirmation eq 'ISSUED_TO_ANOTHER' ) {
                 $self->screen_msg("Item already checked out to another patron.  Please return item for check-in.");
                 $noerror = 0;
                 last;
-            } elsif ($confirmation eq 'DEBT') {
+            } elsif ( $confirmation eq 'DEBT' ) {
                 $self->screen_msg('Outstanding Fines block issue');
                 $noerror = 0;
                 last;
-            } elsif ($confirmation eq 'HIGHHOLDS') {
+            } elsif ( $confirmation eq 'HIGHHOLDS' ) {
                 $overridden_duedate = $needsconfirmation->{$confirmation}->{returndate};
                 $self->screen_msg('Loan period reduced for high-demand item');
-            } elsif ($confirmation eq 'RENTALCHARGE') {
-                if ($self->{fee_ack} ne 'Y') {
+            } elsif ( $confirmation eq 'RENTALCHARGE' ) {
+                if ( $self->{fee_ack} ne 'Y' ) {
                     $noerror = 0;
                     last;
                 }
-            } elsif ($confirmation eq 'PREVISSUE') {
+            } elsif ( $confirmation eq 'PREVISSUE' ) {
                 $self->screen_msg("This item was previously checked out by you");
                 $noerror = 0 if ($prevcheckout_block_checkout);
                 last;
             } elsif ( $confirmation eq 'ADDITIONAL_MATERIALS' ) {
-                if ( $allow_additional_materials_checkout ) {
-                    my $item = Koha::Items->find({ barcode => $barcode });
+                if ($allow_additional_materials_checkout) {
+                    my $item = Koha::Items->find( { barcode => $barcode } );
                     $self->screen_msg( 'Item has additional materials: ' . $item->materials );
                 } else {
                     $self->screen_msg('Item must be checked out at a circulation desk');
@@ -120,10 +122,11 @@ sub do_checkout {
                 $noerror = 0;
                 last;
             } else {
+
                 # We've been returned a case other than those above
                 $self->screen_msg("Item cannot be issued: $confirmation");
                 $noerror = 0;
-                siplog('LOG_DEBUG', "Blocking checkout Reason:$confirmation");
+                siplog( 'LOG_DEBUG', "Blocking checkout Reason:$confirmation" );
                 last;
             }
         }
