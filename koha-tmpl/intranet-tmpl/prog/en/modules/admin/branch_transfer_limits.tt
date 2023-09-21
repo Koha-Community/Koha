@@ -33,6 +33,7 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
+                [% INCLUDE 'messages.inc' %]
 
     <h1>
         [% tx("Library transfer limits for {library_name} ({library_code})", { library_name = Branches.GetName( branchcode), library_code = branchcode } ) | html %]

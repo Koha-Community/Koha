@@ -13,6 +13,7 @@
         <div class="main container-fluid">
             <h1>Preview notice template</h1>
             [% FOR m IN messages %]
+                    [% INCLUDE 'messages.inc' %]
                 [%# FIXME The message block does not appear at the top of the modal! %]
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]

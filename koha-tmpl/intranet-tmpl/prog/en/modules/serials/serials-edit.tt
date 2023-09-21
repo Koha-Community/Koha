@@ -100,6 +100,7 @@ $(document).ready(function() {
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
+                [% INCLUDE 'messages.inc' %]
 
 <h1>Serial edition <em>[% bibliotitle | html %]</em>
     [% IF location %] ([% AuthorisedValues.GetByCode('LOC', location) | html %])[% END %]

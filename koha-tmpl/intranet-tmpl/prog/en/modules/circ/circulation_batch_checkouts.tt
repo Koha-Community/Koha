@@ -50,12 +50,12 @@
             <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         [% END %]
             <main>
+                [% INCLUDE 'messages.inc' %]
                 [% IF patron %]
                     [% INCLUDE 'members-toolbar.inc' %]
                 [% END %]
 
                 <h1>Batch check out</h1>
-
 
 [% IF patron and not batch_allowed %]
   <div class="dialog alert">You are not allowed to use batch checkout for this patron</div>

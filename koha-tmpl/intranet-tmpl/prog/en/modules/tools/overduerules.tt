@@ -33,6 +33,7 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
+                [% INCLUDE 'messages.inc' %]
 
         <h1>Defining [% IF ( branch ) %]overdue actions for [% Branches.GetName( branch ) | html %][% ELSE %]default overdue actions[% END %]</h1>
         <div class="help">
