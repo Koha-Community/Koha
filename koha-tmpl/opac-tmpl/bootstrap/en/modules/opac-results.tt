@@ -34,31 +34,30 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-                </li>
-                [% IF ( searchdesc ) %]
-                    [% IF ( ReturnPath ) %]
-                        <li class="breadcrumb-item">
-                            <a href="[% ReturnPath | url %]">Advanced search</a>
-                        </li>
+        [% WRAPPER breadcrumbs %]
+            [% IF ( searchdesc ) %]
+                [% IF ( ReturnPath ) %]
+                    [% WRAPPER breadcrumb_item %]
+                        <a href="[% ReturnPath | url %]">Advanced search</a>
                     [% END %]
-                    <li class="breadcrumb-item active">
-                        [% IF ( ms_value ) %]
-                            <a href="#" aria-current="page" title="You searched [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]">Results of search for '[% ms_value | html %]'[% IF ( pages > 1) %], page [% current_page_number | html %] of [% pages | html %][% END %]</a>
-                        [% ELSE %]
-                            <a href="#" aria-current="page" title="You searched [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]">Search results</a>
-                        [% END %]
-                    </li>
                 [% ELSE %]
-                    <li class="breadcrumb-item active">
-                        <a href="#" aria-current="page">You did not specify any search criteria</a>
-                    </li>
+                    [% WRAPPER breadcrumb_item %]
+                        <a href="/cgi-bin/koha/opac-search.pl">Advanced search</a>
+                    [% END %]
                 [% END %]
-            </ol>
-        </nav> <!-- /#breadcrumbs -->
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    [% IF ( ms_value ) %]
+                        <span title="You searched [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]">Results of search for '[% ms_value | html %]'[% IF ( pages > 1) %], page [% current_page_number | html %] of [% pages | html %][% END %]</span>
+                    [% ELSE %]
+                        <span title="You searched [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]">Search results</span>
+                    [% END %]
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>You did not specify any search criteria</span>
+                [% END %]
+            [% END %]
+        [% END #/ WRAPPER breadcrumbs %]
 
         [% UNLESS ( total ) %]
             <div class="container-fluid">
@@ -123,9 +122,9 @@
                 [% END # / IF searchdesc %]
 
                 <div id="userresults">
-                    [% IF ( DidYouMean ) %]
+                    [% #IF ( DidYouMean ) %]
                         <div id="didyoumean">Not what you expected? Check for <a href="/cgi-bin/koha/svc/suggestion?render=standalone&amp;q=[% querystring | uri %]">suggestions</a></div>
-                    [% END %]
+                    [% #END %]
 
                     [% IF ( koha_spsuggest ) %]
                         Did you mean:

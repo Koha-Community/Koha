@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
@@ -14,16 +15,11 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-            </li>
-            <li class="breadcrumb-item active">
-                <a href="#" aria-current="page">Placing a hold</a>
-            </li>
-        </ol>
-    </nav> <!-- /#breadcrumbs -->
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Placing a hold</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     <div class="container">
         <div id="holds" class="maincontent">

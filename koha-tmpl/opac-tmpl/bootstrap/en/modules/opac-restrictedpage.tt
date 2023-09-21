@@ -22,18 +22,15 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumbs">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-               <a href="/cgi-bin/koha/opac-main.pl">Home</a>
-            </li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF Koha.Preference('RestrictedPageTitle') %]
-                <li class="breadcrumb-item active">
-                    <a href="#" aria-current="page">[% Koha.Preference('RestrictedPageTitle') | html %]</a>
-                </li>
+                [% Koha.Preference('RestrictedPageTitle') | html %]
+            [% ELSE %]
+                <span>Restricted page</span>
             [% END %]
-        </ol>
-    </nav> <!-- /#breadcrumbs -->
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
 
     <div class="container-fluid">
         <div class="row">
