@@ -1244,7 +1244,7 @@ sub handle_item_information {
         ModDateLastSeen( $item->itemnumber, $seen eq 'keep_lost' ) if $seen;
 
         # Valid Item ID, send the good stuff
-        my $circulation_status = $item->sip_circulation_status;
+        my $circulation_status = $item->sip_circulation_status($server);
         $resp .= $circulation_status;
         $resp .= $item->sip_security_marker;
         $resp .= $item->sip_fee_type;

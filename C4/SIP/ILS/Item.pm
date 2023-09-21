@@ -262,11 +262,18 @@ sub title_id {
 
 sub sip_circulation_status {
     my $self = shift;
+    my $server = shift;
+
+    my $missing_status = $server->{account}->{missing_lost_status};
+
     if ( $self->{_object}->get_transfer ) {
         return '10'; # in transit between libraries
     }
     elsif ( Koha::Checkouts::ReturnClaims->search({ itemnumber => $self->{_object}->id, resolution => undef })->count ) {
         return '11';    # claimed returned
+    }
+    elsif ( $missing_status && $self->{itemlost} && $missing_status eq $self->{itemlost} ) {
+        return '13';    # missing
     }
     elsif ( $self->{itemlost} ) {
         return '12';    # lost

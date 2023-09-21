@@ -1126,7 +1126,7 @@ RULES
 };
 
 subtest item_circulation_status => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -1185,6 +1185,8 @@ subtest item_circulation_status => sub {
     $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
     $status   = $sip_item->sip_circulation_status;
     is( $status, '12', "Item circulation status is lost" );
+    $status = $sip_item->sip_circulation_status( { account => { missing_lost_status => "1" } } );
+    is( $status, '13', "Item circulation status is missing" );
     $item->itemlost(0)->store();
 
     my $location = $item->location;
