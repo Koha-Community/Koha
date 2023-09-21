@@ -132,14 +132,14 @@
                                         <label for="category" class="required">Category: </label>
                                         <input type="text" name="category"  id="category" size="32" maxlength="32" class="focus required" />
                                         <span class="required">Required</span>
-                                        <input type="hidden" name="op" value="add_category" />
+                                        <input type="hidden" name="op-cud" value="add_category" />
                                     </li>
                                 </ol>
                             [% ELSE %]
                                 <ol>
                                     <li>
                                         <span class="label">Category</span>
-                                        <input type="hidden" name="op" value="add" />
+                                        <input type="hidden" name="op-cud" value="add" />
                                         <input type="hidden" name="category" value="[% category_name | html %]" /> [% category_name | html %]
                                     </li>
                                     <li>
@@ -314,7 +314,7 @@
                                 [% UNLESS category.is_system %]
                                     <form id="delete_category" action="/cgi-bin/koha/admin/authorised_values.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
-                                        <input type="hidden" name="op" value="delete_category" />
+                                        <input type="hidden" name="op-cud" value="delete_category" />
                                         <input type="hidden" name="category_name" value="[% category.category_name | html %]" />
                                         <button type="submit"><i class="fa fa-plus"></i> Delete category '[% category.category_name | html %]' </button>
                                     </form>

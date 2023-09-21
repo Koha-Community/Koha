@@ -158,7 +158,7 @@
 <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
     [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
-    <input type="hidden" name="op" value="duplicate_budget" />
+    <input type="hidden" name="op-cud" value="duplicate_budget" />
     <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
 
     <ol>
@@ -231,7 +231,7 @@
     <!-- ################################################################################# -->
     <!-- display information about the budget period that must be added or modified -->
     <!-- ################################################################################# -->
-    <input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="op-cud" value="add_validate" />
     <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
     <ol>
     <li>
@@ -320,7 +320,7 @@
 
     <form action="[% script_name | html %]" method="post">
         [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="delete_confirmed" />
+        <input type="hidden" name="op-cud" value="delete_confirmed" />
         <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
         <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
     </form>
@@ -391,7 +391,7 @@
             </ol>
           </fieldset>
           <fieldset class="action">
-              <input type="hidden" name="op" value="close_confirmed" />
+              <input type="hidden" name="op-cud" value="close_confirmed" />
               <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
               <input type="submit" class="btn btn-primary" value="Move unreceived orders" />
               <a class="cancel" href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Cancel</a>

@@ -81,7 +81,7 @@
                                                     <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
                                                         [% INCLUDE 'csrf-token.inc' %]
                                                         <input type="hidden" name="recall_id" value="[% recall.id | html %]">
-                                                        <input type="hidden" name="op" value="modify">
+                                                        <input type="hidden" name="op-cud" value="modify">
                                                         <fieldset class="action">
                                                             <button type="submit" name="revert" value="revert" class="btn btn-default btn-sm revert_recall"><i class="fa fa-undo"></i> Revert waiting status</button>
                                                             <button type="submit" name="expire" value="expire" class="btn btn-default btn-sm expire_recall"><i class="fa fa-undo"></i> Expire recall</button>
@@ -126,7 +126,7 @@
                                                         <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="recall_id" value="[% recall.id | html %]">
-                                                            <input type="hidden" name="op" value="modify">
+                                                            <input type="hidden" name="op-cud" value="modify">
                                                             <fieldset class="action">
                                                                 <button type="submit" name="revert" value="revert" class="btn btn-default btn-sm revert_recall"><i class="fa fa-undo"></i> Revert waiting status</button>
                                                                 <button type="submit" name="expire" value="expire" class="btn btn-default btn-sm expire_recall"><i class="fa fa-undo"></i> Expire recall</button>

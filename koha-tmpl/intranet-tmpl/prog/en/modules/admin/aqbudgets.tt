@@ -297,7 +297,7 @@
     <fieldset class="rows">
         <legend class="sr-only">Fund details</legend>
 
-    <input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="op-cud" value="add_validate" />
     <input type="hidden" name="checked" value="0" />
     <ol>
     [% IF ( budget_parent_id ) %]
@@ -470,7 +470,7 @@
 
         <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="op-cud" value="delete_confirmed" />
             <input type="hidden" name="budget_id" value="[% budget_id | html %]" />
             <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this fund</button>

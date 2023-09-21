@@ -57,7 +57,7 @@
 
         <form method="post" action="/cgi-bin/koha/admin/transport-cost-matrix.pl" id="cost_matrix_form">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="set-cost-matrix" />
+            <input type="hidden" name="op-cud" value="set-cost-matrix" />
             <fieldset id="transport-cost-matrix">
                 <div class="help">
                     <p>Costs are decimal values between some arbitrary maximum value (e.g. 1 or 100) and 0 which is the minimum (no) cost.</p>

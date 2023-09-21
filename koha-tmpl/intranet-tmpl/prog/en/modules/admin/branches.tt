@@ -129,7 +129,7 @@
     <form action="/cgi-bin/koha/admin/branches.pl" id="Aform" name="Aform" class="validated" method="post">
         [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
-            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="op-cud" value="add_validate" />
             [% IF library %]
                 <input type="hidden" name="is_a_modif" value="1" />
             [% END %]
@@ -321,7 +321,7 @@
         <form action="/cgi-bin/koha/admin/branches.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
             <h1>Are you sure you want to delete [% library.branchname | html %] ([% library.branchcode | html %])?</h1>
-            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="op-cud" value="delete_confirmed" />
             <input type="hidden" name="branchcode" value="[% library.branchcode | html %]" />
             <input type="hidden" name="branchname" value="[% library.branchname | html %]">
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>

@@ -106,7 +106,7 @@
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Return</legend>
-                                    <input type="hidden" name="op" value="returnbook" />
+                                    <input type="hidden" name="op-cud" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
@@ -118,7 +118,7 @@
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Error</legend>
-                                <input type="hidden" name="op" value="" />
+                                <input type="hidden" name="op-cud" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                 <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
@@ -139,7 +139,7 @@
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Return</legend>
-                                    <input type="hidden" name="op" value="returnbook" />
+                                    <input type="hidden" name="op-cud" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
@@ -153,7 +153,7 @@
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Renew</legend>
-                                    <input type="hidden" name="op" value="renew" />
+                                    <input type="hidden" name="op-cud" value="renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
@@ -165,7 +165,7 @@
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Renew</legend>
-                                    <input type="hidden" name="op" value="renew" />
+                                    <input type="hidden" name="op-cud" value="renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
@@ -178,7 +178,7 @@
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Cancel</legend>
-                                <input type="hidden" name="op" value="" />
+                                <input type="hidden" name="op-cud" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                 <input type="hidden" name="newissues" value="[% newissues | html %]" />
@@ -284,7 +284,7 @@
                                         </div>
                                         <div class="col ml-auto">
                                             <button type="button" id="logout_form" class="btn btn-info"><i class="fa fa-check" aria-hidden="true"></i> Finish</button>
-                                            <input type="hidden" name="op" value="checkout" />
+                                            <input type="hidden" name="op-cud" value="checkout" />
                                             <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                             <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                             <input type="hidden" name="newissues" value="[% newissues | html %]" />
@@ -391,7 +391,7 @@
                                                             <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
                                                             <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                                             [% IF ISSUE.can_be_renewed %]
-                                                                <input type="hidden" name="op" value="renew" />
+                                                                <input type="hidden" name="op-cud" value="renew" />
                                                                 <input type="hidden" name="confirmed" value="1" />
                                                                 [% UNLESS ( ISSUE.renew ) %]
                                                                     <input type="submit" value="Renew item"  name="confirm  " class="btn btn-primary btn-sm renew" />
@@ -411,7 +411,7 @@
                                                                 [% IF Koha.Preference('SCOAllowCheckin') %]
                                                                     <div>
                                                                         <input type="submit" value="Check in item" name="confirm" class="btn btn-info btn-sm return" />
-                                                                        <input type="hidden" name="op" value="returnbook" />
+                                                                        <input type="hidden" name="op-cud" value="returnbook" />
                                                                         <input type="hidden" name="confirmed" value=""  />
                                                                     </div>
                                                                 [% END %]
@@ -481,7 +481,7 @@
                                         [% FOREACH INPUT IN INPUTS %]
                                             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]">
                                         [% END %]
-                                        <input type="hidden" name="op" value="login" />
+                                        <input type="hidden" name="op-cud" value="login" />
                                     </fieldset>
                                 </form>
                             </div> <!-- / .sco_entry -->

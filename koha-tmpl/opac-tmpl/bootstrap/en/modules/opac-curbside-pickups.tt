@@ -185,7 +185,7 @@
                                                     <td>
                                                         <form method="post">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="arrival-alert" />
+                                                            <input type="hidden" name="op-cud" value="arrival-alert" />
                                                             <input type="hidden" name="pickup_id" value="[% p.id | html %]" />
                                                             [% IF ! p.staged_datetime || p.arrival_datetime %]
                                                             <button class="btn disabled" disabled href="#" >
@@ -198,7 +198,7 @@
                                                         <p>
                                                         <form method="post">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="cancel-pickup" />
+                                                            <input type="hidden" name="op-cud" value="cancel-pickup" />
                                                             <input type="hidden" name="pickup_id" value="[% p.id | html %]" />
                                                             [% IF p.delivered_datetime %]
                                                                 <button class="btn disabled" disabled href="#" >
@@ -256,7 +256,7 @@
                                         </fieldset>
 
                                         <fieldset class="action">
-                                            <input type="hidden" name="op" value="create-pickup" />
+                                            <input type="hidden" name="op-cud" value="create-pickup" />
                                             <input type="submit" id="schedule-pickup-button" class="btn btn-default" disabled value="Schedule pickup" />
                                         </fieldset>
                                     </form>

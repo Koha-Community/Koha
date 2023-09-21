@@ -111,7 +111,7 @@
 
 <form action="/cgi-bin/koha/admin/currency.pl" name="Aform" method="post" class="validated">
     [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="op-cud" value="add_validate" />
     <fieldset class="rows">
         <legend class="sr-only">New currency entry form</legend>
         <ol>
@@ -198,7 +198,7 @@
         </table>
         <form action="/cgi-bin/koha/admin/currency.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="op-cud" value="delete_confirmed" />
             <input type="hidden" name="currency_code" value="[% currency.currency | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this currency</button>
         </form>

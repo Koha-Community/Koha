@@ -85,7 +85,7 @@
 [% IF ean_form %]
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" name="Eanform" method="post">
     [% INCLUDE 'csrf-token.inc' %]
-  <input type="hidden" name="op" value="save" />
+  <input type="hidden" name="op-cud" value="save" />
   [% IF ean %]
       <input type="hidden" name="oldbranchcode" value="[% ean.branch.branchcode | html %]" />
       <input type="hidden" name="id" value="[% ean.id | html %]" />
@@ -162,7 +162,7 @@
 
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="post">
     [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="op" value="delete_confirmed" />
+    <input type="hidden" name="op-cud" value="delete_confirmed" />
     <input type="hidden" name="id" value="[% ean.id | html %]" />
     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
 </form>

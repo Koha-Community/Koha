@@ -58,10 +58,10 @@ fieldset.rows table { clear: none; margin: 0; }
                 <div class="row" id="page_1">
                     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                         [% IF ( modify ) %]
-                            <input type="hidden" name="op" value="modsubscription" />
+                            <input type="hidden" name="op-cud" value="modsubscription" />
                             <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
                         [% ELSE %]
-                                <input type="hidden" name="op" value="addsubscription" />
+                                <input type="hidden" name="op-cud" value="addsubscription" />
                         [% END %]
                         <input type="hidden" name="user" value="[% logged_in_user.userid | html %]" />
                         <input type="hidden" name="irreg_check" value="0" />

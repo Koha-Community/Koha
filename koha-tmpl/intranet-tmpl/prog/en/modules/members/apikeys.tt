@@ -64,7 +64,7 @@
                 <form id="add-api-key" action="/cgi-bin/koha/members/apikeys.pl" method="post" style="display:none">
                     <input type="hidden" name="patron_id" value="[% patron.id | html %]" />
                     [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="op" value="generate" />
+                    <input type="hidden" name="op-cud" value="generate" />
                     <fieldset class="brief">
                         <legend>Generate new client id/secret pair</legend>
                         <ol>
@@ -103,7 +103,7 @@
                                                 <input type="hidden" name="patron_id" value="[% patron.id | html %]" />
                                                 <input type="hidden" name="key" value="[% key.id | html %]" />
                                                 [% INCLUDE 'csrf-token.inc' %]
-                                                <input type="hidden" name="op" value="delete" />
+                                                <input type="hidden" name="op-cud" value="delete" />
                                                 <button class="btn btn-default btn-xs delete" type="submit"><i class="fa fa-trash-can"></i> Delete</button>
                                             </form>
                                             <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
@@ -111,10 +111,10 @@
                                                 <input type="hidden" name="key" value="[% key.id | html %]" />
                                                 [% INCLUDE 'csrf-token.inc' %]
                                                 [% IF key.active %]
-                                                    <input type="hidden" name="op" value="revoke" />
+                                                    <input type="hidden" name="op-cud" value="revoke" />
                                                     <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-times"></i> Revoke</button>
                                                 [% ELSE %]
-                                                    <input type="hidden" name="op" value="activate" />
+                                                    <input type="hidden" name="op-cud" value="activate" />
                                                     <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-play"></i> Activate</button>
                                                 [% END %]
                                             </form>

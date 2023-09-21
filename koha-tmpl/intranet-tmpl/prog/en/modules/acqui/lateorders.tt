@@ -55,7 +55,7 @@
 [% IF lateorders.size %]
 <form action="lateorders.pl" name="claim" method="post">
     [% INCLUDE 'csrf-token.inc' %]
-  <input type="hidden" name="op" value="send_alert" />
+  <input type="hidden" name="op-cud" value="send_alert" />
   <input type="hidden" name="delay" value="[% delay | html %]" />
   <input type="hidden" name="booksellerid" value="[% bookseller_filter.id | html %]" />
 	[% IF ( letters ) %]
@@ -290,7 +290,7 @@
                 <div class="modal-body">
                 <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes | html %]</textarea>
                 <input type="hidden" id="notes_ordernumber" name="ordernumber" value="" />
-                <input type="hidden" name="op" value="save" />
+                <input type="hidden" name="op-cud" value="save" />
                 <input type="hidden" id="type" name="type" value="" />
             </div>
             <div class="modal-footer">
@@ -316,7 +316,7 @@
                 <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | html %]"/>
                 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                 <input type="hidden" id="date_ordernumber" name="ordernumber" value="" />
-                <input type="hidden" name="op" value="save" />
+                <input type="hidden" name="op-cud" value="save" />
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-default">Save</button>

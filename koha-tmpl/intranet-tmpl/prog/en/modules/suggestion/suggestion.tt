@@ -632,7 +632,7 @@
 
                 <fieldset class="action">
                     <input type="hidden" id="returnsuggested" name="returnsuggested" value="[% IF ( returnsuggestedby ) %][% returnsuggestedby | html %][% ELSE %]noone[% END %]"/>
-                    <input type="hidden" name="op" value="[% op | html %]" />
+                    <input type="hidden" name="op-cud" value="[% op | html %]" />
                     [% IF ( suggestionid ) %]
                         [% IF ( need_confirm ) %]
                             <input type="hidden" name="save_confirmed" value="1" />

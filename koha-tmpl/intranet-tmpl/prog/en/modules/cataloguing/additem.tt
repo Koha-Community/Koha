@@ -177,7 +177,7 @@
 <div id="cataloguing_additem_newitem" class="item_edit_form page-section">
     <form id="f" method="post" action="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblio.biblionumber | html %]" name="f">
         [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="op" value="[% op | html %]" />
+    <input type="hidden" name="op-cud" value="[% op | html %]" />
     [% IF (popup) %]
         <input type="hidden" name="popup" value="1" />
     [% END %]

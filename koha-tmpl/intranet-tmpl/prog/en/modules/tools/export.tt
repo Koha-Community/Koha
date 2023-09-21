@@ -190,7 +190,7 @@
                         </li>
                     </ol>
                 </fieldset>
-                <input type="hidden" name="op" value="export" />
+                <input type="hidden" name="op-cud" value="export" />
                 <input type="hidden" name="record_type" value="bibs" />
                 <fieldset class="action">
                     <input type="submit" class="btn btn-primary" value="Export bibliographic records" />
@@ -266,7 +266,7 @@
                     </ol>
                 </fieldset>
 
-                <input type="hidden" name="op" value="export" />
+                <input type="hidden" name="op-cud" value="export" />
                 <input type="hidden" name="record_type" value="auths" />
 
                 <fieldset class="action"><input type="submit" class="btn btn-primary" value="Export authority records" /></fieldset>
@@ -292,7 +292,7 @@
                     </fieldset>
 
                     [% IF ( dbfiles && (dbfiles.size > 0) ) %]
-                        <input type="hidden" name="op" value="export" />
+                        <input type="hidden" name="op-cud" value="export" />
                         <input type="hidden" name="record_type" value="db" />
                         <fieldset class="action"><input type="submit" class="btn btn-primary" value="Download database" /></fieldset>
                     [% END %]
@@ -319,7 +319,7 @@
                     </fieldset>
 
                     [% IF ( conffiles && (conffiles.size > 0) ) %]
-                        <input type="hidden" name="op" value="export" />
+                        <input type="hidden" name="op-cud" value="export" />
                         <input type="hidden" name="record_type" value="conf" />
                         <fieldset class="action"><input type="submit" class="btn btn-primary" value="Download configuration" /></fieldset>
                     [% END %]

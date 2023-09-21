@@ -108,7 +108,7 @@
                                             <div class="btn-group">
                                                 <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                                     [% INCLUDE 'csrf-token.inc' %]
-                                                    <input type="hidden" name="op" value="email" />
+                                                    <input type="hidden" name="op-cud" value="email" />
                                                     <input type="hidden" name="basketno" value="[% basketno | html %]" />
                                                     <button type="submit" class="btn btn-default" id="emailvendorbutton"><i class="fa-solid fa-envelope"></i> E-mail order</button>
                                                 </form>
@@ -331,7 +331,7 @@
                                                                 </div>
                                                                 <input type="hidden" id="basketno" name="basketno" value="[% basketno | html %]" />
                                                                 <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
-                                                                <input type="hidden" id="op" name="op" value="mod_users" />
+                                                                <input type="hidden" id="op" name="op-cud" value="mod_users" />
                                                             </form>
 
                                                         </li> <!-- /#managedby -->
@@ -363,7 +363,7 @@
                                                                         </select>
                                                                         <a id="library_entry_cancel" href="#" class="cancel">Cancel</a>
                                                                         <input type="hidden" id="basketno" name="basketno" value="[% basketno | html %]" />
-                                                                        <input type="hidden" id="op" name="op" value="mod_branch" />
+                                                                        <input type="hidden" id="op" name="op-cud" value="mod_branch" />
                                                                     </form>
                                                                 </div>
                                                             </li> <!-- #/managing_library_entry -->
@@ -428,7 +428,7 @@
                                                                             </select>
                                                                             <a href="#" id="basket_group_cancel" class="cancel">Cancel</a>
                                                                             <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
-                                                                            <input type="hidden" value="mod_basket" name="op" />
+                                                                            <input type="hidden" value="mod_basket" name="op-cud" />
                                                                             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                                                         </form>
                                                                     </div>
@@ -927,7 +927,7 @@
                     <div class="modal-body">
                         <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes | html %]</textarea>
                         <input type="hidden" id="ordernumber" name="ordernumber" value="" />
-                        <input type="hidden" name="op" value="save" />
+                        <input type="hidden" name="op-cud" value="save" />
                         <input type="hidden" id="type" name="type" value="" />
                     </div>
                     <div class="modal-footer">
@@ -953,7 +953,7 @@
                         <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% books_loo.estimated_delivery_date | html %]"/>
                         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                         <input type="hidden" id="date_ordernumber" name="ordernumber" value="" />
-                        <input type="hidden" name="op" value="save" />
+                        <input type="hidden" name="op-cud" value="save" />
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-default">Save</button>

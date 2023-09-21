@@ -291,14 +291,14 @@
                                 <fieldset class="action">
                                     <input type="hidden" name="suggested_by_anyone" value="[% suggested_by_anyone | html %]" />
                                     [% IF need_confirm # Confirm that we want a duplicate %]
-                                        <input type="hidden" name="op" value="add_confirm" />
+                                        <input type="hidden" name="op-cud" value="add_confirm" />
                                         <input type="submit" class="btn btn-primary" value="Confirm your suggestion" />
                                     [% ELSIF biblionumber # Create from an existing title %]
-                                        <input type="hidden" name="op" value="add_confirm" />
+                                        <input type="hidden" name="op-cud" value="add_confirm" />
                                         <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                                         <input type="submit" class="btn btn-primary" value="Submit your suggestion" />
                                     [% ELSE # Not created from an existing title, search for possible duplicate %]
-                                        <input type="hidden" name="op" value="add_validate" />
+                                        <input type="hidden" name="op-cud" value="add_validate" />
                                         <input type="submit" class="btn btn-primary" value="Submit your suggestion" />
                                     [% END %]
                                     <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a>
@@ -374,7 +374,7 @@
                                 [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="delete_suggestions">
                                     [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op" value="delete_confirm" />
+                                    <input type="hidden" name="op-cud" value="delete_confirm" />
                                     [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                         <div id="toolbar" class="toolbar clearfix">
                                         [% IF ( Koha.Preference('MaxTotalSuggestions') != '' && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]

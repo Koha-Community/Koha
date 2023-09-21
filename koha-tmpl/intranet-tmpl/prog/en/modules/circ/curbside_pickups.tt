@@ -218,7 +218,7 @@
                                                     <td>
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="mark-as-staged"/>
+                                                            <input type="hidden" name="op-cud" value="mark-as-staged"/>
                                                             <input type="hidden" name="tab" value="to-be-staged"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
@@ -228,7 +228,7 @@
 
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="cancel"/>
+                                                            <input type="hidden" name="op-cud" value="cancel"/>
                                                             <input type="hidden" name="tab" value="to-be-staged"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
@@ -279,7 +279,7 @@
                                                     <td>
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="mark-patron-has-arrived"/>
+                                                            <input type="hidden" name="op-cud" value="mark-patron-has-arrived"/>
                                                             <input type="hidden" name="tab" value="staged-and-ready"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
@@ -289,7 +289,7 @@
 
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="mark-as-delivered"/>
+                                                            <input type="hidden" name="op-cud" value="mark-as-delivered"/>
                                                             <input type="hidden" name="tab" value="staged-and-ready"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
@@ -299,7 +299,7 @@
 
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="mark-as-unstaged"/>
+                                                            <input type="hidden" name="op-cud" value="mark-as-unstaged"/>
                                                             <input type="hidden" name="tab" value="staged-and-ready"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
@@ -350,7 +350,7 @@
                                                     <td>
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="mark-as-delivered"/>
+                                                            <input type="hidden" name="op-cud" value="mark-as-delivered"/>
                                                             <input type="hidden" name="tab" value="patron-is-outside"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
@@ -360,7 +360,7 @@
 
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="mark-as-staged"/>
+                                                            <input type="hidden" name="op-cud" value="mark-as-staged"/>
                                                             <input type="hidden" name="tab" value="patron-is-outside"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
@@ -370,7 +370,7 @@
 
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="mark-as-unstaged"/>
+                                                            <input type="hidden" name="op-cud" value="mark-as-unstaged"/>
                                                             <input type="hidden" name="tab" value="patron-is-outside"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
@@ -452,7 +452,7 @@
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset class="rows" style="float: none;">
                                         <input type="hidden" name="borrowernumber" value="[% patron.id | html %]"/>
-                                        <input type="hidden" name="op" value="create-pickup"/>
+                                        <input type="hidden" name="op-cud" value="create-pickup"/>
                                         <input type="hidden" name="tab" value="schedule-pickup"/>
                                         <ol>
                                             <li>

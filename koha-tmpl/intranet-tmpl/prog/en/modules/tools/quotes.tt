@@ -85,7 +85,7 @@
     <form action="/cgi-bin/koha/tools/quotes.pl" id="Aform" name="Aform" class="validated" method="post">
         [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
-            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="op-cud" value="add_validate" />
             <ol>
                 <li>
                     <label for="text" class="required">Source: </label>
@@ -113,7 +113,7 @@
             [% INCLUDE 'csrf-token.inc' %]
             <h1>Are you sure you want to delete the following quote?</h1>
             [% quote.source | html %] - [% quote.text | html %]
-            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="op-cud" value="delete_confirmed" />
             <input type="hidden" name="id" value="[% quote.id | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>

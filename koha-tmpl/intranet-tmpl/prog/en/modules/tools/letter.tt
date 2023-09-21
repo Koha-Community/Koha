@@ -245,7 +245,7 @@
                                                 [% IF !independant_branch || !lette.branchcode %]
                                                     <form method="post" action="/cgi-bin/koha/tools/letter.pl">
                                                         [% INCLUDE 'csrf-token.inc' %]
-                                                        <input type="hidden" name="op" value="copy_form" />
+                                                        <input type="hidden" name="op-cud" value="copy_form" />
                                                         <input type="hidden" name="oldbranchcode" value="[% lette.branchcode | html %]" />
                                                         <input type="hidden" name="module" value="[% lette.module | html %]" />
                                                         <input type="hidden" name="code" value="[% lette.code | html %]" />
@@ -307,9 +307,9 @@
                     <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" class="validate">
                         [% INCLUDE 'csrf-token.inc' %]
                         [% IF add_form %]
-                            <input type="hidden" name="op" id="op" value="add_validate" />
+                            <input type="hidden" name="op-cud" id="op" value="add_validate" />
                         [% ELSE %]
-                            <input type="hidden" name="op" id="op" value="copy_validate" />
+                            <input type="hidden" name="op-cud" id="op" value="copy_validate" />
                         [% END %]
 
                         <input type="hidden" name="checked" value="0" />
@@ -531,7 +531,7 @@
                         </table>
                         <form action="[% action | html %]" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="delete_confirmed">
+                            <input type="hidden" name="op-cud" value="delete_confirmed">
                             <input type="hidden" name="branchcode" value="[% letter.branchcode | html %]" />
                             <input type="hidden" name="code" value="[% letter.code | html %]" />
                             <input type="hidden" name="module" value="[% letter.module | html %]" />

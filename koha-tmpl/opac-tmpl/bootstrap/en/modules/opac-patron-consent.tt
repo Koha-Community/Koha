@@ -34,7 +34,7 @@
                 <div id="patronconsents" class="maincontent">
                     <form action="/cgi-bin/koha/opac-patron-consent.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="save"/>
+                        <input type="hidden" name="op-cud" value="save"/>
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
                         <h1>Your consents</h1>
                         [% FOREACH consent IN consents %]

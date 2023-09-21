@@ -62,10 +62,10 @@
                 [% INCLUDE 'csrf-token.inc' %]
             [% IF ( op_new ) %]
                 <h1>New OAI set</h1>
-                <input type="hidden" name="op" value="savenew" />
+                <input type="hidden" name="op-cud" value="savenew" />
             [% ELSIF ( op_mod ) %]
                 <h1>[% tx("Modify OAI set '{oai_set}'", { oai_set = spec }) | html %]</h1>
-                    <input type="hidden" name="op" value="savemod" />
+                    <input type="hidden" name="op-cud" value="savemod" />
                     <input type="hidden" name="id" value="[% id | html %]" />
             [% END %]
                 <fieldset id="oaidetails" class="rows">

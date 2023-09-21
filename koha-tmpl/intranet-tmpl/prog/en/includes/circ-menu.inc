@@ -227,7 +227,7 @@
                             <input type="hidden" id="cardnumber" name="cardnumber" value="[% patron.cardnumber | html %]" />
                             <input type="hidden" id="borrowernumber" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                             <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-upload"></i> Upload photo</button>
-                            <input name="op" type="hidden" value="Upload" />
+                            <input name="op-cud" type="hidden" value="Upload" />
                             [% IF ( patron.image ) %]
                                 <a id="delpicture"
                                     href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;csrf_token=[% csrf_token | html %]"
@@ -266,7 +266,7 @@
                         <input type="hidden" name="filetype" value="image" />
                         <input type="hidden" name="cardnumber" value="[% patron.cardnumber | html %]" />
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                        <input name="op" type="hidden" value="Upload" />
+                        <input name="op-cud" type="hidden" value="Upload" />
                     </form>
                 </div>
                 <div class="dialog message" style="display:none" id="camera-error">

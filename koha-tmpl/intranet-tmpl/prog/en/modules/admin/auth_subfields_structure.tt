@@ -102,7 +102,7 @@
     <div class="hint">You can drag and drop the subfield tabs to change the order.</div>
     <form action="[% script_name | html %]" name="Aform" method="post">
         [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="add_validate" />
+        <input type="hidden" name="op-cud" value="add_validate" />
         <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
         <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
         <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
@@ -305,7 +305,7 @@
         <h1>Confirm deletion of subfield <span class="ex">'[% ass.tagsubfield | html %]'?</span></h1>
         <form action="[% delete_link | html %]" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="op-cud" value="delete_confirmed" />
             <table>
                 <tr><th scope="row">Subfield:</th> <td>[% ass.tagsubfield | html %]</td></tr>
                 <tr><th scope="row">Description:</th> <td>[% ass.liblibrarian | html_entity %]</td></tr>

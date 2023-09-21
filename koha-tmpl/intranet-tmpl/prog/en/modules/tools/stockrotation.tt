@@ -215,7 +215,7 @@
                         [% IF rota.rota_id %]
                             <input type="hidden" name="id" value="[% rota.rota_id | html %]">
                         [% END %]
-                        <input type="hidden" name="op" value="process_rota">
+                        <input type="hidden" name="op-cud" value="process_rota">
                     </form>
 
                 [% ELSIF (op == 'manage_stages') %]
@@ -278,7 +278,7 @@
                                     <div class="modal-footer">
                                         <input type="hidden" name="stage_id" value="[% stage.id | html %]">
                                         <input type="hidden" name="rota_id" value="[% rota_id | html %]">
-                                        <input type="hidden" name="op" value="process_stage">
+                                        <input type="hidden" name="op-cud" value="process_stage">
                                         <button type="submit" class="btn btn-primary">Save</button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                     </div> <!-- /.modal-footer -->
@@ -373,7 +373,7 @@
                         </fieldset>
                         <input type="hidden" name="stage_id" value="[% stage.id | html %]">
                         <input type="hidden" name="rota_id" value="[% rota_id | html %]">
-                        <input type="hidden" name="op" value="process_stage">
+                        <input type="hidden" name="op-cud" value="process_stage">
                     </form>
                 [% ELSIF (op == 'confirm_remove_from_rota') %]
 
@@ -467,7 +467,7 @@
                                     </div> <!-- /.modal-body -->
                                     <div class="modal-footer">
                                         <input type="hidden" name="rota_id" value="[% rota.id | html %]">
-                                        <input type="hidden" name="op" value="add_items_to_rota">
+                                        <input type="hidden" name="op-cud" value="add_items_to_rota">
                                         <button type="submit" class="btn btn-primary">Save</button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                     </div> <!-- /.modal-footer -->
@@ -615,7 +615,7 @@
                                 <input type="submit" class="btn btn-primary" value="Save" />
                             </fieldset>
                             <input type="hidden" name="rota_id" value="[% rota_id | html %]">
-                            <input type="hidden" name="op" value="move_items_to_rota">
+                            <input type="hidden" name="op-cud" value="move_items_to_rota">
                         </form>
                     [% END %]
                     <p><a href="?op=manage_items&amp;rota_id=[% rota_id | uri %]">Return to rota</a></p>

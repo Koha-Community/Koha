@@ -70,7 +70,7 @@
             [% IF ( table ) %]
                 <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="op" value="save" />
+                    <input type="hidden" name="op-cud" value="save" />
                     <input type="hidden" name="branch" value="[% branch | html %]" />
                     <h3>Rules for overdue actions: [% IF ( branch ) %][% Branches.GetName( branch ) | html %][% ELSE %] default library [% END %]</h3>
                         [% IF ( datasaved ) %]<div class="dialog message">Changes saved.</div> [% END %]

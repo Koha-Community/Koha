@@ -127,7 +127,7 @@
                                     <form action="/cgi-bin/koha/recalls/recalls_to_pull.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="recall_id" value="[% recall.first_recall.id | html %]">
-                                        <input type="hidden" name="op" value="cancel">
+                                        <input type="hidden" name="op-cud" value="cancel">
                                         [% IF recall.first_recall.in_transit %]
                                             <button type="submit" class="btn btn-default btn-sm cancelreturn"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.first_recall.item.homebranch) | html %]</button>
                                         [% ELSE %]

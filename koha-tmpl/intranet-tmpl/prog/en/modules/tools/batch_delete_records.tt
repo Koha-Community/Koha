@@ -143,7 +143,7 @@
         [% END # /WRAPPER tabs %]
 
       <fieldset class="action">
-        <input type="hidden" name="op" value="list" />
+        <input type="hidden" name="op-cud" value="list" />
         <input type="submit" class="btn btn-primary" value="Continue" />
         <a class="cancel" href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cancel</a>
       </fieldset>
@@ -219,7 +219,7 @@
           <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will delete all selected authorities!</div>
       [% END %]
         <fieldset class="action">
-          <input type="hidden" name="op" value="delete" />
+          <input type="hidden" name="op-cud" value="delete" />
           <input type="hidden" name="recordtype" value="[% recordtype | html %]" />
           <input type="submit" class="btn btn-primary" value="Delete selected records" />
           <a class="cancel" href="/cgi-bin/koha/tools/batch_delete_records.pl">Cancel</a>

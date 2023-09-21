@@ -211,7 +211,7 @@
                 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="transferform" method="post">
                     [% INCLUDE 'csrf-token.inc' %]
                     <fieldset>
-                        <input type="hidden" name="op" value="transfer" />
+                        <input type="hidden" name="op-cud" value="transfer" />
                         <input type="hidden" name="public" value="1" />
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
 
@@ -245,7 +245,7 @@
                     <div class="pages">[% pagination_bar | $raw %]</div>
                     <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="remove_biblios" />
+                        <input type="hidden" name="op-cud" value="remove_biblios" />
                         <input type="hidden" name="referer" value="view" />
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
 
@@ -400,10 +400,10 @@
                     <fieldset class="rows">
                         [% IF op == 'add_form' %]
                             <legend><h1>Create a new list</h1></legend>
-                            <input type="hidden" name="op" value="add" />
+                            <input type="hidden" name="op-cud" value="add" />
                         [% ELSE %]
                             <legend><h1>Edit list <em>[% shelf.shelfname | html %]</em></h1></legend>
-                            <input type="hidden" name="op" value="edit" />
+                            <input type="hidden" name="op-cud" value="edit" />
                         [% END %]
                         <input type="hidden" name="referer" value="[% referer | html %]" />
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -572,14 +572,14 @@
                                 <li>
                                     <label for="barcodes">Barcodes:</label>
                                     <textarea name="barcodes" id="barcodes" rows="5"></textarea>
-                                    <input type="hidden" name="op" value="add_biblio" />
+                                    <input type="hidden" name="op-cud" value="add_biblio" />
                                     <input type="hidden" name="referer" value="view" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                 </li>
                                 <li>
                                     <label for="biblionumbers">Biblio numbers:</label>
                                     <textarea name="biblionumbers" id="biblionumbers" rows="5"></textarea>
-                                    <input type="hidden" name="op" value="add_biblio" />
+                                    <input type="hidden" name="op-cud" value="add_biblio" />
                                     <input type="hidden" name="referer" value="view" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                 </li>

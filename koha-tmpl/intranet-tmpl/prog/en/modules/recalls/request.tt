@@ -44,7 +44,7 @@
             <div class="page-section">
                 <form method="post" action="/cgi-bin/koha/recalls/request.pl">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="op" value="cancel_multiple_recalls">
+                    <input type="hidden" name="op-cud" value="cancel_multiple_recalls">
                     <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]">
                     <input type="checkbox" id="select_all"> <span id="select_all_text">Select all</span>
                     [% INCLUDE 'recalls.inc' %]

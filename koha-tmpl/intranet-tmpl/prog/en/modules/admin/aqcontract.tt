@@ -104,7 +104,7 @@
                 <div class="page-section">
                     <form name="Aform" action="/cgi-bin/koha/admin/aqcontract.pl" id="add_modify_contract" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="add_validate" />
+                        <input type="hidden" name="op-cud" value="add_validate" />
                         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                         <input type="hidden" name="checked" value="0" />
                         [% IF ( contractnumber ) %]
@@ -165,7 +165,7 @@
                         </table>
                         <form action="[% script_name | html %]" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="delete_confirmed" />
+                            <input type="hidden" name="op-cud" value="delete_confirmed" />
                             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                             <input type="hidden" name="contractnumber" value="[% contractnumber | html %]" />
                             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete contract</button>

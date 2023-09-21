@@ -90,7 +90,7 @@
                                                     <div class="notice">
                                                         <form id="resend_notice[% QUEUED_MESSAGE.message_id | html %]" action="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | html %]" method="POST">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op" value="resend_notice" />
+                                                            <input type="hidden" name="op-cud" value="resend_notice" />
                                                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                                             <input type="hidden" name="message_id" value="[% QUEUED_MESSAGE.message_id | html %]" />
                                                         </form>

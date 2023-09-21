@@ -235,7 +235,7 @@
                                                             <input type="submit" name="submit" class="submit" value="Set status" disabled="disabled"/>
                                                             <p class="help-block">Item has been claimed as returned.</p>
                                                         [% ELSE %]
-                                                            <input type="hidden" name="op" value="set_lost" />
+                                                            <input type="hidden" name="op-cud" value="set_lost" />
                                                             <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
                                                         [% END %]
                                                     </form>
@@ -271,7 +271,7 @@
                                                                 [% END %]
                                                             [% END %]
                                                         </select>
-                                                        <input type="hidden" name="op" value="set_damaged" />
+                                                        <input type="hidden" name="op-cud" value="set_damaged" />
                                                         <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
                                                     </form>
                                                 [% ELSE %]
@@ -306,7 +306,7 @@
                                                                 [% END %]
                                                             [% END %]
                                                         </select>
-                                                        <input type="hidden" name="op" value="set_withdrawn" />
+                                                        <input type="hidden" name="op-cud" value="set_withdrawn" />
                                                         <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Set status" />
                                                     </form>
                                                 [% ELSE %]
@@ -346,7 +346,7 @@
                                                         <option value="0" selected>No</option>
                                                     [% END %]
                                                 </select>
-                                                <input type="hidden" name="op" value="set_exclude_priority" />
+                                                <input type="hidden" name="op-cud" value="set_exclude_priority" />
                                                 <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                             </form>
                                         </li>
@@ -367,7 +367,7 @@
                                                         <option value="0" selected="selected">No</option>
                                                         [% END %]
                                                     </select>
-                                                    <input type="hidden" name="op" value="set_bookable" />
+                                                    <input type="hidden" name="op-cud" value="set_bookable" />
                                                     <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                                 </form>
                                             [% ELSE %]
@@ -474,7 +474,7 @@
                                                 <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                                                     [% INCLUDE 'csrf-token.inc' %]
                                                     <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                                    <input type="hidden" name="op" value="set_public_note" />
+                                                    <input type="hidden" name="op-cud" value="set_public_note" />
                                                     <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes | html %]</textarea><input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                                 </form>
                                             [% ELSE %]
@@ -488,7 +488,7 @@
                                                 <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                                                     [% INCLUDE 'csrf-token.inc' %]
                                                     <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                                    <input type="hidden" name="op" value="set_non_public_note" />
+                                                    <input type="hidden" name="op-cud" value="set_non_public_note" />
                                                     <textarea name="itemnotes_nonpublic" rows="2" cols="30">[% ITEM_DAT.itemnotes_nonpublic | html %]</textarea><input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                                 </form>
                                             [% ELSE %]

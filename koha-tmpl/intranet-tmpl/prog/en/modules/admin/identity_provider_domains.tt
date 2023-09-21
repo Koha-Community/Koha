@@ -88,7 +88,7 @@
 
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="add" />
+            <input type="hidden" name="op-cud" value="add" />
             <input type="hidden" name="domain_ops" value="1" />
             <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
             <fieldset class="rows">
@@ -170,7 +170,7 @@
 
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="edit_save" />
+            <input type="hidden" name="op-cud" value="edit_save" />
             <input type="hidden" name="domain_ops" value="1" />
             <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
             <input type="hidden" name="identity_provider_domain_id" value="[%- identity_provider_domain.identity_provider_domain_id | html -%]" />
