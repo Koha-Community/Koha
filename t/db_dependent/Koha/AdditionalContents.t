@@ -52,7 +52,7 @@ subtest 'Koha::AdditionalContents basic test' => sub {
         content => 'content for news 1',
         lang    => 'default',
     };
-    $new_news_item_1->translated_contents([$content_1]);
+    $new_news_item_1->translated_contents( [$content_1] );
     my $new_news_item_2 = Koha::AdditionalContent->new(
         {
             category   => 'news',
@@ -66,14 +66,17 @@ subtest 'Koha::AdditionalContents basic test' => sub {
         content => 'content for news 2',
         lang    => 'default',
     };
-    $new_news_item_2->translated_contents([$content_2]);
+    $new_news_item_2->translated_contents( [$content_2] );
 
-    like( $new_news_item_1->id, qr|^\d+$|, 'Adding a new news_item should have set the id');
+    like( $new_news_item_1->id, qr|^\d+$|, 'Adding a new news_item should have set the id' );
     is( Koha::AdditionalContents->search->count, $nb_of_news + 2, 'The 2 news should have been added' );
 
     my $retrieved_news_item_1 = Koha::AdditionalContents->find( $new_news_item_1->id )->translated_contents->next;
-    is( $retrieved_news_item_1->title, $content_1->{title}, 'Find a news_item by id should return the correct news_item' );
-    is( $retrieved_news_item_1->content, $content_1->{content}, 'The content method return the content of the news');
+    is(
+        $retrieved_news_item_1->title, $content_1->{title},
+        'Find a news_item by id should return the correct news_item'
+    );
+    is( $retrieved_news_item_1->content, $content_1->{content}, 'The content method return the content of the news' );
 
     my $default_content = $new_news_item_2->default_localization;
     is( $default_content->content, $content_2->{content}, 'default_localization return the default content' );
@@ -82,9 +85,15 @@ subtest 'Koha::AdditionalContents basic test' => sub {
     $default_content = $new_news_item_2->default_localization;
     is( $default_content->content, $content_2->{content}, 'default_localization still return the default content' );
     my $retrieved_translated_content = $new_news_item_2->translated_content('en');
-    is( $retrieved_translated_content->content, $content_2->{content}, 'default content is returned for non-existing translated interface' );
+    is(
+        $retrieved_translated_content->content, $content_2->{content},
+        'default content is returned for non-existing translated interface'
+    );
     $retrieved_translated_content = $new_news_item_2->translated_content('nl-NL');
-    is( $retrieved_translated_content->content, $translated_content->{content}, 'translated content is returned if it existsOB' );
+    is(
+        $retrieved_translated_content->content, $translated_content->{content},
+        'translated content is returned if it existsOB'
+    );
 
     $new_news_item_1->delete;
     is( Koha::AdditionalContents->search->count, $nb_of_news + 1, 'Delete should have deleted the news_item' );
@@ -167,7 +176,7 @@ subtest '->author' => sub {
 
     $author->delete;
 
-    $news_item = Koha::AdditionalContents->find($news_item->id);
+    $news_item = Koha::AdditionalContents->find( $news_item->id );
     is( ref($news_item), 'Koha::AdditionalContent', 'News are not deleted alongwith the author' );
     is( $news_item->author, undef, '->author returns undef is the author has been deleted' );
 
@@ -199,7 +208,7 @@ subtest '->search_for_display' => sub {
             number => 1,
         }
     });
-    $new_expired->translated_contents( [ { lang => 'default', content => ''} ] );
+    $new_expired->translated_contents( [ { lang => 'default', content => '' } ] );
     my $new_not_expired = $builder->build_object({
         class => 'Koha::AdditionalContents',
         value => {
@@ -283,27 +292,40 @@ subtest 'find_best_match' => sub {
     plan tests => 3;
     $schema->storage->txn_begin;
 
-    my $library01 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $html01 = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => { category => 'html_customizations', location => 'test_best_match', branchcode => undef },
-    });
-    my ( $default_content ) = $html01->translated_contents( [ { lang => 'default', content => '' } ] )->as_list;
+    my $library01 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $html01    = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => { category => 'html_customizations', location => 'test_best_match', branchcode => undef },
+        }
+    );
+    my ($default_content) = $html01->translated_contents( [ { lang => 'default', content => '' } ] )->as_list;
     my $params = { category => 'html_customizations', location => 'test_best_match', lang => 'nl-NL' };
-    is( Koha::AdditionalContents->find_best_match($params)->id, $default_content->id, 'Found all branches, lang default' );
+    is(
+        Koha::AdditionalContents->find_best_match($params)->id, $default_content->id,
+        'Found all branches, lang default'
+    );
 
-    my $html02 = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => { category => 'html_customizations', location => 'test_best_match', branchcode => undef },
-    });
-    my ( $translated_content ) = $html02->translated_contents( [ { lang => 'nl-NL', content => '' } ] )->as_list;
-    is( Koha::AdditionalContents->find_best_match($params)->id, $translated_content->id, 'Found all branches, lang nl-NL' );
+    my $html02 = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => { category => 'html_customizations', location => 'test_best_match', branchcode => undef },
+        }
+    );
+    my ($translated_content) = $html02->translated_contents( [ { lang => 'nl-NL', content => '' } ] )->as_list;
+    is(
+        Koha::AdditionalContents->find_best_match($params)->id, $translated_content->id,
+        'Found all branches, lang nl-NL'
+    );
 
-    $params->{ library_id } = $library01->id;
+    $params->{library_id} = $library01->id;
     $html02->branchcode( $library01->id )->store;
-    is( Koha::AdditionalContents->find_best_match($params)->id, $translated_content->id, 'Found library01, lang nl-NL' );
+    is(
+        Koha::AdditionalContents->find_best_match($params)->id, $translated_content->id,
+        'Found library01, lang nl-NL'
+    );
 
     # Note: find_best_match is tested further via $libary->opac_info; see t/db_dependent/Koha/Library.t
 
     $schema->storage->txn_rollback;
-}
+    }

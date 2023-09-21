@@ -77,7 +77,7 @@ if ( $op eq 'add_form' ) {
     );
 }
 elsif ( $op eq 'add_validate' ) {
-    output_and_exit_if_error($cgi, $cookie, $template, { check => 'csrf_token' });
+    output_and_exit_if_error( $cgi, $cookie, $template, { check => 'csrf_token' } );
     my $location   = $cgi->param('location');
     my $code       = $cgi->param('code');
     my $branchcode = $cgi->param('branchcode') || undef;
@@ -93,15 +93,15 @@ elsif ( $op eq 'add_validate' ) {
             sub {
                 my $additional_content;
                 my $params = {
-                        location       => $location,
-                        branchcode     => $branchcode,
-                        expirationdate => $expirationdate,
-                        published_on   => $published_on,
-                        number         => $number,
-                        borrowernumber => $borrowernumber,
-                    };
+                    location       => $location,
+                    branchcode     => $branchcode,
+                    expirationdate => $expirationdate,
+                    published_on   => $published_on,
+                    number         => $number,
+                    borrowernumber => $borrowernumber,
+                };
 
-                if ( $id ) {
+                if ($id) {
                     $additional_content = Koha::AdditionalContents->find($id);
                     $additional_content->set($params)->store;
                 } else {
@@ -117,9 +117,9 @@ elsif ( $op eq 'add_validate' ) {
                 unless ($code) {
                     $additional_content->discard_changes;
                     $code =
-                      $category eq 'news'
-                      ? 'News_' . $additional_content->id
-                      : $location . '_' . $additional_content->id;
+                        $category eq 'news'
+                        ? 'News_' . $additional_content->id
+                        : $location . '_' . $additional_content->id;
                     $additional_content->code($code)->store;
                     $id = $additional_content->id;
                 }
@@ -142,16 +142,19 @@ elsif ( $op eq 'add_validate' ) {
                     };
 
                     my $existing_content = $existing_contents->find($id);
-                    if ( $existing_content ) {
+                    if ($existing_content) {
                         if ( $existing_content->title ne $title || $existing_content->content ne $content ) {
                             if ( C4::Context->preference("NewsLog") ) {
-                                logaction('NEWS', 'MODIFY' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content));
+                                logaction(
+                                    'NEWS', 'MODIFY', undef,
+                                    sprintf( "%s|%s|%s|%s", $code, $title, $lang, $content )
+                                );
                             }
                         } else {
                             $translated_content->{updated_on} = $existing_content->updated_on;
                         }
-                    } elsif( C4::Context->preference("NewsLog") ) {
-                        logaction('NEWS', 'ADD' , undef, sprintf("%s|%s|%s|%s", $code, $title, $lang, $content))
+                    } elsif ( C4::Context->preference("NewsLog") ) {
+                        logaction( 'NEWS', 'ADD', undef, sprintf( "%s|%s|%s|%s", $code, $title, $lang, $content ) );
                     }
 
                     push @translated_contents, $translated_content;
@@ -159,10 +162,10 @@ elsif ( $op eq 'add_validate' ) {
 
                 if ( C4::Context->preference("NewsLog") ) {
                     my @existing_ids = $existing_contents->get_column('id');
-                    my @deleted_ids = array_minus( @existing_ids, @seen_ids );
-                    for my $id ( @deleted_ids ) {
+                    my @deleted_ids  = array_minus( @existing_ids, @seen_ids );
+                    for my $id (@deleted_ids) {
                         my $c = $existing_contents->find($id);
-                        logaction('NEWS', 'DELETE' , undef, sprintf("%s|%s|%s", $code, $c->lang, $c->content));
+                        logaction( 'NEWS', 'DELETE', undef, sprintf( "%s|%s|%s", $code, $c->lang, $c->content ) );
                     }
                 }
 
@@ -171,7 +174,7 @@ elsif ( $op eq 'add_validate' ) {
         );
     } catch {
         warn $_;
-        if ( $id ) {
+        if ($id) {
             push @messages, { type => 'error', code => 'error_on_update' };
         } else {
             push @messages, { type => 'error', code => 'error_on_insert' };

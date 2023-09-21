@@ -159,9 +159,22 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-08 09:59:00
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7N/mHMqyPJJsYaA8V968wQ
 
+=head2 koha_object_class
+
+  Koha Object class
+
+=cut
+
 sub koha_object_class {
     'Koha::AdditionalContentsLocalization';
 }
+
+=head2 koha_objects_class
+
+  Koha Objects class
+
+=cut
+
 sub koha_objects_class {
     'Koha::AdditionalContentsLocalizations';
 }

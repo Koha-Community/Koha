@@ -41,7 +41,7 @@ Return the Koha::AdditionalContent for this translated content.
 =cut
 
 sub additional_content {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->additional_content;
     return Koha::AdditionalContent->_new_from_dbic($rs);
 }
