@@ -1,4 +1,3 @@
-[% INCLUDE 'blocking_errors.inc' %]
 <div id="toolbar" class="btn-toolbar">
     [% IF ( budget_period_id ) %]
         <div class="btn-group">

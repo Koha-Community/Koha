@@ -1,4 +1,3 @@
-[% INCLUDE 'blocking_errors.inc' %]
 <!-- acquisitions-toolbar.inc -->
 <div id="toolbar" class="btn-toolbar">
     [% IF ( booksellerid ) %]

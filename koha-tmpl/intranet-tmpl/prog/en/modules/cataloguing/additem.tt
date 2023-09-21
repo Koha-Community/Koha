@@ -74,7 +74,6 @@
                         <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblio.biblionumber | uri %]">Add a new item</a> or <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]#holdings">go to the records holdings</a>.
                     </div>
                 [% END %]
-                [% INCLUDE 'blocking_errors.inc' %]
 <h1>Items for [% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %])</h1>
 
 [% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]

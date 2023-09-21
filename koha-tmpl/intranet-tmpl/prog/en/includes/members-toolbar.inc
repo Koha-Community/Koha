@@ -1,4 +1,3 @@
-[% INCLUDE 'blocking_errors.inc' %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE Categories %]

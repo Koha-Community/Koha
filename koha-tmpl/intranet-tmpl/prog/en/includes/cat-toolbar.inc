@@ -1,6 +1,5 @@
 [% USE Context %]
 [% USE Biblio %]
-[% INCLUDE 'blocking_errors.inc' %]
 <div id="toolbar" class="btn-toolbar">
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription || Koha.Preference('CatalogConcerns') ) %]
