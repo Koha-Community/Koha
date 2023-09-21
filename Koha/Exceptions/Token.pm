@@ -27,6 +27,11 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Token',
         description => 'Bad pattern for random token generation'
     },
+    'Koha::Exceptions::Token::WrongCSRFToken' => {
+        isa => 'Koha::Exceptions::Token',
+        description => 'Invalid CSRF Token'
+    },
+
 );
 
 =head1 NAME

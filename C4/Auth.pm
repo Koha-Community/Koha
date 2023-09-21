@@ -32,6 +32,7 @@ use C4::Context;
 use C4::Templates;    # to get the template
 use C4::Languages;
 use C4::Search::History;
+use C4::Output qw( output_and_exit );
 use Koha;
 use Koha::Logger;
 use Koha::Caches;
@@ -53,6 +54,7 @@ use C4::Log qw( logaction );
 use Koha::CookieManager;
 use Koha::Auth::Permissions;
 use Koha::Token;
+use Koha::Exceptions::Token;
 use Koha::Session;
 
 # use utf8;
@@ -189,6 +191,7 @@ sub get_template_and_user {
             $in->{'type'},
             undef,
             $in->{template_name},
+            { skip_csrf_check => 1 },
         );
     }
 
@@ -631,6 +634,16 @@ sub get_template_and_user {
     $template->param( logged_in_user     => $patron );
     $template->param( sessionID          => $sessionID );
 
+    if ( $in->{query}->param('op-cud') ) {
+        C4::Output::output_and_exit( $in->{query}, $cookie, $template, 'wrong_csrf_token' )
+            unless Koha::Token->new->check_csrf(
+            {
+                session_id => scalar $in->{query}->cookie('CGISESSID'),
+                token      => scalar $in->{query}->param('csrf_token'),
+            }
+            );
+    }
+
     return ( $template, $borrowernumber, $cookie, $flags );
 }
 
@@ -791,7 +804,9 @@ sub checkauth {
     my $type            = shift;
     my $emailaddress    = shift;
     my $template_name   = shift;
-    my $params          = shift || {};    # do_not_print
+    my $params          = shift || {}; # do_not_print, skip_csrf_check
+
+    my $skip_csrf_check = $params->{skip_csrf_check} || 0;
     $type = 'opac' unless $type;
 
     if ( $type eq 'opac' && !C4::Context->preference("OpacPublic") ) {
@@ -1312,7 +1327,6 @@ sub checkauth {
     }
 
     # finished authentification, now respond
-    my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     if ( $auth_state eq 'completed' || $authnotrequired ) {
         # successful login
         unless (@$cookie) {
@@ -1328,35 +1342,22 @@ sub checkauth {
         my $patron = $userid ? Koha::Patrons->find({ userid => $userid }) : undef;
         $patron->update_lastseen('login') if $patron;
 
-        my $original_op_cud = $query->param('op-cud');
-        if ( $request_method eq 'GET' ) {
-            $query->param('op-cud', undef);
-        } elsif ( $request_method eq 'POST' ) {
-            $query->param('op', undef);
-        }
-
-        if ( defined $original_op_cud ) {
+        if ( $query->param('op-cud') ) {
             die "Cannot use GET for this request"
-                if $request_method ne 'POST';
+                if $request_method eq 'GET';
 
-            print $query->header(
-                {
-                    type              => 'text/html',
-                    charset           => 'utf-8',
-                    cookie            => $cookie,
-                    'X-Frame-Options' => 'SAMEORIGIN',
-                    -sameSite         => 'Lax'
-                }
-            );
-
-            my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
-            output_and_exit( $query, $cookie, $template, 'wrong_csrf_token' )
-                unless Koha::Token->new->check_csrf(
+            unless (
+                $skip_csrf_check
+                || Koha::Token->new->check_csrf(
                     {
                         session_id => scalar $query->cookie('CGISESSID'),
                         token      => scalar $query->param('csrf_token'),
                     }
-                );
+                )
+                )
+            {
+                Koha::Exceptions::Token::WrongCSRFToken->throw;
+            }
         }
 
         # In case, that this request was a login attempt, we want to prevent that users can repost the opac login
@@ -1398,6 +1399,7 @@ sub checkauth {
     $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 
     my $auth_error = $query->param('auth_error');
+    my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
     $template->param(
         login                                 => 1,
