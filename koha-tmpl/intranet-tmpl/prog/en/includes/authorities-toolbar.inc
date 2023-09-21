@@ -1,4 +1,3 @@
-[% INCLUDE 'blocking_errors.inc' %]
 [% IF ( authid || CAN_user_editauthorities) %]
 
     <div id="toolbar" class="btn-toolbar">

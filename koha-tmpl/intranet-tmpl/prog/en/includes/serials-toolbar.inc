@@ -1,4 +1,3 @@
-[% INCLUDE 'blocking_errors.inc' %]
 [% IF subscriptionid and ( CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_receive_serials ) %]
 
     <div id="toolbar" class="btn-toolbar">

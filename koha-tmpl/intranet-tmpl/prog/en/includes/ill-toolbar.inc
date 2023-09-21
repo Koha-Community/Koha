@@ -1,4 +1,3 @@
-[% INCLUDE 'blocking_errors.inc' %]
 [% USE Koha %]
 [% IF Koha.Preference('ILLModule') && CAN_user_ill %]
     <div id="toolbar" class="btn-toolbar ill-toolbar">
