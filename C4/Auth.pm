@@ -1328,7 +1328,14 @@ sub checkauth {
         my $patron = $userid ? Koha::Patrons->find({ userid => $userid }) : undef;
         $patron->update_lastseen('login') if $patron;
 
-        if ( defined $query->param('op') ) {
+        my $original_op_cud = $query->param('op-cud');
+        if ( $request_method eq 'GET' ) {
+            $query->param('op-cud', undef);
+        } elsif ( $request_method eq 'POST' ) {
+            $query->param('op', undef);
+        }
+
+        if ( defined $original_op_cud ) {
             die "Cannot use GET for this request"
                 if $request_method ne 'POST';
 
