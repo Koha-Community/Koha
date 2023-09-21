@@ -18,6 +18,7 @@ package Koha::Patron::Restriction;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patron::Restriction::Type;
 
 use base qw(Koha::Object);
@@ -42,6 +43,23 @@ sub type {
     my ($self) = @_;
     my $type_rs = $self->_result->type;
     return Koha::Patron::Restriction::Type->_new_from_dbic($type_rs);
+}
+
+=head3 is_expired
+
+my $is_expired = $restriction->is_expired;
+
+Returns 1 if the restriction is expired or 0;
+
+=cut
+
+sub is_expired {
+    my ($self) = @_;
+    return 0 unless $self->expiration;
+    # This condition must be consistent with Koha::Patron->is_debarred
+    my $makes_patron_debarred = dt_from_string( $self->expiration ) > dt_from_string;
+    return 1 unless $makes_patron_debarred;
+    return 0;
 }
 
 =head2 Internal methods

@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             [% FOREACH restriction IN patron.restrictions %]
-                <tr>
+                [% IF restriction.is_expired %]<tr class="expired">[% ELSE %]<tr>[% END %]
                     <td>
                         [% PROCESS restriction_type_description restriction_type=restriction.type %]
                     </td>
@@ -30,7 +30,14 @@
                             [% restriction.comment | $raw %]
                         [% END %]
                     </td>
-                    <td>[% IF restriction.expiration %] [% restriction.expiration | $KohaDates %] [% ELSE %] <em>Indefinite</em> [% END %]</td>
+                    <td>
+                        [% IF restriction.expiration %]
+                            [% restriction.expiration | $KohaDates %]
+                            [% IF restriction.is_expired %](<span>expired</span>)[% END %]
+                        [% ELSE %]
+                            <em>Indefinite</em>
+                        [% END %]
+                    </td>
                     <td>[% restriction.created | $KohaDates %]</td>
                     [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                         <td>
