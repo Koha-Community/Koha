@@ -8,7 +8,8 @@
     [% IF ( unknownbiblionumber ) %]
         [% t("Unknown record") | html %]
     [% ELSE %]
-        [% t("MARC details for") | html %] [% INCLUDE 'biblio-title-head.inc' %]
+        [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+        [% tx("MARC details for {title}", { title = title_in_title }) | html %]
     [% END %] &rsaquo;
     [% t("Catalog") | html %] &rsaquo;
     [% t("Koha") | html %]

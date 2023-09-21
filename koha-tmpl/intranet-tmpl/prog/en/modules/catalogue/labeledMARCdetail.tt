@@ -9,7 +9,7 @@
     [% IF ( unknownbiblionumber ) %]
         [% t("Unknown record") | html %]
     [% ELSE %]
-        [% t("Labeled MARC details for") | html %] [% bibliotitle | html %]
+        [% tx("Labeled MARC details for {title}", { title = bibliotitle }) | html %]
     [% END %] &rsaquo;
     [% t("Catalog") | html %] &rsaquo;
     [% t("Koha") | html %]

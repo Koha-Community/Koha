@@ -8,7 +8,8 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% t("Item details for") | html %] [% INCLUDE 'biblio-title-head.inc' %] &rsaquo;
+    [% title_in_title = INCLUDE 'biblio-title-head.inc' %]
+    [% tx("Item details for {title}", { title = title_in_title }) | html %] &rsaquo;
     [% t("Catalog") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
