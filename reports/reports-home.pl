@@ -17,23 +17,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Context;
-
 
 my $query = CGI->new;
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "reports/reports-home.tt",
-				query => $query,
-				type => "intranet",
-				flagsrequired => {reports => '*'},
-				});
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "reports/reports-home.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
+    }
+);
 output_html_with_http_headers $query, $cookie, $template->output;
