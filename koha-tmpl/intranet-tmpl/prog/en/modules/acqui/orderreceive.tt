@@ -101,6 +101,7 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
+                [% INCLUDE 'messages.inc' %]
 
 <h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% multiple_orders | html %])</h1>
 [% SET only_one_order = ( multiple_orders.split(',').size == 1 ) %]

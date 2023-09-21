@@ -115,9 +115,11 @@
             </div> <!-- /.col-sm-2 -->
             <div class="col-sm-10">
                 <main>
+                    [% INCLUDE 'messages.inc' %]
         [% ELSE %]
             <div class="col-sm-10 col-sm-offset-2">
                 <main>
+                    [% INCLUDE 'messages.inc' %]
         [% END %]
             <div id="interlibraryloans">
         [% IF !backends_available || !has_branch %]

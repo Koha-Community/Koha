@@ -40,6 +40,7 @@
             <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         [% END %]
             <main>
+                [% INCLUDE 'messages.inc' %]
 <h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a></h1>
 
 [% IF ( error_failed_to_create_invoice ) %]
