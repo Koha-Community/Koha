@@ -1312,6 +1312,7 @@ sub checkauth {
     }
 
     # finished authentification, now respond
+    my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     if ( $auth_state eq 'completed' || $authnotrequired ) {
         # successful login
         unless (@$cookie) {
@@ -1326,6 +1327,30 @@ sub checkauth {
 
         my $patron = $userid ? Koha::Patrons->find({ userid => $userid }) : undef;
         $patron->update_lastseen('login') if $patron;
+
+        if ( defined $query->param('op') ) {
+            die "Cannot use GET for this request"
+                if $request_method ne 'POST';
+
+            print $query->header(
+                {
+                    type              => 'text/html',
+                    charset           => 'utf-8',
+                    cookie            => $cookie,
+                    'X-Frame-Options' => 'SAMEORIGIN',
+                    -sameSite         => 'Lax'
+                }
+            );
+
+            my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
+            output_and_exit( $query, $cookie, $template, 'wrong_csrf_token' )
+                unless Koha::Token->new->check_csrf(
+                    {
+                        session_id => scalar $query->cookie('CGISESSID'),
+                        token      => scalar $query->param('csrf_token'),
+                    }
+                );
+        }
 
         # In case, that this request was a login attempt, we want to prevent that users can repost the opac login
         # request. We therefore redirect the user to the requested page again without the login parameters.
@@ -1365,7 +1390,6 @@ sub checkauth {
     $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
     $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 
-    my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $auth_error = $query->param('auth_error');
     my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
     $template->param(
@@ -1479,29 +1503,6 @@ sub checkauth {
             my $reason = $query->param('OpenIDConnectFailed');
             $template->param(invalidGoogleOpenIDConnectLogin => $reason);
         }
-    }
-
-    if ( $auth_state eq 'completed' && defined $query->param('op') ) {
-        die "Cannot use GET for this request"
-            if $request_method ne 'POST';
-
-        print $query->header(
-            {
-                type              => 'text/html',
-                charset           => 'utf-8',
-                cookie            => $cookie,
-                'X-Frame-Options' => 'SAMEORIGIN',
-                -sameSite         => 'Lax'
-            }
-        );
-
-        output_and_exit( $query, $cookie, $template, 'wrong_csrf_token' )
-            unless Koha::Token->new->check_csrf(
-                {
-                    session_id => scalar $query->cookie('CGISESSID'),
-                    token      => scalar $query->param('csrf_token'),
-                }
-            );
     }
 
     $template->param(
