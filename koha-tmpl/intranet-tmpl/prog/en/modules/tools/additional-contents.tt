@@ -524,7 +524,7 @@
             [% END %]
         [% END %]
     [% ELSE %]
-        [% SET opac_available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo', 'OpacMaintenanceNotice', 'CatalogConcernHelp', 'CatalogConcernTemplate', 'CookieConsentBar', 'CookieConsentPopup' ] %]
+        [% SET opac_available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo', 'OpacMaintenanceNotice', 'OPACResultsSidebar', 'CatalogConcernHelp', 'CatalogConcernTemplate', 'CookieConsentBar', 'CookieConsentPopup' ] %]
         <optgroup label="OPAC">
             [% FOREACH l IN opac_available_options.sort %]
                 [% IF l == location %]

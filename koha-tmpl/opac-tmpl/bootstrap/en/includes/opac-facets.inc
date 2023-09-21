@@ -2,6 +2,8 @@
 [% USE AuthorisedValues %]
 [% USE Languages %]
 [% PROCESS 'i18n.inc' %]
+[% USE AdditionalContents %]
+[% SET OPACResultsSidebar = AdditionalContents.get( location => "OPACResultsSidebar", lang => lang, library => branchcode || default_branch ) %]
 [% IF ( opacfacets && facets_loop && total ) %]
     <div id="search-facets">
         <h2><a href="#" class="menu-collapse-toggle">Refine your search</a></h2>
@@ -122,7 +124,7 @@
 
     [% IF ( OPACResultsSidebar ) %]
         <div id="opacresultssidebar">
-            [% OPACResultsSidebar | $raw %]
+            [% PROCESS koha_news_block news => OPACResultsSidebar %]
         </div>
     [% END %]
 [% END # / IF opacfacets && facets_loop %]
