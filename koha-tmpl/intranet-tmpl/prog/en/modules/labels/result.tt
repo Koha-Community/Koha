@@ -34,9 +34,9 @@
 
 <body id="labels_result" class="tools labels">
     <div class="main container-fluid">
+        [% INCLUDE 'messages.inc' %]
         <h1>Search results</h1>
         [% IF ( results ) %]
-                [% INCLUDE 'messages.inc' %]
             <h3>Results [% from | html %] through [% to | html %] [% IF ( total ) %] of [% total | html %][% END %]</h3>
         [% ELSE %]
             <h3>No results found</h3>

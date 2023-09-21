@@ -44,9 +44,9 @@
 <body id="main_auth" class="main_main-auth">
 
 <div class="main container-fluid">
+    [% INCLUDE 'messages.inc' %]
 
 <div id="login">
-            [% INCLUDE 'messages.inc' %]
 <h1><a href="http://koha-community.org">Koha</a></h1>
 [% IF (Koha.Preference('StaffLoginInstructions')) %]<div id="login_instructions">[% Koha.Preference('StaffLoginInstructions') | $raw %]</div>[% END %]
 [% IF ( nopermission ) %]

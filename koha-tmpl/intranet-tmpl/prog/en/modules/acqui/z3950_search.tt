@@ -80,9 +80,9 @@ tr.selected td {
 [% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
+    [% INCLUDE 'messages.inc' %]
       [% IF ( opsearch ) %]
     <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
-            [% INCLUDE 'messages.inc' %]
     <div class="row">
     <div class="col-sm-6">
     <h1>Order from external source</h1>
