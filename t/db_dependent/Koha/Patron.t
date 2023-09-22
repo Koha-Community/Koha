@@ -1123,6 +1123,8 @@ subtest 'safe_to_delete() tests' => sub {
     ok( $patron->safe_to_delete, 'Can delete, all conditions met' );
     my $messages = $patron->safe_to_delete->messages;
     is_deeply( $messages, [], 'Patron can be deleted, no messages' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'article_request_fee() tests' => sub {
@@ -1397,6 +1399,7 @@ subtest 'notify_library_of_registration()' => sub {
 
 subtest 'notice_email_address' => sub {
     plan tests => 2;
+    $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
@@ -1408,10 +1411,12 @@ subtest 'notice_email_address' => sub {
     is ($patron->notice_email_address, $patron->emailpro, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is emailpro");
 
     $patron->delete;
+    $schema->storage->txn_rollback;
 };
 
 subtest 'first_valid_email_address' => sub {
     plan tests => 1;
+    $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { emailpro => ''}});
 
@@ -1419,6 +1424,7 @@ subtest 'first_valid_email_address' => sub {
     is ($patron->first_valid_email_address, $patron->email, "Koha::Patron->first_valid_email_address returns correct value when EmailFieldPrecedence is 'emailpro|email' and emailpro is empty");
 
     $patron->delete;
+    $schema->storage->txn_rollback;
 };
 
 subtest 'get_savings tests' => sub {
@@ -1470,6 +1476,7 @@ subtest 'get_savings tests' => sub {
 };
 
 subtest 'update privacy tests' => sub {
+    $schema->storage->txn_begin;
 
     plan tests => 5;
 
@@ -1499,4 +1506,6 @@ subtest 'update privacy tests' => sub {
 
     is( $old_checkout->borrowernumber, $anon_patron->id, "Checkout is successfully anonymized");
     is( $patron->privacy(), 2, "Patron privacy is successfully updated");
+
+    $schema->storage->txn_rollback;
 };
