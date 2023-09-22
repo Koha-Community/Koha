@@ -1504,8 +1504,8 @@ subtest 'get_savings tests' => sub {
 
     is( $patron->get_savings, 0, 'No checkouts with itemnumber, no savings' );
 
-    AddIssue( $patron->unblessed, $item1->barcode );
-    AddIssue( $patron->unblessed, $item2->barcode );
+    AddIssue( $patron, $item1->barcode );
+    AddIssue( $patron, $item2->barcode );
 
     my $savings = $patron->get_savings;
     is( $savings + 0, $item1->replacementprice + $item2->replacementprice, "Savings correctly calculated from current issues" );

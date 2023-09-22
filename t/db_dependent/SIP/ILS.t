@@ -345,7 +345,7 @@ subtest renew => sub {
         }
     );
 
-    AddIssue( $patron->unblessed, $item->barcode, undef, 0 );
+    AddIssue( $patron, $item->barcode, undef, 0 );
     my $checkout = $item->checkout;
     ok( defined($checkout), "Successfully checked out an item prior to renewal" );
 

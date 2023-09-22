@@ -483,7 +483,7 @@ subtest 'get_items_that_can_fill' => sub {
     );
 
     # item 3 is on loan
-    AddIssue( $patron_3->unblessed, $item_3->barcode );
+    AddIssue( $patron_3, $item_3->barcode );
 
     # item 4 is in transfer
     my $from = $builder->build_object( { class => 'Koha::Libraries' } );

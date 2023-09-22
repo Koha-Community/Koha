@@ -263,14 +263,14 @@ subtest 'add_to_bundle tests' => sub {
     'Koha::Exceptions::Item::Bundle::IsBundle',
       'Exception thrown if you try to add a bundle host to a bundle item';
 
-    C4::Circulation::AddIssue( $patron->unblessed, $host_item->barcode );
+    C4::Circulation::AddIssue( $patron, $host_item->barcode );
     throws_ok { $host_item->add_to_bundle($bundle_item2) }
     'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut',
       'Exception thrown if you try to add an item to a checked out bundle';
     C4::Circulation::AddReturn( $host_item->barcode, $host_item->homebranch );
     $host_item->discard_changes;
 
-    C4::Circulation::AddIssue( $patron->unblessed, $bundle_item2->barcode );
+    C4::Circulation::AddIssue( $patron, $bundle_item2->barcode );
     throws_ok { $host_item->add_to_bundle($bundle_item2) }
     'Koha::Exceptions::Item::Bundle::ItemIsCheckedOut',
       'Exception thrown if you try to add a checked out item';
@@ -304,7 +304,7 @@ subtest 'remove_from_bundle tests' => sub {
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
 
-    C4::Circulation::AddIssue( $patron->unblessed, $host_item->barcode );
+    C4::Circulation::AddIssue( $patron, $host_item->barcode );
     throws_ok { $bundle_item1->remove_from_bundle }
     'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut',
       'Exception thrown if you try to add an item to a checked out bundle';
@@ -871,7 +871,7 @@ subtest 'deletion' => sub {
     $item = $builder->build_sample_item({ library => $library->branchcode });
 
     # book_on_loan
-    C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    C4::Circulation::AddIssue( $patron, $item->barcode );
 
     is(
         @{$item->safe_to_delete->messages}[0]->message,
@@ -1973,7 +1973,7 @@ subtest 'Recalls tests' => sub {
     is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall item if not checked out" );
 
     $item1->update({ withdrawn => 0 });
-    C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode );
+    C4::Circulation::AddIssue( $patron2, $item1->barcode );
 
     Koha::CirculationRules->set_rules({
         branchcode => $branchcode,
@@ -2023,7 +2023,7 @@ subtest 'Recalls tests' => sub {
     C4::Circulation::AddReturn( $item1->barcode, $branchcode );
     is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if no items are checked out" );
 
-    C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode );
+    C4::Circulation::AddIssue( $patron2, $item1->barcode );
     is( $item1->can_be_recalled({ patron => $patron1 }), 1, "Can recall item" );
 
     $recall1 = Koha::Recall->new(
@@ -2168,7 +2168,7 @@ subtest 'has_pending_recall() tests' => sub {
     t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
     t::lib::Mocks::mock_preference( 'UseRecalls', 1 );
 
-    C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    C4::Circulation::AddIssue( $patron, $item->barcode );
 
     my ($recall) = Koha::Recalls->add_recall({ biblio => $item->biblio, item => $item, patron => $patron });
 

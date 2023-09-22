@@ -47,7 +47,7 @@ sub do_renew_for  {
 
     }
     if ($renewokay){
-        my $issue = AddIssue( $patron->unblessed, $self->{item}->id, undef, 0 );
+        my $issue = AddIssue( $patron, $self->{item}->id, undef, 0 );
         $self->{due} = $self->duedatefromissue($issue, $self->{item}->{itemnumber});
         $self->renewal_ok(1);
     } else {

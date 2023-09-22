@@ -455,8 +455,8 @@ subtest 'SearchItems test' => sub {
     is($total_results, 1, 'found all items of library1 with new_status=0 with ifnull = 0');
 
     t::lib::Mocks::mock_userenv({ branchcode => $item1->homebranch });
-    my $patron_borrower = $builder->build_object({ class => 'Koha::Patrons' })->unblessed;
-    AddIssue( $patron_borrower, $item1->barcode );
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    AddIssue( $patron, $item1->barcode );
     # Search item where item is checked out
     $filter = {
         conjunction => 'AND',

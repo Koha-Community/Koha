@@ -698,7 +698,7 @@ subtest 'cancel() tests' => sub {
     t::lib::Mocks::mock_userenv({ patron => $patron });
 
     # Add a checkout so deleting the item fails because od 'book_on_loan'
-    C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+    C4::Circulation::AddIssue( $patron, $item->barcode );
 
     my $result = $order->cancel({ reason => $reason });
     # refresh the order object
@@ -966,7 +966,7 @@ subtest 'cancel() tests' => sub {
     $order->add_item( $item_3->id );
 
     # Add a checkout so deleting the item fails because od 'book_on_loan'
-    C4::Circulation::AddIssue( $patron->unblessed, $item_2->barcode );
+    C4::Circulation::AddIssue( $patron, $item_2->barcode );
     C4::Reserves::AddReserve(
         {
             branchcode     => $item_3->holdingbranch,
