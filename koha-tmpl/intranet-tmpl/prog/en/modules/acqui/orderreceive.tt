@@ -1098,7 +1098,7 @@
                     origrec[row.order_id] = row.quantity_received;
                     $("#order_edit").data('origrec', origrec);
                 }
-                if(row.subscription_id) {
+                if(row.subscription_id || row.basket.standing === true) {
                     row.quantity_received = row.quantity;
                 }
                 var keep = $("#order_edit").data('kept');
