@@ -117,17 +117,14 @@ sub checkpw_cas {
             # we should store the CAS ticekt too, we need this for single logout https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#233-single-logout
 
             # Does it match one of our users ?
-            my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
-            $sth->execute($userid);
-            if ( $sth->rows ) {
-                $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid, $ticket );
+            my $dbh = C4::Context->dbh;
+            my $patron = Koha::Patrons->find({ userid => $userid });
+            if ( $patron ) {
+                return ( 1, $patron->cardnumber, $patron->userid, $ticket, $patron );
             }
-            $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
-            $sth->execute($userid);
-            if ( $sth->rows ) {
-                $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid, $ticket );
+            $patron = Koha::Patrons->find({ cardnumber => $userid });
+            if ( $patron ) {
+                return ( 1, $patron->cardnumber, $patron->userid, $ticket, $patron );
             }
 
             # If we reach this point, then the user is a valid CAS user, but not a Koha user
