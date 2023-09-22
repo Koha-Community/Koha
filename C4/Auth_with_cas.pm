@@ -118,17 +118,13 @@ sub checkpw_cas {
 
             # Does it match one of our users ?
             my $dbh = C4::Context->dbh;
-            my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
-            $sth->execute($userid);
-            if ( $sth->rows ) {
-                $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid, $ticket );
+            my $patron = Koha::Patrons->find({ userid => $userid });
+            if ( $patron ) {
+                return ( 1, $patron->cardnumber, $patron->userid, $ticket, $patron );
             }
-            $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
-            $sth->execute($userid);
-            if ( $sth->rows ) {
-                $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid, $ticket );
+            $patron = Koha::Patrons->find({ cardnumber => $userid });
+            if ( $patron ) {
+                return ( 1, $patron->cardnumber, $patron->userid, $ticket, $patron );
             }
 
             # If we reach this point, then the user is a valid CAS user, but not a Koha user

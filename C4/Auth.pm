@@ -1959,9 +1959,10 @@ sub checkpw {
     if ( $patron and ( $patron->account_locked )  ) {
         # Nothing to check, account is locked
     } elsif ($ldap && defined($password)) {
-        my ( $retval, $retcard, $retuserid ) = checkpw_ldap(@_);    # EXTERNAL AUTH
+        my ( $retval, $retcard, $retuserid );
+        ( $retval, $retcard, $retuserid, $patron ) = checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval == 1 ) {
-            @return = ( $retval, $retcard, $retuserid );
+            @return = ( $retval, $retcard, $retuserid, $patron );
             $passwd_ok = 1;
         }
         $check_internal_as_fallback = 1 if $retval == 0;
@@ -1971,9 +1972,9 @@ sub checkpw {
         # In case of a CAS authentication, we use the ticket instead of the password
         my $ticket = $query->param('ticket');
         $query->delete('ticket');                                   # remove ticket to come back to original URL
-        my ( $retval, $retcard, $retuserid, $cas_ticket ) = checkpw_cas( $ticket, $query, $type );    # EXTERNAL AUTH
+        my ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) = checkpw_cas( $ticket, $query, $type );    # EXTERNAL AUTH
         if ( $retval ) {
-            @return = ( $retval, $retcard, $retuserid, $cas_ticket );
+            @return = ( $retval, $retcard, $retuserid, $patron, $cas_ticket );
         } else {
             @return = (0);
         }
@@ -1991,9 +1992,9 @@ sub checkpw {
 
         # Then, we check if it matches a valid koha user
         if ($shib_login) {
-            my ( $retval, $retcard, $retuserid ) = C4::Auth_with_shibboleth::checkpw_shib($shib_login);    # EXTERNAL AUTH
+            my ( $retval, $retcard, $retuserid, $patron ) = C4::Auth_with_shibboleth::checkpw_shib($shib_login);    # EXTERNAL AUTH
             if ( $retval ) {
-                @return = ( $retval, $retcard, $retuserid );
+                @return = ( $retval, $retcard, $retuserid, $patron );
             }
             $passwd_ok = $retval;
         }
@@ -2004,6 +2005,7 @@ sub checkpw {
     # INTERNAL AUTH
     if ( $check_internal_as_fallback ) {
         @return = checkpw_internal( $userid, $password, $no_set_userenv);
+        push(@return, $patron);
         $passwd_ok = 1 if $return[0] > 0; # 1 or 2
     }
 
