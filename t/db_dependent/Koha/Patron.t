@@ -1080,6 +1080,8 @@ subtest 'safe_to_delete() tests' => sub {
     ok( $patron->safe_to_delete, 'Can delete, all conditions met' );
     my $messages = $patron->safe_to_delete->messages;
     is_deeply( $messages, [], 'Patron can be deleted, no messages' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'article_request_fee() tests' => sub {
@@ -1353,6 +1355,7 @@ subtest 'notify_library_of_registration()' => sub {
 };
 
 subtest 'update privacy tests' => sub {
+    $schema->storage->txn_begin;
 
     plan tests => 5;
 
@@ -1382,4 +1385,6 @@ subtest 'update privacy tests' => sub {
 
     is( $old_checkout->borrowernumber, $anon_patron->id, "Checkout is successfully anonymized");
     is( $patron->privacy(), 2, "Patron privacy is successfully updated");
+
+    $schema->storage->txn_rollback;
 };
