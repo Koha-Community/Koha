@@ -8,9 +8,17 @@ export default defineConfig({
 
     e2e: {
         experimentalStudio: true,
-        baseUrl: "http://localhost:8081",
+        baseUrl: "http://kohadev-intra.mydnsname.org:8081",
         specPattern: "t/cypress/integration/**/*.*",
         supportFile: "t/cypress/support/e2e.js",
+        env: {
+            db: {
+                host: "db",
+                user: "koha_kohadev",
+                password: "password",
+                database: "koha_kohadev",
+            },
+        },
     },
 
     component: {

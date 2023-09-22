@@ -671,3 +671,6 @@ cy.getSushiService = () => {
         "url": "https:\/\/onlinelibrary.wiley.com\/reports\/"
     }
 }
+
+const mysql = require('cypress-mysql');
+mysql.addCommands();

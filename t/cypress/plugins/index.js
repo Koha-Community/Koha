@@ -11,3 +11,9 @@ module.exports = (on, config) => {
 
   return config
 }
+
+const mysql = require('cypress-mysql');
+
+module.exports = (on, config) => {
+  mysql.configurePlugin(on);
+}
