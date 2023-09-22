@@ -52,7 +52,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # Get correct unitprice field
-my ( $unitprice_field ) = C4::Budgets->FieldsForCalculatingFundValues();
+my ($unitprice_field) = C4::Budgets->FieldsForCalculatingFundValues();
 
 my $query = <<EOQ;
 SELECT

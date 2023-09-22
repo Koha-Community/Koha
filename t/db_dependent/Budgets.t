@@ -1219,31 +1219,49 @@ subtest 'FieldsForCalculatingFundValues with a vendor NOT including tax in their
     $schema->storage->txn_begin;
 
     # Test FieldsForCalculatingFundValues()
-    t::lib::Mocks::mock_preference('CalculateFundValuesIncludingTax', '1');
+    t::lib::Mocks::mock_preference( 'CalculateFundValuesIncludingTax', '1' );
     my ( $unitprice_field, $ecost_field ) = C4::Budgets->FieldsForCalculatingFundValues();
-    is ( $unitprice_field, 'unitprice_tax_included', "We expect this to be unitprice_tax_included" );
-    is ( $ecost_field, 'ecost_tax_included', "We expect this to be ecost_tax_included" );
-    t::lib::Mocks::mock_preference('CalculateFundValuesIncludingTax', '0');
+    is( $unitprice_field, 'unitprice_tax_included', "We expect this to be unitprice_tax_included" );
+    is( $ecost_field,     'ecost_tax_included',     "We expect this to be ecost_tax_included" );
+    t::lib::Mocks::mock_preference( 'CalculateFundValuesIncludingTax', '0' );
     ( $unitprice_field, $ecost_field ) = C4::Budgets->FieldsForCalculatingFundValues();
-    is ( $unitprice_field, 'unitprice_tax_excluded', "We expect this to be unitprice_tax_excluded" );
-    is ( $ecost_field, 'ecost_tax_excluded', "We expect this to be ecost_tax_excluded" );
+    is( $unitprice_field, 'unitprice_tax_excluded', "We expect this to be unitprice_tax_excluded" );
+    is( $ecost_field,     'ecost_tax_excluded',     "We expect this to be ecost_tax_excluded" );
 
     # Test GetBudgetOrdered()
     # -----------------------
 
     # Build an order
-    t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
-    my $item_1        = $builder->build_sample_item;
-    my $invoice       = $builder->build({ source => 'Aqinvoice'});
-    my $currency      = $builder->build({ source => 'Currency', value => { active => 1, archived => 0, symbol => 'F', rate => 2, isocode => undef, currency => 'BOO' }  });
-    my $vendor        = $builder->build({ source => 'Aqbookseller',value => { listincgst => 0, invoiceincgst => 0, listprice => $currency->{currency}, invoiceprice => $currency->{currency} } });
-    my $basket        = $builder->build({ source => 'Aqbasket', value => { is_standing => 0, booksellerid => $vendor->{id} } });
-    my $budget_period = $builder->build({ source => 'Aqbudgetperiod' });
-    my $budget        = $builder->build({ source => 'Aqbudget', value => {
-            budget_period_id => $budget_period->{budget_period_id},
-            budget_parent_id => undef,
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', 'nearest_cent' );
+    my $item_1   = $builder->build_sample_item;
+    my $invoice  = $builder->build( { source => 'Aqinvoice' } );
+    my $currency = $builder->build(
+        {
+            source => 'Currency',
+            value  => { active => 1, archived => 0, symbol => 'F', rate => 2, isocode => undef, currency => 'BOO' }
         }
-    });
+    );
+    my $vendor = $builder->build(
+        {
+            source => 'Aqbookseller',
+            value  => {
+                listincgst   => 0, invoiceincgst => 0, listprice => $currency->{currency},
+                invoiceprice => $currency->{currency}
+            }
+        }
+    );
+    my $basket =
+        $builder->build( { source => 'Aqbasket', value => { is_standing => 0, booksellerid => $vendor->{id} } } );
+    my $budget_period = $builder->build( { source => 'Aqbudgetperiod' } );
+    my $budget        = $builder->build(
+        {
+            source => 'Aqbudget',
+            value  => {
+                budget_period_id => $budget_period->{budget_period_id},
+                budget_parent_id => undef,
+            }
+        }
+    );
     my $orderdata = {
         basketno                => $basket->{basketno},
         booksellerid            => $vendor->{id},
@@ -1269,49 +1287,51 @@ subtest 'FieldsForCalculatingFundValues with a vendor NOT including tax in their
     $orderdata = $order->unblessed();
 
     # Place the order
-    $order = $builder->build({ source => 'Aqorder', value => $orderdata });
+    $order = $builder->build( { source => 'Aqorder', value => $orderdata } );
 
     # Check order values with different CalculateFundValuesIncludingTax options
-    t::lib::Mocks::mock_preference('CalculateFundValuesIncludingTax', '0');
+    t::lib::Mocks::mock_preference( 'CalculateFundValuesIncludingTax', '0' );
     my $budget_ordered = GetBudgetOrdered( $order->{budget_id} );
-    is ( $budget_ordered, 10, "We expect this to be the tax exclusive value" );
-    t::lib::Mocks::mock_preference('CalculateFundValuesIncludingTax', '1');
+    is( $budget_ordered, 10, "We expect this to be the tax exclusive value" );
+    t::lib::Mocks::mock_preference( 'CalculateFundValuesIncludingTax', '1' );
     $budget_ordered = GetBudgetOrdered( $order->{budget_id} );
-    is ( $budget_ordered, 11.5, "We expect this to be the tax inclusive value" );
+    is( $budget_ordered, 11.5, "We expect this to be the tax inclusive value" );
 
     # Test GetBudgetSpent() and GetBudgetHierarchy()
     # -----------------------------------------------
 
     # Receive the order
-    $orderdata->{unitprice} = 10; #we are paying what we expected
+    $orderdata->{unitprice} = 10;    #we are paying what we expected
 
     # Do some maths
     $order = Koha::Acquisition::Order->new($orderdata);
     $order->populate_with_prices_for_receiving();
     $orderdata = $order->unblessed();
-    my $received_order = $builder->build({ source => 'Aqorder', value => $orderdata });
+    my $received_order = $builder->build( { source => 'Aqorder', value => $orderdata } );
 
     # Receive a copy of the order
-    ModReceiveOrder({
-            biblionumber => $orderdata->{biblionumber},
-            order => $received_order,
-            invoice => $invoice,
+    ModReceiveOrder(
+        {
+            biblionumber     => $orderdata->{biblionumber},
+            order            => $received_order,
+            invoice          => $invoice,
             quantityreceived => 1,
-            budget_id => $orderdata->{budget_id},
-            received_items => [],
-    });
+            budget_id        => $orderdata->{budget_id},
+            received_items   => [],
+        }
+    );
 
-    t::lib::Mocks::mock_preference('CalculateFundValuesIncludingTax', '0');
+    t::lib::Mocks::mock_preference( 'CalculateFundValuesIncludingTax', '0' );
     my $spent_amount = GetBudgetSpent( $orderdata->{budget_id} );
-    is ( $spent_amount, 10, "We expect this to be the tax exclusive value" );
-    my $gbh = GetBudgetHierarchy($budget->{budget_period_id});
-    is ( @$gbh[0]->{budget_spent}, 10, "We expect this value to be the tax exclusive value");
+    is( $spent_amount, 10, "We expect this to be the tax exclusive value" );
+    my $gbh = GetBudgetHierarchy( $budget->{budget_period_id} );
+    is( @$gbh[0]->{budget_spent}, 10, "We expect this value to be the tax exclusive value" );
 
-    t::lib::Mocks::mock_preference('CalculateFundValuesIncludingTax', '1');
+    t::lib::Mocks::mock_preference( 'CalculateFundValuesIncludingTax', '1' );
     $spent_amount = GetBudgetSpent( $orderdata->{budget_id} );
-    is ( $spent_amount, 11.5, "We expect this to be the tax inclusive value" );
-    $gbh = GetBudgetHierarchy($budget->{budget_period_id});
-    is ( @$gbh[0]->{budget_spent}, 11.5, "We expect this value to be the tax inclusive value");
+    is( $spent_amount, 11.5, "We expect this to be the tax inclusive value" );
+    $gbh = GetBudgetHierarchy( $budget->{budget_period_id} );
+    is( @$gbh[0]->{budget_spent}, 11.5, "We expect this value to be the tax inclusive value" );
 
     $schema->storage->txn_rollback;
 };
