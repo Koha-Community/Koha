@@ -1093,12 +1093,13 @@
             var set_editor = function() {
                 var modal = $("#order_edit");
                 var row = modal.data('row');
+                var effective_create_items = row.basket.create_items || AcqCreateItem;
                 var origrec = $("#order_edit").data('origrec')||{};
                 if(!origrec.hasOwnProperty(row.order_id)) {
                     origrec[row.order_id] = row.quantity_received;
                     $("#order_edit").data('origrec', origrec);
                 }
-                if(row.subscription_id || row.basket.standing === true) {
+                if(row.subscription_id || ( row.basket.standing === true && effective_create_items == 'cataloguing') ) {
                     row.quantity_received = row.quantity;
                 }
                 var keep = $("#order_edit").data('kept');
@@ -1149,8 +1150,6 @@
                 } else {
                     $("#suggestion_fieldset").hide();
                 }
-
-                var effective_create_items = row.basket.create_items || AcqCreateItem;
 
                 // set today if no date_received in row
                 document.querySelector("#datereceived")._flatpickr.setDate(row.date_received||new Date());
