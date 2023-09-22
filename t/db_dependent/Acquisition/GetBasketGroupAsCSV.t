@@ -58,6 +58,8 @@ my $order = Koha::Acquisition::Order->new({
     entrydate => '2016-01-02',
 })->store;
 
+t::lib::Mocks::mock_preference('CSVDelimiter', ',');
+
 my $basketgroup_csv1 = C4::Acquisition::GetBasketGroupAsCSV( $basketgroupid, $query );
 is(
     $basketgroup_csv1,
