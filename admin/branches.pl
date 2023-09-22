@@ -58,7 +58,7 @@ if ( $op eq 'add_form' ) {
     $template->param(
         library      => $library,
     );
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my @fields = qw(
       branchname
       branchaddress1
@@ -191,7 +191,7 @@ if ( $op eq 'add_form' ) {
             patrons_count => $patrons_count,
         );
     }
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     my $library = Koha::Libraries->find($branchcode);
 
     my $deleted = eval { $library->delete; };

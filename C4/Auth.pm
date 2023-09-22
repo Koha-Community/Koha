@@ -634,7 +634,8 @@ sub get_template_and_user {
     $template->param( logged_in_user     => $patron );
     $template->param( sessionID          => $sessionID );
 
-    if ( $in->{query}->param('op-cud') ) {
+    my $op = $in->{query}->param('op');
+    if ( defined $op && $op =~ m{^cud-} ) {
         C4::Output::output_and_exit( $in->{query}, $cookie, $template, 'wrong_csrf_token' )
             unless Koha::Token->new->check_csrf(
             {
@@ -1342,7 +1343,8 @@ sub checkauth {
         my $patron = $userid ? Koha::Patrons->find({ userid => $userid }) : undef;
         $patron->update_lastseen('login') if $patron;
 
-        if ( $query->param('op-cud') ) {
+        my $op = $query->param('op');
+        if ( defined $op && $op =~ m{^cud-} ) {
             die "Cannot use GET for this request"
                 if $request_method eq 'GET';
 

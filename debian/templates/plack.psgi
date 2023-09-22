@@ -48,16 +48,14 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
         Koha::Caches->flush_L1_caches();
         Koha::Cache::Memory::Lite->flush();
 
-        $original_op_cud = $q->param('op-cud');
-        $request_method  = $q->request_method // q{};
-        if ( $request_method eq 'GET' && defined $original_op_cud ) {
-            warn "Programming error - op-cud must not be passed with GET";
-            $q->param( 'op-cud', undef );
-        } elsif ( $request_method ne 'GET' && defined $q->param('op') ) {
-            warn "Programming error - op can only be passed with GET";
-            $q->param( 'op', undef );
-        } else {
-            $q->param( 'op', $original_op_cud );
+        my $original_op    = $q->param('op');
+        my $request_method = $q->request_method // q{};
+        if ( $request_method eq 'GET' && defined $original_op && $original_op =~ m{^cud-} ) {
+            warn "Programming error - op '$original_op' must not start with 'cud-' with GET";
+            $q->param( 'op', '' );
+        } elsif ( $request_method ne 'GET' && defined $q->param('op') && $original_op !~ m{^cud-} ) {
+            warn "Programming error - op '$original_op' must start with 'cud-' for $request_method";
+            $q->param( 'op', '' );
         }
 
         return $q;
