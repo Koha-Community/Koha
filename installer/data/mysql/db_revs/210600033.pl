@@ -8,7 +8,9 @@ return {
         my ($dbh, $out) = @$args{qw(dbh out)};
         if( !column_exists('article_requests', 'toc_request') ) {
             $dbh->do( q|
-                ALTER TABLE article_requests ADD COLUMN toc_request tinyint(4) NOT NULL DEFAULT 0 AFTER updated_on
+                ALTER TABLE article_requests ADD COLUMN toc_request tinyint(4) NOT NULL DEFAULT 0
+                COMMENT 'borrower requested table of contents'
+                AFTER updated_on
             |);
         }
     },
