@@ -299,8 +299,7 @@ foreach my $guarantor (@guarantors) {
     if (   ( $op eq 'cud-save' || $op eq 'cud-insert' )
         && ( $guarantor->is_child || $guarantor->is_guarantee || ( $patron && $patron->is_guarantor ) ) )
     {
-        push @errors, 'ERROR_child_is_guarantor'     if ( $guarantor->is_child );
-        push @errors, 'ERROR_guarantor_is_guarantee' if ( !$guarantor->is_child );
+        push @errors, 'ERROR_guarantor_is_guarantee';
     }
 }
 
@@ -628,46 +627,7 @@ if ( ( !$nok ) and $nodouble and ( $op eq 'cud-insert' or $op eq 'cud-save' ) ) 
         if ( C4::Context->preference('ExtendedPatronAttributes')
             and $input->param('setting_extended_patron_attributes') )
         {
-            my $existing_attributes = $patron->extended_attributes->filter_by_branch_limitations->unblessed;
-
-            my $needs_update = 1;
-
-            # If there are an unqueunal number of new and old patron attributes they definitely need updated
-            if ( scalar @{$existing_attributes} == scalar @{$extended_patron_attributes} ) {
-                my $seen = 0;
-                for ( my $i = 0 ; $i <= scalar @{$extended_patron_attributes} ; $i++ ) {
-                    my $new_attr = $extended_patron_attributes->[$i];
-                    next unless $new_attr;
-                    for ( my $j = 0 ; $j <= scalar @{$existing_attributes} ; $j++ ) {
-                        my $existing_attr = $existing_attributes->[$j];
-                        next unless $existing_attr;
-
-                        if (   $new_attr->{attribute} eq $existing_attr->{attribute}
-                            && $new_attr->{borrowernumber} eq $existing_attr->{borrowernumber}
-                            && $new_attr->{code} eq $existing_attr->{code} )
-                        {
-                            $seen++;
-
-                            # Remove the match from the "old" attribute
-                            splice( @{$existing_attributes}, $j, 1 );
-
-                            # Move on to look at the next "new" attribute
-                            last;
-                        }
-                    }
-                }
-
-                # If we found a match for each existing attribute and the number of see attributes matches the number seen
-                # we don't need to update the attributes
-                if ( scalar @{$existing_attributes} == 0 && $seen == @{$extended_patron_attributes} ) {
-                    $needs_update = 0;
-                }
-            }
-
-            if ($needs_update) {
-                $patron->extended_attributes->filter_by_branch_limitations->delete;
-                $patron->extended_attributes($extended_patron_attributes);
-            }
+            $patron->extended_attributes($extended_patron_attributes);
         }
 
         if (

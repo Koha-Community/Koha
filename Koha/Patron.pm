@@ -20,11 +20,12 @@ package Koha::Patron;
 
 use Modern::Perl;
 
-use List::MoreUtils    qw( any none uniq );
+use List::MoreUtils    qw( any none uniq notall zip6);
 use JSON               qw( to_json );
 use Unicode::Normalize qw( NFKD );
 use Try::Tiny;
 use DateTime ();
+use C4::Log  qw( logaction );
 
 use C4::Auth qw( checkpw_hash );
 use C4::Context;
@@ -2255,17 +2256,91 @@ Or setter FIXME
 
 sub extended_attributes {
     my ( $self, $attributes ) = @_;
+
     if ($attributes) {    # setter
+        my %attribute_changes;
+
+        # Stash changes before
+        for my $attribute ( $self->extended_attributes->as_list ) {
+            my $repeatable = $attribute->type->repeatable ? 1 : 0;
+            $attribute_changes{$repeatable}->{ $attribute->code }->{before} //= [];
+            push(
+                @{ $attribute_changes{$repeatable}->{ $attribute->code }->{before} },
+                $attribute->attribute
+            );
+        }
+        my @new_attributes = map {
+            Koha::Patron::Attribute->new(
+                {
+                    %{$_},
+                    ( borrowernumber => $self->borrowernumber ),
+                }
+            )
+        } @{$attributes};
+
+        # Make sure all attribute types are valid
+        for my $attribute (@new_attributes) {
+            $attribute->validate_type();
+        }
+
+        # Sort new attributes by code
+        @new_attributes = sort { $a->attribute cmp $b->attribute } @new_attributes;
+
+        # Stash changes after
+        for my $attribute ( values @new_attributes ) {
+            my $repeatable = $attribute->type->repeatable ? 1 : 0;
+            $attribute_changes{$repeatable}->{ $attribute->code }->{after} //= [];
+            push(
+                @{ $attribute_changes{$repeatable}->{ $attribute->code }->{after} },
+                $attribute->attribute
+            );
+        }
+
+        my $is_different = sub {
+            my ( $a, $b ) = map { [ sort @{$_} ] } @_;
+            return @{$a} != @{$b} || notall { $_->[0] eq $_->[1] } zip6 @{$a}, @{$b};
+        };
+
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
-                # Remove the existing one
-                $self->extended_attributes->filter_by_branch_limitations->delete;
+                while ( my ( $repeatable, $changes ) = each %attribute_changes ) {
+                    while ( my ( $code, $change ) = each %{$changes} ) {
+                        $change->{before} //= [];
+                        $change->{after}  //= [];
 
-                # Insert the new ones
+                        if ( $is_different->( $change->{before}, $change->{after} ) ) {
+                            unless ($repeatable) {
+                                $change->{before} = @{ $change->{before} } ? $change->{before}->[0] : '';
+                                $change->{after}  = @{ $change->{after} }  ? $change->{after}->[0]  : '';
+                            }
+
+                            # Remove existing
+                            $self->extended_attributes->filter_by_branch_limitations->search(
+                                {
+                                    'me.code' => $code,
+                                }
+                            )->delete;
+
+                            # Add possible new attribute values
+                            for my $attribute (@new_attributes) {
+                                $attribute->store() if ( $attribute->code eq $code );
+                            }
+                            if ( C4::Context->preference("BorrowersLog") ) {
+                                logaction(
+                                    "MEMBERS",
+                                    "MODIFY",
+                                    $self->borrowernumber,
+                                    "Patron attribute "
+                                        . $code . ": "
+                                        . to_json( $change, { pretty => 1, canonical => 1 } )
+                                );
+                            }
+                        }
+                    }
+                }
                 my $new_types = {};
-                for my $attribute (@$attributes) {
-                    $self->add_extended_attribute($attribute);
+                for my $attribute ( @{$attributes} ) {
                     $new_types->{ $attribute->{code} } = 1;
                 }
 

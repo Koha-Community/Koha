@@ -35,6 +35,25 @@ Koha::Patron::Attribute - Koha Patron Attribute Object class
 
 =cut
 
+=head3 validate_type
+
+    my $attribute = Koha::Patron::Attribute->new({ code => 'a_code', ... });
+    try { $attribute->validate_type }
+    catch { handle_exception };
+
+Validate type of C<Koha::Patron::Attribute> object, used in extended_attributes
+to validate type when attribute has not yet been stored.
+
+=cut
+
+sub validate_type {
+
+    my $self = shift;
+
+    Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $self->code )
+        unless $self->type;
+}
+
 =head3 store
 
     my $attribute = Koha::Patron::Attribute->new({ code => 'a_code', ... });
@@ -47,8 +66,7 @@ sub store {
 
     my $self = shift;
 
-    Koha::Exceptions::Patron::Attribute::InvalidType->throw( type => $self->code )
-        unless $self->type;
+    $self->validate_type();
 
     Koha::Exceptions::Patron::Attribute::NonRepeatable->throw( attribute => $self )
         unless $self->repeatable_ok();
