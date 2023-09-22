@@ -74,7 +74,7 @@
                         [% END %]
                     </em><br/>
                 [% END %]
-                <a class="btn btn-xs btn-default" href="#reldebarments" onclick="$('#reldebarments-tab').click()"><i class="fa fa-ban"></i> View restrictions</a>
+                <a class="btn btn-xs btn-default" href="#reldebarments-tab" onclick="$('#reldebarments-tab').click()"><i class="fa fa-ban"></i> View restrictions</a>
 
                 [% IF (noissues && CAN_user_circulate_force_checkout && !moremember) %]
                     <span class="override_debarment">
