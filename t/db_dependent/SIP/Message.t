@@ -246,13 +246,13 @@ subtest "Test patron_status_string" => sub {
 
     my $builder = t::lib::TestBuilder->new();
     my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
-    my $patron = $builder->build({
-        source => 'Borrower',
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
         value  => {
             branchcode => $branchcode,
         },
     });
-    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->{cardnumber} );
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
 
     t::lib::Mocks::mock_userenv({ branchcode => $branchcode });
 
@@ -282,12 +282,21 @@ subtest "Test patron_status_string" => sub {
     );
     AddIssue( $patron, $item2->barcode );
 
-    is( Koha::Checkouts->search({ borrowernumber => $patron->{borrowernumber} })->count, 2, "Found 2 checkouts for this patron" );
+    is(
+        Koha::Checkouts->search( { borrowernumber => $patron->borrowernumber } )->count, 2,
+        "Found 2 checkouts for this patron"
+    );
 
     $item1->itemlost(1)->store();
     $item2->itemlost(2)->store();
 
-    is( Koha::Checkouts->search({ borrowernumber => $patron->{borrowernumber}, 'itemlost' => { '>', 0 } }, { join => 'item'} )->count, 2, "Found 2 lost checkouts for this patron" );
+    is(
+        Koha::Checkouts->search(
+            { borrowernumber => $patron->borrowernumber, 'itemlost' => { '>', 0 } }, { join => 'item' }
+        )->count,
+        2,
+        "Found 2 lost checkouts for this patron"
+    );
 
     my $server->{account}->{lost_block_checkout} = undef;
     my $patron_status_string = C4::SIP::Sip::MsgType::patron_status_string( $sip_patron, $server );
