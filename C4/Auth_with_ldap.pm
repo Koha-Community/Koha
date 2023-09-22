@@ -204,6 +204,7 @@ sub checkpw_ldap {
     my (%borrower);
 	my ($borrowernumber,$cardnumber,$local_userid,$savedpw) = exists_local($userid);
 
+    my $patron;
     if (( $borrowernumber and $config{update}   ) or
         (!$borrowernumber and $config{replicate})   ) {
         %borrower = ldap_entry_2_hash($userldapentry,$userid);
@@ -220,7 +221,7 @@ sub checkpw_ldap {
         }
     } elsif ($config{replicate}) { # A2, C2
         my @columns = Koha::Patrons->columns;
-        my $patron = Koha::Patron->new(
+        $patron = Koha::Patron->new(
             {
                 map { exists( $borrower{$_} ) ? ( $_ => $borrower{$_} ) : () } @columns
             }
@@ -275,7 +276,7 @@ sub checkpw_ldap {
             unless (exists($borrower{$code}) && $borrower{$code} !~ m/^\s*$/ ) {
                 next;
             }
-            my $patron = Koha::Patrons->find($borrowernumber);
+            $patron = Koha::Patrons->find($borrowernumber);
             if ( $patron ) { # Should not be needed, but we are in C4::Auth LDAP...
                 eval {
                     my $attribute = Koha::Patron::Attribute->new({code => $code, attribute => $borrower{$code}});
@@ -287,7 +288,7 @@ sub checkpw_ldap {
             }
         }
     }
-    return(1, $cardnumber, $userid);
+    return(1, $cardnumber, $userid, $patron);
 }
 
 # Pass LDAP entry object and local cardnumber (userid).
