@@ -579,7 +579,7 @@ subtest 'SC status tests' => sub {
 
     $sip_user->delete;
 
-    dies_ok{ $msg->handle_sc_status( $server ) } ,"Dies if sip user cannot be found";
+    dies_ok { $msg->handle_sc_status( $server ) } "Dies if sip user cannot be found";
 
     $schema->storage->txn_rollback;
 };
