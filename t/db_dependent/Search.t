@@ -511,7 +511,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
         UPDATE marc_subfield_structure
         SET hidden=4
         WHERE frameworkcode='$fw' AND
-              tagfield=952 AND
+              tagfield='952' AND
               tagsubfield='p';
     });
 
@@ -520,7 +520,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
         UPDATE marc_subfield_structure
         SET hidden=-7
         WHERE frameworkcode='$fw' AND
-              tagfield=952 AND
+              tagfield='952' AND
               tagsubfield='y';
     });
 
@@ -1018,7 +1018,7 @@ END {
     $dbh->do(q{
         UPDATE marc_subfield_structure
         SET hidden=0
-        WHERE tagfield=952 AND
+        WHERE tagfield='952' AND
               ( tagsubfield IN ('p', 'y') )
     });
 
