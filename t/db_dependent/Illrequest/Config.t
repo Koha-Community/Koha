@@ -44,6 +44,7 @@ subtest 'Basics' => sub {
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_config("interlibrary_loans", {});
+    t::lib::Mocks::mock_preference('ILLPartnerCode', undef);
 
     my $config = Koha::Illrequest::Config->new;
     isa_ok($config, "Koha::Illrequest::Config",
@@ -60,7 +61,7 @@ subtest 'Basics' => sub {
     is($config->backend_dir, "/tmp/", "backend_dir: setter is persistent.");
 
     # partner_code:
-    is($config->partner_code, "IL", "partner_code: Undefined partner_code is undefined.");
+    is($config->partner_code, 'IL', "partner_code: Undefined partner_code fallback to 'IL'.");
     is($config->partner_code("ILTST"), "ILTST", "partner_code: setter works.");
     is($config->partner_code, "ILTST", "partner_code: setter is persistent.");
 
@@ -198,6 +199,7 @@ subtest '_load_configuration' => sub {
     $schema->storage->txn_begin;
 
     my $config = Koha::Illrequest::Config->new;
+    t::lib::Mocks::mock_preference('ILLPartnerCode', 'IL');
 
     # Return basic configuration
     is_deeply(

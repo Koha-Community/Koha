@@ -255,7 +255,6 @@ sub _load_configuration {
         limits             => {},
         digital_recipients => {},
         prefixes           => {},
-        partner_code       => 'IL',
         raw_config         => $xml_config,
     };
 
