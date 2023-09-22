@@ -85,7 +85,6 @@ if ( $op eq 'select' ) {
 
     # Set filter for 'all status'
     if ( $filters->{orderstatus} eq "any" ) {
-        delete( $filters->{orderstatus} );
         $filters->{get_canceled_order} = 1;
     }
 
@@ -93,11 +92,6 @@ if ( $op eq 'select' ) {
         my $order = $_;
         ( grep {$_ eq $order->{ordernumber}} @ordernumbers ) ? () : $order
     } @{ C4::Acquisition::GetHistory(%$filters) };
-
-    # Reset order status for 'all status'
-    if ( $filters->{get_canceled_order} ) {
-        $filters->{orderstatus} = "any";
-    }
 
     @selected_order_loop =
       scalar @ordernumbers

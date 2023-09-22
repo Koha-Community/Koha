@@ -2277,7 +2277,7 @@ sub GetHistory {
         push @query_params, $to_placed_on;
     }
 
-    if ( defined $orderstatus and $orderstatus ne '') {
+    if ( defined $orderstatus and $orderstatus ne '' and $orderstatus ne 'any') {
         $query .= " AND aqorders.orderstatus = ? ";
         push @query_params, "$orderstatus";
     }

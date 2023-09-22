@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 72;
+use Test::More tests => 73;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -963,6 +963,47 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
         };
     };
 
+};
+
+subtest 'GetHistory status search' => sub {
+    plan tests => 3;
+
+    my $builder      = t::lib::TestBuilder->new;
+    my $order_basket = $builder->build( { source => 'Aqbasket', value => { is_standing => 0 } } );
+    my $orderinfo    = {
+        basketno                => $order_basket->{basketno},
+        rrp                     => 19.99,
+        replacementprice        => undef,
+        quantity                => 1,
+        quantityreceived        => 0,
+        datereceived            => undef,
+        orderstatus             => 'cancelled',
+        datecancellationprinted => '1990-01-01',
+    };
+    my $order      = $builder->build( { source => 'Aqorder', value => $orderinfo } );
+    my $orderinfo2 = {
+        basketno                => $order_basket->{basketno},
+        rrp                     => 19.99,
+        replacementprice        => undef,
+        quantity                => 1,
+        quantityreceived        => 0,
+        datereceived            => undef,
+        orderstatus             => 'new',
+        datecancellationprinted => undef,
+    };
+    $order = $builder->build( { source => 'Aqorder', value => $orderinfo2 } );
+
+    $orders = GetHistory( order_status => "new", basket => $order_basket->{basketno} );
+    is( scalar(@$orders), 1, 'GetHistory with order status "new" returns 1 order' );
+
+    my $orders = GetHistory( get_canceled_order => 1, order_status => "any", basket => $order_basket->{basketno} );
+    is( scalar(@$orders), 2, 'GetHistory with order status "any" returns all (2) orders' );
+
+    $orders = GetHistory( order_status => "", basket => $order_basket->{basketno} );
+    is(
+        scalar(@$orders), 1,
+        'GetHistory with order status "all except cancelled" returns only order with status new (1)'
+    );
 };
 
 subtest 'GetHistory with additional fields' => sub {
