@@ -109,7 +109,7 @@ sub checkpw_shib {
         if ($config->{'sync'}) {
             _sync($borrower->borrowernumber, $config, $match);
         }
-        return ( 1, $borrower->get_column('cardnumber'), $borrower->get_column('userid') );
+        return ( 1, $borrower->get_column('cardnumber'), $borrower->get_column('userid'), $borrower );
     }
 
     if ( $config->{'autocreate'} ) {
