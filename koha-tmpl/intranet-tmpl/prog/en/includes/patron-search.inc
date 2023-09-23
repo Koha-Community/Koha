@@ -582,7 +582,7 @@
                                 "orderable": false,
                                 "render": function( data, type, row, meta ) {
                                     if ( row.overdues_count ) {
-                                        return "<span class='overdue'><strong>"+row.overdues_count + "</strong></span>";
+                                        return "<span class='overdue'><strong>"+row.overdues_count + "</strong></span>" + " / " + row.checkouts_count;
                                     } else {
                                         return "0 / " + row.checkouts_count;
                                     }
