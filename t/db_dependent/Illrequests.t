@@ -350,7 +350,7 @@ subtest 'Status Graph tests' => sub {
             ui_method_name => 'Place request with partners',
             method         => 'generic_confirm',
             next_actions   => [ 'COMP', 'CHK', 'REQREV' ],
-            ui_method_icon => 'fa-send-o',
+            ui_method_icon => 'fa-paper-plane',
         },
         REQREV => {
             prev_actions   => [ 'REQ', 'GENREQ' ],
@@ -469,7 +469,7 @@ subtest 'Status Graph tests' => sub {
             ui_method_name => 'Place request with partners',
             method         => 'generic_confirm',
             next_actions   => [ 'COMP', 'CHK', 'REQREV' ],
-            ui_method_icon => 'fa-send-o',
+            ui_method_icon => 'fa-paper-plane',
         },
         REQREV => {
             prev_actions   => [ 'REQ', 'GENREQ' ],
