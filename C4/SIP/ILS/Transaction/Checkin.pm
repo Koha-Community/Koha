@@ -268,6 +268,16 @@ sub _get_sort_bin {
     my $rule = 0;
     RULE: foreach my $line (@lines) {
 
+        # Skip empty lines and comments
+        next if ( $line =~ /^\s*($|#)/ );
+
+        # Skip malformed lines
+        my $count = () = $line =~ /\Q:/g;
+        if ( --$count % 3 ) {
+            warn "Malformed preference line found: '$line'";
+            next;
+        }
+
         my $match = 0;
 
         # Split the line into fields
