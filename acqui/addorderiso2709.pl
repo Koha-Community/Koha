@@ -293,6 +293,8 @@ if ($op eq ""){
                         $orderinfo{ecost} = $order_discount ? $price * ( 1 - $order_discount / 100 ) : $price;
                         $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                         $orderinfo{unitprice} = $orderinfo{ecost};
+                        $orderinfo{sort1} = $c_sort1;
+                        $orderinfo{sort2} = $c_sort2;
                     } else {
                         $orderinfo{listprice} = 0;
                     }
