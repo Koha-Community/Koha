@@ -140,7 +140,7 @@ my $can_item_be_reserved = 0;
 $items->reset;
 
 while ( my $item = $items->next ) {
-    $can_item_be_reserved = $can_item_be_reserved || IsAvailableForItemLevelRequest($item, $patron, undef);
+    $can_item_be_reserved = $can_item_be_reserved || $patron && IsAvailableForItemLevelRequest( $item, $patron, undef );
 }
 
 if( $can_item_be_reserved || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
