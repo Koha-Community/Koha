@@ -1098,6 +1098,8 @@
                     [% IF ( CircAutoPrintQuickSlip == 'clear' ) %]
                         window.location='/cgi-bin/koha/circ/circulation.pl';
                         return false;
+                    [% ELSIF ( CircAutoPrintQuickSlip == 'ignore' ) %]
+                        return false;
                     [% ELSE %]
                         window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=" + borrowernumber + "&amp;print=issue[% CircAutoPrintQuickSlip | html %]", "printwindow");
                         return false;
