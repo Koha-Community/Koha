@@ -52,7 +52,11 @@
         <p class="branchfax">Fax: <span property="faxNumber">[% library.branchfax | html %]</span></p>
     [% END %]
     [% IF ( library.branchurl ) %]
-        <p class="branchurl"><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
+        [% IF ( Koha.Preference('OPACURLOpenInNewWindow') ) %]
+            <p class="branchurl"><a href="[% library.branchurl | url %]" target="_blank" rel="noreferrer" property="url">[% library.branchurl | html %]</a></p>
+        [% ELSE %]
+            <p class="branchurl"><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
+        [% END %]
     [% END %]
 [% END %]
 
