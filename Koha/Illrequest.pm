@@ -298,7 +298,7 @@ correct category and records the fact that the status has changed
 sub status_alias {
     my ($self, $new_status_alias) = @_;
 
-    my $current_status_alias = $self->SUPER::status_alias;
+    my $current_status_alias = $self->get_column('status_alias');
 
     if ($new_status_alias) {
         # Keep a record of the previous status before we change it,
@@ -333,7 +333,7 @@ sub status_alias {
     my $alias = Koha::AuthorisedValues->search(
         {
             category         => 'ILL_STATUS_ALIAS',
-            authorised_value => $self->SUPER::status_alias
+            authorised_value => $current_status_alias
         },
         {},
         $self->branchcode
@@ -359,8 +359,8 @@ and sends a notice if appropriate
 sub status {
     my ( $self, $new_status) = @_;
 
-    my $current_status = $self->SUPER::status;
-    my $current_status_alias = $self->SUPER::status_alias;
+    my $current_status = $self->get_column('status');
+    my $current_status_alias = $self->get_column('status_alias');
 
     if ($new_status) {
         # Keep a record of the previous status before we change it,
