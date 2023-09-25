@@ -5,6 +5,7 @@
 
 use Modern::Perl;
 use Test::More tests => 18;
+use Test::Warn;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -975,13 +976,14 @@ subtest checkin_withdrawn => sub {
 };
 
 subtest _get_sort_bin => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch   = $library->branchcode;
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $branch2  = $library2->branchcode;
 
+    # Rules starts with malformed line, empty line and a comment to prove they are skipped
     my $rules = <<"RULES";
 $branch:homebranch:ne:\$holdingbranch:X\r
 $branch:effective_itemtype:eq:CD:0\r
@@ -992,7 +994,11 @@ $branch2:homebranch:ne:\$holdingbranch:X\r
 $branch2:effective_itemtype:eq:CD:4\r
 $branch2:itemcallnumber:>:600:5\r
 $branch2:effective_itemtype:eq:BOOK:ccode:eq:TEEN:6\r
+# Comment line to skip\r
+\r
+$branch:homebranch:Z\r
 RULES
+
     t::lib::Mocks::mock_preference( 'SIP2SortBinMapping', $rules );
 
     my $item_cd = $builder->build_sample_item(
@@ -1018,6 +1024,13 @@ RULES
         }
     );
 
+    my $item_dvd = $builder->build_sample_item(
+        {
+            library => $library2->branchcode,
+            itype  => 'DVD'
+        }
+    );
+
     my $bin;
 
     # Set holdingbranch as though item returned to library other than homebranch (As AddReturn would)
@@ -1037,6 +1050,10 @@ RULES
 
     $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_book2, $library2->branchcode );
     is( $bin, '6', "Rules with multiple field matches" );
+
+    warnings_are { $bin = C4::SIP::ILS::Transaction::Checkin::_get_sort_bin( $item_dvd, $library2->branchcode ); }
+    ["Malformed preference line found: '$branch:homebranch:Z'"],
+        "Comments and blank lines are skipped, Malformed lines are warned and skipped";
 };
 
 subtest item_circulation_status => sub {
