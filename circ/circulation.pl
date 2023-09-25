@@ -475,7 +475,8 @@ if (@$barcodes) {
   } else {
     my $confirmation_needed = grep { $_->{NEEDSCONFIRMATION} } @$checkout_infos;
     $template->param(
-        checkout_infos => $checkout_infos,
+        checkout_infos      => $checkout_infos,
+        onsite_checkout     => $onsite_checkout,
         confirmation_needed => $confirmation_needed,
     );
   }
