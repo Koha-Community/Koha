@@ -55,6 +55,7 @@ sub pay {
 
     my $account = Koha::Account->new( { patron_id => $borrowernumber } );
 
+    # Bug 16899: Add ability to disallow overpayments for SIP
     if ($disallow_overpayment) {
         return { ok => 0 } if $account->balance < $amt;
     }
