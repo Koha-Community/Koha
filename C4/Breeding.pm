@@ -315,7 +315,7 @@ sub _handle_one_result {
         $row->{breedingid}   = $breedingid;
         $row->{isbn}=_isbn_replace($row->{isbn});
         my $pref_newtags = C4::Context->preference('AdditionalFieldsInZ3950ResultSearch');
-        $row = _add_custom_field_rowdata($row, $marcrecord, $pref_newtags);
+        $row = _add_custom_field_rowdata( $row, $marcrecord, $pref_newtags );
     }
     return ( $row, $error );
 }
@@ -347,6 +347,7 @@ sub _do_xslt_proc {
 sub _add_custom_field_rowdata
 {
     my ( $row, $record, $pref_newtags ) = @_;
+    $pref_newtags //= '';
     my $pref_flavour = C4::Context->preference('MarcFlavour');
 
     $pref_newtags =~ s/^\s+|\s+$//g;

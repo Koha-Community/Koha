@@ -56,7 +56,7 @@ subtest '_do_xslt_proc' => sub {
 };
 #Group 4: testing _add_custom_field_rowdata (part of Z3950Search)
 subtest '_add_custom_field_rowdata' => sub {
-    plan tests => 3;
+    plan tests => 5;
     test_add_custom_field_rowdata();
 };
 
@@ -237,28 +237,36 @@ sub test_do_xslt {
 
 sub test_add_custom_field_rowdata {
     my $row = {
-       biblionumber => 0,
-       server => "testServer",
-       breedingid => 0,
-       title => "Just a title"
-   };
+        biblionumber => 0,
+        server       => "testServer",
+        breedingid   => 0,
+        title        => "Just a title"
+    };
 
     my $biblio = MARC::Record->new();
     $biblio->append_fields(
-        MARC::Field->new('245', ' ', ' ', a => 'Just a title'),
-        MARC::Field->new('035', ' ', ' ', a => 'First 035'),
-        MARC::Field->new('035', ' ', ' ', a => 'Second 035')
+        MARC::Field->new( '245', ' ', ' ', a => 'Just a title' ),
+        MARC::Field->new( '035', ' ', ' ', a => 'First 035' ),
+        MARC::Field->new( '035', ' ', ' ', a => 'Second 035' )
     );
 
-   t::lib::Mocks::mock_preference('AdditionalFieldsInZ3950ResultSearch',"245\$a, 035\$a");
+    my $pref_newtags = "245\$a, 035\$a";
 
-   my $returned_row = C4::Breeding::_add_custom_field_rowdata($row, $biblio);
+    my $returned_row = C4::Breeding::_add_custom_field_rowdata( $row, $biblio, $pref_newtags );
 
-   is($returned_row->{title}, "Just a title", "_add_rowdata returns the title of a biblio");
-   is($returned_row->{addnumberfields}[0], "245\$a", "_add_rowdata returns the field number chosen in the AdditionalFieldsInZ3950ResultSearch preference");
+    is( $returned_row->{title}, "Just a title", "_add_rowdata returns the title of a biblio" );
+    is(
+        $returned_row->{addnumberfields}[0], "245\$a",
+        "_add_rowdata returns the field number chosen in the AdditionalFieldsInZ3950ResultSearch preference"
+    );
 
-   # Test repeatble tags,the trailing whitespace is a normal side-effect of _add_custom_field_row_data
-   is_deeply(\$returned_row->{"035\$a"}, \["First 035 ", "Second 035 "],"_add_rowdata supports repeatable tags");
+    # Test repeatble tags,the trailing whitespace is a normal side-effect of _add_custom_field_row_data
+    is_deeply( \$returned_row->{"035\$a"}, \[ "First 035 ", "Second 035 " ], "_add_rowdata supports repeatable tags" );
+
+    warning_is { C4::Breeding::_add_custom_field_rowdata( $row, $biblio, undef ) } undef,
+        'no warn from add_custom_field_rowdata when pref_newtags undef';
+    warning_is { C4::Breeding::_add_custom_field_rowdata( $row, $biblio, "" ) } undef,
+        'no warn from add_custom_field_rowdata when pref_newtags blank';
 }
 
 sub xsl_file {
