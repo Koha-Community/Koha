@@ -1153,7 +1153,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
     my $credit = Koha::Account::Line->new(
         {
             borrowernumber    => $patron->id,
-            date              => '1970-01-01 00:00:01',
+            date              => '1970-01-01 14:00:01',
             amount            => -.5,
             amountoutstanding => -.5,
             interface         => 'commandline',
@@ -1172,7 +1172,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
     $credit = Koha::Account::Line->new(
         {
             borrowernumber    => $patron->id,
-            date              => '1970-01-01 00:00:01',
+            date              => '1970-01-01 14:00:01',
             amount            => -.5,
             amountoutstanding => -.5,
             interface         => 'commandline',
