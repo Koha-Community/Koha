@@ -360,7 +360,7 @@ if ($basketobj->effective_create_items eq 'ordering' && !$ordernumber) {
     );
 }
 
-my @itemtypes = Koha::ItemTypes->search->as_list;
+my @itemtypes = Koha::ItemTypes->search( {}, { order_by => { -asc => "description" } } )->as_list;
 
 if ( defined $from_subscriptionid ) {
     # Get the last received order for this subscription
