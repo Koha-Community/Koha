@@ -23,7 +23,7 @@ use Modern::Perl;
 use DateTime;
 use Try::Tiny qw( catch try );
 
-use C4::Circulation qw( LostItem MarkIssueReturned );
+use C4::Circulation qw( AddRenewal CanBookBeRenewed LostItem MarkIssueReturned );
 use Koha::Checkouts::Renewals;
 use Koha::Checkouts::ReturnClaims;
 use Koha::Database;
@@ -149,6 +149,48 @@ sub renewals {
     my $renewals_rs = $self->_result->renewals;
     return unless $renewals_rs;
     return Koha::Checkouts::Renewals->_new_from_dbic( $renewals_rs );
+}
+
+=head3 attempt_auto_renew
+
+  my ($success, $error, $updated) = $checkout->auto_renew({ confirm => 1 });
+
+Attempt to automatically renew a book. Return error reason if it cannot be renewed.
+Also return whether a change has been made to avoid notifying on more than one attempt.
+
+If not passed confirm, we will only report and no changes will be made.
+
+=cut
+
+sub attempt_auto_renew {
+    my ( $self, $params ) = @_;
+    my $confirm = $params->{confirm} // 0;
+
+    # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
+    my ( $ok, $error ) = C4::Circulation::CanBookBeRenewed( $self->patron, $self, undef, 1 );
+    if ( $error eq 'auto_renew' ) {
+        if ($confirm) {
+            my $date_due = C4::Circulation::AddRenewal(
+                {
+                    borrowernumber => $self->borrowernumber,
+                    itemnumber     => $self->itemnumber,
+                    branch         => $self->branchcode,
+                    seen           => 0,
+                    automatic      => 1,
+                }
+            );
+            $self->auto_renew_error(undef)->store;
+        }
+        return ( 1, undef, 1 );
+    } else {
+        my $updated = 0;
+        if ( !$self->auto_renew_error || $error ne $self->auto_renew_error ) {
+            $self->auto_renew_error($error)->store if $confirm;
+            $updated = 1;
+        }
+        return ( 0, $error, $updated );
+    }
+
 }
 
 =head3 to_api_mapping

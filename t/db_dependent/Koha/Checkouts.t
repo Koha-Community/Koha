@@ -19,7 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
+use Test::MockModule;
+use Test::Warn;
 
 use C4::Circulation qw( MarkIssueReturned AddReturn );
 use C4::Reserves qw( AddReserve );
@@ -481,4 +483,68 @@ subtest 'automatic_checkin' => sub {
     };
 
     $schema->storage->txn_rollback;
-}
+};
+
+subtest 'attempt_auto_renew' => sub {
+
+    plan tests => 17;
+
+    $schema->storage->txn_begin;
+
+    my $renew_error = 'auto_renew';
+    my $module      = Test::MockModule->new('C4::Circulation');
+    $module->mock( 'CanBookBeRenewed', sub { return ( 1, $renew_error ) } );
+    my $around_now = dt_from_string();
+    $module->mock( 'AddRenewal', sub { warn "AddRenewal called" } );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                date_due         => '2023-01-01 23:59:59',
+                returndate       => undef,
+                auto_renew       => 1,
+                auto_renew_error => undef,
+                onsite_checkout  => 0,
+                renewals_count   => 0,
+            }
+        }
+    );
+
+    my ( $success, $error, $updated );
+    warning_is {
+        ( $success, $error, $updated ) = $checkout->attempt_auto_renew();
+    }
+    undef, "AddRenewal not called without confirm";
+    ok( $success, "Issue is renewed when error is 'auto_renew'" );
+    is( $error, undef, "No error when renewed" );
+    ok( $updated, "Issue reported as updated when renewed" );
+
+    warning_is {
+        ( $success, $error, $updated ) = $checkout->attempt_auto_renew( { confirm => 1 } );
+    }
+    "AddRenewal called", "AddRenewal called when confirm is passed";
+    ok( $success, "Issue is renewed when error is 'auto_renew'" );
+    is( $error, undef, "No error when renewed" );
+    ok( $updated, "Issue reported as updated when renewed" );
+
+    $renew_error = 'anything_else';
+    ( $success, $error, $updated ) = $checkout->attempt_auto_renew();
+    ok( !$success, "Success is untrue for any other status" );
+    is( $error, 'anything_else', "The error is passed through" );
+    ok( $updated, "Issue reported as updated when status changes" );
+    $checkout->discard_changes();
+    is( $checkout->auto_renew_error, undef, "Error not updated if confirm not passed" );
+
+    ( $success, $error, $updated ) = $checkout->attempt_auto_renew( { confirm => 1 } );
+    ok( !$success, "Success is untrue for any other status" );
+    is( $error, 'anything_else', "The error is passed through" );
+    ok( $updated, "Issue updated when confirm passed" );
+    $checkout->discard_changes();
+    is( $checkout->auto_renew_error, 'anything_else', "Error updated if confirm passed" );
+
+    # Error now equals 'anything_else'
+    ( $success, $error, $updated ) = $checkout->attempt_auto_renew();
+    ok( !$updated, "Issue not reported as updated when status has not changed" );
+
+    $schema->storage->txn_rollback;
+};
