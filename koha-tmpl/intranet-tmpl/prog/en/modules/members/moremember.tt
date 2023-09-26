@@ -55,6 +55,10 @@
 
                     [% INCLUDE 'members-toolbar.inc' %]
 
+                    [% IF is_anonymous %]
+                        <div class="dialog alert">This is the anonymous patron.</div>
+                    [% END %]
+
                     [% IF ( error ) %]
                         <div class="dialog alert">
                             [% IF ( error == 'CANT_DELETE_STAFF' ) %]
