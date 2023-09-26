@@ -153,7 +153,7 @@ while ( my $auto_renew = $auto_renews->next ) {
     print "examining item '" . $auto_renew->itemnumber . "' to auto renew\n" if $verbose;
 
     my ( $borrower_preferences, $wants_messages, $wants_digest ) = ( undef, 0, 0 );
-    if ( $send_notices_pref eq 'preferences' ){
+    if ( $send_notices_pref eq 'preferences' ) {
         $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences(
             {
                 borrowernumber => $auto_renew->borrowernumber,
@@ -166,13 +166,13 @@ while ( my $auto_renew = $auto_renews->next ) {
         $wants_digest = 1
             if $wants_messages
             && $borrower_preferences->{wants_digest};
-    } else { # Preference is never or cron
+    } else {    # Preference is never or cron
         $wants_messages = $send_notices;
-        $wants_digest = 0;
+        $wants_digest   = 0;
     }
 
-    my ( $success, $error, $updated ) = $auto_renew->attempt_auto_renew({ confirm => $confirm });
-    if ( $success ) {
+    my ( $success, $error, $updated ) = $auto_renew->attempt_auto_renew( { confirm => $confirm } );
+    if ($success) {
         if ($verbose) {
             say sprintf "Issue id: %s for borrower: %s and item: %s %s be renewed.",
                 $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber,
@@ -182,27 +182,29 @@ while ( my $auto_renew = $auto_renews->next ) {
             push @item_renewal_ids, $auto_renew->itemnumber;
         }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
-            if ( $wants_messages ) && !$wants_digest;
+            if ($wants_messages) && !$wants_digest;
     } elsif (
+
         # FIXME Do we need to list every status? Why not simply else?
-        $error eq 'too_many' ||
-        $error eq 'on_reserve' ||
-        $error eq 'restriction' ||
-        $error eq 'overdue' ||
-        $error eq 'too_unseen' ||
-        $error eq 'auto_account_expired' ||
-        $error eq 'auto_too_late' ||
-        $error eq 'auto_too_much_oweing' ||
-        $error eq 'auto_too_soon' ||
-        $error eq 'item_denied_renewal' ||
-        $error eq 'item_issued_to_other_patron'
-    ) {
-        if ( $verbose ) {
+           $error eq 'too_many'
+        || $error eq 'on_reserve'
+        || $error eq 'restriction'
+        || $error eq 'overdue'
+        || $error eq 'too_unseen'
+        || $error eq 'auto_account_expired'
+        || $error eq 'auto_too_late'
+        || $error eq 'auto_too_much_oweing'
+        || $error eq 'auto_too_soon'
+        || $error eq 'item_denied_renewal'
+        || $error eq 'item_issued_to_other_patron'
+        )
+    {
+        if ($verbose) {
             say sprintf "Issue id: %s for borrower: %s and item: %s %s not be renewed. (%s)",
                 $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber,
                 $confirm ? 'will' : 'would', $error;
         }
-        if ( $updated ) {
+        if ($updated) {
             push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
                 if $error ne 'auto_too_soon' && ( $wants_messages && !$wants_digest );  # Do not notify if it's too soon
         }

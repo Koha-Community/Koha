@@ -431,7 +431,7 @@ subtest "GetIssuingCharges tests" => sub {
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 112;
+    plan tests => 113;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -1412,8 +1412,72 @@ subtest "CanBookBeRenewed tests" => sub {
         );
 
     };
-    # Too many renewals
 
+    subtest "auto_renew_final" => sub {
+        plan tests => 6;
+        my $item_to_auto_renew = $builder->build_sample_item();
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => $item_to_auto_renew->itype,
+                rules        => {
+                    norenewalbefore => undef,
+                    renewalsallowed => 1,
+                }
+            }
+        );
+
+        my $ten_days_before = dt_from_string->add( days => -10 );
+        my $ten_days_ahead  = dt_from_string->add( days => 10 );
+        my $issue           = AddIssue(
+            $renewing_borrower_obj, $item_to_auto_renew->barcode, $ten_days_ahead, undef, $ten_days_before,
+            undef, { auto_renew => 1 }
+        );
+        $issue->renewals_count(0)->store;
+
+        ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $issue );
+        is( $renewokay, 1,                  'Success for auto_renewal' );
+        is( $error,     'auto_renew_final', 'Auto renewal allowed, but it is the last one' );
+
+        # Final unseen renewal
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => $item_to_auto_renew->itype,
+                rules        => {
+                    unseen_renewals_allowed => 2,
+                    renewalsallowed         => 10,
+                }
+            }
+        );
+        t::lib::Mocks::mock_preference( 'UnseenRenewals', 1 );
+        $issue->unseen_renewals(1)->renewals_count(1)->store;
+
+        ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $issue );
+        is( $renewokay, 1,                   'Success for auto_renewal' );
+        is( $error,     'auto_unseen_final', 'Final unseen renewal reported, not final overall' );
+
+        # Final unseen renewal
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => $item_to_auto_renew->itype,
+                rules        => {
+                    unseen_renewals_allowed => 2,
+                    renewalsallowed         => 2,
+                }
+            }
+        );
+        ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $issue );
+        is( $renewokay, 1,                  'Success for auto_renewal' );
+        is( $error,     'auto_renew_final', 'Final auto renewal reported' );
+
+    };
+
+    # Too many renewals
     # set policy to forbid renewals
     Koha::CirculationRules->set_rules(
         {
@@ -1444,6 +1508,7 @@ subtest "CanBookBeRenewed tests" => sub {
         }
     );
     t::lib::Mocks::mock_preference('UnseenRenewals', 1);
+
     $issue_1->unseen_renewals(2)->store;
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrower_obj, $issue_1);

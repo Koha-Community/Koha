@@ -2988,7 +2988,10 @@ sub CanBookBeRenewed {
     return ( 0, 'item_issued_to_other_patron') if $issue->borrowernumber != $patron->borrowernumber;
     return ( 0, 'item_denied_renewal') if $item->is_denied_renewal;
 
-       # override_limit will override anything else except on_reserve
+    my $final_renewal        = 0;
+    my $final_unseen_renewal = 0;
+
+    # override_limit will override anything else except on_reserve
     unless ( $override_limit ){
         my $branchcode = _GetCircControlBranch( $item, $patron );
         my $issuing_rule = Koha::CirculationRules->get_effective_rules(
@@ -3011,6 +3014,10 @@ sub CanBookBeRenewed {
           if C4::Context->preference('UnseenRenewals') &&
             looks_like_number($issuing_rule->{unseen_renewals_allowed}) &&
             $issuing_rule->{unseen_renewals_allowed} <= $issue->unseen_renewals;
+
+        $final_renewal        = $issuing_rule->{renewalsallowed} == ( $issue->renewals_count + 1 ) ? 1 : 0;
+        $final_unseen_renewal = ( C4::Context->preference('UnseenRenewals')
+                && $issuing_rule->{unseen_renewals_allowed} == ( $issue->unseen_renewals + 1 ) ) ? 1 : 0;
 
         my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
         my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
@@ -3123,7 +3130,8 @@ sub CanBookBeRenewed {
         return (0, "too_soon", { soonest_renew_date => $soonest } ) unless $override_limit;
     }
 
-    return ( 1, "auto_renew" ) if $auto_renew eq "ok" || $auto_renew eq "auto_too_soon" && !$override_limit;    # 0 if auto-renewal should not succeed
+    my $auto_renew_code = $final_renewal ? 'auto_renew_final' : $final_unseen_renewal ? 'auto_unseen_final' : 'auto_renew';
+    return ( 1, $auto_renew_code ) if $auto_renew eq "ok" || $auto_renew eq "auto_too_soon" && !$override_limit;
 
     return ( 1, undef );
 }
