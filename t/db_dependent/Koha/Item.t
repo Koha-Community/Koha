@@ -361,7 +361,11 @@ subtest 'has_pending_hold() tests' => sub {
     my $item  = $builder->build_sample_item({ itemlost => 0 });
     my $itemnumber = $item->itemnumber;
 
-    $dbh->do("INSERT INTO tmp_holdsqueue (surname,borrowernumber,itemnumber) VALUES ('Clamp',42,$itemnumber)");
+    my $patron         = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $borrowernumber = $patron->id;
+
+    $dbh->do(
+        "INSERT INTO tmp_holdsqueue (surname,borrowernumber,itemnumber) VALUES ('Clamp',$borrowernumber,$itemnumber)");
     ok( $item->has_pending_hold, "Yes, we have a pending hold");
     $dbh->do("DELETE FROM tmp_holdsqueue WHERE itemnumber=$itemnumber");
     $item->discard_changes;
