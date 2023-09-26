@@ -487,15 +487,14 @@ subtest 'automatic_checkin' => sub {
 
 subtest 'attempt_auto_renew' => sub {
 
-    plan tests => 17;
+    plan tests => 33;
 
     $schema->storage->txn_begin;
 
     my $renew_error = 'auto_renew';
     my $module      = Test::MockModule->new('C4::Circulation');
     $module->mock( 'CanBookBeRenewed', sub { return ( 1, $renew_error ) } );
-    my $around_now = dt_from_string();
-    $module->mock( 'AddRenewal', sub { warn "AddRenewal called" } );
+    $module->mock( 'AddRenewal',       sub { warn "AddRenewal called" } );
     my $checkout = $builder->build_object(
         {
             class => 'Koha::Checkouts',
@@ -527,6 +526,8 @@ subtest 'attempt_auto_renew' => sub {
     is( $error, undef, "No error when renewed" );
     ok( $updated, "Issue reported as updated when renewed" );
 
+    $module->mock( 'AddRenewal', sub { return; } );
+
     $renew_error = 'anything_else';
     ( $success, $error, $updated ) = $checkout->attempt_auto_renew();
     ok( !$success, "Success is untrue for any other status" );
@@ -545,6 +546,38 @@ subtest 'attempt_auto_renew' => sub {
     # Error now equals 'anything_else'
     ( $success, $error, $updated ) = $checkout->attempt_auto_renew();
     ok( !$updated, "Issue not reported as updated when status has not changed" );
+
+    $renew_error = "auto_unseen_final";
+    ( $success, $error, $updated ) = $checkout->attempt_auto_renew( { confirm => 1 } );
+    ok( $success, "Issue is renewed when error is 'auto_unseen_final'" );
+    is( $error, 'auto_unseen_final', "Error of finality reported when renewed" );
+    ok( $updated, "Issue reported as updated when renewed" );
+    $checkout->discard_changes();
+    is( $checkout->auto_renew_error, 'auto_unseen_final', "Error updated" );
+
+    $renew_error = "too_unseen";
+    ( $success, $error, $updated ) = $checkout->attempt_auto_renew( { confirm => 1 } );
+    ok( !$success, "Issue is not renewed when error is 'too_unseen'" );
+    is( $error, 'too_unseen', "Error reported correctly" );
+    ok( !$updated, "Issue not reported as updated when moved from final to too unseen" );
+    $checkout->discard_changes();
+    is( $checkout->auto_renew_error, 'too_unseen', "Error updated" );
+
+    $renew_error = "auto_renew_final";
+    ( $success, $error, $updated ) = $checkout->attempt_auto_renew( { confirm => 1 } );
+    ok( $success, "Issue is renewed when error is 'auto_renew_final'" );
+    is( $error, 'auto_renew_final', "Error of finality reported when renewed" );
+    ok( $updated, "Issue reported as updated when renewed" );
+    $checkout->discard_changes();
+    is( $checkout->auto_renew_error, 'auto_renew_final', "Error updated" );
+
+    $renew_error = "too_many";
+    ( $success, $error, $updated ) = $checkout->attempt_auto_renew( { confirm => 1 } );
+    ok( !$success, "Issue is not renewed when error is 'too_many'" );
+    is( $error, 'too_many', "Error reported correctly" );
+    ok( !$updated, "Issue not reported as updated when moved from final to too many" );
+    $checkout->discard_changes();
+    is( $checkout->auto_renew_error, 'too_many', "Error updated" );
 
     $schema->storage->txn_rollback;
 };

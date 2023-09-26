@@ -168,7 +168,8 @@ sub attempt_auto_renew {
 
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
     my ( $ok, $error ) = C4::Circulation::CanBookBeRenewed( $self->patron, $self, undef, 1 );
-    if ( $error eq 'auto_renew' ) {
+    my $store_error;
+    if ( $error eq 'auto_renew' || $error eq 'auto_renew_final' || $error eq 'auto_unseen_final' ) {
         if ($confirm) {
             my $date_due = C4::Circulation::AddRenewal(
                 {
@@ -179,14 +180,20 @@ sub attempt_auto_renew {
                     automatic      => 1,
                 }
             );
-            $self->auto_renew_error(undef)->store;
+            $store_error = $error eq 'auto_renew' ? undef : $error;
+            $self->auto_renew_error($store_error)->store;
         }
-        return ( 1, undef, 1 );
+        return ( 1, $store_error, 1 );
     } else {
         my $updated = 0;
         if ( !$self->auto_renew_error || $error ne $self->auto_renew_error ) {
+            $updated = 1
+                unless (
+                $self->auto_renew_error
+                && (   $self->auto_renew_error eq 'auto_renew_final' && $error eq 'too_many'
+                    || $self->auto_renew_error eq 'auto_unseen_final' && $error eq 'too_unseen' )
+                );
             $self->auto_renew_error($error)->store if $confirm;
-            $updated = 1;
         }
         return ( 0, $error, $updated );
     }
