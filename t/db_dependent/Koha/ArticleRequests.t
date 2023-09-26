@@ -40,7 +40,7 @@ subtest 'requested() tests' => sub {
     my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library_1->id, flags => 1 } } );
-    t::lib::Mocks::mock_userenv( { branchcode => $library_1 } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
 
     # FIXME: we moved past this pattern. This method should be refactored
     #        as ->filter_by_requested
