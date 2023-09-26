@@ -94,6 +94,10 @@
                         <div class="dialog alert">Staff members are not allowed to discharge borrowers, nor borrowers to request a discharge.</div>
                     [% END %]
 
+                    [% IF is_anonymous %]
+                        <div class="dialog alert">This is the anonymous patron, so circulation is disabled.</div>
+                    [% END %]
+
                     [% IF ( NEEDSCONFIRMATION ) %]
                         <div id="circ_needsconfirmation" class="dialog alert audio-alert-action focus" tabindex="-1">
                             [% IF CAN_user_circulate_force_checkout or ADDITIONAL_MATERIALS %]
