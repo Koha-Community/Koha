@@ -1972,21 +1972,25 @@ sub strings_map {
     }
 
     my $status_string =
-      ( $self->status && exists $status_graph_union->{ $self->status } && defined $status_graph_union->{ $self->status }->{name} )
-      ? $status_graph_union->{ $self->status }->{name}
-      : $self->status;
+        (      $self->status
+            && exists $status_graph_union->{ $self->status }
+            && defined $status_graph_union->{ $self->status }->{name} )
+        ? $status_graph_union->{ $self->status }->{name}
+        : $self->status;
 
     my $status_code =
-      ( $self->status && exists $status_graph_union->{ $self->status } && defined $status_graph_union->{ $self->status }->{id} )
-      ? $status_graph_union->{ $self->status }->{id}
-      : $self->status;
+        (      $self->status
+            && exists $status_graph_union->{ $self->status }
+            && defined $status_graph_union->{ $self->status }->{id} )
+        ? $status_graph_union->{ $self->status }->{id}
+        : $self->status;
 
     my $strings = {
         status => {
-            backend => $self->backend, # the backend identifier
-            str     => $status_string, # the status description, taken from the status graph
-            code    => $status_code,   # the status id, taken from the status graph
-            type    => 'ill_status',   # fixed type
+            backend => $self->backend,    # the backend identifier
+            str     => $status_string,    # the status description, taken from the status graph
+            code    => $status_code,      # the status id, taken from the status graph
+            type    => 'ill_status',      # fixed type
         }
     };
 

@@ -35,7 +35,7 @@ New illbackend
 
 sub new {
     my $class = shift;
-    my $self = {};
+    my $self  = {};
     return bless $self, $class;
 }
 
@@ -117,7 +117,7 @@ sub embed {
 
     foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
         if ( $embed_req eq 'statuses+strings' ) {
-            $return_embed->{statuses} = $self->existing_statuses( $backend_id );
+            $return_embed->{statuses} = $self->existing_statuses($backend_id);
         }
     }
     return $return_embed;
