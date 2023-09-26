@@ -33,7 +33,7 @@ eval { require Selenium::Remote::Driver; };
 if ( $@ ) {
     plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
 } else {
-    plan tests => 1;
+    plan tests => 2;
 }
 
 my $s = t::lib::Selenium->new;
@@ -45,10 +45,22 @@ my $builder = t::lib::TestBuilder->new;
 my $PatronSelfRegistration_value = C4::Context->preference('PatronSelfRegistration');
 C4::Context->set_preference('PatronSelfRegistration', '1');
 
+my $PatronSelfRegistrationDefaultCategory_value = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+
 our @cleanup;
+
+subtest 'Disable if no default category' => sub {
+    plan tests => 1;
+
+    $driver->get( $opac_base_url . 'opac-memberentry.pl' );
+    like( $driver->get_title(), qr(Koha online catalog), );
+};
 
 subtest 'Set flags' => sub {
     plan tests => 2;
+
+    my $default_category = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+    C4::Context->set_preference( 'PatronSelfRegistrationDefaultCategory', $default_category->categorycode );
 
     $driver->get($opac_base_url . 'opac-memberentry.pl');
     like( $driver->get_title(), qr(Register a new account), );
@@ -64,6 +76,7 @@ subtest 'Set flags' => sub {
     my $patron = Koha::Patrons->search({ surname => "a surname" })->next;
     is( $patron->flags, undef, 'flags must be undef even if user tried to pass it' );
     push @cleanup, $patron;
+    push @cleanup, $default_category;
 };
 
 
@@ -71,5 +84,6 @@ $driver->quit();
 
 END {
     C4::Context->set_preference('PatronSelfRegistration', $PatronSelfRegistration_value);
+    C4::Context->set_preference('PatronSelfRegistration', $PatronSelfRegistrationDefaultCategory_value);
     $_->delete for @cleanup;
 };
