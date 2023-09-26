@@ -26,7 +26,7 @@ use File::Slurp qw( read_file );
 use Data::Dumper;
 
 my $curdir = File::Spec->curdir();
-my @dirs = `git ls-tree -d --name-only master`;
+my @dirs = `git ls-tree -d --name-only HEAD`;
 my $makefile = read_file("$curdir/Makefile.PL");
 my @missing;
 for my $d ( sort @dirs ) {

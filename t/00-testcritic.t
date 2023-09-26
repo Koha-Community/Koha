@@ -14,5 +14,5 @@ if ( $EVAL_ERROR ) {
 }
 
 Test::Perl::Critic->import( -profile => '.perlcriticrc' );
-my @files = map { chomp; $_ } `git ls-tree -r master --name-only`;    # only files part of git
+my @files = map { chomp; $_ } `git ls-tree -r HEAD --name-only`;    # only files part of git
 all_critic_ok(@files);
