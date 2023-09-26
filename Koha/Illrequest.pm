@@ -1972,12 +1972,12 @@ sub strings_map {
     }
 
     my $status_string =
-      ( exists $status_graph_union->{ $self->status } && defined $status_graph_union->{ $self->status }->{name} )
+      ( $self->status && exists $status_graph_union->{ $self->status } && defined $status_graph_union->{ $self->status }->{name} )
       ? $status_graph_union->{ $self->status }->{name}
       : $self->status;
 
     my $status_code =
-      ( exists $status_graph_union->{ $self->status } && defined $status_graph_union->{ $self->status }->{id} )
+      ( $self->status && exists $status_graph_union->{ $self->status } && defined $status_graph_union->{ $self->status }->{id} )
       ? $status_graph_union->{ $self->status }->{id}
       : $self->status;
 
