@@ -486,6 +486,10 @@ if ( $patron ) {
         $template->param( is_debarred=> 1 );
         $noissues = 1;
     }
+    if ( $patron->borrowernumber eq C4::Context->preference("AnonymousPatron") ) {
+        $template->param( is_anonymous => 1 );
+        $noissues = 1;
+    }
     my $account = $patron->account;
     if( ( my $owing = $account->non_issues_charges ) > 0 ) {
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5; # FIXME If noissuescharge == 0 then 5, why??
