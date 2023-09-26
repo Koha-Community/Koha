@@ -88,9 +88,9 @@ sub existing_statuses {
         }
     );
     while ( my $request = $ill_requests->next ) {
-        my $status_data = $request->strings_map;
+        my $status_data = $request->status_alias ? $request->strings_map : undef;
 
-        if ( $status_data->{status_alias} ) {
+        if ( $status_data && $status_data->{status_alias} ) {
             push @data, {
                   $status_data->{status_alias}->{str}  ? ( str => $status_data->{status_alias}->{str} )
                 : $status_data->{status_alias}->{code} ? ( str => $status_data->{status_alias}->{code} )
