@@ -39,7 +39,7 @@
 [% BLOCK list_permissions %]
     <li>
         <label for="allow_changes_from">Allow changes to contents from: </label>
-        <select name="allow_changes_from" id="allow_changes_from" onchange="AdjustRemark()">
+        <select name="allow_changes_from" id="allow_changes_from">
 
             [% IF shelf.allow_change_from_owner %]<option value="0">Nobody</option>[% ELSE %]<option value="0" selected="selected">Nobody</option>[% END %]
 
@@ -241,7 +241,7 @@
                                         </div>
 
                                         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                            <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="btn btn-link send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=yes,resizable=yes,height=400,width=500,top=50,left=100'); return false; "><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send list</a></span>
+                                            <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="btn btn-link send"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send list</a></span>
                                         [% END %]
 
                                         <a class="btn btn-link print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&sortfield=[% sortfield | html %]&direction=[% direction | uri %]&print=1"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print list</a>
@@ -567,14 +567,6 @@
                                 [% END %]
                             </div>
 
-                            [% IF can_manage_shelf %]
-                                <form method="post" action="opac-shelves.pl">
-                                    <input type="hidden" name="op" value="delete" />
-                                    <input type="hidden" name="referer" value="list" />
-                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]"/>
-                                    <input type="submit" class="btn btn-danger" value="Delete this list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
-                                </form>
-                            [% END %]
                         [% END # / IF itemsloop %]
                     [% END # /IF shelf AND op == 'view' %]
 
@@ -630,7 +622,7 @@
                                     [% IF Koha.Preference('OpacAllowPublicListCreation') OR public == 1 %]
                                         <li>
                                             <label for="public">Category:</label>
-                                            <select name="public" id="public" onchange="AdjustRemark()">
+                                            <select name="public" id="public">
                                                 [% IF shelf.is_private %]
                                                         <option value="0" selected="selected">Private</option>
                                                     [% ELSE %]
@@ -1077,6 +1069,16 @@ $(function() {
         var format = $(this).data("format");
         $("#download_format").val( format );
         $("#download_list").submit();
+    });
+
+    $("#allow_changes_from, #public").on("change", function(){
+        AdjustRemark();
+    });
+
+    $(".send").on("click", function(e){
+        e.preventDefault();
+        let link = this.href;
+        Dopop( link );
     });
 
 }); // document.ready
