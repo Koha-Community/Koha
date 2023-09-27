@@ -150,7 +150,7 @@
                     [% lateorder.basket.basketname | html %] ([% lateorder.basketno | html %])
                 [% END %]
             </td>
-            <td data-sort="[% lateorder.basket.creationdate | html %]">[% lateorder.basket.creationdate | $KohaDates %]</td>
+            <td data-order="[% lateorder.basket.creationdate | html %]">[% lateorder.basket.creationdate | $KohaDates %]</td>
             <td>
                 [% IF ( lateorder.basket.basketgroupid ) %]
                     [% IF ( CAN_user_acquisition_group_manage ) %]
