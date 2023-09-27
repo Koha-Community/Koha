@@ -300,9 +300,9 @@ $(document).ready(function() {
 
                                     }
 
-                                } else if ( oObj.transferred ) {
+                                } else if ( oObj.found == "T" && oObj.transferred ) {
                                     data += __("Item is <strong>in transit</strong> from %s since %s").format(oObj.from_branch, oObj.date_sent);
-                                } else if ( oObj.not_transferred ) {
+                                } else if ( oObj.found == "T" && oObj.not_transferred ) {
                                     data += __("Item hasn't been transferred yet from %s").format(oObj.not_transferred_by);
                                 }
                                 data += "</em>";
