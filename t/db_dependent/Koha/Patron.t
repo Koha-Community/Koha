@@ -1166,6 +1166,8 @@ subtest 'safe_to_delete() tests' => sub {
     is( $message->type, 'error', 'Type is error' );
     is( $message->message, 'has_debt', 'Cannot delete, has debt' );
     # cleanup
+    my $manager = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { borrowernumber => $manager->id } );
     $patron->account->pay({ amount => 10, debits => [ $debit ] });
 
     ## Happy case :-D
