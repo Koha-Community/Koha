@@ -691,6 +691,10 @@ subtest 'attributes_from_api() tests' => sub {
 
         my $patron = Koha::Patron->new();
 
+        delete $C4::Context::context->{tz};
+        local %ENV;
+        $ENV{TZ} = 'Etc/UTC';    # following tests implicitly assume it
+
         my $attrs = $patron->attributes_from_api(
             {
                 updated_on     => '2019-12-27T14:53:00Z',
@@ -762,6 +766,9 @@ subtest 'attributes_from_api() tests' => sub {
             'date_of_birth',
             'Exception parameter is the API field name, not the DB one'
         );
+
+        # Remove timezone change
+        delete $C4::Context::context->{tz};
     };
 
     subtest 'booleans handling tests' => sub {
