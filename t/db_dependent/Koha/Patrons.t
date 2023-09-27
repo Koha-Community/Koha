@@ -738,6 +738,11 @@ subtest 'get_routing_lists' => sub {
 subtest 'get_age' => sub {
     plan tests => 31;
 
+    # Following tests implicitly assume timezone UTC
+    delete $C4::Context::context->{tz};
+    local %ENV;
+    $ENV{TZ} = 'Etc/UTC';
+
     my $patron = $builder->build( { source => 'Borrower' } );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
@@ -815,10 +820,18 @@ subtest 'get_age' => sub {
     }
 
     $patron->delete;
+
+    # Remove timezone change
+    delete $C4::Context::context->{tz};
 };
 
 subtest 'is_valid_age' => sub {
     plan tests => 10;
+
+    # Following tests implicitly assume timezone UTC
+    delete $C4::Context::context->{tz};
+    local %ENV;
+    $ENV{TZ} = 'Etc/UTC';
 
     my $dt = dt_from_string('2020-02-28');
 
@@ -897,6 +910,9 @@ subtest 'is_valid_age' => sub {
 
     $patron->delete;
     $category->delete;
+
+    # Remove timezone change
+    delete $C4::Context::context->{tz};
 };
 
 subtest 'account' => sub {
