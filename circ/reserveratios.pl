@@ -116,6 +116,8 @@ my $strsth =
             ORDER BY items.itemnumber SEPARATOR '|') as l_location,
         GROUP_CONCAT(DISTINCT items.itype 
             ORDER BY items.itemnumber SEPARATOR '|') as l_itype,
+        GROUP_CONCAT(DISTINCT items.ccode
+            ORDER BY items.ccode SEPARATOR '|') as l_ccode,
 
         reserves.found,
         biblio.title,
@@ -173,6 +175,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
             itemcallnumber     => $data->{itemcallnumber},
             location           => [split('\|', $data->{l_location})],
             itype              => [split('\|', $data->{l_itype})],
+            ccode              => [split('\|', $data->{l_ccode})],
             reservecount       => $data->{reservecount},
             itemcount          => $data->{itemcount},
             copies_to_buy      => sprintf( "%d", $copies_to_buy ),

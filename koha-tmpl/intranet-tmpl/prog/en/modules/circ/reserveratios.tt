@@ -55,6 +55,7 @@
           <th>Holding libraries</th>
           <th>Location</th>
           <th>Itype</th>
+          <th>Collection</th>
           <th class="natural">Call numbers</th>
           <th>Items needed</th>
         </tr>
@@ -93,6 +94,13 @@
                   <ul>
                       [% FOREACH itype IN reserveloo.itype %]
                           <li>[% ItemTypes.GetDescription( itype ) | html %]</li>
+                      [% END %]
+                  </ul>
+            </td>
+            <td>
+                  <ul>
+                      [% FOREACH ccode IN reserveloo.ccode %]
+                          <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ccode ) | html %]</li>
                       [% END %]
                   </ul>
             </td>
