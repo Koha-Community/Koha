@@ -869,9 +869,10 @@ subtest 'deletion' => sub {
 
     my $library   = $builder->build_object({ class => 'Koha::Libraries' });
     my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
-    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
 
-    my $patron = $builder->build_object({class => 'Koha::Patrons'});
+    my $patron = $builder->build_object({class => 'Koha::Patrons', value => { flags => 2^9 } });    # allow edit items
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, borrowernumber => $patron->id });
+
     $item = $builder->build_sample_item({ library => $library->branchcode });
 
     # book_on_loan
