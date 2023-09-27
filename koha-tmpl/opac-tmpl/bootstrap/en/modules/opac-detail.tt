@@ -815,7 +815,7 @@
                                                         [% FILTER html_break %]
                                                             [% review.review | html %]
                                                         [% END %]
-                                                        <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% review.biblionumber | uri %]&amp;reviewid=[% review.reviewid | uri %]');">Edit</a>
+                                                        <a href="/cgi-bin/koha/opac-review.pl?biblionumber=[% review.biblionumber | uri %]&amp;reviewid=[% review.reviewid | uri %]" class="edit_comment">Edit</a>
                                                     </p>
                                                 </div>
                                             [% ELSE %]
@@ -857,8 +857,8 @@
                                     [% IF ( loggedinusername ) %]
                                         [% UNLESS ( loggedincommenter ) %]
                                             <div id="addcomment">
-                                                <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblio.biblionumber | uri %]'); return false;">
-                                                Post your comments on this title.
+                                                <a href="/cgi-bin/koha/opac-review.pl?biblionumber=[% biblio.biblionumber | uri %]" class="edit_comment">
+                                                    Post your comments on this title.
                                                 </a>
                                             </div>
                                         [% END %]
@@ -1923,6 +1923,11 @@
                     });
                 }());
             [% END # /IF ( OPACShelfBrowser ) %]
+
+            $(".edit_comment").on("click", function(e){
+                e.preventDefault();
+                Dopop( this.href );
+            });
         });
 
         $(document).ready(function() {

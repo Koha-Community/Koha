@@ -32,7 +32,7 @@ function confirmDelete(message) {
 }
 
 function Dopop(link) {
-    newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes,resizable=yes');
+    newin=window.open(link,'popup','width=660,height=450,toolbar=false,scrollbars=yes,resizable=yes');
 }
 
 jQuery.fn.preventDoubleFormSubmit = function() {
