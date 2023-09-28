@@ -8,10 +8,10 @@
         <caption class="sr-only">Clubs</caption>
         <thead>
             <tr>
-                <th>Name</th>
+                <th class="all">Name</th>
                 <th>Description</th>
                 <th>Date enrolled</th>
-                <th>&nbsp;</th>
+                <th class="NoSort all">&nbsp;</th>
                 <th></th>
             </tr>
         </thead>
@@ -24,7 +24,7 @@
                     <td>[% e.date_enrolled | $KohaDates %]</td>
                     <td>
                         [% IF e.club.club_template.is_enrollable_from_opac %]
-                            <button class="btn btn-xs btn-default" onclick="cancelEnrollment( [% e.id | html %] )">
+                            <button class="btn btn-sm btn-danger cancel_enrollment" data-id="[% e.id | html %]">
                                 <i class="fa fa-times" aria-hidden="true"></i> Cancel enrollment
                             </button>
                         [% ELSE %]
@@ -45,9 +45,9 @@
     <table id="clubs-table-unenrolled" class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Name</th>
+                <th class="all">Name</th>
                 <th>Description</th>
-                <th>&nbsp;</th>
+                <th class="NoSort all">&nbsp;</th>
                 <th></th>
             </tr>
         </thead>
@@ -59,7 +59,7 @@
                     <td>[% c.description | html %]</td>
                     <td>
                         [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.notice_email_address ) %]
-                            <button class="btn btn-xs btn-default" onclick="loadEnrollmentForm([% c.id | html%])">
+                            <button class="btn btn-sm btn-primary load_enrollment" data-id="[% c.id | html%]">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Enroll
                             </button>
                         [% ELSE %]
@@ -102,19 +102,35 @@ function cancelEnrollment( id ) {
     });
     return false;
 }
-var Tables = $("#clubs-table-enrolled,#clubs-table-unenrolled");
-Tables.each(function(){
-    $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
-        "searching": false,
-        "paging": false,
-        "info": false,
-        "autoWidth": false,
-        "responsive": {
-            "details": { "type": 'column',"target": -1 }
-        },
-        "columnDefs": [
-            { "className": 'dtr-control', "orderable": false, "targets": -1 }
-        ],
-    }));
-});
+
+    var Tables = $("#clubs-table-enrolled,#clubs-table-unenrolled");
+    Tables.each(function(){
+        $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "autoWidth": false,
+            "responsive": {
+                "details": { "type": "column", "target": -1 }
+            },
+            "columnDefs": [
+                { "orderable": false, "searchable": false, "targets": [ 'NoSort' ] },
+                { "className": "dtr-control", "orderable": false, "targets": -1 },
+            ],
+        }));
+    });
+
+    $(".cancel_enrollment").on("click", function(e){
+        e.preventDefault();
+        let clubid = $(this).data("id");
+        cancelEnrollment( clubid );
+    });
+
+    $(".load_enrollment").on("click", function(e){
+        e.preventDefault();
+        let clubid = $(this).data("id");
+        loadEnrollmentForm( clubid );
+    });
+
+
 </script>

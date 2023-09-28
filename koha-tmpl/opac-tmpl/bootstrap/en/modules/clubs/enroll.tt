@@ -29,8 +29,8 @@
             </ol>
         </fieldset>
         <fieldset class="action">
-            <button class="btn btn-primary" onclick="addEnrollment(); return false;">Finish enrollment</button>
-            <a href="#" class="cancel" onclick="showClubs(); return false;">Cancel</a>
+            <button class="btn btn-primary add_enrollment">Finish enrollment</button>
+            <a href="#" class="cancel show_clubs">Cancel</a>
         </fieldset>
     </form>
 </div>
@@ -62,4 +62,16 @@ function showClubs() {
         $("body").css("cursor", "default");
     });
 }
+
+    $(document).ready(function(){
+        $(".add_enrollment").on("click", function(e){
+            e.preventDefault();
+            addEnrollment();
+        });
+
+        $(".show_clubs").on("click", function(e){
+            e.preventDefault();
+            showClubs();
+        });
+    });
 </script>
