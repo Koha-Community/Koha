@@ -74,11 +74,11 @@ window.onbeforeunload = function () {
 $( document ).ready( function () {
 
     $("table.preferences").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sDom": 't',
-        "aoColumnDefs": [
-            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+        "dom":  't',
+        "columnDefs":  [
+            { "targets":  [ -1 ], "orderable":  false, "searchable":  false }
         ],
-        "bPaginate": false
+        "paging":  false
     }));
 
     $( '.prefs-tab' )

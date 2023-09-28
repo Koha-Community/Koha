@@ -453,10 +453,10 @@
             });
 
             $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
-                'bDestroy': true,
-                'bServerSide': true,
-                'bProcessing': true,
-                'sAjaxSource': '/cgi-bin/koha/catalogue/itemsearch.pl',
+                "destroy": true,
+                "serverSide":  true,
+                "processing": true,
+                "ajax":  '/cgi-bin/koha/catalogue/itemsearch.pl',
                 'fnServerData': function(sSource, aoData, fnCallback) {
                     aoData.push( { 'name': 'format', 'value': 'json' } );
                     for (i in params) {
@@ -499,7 +499,7 @@
                 fixedHeader: false // There is a bug on this view
             })).columnFilter({
                 'sPlaceHolder': 'head:after',
-                'aoColumns': [
+                "columns": [
                     null,
                     { 'type': 'text' },
                     { 'type': 'text' },

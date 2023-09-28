@@ -355,15 +355,15 @@
                 $("#subscription_years a:first").tab("show");
             }
             $(".subscription-year-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ 0,-1 ], "bSortable": false, "bSearchable": false }
+                "columnDefs": [
+                    { "targets": [ 0,-1 ], "orderable": false, "searchable":  false }
                 ],
-                "aaSorting": [[0, 'desc']],
-                "sDom": 't',
-                "bAutoWidth": false,
-                "bPaginate": false,
-                "bInfo": false,
-                "bFilter": false,
+                "order": [[0, 'desc']],
+                "dom": 't',
+                "autoWidth": false,
+                "paginate": false,
+                "info": false,
+                "searching": false,
             } ));
 
             $(".CheckAll").on("click", function(e){

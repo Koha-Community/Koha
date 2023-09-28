@@ -152,8 +152,8 @@
     <script>
         $(document).ready(function() {
             $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aaSorting": [[ 3, "desc" ]],
-                "sPaginationType": "full"
+                "order": [[ 3, "desc" ]],
+                "pagingType": "full"
             }));
 
             $("#noticestable").on("click", ".notice-title", function(e){

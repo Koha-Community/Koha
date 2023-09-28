@@ -282,10 +282,10 @@
                         "sWidth"  : "83%",
                     },
                 ],
-               "fnPreDrawCallback": function(oSettings) {
+               "preDrawCallback": function(oSettings) {
                     return true;
                 },
-                "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                "rowCallback": function( nRow, aData, iDisplayIndex ) {
                     /* do foo on various cells in the current row */
                     var quoteNum = $('td', nRow)[0].innerHTML;
                     $(nRow).attr("id", quoteNum); /* set row ids to quote number */
@@ -296,7 +296,7 @@
                     }
                     return nRow;
                 },
-               "fnDrawCallback": function(oSettings) {
+               "drawCallback": function(oSettings) {
                     /* Apply the jEditable handlers to the table on all fields w/o the no_edit id */
                     $('#quotes_editor tbody td[id!="no_edit"]').editable( function(value, settings) {
                             value = escape_str(value);
