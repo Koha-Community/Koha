@@ -298,10 +298,18 @@ if ($barcode) {
 
         # make sure return branch respects home branch circulation rules, default to homebranch
         my $hbr = Koha::CirculationRules->get_return_branch_policy($item);
-        my $validate_float = Koha::Libraries->find( $item->homebranch )->validate_float_sibling({ branchcode => $userenv_branch });
+        my $validate_float =
+            Koha::Libraries->find( $item->homebranch )->validate_float_sibling( { branchcode => $userenv_branch } );
+
         # get the proper branch to which to return the item
         # if library isn't in same the float group, transfer item to homelibrary
-        $returnbranch = $hbr eq 'noreturn' ? $userenv_branch : $hbr eq 'returnbylibrarygroup' ? $validate_float ? $userenv_branch : $item->homebranch : $item->$hbr;
+        $returnbranch =
+              $hbr eq 'noreturn'
+            ? $userenv_branch
+            : $hbr eq 'returnbylibrarygroup' ? $validate_float
+                ? $userenv_branch
+                : $item->homebranch
+            : $item->$hbr;
         my $materials = $item->materials;
         my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => '', kohafield =>'items.materials', authorised_value => $materials });
         $materials = $descriptions->{lib} // $materials;

@@ -337,28 +337,44 @@ subtest 'get_float_libraries and validate_float_sibling' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library1 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library2 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library3 = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library4 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library4 = $builder->build_object( { class => 'Koha::Libraries' } );
 
     my $root1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_float_group => 1 } } );
     my $root2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_float_group => 1 } } );
+
     # Float group 1
-    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library1->branchcode } } );
-    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library2->branchcode } } );
+    $builder->build_object(
+        { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library1->branchcode } }
+    );
+    $builder->build_object(
+        { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library2->branchcode } }
+    );
+
     # Float group 2
-    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library3->branchcode } } );
-    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library4->branchcode } } );
+    $builder->build_object(
+        { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library3->branchcode } }
+    );
+    $builder->build_object(
+        { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library4->branchcode } }
+    );
 
     my @libraries1 = $library1->get_float_libraries()->as_list;
-    is(scalar @libraries1, '2', '1st float group contains 2 libraries');
+    is( scalar @libraries1, '2', '1st float group contains 2 libraries' );
 
     my @libraries2 = $library3->get_float_libraries()->as_list;
-    is(scalar @libraries2, '2', '2nd float group also contains 2 libraries');
+    is( scalar @libraries2, '2', '2nd float group also contains 2 libraries' );
 
-    ok($library1->validate_float_sibling({ branchcode => $library2->branchcode }), "Library1 and library2 belong in to the same float group.");
-    ok($library3->validate_float_sibling({ branchcode => $library4->branchcode }), "Library3 and library5 belong in to the same float group.");
+    ok(
+        $library1->validate_float_sibling( { branchcode => $library2->branchcode } ),
+        "Library1 and library2 belong in to the same float group."
+    );
+    ok(
+        $library3->validate_float_sibling( { branchcode => $library4->branchcode } ),
+        "Library3 and library5 belong in to the same float group."
+    );
 
     $schema->storage->txn_rollback;
 };

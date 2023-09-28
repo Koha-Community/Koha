@@ -376,6 +376,7 @@ sub opac_info {
     });
 }
 
+
 =head3 get_float_libraries
 
 Return all libraries belonging to the same float group
@@ -383,23 +384,23 @@ Return all libraries belonging to the same float group
 =cut
 
 sub get_float_libraries {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $library_groups = $self->library_groups;
     my @float_libraries;
 
     while ( my $library_group = $library_groups->next ) {
-        my $root = Koha::Library::Groups->get_root_ancestor({id => $library_group->id});
-        if($root->ft_local_float_group) {
+        my $root = Koha::Library::Groups->get_root_ancestor( { id => $library_group->id } );
+        if ( $root->ft_local_float_group ) {
             push @float_libraries, $root->all_libraries;
         }
     }
 
     my %seen;
     @float_libraries =
-      grep { !$seen{ $_->id }++ } @float_libraries;
+        grep { !$seen{ $_->id }++ } @float_libraries;
 
-    return Koha::Libraries->search({ branchcode => { '-in' => [ keys %seen ] } });
+    return Koha::Libraries->search( { branchcode => { '-in' => [ keys %seen ] } } );
 }
 
 =head3 validate_float_sibling
@@ -414,8 +415,7 @@ sub validate_float_sibling {
     return 1 if $params->{branchcode} eq $self->id;
 
     my $branchcode = $params->{branchcode};
-    return $self->get_float_libraries->search( { branchcode => $branchcode } )
-      ->count > 0;
+    return $self->get_float_libraries->search( { branchcode => $branchcode } )->count > 0;
 }
 
 =head2 Internal methods
