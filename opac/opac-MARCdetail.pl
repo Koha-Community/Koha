@@ -136,16 +136,21 @@ $template->param(
 ) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 && # <=0 OPAC visible.
      $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
 
-my $can_item_be_reserved = 0;
-$items->reset;
+# Count the number of items that allow holds at the 'All libraries' rule level
+my $holdable_items = $biblio->items->filter_by_for_hold->count;
 
-while ( my $item = $items->next ) {
-    $can_item_be_reserved = $can_item_be_reserved || $patron && IsAvailableForItemLevelRequest( $item, $patron, undef );
+# If we have a patron we need to check their policies for holds in the loop below
+# If we don't have a patron, then holdable items determines holdability
+my $can_holds_be_placed = $patron ? 0 : $holdable_items;
+
+if ($patron) {
+    $items->reset;
+    while ( my $item = $items->next ) {
+        $can_holds_be_placed = $can_holds_be_placed || IsAvailableForItemLevelRequest( $item, $patron, undef );
+    }
 }
 
-if( $can_item_be_reserved || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
-    $template->param( ReservableItems => 1 );
-}
+$template->param( ReservableItems => $can_holds_be_placed );
 
 # fill arrays
 my @loop_data = ();

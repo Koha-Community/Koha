@@ -168,29 +168,29 @@ $template->param(
     subscriptionsnumber => $subscriptionsnumber,
 );
 
-my $can_item_be_reserved = 0;
 my $res = GetISBDView({
     'record'    => $record,
     'template'  => 'opac',
     'framework' => $biblio->frameworkcode
 });
 
-my $items = $biblio->items;
-while ( my $item = $items->next ) {
+# Count the number of items that allow holds at the 'All libraries' rule level
+my $holdable_items = $biblio->items->filter_by_for_hold->count;
 
-    $can_item_be_reserved = $can_item_be_reserved || $patron && IsAvailableForItemLevelRequest( $item, $patron, undef );
+# If we have a patron we need to check their policies for holds in the loop below
+# If we don't have a patron, then holdable items determines holdability
+my $can_holds_be_placed = $patron ? 0 : $holdable_items;
+if ($patron) {
+    my $items = $biblio->items;
+    while ( my $item = $items->next ) {
+        $can_holds_be_placed = $can_holds_be_placed || IsAvailableForItemLevelRequest( $item, $patron, undef );
+    }
 }
-
-if( $can_item_be_reserved || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
-    $template->param( ReservableItems => 1 );
-}
-
-my $norequests = ! $items->filter_by_for_hold->count;
 
 $template->param(
-    norequests   => $norequests,
-    ISBD         => $res,
-    biblio       => $biblio,
+    ReservableItems => $can_holds_be_placed,
+    ISBD            => $res,
+    biblio          => $biblio,
 );
 
 #Search for title in links
