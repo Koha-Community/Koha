@@ -51,7 +51,7 @@
 [% Asset.js('js/Gettext.js') | $raw %]
 [% Asset.js('js/i18n.js') | $raw %]
 </head>
-<body id="sci_main" class="sci" onload="dofocus();" onunload="mungeHistory();">
+<body id="sci_main" class="sci">
     [% INCLUDE 'masthead-sci.inc' %]
 
     <div class="main">
@@ -208,6 +208,14 @@
         }
 
         var barcodes = [];
+
+        $( window ).on( "load", function() {
+            dofocus();
+        });
+
+        $( window ).on( "unload", function() {
+            mungeHistory();
+        });
 
         $(document).ready(function() {
             // Barcodes scanning table initially hidden
