@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 20:52-0300\n"
-"PO-Revision-Date: 2023-08-09 10:37+0000\n"
+"POT-Creation-Date: 2023-09-16 06:50-0300\n"
+"PO-Revision-Date: 2023-09-11 12:13+0000\n"
 "Last-Translator: ManuB. <e.betemps@ville-caluire.fr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /fr/22.11/fr-FR-messages.po\n"
-"X-POOTLE-MTIME: 1691577442.506881\n"
+"X-POOTLE-MTIME: 1694434415.653596\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
@@ -76,6 +76,7 @@ msgid "Address 2"
 msgstr "Adresse 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr "Administration"
 
@@ -193,6 +194,17 @@ msgid "An error occurred when updating mappings: {message}."
 msgstr ""
 "Une erreur est survenue lors de la mise à jour des correspondances : "
 "{message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr ""
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -364,7 +376,10 @@ msgid "Conductors"
 msgstr "Chefs d'orchestre"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, fuzzy, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
 msgstr "Confirmer la suppression de la ville"
 
 #: Koha/Database/Columns.pm:208
@@ -433,7 +448,7 @@ msgstr "Statut endommagé"
 
 #: Koha/Database/Columns.pm:127
 msgid "Data anonymization flag"
-msgstr "Flag d'anonymisation des données"
+msgstr "Marqueur d'anonymisation des données"
 
 #: Koha/Database/Columns.pm:211
 msgid "Date acquired"
@@ -504,7 +519,7 @@ msgstr "Modifier {title}"
 msgid "Edit {title} by {author}"
 msgstr "Modifier {title} par {author}"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
 msgstr "Modifier"
@@ -586,7 +601,7 @@ msgstr "Genre"
 
 #: Koha/Database/Columns.pm:163
 msgid "Gone no address flag"
-msgstr "Fanion «Parti sans laisser d'adresse»"
+msgstr "Marqueur Parti sans laisser d'adresse"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/reports-toolbar.inc:126
 msgid "Hide SQL code"
@@ -722,6 +737,7 @@ msgid "Keyboard"
 msgstr "Clavier"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr "Koha"
 
@@ -771,7 +787,7 @@ msgstr "Localisation"
 
 #: Koha/Database/Columns.pm:168
 msgid "Lost card flag"
-msgstr "Drapeau «Carte perdue»"
+msgstr "Marqueur Carte perdue"
 
 #: Koha/Database/Columns.pm:221
 msgid "Lost on"
@@ -821,7 +837,10 @@ msgid "Modification date"
 msgstr "Date de modification"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-msgid "Modify city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, fuzzy, perl-brace-format
+msgid "Modify city '{city}'"
 msgstr "Modifier une ville"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
@@ -960,6 +979,18 @@ msgstr "Catégorie adhérent"
 msgid "Patron reason"
 msgstr "Motif de l'adhérent"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+#, fuzzy
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "réservation en attente"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+#, fuzzy
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "réservation en attente"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -982,6 +1013,10 @@ msgstr "Localisation permanente"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "Lieu de publication"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr ""
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1057,9 +1092,26 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "Notice #"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+#, fuzzy
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "Notice #"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Date d'inscription"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr ""
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1080,7 +1132,7 @@ msgstr "Réserve"
 
 #: Koha/Database/Columns.pm:156
 msgid "Restricted [until] flag"
-msgstr "Fanion suspendu [until]"
+msgstr "Marqueur Suspendu [jusqu'à]"
 
 #: Koha/Database/Columns.pm:94
 msgid "Retail price"
@@ -1319,6 +1371,10 @@ msgstr "Horodatage"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "Titre"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr ""
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"

@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 07:37-0300\n"
-"PO-Revision-Date: 2023-08-26 02:53+0000\n"
-"Last-Translator: Frank Chou <frank@sris.com.tw>\n"
+"PO-Revision-Date: 2023-09-18 12:14+0000\n"
+"Last-Translator: CindyCheng <cindycheng914@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /zh_TW/22.11/zh-Hant-TW-pref.po\n"
-"X-POOTLE-MTIME: 1693018423.525319\n"
+"X-POOTLE-MTIME: 1695039270.988493\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -4282,9 +4282,10 @@ msgstr "使用館藏類型"
 
 # Cataloging > Record structure > item-level_itypes
 # Cataloging > Record structure
+#, fuzzy
 msgid ""
 "cataloguing.pref#item-level_itypes# as the authoritative item type (for "
-"determining circulation and fines rules, for displaying an item type icon on "
+"determining circulation and fine rules, for displaying an item type icon on "
 "either opac detail or results page, etc)."
 msgstr ""
 "做為權威館藏類型(供流通與罰款規則使用、供 OPAC 詳情或搜尋結果頁面顯示館藏類型"
@@ -6331,8 +6332,9 @@ msgstr ""
 
 # Circulation > Checkout policy > HomeOrHoldingBranch
 # Circulation > Checkout policy
+#, fuzzy
 msgid ""
-"circulation.pref#HomeOrHoldingBranch# Use the checkout and fines rules of"
+"circulation.pref#HomeOrHoldingBranch# Use the circulation and fine rules of"
 msgstr "使用借出與罰款規則"
 
 # Circulation > Checkout policy > HomeOrHoldingBranch
@@ -7378,8 +7380,9 @@ msgid ""
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
-"CPL:homebranch:ne:\\$holdingbranch:X -對於退還到 CPL 的館藏，如果其預約分館不等於所屬圖書館（即屬於與 CPL "
-"不同的分館的任何館藏），則將退還排序 bin 'X'。<br/><br/>"
+"CPL:homebranch:ne:\\$holdingbranch:X -對於退還到 CPL 的館藏，如果其預約分館不"
+"等於所屬圖書館（即屬於與 CPL 不同的分館的任何館藏），則將退還排序 bin 'X'。"
+"<br/><br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -8189,9 +8192,10 @@ msgid "circulation.pref#UseRecalls# Use"
 msgstr "使用"
 
 # Circulation > Recalls > UseRecalls
+#, fuzzy
 msgid ""
 "circulation.pref#UseRecalls# recalls. Make sure you configure <a href=\"/cgi-"
-"bin/koha/admin/smart-rules.pl\">circulation and fines rules</a> for recalls "
+"bin/koha/admin/smart-rules.pl\">circulation and fine rules</a> for recalls "
 "once enabled."
 msgstr ""
 "催還。 確認你的組態 <a href=\"/cgi-bin/koha/admin/smart-rules.pl\">流通和罰款"
@@ -9985,7 +9989,7 @@ msgstr ""
 
 # Serials
 msgid "erm.pref"
-msgstr ""
+msgstr "電子資源管理.pref"
 
 # E-resource management
 # Circulation > Interface
@@ -10258,7 +10262,7 @@ msgstr "讀者更改其 OPAC 介面的語文。"
 
 # Serials
 msgid "interlibrary_loans.pref"
-msgstr "館際互借"
+msgstr "館際互借.pref"
 
 # Interlibrary loans
 # Searching > Features
@@ -10324,9 +10328,9 @@ msgid ""
 "href=\"/cgi-bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS"
 "\">ILL_STATUS_ALIAS</a> authorized value category."
 msgstr ""
-"(以 | 區隔). 若空白，則顯示所有 ILL 請求.請求代碼在後端定義，並且可以通過配置其他別名 <a href=\"/cgi-"
-"bin/koha/admin/authorised_values.pl?searchfield=ILL_STATUS_ALIAS\""
-">ILL_STATUS_ALIAS</a> 容許值類別."
+"(以 | 區隔). 若空白，則顯示所有 ILL 請求.請求代碼在後端定義，並且可以通過配置"
+"其他別名 <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=ILL_STATUS_ALIAS\">ILL_STATUS_ALIAS</a> 容許值類別."
 
 # Interlibrary loans > Features > ILLHiddenRequestStatuses
 # Circulation > Interlibrary loans
@@ -10376,9 +10380,7 @@ msgid ""
 "interlibrary_loans.pref#ILLModuleUnmediated# unmediated interlibrary loan "
 "requests. If enabled and the ILL backend supports it, the newly created "
 "requests are immediately requested by backend."
-msgstr ""
-"無中介的館際互借請求。如果啟用並且 ILL 後端支持，則後端會立即請求新創建的請"
-"求。"
+msgstr "無中介的館際互借請求. 如果啟用並且 ILL 後端支持, 則後端會立即請求新建立的請求."
 
 # Interlibrary loans > OPAC > ILLOpacbackends
 # Circulation > Interlibrary loans
@@ -10392,7 +10394,7 @@ msgstr "(以 | 區隔)。若空白，則啟用安裝的後台。"
 msgid ""
 "interlibrary_loans.pref#ILLOpacbackends# Enabled ILL backends for OPAC "
 "initiated requests:"
-msgstr "為 OPAC的請求啟用 ILL 後台："
+msgstr "為 OPAC 發起的請求啟用 ILL 後端:"
 
 # Interlibrary loans > Notifications > ILLSendStaffNotices
 # Circulation > Interlibrary loans
@@ -10401,15 +10403,14 @@ msgid ""
 "ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices "
 "will be sent."
 msgstr ""
-"（以 | 區隔）。例如 ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED 如果為空，則不會"
-"發送任何館員 ILL通知。"
+"(以 | 區隔). 例如 ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED 如果為空，則不會寄送任何館員 ILL通知."
 
 # Interlibrary loans > Notifications > ILLSendStaffNotices
 # Circulation > Interlibrary loans > ILLSendStaffNotices
 msgid ""
 "interlibrary_loans.pref#ILLSendStaffNotices# Send these ILL notices to staff "
 "when appropriate:"
-msgstr "在適當的時候將這些 ILL 通知發送給館員："
+msgstr "在適當的時候將這些 ILL 通知寄送給館員:"
 
 # Local Use
 msgid "local_use.pref"
@@ -10586,7 +10587,7 @@ msgstr "不執行"
 msgid ""
 "logs.pref#DumpSearchQueryTemplate# dump search query to a comment in the "
 "HTML source for the OPAC and staff interface."
-msgstr "將搜尋查詢轉儲到 OPAC 和員工界面的 HTML 源代碼中的評論中。"
+msgstr "將搜尋查詢轉儲到 OPAC 和館員界面的 HTML 來源的評論中."
 
 # Logging > Debugging > DumpTemplateVarsIntranet
 # Logging > Debugging
@@ -10886,7 +10887,7 @@ msgid ""
 "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose "
 "their own privacy settings for showing the patron's charges to the patron's "
 "guarantor."
-msgstr "讀者選擇他們自己的隱私設定會在讀者的費用對保證人顯示"
+msgstr "讀者選擇他們自己的隱私設定會在讀者的費用對保證人顯示."
 
 # OPAC > Suggestions > AnonSuggestions
 # OPAC > Privacy
@@ -10933,17 +10934,16 @@ msgid ""
 "interface language</li><li>authority types: use the placeholder "
 "{authtypecode} - this will be replaced with the authority type code"
 msgstr ""
-"<br />選項:<ul><li>空白。將不應用 XSLT (<strong>預設</strong>)</li><li>輸入自"
-"定義 XSLT 文件的路徑。</li><li>輸入外部樣式表的 URL。</li></ul>如果您有多個樣"
-"式表：<ul><li>不同的語言：使用佔位符 {langcode} - 這將被替換為當前界面語言</"
-"li><li>權限類型：使用佔位符 {authtypecode} - 這將被替換為權限類型代碼"
+"<br />選項:<ul><li>空白。將不應用 XSLT (<strong>預設</strong>)</li><li>輸入自定義 XSLT "
+"檔案的路徑.</li><li>輸入外部樣式表的 URL.</li></ul>如果您有多個樣式表:<ul><li>不同的語言:使用占位符 "
+"{langcode} - 這將被替換為當前界面語言</li><li>權限類型:使用占位符 {authtypecode} - 這將被替換為權威類型代碼"
 
 # OPAC > Appearance > AuthorityXSLTOpacResultsDisplay
 # Staff interface > Appearance
 msgid ""
 "opac.pref#AuthorityXSLTOpacDetailsDisplay# Display authority details in the "
 "OPAC using the XSLT stylesheet at: "
-msgstr "使用 XSLT 樣式表在 OPAC 中顯示權限詳細資訊： "
+msgstr "使用 XSLT 樣式表在 OPAC 中顯示權威詳細資訊: "
 
 # OPAC > Appearance > AuthorityXSLTOpacResultsDisplay
 # Staff interface > Appearance
@@ -10956,10 +10956,9 @@ msgid ""
 "interface language</li><li>authority types: use the placeholder "
 "{authtypecode} - this will be replaced with the authority type code"
 msgstr ""
-"<br />選項:<ul><li>空白。將不應用 XSLT (<strong>預設</strong>)</li><li>輸入自"
-"定義 XSLT 文件的路徑。</li><li>輸入外部樣式表的 URL。</li></ul>如果您有多個樣"
-"式表：<ul><li>不同的語言：使用佔位符 {langcode} - 這將被替換為當前界面語言</"
-"li><li>權限類型：使用佔位符 {authtypecode} - 這將被替換為權限類型代碼"
+"<br />選項:<ul><li>空白.將不應用 XSLT (<strong>預設</strong>)</li><li>輸入自定義 XSLT "
+"檔案的路徑。</li><li>輸入外部樣式表的 URL。</li></ul>如果您有多個樣式表:<ul><li>不同的語言:使用占位符 "
+"{langcode} - 這將被替換為當前界面語言</li><li>權限類型:使用占位符 {authtypecode} - 這將被替換為權威類型代碼"
 
 # OPAC > Appearance > AuthorityXSLTOpacResultsDisplay
 # Staff interface > Appearance
@@ -11091,7 +11090,7 @@ msgstr ""
 msgid ""
 "opac.pref#EmailPatronRegistrations# Choose email address that new patron "
 "self-registrations will be sent to: "
-msgstr "選擇新讀者自助註冊將發送至的電子郵件地址： "
+msgstr "選擇新讀者自助註冊將寄送至的電子郵件地址: "
 
 # OPAC > Self registration and modification > EmailPatronRegistrations
 # Acquisitions > Policy
@@ -11615,8 +11614,8 @@ msgid ""
 "substatus. Similarly the option 'library only' results in unavailable item "
 "counts per library.)"
 msgstr ""
-". (注意：對於大型聯盟，我們建議按子狀態對不可用館藏進行分組，列出每個子狀態的"
-"館藏計數。類似地，選項“僅圖書館”會導致每個圖書館不可用的館藏計數。）"
+" . (注意: 對於大型聯盟，我們建議按“僅子狀態”對不可用的館藏進行分組，列出每個子狀態的館藏計數. 同樣地,選項 '僅圖書館' "
+"會導致每個圖書館不可用的館藏計數.)"
 
 # OPAC > Appearance > OPACResultsMaxItems
 # OPAC > Appearance
@@ -11644,13 +11643,13 @@ msgstr "顯示不超過"
 msgid ""
 "opac.pref#OPACResultsMaxItems# individual (available) items on the OPAC XSLT "
 "search results.<br>"
-msgstr "OPAC XSLT 搜尋結果中的各個（可用）館藏。<br>"
+msgstr "OPAC XSLT 搜尋結果中的各個 (可用) 館藏.<br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 msgid ""
 "opac.pref#OPACResultsMaxItems# individual (unavailable) items per library "
 "and category (like Checked out, Damaged, On hold, etc.)<br>"
-msgstr "每個圖書館和類別的單個（不可用）館藏（例如已借出、損壞、預約等）<br>"
+msgstr "每個圖書館和類別的個別（不可用）館藏（例如已借出、損壞、預約等）<br>"
 
 # OPAC > Appearance > OPACResultsMaxItems
 # OPAC > Appearance
@@ -11681,8 +11680,8 @@ msgid ""
 "{CONTROLNUMBER}, {OCLC_NO}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be "
 "replaced with information from the displayed record."
 msgstr ""
-"<br />注意：佔位符 {BIBLIONUMBER}、{CONTROLNUMBER}、{OCLC_NO}、{TITLE}、"
-"{ISBN}、{ISSN} 和 {AUTHOR} 將替換為顯示記錄中的資訊。"
+" <br />注意: 占位符 {BIBLIONUMBER}、{CONTROLNUMBER}、{OCLC_NO}、{TITLE}、{ISBN}、{ISSN}"
+" 和 {AUTHOR} 將替換為顯示記錄中的資訊."
 
 # OPAC > Appearance > OPACSearchForTitleIn
 # OPAC > Appearance
@@ -12325,11 +12324,10 @@ msgid "opac.pref#OpacCatalogConcerns# Don't allow"
 msgstr "不允許"
 
 # OPAC > Features > OpacCatalogConcerns
-#, fuzzy
 msgid ""
 "opac.pref#OpacCatalogConcerns# OPAC users to report concerns about "
 "bibliographic records."
-msgstr "OPAC 使用者報告有關書目記錄的疑慮."
+msgstr "opac.pref#OpacCatalogConcerns# OPAC 使用者用戶報告有關書目記錄的問題"
 
 # OPAC > Features > OpacCloud
 # OPAC > Features
@@ -13618,7 +13616,7 @@ msgstr "讀者從 OPAC 登入。"
 # OPAC > Suggestions > suggestion
 # OPAC > Features
 msgid "opac.pref#suggestion# Disable"
-msgstr "禁用"
+msgstr "不啟用"
 
 # OPAC > Suggestions > suggestion
 # OPAC > Features
@@ -13634,15 +13632,15 @@ msgid ""
 "\">AnonSuggestions</a> is disabled, following patron categories are not "
 "allowed to make purchase suggestions:"
 msgstr ""
-"當<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=suggestion\">建議</a>已啟用並且<a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=AnonSuggestions"
-"\">AnonSuggestions</a>禁用，以下讀者類別不允許提出採訪建議："
+"當<a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
+"suggestion\">建議</a>已啟用並且<a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions\""
+">AnonSuggestions</a>不啟用，以下讀者類別不允許提出採購建議:"
 
 # OPAC > Suggestions > suggestion
 # OPAC > Features
 msgid "opac.pref#suggestion# purchase suggestions in the OPAC.<br>"
-msgstr "OPAC 中的採訪建議。<br>"
+msgstr "OPAC 中的採購建議.<br>"
 
 # Patrons
 msgid "patrons.pref"
@@ -13737,7 +13735,7 @@ msgstr "不允許"
 msgid ""
 "patrons.pref#AllowStaffToSetFinesVisibilityForGuarantor# staff to set the "
 "ability for a patron's charges to be viewed by linked patrons in the OPAC."
-msgstr "工作人員設置 OPAC 中連結讀者可以查看讀者費用的能力。"
+msgstr "館員有能力設定某讀者的費用被 OPAC 連結的另個讀者檢視."
 
 # Patrons > General > AutoApprovePatronProfileSettings
 # Patrons > General
@@ -14053,9 +14051,7 @@ msgid ""
 "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the "
 "default fields to be used during a patron search using the \"standard\" "
 "option in the patrons or circulation module:"
-msgstr ""
-"逗號分隔列表定義在讀者搜索期間使用讀者或流通模組中的“標準”選項使用的默認字"
-"段："
+msgstr "以逗點區隔使用 \"標準\" 選項在讀者或流通模組進行讀者清單搜尋時要使用的預設欄位:"
 
 # Patrons > General > DefaultPatronSearchFields
 # Patrons > General
@@ -14065,8 +14061,8 @@ msgid ""
 "fields added to this preference will be added as search options in the "
 "dropdown menu on the patron search page."
 msgstr ""
-"若是空值， Koha 將預設為 \"firstname,surname,othernames,cardnumber,userid\"。"
-"其他欄位加入至此偏好會被作為搜尋選項在讀者搜尋頁的下拉選單中。"
+"若是空值， Koha 將預設為 \"firstname,middle_name,surname,othernames,cardnumber,"
+"userid\".其他欄位加入至此偏好會被作為搜尋選項在讀者搜尋頁的下拉選單中."
 
 # Searching > Results display > RetainPatronsSearchTerms
 # Searching > Features
@@ -14078,7 +14074,7 @@ msgid ""
 "patrons.pref#DefaultPatronSearchMethod# Enable this search method to "
 "determine whether to use Starts with or Contains for autocomplete patron "
 "searches."
-msgstr "啟用此搜尋方法以確定是否使用“開頭為”或“包含”來自動完成讀者搜尋。"
+msgstr "啟用此搜尋方法以確定是否使用從…開始或包含來自動完成讀者搜尋."
 
 # Patrons > General > DefaultPatronSearchMethod
 msgid "patrons.pref#DefaultPatronSearchMethod# Starts with"
@@ -14105,9 +14101,8 @@ msgid ""
 "target='blank'>database columns</a> of the borrowers table, separated by | "
 "(pipe)."
 msgstr ""
-"選項是 <a href='http://schema.koha-community.org/__VERSION__/tables/"
-"borrowers.html' target='blank'>資料庫列</a>借閱者表的內容，用 | 分隔（管"
-"道）。"
+" 有效選項是 <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>資料庫列</a>借閱者表格的內容, 用 | 分隔 (豎)."
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
 # Acquisitions > Policy
@@ -14117,10 +14112,9 @@ msgid ""
 "a> is set to '<strong>first valid</strong>', check the patron email address "
 "fields in the following order and use the first valid email address found:"
 msgstr ""
-"當 <a href='/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailFieldPrimary'>EmailFieldPrimary</a> 被設定為"
-"\"<strong>第一有效</strong>\"，按以下順序檢查讀者電子郵件地址字段並使用找到的"
-"第一個有效電子郵件地址："
+"當 <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFiel"
+"dPrimary'>EmailFieldPrimary</a> 被設定為 '<strong>第一有效</strong>', "
+"按以下順序檢查讀者電子郵件地址欄位並使用找到的第一個有效電子郵件地址:"
 
 # Patrons > Notices and notifications > EnhancedMessagingPreferences
 # Patrons > Notices and notifications
@@ -14130,9 +14124,9 @@ msgid ""
 "href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=EmailFieldPrecedence\">EmailFieldPrecedence</a>."
 msgstr ""
-"<br><strong>注意：</strong>如果設置為“第一有效”，則檢查電子郵件地址的順序將在"
-"<a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=EmailFieldPrecedence\">EmailFieldPrecedence</a>。"
+"<br><strong>注意:</strong>如果設置為\"第一有效\",則檢查電子郵件地址的順序將在 <a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrecedence\""
+">EmailFieldPrecedence</a>."
 
 # Patrons > Notices and notifications > EmailFieldPrimary
 msgid "patrons.pref#EmailFieldPrimary# Use the patron's"
@@ -14193,7 +14187,7 @@ msgstr "啟用"
 msgid ""
 "patrons.pref#EnableExpiredPasswordReset# If not enabled patrons must either "
 "use the 'Forgot your password' feature or have staff"
-msgstr "若無法啟用，讀者必須使用\"忘記密碼\" 或詢問工作人員"
+msgstr "若無法啟用，讀者必須使用 '忘記密碼' 或詢問館員"
 
 # Patrons > Security > EnableExpiredPasswordReset
 # Patrons > Security
@@ -14737,9 +14731,7 @@ msgid ""
 "patrons.pref#PrivacyPolicyConsent# . When you enforce a data privacy policy, "
 "patrons need to give consent before using the OPAC. If you set to "
 "permissive, Koha will warn but not enforce."
-msgstr ""
-"當您執行數據隱私政策時，讀者需要在使用 OPAC 之前給予同意。如果您設置為許可，"
-"Koha 會發出警告但不會強制執行。"
+msgstr "當您執行資料隱私政策時，讀者需要在使用 OPAC 之前給予同意。如果您設定為許可，Koha 會發出警告但不會強制執行。"
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
@@ -14749,19 +14741,19 @@ msgid ""
 "the <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> setting."
 msgstr ""
-"<br><strong>注意：</strong>如果啟用此功能，您還必須使用該設置來設置公共隱私策"
-"略的 <a href=\"/cgi-bin/koha/admin/preferences.pl?"
-"op=search&searchfield=PrivacyPolicyURL\">PrivacyPolicyURL</a> URL。"
+"<br><strong>注意：</strong>如果啟用此功能，您還必須使用以下內容設定公共隱私政策的URL<a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL\""
+">PrivacyPolicyURL</a>設定."
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyConsent# Set data privacy policy consent to:"
-msgstr "將資料隱私政策同意設置為："
+msgstr "將資料隱私政策同意設定為:"
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyConsent# disabled"
-msgstr "失能"
+msgstr "禁用"
 
 # Patrons > Privacy > GDPR_Policy
 # Patrons > Privacy
@@ -14780,9 +14772,9 @@ msgid ""
 "be displayed if <a href=\"/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
-"<br><strong>注意：</strong> 僅在設置後才會顯示  <a href=\"/cgi-bin/koha/"
-"admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent"
-"\">PrivacyPolicyConsent</a>URL。"
+"<br><strong>注意:</strong>僅在以下情況下才會顯示 URL<a href=\"/cgi-"
+"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent\""
+">PrivacyPolicyConsent</a>已設定."
 
 # Patrons > Privacy > PrivacyPolicyURL
 # Patrons > Privacy
@@ -15473,7 +15465,7 @@ msgstr "截切分面長度至"
 msgid ""
 "searching.pref#FacetLabelTruncationLength# characters, in OPAC/staff "
 "interface (REQUIRES ZEBRA)."
-msgstr "字符，在 OPAC/工作人員界面中（需要 ZEBRA）。"
+msgstr "字元,在 OPAC/館員界面中 (REQUIRES ZEBRA)."
 
 # Searching > Results display > FacetMaxCount
 # Searching > Results display
@@ -16559,7 +16551,7 @@ msgstr "顯示"
 msgid ""
 "staff_interface.pref#IntranetAddMastheadLibraryPulldown# a library select "
 "pulldown menu on the staff header search."
-msgstr "在工作人員搜尋標題上的圖書館下拉式選單。"
+msgstr "在館員標頭搜尋上的圖書館下拉式選單."
 
 # Staff interface > Options > IntranetCatalogSearchPulldown
 # Staff interface > Options
@@ -16735,14 +16727,14 @@ msgstr "啟用"
 # Staff interface > Authentication > TwoFactorAuthentication
 # Administration > CAS authentication
 msgid "staff_interface.pref#TwoFactorAuthentication# Enforce"
-msgstr "執行"
+msgstr " 執行"
 
 # Staff interface > Authentication > TwoFactorAuthentication
 # Administration > CAS authentication
 msgid ""
 "staff_interface.pref#TwoFactorAuthentication# two-factor authentication "
 "(2FA) for staff members."
-msgstr "工作人員的雙因素身份驗證 (2FA)。"
+msgstr "館員的雙重驗證 (2FA)."
 
 # Staff interface > Options > UseWYSIWYGinSystemPreferences
 # Staff interface > Options

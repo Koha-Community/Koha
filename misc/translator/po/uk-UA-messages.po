@@ -3,20 +3,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 21:28-0300\n"
-"PO-Revision-Date: 2023-04-20 11:15+0000\n"
+"POT-Creation-Date: 2023-09-16 07:35-0300\n"
+"PO-Revision-Date: 2023-09-27 11:12+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Koha Translation Team\n"
-"Language: \n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /uk/22.11/uk-UA-messages.po\n"
-"X-POOTLE-MTIME: 1681989341.892109\n"
+"X-POOTLE-MTIME: 1695813166.945482\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
@@ -78,6 +78,7 @@ msgid "Address 2"
 msgstr "Адреса, решту"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr ""
 
@@ -191,6 +192,17 @@ msgstr ""
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "Під час оновлення зіставлення сталася помилка: {message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr ""
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -365,7 +377,10 @@ msgid "Conductors"
 msgstr "диригенти"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
 msgstr ""
 
 #: Koha/Database/Columns.pm:208
@@ -463,7 +478,7 @@ msgstr "Дата надходження"
 
 #: Koha/Template/Plugin/Frameworks.pm:51
 msgid "Default"
-msgstr ""
+msgstr "за умовчанням"
 
 #: Koha/Database/Columns.pm:270
 msgid "Dewey/classification"
@@ -471,7 +486,7 @@ msgstr "Класифікація за Дьюї "
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/restriction-types.inc:8
 msgid "Discharge"
-msgstr ""
+msgstr "Обхідний лист"
 
 #: Koha/Database/Columns.pm:73
 msgid "Discount"
@@ -507,7 +522,7 @@ msgstr ""
 msgid "Edit {title} by {author}"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 #, fuzzy
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
@@ -628,7 +643,7 @@ msgstr "ілюстрації"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:55
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
-msgstr "Індекс „{index}“потребує перестворення."
+msgstr "Індекс „{index}“ потребує перестворення."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 #, perl-brace-format
@@ -729,6 +744,7 @@ msgid "Keyboard"
 msgstr "клавішні інструменти"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr ""
 
@@ -789,7 +805,7 @@ msgstr "Стан втрати/відсутності"
 
 #: koha-tmpl/intranet-tmpl/prog/en/includes/restriction-types.inc:5
 msgid "Manual"
-msgstr ""
+msgstr "Обмеження вручну"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:59
 msgid "Mappings have been reset successfully."
@@ -828,8 +844,10 @@ msgid "Modification date"
 msgstr "Дата внесення змін"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-#, fuzzy
-msgid "Modify city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, fuzzy, perl-brace-format
+msgid "Modify city '{city}'"
 msgstr "Періодичність"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
@@ -968,9 +986,20 @@ msgid "Patron category"
 msgstr "Категорія користувача"
 
 #: Koha/Database/Columns.pm:317
-#, fuzzy
 msgid "Patron reason"
-msgstr "причина від користувача"
+msgstr "Причина від користувача"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+#, fuzzy
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "(замовлення перебуває на розгляді)"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+#, fuzzy
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "(замовлення перебуває на розгляді)"
 
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
@@ -995,6 +1024,10 @@ msgstr "Постійне розташування полиці"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "Місце публікації"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr "Додатки"
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1063,10 +1096,9 @@ msgid "Quantity received"
 msgstr "Отримана кількість"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:309
-#, fuzzy
 msgctxt "EDIFACT message QUOTE"
 msgid "Quotes"
-msgstr "Примітки "
+msgstr "Цитати"
 
 # можливо й не потрібно перекладати
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/additem.tt:46
@@ -1076,9 +1108,27 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "запис"
 
+# можливо й не потрібно перекладати
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+#, fuzzy
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "запис"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Дата реєстрації"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr ""
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1169,7 +1219,7 @@ msgstr "Загальне розташування полиці"
 
 #: Koha/Database/Columns.pm:179
 msgid "Show checkouts to guarantor"
-msgstr ""
+msgstr "Показувати видачі поручителю"
 
 #: Koha/Database/Columns.pm:180
 msgid "Show fines to guarantor"
@@ -1290,17 +1340,17 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:893
 msgctxt "UNIMARC 116 painting techniques"
 msgid "Techniques (print) 1"
-msgstr ""
+msgstr "Техніка (гравюри) / 1"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:1086
 msgctxt "UNIMARC 116 painting techniques"
 msgid "Techniques (print) 2"
-msgstr ""
+msgstr "Техніка (гравюри) / 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:1282
 msgctxt "UNIMARC 116 painting techniques"
 msgid "Techniques (print) 3"
-msgstr ""
+msgstr "Техніка (гравюри) / 3"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:9
@@ -1343,6 +1393,10 @@ msgstr "Позначка часу"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "Назва"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr ""
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"

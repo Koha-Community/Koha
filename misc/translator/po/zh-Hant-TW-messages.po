@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 21:32-0300\n"
-"PO-Revision-Date: 2023-08-28 08:22+0000\n"
-"Last-Translator: SiTing <cky4222@gmail.com>\n"
+"POT-Creation-Date: 2023-09-16 07:39-0300\n"
+"PO-Revision-Date: 2023-09-18 15:18+0000\n"
+"Last-Translator: CindyCheng <cindycheng914@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /zh_TW/22.11/zh-Hant-TW-messages.po\n"
-"X-POOTLE-MTIME: 1693210965.312090\n"
+"X-POOTLE-MTIME: 1695050335.224502\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
@@ -75,6 +75,7 @@ msgid "Address 2"
 msgstr "地址 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr "管理"
 
@@ -186,6 +187,17 @@ msgstr "更新 Elasticsearch 索引對映時發生錯誤：{message}."
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "更新對映時發生錯誤：{message}。"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr ""
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -356,7 +368,10 @@ msgid "Conductors"
 msgstr "指揮家"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, fuzzy, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
 msgstr "確認刪除的城市"
 
 #: Koha/Database/Columns.pm:208
@@ -479,7 +494,7 @@ msgstr "E"
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:465
 msgctxt "music"
 msgid "E flat"
-msgstr "E面"
+msgstr "E  面"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:27
 msgctxt "Edit course reserve"
@@ -496,7 +511,7 @@ msgstr "編輯{標題}"
 msgid "Edit {title} by {author}"
 msgstr "由{作者}編輯{標題}"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
 msgstr "編輯"
@@ -522,7 +537,7 @@ msgstr "錯誤：無法找回此 ID的可用性"
 
 #: Koha/Database/Columns.pm:78
 msgid "Estimated delivery date"
-msgstr "預計交貨日"
+msgstr "預計交貨日期"
 
 #: Koha/Database/Columns.pm:216
 msgid "Exclude from local holds priority"
@@ -540,7 +555,7 @@ msgstr "F"
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:468
 msgctxt "music"
 msgid "F sharp"
-msgstr "升Ｆ"
+msgstr "F 升記號"
 
 #: Koha/Database/Columns.pm:160
 msgid "Fax"
@@ -565,7 +580,7 @@ msgstr "星期五"
 
 #: Koha/Database/Columns.pm:66
 msgid "Fund ID (internal)"
-msgstr "基金ID（內部）"
+msgstr "基金 ID (內部的)"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:463
 msgctxt "music"
@@ -644,7 +659,7 @@ msgstr "盤點簿發票號碼"
 
 #: Koha/Database/Columns.pm:80
 msgid "Invoice ID (internal)"
-msgstr "發票 ID（內部）"
+msgstr "發票 ID (內部的)"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:185
 msgid "Irish harp"
@@ -652,7 +667,7 @@ msgstr "愛爾蘭豎琴"
 
 #: Koha/Database/Columns.pm:258
 msgid "Is a serial?"
-msgstr "是連載嗎？"
+msgstr "是連續期刊嗎?"
 
 #: C4/ILSDI/Services.pm:968
 msgid "Item damaged"
@@ -711,6 +726,7 @@ msgid "Keyboard"
 msgstr "鍵盤"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr "Koha"
 
@@ -750,7 +766,7 @@ msgstr "圖書館"
 
 #: Koha/Database/Columns.pm:81
 msgid "Line item ID (EDIFACT)"
-msgstr "行館藏 ID (EDIFACT)"
+msgstr "單行館藏 ID (EDIFACT)"
 
 #: Koha/Database/Columns.pm:305
 msgid "Location"
@@ -808,7 +824,10 @@ msgid "Modification date"
 msgstr "修改日期"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-msgid "Modify city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, fuzzy, perl-brace-format
+msgid "Modify city '{city}'"
 msgstr "修改城市"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
@@ -947,6 +966,18 @@ msgstr "讀者證類型"
 msgid "Patron reason"
 msgstr "讀者理由"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+#, fuzzy
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "待決預約"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+#, fuzzy
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "待決預約"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -969,6 +1000,10 @@ msgstr "永欠排架位置"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "出版地"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr ""
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1044,9 +1079,26 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "記錄 #"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+#, fuzzy
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "記錄 #"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "登記日期"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr ""
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1305,6 +1357,10 @@ msgstr "時間戳記"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "題名"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr ""
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"
@@ -2934,25 +2990,24 @@ msgstr ""
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:291
 msgid "tuned gong"
-msgstr ""
+msgstr "調諧鑼"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:359
 msgid "tuning-fork"
-msgstr ""
+msgstr "音叉"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:289
 msgid "turkish crescent"
-msgstr ""
+msgstr "土耳其新月"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:452
-#, fuzzy
 msgctxt "music"
 msgid "two players on one instrument"
-msgstr "打擊樂器"
+msgstr "兩名使用者使用一台樂器"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:203
 msgid "ukulele"
-msgstr ""
+msgstr "烏克麗麗"
 
 #: cataloguing/value_builder/unimarc_field_146a.pl:58
 msgid "undefined, variable (e.g. Renaissance vocal or instrumental music)"
@@ -2964,49 +3019,47 @@ msgstr "不詳"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:490
 msgid "used by the same player as the preceding code"
-msgstr ""
+msgstr "由與前面的代碼相同的玩家使用"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:136
 msgid "valved bugle"
-msgstr ""
+msgstr "帶閥門的號角"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:300
 msgid "vibra-slap"
-msgstr ""
+msgstr "震盪器"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:299
-#, fuzzy
 msgid "vibraphone"
-msgstr "主要電話"
+msgstr "震音鐵琴"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:164
 msgid "viol"
-msgstr ""
+msgstr "古提琴"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:161
 msgid "viola"
-msgstr ""
+msgstr "中提琴"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:165
 msgid "violin"
-msgstr ""
+msgstr "小提琴"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:163
 msgid "violone"
-msgstr ""
+msgstr "低音維奧爾琴"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:230
 msgid "virginal"
-msgstr ""
+msgstr "古鍵琴"
 
 #: cataloguing/value_builder/unimarc_field_146a.pl:53
 msgid "vocal a cappella music"
 msgstr "無伴奏聲樂"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:392
-#, fuzzy
 msgid "vocal and instrumental ensemble"
-msgstr "聲樂和樂器音樂"
+msgstr "聲樂和樂器合奏"
 
 #: cataloguing/value_builder/unimarc_field_146a.pl:55
 msgid "vocal and instrumental music"
@@ -3014,16 +3067,15 @@ msgstr "聲樂和樂器音樂"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:375
 msgid "vocal ensemble"
-msgstr ""
+msgstr "聲樂合奏"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:63
-#, fuzzy
 msgid "voice - other"
-msgstr "聲音總數"
+msgstr "聲音 - 其他"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:61
 msgid "voice - unspecified"
-msgstr ""
+msgstr "語音未指定"
 
 #: cataloguing/value_builder/unimarc_field_146h.pl:68
 #: cataloguing/value_builder/unimarc_field_146i.pl:68
@@ -3032,28 +3084,27 @@ msgstr "聲音總數"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:103
 msgid "vox humana"
-msgstr ""
+msgstr "人類之聲"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:137
 msgid "wagner tuba"
-msgstr ""
+msgstr "瓦格納大號"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:426
 msgid "walk-on part"
-msgstr ""
+msgstr "步行部分"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:301
 msgid "whip"
-msgstr ""
+msgstr "鞭子"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:363
 msgid "whistle"
-msgstr ""
+msgstr "哨"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:362
-#, fuzzy
 msgid "wind instrument"
-msgstr "管樂器"
+msgstr "管弦樂器"
 
 #: cataloguing/value_builder/unimarc_field_146h.pl:56
 #: cataloguing/value_builder/unimarc_field_146i.pl:56
@@ -3062,34 +3113,31 @@ msgstr "管樂器"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:302
 msgid "wind machine"
-msgstr ""
+msgstr "風力機"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:399
-#, fuzzy
 msgid "wind orchestra"
 msgstr "管弦樂團"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:62
-#, fuzzy
 msgid "woman's voice"
-msgstr "合唱的聲音"
+msgstr "女聲"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:376
 msgid "women's choir"
-msgstr ""
+msgstr "女合唱團"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:303
 msgid "woodblocks"
-msgstr ""
+msgstr "木魚"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:104
-#, fuzzy
 msgid "woodwind - other"
-msgstr "木管樂器"
+msgstr "木管樂器 - 其他"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:102
 msgid "woodwind - unspecified"
-msgstr ""
+msgstr "木管樂器 - 未規定的"
 
 #: cataloguing/value_builder/unimarc_field_146h.pl:69
 #: cataloguing/value_builder/unimarc_field_146i.pl:69
@@ -3098,20 +3146,19 @@ msgstr "木管樂器"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:305
 msgid "xylophone"
-msgstr ""
+msgstr "木琴"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:304
 msgid "xylorimba"
-msgstr ""
+msgstr "小型馬林巴琴"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:205
 msgid "zither"
-msgstr ""
+msgstr "齊特琴"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:99
-#, fuzzy
 msgid "zurna"
-msgstr "姓氏"
+msgstr "管"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tt:597
 #: koha-tmpl/intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:17

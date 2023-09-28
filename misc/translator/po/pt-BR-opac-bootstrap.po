@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-26 23:45-0300\n"
-"PO-Revision-Date: 2023-07-25 13:35+0000\n"
-"Last-Translator: Tiago Murakami <trmurakami@gmail.com>\n"
+"POT-Creation-Date: 2023-09-16 07:20-0300\n"
+"PO-Revision-Date: 2023-09-27 23:26+0000\n"
+"Last-Translator: Marx Medeiros <marx.mr@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /pt_BR/22.11/pt-BR-opac-bootstrap.po\n"
-"X-POOTLE-MTIME: 1690292126.214016\n"
+"X-POOTLE-MTIME: 1695857191.734244\n"
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -1600,8 +1600,8 @@ msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
 "must be seen by the library %s )"
 msgstr ""
-"(%s de %s renovações restantes %s / %s de %s renovações restantes antes dos "
-"exemplares devem ser vistos pela biblioteca %s)"
+"( %s renovações restantes de %s permitidas %s / %s renovações restantes de %"
+"s permitidas antes do exemplar precisar ser apresentado na biblioteca %s)"
 
 #. %1$s:  LEVEL_LOO.number | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:67
@@ -1684,7 +1684,7 @@ msgid ""
 "(Item is withdrawn and check-in blocked by policy, please see library staff "
 "for assistance)"
 msgstr ""
-"(O exemplar foi retirado e o empréstimo está bloqueado pela política, por "
+"(O exemplar foi descartado e o empréstimo está bloqueado pela política, por "
 "favor, consulte a equipe da biblioteca)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:37
@@ -2443,7 +2443,7 @@ msgid "Alternate contact"
 msgstr "Contato alternativo"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Always available"
 msgstr "Sempre disponível"
 
@@ -2937,7 +2937,7 @@ msgstr "Disponível"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Availability:"
 msgstr "Disponibilidade:"
 
@@ -3489,6 +3489,12 @@ msgstr "Gravação em cassete"
 #, c-format
 msgid "Catalog"
 msgstr "Catálogo"
+
+#. %1$s:  q | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:24
+#, c-format
+msgid "Catalog search for '%s'"
+msgstr "Resultados da pesquisa por '%s'"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:391
 #, c-format
@@ -4304,7 +4310,7 @@ msgid "Current session"
 msgstr "Sessão atual"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Currently available"
 msgstr "Disponível atualmente"
 
@@ -4324,7 +4330,7 @@ msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "Atualmente em uso local por %s %s %s(%s)%s"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Currently unavailable"
 msgstr "Atualmente indisponível"
 
@@ -4404,14 +4410,14 @@ msgstr "Data de entrada:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1210
 #, c-format
 msgid "Date due"
-msgstr "Devolução em"
+msgstr "Devolver até"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:416
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:421
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:797
 #, c-format
 msgid "Date due:"
-msgstr "Devolução em"
+msgstr "Devolver até:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:13
 #, c-format
@@ -5020,7 +5026,7 @@ msgid "Error searching %s collection"
 msgstr "Erro ao pesquisar %s coleção"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Error searching OverDrive collection."
 msgstr "Erro ao buscar na coleção do OverDrive."
 
@@ -5431,7 +5437,7 @@ msgid "Format:"
 msgstr "Formato:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Found"
 msgstr "Encontrado"
 
@@ -6658,7 +6664,7 @@ msgid "Item withdrawn"
 msgstr "Exemplar descartado"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Items available:"
 msgstr "Exemplares disponíveis:"
 
@@ -6968,7 +6974,7 @@ msgstr "Carregando"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1081
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:5
 msgid "Loading..."
@@ -7617,7 +7623,7 @@ msgstr "Notícias da %s%s%sbiblioteca%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1016
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:137
 #, c-format
@@ -7781,6 +7787,15 @@ msgstr "Sem reservas"
 msgid "No holds are allowed on this item"
 msgstr "Não são permitidas reservas neste exemplar"
 
+#. For the first occurrence,
+#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:368
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:502
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:593
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:836
+msgid "No item was selected"
+msgstr "Nenhum exemplar foi selecionado"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:163
 #, c-format
 msgid "No items available."
@@ -7882,7 +7897,7 @@ msgid "No results found in the library's %s collection"
 msgstr "Nenhum resultado encontrado na biblioteca %s coleção"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "No results found in the library's OverDrive collection."
 msgstr "Nenhum resultado encontrado na biblioteca da coleção do OverDrive."
 
@@ -8204,13 +8219,13 @@ msgid "Notice:"
 msgstr "Nota:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:468
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:962
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1069
 #, c-format
 msgid "Novelist Select"
 msgstr "Selecione o romancista"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:962
 #, c-format
 msgid "Novelist Select: "
 msgstr "Selecione o romancista: "
@@ -8319,7 +8334,7 @@ msgid ""
 msgstr ""
 "Apenas determinados campos (marcados em vermelho) são necessários, mas "
 "quanto mais informações você digitar, mais fácil será para os bibliotecários "
-"encontrar o título que você está solicitando. O campo \"Notas\" pode ser "
+"encontrarem o título que você está solicitando. O campo \"Notas\" pode ser "
 "usado para fornecer qualquer informação adicional."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:224
@@ -8420,8 +8435,8 @@ msgstr "Conta do OverDrive"
 
 #. For the first occurrence,
 #. %1$s:  q | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:24
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:27
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:41
 #, c-format
 msgid "OverDrive search for '%s'"
 msgstr "Busca do OverDrive para '%s'"
@@ -8939,6 +8954,11 @@ msgid "Please enter a valid date (ISO)."
 msgstr "Favor informar uma data válida (ISO)."
 
 #. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:51
+msgid "Please enter a valid date (should match %s)."
+msgstr "Por favor insira uma data válida (deve corresponder %s)."
+
+#. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/validator-strings.inc:2
 msgid "Please enter a valid date."
 msgstr "Favor informar uma data válida."
@@ -9198,7 +9218,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1003
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1005
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:137
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:13
@@ -10454,8 +10474,8 @@ msgstr "Resultados da pesquisa"
 
 #. NAV
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:10
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:44
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:47
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:3
 msgid "Search results pagination"
 msgstr "Paginação dos resultados da pesquisa"
@@ -10501,7 +10521,7 @@ msgid "Searching %s..."
 msgstr "Pesquisando %s..."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Searching OverDrive..."
 msgstr "Pesquisando no OverDrive..."
 
@@ -12268,7 +12288,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:72
 #, c-format
 msgid "This item has been withdrawn from the collection."
-msgstr "Este exemplar foi retirado da coleção."
+msgstr "Este exemplar foi descartado da coleção."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:156
 #, c-format
@@ -12294,7 +12314,7 @@ msgstr "Este exemplar não pode ser emprestado."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:76
 #, c-format
 msgid "This item is on hold for another patron."
-msgstr "Este exemplar está reservado para outro usuário."
+msgstr "Este exemplar está reservado para outra pessoa."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
 #, c-format
@@ -12357,7 +12377,7 @@ msgstr ""
 "Esta página contém conteúdo enriquecido que só pode ser exibido se o "
 "JavaScript estiver funcionando ou ao clicar "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-page.tt:59
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-page.tt:56
 #, c-format
 msgid "This page does not exist. "
 msgstr "Esta página não existe. "
@@ -12595,7 +12615,7 @@ msgid "Type of heading"
 msgstr "Tipo de cabeçalho"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Type:"
 msgstr "Tipo:"
 
@@ -12876,7 +12896,7 @@ msgstr "Visite o site"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:382
 #, c-format
 msgid "Vol info"
-msgstr "Informaçaõ do volume"
+msgstr "Informação do volume"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:929
 #, c-format
@@ -14383,7 +14403,7 @@ msgstr "Área de seleção"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1046
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1051
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:137
 #, c-format
 msgid "by"
@@ -14790,7 +14810,7 @@ msgid "or "
 msgstr "ou "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "out of"
 msgstr "fora"
 
@@ -14871,7 +14891,7 @@ msgid "reserve"
 msgstr "reserva"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "results in the library's OverDrive collection."
 msgstr "resultados na biblioteca da coleção do OverDrive."
 
@@ -15146,7 +15166,7 @@ msgid "view plain"
 msgstr "somente texto"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "waiting holds:"
 msgstr "reservas aguardando:"
 

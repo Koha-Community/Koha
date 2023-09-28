@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 07:13-0300\n"
-"PO-Revision-Date: 2023-08-07 15:51+0000\n"
+"PO-Revision-Date: 2023-09-28 16:00+0000\n"
 "Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fr_CA\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /fr_CA/22.11/fr-CA-pref.po\n"
-"X-POOTLE-MTIME: 1691423475.243179\n"
+"X-POOTLE-MTIME: 1695916816.574798\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2989,12 +2989,12 @@ msgstr ""
 # Authorities > Linker > LinkerKeepStale
 # Authorities > Linker
 msgid "authorities.pref#LinkerConsiderThesaurus# Do"
-msgstr "Conserver"
+msgstr "Comparer"
 
 # Authorities > Linker > LinkerKeepStale
 # Authorities > Linker
 msgid "authorities.pref#LinkerConsiderThesaurus# Don't"
-msgstr "Ne pas conserver"
+msgstr "Ne pas comparer"
 
 # Authorities > Linker > LinkerConsiderThesaurus
 msgid ""
@@ -3003,8 +3003,8 @@ msgid ""
 "Enabling this preference may require a reindex, and may generate new "
 "authority records if AutoCreateAuthorities is enabled."
 msgstr ""
-"comparer la source des vedettes 6XX à la source du thésaurus pour les "
-"notices d'autorité lors de la liaison. L'activation de cette préférence peut "
+"la source des vedettes 6XX à la source du thésaurus pour les notices "
+"d'autorité lors de l'arrimage. L'activation de cette préférence peut "
 "nécessiter une réindexation et peut générer de nouvelles notices d'autorité "
 "si AutoCreateAuthorities est activé."
 
@@ -3407,7 +3407,6 @@ msgid "cataloguing.pref#CatalogConcerns# Don't allow"
 msgstr "Interdire"
 
 # Cataloging > Interface > CatalogConcerns
-#, fuzzy
 msgid ""
 "cataloguing.pref#CatalogConcerns# staff to report concerns about "
 "bibliographic records."
@@ -4472,12 +4471,13 @@ msgstr "Utiliser le type d'exemplaire de niveau"
 # Cataloging > Record structure
 msgid ""
 "cataloguing.pref#item-level_itypes# as the authoritative item type (for "
-"determining circulation and fines rules, for displaying an item type icon on "
+"determining circulation and fine rules, for displaying an item type icon on "
 "either opac detail or results page, etc)."
 msgstr ""
-"type de document de référence (pour déterminer les règles de circulation et "
-"d'amendes, l'affichage à l'OPAC des icones de type de document soit à "
-"l'affichage détaillée, soit sur la page des résultats de recherche, etc.)."
+"comme type de document de référence (pour déterminer les règles de "
+"circulation et d'amendes, l'affichage à l'OPAC des icones de type de "
+"document soit à l'affichage détaillée, soit sur la page des résultats de "
+"recherche, etc.)."
 
 # Cataloging > Record structure > item-level_itypes
 # Cataloging > Record structure
@@ -6189,20 +6189,19 @@ msgstr ""
 # Circulation > Holds policy > EnableItemGroupHolds
 # Circulation > Holds policy
 msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
-msgstr "Désactiver"
+msgstr "Interdire"
 
 # Circulation > Holds policy > EnableItemGroupHolds
 # Circulation > Interlibrary loans
 msgid "circulation.pref#EnableItemGroupHolds# Enable"
-msgstr "Activer"
+msgstr "Permettre"
 
 # Circulation > Holds policy > EnableItemGroupHolds
 # Circulation > Holds policy
 msgid ""
 "circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
 "groups."
-msgstr ""
-"la fonctionnalité de faire des réservations sur des groupes d'exemplaires."
+msgstr "les réservations sur des groupes d'exemplaires."
 
 # Circulation > Holds policy > EnableItemGroups
 # Circulation > Article requests
@@ -6652,8 +6651,8 @@ msgstr ""
 # Circulation > Checkout policy > HomeOrHoldingBranch
 # Circulation > Checkout policy
 msgid ""
-"circulation.pref#HomeOrHoldingBranch# Use the checkout and fines rules of"
-msgstr "Utiliser les règles de prêt et d'amendes de"
+"circulation.pref#HomeOrHoldingBranch# Use the circulation and fine rules of"
+msgstr "Utiliser les règles de circulation et d'amendes de"
 
 # Circulation > Checkout policy > HomeOrHoldingBranch
 # Circulation > Checkout policy
@@ -8666,7 +8665,7 @@ msgstr "Utiliser"
 # Circulation > Recalls > UseRecalls
 msgid ""
 "circulation.pref#UseRecalls# recalls. Make sure you configure <a href=\"/cgi-"
-"bin/koha/admin/smart-rules.pl\">circulation and fines rules</a> for recalls "
+"bin/koha/admin/smart-rules.pl\">circulation and fine rules</a> for recalls "
 "once enabled."
 msgstr ""
 "les rappels. Une fois cette préférence système activée, assurez-vous de "
@@ -13059,7 +13058,6 @@ msgid "opac.pref#OpacCatalogConcerns# Don't allow"
 msgstr "Interdire"
 
 # OPAC > Features > OpacCatalogConcerns
-#, fuzzy
 msgid ""
 "opac.pref#OpacCatalogConcerns# OPAC users to report concerns about "
 "bibliographic records."
@@ -14895,9 +14893,8 @@ msgstr ""
 
 # Searching > Results display > RetainPatronsSearchTerms
 # Searching > Features
-#, fuzzy
 msgid "patrons.pref#DefaultPatronSearchMethod# Contains"
-msgstr "Ne pas retenir"
+msgstr "Contient"
 
 # Patrons > General > DefaultPatronSearchMethod
 msgid ""
@@ -14905,10 +14902,12 @@ msgid ""
 "determine whether to use Starts with or Contains for autocomplete patron "
 "searches."
 msgstr ""
+"Activer cette méthode de recherche pour déterminer si l'autocomplétion dans "
+"la recherche d'utilisateurs utilise Commence par ou Contient."
 
 # Patrons > General > DefaultPatronSearchMethod
 msgid "patrons.pref#DefaultPatronSearchMethod# Starts with"
-msgstr ""
+msgstr "Commence par"
 
 # Patrons > Notices and notifications > EmailFieldPrecedence
 msgid ""

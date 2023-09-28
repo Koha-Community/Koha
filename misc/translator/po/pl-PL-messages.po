@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 21:15-0300\n"
-"PO-Revision-Date: 2023-08-28 07:24+0000\n"
+"POT-Creation-Date: 2023-09-16 07:18-0300\n"
+"PO-Revision-Date: 2023-09-18 04:45+0000\n"
 "Last-Translator: Urszula <matoga@biblos.pk.edu.pl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /pl/22.11/pl-PL-messages.po\n"
-"X-POOTLE-MTIME: 1693207465.261575\n"
+"X-POOTLE-MTIME: 1695012328.238257\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
@@ -78,6 +78,7 @@ msgid "Address 2"
 msgstr "Adres 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr "Administracja"
 
@@ -192,6 +193,17 @@ msgstr ""
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "Wystąpił błąd w trakcie uaktualniania mapowania: {message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr "Zatwierdzone"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr "Zatwierdzony"
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -364,8 +376,11 @@ msgid "Conductors"
 msgstr "Dyrygenci"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
-msgstr "Potwierdź usunięcie miejscowości"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
+msgstr "Potwierdź usunięcie miejscowości '{city}'"
 
 #: Koha/Database/Columns.pm:208
 msgid "Copy number"
@@ -504,7 +519,7 @@ msgstr "Modyfikuj {title}"
 msgid "Edit {title} by {author}"
 msgstr "Modyfikuj {title} Autor: {author}"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
 msgstr "Modyfikowanie"
@@ -722,6 +737,7 @@ msgid "Keyboard"
 msgstr "Keyboard"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr "Koha"
 
@@ -821,8 +837,11 @@ msgid "Modification date"
 msgstr "Data modyfikacji"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-msgid "Modify city"
-msgstr "Modyfikuj miejscowość"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, perl-brace-format
+msgid "Modify city '{city}'"
+msgstr "Modyfikuj miejscowość '{city}'"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Monday"
@@ -960,6 +979,16 @@ msgstr "Kategoria użytkownika"
 msgid "Patron reason"
 msgstr "Uzasadnienie propozycji"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "Oczekujące"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "Oczekujący"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -982,6 +1011,10 @@ msgstr "Wszystkie lokalizacje"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "Miejsce wydania"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr "Wtyczki"
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1057,9 +1090,25 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "Rekord #"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "Liczba rekordów"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Data rejestracji"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr "Odrzucone"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr "Odrzucony"
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1320,6 +1369,10 @@ msgstr "Znacznik czasu"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "Tytuł"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr "Narzędzia"
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"
