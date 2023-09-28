@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 20:50-0300\n"
-"PO-Revision-Date: 2023-08-07 10:43+0000\n"
+"POT-Creation-Date: 2023-09-16 06:48-0300\n"
+"PO-Revision-Date: 2023-09-19 10:14+0000\n"
 "Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: fi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /fi/22.11/fi-FI-messages.po\n"
-"X-POOTLE-MTIME: 1691405035.799648\n"
+"X-POOTLE-MTIME: 1695118454.573755\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
@@ -76,6 +76,7 @@ msgid "Address 2"
 msgstr "Osoite 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr "Ylläpito"
 
@@ -190,6 +191,17 @@ msgstr ""
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "Tapahtui virhe päivitettäessä nimikarttoja: {message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr "Hyväksytty"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr "Hyväksytty"
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -362,8 +374,11 @@ msgid "Conductors"
 msgstr "Johtajat"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
-msgstr "Vahvista kaupungin/kunnan poisto"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
+msgstr "Vahvista kaupungin '{city}' poisto"
 
 #: Koha/Database/Columns.pm:208
 msgid "Copy number"
@@ -502,7 +517,7 @@ msgstr "Muokkaa {title}"
 msgid "Edit {title} by {author}"
 msgstr "Muokkaa {title} / {author}"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
 msgstr "Muokataan"
@@ -720,6 +735,7 @@ msgid "Keyboard"
 msgstr "Kosketinsoitin"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr "Koha"
 
@@ -817,8 +833,11 @@ msgid "Modification date"
 msgstr "Muokkauspvm"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-msgid "Modify city"
-msgstr "Muokkaa kaupunkia/kuntaa"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, perl-brace-format
+msgid "Modify city '{city}'"
+msgstr "Muokkaa kaupunkia '{city}'"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Monday"
@@ -956,6 +975,16 @@ msgstr "Asiakastyyppi"
 msgid "Patron reason"
 msgstr "Asiakkaan perustelut"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "Odottava"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "Odottava"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -978,6 +1007,10 @@ msgstr "Pysyvä hyllypaikka"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "Julkaisupaikka"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr "Liitännäiset"
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1053,9 +1086,25 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "Tietue #"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "Tietueiden määrä"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Rekisteröintipvm"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr "Hylätty"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr "Hylätty"
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1315,6 +1364,10 @@ msgstr "Aikaleima"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "Nimeke"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr "Työkalut"
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"

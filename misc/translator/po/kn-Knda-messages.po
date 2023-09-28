@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 21:04-0300\n"
+"POT-Creation-Date: 2023-09-16 07:04-0300\n"
 "PO-Revision-Date: 2023-03-25 17:28+0000\n"
 "Last-Translator: R S Wodeyar <raviwodeyar@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
-"Language: kn\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
@@ -26,8 +26,8 @@ msgstr "(ಮ್ಯಾಪಿಂಗ್‌ನೊಂದಿಗೆ {field_name} ಕ್
 #, perl-brace-format
 msgid "({age} year)"
 msgid_plural "({age} years)"
-msgstr[0] "({age} ವರ್ಷ)"
-msgstr[1] "({age} ವರ್ಷಗಳು)"
+msgstr[0] "({ವಯಸ್ಸು} ವರ್ಷ)"
+msgstr[1] "({ವಯಸ್ಸು} ವರ್ಷಗಳು)"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:457
 msgctxt "music"
@@ -76,6 +76,7 @@ msgid "Address 2"
 msgstr "ವಿಳಾಸ 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr ""
 
@@ -183,12 +184,23 @@ msgstr ""
 msgid ""
 "An error occurred when updating Elasticsearch index mappings: {message}."
 msgstr ""
-"Elasticsearc ಹುಡುಕಾಟ ಸೂಚ್ಯಂಕ ಮ್ಯಾಪಿಂಗ್‌ಗಳನ್ನು ನವೀಕರಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ: {message}."
+"Elasticsearc ಹುಡುಕಾಟ ಸೂಚ್ಯಂಕ ಮ್ಯಾಪಿಂಗ್‌ಗಳನ್ನು ನವೀಕರಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ: {ಸಂದೇಶ}."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:42
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "ಮ್ಯಾಪಿಂಗ್‌ಗಳನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ: {message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr ""
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -276,8 +288,8 @@ msgstr "ಬಜೆಟ್ ವೆಚ್ಚದ ತೆರಿಗೆ ಸಹಿತ "
 #, perl-brace-format
 msgid "Bundle of {count} item"
 msgid_plural "Bundle of {count} items"
-msgstr[0] "{count} ಐಟಂನ ಬಂಡಲ್"
-msgstr[1] "{count} ಐಟಂಗಳು"
+msgstr[0] "{ಎಣಿಕೆ} ಐಟಂನ ಬಂಡಲ್"
+msgstr[1] "{ಎಣಿಕೆ} ಐಟಂಗಳು"
 
 #: Koha/CodeList/Unimarc/MediumOfPerformance.pm:459
 msgctxt "music"
@@ -360,7 +372,10 @@ msgid "Conductors"
 msgstr "ಕಂಡಕ್ಟರ್ ಗಳು "
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
 msgstr ""
 
 #: Koha/Database/Columns.pm:208
@@ -500,7 +515,7 @@ msgstr ""
 msgid "Edit {title} by {author}"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 #, fuzzy
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
@@ -619,12 +634,12 @@ msgstr "ದ್ರಷ್ಟಾ೦ತ (ವಿವರಣೆಗಳು)"
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:55
 #, perl-brace-format
 msgid "Index '{index}' needs to be recreated."
-msgstr "ಸೂಚ್ಯಂಕ '{index}' ಅನ್ನು ಪುನಃ ರಚಿಸಬೇಕಾಗಿದೆ."
+msgstr "ಸೂಚ್ಯಂಕ '{ಇಂಡೆಕ್ಸ್}' ಅನ್ನು ಪುನಃ ರಚಿಸಬೇಕಾಗಿದೆ."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:53
 #, perl-brace-format
 msgid "Index '{index}' needs to be reindexed."
-msgstr "ಸೂಚ್ಯಂಕ '{index}' ಅನ್ನು ಮರುಇಂಡೆಕ್ಸ್ ಮಾಡಬೇಕಾಗಿದೆ."
+msgstr "ಸೂಚ್ಯಂಕ '{ಇಂಡೆಕ್ಸ್}' ಅನ್ನು ಮರುಇಂಡೆಕ್ಸ್ ಮಾಡಬೇಕಾಗಿದೆ."
 
 #: Koha/Database/Columns.pm:164
 msgid "Initials"
@@ -718,6 +733,7 @@ msgid "Keyboard"
 msgstr "ಕೀಲಿಮಣೆ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr ""
 
@@ -815,8 +831,10 @@ msgid "Modification date"
 msgstr "ಪರಿಷ್ಕರಣೆ ದಿನಾಂಕ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-#, fuzzy
-msgid "Modify city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, fuzzy, perl-brace-format
+msgid "Modify city '{city}'"
 msgstr "ನಿಯತಕಾಲಿಕತೆ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
@@ -956,6 +974,18 @@ msgstr "ಬಳಕೆದಾರರ ವರ್ಗ"
 msgid "Patron reason"
 msgstr "ಬಳಕೆದಾರ ಕಾರಣ"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+#, fuzzy
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "ಕಾಯ್ದಿರಿಸುವಿಕೆ ಇತ್ಯರ್ಥವಾಗಿಲ್ಲ"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+#, fuzzy
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "ಕಾಯ್ದಿರಿಸುವಿಕೆ ಇತ್ಯರ್ಥವಾಗಿಲ್ಲ"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -978,6 +1008,10 @@ msgstr "ಶಾಶ್ವತ ಶೆಲ್ವಿಂಗ್(ಕಪಾಟು) ಸ್�
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "ಪ್ರಕಾಶನದ ಸ್ಥಳ"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr ""
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1055,9 +1089,26 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "ದಾಖಲೆ"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+#, fuzzy
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "ದಾಖಲೆ"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "ನೋಂದಣಿ ದಿನಾಂಕ"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr ""
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1319,6 +1370,10 @@ msgstr "ಟೈಮ್‌ಸ್ಟ್ಯಾಂಪ್ (ಅವಧಿ)"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "ಶೀರ್ಷಿಕೆ"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr ""
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"
@@ -3092,22 +3147,22 @@ msgstr "ಝುರ್ನಾ"
 #, perl-brace-format
 msgid "{count} item"
 msgid_plural "{count} items"
-msgstr[0] "{count} ಐಟಂ"
-msgstr[1] "{count} ಐಟಂಗಳು"
+msgstr[0] "{ಎಣಿಕೆ} ಐಟಂ"
+msgstr[1] "{ಎಣಿಕೆ} ಐಟಂಗಳು"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/credit_types.tt:190
 #, perl-brace-format
 msgid "{count} library limitation"
 msgid_plural "{count} library limitations"
-msgstr[0] "{count} ಲೈಬ್ರರಿ ಮಿತಿ"
-msgstr[1] "{count} ಲೈಬ್ರರಿ ಮಿತಿಗಳು"
+msgstr[0] "{ಎಣಿಕೆ} ಲೈಬ್ರರಿ ಮಿತಿ"
+msgstr[1] "{ಎಣಿಕೆ} ಲೈಬ್ರರಿ ಮಿತಿಗಳು"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/course_reserves/batch_rm_items.tt:57
 #, perl-brace-format
 msgid "{title} ({barcode}) was removed from {count} course."
 msgid_plural "{title} ({barcode}) was removed from {count} courses."
-msgstr[0] "{title} ({barcode}) ಅನ್ನು {count} ಕೋರ್ಸ್‌ನಿಂದ ತೆಗೆದುಹಾಕಲಾಗಿದೆ"
-msgstr[1] "{title} ({barcode}) ಅನ್ನು {count} ಕೋರ್ಸ್‌ಗಳಿಂದ ತೆಗೆದುಹಾಕಲಾಗಿದೆ."
+msgstr[0] "{ಶೀರ್ಷಿಕೆ} ({ಬಾರ್‌ಕೋಡ್}) ಅನ್ನು {ಎಣಿಕೆ} ಕೋರ್ಸ್‌ನಿಂದ ತೆಗೆದುಹಾಕಲಾಗಿದೆ"
+msgstr[1] "{ಶೀರ್ಷಿಕೆ} ({ಬಾರ್‌ಕೋಡ್}) ಅನ್ನು {ಎಣಿಕೆ} ಕೋರ್ಸ್‌ಗಳಿಂದ ತೆಗೆದುಹಾಕಲಾಗಿದೆ."
 
 #, fuzzy
 #~ msgctxt "citations"

@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-27 11:01-0300\n"
-"PO-Revision-Date: 2022-08-03 23:42+0000\n"
+"POT-Creation-Date: 2023-09-16 07:09-0300\n"
+"PO-Revision-Date: 2023-09-12 01:09+0000\n"
 "Last-Translator: aleisha <aleisha@catalyst.net.nz>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: mi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /mi/22.11/mi-NZ-opac-bootstrap.po\n"
-"X-POOTLE-MTIME: 1659570127.952922\n"
+"X-POOTLE-MTIME: 1694480964.657967\n"
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -149,9 +149,9 @@ msgstr "%s %s %s [%%~ SET line_break = \""
 #. %4$s:  bibitemloo.author | html 
 #. %5$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:190
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s, by %s%s "
-msgstr "%s %s nā %s %s "
+msgstr "%s %s %s, nā %s%s "
 
 #. %1$s:  IF RestrictedPageTitle 
 #. %2$s:  RestrictedPageTitle | html 
@@ -258,9 +258,9 @@ msgstr ""
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=review link=> 1 
 #. %2$s:  IF ( review.author ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:46
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s by "
-msgstr "%s nā "
+msgstr "%s %s nā "
 
 #. %1$s:  i.title | html 
 #. %2$s:  IF i.author 
@@ -278,9 +278,9 @@ msgstr "%s %s nā %s %s "
 #. %5$s:  END # /IF MY_TAG.XSLTBloc 
 #. %6$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:165
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s by %s %s %s %s "
-msgstr "%s nā %s %s %s %s"
+msgstr "%s %s nā %s %s %s %s "
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
@@ -344,9 +344,9 @@ msgstr "%s (Pūkete tau %s)"
 #. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:186
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:188
-#, fuzzy, c-format
+#, c-format
 msgid "%s (default)"
-msgstr "Taunoa"
+msgstr "%s (taunoa)"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -497,9 +497,9 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:174
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:396
-#, fuzzy, c-format
+#, c-format
 msgid "%s Log in with %s "
-msgstr "Takiuru mā Google"
+msgstr "%s Takiuru mā %s"
 
 #. %1$s:  IF !holds 
 #. %2$s:  ELSE 
@@ -2408,7 +2408,7 @@ msgid "Alternate contact"
 msgstr "Hoapā kē"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #, fuzzy
 msgid "Always available"
 msgstr "Ngā tuemi wātea:"
@@ -2909,7 +2909,7 @@ msgstr "Wātea"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Availability:"
 msgstr "Wāteatanga:"
 
@@ -3463,6 +3463,12 @@ msgstr "Tāhopukanga rīpene"
 msgid "Catalog"
 msgstr "Putumōhio"
 
+#. %1$s:  q | html 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:24
+#, fuzzy, c-format
+msgid "Catalog search for '%s'"
+msgstr "Rapu OverDrive mō '%s'"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:391
 #, c-format
 msgid "Catalogs"
@@ -3526,17 +3532,17 @@ msgstr "Ngā wāhanga:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:619
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:17
-#, fuzzy, c-format
+#, c-format
 msgid "Charges"
-msgstr "Whakawātea"
+msgstr "Ngā utu"
 
 #. For the first occurrence,
 #. %1$s:  amountoutstanding | $Price 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:272
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:296
-#, fuzzy, c-format
+#, c-format
 msgid "Charges (%s)"
-msgstr "Ngā whiwhinga (%s)"
+msgstr "Ngā utu (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:137
@@ -4287,7 +4293,7 @@ msgid "Current session"
 msgstr "Wātū onāianei"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #, fuzzy
 msgid "Currently available"
 msgstr "Kei te whakamahia i tēnei wā"
@@ -4308,7 +4314,7 @@ msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "Kai te whakamahia i tēnei wā e %s %s %s(%s)%s"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #, fuzzy
 msgid "Currently unavailable"
 msgstr "Kei te whakamahia i tēnei wā"
@@ -5011,7 +5017,7 @@ msgid "Error searching %s collection"
 msgstr "He hapa rapu i te kohinga %s"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Error searching OverDrive collection."
 msgstr "he hapa rapu i te kohinga OverDrive."
 
@@ -5421,7 +5427,7 @@ msgid "Format:"
 msgstr "Hōputu:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Found"
 msgstr "I kitea"
 
@@ -6639,7 +6645,7 @@ msgid "Item withdrawn"
 msgstr "Kua kounu te tuemi"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Items available:"
 msgstr "Ngā tuemi wātea:"
 
@@ -6737,7 +6743,7 @@ msgid "Last"
 msgstr "Whakamutunga"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:32
-#, fuzzy, c-format
+#, c-format
 msgid "Last "
 msgstr "Whakamutunga"
 
@@ -6950,7 +6956,7 @@ msgstr "Uta ana"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1081
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:5
 msgid "Loading..."
@@ -7340,9 +7346,9 @@ msgid "Messages for you"
 msgstr "Ngā karere māu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:111
-#, fuzzy, c-format
+#, c-format
 msgid "Messaging"
-msgstr "tō kareretanga"
+msgstr "Ō tautuhinga kareretanga"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:378
 #, fuzzy, c-format
@@ -7598,7 +7604,7 @@ msgstr "Ngā rongo mai i te whare pukapuka %s%s%s%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1016
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:104
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:137
 #, c-format
@@ -7609,7 +7615,7 @@ msgstr "Panuku"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1014
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:89
-#, fuzzy, c-format
+#, c-format
 msgid "Next "
 msgstr "Panuku"
 
@@ -7763,6 +7769,16 @@ msgstr "Kāore e puritia ana"
 msgid "No holds are allowed on this item"
 msgstr "Kua tono kē koe i tēnei taitara."
 
+#. For the first occurrence,
+#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:368
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:502
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:593
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:836
+#, fuzzy
+msgid "No item was selected"
+msgstr "Kāore tētahi huatau i tīpakona"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:163
 #, c-format
 msgid "No items available."
@@ -7863,7 +7879,7 @@ msgid "No results found in the library's %s collection"
 msgstr "Kāore he hua i kitea i te kohinga %s o te whare pukapuka."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "No results found in the library's OverDrive collection."
 msgstr "Kāore he hua i kitea i te kohinga OverDrive o te whare pukapuka."
 
@@ -8193,13 +8209,13 @@ msgid "Notice:"
 msgstr "Pānuitanga:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:468
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:962
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1069
 #, c-format
 msgid "Novelist Select"
 msgstr "Tīpako Kaituhi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:962
 #, c-format
 msgid "Novelist Select: "
 msgstr "Tīpako Kaituhi: "
@@ -8414,8 +8430,8 @@ msgstr "Pūkete OverDrive"
 
 #. For the first occurrence,
 #. %1$s:  q | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:24
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:27
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:41
 #, c-format
 msgid "OverDrive search for '%s'"
 msgstr "Rapu OverDrive mō '%s'"
@@ -8658,7 +8674,7 @@ msgid "Permitted staff only"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:25
-#, fuzzy, c-format
+#, c-format
 msgid "Personal details"
 msgstr "Ō taipitopito whaiaro"
 
@@ -8937,6 +8953,12 @@ msgid "Please enter a valid date (ISO)."
 msgstr "Ngana anō ā muri ake."
 
 #. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:51
+#, fuzzy
+msgid "Please enter a valid date (should match %s)."
+msgstr "Ngana anō ā muri ake."
+
+#. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/validator-strings.inc:2
 #, fuzzy
 msgid "Please enter a valid date."
@@ -9202,7 +9224,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1003
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1005
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:5
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:137
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:13
@@ -10311,7 +10333,7 @@ msgid "Save to another list"
 msgstr "Tiakina ki tētahi atu rārangi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:58
-#, fuzzy, c-format
+#, c-format
 msgid "Save to lists"
 msgstr "Tiakina ki ō rārangi"
 
@@ -10458,8 +10480,8 @@ msgstr "E hoki ki ngā hua"
 
 #. NAV
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:10
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:44
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:47
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:57
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:3
 #, fuzzy
 msgid "Search results pagination"
@@ -10506,7 +10528,7 @@ msgid "Searching %s..."
 msgstr "Rapu %s..."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Searching OverDrive..."
 msgstr "Tapu OverDrive Ana..."
 
@@ -12349,7 +12371,7 @@ msgstr ""
 "Kua whai ihirangi whakarei tēnei whārangi ka kitea ina hohe a JavaScript, mā "
 "te pāwhiri rānei "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-page.tt:59
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-page.tt:56
 #, fuzzy, c-format
 msgid "This page does not exist. "
 msgstr "Kua kore tēnei tuemi."
@@ -12575,7 +12597,7 @@ msgid "Type of heading"
 msgstr "Momo whakaupoko"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "Type:"
 msgstr "Momo:"
 
@@ -13964,16 +13986,16 @@ msgstr "I rahua tō whakahōu hoatu taurewa nā ēnei pūtake: "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:49
 #, c-format
 msgid "Your messaging settings"
-msgstr "ō tautuhinga kareretanga"
+msgstr "Ō tautuhinga kareretanga"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Your messaging settings &rsaquo; %s%s%sKoha online%s catalog"
-msgstr "%s%s%sPutumōhio tuihono Koha%s"
+msgstr "Ō tautuhinga kareretanga &rsaquo; %s%s%sPutumōhio tuihono Koha%s"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1081
@@ -14345,7 +14367,7 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1046
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1051
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:137
 #, c-format
 msgid "by"
@@ -14749,7 +14771,7 @@ msgid "or "
 msgstr "tērā rānei"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "out of"
 msgstr "i roto i te"
 
@@ -14826,7 +14848,7 @@ msgid "reserve"
 msgstr "Ngā tāpuitanga akoranga"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "results in the library's OverDrive collection."
 msgstr "ngā hua i kitea i te kohinga OverDrive o te whare pukapuka."
 
@@ -15096,7 +15118,7 @@ msgid "view plain"
 msgstr "tiro kōkau"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:77
 msgid "waiting holds:"
 msgstr "ngā puringa tatari:"
 

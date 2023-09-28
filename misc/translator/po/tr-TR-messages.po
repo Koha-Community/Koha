@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 21:27-0300\n"
+"POT-Creation-Date: 2023-09-16 07:33-0300\n"
 "PO-Revision-Date: 2023-03-06 08:13+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
-"Language: tr\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -76,6 +76,7 @@ msgid "Address 2"
 msgstr "Adres 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr ""
 
@@ -188,6 +189,17 @@ msgstr ""
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "Eşlemeler güncellenirken bir hata oluştu: {message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr ""
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -363,7 +375,10 @@ msgid "Conductors"
 msgstr "Orkestra şefleri"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
 msgstr ""
 
 #: Koha/Database/Columns.pm:208
@@ -507,7 +522,7 @@ msgstr ""
 msgid "Edit {title} by {author}"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 #, fuzzy
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
@@ -728,6 +743,7 @@ msgid "Keyboard"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr ""
 
@@ -831,8 +847,10 @@ msgid "Modification date"
 msgstr "Değiştirilme tarihi"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-#, fuzzy
-msgid "Modify city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, fuzzy, perl-brace-format
+msgid "Modify city '{city}'"
 msgstr "Dönemsel olarak tekrarlanma"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
@@ -980,6 +998,18 @@ msgstr "Kullanıcı kategorisi"
 msgid "Patron reason"
 msgstr "Kullanıcı nedeni"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+#, fuzzy
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "hold pending"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+#, fuzzy
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "hold pending"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -1002,6 +1032,10 @@ msgstr "Kalıcı raf konumu"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "Yayın yeri"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr ""
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1081,9 +1115,26 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "kayıt"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+#, fuzzy
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "kayıt"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Kayıt tarihi"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr ""
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1332,7 +1383,7 @@ msgctxt "pluralization"
 msgid "There is one archived suggestion."
 msgid_plural "There are {count} archived suggestions."
 msgstr[0] "Arşivlenmiş bir öneri var."
-msgstr[1] "Arşivlenmiş öneriler var {count}."
+msgstr[1] "Arşivlenmiş öneriler var {sayı}."
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Thursday"
@@ -1347,6 +1398,10 @@ msgstr "İade kaşesi"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "Eser Adı"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr ""
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"

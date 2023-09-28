@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 20:40-0300\n"
+"POT-Creation-Date: 2023-09-16 06:35-0300\n"
 "PO-Revision-Date: 2023-07-28 19:57+0000\n"
 "Last-Translator: Fridolin SOMERS <fridolin.somers@biblibre.com>\n"
 "Language-Team: Koha Translation Team\n"
@@ -76,6 +76,7 @@ msgid "Address 2"
 msgstr "Адрес 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr "Администриране"
 
@@ -192,6 +193,17 @@ msgstr ""
 msgid "An error occurred when updating mappings: {message}."
 msgstr "Възникна грешка при актуализиране на карти: {message}."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr ""
+
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
 msgstr "Метод за удостоверяване"
@@ -218,8 +230,8 @@ msgstr "Баркод"
 msgid "Basket ID (internal)"
 msgstr "Кошница номер (вътрешен)"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:14
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:13
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:14
 msgid "Batches"
 msgstr "Групи"
 
@@ -362,7 +374,10 @@ msgid "Conductors"
 msgstr "Диригенти"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, fuzzy, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
 msgstr "Потвърдете изтриването на населено място"
 
 #: Koha/Database/Columns.pm:208
@@ -502,7 +517,7 @@ msgstr "Редактиране на {title}"
 msgid "Edit {title} by {author}"
 msgstr "Редактиране на {title} от {author}"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
 msgstr "Редактиране"
@@ -720,6 +735,7 @@ msgid "Keyboard"
 msgstr "Клавиатура"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr "Коха"
 
@@ -749,8 +765,8 @@ msgstr ""
 msgid "Last update date"
 msgstr "Дата на последна актуализация"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:8
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:7
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:8
 msgid "Layouts"
 msgstr "Оформления"
 
@@ -819,7 +835,10 @@ msgid "Modification date"
 msgstr "Дата на промяна"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-msgid "Modify city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, fuzzy, perl-brace-format
+msgid "Modify city '{city}'"
 msgstr "Редактиране на населено място"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
@@ -959,6 +978,18 @@ msgstr "Категория читатели"
 msgid "Patron reason"
 msgstr "Читателска причина"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+#, fuzzy
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "резервация в очакване"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+#, fuzzy
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "резервация в очакване"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -981,6 +1012,10 @@ msgstr "Постоянно местоположение на рафта"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "Място на публикуване"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr ""
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1016,8 +1051,8 @@ msgstr "Печат"
 msgid "Privacy settings"
 msgstr "Настройки на поверителност"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:12
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:11
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:12
 msgid "Profiles"
 msgstr "Профили"
 
@@ -1056,9 +1091,26 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "Запис #"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+#, fuzzy
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "Запис #"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Дата на регистриране"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr ""
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1280,8 +1332,8 @@ msgctxt "UNIMARC 116 painting techniques"
 msgid "Techniques (print) 3"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:10
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:9
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:10
 msgid "Templates"
 msgstr "Шаблони"
 
@@ -1320,6 +1372,10 @@ msgstr "Времеви отпечатък"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "Заглавие"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr ""
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"
@@ -1585,8 +1641,8 @@ msgstr "басет"
 msgid "bassoon"
 msgstr "фагот"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:13
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:12
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:13
 msgid "batch"
 msgstr "група"
 
@@ -2210,8 +2266,8 @@ msgstr "koto"
 msgid "lamellaphone"
 msgstr "ламелафон"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:7
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:6
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:7
 msgid "layout"
 msgstr "подредба"
 
@@ -2566,8 +2622,8 @@ msgctxt "UNIMARC 116 painting techniques"
 msgid "print"
 msgstr "Печат"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:11
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:10
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:11
 msgid "profile"
 msgstr "профил"
 
@@ -2853,8 +2909,8 @@ msgstr "лента"
 msgid "tarol"
 msgstr "тарол"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:9
 #: koha-tmpl/intranet-tmpl/prog/en/modules/patroncards/manage.tt:8
+#: koha-tmpl/intranet-tmpl/prog/en/modules/labels/label-manage.tt:9
 msgid "template"
 msgstr "шаблон"
 

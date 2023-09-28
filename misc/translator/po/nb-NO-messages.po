@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 21:10-0300\n"
-"PO-Revision-Date: 2023-05-22 06:35+0000\n"
+"POT-Creation-Date: 2023-09-16 07:13-0300\n"
+"PO-Revision-Date: 2023-09-18 07:41+0000\n"
 "Last-Translator: Magnus Enger <magnus@enger.priv.no>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: nb\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /nb/22.11/nb-NO-messages.po\n"
-"X-POOTLE-MTIME: 1684737319.435162\n"
+"X-POOTLE-MTIME: 1695022884.668082\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
@@ -76,6 +76,7 @@ msgid "Address 2"
 msgstr "Adresse 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr "Administrasjon"
 
@@ -191,6 +192,17 @@ msgstr ""
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "Det oppstod en feil ved oppdatering av mappinger: {message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr "Godkjent"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr "Godkjent"
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -362,8 +374,11 @@ msgid "Conductors"
 msgstr "Dirigenter"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
-msgstr "Bekreft sletting av sted"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
+msgstr "Bekreft sletting av sted '{city}'"
 
 #: Koha/Database/Columns.pm:208
 msgid "Copy number"
@@ -502,7 +517,7 @@ msgstr "Endre {title}"
 msgid "Edit {title} by {author}"
 msgstr "Endre {title} av {author}"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
 msgstr "Endrer"
@@ -718,6 +733,7 @@ msgid "Keyboard"
 msgstr "Keyboard"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr "Koha"
 
@@ -815,8 +831,11 @@ msgid "Modification date"
 msgstr "Dato for endring"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-msgid "Modify city"
-msgstr "Endre sted"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, perl-brace-format
+msgid "Modify city '{city}'"
+msgstr "Endre sted '{city}'"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Monday"
@@ -954,6 +973,16 @@ msgstr "Lånerkategori"
 msgid "Patron reason"
 msgstr "Grunn til låner"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "Ventende"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "Ventende"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -976,6 +1005,10 @@ msgstr "Permanent hylleplassering"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "Utgivelsessted"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr "Plugins"
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1051,9 +1084,25 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "Post nummer"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "Antall poster"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Registreringsdato"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr "Avvist"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr "Avvist"
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1313,6 +1362,10 @@ msgstr "Timestempel"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "Tittel"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr "Verktøy"
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"

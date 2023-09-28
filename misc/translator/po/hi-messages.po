@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 20:55-0300\n"
-"PO-Revision-Date: 2023-05-23 05:53+0000\n"
+"POT-Creation-Date: 2023-09-16 06:54-0300\n"
+"PO-Revision-Date: 2023-09-21 12:17+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /hi/22.11/hi-messages.po\n"
-"X-POOTLE-MTIME: 1684821184.289924\n"
+"X-POOTLE-MTIME: 1695298642.369621\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
@@ -76,6 +76,7 @@ msgid "Address 2"
 msgstr "पता 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr "प्रशासन"
 
@@ -187,6 +188,17 @@ msgstr "Elasticsearch सूचकांक मैपिंग को अपड�
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "मैपिंग अपडेट करते समय एक त्रुटि हुई: {message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr "अनुमोदित"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr "अनुमोदित"
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -358,8 +370,11 @@ msgid "Conductors"
 msgstr "संवाहक"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
-msgstr "शहर को हटाने की पुष्टि करें "
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
+msgstr "शहर को हटाने की पुष्टि करें '{city}'"
 
 #: Koha/Database/Columns.pm:208
 msgid "Copy number"
@@ -498,7 +513,7 @@ msgstr "संपादित {title}"
 msgid "Edit {title} by {author}"
 msgstr "संपादित {title} द्वारा {author}"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
 msgstr "संपादन"
@@ -714,6 +729,7 @@ msgid "Keyboard"
 msgstr "कुंजीपट"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr "कोहा"
 
@@ -811,8 +827,11 @@ msgid "Modification date"
 msgstr "परिवर्धन की तारीख़"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-msgid "Modify city"
-msgstr "शहर संशोधित करें"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, perl-brace-format
+msgid "Modify city '{city}'"
+msgstr "शहर संशोधित करें '{city}'"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Monday"
@@ -950,6 +969,16 @@ msgstr "संरक्षक वर्ग"
 msgid "Patron reason"
 msgstr "संरक्षक कारण"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "लम्बित"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "लम्बित"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -972,6 +1001,10 @@ msgstr "स्थाई शेल्विग स्थान"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "प्रकाशन का स्थान"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr "प्लगइन"
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1047,9 +1080,25 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "रिकार्ड #"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "गणना रिकॉर्ड करें"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "पंजीकरण तिथि"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr "अस्वीकृत"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr "अस्वीकृत"
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1310,6 +1359,10 @@ msgstr "टाइमस्टैंप"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "शीर्षक"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr "उपकरण"
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"

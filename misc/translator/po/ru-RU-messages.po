@@ -3,20 +3,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 21:18-0300\n"
-"PO-Revision-Date: 2023-06-23 14:39+0000\n"
-"Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
+"POT-Creation-Date: 2023-09-16 07:22-0300\n"
+"PO-Revision-Date: 2023-09-17 06:39+0000\n"
+"Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /ru/22.11/ru-RU-messages.po\n"
-"X-POOTLE-MTIME: 1687531190.554706\n"
+"X-POOTLE-MTIME: 1694932777.173729\n"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:45
 #, perl-brace-format
@@ -78,6 +78,7 @@ msgid "Address 2"
 msgstr "Адрес 2"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:16
 msgid "Administration"
 msgstr "Администрирование"
 
@@ -191,6 +192,17 @@ msgstr "Ошибка при обновлении соответствий инд
 #, perl-brace-format
 msgid "An error occurred when updating mappings: {message}."
 msgstr "Произошла ошибка при обновлении сопоставлений: {message}."
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr "Одобренный"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr "Одобренный"
 
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
@@ -365,8 +377,11 @@ msgid "Conductors"
 msgstr "Дирижеры"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
-msgstr "Подтвердить удаление города"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
+msgstr "Подтвердить удаление города '{city}'"
 
 #: Koha/Database/Columns.pm:208
 msgid "Copy number"
@@ -507,7 +522,7 @@ msgstr "Редактировать {title}"
 msgid "Edit {title} by {author}"
 msgstr "Редактировать {title} / {author}"
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:815
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
 msgstr "Издание"
@@ -736,6 +751,7 @@ msgid "Keyboard"
 msgstr "Клавишный"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:19
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:18
 msgid "Koha"
 msgstr "Koha"
 
@@ -835,8 +851,11 @@ msgid "Modification date"
 msgstr "Дата изменения"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-msgid "Modify city"
-msgstr "Изменить населенный пункт"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, perl-brace-format
+msgid "Modify city '{city}'"
+msgstr "Изменить населенный пункт '{city}'"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
 msgid "Monday"
@@ -976,6 +995,16 @@ msgstr "Категория посетителя"
 msgid "Patron reason"
 msgstr "Причина"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "В ожидании"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "В ожидании"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -999,6 +1028,10 @@ msgstr "Постоянное полочное местоположение"
 #: Koha/Database/Columns.pm:279 Koha/Database/Columns.pm:318
 msgid "Place of publication"
 msgstr "Место публикации"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:12
+msgid "Plugins"
+msgstr "Плагины"
 
 #: Koha/Database/Columns.pm:165
 msgid "Preferred language for notices"
@@ -1076,9 +1109,25 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "Запись #"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "Количество записей"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Дата регистрации"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr "Отклоненный"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr "Отклоненный"
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1339,6 +1388,10 @@ msgstr "Отметка времени"
 #: Koha/Database/Columns.pm:321
 msgid "Title"
 msgstr "Заглавие"
+
+#: koha-tmpl/intranet-tmpl/prog/en/includes/wrapper-staff-tool-plugin.inc:14
+msgid "Tools"
+msgstr "Инструменты"
 
 #: Koha/Database/Columns.pm:219
 msgid "Total checkouts"
