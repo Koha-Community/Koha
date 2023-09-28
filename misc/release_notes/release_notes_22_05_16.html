@@ -1,0 +1,386 @@
+<h1 id="releasenotesforkoha22.05.16">RELEASE NOTES FOR KOHA 22.05.16</h1>
+
+<p>28 Sep 2023</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 22.05.16 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-22.05.16.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 22.05.16 is a bugfix/maintenance release.</p>
+
+<p>It includes 3 enhancements, 12 bugfixes, and 3 security fixes.</p>
+
+<p><strong>System requirements</strong></p>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha on the <a href="https://wiki.koha-community.org/wiki/System_requirements_and_recommendations">community wiki</a>.</p>
+
+<h4 id="securitybugs">Security bugs</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34349">34349</a> Validate inputs for task scheduler</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34369">34369</a> Add CSRF protection to system preferences</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34513">34513</a> Authenticated users can bypass permissions and view some privileged pages</li>
+</ul>
+
+<h2 id="bugfixes">Bugfixes</h2>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=33939">33939</a> JavaScript needs to distinguish between order budgets and default budgets when adding to staged file form a basket</li>
+</ul>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34243">34243</a> Too many cities are created (at least in comments)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34303">34303</a> t/00-testcritic.t should only test files part of git repo</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34316">34316</a> account->add_credit does not rethrow exception</li>
+</ul>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34097">34097</a> Using the three ellipses to set the date accessioned for an item repositions the screen to the top</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34182">34182</a> AddBiblio shouldn't set biblio.serial based on biblio.seriestitle</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34279">34279</a> overduefinescap of 0 is ignored, but overduefinescap of 0.00 is enforced</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34601">34601</a> Cannot manage suggestions without CSRF error</li>
+</ul>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=33992">33992</a> Only consider the date when labelling a waiting recall as problematic</p>
+
+<p><strong>Sponsored by</strong> <em>Auckland University of Technology</em></p></li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=33132">33132</a> Searching by DOB still broken in 22.05.x</li>
+</ul>
+
+<h3 id="templates">Templates</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34184">34184</a> "Document type" in suggestions form should have an empty entry</li>
+</ul>
+
+<h3 id="testsuite">Test Suite</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=33727">33727</a> Merge Calendar tests</li>
+</ul>
+
+<h2 id="enhancements">Enhancements</h2>
+
+<h3 id="command-lineutilities">Command-line Utilities</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34213">34213</a> False POD for matchpoint option in import_patrons.pl</li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=33808">33808</a> Accessibility: Non-descriptive links</li>
+</ul>
+
+<h3 id="packaging">Packaging</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=28493">28493</a> Make koha-passwd display the username</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><p><a href="http://koha-community.org/documentation/">Koha Documentation</a>
+As of the date of these release notes, the Koha manual is available in the following languages:</p></li>
+<li><p><a href="https://koha-community.org/manual/22.05/ar/html/">Arabic</a> (28.2%)</p></li>
+<li><a href="https://koha-community.org/manual/22.05/zh_TW/html/">Chinese (Taiwan)</a> (98.6%)</li>
+<li><a href="https://koha-community.org/manual/22.05/en/html/">English (USA)</a></li>
+<li><a href="https://koha-community.org/manual/22.05/fr/html/">French</a> (66.7%)</li>
+<li><a href="https://koha-community.org/manual/22.05/de/html/">German</a> (69.5%)</li>
+<li><a href="https://koha-community.org/manual/22.05/hi/html/">Hindi</a> (100%)</li>
+<li><a href="https://koha-community.org/manual/22.05/it/html/">Italian</a> (41.2%)</li>
+<li><a href="https://koha-community.org/manual/22.05/es/html/">Spanish</a> (29.9%)</li>
+<li><a href="https://koha-community.org/manual/22.05/tr/html/">Turkish</a> (33.5%)</li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<div style="column-count: 2;">
+
+- Arabic (77.7%)
+- Armenian (100%)
+- Armenian (Classical) (69.7%)
+- Bulgarian (85.5%)
+- Chinese (Taiwan) (96%)
+- Czech (62.2%)
+- English (New Zealand) (68.4%)
+- English (USA)
+- Finnish (94.9%)
+- French (100%)
+- French (Canada) (99.5%)
+- German (100%)
+- German (Switzerland) (54%)
+- Greek (56.1%)
+- Hindi (100%)
+- Italian (99.8%)
+- Nederlands-Nederland (Dutch-The Netherlands) (85.2%)
+- Norwegian Bokmål (55.8%)
+- Persian (58.7%)
+- Polish (100%)
+- Portuguese (87.3%)
+- Portuguese (Brazil) (81.1%)
+- Russian (78.2%)
+- Slovak (64%)
+- Spanish (100%)
+- Swedish (83.5%)
+- Telugu (84.3%)
+- Turkish (98.1%)
+- Ukrainian (74%)
+</div>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 22.05.16 is</p>
+
+<ul>
+<li><p>Release Manager: Tomás Cohen Arazi</p></li>
+<li><p>Release Manager assistants:</p>
+
+<ul>
+<li>Jonathan Druart</li>
+<li>Martin Renvoize</li>
+</ul></li>
+<li><p>QA Manager: Katrin Fischer</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Aleisha Amohia</li>
+<li>Nick Clemens</li>
+<li>David Cook</li>
+<li>Jonathan Druart</li>
+<li>Lucas Gass</li>
+<li>Victor Grousset</li>
+<li>Kyle M Hall</li>
+<li>Andrii Nugged</li>
+<li>Martin Renvoize</li>
+<li>Marcel de Rooy</li>
+<li>Petro Vashchuk</li>
+</ul></li>
+<li><p>Topic Experts:</p>
+
+<ul>
+<li>UI Design -- Owen Leonard</li>
+<li>Zebra -- Fridolin Somers</li>
+<li>REST API -- Martin Renvoize</li>
+<li>ERM -- Pedro Amorim</li>
+<li>ILL -- Pedro Amorim</li>
+</ul></li>
+<li><p>Bug Wranglers:</p>
+
+<ul>
+<li>Aleisha Amohia</li>
+</ul></li>
+<li><p>Packaging Manager: Mason James</p></li>
+<li><p>Documentation Manager: Aude Charillon</p></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>Caroline Cyr La Rose</li>
+<li>Lucy Vaux-Harvey</li>
+</ul></li>
+<li><p>Translation Manager: Bernardo González Kriegel</p></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>Thomas Dukleth</li>
+<li>Katrin Fischer</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>23.05 -- Fridolin Somers</li>
+<li>22.11 -- PTFS Europe (Matt Blenkinsop, Pedro Amorim)</li>
+<li>22.05 -- Lucas Gass</li>
+<li>21.11 -- Danyon Sewell</li>
+</ul></li>
+<li><p>Release Maintainer assistants:</p>
+
+<ul>
+<li>21.11 -- Wainui Witika-Park</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries, companies, and other institutions who are known to have sponsored
+new features in Koha 22.05.16</p>
+
+<div style="column-count: 2;">
+
+- Auckland University of Technology
+</div>
+
+<p>We thank the following individuals who contributed patches to Koha 22.05.16</p>
+
+<div style="column-count: 2;">
+
+- Aleisha Amohia (1)
+- Matt Blenkinsop (1)
+- Nick Clemens (2)
+- David Cook (5)
+- Jonathan Druart (4)
+- Lucas Gass (2)
+- Kyle M Hall (2)
+- Mason James (1)
+- Phil Ringnalda (2)
+- Marcel de Rooy (6)
+- Koha translators (1)
+</div>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 22.05.16</p>
+
+<div style="column-count: 2;">
+
+- ByWater-Solutions (6)
+- Catalyst Open Source Academy (1)
+- Chetco Community Public Library (2)
+- Koha Community Developers (4)
+- KohaAloha (1)
+- Prosentient Systems (5)
+- PTFS-Europe (1)
+- Rijksmuseum (6)
+</div>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha</p>
+
+<div style="column-count: 2;">
+
+- Pedro Amorim (6)
+- Tomás Cohen Arazi (16)
+- Matt Blenkinsop (9)
+- Nick Clemens (3)
+- Jonathan Druart (4)
+- Katrin Fischer (9)
+- Andrew Fuerste-Henry (1)
+- Lucas Gass (24)
+- Kyle M Hall (1)
+- Sam Lau (1)
+- Owen Leonard (2)
+- David Nind (2)
+- Martin Renvoize (13)
+- Marcel de Rooy (8)
+- Fridolin Somers (6)
+</div>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 22.05.x-security.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 28 Sep 2023 16:36:33.</p>
