@@ -39,7 +39,7 @@
 [% Asset.js('js/Gettext.js') | $raw %]
 [% Asset.js('js/i18n.js') | $raw %]
 </head>
-<body id="sco_main" class="sco" onload="dofocus();" onunload="mungeHistory();">
+<body id="sco_main" class="sco">
     [% INCLUDE 'masthead-sco.inc' %]
 
     <div class="main">
@@ -248,7 +248,7 @@
 
                         [% IF ( validuser ) %]
                             <div id="newcheckout" class="sco_entry">
-                                <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('[% patronid | html %]');">
+                                <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl">
                                     <legend><h2>
                                         [% IF ( Koha.Preference('SCOAllowCheckin') ) %]
                                             <span>Check out, return, or renew an item:</span>
@@ -507,6 +507,13 @@
             }
         [% END %]
 
+        $( window ).on( "load", function() {
+            dofocus();
+        });
+
+        $( window ).on( "unload", function() {
+            mungeHistory();
+        });
 
         $(document).ready(function() {
             dofocus();
@@ -540,6 +547,10 @@
                 [% END %]
 
                 return true;
+            });
+
+            $("#scan_form").on("submit", function(){
+                return checkout_confirm('[% patronid | html %]');
             });
     });
 
