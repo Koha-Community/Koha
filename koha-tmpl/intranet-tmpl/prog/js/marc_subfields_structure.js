@@ -33,8 +33,8 @@ $(document).ready(function() {
         "columnDefs": [
             { 'sortable': false, 'targets': [ 'NoSort' ] }
         ],
-        aaSorting: [],
-        paginate: false
+        "order": [],
+        "paginate": false
     }));
 
     selectBsTabByHash("subfieldtabs");

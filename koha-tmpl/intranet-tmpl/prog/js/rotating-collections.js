@@ -16,10 +16,10 @@ $(document).ready(function(){
     if( $('#rotating-collections-table').length > 0 ){
         $('#rotating-collections-table').dataTable($.extend(true, {}, dataTablesDefaults, {
             "autoWidth": false,
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+            "columnDefs":  [
+                { "targets":  [ -1 ], "orderable":  false, "searchable":  false },
             ],
-            "sPaginationType": "full"
+            "pagingType":  "full"
         } ));
     }
 

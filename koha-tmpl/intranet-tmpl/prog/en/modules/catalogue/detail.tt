@@ -2149,11 +2149,11 @@
                     table_settings[index].columns.splice(1,1);
                 }
                 var dt_parameters = {
-                    'sDom': 't',
-                    'bPaginate': false,
-                    'bAutoWidth': false,
+                    "dom": 't',
+                    "paginate": false,
+                    "autoWidth": false,
                     "bKohaColumnsUseNames": true,
-                    "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                    "dom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 };
                 var table = KohaTable( table_name, dt_parameters, table_settings[index], 'with_filters' );
 
@@ -2187,20 +2187,20 @@
             [% IF Koha.Preference('AcquisitionDetails') %]
                 var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'acquisitiondetails-table', 'json') | $raw %];
                 var acquisitiondetails_table = KohaTable("orders", {
-                    "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-                    'bPaginate': false,
-                    'bAutoWidth': false,
-                    "aaSorting": [[ 4, "desc" ]],
+                    "dom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                    "paginate": false,
+                    "autoWidth": false,
+                    "order": [[ 4, "desc" ]],
                 }, table_settings);
             [% END %]
 
             [% IF suggestions.count %]
                 $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aoColumnDefs": [
-                        { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                    "columnDefs": [
+                        { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
+                        { "type": "anti-the", "targets":  [ "anti-the" ] }
                     ],
-                    "sPaginationType": "full"
+                    "pagingType": "full"
                 }));
             [% END %]
 
@@ -2222,21 +2222,21 @@
         [% IF Koha.Preference('EnableItemGroups') %]
             // Load item groups table
             var itemGroupsTable = KohaTable("items-group-table", {
-                "bAutoWidth": false,
-                'sDom': '<"top pager"ilp>t<"bottom pager"ip>r',
-                "aoColumns": [
+                "autoWidth": false,
+                "dom": '<"top pager"ilp>t<"bottom pager"ip>r',
+                "columns": [
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             return oObj.display_order;
                         },
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             return oObj.description;
                         },
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             [% IF CAN_user_editcatalogue_manage_item_groups %]
                                 return `<button class='item-group-edit btn btn-default btn-xs' data-item-group-id='${oObj.item_group_id}'>
                                     <i class="fa-solid fa-pencil" aria-hidden="true"></i> ${_("Edit")}
@@ -2251,10 +2251,10 @@
                         },
                     },
                 ],
-                "bPaginate": false,
-                "bProcessing": true,
-                "bServerSide": false,
-                "sAjaxSource": `/api/v1/biblios/${biblionumber}/item_groups?_per_page=-1`,
+                "paginate": false,
+                "processing": true,
+                "serverSide":  false,
+                "ajax":  `/api/v1/biblios/${biblionumber}/item_groups?_per_page=-1`,
                 "sAjaxDataProp": "",
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     $.getJSON( sSource, aoData, function (json) {

@@ -82,14 +82,14 @@ $(document).ready(function(){
     $("#downloadcartc").empty();
 
     $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sDom": 't',
-        "aoColumnDefs": [
-            { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-            { "sType": "callnumbers", "aTargets" : [ "callnumbers"] }
+        "dom":  't',
+        "columnDefs":  [
+            { "orderable":  false, "searchable":  false, "targets":  [ 'NoSort' ] },
+            { "type":  "anti-the", "targets":  [ "anti-the" ] },
+            { "type":  "callnumbers", "targets":  [ "callnumbers"] }
         ],
-        "aaSorting": [[ 1, "asc" ]],
-        "bPaginate": false
+        "order":  [[ 1, "asc" ]],
+        "paging":  false
     }));
 
     $(".showdetails").on("click",function(e){

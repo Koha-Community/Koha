@@ -60,12 +60,12 @@ var success_test_call = function() {
 
 $(document).ready(function() {
     $("#tagst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+        "columnDefs":  [
+            { "orderable":  false, "searchable":  false, "targets":  [ 'NoSort' ] },
+            { "type":  "anti-the", "targets":  [ "anti-the" ] }
         ],
-        "aaSorting": [[ 2, "desc" ]],
-        "sPaginationType": "full"
+        "order":  [[ 2, "desc" ]],
+        "pagingType":  "full"
     }));
     $('.ajax_buttons' ).css({visibility:"visible"});
     $("p.check").html("<div id=\"searchheader\"><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-check\" aria-hidden=\"false\"><\/i> " + __("Select all") + "<\/a> | <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-times\" aria-hidden=\"false\"><\/i> " + __("Clear all") + "<\/a> | <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\"> " + __("Select all pending") + "<\/a><\/div>");

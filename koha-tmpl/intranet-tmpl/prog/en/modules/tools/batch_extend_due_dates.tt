@@ -275,23 +275,23 @@
             $("#selectall").click();
 
             $("#checkouts").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [0, 3], "bSortable": false, "bSearchable": false },
-                    { "aTargets": [1], "sType": "num-html" }
+                "columnDefs": [
+                    { "targets": [0, 3], "orderable": false, "searchable":  false },
+                    { "targets": [1], "type": "num-html" }
                 ],
-                "sDom": 't',
-                "aaSorting": [],
-                "bPaginate": false
+                "dom": 't',
+                "order": [],
+                "paginate": false
             }));
 
             $("#checkouts_result").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [0, 3], "bSortable": false, "bSearchable": false },
-                    { "aTargets": [1], "sType": "num-html" }
+                "columnDefs": [
+                    { "targets": [0, 3], "orderable": false, "searchable":  false },
+                    { "targets": [1], "type": "num-html" }
                 ],
-                "sDom": 't',
-                "aaSorting": [],
-                "bPaginate": false
+                "dom": 't',
+                "order": [],
+                "paginate": false
             }));
 
             $("#extend_due_dates_form").on('submit', function(e) {

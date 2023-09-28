@@ -623,9 +623,9 @@
                 var public = [% public | html %];
 
                 var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aaSorting": [[ 5, "asc" ]],
-                    'bServerSide': true,
-                    'sAjaxSource': "/cgi-bin/koha/svc/virtualshelves/search",
+                "order": [[ 5, "asc" ]],
+                    "serverSide":  true,
+                    "ajax":  "/cgi-bin/koha/svc/virtualshelves/search",
                     'fnServerData': function(sSource, aoData, fnCallback) {
                         aoData.push({
                             'name': 'public',
@@ -674,25 +674,25 @@
                             }
                         });
                     },
-                    'aoColumns':[
-                        { 'mDataProp': 'dt_public' },
-                        { 'mDataProp': 'dt_shelfname' },
-                        { 'mDataProp': 'dt_count' },
-                        { 'mDataProp': 'dt_is_shared' },
-                        { 'mDataProp': 'dt_owner' },
-                        { 'mDataProp': 'dt_sortby' },
-                        { 'mDataProp': 'dt_created_on' },
-                        { 'mDataProp': 'dt_modification_time' },
-                        { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
+                    'columns':[
+                        { "data": 'dt_public' },
+                        { "data": 'dt_shelfname' },
+                        { "data": 'dt_count' },
+                        { "data": 'dt_is_shared' },
+                        { "data": 'dt_owner' },
+                        { "data": 'dt_sortby' },
+                        { "data": 'dt_created_on' },
+                        { "data": 'dt_modification_time' },
+                        { "data": 'dt_action', "orderable": false, "className":  'actions' }
                     ],
-                    "aoColumnDefs": [
-                        { "bVisible": false, "aTargets": [ 'NoVisible' ] }
+                    "columnDefs": [
+                        { "visible": false, "targets": [ 'NoVisible' ] }
                     ],
-                    'bAutoWidth': false,
-                    'sPaginationType': 'full_numbers',
-                    'bFilter': false,
-                    "bProcessing": true,
-                    "bSortCellsTop": true
+                    "autoWidth": false,
+                    "pagingType": 'full_numbers',
+                    "searching": false,
+                    "processing": true,
+                    "orderCellsTop":  true
                 }));
 
                 dtListResults.fnAddFilters("filter", 750);

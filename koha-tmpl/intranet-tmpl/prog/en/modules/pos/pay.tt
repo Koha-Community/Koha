@@ -332,32 +332,32 @@
 
     $(document).ready(function() {
         var sale_table = $("#sale").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "bPaginate": false,
-            "bFilter": false,
-            "bInfo": false,
-            "aoColumnDefs": [{
-                "aTargets": [-2],
-                "bSortable": false,
-                "bSearchable": false,
+            "paginate": false,
+            "searching": false,
+            "info": false,
+            "columnDefs": [{
+                "targets": [-2],
+                "orderable": false,
+                "searchable":  false,
             }, {
-                "aTargets": [-3],
-                "mRender": function ( data, type, full ) {
+                "targets": [-3],
+                "render": function ( data, type, full ) {
                     var price = Number.parseFloat(data);
                     return price.format_price();
                 }
             }, {
-                "aTargets": [-5],
-                "sClass" : "editable",
+                "targets": [-5],
+                "className":  "editable",
             }, {
-                "aTargets": [-4],
-                "sClass" : "editable_int",
+                "targets": [-4],
+                "className":  "editable_int",
             }, {
                 "targets": [-1],
                 "visible": false,
                 "searchable": false
             }],
-            "aaSorting": [],
-            "fnDrawCallback": function (oSettings) {
+            "order": [],
+            "drawCallback": function (oSettings) {
                 var local = this;
                 local.$('.editable').editable( function(value, settings) {
                     var aPos = local.fnGetPosition( this );
@@ -382,11 +382,11 @@
                     tooltip : _("Click to edit")
                 });
             },
-            "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            "rowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                 var iTotal = aData[1] * aData[2];
                 this.fnUpdate( iTotal, nRow, 3, false, false );
             },
-            "fnFooterCallback": function(nFoot, aData, iStart, iEnd, aiDisplay) {
+            "footerCallback": function(nFoot, aData, iStart, iEnd, aiDisplay) {
                 var iTotalPrice = 0;
                 for ( var i=0 ; i<aData.length ; i++ )
                 {
@@ -406,8 +406,8 @@
 
         var items_table_settings = [% TablesSettings.GetTableSettings('pos', 'pay', 'invoices', 'json') | $raw %];
         var items_table = KohaTable("invoices", {
-               "sPaginationType": "full",
-               "aaSorting": [[ 0, "asc" ]],
+               "pagingType": "full",
+               "order": [[ 0, "asc" ]],
                "autoWidth": false
         }, items_table_settings, false);
 

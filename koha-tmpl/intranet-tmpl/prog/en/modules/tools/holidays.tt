@@ -586,12 +586,12 @@
                 first_td.html(weekdays[first_td.html()]);
             });
             $("#holidayweeklyrepeatable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
-                "bPaginate": false
+                "dom": 't',
+                "paginate": false
             }));
             var tables = $("#holidayexceptions, #holidaysyearlyrepeatable, #holidaysunique").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
-                "bPaginate": false,
+                "dom": 't',
+                "paginate": false,
                 "createdRow": function( row, data, dataIndex ) {
                     var holiday = $(row).data("date");
                     if( holiday < datestring ){

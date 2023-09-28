@@ -420,20 +420,20 @@
 
         $(document).ready(function(){
             inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
-                'sPaginationType': 'full_numbers',
+                "pagingType": 'full_numbers',
                 [% IF compareinv2barcd %]
                     // sort on callnumber
-                    "aaSorting": [[ 1, "asc" ]],
+                    "order": [[ 1, "asc" ]],
                 [% ELSE %]
                     // first column contains checkboxes
-                    "aoColumnDefs": [
-                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                        { "bSortable": false, "bSearchable": false, "aTargets": [ 0 ] }
+                    "columnDefs": [
+                        { "type": "anti-the", "targets":  [ "anti-the" ] },
+                        { "orderable": false, "searchable":  false, "targets": [ 0 ] }
                     ],
                     // 3rd column is callnumber
-                    "aaSorting": [[ 2, "asc" ]],
+                    "order": [[ 2, "asc" ]],
                 [% END %]
-                'fnDrawCallback': function() {
+                "drawCallback": function() {
                     //bind the click handler script to the newly created elements held in the table
                     $('.openWin').bind('click',function(e){
                         e.preventDefault();

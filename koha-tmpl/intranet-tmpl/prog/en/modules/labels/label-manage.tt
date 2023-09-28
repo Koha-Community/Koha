@@ -191,10 +191,10 @@
                 return confirmDelete( _("Are you sure you want to delete this?") );
             });
             $("#labels-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "full",
-                "aaSorting": [[ 1, "asc" ]],
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                "pagingType": "full",
+                "order": [[ 1, "asc" ]],
+                "columnDefs": [
+                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
                 ]
             }));
         });

@@ -260,8 +260,8 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
  * Ex: <td><span title="[% ISO_date %]">[% formatted_date %]</span></td>
  *
  * In DataTables config:
- *     "aoColumns": [
- *        { "sType": "title-string" },
+ *     "data": [
+ *        { "type": "title-string" },
  *      ]
  * http://datatables.net/plug-ins/sorting#hidden_title_string
  */
@@ -288,8 +288,8 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     /* Plugin to allow text sorting to ignore articles
      *
      * In DataTables config:
-     *     "aoColumns": [
-     *        { "sType": "anti-the" },
+     *     "data": [
+     *        { "type": "anti-the" },
      *      ]
      * Based on the plugin found here:
      * http://datatables.net/plug-ins/sorting#anti_the

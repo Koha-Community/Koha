@@ -120,12 +120,12 @@
         $(document).ready(function() {
             [% FOREACH library IN libraries %]
             $("#transferst[% library.branchcode | html %]").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                "columnDefs": [
+                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
+                    { "type": "anti-the", "targets":  [ "anti-the" ] }
                 ],
-                "sDom": 't',
-                "bPaginate": false
+                "dom": 't',
+                "paginate": false
             }));
             [% END %]
         });

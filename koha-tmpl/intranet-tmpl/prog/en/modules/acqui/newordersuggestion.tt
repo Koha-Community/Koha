@@ -130,11 +130,11 @@
     <script>
     $(document).ready(function() {
         var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ 0 ],  "bVisible": false, "bSearchable": true }, // must be searchable for fnFilter
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+            "columnDefs": [
+                { "targets": [ 0 ],  "visible": false, "searchable":  true }, // must be searchable for fnFilter
+                { "targets": [ -1 ], "orderable": false, "searchable":  false },
             ],
-            "sPaginationType": "full"
+            "pagingType": "full"
         }));
         $("#show_only_mine").on('click', function(e){
             e.preventDefault();

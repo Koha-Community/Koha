@@ -681,10 +681,10 @@
 
          $(document).ready(function() {
             var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] }
+                "columnDefs": [
+                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] }
                 ],
-                'sDom': 't'
+                "dom": 't'
             } ) );
             $('body').on('click', '.delete-contact', null, delete_contact);
             $('#add-contact').click(add_contact);

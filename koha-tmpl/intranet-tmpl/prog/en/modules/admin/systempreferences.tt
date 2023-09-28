@@ -462,11 +462,11 @@
         <script>
              $(document).ready(function() {
                 [% IF ( loop ) %]$("#sysprefst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "sDom": '<"top pager"ilf>t',
-                    "aoColumnDefs": [
-                        { "aTargets": [ -1, -2, -3 ], "bSortable": false }
+                    "dom": '<"top pager"ilf>t',
+                    "columnDefs": [
+                        { "targets": [ -1, -2, -3 ], "orderable": false }
                     ],
-                    "bPaginate": false
+                    "paginate": false
                 }));[% END %]
              });
         </script>

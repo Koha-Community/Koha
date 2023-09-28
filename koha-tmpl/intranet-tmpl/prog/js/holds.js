@@ -127,14 +127,14 @@ $(document).ready(function() {
         if ( ! holdsTable ) {
             var title;
             holdsTable = KohaTable("holds-table", {
-                "bAutoWidth": false,
+                "autoWidth": false,
                 "dom": '<"table_controls"B>rt',
-                "aoColumns": [
+                "columns": [
                     {
                         "data": { _: "reservedate_formatted", "sort": "reservedate" }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             title = "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "'>"
@@ -168,12 +168,12 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             return oObj.itemcallnumber && oObj.itemcallnumber.escapeHtml() || "";
                         }
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             var data = "";
                             if ( oObj.itemtype ) {
                                 data += oObj.itemtype_description;
@@ -182,7 +182,7 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             var data = "";
                             if ( oObj.barcode ) {
                                 data += " <a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
@@ -199,7 +199,7 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             if( oObj.branches.length > 1 && oObj.found !== 'W' && oObj.found !== 'T' ){
                                 var branchSelect='<select priority='+oObj.priority+' class="hold_location_select" data-hold-id="'+oObj.reserve_id+'" reserve_id="'+oObj.reserve_id+'" name="pick-location" data-pickup-location-source="hold">';
                                 for ( var i=0; i < oObj.branches.length; i++ ){
@@ -225,7 +225,7 @@ $(document).ready(function() {
                     },
                     { "data": { _: "expirationdate_formatted", "sort": "expirationdate" } },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             if ( oObj.priority && parseInt( oObj.priority ) && parseInt( oObj.priority ) > 0 ) {
                                 return oObj.priority;
                             } else {
@@ -234,13 +234,13 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             return oObj.reservenotes && oObj.reservenotes.escapeHtml() || "";
                         }
                     },
                     {
-                        "bSortable": false,
-                        "mDataProp": function( oObj ) {
+                        "orderable": false,
+                        "data": function( oObj ) {
                             return "<select name='rank-request'>"
                                  +"<option value='n'>" + __("No") + "</option>"
                                  +"<option value='del'>" + __("Yes") + "</option>"
@@ -251,9 +251,9 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "bSortable": false,
+                        "orderable":  false,
                         "visible": SuspendHoldsIntranet,
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             holds[oObj.reserve_id] = oObj; //Store holds for later use
 
                             if ( oObj.found ) {
@@ -268,7 +268,7 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             var data = "";
 
                             if ( oObj.suspend == 1 ) {
@@ -316,10 +316,10 @@ $(document).ready(function() {
                         }
                     }
                 ],
-                "bPaginate": false,
-                "bProcessing": true,
-                "bServerSide": false,
-                "aoColumnDefs": [
+                "paging":  false,
+                "processing":  true,
+                "serverSide":  false,
+                "columnDefs":  [
                     { "type": "anti-the", "targets": [ "anti-the" ] }
                 ],
                 "ajax": {

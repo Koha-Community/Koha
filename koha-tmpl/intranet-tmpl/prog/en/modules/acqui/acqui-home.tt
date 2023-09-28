@@ -231,7 +231,7 @@
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'acq_acqui-home', 'accounts', 'json' ) | $raw %];
             var oTable = KohaTable("accounts", {
-                "fnDrawCallback": function ( oSettings ) {
+                "drawCallback": function ( oSettings ) {
                     if ( oSettings.aiDisplay.length == 0 )
                     {
                         return;
@@ -261,14 +261,14 @@
                     var api = this.api(), data;
                     footer_column_sum( api, [ 6, 7, 8, 9 ] );
                 },
-                "aoColumnDefs": [
-                    { "bVisible": false, "aTargets": [ 0, 1 ] },
-                    { "bSortable": false, "aTargets": ["_all"] }
+                "columnDefs": [
+                    { "visible": false, "targets": [ 0, 1 ] },
+                    { "orderable": false, "targets": ["_all"] }
                 ],
-                'bSort': true,
-                'aaSortingFixed': [[ 1, 'asc' ]],
-                'bPaginate': false,
-                "bAutoWidth": false
+                "ordering": true,
+                "orderFixed": [[ 1, 'asc' ]],
+                "paginate": false,
+                "autoWidth": false
             }, table_settings );
 
             $(oTable).treetable({

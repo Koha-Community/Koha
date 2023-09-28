@@ -701,7 +701,7 @@
             $(document).ready(function() {
                 [% IF budgets %]
                     var oTable = KohaTable("budgeth", {
-                        "fnDrawCallback": function ( oSettings ) {
+                        "drawCallback": function ( oSettings ) {
                             if ( oSettings.aiDisplay.length == 0 )
                             {
                                 return;
@@ -731,14 +731,14 @@
                             var api = this.api(), data;
                             footer_column_sum( api, [ 4, 6, 8, 10 ], 2 );
                         },
-                        "aoColumnDefs": [
-                            { "bVisible": false, "aTargets": [ 0, 1 ] },
-                            { "bSortable": false, "aTargets": ["_all"] }
+                        "columnDefs": [
+                            { "visible": false, "targets": [ 0, 1 ] },
+                            { "orderable": false, "targets": ["_all"] }
                         ],
-                        'bSort': true,
-                        'aaSortingFixed': [[ 1, 'asc' ]],
-                        'bPaginate': false,
-                        "bAutoWidth": false
+                        "ordering": true,
+                        "orderFixed": [[ 1, 'asc' ]],
+                        "paginate": false,
+                        "autoWidth": false
                     });
 
                     $(oTable).treetable({

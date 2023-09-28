@@ -68,20 +68,20 @@ $(document).ready(function() {
     }
 
     KohaTable("stock_rotation_manage_items", {
-        "aoColumnDefs": [
-            { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-            { "sType": "anti-the", "aTargets": [ "anti-the" ] }
+        "columnDefs":  [
+            { "orderable":  false, "searchable":  false, "targets":  [ 'NoSort' ] },
+            { "type":  "anti-the", "targets":  [ "anti-the" ] }
         ],
-        "sPaginationType": "full",
+        "pagingType":  "full",
         "autoWidth": false,
     }, stock_rotation_items_table_settings);
 
     KohaTable("stock_rotation", {
-        "aoColumnDefs": [
-            { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-            { "sType": "anti-the", "aTargets": [ "anti-the" ] }
+        "columnDefs":  [
+            { "orderable":  false, "searchable":  false, "targets":  [ 'NoSort' ] },
+            { "type":  "anti-the", "targets":  [ "anti-the" ] }
         ],
-        "sPaginationType": "full",
+        "pagingType":  "full",
         "autoWidth": false,
     }, stock_rotation_table_settings);
 

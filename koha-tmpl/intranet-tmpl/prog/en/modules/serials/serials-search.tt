@@ -345,29 +345,29 @@
 
         $(document).ready(function() {
             var osrlt = $("#opened_panel table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "full",
+                "pagingType": "full",
                 "order": [[ 2, "asc" ]],
-                "aoColumnDefs": [
-                    { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+                "columnDefs": [
+                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
+                    { "type": "anti-the", "targets":  [ 'anti-the'] }
                 ]
             }));
 
             var csrlt = $("#closed_panel table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 // FIXME sort function of additional_fields!
                 "order": [[ 2, "asc" ]],
-                "sPaginationType": "full",
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [ 'NoSort' ] },
-                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+                "pagingType": "full",
+                "columnDefs": [
+                    { "orderable": false, "targets": [ 'NoSort' ] },
+                    { "type": "anti-the", "targets":  [ 'anti-the'] }
                 ]
             }));
 
             var manarlt = $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "full",
-                "aoColumnDefs": [
-                    { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+                "pagingType": "full",
+                "columnDefs": [
+                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
+                    { "type": "anti-the", "targets":  [ 'anti-the'] }
                 ]
             }));
 

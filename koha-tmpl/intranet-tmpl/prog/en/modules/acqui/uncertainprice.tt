@@ -182,10 +182,10 @@
     <script>
         $(document).ready(function() {
             var uncertainpricet = $("#uncertainpricet").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                "columnDefs": [
+                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
                 ],
-                "sPaginationType": "full"
+                "pagingType": "full"
             }));
             $(".check_uncertain").on("change",function(){
                 var form = document.getElementById("uncertainprices");

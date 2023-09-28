@@ -79,10 +79,10 @@
     <script>
         $(document).ready(function() {
             $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "asSorting" : [ "desc", "asc" ], "bSearchable": false }
+                "columnDefs": [
+                    { "targets": [ -1 ], "orderSequence": [ "desc", "asc" ], "searchable":  false }
                 ],
-                "bPaginate": false
+                "paginate": false
             }));
     });
 </script>

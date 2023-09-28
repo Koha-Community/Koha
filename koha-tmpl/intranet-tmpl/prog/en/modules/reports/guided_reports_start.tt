@@ -1947,9 +1947,9 @@
             [% IF (saved1) %]
                 var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
                 var rtable = KohaTable("table_reports", {
-                    'bAutoWidth': false,
-                    'sPaginationType': 'full',
-                    'aaSorting': [[ 1, "asc" ]],
+                    "autoWidth": false,
+                    "pagingType": 'full',
+                    "order": [[ 1, "asc" ]],
                     "language": {
                         "zeroRecords": _("No matching reports found")
                     },
@@ -2346,14 +2346,14 @@
                         $("#mana_search_result_label").text(_("Results from Mana Knowledge Base"));
                         $("#mana-loading").hide();
                         $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults,{
-                            "sPaginationType":"full",
+                            "pagingType": "full",
                             "autoWidth": false,
                             "columnDefs": [
                                 { "width": "35%", "targets": 1 }
                             ],
-                            "aoColumnDefs": [
-                                { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                                { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+                            "columnDefs": [
+                                { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
+                                { "type": "anti-the", "targets":  [ 'anti-the'] }
                             ]
                         }));
 

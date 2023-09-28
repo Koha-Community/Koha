@@ -188,8 +188,8 @@
             [% END %]
             var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') | $raw %];
             var table = KohaTable("table_readingrec", {
-                "sPaginationType": "full",
-                "aaSorting": [[column_sort, 'desc']]
+                "pagingType": "full",
+                "order": [[column_sort, 'desc']]
             }, table_settings);
 
             $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {

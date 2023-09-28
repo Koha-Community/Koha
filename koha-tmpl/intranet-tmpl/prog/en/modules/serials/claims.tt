@@ -241,12 +241,12 @@
         var sTable;
         $(document).ready(function() {
             sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
-                "aoColumnDefs": [
-                    { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+                "dom": 't',
+                "columnDefs": [
+                    { "targets": [ 0 ], "orderable": false, "searchable":  false },
+                    { "type": "anti-the", "targets":  [ 'anti-the'] }
                 ],
-                "bPaginate": false
+                "paginate": false
             }));
             sTable.fnAddFilters("filter", "200");
             $('#supplierid').change(function() {

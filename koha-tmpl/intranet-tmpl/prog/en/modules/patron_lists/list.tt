@@ -240,7 +240,7 @@
 
                 var table_settings = [% TablesSettings.GetTableSettings('members', 'patron-lists', 'patron-list-table', 'json') | $raw %]
                 KohaTable('patron-list-table', {
-                    "sPaginationType": "full"
+                    "pagingType": "full"
                 }, table_settings);
 
             function AddPatron( patron_name, value, container, input_name ) {

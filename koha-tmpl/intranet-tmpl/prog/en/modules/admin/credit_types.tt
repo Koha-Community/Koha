@@ -238,14 +238,14 @@
             var txtActivefilter = _("Filter system credit types");
             var txtInactivefilter = _("Show all credit types");
             var table_credit_types = $("#table_credit_types").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "aTargets": [ 0, 1 ], "bSortable": false, "bVisible": false },
+                "columnDefs": [
+                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
+                    { "targets": [ 0, 1 ], "orderable": false, "visible": false },
                 ],
-                "aaSorting": [[ 0, "asc" ],[ 2, "asc" ]],
-                "sDom": 'C<"top pager"ilpfB><"#filter_s">tr<"bottom pager"ip>',
-                "iDisplayLength": 20,
-                "sPaginationType": "full_numbers"
+                "order": [[ 0, "asc" ],[ 2, "asc" ]],
+                "dom": 'C<"top pager"ilpfB><"#filter_s">tr<"bottom pager"ip>',
+                "pageLength": 20,
+                "pagingType": "full_numbers"
             }));
             $("#filter_s").html('<p><a href="#" id="filter_system"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
             $('#filter_system').click(function(e) {

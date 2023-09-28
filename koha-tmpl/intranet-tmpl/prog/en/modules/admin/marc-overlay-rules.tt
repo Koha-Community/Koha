@@ -382,18 +382,18 @@
         }
 
         $('#marc-overlay-rules').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumns": [
-                {"bSearchable": false, "bSortable": false},
-                {"sSortDataType": "dom-input"},
-                {"sSortDataType": "dom-input"},
-                {"bSearchable": false, "sSortDataType": "dom-input"},
-                {"bSearchable": false, "sSortDataType": "dom-input"},
-                {"bSearchable": false, "sSortDataType": "dom-input"},
-                {"bSearchable": false, "sSortDataType": "dom-input"},
-                {"bSearchable": false, "sSortDataType": "dom-input"},
-                {"bSearchable": false, "sSortDataType": "dom-input"},
-                {"bSearchable": false, "bSortable": false},
-                {"bSearchable": false, "bSortable": false}
+            "columns": [
+                {"searchable":  false, "orderable": false},
+                {"orderDataType": "dom-input"},
+                {"orderDataType": "dom-input"},
+                {"searchable":  false, "orderDataType": "dom-input"},
+                {"searchable":  false, "orderDataType": "dom-input"},
+                {"searchable":  false, "orderDataType": "dom-input"},
+                {"searchable":  false, "orderDataType": "dom-input"},
+                {"searchable":  false, "orderDataType": "dom-input"},
+                {"searchable":  false, "orderDataType": "dom-input"},
+                {"searchable":  false, "orderable": false},
+                {"searchable":  false, "orderable": false}
             ],
             "pagingType": "simple"
         }));

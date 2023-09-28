@@ -264,15 +264,15 @@
             $("#save_quotes").on("click", yuiGetData);
 
             oTable = $('#quotes_editor').dataTable( {
-                "bAutoWidth"        : false,
-                "bPaginate"         : true,
-                "bSort"             : false,
-                "sPaginationType"   : "full_numbers",
-                "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
-                "aaData"            : aaData,
+                "autoWidth"        : false,
+                "paging"         : true,
+                "ordering"             : false,
+                "pagingType"   : "full_numbers",
+                "dom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
+                "data"            : aaData,
                 "pageLength": 20,
                 "fixedHeader": true,
-                "aoColumns"         : [
+                "columns"         : [
                     {
                         "sTitle"  : _("Number"),
                         "sWidth"  : "2%",
@@ -286,10 +286,10 @@
                         "sWidth"  : "83%",
                     },
                 ],
-               "fnPreDrawCallback": function(oSettings) {
+               "preDrawCallback": function(oSettings) {
                     return true;
                 },
-                "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                "rowCallback": function( nRow, aData, iDisplayIndex ) {
                     /* do foo on various cells in the current row */
                     var quoteNum = $('td', nRow)[0].innerHTML;
                     $(nRow).attr("id", quoteNum); /* set row ids to quote number */
@@ -300,7 +300,7 @@
                     }
                     return nRow;
                 },
-               "fnDrawCallback": function(oSettings) {
+               "drawCallback": function(oSettings) {
                     /* Apply the jEditable handlers to the table on all fields w/o the no_edit id */
                     $('#quotes_editor tbody td[id!="no_edit"]').editable( function(value, settings) {
                             value = escape_str(value);

@@ -134,11 +134,11 @@
 
         $(document).ready(function() {
             $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                "columnDefs": [
+                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
+                    { "type": "anti-the", "targets":  [ "anti-the" ] }
                 ],
-                "sPaginationType": "full"
+                "pagingType": "full"
             }));
 
             $("#show_only_renewed").click(function(){

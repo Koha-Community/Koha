@@ -325,20 +325,20 @@ $(document).ready(function() {
         $('#issues-table-actions').show();
         var msg_loading = __('Loading... you may continue scanning.');
         issuesTable = KohaTable("issues-table", {
-            "oLanguage": {
-                "sEmptyTable" : msg_loading,
-                "sProcessing": msg_loading,
+            "language":  {
+                "emptyTable":  msg_loading,
+                "processing": msg_loading,
             },
-            "bAutoWidth": false,
+            "autoWidth":  false,
             "dom": '<"table_controls"B>rt',
-            "aoColumns": [
+            "columns":  [
                 {
-                    "mDataProp": function( oObj ) {
+                    "data": function( oObj ) {
                         return oObj.sort_order;
                     }
                 },
                 {
-                    "mDataProp": function( oObj ) {
+                    "data": function( oObj ) {
                         if ( oObj.issued_today ) {
                             return "<strong>" + __("Today's checkouts") + "</strong>";
                         } else {
@@ -347,12 +347,12 @@ $(document).ready(function() {
                     }
                 },
                 {
-                    "mDataProp": "date_due",
-                    "bVisible": false,
+                    "data": "date_due",
+                    "visible":  false,
                 },
                 {
-                    "iDataSort": 2, // Sort on hidden unformatted date due column
-                    "mDataProp": function( oObj ) {
+                    "orderData":  2, // Sort on hidden unformatted date due column
+                    "data": function( oObj ) {
                         let date_due_formatted = $datetime(oObj.date_due, { as_due_date: true, no_tz_adjust: true });
                         var due = oObj.date_due_overdue
                             ? "<span class='overdue'>" + date_due_formatted + "</span>"
@@ -377,7 +377,7 @@ $(document).ready(function() {
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         let title = "<span id='title_" + oObj.itemnumber + "' class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
                               + oObj.biblionumber
                               + "'>"
@@ -438,83 +438,83 @@ $(document).ready(function() {
 
                         return title;
                     },
-                    "sType": "anti-the"
+                    "type":  "anti-the"
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         return oObj.recordtype_description.escapeHtml();
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         return oObj.itemtype_description.escapeHtml();
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         return ( oObj.collection ? oObj.collection.escapeHtml() : '' );
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         return ( oObj.location ? oObj.location.escapeHtml() : '' );
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         return (oObj.homebranch ? oObj.homebranch.escapeHtml() : '' );
                     }
                 },
                 {
-                    "mDataProp": "issuedate",
-                    "bVisible": false,
+                    "data": "issuedate",
+                    "visible":  false,
                 },
                 {
-                    "iDataSort": 10, // Sort on hidden unformatted issuedate column
-                    "mDataProp": function( oObj ) {
+                    "orderData":  10, // Sort on hidden unformatted issuedate column
+                    "data": function( oObj ) {
                         return $datetime(oObj.issuedate, { no_tz_adjust: true });
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         return (oObj.branchname ? oObj.branchname.escapeHtml() : '' );
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         return ( oObj.itemcallnumber ? oObj.itemcallnumber.escapeHtml() : '' );
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         return ( oObj.copynumber ? oObj.copynumber.escapeHtml() : '' );
                     }
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         if ( ! oObj.charge ) oObj.charge = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.charge).format_price() + '<span>';
                     },
-                    "sClass": "nowrap"
+                    "className": "nowrap"
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         if ( ! oObj.fine ) oObj.fine = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.fine).format_price()   + '<span>';
                     },
-                    "sClass": "nowrap"
+                    "className": "nowrap"
                 },
                 {
-                    "mDataProp": function ( oObj ) {
+                    "data": function ( oObj ) {
                         if ( ! oObj.price ) oObj.price = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.price).format_price()  + '<span>';
                     },
-                    "sClass": "nowrap"
+                    "className": "nowrap"
                 },
                 {
-                    "bSortable": false,
-                    "bVisible": AllowCirculate ? true : false,
-                    "mDataProp": function ( oObj ) {
+                    "orderable":  false,
+                    "visible":  AllowCirculate ? true : false,
+                    "data": function ( oObj ) {
                         var content = "";
                         var msg = "";
                         var span_style = "";
@@ -645,9 +645,9 @@ $(document).ready(function() {
                     }
                 },
                 {
-                    "bSortable": false,
-                    "bVisible": AllowCirculate ? true : false,
-                    "mDataProp": function ( oObj ) {
+                    "orderable":  false,
+                    "visible":  AllowCirculate ? true : false,
+                    "data": function ( oObj ) {
                         if ( oObj.can_renew_error == "recalled" ) {
                             return "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Recalled") + "</a>";
                         } else if ( oObj.can_renew_error == "on_reserve" ) {
@@ -660,9 +660,9 @@ $(document).ready(function() {
                     }
                 },
                 {
-                    "bVisible": ClaimReturnedLostValue ? true : false,
-                    "bSortable": false,
-                    "mDataProp": function ( oObj ) {
+                    "visible":  ClaimReturnedLostValue ? true : false,
+                    "orderable":  false,
+                    "data": function ( oObj ) {
                         let content = "";
 
                         if ( oObj.return_claim_id ) {
@@ -676,9 +676,9 @@ $(document).ready(function() {
                     }
                 },
                 {
-                    "bVisible": exports_enabled == 1 ? true : false,
-                    "bSortable": false,
-                    "mDataProp": function ( oObj ) {
+                    "visible":  exports_enabled == 1 ? true : false,
+                    "orderable":  false,
+                    "data": function ( oObj ) {
                         var s = "<input type='checkbox' name='itemnumbers' value='" + oObj.itemnumber + "' style='visibility:hidden;' />";
 
                         s += "<input type='checkbox' class='export' id='export_" + oObj.biblionumber + "' name='biblionumbers' value='" + oObj.biblionumber + "' />";
@@ -686,7 +686,7 @@ $(document).ready(function() {
                     }
                 }
             ],
-            "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
+            "footerCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
                 var total_charge = 0;
                 var total_fine  = 0;
                 var total_price = 0;
@@ -699,9 +699,9 @@ $(document).ready(function() {
                 $("#totalfine").html(total_fine.format_price() );
                 $("#totalprice").html(total_price.format_price() );
             },
-            "bPaginate": false,
-            "bProcessing": true,
-            "bServerSide": false,
+            "paging":  false,
+            "processing":  true,
+            "serverSide":  false,
             "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
             "fnServerData": function ( sSource, aoData, fnCallback ) {
                 aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
@@ -720,7 +720,7 @@ $(document).ready(function() {
                     }
                 }
             },
-            "fnInitComplete": function(oSettings, json) {
+            "initComplete": function(oSettings, json) {
                 // Build a summary of checkouts grouped by itemtype
                 var checkoutsByItype = json.aaData.reduce(function (obj, row) {
                     obj[row.type_for_stat] = (obj[row.type_for_stat] || 0) + 1;
@@ -754,17 +754,17 @@ $(document).ready(function() {
     $("#relatives-issues-tab").click( function() {
         if ( ! relativesIssuesTable ) {
             relativesIssuesTable = KohaTable("relatives-issues-table", {
-                "bAutoWidth": false,
+                "autoWidth":  false,
                 "dom": '<"table_controls"B>rt',
-                "aaSorting": [],
-                "aoColumns": [
+                "order":  [],
+                "columns":  [
                     {
-                        "mDataProp": "date_due",
-                        "bVisible": false,
+                        "data": "date_due",
+                        "visible":  false,
                     },
                     {
-                        "iDataSort": 0, // Sort on hidden unformatted date due column
-                        "mDataProp": function( oObj ) {
+                        "orderData":  0, // Sort on hidden unformatted date due column
+                        "data": function( oObj ) {
                             var today = new Date();
                             var due = new Date( oObj.date_due );
                             let date_due_formatted = $datetime(oObj.date_due, { as_due_date: true, no_tz_adjust: true });
@@ -776,7 +776,7 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             let title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "'>"
@@ -833,73 +833,73 @@ $(document).ready(function() {
 
                             return title;
                         },
-                        "sType": "anti-the"
+                        "type":  "anti-the"
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             return oObj.recordtype_description.escapeHtml();
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             return oObj.itemtype_description.escapeHtml();
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             return ( oObj.collection ? oObj.collection.escapeHtml() : '' );
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             return ( oObj.location ? oObj.location.escapeHtml() : '' );
                         }
                     },
                     {
-                        "mDataProp": "issuedate",
-                        "bVisible": false,
+                        "data": "issuedate",
+                        "visible":  false,
                     },
                     {
-                        "iDataSort": 7, // Sort on hidden unformatted issuedate column
-                        "mDataProp": function ( oObj ) {
+                        "orderData":  7, // Sort on hidden unformatted issuedate column
+                        "data": function ( oObj ) {
                             return $datetime(oObj.issuedate, { no_tz_adjust: true });
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             return ( oObj.branchname ? oObj.branchname.escapeHtml() : '' );
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             return ( oObj.itemcallnumber ? oObj.itemcallnumber.escapeHtml() : '' );
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             return ( oObj.copynumber ? oObj.copynumber.escapeHtml() : '' );
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             if ( ! oObj.charge ) oObj.charge = 0;
                             return parseFloat(oObj.charge).toFixed(2);
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             if ( ! oObj.fine ) oObj.fine = 0;
                             return parseFloat(oObj.fine).toFixed(2);
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             if ( ! oObj.price ) oObj.price = 0;
                             return parseFloat(oObj.price).toFixed(2);
                         }
                     },
                     {
-                        "mDataProp": function( oObj ) {
+                        "data": function( oObj ) {
                             return "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=" + oObj.borrowernumber + "'>"
                                 + ( oObj.borrower.firstname ? oObj.borrower.firstname.escapeHtml() : "" )
                                 + " " +
@@ -908,9 +908,9 @@ $(document).ready(function() {
                         }
                     },
                 ],
-                "bPaginate": false,
-                "bProcessing": true,
-                "bServerSide": false,
+                "paging":  false,
+                "processing":  true,
+                "serverSide":  false,
                 "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     $.each(relatives_borrowernumbers, function( index, value ) {
@@ -969,30 +969,30 @@ $(document).ready(function() {
     function loadReturnClaimsTable() {
         if ( ! returnClaimsTable ) {
             returnClaimsTable = $("#return-claims-table").dataTable({
-                "bAutoWidth": false,
-                "sDom": "rt",
-                "aaSorting": [],
-                "aoColumnDefs": [
-                    { "bSortable": false, "bSearchable": false, 'aTargets': ['NoSort'] },
-                    { "sType": "anti-the", "aTargets": ["anti-the"] },
+                "autoWidth":  false,
+                "dom":  "rt",
+                "order":  [],
+                "columnDefs":  [
+                    { "orderable":  false, "searchable":  false, "targets":  ['NoSort'] },
+                    { "type":  "anti-the", "targets":  ["anti-the"] },
                 ],
-                "aoColumns": [
+                "columns":  [
                     {
-                        "mDataProp": "id",
-                        "bVisible": false,
+                        "data": "id",
+                        "visible":  false,
                     },
                     {
-                        "mDataProp": function (oObj) {
+                        "data": function (oObj) {
                             if (oObj.resolution) {
                                 return "is_resolved";
                             } else {
                                 return "is_unresolved";
                             }
                         },
-                        "bVisible": false,
+                        "visible":  false,
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                               let title = '<a class="return-claim-title strong" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + oObj.biblionumber + '">'
                                   + oObj.title
                                   + ( oObj.subtitle ? " " + oObj.subtitle : "" )
@@ -1013,8 +1013,8 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "sClass": "return-claim-notes-td",
-                        "mDataProp": function ( oObj ) {
+                        "className": "return-claim-notes-td",
+                        "data": function ( oObj ) {
                             let notes =  '<span id="return-claim-notes-static-' + oObj.id + '" class="return-claim-notes" data-return-claim-id="' + oObj.id + '">';
                             if ( oObj.notes ) {
                                 notes += oObj.notes;
@@ -1025,12 +1025,12 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": "created_on",
-                        "bVisible": false,
+                        "data": "created_on",
+                        "visible":  false,
                     },
                     {
                         "orderData": 4,
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             if ( oObj.created_on ) {
                                 return $date(oObj.created_on, { no_tz_adjust: true });;
                             } else {
@@ -1039,12 +1039,12 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": "updated_on",
-                        "bVisible": false,
+                        "data": "updated_on",
+                        "visible":  false,
                     },
                     {
                         "orderData": 6,
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             if ( oObj.updated_on ) {
                                 return $date(oObj.updated_on, { no_tz_adjust: true });
                             } else {
@@ -1053,7 +1053,7 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             if ( ! oObj.resolution ) return "";
 
                             let desc = '<strong>' + oObj.resolution_data.lib + '</strong> <i>(';
@@ -1063,7 +1063,7 @@ $(document).ready(function() {
                         }
                     },
                     {
-                        "mDataProp": function ( oObj ) {
+                        "data": function ( oObj ) {
                             let delete_html = oObj.resolved_on
                                 ? '<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash-can"></i> ' + __("Delete") + '</a></li>'
                                 : "";
@@ -1084,9 +1084,9 @@ $(document).ready(function() {
                         }
                     },
                 ],
-                "bPaginate": false,
-                "bProcessing": true,
-                "bServerSide": false,
+                "paging":  false,
+                "processing":  true,
+                "serverSide":  false,
                 "sAjaxSource": '/cgi-bin/koha/svc/return_claims',
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
                     aoData.push( { "name": "borrowernumber", "value": borrowernumber } );

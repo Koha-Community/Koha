@@ -613,11 +613,11 @@
 
                 var table = $("#table_additional_contents").DataTable($.extend(true, {}, dataTablesDefaults, {
                     "order": [[ 4, "desc" ]],
-                    "aoColumnDefs": [
+                    "columnDefs": [
                         { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
                         { "type": "anti-the", "targets": [ "anti-the" ] }
                     ],
-                    "sPaginationType": "full_numbers"
+                    "pagingType": "full_numbers"
                 }));
 
                 $("#del_form").on("click", ".delete_news", function(e){

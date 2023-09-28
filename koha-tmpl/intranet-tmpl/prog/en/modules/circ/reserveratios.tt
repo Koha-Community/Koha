@@ -203,12 +203,12 @@
         var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holdsratios', 'holds-ratios', 'json' ) | $raw %];
         $(document).ready(function() {
             KohaTable("holdst", {
-                "aaSorting": [ [2,'desc'], [3,'asc'] ],
-                  "aoColumnDefs": [
-                      { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                      { "sType": "natural", "aTargets" : [ "natural" ] },
+                "order": [ [2,'desc'], [3,'asc'] ],
+                  "columnDefs": [
+                      { "type": "anti-the", "targets":  [ "anti-the" ] },
+                      { "type": "natural", "targets":  [ "natural" ] },
                     ],
-                "sPaginationType": "full",
+                "pagingType": "full",
                 "autoWidth": false
             }, table_settings);
        });

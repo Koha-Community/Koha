@@ -449,14 +449,14 @@
 
             var table_settings = [% TablesSettings.GetTableSettings( 'serials', 'subscription-detail', 'orders', 'json' ) | $raw %];
             var table = KohaTable("orders", {
-                "aoColumnDefs": [
-                    { "bVisible": false, "aTargets": [ 'NoVisible' ] },
-                    { "bSortable": false, "aTargets": ["_all"] },
+                "columnDefs": [
+                    { "visible": false, "targets": [ 'NoVisible' ] },
+                    { "orderable": false, "targets": ["_all"] },
                 ],
 
-                'bPaginate': false,
-                'bAutoWidth': false,
-                'bSort': false,
+                "paginate": false,
+                "autoWidth": false,
+                "ordering": false,
             }, table_settings);
 
             [% IF orders_grouped.size %]

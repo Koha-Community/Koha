@@ -41,7 +41,7 @@ Koha::Template::Plugin::TablesSettings
 
     <script>
         var columns_settings = [% TablesSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
-        var table = KohaTable("id", { "bAutoWidth": false }, columns_settings );
+        var table = KohaTable("id", { "autoWidth": false }, columns_settings );
     </script>
 
 This plugin allows to get the column configuration for a table. It should be used both in table markup
@@ -65,7 +65,7 @@ use C4::Utils::DataTables::TablesSettings;
 
     <script>
         var tables_settings = [% TablesSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
-        var table = KohaTable("id", { "bAutoWidth": false }, tables_settings );
+        var table = KohaTable("id", { "autoWidth": false }, tables_settings );
     </script>
 
 Used to get the full column settings configuration for datatables, usually requires a format of 'json' to pass into

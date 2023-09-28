@@ -360,18 +360,18 @@
 
             if ( $("#receivedt").length ) {
                 var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "bStateSave": true,
-                    "iDisplayLength": 10,
-                    "aLengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
-                    "aoColumnDefs": [
-                        { "aTargets": [ 5, -1 ], "bSortable": false, "bSearchable": false },
+                    "stateSave": true,
+                    "pageLength": 10,
+                    "lengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
+                    "columnDefs": [
+                        { "targets": [ 5, -1 ], "orderable": false, "searchable":  false },
                     ],
-                    "aoColumns": [
-                        { "sType": "html" },
-                        { "sType": "html" },
-                        { "sType": "html" },
-                        { "sType": "num-html" },
-                        { "sType": "anti-the" },
+                    "columns": [
+                        { "type": "html" },
+                        { "type": "html" },
+                        { "type": "html" },
+                        { "type": "num-html" },
+                        { "type": "anti-the" },
                         null,
                         null,
                         null,
@@ -381,7 +381,7 @@
                         null,
                         null
                     ],
-                    "sPaginationType": "full"
+                    "pagingType": "full"
                 }));
             }
 

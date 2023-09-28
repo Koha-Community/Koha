@@ -142,7 +142,7 @@
         $(document).ready(function(){
             $("#notestable").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "order": [[ 1, "asc" ]],
-                "aoColumnDefs": [
+                "columnDefs": [
                     { "orderable": false, "searchable": false, 'targets': [ 'NoSort' ] },
                     { "type": "anti-the", "targets": [ "anti-the" ] }
                 ],

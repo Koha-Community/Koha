@@ -312,9 +312,9 @@
 
             var table_settings = [% TablesSettings.GetTableSettings('circ', 'view_holdsqueue', 'holds-table', 'json') | $raw %];
             var holdst = KohaTable("holdst", {
-                "sDom": 'B<"clearfix">t',
-                "bSortCellsTop": true,
-                "bPaginate": false
+                "dom": 'B<"clearfix">t',
+                "orderCellsTop":  true,
+                "paginate": false
             }, table_settings);
 
         });

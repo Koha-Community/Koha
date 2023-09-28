@@ -120,11 +120,11 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                     }
             });
             $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                "columnDefs": [
+                    { "targets": [ -1, -2 ], "orderable": false, "searchable":  false },
                 ],
-                "aaSorting": [[ 0, "asc" ]],
-                "sPaginationType": "full"
+                "order": [[ 0, "asc" ]],
+                "pagingType": "full"
             }));
         });
     </script>

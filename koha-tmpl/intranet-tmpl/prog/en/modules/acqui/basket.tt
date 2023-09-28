@@ -1112,13 +1112,13 @@
                 table_settings['columns'].splice(18, 1);
             [% END %]
             KohaTable("orders", {
-                "sPaginationType": "full",
+                "pagingType": "full",
                 "autoWidth": false,
                 "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18[% IF (Koha.Preference('EDIFACT') && ediaccount) %],19[% END %]],
             }, table_settings);
 
             var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "full"
+                "pagingType": "full"
             } ) );
             $("#reopenbutton").on("click",function(e){
                 e.preventDefault();

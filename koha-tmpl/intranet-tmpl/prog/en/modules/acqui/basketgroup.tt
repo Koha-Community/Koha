@@ -383,11 +383,11 @@
             [% END %]
             [% UNLESS ( grouping ) %]
                 $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aoColumnDefs": [
-                        { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    "columnDefs": [
+                        { "targets": [ -1 ], "orderable": false, "searchable":  false },
                     ],
-                    "bAutoWidth": false,
-                    "sPaginationType": "full"
+                    "autoWidth": false,
+                    "pagingType": "full"
                 } ));
             [% ELSE %]
                 grouped = $("#grouped").DataTable($.extend(true, {}, dataTablesDefaults, {

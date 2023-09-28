@@ -444,10 +444,10 @@
                 return confirmDelete(_("Are you sure you want to delete this invoice?"));
             });
             var resultst = $("table.result").dataTable($.extend(true, {}, dataTablesDefaults, {
-                bPaginate: false,
-                aoColumnDefs: [
-                    { "bSortable": false, "aTargets": [1, -1] },
-                    { "bVisible": false, "aTargets": [0] }
+                "paging": false,
+                "columnDefs": [
+                    { "orderable": false, "targets": [1, -1] },
+                    { "visible": false, "targets": [0] }
                 ],
                 autoWidth: false
             }));

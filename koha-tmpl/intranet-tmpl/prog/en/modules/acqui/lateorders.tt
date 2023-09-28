@@ -345,9 +345,9 @@
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'lateorders', 'late_orders', 'json' ) | $raw %];
             late_orderst = KohaTable("late_orders", {
                 "sorting": [[ 1, "asc" ]],
-                "sPaginationType": "full",
-                "bAutoWidth": false,
-                "fnDrawCallback": function() {
+                "pagingType": "full",
+                "autoWidth": false,
+                "drawCallback": function() {
                     if ( typeof late_orderst != 'undefined' ) {
                         check_uncheck();
                         $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
