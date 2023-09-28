@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2023-05-02 10:17+0000\n"
+"PO-Revision-Date: 2023-09-18 08:43+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /tr/22.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1683022623.623572\n"
+"X-POOTLE-MTIME: 1695026604.394508\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -5793,19 +5793,16 @@ msgid ""
 msgstr "İzin verme"
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# both hold dates"
-msgstr "Bölümler"
+msgstr "her iki ayırtma tarihi"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# hold end date"
-msgstr "hold item türü"
+msgstr "ayırtma bitiş tarihi"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OPACMandatoryHoldDates# hold start date"
-msgstr "hold item türü"
+msgstr "ayırtma başlangıç tarihi"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACMandatoryHoldDates# mandatory."
@@ -6327,6 +6324,10 @@ msgid ""
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
+"CPL:homebranch:ne:\\$holdingbranch:X -Ayurtma biriminin ana birime eşit "
+"olmadığı durumlarda (veya CPL'den farklı bir birime ait herhangi bir "
+"materyal) CPL'ye iade edilen bir materyal için sıralama kutusu 'X'i "
+"döndürür.<br/><br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6342,6 +6343,8 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:itype:eq:BOOK:1 - Will return sort "
 "bin 1 for an item of itemtype 'BOOK' returned to CPL.<br/>"
 msgstr ""
+"CPL:itype:eq:BOOK:1 - CPL öğesinde döndürülen 'KİTAP' türündeki bir materyal "
+"için sıralama kutusu 1'i döndürür.<br/>"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#SIP2SortBinMapping# Examples:<br/>"
@@ -6353,6 +6356,9 @@ msgid ""
 "with a leading '\\$' and an item field name will use the value of that field "
 "in the item for comparison:<br/>"
 msgstr ""
+"NOT: 'item_field_value' değerinin başında '\\$' ve bir materyal alanı adı "
+"ile belirtilmesi, karşılaştırma amacıyla materyalde o alanın değerini "
+"kullanacaktır:<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6360,16 +6366,20 @@ msgid ""
 "'branchcode:item field:comparator:item field value:sort bin number', with "
 "one mapping per line.<br/>"
 msgstr ""
+"Eşleme, her satırda bir eşleme olacak şekilde 'branchcode:item "
+"field:comparator:item field value:sort bin number', biçiminde olmalıdır.<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# Use the following mappings to determine "
 "the sort_bin of a returned item.<br/>"
 msgstr ""
+"Döndürülen bir materyalin sort_bin'ini belirlemek için aşağıdaki eşlemeleri "
+"kullanın.<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid "circulation.pref#SIP2SortBinMapping# i.e. \\$holdingbranch<br/></br>"
-msgstr ""
+msgstr "SIP2SortBinMapping# örn. \\$holdingbranch<br/></br>"
 
 # Circulation > Self check-out module
 msgid ""
@@ -8384,13 +8394,12 @@ msgid "enhanced_content.pref#SyndeticsCoverImages# Show"
 msgstr "Göster"
 
 # Enhanced content > Syndetics
-#, fuzzy
 msgid ""
 "enhanced_content.pref#SyndeticsCoverImages# cover images from Syndetics on "
 "search results and item detail pages in the OPAC and the staff interface in a"
 msgstr ""
-"kapak görüntüleri arama sonuçlarındaki Syndeticsden ve materyal detay "
-"sayfaları OPAC'da"
+"OPAC ve personel arayüzündeki arama sonuçları ve materyal detay sayfalarında "
+"Syndetics'ten kapak görselleri"
 
 # Enhanced content > Syndetics
 msgid "enhanced_content.pref#SyndeticsCoverImages# large"
@@ -10225,13 +10234,10 @@ msgstr ""
 "(<strong>loc</strong>)."
 
 # Searching > Search form
-#, fuzzy
 msgid ""
 "opac.pref#OpacAdvancedSearchTypes# Show tabs in the OPAC advanced search for "
 "limiting searches on the"
-msgstr ""
-"OPAC ve personel arayüzündeki gelişmiş aramada, aramaları sınırlandırmak "
-"için sekmeleri göster"
+msgstr "Aramaları sınırlamak için OPAC gelişmiş aramasındaki sekmeleri göster"
 
 # Searching > Search form
 #, fuzzy
@@ -11584,17 +11590,15 @@ msgstr ""
 msgid ""
 "patrons.pref#AutoEmailNewUser# <br><strong>NOTE:</strong> This uses the "
 "WELCOME notice."
-msgstr ""
+msgstr "<br><strong>NOT:</strong>Bu HOŞGELDİNİZ bildirimini kullanır."
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#AutoEmailNewUser# Don't send"
-msgstr "Gönderme"
+msgstr "Gönderme "
 
 # Patrons > Notices and notifications
-#, fuzzy
 msgid "patrons.pref#AutoEmailNewUser# Send"
-msgstr "Gönder"
+msgstr "Gönder "
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#AutoEmailNewUser# an email to newly created patrons."
@@ -11872,16 +11876,16 @@ msgstr ""
 "kullanılacak varsayılan alanları tanımlayan virgülle ayrılmış liste:"
 
 # Patrons > General
-#, fuzzy
 msgid ""
 "patrons.pref#DefaultPatronSearchFields# If empty Koha will default to "
 "\"firstname,surname,othernames,cardnumber,userid\". Additional fields added "
 "to this preference will be added as search options in the dropdown menu on "
 "the patron search page."
 msgstr ""
-"Boş Koha varsayılan olarak \"soyadı, adı, diğer adlar, kart numarası, "
-"kullanıcı kimliği\" olacaktır. Bu tercihe eklenen ek alanlar, kullanıcı "
-"arama sayfasındaki açılır menüye arama seçenekleri olarak eklenecektir."
+"Boşsa Koha varsayılan olarak \"ad, soyad, diğer adlar, kart numarası, "
+"kullanıcı kimliği\" şeklinde olacaktır. Bu tercihe eklenen ilave alanlar, "
+"kullanıcı arama sayfasındaki açılır menüye arama seçenekleri olarak "
+"eklenecektir."
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -12489,9 +12493,8 @@ msgid "patrons.pref#Pseudonymization# Location"
 msgstr "Konum"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Patron category"
-msgstr "Kullanıcının kategorisi"
+msgstr "Kullanıcı kategorisi"
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# Patron's gender"
@@ -12506,23 +12509,20 @@ msgid "patrons.pref#Pseudonymization# Patron's title"
 msgstr "Kullanıcının ünvanı"
 
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# Patrons and transactions will be copied to a "
 "separate table for statistical purposes."
 msgstr ""
-"Kullanıcılar ve işlemler, istatistik amacıyla ayrı bir tabloya "
+"Kullanıcılar ve işlemler istatistiksel amaçlarla ayrı bir tabloya "
 "kopyalanacaktır."
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Sort 1"
-msgstr "Sıralama1"
+msgstr "Sıralama1 "
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# Sort 2"
-msgstr "Sıralama2"
+msgstr "Sıralama 2 "
 
 # Patrons > Security
 msgid "patrons.pref#Pseudonymization# State"
@@ -12533,16 +12533,16 @@ msgid "patrons.pref#Pseudonymization# Transaction type"
 msgstr "İşlem türü"
 
 # Patrons > Security
-#, fuzzy
 msgid "patrons.pref#Pseudonymization# ZIP/Postal code"
-msgstr "Posta kodu"
+msgstr "ZIP/Posta kodu"
 
 # Patrons > Security
-#, fuzzy
 msgid ""
 "patrons.pref#Pseudonymization# pseudonymization to comply with data privacy "
 "policies and regulations like GDPR for managing personal information."
-msgstr "Kişisel bilgiler için GDPR'ye uygun olması için takma ad."
+msgstr ""
+"kişisel bilgilerin yönetimine yönelik GDPR gibi veri gizliliği "
+"politikalarına ve düzenlemelere uymak için takma ad kullanma."
 
 # Patrons > Security
 msgid ""

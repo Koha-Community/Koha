@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "POT-Creation-Date: 2023-07-27 19:02-0300\n"
-"PO-Revision-Date: 2023-06-21 11:03+0000\n"
+"PO-Revision-Date: 2023-09-14 19:44+0000\n"
 "Last-Translator: Urszula <matoga@biblos.pk.edu.pl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pl/22.05/pl-PL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1687345433.857037\n"
+"X-POOTLE-MTIME: 1694720655.343040\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -2598,7 +2598,7 @@ msgstr "Czy na pewno chcesz usunąć zaznaczone tagi?"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:532
 msgid "Are you sure you want to delete these suggestions?"
-msgstr "Czy na pewno chcesz usunąć propozycję?"
+msgstr "Czy na pewno chcesz usunąć propozycje?"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -3393,7 +3393,7 @@ msgstr "Nie można złożyć przypomnienia"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:94
 #, c-format
 msgid "Cannot be transferred to pickup library"
-msgstr ""
+msgstr "Nie można przesłać do biblioteki/filii odbioru"
 
 #. %1$s:  maxlength_cardnumber | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:229
@@ -4305,13 +4305,13 @@ msgstr "Data dodania"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:322
 #, c-format
 msgid "Date added (newest to oldest)"
-msgstr "Data nabycia: Od najnowszych do najstarszych"
+msgstr "Data dodania: Od najnowszych do najstarszych"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:325
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:327
 #, c-format
 msgid "Date added (oldest to newest)"
-msgstr "Data nabycia: Od najstarszych do najnowszych"
+msgstr "Data dodania: Od najstarszych do najnowszych"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:175
 #, c-format
@@ -4933,6 +4933,7 @@ msgstr "Błąd wyszukiwania w kolekcji OverDrive."
 #, c-format
 msgid "Error when placing hold, please report this to the library"
 msgstr ""
+"Wystąpił błąd przy składaniu zamówienia, proszę poinformować o tym bibliotekę"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/xslt-handler.inc:7
 #, c-format
@@ -5005,9 +5006,9 @@ msgstr "Błąd: "
 
 #. %1$s:  fail | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Błąd %s"
+msgstr "Błąd: %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:17
 #, c-format
@@ -5664,7 +5665,7 @@ msgstr "Ukryj opcje"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:466
 #, c-format
 msgid "Hide unholdable items"
-msgstr "Ukryj niedostępny egzemplarz"
+msgstr "Ukryj egzemplarze, których nie można zamówić"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:45
 #, c-format
@@ -5787,7 +5788,7 @@ msgstr "Zamówienia (%s)"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:90
 #, c-format
 msgid "Holds are not allowed from your library"
-msgstr ""
+msgstr "Zamówienia z Twojej biblioteki nie są dozwolone"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:69
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:101
@@ -6439,9 +6440,9 @@ msgid "Item in transit from %s since"
 msgstr "W drodze z %s od"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "Item is damaged"
-msgstr "Egzemplarz zniszczony"
+msgstr "Egzemplarz jest uszkodzony"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
@@ -6753,9 +6754,9 @@ msgid "Library catalog"
 msgstr "Katalog biblioteki"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:100
-#, fuzzy, c-format
+#, c-format
 msgid "Library is not a valid pickup location"
-msgstr "Żadna z bibliotek nie jest dostępna dla lokalizacji odbioru. "
+msgstr "Biblioteka nie realizuje odbiorów"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:220
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:227
@@ -7619,9 +7620,9 @@ msgid "No holds"
 msgstr "Niezarezerwowane"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "No holds are allowed on this item"
-msgstr "Nie można złożyć przypomnienia na ten egzemplarz."
+msgstr "Brak możliwości zamawiania tego egzemplarza"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:163
 #, c-format
@@ -7747,9 +7748,9 @@ msgid "No tags from this library for this title."
 msgstr "Brak tagów dla tego tytułu."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:102
-#, fuzzy, c-format
+#, c-format
 msgid "No valid pickup location"
-msgstr "Miejsce odbioru"
+msgstr "Brak miejsca odbioru"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:57
 #, c-format
@@ -7855,9 +7856,9 @@ msgid "Not finding what you're looking for? "
 msgstr "Brak szukanej pozycji? "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "Not for loan"
-msgstr "Nie można wypożyczyć %s"
+msgstr "Nie można wypożyczyć"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedvalueopac ) 
@@ -7876,9 +7877,9 @@ msgid "Not for loan (%s)"
 msgstr "Nie można wypożyczyć (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "Not holdable"
-msgstr "Niedostępny"
+msgstr "Nie do zamówienia"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:771
 #, c-format
@@ -8128,11 +8129,11 @@ msgstr ""
 "propozycji zakupu."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid "One or more holds were not placed due to following errors:"
 msgstr ""
-"Jedno lub więcej zamówień nie zostało złożonych ze względu na istniejące "
-"zamówienia."
+"Jedno lub więcej zamówień nie zostało złożonych ze względu na następujące "
+"błędy:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:132
 #, c-format
@@ -9582,7 +9583,7 @@ msgstr "Usuń"
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:59
 msgid "Remove facet %s"
-msgstr "Usuń faset %s"
+msgstr "Usuń fasetę %s"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:122
@@ -10721,7 +10722,7 @@ msgstr "Wyświetl "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:465
 #, c-format
 msgid "Show unholdable items"
-msgstr "Wyświetl niedostępny egzemplarz"
+msgstr "Wyświetl egzemplarze, których nie można zamówić"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:113
 #, c-format
@@ -11614,7 +11615,7 @@ msgstr "Schowek został wysłany do: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:96
 #, c-format
 msgid "The chosen pickup location is not allowed"
-msgstr ""
+msgstr "Wskazane miejsce odbioru nie jest obsługiwane"
 
 #. %1$s:  subscription_LOO.startdate | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:62
@@ -11742,9 +11743,9 @@ msgid ""
 msgstr "Proces odzyskiwania hasła dla tego konta został rozpoczęty"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "The record and its items are age restricted"
-msgstr "Egzemplarz jest zastrzeżony."
+msgstr "Dane o tej publikacji są zastrzeżone"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:334
 #, c-format
@@ -11830,7 +11831,7 @@ msgstr "Prenumeraty powiązane z tytułem: %s."
 #, c-format
 msgid ""
 "There are items available in the library, please visit to check them out"
-msgstr ""
+msgstr "Istnieją egzemplarze dostępne w bibliotece. Odwiedź ją, aby wypożyczyć"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:865
 #, c-format
@@ -12769,9 +12770,9 @@ msgid "Yes, suspend all holds"
 msgstr "Tak, zawieś wszystkie zamówienia"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "You already have a hold for this item"
-msgstr "Na ten tytuł zostało już przez Ciebie złożone przypomnienie."
+msgstr "Masz już zamówienie na ten egzemplarz"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:173
 #, c-format
@@ -12820,9 +12821,9 @@ msgid "You are forbidden to view this page."
 msgstr "Nie masz dostępu do tej strony."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "You are from a different library"
-msgstr "Obraz Coce z Open Library"
+msgstr "Jesteś z innej biblioteki"
 
 #. %1$s:  borrowername | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:227
@@ -13054,9 +13055,9 @@ msgid "You have already requested this title."
 msgstr "Ten tytuł został już przez Ciebie zamówiony."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid "You have exceeded the number of concurrent holds for this record"
-msgstr "Osiągnięto maksymalną liczbę przypomnień."
+msgstr "Osiągnięto maksymalną liczbę jednoczesnych zamówień na tę publikację"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1014
 #, c-format
@@ -13148,9 +13149,9 @@ msgid "You have successfully registered your new account."
 msgstr "Udało Ci się zarejestrować nowe konto."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "You have too many holds already"
-msgstr "Konto nie jest obciążone żadnymi należnościami"
+msgstr "Masz już za dużo zamówień"
 
 #. %1$s:  too_much_oweing | $Price 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:75
@@ -13327,9 +13328,9 @@ msgid "You will receive an email shortly. "
 msgstr "Wkrótce otrzymasz wiadomość e-mail. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid "You've reached your daily holds limit"
-msgstr "Osiągnięto limit składania zamówień na kopię."
+msgstr "Osiągnięto dzienny limit składania zamówień"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:114
 #, c-format

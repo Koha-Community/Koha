@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 19:10-0300\n"
-"PO-Revision-Date: 2023-07-25 13:36+0000\n"
+"PO-Revision-Date: 2023-09-25 05:45+0000\n"
 "Last-Translator: plumflower <jeff_lindqvist@hotmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /sv/22.05/sv-SE-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1690292171.270635\n"
+"X-POOTLE-MTIME: 1695620713.157828\n"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -3395,7 +3395,7 @@ msgstr "Kan inte återkrävas"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:94
 #, c-format
 msgid "Cannot be transferred to pickup library"
-msgstr ""
+msgstr "Exemplar kan ej skickas till avhämtningsbibliotek"
 
 #. %1$s:  maxlength_cardnumber | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:229
@@ -4884,13 +4884,13 @@ msgstr "Ange söktermer"
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:47
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Enter your user ID%s and password%s, and click the submit button (or press "
 "the enter key)."
 msgstr ""
-"Ange ditt användar-ID%s och lösenord%s och klicka sedan på skicka-knappen "
-"(eller tryck på Retur-tangenten)."
+"Ange ditt användarnamn%s och lösenord%s och klicka sedan på skicka-knappen ("
+"eller tryck på Retur-tangenten)."
 
 #. For the first occurrence,
 #. %1$s:  authtypetext | html 
@@ -4943,6 +4943,8 @@ msgstr "Ett fel uppstod vid sökning i OverDrive-samlingen."
 #, c-format
 msgid "Error when placing hold, please report this to the library"
 msgstr ""
+"Ett fel uppstod när exemplaret skulle reserveras. Rapportera detta till "
+"biblioteket"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/xslt-handler.inc:7
 #, c-format
@@ -5015,9 +5017,9 @@ msgstr "Fel:"
 
 #. %1$s:  fail | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Fel %s"
+msgstr "Fel: %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-review.tt:17
 #, c-format
@@ -5800,7 +5802,7 @@ msgstr "Reservationer (%s)"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:90
 #, c-format
 msgid "Holds are not allowed from your library"
-msgstr ""
+msgstr "Reservationer är inte möjliga från ditt bibliotek"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:69
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:101
@@ -6458,9 +6460,9 @@ msgid "Item in transit from %s since"
 msgstr "På väg från %s sedan"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "Item is damaged"
-msgstr "Exemplar skadat"
+msgstr "Exemplaret är skadat"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
@@ -6768,9 +6770,9 @@ msgid "Library catalog"
 msgstr "Bibliotekskatalog "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:100
-#, fuzzy, c-format
+#, c-format
 msgid "Library is not a valid pickup location"
-msgstr "Inget bibliotek är tillgängligt som avhämtningsbibliotek. "
+msgstr "Biblioteket är inte ett avhämtningsbibliotek"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:220
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:227
@@ -7636,9 +7638,9 @@ msgid "No holds"
 msgstr "Inga reservationer "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "No holds are allowed on this item"
-msgstr "Du kan inte göra ett återkrav på denna titel."
+msgstr "Exemplaret kan inte reserveras"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:163
 #, c-format
@@ -7764,9 +7766,9 @@ msgid "No tags from this library for this title."
 msgstr "Den aktuella titeln har inga taggar från det här biblioteket."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:102
-#, fuzzy, c-format
+#, c-format
 msgid "No valid pickup location"
-msgstr "Avhämtningsbibliotek"
+msgstr "Inget giltigt avhämtningsbibliotek"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:57
 #, c-format
@@ -7872,9 +7874,9 @@ msgid "Not finding what you're looking for? "
 msgstr "Hittade du inte det du sökte efter? "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "Not for loan"
-msgstr "Ej för utlån %s"
+msgstr "Ej för utlån"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedvalueopac ) 
@@ -7893,9 +7895,9 @@ msgid "Not for loan (%s)"
 msgstr "Ej för utlån: (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "Not holdable"
-msgstr "Inga exemplar finns tillgängliga"
+msgstr "Går ej att reservera"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:771
 #, c-format
@@ -8140,10 +8142,9 @@ msgid ""
 msgstr "När biblioteket har granskat de förslagen kommer du kunna göra flera. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid "One or more holds were not placed due to following errors:"
-msgstr ""
-"En eller fler reservationer gjordes inte på grund av tidigare reservationer."
+msgstr "En eller flera reservationer gjordes inte på grund av följande fel:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:132
 #, c-format
@@ -11091,9 +11092,9 @@ msgstr "Status:"
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "Step one: Enter your user ID%s and password%s"
-msgstr "Steg ett: Ange ditt användar-ID%s och lösenord%s "
+msgstr "Steg ett: Ange ditt användarnamn%s och lösenord%s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:56
 #, c-format
@@ -11627,13 +11628,13 @@ msgstr "Minneslistan skickades till: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:96
 #, c-format
 msgid "The chosen pickup location is not allowed"
-msgstr ""
+msgstr "Det valda avhämtningsbiblioteket är inte tilllåtet"
 
 #. %1$s:  subscription_LOO.startdate | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "The current subscription began on %s and is issued"
-msgstr "Den första prenumerationen startades den %s "
+msgstr "Nuvarande prenumeration startades %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:45
 #, c-format
@@ -11755,9 +11756,9 @@ msgstr ""
 "Processen för att återställa lösenord har redan påbörjats för det här kontot"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "The record and its items are age restricted"
-msgstr "Exemplaret är begränsat."
+msgstr "Posten och exemplaren har åldersgräns"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:334
 #, c-format
@@ -11844,6 +11845,7 @@ msgstr "Det finns %s prenumerationer för den här titeln."
 msgid ""
 "There are items available in the library, please visit to check them out"
 msgstr ""
+"Det finns tillgängliga exemplar i biblioteket, gör ett besök för att låna"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:865
 #, c-format
@@ -11971,9 +11973,9 @@ msgid "This item belongs to another library."
 msgstr "Exemplaret tillhör ett annat bibliotek."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:366
-#, fuzzy, c-format
+#, c-format
 msgid "This item cannot yet be renewed."
-msgstr "Den här titeln kan inte beställas. "
+msgstr "Det här exemplaret kan inte lånas om."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:174
 #, c-format
@@ -12248,9 +12250,9 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:114
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:207
-#, fuzzy, c-format
+#, c-format
 msgid "Toolbar control"
-msgstr "Kontrolltyp"
+msgstr "Kontroll för verktygsfält"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:44
 #, c-format
@@ -12791,9 +12793,9 @@ msgid "Yes, suspend all holds"
 msgstr "Ja, pausa alla reservationer"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "You already have a hold for this item"
-msgstr "Du har redan gjort ett återkrav på denna titel. "
+msgstr "Du har redan en reservation för exemplaret"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:173
 #, c-format
@@ -12841,9 +12843,9 @@ msgid "You are forbidden to view this page."
 msgstr "Du är förbjuden att se denna sida. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "You are from a different library"
-msgstr "Coce-bild från open Library"
+msgstr "Du tillhör ett annat bibliotek"
 
 #. %1$s:  borrowername | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:227
@@ -13074,9 +13076,11 @@ msgid "You have already requested this title."
 msgstr "Du har redan beställt den här titeln. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid "You have exceeded the number of concurrent holds for this record"
-msgstr "Du har nått gränsen för max antal återkrav för denna katalogpost."
+msgstr ""
+"Du har överskridit gränsen för max antal samtidiga reservationer för denna "
+"katalogpost"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:1014
 #, c-format
@@ -13169,9 +13173,9 @@ msgid "You have successfully registered your new account."
 msgstr "Du har registrerat ett nytt konto."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "You have too many holds already"
-msgstr "Du har inga förseningsavgifter eller andra avgifter"
+msgstr "Du har redan för många reservationer"
 
 #. %1$s:  too_much_oweing | $Price 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:75
@@ -13349,9 +13353,9 @@ msgid "You will receive an email shortly. "
 msgstr "Du får strax ett e-postmeddelande. "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid "You've reached your daily holds limit"
-msgstr "Du har nått gränsen för antal tillåtna artikelbeställningar"
+msgstr "Du har nått gränsen för antal tillåtna reservationer samma dag"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:114
 #, c-format
@@ -14497,6 +14501,8 @@ msgid ""
 "requests a particular language for the output, default is the opac cookie "
 "language if set, the first language in opac language list or english"
 msgstr ""
+"begär ett visst språk för utdata, standard är opac-cookie-språket om det är "
+"inställt, det första språket i opac-språklistan eller engelska"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:119
 #, c-format
