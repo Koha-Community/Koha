@@ -113,7 +113,7 @@
                             <strong>Show year: </strong>
                             [% FOREACH year IN years %]
                                 [% IF ( year.year ) %]
-                                    <a class="tabsubs" href="#" onclick="showlayer([% year.year | html %]); return false;">[% year.year | html %]</a>
+                                    <a class="tabsubs" href="#" data-year="[% year.year | html %]">[% year.year | html %]</a>
                                 [% END %]
                             [% END %]
                         </div>
@@ -200,9 +200,12 @@
             $("#reset").click(function(){
                 clearFilters();
             });
-            $("a.tabsubs").click(function(){
+            $("a.tabsubs").on("click", function(e){
+                e.preventDefault();
+                let year = $(this).data("year");
                 $("a.tabsubs").removeClass("currentsubtab");
                 $(this).addClass("currentsubtab");
+                showlayer( year );
             });
             $(".subscriptionstclass").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "order": [[ 0, "desc" ]]
