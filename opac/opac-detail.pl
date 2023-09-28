@@ -662,7 +662,13 @@ if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
     };
 }
 
-my $can_item_be_reserved = 0;
+# Count the number of items that allow holds
+my $holdable_items = $biblio->items->filter_by_for_hold->count;
+# If we have a patron and there are no holdable items - we set to no
+# If we have a patron and there are holdable items we set to no - and we need to check each item specifically
+# If we don't have a patron, then holdable items determines holdability
+my $can_holds_be_placed = $patron && $holdable_items ? 0 : $holdable_items;
+
 my ( $itemloop_has_images, $otheritemloop_has_images );
 if ( not $viewallitems and $items->count > $max_items_to_display ) {
     $template->param(
@@ -686,7 +692,11 @@ else {
         $item_info->{holding_library_info} = $opac_info_holding->content if $opac_info_holding;
         $item_info->{home_library_info} = $opac_info_home->content if $opac_info_home;
 
-        $can_item_be_reserved = $can_item_be_reserved || $patron && IsAvailableForItemLevelRequest($item, $patron, undef);
+        # We only need to check if we haven't determined holds can be place, and there are items that can
+        # be held, and we have a patron to determine holdability
+        if( !$can_holds_be_placed && $holdable_items && $patron ){
+            $can_holds_be_placed = IsAvailableForItemLevelRequest($item, $patron, undef);
+        }
 
         # get collection code description, too
         my $ccode = $item->ccode;
@@ -762,9 +772,7 @@ else {
     }
 }
 
-if( $can_item_be_reserved || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
-    $template->param( ReservableItems => 1 );
-}
+$template->param( ReservableItems => $can_holds_be_placed );
 
 $template->param(
     itemloop_has_images      => $itemloop_has_images,
@@ -792,10 +800,8 @@ if( C4::Context->preference('ArticleRequests') ) {
     $template->param( artreqpossible => $artreqpossible );
 }
 
-my $norequests = ! $biblio->items->filter_by_for_hold->count;
     $template->param(
                      MARCNOTES               => $marcnotesarray,
-                     norequests              => $norequests,
                      itemdata_ccode          => $itemfields{ccode},
                      itemdata_materials      => $itemfields{materials},
                      itemdata_enumchron      => $itemfields{enumchron},
