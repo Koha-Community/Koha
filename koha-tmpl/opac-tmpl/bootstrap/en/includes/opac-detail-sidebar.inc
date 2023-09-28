@@ -1,12 +1,10 @@
 [% USE raw %]
 [% USE Biblio %]
 <ul id="action">
-    [% UNLESS ( norequests ) %]
-        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-            [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
-                [% IF ( ReservableItems ) %]
-                    <li><a class="reserve btn btn-link btn-lg" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a></li>
-                [% END %]
+    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+        [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
+            [% IF ( ReservableItems ) %]
+                <li><a class="reserve btn btn-link btn-lg" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a></li>
             [% END %]
         [% END %]
     [% END %]
