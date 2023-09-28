@@ -398,7 +398,7 @@
                     [% END %]
                 },
                 [% END %]
-                "iDeferLoading": defer_loading,
+                "deferLoading": defer_loading,
                 "columns": [
                     [% FOR column IN columns %]
                         [% IF default_sort_column == column %]
@@ -624,9 +624,9 @@
                 ],
                 'embed': [% To.json(embed) | $raw %],
                 "order": [[ [% order_column_index | html %], "asc" ]],
-                'bAutoWidth': false,
+                "autoWidth": false,
                 'lengthMenu': [aLengthMenu, aLengthMenuLabel],
-                'sPaginationType': 'full_numbers',
+                "pagingType": 'full_numbers',
                 "pageLength": [% Koha.Preference('PatronsPerPage') | html %],
                 [% IF sticky_header %]
                 "initComplete": function(settings, json) {

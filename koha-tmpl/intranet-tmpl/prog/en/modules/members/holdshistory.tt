@@ -147,8 +147,8 @@
               table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
             var table = KohaTable("table_holdshistory", {
-                "sPaginationType": "full",
-                "aaSorting": [[4, 'desc']]
+                "pagingType": "full",
+                "order": [[4, 'desc']]
             }, table_settings);
         });
     </script>

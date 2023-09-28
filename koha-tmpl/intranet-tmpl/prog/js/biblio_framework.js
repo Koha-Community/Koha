@@ -5,12 +5,12 @@
 
     $(document).ready(function() {
         $("#table_biblio_frameworks").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                { "aTargets": [ 0, 1 ], "sType": "natural" },
+            "columnDefs":  [
+                { "targets":  [ -1 ], "orderable":  false, "searchable":  false },
+                { "targets":  [ 0, 1 ], "type":  "natural" },
             ],
-            "bSort": true,
-            "sPaginationType": "full"
+            "ordering": true,
+            "pagingType":  "full"
         }));
 
         $("body").css("cursor", "auto");

@@ -331,23 +331,23 @@
           [% END %]
 
           $("table#biblios").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-              { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-              { "aTargets": [ 3, 4 ], "sType": "num-html" }
+            "columnDefs": [
+              { "targets": [ 0 ], "orderable": false, "searchable":  false },
+              { "targets": [ 3, 4 ], "type": "num-html" }
             ],
-            "sDom": 't',
-            "aaSorting": [],
-            "bPaginate": false
+            "dom": 't',
+            "order": [],
+            "paginate": false
           }));
 
           $("table#authorities").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-              { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-              { "aTargets": [ 3 ], "sType": "num-html" }
+            "columnDefs": [
+              { "targets": [ 0 ], "orderable": false, "searchable":  false },
+              { "targets": [ 3 ], "type": "num-html" }
             ],
-            "sDom": 't',
-            "aaSorting": [],
-            "bPaginate": false
+            "dom": 't',
+            "order": [],
+            "paginate": false
           }));
 
           $("#selectrecords").on("submit",function(){

@@ -107,10 +107,10 @@
     <script>
         $(document).ready(function() {
             eTable = $('#enrollments-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "full",
-                "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-                "aoColumnDefs": [
-                        { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                "pagingType": "full",
+                "dom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+                "columnDefs": [
+                        { "targets": [ -1, -2 ], "orderable": false, "searchable":  false },
                 ]
             } ));
         });

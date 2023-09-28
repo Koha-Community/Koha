@@ -60,12 +60,12 @@
 
         $(document).ready(function() {
             $("#catst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
-                "aaSorting": [[ 2, "asc" ]],
-                "aoColumnDefs": [
-                    { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
+                "dom": 't',
+                "order": [[ 2, "asc" ]],
+                "columnDefs": [
+                    { "targets": [ 0 ], "orderable": false, "searchable":  false }
                 ],
-                "bPaginate": false
+                "paginate": false
             }));
         });
     </script>

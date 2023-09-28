@@ -242,10 +242,10 @@
 
     $(document).ready(function() {
         var crtable = $("#table_cash_registers").DataTable($.extend(true, {}, dataTablesDefaults, {
-              "aoColumnDefs": [
-                  { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable":false },
+              "columnDefs": [
+                  { "targets": [ -1, -2 ], "orderable": false, "searchable": false },
                ],
-               "aaSorting": [[ 1, "asc" ]],
+               "order": [[ 1, "asc" ]],
                "paginationType": "full",
         }));
 

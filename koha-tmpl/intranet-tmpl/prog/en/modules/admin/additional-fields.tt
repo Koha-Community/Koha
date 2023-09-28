@@ -278,12 +278,12 @@
             });
 
             $("#fieldst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                'bAutoWidth': false,
-                'sDom': 't<"bottom pager"ilpf>',
-                'sPaginationType': 'full',
-                'aLengthMenu': [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                'iDisplayLength': 20,
-                'aaSorting': [[ 0, "asc" ]],
+                "autoWidth": false,
+                "dom": 't<"bottom pager"ilpf>',
+                "pagingType": 'full',
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                "pageLength": 20,
+                "order": [[ 0, "asc" ]],
             }));
 
             $(".confirmdelete").click(function(){

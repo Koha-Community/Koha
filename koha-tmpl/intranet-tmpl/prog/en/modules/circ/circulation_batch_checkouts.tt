@@ -357,13 +357,13 @@
                 $('#checkoutrenew').focus();
             }
             $("#checkout_infos").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
-                "aaSorting": [],
-                "aoColumnDefs": [
-                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                "dom": 't',
+                "order": [],
+                "columnDefs": [
+                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
+                    { "type": "anti-the", "targets":  [ "anti-the" ] }
                 ],
-                "bPaginate": false
+                "paginate": false
             }));
         });
         // On-site batch checkout

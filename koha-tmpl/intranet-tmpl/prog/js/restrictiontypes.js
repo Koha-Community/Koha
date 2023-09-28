@@ -17,18 +17,18 @@ jQuery.validator.addMethod( "restrictionDisplayText", function(value){
 
 $(document).ready(function() {
     KohaTable("restriction_types", {
-        "aoColumnDefs": [{
-            "aTargets": [-1],
-            "bSortable": false,
-            "bSearchable": false
+        "columnDefs":  [{
+            "targets":  [-1],
+            "orderable":  false,
+            "searchable":  false
         }, {
-            "aTargets": [0, 1],
-            "sType": "natural"
+            "targets":  [0, 1],
+            "type":  "natural"
         }, ],
-        "aaSorting": [
+        "order":  [
             [1, "asc"]
         ],
-        "sPaginationType": "full",
+        "pagingType":  "full",
         "exportColumns": [0,1],
     });
 

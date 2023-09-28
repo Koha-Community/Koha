@@ -331,10 +331,10 @@
     <script>
         $(document).ready(function() {
             $("#table_marctagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                "columnDefs": [
+                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
                 ],
-                "sPaginationType": "full"
+                "pagingType": "full"
             }));
             $("#select_display").on("change",function(){
                 var checked = $(this).prop("checked") ? 1: 0;

@@ -165,7 +165,7 @@
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("histsearcht", {
-                "sPaginationType": "full"
+                "pagingType": "full"
             }, table_settings );
 
             function AddPatron( patron_name, value, container, input_name ) {

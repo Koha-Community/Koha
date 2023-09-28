@@ -223,11 +223,11 @@
         // We show table ordered by descending dates by default
         // (so that the more recent query is shown first)
         $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aaSorting": [[ 1, "desc" ]],
-            "aoColumnDefs": [
-                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
+            "order": [[ 1, "desc" ]],
+            "columnDefs": [
+                { "targets": [ 0 ], "orderable": false, "searchable":  false }
             ],
-            "sPaginationType": "full_numbers"
+            "pagingType": "full_numbers"
         }));
 
         // DataTables removes hidden rows from the DOM, so we can't expect a

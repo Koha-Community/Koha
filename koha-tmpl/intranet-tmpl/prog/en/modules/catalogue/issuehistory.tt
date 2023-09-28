@@ -144,9 +144,9 @@
                 table_settings['columns'].splice(0,1);
             [% END %]
             var table = KohaTable("table_issues", {
-                "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-                "aaSorting": [[ 5, "desc" ]],
-                "sPaginationType": "full_numbers"
+                "dom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                "order": [[ 5, "desc" ]],
+                "pagingType": "full_numbers"
             }, table_settings);
         });
     </script>

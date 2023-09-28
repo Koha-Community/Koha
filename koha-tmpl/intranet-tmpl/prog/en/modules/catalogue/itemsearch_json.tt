@@ -2,7 +2,7 @@
   "sEcho": [% sEcho | html %],
   "iTotalRecords": [% total_rows | html %],
   "iTotalDisplayRecords": [% total_rows | html %],
-  "aaData": [
+  "data": [
   [%- FOREACH item IN results -%]
     [%- INCLUDE 'catalogue/itemsearch_item.json.inc' item = item, user = user -%]
     [%- UNLESS loop.last %],[% END -%]

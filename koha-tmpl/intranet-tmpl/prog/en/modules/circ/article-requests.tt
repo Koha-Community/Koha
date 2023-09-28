@@ -581,19 +581,19 @@
             });
 
             requested_datatable = $("#article-requests-requested-table").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [0, -1], "bSortable": false, "bSearchable": false },
+                "columnDefs": [
+                    { "targets": [0, -1], "orderable": false, "searchable":  false },
                 ],
             }));
 
             pending_datatable = $("#article-requests-pending-table").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [0, -1], "bSortable": false, "bSearchable": false },
+                "columnDefs": [
+                    { "targets": [0, -1], "orderable": false, "searchable":  false },
                 ],
             }));
             processing_datatable = $("#article-requests-processing-table").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [0, -1], "bSortable": false, "bSearchable": false },
+                "columnDefs": [
+                    { "targets": [0, -1], "orderable": false, "searchable":  false },
                 ],
             }));
             active_datatable = requested_datatable;

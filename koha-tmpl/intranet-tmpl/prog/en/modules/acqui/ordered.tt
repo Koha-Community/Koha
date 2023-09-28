@@ -142,10 +142,10 @@
     <script>
         $(document).ready(function() {
             $("#spent").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                "columnDefs": [
+                    { "type": "anti-the", "targets":  [ "anti-the" ] }
                 ],
-                "sPaginationType": "full"
+                "pagingType": "full"
             }));
         });
     </script>

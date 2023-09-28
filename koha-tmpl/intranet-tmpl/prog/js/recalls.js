@@ -141,12 +141,12 @@ $(document).ready(function() {
         });
 
         $("#recalls-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { 'bSortable': false, 'aTargets': [ 'nosort' ] },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] },
-                { "sType": "anti-the", "aTargets": [ "anti-the" ] }
+            "columnDefs":  [
+                { "orderable":  false, "targets":  [ 'nosort' ] },
+                { "type":  "title-string", "targets":  [ "title-string" ] },
+                { "type":  "anti-the", "targets":  [ "anti-the" ] }
             ],
-            "sPaginationType": "full_numbers"
+            "pagingType":  "full_numbers"
         }));
 
         $("#cancel_selected").click(function(e){

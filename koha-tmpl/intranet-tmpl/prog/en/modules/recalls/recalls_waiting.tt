@@ -165,10 +165,10 @@
         $(document).ready(function() {
             $("#recallswaiting-table, #recallsover-table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "autoWidth": false,
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [ 'nosort' ] },
+                "columnDefs": [
+                    { "orderable": false, "targets": [ 'nosort' ] },
                 ],
-                "sPaginationType": "full_numbers"
+                "pagingType": "full_numbers"
             }));
 
             $(".revert_recall").click(function(e) {

@@ -97,8 +97,8 @@
         var table_settings = [% TablesSettings.GetTableSettings( 'coursereserves', 'courses', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function() {
             var ctable = KohaTable("course_reserves_table", {
-                "sPaginationType": "full",
-                "bAutoWidth": false
+                "pagingType": "full",
+                "autoWidth": false
             }, table_settings );
         });
     </script>

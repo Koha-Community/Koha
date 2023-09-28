@@ -283,12 +283,12 @@
         $(document).ready(function(){
             var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
             var thetable = KohaTable("resultst", {
-                "aoColumnDefs": [
-                    { "aTargets": [ 1 ], "sType": "nsb-nse" },
+                "columnDefs": [
+                    { "targets": [ 1 ], "type": "nsb-nse" },
                 ],
-                "bPaginate": false,
+                "paginate": false,
                 "searching": false,
-                "bInfo":false
+                "info": false
             }, table_settings );
             InitLastAction();
         });

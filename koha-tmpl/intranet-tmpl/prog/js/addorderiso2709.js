@@ -3,12 +3,12 @@
 $(document).ready(function() {
     $("#Aform").preventDoubleFormSubmit();
     $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+        "columnDefs":  [
+            { "orderable":  false, "searchable":  false, "targets":  [ 'NoSort' ] },
+            { "type":  "anti-the", "targets":  [ "anti-the" ] }
         ],
-        "sPaginationType": "full",
-        "aaSorting": []
+        "pagingType":  "full",
+        "order":  []
     }) );
 
     checkOrderBudgets();

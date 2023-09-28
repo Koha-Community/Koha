@@ -116,13 +116,13 @@
     <script>
         $(document).ready(function() {
             $("#invoice_files_details_table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false }
+                "columnDefs": [
+                    { "targets": [ -1, -2 ], "orderable": false, "searchable":  false }
                 ],
-                bInfo: false,
-                bPaginate: false,
-                bFilter: false,
-                sDom: "t"
+                "info": false,
+                "paging": false,
+                "searching": false,
+                "dom": "t"
             }));
             $("a.delete_file").click(function(){
                 return ( confirm( _("Are you sure you want to delete this file ?") ) );

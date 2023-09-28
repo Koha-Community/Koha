@@ -318,8 +318,8 @@
         var table_settings = [% TablesSettings.GetTableSettings( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function(){
             var rtable = KohaTable("course_reserves_table", {
-                "sPaginationType": "full",
-                "bAutoWidth": false,
+                "pagingType": "full",
+                "autoWidth": false,
             }, table_settings );
 
             $(".delete_item").click(function(){

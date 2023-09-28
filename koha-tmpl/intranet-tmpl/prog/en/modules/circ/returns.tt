@@ -1469,10 +1469,10 @@
             [% END %]
 
             var returns_table = KohaTable("checkedintable", {
-                    "bFilter":false,
-                    "bPaginate":false,
-                    "bInfo":false,
-                    "bSort":false,
+                    "searching":false,
+                    "paginate":false,
+                    "info": false,
+                    "ordering":false,
                     "dom": '<"table_controls"B>rt',
                     }, table_settings);
 
@@ -1649,9 +1649,9 @@
             });
 
             $('#items-bundle-contents-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "bFilter": false,
-                "bPaginate": false,
-                "bInfo": false,
+                "searching": false,
+                "paginate": false,
+                "info": false,
                 "order": [[ 1, 'asc' ], [ 0, 'asc' ]]
             }));
 

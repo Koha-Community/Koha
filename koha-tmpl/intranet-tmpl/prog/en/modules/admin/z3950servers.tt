@@ -317,10 +317,10 @@
         [% ELSE %]
             $(document).ready(function() {
                 $("#serverst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aoColumnDefs": [
-                        { "aTargets": [-1], "bSortable": false, "bSearchable": false },
+                    "columnDefs": [
+                        { "targets": [-1], "orderable": false, "searchable":  false },
                     ],
-                    "sPaginationType": "full"
+                    "pagingType": "full"
                 }));
                 $(".delete").on("click",function(e){
                     var servername = $(this).data("servername");

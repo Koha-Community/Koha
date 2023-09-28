@@ -23,15 +23,15 @@ jQuery.validator.addMethod( "enrollment_period", function(){
 
 $(document).ready(function() {
     KohaTable("patron_categories", {
-        "aoColumnDefs": [{
-            "aTargets": [-1],
-            "bSortable": false,
-            "bSearchable": false
+        "columnDefs":  [{
+            "targets":  [-1],
+            "orderable":  false,
+            "searchable":  false
         }, {
-            "aTargets": [3, 4, 5],
-            "sType": "natural"
+            "targets":  [3, 4, 5],
+            "type":  "natural"
         }, ],
-        "sPaginationType": "full",
+        "pagingType":  "full",
         "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12],
     }, table_settings);
 
