@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
-"POT-Creation-Date: 2023-07-27 20:45-0300\n"
-"PO-Revision-Date: 2023-08-28 10:16+0000\n"
+"POT-Creation-Date: 2023-09-16 09:49-0300\n"
+"PO-Revision-Date: 2023-09-18 04:47+0000\n"
 "Last-Translator: Urszula <matoga@biblos.pk.edu.pl>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /pl/22.11/pl-PL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1693217765.881954\n"
+"X-POOTLE-MTIME: 1695012438.873221\n"
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -2639,7 +2639,7 @@ msgstr "Czy na pewno chcesz usunąć zaznaczone tagi?"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:534
 msgid "Are you sure you want to delete these suggestions?"
-msgstr "Czy na pewno chcesz usunąć propozycję?"
+msgstr "Czy na pewno chcesz usunąć propozycje?"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -4418,13 +4418,13 @@ msgstr "Data dodania"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:331
 #, c-format
 msgid "Date added (newest to oldest)"
-msgstr "Data nabycia: Od najnowszych do najstarszych"
+msgstr "Data dodania: Od najnowszych do najstarszych"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:334
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:336
 #, c-format
 msgid "Date added (oldest to newest)"
-msgstr "Data nabycia: Od najstarszych do najnowszych"
+msgstr "Data dodania: Od najstarszych do najnowszych"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:175
 #, c-format
@@ -5784,7 +5784,7 @@ msgstr "Ukryj opcje"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:478
 #, c-format
 msgid "Hide unholdable items"
-msgstr "Ukryj niedostępny egzemplarz"
+msgstr "Ukryj egzemplarze, których nie można zamówić"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:47
 #, c-format
@@ -7843,6 +7843,15 @@ msgstr "Niezarezerwowane"
 msgid "No holds are allowed on this item"
 msgstr "Brak możliwości zamawiania tego egzemplarza"
 
+#. For the first occurrence,
+#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:368
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:502
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:589
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
+msgid "No item was selected"
+msgstr "Nie wybrano żadnego egzemplarza"
+
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:163
 #, c-format
 msgid "No items available."
@@ -8275,13 +8284,13 @@ msgid "Notice:"
 msgstr "Powiadomienie:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:466
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:971
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 #, c-format
 msgid "Novelist Select"
 msgstr "Novelist Select"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:971
 #, c-format
 msgid "Novelist Select: "
 msgstr "Novelist Select: "
@@ -8993,6 +9002,11 @@ msgstr "Wprowadź prawidłowy URL."
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/validator-strings.inc:2
 msgid "Please enter a valid date (ISO)."
 msgstr "Wprowadź prawidłową datę (ISO)."
+
+#. SCRIPT
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:51
+msgid "Please enter a valid date (should match %s)."
+msgstr "Wprowadź prawidłową datę (powinna być zgodna z %s)."
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/validator-strings.inc:2
@@ -11045,7 +11059,7 @@ msgstr "Wyświetl "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:477
 #, c-format
 msgid "Show unholdable items"
-msgstr "Wyświetl niedostępny egzemplarz"
+msgstr "Wyświetl egzemplarze, których nie można zamówić"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:113
 #, c-format
@@ -12426,7 +12440,7 @@ msgid ""
 "clicking "
 msgstr "Strona zawiera treści obsługiwane przez wtyczkę JavaScript "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-page.tt:59
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-page.tt:56
 #, c-format
 msgid "This page does not exist. "
 msgstr "Ta strona nie istnieje. "
@@ -14377,7 +14391,7 @@ msgstr "[ Nowa lista ]"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:935
 #, c-format
 msgid "[%s tag not supported by your browser.]"
-msgstr "[%s tag not supported by your browser.]"
+msgstr "[Tag %s nieobsługiwany przez twoją przeglądarkę.]"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:16
 #, c-format

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-16 16:33-0300\n"
+"POT-Creation-Date: 2023-09-16 09:28-0300\n"
 "PO-Revision-Date: 2022-05-01 10:04-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: hyw\n"
@@ -189,6 +189,17 @@ msgstr ""
 msgid "An error occurred when updating mappings: {message}."
 msgstr "Քարտեզավորումն թարմացնելիս հանդիպել է սխալ։ {message}."
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:170
+msgctxt "Tags (multiple)"
+msgid "Approved"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:117
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:135
+msgctxt "Tags (single)"
+msgid "Approved"
+msgstr ""
+
 #: Koha/Database/Columns.pm:128
 msgid "Authentication method"
 msgstr ""
@@ -365,7 +376,10 @@ msgid "Conductors"
 msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:16
-msgid "Confirm deletion of city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:52
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:139
+#, perl-brace-format
+msgid "Confirm deletion of city '{city}'"
 msgstr ""
 
 #: Koha/Database/Columns.pm:208
@@ -505,7 +519,7 @@ msgstr ""
 msgid "Edit {title} by {author}"
 msgstr ""
 
-#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:802
+#: koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:814
 #, fuzzy
 msgctxt "Editing MARC record titled:"
 msgid "Editing"
@@ -829,8 +843,10 @@ msgid "Modification date"
 msgstr "Ձևափոխման ամսաթիվ"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:10
-#, fuzzy
-msgid "Modify city"
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:41
+#: koha-tmpl/intranet-tmpl/prog/en/modules/admin/cities.tt:95
+#, fuzzy, perl-brace-format
+msgid "Modify city '{city}'"
 msgstr "Պարբերականություն"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/curbside_pickup.tt:141
@@ -979,6 +995,18 @@ msgstr "Հաճախորդի դաս"
 msgid "Patron reason"
 msgstr "հաճախորդներ դեպի "
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:176
+#, fuzzy
+msgctxt "Tags (multiple)"
+msgid "Pending"
+msgstr "չորոշված պահում(ներ)"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:121
+#, fuzzy
+msgctxt "Tags (single)"
+msgid "Pending"
+msgstr "չորոշված պահում(ներ)"
+
 #: cataloguing/value_builder/unimarc_field_146b.pl:63
 #: cataloguing/value_builder/unimarc_field_146c.pl:63
 #: cataloguing/value_builder/unimarc_field_146e.pl:63
@@ -1080,9 +1108,26 @@ msgctxt "Bibliographic record number"
 msgid "Record #"
 msgstr "#գրառում"
 
+#: koha-tmpl/intranet-tmpl/prog/en/modules/acqui/parcels.tt:86
+#, fuzzy
+msgctxt "Bibliographic record"
+msgid "Record count"
+msgstr "#գրառում"
+
 #: Koha/Database/Columns.pm:153
 msgid "Registration date"
 msgstr "Գրանցման ամսաթիվ"
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:173
+msgctxt "Tags (multiple)"
+msgid "Rejected"
+msgstr ""
+
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:113
+#: koha-tmpl/intranet-tmpl/prog/en/modules/tags/review.tt:133
+msgctxt "Tags (single)"
+msgid "Rejected"
+msgstr ""
 
 #: Koha/Database/Columns.pm:183
 msgid "Relationship"
@@ -1328,7 +1373,6 @@ msgstr "Տերմին։"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/detail.tt:922
 #, perl-brace-format
-#, fuzzy
 msgctxt "pluralization"
 msgid "There is one archived suggestion."
 msgid_plural "There are {count} archived suggestions."
@@ -3142,7 +3186,6 @@ msgstr "Ազգանուն"
 msgid "{count} item"
 msgid_plural "{count} items"
 msgstr[0] "{count} նյութերը"
-msgstr[1] "{count} նյութերը"
 
 #: koha-tmpl/intranet-tmpl/prog/en/modules/admin/credit_types.tt:190
 #, fuzzy, perl-brace-format
