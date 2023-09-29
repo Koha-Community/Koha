@@ -262,6 +262,7 @@ if ($op eq "additem") {
             }
             $item->more_subfields_xml(undef);
         } else {
+            next if $c eq 'itemnumber';
             my @v = grep { $_ ne "" }
                 uniq $input->multi_param( "items." . $c );
 
