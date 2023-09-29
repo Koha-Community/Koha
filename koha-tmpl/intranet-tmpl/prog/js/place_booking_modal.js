@@ -487,7 +487,7 @@ $("#placeBookingForm").on('submit', function(e) {
 
 $('#placeBookingModal').on('hidden.bs.modal', function (e) {
     $('#booking_patron_id').val(null).trigger('change');
-    $('#booking_item_id').val(null).trigger('change');
+    $('#booking_item_id').val(0).trigger('change');
     $("#period").get(0)._flatpickr.clear();
     $('#booking_start_date').val('');
     $('#booking_end_date').val('');
