@@ -71,6 +71,9 @@
         label[for^="content_"] {
             font-weight: 700;
         }
+        .customization_note {
+            display: none;
+        }
     </style>
 </head>
 
@@ -233,6 +236,7 @@
                     <select id="location" name="location">
                         [% PROCESS locations_options location => additional_content.location %]
                     </select>
+                    [% INCLUDE 'html-customization-help.inc' %]
                 </li>
                 <li>
                     <label for="branchcode">Library: </label>
@@ -436,7 +440,7 @@
                             [% END %]
                             <td>
                                 <div class="btn-group">
-                                    <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa-solid fa-eye aria-hidden="true"></i> Preview content</a>
+                                    <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview content</a>
                                 </div>
                                 <div id="contentModal[% loop.count | html %]" class="modal" tabindex="-1" role="dialog" data-number="[% loop.count | html %]">
                                     <div class="modal-dialog" role="document">
@@ -669,6 +673,11 @@
         </script>
     [% ELSE %]
         <script>
+            function showLocationNotes( location ){
+                $(".customization_note").hide();
+                $( "#" + location + "_notes" ).show();
+            }
+
             $(document).ready(function() {
                 [% IF category == 'news' %]
                 $("#add_additional_content").validate({
@@ -694,6 +703,12 @@
                     }
                 });
                 [% END %]
+
+                showLocationNotes( $("#location").val() );
+
+                $("#location").on("change", function(){
+                    showLocationNotes( $(this).val() );
+                });
 
                 $("#submit_form").on("click",function(){
                     $("#add_additional_content").submit();
