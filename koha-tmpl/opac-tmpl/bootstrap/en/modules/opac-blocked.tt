@@ -1,4 +1,6 @@
 [% USE raw %]
+[% USE AdditionalContents %]
+[% SET OpacSuppressionMessage = AdditionalContents.get( location => "OpacSuppressionMessage", lang => lang, library => branchcode || default_branch ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     Record blocked &rsaquo;
@@ -28,7 +30,7 @@
                     <p>You are not authorized to view this record.</p>
                     [% IF ( OpacSuppressionMessage ) %]
                         <div id="opacsuppressionmessage">
-                            [% OpacSuppressionMessage | $raw %]
+                            [% PROCESS koha_news_block news => OpacSuppressionMessage %]
                         </div>
                     [% END %]
                 </div>
