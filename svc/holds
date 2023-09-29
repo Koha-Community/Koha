@@ -92,40 +92,37 @@ while ( my $h = $holds_rs->next() ) {
     my $biblio = $h->biblio();
     my @subtitles = split(/ \| /, $biblio->subtitle() // '');
     my $hold = {
-        DT_RowId       => $h->reserve_id(),
-        biblionumber   => $biblionumber,
-        title          => $biblio->title(),
-        subtitle       => \@subtitles,
-        medium         => $biblio->medium() // '',
-        part_number    => $biblio->part_number() // '',
-        part_name      => $biblio->part_name() // '',
-        author         => $biblio->author(),
-        reserve_id     => $h->reserve_id(),
-        branchcode     => $h->branch()->branchname(),
-        branches       => $libraries,
-        desk_name      => $desk_name,
-        reservedate    => $h->reservedate(),
-        expirationdate => $h->expirationdate(),
-        suspend        => $h->suspend(),
-        suspend_until  => $h->suspend_until(),
-        found          => $h->found(),
-        waiting        => $h->is_waiting(),
-        waiting_at     => $h->branch()->branchname(),
-        waiting_here   => $h->branch()->branchcode() eq $branch,
-        priority       => $h->priority(),
-        reservenotes   => $h->reservenotes(),
-        itemtype_limit => $itemtype_limit,
-        reservedate_formatted => $h->reservedate() ? output_pref(
-            { dt => dt_from_string( $h->reservedate() ), dateonly => 1 }
-          )
+        DT_RowId              => $h->reserve_id(),
+        biblionumber          => $biblionumber,
+        title                 => $biblio->title(),
+        subtitle              => \@subtitles,
+        medium                => $biblio->medium() // '',
+        part_number           => $biblio->part_number() // '',
+        part_name             => $biblio->part_name() // '',
+        author                => $biblio->author(),
+        reserve_id            => $h->reserve_id(),
+        branchcode            => $h->branch()->branchname(),
+        branches              => $libraries,
+        desk_name             => $desk_name,
+        reservedate           => $h->reservedate(),
+        expirationdate        => $h->expirationdate(),
+        suspend               => $h->suspend(),
+        suspend_until         => $h->suspend_until(),
+        found                 => $h->found(),
+        waiting               => $h->is_waiting(),
+        waiting_at            => $h->branch()->branchname(),
+        waiting_here          => $h->branch()->branchcode() eq $branch,
+        priority              => $h->priority(),
+        reservenotes          => $h->reservenotes(),
+        itemtype_limit        => $itemtype_limit,
+        reservedate_formatted => $h->reservedate()
+        ? output_pref( { dt => dt_from_string( $h->reservedate() ), dateonly => 1 } )
         : q{},
-        suspend_until_formatted => $h->suspend_until() ? output_pref(
-            { dt => dt_from_string( $h->suspend_until() ), dateonly => 1 }
-          )
+        suspend_until_formatted => $h->suspend_until()
+        ? output_pref( { dt => dt_from_string( $h->suspend_until() ), dateonly => 1 } )
         : q{},
-        expirationdate_formatted => $h->expirationdate() ? output_pref(
-            { dt => dt_from_string( $h->expirationdate() ), dateonly => 1 }
-          )
+        expirationdate_formatted => $h->expirationdate()
+        ? output_pref( { dt => dt_from_string( $h->expirationdate() ), dateonly => 1 } )
         : q{},
     };
 
