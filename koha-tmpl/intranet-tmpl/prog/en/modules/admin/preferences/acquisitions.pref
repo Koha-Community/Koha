@@ -125,6 +125,30 @@ Acquisitions:
             - '<br>If you choose <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailAddressForSuggestions">EmailAddressForSuggestions</a> you have to enter a valid email address:'
             - pref: EmailAddressForSuggestions
               class: email
+        -
+            - Use the from email address
+            - pref: AcquisitionsDefaultEMailAddress
+              class: email
+            - 'when sending acquisitions order and claim notices.'
+            - '<br>If left empty, it will fall back to the first defined address in the following list: Library Email, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress">KohaAdminEmailAddress</a>.'
+        -
+            - Use the from email address
+            - pref: SerialsDefaultEMailAddress
+              class: email
+            - 'when sending serial claim notices.'
+            - '<br>If left empty, it will fall back to the first defined address in the following list: Library Email, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress">KohaAdminEmailAddress</a>.'
+        -
+            - Use the reply-to email address
+            - pref: AcquisitionsDefaultReplyTo
+              class: email
+            - 'when sending acquisitions order and claim notices.'
+            - '<br>If left empty, it will fall back to the first defined address in the following list: Library ReplyTo, Library Email, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplytoDefault">ReplytoDefault</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress">KohaAdminEmailAddress</a>.'
+        -
+            - Use the reply-to email address
+            - pref: SerialsDefaultReplyTo
+              class: email
+            - 'when sending serial claim notices.'
+            - '<br>If left empty, it will fall back to the first defined address in the following list: Library ReplyTo, Library Email, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplytoDefault">ReplytoDefault</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress">KohaAdminEmailAddress</a>.'
     Printing:
         -
             - Use the

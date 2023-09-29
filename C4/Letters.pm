@@ -493,8 +493,23 @@ sub SendAlerts {
                     ? ( bcc => $userenv->{emailaddress} )
                     : ()
                 ),
-                from => $library->branchemail
-                  || C4::Context->preference('KohaAdminEmailAddress'),
+                from => (
+                    $type eq 'claimissues'
+                    ? C4::Context->preference('SerialsDefaultEMailAddress')
+                    : C4::Context->preference('AcquisitionsDefaultEMailAddress')
+                    )
+                    || $library->branchemail
+                    || C4::Context->preference('KohaAdminEmailAddress'),
+                (
+                    $type eq 'claimissues' && C4::Context->preference('SerialsDefaultReplyTo')
+                    ? ( reply_to => C4::Context->preference('SerialsDefaultReplyTo') )
+                    : (
+                        ( $type eq 'claimacquisition' || $type eq 'orderacquisition' )
+                            && C4::Context->preference('AcquisitionsDefaultReplyTo')
+                        ? ( reply_to => C4::Context->preference('AcquisitionsDefaultReplyTo') )
+                        : ()
+                    )
+                ),
                 subject => "" . $letter->{title},
             }
         );
