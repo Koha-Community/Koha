@@ -120,7 +120,7 @@ foreach my $new_guarantor_id (@new_guarantor_ids) {
     push @guarantors, $new_guarantor;
 }
 
-my @existing_guarantors = $patron->guarantor_relationships()->guarantors->as_list unless !$patron;
+my @existing_guarantors = $patron ? $patron->guarantor_relationships()->guarantors->as_list : ();
 push @guarantors, @existing_guarantors;
 
 ## Deal with debarments
