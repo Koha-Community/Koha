@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 177;
+use Test::More tests => 178;
 use Test::Warn;
 use Test::Exception;
 use Encode qw( encode_utf8 );
@@ -1232,6 +1232,50 @@ subtest 'test update_dateexpiry when no dateexpiry in file' => sub {
     );
 
 };
+
+subtest 'prevent regression in update of dateexpiry with no date related flags' => sub {
+    # If the --update-expiration or --expiration-from-today flgas are not passed, the behaviour should be as foolows:
+    # 1) dateexpiry column is blank - preserve existing patron expiry date
+    # 2) dateexpiry column has a date value - update expiry date to match this new date
+    plan tests => 2;
+
+    my $csv_headers = 'cardnumber,surname,branchcode,categorycode,dateenrolled,dateexpiry';
+    my $patron      = $builder->build_object( { class => 'Koha::Patrons' } );
+    $patron->dateexpiry( '2099-12-31' );
+    $patron->dateenrolled( dt_from_string->add( months => '-24', end_of_month => 'limit' ) )->store;
+    my $csv_values = join(
+        ',', $patron->cardnumber, $patron->surname, $patron->branchcode, $patron->categorycode,
+        $patron->dateenrolled, ''
+    );
+
+    my $filename_1 = make_csv( $temp_dir, $csv_headers, $csv_values );
+    open( my $handle_1, "<", $filename_1 ) or die "cannot open < $filename_1: $!";
+    my $params = { file => $handle_1, matchpoint => 'cardnumber', overwrite_cardnumber => 1 };
+    my $result = $patrons_import->import_patrons( $params, {} );
+    $patron->discard_changes();
+
+    is(
+        $patron->dateexpiry, '2099-12-31',
+        'No expiry date provided in CSV so the existing patron expiry date is preserved'
+    );
+
+    $csv_values = join(
+        ',', $patron->cardnumber, $patron->surname, $patron->branchcode, $patron->categorycode,
+        $patron->dateenrolled, '2098-01-01'
+    );
+
+    $filename_1 = make_csv( $temp_dir, $csv_headers, $csv_values );
+    open( $handle_1, "<", $filename_1 ) or die "cannot open < $filename_1: $!";
+    $params = { file => $handle_1, matchpoint => 'cardnumber', overwrite_cardnumber => 1 };
+    $result = $patrons_import->import_patrons( $params, {} );
+    $patron->discard_changes();
+
+    is(
+        $patron->dateexpiry, '2098-01-01',
+        'Expiry date updated to match the date provided in the CSV file'
+    );
+};
+
 
 # got is { code => $code, attribute => $attribute }
 # expected is { $code => \@attributes }
