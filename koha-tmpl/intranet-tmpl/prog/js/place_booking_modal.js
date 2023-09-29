@@ -421,6 +421,7 @@ $("#placeBookingForm").on('submit', function(e) {
                     type: 'range',
                     group: data.item_id ? data.item_id : 0
                 });
+                timeline.focus(data.booking_id);
             }
     
             // Update bookings counts
@@ -471,6 +472,7 @@ $("#placeBookingForm").on('submit', function(e) {
                     type: 'range',
                     group: data.item_id ? data.item_id : 0
                 });
+                timeline.focus(data.booking_id);
             }
     
             // Close modal
