@@ -20,7 +20,7 @@ subtest 'Tests from t' => sub {
     t::lib::Mocks::mock_preference( 'TaxRates', '0.02|0.05|0.196' );
     my $bookseller_module = Test::MockModule->new('Koha::Acquisition::Bookseller');
 
-    my ( @booksellers, @baskets );
+    my ( @booksellers, @baskets, @biblios );
     my @names = ( '0 0', '0 1', '1 0', '1 1' );
     foreach my $i ( 1..4 ) {
         push @booksellers, $builder->build_object(
@@ -37,6 +37,7 @@ subtest 'Tests from t' => sub {
                     { basketname => $names[ $i - 1 ], booksellerid => $booksellers[$i-1]->id }
             }
         );
+        push @biblios,  $builder->build_sample_biblio;
     }
 
     my ( $basketno_0_0, $basketno_0_1, $basketno_1_0, $basketno_1_1 ) = map { $_->id } @baskets;
@@ -48,7 +49,7 @@ subtest 'Tests from t' => sub {
         subtest 'Configuration 1: 0 0 (Vendor List prices do not include tax / Invoice prices do not include tax)' => sub {
             plan tests => 8;
 
-            my $biblionumber_0_0 = 42;
+            my $biblionumber_0_0 = $biblios[0]->id;
 
             my $order_0_0 = Koha::Acquisition::Order->new({
                 biblionumber     => $biblionumber_0_0,
@@ -139,7 +140,7 @@ subtest 'Tests from t' => sub {
         subtest 'Configuration 1: 1 1 (Vendor List prices do include tax / Invoice prices include tax)' => sub {
             plan tests => 11;
 
-            my $biblionumber_1_1 = 43;
+            my $biblionumber_1_1 = $biblios[3]->id;
             my $order_1_1        = Koha::Acquisition::Order->new({
                 biblionumber     => $biblionumber_1_1,
                 quantity         => 2,
@@ -276,7 +277,7 @@ subtest 'Tests from t' => sub {
         subtest 'Configuration 1: 1 0 (Vendor List prices include tax / Invoice prices do not include tax)' => sub {
             plan tests => 9;
 
-            my $biblionumber_1_0 = 44;
+            my $biblionumber_1_0 = $biblios[2]->id;
             my $order_1_0 = Koha::Acquisition::Order->new({
                 biblionumber     => $biblionumber_1_0,
                 quantity         => 2,
@@ -381,7 +382,7 @@ subtest 'Tests from t' => sub {
         subtest 'Configuration 1: 0 1 (Vendor List prices do not include tax / Invoice prices include tax)' => sub {
             plan tests => 9;
 
-            my $biblionumber_0_1 = 45;
+            my $biblionumber_0_1 = $biblios[1]->id;
             my $order_0_1 = Koha::Acquisition::Order->new({
                 biblionumber     => $biblionumber_0_1,
                 quantity         => 2,
@@ -488,15 +489,21 @@ subtest 'Tests from t' => sub {
         is(
             Koha::Number::Price->new( $params->{got} )->format,
             Koha::Number::Price->new( $params->{expected} )->format,
-    "configuration $params->{conf}: $params->{field} should be correctly calculated"
+            "configuration $params->{conf}: $params->{field} should be correctly calculated"
         );
     }
 
     # format_for_editing
-    for my $currency_format ( qw( US FR ) ) {
+    for my $currency_format (qw( US FR )) {
         t::lib::Mocks::mock_preference( 'CurrencyFormat', $currency_format );
-        is( Koha::Number::Price->new( 1234567 )->format_for_editing, '1234567.00', 'format_for_editing should return unformated integer part with 2 decimals' );
-        is( Koha::Number::Price->new( 1234567.89 )->format_for_editing, '1234567.89', 'format_for_editing should return unformated integer part with 2 decimals' );
+        is(
+            Koha::Number::Price->new(1234567)->format_for_editing, '1234567.00',
+            'format_for_editing should return unformated integer part with 2 decimals'
+        );
+        is(
+            Koha::Number::Price->new(1234567.89)->format_for_editing, '1234567.89',
+            'format_for_editing should return unformated integer part with 2 decimals'
+        );
     }
 };
 
