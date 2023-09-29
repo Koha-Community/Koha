@@ -161,6 +161,7 @@ export default {
                     this.scrollPage++
                     await this.$nextTick()
                     const client = APIClient.erm
+                    ul.scrollTop = scrollTop
                     await client[this.dataType]
                         .getAll(
                             {},
