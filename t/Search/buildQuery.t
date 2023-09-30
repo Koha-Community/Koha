@@ -16,27 +16,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Test::More tests => 9;
+use Net::Z3950::ZOOM;
 
-use Test::More;
 use t::lib::Mocks;
 
-use Module::Load::Conditional qw/check_install/;
-
-BEGIN {
-    if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 12;
-    } else {
-        plan skip_all => "Need Test::DBIx::Class"
-    }
-}
-
-# Mock the DB connection and C4::Context
-use Test::DBIx::Class;
-
-use_ok('C4::Search', qw( buildQuery ));
-can_ok('C4::Search',
-    qw/buildQuery/);
-use_ok("Net::Z3950::ZOOM");
+use C4::Search qw( buildQuery  );
 
 #FIXME: would it be better to use our real ccl.properties file?
 sub _get_ccl_properties {
