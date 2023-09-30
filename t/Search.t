@@ -17,29 +17,12 @@
 
 use Modern::Perl;
 
-use C4::Biblio;
-use Test::More;
+use Test::More tests => 2;
 use Test::MockModule;
 use Test::Warn;
 use t::lib::Mocks;
-use t::lib::TestBuilder;
 
-use Module::Load::Conditional qw/check_install/;
-
-BEGIN {
-    if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 4;
-    } else {
-        plan skip_all => "Need Test::DBIx::Class"
-    }
-}
-
-# Mock the DB connexion and C4::Context
-use Test::DBIx::Class;
-
-use_ok('C4::Search');
-can_ok('C4::Search',
-    qw/_build_initial_query/);
+use C4::Search;
 
 subtest "_build_initial_query tests" => sub {
 
@@ -186,8 +169,6 @@ subtest "searchResults PassItemMarcToXSLT test" => sub {
         warn $record->field('952') ? "Item here" : "No item";
         return;
     });
-
-    my $builder = t::lib::TestBuilder->new;
 
     my $xml_record = q{
 <record
