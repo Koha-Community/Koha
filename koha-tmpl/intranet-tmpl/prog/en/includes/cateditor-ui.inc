@@ -870,7 +870,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         if( Object.keys(Preferences.user.macros).length ){
             $convert = $( '<button class="btn btn-default" id="convert-macros" title="'+_("Convert browser storage macros")+'><i class="fa fa-adjust" aria-hidden="true"></i> Convert old macros</button>' );
             $convert.click( function(){
-                if( !confirm( _("This will retrieve macros stored in the brower, save them in the database, and delete them from the browser. Proceed?") ) ){
+                if( !confirm( _("This will retrieve macros stored in the browser, save them in the database, and delete them from the browser. Proceed?") ) ){
                     return;
                 }
                 convertOldMacros();
