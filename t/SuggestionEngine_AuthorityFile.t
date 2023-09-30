@@ -20,30 +20,10 @@
 # for every call to SearchAuthorities
 
 use Modern::Perl;
-
-use File::Spec;
-use MARC::Record;
-
-use Test::More;
+use Test::More tests => 2;
 use Test::MockModule;
-use t::lib::Mocks;
 
-use Module::Load::Conditional qw/check_install/;
-
-BEGIN {
-    if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 3;
-    } else {
-        plan skip_all => "Need Test::DBIx::Class"
-    }
-}
-
-# Mock the DB connexion
-use Test::DBIx::Class;
-my $db = Test::MockModule->new('Koha::Database');
-$db->mock( _new_schema => sub { return Schema(); } );
-
-use_ok('Koha::SuggestionEngine');
+use Koha::SuggestionEngine;
 
 my $module = Test::MockModule->new('C4::AuthoritiesMarc');
 $module->mock('SearchAuthorities', sub {
@@ -68,6 +48,3 @@ is(ref($suggestor), 'Koha::SuggestionEngine', 'Created suggestion engine');
 my $result = $suggestor->get_suggestions({search => 'Cookery'});
 
 is_deeply($result, [ { 'search' => 'an:1234', 'relevance' => 1, 'label' => 'Cooking' } ], "Suggested correct alternative to 'Cookery'");
-
-done_testing();
-
