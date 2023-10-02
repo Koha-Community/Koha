@@ -8,12 +8,12 @@
 <title>[% FILTER collapse %]
     [% IF op == 'add_form' %]
         [% IF cash_register %]
-            [% tx("Modify cash register {cash_register}", { cash_register = cash_register.id }) | html %]
+            [% tx("Modify cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
         [% ELSE %]
             [% t("New cash register") | html %]
         [% END %] &rsaquo;
     [% ELSIF op == 'delete_confirm' %]
-        [% tx("Confirm deletion of cash register '{cash_register}'", { cash_register = cash_register.id }) | html %] &rsaquo;
+        [% tx("Confirm deletion of cash register ''{cash_register}''", { cash_register = cash_register.name }) | html %] &rsaquo;
     [% END %]
     [% t("Cash registers") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -46,7 +46,7 @@
         [% IF op == 'add_form'  %]
             [% IF cash_register %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify cash register [% cash_register.id | html %]</span>
+                    [% tx("Modify cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -56,7 +56,7 @@
 
         [% ELSIF op == 'delete_confirm' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of cash register '[% cash_register.id | html %]'</span>
+                [% tx("Confirm deletion of cash register '{cash_register}'", { cash_register = cash_register.id }) | html %]
             [% END %]
 
         [% END %]
@@ -94,7 +94,13 @@
                 [% END %]
 
                 [% IF op == 'add_form' %]
-                <h1>[% IF cash_register %]Modify cash register[% ELSE %]Add new cash register[% END %]</h1>
+                <h1>
+                    [% IF cash_register %]
+                        [% tx("Modify cash register '{cash_register}'", { cash_register = cash_register.name }) | html %]
+                    [% ELSE %]
+                        <span>New cash register</span>
+                    [% END %]
+                </h1>
                 <form action="/cgi-bin/koha/admin/cash_registers.pl" id="Aform" name="Aform" class="validated" method="post">
 
                     <fieldset class="rows">
@@ -153,11 +159,11 @@
 
                <h1>Cash registers</h1>
                <div class="page-section">
-                   <h2>Cash registers for <select id="branch_filter" name="branch_filter">
-                           <option value=""></option>
-                           [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
-                       </select>
-                   </h2>
+                    <label for="branch_filter"><strong>Filter by branch:</strong></label>
+                    <select id="branch_filter" name="branch_filter">
+                        <option value=""></option>
+                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
+                    </select>
 
                    [% IF cash_registers.count %]
                    <table id="table_cash_registers">
