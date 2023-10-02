@@ -9,7 +9,7 @@
 <title>[% FILTER collapse %]
     [% IF op =='add_form' %]
        [% IF debit_type.code %]
-           [% t("Modify debit type") | html %]
+           [% tx("Modify debit type '{debit_type}'", { debit_type = debit_type.code }) | html %]
        [% ELSE %]
            [% t("New debit type") | html %]
        [% END %] &rsaquo;
@@ -38,7 +38,7 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF debit_type.code %]
-                    <span>Modify debit type</span>
+                    [% tx("Modify debit type '{debit_type}'", { debit_type = debit_type.code }) | html %]
                 [% ELSE %]
                     <span>New debit type</span>
                 [% END %]
@@ -76,7 +76,7 @@
 
                 [% IF op == 'add_form' %]
                     [% IF debit_type %]
-                        <h1>Modify a debit type</h1>
+                        <h1>[% tx("Modify debit type '{debit_type}'", { debit_type = debit_type.code }) | html %]</h1>
                     [% ELSE %]
                         <h1>New debit type</h1>
                     [% END %]
@@ -159,7 +159,7 @@
                         <a class="btn btn-default" id="newdebittype" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form"><i class="fa fa-plus"></i> New debit type</a>
                     </div>
 
-                    <h1>Account debit types</h1>
+                    <h1>Debit types</h1>
                     [% IF debit_types.count %]
                         <div class="page-section">
                             <table id="table_debit_types">
