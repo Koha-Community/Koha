@@ -27,6 +27,7 @@ use C4::Context;
 use Koha::Authority::Types;
 use Koha::AuthorisedValueCategories;
 use Koha::Filter::MARC::ViewPolicy;
+use Koha::BiblioFrameworks;
 
 use List::MoreUtils qw( uniq );
 
@@ -52,11 +53,14 @@ my $cache = Koha::Caches->get_instance();
 my $op       = $input->param('op') || "";
 $tagfield =~ s/\,//g;
 
+my $framework = Koha::BiblioFrameworks->search({ frameworkcode => $frameworkcode })->next;
+
 if ($op) {
     $template->param(
         script_name   => $script_name,
         tagfield      => $tagfield,
         frameworkcode => $frameworkcode,
+        framework     => $framework,
         $op           => 1
     );    # we show only the TMPL_VAR names $op
 }
@@ -65,6 +69,7 @@ else {
         script_name   => $script_name,
         tagfield      => $tagfield,
         frameworkcode => $frameworkcode,
+        framework     => $framework,
         else          => 1
     );    # we show only the TMPL_VAR names $op
 }
@@ -199,7 +204,6 @@ if ( $op eq 'add_form' ) {
     $template->param( 'use_heading_flags_p'      => 1 );
     $template->param( 'heading_edit_subfields_p' => 1 );
     $template->param(
-        action   => "Edit subfields",
         tagfield => $tagfield,
         tagsubfield => $tagsubfield,
         loop           => \@loop_data,

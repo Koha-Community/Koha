@@ -5,28 +5,27 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF ( add_form ) %]
-        [% IF ( use_heading_flags_p ) %]
-            [% IF ( heading_edit_subfields_p ) %]
-                [% t("Edit MARC subfields constraints") | html %] &rsaquo;
-                [% t("MARC subfield structure") | html %]
-            [% END %]
-        [% ELSE %]
-            [% action | html %] &rsaquo;
-            [% t("MARC subfield structure") | html %]
-        [% END %]
+        [% t("Edit subfields constraints") | html %] &rsaquo;
     [% END %]
+
     [% IF ( delete_confirm ) %]
-        Confirm deletion of subfield [% tagsubfield | html %] &rsaquo;
-        [% t("MARC subfield structure") | html %]
+        [% tx("Confirm deletion of subfield '{subfield}'", {subfield = mss.tagsubfield }) | html %] &rsaquo;
     [% END %]
-    [% IF ( delete_confirmed ) %]
-        [% t("Subfield deleted") | html %] &rsaquo;
-        [% t("MARC subfield structure") | html %]
+
+    [% IF ( add_form || delete_confirm || else ) %]
+        [% tx("Tag {tag}", { tag = tagfield}) | html %] &rsaquo;
     [% END %]
-    [% IF ( else ) %]
-        [% t("MARC subfield structure") | html %]
+
+    [% IF ( frameworkcode ) %]
+        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
+    [% ELSE %]
+        [% t("Default framework") | html %]
     [% END %] &rsaquo;
+
+    [% t("MARC bibliographic frameworks") | html %] &rsaquo;
+
     [% t("Administration") | html %] &rsaquo;
+
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -44,50 +43,39 @@
                 <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
             [% END %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
+                <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC bibliographic frameworks</a>
             [% END %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode | uri %]&amp;searchfield=[% tagfield | uri %]">
                     [% IF ( frameworkcode ) %]
-                        <span>[% frameworkcode | html %] framework structure</span>
+                        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %])
                     [% ELSE %]
-                        <span>Default framework structure</span>
+                        <span>Default framework</span>
                     [% END %]
                 </a>
             [% END %]
 
             [% IF ( add_form ) %]
-                [% IF ( use_heading_flags_p ) %]
-                    [% IF ( heading_edit_subfields_p ) %]
-                        [% WRAPPER breadcrumb_item %]
-                            <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">Tag [% tagfield | html %] subfield structure</a>
-                        [% END %]
-                        [% WRAPPER breadcrumb_item bc_active= 1 %]
-                            <span>Edit subfields constraints</span>
-                        [% END %]
-                    [% END %]
-                [% ELSE %]
-                    [% WRAPPER breadcrumb_item %]
-                        <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">Tag [% tagfield | html %] Subfield structure</a>
-                    [% END %]
-                    [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        [% action | html %]
-                    [% END %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">[% tx("Tag {tag}", { tag = tagfield}) | html %]</a>
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Edit subfields constraints</span>
                 [% END %]
             [% END %]
 
             [% IF ( delete_confirm ) %]
                 [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% mss.tagfield | uri %]&amp;frameworkcode=[% mss.frameworkcode | uri %]">Tag [% mss.tagfield | html %] Subfield structure</a>
+                    <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% mss.tagfield | uri %]&amp;frameworkcode=[% mss.frameworkcode | uri %]">[% tx("Tag {tag}", { tag = tagfield}) | html %]</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Confirm deletion of subfield [% mss.tagsubfield | html %]</span>
+                    [% tx("Confirm deletion of subfield '{subfield}'?", {subfield = mss.tagsubfield }) | html %]
                 [% END %]
             [% END %]
 
             [% IF ( else ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Tag [% tagfield | html %] Subfield structure</span>
+                    <span>[% tx("Tag {tag} subfield structure", { tag = tagfield}) | html %]</span>
                 [% END %]
             [% END %]
         [% END #/ WRAPPER breadcrumbs %]
@@ -100,11 +88,7 @@
 
                     [% IF ( add_form ) %]
                         <h1>
-                            [% IF ( use_heading_flags_p ) %]
-                                [% IF ( heading_edit_subfields_p ) %]<span>Tag</span> [% tagfield | html %] <span>Subfield constraints</span>[% END %]
-                            [% ELSE %]
-                                [% action | html %]
-                            [% END %]
+                            [% tx("Tag {tag} subfield constraints", { tag = tagfield}) | html %]
                         </h1>
                         <div class="hint">You can drag and drop the subfield tabs to change the order.</div>
 
@@ -331,7 +315,7 @@
 
                     [% IF ( delete_confirm ) %]
                         <div class="dialog alert">
-                            <h1>Confirm deletion of subfield [% mss.tagsubfield | html %]?</h1>
+                            <h1>[% tx("Confirm deletion of subfield '{subfield}'?", {subfield = mss.tagsubfield }) | html %]</h1>
                             <p>Subfield: [% mss.tagsubfield | html %]</p>
                             <p>Description: [% mss.liblibrarian | html_entity %]</p>
 
@@ -354,7 +338,7 @@
 
                     [% IF ( else ) %]
                         [% IF ( frameworkcode ) %]
-                            <h1>MARC subfield structure admin for [% tagfield | html %] (framework [% frameworkcode | html %])</h1>
+                            <h1>[% tx("Tag {tag} subfield structure (framework {frameworkcode})", { tag = tagfield, frameworkcode = frameworkcode }) | html %]</h1>
                         [% ELSE %]
                             <h1>MARC subfield structure admin for [% tagfield | html %] (default framework)</h1>
                         [% END %]
