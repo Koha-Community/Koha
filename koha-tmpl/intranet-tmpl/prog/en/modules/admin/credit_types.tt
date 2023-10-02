@@ -8,7 +8,7 @@
 <title>[% FILTER collapse %]
     [% IF op =='add_form' %]
        [% IF credit_type.code %]
-           [% t("Modify credit type") | html %] &rsaquo;
+           [% tx("Modify credit type {credit_type}", {credit_type = credit_type.code }) | html %] &rsaquo;
        [% ELSE %]
            [% t("New credit type") | html %] &rsaquo;
        [% END %]
@@ -39,7 +39,7 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF credit_type.code %]
-                    <span>Modify credit type</span>
+                    [% tx("Modify credit type {credit_type}", {credit_type = credit_type.code }) | html %]
                 [% ELSE %]
                     <span>New credit type</span>
                 [% END %]
@@ -77,7 +77,7 @@
 
                 [% IF op == 'add_form' %]
                     [% IF credit_type %]
-                        <h1>Modify a credit type</h1>
+                        <h1>[% tx("Modify credit type {credit_type}", {credit_type = credit_type.code }) | html %]</h1>
                     [% ELSE %]
                         <h1>New credit type</h1>
                     [% END %]
@@ -155,7 +155,7 @@
                         <a class="btn btn-default" id="newcredittype" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form"><i class="fa fa-plus"></i> New credit type</a>
                     </div>
 
-                    <h1>Account credit types</h1>
+                    <h1>Credit types</h1>
                     [% IF credit_types.count %]
                         <div class="page-section">
                             <table id="table_credit_types">
