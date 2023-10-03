@@ -162,6 +162,8 @@
                             if (update_success) {
                                 update_success = 0;
                                 callback(data);
+                            } else {
+                                callback(null);
                             }
                         });
                     },
@@ -171,6 +173,8 @@
                             if (cancel_success) {
                                 cancel_success = 0;
                                 callback(item);
+                            } else {
+                                callback(null);
                             }
                         });
                     }
