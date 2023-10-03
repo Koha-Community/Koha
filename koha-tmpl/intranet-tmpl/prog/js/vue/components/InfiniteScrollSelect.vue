@@ -10,9 +10,9 @@
         @search="searchFilter($event)"
         ref="select"
     >
-        <template #search="{ attributes, events }">
+        <template v-if="required" #search="{ attributes, events }">
             <input
-                :required="required"
+                :required="!model"
                 class="vs__search"
                 v-bind="attributes"
                 v-on="events"
