@@ -6,24 +6,24 @@
 <title>[% FILTER collapse %]
     [% IF op == 'add_source' %]
         [% IF class_source %]
-            [% t("Modify classification source") | html %]
+            [% tx("Modify classification source '{description}'", { description = class_source.description }) | html %]
         [% ELSE %]
-            [% t("Add classification source") | html %]
+            [% t("New classification source") | html %]
         [% END %] &rsaquo;
     [% ELSIF op == 'add_sort_rule' %]
         [% IF sort_rule %]
-            [% t("Modify filing rule") | html %]
+            [% tx("Modify filing rule '{description}'", { description = sort_rule.description }) | html %]
         [% ELSE %]
-            [% t("Add filing rule") | html %]
+            [% t("New filing rule") | html %]
         [% END %] &rsaquo;
     [% ELSIF op == 'add_split_rule' %]
         [% IF split_rule %]
-            [% t("Modify splitting rule") | html %]
+            [% tx("Modify splitting rule '{description}'", { description = split_rule.description }) | html %]
         [% ELSE %]
-            [% t("Add splitting rule") | html %]
+            [% t("New splitting rule") | html %]
         [% END %] &rsaquo;
     [% END %]
-    [% t("Classification sources") | html %] &rsaquo;
+    [% t("Classification configuration") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -62,27 +62,27 @@
         [% IF op == 'add_source' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF class_source %]
-                    <span>Modify classification source</span>
+                    [% tx("Modify classification source '{description}'", { description = class_source.description }) | html %]
                 [% ELSE %]
-                    <span>Add classification source</span>
+                    <span>New classification source</span>
                 [% END %]
             [% END %]
 
         [% ELSIF op == 'add_sort_rule' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF sort_rule %]
-                    <span>Modify filing rule</span>
+                    [% tx("Modify filing rule '{description}'", { description = sort_rule.description }) | html %]
                 [% ELSE %]
-                    <span>Add filing rule</span>
+                    <span>New filing rule</span>
                 [% END %]
             [% END %]
 
         [% ELSIF op == 'add_split_rule' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% IF split_rule %]
-                    <span>Modify splitting rule</span>
+                    [% tx("Modify splitting rule '{description}'", { description = split_rule.description }) | html %]
                 [% ELSE %]
-                    <span>Add splitting rule</span>
+                    <span>New splitting rule</span>
                 [% END %]
             [% END %]
 
@@ -143,9 +143,9 @@
 
 [% IF op == 'add_source' %]
   [% IF class_source %]
-<h1>Modify classification source</h1>
+<h1>[% tx("Modify classification source '{description}'", { description = class_source.description }) | html %]</h1>
   [% ELSE %]
-<h1>Add classification source</h1>
+<h1>New classification source</h1>
   [% END %]
 <form action="[% script_name | html %]" name="Aform" class="validated" method="post">
   <input type="hidden" name="op" value="add_source_validate" />
@@ -207,9 +207,9 @@
 
 [% IF op == 'add_sort_rule' %]
   [% IF sort_rule %]
-<h1>Modify filing rule</h1>
+<h1>[% tx("Modify filing rule '{description}'", { description = sort_rule.description }) | html %]</h1>
   [% ELSE %]
-<h1>Add filing rule</h1>
+<h1>New filing rule</h1>
   [% END %]
 <form action="[% script_name | html %]" name="Aform" class="validated" method="post">
   <input type="hidden" name="op" value="add_sort_rule_validate" />
@@ -253,9 +253,9 @@
 
 [% IF op == 'add_split_rule' %]
   [% IF split_rule %]
-<h1>Modify splitting rule</h1>
+<h1>[% tx("Modify splitting rule '{description}'", { description = split_rule.description }) | html %]</h1>
   [% ELSE %]
-<h1>Add splitting rule</h1>
+<h1>New splitting rule</h1>
   [% END %]
 <form action="[% script_name | html %]" name="Aform" class="validated" method="post">
   <input type="hidden" name="op" value="add_split_rule_validate" />
