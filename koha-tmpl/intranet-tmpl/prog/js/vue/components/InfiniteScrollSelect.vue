@@ -2,7 +2,7 @@
     <v-select
         :id="id"
         v-model="model"
-        :label="queryProperty"
+        :label="label"
         :options="paginationRequired ? paginated : data"
         :reduce="item => item[dataIdentifier]"
         @open="onOpen"
@@ -30,45 +30,24 @@
 import { APIClient } from "../fetch/api-client.js"
 
 export default {
-    created() {
-        switch (this.dataType) {
-            case "vendors":
-                this.dataIdentifier = "id"
-                this.queryProperty = "name"
-                break
-            case "agreements":
-                this.dataIdentifier = "agreement_id"
-                this.queryProperty = "name"
-                break
-            case "licenses":
-                this.dataIdentifier = "license_id"
-                this.queryProperty = "name"
-                break
-            case "localPackages":
-                this.dataIdentifier = "package_id"
-                this.queryProperty = "name"
-                break
-            default:
-                break
-        }
-    },
     props: {
         id: String,
+        selectedData: Object,
         dataType: String,
         modelValue: Number,
+        dataIdentifier: String,
+        label: String,
         required: Boolean,
     },
     emits: ["update:modelValue"],
     data() {
         return {
             observer: null,
-            dataIdentifier: null,
-            queryProperty: null,
             limit: null,
             search: "",
             scrollPage: null,
-            data: [],
-            paginationRequired: true,
+            data: [this.selectedData],
+            paginationRequired: false,
         }
     },
     computed: {
@@ -82,7 +61,7 @@ export default {
         },
         filtered() {
             return this.data.filter(item =>
-                item[this.queryProperty].includes(this.search)
+                item[this.label].includes(this.search)
             )
         },
         paginated() {
@@ -124,7 +103,7 @@ export default {
                 this.data = []
                 this.search = e
                 const client = APIClient.erm
-                const attribute = "me." + this.queryProperty
+                const attribute = "me." + this.label
                 const q = {}
                 q[attribute] = { like: `%${e}%` }
                 await client[this.dataType]

@@ -22,7 +22,10 @@
                     <InfiniteScrollSelect
                         :id="`license_id_${counter}`"
                         v-model="agreement_license.license_id"
+                        :selectedData="agreement_license.license"
                         dataType="licenses"
+                        dataIdentifier="license_id"
+                        label="name"
                         :required="true"
                     />
                     <span class="required">{{ $__("Required") }}</span>
@@ -124,6 +127,7 @@ export default {
                 physical_location: null,
                 notes: "",
                 uri: "",
+                license: { name: "" },
             })
         },
         deleteLicense(counter) {
