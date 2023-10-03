@@ -152,13 +152,10 @@
 
                     // action events
                     onMove: function (data, callback) {
-                        let startDate = new Date(data.start);
+                        let startDate = dayjs(data.start);
                         
                         // set end datetime hours and minutes to the end of the day
-                        let endDate = new Date(data.end);
-                        endDate.setHours(endDate.getHours()+23);
-                        endDate.setMinutes(endDate.getMinutes()+59);
-                        endDate.setTime(endDate.getTime()-86400000);
+                        let endDate = dayjs(data.end).endOf('day');
 
                         $('#placeBookingModal').modal('show', $('<button data-booking="'+data.id+'"  data-biblionumber="[% biblionumber | uri %]"  data-itemnumber="'+data.group+'" data-patron="'+data.patron+'" data-start_date="'+startDate.toISOString()+'" data-end_date="'+endDate.toISOString()+'">'));
                         $('#placeBookingModal').on('hide.bs.modal', function(e) {
@@ -207,7 +204,7 @@
                 "defaultContent": "Any item",
                 "render": function(data,type,row,meta) {
                     if ( row.item ) {
-                        return row.item.external_id;
+                        return row.item.external_id + " (" + row.booking_id + ")";
                     } else {
                         return null;
                     }
