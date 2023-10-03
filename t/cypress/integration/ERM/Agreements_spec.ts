@@ -9,6 +9,7 @@ const dates = {
     tomorrow_us: dayjs().add(1, "day").format("MM/DD/YYYY"),
 };
 function get_agreement() {
+    let licenses = get_licenses_to_relate();
     return {
         agreement_id: 1,
         closure_reason: "",
@@ -39,14 +40,8 @@ function get_agreement() {
             {
                 agreement_id: 1,
                 agreement_license_id: 3,
-                license: {
-                    description: "license description",
-                    license_id: 1,
-                    name: "license name",
-                    status: "expired",
-                    type: "alliance",
-                },
-                license_id: 1,
+                license: licenses[0],
+                license_id: licenses[0].license_id,
                 notes: "license notes",
                 physical_location: "cupboard",
                 status: "controlling",
@@ -55,14 +50,8 @@ function get_agreement() {
             {
                 agreement_id: 1,
                 agreement_license_id: 4,
-                license: {
-                    description: "second license description",
-                    license_id: 2,
-                    name: "second license name",
-                    status: "expired",
-                    type: "alliance",
-                },
-                license_id: 2,
+                license: licenses[1],
+                license_id: licenses[1].license_id,
                 notes: "second license notes",
                 physical_location: "cupboard",
                 status: "future",
@@ -101,8 +90,11 @@ function get_licenses_to_relate() {
     return [
         {
             license_id: 1,
-            description: "a license",
+            description: "license description",
+            license_id: 1,
             name: "first license name",
+            status: "expired",
+            type: "alliance",
         },
         {
             license_id: 2,
