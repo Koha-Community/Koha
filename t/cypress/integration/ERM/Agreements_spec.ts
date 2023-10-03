@@ -409,9 +409,14 @@ describe("Agreement CRUD operations", () => {
         // Add new license
         let licenses_to_relate = get_licenses_to_relate();
         let related_license = agreement.agreement_licenses[0];
+        let licenses_count = licenses_to_relate.length.toString();
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: licenses_to_relate,
+            headers: {
+                "X-Base-Total-Count": licenses_count,
+                "X-Total-Count": licenses_count,
+            },
         });
         cy.visit("/cgi-bin/koha/erm/agreements/add");
         cy.get("#agreement_licenses").contains("Add new license").click();
@@ -503,9 +508,14 @@ describe("Agreement CRUD operations", () => {
             "get-agreement"
         );
         // Intercept related licenses request after entering agreement edit
+        let licenses_count = licenses_to_relate.length.toString();
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: licenses_to_relate,
+            headers: {
+                "X-Base-Total-Count": licenses_count,
+                "X-Total-Count": licenses_count,
+            },
         }).as("get-related-licenses");
         // Intercept related agreements request after entering agreement edit
         cy.intercept("GET", "/api/v1/erm/agreements*", {
