@@ -236,7 +236,7 @@ sub show_all_entries {
     my $max_retries = $self->max_retries;
     while ( not $all_displayed ) {
         my $dt_infos = $self->driver->get_text(
-            $xpath_selector . '//div[@class="dataTables_info"]' );
+            $xpath_selector . '//div[@class="dt-info"]' );
 
         if ( $dt_infos =~ m|Showing 1 to (\d+) of (\d+) entries| ) {
             $all_displayed = 1 if $1 == $2;
