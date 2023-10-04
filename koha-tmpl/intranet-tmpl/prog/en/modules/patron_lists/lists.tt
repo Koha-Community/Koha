@@ -47,6 +47,7 @@
             <table id="patron-lists-table">
                 <thead>
                     <tr>
+                        <input type="button" type="submit" class="btn btn-default btn-sm disabled" value="Delete selected lists" id="delete_selected_lists"/>
                         <th>Name</th>
                         <th>Patrons in list</th>
                         <th>Shared</th>
@@ -58,7 +59,10 @@
                     [% FOREACH l IN lists %]
                         [% SET shared_by_other = l.owner.id != logged_in_user.id %]
                         <tr>
-                            <td><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]">[% l.name | html %]</a></td>
+                            <td>
+                                <input class="select_patron" type="checkbox" autocomplete="off" data-patron-list-id="[% l.patron_list_id | html %]">
+                                <a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]">[% l.name | html %]</a>
+                            </td>
                             <td>[% l.patron_list_patrons_rs.count || 0 | html %]</td>
                             <td>
                                 [% IF l.shared %]
@@ -68,6 +72,7 @@
                                         by you
                                     [% END %]
                                 [% END %]
+
                             </td>
                             <td>
                                 <div class="btn-group dropup">
@@ -147,17 +152,41 @@
             var patronExportModal = $("#patronExportModal");
             var patronExportModalBody = $("#patronExportModal .modal-body");
 
+            let selectedPatronLists = new Array();
+
             $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
                 "autoWidth": false,
                 "aoColumnDefs": [
-                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] }
+                    {"bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ]}
                 ],
                 "sPaginationType": "full"
             } ));
             $(".delete_patron").on("click", function(){
                 $(".dropdown").removeClass("open");
                 var list = $(this).data("list-name");
-                return confirmDelete( _("Are you sure you want to delete the list %s?").format(list) );
+                return confirmDelete( _("Are you sure you want to delete the list %s?").format(list));
+            });
+
+            $("#delete_selected_lists").on("click", function() {
+                if (selectedPatronLists.length != 0) {
+                    if (confirm(_("Are you sure you want to delete the selected lists ?"))) {
+                    var delete_lists_url = '/cgi-bin/koha/patron_lists/delete.pl?patron_lists_ids=' + selectedPatronLists.join("&patron_lists_ids=");
+                    window.location.href = delete_lists_url;
+                    }
+                }
+            });
+
+            $(".select_patron").on("click", function() {
+                if($(this).is(':checked')){
+                    $("#delete_selected_lists").attr("class","btn btn-default btn-sm");
+                    selectedPatronLists.push($(this).data("patron-list-id"));
+                }
+                else {
+                    selectedPatronLists = selectedPatronLists.filter(item => item !== $(this).data("patron-list-id"));
+                    if(selectedPatronLists.length === 0){
+                        $("#delete_selected_lists").attr("class","btn btn-default btn-sm disabled");
+                    }
+                }
             });
 
             $(".print_cards").on("click", function(e){
