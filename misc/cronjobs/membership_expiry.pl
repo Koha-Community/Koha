@@ -24,27 +24,11 @@ membership_expiry.pl - cron script to put membership expiry reminders into the m
 
 =head1 SYNOPSIS
 
-./membership_expiry.pl -c
+./membership_expiry.pl -c [-v] [-n] [-branch CODE] [-before DAYS] [-after DAYS] [-where COND] [-renew] [-letter X] [-letter-renew Y] [-active|-inactive]
 
 or, in crontab:
 
-0 1 * * * membership_expiry.pl -c
-
-Options:
-   --help                   brief help message
-   --man                    full documentation
-   --where <conditions>     where clause to add to the query
-   -v -verbose              verbose mode
-   -n --nomail              if supplied, messages will be output to STDOUT and no email or sms will be sent
-   -c --confirm             commit changes to db, no action will be taken unless this switch is included
-   -b --branch <branchname> only deal with patrons from this library/branch
-   --before=X               include patrons expiring a number of days BEFORE the date set by the preference
-   --after=X                include patrons expiring a number of days AFTER  the date set by the preference
-   -l --letter <lettercode> use a specific membership expiry notice
-   --letter_renew <code>    use a specific membership renewal notice (needs --renew too)
-   --active=X               only deal with active patrons (active within X months)
-   --inactive=X             only deal with inactive patrons (inactive within X months)
-   --renew                  renew patrons and send notice (instead of expiry notice only)
+0 1 * * * membership_expiry.pl -c [other options you need as mentioned above]
 
 =head1 DESCRIPTION
 
