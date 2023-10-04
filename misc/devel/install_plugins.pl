@@ -26,10 +26,17 @@ use Koha::Script;
 use C4::Context;
 use Koha::Plugins;
 
-my ($help);
-GetOptions( 'help|?' => \$help );
+my ($help, @include, @exclude);
+
+GetOptions(
+    'help|?' => \$help,
+    'include=s' => \@include,
+    'exclude=s' => \@exclude,
+) or die "Installation aborted\n";
 
 pod2usage(1) if $help;
+
+die "Installation aborted : --include and --exclude can't be used simultaneously\n" if @include && @exclude;
 
 unless ( C4::Context->config("enable_plugins") ) {
     print "The plugin system must be enabled for one to be able to install plugins\n";
@@ -47,7 +54,12 @@ for my $existing_plugin (@existing_plugins) {
     $existing_plugins->{ $existing_plugin->{metadata}->{name} } = $existing_plugin->{metadata}->{version};
 }
 
-my @installed_plugins = Koha::Plugins->new()->InstallPlugins( { verbose => 0 } );
+my $params = {};
+$params->{'include'} = \@include if @include;
+$params->{'exclude'} = \@exclude if @exclude;
+
+my @installed_plugins = Koha::Plugins->new()->InstallPlugins($params);
+
 unless (@installed_plugins) {
     my $plugins_dir = C4::Context->config("pluginsdir");
     if ( ref($plugins_dir) eq 'ARRAY' ) {
@@ -87,6 +99,8 @@ install_plugins.pl - install all plugins found in plugins_dir
 
 Options:
   -?|--help        brief help message
+  --include        install only the plugins of the specified classes
+  --exclude        install all the plugins except the specified ones
 
 =head1 OPTIONS
 
@@ -95,6 +109,14 @@ Options:
 =item B<--help|-?>
 
 Print a brief help message and exits
+
+=item B<--include>
+
+Retrieve the list of plugin classes and install only those. It's possible to specify the package of a class to install a specific plugin (e.g. --include <package::pluginClass> --include <anotherPluginClass>).
+
+=item B<--exclude>
+
+Retrieve the list of plugin classes and install all plugins except those. It's possible to specify the package of a class to install a specific plugin (e.g. --exclude <package::pluginClass> --exclude <anotherPluginClass>).
 
 =back
 
