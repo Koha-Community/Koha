@@ -278,7 +278,6 @@
         $(document).ready(function() {
             columns_settings = [% TablesSettings.GetTableSettings( 'admin', 'currency', 'currencies-table', 'json' ) | $raw %]
             var issuest = KohaTable("currencies-table", {
-                dom: 'B<"clearfix">t',
             }, columns_settings );
 
             // prevents users to check active with a currency != 1
