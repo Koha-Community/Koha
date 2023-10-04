@@ -94,6 +94,8 @@
                             <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" value="[% barcode | html %]" /></li>
                             <li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" value="[% desc | html %]" /></li>
                             <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" value="[% note | html %]" /></li>
+                            <li class="additional_field"><label for="cost">Cost: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="cost" id="cost" min="0" value="[% amount | $Price on_editing => 1 %]" /></li>
+                            <li class="additional_field"><label for="quantity">Quantity: </label><input type="text" name="quantity" id="quantity" value="1" /></li>
                             <li><label for="amount">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" min="0" value="[% amount | $Price on_editing => 1 %]" /> Example: 5.00</li>
                         </ol>
                     </fieldset>
@@ -141,11 +143,29 @@
             [% UNLESS amount.defined %]
             $("#maninvoice #desc").val($("#maninvoice #type option:selected").text());
             $("#maninvoice #amount").val(type_fees[$("#maninvoice #type option:selected").val()]);
+            $("#maninvoice #cost").val(type_fees[$("#maninvoice #type option:selected").val()]);
+            if(!type_fees[$("#maninvoice #type option:selected").val()]){
+                $("#maninvoice li.additional_field").hide();
+            }
             [% END %]
             $("#maninvoice #type").change(function(){
                 $("#maninvoice #desc").val($(this).find("option:selected").text());
                 $("#maninvoice #amount").val(type_fees[$(this).val()]);
+                $("#maninvoice #cost").val(type_fees[$(this).val()]);
+                $("#maninvoice #quantity").val('1');
+                if(type_fees[$(this).val()]){
+                    $("#maninvoice li.additional_field").show();
+                }
+                else{
+                    $("#maninvoice li.additional_field").hide();
+                }
             });
+            $("#maninvoice #quantity").blur(function(){
+                $("#maninvoice #amount").val(($("#maninvoice #cost").val() * $(this).val()).toFixed(2));
+            })
+            $("#maninvoice #cost").blur(function(){
+                $("#maninvoice #amount").val(($("#maninvoice #quantity").val() * $(this).val()).toFixed(2));
+            })
         });
     </script>
 [% END %]
