@@ -165,7 +165,7 @@ sub main
     }
 
 
-    my $jsonobj = JSON->new;
+    my $jsonobj = JSON->new->canonical( $ENV{CANONICAL} // 1 );    # if you dont want sorted keys, export CANONICAL=0
     my $basename = basename($src);
     $basename =~ s/\.pot?$//;
     if ($pretty)
