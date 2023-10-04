@@ -20,9 +20,6 @@
     [% WRAPPER 'sub-header.inc' %]
         [% WRAPPER breadcrumbs %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -37,12 +34,12 @@
                 <main>
 
                     <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="new_search_field" href="/cgi-bin/koha/admin/items_search_fields.pl"><i class="fa fa-plus"></i> New search field</a>
+                        <a class="btn btn-default" href="/cgi-bin/koha/admin/items_search_field.pl"><i class="fa fa-plus"></i> New search field</a>
                     </div>
 
                     [% IF field_added %]
                         <div class="dialog message">
-                            Field successfully added: [% field_added.label | html %]
+                            Field successfully added
                         </div>
                     [% ELSIF field_not_added %]
                         <div class="dialog alert">
@@ -60,7 +57,7 @@
                         </div>
                     [% ELSIF field_updated %]
                         <div class="dialog message">
-                            Field successfully updated: [% field_updated.label | html %]
+                            Field successfully updated
                         </div>
                     [% ELSIF field_not_updated %]
                         <div class="dialog alert">
@@ -107,18 +104,6 @@
                             There are no item search fields defined.
                         </div>
                     [% END %]
-
-                    <form id="add_field_form" action="/cgi-bin/koha/admin/items_search_fields.pl" method="POST">
-                        <fieldset class="rows">
-                            <legend><h1>Add a new field</h1></legend>
-                            [% INCLUDE 'admin-items-search-field-form.inc' field=undef %]
-                            <input type="hidden" name="op" value="add" />
-                        </fieldset>
-                        <fieldset class="action">
-                            <input type="submit" class="btn btn-primary" value="Submit" />
-                            <a href="#" class="cancel hide_form">Cancel</a>
-                        </fieldset>
-                    </form>
 
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->

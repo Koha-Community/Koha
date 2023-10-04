@@ -5,6 +5,11 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
     <title>[% FILTER collapse %]
+    [% IF (field) %]
+        [% tx("Modify search field '{field}'", { field = field.name }) | html %]
+    [% ELSE %]
+        [% t("New search field") | html %]
+    [% END %] &rsaquo;
     [% t("Item search fields") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
@@ -23,17 +28,17 @@
                 <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
             [% END %]
 
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a>
+            [% END %]
             [% IF (field) %]
-                [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a>
-                [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify search field [% field.name | html %]</span>
+                    [% tx("Modify search field  '{field}'", { field = field.name }) | html %]
                 [% END %]
 
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Item search fields</span>
+                    <span>New search field</span>
                 [% END %]
             [% END %]
         [% END #/ WRAPPER breadcrumbs %]
@@ -44,15 +49,22 @@
             <div class="col-sm-10 col-sm-push-2">
                 <main>
 
-                    <h1>Item search field: [% field.label | html %]</h1>
+                    <h1>
+                        [% IF (field) %]
+                            [% tx("Modify search field  '{field}'", { field = field.name }) | html %]
+                        [% ELSE %]
+                            [% t("New search field") | html %]
+                        [% END %]
+                    </h1>
 
-                    <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" id="edit_search_fields">
+                    <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" id="search_fields">
                         <fieldset class="rows">
-                        <legend>Edit field</legend>
-                        [% INCLUDE 'admin-items-search-field-form.inc' field=field %]
-                        <div>
-                            <input type="hidden" name="op" value="mod" />
-                        </div>
+                            [% INCLUDE 'admin-items-search-field-form.inc' field=field %]
+                            [% IF (field) %]
+                                <input type="hidden" name="op" value="mod" />
+                            [% ELSE %]
+                                <input type="hidden" name="op" value="add" />
+                            [% END %]
                         </fieldset>
                         <fieldset class="action">
                             <input type="submit" class="btn btn-primary" value="Submit" />

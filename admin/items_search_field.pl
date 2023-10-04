@@ -22,7 +22,7 @@ use CGI;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
-use Koha::Item::Search::Field qw(GetItemSearchField ModItemSearchField);
+use Koha::Item::Search::Field qw(GetItemSearchField AddItemSearchField ModItemSearchField);
 
 my $cgi = CGI->new;
 
@@ -47,6 +47,18 @@ if ($op eq 'mod') {
     $field = ModItemSearchField($field);
     my $updated = ($field) ? 1 : 0;
     print $cgi->redirect('/cgi-bin/koha/admin/items_search_fields.pl?updated=' . $updated);
+    exit;
+} elsif ( $op eq 'add' ) {
+    my %vars = $cgi->Vars;
+    my $field;
+    my @params = qw(name label tagfield tagsubfield authorised_values_category);
+    @$field{@params} = @vars{@params};
+    if ( $field->{authorised_values_category} eq '' ) {
+        $field->{authorised_values_category} = undef;
+    }
+    $field = AddItemSearchField($field);
+    my $added = ($field) ? 1 : 0;
+    print $cgi->redirect( '/cgi-bin/koha/admin/items_search_fields.pl?added=' . $added );
     exit;
 }
 

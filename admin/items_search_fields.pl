@@ -22,7 +22,7 @@ use CGI;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
-use Koha::Item::Search::Field qw(AddItemSearchField GetItemSearchFields DelItemSearchField);
+use Koha::Item::Search::Field qw(GetItemSearchFields DelItemSearchField);
 
 my $cgi = CGI->new;
 
@@ -35,21 +35,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 
 my $op = $cgi->param('op') || '';
 
-if ($op eq 'add') {
-    my %vars = $cgi->Vars;
-    my $field;
-    my @params = qw(name label tagfield tagsubfield authorised_values_category);
-    @$field{@params} = @vars{@params};
-    if ( $field->{authorised_values_category} eq '' ) {
-        $field->{authorised_values_category} = undef;
-    }
-    $field = AddItemSearchField($field);
-    if ($field) {
-        $template->param(field_added => $field);
-    } else {
-        $template->param(field_not_added => 1);
-    }
-} elsif ($op eq 'del') {
+if ($op eq 'del') {
     my $name = $cgi->param('name');
     my $rv = DelItemSearchField($name);
     if ($rv) {
