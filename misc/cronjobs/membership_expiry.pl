@@ -209,10 +209,12 @@ $letter_renew  = 'MEMBERSHIP_RENEWED' if !$letter_renew;
 
 pod2usage( -verbose => 2 ) if $man;
 pod2usage(1) if $help || !$confirm;
-if ( defined($active) && defined($inactive) ) {
-    print "Sorry, it is not possible to pass both -active as well as -inactive.\n";
-    exit;
-}
+
+pod2usage(
+    -verbose => 1,
+    -msg     => q{The --active and --inactive flags are mutually exclusive},
+    -exitval => 1
+) if defined $active && defined $inactive;
 
 cronlogaction({ info => $command_line_options });
 
