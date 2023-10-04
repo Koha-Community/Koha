@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF ( add_form ) %]
-        [% t("Edit subfields constraints") | html %] &rsaquo;
+        [% t("Edit subfield constraints") | html %] &rsaquo;
     [% END %]
 
     [% IF ( delete_confirm ) %]
@@ -60,7 +60,7 @@
                     <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">[% tx("Tag {tag}", { tag = tagfield}) | html %]</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Edit subfields constraints</span>
+                    <span>Edit subfield constraints</span>
                 [% END %]
             [% END %]
 
@@ -340,7 +340,7 @@
                         [% IF ( frameworkcode ) %]
                             <h1>[% tx("Tag {tag} subfield structure (framework {frameworkcode})", { tag = tagfield, frameworkcode = frameworkcode }) | html %]</h1>
                         [% ELSE %]
-                            <h1>MARC subfield structure admin for [% tagfield | html %] (default framework)</h1>
+                            <h1>[% tx("Tag {tag} subfield structure (default framework)", { tag = tagfield}) | html %]</h1>
                         [% END %]
 
                         <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>

@@ -18,7 +18,11 @@
     [% IF ( delete_confirmed ) %]
         [% t("Data deleted") | html %] &rsaquo;
     [% END %]
-    [% framework.frameworktext | html %] ([% framework.frameworkcode | html %]) &rsaquo;
+    [% IF framework %]
+        [% framework.frameworktext | html %] ([% framework.frameworkcode | html %]) &rsaquo;
+    [% ELSE %]
+        [% t("Default framework") | html %] &rsaquo;
+    [% END %]
     [% t("MARC bibliographic frameworks") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
@@ -63,7 +67,7 @@
                 [% IF framework %]
                     <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                 [% ELSE %]
-                    <span>Default MARC bibliographic framework</span>
+                    <span>Default framework</span>
                 [% END %]
             [% END %]
 
@@ -73,7 +77,7 @@
                     [% IF framework %]
                         <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                     [% ELSE %]
-                        <span>Default MARC bibliographic framework</span>
+                        <span>Default framework</span>
                     [% END %]
                 </a>
             [% END %]
@@ -87,7 +91,7 @@
                     [% IF framework %]
                         <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
                     [% ELSE %]
-                        <span>Default MARC bibliographic framework</span>
+                        <span>Default framework</span>
                     [% END %]
                 </a>
             [% END %]
