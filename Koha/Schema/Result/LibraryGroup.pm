@@ -103,6 +103,14 @@ Use this group for opac side search groups
 
 Use this group to identify libraries as pick up location for holds
 
+=head2 ft_local_float_group
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+Use this group to identify libraries as part of float group
+
 =head2 created_on
 
   data_type: 'timestamp'
@@ -142,6 +150,8 @@ __PACKAGE__->add_columns(
   "ft_search_groups_staff",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "ft_local_hold_group",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "ft_local_float_group",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "created_on",
   {
@@ -256,8 +266,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-02-01 19:02:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G6Q4trvkAM/xH1skCv+B6g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-04 17:58:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M9YgMuCWhncegAzkH8uoJg
 
 sub koha_object_class {
     'Koha::Library::Group';
@@ -268,11 +278,11 @@ sub koha_objects_class {
 
 __PACKAGE__->add_columns(
     '+ft_hide_patron_info'    => { is_boolean => 1 },
-    '+ft_search_groups_opac'  => { is_boolean => 1 },
-    '+ft_search_groups_staff' => { is_boolean => 1 },
-    '+ft_local_hold_group'    => { is_boolean => 1 },
     '+ft_limit_item_editing'  => { is_boolean => 1 },
     '+ft_local_float_group'   => { is_boolean => 1 },
+    '+ft_local_hold_group'    => { is_boolean => 1 },
+    '+ft_search_groups_opac'  => { is_boolean => 1 },
+    '+ft_search_groups_staff' => { is_boolean => 1 },
 );
 
 1;
