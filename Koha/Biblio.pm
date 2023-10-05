@@ -1321,7 +1321,7 @@ Normalizes and returns the OCLC number found in the MARC record.
 sub normalized_oclc {
     my ($self) = @_;
     my $marc_record = $self->metadata->record;
-    return C4::Koha::GetNormalizedOCLCNumber($marc_record);
+    return $self->metadata_extractor->get_normalized_oclc;
 }
 
 =head3 to_api

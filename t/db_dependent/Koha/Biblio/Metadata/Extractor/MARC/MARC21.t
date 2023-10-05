@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -67,5 +67,22 @@ subtest 'get_normalized_upc() tests' => sub {
 
     $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
     is( $extractor->get_normalized_upc, "" );
+
+};
+
+subtest 'get_normalized_oclc() tests' => sub {
+
+    plan tests => 2;
+
+    my $record = MARC::Record->new();
+    $record->append_fields( MARC::Field->new( '035', ' ', ' ', a => "(OCoLC)902632762" ) );
+
+    my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_oclc, '902632762' );
+
+    $record    = MARC::Record->new();
+    $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+
+    is( $extractor->get_normalized_oclc, "" );
 
 };
