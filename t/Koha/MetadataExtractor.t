@@ -25,26 +25,26 @@ use Test::MockModule;
 
 use MARC::Record;
 
-use Koha::MetadataExtractor;
+use Koha::Biblio::Metadata::Extractor;
 
 subtest 'new() tests' => sub {
 
     plan tests => 1;
 
-    my $extractor = Koha::MetadataExtractor->new;
-    is( ref($extractor), 'Koha::MetadataExtractor' );
+    my $extractor = Koha::Biblio::Metadata::Extractor->new;
+    is( ref($extractor), 'Koha::Biblio::Metadata::Extractor' );
 };
 
 subtest 'get_extractor() tests' => sub {
 
     plan tests => 8;
 
-    my $extractor = Koha::MetadataExtractor->new;
+    my $extractor = Koha::Biblio::Metadata::Extractor->new;
 
     foreach my $schema (qw{ MARC21 UNIMARC }) {
         my $specific_extractor = $extractor->get_extractor( { schema => $schema } );
         is(
-            ref($specific_extractor), "Koha::MetadataExtractor::MARC::$schema",
+            ref($specific_extractor), "Koha::Biblio::Metadata::Extractor::MARC::$schema",
             "Returns the right extractor library for schema ($schema)"
         );
         ok( exists $extractor->{extractors}->{$schema}, "Extractor for $schema cached" );
@@ -73,14 +73,14 @@ subtest 'get_normalized_upc() tests' => sub {
 
     plan tests => 6;
 
-    my $extractor = Koha::MetadataExtractor->new;
+    my $extractor = Koha::Biblio::Metadata::Extractor->new;
 
     my $record = MARC::Record->new();
 
-    my $mock_marc21 = Test::MockModule->new('Koha::MetadataExtractor::MARC::MARC21');
+    my $mock_marc21 = Test::MockModule->new('Koha::Biblio::Metadata::Extractor::MARC::MARC21');
     $mock_marc21->mock( 'get_normalized_upc', sub { return 'MARC21' } );
 
-    my $mock_unimarc = Test::MockModule->new('Koha::MetadataExtractor::MARC::UNIMARC');
+    my $mock_unimarc = Test::MockModule->new('Koha::Biblio::Metadata::Extractor::MARC::UNIMARC');
     $mock_unimarc->mock( 'get_normalized_upc', sub { return 'UNIMARC' } );
 
     foreach my $schema (qw{ MARC21 UNIMARC }) {

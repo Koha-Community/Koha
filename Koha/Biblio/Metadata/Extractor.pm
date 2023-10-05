@@ -1,4 +1,4 @@
-package Koha::MetadataExtractor;
+package Koha::Biblio::Metadata::Extractor;
 
 # Copyright ByWater Solutions 2023
 #
@@ -19,7 +19,7 @@ package Koha::MetadataExtractor;
 
 =head1 NAME
 
-Koha::MetadataExtractor - Extract specific metadata from MARC::Record objects
+Koha::Biblio::Metadata::Extractor - Extract specific metadata from MARC::Record objects
 
 =cut
 
@@ -33,9 +33,9 @@ use Koha::Exceptions;
 
 =head3 new
 
-    my $extractor = Koha::MetadataExtractor->new;
+    my $extractor = Koha::Biblio::Metadata::Extractor->new;
 
-Constructor for the I<Koha::MetadataExtractor> class.
+Constructor for the I<Koha::Biblio::Metadata::Extractor> class.
 
 =cut
 
@@ -89,7 +89,7 @@ sub get_extractor {
         unless $valid_schemas->{$schema};
 
     unless ( $self->{extractors}->{$schema} ) {
-        my $extractor_class = "Koha::MetadataExtractor::MARC::$schema";
+        my $extractor_class = "Koha::Biblio::Metadata::Extractor::MARC::$schema";
         eval "require $extractor_class";
         $self->{extractors}->{$schema} = $extractor_class->new;
     }

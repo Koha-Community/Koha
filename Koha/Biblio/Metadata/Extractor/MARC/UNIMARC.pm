@@ -1,4 +1,4 @@
-package Koha::MetadataExtractor::MARC::MARC21;
+package Koha::Biblio::Metadata::Extractor::MARC::UNIMARC;
 
 # Copyright ByWater Solutions 2023
 #
@@ -19,7 +19,7 @@ package Koha::MetadataExtractor::MARC::MARC21;
 
 =head1 NAME
 
-Koha::MetadataExtractor - Extract specific metadata from MARC::Record objects
+Koha::Biblio::Metadata::Extractor - Extract specific metadata from MARC::Record objects
 
 =cut
 
@@ -33,9 +33,9 @@ use Koha::Exceptions;
 
 =head3 new
 
-    my $extractor = Koha::MetadataExtractor::MARC::MARC21->new;
+    my $extractor = Koha::Biblio::Metadata::Extractor::MARC::UNIMARC->new;
 
-Constructor for the I<Koha::MetadataExtractor> class.
+Constructor for the I<Koha::Biblio::Metadata::Extractor::MARC::UNIMARC> class.
 
 =cut
 
@@ -52,7 +52,7 @@ sub new {
 
     my $normalized_upc = $extractor->get_normalized_upc( $record );
 
-Returns a stringthe COinS (a span) which can be included in a biblio record
+Returns the normalized UPC for the passed I<$record>.
 
 =cut
 
@@ -65,21 +65,18 @@ sub get_normalized_upc {
     Koha::Exceptions::WrongParameter->throw( name => 'record', type => ref($record) )
         unless ref($record) eq 'MARC::Record';
 
-    my @fields = $record->field('024');
+    my @fields = $record->field('072');
     foreach my $field (@fields) {
 
-        my $indicator = $field->indicator(1);
-        my $upc       = $field->subfield('a');
+        my $upc = $field->subfield('a');
 
         ( my $normalized_upc ) = $upc =~ /([\d-]*[X]*)/;
         $normalized_upc =~ s/-//g;
 
-        if ( $normalized_upc && $indicator eq "1" ) {
+        if ($normalized_upc) {
             return $normalized_upc;
         }
     }
-
-    return;
 }
 
 =head1 AUTHOR

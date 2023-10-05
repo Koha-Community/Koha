@@ -24,21 +24,21 @@ use Test::Exception;
 
 use MARC::Record;
 
-use Koha::MetadataExtractor::MARC::MARC21;
+use Koha::Biblio::Metadata::Extractor::MARC::MARC21;
 
 subtest 'new() tests' => sub {
 
     plan tests => 1;
 
-    my $extractor = Koha::MetadataExtractor::MARC::MARC21->new;
-    is( ref($extractor), 'Koha::MetadataExtractor::MARC::MARC21' );
+    my $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new;
+    is( ref($extractor), 'Koha::Biblio::Metadata::Extractor::MARC::MARC21' );
 };
 
 subtest 'get_normalized_upc() tests' => sub {
 
     plan tests => 6;
 
-    my $extractor = Koha::MetadataExtractor::MARC::MARC21->new;
+    my $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new;
 
     my $record = MARC::Record->new();
     $record->append_fields( MARC::Field->new( '024', '1', ' ', a => "9-123345345X" ) );
