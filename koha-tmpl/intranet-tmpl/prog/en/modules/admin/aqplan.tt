@@ -6,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% PROCESS 'budget_planning.inc' %]
 <title>[% FILTER collapse %]
-    [% tx("Planning for {fund} ", { fund = budget_period_description }) | html %][% PROCESS planning plan=authcat %] &rsaquo;
+    [% PROCESS planning plan=authcat %] &rsaquo;
     [% t("Funds") | html %] &rsaquo;
     [% t("Budgets") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -33,7 +33,7 @@
             <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">Funds</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Planning</span>
+            [% PROCESS planning plan=authcat %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
@@ -46,7 +46,7 @@
 [% INCLUDE 'budgets-admin-toolbar.inc' %]
 
 <form method="post" id="Aform" name="Aform"  action="/cgi-bin/koha/admin/aqplan.pl">
-<h1>Planning for [% budget_period_description | html %] [% PROCESS planning plan=authcat %]</h1>
+<h1>[% PROCESS planning plan=authcat %]</h1>
 <input type="hidden" name="authcat" value="[% authcat | html %]" />
 <!-- Budget Lines -->
 
@@ -207,10 +207,10 @@
 <h4>Filter</h4>
 [% BLOCK planning_types %]
 [%   SWITCH type %]
-[%     CASE 'MONTHS'    %]<span>by months</span>
-[%     CASE 'ITEMTYPES' %]<span>by item types</span>
-[%     CASE 'BRANCHES'  %]<span>by libraries</span>
-[%     CASE             %]<span>by [% type | html %]</span>
+[%     CASE 'MONTHS'    %][% tp("Budget planning", "by months") | html %]
+[%     CASE 'ITEMTYPES' %][% tp("Budget planning", "by item types") | html %]
+[%     CASE 'BRANCHES'  %][% tp("Budget planning", "by libraries") | html %]
+[%     CASE             %][% tpx("Budget planning", "by {type}", {type = type}) | html %]
 [%   END %]
 [% END %]
 <ol>
@@ -338,6 +338,8 @@
                 $("#budget_est_"+budget_id).text($("#budget_tot_"+budget_id).prev().text());
                 $("#budget_est_"+budget_id).css("color","green");
             });
+
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 [% END %]

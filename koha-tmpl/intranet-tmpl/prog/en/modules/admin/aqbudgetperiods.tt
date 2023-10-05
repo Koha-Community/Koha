@@ -28,9 +28,15 @@
               <li>
                   <a href="[% script_name | url %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
               </li>
-              <li>
-                  <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add fund</a>
-              </li>
+            [% IF ( block_budget.budget_period_locked ) %]
+                <li class="disabled">
+                    <a data-toggle="tooltip" data-placement="left" title="Budget is locked" href="#"><i class="fa fa-plus"></i> Add fund</a>
+                </li>
+            [% ELSE %]
+                <li>
+                    <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add fund</a>
+                </li>
+            [% END %]
         </ul>
     </div>
 [% END -%]
@@ -44,25 +50,26 @@
 <title>[% FILTER collapse %]
     [% IF ( add_form ) %]
         [% IF ( budget_period_id ) %]
-            [% tx("Modify budget {budget_period_description}", { budget_period_description = budget_period_description }) | html %]
+            [% tx("Modify budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
         [% ELSE %]
-            [% t("Add budget") | html %]
+            [% t("New budget") | html %]
         [% END %] &rsaquo;
     [% END %]
     [% IF ( duplicate_form ) %]
         [% t("Duplicate budget") | html %] &rsaquo;
     [% END %]
     [% IF ( delete_confirm ) %]
-        [% tx("Delete budget '{budget_period_description}'?", { budget_period_description = budget_period_description }) | html %] &rsaquo;
-    [% END %]
-    [% IF ( delete_confirmed ) %]
-        [% t("Data deleted") | html %] &rsaquo;
+        [% IF ( total || funds_exist ) %]
+            [% tx("Cannot delete budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %] &rsaquo;
+        [% ELSE %]
+            [% tx("Confirm deletion of budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %] &rsaquo;
+        [% END %]
     [% END %]
     [% IF close_form %]
-        [% tx("Close budget {budget_period_description}", { budget_period_description = budget_period_description }) | html %] &rsaquo;
+        [% tx("Close budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %] &rsaquo;
     [% END %]
     [% IF closed %]
-        [% tx("Budget {budget_period_description} closed", { budget_period_description = budget_period_description }) | html %] &rsaquo;
+        [% tx("Budget '{budget_period_description}' closed", { budget_period_description = budget_period_description }) | html %] &rsaquo;
     [% END %]
     [% t("Budgets") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -84,7 +91,7 @@
 
         [% IF ( else ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Budgets administration</span>
+                <span>Budgets</span>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
@@ -95,11 +102,11 @@
         [% IF ( add_form ) %]
             [% IF ( budget_period_id ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify budget '[% budget_period_description | html %]'</span>
+                    [% tx("Modify budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Add budget</span>
+                    <span>New budget</span>
                 [% END %]
             [% END %]
         [% END %]
@@ -107,11 +114,11 @@
         [% IF ( delete_confirm ) %]
             [% IF ( total || funds_exist ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Cannot delete budget '[% budget_period_description | html %]'</span>
+                    [% tx("Cannot delete budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Delete budget '[% budget_period_description | html %]'?</span>
+                    [% tx("Confirm deletion of budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
                 [% END %]
             [% END %]
         [% END %]
@@ -124,13 +131,13 @@
 
         [% IF close_form %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Close budget [% budget_period_description | html %]</span>
+                [% tx("Close budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]
             [% END %]
         [% END %]
 
         [% IF closed %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Budget [% budget_period_description | html %] closed</span>
+                [% tx("Budget '{budget_period_description}' closed", { budget_period_description = budget_period_description }) | html %]
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -212,9 +219,9 @@
     <!--  add or modify a budget period   -->
 
     [% IF ( budget_period_id ) %]
-        <h1>Modify budget <em>[% budget_period_description | html %]</em></h1>
+        <h1>[% tx("Modify budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]</h1>
     [% ELSE %]
-        <h1>Add budget</h1>
+        <h1>New budget</h1>
 	[% END %]
 <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
     <fieldset class="rows">
@@ -294,15 +301,15 @@
     [% IF ( total ) %]
         <div class="dialog message">
         <h1>Cannot delete budget</h1>
-        <p><strong>This record is used [% total | html %] times</strong>
-        . Deletion is not possible.</p>
+        <p><strong>This record is used [% total | html %] times</strong>.
+        Deletion is not possible.</p>
     [% ELSIF ( funds_exist ) %]
         <div class="dialog message">
         <h1>Cannot delete budget</h1>
         <p>This budget has funds attached. You must delete all attached funds before you can delete this budget.</p>
     [% ELSE %]
         <div class="dialog alert">
-        <h1>Delete budget '[% budget_period_description | html %]'?</h1>
+        <h1>[% tx("Confirm deletion of budget '{budget_period_description}'?", { budget_period_description = budget_period_description }) | html %]</h1>
 
     <!-- ############################################################# -->
     <!-- "delete" and "cancel" buttons    -->
@@ -322,15 +329,20 @@
 [% END %]
 
 [% IF close_form %]
-<h1>Close budget [% budget_period_description | html %]</h1>
-  [% IF budget_periods.size == 0 %]
-    <span>You cannot move funds of this budget, there is no active budget.
-    Please create a new active budget and retry.</span>
-    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
-  [% ELSIF number_of_unreceived_orders == 0 %]
-    <span>There are no unreceived orders for this budget.</span>
-    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
-  [% ELSE %]
+<h1>[% tx("Close budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]</h1>
+    [% IF budget_periods.size == 0 %]
+        <div class="dialog alert">
+            <p>You cannot move funds of this budget, there is no active budget.</p>
+            <p>Please create a new active budget and retry.</p>
+            <a class="btn btn-default" href="/cgi-bin/koha/admin/aqbudgetperiods.pl"><i class="fa fa-fw fa-arrow-left"></i> Return to budgets</a>
+        </div>
+    [% ELSIF number_of_unreceived_orders == 0 %]
+        <div class="dialog message">
+            <h2>Cannot close budget</h2>
+            <p>There are no unreceived orders for this budget.</p>
+            <a class="btn btn-default"  href="/cgi-bin/koha/admin/aqbudgetperiods.pl"><i class="fa fa-fw fa-arrow-left"></i> Return to budgets</a>
+        </div>
+    [% ELSE %]
     <div class="page-section">
         <h3>The unreceived orders from the following funds will be moved</h3>
           Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% budget_period_description | html %]</a>:
@@ -382,7 +394,7 @@
     </div><!-- /.page-section -->
   [% END %]
 [% ELSIF closed %]
-    <h1>Budget [% budget_period_description | html %] closed</h1>
+    <h1>[% tx("Budget '{budget_period_description}' closed", { budget_period_description = budget_period_description }) | html %]</h1>
 
     <div class="page-section">
         <h3>Report after moving unreceived orders from budget [% from_budget_period.budget_period_description | html %] ([% from_budget_period.budget_period_startdate | $KohaDates %] - [% from_budget_period.budget_period_enddate | $KohaDates %]) to [% to_budget_period.budget_period_description | html %] ([% to_budget_period.budget_period_startdate | $KohaDates %] - [% to_budget_period.budget_period_enddate | $KohaDates%])</h3>
@@ -436,7 +448,7 @@
 
 <!--  DEFAULT  display budget periods list -->
 [% IF ( else ) %]
-  <h1>Budgets administration</h1>
+  <h1>Budgets</h1>
 
     [% IF ( failed_delete_funds_exist ) %]
         <div class="dialog message">Failed to delete budget because funds exist.</div>
@@ -548,6 +560,8 @@
             [% IF ( tab ) %]
                 $("#budgetsTabs li:eq([% tab | html %]) a").tab("show");
             [% END %]
+
+            $('[data-toggle="tooltip"]').tooltip();
 
             $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [

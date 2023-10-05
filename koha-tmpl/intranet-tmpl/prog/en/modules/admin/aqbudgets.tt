@@ -16,10 +16,25 @@
                 [% t("Modify fund") | html %]
             [% END %]
         [% ELSE %]
-            [% t("Add fund") | html %]
+            [% IF ( budget_parent_name ) %]
+                [% tx("Add fund to '{fund_parent}'", {fund_parent = budget_parent_name}) %]
+            [% ELSE %]
+                [% t("New fund") | html %]
+            [% END %]
         [% END %] &rsaquo;
     [% END %]
+    [% IF op == 'list' || op == 'add_form' %]
+        [% IF budget_period_id %]
+            [% tx("Funds for budget '{budget}'", { budget = budget_period_description }) %]
+        [% ELSE %]
+            [% t("Funds") | html %]
+        [% END %] &rsaquo;
+    [% END %]
+    [% IF op == 'delete_confirm' %]
+        [% tx("Confirm deletion of fund '{fund}'", {fund = budget_name}) %] &rsaquo;
+    [% END %]
     [% t("Funds") | html %] &rsaquo;
+    [% t("Budgets") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
@@ -43,31 +58,43 @@
 
         [% IF op == 'list' %]
             [% IF budget_period_id %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a>
+                [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Funds for '[% budget_period_description | html %]'</span>
+                    [% tx("Funds for budget '{budget}'", { budget = budget_period_description }) %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>All funds</span>
+                    <span>Funds</span>
                 [% END %]
             [% END %]
         [% END %]
 
         [% IF op == 'add_form' %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">Funds</a>
+                <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a>
+            [% END %]
+            [% IF ( budget_period_id ) %]
+                [% WRAPPER breadcrumb_item %]
+                    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% tx("Funds for '{budget}'", { budget = budget_period_description }) %]</a>
+                [% END %]
             [% END %]
             [% IF ( budget_id ) %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     [% IF ( budget_name ) %]
-                        <span>Modify fund '[% budget_name | html %]'</span>
+                        [% tx("Modify fund '{fund_name}'", { fund_name = budget_name }) | html %]
                     [% ELSE %]
                         <span>Modify fund</span>
                     [% END %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Add fund</span>
+                    [% IF ( budget_parent_name ) %]
+                        [% tx("Add fund to '{fund_parent}'", {fund_parent = budget_parent_name}) %]
+                    [% ELSE %]
+                        <span>New fund</span>
+                    [% END %]
                 [% END %]
             [% END %]
         [% END %]
@@ -77,7 +104,7 @@
                 <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Delete fund?</span>
+                [% tx("Confirm deletion of fund '{fund}'", {fund = budget_name}) %]
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -99,11 +126,11 @@
 [% IF op == 'list' %]
 
 <h1>
-  [% IF budget_period_id %]
-    Funds for '[% budget_period_description | html %]'
-  [% ELSE %]
-    All funds
-  [% END %]
+    [% IF budget_period_id %]
+        [% tx("Funds for budget '{budget}'", {budget = budget_period_description}) %]
+    [% ELSE %]
+        <span>Funds</span>
+    [% END %]
 </h1>
 
 [% INCLUDE 'budgets-active-currency.inc' %]
@@ -241,7 +268,7 @@
 </div> <!-- /.page-section -->
 
 [% ELSE %]
-    <p>No fund found</p>
+    <div class="dialog message">No fund found</div>
 [% END %]
 
 [% END %] <!-- list -->
@@ -250,13 +277,23 @@
 <!-- create add/mod entry form -->
 [% IF op == 'add_form' && !error_not_authorised_to_modify %]
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" id="edit_fund" name="Aform" method="post">
+    <h1>
+        [% IF ( budget_id ) %]
+            [% IF ( budget_period_description ) %]
+                [% tx("Modify fund '{fund_name}' for budget '{budget}'", { fund_name = budget_name, budget = budget_period_description }) | html %]
+            [% ELSE %]
+                [% tx("Modify fund '{fund_name}'", { fund_name = budget_name }) | html %]
+            [% END %]
+        [% ELSE %]
+            [% IF ( budget_parent_name ) %]
+                [% tx("Add fund to '{fund_parent}'", {fund_parent = budget_parent_name}) %]
+            [% ELSE %]
+                [% t("New fund") | html %]
+            [% END %]
+        [% END %]
+    </h1>
     <fieldset class="rows">
-        <legend><h1>[% IF ( budget_id ) %]<span>Modify fund</span>[% ELSE %]<span>Add fund</span>[% END %]
-    [% IF ( budget_period_description ) %]
-        [% budget_name | html %] <span>for budget</span> '[% budget_period_description | html %]'
-    [% END %]
-            </h1>
-    </legend>
+        <legend class="sr-only">Fund details</legend>
 
     <input type="hidden" name="op" value="add_validate" />
     <input type="hidden" name="checked" value="0" />
@@ -318,7 +355,7 @@
         <li class="radio">
             <label>
                 <input type="checkbox" id="set_owner_to_children" name="set_owner_to_children" value="1" />
-                Update all sub funds with this owner
+                <span>Update all sub funds with this owner</span>
             </label>
             <span class="hint">Selecting this option will overwrite existing fund owners, if any</span>
         </li>
@@ -420,8 +457,8 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h1>Delete fund [% budget_name | html %]?</h1>
-        If you delete this fund, all orders linked to this fund will be deleted!
+        <h1>[% tx("Confirm deletion of fund '{fund}'?", {fund = budget_name}) %]</h1>
+        <p>If you delete this fund, all orders linked to this fund will be deleted!</p>
         <table>
             <tr>
             <th scope="row">Fund amount:</th>
@@ -661,8 +698,6 @@
         [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
 
         <script>
-        //<![CDATA[
-            //
             $(document).ready(function() {
                 [% IF budgets %]
                     var oTable = KohaTable("budgeth", {
@@ -737,8 +772,9 @@
                     e.preventDefault();
                     alert(_("This fund has sub funds. It cannot be deleted."));
                 });
+
+                $('[data-toggle="tooltip"]').tooltip();
             });
-        //]]>
         </script>
     [% END %]
 [% END %]
