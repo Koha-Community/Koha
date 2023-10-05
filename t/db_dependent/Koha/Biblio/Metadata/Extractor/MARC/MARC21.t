@@ -22,43 +22,50 @@ use Modern::Perl;
 use Test::More tests => 2;
 use Test::Exception;
 
-use MARC::Record;
+use t::lib::TestBuilder;
+use t::lib::Mocks;
 
-use Koha::Biblio::Metadata::Extractor::MARC::MARC21;
+use Koha::Biblio::Metadata::Extractor;
+
+my $schema  = Koha::Database->schema;
+my $builder = t::lib::TestBuilder->new;
+
+t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
 
 subtest 'new() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 3;
 
-    my $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new;
+    $schema->storage->txn_begin;
+
+    throws_ok { Koha::Biblio::Metadata::Extractor->new; }
+    'Koha::Exceptions::MissingParameter',
+        'Exception if no parameter';
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $extractor = Koha::Biblio::Metadata::Extractor->new( { biblio => $biblio } );
+    is( ref($extractor), 'Koha::Biblio::Metadata::Extractor::MARC::MARC21' );
+
+    my $record = $biblio->metadata->record;
+    $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
     is( ref($extractor), 'Koha::Biblio::Metadata::Extractor::MARC::MARC21' );
 };
 
 subtest 'get_normalized_upc() tests' => sub {
 
-    plan tests => 6;
-
-    my $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new;
+    plan tests => 2;
 
     my $record = MARC::Record->new();
     $record->append_fields( MARC::Field->new( '024', '1', ' ', a => "9-123345345X" ) );
 
-    is( $extractor->get_normalized_upc($record), '9123345345X' );
+    my $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_upc, '9123345345X' );
 
     $record = MARC::Record->new();
     $record->append_fields( MARC::Field->new( '024', ' ', ' ', a => "9-123345345X" ) );
 
-    is( $extractor->get_normalized_upc($record), undef );
+    $extractor = Koha::Biblio::Metadata::Extractor->new( { metadata => $record } );
+    is( $extractor->get_normalized_upc, "" );
 
-    throws_ok { $extractor->get_normalized_upc() }
-    'Koha::Exceptions::MissingParameter',
-        'Exception if no parameter';
-
-    like( "$@", qr{A required parameter is missing' with parameter => record} );
-
-    throws_ok { $extractor->get_normalized_upc("Some string") }
-    'Koha::Exceptions::WrongParameter',
-        'Exception if no parameter';
-
-    like( "$@", qr{Parameter has wrong value or type} );
 };

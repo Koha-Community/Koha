@@ -1,6 +1,6 @@
 package Koha::Biblio::Metadata::Extractor::MARC::MARC21;
 
-# Copyright ByWater Solutions 2023
+# Copyright Koha Development Team 2023
 #
 # This file is part of Koha.
 #
@@ -19,11 +19,13 @@ package Koha::Biblio::Metadata::Extractor::MARC::MARC21;
 
 =head1 NAME
 
-Koha::Biblio::Metadata::Extractor - Extract specific metadata from MARC::Record objects
+Koha::Biblio::Metadata::Extractor::MARC::MARC21 - Extract specific metadata from MARC21 MARC::Record objects
 
 =cut
 
 use Modern::Perl;
+
+use base qw(Koha::Biblio::Metadata::Extractor::MARC);
 
 use Koha::Exceptions;
 
@@ -35,56 +37,48 @@ use Koha::Exceptions;
 
     my $extractor = Koha::Biblio::Metadata::Extractor::MARC::MARC21->new;
 
-Constructor for the I<Koha::Biblio::Metadata::Extractor> class.
+Constructor for the I<Koha::Biblio::Metadata::Extractor::MARC::MARC21> class.
 
 =cut
 
 sub new {
-    my ($class) = @_;
-    my $self = {};
+    my ( $class, $params ) = @_;
 
     return
-        bless $self,
+        bless $params,
         $class;
 }
 
 =head2 get_normalized_upc
 
-    my $normalized_upc = $extractor->get_normalized_upc( $record );
+    my $normalized_upc = $extractor->get_normalized_upc();
 
-Returns a stringthe COinS (a span) which can be included in a biblio record
+Returns a normalized UPC.
 
 =cut
 
 sub get_normalized_upc {
-    my ( $self, $record ) = @_;
+    my ($self) = @_;
 
-    Koha::Exceptions::MissingParameter->throw( parameter => 'record' )
-        unless $record;
-
-    Koha::Exceptions::WrongParameter->throw( name => 'record', type => ref($record) )
-        unless ref($record) eq 'MARC::Record';
-
+    my $record = $self->metadata;
     my @fields = $record->field('024');
     foreach my $field (@fields) {
 
         my $indicator = $field->indicator(1);
-        my $upc       = $field->subfield('a');
 
-        ( my $normalized_upc ) = $upc =~ /([\d-]*[X]*)/;
-        $normalized_upc =~ s/-//g;
+        my $normalized_upc = $self->_normalize_string( $field->subfield('a') );
 
         if ( $normalized_upc && $indicator eq "1" ) {
             return $normalized_upc;
         }
     }
-
-    return;
 }
 
 =head1 AUTHOR
 
 Tomas Cohen Arazi, E<lt>tomascohen@theke.ioE<gt>
+
+Jonathan Druart, E<lt>jonathan.druart@bugs.koha-community.orgE<gt>
 
 =cut
 

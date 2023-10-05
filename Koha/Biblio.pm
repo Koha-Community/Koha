@@ -33,6 +33,7 @@ use base qw(Koha::Object);
 use Koha::Acquisition::Orders;
 use Koha::ArticleRequests;
 use Koha::Biblio::Metadatas;
+use Koha::Biblio::Metadata::Extractor;
 use Koha::Biblio::ItemGroups;
 use Koha::Biblioitems;
 use Koha::Cache::Memory::Lite;
@@ -1280,6 +1281,22 @@ sub public_read_list {
     ];
 }
 
+=head3 metadata_extractor
+
+    my $extractor = $biblio->metadata_extractor
+
+Return a Koha::Biblio::Metadata::Extractor object to use to extract data from the metadata (ie. MARC record for now)
+
+=cut
+
+sub metadata_extractor {
+    my ($self) = @_;
+
+    $self->{metadata_extractor} ||= Koha::Biblio::Metadata::Extractor->new( { biblio => $self } );
+
+    return $self->{metadata_extractor};
+}
+
 =head3 normalized_upc
 
     my $normalized_upc = $biblio->normalized_upc
@@ -1290,8 +1307,7 @@ Normalizes and returns the UPC value found in the MARC record.
 
 sub normalized_upc {
     my ($self) = @_;
-    my $marc_record = $self->metadata->record;
-    return C4::Koha::GetNormalizedUPC($marc_record);
+    return $self->metadata_extractor->get_normalized_upc;
 }
 
 =head3 normalized_oclc

@@ -1,6 +1,6 @@
 package Koha::Biblio::Metadata::Extractor;
 
-# Copyright ByWater Solutions 2023
+# Copyright Koha Development Team 2023
 #
 # This file is part of Koha.
 #
@@ -26,6 +26,7 @@ Koha::Biblio::Metadata::Extractor - Extract specific metadata from MARC::Record 
 use Modern::Perl;
 
 use Koha::Exceptions;
+use Koha::Biblio::Metadata::Extractor::MARC;
 
 =head1 API
 
@@ -33,73 +34,24 @@ use Koha::Exceptions;
 
 =head3 new
 
-    my $extractor = Koha::Biblio::Metadata::Extractor->new;
+    my $extractor = Koha::Biblio::Metadata::Extractor->new({ biblio => $biblio });
 
 Constructor for the I<Koha::Biblio::Metadata::Extractor> class.
 
 =cut
 
 sub new {
-    my ($class) = @_;
-    my $self = { extractors => {} };
+    my ( $class, $params ) = @_;
 
-    return
-        bless $self,
-        $class;
-}
-
-=head2 get_normalized_upc
-
-    my $normalized_upc = $extractor->get_normalized_upc( { record => $record, schema => $schema } );
-
-Returns the normalized UPC for the passed I<$record>.
-
-=cut
-
-sub get_normalized_upc {
-    my ( $self, $params ) = @_;
-
-    Koha::Exceptions::MissingParameter->throw( parameter => 'record' )
-        unless $params->{record};
-
-    return $self->get_extractor( { schema => $params->{schema} } )->get_normalized_upc( $params->{record} );
-}
-
-=head2 Internal methods
-
-=head3 get_extractor
-
-    my $extractor = $self->get_extractor( { schema => $schema } );
-
-Returns the cached extractor for the specified I<$schema>.
-
-=cut
-
-sub get_extractor {
-    my ( $self, $params ) = @_;
-
-    my $schema = $params->{schema};
-
-    Koha::Exceptions::MissingParameter->throw( parameter => 'schema' )
-        unless $schema;
-
-    my $valid_schemas = { 'MARC21' => 1, 'UNIMARC' => 1 };
-
-    Koha::Exceptions::WrongParameter->throw( name => 'schema', value => $schema )
-        unless $valid_schemas->{$schema};
-
-    unless ( $self->{extractors}->{$schema} ) {
-        my $extractor_class = "Koha::Biblio::Metadata::Extractor::MARC::$schema";
-        eval "require $extractor_class";
-        $self->{extractors}->{$schema} = $extractor_class->new;
-    }
-
-    return $self->{extractors}->{$schema};
+    # We only support MARC for now, no need to complexify here
+    return Koha::Biblio::Metadata::Extractor::MARC->new($params);
 }
 
 =head1 AUTHOR
 
 Tomas Cohen Arazi, E<lt>tomascohen@theke.ioE<gt>
+
+Jonathan Druart, E<lt>jonathan.druart@bugs.koha-community.orgE<gt>
 
 =cut
 
