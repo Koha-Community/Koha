@@ -138,7 +138,8 @@ sub enqueue {
         # Picking a random id (memcached_namespace) from the config
         my $namespace = C4::Context->config('memcached_namespace');
         my $encoded_args = Encode::encode_utf8( $json_args ); # FIXME We should better leave this to Net::Stomp?
-        $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_queue), body => $encoded_args } )
+        my $destination = sprintf( "/queue/%s-%s", $namespace, $job_queue );
+        $conn->send_with_receipt( { destination => $destination, body => $encoded_args, persistent => 'true' } )
           or Koha::Exceptions::Exception->throw('Job has not been enqueued');
     } catch {
         $self->status('failed')->store;
