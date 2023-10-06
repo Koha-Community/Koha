@@ -116,7 +116,7 @@ while ( my $hold = $holds->next ) {
     
 }
 
-my $holds_with_cancellation_requests = Koha::Holds->waiting->filter_by_has_cancellation_requests;
+my $holds_with_cancellation_requests = Koha::Holds->waiting->search({ ($all_branches ? () : ( branchcode => $default ) ) })->filter_by_has_cancellation_requests;
 
 $template->param(cancel_result => \@cancel_result) if @cancel_result;
 
