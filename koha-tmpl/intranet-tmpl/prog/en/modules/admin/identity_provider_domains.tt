@@ -9,8 +9,9 @@
     [% IF op == 'add_form' %]
         [% t("New identity provider domain") | html %] &rsaquo;
     [% ELSIF op == 'edit_form' %]
-        [% t("Edit identity provider domain") | html %] &rsaquo;
+        [% tx("Modify identity provider domain '{domain}'", {domain = identity_provider_domain.domain}) | html %] &rsaquo;
     [% END %]
+    [% tx("Domains for '{identity_provider_code}'", {identity_provider_code = identity_provider_code}) | html %] &rsaquo;
     [% t("Identity providers") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
@@ -34,23 +35,23 @@
 
         [% IF op == 'add_form' %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">Domains for [%- identity_provider_code | html -%]</a>
+                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">[% tx("Domains for '{identity_provider_code}'", {identity_provider_code = identity_provider_code}) | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>New domain</span>
+                <span>New identity provider domain</span>
             [% END %]
 
         [% ELSIF op == 'edit_form' %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">Domains for [%- identity_provider_code | html -%]</a>
+                <a href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | uri -%]">[% tx("Domains for '{identity_provider_code}'", {identity_provider_code = identity_provider_code}) | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Edit domain</span>
+                [% tx("Modify identity provider domain '{domain}'", {domain = identity_provider_domain.domain}) | html %]
             [% END %]
 
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Domains for [%- identity_provider_code | html -%]</span>
+                <span>[% tx("Domains for '{identity_provider_code}'", {identity_provider_code = identity_provider_code}) | html %]</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -82,8 +83,8 @@
     <div class="dialog alert"   id="identity_provider_domain_delete_error"   style="display: none;"></div>
 
 [% IF op == 'add_form' %]
-    <h1>New email domain</h1>
-    <div class="page-section">
+    <h1>[% tx("New identity provider domain for '{identity_provider_code}'", {identity_provider_code = identity_provider_code}) | html %]</h1>
+
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
             <input type="hidden" name="op" value="add" />
             <input type="hidden" name="domain_ops" value="1" />
@@ -159,12 +160,12 @@
                 <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]">Cancel</a>
             </fieldset>
         </form>
-    </div>
+
 [% END %]
 
 [% IF op == 'edit_form' %]
-    <h1>Edit identity provider domain</h1>
-    <div class="page-section">
+    <h1>[% tx("Modify identity provider domain '{domain}'", {domain = identity_provider_domain.domain}) | html %]</h1>
+
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
             <input type="hidden" name="op" value="edit_save" />
             <input type="hidden" name="domain_ops" value="1" />
@@ -265,16 +266,16 @@
                 <a class="cancel" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]">Cancel</a>
             </fieldset>
         </form>
-    </div>
+
 [% END %]
 
 [% IF op == 'list' %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default" id="new_identity_provider_domain" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=add_form"><i class="fa fa-plus"></i> New email domain</a>
+        <a class="btn btn-default" id="new_identity_provider_domain" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=add_form"><i class="fa fa-plus"></i> New identity provider domain</a>
     </div>
 
-    <h1>Identity provider email domains</h1>
+    <h1>[% tx("Identity provider domains for '{identity_provider_code}'", {identity_provider_code = identity_provider_code}) | html %]</h1>
     <div class="page-section">
         <table id="identity_provider_domains">
             <thead>
@@ -298,7 +299,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3 id="delete_confirm_modal_label">Delete identity provider domain</h3>
+                            <h3 id="delete_confirm_modal_label">Confirm deletion of identity provider domain</h3>
                         </div>
                         <div class="modal-body">
                             <div id="delete_confirm_dialog"></div>
