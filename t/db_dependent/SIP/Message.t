@@ -189,10 +189,13 @@ subtest 'hold_patron_name() tests' => sub {
 
 subtest 'Lastseen response' => sub {
 
+    plan tests => 6;
+
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
-    plan tests => 6;
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
+
     my $builder = t::lib::TestBuilder->new();
     my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
     my ( $response, $findpatron );

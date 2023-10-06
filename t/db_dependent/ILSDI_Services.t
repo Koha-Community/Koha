@@ -47,6 +47,8 @@ subtest 'AuthenticatePatron test' => sub {
 
     $schema->storage->txn_begin;
 
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
+
     my $plain_password = 'tomasito';
 
     $builder->build({
