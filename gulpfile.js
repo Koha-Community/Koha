@@ -137,7 +137,7 @@ const poTypes = Object.keys(poTasks);
 
 function po_extract_marc (type) {
     return src(`koha-tmpl/*-tmpl/*/en/**/*${type}*`, { read: false, nocase: true })
-        .pipe(xgettext('misc/translator/xgettext.pl --charset=UTF-8 -s', `Koha-marc-${type}.pot`))
+        .pipe(xgettext('misc/translator/xgettext.pl --charset=UTF-8 -F', `Koha-marc-${type}.pot`))
         .pipe(dest('misc/translator'))
 }
 
@@ -157,7 +157,7 @@ function po_extract_staff () {
     ];
 
     return src(globs, { read: false, nocase: true })
-        .pipe(xgettext('misc/translator/xgettext.pl --charset=UTF-8 -s', 'Koha-staff-prog.pot'))
+        .pipe(xgettext('misc/translator/xgettext.pl --charset=UTF-8 -F', 'Koha-staff-prog.pot'))
         .pipe(dest('misc/translator'))
 }
 
@@ -173,7 +173,7 @@ function po_extract_opac () {
     ];
 
     return src(globs, { read: false, nocase: true })
-        .pipe(xgettext('misc/translator/xgettext.pl --charset=UTF-8 -s', 'Koha-opac-bootstrap.pot'))
+        .pipe(xgettext('misc/translator/xgettext.pl --charset=UTF-8 -F', 'Koha-opac-bootstrap.pot'))
         .pipe(dest('misc/translator'))
 }
 
@@ -272,7 +272,7 @@ function po_create_installer ()         { return po_create_type('installer') }
 function po_create_installer_marc21 ()  { return po_create_type('installer-MARC21') }
 
 function po_update_type (type) {
-    const msgmerge_opts = '--backup=off --quiet --sort-output --update';
+    const msgmerge_opts = '--backup=off --quiet -F --update';
     const cmd = `msgmerge ${msgmerge_opts} <%= file.path %> misc/translator/Koha-${type}.pot`;
     const languages = getLanguages();
     const globs = languages.map(language => `misc/translator/po/${language}-${type}.po`);
