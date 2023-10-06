@@ -6,13 +6,17 @@
 <title>[% FILTER collapse %]
     [% IF ean_form %]
         [% IF ean %]
-            [% t("Modify library EAN") | html %]
+            [% tx("Modify library EAN '{ean}'", { ean = ean.description }) %]
         [% ELSE %]
-            [% t("Add new library EAN") | html %]
+            [% t("New library EAN") | html %]
         [% END %] &rsaquo;
     [% END %]
     [% IF delete_confirm %]
-        [% t("Confirm deletion of EAN") | html %] &rsaquo;
+        [% IF ( ean.branch.branchname ) %]
+            [% tx("Confirm deletion of EAN '{ean}' for '{library}'?", { ean = ean.description, library = ean.branch.branchname }) %]
+        [% ELSE %]
+            [% tx("Confirm deletion of EAN '{ean}'?", { ean = ean.description }) %]
+        [% END %] &rsaquo;
     [% END %]
     [% t("Library EANs") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -37,9 +41,9 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1%]
                 [% IF ean %]
-                    <span>Modify library EAN</span>
+                    [% tx("Modify library EAN '{ean}'", { ean = ean.description }) %]
                 [% ELSE %]
-                    <span>Add new library EAN</span>
+                    <span>New library EAN</span>
                 [% END %]
             [% END %]
 
@@ -48,7 +52,11 @@
                 <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1%]
-                <span>Confirm deletion of EAN</span>
+                [% IF ( ean.branch.branchname ) %]
+                    [% tx("Confirm deletion of EAN '{ean}' for '{library}'?", { ean = ean.description, library = ean.branch.branchname }) %]
+                [% ELSE %]
+                    [% tx("Confirm deletion of EAN '{ean}'?", { ean = ean.description }) %]
+                [% END %]
             [% END %]
 
         [% ELSE %]
@@ -81,16 +89,16 @@
       <input type="hidden" name="id" value="[% ean.id | html %]" />
   [% END %]
 
+    <h1>
+        [% IF ean %]
+            [% tx("Modify library EAN '{ean}'", { ean = ean.description }) %]
+        [% ELSE %]
+            <span>New EAN</span>
+        [% END %]
+    </h1>
+
   <fieldset class="rows">
-      <legend>
-            <h1>
-                [% IF ean %]
-                    Modify EAN
-                [% ELSE %]
-                    New EAN
-                [% END %]
-            </h1>
-      </legend>
+      <legend class="sr-only">EAN details</legend>
 
       <ol>
           <li>
@@ -142,7 +150,14 @@
 
 [% IF delete_confirm %]
 <div class="dialog alert">
-<h1>Delete EAN [% ean.ean | html %] for [% ean.branch.branchname | html %]?</h1>
+    <h1>
+        [% IF ( ean.branch.branchname ) %]
+            [% tx("Confirm deletion of EAN '{ean}' for '{library}'?", { ean = ean.description, library = ean.branch.branchname }) %]
+        [% ELSE %]
+            [% tx("Confirm deletion of EAN '{ean}'?", { ean = ean.description }) %]
+        [% END %]
+    </h1>
+
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="post">
     <input type="hidden" name="op" value="delete_confirmed" />
     <input type="hidden" name="id" value="[% ean.id | html %]" />

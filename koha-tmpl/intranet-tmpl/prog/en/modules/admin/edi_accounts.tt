@@ -7,13 +7,13 @@
 <title>[% FILTER collapse %]
     [% IF acct_form %]
         [% IF account %]
-            [% t("Modify account") | html %]
+            [% tx("Modify account '{edi_account}' for vendor '{vendor}'", { edi_account = account.description, vendor = account.vendor.name }) %]
         [% ELSE %]
-            [% t("Add new account") | html %]
+            [% t("New account") | html %]
         [% END %] &rsaquo;
     [% END %]
     [% IF delete_confirm %]
-        [% t("Confirm deletion of account") | html %] &rsaquo;
+        [% tx("Confirm deletion of account '{edi_account}' for vendor '{vendor}'", { edi_account = account.description, vendor = account.vendor.name }) %]
     [% END %]
     [% t("EDI accounts") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
@@ -45,17 +45,17 @@
         [% IF acct_form %]
             [% IF account %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify account</span>
+                    [% tx("Modify account '{edi_account}' for vendor '{vendor}'", { edi_account = account.description, vendor = account.vendor.name }) %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Add new account</span>
+                    <span>New account</span>
                 [% END %]
             [% END %]
 
         [% ELSIF delete_confirm %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm deletion of account</span>
+                [% tx("Confirm deletion of account '{edi_account}' for vendor '{vendor}'", { edi_account = account.description, vendor = account.vendor.name }) %]
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -88,16 +88,15 @@
   [% IF account %]
   <input type="hidden" name="id" value="[% account.id | html %]" />
   [% END %]
+    <h1>
+        [% IF account %]
+            [% tx("Modify account '{edi_account}' for vendor '{vendor}'", { edi_account = account.description, vendor = account.vendor.name }) %]
+        [% ELSE %]
+            <span>New account</span>
+        [% END %]
+    </h1>
   <fieldset class="rows">
-  <legend>
-        <h1>
-            [% IF account %]
-                Modify account
-            [% ELSE %]
-                New account
-            [% END %]
-        </h1>
-  </legend>
+    <legend class="sr-only">Account details</legend>
 
   <ol>
   <li>
@@ -265,7 +264,7 @@
 [% END %]
 [% IF delete_confirm %]
 <div class="dialog alert">
-<h1>Delete this account?</h1>
+<h1>Confirm deletion of account?</h1>
 <table>
     <tr>
     <th>Vendor</th>
@@ -294,7 +293,7 @@
 [% END %]
 [% IF display %]
 [% IF ( ediaccounts ) %]
-<h1>Vendor EDI accounts</h1>
+<h1>EDI accounts</h1>
 <div class="page-section">
     <table>
     <tr>
