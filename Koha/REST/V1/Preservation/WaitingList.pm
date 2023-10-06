@@ -74,7 +74,7 @@ sub add_items {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $body = $c->validation->every_param('body');
+        my $body = $c->req->json;
         my $new_not_for_loan = C4::Context->preference('PreservationNotForLoanWaitingListIn');
 
         Koha::Exceptions::Preservation::MissingSettings->throw( parameter => 'PreservationNotForLoanWaitingListIn' ) unless $new_not_for_loan;
@@ -126,7 +126,7 @@ sub remove_item {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $item_id = $c->validation->param('item_id');
+        my $item_id = $c->param('item_id');
 
         my $item = Koha::Items->find($item_id);
 

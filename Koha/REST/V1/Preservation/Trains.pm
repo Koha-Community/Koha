@@ -58,7 +58,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $train_id = $c->validation->param('train_id');
+        my $train_id = $c->param('train_id');
         my $train    = $c->objects->find( Koha::Preservation::Trains->search, $train_id );
 
         unless ($train) {
@@ -91,7 +91,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $train = Koha::Preservation::Train->new_from_api($body)->store;
 
@@ -155,7 +155,7 @@ Controller function that handles updating a Koha::Preservation::Train object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $train_id = $c->validation->param('train_id');
+    my $train_id = $c->param('train_id');
     my $train = Koha::Preservation::Trains->find( $train_id );
 
     unless ($train) {
@@ -169,7 +169,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 $train->set_from_api($body)->store;
 
@@ -226,7 +226,7 @@ Controller function that handles deleting a Koha::Preservation::Train object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $train = Koha::Preservation::Trains->find( $c->validation->param('train_id') );
+    my $train = Koha::Preservation::Trains->find( $c->param('train_id') );
     unless ($train) {
         return $c->render(
             status  => 404,
@@ -255,7 +255,7 @@ Controller function that handles getting an item from a train
 sub get_item {
     my $c = shift->openapi->valid_input or return;
 
-    my $train_id = $c->validation->param('train_id');
+    my $train_id = $c->param('train_id');
     my $train = Koha::Preservation::Trains->find( $train_id );
 
     unless ($train) {
@@ -265,7 +265,7 @@ sub get_item {
         );
     }
 
-    my $train_item_id = $c->validation->param('train_item_id');
+    my $train_item_id = $c->param('train_item_id');
 
     my $train_item = $c->objects->find(Koha::Preservation::Train::Items->search, { train_item_id => $train_item_id, train_id => $train_id });
 
@@ -297,7 +297,7 @@ Controller function that handles adding items in batch to a train
 sub add_items {
     my $c = shift->openapi->valid_input or return;
 
-    my $train_id = $c->validation->param('train_id');
+    my $train_id = $c->param('train_id');
     my $train = Koha::Preservation::Trains->find( $train_id );
 
     unless ($train) {
@@ -307,7 +307,7 @@ sub add_items {
         );
     }
 
-    my $body = $c->validation->every_param('body');
+    my $body = $c->req->json;
     return try {
         Koha::Database->new->schema->txn_do(
             sub {
@@ -339,7 +339,7 @@ Controller function that handles adding a new item to a train
 sub add_item {
     my $c = shift->openapi->valid_input or return;
 
-    my $train_id = $c->validation->param('train_id');
+    my $train_id = $c->param('train_id');
     my $train = Koha::Preservation::Trains->find( $train_id );
 
     unless ($train) {
@@ -349,7 +349,7 @@ sub add_item {
         );
     }
 
-    my $body = $c->validation->param('body');
+    my $body = $c->req->json;
     return try {
         Koha::Database->new->schema->txn_do(
             sub {
@@ -408,7 +408,7 @@ Controller function that handles copying an item from a train to an other
 sub copy_item {
     my $c = shift->openapi->valid_input or return;
 
-    my $train_id = $c->validation->param('train_id');
+    my $train_id = $c->param('train_id');
     my $train = Koha::Preservation::Trains->find( $train_id );
 
     unless ($train) {
@@ -418,7 +418,7 @@ sub copy_item {
         );
     }
 
-    my $train_item_id = $c->validation->param('train_item_id');
+    my $train_item_id = $c->param('train_item_id');
 
     my $train_item = Koha::Preservation::Train::Items->search({ train_item_id => $train_item_id, train_id => $train_id })->single;
 
@@ -429,7 +429,7 @@ sub copy_item {
         );
     }
 
-    my $body = $c->validation->param('body');
+    my $body = $c->req->json;
     return try {
         Koha::Database->new->schema->txn_do(
             sub {
@@ -512,7 +512,7 @@ Controller function that handles updating an item from a train
 sub update_item {
     my $c = shift->openapi->valid_input or return;
 
-    my $train_id = $c->validation->param('train_id');
+    my $train_id = $c->param('train_id');
     my $train = Koha::Preservation::Trains->find( $train_id );
 
     unless ($train) {
@@ -522,7 +522,7 @@ sub update_item {
         );
     }
 
-    my $train_item_id = $c->validation->param('train_item_id');
+    my $train_item_id = $c->param('train_item_id');
 
     my $train_item = Koha::Preservation::Train::Items->search({ train_item_id => $train_item_id, train_id => $train_id })->single;
 
@@ -536,7 +536,7 @@ sub update_item {
     return try {
         Koha::Database->new->schema->txn_do(
             sub {
-                my $body       = $c->validation->param('body');
+                my $body       = $c->req->json;
                 my $attributes = delete $body->{attributes} // [];
 
                 $train_item->set_from_api($body)->store;
@@ -560,7 +560,7 @@ Controller function that handles removing an item from a train
 sub remove_item {
     my $c = shift->openapi->valid_input or return;
 
-    my $train_id = $c->validation->param('train_id');
+    my $train_id = $c->param('train_id');
     my $train = Koha::Preservation::Trains->find( $train_id );
 
     unless ($train) {
@@ -570,7 +570,7 @@ sub remove_item {
         );
     }
 
-    my $train_item_id = $c->validation->param('train_item_id');
+    my $train_item_id = $c->param('train_item_id');
 
     my $train_item = $train->items->find($train_item_id);
 

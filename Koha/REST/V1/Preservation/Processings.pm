@@ -54,7 +54,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $processing_id = $c->validation->param('processing_id');
+        my $processing_id = $c->param('processing_id');
         my $processing    = $c->objects->find( Koha::Preservation::Processings->search, $processing_id );
 
         unless ($processing) {
@@ -87,7 +87,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $attributes = delete $body->{attributes} // [];
 
@@ -154,7 +154,7 @@ Controller function that handles updating a Koha::Preservation::Processing objec
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $processing_id = $c->validation->param('processing_id');
+    my $processing_id = $c->param('processing_id');
     my $processing = Koha::Preservation::Processings->find( $processing_id );
 
     unless ($processing) {
@@ -168,7 +168,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $attributes = delete $body->{attributes} // [];
 
@@ -227,7 +227,7 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $processing_id = $c->validation->param('processing_id');
+    my $processing_id = $c->param('processing_id');
     my $processing = Koha::Preservation::Processings->find( $processing_id );
     unless ($processing) {
         return $c->render(
