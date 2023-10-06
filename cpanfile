@@ -166,7 +166,6 @@ recommends 'Selenium::Remote::Driver', '1.27';
 recommends 'Starman', '0.4014';
 recommends 'Sys::CPU', '0.52';
 recommends 'Template::Plugin::Stash', '1.006';
-recommends 'Test::DBIx::Class', '0.42';
 recommends 'Test::Deep', '0.106';
 recommends 'Test::Exception', '0.35';
 recommends 'Test::MockObject', '1.09';
