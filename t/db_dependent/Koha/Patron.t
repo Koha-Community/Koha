@@ -339,7 +339,7 @@ subtest 'is_active' => sub {
 
     # Check lastseen, test days parameter
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', 1 );
-    $patron->track_login;
+    $patron->update_lastseen('login');
     is( $patron->is_active( { days => 1 } ), 1, 'Just logged in' );
     my $ago = dt_from_string->subtract( days => 2 );
     $patron->lastseen($ago)->store;
