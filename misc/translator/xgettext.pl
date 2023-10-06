@@ -158,15 +158,6 @@ sub text_extract {
 
 ###############################################################################
 
-sub generate_strings_list {
-    # Emit all extracted strings.
-    for my $t (string_list) {
-        printf $OUTPUT "%s\n", $t;
-    }
-}
-
-###############################################################################
-
 sub generate_po_file {
     # We don't emit the Plural-Forms header; it's meaningless for us
     my $pot_charset = (defined $charset_out? $charset_out: 'CHARSET');
