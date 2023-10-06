@@ -997,7 +997,7 @@ sub handle_patron_info {
     $resp = (PATRON_INFO_RESP);
     if ($patron) {
         if ( C4::Context->preference('TrackLastPatronActivity') ) {
-            my $koha_patron = Koha::Patrons->find($patron->userid);
+            my $koha_patron = Koha::Patrons->find($patron->{borrowernumber});
             $koha_patron->update_lastseen('connection');
         }
         $resp .= patron_status_string( $patron, $server );
