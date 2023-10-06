@@ -1957,17 +1957,17 @@ subtest 'update_lastseen tests' => sub {
     plan tests => 18;
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $userid = $patron->userid;
 
-    $patron->lastseen( undef );
+    $patron->lastseen(undef);
     $patron->store();
 
     my $cache     = Koha::Caches->get_instance();
     my $cache_key = "track_login_" . $patron->userid;
     $cache->clear_from_cache($cache_key);
 
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity',         '1' );
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login,connection,check_in,check_out,renewal' );
 
     is( $patron->lastseen, undef, 'Patron should have not last seen when newly created' );
@@ -1975,86 +1975,111 @@ subtest 'update_lastseen tests' => sub {
     my $now = dt_from_string();
     Time::Fake->offset( $now->epoch );
 
-    $patron->update_lastseen( 'login' );
+    $patron->update_lastseen('login');
     $patron->_result()->discard_changes();
     isnt( $patron->lastseen, undef, 'Patron should have last seen set when TrackLastPatronActivity = 1' );
     my $last_seen = $patron->lastseen;
 
     Time::Fake->offset( $now->epoch + 5 );
+
     # Test that lastseen isn't updated more than once in a day (regardless of activity passed)
-    $patron->update_lastseen( 'login' );
+    $patron->update_lastseen('login');
     $patron->_result()->discard_changes();
     is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a login' );
-    $patron->update_lastseen( 'connection' );
+    $patron->update_lastseen('connection');
     $patron->_result()->discard_changes();
     is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a SIP/ILSDI connection' );
-    $patron->update_lastseen( 'check_out' );
+    $patron->update_lastseen('check_out');
     $patron->_result()->discard_changes();
     is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a check out' );
-    $patron->update_lastseen( 'check_in' );
+    $patron->update_lastseen('check_in');
     $patron->_result()->discard_changes();
     is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a check in' );
-    $patron->update_lastseen( 'renewal' );
+    $patron->update_lastseen('renewal');
     $patron->_result()->discard_changes();
     is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a renewal' );
 
     # Check that tracking is disabled when the activity isn't listed
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
-    $cache->clear_from_cache($cache_key); # Rule out the more than once day prevention above
+    $cache->clear_from_cache($cache_key);    # Rule out the more than once day prevention above
 
-    $patron->update_lastseen( 'login' );
+    $patron->update_lastseen('login');
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a login if login is not selected as an option and the cache has been cleared' );
+    is(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be unchanged after a login if login is not selected as an option and the cache has been cleared'
+    );
 
-    $patron->update_lastseen( 'connection' );
+    $patron->update_lastseen('connection');
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a connection if connection is not selected as an option and the cache has been cleared' );
+    is(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be unchanged after a connection if connection is not selected as an option and the cache has been cleared'
+    );
 
-    $patron->update_lastseen( 'check_in' );
+    $patron->update_lastseen('check_in');
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a check_in if check_in is not selected as an option and the cache has been cleared' );
+    is(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be unchanged after a check_in if check_in is not selected as an option and the cache has been cleared'
+    );
 
-    $patron->update_lastseen( 'check_out' );
+    $patron->update_lastseen('check_out');
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a check_out if check_out is not selected as an option and the cache has been cleared' );
+    is(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be unchanged after a check_out if check_out is not selected as an option and the cache has been cleared'
+    );
 
-    $patron->update_lastseen( 'renewal' );
+    $patron->update_lastseen('renewal');
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged after a renewal if renewal is not selected as an option and the cache has been cleared' );
+    is(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be unchanged after a renewal if renewal is not selected as an option and the cache has been cleared'
+    );
 
     # Check tracking for each activity
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login,connection,check_in,check_out,renewal' );
 
     $cache->clear_from_cache($cache_key);
-    $patron->update_lastseen( 'login' );
+    $patron->update_lastseen('login');
     $patron->_result()->discard_changes();
     isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a login if we cleared the cache' );
 
     $cache->clear_from_cache($cache_key);
-    $patron->update_lastseen( 'connection' );
+    $patron->update_lastseen('connection');
     $patron->_result()->discard_changes();
-    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a connection if we cleared the cache' );
+    isnt(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be changed after a connection if we cleared the cache'
+    );
 
     $cache->clear_from_cache($cache_key);
-    $patron->update_lastseen( 'check_out' );
+    $patron->update_lastseen('check_out');
     $patron->_result()->discard_changes();
-    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a check_out if we cleared the cache' );
+    isnt(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be changed after a check_out if we cleared the cache'
+    );
 
     $cache->clear_from_cache($cache_key);
-    $patron->update_lastseen( 'check_in' );
+    $patron->update_lastseen('check_in');
     $patron->_result()->discard_changes();
-    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a check_in if we cleared the cache' );
+    isnt(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be changed after a check_in if we cleared the cache'
+    );
 
     $cache->clear_from_cache($cache_key);
-    $patron->update_lastseen( 'renewal' );
+    $patron->update_lastseen('renewal');
     $patron->_result()->discard_changes();
     isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a renewal if we cleared the cache' );
 
     # Check that the preference takes effect
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
-    $patron->lastseen( undef )->store;
+    $patron->lastseen(undef)->store;
     $cache->clear_from_cache($cache_key);
-    $patron->update_lastseen( 'login' );
+    $patron->update_lastseen('login');
     $patron->_result()->discard_changes();
     is( $patron->lastseen, undef, 'Patron should still have last seen unchanged when TrackLastPatronActivity = 0' );
 
