@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE To %]
 [% USE Asset %]
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
 [% USE AuthorisedValues %]
@@ -33,6 +34,8 @@
         const authorised_value_categories = [% To.json(AuthorisedValues.GetCategories()) | $raw %].map(c => c.category);
         const db_columns = [% To.json(db_columns) | $raw %];
         const api_mappings = [% To.json(api_mappings) | $raw %];
+
+        const csrf_token = "[% Koha.GenerateCSRF | $raw %]";
 
     </script>
 
