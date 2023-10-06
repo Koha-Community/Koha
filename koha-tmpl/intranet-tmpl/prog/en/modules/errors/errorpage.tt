@@ -1,6 +1,10 @@
 [% USE raw %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Error [% errno | html %] &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% tx("Error {error_number}", {error_number = errno }) | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="err_[% errno | html %]" class="err">
@@ -13,7 +17,7 @@
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
             <a href="#" aria-current="page">
-                Error [% errno | html %]
+                [% tx("Error {error_number}", {error_number = errno }) | html %]
             </a>
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -24,7 +28,7 @@
             <div class="col-md-8 col-md-offset-2">
 
     <h1>An error has occurred!</h1>
-    <h2><em>Error [% errno | html %]</em></h2>
+    <h2><em>[% tx("Error {error_number}", {error_number = errno }) | html %]</em></h2>
         <h3>This message may have been caused by any of the following reasons:</h3>
         <ul style="padding-bottom: 0.5em;">
             <li>You made use of an external link to an item that is no longer available</li>
