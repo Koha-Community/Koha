@@ -9,11 +9,12 @@ export class ItemAPIClient extends HttpClient {
 
     get items() {
         return {
-            getAll: (query, params) =>
+            getAll: (query, params, headers) =>
                 this.getAll({
                     endpoint: "items",
                     query,
                     params,
+                    headers,
                 }),
         };
     }

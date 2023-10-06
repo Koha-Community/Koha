@@ -168,7 +168,7 @@ export default {
             const client = APIClient.item
             let q = { "me.item_id": item_ids }
             await client.items
-                .getAll(q, { headers: { "x-koha-embed": "biblio" } })
+                .getAll(q, {}, { headers: { "x-koha-embed": "biblio" } })
                 .then(
                     items => {
                         this.items = items
