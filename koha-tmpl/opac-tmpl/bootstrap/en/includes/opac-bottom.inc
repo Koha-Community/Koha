@@ -240,11 +240,6 @@
 [% END %]
 [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
     [% Asset.js("js/coce.js") | $raw %]
-    <script>
-
-        var NO_COCE_JACKET = _("No cover image available");
-
-    </script>
 [% END %]
 
 [% IF OPACLocalCoverImages %]
