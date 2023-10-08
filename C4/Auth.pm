@@ -795,15 +795,16 @@ sub checkauth {
 
     if ( $type eq 'opac' && !C4::Context->preference("OpacPublic") ) {
         my @allowed_scripts_for_private_opac = qw(
-          opac-memberentry.tt
-          opac-registration-email-sent.tt
-          opac-registration-confirmation.tt
-          opac-memberentry-update-submitted.tt
-          opac-password-recovery.tt
-          opac-reset-password.tt
+            opac-memberentry.tt
+            opac-registration-email-sent.tt
+            opac-registration-confirmation.tt
+            opac-memberentry-update-submitted.tt
+            opac-password-recovery.tt
+            opac-reset-password.tt
+            ilsdi.tt
         );
         $authnotrequired = 0 unless grep { $_ eq $template_name }
-          @allowed_scripts_for_private_opac;
+            @allowed_scripts_for_private_opac;
     }
 
     my $timeout = _timeout_syspref();
