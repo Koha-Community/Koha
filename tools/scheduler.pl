@@ -27,7 +27,6 @@ use C4::Output qw( output_html_with_http_headers );
 use Koha::DateUtils qw( dt_from_string output_pref );;
 use Koha::Reports;
 use Koha::Email;
->>>>>>> Bug 34349: Validate/escape inputs for task scheduler
 
 my $input = CGI->new;
 my $base;
