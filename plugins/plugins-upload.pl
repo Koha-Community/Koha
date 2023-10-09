@@ -45,93 +45,90 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ($plugins_enabled) {
+my $uploadlocation = $input->param('uploadlocation');
+
+# Early exists if uploads are not enabled direct upload attempted when uploads are restricted
+if (!$plugins_enabled) {
+    output_html_with_http_headers $input, $cookie, $template->output;
+} elsif ( $plugins_restricted && !$uploadlocation ) {
     $template->param( plugins_restricted => $plugins_restricted );
-} else {
-    # Exit early if uploads are not enabled
     output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 my $uploadfilename = $input->param('uploadfile');
 my $uploadfile     = $input->upload('uploadfile');
-my $uploadlocation = $input->param('uploadlocation');
 my $op             = $input->param('op') || q{};
 
 my ( $tempfile, $tfh );
 
 my %errors;
 
-if ($plugins_enabled) {
-    if ( ( $op eq 'Upload' ) && ( $uploadfile || $uploadlocation ) ) {
-        my $plugins_dir = C4::Context->config("pluginsdir");
-        $plugins_dir = ref($plugins_dir) eq 'ARRAY' ? $plugins_dir->[0] : $plugins_dir;
+if ( ( $op eq 'Upload' ) && ( $uploadfile || $uploadlocation ) ) {
+    my $plugins_dir = C4::Context->config("pluginsdir");
+    $plugins_dir = ref($plugins_dir) eq 'ARRAY' ? $plugins_dir->[0] : $plugins_dir;
 
-        my $dirname = File::Temp::tempdir( CLEANUP => 1 );
+    my $dirname = File::Temp::tempdir( CLEANUP => 1 );
 
-        my $filesuffix;
-        $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
-        ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
+    my $filesuffix;
+    $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
+    ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
 
-        $errors{'NOTKPZ'}         = 1 if ( $uploadfilename !~ /\.kpz$/i );
-        $errors{'NOWRITETEMP'}    = 1 unless ( -w $dirname );
-        $errors{'NOWRITEPLUGINS'} = 1 unless ( -w $plugins_dir );
+    $errors{'NOTKPZ'}         = 1 if ( $uploadfilename !~ /\.kpz$/i );
+    $errors{'NOWRITETEMP'}    = 1 unless ( -w $dirname );
+    $errors{'NOWRITEPLUGINS'} = 1 unless ( -w $plugins_dir );
 
-        if ($uploadlocation) {
-            my $do_get = 1;
-            if ( $plugins_restricted ) {
-                my $repos = C4::Context->config('plugin_repos');
+    if ($uploadlocation) {
+        my $do_get = 1;
+        if ($plugins_restricted) {
+            my $repos = C4::Context->config('plugin_repos');
 
-                # Fix data structure if only one repo defined
-                if ( ref($repos->{repo}) eq 'HASH' ) {
-                    $repos = { repo => [ $repos->{repo} ] };
-                }
-
-                $do_get = any { index($uploadlocation, $_->{org_name}) != -1 } @{ $repos->{repo} };
+            # Fix data structure if only one repo defined
+            if ( ref( $repos->{repo} ) eq 'HASH' ) {
+                $repos = { repo => [ $repos->{repo} ] };
             }
 
-            if ( $do_get ) {
-                my $ua = Mojo::UserAgent->new( max_redirects => 5 );
-                my $tx = $ua->get($uploadlocation);
-                $tx->result->content->asset->move_to($tempfile);
-            } else {
-                $errors{'RESTRICTED'} = 1;
-            }
-        } else {
-            $errors{'RESTRICTED'} = 1 unless ( !$plugins_restricted );
-            $errors{'EMPTYUPLOAD'} = 1 unless ( length($uploadfile) > 0 );
+            $do_get = any { index( $uploadlocation, $_->{org_name} ) != -1 } @{ $repos->{repo} };
         }
 
-        if (%errors) {
-            $template->param( ERRORS => [ \%errors ] );
+        if ($do_get) {
+            my $ua = Mojo::UserAgent->new( max_redirects => 5 );
+            my $tx = $ua->get($uploadlocation);
+            $tx->result->content->asset->move_to($tempfile);
         } else {
-            if ($uploadfile && !$plugins_restricted) {
-                while (<$uploadfile>) {
-                    print $tfh $_;
-                }
-                close $tfh;
-            }
-
-            my $ae = Archive::Extract->new( archive => $tempfile, type => 'zip' );
-            unless ( $ae->extract( to => $plugins_dir ) ) {
-                warn "ERROR: " . $ae->error;
-                $errors{'UZIPFAIL'} = $uploadfilename;
-                $template->param( ERRORS => [ \%errors ] );
-                output_html_with_http_headers $input, $cookie, $template->output;
-                exit;
-            }
-
-            Koha::Plugins->new()->InstallPlugins();
+            $errors{'RESTRICTED'} = 1;
         }
-    } elsif ( ( $op eq 'Upload' ) && !$uploadfile && !$uploadlocation ) {
-        warn "Problem uploading file or no file uploaded.";
-    }
-
-    if ( ( $uploadfile || $uploadlocation ) && !%errors && !$template->param('ERRORS') ) {
-        print $input->redirect("/cgi-bin/koha/plugins/plugins-home.pl");
     } else {
-        output_html_with_http_headers $input, $cookie, $template->output;
+        $errors{'RESTRICTED'}  = 1 unless ( !$plugins_restricted );
+        $errors{'EMPTYUPLOAD'} = 1 unless ( length($uploadfile) > 0 );
     }
 
+    if (%errors) {
+        $template->param( ERRORS => [ \%errors ] );
+    } else {
+        if ( $uploadfile && !$plugins_restricted ) {
+            while (<$uploadfile>) {
+                print $tfh $_;
+            }
+            close $tfh;
+        }
+
+        my $ae = Archive::Extract->new( archive => $tempfile, type => 'zip' );
+        unless ( $ae->extract( to => $plugins_dir ) ) {
+            warn "ERROR: " . $ae->error;
+            $errors{'UZIPFAIL'} = $uploadfilename;
+            $template->param( ERRORS => [ \%errors ] );
+            output_html_with_http_headers $input, $cookie, $template->output;
+            exit;
+        }
+
+        Koha::Plugins->new()->InstallPlugins();
+    }
+} elsif ( ( $op eq 'Upload' ) && !$uploadfile && !$uploadlocation ) {
+    warn "Problem uploading file or no file uploaded.";
+}
+
+if ( ( $uploadfile || $uploadlocation ) && !%errors && !$template->param('ERRORS') ) {
+    print $input->redirect("/cgi-bin/koha/plugins/plugins-home.pl");
 } else {
     output_html_with_http_headers $input, $cookie, $template->output;
 }
