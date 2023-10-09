@@ -49,15 +49,7 @@
                 <main>
 
                     [% INCLUDE 'labels-toolbar.inc' %]
-                    [% IF ( label_element == 'layout' ) %]
-                        <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
-                    [% ELSIF ( label_element == 'template' ) %]
-                        <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
-                    [% ELSIF ( label_element == 'profile' ) %]
-                        <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
-                    [% ELSIF ( label_element == 'batch' ) %]
-                        <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
-                    [% END %]
+                    <h2>[% PROCESS translate_label_element element=label_element_title %]</h2>
 
                         [% IF ( error ) %]
                             <div class="dialog alert">
