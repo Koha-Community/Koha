@@ -67,12 +67,17 @@
             <th>Checkin on</th>
             </tr></thead>
             <tbody>
+        [% SET anonymous_patron_id = Koha.Preference('AnonymousPatron') || 0 %]
         [% FOREACH checkout IN checkouts %]
             <tr>
                 [% IF show_patron_column %]
                     <td>
                         [% IF checkout.patron %][%# Not set for deleted patron records %]
-                            [% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]
+                            [% IF checkout.patron.id == anonymous_patron_id %]
+                                <em>Anonymized</em>
+                            [% ELSE %]
+                                [% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]
+                            [% END %]
                         [% END %]
                     </td>
                 [% END %]
