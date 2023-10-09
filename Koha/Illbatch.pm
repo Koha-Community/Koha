@@ -53,7 +53,8 @@ Return the patron object associated with this batch
 
 sub patron {
     my ($self) = @_;
-    return Koha::Patron->_new_from_dbic( scalar $self->_result->borrowernumber );
+    my $patron = return Koha::Patrons->find( { borrowernumber => $self->borrowernumber } );
+    return unless $patron;
 }
 
 =head3 branch
@@ -66,7 +67,8 @@ Return the branch object associated with this batch
 
 sub branch {
     my ($self) = @_;
-    return Koha::Library->_new_from_dbic( scalar $self->_result->branchcode );
+    my $library = return Koha::Libraries->find( { branchcode => $self->branchcode } );
+    return unless $library;
 }
 
 =head3 requests_count
@@ -80,6 +82,18 @@ Return the number of requests associated with this batch
 sub requests_count {
     my ($self) = @_;
     return Koha::Illrequests->search( { batch_id => $self->id } )->count;
+}
+
+=head3 requests
+
+Return the requests for this batch
+
+=cut
+
+sub requests {
+    my ($self) = @_;
+    my $requests = $self->_result->illrequests;
+    return Koha::Illrequests->_new_from_dbic($requests);
 }
 
 =head3 create_and_log
@@ -174,6 +188,51 @@ sub delete_and_log {
 }
 
 =head2 Internal methods
+
+
+=head3 strings_map
+
+=cut
+
+sub strings_map {
+    my ( $self, $params ) = @_;
+
+    my $strings = {};
+
+    if ( defined $self->statuscode ) {
+        my $ill_batch_status = Koha::IllbatchStatuses->search( { code => $self->statuscode } );
+        my $ill_batch_status_str =
+            $ill_batch_status->count
+                ? $ill_batch_status->next->name
+        : $self->statuscode;
+
+        $strings->{status} = {
+            name => $ill_batch_status_str,
+        };
+    }
+
+    if ( defined $self->branchcode ) {
+        my $ill_batch_branch = Koha::Libraries->find( $self->branchcode );
+        my $ill_batch_branchname_str = $ill_batch_branch ? $ill_batch_branch->branchname : $self->branchcode;
+
+        $strings->{branchname} = $ill_batch_branchname_str;
+    }
+
+    return $strings;
+}
+
+=head3 to_api_mapping
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id             => 'batch_id',
+        branchcode     => 'library_id',
+        borrowernumber => 'patron_id',
+        status         => 'batch_status',
+    };
+}
 
 =head3 _type
 

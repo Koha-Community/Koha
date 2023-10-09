@@ -38,63 +38,15 @@ Return a list of available ILL batches
 =cut
 
 sub list {
-    my $c = shift->openapi->valid_input;
+    my $c = shift->openapi->valid_input or return;
 
-    #FIXME: This should be $c->objects-search
-    my @batches = Koha::Illbatches->search()->as_list;
+    return try {
+        my $illbatches = $c->objects->search( Koha::Illbatches->new );
+        return $c->render( status => 200, openapi => $illbatches );
+    } catch {
+        $c->unhandled_exception($_);
+    };
 
-    #FIXME: Below should be coming from $c->objects accessors
-    # Get all patrons associated with all our batches
-    # in one go
-    my $patrons = {};
-    foreach my $batch (@batches) {
-        my $patron_id = $batch->borrowernumber;
-        $patrons->{$patron_id} = 1;
-    }
-    my @patron_ids     = keys %{$patrons};
-    my $patron_results = Koha::Patrons->search( { borrowernumber => { -in => \@patron_ids } } );
-
-    # Get all branches associated with all our batches
-    # in one go
-    my $branches = {};
-    foreach my $batch (@batches) {
-        my $branch_id = $batch->branchcode;
-        $branches->{$branch_id} = 1;
-    }
-    my @branchcodes    = keys %{$branches};
-    my $branch_results = Koha::Libraries->search( { branchcode => { -in => \@branchcodes } } );
-
-    # Get all batch statuses associated with all our batches
-    # in one go
-    my $statuses = {};
-    foreach my $batch (@batches) {
-        my $code = $batch->statuscode;
-        $statuses->{$code} = 1;
-    }
-    my @statuscodes    = keys %{$statuses};
-    my $status_results = Koha::IllbatchStatuses->search( { code => { -in => \@statuscodes } } );
-
-    # Populate the response
-    my @to_return = ();
-    foreach my $it_batch (@batches) {
-        my $patron = $patron_results->find( { borrowernumber => $it_batch->borrowernumber } );
-        my $branch = $branch_results->find( { branchcode     => $it_batch->branchcode } );
-        my $status = $status_results->find( { code           => $it_batch->statuscode } );
-        push @to_return, {
-            batch_id       => $it_batch->id,
-            backend        => $it_batch->backend,
-            library_id     => $it_batch->branchcode,
-            name           => $it_batch->name,
-            statuscode     => $it_batch->statuscode,
-            patron_id      => $it_batch->borrowernumber,
-            patron         => $patron,
-            branch         => $branch,
-            status         => $status,
-            requests_count => $it_batch->requests_count
-        };
-    }
-
-    return $c->render( status => 200, openapi => \@to_return );
 }
 
 =head3 get

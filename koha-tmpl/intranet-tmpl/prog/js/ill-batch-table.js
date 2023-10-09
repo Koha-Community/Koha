@@ -27,11 +27,15 @@
         table = initTable();
 
         // Do the initial data population
-        window.doBatchApiRequest()
-            .then(function (response) {
+        window.doBatchApiRequest('', {
+                headers: {
+                    'x-koha-embed': '+strings,requests+count,patron'
+                }
+            })
+            .then(function(response) {
                 return response.json();
             })
-            .then(function (data) {
+            .then(function(data) {
                 batchesProxy.data = data;
             });
 
@@ -87,8 +91,8 @@
     }
 
     // A render function for branch name
-    var createBranch = function (data) {
-        return data.branchname;
+    var createBranch = function (x, y, data) {
+        return data._strings.branchname;
     };
 
     // A render function for batch name
@@ -102,7 +106,7 @@
 
     // A render function for batch status
     var createStatus = function (x, y, data) {
-        return data.status.name;
+        return data._strings.status.name;
     };
 
     // A render function for our patron link

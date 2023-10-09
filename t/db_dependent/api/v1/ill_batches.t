@@ -85,11 +85,12 @@ subtest 'list() tests' => sub {
     );
 
     # One batch created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/ill/batches")->status_is(200)->json_has( '/0/batch_id', 'Batch ID' )
-        ->json_has( '/0/name',           'Batch name' )->json_has( '/0/backend', 'Backend name' )
-        ->json_has( '/0/patron_id',      'Borrowernumber' )->json_has( '/0/library_id', 'Branchcode' )
-        ->json_has( '/0/patron',         'patron embedded' )->json_has( '/0/branch', 'branch embedded' )
-        ->json_has( '/0/requests_count', 'request count' );
+    $t->get_ok(
+        "//$userid:$password@/api/v1/ill/batches" => { 'x-koha-embed' => '+strings,requests+count,patron,branch' } )
+        ->status_is(200)->json_has( '/0/batch_id', 'Batch ID' )->json_has( '/0/name', 'Batch name' )
+        ->json_has( '/0/backend',    'Backend name' )->json_has( '/0/patron_id', 'Borrowernumber' )
+        ->json_has( '/0/library_id', 'Branchcode' )->json_has( '/0/patron', 'patron embedded' )
+        ->json_has( '/0/branch',     'branch embedded' )->json_has( '/0/requests_count', 'request count' );
 
     # Try to create a second batch with the same name, this should fail
     my $another_batch = $builder->build_object( { class => 'Koha::Illbatches', value => { name => $batch->name } } );
@@ -327,7 +328,7 @@ subtest 'update() tests' => sub {
         ]
         );
 
-    my $batch_to_delete = $builder->build_object( { class => 'Koha::Cities' } );
+    my $batch_to_delete = $builder->build_object( { class => 'Koha::Illbatches' } );
     my $non_existent_id = $batch_to_delete->id;
     $batch_to_delete->delete;
 
