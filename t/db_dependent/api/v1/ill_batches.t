@@ -161,7 +161,8 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/ill/batches/" . $batch->id )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/ill/batches/"
+            . $batch->id => { 'x-koha-embed' => '+strings,requests+count,patron,branch' } )->status_is(200)
         ->json_has( '/batch_id',   'Batch ID' )->json_has( '/name', 'Batch name' )
         ->json_has( '/backend',    'Backend name' )->json_has( '/patron_id', 'Borrowernumber' )
         ->json_has( '/library_id', 'Branchcode' )->json_has( '/patron', 'patron embedded' )
@@ -238,11 +239,13 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $batch_id =
-        $t->post_ok( "//$userid:$password@/api/v1/ill/batches" => json => $batch_metadata )->status_is(201)
+        $t->post_ok( "//$userid:$password@/api/v1/ill/batches" =>
+                { 'x-koha-embed' => '+strings,requests+count,patron,branch' } => json => $batch_metadata )
+            ->status_is(201)
         ->json_is( '/name'       => $batch_metadata->{name} )->json_is( '/backend' => $batch_metadata->{backend} )
         ->json_is( '/patron_id'  => $librarian->borrowernumber )
         ->json_is( '/library_id' => $batch_metadata->{library_id} )->json_is( '/statuscode' => $batch_status->code )
-        ->json_has('/patron')->json_has('/status')->json_has('/requests_count')->json_has('/branch');
+        ->json_has('/patron')->json_has('/_strings/status')->json_has('/requests_count')->json_has('/branch');
 
     # Authorized attempt to create with null id
     $batch_metadata->{id} = undef;

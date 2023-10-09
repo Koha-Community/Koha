@@ -309,7 +309,7 @@
         var payload = {
             batch_id: batchId,
             ill_backend_id: batch.data.backend,
-            patron_id: batch.data.patron.borrowernumber,
+            patron_id: batch.data.patron.patron_id,
             library_id: batch.data.library_id,
             extended_attributes: extended_attributes
         };
@@ -499,7 +499,11 @@
 
     // Get the batch
     function fetchBatch() {
-        window.doBatchApiRequest("/" + batchId)
+        window.doBatchApiRequest("/" + batchId, {
+                headers: {
+                    'x-koha-embed': 'patron'
+                }
+            })
             .then(function (response) {
                 return response.json();
             })
@@ -528,7 +532,8 @@
         return doBatchApiRequest('', {
             method: 'POST',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'x-koha-embed': 'patron'
             },
             body: JSON.stringify({
                 name: nameInput.value,
@@ -572,6 +577,7 @@
     function updateBatch() {
         var selectedBranchcode = branchcodeSelect.selectedOptions[0].value;
         var selectedStatuscode = statusesSelect.selectedOptions[0].value;
+
         return doBatchApiRequest('/' + batch.data.batch_id, {
             method: 'PUT',
             headers: {

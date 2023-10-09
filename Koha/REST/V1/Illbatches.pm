@@ -56,34 +56,25 @@ Get one batch
 =cut
 
 sub get {
-    my $c = shift->openapi->valid_input;
+    my $c = shift->openapi->valid_input or return;
 
-    my $batchid = $c->param('ill_batch_id');
+    return try {
+        my $ill_batch = $c->objects->find( Koha::Illbatches->search, $c->param('ill_batch_id') );
 
-    my $batch = Koha::Illbatches->find($batchid);
-
-    if ( not defined $batch ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "ILL batch not found" }
-        );
-    }
-
-    return $c->render(
-        status  => 200,
-        openapi => {
-            batch_id       => $batch->id,
-            backend        => $batch->backend,
-            library_id     => $batch->branchcode,
-            name           => $batch->name,
-            statuscode     => $batch->statuscode,
-            patron_id      => $batch->borrowernumber,
-            patron         => $batch->patron->unblessed,
-            branch         => $batch->branch->unblessed,
-            status         => $batch->status->unblessed,
-            requests_count => $batch->requests_count
+        unless ($ill_batch) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "ILL batch not found" }
+            );
         }
-    );
+
+        return $c->render(
+            status  => 200,
+            openapi => $ill_batch
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 add
@@ -97,8 +88,6 @@ sub add {
 
     my $body = $c->req->json;
 
-    # We receive cardnumber, so we need to look up the corresponding
-    # borrowernumber
     my $patron = Koha::Patrons->find( { cardnumber => $body->{cardnumber} } );
 
     if ( not defined $patron ) {
@@ -113,26 +102,16 @@ sub add {
     $body->{branchcode}     = delete $body->{library_id};
 
     return try {
-        my $batch = Koha::Illbatch->new($body);
+        my $batch = Koha::Illbatch->new_from_api($body);
         $batch->create_and_log;
+
         $c->res->headers->location( $c->req->url->to_string . '/' . $batch->id );
 
-        my $ret = {
-            batch_id       => $batch->id,
-            backend        => $batch->backend,
-            library_id     => $batch->branchcode,
-            name           => $batch->name,
-            statuscode     => $batch->statuscode,
-            patron_id      => $batch->borrowernumber,
-            patron         => $batch->patron->unblessed,
-            branch         => $batch->branch->unblessed,
-            status         => $batch->status->unblessed,
-            requests_count => 0
-        };
+        my $ill_batch = $c->objects->find( Koha::Illbatches->search, $batch->id );
 
         return $c->render(
             status  => 201,
-            openapi => $ret
+            openapi => $ill_batch
         );
     } catch {
         if ( blessed $_ ) {
@@ -158,7 +137,7 @@ sub update {
 
     my $batch = Koha::Illbatches->find( $c->param('ill_batch_id') );
 
-    if ( not defined $batch ) {
+    unless ($batch) {
         return $c->render(
             status  => 404,
             openapi => { error => "ILL batch not found" }
@@ -173,22 +152,9 @@ sub update {
     return try {
         $batch->update_and_log($params);
 
-        my $ret = {
-            batch_id       => $batch->id,
-            backend        => $batch->backend,
-            library_id     => $batch->branchcode,
-            name           => $batch->name,
-            statuscode     => $batch->statuscode,
-            patron_id      => $batch->borrowernumber,
-            patron         => $batch->patron->unblessed,
-            branch         => $batch->branch->unblessed,
-            status         => $batch->status->unblessed,
-            requests_count => $batch->requests_count
-        };
-
         return $c->render(
             status  => 200,
-            openapi => $ret
+            openapi => $batch->to_api
         );
     } catch {
         $c->unhandled_exception($_);
