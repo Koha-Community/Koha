@@ -66,21 +66,23 @@ my $biblio4 = $builder->build_sample_biblio;
 my $biblio5 = $builder->build_sample_biblio;
 my $biblio6 = $builder->build_sample_biblio;
 
-my $item1 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
-my $item2 = $builder->build_sample_item({biblionumber => $biblio2->biblionumber});
-my $item3 = $builder->build_sample_item({biblionumber => $biblio3->biblionumber});
-my $item4 = $builder->build_sample_item({biblionumber => $biblio4->biblionumber});
-my $item5 = $builder->build_sample_item({biblionumber => $biblio5->biblionumber});
-my $item6 = $builder->build_sample_item({biblionumber => $biblio6->biblionumber});
+my $item1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+my $item2 = $builder->build_sample_item( { biblionumber => $biblio2->biblionumber } );
+my $item3 = $builder->build_sample_item( { biblionumber => $biblio3->biblionumber } );
+my $item4 = $builder->build_sample_item( { biblionumber => $biblio4->biblionumber } );
+my $item5 = $builder->build_sample_item( { biblionumber => $biblio5->biblionumber } );
+my $item6 = $builder->build_sample_item( { biblionumber => $biblio6->biblionumber } );
 
-Koha::CirculationRules->set_rules({
-    categorycode => undef,
-    itemtype => undef,
-    branchcode => undef,
-    rules => {
-        holds_pickup_period => undef,
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
+        rules        => {
+            holds_pickup_period => undef,
+        }
     }
-});
+);
 
 my $today = dt_from_string();
 
@@ -209,62 +211,75 @@ my $reserve4 = $builder->build({
 t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 10);
 ModReserveAffect( $item4->itemnumber, $patron2->{borrowernumber}, 0, $reserve4->{reserve_id});
 
-my $r4 = Koha::Holds->find($reserve4->{reserve_id});
-is($r4->expirationdate, $requested_expiredate->ymd, 'Requested expiration date should be kept' );
+my $r4 = Koha::Holds->find( $reserve4->{reserve_id} );
+is( $r4->expirationdate, $requested_expiredate->ymd, 'Requested expiration date should be kept' );
 
-Koha::CirculationRules->set_rules({
-    categorycode => $patron1->{categorycode},
-    itemtype => undef,
-    branchcode => undef,
-    rules => {
-        holds_pickup_period => '3',
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => $patron1->{categorycode},
+        itemtype     => undef,
+        branchcode   => undef,
+        rules        => {
+            holds_pickup_period => '3',
+        }
     }
-});
-t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 7);
+);
+t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', 7 );
 
-my $reserve5_reservedate = $today->clone;
-my $reserve5_expirationdate = $reserve5_reservedate->add(days => 3);
+my $reserve5_reservedate    = $today->clone;
+my $reserve5_expirationdate = $reserve5_reservedate->add( days => 3 );
 
-my $reserve5 = $builder->build({
-    source => 'Reserve',
-    value => {
-        borrowernumber => $patron1->{borrowernumber},
-        reservedate => $reserve5_reservedate->ymd,
-        expirationdate => undef,
-        biblionumber => $biblio5->biblionumber,
-        branchcode => 'LIB2',
-        priority => 1,
-        found => '',
-        patron_expiration_date => undef,
-    },
-});
+my $reserve5 = $builder->build(
+    {
+        source => 'Reserve',
+        value  => {
+            borrowernumber         => $patron1->{borrowernumber},
+            reservedate            => $reserve5_reservedate->ymd,
+            expirationdate         => undef,
+            biblionumber           => $biblio5->biblionumber,
+            branchcode             => 'LIB2',
+            priority               => 1,
+            found                  => '',
+            patron_expiration_date => undef,
+        },
+    }
+);
 
-ModReserveAffect( $item5->itemnumber, $patron1->{borrowernumber});
-my $r5 = Koha::Holds->find($reserve5->{reserve_id});
+ModReserveAffect( $item5->itemnumber, $patron1->{borrowernumber} );
+my $r5 = Koha::Holds->find( $reserve5->{reserve_id} );
 
-is($r5->expirationdate, $reserve5_expirationdate->ymd, 'Expiration date should be set to today + 3 based on circulation rules' );
+is(
+    $r5->expirationdate, $reserve5_expirationdate->ymd,
+    'Expiration date should be set to today + 3 based on circulation rules'
+);
 
 my $reserve6_reservedate = $today->clone;
+
 # add 3 days of pickup + 1 day of holiday
-my $reserve6_expirationdate = $reserve6_reservedate->add(days => 5);
+my $reserve6_expirationdate = $reserve6_reservedate->add( days => 5 );
 
-my $reserve6 = $builder->build({
-    source => 'Reserve',
-    value => {
-        borrowernumber => $patron1->{borrowernumber},
-        reservedate => $reserve6_reservedate->ymd,
-        expirationdate => undef,
-        biblionumber => $biblio6->biblionumber,
-        branchcode => 'LIB1',
-        priority => 1,
-        found => '',
-        patron_expiration_date => undef,
-    },
-});
+my $reserve6 = $builder->build(
+    {
+        source => 'Reserve',
+        value  => {
+            borrowernumber         => $patron1->{borrowernumber},
+            reservedate            => $reserve6_reservedate->ymd,
+            expirationdate         => undef,
+            biblionumber           => $biblio6->biblionumber,
+            branchcode             => 'LIB1',
+            priority               => 1,
+            found                  => '',
+            patron_expiration_date => undef,
+        },
+    }
+);
 
-ModReserveAffect( $item6->itemnumber, $patron1->{borrowernumber});
-my $r6 = Koha::Holds->find($reserve6->{reserve_id});
+ModReserveAffect( $item6->itemnumber, $patron1->{borrowernumber} );
+my $r6 = Koha::Holds->find( $reserve6->{reserve_id} );
 
-is($r6->expirationdate, $reserve6_expirationdate->ymd, 'Expiration date should be set to today + 4 based on circulation rules and including a holiday' );
+is(
+    $r6->expirationdate, $reserve6_expirationdate->ymd,
+    'Expiration date should be set to today + 4 based on circulation rules and including a holiday'
+);
 
 $schema->storage->txn_rollback;
