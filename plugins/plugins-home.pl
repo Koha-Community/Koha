@@ -58,7 +58,7 @@ if ($plugins_enabled) {
         }
     );
 
-    $template->param( plugins => \@plugins, );
+    $template->param( plugins            => \@plugins, );
     $template->param( plugins_restricted => C4::Context->config('plugins_restricted') );
 
     $template->param( can_search => C4::Context->config('plugin_repos') ? 1 : 0 );

@@ -40,7 +40,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $class = $input->param('class');
 
-if ( $class ) {
+if ($class) {
     Koha::Plugins::Handler->delete( { class => $class } );
 }
 
