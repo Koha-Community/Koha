@@ -14,7 +14,9 @@
 [% ELSE %]
 <link rel="shortcut icon" href="[% interface | html %]/[% theme | html %]/images/favicon.ico" type="image/x-icon" />
 [% END %]
-[% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
+[% Asset.css("lib/fontawesome/css/fontawesome.min.css") | $raw %]
+[% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
+[% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]
 [% IF ( bidi ) %]
     [% Asset.css("css/sco-rtl.css") | $raw %]
 [% ELSE %]
