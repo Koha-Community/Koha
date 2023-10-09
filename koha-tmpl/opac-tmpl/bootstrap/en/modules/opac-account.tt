@@ -137,7 +137,7 @@ $( document ).ready(function() {
             var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
             $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtInactivefilter);
         }
-        fines_table.fnFilter(filteredValue, -1, true, false);
+        fines_table.fnFilter(filteredValue, -2, true, false);
         $(this).toggleClass('filtered');
     });
 
