@@ -703,7 +703,6 @@ push @{ $pl_files->{'rewrite-config.PL'} }, (
 );
 push @{ $pl_files->{'rewrite-config.PL'} }, (
     'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
-    'blib/SCRIPT_DIR/koha-index-daemon-ctl.sh',
 );
 $config{'ZEBRA_AUTH_CFG'} = 'zebra-authorities-dom.cfg';
 $config{'ZEBRA_BIB_CFG'}  = 'zebra-biblios-dom.cfg';
