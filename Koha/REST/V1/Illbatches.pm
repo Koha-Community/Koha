@@ -106,7 +106,7 @@ Get one batch
 sub get {
     my $c = shift->openapi->valid_input;
 
-    my $batchid = $c->param('illbatch_id');
+    my $batchid = $c->param('ill_batch_id');
 
     my $batch = Koha::Illbatches->find($batchid);
 
@@ -204,7 +204,7 @@ Update a batch
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $batch = Koha::Illbatches->find( $c->param('illbatch_id') );
+    my $batch = Koha::Illbatches->find( $c->param('ill_batch_id') );
 
     if ( not defined $batch ) {
         return $c->render(
@@ -253,7 +253,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $batch = Koha::Illbatches->find( $c->param('illbatch_id') );
+    my $batch = Koha::Illbatches->find( $c->param('ill_batch_id') );
 
     if ( not defined $batch ) {
         return $c->render( status => 404, openapi => { error => "ILL batch not found" } );

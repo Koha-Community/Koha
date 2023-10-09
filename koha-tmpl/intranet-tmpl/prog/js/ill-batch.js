@@ -13,7 +13,7 @@
 
     // Make a batch API call, returning the resulting promise
     window.doBatchApiRequest = function (url, options) {
-        var batchListApi = '/api/v1/illbatches';
+        var batchListApi = '/api/v1/ill/batches';
         var fullUrl = batchListApi + (url ? url : '');
         return doApiRequest(fullUrl, options);
     };

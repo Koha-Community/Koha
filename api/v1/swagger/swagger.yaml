@@ -64,10 +64,10 @@ definitions:
     $ref: ./definitions/ill_status.yaml
   ill_request:
     $ref: ./definitions/ill_request.yaml
-  illbatch:
-    $ref: ./definitions/illbatch.yaml
-  illbatches:
-    $ref: ./definitions/illbatches.yaml
+  ill_batch:
+    $ref: ./definitions/ill_batch.yaml
+  ill_batches:
+    $ref: ./definitions/ill_batches.yaml
   illbatchstatus:
     $ref: ./definitions/illbatchstatus.yaml
   illbatchstatuses:
@@ -277,10 +277,10 @@ paths:
     $ref: "./paths/ill_backends.yaml#/~1ill~1backends~1{ill_backend_id}"
   /ill/requests:
     $ref: ./paths/ill_requests.yaml#/~1ill~1requests
-  /illbatches:
-    $ref: ./paths/illbatches.yaml#/~1illbatches
-  "/illbatches/{illbatch_id}":
-    $ref: "./paths/illbatches.yaml#/~1illbatches~1{illbatch_id}"
+  /ill/batches:
+    $ref: ./paths/ill_batches.yaml#/~1ill~1batches
+  "/ill/batches/{ill_batch_id}":
+    $ref: "./paths/ill_batches.yaml#/~1ill~1batches~1{ill_batch_id}"
   /illbatchstatuses:
     $ref: ./paths/illbatchstatuses.yaml#/~1illbatchstatuses
   "/illbatchstatuses/{illbatchstatus_code}":
@@ -537,10 +537,10 @@ parameters:
     name: hold_id
     required: true
     type: integer
-  illbatch_id_pp:
+  ill_batch_id_pp:
     description: Internal ILL batch identifier
     in: path
-    name: illbatch_id
+    name: ill_batch_id
     required: true
     type: integer
   illbatchstatus_code_pp:
@@ -880,7 +880,7 @@ tags:
     name: ill_backends
     x-displayName: ILL backends
   - description: "Manage ILL module batches\n"
-    name: illbatches
+    name: ill_batches
     x-displayName: ILL batches
   - description: "Manage ILL module batch statuses\n"
     name: illbatchstatuses
