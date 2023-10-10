@@ -289,7 +289,7 @@ subtest 'with a library that is never open' => sub {
         $calendar->insert_week_day_holiday( weekday => $weekday, title => '', description => '' );
     }
 
-    my $now = DateTime->now;
+    my $now = dt_from_string;
 
     subtest 'next_open_days should throw an exception' => sub {
         my $kcalendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
@@ -315,7 +315,7 @@ subtest 'with a library that is *almost* never open' => sub {
         $calendar->insert_week_day_holiday( weekday => $weekday, title => '', description => '' );
     }
 
-    my $now                    = DateTime->now;
+    my $now                    = dt_from_string;
     my $open_day_in_the_future = $now->clone()->add( years => 1 );
     my $open_day_in_the_past   = $now->clone()->subtract( years => 1 );
     $calendar->insert_exception_holiday( date => $open_day_in_the_future->ymd, title => '', description => '' );
