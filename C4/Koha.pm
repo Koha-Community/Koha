@@ -683,7 +683,6 @@ sub GetNormalizedOCLCNumber {
     } else {
         # TODO for UNIMARC
     }
-    return
 }
 
 sub _normalize_match_point {
