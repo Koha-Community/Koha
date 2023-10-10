@@ -1,10 +1,9 @@
 use Modern::Perl;
 
 return {
-    bug_number => "25560",
-    description =>
-      "Migrating existing UpdateNotForLoanStatusOnCheckin rules to new format",
-    up => sub {
+    bug_number  => "25560",
+    description => "Migrating existing UpdateNotForLoanStatusOnCheckin rules to new format",
+    up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
