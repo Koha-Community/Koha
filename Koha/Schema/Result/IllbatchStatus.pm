@@ -106,13 +106,13 @@ Related object: L<Koha::Schema::Result::Illbatch>
 __PACKAGE__->has_many(
   "illbatches",
   "Koha::Schema::Result::Illbatch",
-  { "foreign.statuscode" => "self.code" },
+  { "foreign.status_code" => "self.code" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-08 13:49:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yo60FJ+kyRj8QuEMac8CFA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-10 18:12:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sRgblQWtTH/cdtdMT3KP+w
 
 __PACKAGE__->add_columns(
     '+is_system' => { is_boolean => 1 },

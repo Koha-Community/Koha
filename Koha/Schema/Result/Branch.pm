@@ -703,7 +703,7 @@ Related object: L<Koha::Schema::Result::Illbatch>
 __PACKAGE__->has_many(
   "illbatches",
   "Koha::Schema::Result::Illbatch",
-  { "foreign.branchcode" => "self.branchcode" },
+  { "foreign.library_id" => "self.branchcode" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -933,8 +933,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-28 11:24:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GGYhqyTVMmaFo9hAY4Jy5w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-10 14:16:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LjdauIP6C1I1/1liCIddJQ
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },

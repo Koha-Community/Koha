@@ -1413,7 +1413,7 @@ Related object: L<Koha::Schema::Result::Illbatch>
 __PACKAGE__->has_many(
   "illbatches",
   "Koha::Schema::Result::Illbatch",
-  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { "foreign.patron_id" => "self.borrowernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -2118,8 +2118,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-28 11:24:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RUWvcq9kgQvACo14H/u9jQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-10 14:16:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nIMnqyBVBam7NvIx4aDfHw
 
 __PACKAGE__->has_many(
   "restrictions",

@@ -1,8 +1,8 @@
 ---
 type: object
 properties:
-  batch_id:
-    type: string
+  ill_batch_id:
+    type: integer
     description: Internal ILL batch identifier
   name:
     type: string
@@ -12,34 +12,41 @@ properties:
     description: Backend name
   cardnumber:
     type: string
-    description: Card number of the patron of the ILL batch
+    description: Library assigned user identifier of the ILL batch
   patron_id:
     type: string
-    description: Borrower number of the patron of the ILL batch
+    description: Internal identifier the patron of the ILL batch
   library_id:
     type: string
-    description: Branch code of the branch of the ILL batch
+    description: Internal identifier for the ILL batch's library
+  status_code:
+    type: string
+    description: Code of the status of the ILL batch
   patron:
     type:
       - object
       - "null"
     description: The patron associated with the batch
-  branch:
+  library:
     type:
       - object
       - "null"
-    description: The branch associated with the batch
-  statuscode:
-    type: string
-    description: Code of the status of the ILL batch
+    description: The library associated with the batch
+  requests:
+    type:
+      - array
+      - "null"
+    description: The requests in this batch (x-koha-embed)
+  requests_count:
+    type:
+      - integer
+      - "null"
+    description: The number of requests in this batch (x-koha-embed)
   status:
     type:
       - object
       - "null"
-    description: The status associated with the batch
-  requests_count:
-    type: string
-    description: The number of requests in this batch
+    description: The status associated with the batch (x-koha-embed)
   _strings:
     type:
       - object
@@ -50,4 +57,4 @@ required:
   - name
   - backend
   - library_id
-  - statuscode
+  - status_code

@@ -276,7 +276,7 @@ Related object: L<Koha::Schema::Result::Illbatch>
 __PACKAGE__->belongs_to(
   "batch",
   "Koha::Schema::Result::Illbatch",
-  { id => "batch_id" },
+  { ill_batch_id => "batch_id" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
@@ -391,8 +391,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-08 13:51:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QS3E1jO/d797B0ADcjT0yQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-10 14:49:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DQl+7uwLCz5GeqU2hBFmMA
 
 __PACKAGE__->has_many(
   "comments",

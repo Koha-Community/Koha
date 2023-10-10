@@ -23,6 +23,8 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use JSON qw(encode_json);
+
 use Koha::Illbatch;
 use Koha::Illbatches;
 use Koha::Illrequests;
@@ -37,11 +39,9 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
 
-    plan tests => 19;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
-
-    Koha::Illbatches->search->delete;
 
     my $librarian = $builder->build_object(
         {
@@ -52,55 +52,62 @@ subtest 'list() tests' => sub {
         }
     );
 
-    my $branch = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
     my $password = 'sheev_is_da_boss!';
     $librarian->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $librarian->userid;
 
+    my $batch_to_delete  = $builder->build_object( { class => 'Koha::Illbatches' } );
+    my $deleted_batch_id = $batch_to_delete->id;
+    $batch_to_delete->delete;
+
+    my $query = { ill_batch_id => [$deleted_batch_id] };
+
     ## Authorized user tests
     # No batches, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/ill/batches")->status_is(200)->json_is( [] );
+    $t->get_ok( "//$userid:$password@/api/v1/ill/batches?q=" . encode_json($query) )->status_is(200)->json_is( [] );
 
-    my $batch = $builder->build_object(
+    my $batch_1 = $builder->build_object(
         {
             class => 'Koha::Illbatches',
             value => {
-                name           => "PapaPalpatine",
-                backend        => "Mock",
-                borrowernumber => $librarian->borrowernumber,
-                branchcode     => $branch->branchcode
+                backend    => "Mock",
+                patron_id  => $librarian->id,
+                library_id => $library->id,
             }
         }
     );
 
-    my $illrq = $builder->build(
+    my $illrq = $builder->build_object(
         {
-            source => 'Illrequest',
-            value  => {
-                borrowernumber => $librarian->borrowernumber,
-                batch_id       => $batch->id
+            class => 'Koha::Illrequests',
+            value => {
+                batch_id       => $batch_1->id,
+                borrowernumber => $librarian->id,
             }
         }
     );
+
+    $query = { ill_batch_id => [ $batch_1->id ] };
 
     # One batch created, should get returned
-    $t->get_ok(
-        "//$userid:$password@/api/v1/ill/batches" => { 'x-koha-embed' => '+strings,requests+count,patron,branch' } )
-        ->status_is(200)->json_has( '/0/batch_id', 'Batch ID' )->json_has( '/0/name', 'Batch name' )
-        ->json_has( '/0/backend',    'Backend name' )->json_has( '/0/patron_id', 'Borrowernumber' )
-        ->json_has( '/0/library_id', 'Branchcode' )->json_has( '/0/patron', 'patron embedded' )
-        ->json_has( '/0/branch',     'branch embedded' )->json_has( '/0/requests_count', 'request count' );
-
-    # Try to create a second batch with the same name, this should fail
-    my $another_batch = $builder->build_object( { class => 'Koha::Illbatches', value => { name => $batch->name } } );
+    $t->get_ok( "//$userid:$password@/api/v1/ill/batches?q="
+            . encode_json($query) => { 'x-koha-embed' => '+strings,requests+count,patron,library' } )->status_is(200)
+        ->json_has( '/0/ill_batch_id', 'Batch ID' )->json_has( '/0/name', 'Batch name' )
+        ->json_has( '/0/backend',      'Backend name' )->json_has( '/0/patron_id', 'Borrowernumber' )
+        ->json_has( '/0/library_id',   'Branchcode' )->json_has( '/0/patron', 'patron embedded' )
+        ->json_has( '/0/library',      'branch embedded' )->json_has( '/0/requests_count', 'request count' );
 
     # Create a second batch with a different name
-    my $batch_with_another_name = $builder->build_object( { class => 'Koha::Illbatches' } );
+    my $batch_2 = $builder->build_object( { class => 'Koha::Illbatches' } );
+
+    $query = { ill_batch_id => [ $batch_1->id, $batch_2->id ] };
 
     # Two batches created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/ill/batches")->status_is(200)->json_has( '/0', 'has first batch' )
-        ->json_has( '/1', 'has second batch' );
+    $t->get_ok( "//$userid:$password@/api/v1/ill/batches?q=" . encode_json($query) )->status_is(200)
+        ->json_has( '/0', 'has first batch' )->json_is( '/0/ill_batch_id', $batch_1->id )
+        ->json_has( '/1', 'has second batch' )->json_is( '/1/ill_batch_id', $batch_2->id );
 
     my $patron = $builder->build_object(
         {
@@ -144,16 +151,15 @@ subtest 'get() tests' => sub {
         }
     );
 
-    my $branch = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
     my $batch = $builder->build_object(
         {
             class => 'Koha::Illbatches',
             value => {
-                name           => "LeiaOrgana",
-                backend        => "Mock",
-                borrowernumber => $librarian->borrowernumber,
-                branchcode     => $branch->branchcode
+                backend    => "Mock",
+                patron_id  => $librarian->id,
+                library_id => $library->id,
             }
         }
     );
@@ -162,11 +168,11 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     $t->get_ok( "//$userid:$password@/api/v1/ill/batches/"
-            . $batch->id => { 'x-koha-embed' => '+strings,requests+count,patron,branch' } )->status_is(200)
-        ->json_has( '/batch_id',   'Batch ID' )->json_has( '/name', 'Batch name' )
-        ->json_has( '/backend',    'Backend name' )->json_has( '/patron_id', 'Borrowernumber' )
-        ->json_has( '/library_id', 'Branchcode' )->json_has( '/patron', 'patron embedded' )
-        ->json_has( '/branch',     'branch embedded' )->json_has( '/requests_count', 'request count' );
+            . $batch->id => { 'x-koha-embed' => '+strings,requests+count,patron,library' } )->status_is(200)
+        ->json_has( '/ill_batch_id', 'Batch ID' )->json_has( '/name', 'Batch name' )
+        ->json_has( '/backend',      'Backend name' )->json_has( '/patron_id', 'Borrowernumber' )
+        ->json_has( '/library_id',   'Branchcode' )->json_has( '/patron', 'patron embedded' )
+        ->json_has( '/library',      'library embedded' )->json_has( '/requests_count', 'request count' );
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/ill/batches/" . $batch->id )->status_is(403);
 
@@ -182,7 +188,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 19;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -206,16 +212,16 @@ subtest 'add() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $branch = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
     my $batch_status = $builder->build_object( { class => 'Koha::IllbatchStatuses' } );
 
     my $batch_metadata = {
-        name       => "Anakin's requests",
-        backend    => "Mock",
-        cardnumber => $librarian->cardnumber,
-        library_id => $branch->branchcode,
-        statuscode => $batch_status->code
+        name        => "Anakin's requests",
+        backend     => "Mock",
+        cardnumber  => $librarian->cardnumber,
+        library_id  => $library->branchcode,
+        status_code => $batch_status->code
     };
 
     # Unauthorized attempt to write
@@ -239,13 +245,13 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $batch_id =
-        $t->post_ok( "//$userid:$password@/api/v1/ill/batches" =>
-                { 'x-koha-embed' => '+strings,requests+count,patron,branch' } => json => $batch_metadata )
-            ->status_is(201)
-        ->json_is( '/name'       => $batch_metadata->{name} )->json_is( '/backend' => $batch_metadata->{backend} )
-        ->json_is( '/patron_id'  => $librarian->borrowernumber )
-        ->json_is( '/library_id' => $batch_metadata->{library_id} )->json_is( '/statuscode' => $batch_status->code )
-        ->json_has('/patron')->json_has('/_strings/status')->json_has('/requests_count')->json_has('/branch');
+        $t->post_ok(
+        "//$userid:$password@/api/v1/ill/batches" => { 'x-koha-embed' => '+strings,requests+count,patron,library' } =>
+            json => $batch_metadata )->status_is(201)->json_is( '/name' => $batch_metadata->{name} )
+        ->json_is( '/backend'    => $batch_metadata->{backend} )->json_is( '/patron_id' => $librarian->borrowernumber )
+        ->json_is( '/library_id' => $batch_metadata->{library_id} )->json_is( '/status_code' => $batch_status->code )
+        ->json_has('/patron')->json_has('/_strings/status_code')->json_has('/_strings/library_id')
+        ->json_has('/requests_count')->json_has('/library');
 
     # Authorized attempt to create with null id
     $batch_metadata->{id} = undef;
@@ -281,8 +287,7 @@ subtest 'update() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $branch = $builder->build_object( { class => 'Koha::Libraries' } );
-
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $batch_id = $builder->build_object( { class => 'Koha::Illbatches' } )->id;
 
     # Unauthorized attempt to update
@@ -293,10 +298,10 @@ subtest 'update() tests' => sub {
 
     # Attempt partial update on a PUT
     my $batch_with_missing_field = {
-        backend    => "Mock",
-        patron_id  => $librarian->borrowernumber,
-        library_id => $branch->branchcode,
-        statuscode => $batch_status->code
+        backend     => "Mock",
+        patron_id   => $librarian->borrowernumber,
+        library_id  => $library->branchcode,
+        status_code => $batch_status->code
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/ill/batches/$batch_id" => json => $batch_with_missing_field )
@@ -304,11 +309,11 @@ subtest 'update() tests' => sub {
 
     # Full object update on PUT
     my $batch_with_updated_field = {
-        name       => "Master Ploo Koon",
-        backend    => "Mock",
-        patron_id  => $librarian->borrowernumber,
-        library_id => $branch->branchcode,
-        statuscode => $batch_status->code
+        name        => "Master Ploo Koon",
+        backend     => "Mock",
+        patron_id   => $librarian->borrowernumber,
+        library_id  => $library->branchcode,
+        status_code => $batch_status->code
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/ill/batches/$batch_id" => json => $batch_with_updated_field )

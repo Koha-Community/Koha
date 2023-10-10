@@ -18,9 +18,15 @@ package Koha::Illbatch;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Koha::Database;
+
+use Koha::Illrequests;
 use Koha::Illrequest::Logger;
-use Koha::IllbatchStatus;
+use Koha::IllbatchStatuses;
+use Koha::Libraries;
+use Koha::Patrons;
+
 use JSON qw( to_json );
 use base qw(Koha::Object);
 
@@ -40,35 +46,37 @@ Return the status object associated with this batch
 
 sub status {
     my ($self) = @_;
-    return Koha::IllbatchStatus->_new_from_dbic( scalar $self->_result->statuscode );
+    return Koha::IllbatchStatus->_new_from_dbic( scalar $self->_result->status_code );
 }
 
 =head3 patron
 
     my $patron = Koha::Illbatch->patron;
 
-Return the patron object associated with this batch
+Return the I<Koha::Patron> object associated with this batch
 
 =cut
 
 sub patron {
     my ($self) = @_;
-    my $patron = return Koha::Patrons->find( { borrowernumber => $self->borrowernumber } );
+    my $patron = $self->_result->patron;
     return unless $patron;
+    return Koha::Patron->_new_from_dbic($patron);
 }
 
-=head3 branch
+=head3 library
 
-    my $branch = Koha::Illbatch->branch;
+    my $library = Koha::Illbatch->library;
 
-Return the branch object associated with this batch
+Return the I<Koha::Library> object associated with this batch
 
 =cut
 
-sub branch {
+sub library {
     my ($self) = @_;
-    my $library = return Koha::Libraries->find( { branchcode => $self->branchcode } );
+    my $library = $self->_result->library;
     return unless $library;
+    return Koha::Library->_new_from_dbic($library);
 }
 
 =head3 requests_count
@@ -86,13 +94,13 @@ sub requests_count {
 
 =head3 requests
 
-Return the requests for this batch
+Return the I<Koha::Illrequests> for this batch
 
 =cut
 
 sub requests {
     my ($self) = @_;
-    my $requests = $self->_result->illrequests;
+    my $requests = $self->_result->requests;
     return Koha::Illrequests->_new_from_dbic($requests);
 }
 
@@ -134,7 +142,7 @@ sub update_and_log {
 
     my $before = {
         name       => $self->name,
-        branchcode => $self->branchcode
+        library_id => $self->library_id,
     };
 
     $self->set($params);
@@ -142,7 +150,7 @@ sub update_and_log {
 
     my $after = {
         name       => $self->name,
-        branchcode => $self->branchcode
+        library_id => $self->library_id,
     };
 
     my $logger = Koha::Illrequest::Logger->new;
@@ -192,6 +200,17 @@ sub delete_and_log {
 
 =head3 strings_map
 
+Returns a map of column name to string representations including the string,
+the mapping type and the mapping category where appropriate.
+
+Currently handles library and ILL batch status expansions.
+expansions.
+
+Accepts a param hashref where the I<public> key denotes whether we want the public
+or staff client strings.
+
+Note: the I<public> parameter is not currently used.
+
 =cut
 
 sub strings_map {
@@ -199,39 +218,29 @@ sub strings_map {
 
     my $strings = {};
 
-    if ( defined $self->statuscode ) {
-        my $ill_batch_status = Koha::IllbatchStatuses->search( { code => $self->statuscode } );
-        my $ill_batch_status_str =
-            $ill_batch_status->count
-                ? $ill_batch_status->next->name
-        : $self->statuscode;
+    if ( defined $self->status_code ) {
+        my $status = $self->status;
 
-        $strings->{status} = {
-            name => $ill_batch_status_str,
-        };
+        if ($status) {
+            $strings->{status_code} = {
+                str  => $status->name,
+                type => 'ill_batch_status',
+            };
+        }
     }
 
-    if ( defined $self->branchcode ) {
-        my $ill_batch_branch = Koha::Libraries->find( $self->branchcode );
-        my $ill_batch_branchname_str = $ill_batch_branch ? $ill_batch_branch->branchname : $self->branchcode;
+    if ( defined $self->library_id ) {
+        my $library = $self->library;
 
-        $strings->{branchname} = $ill_batch_branchname_str;
+        if ($library) {
+            $strings->{library_id} = {
+                str  => $library->branchname,
+                type => 'library',
+            };
+        }
     }
 
     return $strings;
-}
-
-=head3 to_api_mapping
-
-=cut
-
-sub to_api_mapping {
-    return {
-        id             => 'batch_id',
-        branchcode     => 'library_id',
-        borrowernumber => 'patron_id',
-        status         => 'batch_status',
-    };
 }
 
 =head3 _type

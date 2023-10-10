@@ -10,14 +10,14 @@ return {
         unless ( TableExists('illbatch_statuses') ) {
             $dbh->do(
                 q{
-                CREATE TABLE`illbatch_statuses` (
+                CREATE TABLE `illbatch_statuses` (
                     `id` int(11) NOT NULL auto_increment COMMENT "Status ID",
                     `name` varchar(100) NOT NULL COMMENT "Name of status",
                     `code` varchar(20) NOT NULL COMMENT "Unique, immutable code for status",
                     `is_system` tinyint(1) COMMENT "Is this status required for system operation",
-                    PRIMARY KEY (`id`),
+                    PRIMARY KEY(`id`),
                     UNIQUE KEY `u_illbatchstatuses__code` (`code`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+                ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
             }
             );
 
@@ -28,18 +28,18 @@ return {
             $dbh->do(
                 q{
                 CREATE TABLE `illbatches` (
-                    `id` int(11) NOT NULL auto_increment COMMENT "Batch ID",
+                    `ill_batch_id` int(11) NOT NULL auto_increment COMMENT "Batch ID",
                     `name` varchar(100) NOT NULL COMMENT "Unique name of batch",
                     `backend` varchar(20) NOT NULL COMMENT "Name of batch backend",
-                    `borrowernumber` int(11) COMMENT "Patron associated with batch",
-                    `branchcode` varchar(50) COMMENT "Branch associated with batch",
-                    `statuscode` varchar(20) COMMENT "Status of batch",
-                    PRIMARY KEY (`id`),
+                    `patron_id` int(11) NULL DEFAULT NULL COMMENT "Patron associated with batch",
+                    `library_id` varchar(50) NULL DEFAULT NULL COMMENT "Branch associated with batch",
+                    `status_code` varchar(20) NULL DEFAULT NULL COMMENT "Status of batch",
+                    PRIMARY KEY (`ill_batch_id`),
                     UNIQUE KEY `u_illbatches__name` (`name`),
-                    CONSTRAINT `illbatches_bnfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
-                    CONSTRAINT `illbatches_bcfk` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
-                    CONSTRAINT `illbatches_sfk` FOREIGN KEY (`statuscode`) REFERENCES `illbatch_statuses` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+                    CONSTRAINT `illbatches_bnfk` FOREIGN KEY (`patron_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+                    CONSTRAINT `illbatches_bcfk` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
+                    CONSTRAINT `illbatches_sfk` FOREIGN KEY (`status_code`) REFERENCES `illbatch_statuses` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             }
             );
 
@@ -49,7 +49,7 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE `illrequests`
-                    ADD COLUMN `batch_id` int(11) AFTER backend -- Optional ID of batch that this request belongs to
+                    ADD COLUMN `batch_id` int(11) COMMENT 'Optional ID of batch that this request belongs to' AFTER backend
             }
             );
 
@@ -60,34 +60,7 @@ return {
             $dbh->do(
                 q{
                 ALTER TABLE `illrequests`
-                    ADD CONSTRAINT `illrequests_ibfk` FOREIGN KEY (`batch_id`) REFERENCES `illbatches` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-            }
-            );
-        }
-
-        unless ( foreign_key_exists( 'illbatches', 'illbatches_bnfk' ) ) {
-            $dbh->do(
-                q{
-                ALTER TABLE `illbatches`
-                    ADD CONSTRAINT `illbatches_bnfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
-            }
-            );
-        }
-
-        unless ( foreign_key_exists( 'illbatches', 'illbatches_bcfk' ) ) {
-            $dbh->do(
-                q{
-                ALTER TABLE `illbatches`
-                    ADD CONSTRAINT `illbatches_bcfk` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE
-            }
-            );
-        }
-
-        unless ( foreign_key_exists( 'illbatches', 'illbatches_sfk' ) ) {
-            $dbh->do(
-                q{
-                ALTER TABLE `illbatches`
-                    ADD CONSTRAINT `illbatches_sfk` FOREIGN KEY (`statuscode`) REFERENCES `illbatch_statuses` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
+                    ADD CONSTRAINT `illrequests_ibfk` FOREIGN KEY (`batch_id`) REFERENCES `illbatches` (`ill_batch_id`) ON DELETE SET NULL ON UPDATE CASCADE
             }
             );
         }

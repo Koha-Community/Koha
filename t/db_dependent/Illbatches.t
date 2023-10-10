@@ -17,7 +17,6 @@
 
 use Modern::Perl;
 
-use File::Basename qw/basename/;
 use Koha::Database;
 use Koha::Illbatch;
 use Koha::Illbatches;
@@ -28,7 +27,7 @@ use t::lib::TestBuilder;
 use Test::MockObject;
 use Test::MockModule;
 
-use Test::More tests => 8;
+use Test::More tests => 7;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -54,19 +53,17 @@ my $librarian = $builder->build(
 my $branch = $builder->build( { source => 'Branch' } );
 
 # Create a batch
-my $illbatch = $builder->build(
+my $illbatch = $builder->build_object(
     {
-        source => 'Illbatch',
+        class => 'Koha::Illbatches',
         value  => {
-            name           => "My test batch",
-            backend        => "Mock",
-            borrowernumber => $librarian->{borrowernumber},
-            branchcode     => $branch->{branchcode}
+            name       => "My test batch",
+            backend    => "Mock",
+            patron_id  => $librarian->{borrowernumber},
+            library_id => $branch->{branchcode}
         }
     }
 );
-my $batch_obj = Koha::Illbatches->find( $illbatch->{id} );
-isa_ok( $batch_obj, 'Koha::Illbatch' );
 
 # Create an ILL request in the batch
 my $illrq = $builder->build(
@@ -74,23 +71,23 @@ my $illrq = $builder->build(
         source => 'Illrequest',
         value  => {
             borrowernumber => $patron->{borrowernumber},
-            batch_id       => $illbatch->{id}
+            batch_id       => $illbatch->id
         }
     }
 );
 my $illrq_obj = Koha::Illrequests->find( $illrq->{illrequest_id} );
 
 # Check requests_count
-my $requests_count = $batch_obj->requests_count;
+my $requests_count = $illbatch->requests_count;
 is( $requests_count, 1, 'requests_count returns correctly' );
 
 # Check patron
-my $batch_patron = $batch_obj->patron;
+my $batch_patron = $illbatch->patron;
 isa_ok( $batch_patron, 'Koha::Patron' );
 is( $batch_patron->firstname, "Grogu", "patron returns correctly" );
 
 # Check branch
-my $batch_branch = $batch_obj->branch;
+my $batch_branch = $illbatch->library;
 isa_ok( $batch_branch, 'Koha::Library' );
 is( $batch_branch->branchcode, $branch->{branchcode}, "branch returns correctly" );
 

@@ -41,12 +41,14 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $illbatches = $c->objects->search( Koha::Illbatches->new );
-        return $c->render( status => 200, openapi => $illbatches );
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->search( Koha::Illbatches->new )
+        );
     } catch {
+        warn "$_";
         $c->unhandled_exception($_);
     };
-
 }
 
 =head3 get
@@ -59,7 +61,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $ill_batch = $c->objects->find( Koha::Illbatches->search, $c->param('ill_batch_id') );
+        my $ill_batch = $c->objects->find( Koha::Illbatches->new, $c->param('ill_batch_id') );
 
         unless ($ill_batch) {
             return $c->render(
@@ -98,8 +100,7 @@ sub add {
     }
 
     delete $body->{cardnumber};
-    $body->{borrowernumber} = $patron->borrowernumber;
-    $body->{branchcode}     = delete $body->{library_id};
+    $body->{patron_id} = $patron->id;
 
     return try {
         my $batch = Koha::Illbatch->new_from_api($body);
@@ -107,7 +108,7 @@ sub add {
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $batch->id );
 
-        my $ill_batch = $c->objects->find( Koha::Illbatches->search, $batch->id );
+        my $ill_batch = $c->objects->find( Koha::Illbatches->new, $batch->id );
 
         return $c->render(
             status  => 201,
@@ -146,15 +147,13 @@ sub update {
 
     my $params = $c->req->json;
     delete $params->{cardnumber};
-    $params->{borrowernumber} = delete $params->{patron_id}  if $params->{patron_id};
-    $params->{branchcode}     = delete $params->{library_id} if $params->{library_id};
 
     return try {
         $batch->update_and_log($params);
 
         return $c->render(
             status  => 200,
-            openapi => $batch->to_api
+            openapi => $c->objects->to_api($batch),
         );
     } catch {
         $c->unhandled_exception($_);
