@@ -544,6 +544,10 @@ sub check_booking {
     my $end_date   = dt_from_string( $params->{end_date} );
     my $booking_id = $params->{booking_id};
 
+    if ( my $checkout = $self->checkout ) {
+        return 0 if ( $start_date <= dt_from_string( $checkout->date_due ) );
+    }
+
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $existing_bookings = $self->bookings(
         [

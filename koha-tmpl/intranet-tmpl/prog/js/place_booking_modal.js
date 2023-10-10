@@ -1,5 +1,5 @@
 let dataFetched = false;
-let bookable_items, bookings, booking_id, booking_item_id, booking_patron;
+let bookable_items, bookings, checkouts, booking_id, booking_item_id, booking_patron;
 
 $('#placeBookingModal').on('show.bs.modal', function(e) {
 
@@ -138,14 +138,35 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
             dataType: 'json',
             type: 'GET'
         });
+
+        // Fetch list of current checkouts
+        let checkoutsFetch = $.ajax({
+            url: '/api/v1/biblios/' + biblionumber + '/checkouts?_per_page=-1',
+            dataType: 'json',
+            type: 'GET'
+        });
     
         // Update item select2 and period flatpickr
-        $.when(itemsFetch, bookingsFetch).then(
-            function(itemsFetch,bookingsFetch){
+        $.when(itemsFetch, bookingsFetch, checkoutsFetch).then(
+            function(itemsFetch,bookingsFetch, checkoutsFetch){
 
                 // Set variables
                 bookable_items = itemsFetch[0];
                 bookings = bookingsFetch[0];
+                checkouts = checkoutsFetch[0];
+
+                // Merge current checkouts into bookings
+                for (checkout of checkouts) {
+                    let booking = {
+                        biblio_id: biblionumber,
+                        booking_id: null,
+                        end_date: checkout.due_date,
+                        item_id: checkout.item_id,
+                        patron_id: checkout.patron_id,
+                        start_date: new Date().toISOString(),
+                    };
+                    bookings.unshift(booking);
+                }
     
                 // Item select2
                 $("#booking_item_id").select2({
