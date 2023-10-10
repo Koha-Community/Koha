@@ -8,7 +8,7 @@
     <!-- HOLDS TABLE ROWS -->
     <thead>
         <tr>
-            <th class="anti-the">Title</th>
+            <th class="all anti-the">Title</th>
             [% IF ( showpriority ) %]
                 <th>Placed on</th>
             [% ELSE %]
@@ -66,17 +66,13 @@
                     [% END %]
                 </td>
                 <td class="reservedate" data-order="[% HOLD.reservedate | html %]">
-                    <span class="tdlabel">Hold date:</span>
-                        [% HOLD.reservedate | $KohaDates %]
-                    </span>
+                    [% HOLD.reservedate | $KohaDates %]
                 </td>
                 [% IF ! HOLD.found %]
                     <td class="expirationdate" data-order="[% HOLD.expirationdate | html %]">
                         [% IF ( HOLD.expirationdate ) %]
-                            <span class="tdlabel">Expiration:</span>
                             [% HOLD.expirationdate | $KohaDates %]
                         [% ELSE %]
-                            <span class="tdlabel">Expiration:</span>
                             Never expires
                         [% END %]
                 [% ELSE %]
@@ -86,7 +82,6 @@
                 </td>
                 [% UNLESS( singleBranchMode) %]
                     <td class="branch">
-                        <span class="tdlabel">Pickup location:</span>
                         [% HOLD.branch.branchname | html %]
                         [% IF ( HOLD.can_update_pickup_location_opac ) %]
                             <button type="button" class="btn btn-sm btn-link" data-toggle="modal" data-target="#changePickup[% HOLD.reserve_id | html %]">
@@ -125,7 +120,6 @@
                 [% END %]
                 [% IF ( showpriority ) %]
                         <td data-order="[% HOLD.priority | html %]" class="priority">
-                        <span class="tdlabel">Priority:</span>
                         [% HOLD.priority | html %]
                     </td>
                 [% END %]
@@ -133,7 +127,6 @@
                     <td>[% HOLD.reservenotes | html | html_line_break %]</td>
                 [% END %]
                 <td class="status">
-                    <span class="tdlabel">Status:</span>
                     [% IF ( HOLD.is_waiting ) %]
                         <i class="fa fa-exclamation-circle text-warning" aria-hidden="true"></i>
                         [% IF ( HOLD.is_at_destination ) %]
@@ -206,8 +199,8 @@
                             </form>
                         [% END %]
                     </td>
-                    <td></td>
                 [% END # / IF onlyinfo %]
+                <td></td>
             </tr>
         [% END # /FOREACH HOLDS %]
     </tbody>

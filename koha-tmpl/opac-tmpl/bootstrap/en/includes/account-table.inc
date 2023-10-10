@@ -7,8 +7,8 @@
                 <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
                     <th>Created</th>
-                    <th>Updated</th>
-                    <th>Type</th>
+                    <th class="psort">Updated</th>
+                    <th class="all">Type</th>
                     <th>Description</th>
                     <th>Amount</th>
                     <th>Amount outstanding</th>

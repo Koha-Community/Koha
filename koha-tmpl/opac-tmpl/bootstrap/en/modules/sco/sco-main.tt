@@ -14,6 +14,7 @@
 [% ELSE %]
 <link rel="shortcut icon" href="[% interface | html %]/[% theme | html %]/images/favicon.ico" type="image/x-icon" />
 [% END %]
+[% Asset.css("lib/jquery/responsive.dataTables.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/fontawesome.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]
@@ -313,13 +314,14 @@
                                         <thead>
                                             <tr>
                                                 <th class="noshow">Checked out on</th>
-                                                <th class="anti-the">Title</th>
+                                                <th class="all anti-the">Title</th>
                                                 <th>Call number</th>
-                                                <th>Due</th>
-                                                <th class="nosort">Renew</th>
+                                                <th class="psort">Due</th>
+                                                <th class="all nosort">Renew</th>
                                                 [% UNLESS ( nofines ) %]
                                                     <th>Fines</th>
                                                 [% END %]
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -373,9 +375,11 @@
                                                                     <span>No renewals allowed</span>
                                                                 [% END %]
                                                                 [% IF Koha.Preference('SCOAllowCheckin') %]
-                                                                    <input type="submit" value="Check in item" name="confirm" class="btn btn-info btn-sm return" />
-                                                                    <input type="hidden" name="op" value="returnbook" />
-                                                                    <input type="hidden" name="confirmed" value=""  />
+                                                                    <div>
+                                                                        <input type="submit" value="Check in item" name="confirm" class="btn btn-info btn-sm return" />
+                                                                        <input type="hidden" name="op" value="returnbook" />
+                                                                        <input type="hidden" name="confirmed" value=""  />
+                                                                    </div>
                                                                 [% END %]
                                                             [% END %]
                                                             [% IF ISSUE.auto_renew %]
@@ -388,6 +392,7 @@
                                                             [% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]
                                                         </td>
                                                     [% END %]
+                                                    <td></td>
                                                 </tr>
                                             [% END # / FOREACH ISSUE %]
                                         </tbody>
@@ -518,15 +523,38 @@
         $(document).ready(function() {
             dofocus();
             [% IF ( patronid ) %]sco_init();[% END %]
-            $("#loanTable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "dom": "t",
-                "order": [ 0 ],
-                "columnDefs": [
-                    { "targets": [ "nosort" ], "sortable": false, "searchable": false },
-                    { "targets": [ "noshow" ], "visible": false, "searchable": false },
-                    { "type": "anti-the", "targets" : [ "anti-the" ] }
-                ]
-            }));
+
+            var dTables = $("#loanTable, #holdst, #finestable");
+            dTables.each(function(){
+                var thIndex = $(this).find("th.psort").index();
+                $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "sorting" : [[ thIndex, 'asc' ]],
+                    "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
+                    "columnDefs": [
+                        { "targets": [ "nosort" ],"sortable": false,"searchable": false },
+                        { "targets": [ "noshow" ], "visible": false, "searchable": false },
+                        { "type": "anti-the", "targets" : [ "anti-the" ] },
+                        { "visible": false, "targets" : [ "hidden" ] },
+                        { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                    ],
+                    "language": {
+                        "search": "_INPUT_",
+                        "searchPlaceholder": _("Search")
+                    },
+                    "autoWidth": false,
+                    "responsive": {
+                        details: {
+                            type: 'column',
+                            target: -1
+                        }
+                    }
+                }));
+            });
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+                dTables.DataTable().responsive.recalc();
+                dataTables.DataTable().responsive.recalc();
+            } );
 
             $("#logout_form").on("click", function(e){
                 e.preventDefault(e);
