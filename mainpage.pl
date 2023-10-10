@@ -37,6 +37,7 @@ use Koha::Suggestions;
 use Koha::BackgroundJobs;
 use Koha::CurbsidePickups;
 use Koha::Tickets;
+use Koha::Token;
 
 my $query = CGI->new;
 
@@ -69,6 +70,7 @@ my $koha_news = Koha::AdditionalContents->search_for_display(
 
 $template->param(
     koha_news   => $koha_news,
+    csrf_token  => Koha::Token->new->generate_csrf( { session_id => $query->cookie('CGISESSID'), } ),
     daily_quote => Koha::Quotes->get_daily_quote(),
 );
 
