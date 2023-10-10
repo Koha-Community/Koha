@@ -50,13 +50,9 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 if ( $op eq 'add_form' ) {
-    my @opening_hours =
-        Koha::Library::Hours->search( { library_id => $branchcode }, { order_by => { -asc => 'day' } } )->as_list;
-
     $template->param(
-        library       => Koha::Libraries->find($branchcode),
-        smtp_servers  => Koha::SMTP::Servers->search,
-        opening_hours => \@opening_hours
+        library      => Koha::Libraries->find($branchcode),
+        smtp_servers => Koha::SMTP::Servers->search,
     );
 } elsif ( $branchcode && $op eq 'view' ) {
     my $library = Koha::Libraries->find($branchcode);

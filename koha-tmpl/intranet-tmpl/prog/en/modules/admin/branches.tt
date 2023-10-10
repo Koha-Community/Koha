@@ -291,8 +291,8 @@
                     <div class="hint">Set to 'yes' to show this library as a search option and on the libraries page in the OPAC.</div>
                 </li>
                 <li>
-                    <label for="opening_hours">Opening hours: </label>
-                    <table id="opening_hours_table">
+                    <label for="library_hours">Opening hours: </label>
+                    <table id="library_hours_table">
                         <thead>
                             <tr>
                                 <th>Day</th>
@@ -301,9 +301,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            [% IF opening_hours # Existing library %]
+                            [% IF library.library_hours # Existing library %]
                                 [% daycount = 0 %]
-                                [% FOREACH hr IN opening_hours %]
+                                [% FOREACH hr IN library.library_hours %]
                                 <tr id="hours_[% daycount | html %]">
                                     <td>
                                         [% PROCESS dayname day=daycount %]
@@ -419,6 +419,7 @@
                     <th>Pickup location</th>
                     <th>Public</th>
                     <th>SMTP server</th>
+                    <th>Library hours</th>
                     <th data-class-name="actions noExport">Actions</th>
                 </tr>
             </thead>
@@ -549,6 +550,39 @@
                             <span>No</span>
                         [% END %]
                     </li>
+                    <li>
+                        <span class="label">Opening hours: </span>
+                        [% IF library.library_hours # Existing library %]
+                            <table id="library_hours_table">
+                                <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Open time</th>
+                                        <th>Close time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% daycount = 0 %]
+                                    [% FOREACH hr IN library.library_hours %]
+                                    <tr id="hours_[% daycount | html %]">
+                                        <td>
+                                            <span>[% PROCESS dayname day=daycount %]</span>
+                                        </td>
+                                        <td>
+                                            <span>[% hr.open_time | html %]</span>
+                                        </td>
+                                        <td>
+                                            <span>[% hr.close_time | html %]</span>
+                                        </td>
+                                    </tr>
+                                    [% daycount = daycount+1 %]
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        [% ELSE %]
+                            <span>No opening hours have been set.</span>
+                        [% END %]
+                    </li>
                 </ol>
             </div> <!-- /.rows -->
         </div> <!-- /.col-sm-6 -->
@@ -618,7 +652,7 @@
                 'emptyTable': '<div class="dialog message">'+_("There are no libraries defined.")+' <a href="/cgi-bin/koha/admin/branches.pl?op=add_form">'+_("Start defining libraries")+'</a>.</div>',
                 "stateSave": true,
                 "columnDefs": [ {
-                    "targets": [0,1,3,4,7,9,10,11,12,13,14,15,16],
+                    "targets": [0,1,3,4,7,9,10,11,12,13,14,15,16,17],
                     "render": function (data, type, row, meta) {
                         if ( type == 'display' ) {
                             if ( data != null ) {
@@ -711,6 +745,25 @@
                         },
                         "searchable": false,
                         "visible": true,
+                        "orderable": false
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            const daynames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+                            var daycount = 0;
+                            var result = '<table id="library_hours_table"><thead><tr><th>Day</th><th>Open time</th><th>Close time</th></tr></thead><tbody>';
+                            while ( row.library_hours[daycount] ) {
+                                result += '<tr id="hours_"'+daycount+'>';
+                                result += '<td>'+daynames[daycount]+'</td>';
+                                result += '<td><span>'+row.open_time+'</span></td>';
+                                result += '<td><span>'+row.close_time+'</span></td>';
+                                result += '</tr>';
+                                daycount++;
+                            }
+                            result += '</tbody></table>';
+                            return result;
+                        },
+                        "searchable": false,
                         "orderable": false
                     },
                     {

@@ -115,6 +115,11 @@ properties:
   needs_override:
     type: boolean
     description: If the library needs an override to act as pickup location for a hold
+  library_hours:
+    type:
+      - object
+      - "null"
+    description: The open and close times for a library on any given day
 additionalProperties: false
 required:
   - library_id

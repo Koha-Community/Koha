@@ -26,6 +26,7 @@ use Koha::Caches;
 use Koha::Database;
 use Koha::StockRotationStages;
 use Koha::SMTP::Servers;
+use Koha::Library::Hours;
 
 use base qw(Koha::Object);
 
@@ -418,6 +419,18 @@ sub validate_float_sibling {
 
     my $branchcode = $params->{branchcode};
     return $self->get_float_libraries->search( { branchcode => $branchcode } )->count > 0;
+}
+
+=head3 library_hours
+
+Returns the open and close times for a library.
+
+=cut
+
+sub library_hours {
+    my $self             = shift;
+    my $library_hours_rs = $self->_result->library_hours;
+    return Koha::Library::Hours->_new_from_dbic($library_hours_rs);
 }
 
 =head2 Internal methods
