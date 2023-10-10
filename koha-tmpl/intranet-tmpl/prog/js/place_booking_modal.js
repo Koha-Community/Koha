@@ -207,6 +207,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                 let changeExists = periodPicker.config.onChange.filter(f => f.name ==='periodChange');
                 if(changeExists.length === 0) {
                     periodPicker.config.onChange.push(function periodChange(selectedDates, dateStr, instance) {
+                        // Range set, update hidden fields and set available items
                         if ( selectedDates[0] && selectedDates[1] ) {
                             // set form fields from picker
                             let picker_start = dayjs(selectedDates[0]);
@@ -241,6 +242,14 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                                     option.prop('disabled',false);
                                 }
                             });
+                            $('#booking_item_id').trigger('change.select2');
+                        }
+                        // Range not set, reset field options
+                        else {
+                            $('#booking_item_id > option').each(function() {
+                                $(this).prop('disabled', false);
+                            });
+                            $('#booking_item_id').trigger('change.select2');
                         }
                     });
                 };
