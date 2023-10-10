@@ -16,11 +16,13 @@ return {
         say $out "Added system preference 'RedirectGuaranteeEmail'";
 
         unless ( column_exists( 'message_queue', 'cc_address' ) ) {
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 ALTER TABLE `message_queue`
                 ADD COLUMN `cc_address` longtext DEFAULT NULL
                 AFTER `to_address`
-            });
+            }
+            );
             say $out "Added column 'cc_address'";
         }
     },
