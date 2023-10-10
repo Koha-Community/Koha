@@ -22,8 +22,6 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use C4::Koha;
-use C4::Context;
 use Koha::Notice::Templates;
 
 =head1 NAME
