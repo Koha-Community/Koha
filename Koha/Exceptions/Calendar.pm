@@ -9,7 +9,7 @@ use Exception::Class (
         isa => 'Koha::Exception',
     },
     'Koha::Exceptions::Calendar::NoOpenDays' => {
-        isa => 'Koha::Exceptions::Calendar',
+        isa         => 'Koha::Exceptions::Calendar',
         description => 'Library has no open days',
     },
 );

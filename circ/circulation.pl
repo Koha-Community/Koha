@@ -289,36 +289,36 @@ if ($patron) {
 #
 #
 if (@$barcodes) {
-  my $checkout_infos;
-  for my $barcode ( @$barcodes ) {
+    my $checkout_infos;
+    for my $barcode ( @$barcodes ) {
 
-    my $template_params = {
-        barcode         => $barcode,
-        onsite_checkout => $onsite_checkout,
-    };
+        my $template_params = {
+            barcode         => $barcode,
+            onsite_checkout => $onsite_checkout,
+        };
 
-    # always check for blockers on issuing
-    my ( $error, $question, $alerts, $messages );
-    try {
-        ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
-            $patron,
-            $barcode, $datedue,
-            $inprocess,
-            undef,
-            {
-                onsite_checkout     => $onsite_checkout,
-                override_high_holds => $override_high_holds || $override_high_holds_tmp || 0,
+        # always check for blockers on issuing
+        my ( $error, $question, $alerts, $messages );
+        try {
+            ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
+                $patron,
+                $barcode, $datedue,
+                $inprocess,
+                undef,
+                {
+                    onsite_checkout     => $onsite_checkout,
+                    override_high_holds => $override_high_holds || $override_high_holds_tmp || 0,
+                }
+            );
+        } catch {
+            die $_ unless blessed $_ && $_->can('rethrow');
+
+            if ( $_->isa('Koha::Exceptions::Calendar::NoOpenDays') ) {
+                $error = { NO_OPEN_DAYS => 1 };
+            } else {
+                $_->rethrow;
             }
-        );
-    } catch {
-        die $_ unless blessed $_ && $_->can('rethrow');
-
-        if ($_->isa('Koha::Exceptions::Calendar::NoOpenDays')) {
-            $error = { NO_OPEN_DAYS => 1 };
-        } else {
-            $_->rethrow;
-        }
-    };
+        };
 
     my $blocker = $invalidduedate ? 1 : 0;
 
@@ -364,8 +364,10 @@ if (@$barcodes) {
 
     # Only some errors will block when performing forced onsite checkout,
     # for other cases all errors will block
-    my @blocking_error_codes = ($onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce")) ?
-        qw( UNKNOWN_BARCODE NO_OPEN_DAYS ) : (keys %$error);
+    my @blocking_error_codes =
+        ( $onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce") )
+        ? qw( UNKNOWN_BARCODE NO_OPEN_DAYS )
+        : ( keys %$error );
 
     foreach my $code ( @blocking_error_codes ) {
         if ($error->{$code}) {
