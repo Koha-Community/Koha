@@ -293,6 +293,7 @@
                                                         <label for="from[% bibitemloo.biblionumber | html %]">Hold starts on date:</label>
                                                         <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" data-start_for="to[% bibitemloo.biblionumber | html %]" size="10" class="flatpickr holddatefrom" />
                                                         <span class="date-format from" data-biblionumber="[% bibitemloo.biblionumber | html %]">[% INCLUDE 'date-format.inc' %]</span>
+                                                        <div class="required_label" style="display:none;">Required</div>
                                                     </li>
                                                 [% END %]
 
@@ -300,6 +301,7 @@
                                                     <label for="to[% bibitemloo.biblionumber | html %]">Hold not needed after:</label>
                                                     <input type="text" name="expiration_date_[% bibitemloo.biblionumber | html %]" id="to[% bibitemloo.biblionumber | html %]" size="10" class="flatpickr futuredate" />
                                                     <span class="date-format to" data-biblionumber="[% bibitemloo.biblionumber | html %]">[% INCLUDE 'date-format.inc' %]</span>
+                                                    <div class="required_label" style="display:none;">Required</div>
                                                 </li>
 
                                                 [% IF Koha.Preference('AllowHoldItemTypeSelection') %]
@@ -519,16 +521,11 @@
         $(".toggle-hold-options").show();
         $(".hold-options").hide();
         var OPACMandatoryHoldDates = "[% Koha.Preference('OPACMandatoryHoldDates') | html %]";
-        var requiredDiv = "<div class=\"required_label required\">" + _("Required") + "</div>";
-        if( OPACMandatoryHoldDates ) {
-            if( OPACMandatoryHoldDates == "start" || OPACMandatoryHoldDates == "both" ) {
-                $(".holddatefrom").prop( 'required', true );
-                $(".holddatefrom").parent().append(requiredDiv);
-            }
-            if( OPACMandatoryHoldDates == "end"   || OPACMandatoryHoldDates == "both" ) {
-                $(".futuredate").prop( 'required', true );
-                $(".futuredate").parent().append(requiredDiv);
-            }
+        if( OPACMandatoryHoldDates == "start" || OPACMandatoryHoldDates == "both" ) {
+            $(".holddatefrom").prop( 'required', true ).siblings(".required_label").addClass('required').show();
+        }
+        if( OPACMandatoryHoldDates == "end"   || OPACMandatoryHoldDates == "both" ) {
+            $(".futuredate").prop( 'required', true ).siblings(".required_label").addClass('required').show();
         }
 
         $(".checkitem").parent().click(function(e){
@@ -564,7 +561,7 @@
 
         [% FOREACH bibitemloo IN bibitemloop %]
           [% IF bibitemloo.force_hold %]
-            if( $("#to[% bibitemloo.biblionumber | html %]:hidden").length )
+            if( $("#to[% bibitemloo.biblionumber | html %]").parent(":hidden").length )
                 $("#toggle-hold-options-[% bibitemloo.biblionumber | html %]").click();
             $("#reqspecific_[% bibitemloo.biblionumber | html %]").click();
             $("#copiesrow_[% bibitemloo.biblionumber | html %]").show();
@@ -676,14 +673,14 @@
                 if( $(".holddatefrom").prop('required') && $("#from"+ biblioNum).val() == '' ) {
                     alert(MSG_EMPTY_START_DATE);
                     badBib = biblioNum;
-                    if( $("#from"+biblioNum+":hidden").length ) $("#toggle-hold-options-"+biblioNum).click();
-                    $("#from"+ biblioNum).focus();
+                    if( $("#from"+biblioNum).parent(":hidden").length ) $("#toggle-hold-options-"+biblioNum).trigger('click');
+                    $("#from"+biblioNum).siblings('.flatpickr_wrapper').find('.flatpickr-input').trigger('focus');
                     return false;
                 } else if( $(".futuredate").prop('required') && $("#to"+ biblioNum).val() == '' ) {
                     alert(MSG_EMPTY_END_DATE);
                     badBib = biblioNum;
-                    if( $("#to"+biblioNum+":hidden").length ) $("#toggle-hold-options-"+biblioNum).click();
-                    $("#to"+ biblioNum).focus();
+                    if( $("#to"+biblioNum).parent(":hidden").length ) $("#toggle-hold-options-"+biblioNum).trigger('click');
+                    $("#to"+biblioNum).siblings('.flatpickr_wrapper').find('.flatpickr-input').trigger('focus');
                     return false;
                 }
 
