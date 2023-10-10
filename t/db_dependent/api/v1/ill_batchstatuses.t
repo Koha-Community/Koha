@@ -56,7 +56,7 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No statuses, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/illbatchstatuses")->status_is(200)->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/ill/batchstatuses")->status_is(200)->json_is( [] );
 
     my $status = $builder->build_object(
         {
@@ -70,7 +70,7 @@ subtest 'list() tests' => sub {
     );
 
     # One batch created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/illbatchstatuses")->status_is(200)->json_has( '/0/id', 'ID' )
+    $t->get_ok("//$userid:$password@/api/v1/ill/batchstatuses")->status_is(200)->json_has( '/0/id', 'ID' )
         ->json_has( '/0/name', 'Name' )->json_has( '/0/code', 'Code' )->json_has( '/0/is_system', 'is_system' );
 
     $schema->storage->txn_rollback;
@@ -113,17 +113,17 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/illbatchstatuses/" . $status->code )->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $status->code )->status_is(200)
         ->json_has( '/id',        'ID' )->json_has( '/name', 'Name' )->json_has( '/code', 'Code' )
         ->json_has( '/is_system', 'is_system' );
 
-    $t->get_ok( "//$unauth_userid:$password@/api/v1/illbatchstatuses/" . $status->id )->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/ill/batchstatuses/" . $status->id )->status_is(403);
 
     my $status_to_delete  = $builder->build_object( { class => 'Koha::IllbatchStatuses' } );
     my $non_existent_code = $status_to_delete->code;
     $status_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/illbatchstatuses/$non_existent_code")->status_is(404)
+    $t->get_ok("//$userid:$password@/api/v1/ill/batchstatuses/$non_existent_code")->status_is(404)
         ->json_is( '/error' => 'ILL batch status not found' );
 
     $schema->storage->txn_rollback;
@@ -161,7 +161,7 @@ subtest 'add() tests' => sub {
     };
 
     # Unauthorized attempt to write
-    $t->post_ok( "//$unauth_userid:$password@/api/v1/illbatchstatuses" => json => $status_metadata )->status_is(403);
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )->status_is(403);
 
     # Authorized attempt to write invalid data
     my $status_with_invalid_field = {
@@ -169,7 +169,7 @@ subtest 'add() tests' => sub {
         doh => 1
     };
 
-    $t->post_ok( "//$userid:$password@/api/v1/illbatchstatuses" => json => $status_with_invalid_field )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_with_invalid_field )->status_is(400)
         ->json_is(
         "/errors" => [
             {
@@ -181,13 +181,13 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $status_id =
-        $t->post_ok( "//$userid:$password@/api/v1/illbatchstatuses" => json => $status_metadata )->status_is(201)
+        $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )->status_is(201)
         ->json_has( '/id',        'ID' )->json_has( '/name', 'Name' )->json_has( '/code', 'Code' )
         ->json_has( '/is_system', 'is_system' );
 
     # Authorized attempt to create with null id
     $status_metadata->{id} = undef;
-    $t->post_ok( "//$userid:$password@/api/v1/illbatchstatuses" => json => $status_metadata )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )->status_is(400)
         ->json_has('/errors');
 
     $schema->storage->txn_rollback;
@@ -221,7 +221,7 @@ subtest 'update() tests' => sub {
     my $status_code = $builder->build_object( { class => 'Koha::IllbatchStatuses' } )->code;
 
     # Unauthorized attempt to update
-    $t->put_ok( "//$unauth_userid:$password@/api/v1/illbatchstatuses/$status_code" => json =>
+    $t->put_ok( "//$unauth_userid:$password@/api/v1/ill/batchstatuses/$status_code" => json =>
             { name => 'These are not the droids you are looking for' } )->status_is(403);
 
     # Attempt partial update on a PUT
@@ -230,7 +230,7 @@ subtest 'update() tests' => sub {
         is_system => 0
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/illbatchstatuses/$status_code" => json => $status_with_missing_field )
+    $t->put_ok( "//$userid:$password@/api/v1/ill/batchstatuses/$status_code" => json => $status_with_missing_field )
         ->status_is(400)->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
@@ -240,7 +240,7 @@ subtest 'update() tests' => sub {
         is_system => 0
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/illbatchstatuses/$status_code" => json => $status_with_updated_field )
+    $t->put_ok( "//$userid:$password@/api/v1/ill/batchstatuses/$status_code" => json => $status_with_updated_field )
         ->status_is(200)->json_is( '/name' => 'Master Ploo Koon' );
 
     # Authorized attempt to write invalid data
@@ -250,7 +250,7 @@ subtest 'update() tests' => sub {
         code => $status_code
     };
 
-    $t->put_ok( "//$userid:$password@/api/v1/illbatchstatuses/$status_code" => json => $status_with_invalid_field )
+    $t->put_ok( "//$userid:$password@/api/v1/ill/batchstatuses/$status_code" => json => $status_with_invalid_field )
         ->status_is(400)->json_is(
         "/errors" => [
             {
@@ -265,7 +265,7 @@ subtest 'update() tests' => sub {
     $status_to_delete->delete;
 
     $t->put_ok(
-        "//$userid:$password@/api/v1/illbatchstatuses/$non_existent_code" => json => $status_with_updated_field )
+        "//$userid:$password@/api/v1/ill/batchstatuses/$non_existent_code" => json => $status_with_updated_field )
         ->status_is(404);
 
     $schema->storage->txn_rollback;
@@ -312,13 +312,13 @@ subtest 'delete() tests' => sub {
     );
 
     # Unauthorized attempt to delete
-    $t->delete_ok( "//$unauth_userid:$password@/api/v1/illbatchstatuses/" . $non_system_status->code )->status_is(403);
+    $t->delete_ok( "//$unauth_userid:$password@/api/v1/ill/batchstatuses/" . $non_system_status->code )->status_is(403);
 
-    $t->delete_ok( "//$userid:$password@/api/v1/illbatchstatuses/" . $non_system_status->code )->status_is(204);
+    $t->delete_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $non_system_status->code )->status_is(204);
 
-    $t->delete_ok( "//$userid:$password@/api/v1/illbatchstatuses/" . $non_system_status->code )->status_is(404);
+    $t->delete_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $non_system_status->code )->status_is(404);
 
-    $t->delete_ok( "//$userid:$password@/api/v1/illbatchstatuses/" . $system_status->code )->status_is(400)
+    $t->delete_ok( "//$userid:$password@/api/v1/ill/batchstatuses/" . $system_status->code )->status_is(400)
         ->json_is( "/errors" => [ { message => "ILL batch status cannot be deleted" } ] );
 
     $schema->storage->txn_rollback;

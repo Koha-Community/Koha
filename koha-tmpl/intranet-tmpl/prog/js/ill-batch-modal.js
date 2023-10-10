@@ -485,7 +485,7 @@
 
     // Get all batch statuses
     function fetchStatuses() {
-        window.doApiRequest('/api/v1/illbatchstatuses')
+        window.doApiRequest('/api/v1/ill/batchstatuses')
             .then(function (response) {
                 return response.json();
             })

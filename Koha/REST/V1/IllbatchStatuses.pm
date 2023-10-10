@@ -50,7 +50,7 @@ Get one batch statuses
 sub get {
     my $c = shift->openapi->valid_input;
 
-    my $status_code = $c->param('illbatchstatus_code');
+    my $status_code = $c->param('ill_batchstatus_code');
 
     my $status = Koha::IllbatchStatuses->find( { code => $status_code } );
 
@@ -107,7 +107,7 @@ Update a batch status
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $status = Koha::IllbatchStatuses->find( { code => $c->param('illbatchstatus_code') } );
+    my $status = Koha::IllbatchStatuses->find( { code => $c->param('ill_batchstatus_code') } );
 
     if ( not defined $status ) {
         return $c->render(
@@ -142,7 +142,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $status = Koha::IllbatchStatuses->find( { code => $c->param('illbatchstatus_code') } );
+    my $status = Koha::IllbatchStatuses->find( { code => $c->param('ill_batchstatus_code') } );
 
     if ( not defined $status ) {
         return $c->render( status => 404, openapi => { errors => [ { message => "ILL batch status not found" } ] } );

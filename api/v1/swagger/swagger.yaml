@@ -68,10 +68,10 @@ definitions:
     $ref: ./definitions/ill_batch.yaml
   ill_batches:
     $ref: ./definitions/ill_batches.yaml
-  illbatchstatus:
-    $ref: ./definitions/illbatchstatus.yaml
-  illbatchstatuses:
-    $ref: ./definitions/illbatchstatuses.yaml
+  ill_batchstatus:
+    $ref: ./definitions/ill_batchstatus.yaml
+  ill_batchstatuses:
+    $ref: ./definitions/ill_batchstatuses.yaml
   import_batch_profile:
     $ref: ./definitions/import_batch_profile.yaml
   import_batch_profiles:
@@ -281,10 +281,10 @@ paths:
     $ref: ./paths/ill_batches.yaml#/~1ill~1batches
   "/ill/batches/{ill_batch_id}":
     $ref: "./paths/ill_batches.yaml#/~1ill~1batches~1{ill_batch_id}"
-  /illbatchstatuses:
-    $ref: ./paths/illbatchstatuses.yaml#/~1illbatchstatuses
-  "/illbatchstatuses/{illbatchstatus_code}":
-    $ref: "./paths/illbatchstatuses.yaml#/~1illbatchstatuses~1{illbatchstatus_code}"
+  /ill/batchstatuses:
+    $ref: ./paths/ill_batchstatuses.yaml#/~1ill~1batchstatuses
+  "/ill/batchstatuses/{ill_batchstatus_code}":
+    $ref: "./paths/ill_batchstatuses.yaml#/~1ill~1batchstatuses~1{ill_batchstatus_code}"
   "/import_batches/{import_batch_id}/records/{import_record_id}/matches/chosen":
     $ref: "./paths/import_batches.yaml#/~1import_batches~1{import_batch_id}~1records~1{import_record_id}~1matches~1chosen"
   /import_batch_profiles:
@@ -543,10 +543,10 @@ parameters:
     name: ill_batch_id
     required: true
     type: integer
-  illbatchstatus_code_pp:
+  ill_batchstatus_code_pp:
     description: Internal ILL batch status identifier
     in: path
-    name: illbatchstatus_code
+    name: ill_batchstatus_code
     required: true
     type: string
   import_batch_profile_id_pp:
@@ -883,7 +883,7 @@ tags:
     name: ill_batches
     x-displayName: ILL batches
   - description: "Manage ILL module batch statuses\n"
-    name: illbatchstatuses
+    name: ill_batchstatuses
     x-displayName: ILL batch statuses
   - description: "Manage ILL requests\n"
     name: ill_requests

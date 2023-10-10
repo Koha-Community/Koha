@@ -1,10 +1,10 @@
 ---
-/illbatchstatuses:
+/ill/batchstatuses:
   get:
     x-mojo-to: IllbatchStatuses#list
     operationId: listIllbatchstatuses
     tags:
-      - illbatchstatuses
+      - ill_batchstatuses
     summary: List ILL batch statuses
     parameters: []
     produces:
@@ -13,7 +13,7 @@
       "200":
         description: A list of ILL batch statuses
         schema:
-          $ref: "../swagger.yaml#/definitions/illbatchstatuses"
+          $ref: "../swagger.yaml#/definitions/ill_batchstatuses"
       "401":
         description: Authentication required
         schema:
@@ -44,7 +44,7 @@
     x-mojo-to: IllbatchStatuses#add
     operationId: addIllbatchstatus
     tags:
-      - illbatchstatuses
+      - ill_batchstatuses
     summary: Add ILL batch status
     parameters:
       - name: body
@@ -52,14 +52,14 @@
         description: A JSON object containing informations about the new batch status
         required: true
         schema:
-          $ref: "../swagger.yaml#/definitions/illbatchstatus"
+          $ref: "../swagger.yaml#/definitions/ill_batchstatus"
     produces:
       - application/json
     responses:
       "201":
         description: Batch status added
         schema:
-          $ref: "../swagger.yaml#/definitions/illbatchstatus"
+          $ref: "../swagger.yaml#/definitions/ill_batchstatus"
       "400":
         description: Bad request
         schema:
@@ -90,15 +90,15 @@
     x-koha-authorization:
       permissions:
         ill: "1"
-"/illbatchstatuses/{illbatchstatus_code}":
+"/ill/batchstatuses/{ill_batchstatus_code}":
   get:
     x-mojo-to: IllbatchStatuses#get
     operationId: getIllbatchstatuses
     tags:
-      - illbatchstatuses
+      - ill_batchstatuses
     summary: Get ILL batch status
     parameters:
-      - name: illbatchstatus_code
+      - name: ill_batchstatus_code
         in: path
         description: ILL batch status
         required: true
@@ -109,7 +109,7 @@
       "200":
         description: An ILL batch status
         schema:
-          $ref: "../swagger.yaml#/definitions/illbatchstatus"
+          $ref: "../swagger.yaml#/definitions/ill_batchstatus"
       "401":
         description: Authentication required
         schema:
@@ -140,16 +140,16 @@
     x-mojo-to: IllbatchStatuses#update
     operationId: updateIllBatchstatus
     tags:
-      - illbatchstatuses
+      - ill_batchstatuses
     summary: Update batch status
     parameters:
-      - $ref: "../swagger.yaml#/parameters/illbatchstatus_code_pp"
+      - $ref: "../swagger.yaml#/parameters/ill_batchstatus_code_pp"
       - name: body
         in: body
         description: A JSON object containing information on the batch status
         required: true
         schema:
-          $ref: "../swagger.yaml#/definitions/illbatchstatus"
+          $ref: "../swagger.yaml#/definitions/ill_batchstatus"
     consumes:
       - application/json
     produces:
@@ -158,7 +158,7 @@
       "200":
         description: An ILL batch status
         schema:
-          $ref: "../swagger.yaml#/definitions/illbatchstatus"
+          $ref: "../swagger.yaml#/definitions/ill_batchstatus"
       "400":
         description: Bad request
         schema:
@@ -193,10 +193,10 @@
     x-mojo-to: IllbatchStatuses#delete
     operationId: deleteBatchstatus
     tags:
-      - illbatchstatuses
+      - ill_batchstatuses
     summary: Delete ILL batch status
     parameters:
-      - $ref: "../swagger.yaml#/parameters/illbatchstatus_code_pp"
+      - $ref: "../swagger.yaml#/parameters/ill_batchstatus_code_pp"
     produces:
       - application/json
     responses:
