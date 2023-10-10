@@ -148,11 +148,17 @@ th {
     text-align: left;
 }
 
+td:first-child,
+th:first-child {
+    border-left: 0;
+}
+
+td:last-child,
 th:last-child {
     background-color: #E9E9E9;
     border-bottom: 1px solid #CCCCCC;
     border-left: 0;
-    border-right: 0 solid #CCCCCC;
+    border-right: 0;
     border-top: 0;
     font-size: 14px;
     font-weight: bold;
@@ -316,15 +322,19 @@ form#sortbyform,
 fieldset.action,
 .list-actions,
 .print,
-.ui-tabs-nav,
 .browse-controls,
 .cart-controls,
-button.dt-button {
-    display: none;
+button.dt-button,
+.navbar,
+.nav-tabs,
+#sub-header,
+[class*="_table_controls"],
+.pager,
+aside {
+    display: none !important;
 }
 
-.ui-tabs .ui-tabs-panel,
-.ui-tabs .ui-tabs-hide {
+.tab-content > .tab-pane {
     display: block !important;
 }
 
