@@ -329,7 +329,15 @@ sub _add_binding {
         #click event applies to buttonDot
 
     if( $pars =~ /^(e|ev|event)$/i ) { # new style event handler assumed
-        $bind= qq|    \$("#$ctl").$ev(\{id: '$id'\}, $fname);\n|;
+
+        if ($ev eq "click"){
+          # remove already registered click listeners
+          $bind= qq|    \$("#$ctl").off('click');\n|;
+          $bind.= qq|    \$("#$ctl").$ev(\{id: '$id'\}, $fname);\n|;
+        } else {
+          $bind= qq|    \$("#$ctl").$ev(\{id: '$id'\}, $fname);\n|;
+        }
+
         $script='';
     } elsif( $fname eq 'noclick' ) { # no click: return false, no scroll
         $bind= qq|    \$("#$ctl").$ev(function () { return false; });\n|;
