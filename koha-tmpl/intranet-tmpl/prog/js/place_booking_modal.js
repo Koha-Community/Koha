@@ -1,5 +1,5 @@
 let dataFetched = false;
-let items, bookings, booking_id, itemnumber;
+let bookable_items, bookings, booking_id, booking_item_id, booking_patron;
 
 $('#placeBookingModal').on('show.bs.modal', function(e) {
 
@@ -9,7 +9,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
     $('#booking_biblio_id').val(biblionumber);
 
     let patron_id = button.data('patron') || 0;
-    itemnumber = button.data('itemnumber');
+    booking_item_id = button.data('itemnumber');
     let start_date = button.data('start_date');
     let end_date = button.data('end_date');
 
@@ -23,260 +23,6 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
         // Ensure we don't accidentally update a booking
         $('#booking_id').val('');
     }
-
-    // Adopt periodPicker
-    let periodPicker = $("#period").get(0)._flatpickr;
-
-    if ( !dataFetched ) {
-
-        // Fetch list of bookable items
-        let itemsFetch = $.ajax({
-            url: '/api/v1/biblios/' + biblionumber + '/items?bookable=1' + '&_per_page=-1',
-            dataType: 'json',
-            type: 'GET'
-        });
-    
-        // Fetch list of existing bookings
-        let bookingsFetch = $.ajax({
-            url: '/api/v1/bookings?biblio_id=' + biblionumber,
-            dataType: 'json',
-            type: 'GET'
-        });
-    
-        // Update item select2 and period flatpickr
-        $.when(itemsFetch, bookingsFetch).then(
-            function(itemsFetch,bookingsFetch){
-
-                // Set variables
-                items = itemsFetch[0];
-                bookings = bookingsFetch[0];
-    
-                // Item select2
-                $("#booking_item_id").select2({
-                    dropdownParent: $(".modal-content", "#placeBookingModal"),
-                    width: '50%',
-                    dropdownAutoWidth: true,
-                    minimumResultsForSearch: 20,
-                    placeholder: "Select item"
-                });
-    
-                // Update flatpickr mode
-                periodPicker.set('mode', 'range');
-    
-                // Total bookable items
-                let bookable = 0;
-    
-                for (item of items) {
-                    bookable++;
-                    // Populate item select (NOTE: Do we still need this check for pre-existing select option here?)
-                    if (!($('#booking_item_id').find("option[value='" + item.item_id + "']").length)) {
-                        // Create a DOM Option and de-select by default
-                        let newOption = new Option(escape_str(item.external_id), item.item_id, false, false);
-                        // Append it to the select
-                        $('#booking_item_id').append(newOption);
-                    }
-                }
-    
-                // Set disable function for periodPicker
-                let disableExists = periodPicker.config.disable.filter(f => f.name === 'dateDisable');
-                if ( disableExists.length === 0 ) {
-                    periodPicker.config.disable.push(function dateDisable(date){
-        
-                        // set local copy of selectedDates
-                        let selectedDates = periodPicker.selectedDates;
-        
-                        // set booked counter
-                        let booked = 0;
-        
-                        // reset the unavailable items array
-                        let unavailable_items = [];
-        
-                        // reset the biblio level bookings array
-                        let biblio_bookings = [];
-        
-                        // disable dates before selected date
-                        if (!selectedDates[1] && (selectedDates[0] && selectedDates[0] > date)) {
-                            return true;
-                        }
-        
-                        // iterate existing bookings
-                        for (booking of bookings) {
-
-                            // Skip if we're editing this booking
-                            if (booking_id && booking_id == booking.booking_id){
-                                continue;
-                            }
-
-                            let start_date = flatpickr.parseDate(booking.start_date);
-                            let end_date = flatpickr.parseDate(booking.end_date);
-        
-                            // patron has selected a start date (end date checks)
-                            if (selectedDates[0]) {
-        
-                                // new booking start date is between existing booking start and end dates
-                                if (selectedDates[0] >= start_date && selectedDates[0] <= end_date) {
-                                    if (booking.item_id) {
-                                        if (unavailable_items.indexOf(booking.item_id) === -1) {
-                                            unavailable_items.push(booking.item_id);
-                                        }
-                                    } else {
-                                        if (biblio_bookings.indexOf(booking.booking_id) === -1) {
-                                            biblio_bookings.push(booking.booking_id);
-                                        }
-                                    }
-                                }
-        
-                                // new booking end date would be between existing booking start and end dates
-                                else if (date >= start_date && date <= end_date) {
-                                    if (booking.item_id) {
-                                        if (unavailable_items.indexOf(booking.item_id) === -1) {
-                                            unavailable_items.push(booking.item_id);
-                                        }
-                                    } else {
-                                        if (biblio_bookings.indexOf(booking.booking_id) === -1) {
-                                            biblio_bookings.push(booking.booking_id);
-                                        }
-                                    }
-                                }
-        
-                                // new booking would span existing booking
-                                else if (selectedDates[0] <= start_date && date >= end_date) {
-                                    if (booking.item_id) {
-                                        if (unavailable_items.indexOf(booking.item_id) === -1) {
-                                            unavailable_items.push(booking.item_id);
-                                        }
-                                    } else {
-                                        if (biblio_bookings.indexOf(booking.booking_id) === -1) {
-                                            biblio_bookings.push(booking.booking_id);
-                                        }
-                                    }
-                                }
-        
-                                // new booking would not conflict
-                                else {
-                                    continue;
-                                }
-        
-                                // check that there are available items
-                                // available = all bookable items - booked items - booked biblios
-                                let total_available = items.length - unavailable_items.length - biblio_bookings.length;
-                                if (total_available === 0) {
-                                    return true;
-                                }
-                            }
-        
-                            // patron has not yet selected a start date (start date checks)
-                            else if (date <= end_date && date >= start_date) {
-        
-                                // same item, disable date
-                                if (booking.item_id && booking.item_id == itemnumber) {
-                                    return true;
-                                }
-        
-                                // count all clashes, both item and biblio level
-                                booked++;
-                                if (booked == bookable) {
-                                    return true;
-                                }
-        
-                                // FIXME: The above is not intelligent enough to spot
-                                // cases where an item must be used for a biblio level booking
-                                // due to all other items being booking within the biblio level
-                                // booking period... we end up with a clash
-                                // To reproduce: 
-                                // * One bib with two bookable items.
-                                // * Add item level booking
-                                // * Add biblio level booking that extends one day beyond the item level booking
-                                // * Try to book the item without an item level booking from the day before the biblio level
-                                //   booking is to be returned. Note this is a clash, the only item available for the biblio
-                                //   level booking is the item you just booked out overlapping the end date.
-                            }
-                        }
-                    });
-                };
-                
-                // Setup listener for item select2
-                $('#booking_item_id').on('select2:select', function(e) {
-                    itemnumber = e.params.data.id ? e.params.data.id : null;
-    
-                    // redraw pariodPicker taking selected item into account
-                    periodPicker.redraw();
-                });
-    
-                // Set onChange for flatpickr
-                let changeExists = periodPicker.config.onChange.filter(f => f.name ==='periodChange');
-                if(changeExists.length === 0) {
-                    periodPicker.config.onChange.push(function periodChange(selectedDates, dateStr, instance) {
-                        // Range set, update hidden fields and set available items
-                        if ( selectedDates[0] && selectedDates[1] ) {
-                            // set form fields from picker
-                            let picker_start = dayjs(selectedDates[0]);
-                            let picker_end = dayjs(selectedDates[1]).endOf('day');
-                            $('#booking_start_date').val(picker_start.toISOString());
-                            $('#booking_end_date').val(picker_end.toISOString());
-        
-                            // set available items in select2
-                            let booked_items = bookings.filter(function(booking) {
-                                let start_date = flatpickr.parseDate(booking.start_date);
-                                let end_date = flatpickr.parseDate(booking.end_date);
-                                // This booking ends before the start of the new booking
-                                if ( end_date <= selectedDates[0] ) {
-                                    return false;
-                                }
-                                // This booking starts after then end of the new booking
-                                if ( start_date >= selectedDates[1] ) {
-                                    return false;
-                                }
-                                // This booking overlaps
-                                return true;
-                            });
-                            $("#booking_item_id > option").each(function() {
-                                let option = $(this);
-                                if ( itemnumber && itemnumber == option.val() ) {
-                                    option.prop('disabled',false);
-                                } else if ( booked_items.some(function(booked_item){
-                                    return option.val() == booked_item.item_id;
-                                }) ) {
-                                    option.prop('disabled',true);
-                                } else {
-                                    option.prop('disabled',false);
-                                }
-                            });
-                            $('#booking_item_id').trigger('change.select2');
-                        }
-                        // Range not set, reset field options
-                        else {
-                            $('#booking_item_id > option').each(function() {
-                                $(this).prop('disabled', false);
-                            });
-                            $('#booking_item_id').trigger('change.select2');
-                        }
-                    });
-                };
-    
-                // Enable flatpickr now we have date function populated
-                periodPicker.redraw();
-                $("#period_fields :input").prop('disabled', false);
-    
-                // Redraw select with new options and enable
-                $('#booking_item_id').trigger('change');
-                $("#booking_item_id").prop("disabled", false);
-
-                // Set the flag to indicate that data has been fetched
-                dataFetched = true;
-        
-                // Set form values
-                setFormValues(patron_id,itemnumber,start_date,end_date,periodPicker);
-            },
-            function(jqXHR, textStatus, errorThrown){
-                console.log("Fetch failed");
-            }
-        );
-    } else {
-        setFormValues(patron_id,itemnumber,start_date,end_date,periodPicker);
-    };
-
-    // Setup forms
 
     // Patron select2
     $("#booking_patron_id").kohaSelect({
@@ -370,12 +116,268 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
         placeholder: "Search for a patron"
     });
 
+    $('#booking_patron_id').on('select2:select', function (e) {
+        booking_patron = e.params.data;
+    });
+
+    // Adopt periodPicker
+    let periodPicker = $("#period").get(0)._flatpickr;
+
+    if ( !dataFetched ) {
+
+        // Fetch list of bookable items
+        let itemsFetch = $.ajax({
+            url: '/api/v1/biblios/' + biblionumber + '/items?bookable=1' + '&_per_page=-1',
+            dataType: 'json',
+            type: 'GET'
+        });
+    
+        // Fetch list of existing bookings
+        let bookingsFetch = $.ajax({
+            url: '/api/v1/bookings?biblio_id=' + biblionumber,
+            dataType: 'json',
+            type: 'GET'
+        });
+    
+        // Update item select2 and period flatpickr
+        $.when(itemsFetch, bookingsFetch).then(
+            function(itemsFetch,bookingsFetch){
+
+                // Set variables
+                bookable_items = itemsFetch[0];
+                bookings = bookingsFetch[0];
+    
+                // Item select2
+                $("#booking_item_id").select2({
+                    dropdownParent: $(".modal-content", "#placeBookingModal"),
+                    width: '50%',
+                    dropdownAutoWidth: true,
+                    minimumResultsForSearch: 20,
+                    placeholder: "Select item"
+                });
+    
+                // Update flatpickr mode
+                periodPicker.set('mode', 'range');
+    
+                // Total bookable items
+                let bookable = 0;
+    
+                for (item of bookable_items) {
+                    bookable++;
+                    // Populate item select (NOTE: Do we still need this check for pre-existing select option here?)
+                    if (!($('#booking_item_id').find("option[value='" + item.item_id + "']").length)) {
+                        // Create a DOM Option and de-select by default
+                        let newOption = new Option(escape_str(item.external_id), item.item_id, false, false);
+                        // Append it to the select
+                        $('#booking_item_id').append(newOption);
+                    }
+                }
+    
+                // Set disable function for periodPicker
+                let disableExists = periodPicker.config.disable.filter(f => f.name === 'dateDisable');
+                if ( disableExists.length === 0 ) {
+                    periodPicker.config.disable.push(function dateDisable(date){
+        
+                        // set local copy of selectedDates
+                        let selectedDates = periodPicker.selectedDates;
+        
+                        // set booked counter
+                        let booked = 0;
+        
+                        // reset the unavailable items array
+                        let unavailable_items = [];
+        
+                        // reset the biblio level bookings array
+                        let biblio_bookings = [];
+        
+                        // disable dates before selected date
+                        if (!selectedDates[1] && (selectedDates[0] && selectedDates[0] > date)) {
+                            return true;
+                        }
+        
+                        // iterate existing bookings
+                        for (booking of bookings) {
+
+                            // Skip if we're editing this booking
+                            if (booking_id && booking_id == booking.booking_id){
+                                continue;
+                            }
+
+                            let start_date = flatpickr.parseDate(booking.start_date);
+                            let end_date = flatpickr.parseDate(booking.end_date);
+        
+                            // patron has selected a start date (end date checks)
+                            if (selectedDates[0]) {
+        
+                                // new booking start date is between existing booking start and end dates
+                                if (selectedDates[0] >= start_date && selectedDates[0] <= end_date) {
+                                    if (booking.item_id) {
+                                        if (unavailable_items.indexOf(booking.item_id) === -1) {
+                                            unavailable_items.push(booking.item_id);
+                                        }
+                                    } else {
+                                        if (biblio_bookings.indexOf(booking.booking_id) === -1) {
+                                            biblio_bookings.push(booking.booking_id);
+                                        }
+                                    }
+                                }
+        
+                                // new booking end date would be between existing booking start and end dates
+                                else if (date >= start_date && date <= end_date) {
+                                    if (booking.item_id) {
+                                        if (unavailable_items.indexOf(booking.item_id) === -1) {
+                                            unavailable_items.push(booking.item_id);
+                                        }
+                                    } else {
+                                        if (biblio_bookings.indexOf(booking.booking_id) === -1) {
+                                            biblio_bookings.push(booking.booking_id);
+                                        }
+                                    }
+                                }
+        
+                                // new booking would span existing booking
+                                else if (selectedDates[0] <= start_date && date >= end_date) {
+                                    if (booking.item_id) {
+                                        if (unavailable_items.indexOf(booking.item_id) === -1) {
+                                            unavailable_items.push(booking.item_id);
+                                        }
+                                    } else {
+                                        if (biblio_bookings.indexOf(booking.booking_id) === -1) {
+                                            biblio_bookings.push(booking.booking_id);
+                                        }
+                                    }
+                                }
+        
+                                // new booking would not conflict
+                                else {
+                                    continue;
+                                }
+        
+                                // check that there are available items
+                                // available = all bookable items - booked items - booked biblios
+                                let total_available = bookable_items.length - unavailable_items.length - biblio_bookings.length;
+                                if (total_available === 0) {
+                                    return true;
+                                }
+                            }
+        
+                            // patron has not yet selected a start date (start date checks)
+                            else if (date <= end_date && date >= start_date) {
+        
+                                // same item, disable date
+                                if (booking.item_id && booking.item_id == booking_item_id) {
+                                    return true;
+                                }
+        
+                                // count all clashes, both item and biblio level
+                                booked++;
+                                if (booked == bookable) {
+                                    return true;
+                                }
+        
+                                // FIXME: The above is not intelligent enough to spot
+                                // cases where an item must be used for a biblio level booking
+                                // due to all other items being booking within the biblio level
+                                // booking period... we end up with a clash
+                                // To reproduce: 
+                                // * One bib with two bookable items.
+                                // * Add item level booking
+                                // * Add biblio level booking that extends one day beyond the item level booking
+                                // * Try to book the item without an item level booking from the day before the biblio level
+                                //   booking is to be returned. Note this is a clash, the only item available for the biblio
+                                //   level booking is the item you just booked out overlapping the end date.
+                            }
+                        }
+                    });
+                };
+                
+                // Setup listener for item select2
+                $('#booking_item_id').on('select2:select', function(e) {
+                    booking_item_id = e.params.data.id ? e.params.data.id : null;
+    
+                    // redraw pariodPicker taking selected item into account
+                    periodPicker.redraw();
+                });
+    
+                // Set onChange for flatpickr
+                let changeExists = periodPicker.config.onChange.filter(f => f.name ==='periodChange');
+                if(changeExists.length === 0) {
+                    periodPicker.config.onChange.push(function periodChange(selectedDates, dateStr, instance) {
+                        // Range set, update hidden fields and set available items
+                        if ( selectedDates[0] && selectedDates[1] ) {
+                            // set form fields from picker
+                            let picker_start = dayjs(selectedDates[0]);
+                            let picker_end = dayjs(selectedDates[1]).endOf('day');
+                            $('#booking_start_date').val(picker_start.toISOString());
+                            $('#booking_end_date').val(picker_end.toISOString());
+        
+                            // set available items in select2
+                            let booked_items = bookings.filter(function(booking) {
+                                let start_date = flatpickr.parseDate(booking.start_date);
+                                let end_date = flatpickr.parseDate(booking.end_date);
+                                // This booking ends before the start of the new booking
+                                if ( end_date <= selectedDates[0] ) {
+                                    return false;
+                                }
+                                // This booking starts after then end of the new booking
+                                if ( start_date >= selectedDates[1] ) {
+                                    return false;
+                                }
+                                // This booking overlaps
+                                return true;
+                            });
+                            $("#booking_item_id > option").each(function() {
+                                let option = $(this);
+                                if ( booking_item_id && booking_item_id == option.val() ) {
+                                    option.prop('disabled',false);
+                                } else if ( booked_items.some(function(booked_item){
+                                    return option.val() == booked_item.item_id;
+                                }) ) {
+                                    option.prop('disabled',true);
+                                } else {
+                                    option.prop('disabled',false);
+                                }
+                            });
+                            $('#booking_item_id').trigger('change.select2');
+                        }
+                        // Range not set, reset field options
+                        else {
+                            $('#booking_item_id > option').each(function() {
+                                $(this).prop('disabled', false);
+                            });
+                            $('#booking_item_id').trigger('change.select2');
+                        }
+                    });
+                };
+    
+                // Enable flatpickr now we have date function populated
+                periodPicker.redraw();
+                $("#period_fields :input").prop('disabled', false);
+    
+                // Redraw select with new options and enable
+                $('#booking_item_id').trigger('change');
+                $("#booking_item_id").prop("disabled", false);
+
+                // Set the flag to indicate that data has been fetched
+                dataFetched = true;
+        
+                // Set form values
+                setFormValues(patron_id,booking_item_id,start_date,end_date,periodPicker);
+            },
+            function(jqXHR, textStatus, errorThrown){
+                console.log("Fetch failed");
+            }
+        );
+    } else {
+        setFormValues(patron_id,booking_item_id,start_date,end_date,periodPicker);
+    };
 });
 
-function setFormValues(patron_id,itemnumber,start_date,end_date,periodPicker){
+function setFormValues(patron_id,booking_item_id,start_date,end_date,periodPicker){
 
     // If passed patron, pre-select
     if (patron_id) {
+        let patronSelect = $('#booking_patron_id');
         let patron = $.ajax({
             url: '/api/v1/patrons/' + patron_id,
             dataType: 'json',
@@ -384,14 +386,17 @@ function setFormValues(patron_id,itemnumber,start_date,end_date,periodPicker){
 
         $.when(patron).done(
             function(patron){
-                let newOption = new Option(escape_str(patron.surname) + ", " + escape_str(patron.firstname), patron.patron_id, true, true);
-                $('#booking_patron_id').append(newOption).trigger('change');
 
                 // clone patron_id to id (select2 expects an id field)
                 patron.id = patron.patron_id;
+                patron.text = escape_str(patron.surname) + ", " + escape_str(patron.firstname);
+
+                // Add and select new option
+                let newOption = new Option(patron.text, patron.id, true, true);
+                patronSelect.append(newOption).trigger('change');
 
                 // manually trigger the `select2:select` event
-                $('#booking_patron_id').trigger({
+                patronSelect.trigger({
                     type: 'select2:select',
                     params: {
                         data: patron
@@ -418,8 +423,8 @@ function setFormValues(patron_id,itemnumber,start_date,end_date,periodPicker){
     };
 
     // If passed an itemnumber, pre-select
-    if (itemnumber) {
-        $('#booking_item_id').val(itemnumber).trigger('change');
+    if (booking_item_id) {
+        $('#booking_item_id').val(booking_item_id).trigger('change');
     }
 }
 
@@ -450,14 +455,13 @@ $("#placeBookingForm").on('submit', function(e) {
                 bookings_table.api().ajax.reload();
             }
             if (typeof timeline !== 'undefined' && timeline !== null) {
-                let selected_patron = $("#booking_patron_id").select2('data')[0];
                 timeline.itemsData.add({
                     id: data.booking_id,
                     booking: data.booking_id,
                     patron: data.patron_id,
                     start: dayjs(data.start_date).toDate(),
                     end: dayjs(data.end_date).toDate(),
-                    content: $patron_to_html(selected_patron, {
+                    content: $patron_to_html(booking_patron, {
                         display_cardnumber: true,
                         url: false
                     }),
@@ -501,14 +505,13 @@ $("#placeBookingForm").on('submit', function(e) {
                 bookings_table.api().ajax.reload();
             }
             if (typeof timeline !== 'undefined' && timeline !== null) {
-                let selected_patron = $("#booking_patron_id").select2('data')[0];
                 timeline.itemsData.update({
                     id: data.booking_id,
                     booking: data.booking_id,
                     patron: data.patron_id,
                     start: dayjs(data.start_date).toDate(),
                     end: dayjs(data.end_date).toDate(),
-                    content: $patron_to_html(selected_patron, {
+                    content: $patron_to_html(booking_patron, {
                         display_cardnumber: true,
                         url: false
                     }),
