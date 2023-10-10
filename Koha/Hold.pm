@@ -866,21 +866,25 @@ a patron on a record to be alike.
 sub change_type {
     my ( $self, $itemnumber ) = @_;
 
-    my $record_holds_per_patron = Koha::Holds->search( {
-        borrowernumber => $self->borrowernumber,
-        biblionumber => $self->biblionumber,
-    } );
+    my $record_holds_per_patron = Koha::Holds->search(
+        {
+            borrowernumber => $self->borrowernumber,
+            biblionumber   => $self->biblionumber,
+        }
+    );
 
     if ( $itemnumber && $self->itemnumber ) {
-        $self->itemnumber( $itemnumber )->store;
+        $self->itemnumber($itemnumber)->store;
         return $self;
     }
 
     if ( $record_holds_per_patron->count == 1 ) {
-        $self->set({
-            itemnumber => $itemnumber ? $itemnumber : undef,
-            item_level_hold => $itemnumber ? 1 : 0,
-        })->store;
+        $self->set(
+            {
+                itemnumber      => $itemnumber ? $itemnumber : undef,
+                item_level_hold => $itemnumber ? 1           : 0,
+            }
+        )->store;
     } else {
         Koha::Exceptions::Hold::CannotChangeHoldType->throw();
     }

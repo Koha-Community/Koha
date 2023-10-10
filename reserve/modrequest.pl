@@ -96,13 +96,13 @@ else {
             try {
                 $hold->change_type;
             } catch {
-                if ($_->isa('Koha::Exceptions::Hold::CannotChangeHoldType')){
+                if ( $_->isa('Koha::Exceptions::Hold::CannotChangeHoldType') ) {
                     warn $_;
                 } else {
                     $_->rethrow;
                 }
             }
-        };
+        }
     }
     my @biblio_ids = uniq @biblionumber;
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
