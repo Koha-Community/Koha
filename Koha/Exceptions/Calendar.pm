@@ -14,4 +14,20 @@ use Exception::Class (
     },
 );
 
+=head1 NAME
+
+Koha::Exceptions::Calendar - Base class for calendar exceptions
+
+=head1 Exceptions
+
+=head2 Koha::Exceptions::Calendar
+
+Generic calendar exception
+
+=head2 Koha::Exceptions::Calendar::NoOpenDays
+
+Exceptions to be used when no open days have been found
+
+=cut
+
 1;
