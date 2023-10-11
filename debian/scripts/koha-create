@@ -772,7 +772,7 @@ then
     then
         die "Group $username already exists."
     fi
-    adduser --no-create-home --disabled-login \
+    adduser --no-create-home --disabled-password \
         --gecos "Koha instance $username" \
         --home "/var/lib/koha/$name" \
         --quiet "$username"
