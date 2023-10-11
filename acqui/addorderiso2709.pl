@@ -28,8 +28,8 @@ use Encode;
 use Scalar::Util qw( looks_like_number );
 
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Auth        qw( get_template_and_user );
+use C4::Output      qw( output_html_with_http_headers );
 use C4::ImportBatch qw( SetImportBatchStatus );
 use C4::Matcher;
 use C4::Search qw( FindDuplicate );
@@ -40,7 +40,7 @@ use C4::Biblio qw(
     GetMarcQuantity
     TransformHtmlToXml
 );
-use C4::Items qw( PrepareItemrecordDisplay AddItemFromMarc );
+use C4::Items   qw( PrepareItemrecordDisplay AddItemFromMarc );
 use C4::Budgets qw( GetBudget GetBudgets GetBudgetHierarchy CanUserUseBudget );
 use C4::Suggestions;    # GetSuggestion
 use C4::Members;
@@ -57,30 +57,33 @@ use Koha::Patrons;
 use Koha::MarcOrder;
 
 my $input = CGI->new;
-my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
-    template_name => "acqui/addorderiso2709.tt",
-    query => $input,
-    type => "intranet",
-    flagsrequired   => { acquisition => 'order_manage' },
-});
+my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
+    {
+        template_name => "acqui/addorderiso2709.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { acquisition => 'order_manage' },
+    }
+);
 
-my $cgiparams = $input->Vars;
-my $op = $cgiparams->{'op'} || '';
-my $booksellerid  = $input->param('booksellerid');
-my $allmatch = $input->param('allmatch');
-my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+my $cgiparams    = $input->Vars;
+my $op           = $cgiparams->{'op'} || '';
+my $booksellerid = $input->param('booksellerid');
+my $allmatch     = $input->param('allmatch');
+my $bookseller   = Koha::Acquisition::Booksellers->find($booksellerid);
 
-$template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl",
-                booksellerid => $booksellerid,
-                booksellername => $bookseller->name,
-                );
+$template->param(
+    scriptname     => "/cgi-bin/koha/acqui/addorderiso2709.pl",
+    booksellerid   => $booksellerid,
+    booksellername => $bookseller->name,
+);
 
-if ($cgiparams->{'import_batch_id'} && $op eq ""){
+if ( $cgiparams->{'import_batch_id'} && $op eq "" ) {
     $op = "batch_details";
 }
 
 #Needed parameters:
-if (! $cgiparams->{'basketno'}){
+if ( !$cgiparams->{'basketno'} ) {
     die "Basketnumber required to order from iso2709 file import";
 }
 my $basket = Koha::Acquisition::Baskets->find( $cgiparams->{basketno} );
@@ -88,25 +91,30 @@ my $basket = Koha::Acquisition::Baskets->find( $cgiparams->{basketno} );
 #
 # 1st step = choose the file to import into acquisition
 #
-if ($op eq ""){
-    $template->param("basketno" => $cgiparams->{'basketno'});
-#display batches
-    Koha::MarcOrder->import_batches_list($template);
-#
-# 2nd step = display the content of the chosen file
-#
-} elsif ($op eq "batch_details"){
-#display lines inside the selected batch
+if ( $op eq "" ) {
+    $template->param( "basketno" => $cgiparams->{'basketno'} );
 
-    $template->param("batch_details" => 1,
-                     "basketno"      => $cgiparams->{'basketno'},
-                     # get currencies (for change rates calcs if needed)
-                     currencies => Koha::Acquisition::Currencies->search,
-                     bookseller => $bookseller,
-                     "allmatch" => $allmatch,
-                     );
-    Koha::MarcOrder->import_biblios_list($template, $cgiparams->{'import_batch_id'});
+    #display batches
+    Koha::MarcOrder->import_batches_list($template);
+    #
+    # 2nd step = display the content of the chosen file
+    #
+} elsif ( $op eq "batch_details" ) {
+
+    #display lines inside the selected batch
+
+    $template->param(
+        "batch_details" => 1,
+        "basketno"      => $cgiparams->{'basketno'},
+
+        # get currencies (for change rates calcs if needed)
+        currencies => Koha::Acquisition::Currencies->search,
+        bookseller => $bookseller,
+        "allmatch" => $allmatch,
+    );
+    Koha::MarcOrder->import_biblios_list( $template, $cgiparams->{'import_batch_id'} );
     if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
+
         # prepare empty item form
         my $cell = PrepareItemrecordDisplay( '', '', undef, 'ACQ' );
 
@@ -128,26 +136,37 @@ if ($op eq ""){
     $template->param('basketno' => $cgiparams->{'basketno'});
 # Budget_id is mandatory for adding an order, we just add a default, the user needs to modify this aftewards
     my $budgets = GetBudgets();
-    if (scalar @$budgets == 0){
+    if ( scalar @$budgets == 0 ) {
         die "No budgets defined, can't continue";
     }
     my $budget_id = @$budgets[0]->{'budget_id'};
-#get all records from a batch, and check their import status to see if they are checked.
-#(default values: quantity 1, uncertainprice yes, first budget)
+
+    #get all records from a batch, and check their import status to see if they are checked.
+    #(default values: quantity 1, uncertainprice yes, first budget)
 
     # retrieve the file you want to import
     my $import_batch_id = $cgiparams->{'import_batch_id'};
-    my $import_batch = Koha::ImportBatches->find( $import_batch_id );
-    my $overlay_action = $import_batch->overlay_action;
-    my $import_records = Koha::Import::Records->search({
-        import_batch_id => $import_batch_id,
-    });
+    my $import_batch    = Koha::ImportBatches->find($import_batch_id);
+    my $overlay_action  = $import_batch->overlay_action;
+    my $import_records  = Koha::Import::Records->search(
+        {
+            import_batch_id => $import_batch_id,
+        }
+    );
     my $duplinbatch;
-    my $imported = 0;
+    my $imported                  = 0;
     my @import_record_id_selected = $input->multi_param("import_record_id");
-    my $matcher_id = $input->param('matcher_id');
-    my $active_currency = Koha::Acquisition::Currencies->get_active;
-    while( my $import_record = $import_records->next ){
+    my @quantities                = $input->multi_param('quantity');
+    my @prices                    = $input->multi_param('price');
+    my @orderreplacementprices    = $input->multi_param('replacementprice');
+    my @budgets_id                = $input->multi_param('budget_id');
+    my @discount                  = $input->multi_param('discount');
+    my @sort1                     = $input->multi_param('sort1');
+    my @sort2                     = $input->multi_param('sort2');
+    my $matcher_id                = $input->param('matcher_id');
+    my $active_currency           = Koha::Acquisition::Currencies->get_active;
+
+    while ( my $import_record = $import_records->next ) {
         my $marcrecord        = $import_record->get_marc_record || die "couldn't translate marc information";
         my @homebranches      = $input->multi_param( 'homebranch_' . $import_record->import_record_id );
         my @holdingbranches   = $input->multi_param( 'holdingbranch_' . $import_record->import_record_id );
@@ -212,43 +231,48 @@ if ($op eq ""){
 
     # If all bibliographic records from the batch have been imported we modifying the status of the batch accordingly
     SetImportBatchStatus( $import_batch_id, 'imported' )
-        if Koha::Import::Records->search({import_batch_id => $import_batch_id, status => 'imported' })->count
-           == Koha::Import::Records->search({import_batch_id => $import_batch_id})->count;
+        if Koha::Import::Records->search( { import_batch_id => $import_batch_id, status => 'imported' } )->count ==
+        Koha::Import::Records->search( { import_batch_id => $import_batch_id } )->count;
 
     # go to basket page
-    if ( $imported ) {
-        print $input->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=".$cgiparams->{'basketno'}."&amp;duplinbatch=$duplinbatch");
+    if ($imported) {
+        print $input->redirect(
+            "/cgi-bin/koha/acqui/basket.pl?basketno=" . $cgiparams->{'basketno'} . "&amp;duplinbatch=$duplinbatch" );
     } else {
-        print $input->redirect("/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=$import_batch_id&amp;basketno=".$cgiparams->{'basketno'}."&amp;booksellerid=$booksellerid&amp;allmatch=1");
+        print $input->redirect( "/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=$import_batch_id&amp;basketno="
+                . $cgiparams->{'basketno'}
+                . "&amp;booksellerid=$booksellerid&amp;allmatch=1" );
     }
     exit;
 }
 
-my $budgets = GetBudgets();
+my $budgets   = GetBudgets();
 my $budget_id = @$budgets[0]->{'budget_id'};
+
 # build bookfund list
-my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
+my $patron = Koha::Patrons->find($loggedinuser)->unblessed;
 my $budget = GetBudget($budget_id);
 
 # build budget list
-my $budget_loop = [];
+my $budget_loop       = [];
 my $budgets_hierarchy = GetBudgetHierarchy;
 foreach my $r ( @{$budgets_hierarchy} ) {
-    next unless (CanUserUseBudget($patron, $r, $userflags));
+    next unless ( CanUserUseBudget( $patron, $r, $userflags ) );
     push @{$budget_loop},
-      { b_id  => $r->{budget_id},
-        b_txt => $r->{budget_name},
-        b_code => $r->{budget_code},
+        {
+        b_id            => $r->{budget_id},
+        b_txt           => $r->{budget_name},
+        b_code          => $r->{budget_code},
         b_sort1_authcat => $r->{'sort1_authcat'},
         b_sort2_authcat => $r->{'sort2_authcat'},
-        b_active => $r->{budget_period_active},
-        b_sel => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
-      };
+        b_active        => $r->{budget_period_active},
+        b_sel           => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
+        };
 }
 
 @{$budget_loop} =
-  sort { uc( $a->{b_txt}) cmp uc( $b->{b_txt}) } @{$budget_loop};
+    sort { uc( $a->{b_txt} ) cmp uc( $b->{b_txt} ) } @{$budget_loop};
 
-$template->param( budget_loop    => $budget_loop,);
+$template->param( budget_loop => $budget_loop, );
 
 output_html_with_http_headers $input, $cookie, $template->output;
