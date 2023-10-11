@@ -46,6 +46,18 @@ __PACKAGE__->table("restriction_types");
   default_value: 0
   is_nullable: 0
 
+=head2 lift_after_payment
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+=head2 fee_limit
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -57,6 +69,10 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "is_default",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "lift_after_payment",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "fee_limit",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
 );
 
 =head1 PRIMARY KEY
@@ -89,8 +105,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-08-19 17:53:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CC8yZ6IqZPnySpMC5Mn/ig
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-11 14:33:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sYJS1OhmHvr8hUFwaGBdjQ
 
 __PACKAGE__->add_columns(
     '+is_system'  => { is_boolean => 1 },
