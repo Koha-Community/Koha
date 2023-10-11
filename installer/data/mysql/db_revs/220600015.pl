@@ -22,21 +22,43 @@ return {
 
         say $out "Added new table 'item_bundles'";
 
-        my ($lost_val) = $dbh->selectrow_array( "SELECT MAX(CAST(authorised_value AS SIGNED)) FROM authorised_values WHERE category = 'LOST'", {} );
-        $lost_val++;
+        my ($lost_val) = $dbh->selectrow_array(
+            "SELECT CAST(authorised_value AS SIGNED) FROM authorised_values WHERE category = 'LOST' AND lib = 'Missing from bundle' LIMIT 1",
+            {}
+        );
 
-        $dbh->do(qq{
-           INSERT INTO authorised_values (category,authorised_value,lib) VALUES ('LOST',$lost_val,'Missing from bundle')
-        });
-        say $out "Missing from bundle LOST AV added";
+        if ( !$lost_val ) {
 
-        my ($nfl_val) = $dbh->selectrow_array( "SELECT MAX(CAST(authorised_value AS SIGNED)) FROM authorised_values WHERE category = 'NOT_LOAN'", {} );
-        $nfl_val++;
+            ($lost_val) = $dbh->selectrow_array(
+                "SELECT MAX(CAST(authorised_value AS SIGNED)) FROM authorised_values WHERE category = 'LOST'", {} );
+            $lost_val++;
 
-        $dbh->do(qq{
-           INSERT INTO authorised_values (category,authorised_value,lib) VALUES ('NOT_LOAN',$nfl_val,'Added to bundle')
-        });
-        say $out "Added to bundle NOT_LOAN AV added";
+            $dbh->do(
+                qq{)
+                INSERT INTO authorised_values (category,authorised_value,lib) VALUES ('LOST',$lost_val,'Missing from bundle')
+            }
+            );
+            say $out "Missing from bundle LOST AV added";
+        }
+
+        my ($nfl_val) = $dbh->selectrow_array(
+            "SELECT CAST(authorised_value AS SIGNED) FROM authorised_values WHERE category = 'NOT_LOAN' AND lib = 'Added to bundle' LIMIT 1",
+            {}
+        );
+
+        if ( !$nfl_val ) {
+
+            ($nfl_val) = $dbh->selectrow_array(
+                "SELECT MAX(CAST(authorised_value AS SIGNED)) FROM authorised_values WHERE category = 'NOT_LOAN'", {} );
+            $nfl_val++;
+
+            $dbh->do(
+                qq{
+            INSERT INTO authorised_values (category,authorised_value,lib) VALUES ('NOT_LOAN',$nfl_val,'Added to bundle')
+            }
+            );
+            say $out "Added to bundle NOT_LOAN AV added";
+        }
 
         $dbh->do(qq{
             INSERT IGNORE INTO systempreferences( `variable`, `value`, `options`, `explanation`, `type` )
