@@ -450,6 +450,9 @@ $("#placeBookingForm").on('submit', function(e) {
         );
     
         posting.done(function(data) {
+            // Update bookings store for subsequent bookings
+            bookings.push(data);
+
             // Update bookings page as required
             if (typeof bookings_table !== 'undefined' && bookings_table !== null) {
                 bookings_table.api().ajax.reload();
@@ -499,6 +502,10 @@ $("#placeBookingForm").on('submit', function(e) {
     
         putting.done(function(data) {
             update_success = 1;
+
+            // Update bookings store for subsequent bookings
+            let target = bookings.find((obj) => obj.booking_id === data.booking_id);
+            Object.assign(target,data);
 
             // Update bookings page as required
             if (typeof bookings_table !== 'undefined' && bookings_table !== null) {
