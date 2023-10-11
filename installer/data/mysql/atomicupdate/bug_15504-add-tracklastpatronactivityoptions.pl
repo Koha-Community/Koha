@@ -7,8 +7,14 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
+        # Get existing value from the TrackLastPatronActivity system preference
+        my ($tracklastactivity) = $dbh->selectrow_array( q|
+            SELECT value FROM systempreferences WHERE variable='TrackLastPatronActivity';
+        |);
+
+        my $triggers = $tracklastactivity ? 'check_out,connection,login' : '';
         $dbh->do(
-            q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('TrackLastPatronActivityTriggers','',NULL,'If set, the field borrowers.lastseen will be updated every time a patron is does a selected option','multiple') }
+            qq{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('TrackLastPatronActivityTriggers',$triggers,NULL,'If set, the field borrowers.lastseen will be updated every time a patron is does a selected option','multiple') }
         );
 
         say $out "Added system preference 'TrackLastPatronActivityTriggers'";
