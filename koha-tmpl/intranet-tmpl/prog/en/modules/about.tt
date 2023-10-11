@@ -321,6 +321,16 @@
                                         [% END %]
                                     </p>
                                 [% END %]
+                                [% IF ai_biblioitems %]
+                                    <h4>Bibliographic records</h4>
+                                    <p>The following IDs exist in both tables [% "biblio" | $HtmlTags tag="strong" %] and [% "deletedbiblioitems" | $HtmlTags tag="strong" %]:</p>
+                                    <p>
+                                        [% FOR b IN ai_biblioitems %]
+                                            [% b.biblioitemnumber | html %]
+                                            [% UNLESS loop.last %], [% END %]
+                                        [% END %]
+                                    </p>
+                                [% END %]
                                 [% IF ai_items %]
                                     <h4>Items</h4>
                                     <p>The following IDs exist in both tables [% "items" | $HtmlTags tag="strong" %] and [% "deleteditems" | $HtmlTags tag="strong" %]:</p>
