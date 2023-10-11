@@ -1186,7 +1186,7 @@ sub update_lastseen {
     return $self unless $tracked_activities->{$activity};
 
     my $cache     = Koha::Caches->get_instance();
-    my $cache_key = "track_login_" . $self->userid;
+    my $cache_key = "track_activity_" . $self->borrowernumber;
     my $cached    = $cache->get_from_cache($cache_key);
     my $now       = dt_from_string();
     return if $cached && $cached eq $now->ymd;

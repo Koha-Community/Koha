@@ -1964,7 +1964,7 @@ subtest 'update_lastseen tests' => sub {
     $patron->store();
 
     my $cache     = Koha::Caches->get_instance();
-    my $cache_key = "track_login_" . $patron->userid;
+    my $cache_key = "track_activity_" . $patron->borrowernumber;
     $cache->clear_from_cache($cache_key);
 
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity',         '1' );
