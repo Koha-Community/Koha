@@ -274,9 +274,9 @@ sub UpdateBorrowerDebarmentFlags {
 
 =head2 del_restrictions_after_payment
 
-my $success = del_restrictions_after_payment({
-    borrowernumber => $borrowernumber,
-});
+    my $success = del_restrictions_after_payment({
+        borrowernumber => $borrowernumber,
+    });
 
 Deletes any restrictions from patron by following the rules
 defined in "Patron restrictions".
@@ -295,8 +295,7 @@ sub del_restrictions_after_payment {
     my $restrictions = $patron->restrictions;
     return unless ( $restrictions->count );
 
-    my $lines =
-      Koha::Account::Lines->search( { borrowernumber => $borrowernumber } );
+    my $lines     = Koha::Account::Lines->search( { borrowernumber => $borrowernumber } );
     my $total_due = $lines->total_outstanding;
 
     while ( my $restriction = $restrictions->next ) {

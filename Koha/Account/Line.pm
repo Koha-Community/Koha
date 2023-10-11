@@ -700,7 +700,7 @@ sub apply {
         }
     });
 
-    Koha::Patron::Debarments::del_restrictions_after_payment({ borrowernumber => $self->borrowernumber });
+    Koha::Patron::Debarments::del_restrictions_after_payment( { borrowernumber => $self->borrowernumber } );
 
     return $self;
 }

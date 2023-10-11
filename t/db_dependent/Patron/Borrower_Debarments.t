@@ -262,7 +262,7 @@ my $patron4 = Koha::Patron->new(
 )->store;
 
 my $account = $patron4->account;
-my $line1 = $account->add_debit({ type => 'ACCOUNT', amount => 10, interface => 'commandline' });
+my $line1   = $account->add_debit( { type => 'ACCOUNT', amount => 10, interface => 'commandline' } );
 
 Koha::Patron::Debarments::AddDebarment(
     {
@@ -286,11 +286,11 @@ $restrictions = $patron4->restrictions;
 
 is( $restrictions->count, 2, "->restrictions returns 2 restrictions before payment" );
 
-$account->pay({amount => 5});
+$account->pay( { amount => 5 } );
 $restrictions = $patron4->restrictions;
-is( $restrictions->count, 1, "->restrictions returns 1 restriction after paying half of the fee" );
+is( $restrictions->count,            1,       "->restrictions returns 1 restriction after paying half of the fee" );
 is( $restrictions->next->type->code, "TEST2", "Restriction left has type value 'TEST2'" );
 
-$account->pay({amount => 5});
+$account->pay( { amount => 5 } );
 $restrictions = $patron4->restrictions;
 is( $restrictions->count, 0, "->restrictions returns 0 restrictions after paying all fees" );

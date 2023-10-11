@@ -53,10 +53,10 @@ if ( $op eq 'add_form') {
     }
 } elsif ( $op eq 'add_validate' ) {
 
-    my $display_text = $input->param('display_text');
+    my $display_text       = $input->param('display_text');
     my $lift_after_payment = $input->param('lift_after_payment');
-    my $fee_limit = $input->param('fee_limit');
-    my $is_a_modif = $input->param("is_a_modif");
+    my $fee_limit          = $input->param('fee_limit');
+    my $is_a_modif         = $input->param("is_a_modif");
 
     if ($is_a_modif) {
         # Check whether another restriction already has this display text
@@ -86,12 +86,14 @@ if ( $op eq 'add_form') {
                 type => 'error', code => 'duplicate_code'
             };
         } else {
-            my $restriction = Koha::Patron::Restriction::Type->new({
-                code => $code,
-                display_text => $display_text,
-                lift_after_payment => $lift_after_payment,
-                fee_limit => $fee_limit
-            });
+            my $restriction = Koha::Patron::Restriction::Type->new(
+                {
+                    code               => $code,
+                    display_text       => $display_text,
+                    lift_after_payment => $lift_after_payment,
+                    fee_limit          => $fee_limit
+                }
+            );
             $restriction->store;
             push @messages, { type => 'message', code => 'add_success' };
         }
