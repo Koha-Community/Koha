@@ -194,7 +194,6 @@ subtest 'Lastseen response' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
 
     my $builder = t::lib::TestBuilder->new();
     my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
@@ -220,7 +219,7 @@ subtest 'Lastseen response' => sub {
 
     my $server = { ils => $mocks->{ils} };
     undef $response;
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
     $msg->handle_patron_info( $server );
 
     isnt( $response, undef, 'At least we got a response.' );
@@ -229,7 +228,7 @@ subtest 'Lastseen response' => sub {
     $seen_patron = Koha::Patrons->find({ cardnumber => $seen_patron->{cardnumber} });
     is( output_pref({str => $seen_patron->lastseen(), dateonly => 1}), output_pref({str => '2001-01-01', dateonly => 1}),'Last seen not updated if not tracking patrons');
     undef $response;
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
     $msg->handle_patron_info( $server );
 
     isnt( $response, undef, 'At least we got a response.' );

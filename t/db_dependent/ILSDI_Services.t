@@ -47,7 +47,6 @@ subtest 'AuthenticatePatron test' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
 
     my $plain_password = 'tomasito';
 
@@ -71,7 +70,7 @@ subtest 'AuthenticatePatron test' => sub {
     $query->param( 'username', $borrower->{userid});
     $query->param( 'password', $plain_password);
 
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
     my $reply = C4::ILSDI::Services::AuthenticatePatron( $query );
     is( $reply->{id}, $borrower->{borrowernumber}, "userid and password - Patron authenticated" );
     is( $reply->{code}, undef, "Error code undef");
@@ -89,7 +88,7 @@ subtest 'AuthenticatePatron test' => sub {
     is( $reply->{code}, 'PatronNotFound', "non-existing userid - PatronNotFound" );
     is( $reply->{id}, undef, "id undef");
 
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
     $query->param( 'username', uc( $borrower->{userid} ));
     $reply = C4::ILSDI::Services::AuthenticatePatron( $query );
     my $now = dt_from_string;

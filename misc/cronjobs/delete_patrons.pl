@@ -38,8 +38,8 @@ $not_borrowed_since = dt_from_string( $not_borrowed_since, 'iso' )
 $expired_before = dt_from_string( $expired_before, 'iso' )
   if $expired_before;
 
-if ( $last_seen and not C4::Context->preference('TrackLastPatronActivity') ) {
-    pod2usage(q{The --last_seen will be ineffective if TrackLastPatronActivity turned off or there are not TrackLastPatronActivityTriggers defined});
+if ( $last_seen and not C4::Context->preference('TrackLastPatronActivityTriggers') ) {
+    pod2usage(q{The --last_seen will be ineffective if there are not TrackLastPatronActivityTriggers enabled});
 }
 
 unless ( $not_borrowed_since or $expired_before or $last_seen or @category_code or $branchcode or $file ) {
@@ -185,8 +185,7 @@ Delete patrons with an account expired before this date.
 
 Delete patrons who have not been active since this date.
 
-The system preference TrackLastPatronActivity must be enabled and at least one TrackLastPatronActivityTriggers
-must be set to use this option.
+The system preference TrackLastPatronActivityTriggers must be contain least trigger to use this option.
 
 =item B<--category_code>
 

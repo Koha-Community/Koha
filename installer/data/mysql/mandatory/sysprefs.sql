@@ -753,7 +753,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('TraceCompleteSubfields','0','0','Force subject tracings to only match complete subfields.','YesNo'),
 ('TraceSubjectSubdivisions','0','1','Create searches on all subdivisions for subject tracings.','YesNo'),
 ('TrackClicks','0',NULL,'Track links clicked','Integer'),
-('TrackLastPatronActivity','0',NULL,'If set, the field borrowers.lastseen will be updated everytime a patron is seen','YesNo'),
 ('TrackLastPatronActivityTriggers','',NULL,'If set, the field borrowers.lastseen will be updated everytime a patron is does a selected option','multiple'),
 ('TransfersBlockCirc','1',NULL,'Should the transfer modal block circulation staff from continuing scanning items','YesNo'),
 ('TransfersMaxDaysWarning','3',NULL,'Define the days before a transfer is suspected of having a problem','Integer'),

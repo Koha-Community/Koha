@@ -18,5 +18,11 @@ return {
         );
 
         say $out "Added system preference 'TrackLastPatronActivityTriggers'";
+
+        $dbh->do(q{
+            DELETE FROM systempreferences WHERE variable='TrackLastPatronActivity'
+        });
+
+        say $out "Removed system preference 'TrackLastPatronActivity'";
     },
 };

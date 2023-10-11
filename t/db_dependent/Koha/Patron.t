@@ -338,14 +338,14 @@ subtest 'is_active' => sub {
     $patron->dateenrolled('2020-01-01')->store;
 
     # Check lastseen, test days parameter
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', 1 );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login' );
     $patron->update_lastseen('login');
     is( $patron->is_active( { days => 1 } ), 1, 'Just logged in' );
     my $ago = dt_from_string->subtract( days => 2 );
     $patron->lastseen($ago)->store;
     is( $patron->is_active( { days => 1 } ), 0, 'Not active since yesterday' );
     is( $patron->is_active( { days => 3 } ), 1, 'Active within last 3 days' );
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', 0 );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
     is( $patron->is_active( { days => 3 } ), 0, 'Pref disabled' );
 
     # Look at holds, test with weeks
@@ -1967,7 +1967,6 @@ subtest 'update_lastseen tests' => sub {
     my $cache_key = "track_activity_" . $patron->borrowernumber;
     $cache->clear_from_cache($cache_key);
 
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity',         '1' );
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login,connection,check_in,check_out,renewal' );
 
     is( $patron->lastseen, undef, 'Patron should have not last seen when newly created' );
@@ -1977,7 +1976,7 @@ subtest 'update_lastseen tests' => sub {
 
     $patron->update_lastseen('login');
     $patron->_result()->discard_changes();
-    isnt( $patron->lastseen, undef, 'Patron should have last seen set when TrackLastPatronActivity = 1' );
+    isnt( $patron->lastseen, undef, 'Patron should have last seen set when TrackLastPatronActivityTriggers contains values' );
     my $last_seen = $patron->lastseen;
 
     Time::Fake->offset( $now->epoch + 5 );
@@ -2076,12 +2075,12 @@ subtest 'update_lastseen tests' => sub {
     isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed after a renewal if we cleared the cache' );
 
     # Check that the preference takes effect
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
     $patron->lastseen(undef)->store;
     $cache->clear_from_cache($cache_key);
     $patron->update_lastseen('login');
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, undef, 'Patron should still have last seen unchanged when TrackLastPatronActivity = 0' );
+    is( $patron->lastseen, undef, 'Patron should still have last seen unchanged when TrackLastPatronActivityTriggers is unset' );
 
     Time::Fake->reset;
     $schema->storage->txn_rollback;

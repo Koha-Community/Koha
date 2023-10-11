@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 50;
+use Test::More tests => 49;
 use Test::MockModule;
 use Test::Exception;
 
@@ -280,7 +280,7 @@ is( scalar(@$patstodel),2,'Borrowers without issues deleted by expiration_date a
 $patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),2,'Borrowers without issues deleted by last issue date');
 
-# Test GetBorrowersToExpunge and TrackLastPatronActivity
+# Test GetBorrowersToExpunge and TrackLastPatronActivityTriggers
 my $new_category = $builder->build_object(
     {
         class => 'Koha::Patron::Categories',
@@ -312,11 +312,11 @@ $builder->build({
     }
 });
 $patstodel = GetBorrowersToExpunge( { category_code => $new_category->categorycode, last_seen => '1999-12-12' });
-is( scalar @$patstodel, 0, 'TrackLastPatronActivity - 0 patrons must be deleted' );
+is( scalar @$patstodel, 0, 'TrackLastPatronActivityTriggers - 0 patrons must be deleted' );
 $patstodel = GetBorrowersToExpunge( { category_code => $new_category->categorycode, last_seen => '2016-02-15' });
-is( scalar @$patstodel, 2, 'TrackLastPatronActivity - 2 patrons must be deleted' );
+is( scalar @$patstodel, 2, 'TrackLastPatronActivityTriggers - 2 patrons must be deleted' );
 $patstodel = GetBorrowersToExpunge( { category_code => $new_category->categorycode, last_seen => '2016-04-04' });
-is( scalar @$patstodel, 3, 'TrackLastPatronActivity - 3 patrons must be deleted' );
+is( scalar @$patstodel, 3, 'TrackLastPatronActivityTriggers - 3 patrons must be deleted' );
 my $patron2 = $builder->build({
     source => 'Borrower',
     value => {
@@ -325,10 +325,6 @@ my $patron2 = $builder->build({
     }
 });
 t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
-t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
-Koha::Patrons->find( $patron2->{borrowernumber} )->update_lastseen('connection');
-is( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lastseen should not be changed' );
-t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
 Koha::Patrons->find( $patron2->{borrowernumber} )->update_lastseen('connection');
 isnt( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lastseen should be changed now' );
 
