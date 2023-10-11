@@ -941,6 +941,10 @@ details[open] {
     justify-content: space-between;
 }
 
+#shortcut {
+    display: flex;
+}
+
 #breadcrumbs, #shortcut {
     background-color: transparent;
     clear: both;
@@ -3223,7 +3227,11 @@ label {
     }
 
     > .btn:first-child:not( :last-child ):not( .dropdown-toggle ) {
-        border-right: 1px solid darken( saturate( $btn-primary, 15 ), 15 );
+        border-right: 1px solid #CCC;
+
+        &.btn-primary {
+            border-right: 1px solid darken( saturate( $btn-primary, 15 ), 15 );
+        }
     }
 }
 

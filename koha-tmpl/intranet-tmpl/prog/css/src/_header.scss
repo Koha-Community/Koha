@@ -295,8 +295,17 @@ a.navbar-toggle {
 }
 
 #lastborrowerlink {
-    color: #FFFFFF;
-    background-color: $background-color-primary;
+    font-size: 13px;
+    padding: 0 .7em;
+
+    & + .dropdown-toggle {
+        margin-left: 0;
+        padding: .01em .7em;
+
+        &:hover {
+            background-color: #FFF;
+        }
+    }
 }
 
 @media (max-width: 768px) {
