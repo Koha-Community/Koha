@@ -278,16 +278,16 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
-            reservesallowed => 25,
-            issuelength     => 14,
-            lengthunit      => 'days',
-            renewalsallowed => 1,
-            renewalperiod   => 7,
+            reservesallowed     => 25,
+            issuelength         => 14,
+            lengthunit          => 'days',
+            renewalsallowed     => 1,
+            renewalperiod       => 7,
             norenewalbefore     => undef,
             noautorenewalbefore => undef,
-            auto_renew      => 0,
-            fine            => .10,
-            chargeperiod    => 1,
+            auto_renew          => 0,
+            fine                => .10,
+            chargeperiod        => 1,
         }
     }
 );
@@ -845,10 +845,10 @@ subtest "CanBookBeRenewed tests" => sub {
         }
     );
 
-    my $auto_renew_issue = AddIssue( $renewing_borrower_obj, $item_4->barcode, undef, undef, undef, undef, { auto_renew => 1 } );
+    my $auto_renew_issue =
+        AddIssue( $renewing_borrower_obj, $item_4->barcode, undef, undef, undef, undef, { auto_renew => 1 } );
     my $info;
-    ( $renewokay, $error, $info ) =
-      CanBookBeRenewed( $renewing_borrower_obj, $auto_renew_issue );
+    ( $renewokay, $error, $info ) = CanBookBeRenewed( $renewing_borrower_obj, $auto_renew_issue );
     is( $info->{soonest_renew_date}, undef, "soonest_renew_date is not returned because this issue can be renewed" );
     is( $renewokay, 1, 'Bug 25393: Can do a manual renew, even if renewal is automatic and premature' );
     is(
@@ -939,7 +939,10 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $error, 'too_soon',
         'Bug 25393: Cannot renew, renewal is premature (returned code is too_soon)'
     );
-    is( $info->{soonest_renew_date}, dt_from_string($auto_renew_issue->date_due)->subtract( days => 7 ), "Soonest renew date returned when error is 'auto_too_soon'");
+    is(
+        $info->{soonest_renew_date}, dt_from_string( $auto_renew_issue->date_due )->subtract( days => 7 ),
+        "Soonest renew date returned when error is 'auto_too_soon'"
+    );
 
     ( $renewokay_cron, $error_cron, $info_cron ) =
         CanBookBeRenewed( $renewing_borrower_obj, $auto_renew_issue, undef, 1 );

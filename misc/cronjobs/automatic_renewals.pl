@@ -178,46 +178,47 @@ while ( my $auto_renew = $auto_renews->next ) {
         $updated = 1;
         if ($verbose) {
             say sprintf "Issue id: %s for borrower: %s and item: %s %s be renewed.",
-              $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber, $confirm ? 'will' : 'would';
+                $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber,
+                $confirm ? 'will' : 'would';
         }
-        if ($confirm){
+        if ($confirm) {
             my $date_due = AddRenewal(
                 {
-                    borrowernumber    => $auto_renew->borrowernumber,
-                    itemnumber        => $auto_renew->itemnumber,
-                    branch            => $auto_renew->branchcode,
-                    seen              => 0,
-                    automatic         => 1,
+                    borrowernumber => $auto_renew->borrowernumber,
+                    itemnumber     => $auto_renew->itemnumber,
+                    branch         => $auto_renew->branchcode,
+                    seen           => 0,
+                    automatic      => 1,
                 }
             );
             push @item_renewal_ids, $auto_renew->itemnumber;
             $auto_renew->auto_renew_error(undef)->store;
         }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
-            if ( $wants_messages ) && !$wants_digest;
-    } elsif (
-        $error eq 'too_many' ||
-        $error eq 'on_reserve' ||
-        $error eq 'restriction' ||
-        $error eq 'overdue' ||
-        $error eq 'too_unseen' ||
-        $error eq 'auto_account_expired' ||
-        $error eq 'auto_too_late' ||
-        $error eq 'auto_too_much_oweing' ||
-        $error eq 'auto_too_soon' ||
-        $error eq 'too_soon' ||
-        $error eq 'item_denied_renewal' ||
-        $error eq 'item_issued_to_other_patron'
-    ) {
-        if ( $verbose ) {
+            if ($wants_messages) && !$wants_digest;
+    } elsif ( $error eq 'too_many'
+        || $error eq 'on_reserve'
+        || $error eq 'restriction'
+        || $error eq 'overdue'
+        || $error eq 'too_unseen'
+        || $error eq 'auto_account_expired'
+        || $error eq 'auto_too_late'
+        || $error eq 'auto_too_much_oweing'
+        || $error eq 'auto_too_soon'
+        || $error eq 'too_soon'
+        || $error eq 'item_denied_renewal'
+        || $error eq 'item_issued_to_other_patron' )
+    {
+        if ($verbose) {
             say sprintf "Issue id: %s for borrower: %s and item: %s %s not be renewed. (%s)",
-              $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber, $confirm ? 'will' : 'would', $error;
+                $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber,
+                $confirm ? 'will' : 'would', $error;
         }
-        $updated = 1 if (!$auto_renew->auto_renew_error || $error ne $auto_renew->auto_renew_error);
-        if ( $updated ) {
+        $updated = 1 if ( !$auto_renew->auto_renew_error || $error ne $auto_renew->auto_renew_error );
+        if ($updated) {
             $auto_renew->auto_renew_error($error)->store if $confirm;
             push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
-              if $error ne 'auto_too_soon' && ( $wants_messages  && !$wants_digest );    # Do not notify if it's too soon
+                if $error ne 'auto_too_soon' && ( $wants_messages && !$wants_digest );  # Do not notify if it's too soon
         }
     }
 

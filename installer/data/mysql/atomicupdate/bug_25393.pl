@@ -3,7 +3,7 @@ use Modern::Perl;
 return {
     bug_number  => "25393",
     description => "Create separate 'no automatic renewal before' rule",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
@@ -12,7 +12,7 @@ return {
             { Slice => {} }
         );
 
-        if(!scalar @{$rules}){
+        if ( !scalar @{$rules} ) {
             my $existing_rules = $dbh->selectall_arrayref(
                 q|SELECT * FROM circulation_rules WHERE rule_name = "norenewalbefore"|,
                 { Slice => {} }
@@ -31,10 +31,11 @@ return {
                     $existing_rule->{rule_value}
                 );
             }
-            say $out "Bug 25939: New circulation rule 'noautorenewalbefore' has been added. Defaulting value to 'norenewalbefore'.";
-        }else{
+            say $out
+                "Bug 25939: New circulation rule 'noautorenewalbefore' has been added. Defaulting value to 'norenewalbefore'.";
+        } else {
             say $out "Bug 25939: Circulation rule 'noautorenewalbefore' found. Skipping update.";
         }
 
-        },
+    },
 };
