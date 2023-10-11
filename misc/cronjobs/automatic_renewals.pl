@@ -205,6 +205,7 @@ while ( my $auto_renew = $auto_renews->next ) {
         $error eq 'auto_too_late' ||
         $error eq 'auto_too_much_oweing' ||
         $error eq 'auto_too_soon' ||
+        $error eq 'too_soon' ||
         $error eq 'item_denied_renewal' ||
         $error eq 'item_issued_to_other_patron'
     ) {
