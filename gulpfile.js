@@ -272,7 +272,7 @@ function po_create_installer ()         { return po_create_type('installer') }
 function po_create_installer_marc21 ()  { return po_create_type('installer-MARC21') }
 
 function po_update_type (type) {
-    const msgmerge_opts = '--backup=off --quiet -F --update';
+    const msgmerge_opts = '--backup=off --no-wrap --quiet -F --update';
     const cmd = `msgmerge ${msgmerge_opts} <%= file.path %> misc/translator/Koha-${type}.pot`;
     const languages = getLanguages();
     const globs = languages.map(language => `misc/translator/po/${language}-${type}.po`);
