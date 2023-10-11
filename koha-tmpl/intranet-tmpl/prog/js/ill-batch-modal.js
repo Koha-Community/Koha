@@ -25,7 +25,7 @@
     var createProgressBar = document.getElementById("processed_progress_bar");
     var identifierTable = document.getElementById('identifier-table');
     var createRequestsButton = document.getElementById('create-requests-button');
-    var statusesSelect = document.getElementById('statuscode');
+    var statusesSelect = document.getElementById('status_code');
     var cancelButton = document.getElementById('lhs').querySelector('button');
     var cancelButtonOriginalText = cancelButton.innerHTML;
 
@@ -49,7 +49,7 @@
         backend: null,
         cardnumber: '',
         branchcode: '',
-        statuscode: 'NEW'
+        status_code: 'NEW'
     };
 
     // The object that holds the batch we're working with
@@ -307,7 +307,7 @@
         }
 
         var payload = {
-            batch_id: batchId,
+            ill_batch_id: batchId,
             ill_backend_id: batch.data.backend,
             patron_id: batch.data.patron.patron_id,
             library_id: batch.data.library_id,
@@ -378,7 +378,7 @@
             var option = document.createElement('option')
             option.value = status.code;
             option.text = status.name;
-            if (batch.data.batch_id && batch.data.statuscode === status.code) {
+            if (batch.data.ill_batch_id && batch.data.status_code === status.code) {
                 option.selected = true;
             }
             statusesSelect.add(option);
@@ -479,7 +479,7 @@
         updateBatch()
             .then(function () {
                 $('#ill-batch-modal').modal({ show: false });
-                location.href = '/cgi-bin/koha/ill/ill-requests.pl?batch_id=' + batch.data.batch_id;
+                location.href = '/cgi-bin/koha/ill/ill-requests.pl?batch_id=' + batch.data.ill_batch_id;
             });
     };
 
@@ -509,12 +509,12 @@
             })
             .then(function (jsoned) {
                 batch.data = {
-                    batch_id: jsoned.batch_id,
+                    ill_batch_id: jsoned.ill_batch_id,
                     name: jsoned.name,
                     backend: jsoned.backend,
                     cardnumber: jsoned.cardnumber,
                     library_id: jsoned.library_id,
-                    statuscode: jsoned.statuscode
+                    status_code: jsoned.status_code
                 }
                 return jsoned;
             })
@@ -540,7 +540,7 @@
                 backend: backend,
                 cardnumber: cardnumberInput.value,
                 library_id: selectedBranchcode,
-                statuscode: selectedStatuscode
+                status_code: selectedStatuscode
             })
         })
             .then(function (response) {
@@ -550,14 +550,14 @@
                 return Promise.reject(response);
             })
             .then(function (body) {
-                batchId = body.batch_id;
+                batchId = body.ill_batch_id;
                 batch.data = {
-                    batch_id: body.batch_id,
+                    ill_batch_id: body.ill_batch_id,
                     name: body.name,
                     backend: body.backend,
                     cardnumber: body.patron.cardnumber,
                     library_id: body.library_id,
-                    statuscode: body.statuscode,
+                    status_code: body.status_code,
                     patron: body.patron,
                     status: body.status
                 };
@@ -578,7 +578,7 @@
         var selectedBranchcode = branchcodeSelect.selectedOptions[0].value;
         var selectedStatuscode = statusesSelect.selectedOptions[0].value;
 
-        return doBatchApiRequest('/' + batch.data.batch_id, {
+        return doBatchApiRequest('/' + batch.data.ill_batch_id, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json'
@@ -588,7 +588,7 @@
                 backend: batch.data.backend,
                 cardnumber: batch.data.patron.cardnumber,
                 library_id: selectedBranchcode,
-                statuscode: selectedStatuscode
+                status_code: selectedStatuscode
             })
         })
             .catch(function () {
@@ -1045,7 +1045,7 @@
     }
 
     function manageBatchItemsDisplay() {
-        batchItemsDisplay.style.display = batch.data.batch_id ? 'block' : 'none'
+        batchItemsDisplay.style.display = batch.data.ill_batch_id ? 'block' : 'none'
     };
 
     function updateBatchInputs() {

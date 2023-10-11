@@ -50,7 +50,7 @@
             data: batchesProxy.data,
             columns: [
                 {
-                    data: 'batch_id',
+                    data: 'ill_batch_id',
                     width: '10%'
                 },
                 {
@@ -92,13 +92,13 @@
 
     // A render function for branch name
     var createBranch = function (x, y, data) {
-        return data._strings.branchname;
+        return data._strings.library_id.str;
     };
 
     // A render function for batch name
     var createName = function (x, y, data) {
         var a = document.createElement('a');
-        a.setAttribute('href', '/cgi-bin/koha/ill/ill-requests.pl?batch_id=' + data.batch_id);
+        a.setAttribute('href', '/cgi-bin/koha/ill/ill-requests.pl?batch_id=' + data.ill_batch_id);
         a.setAttribute('title', data.name);
         a.textContent = data.name;
         return a.outerHTML;
@@ -106,7 +106,7 @@
 
     // A render function for batch status
     var createStatus = function (x, y, data) {
-        return data._strings.status.name;
+        return data._strings.status_code.str;
     };
 
     // A render function for our patron link
@@ -122,13 +122,13 @@
         var editButton = document.createElement('button');
         editButton.setAttribute('type', 'button');
         editButton.setAttribute('class', 'editButton btn btn-xs btn-default');
-        editButton.setAttribute('data-batch-id', row.batch_id);
+        editButton.setAttribute('data-batch-id', row.ill_batch_id);
         editButton.appendChild(document.createTextNode(ill_batch_edit));
 
         var deleteButton = document.createElement('button');
         deleteButton.setAttribute('type', 'button');
         deleteButton.setAttribute('class', 'deleteButton btn btn-xs btn-danger');
-        deleteButton.setAttribute('data-batch-id', row.batch_id);
+        deleteButton.setAttribute('data-batch-id', row.ill_batch_id);
         deleteButton.appendChild(document.createTextNode(ill_batch_delete));
 
         div.appendChild(editButton);
@@ -200,7 +200,7 @@
     // Remove a batch from our proxy data
     var removeBatch = function(id) {
         batchesProxy.data = batchesProxy.data.filter(function (batch) {
-            return batch.batch_id != id;
+            return batch.ill_batch_id != id;
         });
     };
 

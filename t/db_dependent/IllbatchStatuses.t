@@ -197,7 +197,7 @@ my $batch = Koha::Illbatch->new(
         patron_id  => $patron->borrowernumber,
         library_id => $library->branchcode,
         backend    => "TEST",
-        statuscode => $status5->code
+        status_code => $status5->code
     }
 );
 $batch->create_and_log;
@@ -205,7 +205,7 @@ $batch->create_and_log;
 # Delete the batch status and ensure the batch's status has been changed
 # to UNKNOWN
 $status5->delete_and_log;
-my $updated_code = Koha::Illbatches->find( { statuscode => "UNKNOWN" } );
-is( $updated_code->statuscode, "UNKNOWN", "batches attached to deleted status have status changed to UNKNOWN" );
+my $updated_code = Koha::Illbatches->find( { status_code => "UNKNOWN" } );
+is( $updated_code->status_code, "UNKNOWN", "batches attached to deleted status have status changed to UNKNOWN" );
 
 $schema->storage->txn_rollback;

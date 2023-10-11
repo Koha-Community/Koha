@@ -28,9 +28,9 @@
                                         [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
                                     </select>
                                 </li>
-                                <li id="batch_statuscode" style="display:none">
-                                    <label class="required" for="statuscode">Status:</label>
-                                    <select id="statuscode" name="statuscode"></select>
+                                <li id="batch_status_code" style="display:none">
+                                    <label class="required" for="status_code">Status:</label>
+                                    <select id="status_code" name="status_code"></select>
                                 </li>
                             </ol>
                         </fieldset>

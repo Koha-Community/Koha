@@ -1909,6 +1909,7 @@ sub TO_JSON {
 sub to_api_mapping {
     return {
         accessurl         => 'access_url',
+        batch_id          => 'ill_batch_id',
         backend           => 'ill_backend_id',
         borrowernumber    => 'patron_id',
         branchcode        => 'library_id',
@@ -1997,12 +1998,12 @@ sub strings_map {
     my $batch = $self->batch;
     if ($batch) {
         $strings->{"batch"} = {
-            id => $batch->id,
+            ill_batch_id => $batch->ill_batch_id,
             name => $batch->name,
             backend => $batch->backend,
-            borrowernumber => $batch->borrowernumber,
-            branchcode => $batch->branchcode,
-            statuscode => $batch->statuscode
+            patron_id => $batch->patron_id,
+            library_id => $batch->library_id,
+            status_code => $batch->status_code
         };
     }
 

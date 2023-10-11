@@ -669,7 +669,7 @@
                                 [% IF request.batch > 0 %]
                                 <li class="batch">
                                     <span class="label batch">Batch:</span>
-                                    <a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=[% request.batch.id | uri %]">
+                                    <a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=[% request.batch.ill_batch_id | uri %]">
                                     [% request.batch.name | html %]
                                     </a>
                                 </li>

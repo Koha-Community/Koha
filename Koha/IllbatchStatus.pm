@@ -124,8 +124,8 @@ sub delete_and_log {
     }
 
     # Update all batches that use this status to have status UNKNOWN
-    my $affected = Koha::Illbatches->search( { statuscode => $self->code } );
-    $affected->update( { statuscode => 'UNKNOWN' } );
+    my $affected = Koha::Illbatches->search( { status_code => $self->code } );
+    $affected->update( { status_code => 'UNKNOWN' } );
 
     my $logger = Koha::Illrequest::Logger->new;
 

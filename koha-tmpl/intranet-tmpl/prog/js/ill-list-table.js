@@ -220,7 +220,7 @@ $(document).ready(function() {
                 "render": function(data, type, row, meta) {
                     return row.batch ?
                         '<a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=' +
-                        row.batch_id +
+                        row.ill_batch_id +
                         '">' +
                         row.batch.name +
                         '</a>'
