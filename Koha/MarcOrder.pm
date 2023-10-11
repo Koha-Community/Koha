@@ -661,6 +661,14 @@ sub create_order_lines {
     return;
 }
 
+=head3 import_batches_list
+
+Fetches import batches matching the batch to be added to the basket and adds these to the $template
+
+Koha::MarcOrder->import_batches_list($template);
+
+=cut
+
 sub import_batches_list {
     my ( $self, $template ) = @_;
     my $batches = GetImportBatchRangeDesc();
@@ -698,6 +706,15 @@ sub import_batches_list {
     my $num_batches = GetNumberOfNonZ3950ImportBatches();
     $template->param( num_results => $num_batches );
 }
+
+=head3
+
+For an import batch, this function reads the files and creates all the relevant data pertaining to that file
+It then passes this to the $template variable to be shown in the UI
+
+Koha::MarcOrder->import_biblios_list( $template, $cgiparams->{'import_batch_id'} );
+
+=cut
 
 sub import_biblios_list {
     my ( $self, $template, $import_batch_id ) = @_;
@@ -797,7 +814,7 @@ sub import_biblios_list {
                 'uri',        'copyno',        'price', 'replacementprice', 'itemcallnumber', 'quantity', 'budget_code'
             ]
         );
-        if ( %$alliteminfos != -1 ) {
+        if ( !$alliteminfos || %$alliteminfos != -1 ) {
             my $item_homebranch     = $alliteminfos->{homebranch};
             my $item_holdingbranch  = $alliteminfos->{holdingbranch};
             my $item_itype          = $alliteminfos->{itype};
@@ -855,7 +872,7 @@ sub import_biblios_list {
         push @list, \%cellrecord;
 
         # If MarcItemFieldsToOrder is not set, we use MarcFieldsToOrder to populate the order form.
-        if ( %$alliteminfos == -1 ) {
+        if ( $alliteminfos || %$alliteminfos == -1 ) {
             $cellrecord{price}            = $price            || '';
             $cellrecord{replacementprice} = $replacementprice || '';
             $cellrecord{quantity}         = $quantity         || '';
@@ -896,6 +913,12 @@ sub import_biblios_list {
     _batch_info( $template, $batch );
 }
 
+=head3
+
+Creates a hash of information to be used about an import batch in the template
+
+=cut
+
 sub _batch_info {
     my ( $template, $batch ) = @_;
     $template->param(
@@ -927,6 +950,12 @@ sub _batch_info {
     }
     _add_matcher_list( $batch->{'matcher_id'}, $template );
 }
+
+=head3
+
+Adds a list of available matchers based on an import batch
+
+=cut
 
 sub _add_matcher_list {
     my ( $current_matcher_id, $template ) = @_;
