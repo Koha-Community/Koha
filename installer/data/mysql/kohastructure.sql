@@ -5048,6 +5048,8 @@ CREATE TABLE `restriction_types` (
   `display_text` text NOT NULL,
   `is_system` tinyint(1) NOT NULL DEFAULT 0,
   `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `lift_after_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `fee_limit` decimal(28,6) DEFAULT NULL,
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
