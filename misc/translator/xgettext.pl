@@ -265,13 +265,9 @@ EOF
         }
 
         printf $OUTPUT "#, c-format\n" if $cformat_p;
-        printf $OUTPUT "msgid %s\n", TmplTokenizer::quote_po(
-            TmplTokenizer::string_canon(
-                TmplTokenizer::charset_convert( $t, $charset_in, $charset_out )
-            )
-        );
-        printf $OUTPUT "msgstr %s\n\n", (defined $translation{$t}?
-            TmplTokenizer::quote_po( $translation{$t} ): "\"\"");
+        my $msgid = TmplTokenizer::string_canon( TmplTokenizer::charset_convert( $t, $charset_in, $charset_out ) );
+        printf $OUTPUT "msgid %s\n", ( defined $msgid && length $msgid ? Locale::PO->quote($msgid) : q{""} );
+        printf $OUTPUT "msgstr %s\n\n", ( defined $translation{$t} ? Locale::PO->quote( $translation{$t} ) : q{""} );
     }
 }
 
