@@ -245,7 +245,7 @@ CREATE TABLE `additional_field_values` (
   `record_id` int(11) NOT NULL COMMENT 'record_id',
   `value` varchar(255) NOT NULL DEFAULT '' COMMENT 'value for this field',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `field_record` (`field_id`,`record_id`),
+  KEY `afv_fk` (`field_id`),
   CONSTRAINT `afv_fk` FOREIGN KEY (`field_id`) REFERENCES `additional_fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -265,6 +265,7 @@ CREATE TABLE `additional_fields` (
   `marcfield` varchar(16) NOT NULL DEFAULT '' COMMENT 'contains the marc field to copied into the record',
   `marcfield_mode` enum('get','set') NOT NULL DEFAULT 'get' COMMENT 'mode of operation (get or set) for marcfield',
   `searchable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is the field searchable?',
+  `repeatable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is the field repeatable?',
   PRIMARY KEY (`id`),
   UNIQUE KEY `fields_uniq` (`tablename`(191),`name`(191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
