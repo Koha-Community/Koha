@@ -842,7 +842,7 @@ sub is_active {
     # Enrollment within this period?
     return 1 if DateTime->compare( dt_from_string( $self->dateenrolled ), $dt ) > -1;
 
-    # Last seen? Updated each login when you track patron activity
+    # Last seen? Updated for tracked patron activities
     if ( C4::Context->preference('TrackLastPatronActivityTriggers') ) {
         return 1 if DateTime->compare( dt_from_string( $self->lastseen ), $dt ) > -1;
     }
@@ -1189,7 +1189,7 @@ sub update_lastseen {
     my $cache_key = "track_activity_" . $self->borrowernumber;
     my $cached    = $cache->get_from_cache($cache_key);
     my $now       = dt_from_string();
-    return if $cached && $cached eq $now->ymd;
+    return $self if $cached && $cached eq $now->ymd;
 
     $self->lastseen($now)->store;
     $cache->set_in_cache( $cache_key, $now->ymd );
