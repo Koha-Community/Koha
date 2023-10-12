@@ -100,15 +100,17 @@
     [% ELSE %]
         <option value=" ">Space ( )</option>
     [% END %]
+    [% tab_char = '\t' %]
     [% IF selected_separator == '\t' %]
-        <option value="\t" selected="selected">Tabulation (\t)</option>
+        <option value="\t" selected="selected">Tabulation ([% tab_char | html %])</option>
     [% ELSE %]
-        <option value="\t">Tabulation (\t)</option>
+        <option value="\t">Tabulation ([% tab_char | html %])</option>
     [% END %]
+    [% new_line_char = '\n' %]
     [% IF selected_separator == '\n' %]
-        <option value="\n" selected="selected">New line (\n)</option>
+        <option value="\n" selected="selected">New line ([% new_line_char | html %])</option>
     [% ELSE %]
-        <option value="\n">New line (\n)</option>
+        <option value="\n">New line ([% new_line_char | html %])</option>
     [% END %]
 [% END %]
 
