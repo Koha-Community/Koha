@@ -656,7 +656,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SavedSearchFilters', '0', NULL, 'Allow staff with permission to create/edit custom search filters', 'YesNo'),
 ('SCOAllowCheckin','0','','If enabled, patrons may return items through the Web-based Self Checkout','YesNo'),
 ('SCOLoadCheckoutsByDefault','1','','If enabled, load the list of a patrons checkouts when they log in to the Self Checkout','YesNo'),
-('SCOMainUserBlock','','70|10','Add a block of HTML that will display on the self checkout screen','Textarea'),
 ('SCOUserCSS','',NULL,'Add CSS to be included in the SCO module in an embedded <style> tag.','free'),
 ('SCOUserJS','',NULL,'Define custom javascript for inclusion in the SCO module','free'),
 ('SearchEngine','Zebra','Elasticsearch|Zebra','Search Engine','Choice'),
