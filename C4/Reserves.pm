@@ -258,6 +258,9 @@ sub AddReserve {
     )->store();
     $hold->set_waiting() if $found && $found eq 'W';
 
+    # record patron activity
+    $hold->patron->update_lastseen('hold');
+
     logaction( 'HOLDS', 'CREATE', $hold->id, $hold )
         if C4::Context->preference('HoldsLog');
 
@@ -273,7 +276,7 @@ sub AddReserve {
 
     # Send e-mail to librarian if syspref is active
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
-        my $patron = Koha::Patrons->find( $borrowernumber );
+        my $patron = $hold->patron;
         my $library = $patron->library;
         if ( my $letter =  C4::Letters::GetPreparedLetter (
             module => 'reserves',

@@ -1488,12 +1488,14 @@ subtest 'IsAvailableForItemLevelRequest() tests' => sub {
 
 subtest 'AddReserve() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'hold' );
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { lastseen => undef } } );
     my $biblio  = $builder->build_sample_biblio;
 
     my $mock = Test::MockModule->new('Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue');
@@ -1525,6 +1527,9 @@ subtest 'AddReserve() tests' => sub {
             biblionumber   => $biblio->id,
         }
     );
+
+    $patron->discard_changes;
+    isnt( $patron->lastseen, undef, "Patron activity tracked when hold is a valid trigger" );
 
     $schema->storage->txn_rollback;
 };

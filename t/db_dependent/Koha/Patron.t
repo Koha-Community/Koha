@@ -1954,7 +1954,7 @@ subtest 'alert_subscriptions tests' => sub {
 
 subtest 'update_lastseen tests' => sub {
 
-    plan tests => 18;
+    plan tests => 21;
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -1967,7 +1967,10 @@ subtest 'update_lastseen tests' => sub {
     my $cache_key = "track_activity_" . $patron->borrowernumber;
     $cache->clear_from_cache($cache_key);
 
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login,connection,check_in,check_out,renewal' );
+    t::lib::Mocks::mock_preference(
+        'TrackLastPatronActivityTriggers',
+        'login,connection,check_in,check_out,renewal,hold'
+    );
 
     is( $patron->lastseen, undef, 'Patron should have not last seen when newly created' );
 
@@ -1997,6 +2000,9 @@ subtest 'update_lastseen tests' => sub {
     $patron->update_lastseen('renewal');
     $patron->_result()->discard_changes();
     is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a renewal' );
+    $patron->update_lastseen('hold');
+    $patron->_result()->discard_changes();
+    is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged after a hold' );
 
     # Check that tracking is disabled when the activity isn't listed
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
@@ -2036,9 +2042,18 @@ subtest 'update_lastseen tests' => sub {
         $patron->lastseen, $last_seen,
         'Patron last seen should be unchanged after a renewal if renewal is not selected as an option and the cache has been cleared'
     );
+    $patron->update_lastseen('hold');
+    $patron->_result()->discard_changes();
+    is(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be unchanged after a hold if hold is not selected as an option and the cache has been cleared'
+    );
 
     # Check tracking for each activity
-    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login,connection,check_in,check_out,renewal' );
+    t::lib::Mocks::mock_preference(
+        'TrackLastPatronActivityTriggers',
+        'login,connection,check_in,check_out,renewal,hold'
+    );
 
     $cache->clear_from_cache($cache_key);
     $patron->update_lastseen('login');
@@ -2067,6 +2082,14 @@ subtest 'update_lastseen tests' => sub {
     isnt(
         $patron->lastseen, $last_seen,
         'Patron last seen should be changed after a check_in if we cleared the cache'
+    );
+
+    $cache->clear_from_cache($cache_key);
+    $patron->update_lastseen('hold');
+    $patron->_result()->discard_changes();
+    isnt(
+        $patron->lastseen, $last_seen,
+        'Patron last seen should be changed after a hold if we cleared the cache'
     );
 
     $cache->clear_from_cache($cache_key);
