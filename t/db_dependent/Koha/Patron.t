@@ -390,7 +390,7 @@ subtest 'is_active' => sub {
     $old_checkout->delete;
 
     # Look at article_requests, test with since
-    $ago = dt_from_string->subtract( days => 10 );
+    $ago = dt_from_string->subtract( days => 9, hours => 23 );
     my $article_request = $builder->build_object(
         {
             class => 'Koha::ArticleRequests',
