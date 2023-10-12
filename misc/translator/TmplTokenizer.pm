@@ -461,15 +461,6 @@ sub trim {
     return wantarray? (substr($s0, 0, $l1), $s, substr($s0, $l0 - $l2)): $s;
 }
 
-sub quote_po {
-    my($s) = @_;
-    # Locale::PO->quote is buggy, it doesn't quote newlines :-/
-    $s =~ s/([\\"])/\\$1/gs;
-    $s =~ s/\n/\\n/g;
-    #$s =~ s/[\177-\377]/ sprintf("\\%03o", ord($&)) /egs;
-    return "\"$s\"";
-}
-
 sub charset_canon {
     my($charset) = @_;
     $charset = uc($charset);

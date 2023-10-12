@@ -40,7 +40,7 @@ sub find_translation {
     if ($s =~ /\S/s) {
       $key = TmplTokenizer::string_canon($key);
       $key = TmplTokenizer::charset_convert($key, $charset_in, $charset_out);
-      $key = TmplTokenizer::quote_po($key);
+      $key = Locale::PO->quote($key);
     }
     if (defined $href->{$key} && !$href->{$key}->fuzzy && length Locale::PO->dequote($href->{$key}->msgstr)){
 	if ($s =~ /^(\s+)/){
