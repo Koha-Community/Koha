@@ -814,11 +814,16 @@ sub is_expired {
 
 $patron->is_active({ [ since => $date ], [ days|weeks|months|years => $value ] })
 
-A patron is considered 'active' if their account did not expire, and has not been anonymized,
-and patron logged in recently, or placed a hold, article request or borrowed a book recently.
-A recent enrollment as new patron counts too.
+A patron is considered 'active' if the following conditions hold:
 
-Recently is defined by $date or $value in days, weeks or months. You should
+    - account did not expire
+    - account has not been anonymized
+    - enrollment or lastseen within period specified
+
+Note: lastseen is updated for triggers defined in preference
+TrackLastPatronActivityTriggers. This includes logins, issues, holds, etc.
+
+The period to check is defined by $date or $value in days, weeks or months. You should
 pass one of those; otherwise an exception is thrown.
 
 =cut
@@ -842,37 +847,9 @@ sub is_active {
     # Enrollment within this period?
     return 1 if DateTime->compare( dt_from_string( $self->dateenrolled ), $dt ) > -1;
 
-    # Last seen? Updated for tracked patron activities
-    if ( C4::Context->preference('TrackLastPatronActivityTriggers') ) {
-        return 1 if DateTime->compare( dt_from_string( $self->lastseen ), $dt ) > -1;
-    }
-
-    # Check holds, issues and article requests
-    return 1 if $self->holds->filter_by_last_update(
-        {
-            timestamp_column_name => 'timestamp', from => $dt,
-        }
-    )->count;
-    return 1 if $self->old_holds->filter_by_last_update(
-        {
-            timestamp_column_name => 'timestamp', from => $dt,
-        }
-    )->count;
-    return 1 if $self->checkouts->filter_by_last_update(
-        {
-            timestamp_column_name => 'timestamp', from => $dt,
-        }
-    )->count;
-    return 1 if $self->old_checkouts->filter_by_last_update(
-        {
-            timestamp_column_name => 'timestamp', from => $dt,
-        }
-    )->count;
-    return 1 if $self->article_requests->filter_by_last_update(
-        {
-            timestamp_column_name => 'updated_on', from => $dt,
-        }
-    )->count;
+    # We look at lastseen regardless of TrackLastPatronActivityTriggers. If lastseen is set
+    # recently, the triggers may have been removed after that, etc.
+    return 1 if $self->lastseen && DateTime->compare( dt_from_string( $self->lastseen ), $dt ) > -1;
 
     return 0;
 }
