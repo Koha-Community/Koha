@@ -49,6 +49,10 @@
                 }
             }
 
+            if ( name.replace(' ', '').length == 0 ) {
+                name = _("A patron from library %s".format(patron.library.name));
+            }
+
             return name;
         };
     })();
