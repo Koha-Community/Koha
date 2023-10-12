@@ -25,24 +25,24 @@ use C4::Letters;
 use Koha::Patrons;
 use Koha::Preservation::Train::Items;
 
-my $input = CGI->new;
+my $input         = CGI->new;
 my $train_item_id = $input->param('train_item_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/printslip.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { preservation => '*' },
+        template_name => "circ/printslip.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { preservation => '*' },
     }
 );
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
-my $branch = C4::Context->userenv->{'branch'};
+my $branch         = C4::Context->userenv->{'branch'};
 
 my $train_item = Koha::Preservation::Train::Items->find($train_item_id);
 
-unless ($train_item){
+unless ($train_item) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -64,12 +64,12 @@ my $slip    = $letter->{content};
 my $is_html = $letter->{is_html};
 
 $template->param(
-    slip => $slip,
-    plain => !$is_html,
-    caller => 'preservation',
+    slip       => $slip,
+    plain      => !$is_html,
+    caller     => 'preservation',
     stylesheet => C4::Context->preference("SlipCSS"),
 );
 
-$template->param( IntranetSlipPrinterJS => C4::Context->preference('IntranetSlipPrinterJS' ) );
+$template->param( IntranetSlipPrinterJS => C4::Context->preference('IntranetSlipPrinterJS') );
 
 output_html_with_http_headers $input, $cookie, $template->output;

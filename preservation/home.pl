@@ -48,10 +48,10 @@ $template->param(
         biblioitems => Koha::Biblioitem->to_api_mapping,
         biblio      => Koha::Biblio->to_api_mapping,
     },
-    notice_templates =>
-      [ map { { id => $_->id, code => $_->code, name => $_->name } }
-          Koha::Notice::Templates->search( { module => 'preservation' } )
-          ->as_list ],
+    notice_templates => [
+        map { { id => $_->id, code => $_->code, name => $_->name } }
+            Koha::Notice::Templates->search( { module => 'preservation' } )->as_list
+    ],
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
