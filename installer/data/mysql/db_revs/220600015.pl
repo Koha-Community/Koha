@@ -34,7 +34,7 @@ return {
             $lost_val++;
 
             $dbh->do(
-                qq{)
+                qq{
                 INSERT INTO authorised_values (category,authorised_value,lib) VALUES ('LOST',$lost_val,'Missing from bundle')
             }
             );
