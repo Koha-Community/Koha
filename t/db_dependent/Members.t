@@ -281,12 +281,17 @@ $patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_
 is( scalar(@$patstodel),2,'Borrowers without issues deleted by last issue date');
 
 # Test GetBorrowersToExpunge and TrackLastPatronActivity
-$dbh->do(q|UPDATE borrowers SET lastseen=NULL|);
+my $new_category = $builder->build_object(
+    {
+        class => 'Koha::Patron::Categories',
+        value => { category_type => 'A' },     # should not be S for GetBorrowersToExpunge
+    }
+);
 $builder->build({
     source => 'Borrower',
     value => {
         lastseen => '2016-01-01 01:01:01',
-        categorycode => 'CIVILIAN',
+        categorycode => $new_category->categorycode,
         flags => undef,
     }
 });
@@ -294,7 +299,7 @@ $builder->build({
     source => 'Borrower',
     value => {
         lastseen => '2016-02-02 02:02:02',
-        categorycode => 'CIVILIAN',
+        categorycode => $new_category->categorycode,
         flags => undef,
     }
 });
@@ -302,15 +307,15 @@ $builder->build({
     source => 'Borrower',
     value => {
         lastseen => '2016-03-03 03:03:03',
-        categorycode => 'CIVILIAN',
+        categorycode => $new_category->categorycode,
         flags => undef,
     }
 });
-$patstodel = GetBorrowersToExpunge( { last_seen => '1999-12-12' });
+$patstodel = GetBorrowersToExpunge( { category_code => $new_category->categorycode, last_seen => '1999-12-12' });
 is( scalar @$patstodel, 0, 'TrackLastPatronActivity - 0 patrons must be deleted' );
-$patstodel = GetBorrowersToExpunge( { last_seen => '2016-02-15' });
+$patstodel = GetBorrowersToExpunge( { category_code => $new_category->categorycode, last_seen => '2016-02-15' });
 is( scalar @$patstodel, 2, 'TrackLastPatronActivity - 2 patrons must be deleted' );
-$patstodel = GetBorrowersToExpunge( { last_seen => '2016-04-04' });
+$patstodel = GetBorrowersToExpunge( { category_code => $new_category->categorycode, last_seen => '2016-04-04' });
 is( scalar @$patstodel, 3, 'TrackLastPatronActivity - 3 patrons must be deleted' );
 my $patron2 = $builder->build({
     source => 'Borrower',
