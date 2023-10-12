@@ -14,7 +14,8 @@ return {
 
         my $triggers = $tracklastactivity ? 'check_out,connection,login' : '';
         $dbh->do(
-            qq{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('TrackLastPatronActivityTriggers',$triggers,NULL,'If set, the field borrowers.lastseen will be updated every time a patron is does a selected option','multiple') }
+            qq{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('TrackLastPatronActivityTriggers',?,NULL,'If set, the field borrowers.lastseen will be updated every time a patron is does a selected option','multiple') },
+            undef, $triggers,
         );
 
         say $out "Added system preference 'TrackLastPatronActivityTriggers'";
