@@ -30,7 +30,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'request() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -39,7 +39,7 @@ subtest 'request() tests' => sub {
     my $patron_mock = Test::MockModule->new('Koha::Patron');
     $patron_mock->mock( 'article_request_fee', sub { return $amount; } );
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { lastseen => undef } } );
     my $item   = $builder->build_sample_item;
 
     my $ar_mock = Test::MockModule->new('Koha::ArticleRequest');
@@ -52,6 +52,7 @@ subtest 'request() tests' => sub {
         }
     );
 
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
     $ar->request()->discard_changes;
 
     is( $ar->status, Koha::ArticleRequest::Status::Requested );
@@ -59,6 +60,8 @@ subtest 'request() tests' => sub {
 
     is( $ar->debit_id, undef, 'No fee linked' );
     is( $patron->account->balance, 0, 'No outstanding fees' );
+    $patron->discard_changes;
+    is( $patron->lastseen, undef, 'Patron activity not tracked when article is not a valid trigger' );
 
     # set a fee amount
     $amount = 10;
@@ -71,6 +74,7 @@ subtest 'request() tests' => sub {
         }
     );
 
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'article' );
     $ar->request()->discard_changes;
 
     is( $ar->status, Koha::ArticleRequest::Status::Requested );
@@ -79,6 +83,8 @@ subtest 'request() tests' => sub {
 
     ok( defined $ar->debit_id, 'Fee linked' );
     is( $patron->account->balance, $amount, 'Outstanding fees with the right value' );
+    $patron->discard_changes;
+    isnt( $patron->lastseen, undef, 'Patron activity tracked when article is a valid trigger' );
 
     $schema->storage->txn_rollback;
 };

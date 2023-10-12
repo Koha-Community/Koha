@@ -64,6 +64,7 @@ sub request {
         if $debit;
 
     $self->store();
+    $self->patron->update_lastseen('article');
     $self->notify();
     return $self;
 }
@@ -220,6 +221,19 @@ Returns the Koha::Patron object for this article request
 =cut
 
 sub borrower {
+    my ($self) = @_;
+    my $rs = $self->_result->borrowernumber;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic($rs);
+}
+
+=head3 patron
+
+Returns the Koha::Patron object for this article request
+
+=cut
+
+sub patron {
     my ($self) = @_;
     my $rs = $self->_result->borrowernumber;
     return unless $rs;
