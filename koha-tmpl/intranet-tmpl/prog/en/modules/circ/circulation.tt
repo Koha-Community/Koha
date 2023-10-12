@@ -762,11 +762,7 @@
                                             <a href="#" title="Checkout settings"><i class="fa-solid fa-sliders"></i></a>
                                         </div>
 
-                                        [% IF waiting_holds_barcodes %]
-                                            <button type="button" class="btn btn-primary">Check out</button>
-                                        [% ELSE %]
-                                            <button type="submit" class="btn btn-primary">Check out</button>
-                                        [% END %]
+                                        <button type="submit" class="btn btn-primary">Check out</button>
 
                                         <div class="circ-settings">
 
@@ -1063,30 +1059,19 @@
                 [% FOREACH b IN waiting_holds_barcodes %]
                     waiting_holds_barcodes.push("[% b | html %]");
                 [% END %]
-                $('#barcode').on('keyup', function() {
-                    $('#mainform .btn-primary').off('click');
-                    $('#barcode').off('keypress');
-                    if ( waiting_holds_barcodes.includes($('#barcode').val().trim()) ) {
-                        $('#mainform .btn-primary').on('click',function() {
-                            $('#mainform').submit();
-                        });
-
-                        $('#barcode').on('keypress', function(e) {
-                            if (e.which == 13) {
-                                $('#mainform').submit();
-                            }
-                        });
-                    } else {
-                        $('#mainform .btn-primary').on('click',function() {
-                            $('#circ-warnwaitingholds-modal').modal();
-                        });
-
-                        $('#barcode').on('keypress', function(e) {
-                            if (e.which == 13) {
-                                $('#circ-warnwaitingholds-modal').modal();
-                            }
-                        });
+                $("#mainform").on('submit', function(){
+                    if( $("#checkout_confirmed").length > 0 ){
+                        return true;
                     }
+                    if ( waiting_holds_barcodes.includes($('#barcode').val().trim()) ) {
+                        return true;
+                    } else {
+                        $('#circ-warnwaitingholds-modal').modal();
+                        return false;
+                    }
+                });
+                $("#circ-warnwaitingholds-modal").on('hidden.bs.modal',function(){
+                    $("#mainform").append('<input type="hidden" id="checkout_confirmed" value=1>').submit();
                 });
             [% END %]
 
