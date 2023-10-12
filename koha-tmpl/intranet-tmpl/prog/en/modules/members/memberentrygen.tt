@@ -1529,8 +1529,8 @@ legend:hover {
                                             [% FOREACH pa_loo IN patron_attributes %]
                                                 <ol class="attributes_table">
                                                     [% IF pa_loo.class %]
-                                                        <fieldset id="aai_[% pa_loo.class | html %]">
-                                                        <legend id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</legend>
+                                                        <div id="aai_[% pa_loo.class | html %]">
+                                                        <h3 id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</h3>
                                                     [% END %]
                                                     [% FOREACH patron_attribute IN pa_loo.items %]
                                                         <li data-category_code="[% patron_attribute.category_code | html %]">
@@ -1573,7 +1573,7 @@ legend:hover {
                                                             [% IF patron_attribute.mandatory %]<span class="required">Required</span>[% END %]
                                                         </li>
                                                     [% END # /FOREACH patron_attribute %]
-                                                    [% IF pa_loo.class %]</fieldset>[% END %]
+                                                    [% IF pa_loo.class %]</div>[% END %]
                                                 </ol>
                                             [% END # /FOREACH pa_loo %]
                                         </fieldset> <!-- /#memberentry_patron_attributes -->
