@@ -3,10 +3,16 @@
 [% USE AdditionalContents %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET OpacHeader = AdditionalContents.get( location => "opacheader", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% SET OpacMaintenanceNotice = AdditionalContents.get( location => "OpacMaintenanceNotice", lang => lang, library => branchcode || default_branch ) %]
+[% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
+[% SET opaclanguagedisplay = Koha.Preference('opaclanguagedisplay') %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
+        .navbar-expand {
+            justify-content: space-between;
+        }
         #opac-maintenance-message {
             background:none repeat scroll 0 0 #FFFFFF;
             border:1px solid #A2A2A2;
@@ -19,10 +25,32 @@
             top:auto;
             width:50%;
         }
+        .langlabel {
+            display: inline;
+        }
     </style>
 [% END %]
 </head>
 <body id="opac_maintenance" class="opac">
+    <div id="wrapper">
+        <div id="header-region" class="noprint">
+            <nav class="navbar navbar-expand">
+                <div id="logo">
+                    <a class="navbar-brand" href="/cgi-bin/koha/opac-main.pl">
+                        [% IF ( LibraryNameTitle ) %]
+                            [% LibraryNameTitle | html %]
+                        [% ELSE %]
+                            Koha online
+                        [% END %]
+                    </a>
+                </div>
+
+                [% IF ( Koha.Preference( 'opaclanguagesdisplay' ) ) %]
+                    [% INCLUDE 'masthead-langmenu.inc' %]
+                [% END %]
+            </nav>
+        </div>
+
     [% IF ( OpacHeader ) %]
         <div class="container-fluid">
             <div class="row">
@@ -32,12 +60,14 @@
             </div>
         </div>
     [% END %]
+
+<div class="main">
     <div class="container-fluid">
         <div class="row">
             <div class="col">
                 <div id="opac-maintenance-message" class="maincontent">
-                    [% IF Koha.Preference( 'OpacMaintenanceNotice' ) %]
-                        [% Koha.Preference( 'OpacMaintenanceNotice' ) | $raw %]
+                    [% IF ( OpacMaintenanceNotice ) %]
+                        [% PROCESS koha_news_block news => OpacMaintenanceNotice %]
                     [% ELSE %]
                         <h1>System maintenance</h1>
                             <p>
@@ -53,6 +83,7 @@
             </div>
         </div>
     </div>
+</div>
 
-[% INCLUDE 'opac-bottom.inc' is_popup=1 %]
+[% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %][% END %]

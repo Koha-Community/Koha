@@ -55,8 +55,8 @@
     </div> <!-- / #wrapper in masthead.inc -->
 
     [% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
-        [% IF ( opaclanguagesdisplay ) %]
-            [% IF ( languages_loop && opaclanguagesdisplay ) %]
+        [% IF ( Koha.Preference('opaclanguagesdisplay') ) %]
+            [% IF ( languages_loop ) %]
                 [% UNLESS ( one_language_enabled ) %]
                     <footer id="changelanguage"  class="noprint">
                         <ul class="nav">

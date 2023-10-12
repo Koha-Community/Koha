@@ -55,13 +55,7 @@ OPAC:
               choices:
                   1: Show
                   0: "Don't show"
-            - "a warning that the OPAC is under maintenance, instead of the OPAC itself. Note: this shows the same warning as when the database needs to be upgraded, but unconditionally."
-        -
-            - 'Show the following HTML when <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance">OpacMaintenance</a> is enabled:'
-            - pref: OpacMaintenanceNotice
-              type: textarea
-              syntax: text/html
-              class: code
+            - "a warning that the OPAC is under maintenance, instead of the OPAC itself. Note: this shows the same warning as when the database needs to be upgraded, but unconditionally. A custom message can be shown on OPAC maintenance page by creating an <a href='/cgi-bin/koha/tools/additional-contents.pl?category=html_customizations'>HTML customization</a> in the OpacMaintenanceNotice region."
         -
             - "This description will show in search engine results (160 characters)."
             - pref: OpacMetaDescription

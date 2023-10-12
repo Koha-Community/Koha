@@ -18,14 +18,21 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Templates qw/gettemplate/;
 
 use Koha;
 
 my $query = CGI->new;
-my $template = C4::Templates::gettemplate( 'maintenance.tt', 'opac', $query );
+
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "maintenance.tt",
+        type            => "opac",
+        query           => $query,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
+    }
+);
 
 my $koha_db_version = C4::Context->preference('Version');
 my $kohaversion     = Koha::version();
