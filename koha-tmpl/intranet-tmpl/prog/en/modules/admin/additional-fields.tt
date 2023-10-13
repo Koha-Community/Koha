@@ -156,6 +156,7 @@
                             [% IF show_searchable %]
                                 <th>Searchable</th>
                             [% END %]
+                            <th>Repeatable</th>
                             <th class="noExport">Actions</th>
                         </tr>
                     </thead>
@@ -178,6 +179,9 @@
                                         [% IF field.searchable %]Yes[% ELSE %]No[% END %]
                                     </td>
                                 [% END %]
+                                    <td>
+                                        [% IF field.repeatable %]Yes[% ELSE %]No[% END %]
+                                    </td>
                                 <td class="actions">
                                     <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                     <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id | uri %]&amp;tablename=[% tablename | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
@@ -211,6 +215,14 @@
                             <option value="">None</option>
                             [% PROCESS options_for_authorised_value_categories authorised_value_categories = AuthorisedValues.GetCategories({selected => field.authorised_value_category}) %]
                         </select>
+                    </li>
+                    <li>
+                        <label for="repeatable">Repeatable: </label>
+                        [% IF field.repeatable %]
+                            <input type="checkbox" name="repeatable" id="repeatable" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="repeatable" id="repeatable" />
+                        [% END %]
                     </li>
                     [% IF show_marcfield %]
                         <li>
@@ -297,6 +309,12 @@
                     if ( $("#marcfield").val().length > 0
                         && $("select[name='authorised_value_category']" ).val().length > 0 ) {
                         alert(_("You cannot select an authorised value category and a MARC field") );
+                        return false;
+                    }
+                } $("#repeatable").prop('checked') == true
+                if ( $("#marcfield").length && $("#repeatable").length) {
+                    if ( $("#marcfield").val().length > 0 && $("#repeatable").prop('checked') == true ) {
+                        alert(_("You cannot set a MARC field as repeatable") );
                         return false;
                     }
                 }

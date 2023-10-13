@@ -53,6 +53,7 @@ if ( $op eq 'cud-add' ) {
     my $marcfield = $input->param('marcfield') // q{};
     my $marcfield_mode = $input->param('marcfield_mode') // 'get';
     my $searchable = $input->param('searchable') ? 1 : 0;
+    my $repeatable = $input->param('repeatable') ? 1 : 0;
     if ( $field_id and $name ) {
         my $updated    = 0;
         my $set_fields = {
@@ -60,6 +61,7 @@ if ( $op eq 'cud-add' ) {
             marcfield      => $marcfield,
             marcfield_mode => $marcfield_mode,
             searchable     => $searchable,
+            repeatable     => $repeatable,
         };
         $set_fields->{authorised_value_category} = $authorised_value_category if $authorised_value_category;
 
@@ -80,6 +82,7 @@ if ( $op eq 'cud-add' ) {
             marcfield      => $marcfield,
             marcfield_mode => $marcfield_mode,
             searchable     => $searchable,
+            repeatable     => $repeatable,
         };
         $set_fields->{authorised_value_category} = $authorised_value_category if $authorised_value_category;
 
