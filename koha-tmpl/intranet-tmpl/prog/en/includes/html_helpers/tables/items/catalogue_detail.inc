@@ -261,9 +261,11 @@
         [% IF hidden_count %]
             default_filters.lost_status = "0";
         [% END %]
+        [% IF StaffDetailItemSelection %]
         if ( !items_selection.hasOwnProperty(tab_id) ){
             items_selection[tab_id] = [];
         }
+        [% END %]
 
         let filters_options = {
             2: () => all_item_types,
@@ -760,7 +762,9 @@
                         table.columns(i).visible(false);
                     }
                 });
+                [% IF StaffDetailItemSelection %]
                 itemSelectionBuildActionLinks(tab_id);
+                [% END %]
             },
             [% IF StaffDetailItemSelection %]
             drawCallback: function(settings){
