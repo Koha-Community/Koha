@@ -9,7 +9,7 @@
     [% END %]
         <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
             <div class="form-title">
-                <label class="control-label">Search catalog</label>
+                <label class="control-label" for="search-form">Search catalog</label>
             </div>
 
             <div class="form-content">
@@ -23,7 +23,7 @@
                     <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
                 [% END %]
             </div>
-            <button type="submit"><i class="fa fa-arrow-right"></i></button>
+            <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
             <div class="form-extra-content">
                 [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]

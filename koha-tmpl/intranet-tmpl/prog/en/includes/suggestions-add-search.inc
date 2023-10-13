@@ -8,7 +8,7 @@
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
 
                 <div class="form-title">
-                    <label class="control-label">Search suggestions</label>
+                    <label class="control-label" for="searchtitle">Search suggestions</label>
                 </div>
 
                 <div class="form-content">
@@ -17,7 +17,7 @@
                     <input type="text" class="head-searchbox form-control" placeholder="Publisher" id="searchpublishercode" name="publishercode" size="10" value="[% publishercode | html %]" />
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 

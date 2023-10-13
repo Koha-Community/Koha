@@ -10,7 +10,7 @@
                 <input type="hidden" name="searched" value="1" />
 
                 <div class="form-title">
-                    <label class="control-label">Search subscriptions</label>
+                    <label class="control-label" for="ISSN_filter">Search subscriptions</label>
                 </div>
 
                 <div class="form-content">
@@ -25,7 +25,7 @@
 
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
                 <div class="form-extra-content">
                     <div>
                         <label for="callnumber_filter">Call number:</label>

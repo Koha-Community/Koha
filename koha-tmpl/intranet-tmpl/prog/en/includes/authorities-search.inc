@@ -81,7 +81,7 @@
                 <input type="hidden" name="excluding" value="" />
 
                 <div class="form-title">
-                    <label class="control-label">Search main heading ($a only)</label>
+                    <label class="control-label" for="value_mainentry">Search main heading ($a only)</label>
                 </div>
 
                 <div class="form-content">
@@ -89,13 +89,13 @@
                     <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
-                <span class="form-extra-content">
+                <div class="form-extra-content">
                     [% INCLUDE authtype %]
                     [% INCLUDE operator %]
                     [% INCLUDE orderby %]
-                </span>
+                </div>
             </form>
         </div>
 
@@ -108,7 +108,7 @@
                 <input type="hidden" name="type" value="intranet" />
 
                 <div class="form-title">
-                    <label class="control-label">Search main heading</label>
+                    <label class="control-label" for="value_mainheading">Search main heading</label>
                 </div>
 
                 <div class="form-content">
@@ -116,13 +116,13 @@
                     <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
-                <span class="form-extra-content">
+                <div class="form-extra-content">
                     [% INCLUDE authtype %]
                     [% INCLUDE operator %]
                     [% INCLUDE orderby %]
-                </span>
+                </div>
             </form>
         </div>
 
@@ -133,7 +133,7 @@
                 <input type="hidden" name="marclist" value="match" />
 
                 <div class="form-title">
-                    <label class="control-label">Search all headings</label>
+                    <label class="control-label" for="value_matchheading">Search all headings</label>
                 </div>
 
                 <div class="form-content">
@@ -141,13 +141,13 @@
                     <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
-                <span class="form-extra-content">
+                <div class="form-extra-content">
                     [% INCLUDE authtype %]
                     [% INCLUDE operator %]
                     [% INCLUDE orderby %]
-                </span>
+                </div>
             </form>
         </div>
 
@@ -160,7 +160,7 @@
                 <input type="hidden" name="excluding" value="" />
 
                 <div class="form-title">
-                    <label class="control-label">Search entire record</label>
+                    <label class="control-label" for="value_anywhere">Search entire record</label>
                 </div>
 
                 <div class="form-content">
@@ -168,13 +168,13 @@
                     <button type="button" class="form-extra-content-toggle"><i class="fa fa-sliders"></i></button>
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
 
-                <span class="form-extra-content">
+                <div class="form-extra-content">
                     [% INCLUDE authtype %]
                     [% INCLUDE operator %]
                     [% INCLUDE orderby %]
-                </span>
+                </div>
             </form>
         </div>
 

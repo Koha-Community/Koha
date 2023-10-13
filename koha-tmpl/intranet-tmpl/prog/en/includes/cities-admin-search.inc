@@ -5,14 +5,14 @@
         <div id="city_search" role="tabpanel" class="tab-pane active">
             <form action="[% script_name | html %]" method="post">
                 <div class="form-title">
-                    <label class="control-label">Search cities</label>
+                    <label class="control-label" for="city_name_filter">Search cities</label>
                 </div>
 
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="city_name_filter" id="city_name_filter" value="[% city_name_filter | html %]" placeholder="City search" />
                 </div>
 
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 
