@@ -54,9 +54,12 @@ subtest 'Method available_types' => sub {
     plan tests => 7;
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent',   'Enforced' );
-    my $types = Koha::Patron::Consents->available_types;
-    is( keys %$types, 1, 'Expect one type for privacy policy' );
+    t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent', q{} );
+    my $types        = Koha::Patron::Consents->available_types;
+    my $count_before = scalar keys %$types;
+    t::lib::Mocks::mock_preference( 'PrivacyPolicyConsent', 'Enforced' );
+    $types = Koha::Patron::Consents->available_types;
+    is( keys %$types, $count_before + 1, 'Expect one type more for privacy policy' );
 
     # Mock get_enabled_plugins
     my $plugins        = [];
