@@ -29,6 +29,7 @@
   "[% AuthorisedValues.GetDescriptionByKohaField( frameworkcode => biblio.frameworkcode, kohafield => 'items.notforloan', authorised_value => item.notforloan) | html %]",
   "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) || "" | html %]",
   "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) || "" | html %]",
+  "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => item.damaged ) || "" | html %]",
   "[% (item.issues || 0) | html %]",
   "[% IF item.checkout %][% item.checkout.date_due | $KohaDates %][% END %]",
   "[% FILTER escape_quotes ~%]

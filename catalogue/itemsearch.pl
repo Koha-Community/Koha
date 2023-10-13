@@ -108,6 +108,14 @@ my $itemlost_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_v
 $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.withdrawn', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 my $withdrawn_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
 
+$mss = Koha::MarcSubfieldStructures->search(
+    {
+        frameworkcode    => '', kohafield => 'items.damaged',
+        authorised_value => [ -and => { '!=' => undef }, { '!=' => '' } ]
+    }
+);
+my $damaged_values = $mss->count ? GetAuthorisedValues( $mss->next->authorised_value ) : [];
+
 if ( Koha::MarcSubfieldStructures->search( { frameworkcode => '', kohafield => 'items.new_status' } )->count ) {
     $template->param( has_new_status => 1 );
 }
@@ -120,14 +128,16 @@ if ( defined $format ) {
         filters => [],
     };
 
-    foreach my $p (qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan itemlost withdrawn)) {
-        if (my @q = $cgi->multi_param($p)) {
-            if ($q[0] ne '') {
+    foreach my $p (
+        qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan itemlost withdrawn damaged))
+    {
+        if ( my @q = $cgi->multi_param($p) ) {
+            if ( $q[0] ne '' ) {
                 my $f = {
                     field => $p,
                     query => \@q,
                 };
-                if (my $op = scalar $cgi->param($p . '_op')) {
+                if ( my $op = scalar $cgi->param( $p . '_op' ) ) {
                     $f->{operator} = $op;
                 }
                 push @{ $filter->{filters} }, $f;
@@ -174,7 +184,7 @@ if ( defined $format ) {
     push @{ $filter->{filters} }, $f;
 
     # Yes/No parameters
-    foreach my $p (qw( damaged new_status )) {
+    foreach my $p (qw( new_status )) {
         my $v = $cgi->param($p) // '';
         my $f = {
             field => $p,
@@ -183,10 +193,10 @@ if ( defined $format ) {
         if ( $p eq 'new_status' ) {
             $f->{ifnull} = 0;
         }
-        if ($v eq 'yes') {
+        if ( $v eq 'yes' ) {
             $f->{operator} = '!=';
             push @{ $filter->{filters} }, $f;
-        } elsif ($v eq 'no') {
+        } elsif ( $v eq 'no' ) {
             $f->{operator} = '=';
             push @{ $filter->{filters} }, $f;
         }
@@ -309,6 +319,14 @@ foreach my $value (@$withdrawn_values) {
     };
 }
 
+my @damageds;
+foreach my $value (@$damaged_values) {
+    push @damageds, {
+        value => $value->{authorised_value},
+        label => $value->{lib},
+    };
+}
+
 my @items_search_fields = GetItemSearchFields();
 
 my $authorised_values = {};
@@ -324,6 +342,7 @@ $template->param(
     ccodes => \@ccodes,
     itemlosts => \@itemlosts,
     withdrawns => \@withdrawns,
+    damageds => \@damageds,
     items_search_fields => \@items_search_fields,
     authorised_values_json => to_json($authorised_values),
 );

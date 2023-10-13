@@ -26,9 +26,9 @@
     [%- CASE 'All collection codes' %]<span>All collections</span>
     [%- CASE 'notforloan' %]<span>Status</span>
     [%- CASE 'All statuses' %]<span>All statuses</span>
-    [%- CASE 'damaged' %]<span>Damaged</span>
     [%- CASE 'itemlost' %]<span>Lost</span>
     [%- CASE 'withdrawn' %]<span>Withdrawn</span>
+    [%- CASE 'damaged' %]<span>Damaged</span>
     [%- CASE 'new_status' %]<span>Is new</span>
   [%- END -%]
 [%- END -%]
@@ -204,6 +204,9 @@
             [% IF withdrawns.size %]
                 [% INCLUDE form_field_select name="withdrawn" options = withdrawns empty_option = "All statuses" %]
             [% END %]
+            [% IF damageds.size %]
+                [% INCLUDE form_field_select name="damaged" options = damageds empty_option = "All statuses" %]
+            [% END %]
             <div class="form-field">
                 <label class="form-field-label">Availability:</label>
                 <input type="radio" name="onloan" id="onloan_indifferent" value="" checked="checked"/>
@@ -231,7 +234,6 @@
               <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="" />
               <span class="hint">(inclusive)</span>
             </div>
-            [% INCLUDE form_field_radio_yes_no name="damaged" %]
             [% IF ( has_new_status ) %]
                 [% INCLUDE form_field_radio_yes_no name="new_status" divclass='item-new-status' %]
             [% END %]
@@ -383,6 +385,7 @@
                 + '      <th id="items_status">' + _("Not for loan status") + '</th>'
                 + '      <th id="items_itemlost">' + _("Lost status") + '</th>'
                 + '      <th id="items_widthdrawn">' + _("Withdrawn status") + '</th>'
+                + '      <th id="items_damaged">' + _("Damaged status") + '</th>'
                 + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
                 + '      <th id="items_date_due">' + _("Due date") + '</th>'
                 + '      <th id=""></th>'
@@ -506,6 +509,7 @@
                     { 'sName': 'notforloan' },
                     { 'sName': 'itemlost' },
                     { 'sName': 'withdrawn' },
+                    { 'sName': 'damaged' },
                     { 'sName': 'issues' },
                     { 'sName': 'date_due' },
                     { 'sName': 'actions', 'bSortable': false }
@@ -555,6 +559,11 @@
                     [% END %]
                     [% IF withdrawns.size %]
                         { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => withdrawns %] },
+                    [% ELSE %]
+                        null,
+                    [% END %]
+                    [% IF damageds.size %]
+                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => damageds %] },
                     [% ELSE %]
                         null,
                     [% END %]
