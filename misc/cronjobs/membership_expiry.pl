@@ -95,11 +95,19 @@ Optional parameter to use another renewal notice than the default: MEMBERSHIP_RE
 =item B<-active>
 
 Optional parameter to include active patrons only (active within passed number of months).
+This parameter needs the preference TrackLastPatronActivityTriggers.
+
+IMPORTANT: You should be using those triggers already for the period that you
+consider a user to be (in)active.
 
 =item B<-inactive>
 
 Optional parameter to include inactive patrons only (inactive within passed number of months).
 This allows you to e.g. send expiry warnings only to inactive patrons.
+This parameter needs the preference TrackLastPatronActivityTriggers.
+
+IMPORTANT: You should be using those triggers already for the period that you
+consider a user to be (in)active.
 
 =item B<-renew>
 
@@ -194,11 +202,29 @@ $letter_renew  = 'MEMBERSHIP_RENEWED' if !$letter_renew;
 pod2usage( -verbose => 2 ) if $man;
 pod2usage(1) if $help || !$confirm;
 
-pod2usage(
-    -verbose => 1,
-    -msg     => q{The --active and --inactive flags are mutually exclusive},
-    -exitval => 1
-) if defined $active && defined $inactive;
+# Check active/inactive. Note that passing no value or zero is a no-op.
+if ( !C4::Context->preference('TrackLastPatronActivityTriggers')
+    && ( $active || $inactive ) )
+{
+    pod2usage(
+        -verbose => 1,
+        -msg     =>
+            q{Exiting membership_expiry.pl: Using --active or --inactive needs use of TrackLastPatronActivityTriggers over specified period},
+        -exitval => 1
+    );
+} elsif ( $active && $inactive ) {
+    pod2usage(
+        -verbose => 1,
+        -msg     => q{The --active and --inactive flags are mutually exclusive},
+        -exitval => 1
+    );
+} elsif ( ( defined $active && !$active ) || ( defined $inactive && !$inactive ) ) {
+    pod2usage(
+        -verbose => 1,
+        -msg     => q{Options --active and --inactive need a number of months},
+        -exitval => 1
+    );
+}
 
 cronlogaction({ info => $command_line_options });
 
