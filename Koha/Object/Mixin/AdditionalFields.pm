@@ -91,6 +91,49 @@ sub set_additional_fields {
     }
 }
 
+=head3 get_additional_field_values_for_template
+
+Returns additional field values in the format expected by the .tt file
+
+    my $fields =  Koha::Acquisition::Baskets->find($basketno)->get_additional_field_values_for_template;
+
+Expected format is a hash of arrays, where the hash key is the field id and its respective array contains
+the field values 'value' for that field. Example where field_id = 2 is the only repeatable field:
+
+{
+    '3' => ['first value for field 3'],
+    '1' => ['first value for field 1'],
+    '4' => ['first value for field 4'],
+    '2' => [
+        'first value for field 2',
+        'second value for field 2',
+        'third value for field 2'
+    ]
+};
+
+=cut
+
+sub get_additional_field_values_for_template {
+    my ($self) = @_;
+
+    my $additional_field_ids = $self->additional_field_values->search(
+        {},
+        {
+            columns  => ['field_id'],
+            distinct => 1,
+        }
+    );
+
+    my %fields;
+    while ( my $additional_field_value = $additional_field_ids->next ) {
+        my @values = map ( $_->value,
+            $self->additional_field_values->search( { field_id => $additional_field_value->field_id } )->as_list );
+        $fields{ $additional_field_value->field_id } = \@values;
+    }
+
+    return \%fields;
+}
+
 =head3 additional_field_values
 
 Returns additional field values

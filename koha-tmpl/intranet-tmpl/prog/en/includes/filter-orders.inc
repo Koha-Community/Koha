@@ -31,7 +31,7 @@
         <label for="basketgroupname">Basket group:</label>
         <input type="text" name="basketgroupname" id="basketgroupname" value="[% filters.basketgroupname | html %]" />
     </li>
-        [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_filters wrap_fieldset=0 %]
+        [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_filters wrap_fieldset=0 search_form=1 %]
     <li>
       <label for="ordernumber">Order line:</label>
       <input type="text" name="ordernumber" id="ordernumber" value="[% filters.ordernumber | html %]" />

@@ -1,11 +1,25 @@
 [% USE AuthorisedValues %]
 [% FOR field IN available %]
-    <li>
-        <span class="label"> [% field.name | html %]: </span>
-        [% IF field.authorised_value_category %]
-            [% AuthorisedValues.GetByCode( field.authorised_value_category, values.${field.name} ) | html %]
-        [% ELSE %]
-            [% values.${field.name} | html %]
+        [% IF is_table_cell %]
+            <td>
         [% END %]
-    </li>
+        [% SET values_list = [] %]
+        [% FOR value IN values.${field.id} %]
+            [% IF field.authorised_value_category %]
+                [% values_list.push(AuthorisedValues.GetByCode( field.authorised_value_category, value )) %]
+            [% ELSE %]
+                [% values_list.push(value) %]
+            [% END %]
+        [% END %]
+        [% IF value_only %]
+           [% values_list.join(', ') | html %]
+        [% ELSIF !values_list.empty %]
+            <li>
+                <span class="label"> [% field.name | html %]: </span>
+                [% values_list.join(', ') | html %]
+            </li>
+        [% END %]
+        [% IF is_table_cell %]
+            </td>
+        [% END %]
 [% END %]
