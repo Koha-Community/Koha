@@ -628,8 +628,8 @@ sub SearchSubscriptions {
 
     my $total_results = @{$results};
 
-    if ($params->{results_limit} && $total_results > $params->{results_limit}) {
-        $results = [splice(@{$results}, 0, $params->{results_limit})];
+    if ( $params->{results_limit} && $total_results > $params->{results_limit} ) {
+        $results = [ splice( @{$results}, 0, $params->{results_limit} ) ];
     }
 
     for my $subscription ( @$results ) {
