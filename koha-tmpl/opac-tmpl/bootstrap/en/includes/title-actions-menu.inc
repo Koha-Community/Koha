@@ -50,12 +50,12 @@
 
     [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername && ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
         [% IF ( shelf AND op == 'view' ) %]
-            <span class="actions"><a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% items.biblionumber | uri %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% items.biblionumber | uri %]'); return false;" class="btn btn-link btn-sm"><i class="fa fa-list" aria-hidden="true"></i> Save to another list</a></span>
+            <span class="actions"><a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% items.biblionumber | uri %]" class="addtoshelf btn btn-link btn-sm"><i class="fa fa-list" aria-hidden="true"></i> Save to another list</a></span>
             [% IF can_remove_biblios %]
                 <span class="actions"><a class="btn btn-link btn-sm removefromlist" href="/cgi-bin/koha/opac-shelves.pl?op=remove_biblios&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;biblionumber=[% items.biblionumber | html %]"><i class="fa fa-remove" aria-hidden="true"></i> Remove from this list</a></span>
             [% END %]
         [% ELSE %]
-            <span class="actions"><a class="addtoshelf btn btn-link btn-sm" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% items.biblionumber | html %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% items.biblionumber | html %]'); return false;"><i class="fa fa-list" aria-hidden="true"></i> Save to lists</a></span>
+            <span class="actions"><a class="addtoshelf btn btn-link btn-sm" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% items.biblionumber | html %]"><i class="fa fa-list" aria-hidden="true"></i> Save to lists</a></span>
         [% END # /IF ( shelf AND op == 'view' ) %]
     [% END # /IF Koha.Preference( 'opacuserlogin' ) %]
 
