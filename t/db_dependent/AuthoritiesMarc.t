@@ -130,32 +130,33 @@ $dbh->do(q{
 t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 my $expected_marc21_summary = {
     'authorized' => [
-                      {
-                        'field' => '151',
-                        'heading' => 'New York (State)',
-                        'hemain' => 'New York (State)'
-                      }
-                    ],
-    'authtypecode' => 'GEOGR_NAME',
-    'mainentry' => 'New York (State)',
+        {
+            'field'   => '151',
+            'heading' => 'New York (State)',
+            'hemain'  => 'New York (State)'
+        }
+    ],
+    'authtypecode'  => 'GEOGR_NAME',
+    'mainentry'     => 'New York (State)',
     'mainmainentry' => 'New York (State)',
-    'notes' => [],
-    'otherscript' => [],
-    'seealso' => [
-                   {
-                     'authid' => '1',
-                     'field' => '551',
-                     'heading' => 'United States',
-                     'hemain' => 'United States',
-                     'search' => 'United States',
-                     'type' => 'broader'
-                   }
-                 ],
-    'seefrom' => [],
-    'label' => 'Geographic Name',
-    'type' => 'Geographic Name',
+    'notes'         => [],
+    'otherscript'   => [],
+    'seealso'       => [
+        {
+            'authid'  => '1',
+            'field'   => '551',
+            'heading' => 'United States',
+            'hemain'  => 'United States',
+            'search'  => 'United States',
+            'type'    => 'broader'
+        }
+    ],
+    'seefrom'   => [],
+    'label'     => 'Geographic Name',
+    'type'      => 'Geographic Name',
     'equalterm' => []
 };
+
 is_deeply(
     BuildSummary(C4::AuthoritiesMarc::GetAuthority(2), 2, 'GEOGR_NAME'),
     $expected_marc21_summary,
@@ -183,23 +184,22 @@ $unimarc_name_auth->add_fields(
 );
 my $expected_unimarc_name_summary = {
     'authorized' => [
-                      {
-                        'field' => '200',
-                        'heading' => 'Fossey Brigitte',
-                        'hemain' => 'Fossey'
-                      }
-                    ],
-    'authtypecode' => 'NP',
-    'mainentry' => 'Fossey Brigitte',
+        {
+            'field'   => '200',
+            'heading' => 'Fossey Brigitte',
+            'hemain'  => 'Fossey'
+        }
+    ],
+    'authtypecode'  => 'NP',
+    'mainentry'     => 'Fossey Brigitte',
     'mainmainentry' => 'Fossey',
-    'notes' => [],
-    'otherscript' => [],
-    'seealso' => [],
-    'seefrom' => [],
-    'summary' => 'Fossey, Brigitte',
-    'type' => 'Auteur',
-    'equalterm' => []
-
+    'notes'         => [],
+    'otherscript'   => [],
+    'seealso'       => [],
+    'seefrom'       => [],
+    'summary'       => 'Fossey, Brigitte',
+    'type'          => 'Auteur',
+    'equalterm'     => []
 };
 
 is_deeply(
