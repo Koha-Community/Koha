@@ -105,18 +105,19 @@ elsif  ($op eq 'save') {
         $cgi->param('format_string', $format_string);
     }
     my @params = (
-                    barcode_type    => scalar $cgi->param('barcode_type') || 'CODE39',
-                    printing_type   => scalar $cgi->param('printing_type') || 'BAR',
-                    layout_name     => scalar $cgi->param('layout_name') || 'DEFAULT',
-                    guidebox        => ($cgi->param('guidebox') ? 1 : 0),
-                    oblique_title   => ($cgi->param('oblique_title') ? 1 : 0),
-                    font            => scalar $cgi->param('font') || 'TR',
-                    font_size       => scalar $cgi->param('font_size') || 3,
-                    scale_width     => scalar $cgi->param('scale_width') || 0.8,
-                    scale_height    => scalar $cgi->param('scale_height') || 0.01,
-                    callnum_split   => ($cgi->param('callnum_split') ? 1 : 0),
-                    text_justify    => scalar $cgi->param('text_justify') || 'L',
-                    format_string   => scalar $cgi->param('format_string') || 'title, author, isbn, issn, itemtype, barcode, itemcallnumber',
+        barcode_type  => scalar $cgi->param('barcode_type')  || 'CODE39',
+        printing_type => scalar $cgi->param('printing_type') || 'BAR',
+        layout_name   => scalar $cgi->param('layout_name')   || 'DEFAULT',
+        guidebox      => ( $cgi->param('guidebox')      ? 1 : 0 ),
+        oblique_title => ( $cgi->param('oblique_title') ? 1 : 0 ),
+        font          => scalar $cgi->param('font')         || 'TR',
+        font_size     => scalar $cgi->param('font_size')    || 3,
+        scale_width   => scalar $cgi->param('scale_width')  || 0.8,
+        scale_height  => scalar $cgi->param('scale_height') || 0.01,
+        callnum_split => ( $cgi->param('callnum_split') ? 1 : 0 ),
+        text_justify  => scalar $cgi->param('text_justify') || 'L',
+        format_string => scalar $cgi->param('format_string')
+            || 'title, author, isbn, issn, itemtype, barcode, itemcallnumber',
     );
     if ($layout_id) {   # if a label_id was passed in, this is an update to an existing layout
         $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
@@ -141,21 +142,21 @@ my $text_justification_types = _set_selected(get_text_justification_types(), $la
 my ($select_text_fields, $select_text_fields_cnt) = _select_format_string($layout->get_attr('format_string'));
 
 $template->param(
-        barcode_types   => $barcode_types,
-        label_types     => $label_types,
-        font_types      => $font_types,
-        text_justification_types    => $text_justification_types,
-        fields          => $select_text_fields,
-        field_count     => $select_text_fields_cnt,
-        layout_id       => $layout->get_attr('layout_id') > -1 ? $layout->get_attr('layout_id') : '',
-        layout_name     => $layout->get_attr('layout_name'),
-        guidebox        => $layout->get_attr('guidebox'),
-        oblique_title   => $layout->get_attr('oblique_title'),
-        font_size       => $layout->get_attr('font_size'),
-        scale_width     => $layout->get_attr('scale_width'),
-        scale_height    => $layout->get_attr('scale_height'),
-        callnum_split   => $layout->get_attr('callnum_split'),
-        format_string   => $layout->get_attr('format_string'),
-        layout_string   => 1,   # FIXME: This should not be hard-coded; It should perhaps be yet another syspref... CN
+    barcode_types            => $barcode_types,
+    label_types              => $label_types,
+    font_types               => $font_types,
+    text_justification_types => $text_justification_types,
+    fields                   => $select_text_fields,
+    field_count              => $select_text_fields_cnt,
+    layout_id                => $layout->get_attr('layout_id') > -1 ? $layout->get_attr('layout_id') : '',
+    layout_name              => $layout->get_attr('layout_name'),
+    guidebox                 => $layout->get_attr('guidebox'),
+    oblique_title            => $layout->get_attr('oblique_title'),
+    font_size                => $layout->get_attr('font_size'),
+    scale_width              => $layout->get_attr('scale_width'),
+    scale_height             => $layout->get_attr('scale_height'),
+    callnum_split            => $layout->get_attr('callnum_split'),
+    format_string            => $layout->get_attr('format_string'),
+    layout_string => 1,    # FIXME: This should not be hard-coded; It should perhaps be yet another syspref... CN
 );
 output_html_with_http_headers $cgi, $cookie, $template->output;

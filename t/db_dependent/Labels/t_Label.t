@@ -54,13 +54,11 @@ my $branch_1 = $builder->build( { source => 'Branch' } )->{branchcode};
 my $category_1 = $builder->build( { source => 'Category' } )->{categorycode};
 
 # Add an item type
-my $itemtype =
-  $builder->build( { source => 'Itemtype', value => { notforloan => undef } } )
-  ->{itemtype};
+my $itemtype = $builder->build( { source => 'Itemtype', value => { notforloan => undef } } )->{itemtype};
 
-t::lib::Mocks::mock_userenv({ branchcode => $branch_1 });
+t::lib::Mocks::mock_userenv( { branchcode => $branch_1 } );
 
-my $bibnum = $builder->build_sample_biblio({ frameworkcode => $frameworkcode })->biblionumber;
+my $bibnum = $builder->build_sample_biblio( { frameworkcode => $frameworkcode } )->biblionumber;
 
 # Create a helper item instance for testing
 my $item = $builder->build_sample_item(
@@ -124,22 +122,24 @@ my $label_info = {
         label_width      => $dummy_template_values->{'label_width'},
         left_text_margin => $dummy_template_values->{'left_text_margin'}
     ),
-    scale_width => $dummy_template_values->{barcode_width},
+    scale_width  => $dummy_template_values->{barcode_width},
     scale_height => $dummy_template_values->{barcode_height},
 };
 
-my $format_string = '100a 245a';
-my $barcode_width = $label_info->{scale_width} * $label_info->{width};
+my $format_string  = '100a 245a';
+my $barcode_width  = $label_info->{scale_width} * $label_info->{width};
 my $barcode_height = $label_info->{scale_height} * $label_info->{height};
-my $label = C4::Labels::Label->new(%$label_info, format_string => $format_string);
-my $label_text = $label->create_label();
+my $label          = C4::Labels::Label->new( %$label_info, format_string => $format_string );
+my $label_text     = $label->create_label();
 ok( defined $label_text, 'Label Text Value defined.' );
 my $label_csv_data = $label->csv_data();
-is_deeply( $label_csv_data,
-    [ sprintf( "%s %s", $item->biblio->author, $item->biblio->title ) ] );
+is_deeply(
+    $label_csv_data,
+    [ sprintf( "%s %s", $item->biblio->author, $item->biblio->title ) ]
+);
 
-$format_string = '100a 245a,enumchron copynumber';
-$label = C4::Labels::Label->new(%$label_info, format_string => $format_string);
+$format_string  = '100a 245a,enumchron copynumber';
+$label          = C4::Labels::Label->new( %$label_info, format_string => $format_string );
 $label_csv_data = $label->csv_data();
 is_deeply(
     $label_csv_data,
@@ -148,8 +148,8 @@ is_deeply(
         sprintf( "%s %s", $item->enumchron,      $item->copynumber )
     ]
 );
-is($barcode_width, '2.104',);
-is($barcode_height, '0.01',);
+is( $barcode_width,  '2.104', );
+is( $barcode_height, '0.01', );
 
 $schema->storage->txn_rollback();
 

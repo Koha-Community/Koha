@@ -131,53 +131,59 @@ foreach my $item (@{$items}) {
     my ($barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor) = 0,0,0,0;
     if ($layout->get_attr('printing_type') eq 'ALT') {  # we process the ALT style printing type here because it is not an atomic printing type
         my $label_a = C4::Labels::Label->new(
-                                        batch_id            => $batch_id,
-                                        item_number         => $item->{'item_number'},
-                                        llx                 => $llx,
-                                        lly                 => $lly,
-                                        width               => $template->get_attr('label_width'),
-                                        height              => $template->get_attr('label_height'),
-                                        top_text_margin     => $template->get_attr('top_text_margin'),
-                                        left_text_margin    => $template->get_attr('left_text_margin'),
-                                        barcode_type        => $layout->get_attr('barcode_type'),
-                                        printing_type       => 'BIB',
-                                        guidebox            => $layout->get_attr('guidebox'),
-                                        oblique_title       => $layout->get_attr('oblique_title'),
-                                        font                => $layout->get_attr('font'),
-                                        font_size           => $layout->get_attr('font_size'),
-                                        scale_width         => $layout->get_attr('scale_width'),
-                                        scale_height        => $layout->get_attr('scale_height'),
-                                        callnum_split       => $layout->get_attr('callnum_split'),
-                                        justify             => $layout->get_attr('text_justify'),
-                                        format_string       => $layout->get_attr('format_string'),
-                                        text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
-                                          );
+            batch_id         => $batch_id,
+            item_number      => $item->{'item_number'},
+            llx              => $llx,
+            lly              => $lly,
+            width            => $template->get_attr('label_width'),
+            height           => $template->get_attr('label_height'),
+            top_text_margin  => $template->get_attr('top_text_margin'),
+            left_text_margin => $template->get_attr('left_text_margin'),
+            barcode_type     => $layout->get_attr('barcode_type'),
+            printing_type    => 'BIB',
+            guidebox         => $layout->get_attr('guidebox'),
+            oblique_title    => $layout->get_attr('oblique_title'),
+            font             => $layout->get_attr('font'),
+            font_size        => $layout->get_attr('font_size'),
+            scale_width      => $layout->get_attr('scale_width'),
+            scale_height     => $layout->get_attr('scale_height'),
+            callnum_split    => $layout->get_attr('callnum_split'),
+            justify          => $layout->get_attr('text_justify'),
+            format_string    => $layout->get_attr('format_string'),
+            text_wrap_cols   => $layout->get_text_wrap_cols(
+                label_width      => $template->get_attr('label_width'),
+                left_text_margin => $template->get_attr('left_text_margin')
+            ),
+        );
         $pdf->Add($label_a->draw_guide_box) if $layout->get_attr('guidebox');
         my $label_a_text = $label_a->create_label();
         _print_text($label_a_text);
         ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
         my $label_b = C4::Labels::Label->new(
-                                        batch_id            => $batch_id,
-                                        item_number         => $item->{'item_number'},
-                                        llx                 => $llx,
-                                        lly                 => $lly,
-                                        width               => $template->get_attr('label_width'),
-                                        height              => $template->get_attr('label_height'),
-                                        top_text_margin     => $template->get_attr('top_text_margin'),
-                                        left_text_margin    => $template->get_attr('left_text_margin'),
-                                        barcode_type        => $layout->get_attr('barcode_type'),
-                                        printing_type       => 'BAR',
-                                        guidebox            => $layout->get_attr('guidebox'),
-                                        oblique_title       => $layout->get_attr('oblique_title'),
-                                        font                => $layout->get_attr('font'),
-                                        font_size           => $layout->get_attr('font_size'),
-                                        scale_width         => $layout->get_attr('scale_width'),
-                                        scale_height        => $layout->get_attr('scale_height'),
-                                        callnum_split       => $layout->get_attr('callnum_split'),
-                                        justify             => $layout->get_attr('text_justify'),
-                                        format_string       => $layout->get_attr('format_string'),
-                                        text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
-                                          );
+            batch_id         => $batch_id,
+            item_number      => $item->{'item_number'},
+            llx              => $llx,
+            lly              => $lly,
+            width            => $template->get_attr('label_width'),
+            height           => $template->get_attr('label_height'),
+            top_text_margin  => $template->get_attr('top_text_margin'),
+            left_text_margin => $template->get_attr('left_text_margin'),
+            barcode_type     => $layout->get_attr('barcode_type'),
+            printing_type    => 'BAR',
+            guidebox         => $layout->get_attr('guidebox'),
+            oblique_title    => $layout->get_attr('oblique_title'),
+            font             => $layout->get_attr('font'),
+            font_size        => $layout->get_attr('font_size'),
+            scale_width      => $layout->get_attr('scale_width'),
+            scale_height     => $layout->get_attr('scale_height'),
+            callnum_split    => $layout->get_attr('callnum_split'),
+            justify          => $layout->get_attr('text_justify'),
+            format_string    => $layout->get_attr('format_string'),
+            text_wrap_cols   => $layout->get_text_wrap_cols(
+                label_width      => $template->get_attr('label_width'),
+                left_text_margin => $template->get_attr('left_text_margin')
+            ),
+        );
         $pdf->Add($label_b->draw_guide_box) if $layout->get_attr('guidebox');
         my $label_b_text = $label_b->create_label();
         ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
@@ -186,27 +192,30 @@ foreach my $item (@{$items}) {
     else {
     }
         my $label = C4::Labels::Label->new(
-                                        batch_id            => $batch_id,
-                                        item_number         => $item->{'item_number'},
-                                        llx                 => $llx,
-                                        lly                 => $lly,
-                                        width               => $template->get_attr('label_width'),
-                                        height              => $template->get_attr('label_height'),
-                                        top_text_margin     => $template->get_attr('top_text_margin'),
-                                        left_text_margin    => $template->get_attr('left_text_margin'),
-                                        barcode_type        => $layout->get_attr('barcode_type'),
-                                        printing_type       => $layout->get_attr('printing_type'),
-                                        guidebox            => $layout->get_attr('guidebox'),
-                                        oblique_title       => $layout->get_attr('oblique_title'),
-                                        font                => $layout->get_attr('font'),
-                                        font_size           => $layout->get_attr('font_size'),
-                                        scale_width         => $layout->get_attr('scale_width'),
-                                        scale_height        => $layout->get_attr('scale_height'),
-                                        callnum_split       => $layout->get_attr('callnum_split'),
-                                        justify             => $layout->get_attr('text_justify'),
-                                        format_string       => $layout->get_attr('format_string'),
-                                        text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
-                                          );
+            batch_id         => $batch_id,
+            item_number      => $item->{'item_number'},
+            llx              => $llx,
+            lly              => $lly,
+            width            => $template->get_attr('label_width'),
+            height           => $template->get_attr('label_height'),
+            top_text_margin  => $template->get_attr('top_text_margin'),
+            left_text_margin => $template->get_attr('left_text_margin'),
+            barcode_type     => $layout->get_attr('barcode_type'),
+            printing_type    => $layout->get_attr('printing_type'),
+            guidebox         => $layout->get_attr('guidebox'),
+            oblique_title    => $layout->get_attr('oblique_title'),
+            font             => $layout->get_attr('font'),
+            font_size        => $layout->get_attr('font_size'),
+            scale_width      => $layout->get_attr('scale_width'),
+            scale_height     => $layout->get_attr('scale_height'),
+            callnum_split    => $layout->get_attr('callnum_split'),
+            justify          => $layout->get_attr('text_justify'),
+            format_string    => $layout->get_attr('format_string'),
+            text_wrap_cols   => $layout->get_text_wrap_cols(
+                label_width      => $template->get_attr('label_width'),
+                left_text_margin => $template->get_attr('left_text_margin')
+            ),
+        );
         $pdf->Add($label->draw_guide_box) if $layout->get_attr('guidebox');
         $label->{'barcode'} = $item->{'item_number'} if ($from and $to);
         my $label_text = $label->create_label();

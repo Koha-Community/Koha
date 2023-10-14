@@ -36,7 +36,7 @@ sub _check_params {
         'callnum_split',
         'text_justify',
         'format_string',
-        'layout_xml',           # FIXME: all layouts should be stored in xml format to greatly simplify handling -chris_n
+        'layout_xml',    # FIXME: all layouts should be stored in xml format to greatly simplify handling -chris_n
         'creator',
         'units',
         'start_label',
@@ -67,23 +67,23 @@ sub new {
         return -1;
     }
     my $type = ref($invocant) || $invocant;
-    if (grep {$_ eq 'Labels'} @_) {
-       $self = {
-            layout_xml      =>      '',
-            units           =>      'POINT',
-            start_label     =>      1,
-            barcode_type    =>      'CODE39',
-            printing_type   =>      'BAR',
-            layout_name     =>      'DEFAULT',
-            guidebox        =>      0,
-            oblique_title   =>      1,
-            font            =>      'TR',
-            font_size       =>      3,
-            scale_width     =>      0.8,
-            scale_height    =>      0.01,
-            callnum_split   =>      0,
-            text_justify    =>      'L',
-            format_string   =>      join(', ', @{ PRESET_FIELDS() }),
+    if ( grep { $_ eq 'Labels' } @_ ) {
+        $self = {
+            layout_xml    => '',
+            units         => 'POINT',
+            start_label   => 1,
+            barcode_type  => 'CODE39',
+            printing_type => 'BAR',
+            layout_name   => 'DEFAULT',
+            guidebox      => 0,
+            oblique_title => 1,
+            font          => 'TR',
+            font_size     => 3,
+            scale_width   => 0.8,
+            scale_height  => 0.01,
+            callnum_split => 0,
+            text_justify  => 'L',
+            format_string => join( ', ', @{ PRESET_FIELDS() } ),
             @_,
         };
     }
