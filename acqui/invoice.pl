@@ -131,11 +131,13 @@ elsif ( $op && $op eq 'cud-mod' ) {
     my @additional_fields;
     my $invoice_fields = Koha::AdditionalFields->search({ tablename => 'aqinvoices' });
     while ( my $field = $invoice_fields->next ) {
-        my $value = $input->param('additional_field_' . $field->id);
-        push @additional_fields, {
-            id => $field->id,
-            value => $value,
-        };
+        my @field_values = $input->param( 'additional_field_' . $field->id );
+        foreach my $value (@field_values) {
+            push @additional_fields, {
+                id    => $field->id,
+                value => $value,
+            } if $value;
+        }
     }
     Koha::Acquisition::Invoices->find($invoiceid)->set_additional_fields(\@additional_fields);
 
@@ -320,9 +322,7 @@ if ( $adjustments ) { $template->param( adjustments => $adjustments ); }
 my $invoice = Koha::Acquisition::Invoices->find($invoiceid);
 $template->param(
     available_additional_fields => Koha::AdditionalFields->search( { tablename => 'aqinvoices' } ),
-    additional_field_values => { map {
-                $_->field->id => $_->value
-            } $invoice->additional_field_values->as_list },
+    additional_field_values => $invoice->get_additional_field_values_for_template,
 );
 
 $template->param(

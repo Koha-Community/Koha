@@ -385,6 +385,7 @@
                                     [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
                                 </select>
                             </li>
+                        [%# FIXME additional-fields.entry.inc should/could be considered here %]
                         [% FOR field IN additional_fields_for_invoice %]
                             <li>
                                 <label for="additional_field_[% field.id | html %]ID"> [% field.name | html %]: </label>

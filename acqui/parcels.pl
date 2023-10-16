@@ -134,12 +134,12 @@ if ($op and $op eq 'cud-confirm') {
         my @additional_fields;
         my $invoice_fields = Koha::AdditionalFields->search({ tablename => 'aqinvoices' });
         while ( my $field = $invoice_fields->next ) {
-            my $value = $input->param('additional_field_' . $field->id);
-            if (defined $value) {
+            my @field_values = $input->param( 'additional_field_' . $field->id );
+            foreach my $value (@field_values) {
                 push @additional_fields, {
                     id    => $field->id,
                     value => $value,
-                };
+                } if $value;
             }
         }
         if (@additional_fields) {
