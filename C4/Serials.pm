@@ -645,6 +645,8 @@ sub SearchSubscriptions {
         $subscription->{additional_fields} = { map { $_->field->name => $_->value }
             $subscription_object->additional_field_values->as_list };
 
+        #FIXME: The above $subscription->{additional_fields} may be redundant. Remove if so.
+        $subscription->{additional_field_values} = $subscription_object->get_additional_field_values_for_template;
     }
 
     return wantarray ? @{$results} : { results => $results, total => $total_results };

@@ -132,17 +132,12 @@ $template->param(
 );
 
 my @additional_fields = Koha::AdditionalFields->search({ tablename => 'subscription' })->as_list;
-my %additional_field_values;
-if ($subscriptionid) {
-    my $subscription = Koha::Subscriptions->find($subscriptionid);
-    foreach my $value ($subscription->additional_field_values->as_list) {
-        $additional_field_values{$value->field_id} = $value->value;
-    }
-}
+my @additional_field_values;
+@additional_field_values = Koha::Subscriptions->find($subscriptionid)->get_additional_field_values_for_template if $subscriptionid;
 
 $template->param(
-    additional_fields => \@additional_fields,
-    additional_field_values => \%additional_field_values,
+    additional_fields       => \@additional_fields,
+    additional_field_values => @additional_field_values,
 );
 
 my $typeloop = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
@@ -368,11 +363,13 @@ sub redirect_add_subscription {
     my $biblio = Koha::Biblios->find($biblionumber);
     my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
     while ( my $field = $subscription_fields->next ) {
-        my $value = $query->param('additional_field_' . $field->id);
-        push @additional_fields, {
-            id => $field->id,
-            value => $value,
-        };
+        my @field_values = $query->param( 'additional_field_' . $field->id );
+        foreach my $value (@field_values) {
+            push @additional_fields, {
+                id    => $field->id,
+                value => $value,
+            } if $value;
+        }
     }
     Koha::Subscriptions->find($subscriptionid)->set_additional_fields(\@additional_fields);
 
@@ -482,11 +479,13 @@ sub redirect_mod_subscription {
     my $biblio = Koha::Biblios->find($biblionumber);
     my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
     while ( my $field = $subscription_fields->next ) {
-        my $value = $query->param('additional_field_' . $field->id);
-        push @additional_fields, {
-            id => $field->id,
-            value => $value,
-        };
+        my @field_values = $query->param( 'additional_field_' . $field->id );
+        foreach my $value (@field_values) {
+            push @additional_fields, {
+                id    => $field->id,
+                value => $value,
+            } if $value;
+        }
     }
     Koha::Subscriptions->find($subscriptionid)->set_additional_fields(\@additional_fields);
 

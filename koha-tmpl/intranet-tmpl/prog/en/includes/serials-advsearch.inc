@@ -58,7 +58,7 @@
                     </li>
                 [% END %]
 
-                [% INCLUDE 'additional-fields-entry.inc' available=additional_fields_for_subscription values=additional_field_filters wrap_fieldset=0 %]
+                [% INCLUDE 'additional-fields-entry.inc' available=additional_fields_for_subscription values=additional_field_filters wrap_fieldset=0 search_form=1 %]
             </ol>
             <input type="hidden" name="searched" value="1" />
             [% IF ( mana ) %]

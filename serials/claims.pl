@@ -86,6 +86,9 @@ if ($supplierid) {
     foreach my $issue (@missingissues) {
         $issue->{cannot_claim} = 1
           unless C4::Serials::can_claim_subscription($issue);
+
+        $issue->{additional_field_values} =
+            Koha::Subscriptions->find( $issue->{subscriptionid} )->get_additional_field_values_for_template;
     }
     $template->param( suppliername => $supplier->name );
 }

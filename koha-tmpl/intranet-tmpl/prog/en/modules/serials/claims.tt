@@ -167,13 +167,7 @@
                                             <td data-order="[% missingissue.claimdate | html %]">
                                                 [% missingissue.claimdate | $KohaDates %]
                                             </td>
-                                            [% FOR field IN additional_fields_for_subscription %]
-                                                [% IF field.authorised_value_category %]
-                                                    <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, missingissue.additional_fields.${field.name} ) | html %]</td>
-                                                [% ELSE %]
-                                                    <td>[% missingissue.additional_fields.${field.name} | html %]</td>
-                                                [% END %]
-                                            [% END %]
+                                            [% INCLUDE 'additional-fields-display.inc' available=additional_fields_for_subscription values=missingissue.additional_field_values value_only=1 is_table_cell=1 %]
                                         </tr>
                                     [% END # /FOREACH missingissue %]
                                 </tbody>
