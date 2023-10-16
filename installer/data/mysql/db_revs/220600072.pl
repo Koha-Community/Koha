@@ -259,7 +259,7 @@ return {
     [% IF credit.library %]
     <tr>
         <th colspan="2" class="centerednames">
-        <h2>[% payment.library.branchname ) | html %]</h2>
+        <h2>[% payment.library.branchname | html %]</h2>
         </th>
     </tr>
     [% END %]
