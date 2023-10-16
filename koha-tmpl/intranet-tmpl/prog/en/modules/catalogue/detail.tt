@@ -273,13 +273,17 @@
 
 <ul class="nav nav-tabs" role="tablist">
     [% IF Koha.Preference('SeparateHoldings') %]
-        <li role="presentation">
-            [%# FIXME We could build the numbers from DataTable's info %]
-            <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</a>
-        </li>
-        <li role="presentation">
-            <a href="#otherholdings"  aria-controls="otherholdings" role="tab" data-toggle="tab">Other holdings ([% other_holdings_count || 0 | html %])</a>
-        </li>
+        [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
+            <li role="presentation">
+                [%# FIXME We could build the numbers from DataTable's info %]
+                <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</a>
+            </li>
+        [% END %]
+        [% IF other_holdings_count %]
+            <li role="presentation">
+                <a href="#otherholdings"  aria-controls="otherholdings" role="tab" data-toggle="tab">Other holdings ([% other_holdings_count || 0 | html %])</a>
+            </li>
+        [% END %]
     [% ELSE %]
         <li role="presentation">
             <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">Holdings ([% items_to_display_count || 0 | html %])</a>
@@ -1285,7 +1289,11 @@
                     $(".nav-tabs a[href='#holdings']").tab("show");
                 [% END %]
             [% ELSE %]
-                $(".nav-tabs a[href='#holdings']").tab("show");
+                [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
+                    $(".nav-tabs a[href='#holdings']").tab("show");
+                [% ELSE %]
+                    $(".nav-tabs a[href='#otherholdings']").tab("show");
+                [% END %]
             [% END %]
             $('#search-form').focus();
             $('.thumbnails > li > .remove').click(function() {
