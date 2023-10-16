@@ -136,7 +136,7 @@
     <script>
         $(document).ready(function() {
             if( $("#authoritiestabs .tab-pane.active").length < 1 ){
-                let tab_object;
+                let tab_object = [];
 
                 [% SET DefaultAuthorityTab = Koha.Preference('DefaultAuthorityTab') %]
                 [% IF DefaultAuthorityTab %]
