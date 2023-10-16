@@ -108,7 +108,7 @@
                       [% END %]
                   </ul>
             </td>
-            <td class="actions">
+            <td class="actions" data-sort="[% reserveloo.copies_to_buy | html %]">
                 <p>
                     [% IF ( reserveloo.thisratio_atleast1 ) %]
                         [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.copies_to_buy | html %] -->
