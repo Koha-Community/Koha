@@ -744,7 +744,10 @@ $(document).ready(function(){
     function Check(){
         var StrAlert = AreFieldsNotOk();
         var StrWarning = AreFieldsNotOk( false );
-        if( !StrAlert && StrWarning ){
+        if ( $('.plugin-blocks-submit').length > 0 ) {
+            // This class can be set by framework plugins to block submittal temporarily (e.g. during ajax call)
+            return false;
+        } else if( !StrAlert && StrWarning ) {
             // Check important fields
             $("#check_errors").html( StrWarning );
             $('html, body').animate({ scrollTop: 0 }, 'fast');
