@@ -4,6 +4,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE Price %]
+[% USE AuthorisedValues %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -136,9 +137,15 @@
                                         [% IF ( ITEM_DAT.ccode) %]
                                             <li><span class="label">Collection:</span> [% ITEM_DAT.ccode | html %]</li>
                                         [% END %]
-                                        <li><span class="label">Item callnumber:</span> [% ITEM_DAT.itemcallnumber | html %]&nbsp;</li>
+                                        <li><span class="label">Item call number:</span> [% ITEM_DAT.itemcallnumber | html %]</li>
                                         [% IF ( ITEM_DAT.displaycopy ) %]
                                             <li><span class="label">Copy number:</span> [% ITEM_DAT.copyvol | html %]&nbsp;</li>
+                                        [% END %]
+                                        [% IF ( ITEM_DAT.location ) %]
+                                            <li>
+                                                <span class="label">Shelving location:</span>
+                                                [% AuthorisedValues.GetByCode( 'LOC', ITEM_DAT.location ) | html %]
+                                            </li>
                                         [% END %]
                                         [% IF ( ITEM_DAT.replacementprice ) %]
                                             <li><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li>
