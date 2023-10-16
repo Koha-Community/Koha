@@ -159,8 +159,8 @@
                                     <input type="checkbox" id="mandatory[% loo.row | html %]" name="mandatory[% loo.row | html %]" value="1" />
                                 [% END %]
                             </li>
-                            <li><label for="liblibrarian[% loo.row | html %]">Text for librarian: </label><input id="liblibrarian[% loo.row | html %]" type="text" name="liblibrarian" value="[% loo.liblibrarian | html_entity %]" size="40" maxlength="80" /></li>
-                            <li><label for="libopac[% loo.row | html %]">Text for OPAC: </label><input type="text" id="libopac[% loo.row | html %]" name="libopac" value="[% loo.libopac | html_entity %]" size="40" maxlength="80" /></li>
+                            <li><label for="liblibrarian[% loo.row | html %]">Description in staff interface: </label><input id="liblibrarian[% loo.row | html %]" type="text" name="liblibrarian" value="[% loo.liblibrarian | html_entity %]" size="40" maxlength="80" /></li>
+                            <li><label for="libopac[% loo.row | html %]">Description in OPAC: </label><input type="text" id="libopac[% loo.row | html %]" name="libopac" value="[% loo.libopac | html_entity %]" size="40" maxlength="80" /></li>
                             <li><label for="tab[% loo.row | html %]">Managed in tab: </label>
                                 <select name="tab" id="tab[% loo.row | html %]">
                                     [%- IF ( loo.tab ==  -1 ) -%]
@@ -332,7 +332,7 @@
     <thead>
         <tr>
             <th>Subfield</th>
-            <th>Text</th>
+            <th>Description</th>
             <th>Constraints</th>
             <th class="NoSort">&nbsp;</th>
         </tr>
