@@ -91,6 +91,53 @@ sub set_additional_fields {
     }
 }
 
+=head3 add_additional_fields
+
+Similar to set_additional_fields, but instead of overwriting existing fields, only adds new ones
+
+    $foo->add_additional_fields(
+        {
+            '2' => [
+                'first value for field 2',
+                'second value for field 2'
+            ],
+            '1' => ['first value for field 1']
+        },
+        'subscription'
+    );
+
+=cut
+
+sub add_additional_fields {
+    my ( $self, $new_additional_fields, $tablename ) = @_;
+
+    my @additional_fields;
+
+    my $table_fields = Koha::AdditionalFields->search( { tablename => $tablename } );
+    while ( my $field = $table_fields->next ) {
+        my $new_additional_field_values = $new_additional_fields->{ $field->id };
+
+        if ( $new_additional_field_values && scalar @{$new_additional_field_values} ) {
+            foreach my $value ( @{$new_additional_field_values} ) {
+                push @additional_fields, {
+                    id    => $field->id,
+                    value => $value,
+                } if $value;
+            }
+        } else {
+            my $existing_additional_field_values = $self->additional_field_values->search( { field_id => $field->id } );
+            while ( my $existing = $existing_additional_field_values->next ) {
+                push @additional_fields, {
+                    id    => $field->id,
+                    value => $existing->value,
+                } if $existing && $existing->value;
+            }
+        }
+    }
+
+    $self->set_additional_fields( \@additional_fields );
+}
+
 =head3 get_additional_field_values_for_template
 
 Returns additional field values in the format expected by the .tt file

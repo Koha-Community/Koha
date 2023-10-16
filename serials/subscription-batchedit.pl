@@ -49,7 +49,7 @@ foreach my $subscriptionid (@subscriptionids) {
     push @subscriptions, $subscription if $subscription;
 }
 
-my @available_additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription' } )->as_list;
+my $available_additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription' } );
 
 my $op = $cgi->param('op') || q{};
 if ( $op eq 'cud-batchedit' ) {
@@ -66,9 +66,15 @@ if ( $op eq 'cud-batchedit' ) {
     $params{'enddate'} = dt_from_string( scalar $cgi->param('enddate') ) if $cgi->param('enddate');
 
     my $field_values = {};
-    foreach my $field (@available_additional_fields) {
-        my $value = $cgi->param( 'field_' . $field->id );
-        $field_values->{ $field->id } = $value;
+
+    while ( my $available_field = $available_additional_fields->next ) {
+        my @submitted_fields = $cgi->param( 'additional_field_' . $available_field->id );
+
+        my @submitted_fields_array;
+        foreach my $submitted_field (@submitted_fields) {
+            push @submitted_fields_array, $submitted_field if $submitted_field;
+        }
+        $field_values->{ $available_field->id } = \@submitted_fields_array;
     }
 
     foreach my $subscription (@subscriptions) {
@@ -81,25 +87,7 @@ if ( $op eq 'cud-batchedit' ) {
             }
         }
 
-        my @additional_field_values;
-        foreach my $field (@available_additional_fields) {
-            my $value = $field_values->{ $field->id };
-            if ( defined $value and $value ne '' ) {
-                push @additional_field_values, {
-                    id    => $field->id,
-                    value => $value,
-                };
-            } else {
-                my $existing = $subscription->additional_field_values->search( { field_id => $field->id } )->last;
-                if ( $existing && $existing->value ) {
-                    push @additional_field_values, {
-                        id    => $field->id,
-                        value => $existing->value,
-                    };
-                }
-            }
-        }
-        $subscription->set_additional_fields( \@additional_field_values );
+        $subscription->add_additional_fields($field_values, 'subscription');
 
         $subscription->store;
     }
@@ -110,10 +98,10 @@ if ( $op eq 'cud-batchedit' ) {
 }
 
 $template->param(
-    subscriptions     => \@subscriptions,
-    booksellers       => [ Koha::Acquisition::Booksellers->search->as_list ],
-    additional_fields => \@available_additional_fields,
-    referrer          => scalar $cgi->param('referrer'),
+    subscriptions               => \@subscriptions,
+    booksellers                 => [ Koha::Acquisition::Booksellers->search->as_list ],
+    available_additional_fields => Koha::AdditionalFields->search( { tablename => 'subscription' } ),
+    referrer                    => scalar $cgi->param('referrer'),
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -20,7 +20,11 @@
                     [% END %]
                 [% END %]
                     [% IF !field.repeatable %]
-                        <option value=""></option>
+                        [% IF batch_edit %]
+                            <option value="">No change</option>
+                        [% ELSE %]
+                            <option value=""></option>
+                        [% END %]
                     [% END %]
                     [% IF authorised_value_category == 'branches' %]
                         [% FOREACH branch IN Branches.all() %]
@@ -108,7 +112,11 @@
                 [% IF !text_field_value_rendered %]
                     <li>
                     <label for="additional_field_[% field.id | html %]"> [% field.name | html %]: </label>
-                    <input type="text" id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]" />
+                    [% IF batch_edit %]
+                        <input type="text" id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]" placeholder="No change" />
+                    [% ELSE %]
+                        <input type="text" id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]" />
+                    [% END %]
                     [% UNLESS search_form == 1 %]
                         <a href="#" class="clear_attribute"><i class="fa fa-fw fa-trash-can"></i> Clear</a>
                     [% END %]
