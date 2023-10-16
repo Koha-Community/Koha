@@ -30,11 +30,13 @@ $(document).ready(function() {
     $("#CheckAllRenewals").on("click",function(){
         $("#UncheckAllCheckins").click();
         $(".renew:visible").prop("checked", true);
+        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
         showHideOnHoldRenewal();
         return false;
     });
     $("#UncheckAllRenewals").on("click",function(){
         $(".renew:visible").prop("checked", false);
+        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
         showHideOnHoldRenewal();
         return false;
     });
@@ -42,10 +44,12 @@ $(document).ready(function() {
     $("#CheckAllCheckins").on("click",function(){
         $("#UncheckAllRenewals").click();
         $(".checkin:visible").prop("checked", true);
+        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
         return false;
     });
     $("#UncheckAllCheckins").on("click",function(){
         $(".checkin:visible").prop("checked", false);
+        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
         return false;
     });
 
@@ -64,11 +68,15 @@ $(document).ready(function() {
         if ( $(this).is(":checked") ) {
             $( "#checkin_" + $(this).val() ).prop("checked", false);
         }
+        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
+        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
     });
     $(document).on("change", '.checkin', function(){
         if ( $(this).is(":checked") ) {
             $( "#renew_" + $(this).val() ).prop("checked", false);
         }
+        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
+        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
     });
 
     // Display on hold due dates input when an on hold item is
@@ -97,7 +105,7 @@ $(document).ready(function() {
     });
 
     // Handle renewals and returns
-    $("#RenewCheckinChecked").on("click",function(){
+    $("#CheckinChecked").on("click",function(){
 
         let refresh_table = true;
         $(".checkin:checked:visible").each(function() {
@@ -138,7 +146,20 @@ $(document).ready(function() {
                 async: false,
             });
         });
+        // Refocus on barcode field if it exists
+        if ( $("#barcode").length ) {
+            $("#barcode").focus();
+        }
 
+        if ( refresh_table ) {
+            RefreshIssuesTable();
+        }
+
+        // Prevent form submit
+        return false;
+    });
+    $("#RenewChecked").on("click",function(){
+        let refresh_table = true;
         $(".confirm:checked:visible").each(function() {
             itemnumber = $(this).val();
             id = "#checkin_" + itemnumber;
@@ -237,7 +258,7 @@ $(document).ready(function() {
         $("#CheckAllRenewals").click();
         $("#UncheckAllCheckins").click();
         showHideOnHoldRenewal();
-        $("#RenewCheckinChecked").click();
+        $("#RenewChecked").click();
 
         // Prevent form submit
         return false;
