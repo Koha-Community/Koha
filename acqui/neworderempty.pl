@@ -424,26 +424,29 @@ $quantity //= 0;
 # Get additional fields
 my $record;
 my @additional_fields = Koha::AdditionalFields->search({ tablename => 'aqorders' })->as_list;
-my %additional_field_values;
+my $additional_field_values;
 my $items;
 if ($ordernumber) {
     my $order = Koha::Acquisition::Orders->find($ordernumber);
-    foreach my $value ($order->additional_field_values->as_list) {
-        $additional_field_values{$value->field_id} = $value->value;
-    }
+    $additional_field_values = $order->get_additional_field_values_for_template;
     $items = $order->items;
 } elsif ( $biblionumber ) {
+    my %additional_field_values;
     foreach my $af (@additional_fields) {
+        my @marc_field_values;
         if ($af->marcfield) {
             $record //= Koha::Biblios->find($biblionumber)->metadata->record;
             my ($field, $subfield) = split /\$/, $af->marcfield;
-            $additional_field_values{$af->id} = $record->subfield($field, $subfield);
+            push @marc_field_values, $record->subfield( $field, $subfield ) if $record->subfield( $field, $subfield );
+            $additional_field_values{ $af->id } = \@marc_field_values;
         }
     }
+    $additional_field_values = \%additional_field_values
 }
+
 $template->param(
     additional_fields => \@additional_fields,
-    additional_field_values => \%additional_field_values,
+    additional_field_values => $additional_field_values,
     items => $items,
 );
 
