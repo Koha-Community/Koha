@@ -1392,7 +1392,7 @@ legend:hover {
                                             [% END # /UNLESS nogonenoaddress %]
                                         </ol>
                                     </fieldset> <!-- /#memberentry_account_flags -->
-
+                                [% END %]
                                     <fieldset class="rows" id="memberentry_restrictions">
                                         <legend id="restrictions_lgd">Patron restrictions</legend>
                                         [% IF ( patron.restrictions.count ) %]
@@ -1478,7 +1478,6 @@ legend:hover {
                                             </fieldset> <!-- /#manual_restriction_form -->
                                         [% END # /IF CAN_user_borrowers_edit_borrowers %]
                                     </fieldset> <!-- /#memberentry_restrictions -->
-                                [% END # /UNLESS ( opadd || opduplicate ) %]
                             [% END # /IF ( step_3 ) %]
 
                             [% IF ( step_7 ) %]
