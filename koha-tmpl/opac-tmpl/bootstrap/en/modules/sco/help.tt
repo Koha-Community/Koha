@@ -2,8 +2,10 @@
 [% USE Koha %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% USE AdditionalContents %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% SET SelfCheckHelpMessage = AdditionalContents.get( location => "SelfCheckHelpMessage", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 <title>Self checkout help &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
@@ -40,7 +42,7 @@
 
                     [% IF ( SelfCheckHelpMessage ) %]
                         <div id="selfcheckhelpmessage">
-                            [% SelfCheckHelpMessage | $raw %]
+                            [% PROCESS koha_news_block news => SelfCheckHelpMessage %]
                         </div>
                     [% END %]
 

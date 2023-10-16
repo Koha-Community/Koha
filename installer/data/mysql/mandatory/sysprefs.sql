@@ -664,7 +664,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SearchWithISBNVariations','0',NULL,'If enabled, search on all variations of the ISBN','YesNo'),
 ('SearchWithISSNVariations','0',NULL,'If enabled, search on all variations of the ISSN','YesNo'),
 ('SelfCheckAllowByIPRanges','',NULL,'(Leave blank if not used. Use ranges or simple ip addresses separated by spaces, like <code>192.168.1.1 192.168.0.0/24</code>.)','Short'),
-('SelfCheckHelpMessage','','70|10','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','Textarea'),
 ('SelfCheckInModule', 0, NULL, 'Enable the standalone self-checkin module.', 'YesNo'),
 ('SelfCheckInTimeout','120','','Define the number of seconds before the self check-in module times out.','Integer'),
 ('SelfCheckInUserCSS','',NULL,'Add CSS to be included in the self check-in module in an embedded <style> tag.','free'),
