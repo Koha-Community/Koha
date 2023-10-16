@@ -11,6 +11,7 @@
                         @change="selectFile($event)"
                         :id="`import_file`"
                         :name="`import_file`"
+                        required
                     />
                 </span>
                 <ol>
@@ -18,11 +19,28 @@
                         {{ $__("File name") }}:
                         <span>{{ file.filename }}</span>
                     </li>
-                    <li v-show="file.file_type">
-                        {{ $__("File type") }}:
-                        <span>{{ file.file_type }}</span>
-                    </li>
                 </ol>
+                <fieldset id="package_list">
+                    {{ $__("To the following local package") }}:
+                    <v-select
+                        v-model="package_id"
+                        label="name"
+                        :reduce="p => p.package_id"
+                        :options="packages"
+                        :clearable="false"
+                        :required="!package_id"
+                    >
+                        <template #search="{ attributes, events }">
+                            <input
+                                :required="!package_id"
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                            />
+                        </template>
+                    </v-select>
+                    <span class="required">{{ $__("Required") }}</span>
+                </fieldset>
             </div>
             <fieldset class="action">
                 <ButtonSubmit />
@@ -46,7 +64,19 @@ export default {
                 filename: null,
                 file_content: null,
             },
+            packages: [],
+            package_id: null,
         }
+    },
+    beforeCreate() {
+        const client = APIClient.erm
+        client.localPackages.getAll().then(
+            packages => {
+                this.packages = packages
+                this.initialized = true
+            },
+            error => {}
+        )
     },
     methods: {
         selectFile(e) {
@@ -63,8 +93,13 @@ export default {
         },
         addDocument(e) {
             e.preventDefault()
+
             const client = APIClient.erm
-            client.localTitles.import_kbart(this.file).then(
+            const importData = {
+                file: this.file,
+                package_id: this.package_id,
+            }
+            client.localTitles.import_kbart(importData).then(
                 success => {
                     let message = ""
                     if (success.job_ids) {
@@ -108,6 +143,7 @@ export default {
                 file_type: null,
                 file_content: null,
             }
+            this.package_id = null
         },
     },
     components: {

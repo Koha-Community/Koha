@@ -77,6 +77,7 @@ sub process {
 
     try {
         my $file = $args->{file};
+        my $package_id = $args->{package_id};
         my ( $column_headers, $lines ) = format_file($file);
 
         if ( scalar( @{$lines} ) == 0 ) {
@@ -118,6 +119,9 @@ sub process {
                         $failed_imports++;
                     } else {
                         my $imported_title = Koha::ERM::EHoldings::Title->new($formatted_title)->store;
+                        my $title_id = $imported_title->title_id;
+                        Koha::ERM::EHoldings::Resource->new( { title_id => $title_id, package_id => $package_id } )
+                            ->store;
 
                         # No need to add a message for a successful import,
                         # files could have 1000s of titles which will lead to lots of messages in background_job->data

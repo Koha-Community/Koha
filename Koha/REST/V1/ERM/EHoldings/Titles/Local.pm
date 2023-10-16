@@ -271,7 +271,9 @@ sub import_from_list {
 sub import_from_kbart_file {
     my $c = shift or return;
 
-    my $file = $c->req->json;
+    my $import_data = $c->req->json;
+    my $file = $import_data->{file};
+    my $package_id = $import_data->{package_id};
 
     return try {
         my @job_ids;
@@ -315,12 +317,12 @@ sub import_from_kbart_file {
                     filename     => $file->{filename},
                     file_content => encode_base64( join( "\r", @{$chunk} ) )
                 };
-                my $params = { file => $chunked_file };
+                my $params = { file => $chunked_file, package_id => $package_id };
                 my $job_id = Koha::BackgroundJob::ImportKBARTFile->new->enqueue($params);
                 push @job_ids, $job_id;
             }
         } else {
-            my $params = { file => $file };
+            my $params = { file => $file, package_id => $package_id };
             my $job_id = Koha::BackgroundJob::ImportKBARTFile->new->enqueue($params);
             push @job_ids, $job_id;
         }
