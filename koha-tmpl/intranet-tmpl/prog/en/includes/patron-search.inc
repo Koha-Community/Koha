@@ -161,7 +161,7 @@
                             [% CASE 'phone' %]<th>Phone</th>
                             [% CASE 'checkouts' %]<th>Checkouts</th>
                             [% CASE 'account_balance' %]<th>Fines</th>
-                            [% CASE 'action' %]<th>&nbsp;</th>
+                            [% CASE 'action' %]<th class="noExport">&nbsp;</th>
                         [% END %]
                     [% END %]
                 </tr>
