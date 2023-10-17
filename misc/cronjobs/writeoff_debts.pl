@@ -11,15 +11,16 @@ use Koha::DateUtils qw( dt_from_string );
 
 use Koha::Script -cron;
 
-my ( $help, $verbose, @type, $before, $after, $file, $confirm );
+my ( $help, $verbose, @type, $before, $after, @category_code, $file, $confirm );
 GetOptions(
-    'h|help'                         => \$help,
-    'v|verbose+'                     => \$verbose,
-    't|type:s'                       => \@type,
-    'ab|added_before|added-before:s' => \$before,
-    'aa|added_after|added-after:s'   => \$after,
-    'f|file:s'                       => \$file,
-    'c|confirm'                      => \$confirm,
+    'h|help'                           => \$help,
+    'v|verbose+'                       => \$verbose,
+    't|type:s'                         => \@type,
+    'ab|added_before|added-before:s'   => \$before,
+    'aa|added_after|added-after:s'     => \$after,
+    'cc|category_code|category-code:s' => \@category_code,
+    'f|file:s'                         => \$file,
+    'c|confirm'                        => \$confirm,
 );
 @type = split( /,/, join( ',', @type ) );
 
@@ -57,6 +58,11 @@ if ($before) {
 if ($after) {
     my $added_after = dt_from_string( $after, 'iso' );
     $where->{date}->{'>'} = $dtf->format_datetime($added_after);
+}
+
+if (@category_code) {
+    $where->{'patron.categorycode'}->{'-in'} = \@category_code;
+    push @{ $attr->{'join'} }, 'patron';
 }
 
 my $lines = Koha::Account::Lines->search( $where, $attr );
@@ -167,6 +173,12 @@ Writeoff debts added after the date passed.
 
 Dates should be in ISO format, e.g., 2013-07-19, and can be generated
 with `date -d '-3 month' --iso-8601`.
+
+=item B<--category-code>
+
+Writeoff debts for patrons belonging to the passed categories.
+
+Can be used multiple times for additional category codes.
 
 =item B<--type>
 
