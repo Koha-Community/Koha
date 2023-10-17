@@ -27,7 +27,7 @@ use t::lib::TestBuilder;
 use Test::MockObject;
 use Test::MockModule;
 
-use Test::More tests => 7;
+use Test::More tests => 6;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -35,8 +35,6 @@ use_ok('Koha::Illbatch');
 use_ok('Koha::Illbatches');
 
 $schema->storage->txn_begin;
-
-Koha::Illrequests->search->delete;
 
 # Create a patron
 my $patron = $builder->build( { source => 'Borrower' } );
@@ -76,10 +74,6 @@ my $illrq = $builder->build(
     }
 );
 my $illrq_obj = Koha::Illrequests->find( $illrq->{illrequest_id} );
-
-# Check requests_count
-my $requests_count = $illbatch->requests_count;
-is( $requests_count, 1, 'requests_count returns correctly' );
 
 # Check patron
 my $batch_patron = $illbatch->patron;

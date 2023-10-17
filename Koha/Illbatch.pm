@@ -79,19 +79,6 @@ sub library {
     return Koha::Library->_new_from_dbic($library);
 }
 
-=head3 requests_count
-
-    my $requests_count = Koha::Illbatch->requests_count;
-
-Return the number of requests associated with this batch
-
-=cut
-
-sub requests_count {
-    my ($self) = @_;
-    return Koha::Illrequests->search( { batch_id => $self->id } )->count;
-}
-
 =head3 requests
 
 Return the I<Koha::Illrequests> for this batch
