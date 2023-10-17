@@ -52,12 +52,12 @@ $(document).ready(function() {
                 $('#addConcernModal').modal('hide');
                 $('#concern_body').val('');
                 $('#concern_title').val('');
-                $('h1:first').before('<div class="alert alert-success">Your concern was sucessfully submitted.</div>');
+                $('h1:first').before('<div class="alert alert-success">' + __("Your concern was sucessfully submitted.") + '</div>');
             },
             error: function(data) {
                 $('#concern-submit-spinner').hide();
                 $('#addConcernModal').modal('hide');
-                $('h1:first').before('<div class="alert alert-error">There was an error when submitting your concern, please contact a librarian.</div>');
+                $('h1:first').before('<div class="alert alert-error">' + __("There was an error when submitting your concern, please contact a librarian.") + '</div>');
             },
             contentType: "json"
         });
