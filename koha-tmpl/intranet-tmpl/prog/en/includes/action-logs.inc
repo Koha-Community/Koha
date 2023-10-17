@@ -133,6 +133,8 @@
         <span>Run</span>
     [% CASE 'End' %]
         <span>End</span>
+    [% CASE 'PATRON_MERGE' %]
+        <span>Merge</span>
     [% CASE 'EDIT_MAPPINGS' %]
         <span>Edit mappings</span>
     [% CASE 'RESET_MAPPINGS' %]
