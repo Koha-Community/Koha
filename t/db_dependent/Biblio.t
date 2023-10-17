@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -26,6 +26,7 @@ use MARC::Record;
 use t::lib::Mocks qw( mock_preference );
 use t::lib::TestBuilder;
 
+use Koha::ActionLogs;
 use Koha::Database;
 use Koha::Caches;
 use Koha::MarcSubfieldStructures;
@@ -994,6 +995,31 @@ subtest 'GetFrameworkCode' => sub {
     ModBiblio($biblio->metadata->record, $biblio->biblionumber, 'OGR');
     is(GetFrameworkCode($biblio->biblionumber), 'OGR', 'GetFrameworkCode returns correct frameworkcode after setting a new one though ModBiblio');
 
+};
+
+subtest 'ModBiblio on invalid record' => sub {
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference( "CataloguingLog", 1 );
+
+    # We create a record with an onvalid control character in the MARC
+    my $record = MARC::Record->new();
+    my $field  = MARC::Field->new( '650', '', '', 'a' => '00aD000015937' );
+    $record->append_fields($field);
+
+    my ($biblionumber) = C4::Biblio::AddBiblio( $record, '' );
+
+    warning_like { C4::Biblio::ModBiblio( $record, $biblionumber, '' ); }
+    qr/parser error : PCDATA invalid Char value 31/,
+        'Modding the biblio warns about the encoding issues';
+    my $action_logs =
+        Koha::ActionLogs->search( { object => $biblionumber, module => 'Cataloguing', action => 'MODIFY' } );
+    is( $action_logs->count, 1, "Modification of biblio was successful and recorded" );
+    my $action_log = $action_logs->next;
+    like(
+        $action_log->info, qr/parser error : PCDATA invalid Char value 31/,
+        "Metadata issue successfully logged in action logs"
+    );
 };
 
 # Cleanup
