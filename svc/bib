@@ -89,7 +89,7 @@ sub update_bib {
     my $query = shift;
     my $biblionumber = shift;
     my $biblio = Koha::Biblios->find( $biblionumber );
-    my $old_record = $biblio->metadata->record;
+    my $old_record = $biblio->metadata;
     my $frameworkcode = $query->url_param('frameworkcode') // GetFrameworkCode($biblionumber);
     unless  (defined $old_record) {
         print $query->header(-type => 'text/xml', -status => '404 Not Found');
