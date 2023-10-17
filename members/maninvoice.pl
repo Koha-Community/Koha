@@ -164,12 +164,12 @@ if ( $op eq 'cud-add' ) {
             my @additional_fields;
             my $accountline_fields = Koha::AdditionalFields->search({ tablename => 'accountlines:debit' });
             while ( my $field = $accountline_fields->next ) {
-                my $value = $input->param('additional_field_' . $field->id);
-                if (defined $value) {
+                my @field_values = $input->param( 'additional_field_' . $field->id );
+                foreach my $value (@field_values) {
                     push @additional_fields, {
-                        id => $field->id,
+                        id    => $field->id,
                         value => $value,
-                    };
+                    } if $value;
                 }
             }
             if (@additional_fields) {

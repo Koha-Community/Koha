@@ -130,6 +130,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("js/additional-fields-entry.js") | $raw %]
     <script>
         var type_fees = {};
         [% FOREACH debit_type IN debit_types %]
