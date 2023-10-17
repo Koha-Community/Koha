@@ -41,7 +41,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
 
     my $results = $keeper->merge_with([ $borrower1->{borrowernumber}, $borrower2->{borrowernumber} ]);
 
-    my $log=GetLogs("","","",["MEMBERS"],["Merge"],$keeper->id,"");
+    my $log=GetLogs("","","",["MEMBERS"],["PATRON_MERGE"],$keeper->id,"");
 
     my $info_borrower1 = $borrower1->{firstname} . " " . $borrower1->{surname} . " (" . $borrower1->{cardnumber} . ") has been merged into " .
     $keeper->firstname . " " . $keeper->surname . " (" . $keeper->cardnumber . ")";
@@ -63,7 +63,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
 
     $results = $keeper->merge_with([ $borrower3->{borrowernumber}, $borrower4->{borrowernumber} ]);
 
-    $log=GetLogs("","","",["MEMBERS"],["Merge"],$keeper->id,"");
+    $log=GetLogs("","","",["MEMBERS"],["PATRON_MERGE"],$keeper->id,"");
     $info_log = $log->[0]{info};
 
     is($info_log,undef,"GetLogs didn't returns results in the log viewer for the merge of " . $borrower3->{borrowernumber});

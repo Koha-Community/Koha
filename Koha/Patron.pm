@@ -802,7 +802,7 @@ sub merge_with {
                         . $self->firstname . " "
                         . $self->surname . " ("
                         . $self->cardnumber . ")";
-                    logaction( "MEMBERS", "Merge", $self->id, $info );
+                    logaction( "MEMBERS", "PATRON_MERGE", $self->id, $info );
                 }
             }
         }
