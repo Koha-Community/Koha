@@ -106,7 +106,11 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
         GetRecord: function( id, remove_control_num, callback ) {
             $.get(
                 '/cgi-bin/koha/svc/bib/'+ id
-            ).done( function( metadata ) {
+            ).done( function( metadata, status, xhr ) {
+                let encoding_issues = xhr.getResponseHeader('invalid-metadata');
+                if( encoding_issues ){
+                    humanMsg.displayAlert( _("Record had encoding issues, please see logs") );
+                }
                 $.get(
                     '/cgi-bin/koha/svc/bib_framework/' + id
                 ).done( function( frameworkcode ) {
