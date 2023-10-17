@@ -67,9 +67,18 @@ sub fetch_bib {
     my $query = shift;
     my $biblionumber = shift;
     my $biblio = Koha::Biblios->find( $biblionumber );
-    my $record = $biblio->metadata->record({ embed_items => scalar $query->param('items') });
+    my $record;
+    my $exception;
+    my $invalid_metadata;
+    eval { $record = $biblio->metadata->record({ embed_items => scalar $query->param('items') }) };
+    if( $@ ){
+        $exception = $@;
+        $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
+        $record = $biblio->metadata->record_strip_nonxml({ embed_items => scalar $query->param('items') });
+        $invalid_metadata = 1;
+    }
     if  (defined $record) {
-        print $query->header(-type => 'text/xml',-charset => 'utf-8',);
+        print $query->header(-type => 'text/xml',-charset => 'utf-8', -invalid_metadata => $invalid_metadata );
         print $record->as_xml_record();
     } else {
         print $query->header(-type => 'text/xml', -status => '404 Not Found');
