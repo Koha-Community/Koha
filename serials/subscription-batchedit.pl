@@ -84,6 +84,14 @@ if ($batchedit) {
                     id => $field->id,
                     value => $value,
                 };
+            }else{
+                my $existing = $subscription->additional_field_values->search( { field_id => $field->id } )->last;
+                if($existing && $existing->value){
+                    push @additional_field_values, {
+                        id    => $field->id,
+                        value => $existing->value,
+                    };
+                }
             }
         }
         $subscription->set_additional_fields(\@additional_field_values);
