@@ -1995,18 +1995,6 @@ sub strings_map {
         };
     }
 
-    my $batch = $self->batch;
-    if ($batch) {
-        $strings->{"batch"} = {
-            ill_batch_id => $batch->ill_batch_id,
-            name => $batch->name,
-            backend => $batch->backend,
-            patron_id => $batch->patron_id,
-            library_id => $batch->library_id,
-            status_code => $batch->status_code
-        };
-    }
-
     return $strings;
 }
 
