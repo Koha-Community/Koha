@@ -409,6 +409,18 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->belongs_to(
+  "ill_batch",
+  "Koha::Schema::Result::Illbatch",
+  { ill_batch_id => "batch_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
   "library",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },

@@ -147,18 +147,20 @@ sub push_processor {
     push @{$self->{processors}}, $processor;
 }
 
-=head3 batch
+=head3 ill_batch
 
-    my $batch = $request->batch;
+    my $ill_batch = $request->ill_batch;
 
-Returns the batch associated with a request
+Returns the I<Koha::Illbatch> associated with the request
 
 =cut
 
-sub batch {
-    my ( $self ) = @_;
+sub ill_batch {
+    my ($self) = @_;
 
-    return Koha::Illbatches->find($self->_result->batch_id);
+    my $ill_batch = $self->_result->ill_batch;
+    return unless $ill_batch;
+    return Koha::Illbatch->_new_from_dbic($ill_batch);
 }
 
 =head3 statusalias
