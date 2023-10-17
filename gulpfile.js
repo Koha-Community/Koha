@@ -19,7 +19,7 @@ const exec = require('gulp-exec');
 const merge = require('merge-stream');
 const through2 = require('through2');
 const Vinyl = require('vinyl');
-const args = require('minimist')(process.argv.slice(2));
+const args = require('minimist')(process.argv.slice(2), { default: { 'generate-pot': 'always' } });
 const rename = require('gulp-rename');
 
 const STAFF_CSS_BASE = "koha-tmpl/intranet-tmpl/prog/css";
@@ -262,7 +262,11 @@ function po_create_type (type) {
 
     // Generate .pot only if it doesn't exist or --force-extract is given
     const extract = () => stream.finished(poTasks[type].extract());
-    const p = args['force-extract'] ? extract() : access(pot).catch(extract);
+    const p =
+        args['generate-pot'] === 'always' ? extract() :
+        args['generate-pot'] === 'auto' ? access(pot).catch(extract) :
+        args['generate-pot'] === 'never' ? Promise.resolve(0) :
+        Promise.reject(new Error('Invalid value for option --generate-pot: ' + args['generate-pot']))
 
     return p.then(function () {
         const languages = getLanguages();
@@ -299,7 +303,11 @@ function po_update_type (type) {
 
     // Generate .pot only if it doesn't exist or --force-extract is given
     const extract = () => stream.finished(poTasks[type].extract());
-    const p = args['force-extract'] ? extract() : access(pot).catch(extract);
+    const p =
+        args['generate-pot'] === 'always' ? extract() :
+        args['generate-pot'] === 'auto' ? access(pot).catch(extract) :
+        args['generate-pot'] === 'never' ? Promise.resolve(0) :
+        Promise.reject(new Error('Invalid value for option --generate-pot: ' + args['generate-pot']))
 
     return p.then(function () {
         const languages = getLanguages();
