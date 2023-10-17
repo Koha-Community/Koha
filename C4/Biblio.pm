@@ -374,11 +374,11 @@ sub ModBiblio {
         my $record;
         my $decoding_error = "";
         eval { $record = $biblio->metadata->record };
-        if( $@ ){
+        if ($@) {
             my $exception = $@;
             $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
             $decoding_error = "There was an error with this bibliographic record: " . $exception;
-            $record = $biblio->metadata->record_strip_nonxml;
+            $record         = $biblio->metadata->record_strip_nonxml;
         }
         logaction( "CATALOGUING", "MODIFY", $biblionumber, "biblio $decoding_error BEFORE=>" . $record->as_formatted );
     }
