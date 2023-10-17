@@ -265,7 +265,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('FinesIncludeGracePeriod','1',NULL,'If enabled, fines calculations will include the grace period.','YesNo'),
 ('FinesLog','1',NULL,'If ON, log fines','YesNo'),
 ('finesMode','off','off|production','Choose the fines mode, \'off\' (no charges), \'production\' (accrue overdue fines).  Requires accruefines cronjob.','Choice'),
-('ForcedLibrarySelection','0',NULL,'Force staff to select a library when logging into the staff interface.','YesNo'),
+('ForceLibrarySelection','0',NULL,'Force staff to select a library when logging into the staff interface.','YesNo'),
 ('FRBRizeEditions','0','','If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo'),
 ('GenerateAuthorityField667', 'Machine generated authority record', NULL, 'When BiblioAddsAuthorities and AutoCreateAuthorities are enabled, use this as a default value for the 667$a field of MARC21 records', 'free'),
 ('GenerateAuthorityField670', 'Work cat.', NULL, 'When BiblioAddsAuthorities and AutoCreateAuthorities are enabled, use this as a default value for the 670$a field of MARC21 records', 'free'),
