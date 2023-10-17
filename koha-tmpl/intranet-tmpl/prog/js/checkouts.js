@@ -259,7 +259,7 @@ $(document).ready(function() {
         $("#UncheckAllCheckins").click();
         showHideOnHoldRenewal();
         $("#RenewChecked").click();
-
+        $('#RenewChecked').prop('disabled' , true );
         // Prevent form submit
         return false;
     });
