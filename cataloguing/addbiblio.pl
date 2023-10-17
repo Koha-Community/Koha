@@ -578,7 +578,7 @@ my (
 
 if ( $biblio && !$breedingid ) {
     eval { $record = $biblio->metadata->record };
-    if( $@ ){
+    if ($@) {
         my $exception = $@;
         $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
         $record = $biblio->metadata->record_strip_nonxml;

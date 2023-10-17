@@ -70,18 +70,18 @@ sub fetch_bib {
     my $record;
     my $exception;
     my $invalid_metadata;
-    eval { $record = $biblio->metadata->record({ embed_items => scalar $query->param('items') }) };
-    if( $@ ){
+    eval { $record = $biblio->metadata->record( { embed_items => scalar $query->param('items') } ) };
+    if ($@) {
         $exception = $@;
         $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
-        $record = $biblio->metadata->record_strip_nonxml({ embed_items => scalar $query->param('items') });
+        $record           = $biblio->metadata->record_strip_nonxml( { embed_items => scalar $query->param('items') } );
         $invalid_metadata = 1;
     }
-    if  (defined $record) {
-        print $query->header(-type => 'text/xml',-charset => 'utf-8', -invalid_metadata => $invalid_metadata );
+    if ( defined $record ) {
+        print $query->header( -type => 'text/xml', -charset => 'utf-8', -invalid_metadata => $invalid_metadata );
         print $record->as_xml_record();
     } else {
-        print $query->header(-type => 'text/xml', -status => '404 Not Found');
+        print $query->header( -type => 'text/xml', -status => '404 Not Found' );
     }
 }
 
