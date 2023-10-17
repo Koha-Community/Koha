@@ -47,7 +47,7 @@ foreach my $subscriptionid (@subscriptionids) {
     push @subscriptions, $subscription if $subscription;
 }
 
-my @additional_fields = Koha::AdditionalFields->search({tablename => 'subscription'})->as_list;
+my @available_additional_fields = Koha::AdditionalFields->search({tablename => 'subscription'})->as_list;
 
 my $batchedit = $cgi->param('batchedit');
 if ($batchedit) {
@@ -63,7 +63,7 @@ if ($batchedit) {
     );
 
     my $field_values = {};
-    foreach my $field (@additional_fields) {
+    foreach my $field (@available_additional_fields) {
         my $value = $cgi->param('field_' . $field->id);
         $field_values->{$field->id} = $value;
     }
@@ -77,7 +77,7 @@ if ($batchedit) {
         }
 
         my @additional_field_values;
-        foreach my $field (@additional_fields) {
+        foreach my $field (@available_additional_fields) {
             my $value = $field_values->{$field->id};
             if (defined $value and $value ne '') {
                 push @additional_field_values, {
@@ -99,7 +99,7 @@ if ($batchedit) {
 $template->param(
     subscriptions => \@subscriptions,
     booksellers => [ Koha::Acquisition::Booksellers->search->as_list ],
-    additional_fields => \@additional_fields,
+    additional_fields => \@available_additional_fields,
     referrer => scalar $cgi->param('referrer'),
 );
 
