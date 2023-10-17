@@ -1097,7 +1097,7 @@ subtest 'edit() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 24;
 
     $schema->storage->txn_begin;
 
@@ -1139,17 +1139,22 @@ subtest 'add() tests' => sub {
         return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
     });
 
-    my $can_be_reserved = 'OK';
+    my $can_biblio_be_reserved = 'OK';
+    my $can_item_be_reserved   = 'OK';
+
     my $mock_reserves = Test::MockModule->new('C4::Reserves');
-    $mock_reserves->mock( 'CanItemBeReserved', sub
-        {
-            return { status => $can_be_reserved }
+
+    $mock_reserves->mock(
+        'CanItemBeReserved',
+        sub {
+            return { status => $can_item_be_reserved };
         }
 
     );
-    $mock_reserves->mock( 'CanBookBeReserved', sub
-        {
-            return { status => $can_be_reserved }
+    $mock_reserves->mock(
+        'CanBookBeReserved',
+        sub {
+            return { status => $can_biblio_be_reserved };
         }
 
     );
@@ -1243,7 +1248,18 @@ subtest 'add() tests' => sub {
       ->status_is(400)
       ->json_is({ error => 'The supplied pickup location is not valid' });
 
+    $can_item_be_reserved   = 'notReservable';
+    $can_biblio_be_reserved = 'OK';
+
     $item_hold_data->{pickup_library_id} = $library_2->branchcode;
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )
+      ->status_is(403, 'Item checks performed when both biblio_id and item_id passed (Bug 35053)')
+      ->json_is({ error => 'Hold cannot be placed. Reason: notReservable' });
+
+    $can_item_be_reserved   = 'OK';
+    $can_biblio_be_reserved = 'OK';
+
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )
       ->status_is(201);
 
