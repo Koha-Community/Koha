@@ -1,4 +1,5 @@
 [% USE To %]
+[% USE tojson = To %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
@@ -234,8 +235,8 @@
     };
 
     let table_nodes = {
-        holdings: '[% PROCESS 'build_table' tab="holdings" | collapse %]',
-        otherholdings: '[% PROCESS 'build_table' tab="otherholdings" | collapse %]',
+        holdings: "[% PROCESS 'build_table' tab="holdings" | collapse | $tojson %]",
+        otherholdings: "[% PROCESS 'build_table' tab="otherholdings" | collapse | $tojson %]",
     };
     function build_items_table (tab_id, add_filters, dt_options, drawcallback) {
 
