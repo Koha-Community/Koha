@@ -92,17 +92,15 @@ sub add {
 
         if ( $item_id and $biblio_id ) {
 
+            $biblio = Koha::Biblios->find($biblio_id);
+            $item   = $biblio->items->find($item_id);
+
             # check they are consistent
-            unless ( Koha::Items->search( { itemnumber => $item_id, biblionumber => $biblio_id } )
-                ->count > 0 )
-            {
+            unless ($item) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "Item $item_id doesn't belong to biblio $biblio_id" }
                 );
-            }
-            else {
-                $biblio = Koha::Biblios->find($biblio_id);
             }
         }
         elsif ($item_id) {
