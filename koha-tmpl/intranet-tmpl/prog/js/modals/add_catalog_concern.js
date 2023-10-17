@@ -35,7 +35,7 @@ $(document).ready(function() {
                 $('#addConcernModal').modal('hide');
                 $('#concern_body').val('');
                 $('#concern_title').val('');
-                $('#toolbar').before('<div class="alert alert-success">Your concern was sucessfully submitted.</div>');
+                $('#toolbar').before('<div class="dialog message">' + __("Your concern was sucessfully submitted.") + '</div>');
                 if ($.fn.dataTable.isDataTable("#table_concerns")) {
                     $("#table_concerns").DataTable().ajax.reload();
                 }
@@ -43,7 +43,7 @@ $(document).ready(function() {
             error: function(data) {
                 $('#concern-submit-spinner').hide();
                 $('#addConcernModal').modal('hide');
-                $('#toolbar').before('<div class="alert alert-error">There was an error when submitting your concern, please contact a librarian.</div>');
+                $('#toolbar').before('<div class="dialog alert">' + __("There was an error when submitting your concern, please contact a librarian.") + '</div>');
             },
             contentType: "json"
         });
