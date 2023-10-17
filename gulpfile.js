@@ -8,6 +8,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const util = require('util');
+const stream = require('stream/promises');
 
 const sass = require("gulp-sass");
 const cssnano = require("gulp-cssnano");
@@ -252,19 +253,26 @@ function po_create_type (type) {
     const access = util.promisify(fs.access);
     const exec = util.promisify(child_process.exec);
 
-    const languages = getLanguages();
-    const promises = [];
-    for (const language of languages) {
-        const locale = language.split('-').filter(s => s.length !== 4).join('_');
-        const po = `misc/translator/po/${language}-${type}.po`;
-        const pot = `misc/translator/Koha-${type}.pot`;
+    const pot = `misc/translator/Koha-${type}.pot`;
 
-        const promise = access(po)
-            .catch(() => exec(`msginit -o ${po} -i ${pot} -l ${locale} --no-translator`))
-        promises.push(promise);
-    }
+    // Generate .pot only if it doesn't exist or --force-extract is given
+    const extract = () => stream.finished(poTasks[type].extract());
+    const p = args['force-extract'] ? extract() : access(pot).catch(extract);
 
-    return Promise.all(promises);
+    return p.then(function () {
+        const languages = getLanguages();
+        const promises = [];
+        for (const language of languages) {
+            const locale = language.split('-').filter(s => s.length !== 4).join('_');
+            const po = `misc/translator/po/${language}-${type}.po`;
+
+            const promise = access(po)
+                .catch(() => exec(`msginit -o ${po} -i ${pot} -l ${locale} --no-translator`))
+            promises.push(promise);
+        }
+
+        return Promise.all(promises);
+    });
 }
 
 function po_create_marc_marc21 ()       { return po_create_type('marc-MARC21') }
@@ -279,14 +287,25 @@ function po_create_installer_marc21 ()  { return po_create_type('installer-MARC2
 function po_create_installer_unimarc () { return po_create_type('installer-UNIMARC') }
 
 function po_update_type (type) {
-    const msgmerge_opts = '--backup=off --no-wrap --quiet -F --update';
-    const cmd = `msgmerge ${msgmerge_opts} <%= file.path %> misc/translator/Koha-${type}.pot`;
-    const languages = getLanguages();
-    const globs = languages.map(language => `misc/translator/po/${language}-${type}.po`);
+    const access = util.promisify(fs.access);
+    const exec = util.promisify(child_process.exec);
 
-    return src(globs)
-        .pipe(exec(cmd, { continueOnError: true }))
-        .pipe(exec.reporter({ err: false, stdout: false }))
+    const pot = `misc/translator/Koha-${type}.pot`;
+
+    // Generate .pot only if it doesn't exist or --force-extract is given
+    const extract = () => stream.finished(poTasks[type].extract());
+    const p = args['force-extract'] ? extract() : access(pot).catch(extract);
+
+    return p.then(function () {
+        const languages = getLanguages();
+        const promises = [];
+        for (const language of languages) {
+            const po = `misc/translator/po/${language}-${type}.po`;
+            promises.push(exec(`msgmerge --backup=off --no-wrap --quiet -F --update ${po} ${pot}`));
+        }
+
+        return Promise.all(promises);
+    });
 }
 
 function po_update_marc_marc21 ()       { return po_update_type('marc-MARC21') }
@@ -368,8 +387,8 @@ function getLanguages () {
 exports.build = build;
 exports.css = css;
 
-exports['po:create'] = parallel(...poTypes.map(type => series(poTasks[type].extract, poTasks[type].create)));
-exports['po:update'] = parallel(...poTypes.map(type => series(poTasks[type].extract, poTasks[type].update)));
+exports['po:create'] = parallel(...poTypes.map(type => poTasks[type].create));
+exports['po:update'] = parallel(...poTypes.map(type => poTasks[type].update));
 exports['po:extract'] = parallel(...poTypes.map(type => poTasks[type].extract));
 
 exports.default = function () {
