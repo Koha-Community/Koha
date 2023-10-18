@@ -1,3 +1,4 @@
+[% PROCESS 'html_helpers.inc' %]
 <div id="ill-batch-details" style="display:none"></div>
 <div id="ill-batch-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ill-batch-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-lg">
