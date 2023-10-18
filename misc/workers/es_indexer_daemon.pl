@@ -122,10 +122,10 @@ while (1) {
 
         # FIXME This means we need to have create the DB entry before
         # It could work in a first step, but then we will want to handle job that will be created from the message received
-        my $job = Koha::BackgroundJobs->find($args->{job_id});
+        my $job = Koha::BackgroundJobs->search( { id => $args->{job_id}, status => 'new' } )->next;
 
-        unless ( $job ) {
-            $logger->warn(sprintf "No job found for id=%s", $args->{job_id});
+        unless ($job) {
+            $logger->warn( sprintf "Job %s not found, or has wrong status", $args->{job_id} );
             next;
         }
 
