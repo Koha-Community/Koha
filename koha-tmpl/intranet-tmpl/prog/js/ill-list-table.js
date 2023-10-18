@@ -195,7 +195,7 @@ $(document).ready(function() {
             'biblio',
             'comments+count',
             'extended_attributes',
-            'batch',
+            'ill_batch',
             'library',
             'id_prefix',
             'patron'
