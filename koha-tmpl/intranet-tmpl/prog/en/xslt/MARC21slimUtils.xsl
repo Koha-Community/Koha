@@ -281,41 +281,34 @@
                 </xsl:when>
             </xsl:choose>
 
-            <xsl:if test="$field/marc:subfield[@code='a']">
-                <xsl:call-template name="subfieldSelect">
-                    <xsl:with-param name="codes">a</xsl:with-param>
-                </xsl:call-template>
-            </xsl:if>
-            <xsl:text> </xsl:text>
-
-            <xsl:choose>
-                <xsl:when test="$url='1'">
-                    <xsl:if test="$field/marc:subfield[@code='b']">
-                         <a>
-                         <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Provider:<xsl:value-of select="str:encode-uri($field/marc:subfield[@code='b'], true())"/></xsl:attribute>
-                         <xsl:call-template name="subfieldSelect">
-                             <xsl:with-param name="codes">b</xsl:with-param>
-                         </xsl:call-template>
-                         </a>
+            <xsl:for-each select="marc:subfield">
+                <xsl:if test="@code='a'">
+                    <xsl:value-of select="current()"/>
+                </xsl:if>
+                    <xsl:if test="@code='b'">
+                        <xsl:choose>
+                            <xsl:when test="$url='1'">
+                                     <a>
+                                     <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Provider:<xsl:value-of select="str:encode-uri(current(), true())"/></xsl:attribute>
+                                     <xsl:value-of select="current()"/>
+                                     </a>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                    <xsl:value-of select="current()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:if>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:if test="$field/marc:subfield[@code='b']">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">b</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:if>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text> </xsl:text>
-            <xsl:call-template name="chopPunctuation">
-                <xsl:with-param name="chopString">
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">c</xsl:with-param>
+                <xsl:if test="@code='c'">
+                    <xsl:call-template name="chopPunctuation">
+                        <xsl:with-param name="chopString">
+                            <xsl:value-of select="current()"/>
+                        </xsl:with-param>
                     </xsl:call-template>
-                </xsl:with-param>
-            </xsl:call-template>
-
+                </xsl:if>
+                <xsl:if test="position() != last()">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+            </xsl:for-each>
         </span>
     </xsl:template>
 
