@@ -196,6 +196,18 @@
                                 [% END # IF language.plural %]
                             [% END # FOREACH language %]
                         </ul> <!-- / ul.sortable -->
+                    [% ELSIF ( CHUNK.type_countries ) %]
+                        [% PROCESS 'country-list.inc' %]
+                        <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]">
+                            <option value="">&nbsp;</option>
+                            [% FOREACH country IN country_strings.split(',') %]
+                                [% IF country.trim == CHUNK.value %]
+                                    <option value="[% country.trim | html %]" selected="selected">[% country.trim | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% country.trim | html %]">[% country.trim | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
                     [% END %]
                     [% END %]
                     [% IF LINE.WARNINGS.size %]
