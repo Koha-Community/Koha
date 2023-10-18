@@ -304,6 +304,7 @@ my $target_map = {
   './authorities'               => 'INTRANET_CGI_DIR',
   './basket'                    => 'INTRANET_CGI_DIR',
   './bin'                       => { target => 'SCRIPT_DIR', trimdir => -1 },
+  './bookings'                  => 'INTRANET_CGI_DIR',
   './C4'                        => 'PERL_MODULE_DIR',
   './catalogue'                 => 'INTRANET_CGI_DIR',
   './cataloguing'               => 'INTRANET_CGI_DIR',
