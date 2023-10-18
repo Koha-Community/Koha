@@ -92,10 +92,12 @@ $scr
 
 function Focus$function_name(event) {
     set_barcode(event.data.id, false);
+    return false;
 }
 
 function Click$function_name(event) {
     set_barcode(event.data.id, true);
+    return false;
 }
 </script>
 END_OF_JS
