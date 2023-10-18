@@ -369,6 +369,14 @@ sub after_recall_action {
         "after_recall_action called with action: $action, ref: " . ref($recall) );
 }
 
+sub template_include_paths {
+    my ($self) = @_;
+
+    return [
+        $self->mbf_path('inc'),
+    ];
+}
+
 sub _private_sub {
     return "";
 }

@@ -61,6 +61,11 @@ sub new {
         push @includes, "$htdocs/$_/$lang/includes";
         push @includes, "$htdocs/$_/en/includes" unless $lang eq 'en';
     }
+
+    my @plugins_include_paths = Koha::Plugins->call( 'template_include_paths',
+        { interface => $interface, lang => $lang } );
+    push @includes, map { $_ ? @$_ : () } @plugins_include_paths;
+
     # Do not use template cache if script is called from commandline
     my $use_template_cache = C4::Context->config('template_cache_dir') && defined $ENV{GATEWAY_INTERFACE};
     my $template = Template->new(
