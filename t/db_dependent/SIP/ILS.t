@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
