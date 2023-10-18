@@ -154,7 +154,7 @@ $(document).ready(function() {
         if ( refresh_table ) {
             RefreshIssuesTable();
         }
-
+        $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
         // Prevent form submit
         return false;
     });
@@ -249,7 +249,7 @@ $(document).ready(function() {
         if ( refresh_table ) {
             RefreshIssuesTable();
         }
-
+        $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
         // Prevent form submit
         return false;
     });
@@ -304,7 +304,6 @@ $(document).ready(function() {
         $('#issues-table-loading-message').hide();
         $('#issues-table').show();
         $('#issues-table-actions').show();
-
         var msg_loading = __('Loading... you may continue scanning.');
         issuesTable = KohaTable("issues-table", {
             "oLanguage": {
