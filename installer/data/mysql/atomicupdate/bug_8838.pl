@@ -7,16 +7,20 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do(q{
-            INSERT IGNORE INTO `letter` VALUES (NULL,'reserves','HOLDDGST','','Hold available for pickup (digest)',0,'Hold(s) available for pickup','You have one or more holds available for pickup:\r\n----\r\nTitle: [% hold.biblio.title %]\r\nAuthor: [% hold.biblio.author %]\r\nCopy: [% hold.item.copynumber %]\r\nLocation: [% hold.branch.branchname %]\r\nWaiting since: [% hold.waitingdate %]:\r\n[% hold.branch.branchaddress1 %]\r\n[% hold.branch.branchaddress2 %]\r\n[% hold.branch.branchaddress3 %]\r\n[% hold.branch.branchcity %] [% hold.branch.branchzip %]\r\n----','email','default','2023-08-29 18:42:15');
-        });
+        $dbh->do(
+            q{
+            INSERT IGNORE INTO `letter` VALUES (NULL,'reserves','HOLDDGST','','Hold available for pickup (digest)',0,'Hold(s) available for pickup','You have one or more holds available for pickup:\r\n----\r\nTitle: [% hold.biblio.title %]\r\nAuthor: [% hold.biblio.author %]\r\nCopy: [% hold.item.copynumber %]\r\nLocation: [% hold.branch.branchname %]\r\nWaiting since: [% hold.waitingdate %]\r\n[% hold.branch.branchaddress1 %]\r\n[% hold.branch.branchaddress2 %]\r\n[% hold.branch.branchaddress3 %]\r\n[% hold.branch.branchcity %] [% hold.branch.branchzip %]\r\n----','email','default','2023-08-29 18:42:15');
+        }
+        );
 
-        $dbh->do(q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO message_transports VALUES
             ( 4, "email", 1, "reserves", "HOLDDGST", "" ),
             ( 4, "sms", 1, "reserves", "HOLDDGST", "" ),
             ( 4, "phone", 1, "reserves", "HOLDDGST", "");
-        });
+        }
+        );
 
         # Print useful stuff here
         # tables
