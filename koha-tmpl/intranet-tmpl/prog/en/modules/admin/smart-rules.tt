@@ -1531,6 +1531,7 @@
                                 $(this).attr('selected', 'selected');
                             }
                         });
+                        var current_input_id = $(current_column).children('input').first().attr('id');
                         if ( i == 0 || i == 1 ) {
                             // Disable the 2 first columns, we cannot update them.
                             var val = $(current_column).find("select option:selected").val();
@@ -1541,13 +1542,14 @@
                             // Remove potential previous input added
                             $(current_column).find("input").remove();
                             $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
-                        } else if ( i == 5 || i == 6 || i == 26 || i == 27 || i == 28 ) {
+                        } else if ( i == 5 || i == 6 || i == 26 || i == 27 || i == 28 || current_input_id === "holds_pickup_period" ) {
                             // If the value is not an integer for
                             //     - "Current checkouts allowed"
                             //     - "Current on-site checkouts allowed"
                             //     - "Holds allowed (total)"
                             //     - "Holds allowed (daily)"
                             //     - "Holds per record (count)"
+                            //     - "Holds pickup period (day)"
                             // The value is "Unlimited" (or an equivalent translated string)
                             // an it should be set to an empty string
                             if( !((parseFloat(itm_text) == parseInt(itm_text)) && !isNaN(itm_text)) ) {
