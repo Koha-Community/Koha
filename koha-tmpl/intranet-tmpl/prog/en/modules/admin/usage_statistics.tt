@@ -97,12 +97,12 @@
                             [% PROCESS 'country-list.inc' %]
                             <select name="UsageStatsCountry" id="UsageStatsCountry">
                                 <option value="">&nbsp;</option>
-                                [% FOR country IN countries %]
+                                [% FOREACH country IN country_strings.split(',') %]
                                     [% IF country == UsageStatsCountry %]
-                                        <option value="[% country | html %]" selected="selected">[% country | html %]</option>
+                                        <option value="[% country.trim | html %]" selected="selected">[% country.trim | html %]</option>
                                         [% SET IsUsageStatsCountryValid = 1 %]
                                     [% ELSE %]
-                                        <option value="[% country | html %]">[% country | html %]</option>
+                                        <option value="[% country.trim | html %]">[% country.trim | html %]</option>
                                     [% END %]
                                 [% END %]
                             </select>
