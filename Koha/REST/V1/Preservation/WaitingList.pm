@@ -41,16 +41,16 @@ sub list {
 
     return try {
         my $not_for_loan = C4::Context->preference('PreservationNotForLoanWaitingListIn');
-        Koha::Exceptions::Preservation::MissingSettings->throw( parameter => 'PreservationNotForLoanWaitingListIn' ) unless $not_for_loan;
+        Koha::Exceptions::Preservation::MissingSettings->throw( parameter => 'PreservationNotForLoanWaitingListIn' )
+            unless $not_for_loan;
 
-        my $items_set = Koha::Items->new->search({ notforloan => $not_for_loan });
-        my $items     = $c->objects->search( $items_set );
+        my $items_set = Koha::Items->new->search( { notforloan => $not_for_loan } );
+        my $items     = $c->objects->search($items_set);
         return $c->render(
             status  => 200,
             openapi => $items
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Preservation::MissingSettings') ) {
                 return $c->render(
@@ -74,30 +74,31 @@ sub add_items {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $body = $c->req->json;
+        my $body             = $c->req->json;
         my $new_not_for_loan = C4::Context->preference('PreservationNotForLoanWaitingListIn');
 
-        Koha::Exceptions::Preservation::MissingSettings->throw( parameter => 'PreservationNotForLoanWaitingListIn' ) unless $new_not_for_loan;
+        Koha::Exceptions::Preservation::MissingSettings->throw( parameter => 'PreservationNotForLoanWaitingListIn' )
+            unless $new_not_for_loan;
 
         my @items;
-        for my $item_id ( @$body ) {
+        for my $item_id (@$body) {
             try {
                 while ( my ( $k, $v ) = each %$item_id ) {
 
                     my $key  = $k eq 'item_id' ? 'itemnumber' : 'barcode';
                     my $item = Koha::Items->find( { $key => $v } );
-                    next unless $item; # FIXME Must return a multi-status response 207
+                    next unless $item;    # FIXME Must return a multi-status response 207
                     if ( $item->notforloan != $new_not_for_loan ) {
                         my $already_in_train = Koha::Preservation::Train::Items->search(
                             {
-                                item_id => $item->itemnumber,
+                                item_id             => $item->itemnumber,
                                 'train.received_on' => undef,
                             },
                             {
                                 join => 'train',
                             }
                         )->count;
-                        if ( $already_in_train ) {
+                        if ($already_in_train) {
                             Koha::Exceptions::Preservation::ItemAlreadyInTrain->throw;
                         }
 
@@ -110,8 +111,7 @@ sub add_items {
             };
         }
         return $c->render( status => 201, openapi => \@items );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -138,7 +138,7 @@ sub remove_item {
         }
 
         my $not_for_loan_waiting_list_in = C4::Context->preference('PreservationNotForLoanWaitingListIn');
-        if ($item->notforloan ne $not_for_loan_waiting_list_in) {
+        if ( $item->notforloan ne $not_for_loan_waiting_list_in ) {
             unless ($item) {
                 return $c->render(
                     status  => 404,
@@ -153,8 +153,7 @@ sub remove_item {
             status  => 204,
             openapi => q{}
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

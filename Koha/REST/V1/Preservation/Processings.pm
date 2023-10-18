@@ -23,6 +23,7 @@ use Koha::Preservation::Processings;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny;
+
 =head1 API
 
 =head2 Methods
@@ -36,10 +37,9 @@ sub list {
 
     return try {
         my $processings_set = Koha::Preservation::Processings->new;
-        my $processings = $c->objects->search( $processings_set );
+        my $processings     = $c->objects->search($processings_set);
         return $c->render( status => 200, openapi => $processings );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -68,8 +68,7 @@ sub get {
             status  => 200,
             openapi => $processing
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -94,15 +93,14 @@ sub add {
                 my $processing = Koha::Preservation::Processing->new_from_api($body)->store;
                 $processing->attributes($attributes);
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $processing->processing_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $processing->processing_id );
                 return $c->render(
                     status  => 201,
                     openapi => $processing->to_api
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::Preservation::Processing->new->to_api_mapping;
 
@@ -112,28 +110,17 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
                     openapi => { error => $_->error }
@@ -155,7 +142,7 @@ sub update {
     my $c = shift->openapi->valid_input or return;
 
     my $processing_id = $c->param('processing_id');
-    my $processing = Koha::Preservation::Processings->find( $processing_id );
+    my $processing    = Koha::Preservation::Processings->find($processing_id);
 
     unless ($processing) {
         return $c->render(
@@ -175,40 +162,28 @@ sub update {
                 $processing->set_from_api($body)->store;
                 $processing->attributes($attributes);
 
-
-                $c->res->headers->location($c->req->url->to_string . '/' . $processing->processing_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $processing->processing_id );
                 return $c->render(
                     status  => 200,
                     openapi => $processing->to_api
                 );
             }
         );
-    }
-    catch {
+    } catch {
         my $to_api_mapping = Koha::Preservation::Processing->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
                     openapi => { error => $_->error }
@@ -218,7 +193,7 @@ sub update {
 
         $c->unhandled_exception($_);
     };
-};
+}
 
 =head3 delete
 
@@ -228,7 +203,7 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $processing_id = $c->param('processing_id');
-    my $processing = Koha::Preservation::Processings->find( $processing_id );
+    my $processing    = Koha::Preservation::Processings->find($processing_id);
     unless ($processing) {
         return $c->render(
             status  => 404,
@@ -236,9 +211,9 @@ sub delete {
         );
     }
 
-    unless ($processing->can_be_deleted) {
+    unless ( $processing->can_be_deleted ) {
         return $c->render(
-            status => 409,
+            status  => 409,
             openapi => { error => "Processing is already used" },
         );
     }
@@ -248,8 +223,7 @@ sub delete {
             status  => 204,
             openapi => q{}
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

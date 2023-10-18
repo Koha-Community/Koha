@@ -40,11 +40,15 @@ subtest 'default_processing' => sub {
     my $processing         = $builder->build_object( { class => 'Koha::Preservation::Processings' } );
     my $another_processing = $builder->build_object( { class => 'Koha::Preservation::Processings' } );
 
-    my $train = $builder->build_object( { class => 'Koha::Preservation::Trains', value => { default_processing_id => $processing->processing_id } } );
+    my $train = $builder->build_object(
+        { class => 'Koha::Preservation::Trains', value => { default_processing_id => $processing->processing_id } } );
 
     my $default_processing = $train->default_processing;
-    is( ref($default_processing),           'Koha::Preservation::Processing', '->default_processing returns a Koha::Preservation::Processing object' );
-    is( $default_processing->processing_id, $processing->processing_id,       'correct processing is returned' );
+    is(
+        ref($default_processing), 'Koha::Preservation::Processing',
+        '->default_processing returns a Koha::Preservation::Processing object'
+    );
+    is( $default_processing->processing_id, $processing->processing_id, 'correct processing is returned' );
     $processing->delete;
     $default_processing = $train->get_from_storage->default_processing;
     is( $default_processing, undef, 'deleting the processing does not delete the train' );
@@ -59,7 +63,7 @@ subtest 'add_items & items' => sub {
 
     my $not_for_loan_waiting_list_in = 24;
     my $not_for_loan_train_in        = 42;
-    my $train = $builder->build_object(
+    my $train                        = $builder->build_object(
         {
             class => 'Koha::Preservation::Trains',
             value => {
@@ -74,19 +78,26 @@ subtest 'add_items & items' => sub {
     my $item_2 = $builder->build_sample_item;
     my $item_3 = $builder->build_sample_item;
 
-    $builder->build_object( { class => 'Koha::AuthorisedValues', value => { category => 'NOT_LOAN', authorised_value => $not_for_loan_waiting_list_in } } );
+    $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => { category => 'NOT_LOAN', authorised_value => $not_for_loan_waiting_list_in }
+        }
+    );
     $item_1->notforloan($not_for_loan_waiting_list_in)->store;
     $item_2->notforloan(0)->store;    # item_2 is not in the waiting list
     $item_3->notforloan($not_for_loan_waiting_list_in)->store;
     t::lib::Mocks::mock_preference( 'PreservationNotForLoanWaitingListIn', $not_for_loan_waiting_list_in );
     warning_is {
-        $train->add_items( [ { item_id => $item_1->itemnumber }, { item_id => $item_2->itemnumber }, { barcode => $item_3->barcode } ] );
+        $train->add_items(
+            [ { item_id => $item_1->itemnumber }, { item_id => $item_2->itemnumber }, { barcode => $item_3->barcode } ]
+        );
     }
     'Item not added to train: [Cannot add item to train, it is not in the waiting list]';
     my $items_train = $train->items;
     is( $items_train->count, 2, '2 items added to the train' );
-    my $item_train_1 = $items_train->find( { item_id => $item_1->itemnumber } );
-    my $item_train_3 = $items_train->find( { item_id => $item_3->itemnumber } );
+    my $item_train_1     = $items_train->find( { item_id => $item_1->itemnumber } );
+    my $item_train_3     = $items_train->find( { item_id => $item_3->itemnumber } );
     my $catalogue_item_1 = $item_train_1->catalogue_item;
     is( ref($catalogue_item_1),        'Koha::Item' );
     is( $catalogue_item_1->notforloan, $not_for_loan_train_in );
@@ -101,7 +112,8 @@ subtest 'add_items & items' => sub {
 
     warning_is {
         $train->add_item( { item_id => $item_2->itemnumber }, { skip_waiting_list_check => 1 } );
-    } '';
+    }
+    '';
     is( $train->items->count, 3, 'the item has been added to the train' );
     is( $item_2->get_from_storage->notforloan, $not_for_loan_train_in );
 
@@ -121,12 +133,14 @@ subtest 'add_items & items' => sub {
 
     throws_ok {
         $another_train->add_item( { item_id => $item_1->itemnumber }, { skip_waiting_list_check => 1 } );
-    } 'Koha::Exceptions::Preservation::ItemAlreadyInAnotherTrain';
+    }
+    'Koha::Exceptions::Preservation::ItemAlreadyInAnotherTrain';
 
     my $item_4 = $builder->build_sample_item;
     throws_ok {
         $train->add_item( { item_id => $item_4->itemnumber } );
-    } 'Koha::Exceptions::Preservation::CannotAddItemToClosedTrain';
+    }
+    'Koha::Exceptions::Preservation::CannotAddItemToClosedTrain';
 
     $schema->storage->txn_rollback;
 };

@@ -55,28 +55,27 @@ subtest 'add_item, list, remove_item tests' => sub {
     my $item_3 = $builder->build_sample_item;
 
     t::lib::Mocks::mock_preference( 'PreservationNotForLoanWaitingListIn', undef );
-    $t->get_ok("//$userid:$password@/api/v1/preservation/waiting-list/items")
-      ->status_is(400)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/preservation/waiting-list/items")->status_is(400)->json_is(
         {
             error     => 'MissingSettings',
             parameter => 'PreservationNotForLoanWaitingListIn'
         }
-      );
+    );
 
     my $not_for_loan_waiting_list_in = 24;
-    t::lib::Mocks::mock_preference( 'PreservationNotForLoanWaitingListIn',
-        $not_for_loan_waiting_list_in );
+    t::lib::Mocks::mock_preference(
+        'PreservationNotForLoanWaitingListIn',
+        $not_for_loan_waiting_list_in
+    );
 
-    $t->get_ok("//$userid:$password@/api/v1/preservation/waiting-list/items")
-      ->status_is(200)->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/preservation/waiting-list/items")->status_is(200)->json_is( [] );
 
     # Add items
     $t->post_ok(
-        "//$userid:$password@/api/v1/preservation/waiting-list/items" =>
-          json => [
+        "//$userid:$password@/api/v1/preservation/waiting-list/items" => json => [
             { item_id => $item_1->itemnumber },
             { barcode => $item_3->barcode }
-          ]
+        ]
     )->status_is(201)->json_is(
         [
             { item_id => $item_1->itemnumber },
@@ -89,22 +88,21 @@ subtest 'add_item, list, remove_item tests' => sub {
     is( $item_3->get_from_storage->notforloan, $not_for_loan_waiting_list_in );
 
     $t->post_ok(
-        "//$userid:$password@/api/v1/preservation/waiting-list/items" =>
-          json => [
+        "//$userid:$password@/api/v1/preservation/waiting-list/items" => json => [
             { item_id => $item_2->itemnumber },
             { barcode => $item_3->barcode }
-          ]
+        ]
     )->status_is(201)->json_is( [ { item_id => $item_2->itemnumber } ] );
 
     is( $item_1->get_from_storage->notforloan, $not_for_loan_waiting_list_in );
     is( $item_2->get_from_storage->notforloan, $not_for_loan_waiting_list_in );
     is( $item_3->get_from_storage->notforloan, $not_for_loan_waiting_list_in );
 
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/preservation/waiting-list/items/"
-          . $item_2->itemnumber )->status_is(204);
+    $t->delete_ok( "//$userid:$password@/api/v1/preservation/waiting-list/items/" . $item_2->itemnumber )
+        ->status_is(204);
 
-    is( $item_2->get_from_storage->notforloan, 0,
+    is(
+        $item_2->get_from_storage->notforloan, 0,
         "Item removed from the waiting list has its notforloan status back to 0"
     );
 
@@ -124,10 +122,8 @@ subtest 'add_item, list, remove_item tests' => sub {
 
     # And try to add it to the waiting list
     warning_like {
-        $t->post_ok(
-            "//$userid:$password@/api/v1/preservation/waiting-list/items" =>
-              json => [ { item_id => $item_1->itemnumber } ] )->status_is(201)
-          ->json_is( [] );
+        $t->post_ok( "//$userid:$password@/api/v1/preservation/waiting-list/items" => json =>
+                [ { item_id => $item_1->itemnumber } ] )->status_is(201)->json_is( [] );
     }
     qr[Cannot add item to waiting list, it is already in a non-received train];
 
@@ -147,21 +143,17 @@ subtest 'add_item, list, remove_item tests' => sub {
     $train->received_on(dt_from_string)->store;
 
     $t->post_ok(
-        "//$userid:$password@/api/v1/preservation/waiting-list/items" =>
-          json => [ { item_id => $item_3->itemnumber } ] )->status_is(201)
-      ->json_is( [ { item_id => $item_3->itemnumber } ] );
+        "//$userid:$password@/api/v1/preservation/waiting-list/items" => json => [ { item_id => $item_3->itemnumber } ]
+    )->status_is(201)->json_is( [ { item_id => $item_3->itemnumber } ] );
 
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/preservation/waiting-list/items/"
-          . $item_2->itemnumber )->status_is(204);
+    $t->delete_ok( "//$userid:$password@/api/v1/preservation/waiting-list/items/" . $item_2->itemnumber )
+        ->status_is(204);
 
     $item_2->delete;
-    $t->delete_ok("//$userid:$password@/api/v1/preservation/waiting-list/items")
-      ->status_is(404);
+    $t->delete_ok("//$userid:$password@/api/v1/preservation/waiting-list/items")->status_is(404);
 
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/preservation/waiting-list/items/"
-          . $item_2->itemnumber )->status_is(404);
+    $t->delete_ok( "//$userid:$password@/api/v1/preservation/waiting-list/items/" . $item_2->itemnumber )
+        ->status_is(404);
 
     $schema->storage->txn_rollback;
 };

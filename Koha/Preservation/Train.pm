@@ -46,7 +46,7 @@ Return the default processing object for this train
 =cut
 
 sub default_processing {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $rs = $self->_result->default_processing;
     return unless $rs;
     return Koha::Preservation::Processing->_new_from_dbic($rs);
@@ -77,13 +77,11 @@ sub add_item {
     Koha::Exceptions::Preservation::ItemNotFound->throw unless $item;
 
     Koha::Exceptions::Preservation::ItemNotInWaitingList->throw
-      if !$skip_waiting_list_check && $item->notforloan != $not_for_loan;
+        if !$skip_waiting_list_check && $item->notforloan != $not_for_loan;
 
     my $already_in_train = Koha::Preservation::Train::Items->search(
         { item_id => $train_item->{item_id}, 'train.received_on' => undef },
-        {
-            join => 'train'
-        }
+        { join    => 'train' }
     );
     if ( $already_in_train->count ) {
         my $train_id = $already_in_train->next->train_id;
@@ -93,14 +91,14 @@ sub add_item {
     # FIXME We need a LOCK here
     # Not important for now as we have add_items
     # Note that there are several other places in Koha with this max+1 problem
-    my $max = $self->items->search->_resultset->get_column("user_train_item_id")->max || 0;
+    my $max               = $self->items->search->_resultset->get_column("user_train_item_id")->max || 0;
     my $train_item_object = Koha::Preservation::Train::Item->new(
         {
-            train_id      => $self->train_id,
-            item_id       => $item->itemnumber,
-            processing_id => $train_item->{processing_id} || $self->default_processing_id,
+            train_id           => $self->train_id,
+            item_id            => $item->itemnumber,
+            processing_id      => $train_item->{processing_id} || $self->default_processing_id,
             user_train_item_id => $max + 1,
-            added_on      => \'NOW()',
+            added_on           => \'NOW()',
         }
     )->store;
     $item->notforloan( $self->not_for_loan )->store;
@@ -121,7 +119,7 @@ sub add_items {
     for my $train_item (@$train_items) {
         try {
             my $added_item = $self->add_item($train_item);
-            $added_item->attributes($train_item->{attributes});
+            $added_item->attributes( $train_item->{attributes} );
             push @added_items, $added_item;
         } catch {
 
@@ -142,9 +140,9 @@ Return the items in this train.
 =cut
 
 sub items {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $items_rs = $self->_result->preservation_trains_items;
-    return Koha::Preservation::Train::Items->_new_from_dbic($items_rs)
+    return Koha::Preservation::Train::Items->_new_from_dbic($items_rs);
 }
 
 =head2 Internal methods

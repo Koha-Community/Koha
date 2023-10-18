@@ -45,8 +45,8 @@ Return the processing object for this item
 =cut
 
 sub processing {
-    my ( $self ) = @_;
-    my $rs = $self->_result->processing; # FIXME Should we return train's default processing if there is no specific?
+    my ($self) = @_;
+    my $rs = $self->_result->processing;    # FIXME Should we return train's default processing if there is no specific?
     return Koha::Preservation::Processing->_new_from_dbic($rs);
 }
 
@@ -57,7 +57,7 @@ Return the catalogue item object for this train item
 =cut
 
 sub catalogue_item {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $item_rs = $self->_result->item;
     return Koha::Item->_new_from_dbic($item_rs);
 }
@@ -71,7 +71,7 @@ Getter and setter for the attributes
 sub attributes {
     my ( $self, $attributes ) = @_;
 
-    if ( $attributes ) {
+    if ($attributes) {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {

@@ -39,7 +39,9 @@ Return the configuration options needed for the Preservation Vue app
 
 sub config {
     my $c = shift->openapi->valid_input or return;
+
     my $patron = $c->stash('koha.user');
+
     return $c->render(
         status  => 200,
         openapi => {

@@ -44,22 +44,18 @@ Set or return the attributes for this processing
 sub attributes {
     my ( $self, $attributes ) = @_;
 
-    if ( $attributes ) {
+    if ($attributes) {
         my $schema = $self->_result->result_source->schema;
         $schema->txn_do(
             sub {
                 my @existing_ids = map { $_->{processing_attribute_id} || () } @$attributes;
-                if (@existing_ids || !@$attributes) {
+                if ( @existing_ids || !@$attributes ) {
                     $self->attributes->search(
                         {
                             (
                                 # If no attributes passed we delete all the existing ones
                                 @$attributes
-                                ? (
-                                    processing_attribute_id => {
-                                        -not_in => \@existing_ids
-                                    }
-                                  )
+                                ? ( processing_attribute_id => { -not_in => \@existing_ids } )
                                 : ()
                             )
                         }
@@ -71,7 +67,7 @@ sub attributes {
                     if ($existing_attribute) {
                         $existing_attribute->set($attribute)->store;
                     } else {
-                        $self->_result ->add_to_preservation_processing_attributes( $attribute );
+                        $self->_result->add_to_preservation_processing_attributes($attribute);
                     }
                 }
             }
@@ -92,10 +88,9 @@ Note that we do not enforce that in ->delete, the callers are supposed to deal w
 sub can_be_deleted {
     my ($self) = @_;
 
-    my $trains_using_it = Koha::Preservation::Trains->search(
-        { default_processing_id => $self->processing_id } )->count;
-    my $items_using_it = Koha::Preservation::Train::Items->search(
-        { processing_id => $self->processing_id } )->count;
+    my $trains_using_it =
+        Koha::Preservation::Trains->search( { default_processing_id => $self->processing_id } )->count;
+    my $items_using_it = Koha::Preservation::Train::Items->search( { processing_id => $self->processing_id } )->count;
 
     return ( $trains_using_it || $items_using_it ) ? 0 : 1;
 }

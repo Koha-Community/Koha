@@ -58,9 +58,9 @@ sub full_message {
 
     my $msg = $self->message;
 
-    unless ( $msg ) {
+    unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Preservation::MissingSettings') ) {
-            $msg = sprintf("The following parameter settings is required: %s", $self->parameter );
+            $msg = sprintf( "The following parameter settings is required: %s", $self->parameter );
         }
     }
 

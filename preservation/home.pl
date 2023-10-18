@@ -17,8 +17,8 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Database::Columns;
@@ -39,13 +39,13 @@ $template->param(
         map {
             my $table = $_;
             map { ( $table . '.' . $_ => $columns->{$table}->{$_} ) }
-              keys %{ $columns->{$table} }
+                keys %{ $columns->{$table} }
         } qw( biblio biblioitems items )
     },
     api_mappings => {
-        items => Koha::Item->to_api_mapping,
+        items       => Koha::Item->to_api_mapping,
         biblioitems => Koha::Biblioitem->to_api_mapping,
-        biblio => Koha::Biblio->to_api_mapping,
+        biblio      => Koha::Biblio->to_api_mapping,
     },
 );
 

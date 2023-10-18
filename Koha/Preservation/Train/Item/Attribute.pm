@@ -45,9 +45,9 @@ Return the Koha::Preservation::Processing::Attribute object
 =cut
 
 sub processing_attribute {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $processing_attribute_rs = $self->_result->processing_attribute;
-    return Koha::Preservation::Processing::Attribute->_new_from_dbic($processing_attribute_rs)
+    return Koha::Preservation::Processing::Attribute->_new_from_dbic($processing_attribute_rs);
 }
 
 =head3 strings_map

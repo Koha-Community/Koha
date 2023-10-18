@@ -40,10 +40,9 @@ sub list {
 
     return try {
         my $trains_set = Koha::Preservation::Trains->new;
-        my $trains = $c->objects->search( $trains_set );
+        my $trains     = $c->objects->search($trains_set);
         return $c->render( status => 200, openapi => $trains );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -72,8 +71,7 @@ sub get {
             status  => 200,
             openapi => $train
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -95,15 +93,14 @@ sub add {
 
                 my $train = Koha::Preservation::Train->new_from_api($body)->store;
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $train->train_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $train->train_id );
                 return $c->render(
                     status  => 201,
                     openapi => $train->to_api
                 );
             }
         );
-    }
-    catch {
+    } catch {
 
         my $to_api_mapping = Koha::Preservation::Train->new->to_api_mapping;
 
@@ -113,28 +110,17 @@ sub add {
                     status  => 409,
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
                     openapi => { error => $_->error }
@@ -156,7 +142,7 @@ sub update {
     my $c = shift->openapi->valid_input or return;
 
     my $train_id = $c->param('train_id');
-    my $train = Koha::Preservation::Trains->find( $train_id );
+    my $train    = Koha::Preservation::Trains->find($train_id);
 
     unless ($train) {
         return $c->render(
@@ -173,39 +159,28 @@ sub update {
 
                 $train->set_from_api($body)->store;
 
-                $c->res->headers->location($c->req->url->to_string . '/' . $train->train_id);
+                $c->res->headers->location( $c->req->url->to_string . '/' . $train->train_id );
                 return $c->render(
                     status  => 200,
                     openapi => $train->to_api
                 );
             }
         );
-    }
-    catch {
+    } catch {
         my $to_api_mapping = Koha::Preservation::Train->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->broken_fk }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
                 return $c->render(
                     status  => 400,
-                    openapi => {
-                            error => "Given "
-                            . $to_api_mapping->{ $_->parameter }
-                            . " does not exist"
-                    }
+                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
                 );
-            }
-            elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
+            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
                     openapi => { error => $_->error }
@@ -215,7 +190,7 @@ sub update {
 
         $c->unhandled_exception($_);
     };
-};
+}
 
 =head3 delete
 
@@ -240,8 +215,7 @@ sub delete {
             status  => 204,
             openapi => q{}
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -256,7 +230,7 @@ sub get_item {
     my $c = shift->openapi->valid_input or return;
 
     my $train_id = $c->param('train_id');
-    my $train = Koha::Preservation::Trains->find( $train_id );
+    my $train    = Koha::Preservation::Trains->find($train_id);
 
     unless ($train) {
         return $c->render(
@@ -267,7 +241,10 @@ sub get_item {
 
     my $train_item_id = $c->param('train_item_id');
 
-    my $train_item = $c->objects->find(Koha::Preservation::Train::Items->search, { train_item_id => $train_item_id, train_id => $train_id });
+    my $train_item = $c->objects->find(
+        Koha::Preservation::Train::Items->search,
+        { train_item_id => $train_item_id, train_id => $train_id }
+    );
 
     unless ($train_item) {
         return $c->render(
@@ -282,8 +259,7 @@ sub get_item {
                 return $c->render( status => 200, openapi => $train_item );
             }
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -298,7 +274,7 @@ sub add_items {
     my $c = shift->openapi->valid_input or return;
 
     my $train_id = $c->param('train_id');
-    my $train = Koha::Preservation::Trains->find( $train_id );
+    my $train    = Koha::Preservation::Trains->find($train_id);
 
     unless ($train) {
         return $c->render(
@@ -315,8 +291,7 @@ sub add_items {
                 return $c->render( status => 201, openapi => $train_items );
             }
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Preservation::MissingSettings') ) {
                 return $c->render(
@@ -340,7 +315,7 @@ sub add_item {
     my $c = shift->openapi->valid_input or return;
 
     my $train_id = $c->param('train_id');
-    my $train = Koha::Preservation::Trains->find( $train_id );
+    my $train    = Koha::Preservation::Trains->find($train_id);
 
     unless ($train) {
         return $c->render(
@@ -357,10 +332,9 @@ sub add_item {
                 my $train_item = $train->add_item($body);
                 $train_item->attributes($attributes);
                 return $c->render( status => 201, openapi => $train_item );
-              }
+            }
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Preservation::MissingSettings') ) {
                 return $c->render(
@@ -409,7 +383,7 @@ sub copy_item {
     my $c = shift->openapi->valid_input or return;
 
     my $train_id = $c->param('train_id');
-    my $train = Koha::Preservation::Trains->find( $train_id );
+    my $train    = Koha::Preservation::Trains->find($train_id);
 
     unless ($train) {
         return $c->render(
@@ -420,7 +394,8 @@ sub copy_item {
 
     my $train_item_id = $c->param('train_item_id');
 
-    my $train_item = Koha::Preservation::Train::Items->search({ train_item_id => $train_item_id, train_id => $train_id })->single;
+    my $train_item =
+        Koha::Preservation::Train::Items->search( { train_item_id => $train_item_id, train_id => $train_id } )->single;
 
     unless ($train_item) {
         return $c->render(
@@ -434,7 +409,7 @@ sub copy_item {
         Koha::Database->new->schema->txn_do(
             sub {
                 my $new_train_id = delete $body->{train_id};
-                my $new_train = Koha::Preservation::Trains->find( $new_train_id );
+                my $new_train    = Koha::Preservation::Trains->find($new_train_id);
                 unless ($train) {
                     return $c->render(
                         status  => 404,
@@ -454,17 +429,16 @@ sub copy_item {
                     map {
                         {
                             processing_attribute_id => $_->processing_attribute_id,
-                            train_item_id => $new_train_item->train_item_id,
-                            value         => $_->value
+                            train_item_id           => $new_train_item->train_item_id,
+                            value                   => $_->value
                         }
                     } $train_item->attributes->as_list
-                  ];
+                ];
                 $new_train_item->attributes($attributes);
                 return $c->render( status => 201, openapi => $train_item );
-              }
+            }
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Preservation::MissingSettings') ) {
                 return $c->render(
@@ -513,7 +487,7 @@ sub update_item {
     my $c = shift->openapi->valid_input or return;
 
     my $train_id = $c->param('train_id');
-    my $train = Koha::Preservation::Trains->find( $train_id );
+    my $train    = Koha::Preservation::Trains->find($train_id);
 
     unless ($train) {
         return $c->render(
@@ -524,7 +498,8 @@ sub update_item {
 
     my $train_item_id = $c->param('train_item_id');
 
-    my $train_item = Koha::Preservation::Train::Items->search({ train_item_id => $train_item_id, train_id => $train_id })->single;
+    my $train_item =
+        Koha::Preservation::Train::Items->search( { train_item_id => $train_item_id, train_id => $train_id } )->single;
 
     unless ($train_item) {
         return $c->render(
@@ -542,14 +517,12 @@ sub update_item {
                 $train_item->set_from_api($body)->store;
                 $train_item->attributes($attributes);
                 return $c->render( status => 200, openapi => $train_item );
-              }
+            }
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
-
 
 =head3 remove_item
 
@@ -561,7 +534,7 @@ sub remove_item {
     my $c = shift->openapi->valid_input or return;
 
     my $train_id = $c->param('train_id');
-    my $train = Koha::Preservation::Trains->find( $train_id );
+    my $train    = Koha::Preservation::Trains->find($train_id);
 
     unless ($train) {
         return $c->render(
@@ -588,8 +561,7 @@ sub remove_item {
             status  => 204,
             openapi => q{}
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
