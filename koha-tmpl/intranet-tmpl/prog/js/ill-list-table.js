@@ -218,11 +218,11 @@ $(document).ready(function() {
                 "data": "batch.name", // batch
                 "orderable": false,
                 "render": function(data, type, row, meta) {
-                    return row.batch ?
+                    return row.ill_batch ?
                         '<a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=' +
-                        row.ill_batch_id +
+                        row.ill_batch.ill_batch_id +
                         '">' +
-                        row.batch.name +
+                        row.ill_batch.name +
                         '</a>'
                         : "";
                 }
