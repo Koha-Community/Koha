@@ -283,27 +283,35 @@
 
             <xsl:for-each select="marc:subfield">
                 <xsl:if test="@code='a'">
-                    <xsl:value-of select="current()"/>
+                    <span class="rda264_place" property="location">
+                        <xsl:value-of select="current()"/>
+                    </span>
                 </xsl:if>
                     <xsl:if test="@code='b'">
-                        <xsl:choose>
-                            <xsl:when test="$url='1'">
-                                     <a>
-                                     <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Provider:<xsl:value-of select="str:encode-uri(current(), true())"/></xsl:attribute>
-                                     <xsl:value-of select="current()"/>
-                                     </a>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                    <xsl:value-of select="current()"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                         <span property="rda264_name" typeof="Organization">
+                             <span property="name" class="rda264_name">
+                                <xsl:choose>
+                                    <xsl:when test="$url='1'">
+                                             <a>
+                                             <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Provider:<xsl:value-of select="str:encode-uri(current(), true())"/></xsl:attribute>
+                                             <xsl:value-of select="current()"/>
+                                             </a>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                            <xsl:value-of select="current()"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                             </span>
+                         </span>
                     </xsl:if>
                 <xsl:if test="@code='c'">
-                    <xsl:call-template name="chopPunctuation">
-                        <xsl:with-param name="chopString">
-                            <xsl:value-of select="current()"/>
-                        </xsl:with-param>
-                    </xsl:call-template>
+                    <span property="date" class="rda264_date">
+                        <xsl:call-template name="chopPunctuation">
+                            <xsl:with-param name="chopString">
+                                <xsl:value-of select="current()"/>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </span>
                 </xsl:if>
                 <xsl:if test="position() != last()">
                     <xsl:text> </xsl:text>
