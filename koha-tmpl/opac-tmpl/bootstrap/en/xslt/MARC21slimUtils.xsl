@@ -285,23 +285,23 @@
                         <xsl:value-of select="current()"/>
                     </span>
                 </xsl:if>
-                    <xsl:if test="@code='b'">
-                         <span property="rda264_name" typeof="Organization">
-                             <span property="name" class="rda264_name">
-                                <xsl:choose>
-                                    <xsl:when test="$url='1'">
-                                             <a>
-                                             <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Provider:<xsl:value-of select="str:encode-uri(current(), true())"/></xsl:attribute>
-                                             <xsl:value-of select="current()"/>
-                                             </a>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                            <xsl:value-of select="current()"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                             </span>
+                <xsl:if test="@code='b'">
+                     <span property="rda264_name" typeof="Organization">
+                         <span property="name" class="rda264_name">
+                            <xsl:choose>
+                                <xsl:when test="$url='1'">
+                                         <a>
+                                         <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Provider:<xsl:value-of select="str:encode-uri(current(), true())"/></xsl:attribute>
+                                         <xsl:value-of select="current()"/>
+                                         </a>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                        <xsl:value-of select="current()"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                          </span>
-                    </xsl:if>
+                     </span>
+                </xsl:if>
                 <xsl:if test="@code='c'">
                     <span property="date" class="rda264_date">
                         <xsl:call-template name="chopPunctuation">
