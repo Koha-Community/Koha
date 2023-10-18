@@ -1818,6 +1818,21 @@ tables:
             - "Thank you!"
 
         - module: reserves
+          code: HOLDDGST
+          branchcode: ""
+          name: "Hold(s) available for pickup"
+          is_html: 0
+          title: "Hold(s) available for pickup"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "You have one or more holds available for pickup:"
+            - ""
+            - "----"
+            - "Title: [% hold.biblio.title %]"
+            - "----"
+
+        - module: reserves
           code: HOLD
           branchcode: ""
           name: "Hold available for pickup"
