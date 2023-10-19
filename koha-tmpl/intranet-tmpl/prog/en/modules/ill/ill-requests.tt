@@ -555,7 +555,7 @@
                         </div>
                     [% END %]
 
-                    <h1>Manage ILL request</h1>
+                    <h1>Manage ILL request [% request.id_prefix _ request.illrequest_id | html %]</h1>
                     <div id="request-toolbar" class="btn-toolbar">
                         <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?op=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
                         <i class="fa-solid fa-pencil" aria-hidden="true"></i>
@@ -709,10 +709,6 @@
                                 <li class="price_paid">
                                     <span class="label price_paid">Price paid:</span>
                                     [% IF request.price_paid %][% request.price_paid | $Price %][% ELSE %]<span>N/A</span>[% END %]
-                                </li>
-                                <li class="req_id">
-                                    <span class="label req_id">Request number:</span>
-                                    [% request.id_prefix _ request.illrequest_id | html %]
                                 </li>
                                 <li class="notesstaff">
                                     <span class="label notes_staff">Staff notes:</span>
