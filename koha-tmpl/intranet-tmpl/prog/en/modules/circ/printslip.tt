@@ -39,7 +39,8 @@
     [% SET slips = [{content => slip, is_html => !plain, style => style }] %]
 [% END %]
 [% FOR slip IN slips %]
-[% IF slip.style %]<style>[% slip.style | $raw %]</style>[% END %]
+[% IF slip.style %]<style>[% slip.style.replace('[^{]+{', '#slip_' _ slip.id _ ' {') | $raw %]</style>[% END %]
+<div id="slip_[% slip.id | html %]">
 [% UNLESS slip.is_html %]
 <pre>
 [% IF ( slip.content ) %][% slip.content | html %][% ELSE %]No slip template found[% END %]
@@ -47,6 +48,7 @@
 [% ELSE %]
 [% IF ( slip.content ) %][% slip.content | $raw %][% ELSE %]No slip template found[% END %]
 [% END %]
+</div>
 [% IF slips.size > 1 && !loop.last%]<div class="pagebreak"></div>[% END %]
 [% END %]
 
