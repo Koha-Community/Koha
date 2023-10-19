@@ -62,8 +62,8 @@
                         <label id="renew_as_unseen_label" for="override_limit">Renew as &quot;unseen&quot; if appropriate:</label>
                         <input type="checkbox" name="renew_as_unseen" id="renew_as_unseen_checkbox" value="1" />
                     [% END %]
-                    <button class="btn btn-default" id="RenewChecked" disabled="disabled"><i class="fa fa-check"></i> Renew selected items</button>
-                    <button class="btn btn-default" id="CheckinChecked" disabled="disabled"><i class="fa fa-check"></i> Check in selected items</button>
+                    <button class="btn btn-default" id="CheckinChecked" disabled="disabled"><i class="fa fa-download"></i> Check in selected items</button>
+                    <button class="btn btn-default" id="RenewChecked" disabled="disabled"><i class="fa fa-retweet"></i> Renew selected items</button>
                     <button class="btn btn-default" id="RenewAll"><i class="fa fa-book"></i> Renew all</button>
                 [% END %]
             </fieldset>
