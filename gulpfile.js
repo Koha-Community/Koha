@@ -133,7 +133,29 @@ const poTasks = {
     },
 };
 
-const poTypes = Object.keys(poTasks);
+function getPoTasks () {
+    let tasks = [];
+
+    let all_tasks = Object.keys(poTasks);
+
+    if (args.task) {
+        tasks = [args.task].flat(Infinity);
+    } else {
+        return all_tasks;
+    }
+
+    let invalid_tasks = tasks.filter( function( el ) {
+        return all_tasks.indexOf( el ) < 0;
+    });
+
+    if ( invalid_tasks.length ) {
+        console.error("Invalid task");
+        return [];
+    }
+
+    return tasks;
+}
+const poTypes = getPoTasks();
 
 function po_extract_marc (type) {
     return src(`koha-tmpl/*-tmpl/*/en/**/*${type}*`, { read: false, nocase: true })
@@ -377,11 +399,11 @@ function getLanguages () {
         return [args.lang];
     }
 
-    const filenames = fs.readdirSync('misc/translator/po')
-        .filter(filename => filename.endsWith('.po'))
+    const filenames = fs.readdirSync('misc/translator/po/')
+        .filter(filename => filename.endsWith('-installer.po'))
         .filter(filename => !filename.startsWith('.'))
 
-    const re = new RegExp('-(' + poTypes.join('|') + ')\.po$');
+    const re = new RegExp('-installer.po');
     languages = filenames.map(filename => filename.replace(re, ''))
 
     return Array.from(new Set(languages));
