@@ -129,22 +129,6 @@ sub store {
     return $self;
 }
 
-=head3 insert
-
-    Koha::Statistic->insert( $params );
-
-    This is a shorthand for ->new($params)->store.
-    It is the new equivalent for the legacy C4::Stats::UpdateStats call.
-
-=cut
-
-sub insert {
-    my ( $class, $params ) = @_;
-    my $statistic = $class->new($params) or return;
-    $statistic->store;
-    return $statistic;
-}
-
 =head3 item
 
     my $item = $statistic->item;

@@ -52,7 +52,7 @@ subtest 'Basic Koha object tests' => sub {
     my $item    = $builder->build_sample_item;
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    Koha::Statistic->insert(
+    Koha::Statistic->new(
         {
             type           => 'issue',
             branch         => $library->branchcode,
@@ -63,7 +63,7 @@ subtest 'Basic Koha object tests' => sub {
             ccode          => $item->ccode,
             interface      => C4::Context->interface,
         }
-    );
+    )->store;
 
     my $stat = Koha::Statistics->search( { itemnumber => $item->itemnumber } )->next;
     is( $stat->borrowernumber,   $patron->borrowernumber, 'Patron is there' );
@@ -107,7 +107,7 @@ subtest 'Test exceptions in ->new' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Test ->insert (fka UpdateStats)' => sub {
+subtest 'Test new->store (fka UpdateStats)' => sub {
     plan tests => 15;
     $schema->storage->txn_begin;
 
@@ -154,7 +154,7 @@ subtest 'Test ->insert (fka UpdateStats)' => sub {
 
 sub insert_and_fetch {
     my $params    = shift;
-    my $statistic = Koha::Statistic->insert($params);
+    my $statistic = Koha::Statistic->new($params)->store;
     return Koha::Statistics->search( { borrowernumber => $test_params->{borrowernumber} } )->last;
 
     # FIXME discard_changes would be nicer, but we dont have a PK (yet)

@@ -231,16 +231,18 @@ sub store {
 
 sub _add_statistic {
     my ( $self, $type ) = @_;
-    C4::Stats::UpdateStats({
-        type           => $type,
-        branch         => C4::Context->userenv ? C4::Context->userenv->{branch} : undef,
-        borrowernumber => undef,
-        categorycode   => undef,
-        itemnumber     => $self->itemnumber,
-        ccode          => $self->ccode,
-        itemtype       => $self->effective_itemtype,
-        location       => $self->location,
-    });
+    C4::Stats::UpdateStats(
+        {
+            borrowernumber => undef,
+            branch         => C4::Context->userenv ? C4::Context->userenv->{branch} : undef,
+            categorycode   => undef,
+            ccode          => $self->ccode,
+            itemnumber     => $self->itemnumber,
+            itemtype       => $self->effective_itemtype,
+            location       => $self->location,
+            type           => $type,
+        }
+    );
 }
 
 =head3 delete

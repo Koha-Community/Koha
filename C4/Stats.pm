@@ -48,14 +48,14 @@ The functions of this module deals with statistics table of Koha database.
 
     C4::Stats::UpdateStats($params);
 
-    This is a (legacy) alias for Koha::Statistic->insert($params).
+    This is a (legacy) alias for Koha::Statistic->new($params)->store.
     Please see Koha::Statistic module.
 
 =cut
 
 sub UpdateStats {
     my $params = shift;
-    Koha::Statistic->insert($params);
+    Koha::Statistic->new($params)->store;
 }
 
 1;
