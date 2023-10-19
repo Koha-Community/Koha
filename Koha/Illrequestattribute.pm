@@ -29,6 +29,35 @@ Koha::Illrequestattribute - Koha Illrequestattribute Object class
 
 =head1 API
 
+=head2 Class methods
+
+=head3 store
+
+Overloaded store method to ensure we have backend filled if not already passed
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    if ( !$self->backend ) {
+        $self->backend( $self->request->backend );
+    }
+
+    return $self->SUPER::store;
+}
+
+=head3 request
+
+Returns a Koha::Illrequest object representing the core request.
+
+=cut
+
+sub request {
+    my ($self) = @_;
+    return Koha::Illrequest->_new_from_dbic( $self->_result->illrequest );
+}
+
 =head2 Internal methods
 
 =head3 _type
