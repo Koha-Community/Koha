@@ -192,6 +192,20 @@ the ability to act as a pickup location
 
 whether this library should show in the opac
 
+=head2 opacuserjs
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+branch specific javascript for the OPAC
+
+=head2 opacusercss
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+branch specific css for the OPAC
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -241,6 +255,10 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "public",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "opacuserjs",
+  { data_type => "longtext", is_nullable => 1 },
+  "opacusercss",
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -933,8 +951,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-10 14:16:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LjdauIP6C1I1/1liCIddJQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-19 18:12:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZN7YtRwqkiYZYU1U+Yi+SA
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },
