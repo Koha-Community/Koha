@@ -39,28 +39,11 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                 "x-koha-embed": "library"
             },
             data: function(params) {
-                let search_term = (params.term === undefined) ? '' : params.term;
+                let q = buildPatronSearchQuery(params.term);
                 let query = {
-                    'q': JSON.stringify({
-                        "-or": [{
-                                "firstname": {
-                                    "-like": search_term + '%'
-                                }
-                            },
-                            {
-                                "surname": {
-                                    "-like": search_term + '%'
-                                }
-                            },
-                            {
-                                "cardnumber": {
-                                    "-like": search_term + '%'
-                                }
-                            }
-                        ]
-                    }),
-                    '_order_by': '+me.surname,+me.firstname',
+                    'q': JSON.stringify(q),
                     '_page': params.page,
+                    '_order_by': '+me.surname,+me.firstname',
                 };
                 return query;
             },
@@ -92,15 +75,22 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                             ? escape_str(patron.firstname) + " "
                             : "") +
                         (patron.cardnumber
-                            ? " (" + escape_str(patron.cardnumber) + ") "
+                            ? " (" + escape_str(patron.cardnumber) + ")"
                             : "") +
+                        "<small>" +
                         (patron.date_of_birth
-                            ? '<small><span class="age_years">' +
+                            ? ' <span class="age_years">' +
                               $get_age(patron.date_of_birth) +
                               " " +
                               __("years") +
-                              "</span></small>"
-                            : "")
+                              "</span>"
+                            : "") +
+                        (patron.library ?
+                                " <span class=\"ac-library\">" +
+                                escape_str(patron.library.name) +
+                                "</span>"
+                            : "") +
+                        "</small>"
                 )
                 .addClass(loggedInClass);
             return $patron;
