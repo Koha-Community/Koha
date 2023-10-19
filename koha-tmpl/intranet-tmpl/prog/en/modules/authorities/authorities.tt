@@ -129,6 +129,10 @@
     });
 
     function selectTab( tablink ){
+        /* return if no tabs displayed (BIG_LOOP.size <= 1) */
+        if ($(".toolbar-tabs-container .nav-tabs li").length === 0){
+            return;
+        }
         let a = $("a[href='" + tablink + "']");
         $(".toolbar-tabs-container .nav-tabs li").removeClass("selected");
         a.tab("show").parent().addClass("selected");
