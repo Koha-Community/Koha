@@ -241,30 +241,46 @@ if ( $backends_available ) {
                 batches        => $batches
             );
         } else {
-            # Commit:
-            # Save the changes
-            $request->borrowernumber($params->{borrowernumber});
-            $request->biblio_id($params->{biblio_id});
-            $request->batch_id($params->{batch_id});
-            $request->branchcode($params->{branchcode});
-            $request->price_paid($params->{price_paid});
-            $request->notesopac($params->{notesopac});
-            $request->notesstaff($params->{notesstaff});
-            my $alias = (length $params->{status_alias} > 0) ?
-                $params->{status_alias} :
-                "-1";
-            $request->status_alias($alias);
-            $request->store;
-            my $backend_result = {
-                error   => 0,
-                status  => '',
-                message => '',
-                op  => 'edit_action',
-                stage   => 'commit',
-                next    => 'illlist',
-                value   => {}
-            };
-            handle_commit_maybe($backend_result, $request);
+            my $valid_patron = Koha::Patrons->find( $params->{borrowernumber} );
+            my $valid_biblio = Koha::Biblios->find( $params->{biblio_id} );
+
+            if ( $params->{borrowernumber} && !$valid_patron || $params->{biblio_id} && !$valid_biblio ){
+                my $error_result = {
+                    error  => 1,
+                    status => $params->{borrowernumber} && !$valid_patron ? 'invalid_patron' : 'invalid_biblio',
+                    op     => 'edit_action',
+                    stage  => 'init',
+                    next   => 'illview',
+                };
+                $template->param(
+                    whole   => $error_result,
+                    request => $request,
+                );
+            }else{
+                $request->borrowernumber( $params->{borrowernumber} );
+                $request->biblio_id( $params->{biblio_id} );
+                $request->batch_id( $params->{batch_id} );
+                $request->branchcode( $params->{branchcode} );
+                $request->price_paid( $params->{price_paid} );
+                $request->notesopac( $params->{notesopac} );
+                $request->notesstaff( $params->{notesstaff} );
+                my $alias =
+                    ( length $params->{status_alias} > 0 )
+                    ? $params->{status_alias}
+                    : "-1";
+                $request->status_alias($alias);
+                $request->store;
+                my $backend_result = {
+                    error   => 0,
+                    status  => '',
+                    message => '',
+                    op      => 'edit_action',
+                    stage   => 'commit',
+                    next    => 'illlist',
+                    value   => {}
+                };
+                handle_commit_maybe( $backend_result, $request );
+            }
         }
 
     } elsif ( $op eq 'moderate_action' ) {

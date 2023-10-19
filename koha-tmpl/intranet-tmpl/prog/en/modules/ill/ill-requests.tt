@@ -136,7 +136,14 @@
                     <!-- Dispatch on Status -->
                     <p>We encountered an error:</p>
                     <p>
-                      <pre>[% whole.message | html %] ([% whole.status | html %])</pre>
+                    [% SWITCH whole.status %]
+                    [%   CASE 'invalid_patron' %]
+                        <pre>The patron ID you entered is invalid.</pre>
+                    [%   CASE 'invalid_biblio' %]
+                        <pre>The bibliographic record ID you entered is invalid.</pre>
+                    [%   CASE %]
+                        <pre>[% whole.message | html %] ([% whole.status | html %])</pre>
+                    [% END %]
                     </p>
                 [% END %]
 
