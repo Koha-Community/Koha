@@ -34,7 +34,7 @@ return {
 
         if ( !column_exists( 'deleteditems', 'bookable' ) ) {
             $dbh->do(q{
-                ALTER TABLE items ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
+                ALTER TABLE deleteditems ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
             });
         }
     },
