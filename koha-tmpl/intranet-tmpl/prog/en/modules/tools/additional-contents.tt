@@ -524,7 +524,7 @@
             [% END %]
         [% END %]
     [% ELSE %]
-        [% SET opac_available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo',  ] %]
+        [% SET opac_available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo', 'CatalogConcernHelp', 'CatalogConcernTemplate', 'CookieConsentBar', 'CookieConsentPopup' ] %]
         <optgroup label="OPAC">
             [% FOREACH l IN opac_available_options.sort %]
                 [% IF l == location %]
@@ -534,7 +534,7 @@
                 [% END %]
             [% END %]
         </optgroup>
-        [% SET staff_available_options = [ 'CatalogConcernHelp', 'CatalogConcernTemplate', 'CookieConsentBar', 'CookieConsentPopup', 'StaffAcquisitionsHome', 'StaffAuthoritiesHome', 'StaffCataloguingHome', 'StaffListsHome', 'StaffPatronsHome', 'StaffPOSHome', 'StaffSerialsHome' ] %]
+        [% SET staff_available_options = [ 'StaffAcquisitionsHome', 'StaffAuthoritiesHome', 'StaffCataloguingHome', 'StaffListsHome', 'StaffPatronsHome', 'StaffPOSHome', 'StaffSerialsHome' ] %]
         <optgroup label="Staff">
             [% FOREACH l IN staff_available_options.sort %]
                 [% IF l == location %]

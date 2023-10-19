@@ -65,3 +65,31 @@
 <div id="OpacSuggestionInstructions_notes" class="hint customization_note">
     Show this content at the top of the purchase suggestion form in the OPAC.
 </div>
+
+<div id="StaffAcquisitionsHome_notes" class="hint customization_note">
+    Show this content on the acquisitions home page in the staff interface.
+</div>
+
+<div id="StaffAuthoritiesHome_notes" class="hint customization_note">
+    Show this content on the authorities home page in the staff interface.
+</div>
+
+<div id="StaffCataloguingHome_notes" class="hint customization_note">
+    Show this content on the cataloging home page in the staff interface.
+</div>
+
+<div id="StaffListsHome_notes" class="hint customization_note">
+    Show this content on the lists home page in the staff interface.
+</div>
+
+<div id="StaffPatronsHome_notes" class="hint customization_note">
+    Show this content on the patrons home page in the staff interface.
+</div>
+
+<div id="StaffPOSHome_notes" class="hint customization_note">
+    Show this content on the point of sale home page in the staff interface.
+</div>
+
+<div id="StaffSerialsHome_notes" class="hint customization_note">
+    Show this content on the serials home page in the staff interface.
+</div>
