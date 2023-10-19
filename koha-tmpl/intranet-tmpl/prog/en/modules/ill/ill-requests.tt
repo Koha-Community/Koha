@@ -640,10 +640,12 @@
                         <h4>Details from library</h4>
                         <div class="rows">
                             <ol>
-                                <li class="orderid">
-                                    <span class="label orderid">Order ID:</span>
-                                    [% IF request.orderid %][% request.orderid | html %][% ELSE %]<span>N/A</span>[% END %]
-                                </li>
+                                [% IF request.orderid %]
+                                    <li class="orderid">
+                                        <span class="label orderid">Order ID:</span>
+                                        [% request.orderid | html %]
+                                    </li>
+                                [% END %]
                                 <li class="borrowernumber">
                                     <span class="label borrowernumber">Patron:</span>
                                     [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
@@ -651,15 +653,12 @@
                                     [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
                                     </a>
                                 </li>
-
-                                <li class="biblio_id">
-                                    <span class="label biblio_id">Bibliographic record ID:</span>
-                                    [% IF request.biblio_id %]
+                                [% IF request.biblio_id %]
+                                    <li class="biblio_id">
+                                        <span class="label biblio_id">Bibliographic record ID:</span>
                                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% request.biblio_id | uri %]">[% request.biblio_id | html %]</a>
-                                    [% ELSE %]
-                                        <span>N/A</span>
-                                    [% END %]
-                                </li>
+                                    </li>
+                                [% END %]
                                 <li class="branchcode">
                                     <span class="label branchcode">Library:</span>
                                     [% Branches.GetName(request.branchcode) | html %]
@@ -676,58 +675,74 @@
                                     [% END %]
                                 </li>
                                 [% IF request.ill_batch > 0 %]
-                                <li class="batch">
-                                    <span class="label batch">Batch:</span>
-                                    <a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=[% request.ill_batch.ill_batch_id | uri %]">
-                                    [% request.ill_batch.name | html %]
-                                    </a>
-                                </li>
+                                    <li class="batch">
+                                        <span class="label batch">Batch:</span>
+                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?batch_id=[% request.ill_batch.ill_batch_id | uri %]">
+                                        [% request.ill_batch.name | html %]
+                                        </a>
+                                    </li>
                                 [% END %]
                                 <li class="updated">
                                     <span class="label updated">Last updated:</span>
                                     [% request.updated | $KohaDates  with_hours => 1 %]
                                 </li>
-                                <li class="medium">
-                                    <span class="label medium">Request type:</span>
-                                    [% type = request.get_type %]
-                                    [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
-                                </li>
-                                <li class="type_disclaimer_value">
-                                    <span class="label type_disclaimer_value">Type disclaimer value:</span>
-                                    [% type_disclaimer_value = request.get_type_disclaimer_value %]
-                                    [% IF type_disclaimer_value %][% type_disclaimer_value | html %][% ELSE %]<span>N/A</span>[% END %]
-                                </li>
-                                <li class="type_disclaimer_date">
-                                    <span class="label type_disclaimer_date">Type disclaimer date:</span>
-                                    [% type_disclaimer_date = request.get_type_disclaimer_date %]
-                                    [% IF type_disclaimer_date %][% type_disclaimer_date | $KohaDates  with_hours => 1 %][% ELSE %]<span>N/A</span>[% END %]
-                                </li>
-                                <li class="cost">
-                                    <span class="label cost">Cost:</span>
-                                    [% IF request.cost %][% request.cost | $Price %][% ELSE %]<span>N/A</span>[% END %]
-                                </li>
-                                <li class="price_paid">
-                                    <span class="label price_paid">Price paid:</span>
-                                    [% IF request.price_paid %][% request.price_paid | $Price %][% ELSE %]<span>N/A</span>[% END %]
-                                </li>
-                                <li class="notesstaff">
-                                    <span class="label notes_staff">Staff notes:</span>
-                                    <p>[% request.notesstaff | html %]</p>
-                                </li>
-                                <li class="notesopac">
-                                    <span class="label notes_opac">Notes:</span>
-                                    <p>[% request.notesopac | html %]</p>
-                                </li>
+                                [% type = request.get_type %]
+                                [% IF type %]
+                                    <li class="medium">
+                                        <span class="label medium">Request type:</span>
+                                        [% type | html %]
+                                    </li>
+                                [% END %]
+                                [% type_disclaimer_value = request.get_type_disclaimer_value %]
+                                [% IF type_disclaimer_value %]
+                                    <li class="type_disclaimer_value">
+                                        <span class="label type_disclaimer_value">Type disclaimer value:</span>
+                                        [% type_disclaimer_value | html %]
+                                    </li>
+                                [% END %]
+                                [% type_disclaimer_date = request.get_type_disclaimer_date %]
+                                [% IF type_disclaimer_date %]
+                                    <li class="type_disclaimer_date">
+                                        <span class="label type_disclaimer_date">Type disclaimer date:</span>
+                                        [% type_disclaimer_date | $KohaDates with_hours => 1 %]
+                                    </li>
+                                [% END %]
+                                [% IF request.cost %]
+                                    <li class="cost">
+                                        <span class="label cost">Cost:</span>
+                                        [% request.cost | $Price %]
+                                    </li>
+                                [% END %]
+                                [% IF request.price_paid %]
+                                    <li class="price_paid">
+                                        <span class="label price_paid">Price paid:</span>
+                                        [% request.price_paid | $Price %]
+                                    </li>
+                                [% END %]
+                                [% IF request.notesstaff %]
+                                    <li class="notesstaff">
+                                        <span class="label notes_staff">Staff notes:</span>
+                                        <p>[% request.notesstaff | html %]</p>
+                                    </li>
+                                [% END %]
+                                [% IF request.notesopac %]
+                                    <li class="notesopac">
+                                        <span class="label notes_opac">Notes:</span>
+                                        <p>[% request.notesopac | html %]</p>
+                                    </li>
+                                [% END %]
                             </ol>
                         </div>
                         <div class="rows">
                             <h4>Details from supplier ([% request.backend | html %])</h4>
                             <ol>
                                 [% FOREACH meta IN request.metadata %]
+                                    [% IF meta.value %]
                                     <li class="requestmeta-[% meta.key.replace('\s','_') | html %]">
                                         <span class="label">[% meta.key.replace('_',' ') | html %]:</span>
                                         [% meta.value | html %]
                                     </li>
+                                    [% END %]
                                 [% END %]
                             </ol>
                         </div>
