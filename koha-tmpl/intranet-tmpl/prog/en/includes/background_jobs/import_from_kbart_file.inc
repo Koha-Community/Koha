@@ -12,7 +12,7 @@
                     </tr>
                     <tr>
                         <td>Total lines processed</td>
-                        <td>[% report.total_lines | html %]</td>
+                        <td>[% report.total_rows | html %]</td>
                     </tr>
                     <tr>
                         <td>Titles imported</td>

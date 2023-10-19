@@ -119,7 +119,9 @@
                     <li v-if="title.title_url">
                         <label>{{ $__("Title-level URL") }}:</label>
                         <span>
-                            {{ title.title_url }}
+                            <a :href="title.title_url" target="_blank">{{
+                                title.title_url
+                            }}</a>
                         </span>
                     </li>
                     <li v-if="title.first_author">

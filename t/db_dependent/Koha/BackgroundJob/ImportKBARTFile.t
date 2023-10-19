@@ -45,16 +45,16 @@ subtest 'enqueue' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'calculate_chunked_file_size' => sub {
+subtest 'calculate_chunked_params_size' => sub {
 
     plan tests => 2;
 
     my $max_number_of_lines =
-        Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_file_size( 500000, 100000, 50000 );
-    is( $max_number_of_lines, 9000, 'Number of lines calculated correctly' );
+        Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_params_size( 500000, 100000, 50000 );
+    is( $max_number_of_lines, 7500, 'Number of lines calculated correctly' );
     my $max_number_of_lines2 =
-        Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_file_size( 400000, 100000, 60000 );
-    is( $max_number_of_lines2, 13500, 'Number of lines calculated correctly' );
+        Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_params_size( 400000, 100000, 60000 );
+    is( $max_number_of_lines2, 11250, 'Number of lines calculated correctly' );
 };
 
 subtest 'format_title' => sub {
@@ -74,12 +74,12 @@ subtest 'format_title' => sub {
     is( $title->{coverage_notes},        undef,        'coverage_notes has been deleted' );
 };
 
-subtest 'format_file' => sub {
+subtest 'read_file' => sub {
 
     plan tests => 6;
 
     my $file = {
-        filename     => 'Test_file.txt',
+        filename     => 'Test_file.tsv',
         file_content => encode_base64(
             'publication_title	print_identifier	online_identifier	date_first_issue_online	num_first_vol_online	num_first_issue_online	date_last_issue_online	num_last_vol_online	num_last_issue_online	title_url	first_author	title_id	embargo_info	coverage_depth	coverage_notes	publisher_name	publication_type	date_monograph_published_print	date_monograph_published_online	monograph_volume	monograph_edition	first_editor	parent_publication_title_id	preceding_publication_title_id	access_type
 Nature Plants		2055-0278	2015-01	1	1				https://www.nature.com/nplants		4aaa7		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P
@@ -87,21 +87,28 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
         )
     };
 
-    my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::format_file($file);
+    my ( $column_headers, $lines, $error ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
 
     is( @{$column_headers},     25,                  '25 column headers found' );
     is( @{$column_headers}[0],  'publication_title', 'First header correctly extracted' );
     is( @{$column_headers}[10], 'first_author',      'Tenth header correctly extracted' );
-
-    is( @{$lines}, 2, 'Two lines need processing' );
-    is(
+    is( @{$lines},              2,                   'Two lines need processing' );
+    is_deeply(
         @{$lines}[0],
-        'Nature Plants		2055-0278	2015-01	1	1				https://www.nature.com/nplants		4aaa7		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P',
+        [
+            'Nature Plants', '', '2055-0278', '2015-01',     '1', '1', '', '', '', 'https://www.nature.com/nplants', '',
+            '4aaa7', '', 'fulltext', 'Hybrid (Open Choice)', 'Nature Publishing Group UK', 'serial', '', '', '', '',
+            '',      '', '',         'P'
+        ],
         'Line correctly identified'
     );
-    is(
+    is_deeply(
         @{$lines}[1],
-        'Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bbb0		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P',
+        [
+            'Nature Astronomy', '', '2397-3366', '2017-01', '1', '1', '', '', '', 'https://www.nature.com/natastron',
+            '', '4bbb0', '', 'fulltext', 'Hybrid (Open Choice)', 'Nature Publishing Group UK', 'serial', '', '', '',
+            '', '',      '', '',         'P'
+        ],
         'Line correctly identified'
     );
 
@@ -112,7 +119,7 @@ subtest 'create_title_hash_from_line_data' => sub {
     plan tests => 2;
 
     my $file = {
-        filename     => 'Test_file.txt',
+        filename     => 'Test_file.tsv',
         file_content => encode_base64(
             'publication_title	print_identifier	online_identifier	date_first_issue_online	num_first_vol_online	num_first_issue_online	date_last_issue_online	num_last_vol_online	num_last_issue_online	title_url	first_author	title_id	embargo_info	coverage_depth	coverage_notes	publisher_name	publication_type	date_monograph_published_print	date_monograph_published_online	monograph_volume	monograph_edition	first_editor	parent_publication_title_id	preceding_publication_title_id	access_type
 Nature Plants		2055-0278	2015-01	1	1				https://www.nature.com/nplants		4aaa7		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P
@@ -120,7 +127,7 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
         )
     };
 
-    my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::format_file($file);
+    my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
 
     my $title_from_line1 =
         Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[0], $column_headers );
@@ -191,13 +198,29 @@ subtest 'process' => sub {
 
     $schema->storage->txn_begin;
 
+    Koha::ERM::EHoldings::Packages->search->delete;
+    my $ehpackage = $builder->build_object(
+        {
+            class => 'Koha::ERM::EHoldings::Packages',
+            value => { external_id => undef }
+        }
+    );
+
     my $file = {
-        filename     => 'Test_file.txt',
+        filename     => 'Test_file.tsv',
         file_content => encode_base64(
             'publication_title	print_identifier	online_identifier	date_first_issue_online	num_first_vol_online	num_first_issue_online	date_last_issue_online	num_last_vol_online	num_last_issue_online	title_url	first_author	title_id	embargo_info	coverage_depth	coverage_notes	publisher_name	publication_type	date_monograph_published_print	date_monograph_published_online	monograph_volume	monograph_edition	first_editor	parent_publication_title_id	preceding_publication_title_id	access_type
 Nature Plants		2055-0278	2015-01	1	1				https://www.nature.com/nplants		4aaa7		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P
 Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bbb0		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P'
         )
+    };
+
+    my ( $column_headers, $rows, $error ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
+    my $data = {
+        column_headers => $column_headers,
+        rows           => $rows,
+        package_id     => $ehpackage->package_id,
+        file_name      => $file->{filename}
     };
 
     my $job = Koha::BackgroundJob::ImportKBARTFile->new(
@@ -208,7 +231,6 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
         }
     )->store;
     $job = Koha::BackgroundJobs->find( $job->id );
-    my $data = { file => $file };
     my $json = $job->json->encode($data);
     $job->data($json)->store;
     $job->process($data);
@@ -251,12 +273,18 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
     $module->mock(
         'create_title_hash_from_line_data',
         sub {
-            my ( $line, $column_headers ) = @_;
+            my ( $row, $column_headers ) = @_;
 
             my %new_title;
-            my @values = split /\t/, $line;
 
-            @new_title{ @{$column_headers} } = @values;
+            @new_title{ @{$column_headers} } = @$row;
+
+            # If the file has been converted from CSV to TSV for import, then some titles containing commas will be enclosed in ""
+            my $first_char = substr( $new_title{publication_title}, 0, 1 );
+            my $last_char  = substr( $new_title{publication_title}, -1 );
+            if ( $first_char eq '"' && $last_char eq '"' ) {
+                $new_title{publication_title} =~ s/^"|"$//g;
+            }
 
             $new_title{title_id}          = '12345' if $new_title{publication_title} eq 'Nature Plants';
             $new_title{publication_title} = ''      if $new_title{publication_title} eq 'Nature Plants';
@@ -302,12 +330,18 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
     $module->mock(
         'create_title_hash_from_line_data',
         sub {
-            my ( $line, $column_headers ) = @_;
+            my ( $row, $column_headers ) = @_;
 
             my %new_title;
-            my @values = split /\t/, $line;
 
-            @new_title{ @{$column_headers} } = @values;
+            @new_title{ @{$column_headers} } = @$row;
+
+            # If the file has been converted from CSV to TSV for import, then some titles containing commas will be enclosed in ""
+            my $first_char = substr( $new_title{publication_title}, 0, 1 );
+            my $last_char  = substr( $new_title{publication_title}, -1 );
+            if ( $first_char eq '"' && $last_char eq '"' ) {
+                $new_title{publication_title} =~ s/^"|"$//g;
+            }
 
             $new_title{title_id}      = 'abcde' if $new_title{publication_title} eq 'Nature Plants';
             $new_title{unknown_field} = ''      if $new_title{publication_title} eq 'Nature Plants';
@@ -334,8 +368,8 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
         $job4->messages,
         [
             {
-                'type'  => 'error',
-                'title' => 'Nature Plants',
+                'type'          => 'error',
+                'title'         => 'Nature Plants',
                 'error_message' =>
                     'DBIx::Class::Row::store_column(): No such column \'unknown_field\' on Koha::Schema::Result::ErmEholdingsTitle at /kohadevbox/koha/Koha/Object.pm line 79
 ',

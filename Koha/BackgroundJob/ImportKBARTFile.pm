@@ -16,10 +16,10 @@ package Koha::BackgroundJob::ImportKBARTFile;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON qw( decode_json encode_json );
-use Try::Tiny qw( catch try );
+use JSON         qw( decode_json encode_json );
+use Try::Tiny    qw( catch try );
 use MIME::Base64 qw( decode_base64 );
-use POSIX qw( floor );
+use POSIX        qw( floor );
 
 use C4::Context;
 
@@ -65,37 +65,37 @@ sub process {
     my $titles_imported  = 0;
     my $duplicate_titles = 0;
     my $failed_imports   = 0;
-    my $total_lines;
-    my $file_name = $args->{file}->{filename};
+    my $total_rows;
+    my $file_name = $args->{file_name};
     my $report    = {
         duplicates_found => undef,
         titles_imported  => undef,
         file_name        => $file_name,
-        total_lines      => undef,
+        total_rows       => undef,
         failed_imports   => undef
     };
 
     try {
-        my $file = $args->{file};
-        my $package_id = $args->{package_id};
-        my ( $column_headers, $lines ) = format_file($file);
+        my $column_headers = $args->{column_headers};
+        my $rows           = $args->{rows};
+        my $package_id     = $args->{package_id};
 
-        if ( scalar( @{$lines} ) == 0 ) {
+        if ( scalar( @{$rows} ) == 0 ) {
             push @messages, {
                 code          => 'job_failed',
                 type          => 'error',
-                error_message => 'No valid lines were found in this file. Please check the file formatting.',
+                error_message => 'No valid rows were found in this file. Please check the file formatting.',
             };
             $self->status('failed')->store;
         }
 
-        $self->size( scalar( @{$lines} ) )->store;
-        $total_lines = scalar( @{$lines} );
+        $self->size( scalar( @{$rows} ) )->store;
+        $total_rows = scalar( @{$rows} );
 
-        foreach my $line ( @{$lines} ) {
-            next if !$line;
-            my $new_title   = create_title_hash_from_line_data( $line, $column_headers );
-            my $title_match = Koha::ERM::EHoldings::Titles->search( { external_id => $new_title->{title_id} } )->count;
+        foreach my $row ( @{$rows} ) {
+            next if !$row;
+            my $new_title   = create_title_hash_from_line_data( $row, $column_headers );
+            my $title_match = check_for_matching_title($new_title);
 
             if ($title_match) {
                 $duplicate_titles++;
@@ -119,9 +119,12 @@ sub process {
                         $failed_imports++;
                     } else {
                         my $imported_title = Koha::ERM::EHoldings::Title->new($formatted_title)->store;
-                        my $title_id = $imported_title->title_id;
-                        Koha::ERM::EHoldings::Resource->new( { title_id => $title_id, package_id => $package_id } )
-                            ->store;
+                        create_linked_resource(
+                            {
+                                title      => $imported_title,
+                                package_id => $package_id
+                            }
+                        );
 
                         # No need to add a message for a successful import,
                         # files could have 1000s of titles which will lead to lots of messages in background_job->data
@@ -132,7 +135,7 @@ sub process {
                     push @messages, {
                         code          => 'title_failed',
                         type          => 'error',
-                        error_message => $_->{msg},
+                        error_message => $_->{msg} || "Please check your file",
                         title         => $new_title->{publication_title}
                     }
                 };
@@ -142,7 +145,7 @@ sub process {
 
         $report->{duplicates_found} = $duplicate_titles;
         $report->{titles_imported}  = $titles_imported;
-        $report->{total_lines}      = $total_lines;
+        $report->{total_rows}       = $total_rows;
         $report->{failed_imports}   = $failed_imports;
 
         my $data = $self->decoded_data;
@@ -167,7 +170,7 @@ Enqueue the new job
 sub enqueue {
     my ( $self, $args ) = @_;
 
-    return unless exists $args->{file};
+    return unless exists $args->{column_headers};
 
     $self->SUPER::enqueue(
         {
@@ -194,7 +197,7 @@ sub format_title {
     delete $title->{title_id};
 
     # Some files appear to use coverage_notes instead of "notes" as in the KBART standard
-    if ( $title->{coverage_notes} ) {
+    if ( exists $title->{coverage_notes} ) {
         $title->{notes} = $title->{coverage_notes};
         delete $title->{coverage_notes};
     }
@@ -202,23 +205,39 @@ sub format_title {
     return $title;
 }
 
-=head3 format_file
+=head3 read_file
 
-Formats a file to provide report headers and lines to be processed
+Reads a file to provide report headers and lines to be processed
 
 =cut
 
-sub format_file {
+sub read_file {
     my ($file) = @_;
 
-    my $file_content = decode_base64( $file->{file_content} );
-    $file_content =~ s/\n/\r/g;
-    my @lines          = split /\r/, $file_content;
-    my @column_headers = split /\t/, $lines[0];
-    shift @lines;    # Remove headers row
-    my @remove_null_lines = grep $_ ne '', @lines;
+    my $file_content = defined( $file->{file_content} ) ? decode_base64( $file->{file_content} ) : "";
+    my $delimiter    = $file->{filename} =~ /\.tsv$/    ? "\t"                                   : ",";
+    my $quote_char   = $file->{filename} =~ /\.tsv$/    ? ""                                     : '"';
 
-    return ( \@column_headers, \@remove_null_lines );
+    open my $fh, "<", \$file_content or die;
+    my $csv = Text::CSV_XS->new(
+        {
+            sep_char           => $delimiter,
+            quote_char         => $quote_char,
+            binary             => 1,
+            allow_loose_quotes => 1
+        }
+    );
+    my $headers_to_check = $csv->getline($fh);
+    my $column_headers   = rescue_EBSCO_files($headers_to_check);
+    my $lines            = $csv->getline_all( $fh, 0 );
+
+    my ( $cde, $str, $pos ) = $csv->error_diag();
+    my $error = $cde ? "$cde, $str, $pos" : "";
+    warn $error if $error;
+
+    close($fh);
+
+    return ( $column_headers, $lines, $error );
 }
 
 =head3 create_title_hash_from_line_data
@@ -228,14 +247,100 @@ Takes a line and creates a hash of the values mapped to the column headings
 =cut
 
 sub create_title_hash_from_line_data {
-    my ( $line, $column_headers ) = @_;
+    my ( $row, $column_headers ) = @_;
 
     my %new_title;
-    my @values = split /\t/, $line;
 
-    @new_title{ @{$column_headers} } = @values;
+    @new_title{ @{$column_headers} } = @$row;
+
+    # If the file has been converted from CSV to TSV for import, then some titles containing commas will be enclosed in ""
+    my $first_char = substr( $new_title{publication_title}, 0, 1 );
+    my $last_char  = substr( $new_title{publication_title}, -1 );
+    if ( $first_char eq '"' && $last_char eq '"' ) {
+        $new_title{publication_title} =~ s/^"|"$//g;
+    }
 
     return \%new_title;
+}
+
+=head3 check_for_matching_title
+
+Checks whether this title already exists to avoid duplicates
+
+=cut
+
+sub check_for_matching_title {
+    my ($title) = @_;
+
+    my $match_parameters = {};
+    $match_parameters->{print_identifier}  = $title->{print_identifier}  if $title->{print_identifier};
+    $match_parameters->{online_identifier} = $title->{online_identifier} if $title->{online_identifier};
+
+    # Use external_id in case title exists for a different provider, we want to add it for the new provider
+    $match_parameters->{external_id} = $title->{title_id} if $title->{title_id};
+
+    # If no match parameters are provided in the file we should add the new title
+    return 0 if !%$match_parameters;
+
+    my $title_match = Koha::ERM::EHoldings::Titles->search($match_parameters)->count;
+
+    return $title_match;
+}
+
+=head3 create_linked_resource
+
+Creates a resource for a newly stored title.
+
+=cut
+
+sub create_linked_resource {
+    my ($args) = @_;
+
+    my $title      = $args->{title};
+    my $package_id = $args->{package_id};
+
+    my $title_id = $title->title_id;
+    my ( $date_first_issue_online, $date_last_issue_online ) = get_first_and_last_issue_dates($title);
+    my $resource = Koha::ERM::EHoldings::Resource->new(
+        {
+            title_id   => $title_id,
+            package_id => $package_id,
+            started_on => $date_first_issue_online,
+            ended_on   => $date_last_issue_online,
+        }
+    )->store;
+
+    return;
+}
+
+=head3 get_first_and_last_issue_dates
+
+Gets and formats a date for storing on the resource. Dates can come from files in YYYY, YYYY-MM or YYYY-MM-DD format
+
+=cut
+
+sub get_first_and_last_issue_dates {
+    my ($title) = @_;
+
+    return ( undef, undef ) if ( !$title->date_first_issue_online && !$title->date_last_issue_online );
+
+    my $date_first_issue_online =
+          $title->date_first_issue_online =~ /^\d{4}((-\d{2}-\d{2}$|-\d{2}$)|$)$/
+        ? $title->date_first_issue_online
+        : undef;
+    my $date_last_issue_online =
+        $title->date_last_issue_online =~ /^\d{4}((-\d{2}-\d{2}$|-\d{2}$)|$)$/ ? $title->date_last_issue_online : undef;
+
+    $date_first_issue_online = $date_first_issue_online . '-01-01'
+        if $date_first_issue_online && $date_first_issue_online =~ /^\d{4}$/;
+    $date_last_issue_online = $date_last_issue_online . '-01-01'
+        if $date_last_issue_online && $date_last_issue_online =~ /^\d{4}$/;
+    $date_first_issue_online = $date_first_issue_online . '-01'
+        if $date_first_issue_online && $date_first_issue_online =~ /^\d{4}-\d{2}$/;
+    $date_last_issue_online = $date_last_issue_online . '-01'
+        if $date_last_issue_online && $date_last_issue_online =~ /^\d{4}-\d{2}$/;
+
+    return ( $date_first_issue_online, $date_last_issue_online );
 }
 
 =head3 get_valid_headers
@@ -275,20 +380,63 @@ sub get_valid_headers {
     );
 }
 
-=head3 calculate_chunked_file_size
+=head3 calculate_chunked_params_size
 
 Calculates average line size to work out how many lines to chunk a large file into
-Knocks 10% off the final result to give some margin for error
+Uses only 75% of the max_allowed_packet as an upper limit
 
 =cut
 
-sub calculate_chunked_file_size {
-    my ( $file_size, $max_allowed_packet, $number_of_lines ) = @_;
+sub calculate_chunked_params_size {
+    my ( $params_size, $max_allowed_packet, $number_of_rows ) = @_;
 
-    my $average_line_size = $file_size / $number_of_lines;
-    my $lines_possible    = $max_allowed_packet / $average_line_size;
-    my $moderated_value   = floor( $lines_possible * 0.9 );
-    return $moderated_value;
+    my $average_line_size = $params_size / $number_of_rows;
+    my $lines_possible    = ( $max_allowed_packet * 0.75 ) / $average_line_size;
+    my $rounded_value     = floor($lines_possible);
+    return $rounded_value;
+}
+
+=head3 is_file_too_large
+
+Calculates the final size of the background job object that will need storing to check if we exceed the max_allowed_packet
+
+=cut
+
+sub is_file_too_large {
+    my ( $params_to_store, $max_allowed_packet ) = @_;
+
+    my $json           = JSON->new->utf8(0);
+    my $encoded_params = $json->encode($params_to_store);
+    my $params_size    = length $encoded_params;
+
+    # A lot more than just the params are stored in the background job table and this is difficult to calculate
+    # We should allow for no more than 75% of the max_allowed_packet to be made up of the job params to avoid db conflicts
+    return {
+        file_too_large => 1,
+        params_size    => $params_size
+    } if $params_size > ( $max_allowed_packet * 0.75 );
+
+    return {
+        file_too_large => 0,
+        params_size    => $params_size
+    };
+}
+
+=head3
+
+EBSCO have an incorrect spelling of "preceding_publication_title_id" in all of their KBART files ("preceeding" instead of "preceding").
+This is very annoying because it means all of their KBART files fail to import using the current methodology.
+There is no simple way of finding out who the vendor is before importing so all KBART files from any vendor are going to have to be checked for this spelling and corrected.
+
+=cut
+
+sub rescue_EBSCO_files {
+    my ($column_headers) = @_;
+
+    my ($index) = grep { @$column_headers[$_] eq 'preceeding_publication_title_id' } ( 0 .. @$column_headers - 1 );
+    @$column_headers[$index] = 'preceding_publication_title_id' if $index;
+
+    return $column_headers;
 }
 
 1;

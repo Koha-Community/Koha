@@ -27,6 +27,7 @@ use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
 use MIME::Base64 qw( decode_base64 encode_base64 );
 use POSIX qw( floor );
+use Text::CSV_XS;
 
 =head1 API
 
@@ -272,57 +273,67 @@ sub import_from_kbart_file {
     my $c = shift or return;
 
     my $import_data = $c->req->json;
-    my $file = $import_data->{file};
-    my $package_id = $import_data->{package_id};
+    my $file        = $import_data->{file};
+    my $package_id  = $import_data->{package_id};
 
     return try {
         my @job_ids;
         my @invalid_columns;
         my $max_allowed_packet = C4::Context->dbh->selectrow_array(q{SELECT @@max_allowed_packet});
-        my $file_content       = defined( $file->{file_content} ) ? decode_base64( $file->{file_content} ) : "";
-        $file_content =~ s/\n/\r/g;
-        my @lines          = split /\r/, $file_content;
-        my @column_headers = split /\t/, $lines[0];
-        shift @lines;    # Remove headers row
-        my @remove_null_lines = grep $_ ne '', @lines;
+
+        # Check if file is in TSV or CSV format and send an error back if not
+        if ( $file->{filename} !~ /\.csv$/ && $file->{filename} !~ /\.tsv$/ ) {
+            return $c->render(
+                status  => 201,
+                openapi => { invalid_filetype => 1 }
+            );
+        }
+
+        my ( $column_headers, $rows ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
 
         # Check that the column headers in the file match the standardised KBART phase II columns
-        # If not, return a warning before the job is queued
+        # If not, return a warning
         my @valid_headers = Koha::BackgroundJob::ImportKBARTFile::get_valid_headers();
-        foreach my $header (@column_headers) {
+        foreach my $header (@$column_headers) {
             if ( !grep { $_ eq $header } @valid_headers ) {
+                $header = 'Empty column - please remove' if $header eq '';
                 push @invalid_columns, $header;
             }
         }
         return $c->render(
             status  => 201,
-            openapi => { invalid_columns => \@invalid_columns, valid_columns => \@valid_headers }
+            openapi => { invalid_columns => \@invalid_columns, valid_columns => \@valid_headers, invalid_filetype => 0 }
         ) if scalar(@invalid_columns) > 0;
 
-        my $file_size = length($file_content);
+        my $params = {
+            column_headers => $column_headers,
+            rows           => $rows,
+            package_id     => $package_id,
+            file_name      => $file->{filename}
+        };
+        my $outcome = Koha::BackgroundJob::ImportKBARTFile::is_file_too_large( $params, $max_allowed_packet );
 
         # If the file is too large, we can break the file into smaller chunks and enqueue one job per chunk
-        if ( $file_size > $max_allowed_packet ) {
-
-            my $max_number_of_lines = Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_file_size(
-                $file_size, $max_allowed_packet,
-                scalar(@remove_null_lines)
+        if ( $outcome->{file_too_large} ) {
+            my $max_number_of_rows = Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_params_size(
+                $outcome->{params_size}, $max_allowed_packet,
+                scalar(@$rows)
             );
-            my @chunked_files;
-            push @chunked_files, [ splice @remove_null_lines, 0, $max_number_of_lines ] while @remove_null_lines;
 
+            my @chunked_files;
+            push @chunked_files, [ splice @$rows, 0, $max_number_of_rows ] while @$rows;
             foreach my $chunk (@chunked_files) {
-                unshift( @{$chunk}, join( "\t", @column_headers ) );
-                my $chunked_file = {
-                    filename     => $file->{filename},
-                    file_content => encode_base64( join( "\r", @{$chunk} ) )
+                my $params = {
+                    column_headers => $column_headers,
+                    rows           => $chunk,
+                    package_id     => $package_id,
+                    file_name      => $file->{filename}
                 };
-                my $params = { file => $chunked_file, package_id => $package_id };
-                my $job_id = Koha::BackgroundJob::ImportKBARTFile->new->enqueue($params);
-                push @job_ids, $job_id;
+
+                my $chunked_job_id = Koha::BackgroundJob::ImportKBARTFile->new->enqueue($params);
+                push @job_ids, $chunked_job_id;
             }
         } else {
-            my $params = { file => $file, package_id => $package_id };
             my $job_id = Koha::BackgroundJob::ImportKBARTFile->new->enqueue($params);
             push @job_ids, $job_id;
         }
@@ -335,5 +346,6 @@ sub import_from_kbart_file {
         $c->unhandled_exception($_);
     };
 }
+
 
 1;
