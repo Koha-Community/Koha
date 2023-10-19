@@ -1201,7 +1201,7 @@ subtest 'test update_dateexpiry when no dateexpiry in file' => sub {
 
     is(
         $patron->dateexpiry, dt_from_string->add( months => 18, end_of_month => 'limit' )->ymd,
-        "Expiration date is correct with update_dateexpiry = true no dateexpiry in file and update_datexpiryfromtoday false (i.e. use passed dateenrolled) "
+        "Expiration date is correct with update_dateexpiry = true no dateexpiry in file and update_dateexpiryfromtoday false (i.e. use passed dateenrolled) "
     );
 
     $filename_1 = make_csv( $temp_dir, $csv_headers, $csv_values );
@@ -1214,7 +1214,7 @@ subtest 'test update_dateexpiry when no dateexpiry in file' => sub {
     $patron->discard_changes();
     is(
         $patron->dateexpiry, dt_from_string->add( months => 42, end_of_month => 'limit' )->ymd,
-        "Expiration date is correct with update_dateexpiry = true no dateexpiry in file and update_datexpiryfromtoday true "
+        "Expiration date is correct with update_dateexpiry = true no dateexpiry in file and update_dateexpiryfromtoday true "
     );
 
     $csv_headers = 'cardnumber,surname,branchcode,categorycode';
@@ -1228,7 +1228,7 @@ subtest 'test update_dateexpiry when no dateexpiry in file' => sub {
     $patron->discard_changes();
     is(
         $patron->dateexpiry, dt_from_string->add( months => 42, end_of_month => 'limit' )->ymd,
-        "Expiration date is correct with update_dateexpiry = true no dateexpiry in file and update_datexpiryfromtoday false but no dateenrolled in file (today is used) "
+        "Expiration date is correct with update_dateexpiry = true no dateexpiry in file and update_dateexpiryfromtoday false but no dateenrolled in file (today is used) "
     );
 
 };

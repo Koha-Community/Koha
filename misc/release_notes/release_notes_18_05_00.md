@@ -626,7 +626,7 @@ have already been fixed in maintainance releases)
 - [[19847]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19847) tracklinks.pl accepts any url from a parameter for proxying
 - [[19881]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19881) authorities-list.pl can be executed by anybody
 - [[20126]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20126) Saving a biblio does no longer update MARC field lengths
-- [[20145]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20145) borrowers.datexpiry eq '0000-00-00' means expired?
+- [[20145]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20145) borrowers.dateexpiry eq '0000-00-00' means expired?
 - [[20229]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20229) Remove problematic SQL modes
 - [[20299]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20299) Koha is a gift
 - [[20323]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20323) Batch patron modification tool broken
