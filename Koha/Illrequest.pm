@@ -1103,6 +1103,36 @@ sub get_type {
     return $attr->value;
 };
 
+=head3 get_type_disclaimer_value
+
+    my $type = $abstract->get_type_disclaimer_value();
+
+Return the value submitted in the type disclaimer workflow stage
+
+=cut
+
+sub get_type_disclaimer_value {
+    my ($self) = @_;
+    my $attr = $self->illrequestattributes->find( { type => 'type_disclaimer_value' } );
+    return if !$attr;
+    return $attr->value;
+}
+
+=head3 get_type_disclaimer_date
+
+    my $type = $abstract->type_disclaimer_date();
+
+Return the time the disclaimer was submitted in the type disclaimer workflow stage
+
+=cut
+
+sub get_type_disclaimer_date {
+    my ($self) = @_;
+    my $attr = $self->illrequestattributes->find( { type => 'type_disclaimer_date' } );
+    return if !$attr;
+    return $attr->value;
+}
+
 #### Illrequests Imports
 
 =head3 check_limits

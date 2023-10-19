@@ -692,6 +692,16 @@
                                     [% type = request.get_type %]
                                     [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
                                 </li>
+                                <li class="type_disclaimer_value">
+                                    <span class="label type_disclaimer_value">Type disclaimer value:</span>
+                                    [% type_disclaimer_value = request.get_type_disclaimer_value %]
+                                    [% IF type_disclaimer_value %][% type_disclaimer_value | html %][% ELSE %]<span>N/A</span>[% END %]
+                                </li>
+                                <li class="type_disclaimer_date">
+                                    <span class="label type_disclaimer_date">Type disclaimer date:</span>
+                                    [% type_disclaimer_date = request.get_type_disclaimer_date %]
+                                    [% IF type_disclaimer_date %][% type_disclaimer_date | html %][% ELSE %]<span>N/A</span>[% END %]
+                                </li>
                                 <li class="cost">
                                     <span class="label cost">Cost:</span>
                                     [% IF request.cost %][% request.cost | $Price %][% ELSE %]<span>N/A</span>[% END %]
