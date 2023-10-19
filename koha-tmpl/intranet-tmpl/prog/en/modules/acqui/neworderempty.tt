@@ -365,7 +365,7 @@
         [% IF NOT Koha.Preference('UseACQFrameworkForBiblioRecords') OR NoACQframework %]
             <ol><li>
                 [% IF ( biblionumber ) %]
-                <span class="label">Title</span>
+                <span class="label">Title:</span>
                     <input type="hidden" name="title" value="[% title | html %]" /> <span class="title">[% title | html %]</span>
                 [% ELSE %]
                 <label for="entertitle">Title: </label>
