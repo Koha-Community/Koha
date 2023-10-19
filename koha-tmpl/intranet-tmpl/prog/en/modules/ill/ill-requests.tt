@@ -403,7 +403,7 @@
                 <!-- generic_confirm ends here -->
 
                 [% ELSIF op == 'edit_action' %]
-                    <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
+                    <form method="POST" id="ill_edit_action_form" action="/cgi-bin/koha/ill/ill-requests.pl">
                         [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <legend>Request details</legend>
@@ -978,6 +978,18 @@
                 $('.ill_checkout_due_date').show();
             }
         });
+
+        if ($("#ill_edit_action_form #borrowernumber").length) {
+            patron_autocomplete(
+                $('#ill_edit_action_form #borrowernumber'), {
+                    'on-select-callback': function(event, ui) {
+                        $("#ill_edit_action_form #borrowernumber").val(ui.item.patron_id);
+                        return false;
+                    }
+                }
+            );
+        }
+
     </script>
     [% INCLUDE 'ill-list-table-strings.inc' %]
     [% INCLUDE 'ill-batch-table-strings.inc' %]
