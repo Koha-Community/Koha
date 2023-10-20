@@ -32,9 +32,9 @@ return {
                 );
             }
             say $out
-                "Bug 25939: New circulation rule 'noautorenewalbefore' has been added. Defaulting value to 'norenewalbefore'.";
+                "New circulation rule 'noautorenewalbefore' has been added. Defaulting value to 'norenewalbefore'.";
         } else {
-            say $out "Bug 25939: Circulation rule 'noautorenewalbefore' found. Skipping update.";
+            say $out "Circulation rule 'noautorenewalbefore' found. Skipping update.";
         }
 
     },
