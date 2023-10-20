@@ -402,7 +402,7 @@
                                                     [% ELSE %]
                                                         [% check_title = itemsloo.biblionumber %]
                                                     [% END %]
-                                                    <td class="selectcol"><input type="checkbox" class="cb" name="biblionumber" value="[% itemsloo.biblionumber | html %]" aria-label="[% check_title | html %]"/></td>
+                                                    <td class="select selectcol"><input type="checkbox" class="cb" name="biblionumber" value="[% itemsloo.biblionumber | html %]" data-title="[% itemsloo.title | html %]" aria-label="[% check_title | html %]"/></td>
                                                     [% UNLESS ( item_level_itypes ) %]
                                                         <td>
                                                             [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
@@ -541,7 +541,7 @@
                                     <input type="hidden" name="op" value="remove_biblios" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                     <input type="hidden" name="modifyshelfcontents" value="1" />
-                                    <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger"/>
+                                    <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger removeitems"/>
                                 [% END %]
                             </form> <!-- /myform -->
                         [% ELSE %]
@@ -980,29 +980,53 @@ $(function() {
     [% END %]
 
     [% IF loggedinusername && can_remove_biblios %]
-        $(".removefromlist").on("click", function(e){
-            return confirmDelete(MSG_REMOVE_ONE_FROM_LIST);
-        });
-
-        $("#myform").submit(function(){
-            var checkedBoxes = $(".cb:checked");
-            var numchecked = $(checkedBoxes).size();
-            if (numchecked) {
-                if( numchecked > 1 ){
-                    return confirmDelete(MSG_REMOVE_FROM_LIST);
-                } else {
-                    return confirmDelete(MSG_REMOVE_ONE_FROM_LIST);
-                }
+        $("body").on("click", ".removeitems", function(e){
+            e.preventDefault();
+            var href;
+            var title;
+            var yes_label;
+            var no_label;
+            var message = "";
+            /* Single "Remove from list" link has a biblionumber data-attribute */
+            if( $(this).data("biblionumber") ){
+                /* Use the checkbox with that value to preview the title in the confirmation */
+                var selected_titles = $(".cb[value='" + $(this).data("biblionumber") + "'");
+                var href = $(this).attr("href");
             } else {
+                var selected_titles = $(".cb:checked");
+            }
+            if ( selected_titles.size() < 1 ) {
                 alert( _("No item was selected") );
-                return false;
+            } else {
+                if( selected_titles.size() > 1 ){
+                    message = $("<ul></ul>");
+                    title = _("Are you sure you want to remove these items from the list?");
+                    yes_label = _("Yes, delete from list");
+                    no_label = _("No, do not delete from list");
+                    selected_titles.each(function(){
+                        message.append( "<li>" +  $(this).data("title") + "</li>" );
+                    });
+                } else {
+                    title = _("Are you sure you want to remove this item from the list?");
+                    yes_label = _("Yes, delete from list");
+                    no_label = _("No, do not delete from list");
+                    selected_titles.each(function(){
+                        message += $(this).data("title");
+                    });
+                }
+                confirmModal( message, title, yes_label, no_label, function( result ){
+                    if( result ){
+                        if( href ){
+                            location.href= href;
+                        } else {
+                            $("#myform").submit();
+                        }
+                    }
+                });
             }
         });
-        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link disabled removeitems tag_hides\"><i class=\"fa fa-fw fa-times\" aria-hidden=\"true\"></i> "+_("Remove from list")+"</a>")
-        .click(function(){
-            $("#myform").submit();
-            return false;
-        });
+
+        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link disabled removeitems tag_hides\"><i class=\"fa fa-fw fa-remove\" aria-hidden=\"true\"></i> "+_("Remove from list")+"</a>");
     [% END %]
     [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
