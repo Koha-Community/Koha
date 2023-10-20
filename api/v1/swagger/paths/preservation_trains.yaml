@@ -572,6 +572,7 @@
             - catalogue_item
             - catalogue_item.biblio
         collectionFormat: csv
+        additionalProperties: false
     responses:
       200:
         description: An item in train
@@ -624,11 +625,15 @@
         required: true
         schema:
           type: object
+          properties:
+            train_id:
+              description: Train id
+              type: integer
     responses:
       201:
         description: A successfully copied item
         schema:
-          type: object
+          $ref: "../swagger.yaml#/definitions/preservation_train_item"
       400:
         description: Bad parameter
         schema:

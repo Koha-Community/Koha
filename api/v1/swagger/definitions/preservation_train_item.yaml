@@ -1,0 +1,34 @@
+---
+type: object
+properties:
+  train_item_id:
+    type: integer
+    description: internally assigned train item identifier
+    readOnly: true
+  train_id:
+    type: integer
+    description: internally train identifier
+  item_id:
+    type: integer
+    description: internally item identifier
+  user_train_item_id:
+    type: integer
+    description: internally user train item identifier
+  processing_id:
+    description: internally processing identifier
+    type: integer
+  added_on:
+    description: add date
+    type:
+      - string
+      - "null"
+  attributes:
+    description: attribute list
+    type:
+      - array
+      - "null"
+
+additionalProperties: false
+required:
+  - train_id
+  - processing_id
