@@ -211,6 +211,13 @@ CREATE TABLE `additional_contents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `additional_contents_localizations`
+--
+
+DROP TABLE IF EXISTS `additional_contents_localizations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `additional_contents_localizations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'unique identifier for the additional content',
   `additional_content_id` int(10) unsigned NOT NULL COMMENT 'link to the additional content',
