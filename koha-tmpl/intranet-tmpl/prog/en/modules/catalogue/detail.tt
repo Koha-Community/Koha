@@ -92,19 +92,6 @@
 [% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
 
 [% INCLUDE 'cat-toolbar.inc' %]
-    [% IF decoding_error %]
-        <div>
-           <span class="biberror">
-            There is an error with this bibliographic record, the view may be degraded.</span>
-            <span class="error"><br/> Error: [% decoding_error | html %]</span>
-        </div>
-    [% END %]
-    [% IF analytics_error %]
-        <div>
-           <span class="analytics_error">
-            There was an error searching for analytic records, please see the logs for details.</span>
-        </div>
-    [% END %]
     [% IF ( ocoins ) %]
         <!-- COinS / OpenURL -->
         <span class="Z3988" title="[% ocoins | html %]"></span>
@@ -115,6 +102,21 @@
     [% ELSE %]
         <div id="catalogue_detail_biblio" class="col-xs-12">
     [% END %]
+        [% IF decoding_error || analytics_error %]
+            <div class="page-section bg-danger">
+               <h1>Errors found</h1>
+               [% IF decoding_error %]
+                   <h2>Encoding errors</h2>
+                   <p>There is at least one encoding error with this bibliographic record, the view may be degraded.</p>
+                   <pre class="error">[% decoding_error | html %]</pre>
+               [% END %]
+               [% IF analytics_error %]
+                   <h2>Analytics errors</h2>
+                   <p>There was an error searching for analytic records, please see the logs for details.</p>
+               [% END %]
+            </div>
+        [% END %]
+
         <div class="page-section">
 
         [% XSLTBloc | $raw %]
