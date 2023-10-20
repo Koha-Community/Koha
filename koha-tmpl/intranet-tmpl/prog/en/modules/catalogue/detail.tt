@@ -2221,22 +2221,24 @@
 
         [% IF Koha.Preference('EnableItemGroups') %]
             // Load item groups table
-            var itemGroupsTable = KohaTable("items-group-table", {
-                "autoWidth": false,
-                "dom": '<"top pager"ilp>t<"bottom pager"ip>r',
-                "columns": [
+            var itemGroupsTable = $("#items-group-table").kohaTable({
+                autoWidth: false,
+                dom: '<"top pager"ilp>t<"bottom pager"ip>r',
+                columns: [
                     {
-                        "data": function( oObj ) {
-                            return oObj.display_order;
-                        },
+                        data: "display_order",
+                        title: _("Display order"),
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": function( oObj ) {
-                            return oObj.description;
-                        },
+                        data: "description",
+                        title: _("Description"),
+                        searchable: true,
+                        orderable: true,
                     },
                     {
-                        "data": function( oObj ) {
+                        data: function( oObj ) {
                             [% IF CAN_user_editcatalogue_manage_item_groups %]
                                 return `<button class='item-group-edit btn btn-default btn-xs' data-item-group-id='${oObj.item_group_id}'>
                                     <i class="fa-solid fa-pencil" aria-hidden="true"></i> ${_("Edit")}
@@ -2249,18 +2251,12 @@
                                 return "";
                             [% END %]
                         },
+                        searchable: false,
+                        orderable: false,
                     },
                 ],
-                "paginate": false,
-                "processing": true,
-                "serverSide":  false,
-                "ajax":  `/api/v1/biblios/${biblionumber}/item_groups?_per_page=-1`,
-                "sAjaxDataProp": "",
-                "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    $.getJSON( sSource, aoData, function (json) {
-                        fnCallback(json)
-                    } );
-                },
+                paginate: false,
+                ajax: { url: `/api/v1/biblios/${biblionumber}/item_groups?_per_page=-1` },
             });
 
             // Create new item groups
