@@ -130,12 +130,6 @@
     x-koha-authorization:
       permissions:
         preservation: 1
-        description: |
-          Internal server error. Possible `error_code` attribute values:
-
-          * `internal_server_error`
-        schema:
-          $ref: "../swagger.yaml#/definitions/error"
 /preservation/waiting-list/items/{item_id}:
   delete:
     x-mojo-to: Preservation::WaitingList#remove_item
