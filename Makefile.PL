@@ -351,6 +351,7 @@ my $target_map = {
   './perltidyrc'                => 'NONE',
   './plugins'                   => 'INTRANET_CGI_DIR',
   './pos'                       => 'INTRANET_CGI_DIR',
+  './preservation'              => 'INTRANET_CGI_DIR',
   './recalls'                   => 'INTRANET_CGI_DIR',
   './reports'                   => 'INTRANET_CGI_DIR',
   './reserve'                   => 'INTRANET_CGI_DIR',
