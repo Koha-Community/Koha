@@ -117,8 +117,9 @@
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       500:
-        description: |-
+        description: |
           Internal server error. Possible `error_code` attribute values:
+
           * `internal_server_error`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
@@ -129,18 +130,12 @@
     x-koha-authorization:
       permissions:
         preservation: 1
-        description: |-
+        description: |
           Internal server error. Possible `error_code` attribute values:
+
           * `internal_server_error`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
-      503:
-        description: Under maintenance
-        schema:
-          $ref: "../swagger.yaml#/definitions/error"
-    x-koha-authorization:
-      permissions:
-        preservation: 1
 /preservation/waiting-list/items/{item_id}:
   delete:
     x-mojo-to: Preservation::WaitingList#remove_item
