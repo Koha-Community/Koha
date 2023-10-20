@@ -64,6 +64,8 @@ use Koha::Logger;
 use Koha::BackgroundJobs;
 use C4::Context;
 
+$SIG{'PIPE'} = 'IGNORE';    # See BZ 35111; added to ignore PIPE error when connection lost on Ubuntu.
+
 my ( $help, @queues );
 
 my $max_processes = $ENV{MAX_PROCESSES};
