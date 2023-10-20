@@ -31,11 +31,13 @@ export default {
     setup() {
         const table = ref()
 
-        const { getMonthsData, getColumnOptions } = inject("reportsStore")
+        const { getMonthsData, getColumnOptions, checkReportColumns } =
+            inject("reportsStore")
 
         return {
             getMonthsData,
             getColumnOptions,
+            checkReportColumns,
             table,
         }
     },
@@ -106,13 +108,14 @@ export default {
         }
     },
     methods: {
-        buildColumnArray(report_type, params, data_type) {
+        buildColumnArray(report_display, params, data_type) {
             const columns = params.columns
             const months_data = this.getMonthsData()
             const column_options = this.getColumnOptions()
             const time_period_columns = params.tp_columns
             const yearly_filter = params.yearly_filter
             const query = params.queryObject
+            const report_type = params.queryObject.report_type
             const column_set = []
 
             columns.forEach(column => {
@@ -121,7 +124,7 @@ export default {
                 if (column !== 1) column_options[column].active = false
             })
 
-            report_type !== "usage_data_provider" &&
+            report_display !== "usage_data_provider" &&
                 column_set.unshift({
                     title: __(
                         data_type.charAt(0).toUpperCase() + data_type.slice(1)
@@ -132,7 +135,25 @@ export default {
                 })
 
             // Add metric type to each row
-            if (report_type !== "metric_type") {
+            if (report_display !== "metric_type") {
+                // Add yop if it is required
+                if (this.checkReportColumns(report_type, "YOP")) {
+                    column_set.push({
+                        title: __("YOP"),
+                        data: "yop",
+                        searchable: true,
+                        orderable: true,
+                    })
+                }
+                // Add access type if it is required
+                if (this.checkReportColumns(report_type, "Access_Type")) {
+                    column_set.push({
+                        title: __("Access type"),
+                        data: "access_type",
+                        searchable: true,
+                        orderable: true,
+                    })
+                }
                 column_set.push({
                     title: __("Metric"),
                     render: function (data, type, row, meta) {
@@ -143,7 +164,7 @@ export default {
                 })
             }
 
-            if (report_type === "usage_data_provider") {
+            if (report_display === "usage_data_provider") {
                 column_set.unshift({
                     title: __("Data provider"),
                     data: "name",
@@ -180,7 +201,7 @@ export default {
                     })
                 })
             } else {
-                if (report_type.includes("monthly")) {
+                if (report_display.includes("monthly")) {
                     const years = Object.keys(time_period_columns)
 
                     years.forEach(year => {
@@ -218,7 +239,7 @@ export default {
                         })
                     })
                 }
-                if (report_type === "yearly") {
+                if (report_display === "yearly") {
                     const years = time_period_columns
 
                     years.forEach(year => {
@@ -239,32 +260,74 @@ export default {
                         })
                     })
                 }
-                if (report_type === "metric_type") {
+                if (report_display === "metric_type") {
                     const metric_types = query.metric_types
-                    metric_types.forEach(metric => {
+                    const access_types = query.access_types
+                    // Add yop if it is required
+                    if (this.checkReportColumns(report_type, "YOP")) {
                         column_set.push({
-                            title: __(metric),
-                            render: function (data, type, row, meta) {
-                                const filterByMetric =
-                                    row.erm_usage_muses.filter(
-                                        item => item.metric_type === metric
-                                    )
-                                const period_total = filterByMetric.reduce(
-                                    (acc, item) => {
-                                        return acc + item.usage_count
-                                    },
-                                    0
-                                )
-                                return period_total
-                            },
+                            title: __("YOP"),
+                            data: "yop",
                             searchable: true,
                             orderable: true,
                         })
+                    }
+                    metric_types.forEach(metric => {
+                        if (access_types && access_types.length > 0) {
+                            access_types.forEach(access => {
+                                column_set.push({
+                                    title: __(access),
+                                    render: function (data, type, row, meta) {
+                                        const filterByType =
+                                            row.erm_usage_muses.filter(
+                                                item =>
+                                                    item.access_type === access
+                                            )
+                                        const filterByMetric =
+                                            filterByType.filter(
+                                                item =>
+                                                    item.metric_type === metric
+                                            )
+                                        const period_total =
+                                            filterByMetric.reduce(
+                                                (acc, item) => {
+                                                    return (
+                                                        acc + item.usage_count
+                                                    )
+                                                },
+                                                0
+                                            )
+                                        return period_total
+                                    },
+                                    searchable: false,
+                                    orderable: false,
+                                })
+                            })
+                        } else {
+                            column_set.push({
+                                title: __(metric),
+                                render: function (data, type, row, meta) {
+                                    const filterByMetric =
+                                        row.erm_usage_muses.filter(
+                                            item => item.metric_type === metric
+                                        )
+                                    const period_total = filterByMetric.reduce(
+                                        (acc, item) => {
+                                            return acc + item.usage_count
+                                        },
+                                        0
+                                    )
+                                    return period_total
+                                },
+                                searchable: false,
+                                orderable: false,
+                            })
+                        }
                     })
                 }
             }
             // Add totals column if required
-            if (report_type === "monthly_with_totals") {
+            if (report_display === "monthly_with_totals") {
                 column_set.push({
                     title: __("Period total"),
                     data: "usage_total",
@@ -281,6 +344,7 @@ export default {
             const queryObject = {}
             const {
                 metric_types,
+                access_types,
                 usage_data_providers,
                 keywords,
                 report_type,
@@ -321,6 +385,10 @@ export default {
             if (metric_types) {
                 queryObject[`erm_usage_muses.metric_type`] = metric_types
             }
+            // Add any metric types query
+            if (access_types) {
+                queryObject[`erm_usage_muses.access_type`] = access_types
+            }
             // Add any data provider query
             if (usage_data_providers) {
                 queryObject[`erm_usage_muses.usage_data_provider_id`] =
@@ -350,14 +418,16 @@ export default {
                 return url
             }
         },
-        mergeTitleDataIntoOneLine(numberOfMetricTypes) {
+        mergeTitleDataIntoOneLine(numberOfMetricTypes, numberOfAccessTypes) {
             let dt = this.$refs.table.useTableObject()
             dt.on("draw", () => {
                 const rows = dt.rows().nodes().to$()
-
+                const numberOfRows = numberOfAccessTypes
+                    ? numberOfMetricTypes * numberOfAccessTypes
+                    : numberOfMetricTypes
                 const data_rows = []
-                for (let i = 0; i < rows.length; i = i + numberOfMetricTypes) {
-                    data_rows.push([rows.slice(i, i + numberOfMetricTypes)])
+                for (let i = 0; i < rows.length; i = i + numberOfRows) {
+                    data_rows.push([rows.slice(i, i + numberOfRows)])
                 }
 
                 data_rows
@@ -366,7 +436,7 @@ export default {
                         Array.from(titleRows).forEach((row, i) => {
                             const cells = row.cells
                             if (i === 0) {
-                                cells[0].rowSpan = numberOfMetricTypes
+                                cells[0].rowSpan = numberOfRows
                                 cells[0].style.textAlign = "center"
                                 cells[0].style.verticalAlign = "middle"
                                 cells[0].style.borderRight = "1px solid #BCBCBC"
@@ -378,15 +448,50 @@ export default {
             })
             this.$refs.table_div.classList.remove("hide-table")
         },
+        createMetricReportTableHeader(metric_types, access_types) {
+            const table = this.$refs.table.$el.getElementsByTagName("table")[0]
+            const numberOfColumns = table.rows[0].cells.length
+            const dataColumns = metric_types.length * access_types
+            const numberOfNonStatisticColumns = numberOfColumns - dataColumns
+            const numberOfCellsToCreate =
+                numberOfNonStatisticColumns + metric_types.length
+
+            const row = table.insertRow(0)
+            const cellsToInsert = Array.from("1".repeat(numberOfCellsToCreate))
+            const cells = cellsToInsert.map(item => {
+                const cell = document.createElement("th")
+                row.appendChild(cell)
+                return cell
+            })
+
+            const metricTypeColumns = cells.splice(numberOfNonStatisticColumns)
+            metric_types.forEach((metric, i) => {
+                const cell = metricTypeColumns[i]
+                cell.colSpan = access_types
+                cell.innerHTML = metric
+            })
+            this.$refs.table_div.classList.remove("hide-table")
+        },
     },
     watch: {
         table() {
-            if (this.report_type !== "metric_type") {
-                this.mergeTitleDataIntoOneLine(
-                    this.params.queryObject.metric_types.length
-                )
+            const number_of_access_types = this.params.queryObject.access_types
+                ? this.params.queryObject.access_types.length
+                : 0
+            if (this.report_type === "metric_type") {
+                if (number_of_access_types) {
+                    this.createMetricReportTableHeader(
+                        this.params.queryObject.metric_types,
+                        number_of_access_types
+                    )
+                } else {
+                    this.$refs.table_div.classList.remove("hide-table")
+                }
             } else {
-                this.$refs.table_div.classList.remove("hide-table")
+                this.mergeTitleDataIntoOneLine(
+                    this.params.queryObject.metric_types.length,
+                    number_of_access_types
+                )
             }
         },
     },

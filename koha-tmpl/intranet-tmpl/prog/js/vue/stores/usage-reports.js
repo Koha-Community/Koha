@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export const useReportsStore = defineStore('reports', {
+export const useReportsStore = defineStore("reports", {
     state: () => ({
         months_data: [
             { short: "Jan", description: "January", value: 1, active: true },
@@ -22,7 +22,7 @@ export const useReportsStore = defineStore('reports', {
                 id: 1,
                 name: "Provider name",
                 active: true,
-                used_by: ["title", "item", "database", 'platform'],
+                used_by: ["title", "item", "database", "platform"],
                 column: {
                     title: __("Data provider"),
                     data: "provider_name",
@@ -115,13 +115,24 @@ export const useReportsStore = defineStore('reports', {
                 },
             },
         },
+        report_type_map: {
+            TR_B1: ["YOP", "ISBN"],
+            TR_B2: ["YOP", "ISBN"],
+            TR_B3: ["YOP", "Access_Type", "ISBN"],
+            TR_J3: ["Access_Type"],
+            TR_J4: ["YOP"],
+        },
     }),
     actions: {
         getMonthsData() {
-            return this.months_data
+            return this.months_data;
         },
         getColumnOptions() {
-            return this.title_property_column_options
-        }
-    }
-})
+            return this.title_property_column_options;
+        },
+        checkReportColumns(report_type, column) {
+            if (!this.report_type_map.hasOwnProperty(report_type)) return false;
+            return this.report_type_map[report_type].includes(column);
+        },
+    },
+});

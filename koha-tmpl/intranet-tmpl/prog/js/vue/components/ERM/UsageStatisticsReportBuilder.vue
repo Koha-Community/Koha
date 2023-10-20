@@ -98,14 +98,29 @@
                                 >{{ $__("Choose metric type") }}:</label
                             >
                             <v-select
-                                id="metric_type"
+                                id="metric_types"
                                 v-model="query.metric_types"
                                 label="description"
-                                :reduce="report => report.value"
+                                :reduce="metric => metric.value"
                                 :options="metric_types_options"
                                 multiple
                                 :disabled="
                                     this.metric_types_options.length === 0
+                                "
+                            />
+                        </li>
+                        <li>
+                            <label for="access_types"
+                                >{{ $__("Choose access type") }}:</label
+                            >
+                            <v-select
+                                id="access_types"
+                                v-model="query.access_types"
+                                label="description"
+                                :options="access_types_options"
+                                multiple
+                                :disabled="
+                                    this.access_types_options.length === 0
                                 "
                             />
                         </li>
@@ -379,6 +394,7 @@ export default {
                 data_display: "monthly",
                 report_type: null,
                 metric_types: null,
+                access_types: null,
                 usage_data_providers: null,
                 keywords: null,
                 start_month: null,
@@ -449,6 +465,7 @@ export default {
                 No_License: ["DR", "DR_D2", "TR", "TR_B2", "TR_J2", "IR"],
             },
             metric_types_options: [],
+            access_types_options: [],
             report_types_options: [...this.av_report_types],
             filter_data: [],
             usage_data_provider_list: [...this.usage_data_providers],
@@ -508,6 +525,7 @@ export default {
                 data_display: "monthly",
                 report_type: null,
                 metric_types: null,
+                access_types: null,
                 usage_data_providers: null,
                 keywords: null,
                 start_month: null,
@@ -650,6 +668,7 @@ export default {
                 start_year,
                 end_year,
                 metric_types,
+                access_types,
                 usage_data_providers,
                 keywords,
                 report_type,
@@ -689,6 +708,10 @@ export default {
                 if (metric_types) {
                     queryByYear[`${prefix}.metric_type`] = metric_types
                 }
+                // Add any access types query
+                if (access_types) {
+                    queryByYear[`${prefix}.access_type`] = access_types
+                }
                 // Add any data provider query
                 if (usage_data_providers) {
                     queryByYear[`${prefix}.usage_data_provider_id`] =
@@ -708,6 +731,7 @@ export default {
                 start_year,
                 end_year,
                 metric_types,
+                access_types,
                 usage_data_providers,
                 keywords,
                 report_type,
@@ -727,13 +751,16 @@ export default {
             if (metric_types) {
                 queryObject[`erm_usage_yuses.metric_type`] = metric_types
             }
-            // Add any title query
+            // Add any access types query
+            if (access_types) {
+                queryObject[`erm_usage_yuses.access_type`] = access_types
+            }
             // Add any keyword query
             if (keywords) {
                 const object_ids = keywords.map(object => {
                     return object[`${db_table}_id`]
                 })
-                queryByYear[`erm_usage_yuses.${db_table}_id`] = object_ids
+                queryObject[`erm_usage_yuses.${db_table}_id`] = object_ids
             }
             // Add any data provider query
             if (usage_data_providers) {
@@ -770,6 +797,12 @@ export default {
                         av_type = this.av_database_reports_metrics
                         this.data_type = "database"
                         break
+                }
+
+                if (report_type === "TR_J3" || report_type === "TR_B3") {
+                    this.access_types_options = ["Controlled", "OA_Gold"]
+                } else {
+                    this.access_types_options = []
                 }
 
                 for (const metric in this.metric_types_matrix) {
@@ -889,6 +922,7 @@ export default {
                 data_display,
                 report_type,
                 metric_types,
+                access_types,
             } = queryObject
 
             if (!report_type || !start_year || !end_year) {
@@ -917,6 +951,18 @@ export default {
                     }
                 )
                 queryObject.metric_types = final_metric_types
+            }
+            // If no access types are selected then all possible values should be included for backend data filtering ( but only for TR_J3 and TR_B3 reports)
+            if (
+                (report_type === "TR_J3" || report_type === "TR_B3") &&
+                (!access_types || (access_types && access_types.length === 0))
+            ) {
+                const final_access_types = this.access_types_options.map(
+                    access => {
+                        return access
+                    }
+                )
+                queryObject.access_types = final_access_types
             }
 
             // Determine which database table should be queried

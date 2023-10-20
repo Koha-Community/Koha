@@ -125,13 +125,12 @@ export default {
             const table = this.$refs.table.$el.getElementsByTagName("table")[0]
 
             const row = table.insertRow(0)
-            const [cellOne, cellTwo, cellThree, cellFour, cellFive] = [
-                ...Array(5).keys(),
-            ].map(item => {
-                const cell = document.createElement("th")
-                row.appendChild(cell)
-                return cell
-            })
+            const [cellOne, cellTwo, cellThree, cellFour, cellFive] =
+                Array.from("1".repeat(5)).map(item => {
+                    const cell = document.createElement("th")
+                    row.appendChild(cell)
+                    return cell
+                })
             cellTwo.colSpan = 2
             cellTwo.innerHTML = "Title reports"
             cellThree.colSpan = 2

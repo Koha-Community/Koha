@@ -28,9 +28,10 @@ use Koha::ERM::EUsage::UsageDatabases;
 use Koha::ERM::EUsage::UsageDataProvider;
 use Koha::ERM::EUsage::UsageDataProviders;
 
-use Clone        qw( clone );
-use Scalar::Util qw( blessed );
-use Try::Tiny    qw( catch try );
+use Clone           qw( clone );
+use Scalar::Util    qw( blessed );
+use Try::Tiny       qw( catch try );
+use List::MoreUtils qw(uniq);
 use JSON;
 
 =head1 API
@@ -48,13 +49,12 @@ sub monthly_report {
 
     return try {
 
-        my $args = $c->validation->output;
-
+        my $args = $c->param('q');
         my @query_params_array;
         my $json = JSON->new;
 
-        if ( ref( $args->{q} ) eq 'ARRAY' ) {
-            foreach my $q ( @{ $args->{q} } ) {
+        if ( ref($args) eq 'ARRAY' ) {
+            foreach my $q ( @{$args} ) {
                 push @query_params_array, $json->decode($q)
                     if $q;
             }
@@ -68,6 +68,10 @@ sub monthly_report {
             Koha::ERM::EUsage::UsageDataProviders->search( {}, {} )->unblessed;
         my $metric_types =
             $query_params_array[0][0]->{'erm_usage_muses.metric_type'};
+        my $access_types =
+              $query_params_array[0][0]->{'erm_usage_muses.access_type'}
+            ? $query_params_array[0][0]->{'erm_usage_muses.access_type'}
+            : ();
 
         # Objects with no data in the selected range will not be returned by the API - we still want to include them if they have been requested
         my $requested_ids = _get_correct_query_param(
@@ -85,45 +89,18 @@ sub monthly_report {
             push @{$data}, $missing_result if $missing_result;
         }
 
-        my @report_data;
-
-        for my $data_object ( @{$data} ) {
-
-            # Add provider name rather than embed provider object
-            my $usage_data_provider_id = $data_object->{usage_data_provider_id};
-            my @provider_object =
-                grep { $usage_data_provider_id eq $_->{erm_usage_data_provider_id} } @{$usage_data_providers};
-            my $provider_name = $provider_object[0]->{name};
-
-            # Split data objects into metric_types i.e. one table row per metric_type
-            for my $metric_type (@$metric_types) {
-                my $statistics = $data_object->{'erm_usage_muses'};
-                my @filtered_statistics =
-                    grep { $metric_type eq $_->{metric_type} } @$statistics;
-                my @usage_counts =
-                    map { $_->{usage_count} } @filtered_statistics;
-                my $sum =
-                    scalar(@usage_counts) > 0
-                    ? eval join '+', @usage_counts
-                    : 0;
-
-                my $data_object_hash = _get_object_hash(
-                    {
-                        data_type   => $data_type,
-                        data_object => $data_object,
-                        statistics  => \@filtered_statistics,
-                        provider    => $provider_name,
-                        metric_type => $metric_type,
-                        period      => 'monthly',
-                        sum         => $sum
-                    }
-                );
-
-                push @report_data, $data_object_hash;
+        my $report_data = _get_report_data(
+            {
+                data_type            => $data_type,
+                data                 => $data,
+                metric_types         => $metric_types,
+                access_types         => $access_types,
+                usage_data_providers => $usage_data_providers,
+                period               => 'monthly'
             }
-        }
+        );
 
-        return $c->render( status => 200, openapi => \@report_data );
+        return $c->render( status => 200, openapi => $report_data );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -140,13 +117,12 @@ sub yearly_report {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $args = $c->validation->output;
-
+        my $args = $c->param('q');
         my @query_params_array;
         my $json = JSON->new;
 
-        if ( ref( $args->{q} ) eq 'ARRAY' ) {
-            foreach my $q ( @{ $args->{q} } ) {
+        if ( ref($args) eq 'ARRAY' ) {
+            foreach my $q ( @{$args} ) {
                 push @query_params_array, $json->decode($q)
                     if $q;
             }
@@ -176,38 +152,23 @@ sub yearly_report {
         }
 
         my $metric_types = $query_params_array[0]->{'erm_usage_yuses.metric_type'};
-        my @report_data;
+        my $access_types =
+              $query_params_array[0]->{'erm_usage_yuses.access_type'}
+            ? $query_params_array[0]->{'erm_usage_yuses.access_type'}
+            : ();
 
-        for my $data_object ( @{$data} ) {
-
-            # Add provider name rather than embed provider object
-            my $usage_data_provider_id = $data_object->{usage_data_provider_id};
-            my @provider_object =
-                grep { $usage_data_provider_id eq $_->{erm_usage_data_provider_id} } @{$usage_data_providers};
-            my $provider_name = $provider_object[0]->{name};
-
-            # Split data objects into metric_types i.e. one table row per metric_type
-            for my $metric_type (@$metric_types) {
-                my $statistics = $data_object->{'erm_usage_yuses'};
-                my @filtered_statistics =
-                    grep { $metric_type eq $_->{metric_type} } @$statistics;
-
-                my $data_object_hash = _get_object_hash(
-                    {
-                        data_type   => $data_type,
-                        data_object => $data_object,
-                        statistics  => \@filtered_statistics,
-                        provider    => $provider_name,
-                        metric_type => $metric_type,
-                        period      => 'yearly'
-                    }
-                );
-
-                push @report_data, $data_object_hash;
+        my $report_data = _get_report_data(
+            {
+                data_type            => $data_type,
+                data                 => $data,
+                metric_types         => $metric_types,
+                access_types         => $access_types,
+                usage_data_providers => $usage_data_providers,
+                period               => 'yearly'
             }
-        }
+        );
 
-        return $c->render( status => 200, openapi => \@report_data );
+        return $c->render( status => 200, openapi => $report_data );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -225,13 +186,12 @@ sub metric_types_report {
 
     return try {
 
-        my $args = $c->validation->output;
-
+        my $args = $c->param('q');
         my @query_params_array;
         my $json = JSON->new;
 
-        if ( ref( $args->{q} ) eq 'ARRAY' ) {
-            foreach my $q ( @{ $args->{q} } ) {
+        if ( ref($args) eq 'ARRAY' ) {
+            foreach my $q ( @{$args} ) {
                 push @query_params_array, $json->decode($q)
                     if $q;
             }
@@ -260,20 +220,19 @@ sub metric_types_report {
             push @{$data}, $missing_result if $missing_result;
         }
 
-        my @report_data;
+        my @metric_types = ('metric_types_report');
+        my $report_data  = _get_report_data(
+            {
+                data_type            => $data_type,
+                data                 => $data,
+                metric_types         => \@metric_types,
+                access_types         => undef,
+                usage_data_providers => $usage_data_providers,
+                period               => 'monthly'
+            }
+        );
 
-        for my $data_object ( @{$data} ) {
-
-            # Add provider name rather than embed provider object
-            my $usage_data_provider_id = $data_object->{usage_data_provider_id};
-            my @provider_object =
-                grep { $usage_data_provider_id eq $_->{erm_usage_data_provider_id} } @{$usage_data_providers};
-            my $provider_name = $provider_object[0]->{name};
-            $data_object->{provider_name} = $provider_name;
-
-            push @report_data, $data_object;
-        }
-        return $c->render( status => 200, openapi => \@report_data );
+        return $c->render( status => 200, openapi => $report_data );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -291,20 +250,19 @@ sub provider_rollup_report {
 
     return try {
 
-        my $args = $c->validation->output;
-
-        my $usage_data_providers_set = Koha::ERM::EUsage::UsageDataProviders->new;
-        my $usage_data_providers     = $c->objects->search($usage_data_providers_set);
-
+        my $args = $c->param('q');
         my @query_params_array;
         my $json = JSON->new;
 
-        if ( ref( $args->{q} ) eq 'ARRAY' ) {
-            foreach my $q ( @{ $args->{q} } ) {
+        if ( ref($args) eq 'ARRAY' ) {
+            foreach my $q ( @{$args} ) {
                 push @query_params_array, $json->decode($q)
                     if $q;
             }
         }
+
+        my $usage_data_providers_set = Koha::ERM::EUsage::UsageDataProviders->new;
+        my $usage_data_providers     = $c->objects->search($usage_data_providers_set);
 
         my $data_type = $c->validation->param('data_type');
         my $key       = 'erm_usage_' . $data_type . 's';
@@ -325,9 +283,8 @@ sub provider_rollup_report {
                         grep { $metric_type eq $_->{metric_type} } @$statistics;
                     my @usage_counts =
                         map { $_->{usage_count} } @filtered_statistics;
-                    my $sum =
-                        scalar(@usage_counts) > 0
-                        ? eval join '+', @usage_counts
+                    my $sum = scalar(@usage_counts) > 0
+                        ? _get_usage_total( \@usage_counts )
                         : 0;
 
                     my $data_object_hash = _get_object_hash(
@@ -349,7 +306,7 @@ sub provider_rollup_report {
                     map { $_->{usage_total} } @filtered_object_data;
                 my $provider_rollup_total =
                     scalar(@data_object_usage_totals) > 0
-                    ? eval join '+', @data_object_usage_totals
+                    ? _get_usage_total(@data_object_usage_totals)
                     : 0;
 
                 my %usage_data_provider_hash = (
@@ -481,6 +438,8 @@ sub _get_object_hash {
     my $statistics  = $args->{statistics};
     my $provider    = $args->{provider};
     my $metric_type = $args->{metric_type};
+    my $access_type = $args->{access_type};
+    my $yop         = $args->{yop};
     my $period      = $args->{period};
     my $sum         = $args->{sum};
     my %object_hash;
@@ -497,7 +456,10 @@ sub _get_object_hash {
             title_uri              => $data_object->{title_uri},
             publisher              => $data_object->{publisher},
             publisher_id           => $data_object->{publisher_id},
+            platform               => $data_object->{platform},
             metric_type            => $metric_type,
+            access_type            => $access_type,
+            yop                    => $yop,
         );
     }
     if ( $data_type eq 'platform' ) {
@@ -570,6 +532,171 @@ sub _get_missing_data {
     }
 
     return $item if $item;
+}
+
+=head3 _get_report_data
+
+Takes the dataset retrieved from the database and converts it into a reportable set of data
+Each title in the dataset needs to be split into rows depending on its different properties - YOP, access_type, metric_type
+
+=cut
+
+sub _get_report_data {
+    my ($args) = @_;
+
+    my $data                 = $args->{data};
+    my $metric_types         = $args->{metric_types};
+    my $access_types         = $args->{access_types};
+    my $usage_data_providers = $args->{usage_data_providers};
+    my $data_type            = $args->{data_type};
+    my $period               = $args->{period};
+    my $data_key             = $period eq 'monthly' ? 'erm_usage_muses' : 'erm_usage_yuses';
+    my @report_data;
+
+    for my $data_object ( @{$data} ) {
+
+        # Add provider name rather than embed provider object
+        my $usage_data_provider_id = $data_object->{usage_data_provider_id};
+        my @provider_object =
+            grep { $usage_data_provider_id eq $_->{erm_usage_data_provider_id} } @{$usage_data_providers};
+        my $provider_name = $provider_object[0]->{name};
+
+        my $statistics = $data_object->{$data_key};
+        my @yops       = uniq map( $_->{yop}, @$statistics );
+        @yops = grep defined, @yops;
+
+        # Split data objects into metric_types i.e. one table row per metric_type
+        if ( scalar(@yops) > 0 ) {
+            for my $yop (@yops) {
+                _create_report_rows(
+                    {
+                        data_object   => $data_object,
+                        statistics    => $statistics,
+                        metric_types  => $metric_types,
+                        access_types  => $access_types,
+                        provider_name => $provider_name,
+                        data_type     => $data_type,
+                        period        => $period,
+                        report_data   => \@report_data,
+                        yop           => $yop,
+                    }
+                );
+
+            }
+        } else {
+            _create_report_rows(
+                {
+                    data_object   => $data_object,
+                    statistics    => $statistics,
+                    metric_types  => $metric_types,
+                    access_types  => $access_types,
+                    provider_name => $provider_name,
+                    data_type     => $data_type,
+                    period        => $period,
+                    report_data   => \@report_data,
+                    yop           => undef,
+                }
+            );
+        }
+    }
+    return \@report_data;
+}
+
+=head3 _create_report_rows
+
+A helper function for creating report rows based on access_type and metric_type
+
+=cut
+
+sub _create_report_rows {
+    my ($args) = @_;
+
+    my $data_object   = $args->{data_object};
+    my $statistics    = $args->{statistics};
+    my $metric_types  = $args->{metric_types};
+    my $access_types  = $args->{access_types};
+    my $provider_name = $args->{provider_name};
+    my $data_type     = $args->{data_type};
+    my $period        = $args->{period};
+    my $report_data   = $args->{report_data};
+    my $yop           = $args->{yop};
+
+    if ( $access_types && scalar(@$access_types) > 0 ) {
+        for my $access_type (@$access_types) {
+            for my $metric_type (@$metric_types) {
+                my @usage_stats = $yop ? grep { $yop eq $_->{yop} } @$statistics : @$statistics;
+                my @stats_by_access_type =
+                    grep { $access_type eq $_->{access_type} } @usage_stats;
+                my @stats_by_metric_type =
+                    grep { $metric_type eq $_->{metric_type} } @stats_by_access_type;
+                my @usage_counts =
+                    map { $_->{usage_count} } @stats_by_metric_type;
+                my $sum = $period eq 'monthly' && scalar(@usage_counts) > 0
+                    ? _get_usage_total( \@usage_counts )
+                    : 0;
+
+                my $data_object_hash = _get_object_hash(
+                    {
+                        data_type   => $data_type,
+                        data_object => $data_object,
+                        statistics  => \@stats_by_metric_type,
+                        provider    => $provider_name,
+                        metric_type => $metric_type,
+                        access_type => $access_type,
+                        yop         => $yop ? $yop : undef,
+                        period      => $period,
+                        sum         => $sum
+                    }
+                );
+                push @$report_data, $data_object_hash;
+            }
+        }
+    } else {
+        for my $metric_type (@$metric_types) {
+            my @usage_stats = $yop ? grep { $yop eq $_->{yop} } @$statistics : @$statistics;
+            my @stats_by_metric_type =
+                $metric_type ne 'metric_types_report'
+                ? grep { $metric_type eq $_->{metric_type} } @usage_stats
+                : @usage_stats;
+            my @usage_counts =
+                map { $_->{usage_count} } @stats_by_metric_type;
+            my $sum = $period eq 'monthly' && scalar(@usage_counts) > 0
+                ? _get_usage_total(\@usage_counts)
+                : 0;
+
+            my $data_object_hash = _get_object_hash(
+                {
+                    data_type   => $data_type,
+                    data_object => $data_object,
+                    statistics  => \@stats_by_metric_type,
+                    provider    => $provider_name,
+                    metric_type => $metric_type,
+                    access_type => undef,
+                    yop         => $yop ? $yop : undef,
+                    period      => $period,
+                    sum         => $sum
+                }
+            );
+            push @$report_data, $data_object_hash;
+        }
+    }
+}
+
+=head3
+
+A method for summing the usage counts for a data  object
+
+=cut
+
+sub _get_usage_total {
+    my ( $statistics ) = @_;
+
+    my $sum = 0;
+    foreach my $statistic (@$statistics) {
+        $sum += $statistic;
+    }
+
+    return $sum
 }
 
 1;
