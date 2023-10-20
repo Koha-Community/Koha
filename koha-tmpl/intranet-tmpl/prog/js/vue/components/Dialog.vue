@@ -38,6 +38,7 @@
                                 v-if="input.type == 'Text'"
                                 :id="`confirmation_input_${input.id}`"
                                 v-model="input.value"
+                                :required="input.required"
                             />
                         </div>
                     </div>
@@ -87,7 +88,9 @@ export default {
             if (
                 this.confirmation.inputs &&
                 this.confirmation.inputs.filter(
-                    input => input.required && input.value == null
+                    input =>
+                        input.required &&
+                        (input.value == null || input.value == "")
                 ).length
             ) {
                 this.$refs.confirmationform.reportValidity()
