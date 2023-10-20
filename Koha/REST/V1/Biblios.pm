@@ -301,10 +301,9 @@ sub get_items {
     return try {
 
         # FIXME We need to order_by serial.publisheddate if we have _order_by=+me.serial_issue_number
-        #       Should we use search_ordered here? Maybe as well in Koha::REST::V1::Items::list?
         # FIXME Do we always need host_items => 1 or depending on a flag?
         # FIXME Should we prefetch => ['issue','branchtransfer']?
-        my $items_rs = $biblio->items( { host_items => 1 } )->search( {}, { join => 'biblioitem' } ) );
+        my $items_rs = $biblio->items( { host_items => 1 } )->search_ordered( {}, { join => 'biblioitem' } );
         $items_rs = $items_rs->filter_by_bookable if $bookable_only;
         # FIXME We need to order_by serial.publisheddate if we have _order_by=+me.serial_issue_number
         my $items = $c->objects->search($items_rs);

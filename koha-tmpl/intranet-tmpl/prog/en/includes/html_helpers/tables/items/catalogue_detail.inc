@@ -275,7 +275,7 @@
         };
         var items_table = $("#" + tab_id + '_table').kohaTable({
             ajax: { url: item_table_url },
-            order: [[ 0, "asc" ]],
+            order: [],
             embed,
             autoWidth: false,
             bKohaColumnsUseNames: true,
