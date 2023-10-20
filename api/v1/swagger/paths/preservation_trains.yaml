@@ -326,12 +326,12 @@
         name: body
         required: true
         schema:
-          type: object
+          $ref: "../swagger.yaml#/definitions/preservation_train_item"
     responses:
       201:
         description: A successfully added item
         schema:
-          type: object
+          $ref: "../swagger.yaml#/definitions/preservation_train_item"
       400:
         description: Bad parameter
         schema:
@@ -455,7 +455,7 @@
         name: body
         required: true
         schema:
-          type: object
+          $ref: "../swagger.yaml#/definitions/preservation_train_item"
       - name: x-koha-embed
         in: header
         required: false
@@ -470,7 +470,7 @@
       200:
         description: A successfully updated item
         schema:
-          type: object
+          $ref: "../swagger.yaml#/definitions/preservation_train_item"
       400:
         description: Bad parameter
         schema:
@@ -572,12 +572,11 @@
             - catalogue_item
             - catalogue_item.biblio
         collectionFormat: csv
-        additionalProperties: false
     responses:
       200:
         description: An item in train
         schema:
-          type: object
+          $ref: "../swagger.yaml#/definitions/preservation_train_item"
       401:
         description: Authentication required
         schema:
@@ -629,6 +628,7 @@
             train_id:
               description: Train id
               type: integer
+          additionalProperties: false
     responses:
       201:
         description: A successfully copied item
