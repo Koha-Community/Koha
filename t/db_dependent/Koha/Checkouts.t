@@ -421,7 +421,8 @@ subtest 'automatic_checkin' => sub {
             }
         )->store;
 
-        my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $patron->branchcode}  } );
+        my $patron_2 =
+            $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $patron->branchcode } } );
         my $reserveid = AddReserve(
             {
                 branchcode     => $patron->branchcode,
@@ -431,12 +432,12 @@ subtest 'automatic_checkin' => sub {
             }
         );
 
-        t::lib::Mocks::mock_preference('AutomaticCheckinAutoFill', '0');
+        t::lib::Mocks::mock_preference( 'AutomaticCheckinAutoFill', '0' );
 
         Koha::Checkouts->automatic_checkin;
-        my $reserve = Koha::Holds->find( $reserveid );
+        my $reserve = Koha::Holds->find($reserveid);
 
-        is( $reserve->found, undef, "Hold was not filled when AutomaticCheckinAutoFill disabled");
+        is( $reserve->found, undef, "Hold was not filled when AutomaticCheckinAutoFill disabled" );
 
         my $checkout_3_due_ac = Koha::Checkout->new(
             {
@@ -446,12 +447,12 @@ subtest 'automatic_checkin' => sub {
                 date_due       => $today
             }
         )->store;
-        t::lib::Mocks::mock_preference('AutomaticCheckinAutoFill', '1');
+        t::lib::Mocks::mock_preference( 'AutomaticCheckinAutoFill', '1' );
 
         Koha::Checkouts->automatic_checkin;
         $reserve->discard_changes;
 
-        is( $reserve->found, 'W', "Hold was filled when AutomaticCheckinAutoFill enabled");
+        is( $reserve->found, 'W', "Hold was filled when AutomaticCheckinAutoFill enabled" );
 
         my $checkout_2_odue_ac = Koha::Checkout->new(
             {
@@ -461,7 +462,7 @@ subtest 'automatic_checkin' => sub {
                 date_due       => $today
             }
         )->store;
-        my $branch2 = $builder->build_object({ class=> "Koha::Libraries" });
+        my $branch2    = $builder->build_object( { class => "Koha::Libraries" } );
         my $reserve2id = AddReserve(
             {
                 branchcode     => $branch2->branchcode,
@@ -472,8 +473,11 @@ subtest 'automatic_checkin' => sub {
         );
         Koha::Checkouts->automatic_checkin;
 
-        my $reserve2 = Koha::Holds->find( $reserve2id );
-        is( $reserve2->found, 'T', "Hold was filled when AutomaticCheckinAutoFill enabled and transfer was initiated when branches didn't match");
+        my $reserve2 = Koha::Holds->find($reserve2id);
+        is(
+            $reserve2->found, 'T',
+            "Hold was filled when AutomaticCheckinAutoFill enabled and transfer was initiated when branches didn't match"
+        );
     };
 
     $schema->storage->txn_rollback;
