@@ -48,11 +48,13 @@ return {
         });
         say $out "Ensure additional_contents.code is VARCHAR(100)";
 
-        $dbh->do(q{
-                ALTER TABLE `additional_contents`
-                MODIFY COLUMN `lang` VARCHAR(50) NOT NULL DEFAULT ''
-        });
-        say $out "Ensure additional_contents.lang is VARCHAR(50)";
+        if ( column_exists('additional_contents', 'lang') ) {
+            $dbh->do(q{
+                    ALTER TABLE `additional_contents`
+                    MODIFY COLUMN `lang` VARCHAR(50) NOT NULL DEFAULT ''
+            });
+            say $out "Ensure additional_contents.lang is VARCHAR(50)";
+        }
 
         $dbh->do(q{
             ALTER TABLE search_marc_map MODIFY `marc_type` enum('marc21','unimarc') NOT NULL COMMENT 'what MARC type this map is for'
