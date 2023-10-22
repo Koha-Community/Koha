@@ -9,9 +9,9 @@ return {
 
         # Get existing value from the TrackLastPatronActivity system preference
         my ($tracklastactivity) = $dbh->selectrow_array(
-            q|
+            q{
             SELECT value FROM systempreferences WHERE variable='TrackLastPatronActivity';
-        |
+        }
         );
 
         my $triggers = $tracklastactivity ? 'check_out,connection,login' : '';
