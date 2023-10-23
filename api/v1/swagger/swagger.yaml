@@ -767,9 +767,20 @@ info:
     name: Koha Development Team
     url: https://koha-community.org/
   description: |
-    ## Introduction
+    ## Background
 
-    This API is documented in **OpenAPI format**.
+    The API supports two sets of endpoints, one targetted at library staff and the other at at library users.
+
+    Those endpoints under the `/public` path are aimed at delivering functionality tailored to library users and offer
+    a more restricted set of functions, overrides and data in thier responses for data privacy and library policy
+    reasons. Many of these endpoints do not require authentication for fetching public data, though an authenticated
+    session will expose additional options and allow users to see more data where it is part of their own record.
+
+    All other endpoints are targetted at the staff interface level and allow for additional functionality and a more
+    unrestricted view of data.  These endpoints, however, have a level of redaction built in for resources that the
+    api consumer should not have access to.  For example, user data for users who do not belong to the same library
+    or library group of your api user will be reduced to just minimum neccesary for a valid response. Object keys will
+    be consistent for all responses, but their values may be removed depending on access.
 
     ## Authentication
 
@@ -781,6 +792,14 @@ info:
 
     Both _Basic authentication_ and the _OAuth2_ flow, need to be enabled
     by system preferences.
+
+    ## Authorization
+
+    The API uses existing user profiles to restrict access to resources based on user permissions and the library the
+    API user is assigned to.  This may result, at times, in resources being returned in a redacted form with all keys
+    present but sensative values nulled.
+
+    We do not yet support OAuth Scopes or the Authorization Code grant flow.
 
     ## Errors
 
