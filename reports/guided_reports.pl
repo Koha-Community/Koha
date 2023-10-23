@@ -81,7 +81,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $session_id = $input->cookie('CGISESSID');
 my $session = $session_id ? get_session($session_id) : undef;
 
-$template->param(  templates => Koha::Notice::Templates->search({ module => 'report' }) );
+$template->param( templates => Koha::Notice::Templates->search( { module => 'report' } ) );
 
 my $filter;
 if ( $input->param("filter_set") or $input->param('clear_filters') ) {
@@ -670,13 +670,14 @@ elsif ($phase eq 'Share'){
 }
 elsif ($phase eq 'Run this report'){
     # execute a saved report
-    my $limit      = $input->param('limit') || 20;
-    my $offset     = 0;
-    my $report_id  = $input->param('reports');
-    my @sql_params = $input->multi_param('sql_params');
-    my @param_names = $input->multi_param('param_name');
-    my $template_id = $input->param('template');
+    my $limit           = $input->param('limit') || 20;
+    my $offset          = 0;
+    my $report_id       = $input->param('reports');
+    my @sql_params      = $input->multi_param('sql_params');
+    my @param_names     = $input->multi_param('param_name');
+    my $template_id     = $input->param('template');
     my $want_full_chart = $input->param('want_full_chart') || 0;
+
 
     # offset algorithm
     if ($input->param('page')) {
