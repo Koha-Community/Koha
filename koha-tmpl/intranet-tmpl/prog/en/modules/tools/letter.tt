@@ -172,7 +172,7 @@
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=serial">Serials (new issue)</a></li>
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=suggestions">Suggestions</a></li>
                                 <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=pos">Point of sale</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=report">Report</a></li>
+                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=report">Reports</a></li>
                             </ul>
                         </div>
                     </div> <!-- /#toolbar -->
@@ -231,7 +231,7 @@
                                                     [% CASE 'serial' %]<span>Serials (new issue)</span>
                                                     [% CASE 'suggestions' %]<span>Suggestions</span>
                                                     [% CASE 'pos' %]<span>Point of sale</span>
-                                                    [% CASE 'report' %]<span>Report</span>
+                                                    [% CASE 'report' %]<span>Reports</span>
                                                     [% CASE %]<span>[% lette.module | html %]</span>
                                                 [% END %]
                                             </td>
@@ -414,9 +414,9 @@
                                             <option value="pos">Point of sale</option>
                                         [% END %]
                                         [% IF ( module == "report" ) %]
-                                            <option value="report" selected="selected">Report</option>
+                                            <option value="report" selected="selected">Reports</option>
                                         [% ELSE %]
-                                            <option value="report">Report</option>
+                                            <option value="report">Reports</option>
                                         [% END %]
                                     </select>
                                 </li>
