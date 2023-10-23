@@ -54,7 +54,7 @@ function batchModify(){
         var bib = $(this).val();
         bibs += bib + "/";
     });
-    newloc = "/cgi-bin/koha/tools/batch_record_modification.pl?op=list&amp;bib_list=" + bibs + "&type=biblio";
+    newloc = "/cgi-bin/koha/tools/batch_record_modification.pl?op=list&bib_list=" + bibs + "&type=biblio";
 
     window.opener.location = newloc;
     window.close();

@@ -145,16 +145,16 @@ function update_child() {
 function confirm_reregistration() {
     var is_confirmed = window.confirm( __("Are you sure you want to renew this patron's registration?") );
     if (is_confirmed) {
-        window.location = '/cgi-bin/koha/members/setstatus.pl?borrowernumber=' + borrowernumber + '&amp;destination=' + destination + '&amp;reregistration=y';
+        window.location = '/cgi-bin/koha/members/setstatus.pl?borrowernumber=' + borrowernumber + '&destination=' + destination + '&reregistration=y';
     }
 }
 function export_barcodes() {
-    window.open('/cgi-bin/koha/members/readingrec.pl?borrowernumber=' + borrowernumber + '&amp;op=export_barcodes');
+    window.open('/cgi-bin/koha/members/readingrec.pl?borrowernumber=' + borrowernumber + '&op=export_barcodes');
 }
 var slip_re = /slip/;
 function printx_window(print_type) {
     var handler = print_type.match(slip_re) ? "printslip" : "summary-print";
-    window.open("/cgi-bin/koha/members/" + handler + ".pl?borrowernumber=" + borrowernumber + "&amp;print=" + print_type, "printwindow");
+    window.open("/cgi-bin/koha/members/" + handler + ".pl?borrowernumber=" + borrowernumber + "&print=" + print_type, "printwindow");
     return false;
 }
 function searchToHold(){

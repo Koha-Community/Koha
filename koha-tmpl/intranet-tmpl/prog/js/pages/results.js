@@ -434,7 +434,7 @@ function resultsBatchProcess( op ){
             selected.each(function() {
                 params.push( $(this).val() );
             });
-            url = "/cgi-bin/koha/tools/batch_record_modification.pl?op=list&amp;bib_list=" + params.join("/");
+            url = "/cgi-bin/koha/tools/batch_record_modification.pl?op=list&bib_list=" + params.join("/");
             location.href = url;
         }
     } else if( op == "delete" ){
