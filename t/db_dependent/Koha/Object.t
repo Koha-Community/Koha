@@ -397,7 +397,7 @@ subtest "to_api() tests" => sub {
     'Koha::Exceptions::Object::MethodNotCoveredByTests',
         'Unknown method exception thrown if is_count not specified';
 
-    subtest 'unprivileged request tests' => sub {
+    subtest 'public request tests' => sub {
 
         my @all_attrs = Koha::Libraries->columns();
         my $public_attrs = { map { $_ => 1 } @{ Koha::Library->public_read_list() } };
@@ -535,16 +535,21 @@ subtest "to_api() tests" => sub {
         $schema->storage->txn_rollback;
     };
 
-    subtest 'accessible usage tests' => sub {
+    subtest 'unprivileged requests redaction tests' => sub {
 
-        plan tests => 2;
+        my @all_attrs        = Koha::Patrons->columns();
+        my $unredacted_attrs = { map { $_ => 1 } @{ Koha::Patron->unredact_list() } };
+        my $mapping          = Koha::Patron->to_api_mapping;
+        my @mapped_to_null   = grep { !defined( $mapping->{$_} ) } keys %{$mapping};
+
+        plan tests => ( scalar @all_attrs * 3 ) - scalar @mapped_to_null;
 
         $schema->storage->txn_begin;
 
         my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
         my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
 
-        my $patron = $builder->build_object(
+        my $api_consumer = $builder->build_object(
             {
                 class => 'Koha::Patrons',
                 value => {
@@ -554,20 +559,53 @@ subtest "to_api() tests" => sub {
             }
         );
 
-        my $patron_1 = $builder->build_object(
-            { class => 'Koha::Patrons', value => { branchcode => $library_1->id } }
-        );
-        my $patron_2 = $builder->build_object(
-            { class => 'Koha::Patrons', value => { branchcode => $library_2->id } }
-        );
+        my $patron_1 =
+            $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library_1->id } } );
+        my $patron_2 =
+            $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library_2->id } } );
 
-        t::lib::Mocks::mock_userenv( { patron => $patron } );
+        t::lib::Mocks::mock_userenv( { patron => $api_consumer } );
 
-        is(
-            $patron_1->to_api( { user => $patron } )->{firstname}, $patron_1->firstname,
-            'Returns unredacted object hash'
-        );
-        is( $patron_2->to_api( { user => $patron } )->{firstname}, undef, 'Returns redacted object hash' );
+        my $visible_user  = $patron_1->to_api( { user => $api_consumer } );
+        my $redacted_user = $patron_2->to_api( { user => $api_consumer } );
+
+        foreach my $attr (@all_attrs) {
+            my $mapped = exists $mapping->{$attr} ? $mapping->{$attr} : $attr;
+            if ( defined($mapped) ) {
+                ok(
+                    exists $visible_user->{$mapped},
+                    "Mapped attribute '$attr' is present"
+                );
+                if ( exists $unredacted_attrs->{$attr} ) {
+                    is(
+                        $visible_user->{$mapped}, $patron_1->TO_JSON->{$attr},
+                        "Unredacted attribute '$attr' is visible when user is accessible"
+                    );
+                    is(
+                        $redacted_user->{$mapped}, $patron_2->TO_JSON->{$attr},
+                        "Unredacted attribute '$attr' is visible when user is inaccessible"
+                    );
+                } else {
+                    is(
+                        $visible_user->{$mapped}, $patron_1->TO_JSON->{$attr},
+                        "Redacted attribute '$attr' is visible when user is accessible"
+                    );
+                    is(
+                        $redacted_user->{$mapped}, undef,
+                        "Redacted attribute '$attr' is undefined when user is inaccessible"
+                    );
+                }
+            } else {
+                ok(
+                    !exists $visible_user->{$attr},
+                    "Mapped to null attribute '$attr' is not present when accessible"
+                );
+                ok(
+                    !exists $redacted_user->{$attr},
+                    "Mapped to null attribute '$attr' is not present when inaccessible"
+                );
+            }
+        }
 
         $schema->storage->txn_rollback;
     };
