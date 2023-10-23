@@ -51,7 +51,7 @@ function confirm_deletion(link) {
     }
     if (is_confirmed) {
         $("#deletebiblio").unbind('click');
-        window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=" + biblionumber + (searchid ? "&amp;searchid="+searchid : "");
+        window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&biblionumber=" + biblionumber + (searchid ? "&searchid="+searchid : "");
     } else {
         return false;
     }
@@ -66,7 +66,7 @@ function confirm_items_deletion() {
         alert(__("%s hold(s) on this record. You must delete all holds before deleting all items.").format(holdcount));
     } else if ( count > 0 ) {
         if (confirm(__("Are you sure you want to delete the %s attached items?").format(count))) {
-            window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&amp;biblionumber=" + biblionumber + (searchid ? "&amp;searchid="+searchid : "");
+            window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&biblionumber=" + biblionumber + (searchid ? "&searchid="+searchid : "");
         } else {
             return false;
         }
