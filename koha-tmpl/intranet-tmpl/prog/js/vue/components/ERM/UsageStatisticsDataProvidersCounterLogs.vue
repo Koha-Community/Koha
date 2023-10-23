@@ -124,6 +124,7 @@ export default {
                     orderable: true,
                 },
                 {
+                    data: "importdate",
                     title: __("Import date"),
                     render: function (data, type, row, meta) {
                         const date = row.importdate.substr(0, 10)
