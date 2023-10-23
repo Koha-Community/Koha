@@ -155,6 +155,7 @@ sub set_job_size {
             type => 'success', # success, warning or error
             code => 'object_added', # object_added or object_already_exists
             title => $row->{Title},
+            message => 'message',
         }
     );
 

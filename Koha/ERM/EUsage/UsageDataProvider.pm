@@ -215,10 +215,16 @@ sub harvest_sushi {
         return;
     }
 
+    my $decoded_response = decode_json( $response->decoded_content );
+
+    return if $self->_sushi_errors($decoded_response);
+
     # Parse the SUSHI response
     my $sushi_counter =
-        Koha::ERM::EUsage::SushiCounter->new( { response => decode_json( $response->decoded_content ) } );
+        Koha::ERM::EUsage::SushiCounter->new( { response => $decoded_response } );
     my $counter_file = $sushi_counter->get_COUNTER_from_SUSHI;
+
+    return if $self->_counter_file_size_too_large($counter_file);
 
     $self->counter_files( 
         [
@@ -438,6 +444,77 @@ sub _check_trailing_character {
     }
 
     return $url;
+}
+
+=head3 _sushi_errors
+
+Checks and handles possible errors in the SUSHI response
+Additionally, adds background job report message(s) if that is the case
+
+=cut
+
+sub _sushi_errors {
+    my ( $self, $decoded_response ) = @_;
+
+    if ( $decoded_response->{Severity} ) {
+        $self->{job_callbacks}->{add_message_callback}->(
+            {
+                type    => 'error',
+                code    => $decoded_response->{Code},
+                message => $decoded_response->{Severity} . ' - ' . $decoded_response->{Message},
+            }
+        ) if $self->{job_callbacks};
+        return 1;
+    }
+
+    if ( $decoded_response->{Report_Header}->{Exceptions} ) {
+        foreach my $exception ( @{ $decoded_response->{Report_Header}->{Exceptions} } ) {
+            $self->{job_callbacks}->{add_message_callback}->(
+                {
+                    type    => 'error',
+                    code    => $exception->{Code},
+                    message => $exception->{Message} . ' - ' . $exception->{Data},
+                }
+            ) if $self->{job_callbacks};
+        }
+        return 1;
+    }
+
+    if ( scalar @{ $decoded_response->{Report_Items} } == 0 ) {
+        $self->{job_callbacks}->{add_message_callback}->(
+            {
+                type => 'error',
+                code => 'no_items',
+            }
+        ) if $self->{job_callbacks};
+        return 1;
+    }
+
+    return 0;
+}
+
+=head3 _counter_file_size_too_large
+
+Checks whether a counter file size exceeds the size allowed by the database or not
+Additionally, adds a background job report message if that is the case
+
+=cut
+
+sub _counter_file_size_too_large {
+    my ( $self, $counter_file ) = @_;
+
+    my $max_allowed_packet = C4::Context->dbh->selectrow_array(q{SELECT @@max_allowed_packet});
+    if ( length($counter_file) > $max_allowed_packet ) {
+        $self->{job_callbacks}->{add_message_callback}->(
+            {
+                type    => 'error',
+                code    => 'payload_too_large',
+                message => $max_allowed_packet / 1024 / 1024,
+            }
+        ) if $self->{job_callbacks};
+        return 1;
+    }
+    return 0;
 }
 
 =head3 _type

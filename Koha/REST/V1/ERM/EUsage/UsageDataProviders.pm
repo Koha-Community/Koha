@@ -313,6 +313,10 @@ sub process_COUNTER_file {
                     ? decode_base64( $body->{file_content} )
                     : "";
 
+                my $max_allowed_packet = C4::Context->dbh->selectrow_array(q{SELECT @@max_allowed_packet});
+                Koha::Exceptions::PayloadTooLarge->throw("File size exceeds limit defined by server")
+                    if length($file_content) > $max_allowed_packet;
+
                 # Validate the file_content without storing, it'll throw an exception if fail
                 my $counter_file_validation = Koha::ERM::EUsage::CounterFile->new( { file_content => $file_content } );
                 $counter_file_validation->validate;
@@ -356,7 +360,7 @@ sub process_COUNTER_file {
             } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
                 return $c->render(
                     status  => 413,
-                    openapi => { error => $_->error }
+                    openapi => { error => $_->description }
                 );
             } elsif ( $_->isa('Koha::Exceptions::ERM::EUsage::CounterFile::UnsupportedRelease') ) {
                 return $c->render(

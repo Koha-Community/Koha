@@ -84,12 +84,20 @@
                 <i class="fa fa-exclamation error"></i>
             [% END %]
             [% SWITCH m.code %]
-            [% CASE 'object_already_exists' %]
-                <span><strong>[% m.title %]</strong> already exists in this data provider and was not created. New usage statistics were verified anyway</span>
-            [% CASE 'object_added' %]
-                <span><strong>[% m.title %]</strong> successfully added</span>
-            [% CASE 'object_could_not_be_added' %]
-                <span><strong>[% m.title %]</strong> could not be processed - please check the logs</span>
+                [% CASE 'object_already_exists' %]
+                    <span><strong>[% m.title %]</strong> already exists in this data provider and was not created. New usage statistics were verified anyway</span>
+                [% CASE 'object_added' %]
+                    <span><strong>[% m.title %]</strong> successfully added</span>
+                [% CASE 'object_could_not_be_added' %]
+                    <span><strong>[% m.title %]</strong> could not be processed - please check the logs</span>
+                [% CASE 'payload_too_large' %]
+                    <span>COUNTER report file size exceeds limit defined by the database. Limit is [% m.message %] MB.</span><br>
+                    <span>Please increase this limit or harvest a shorter period.</span>
+                [% CASE 'no_items' %]
+                    <span>SUSHI response returned no items.</span><br>
+                    <span>Please try a different harvest period.</span>
+                [% CASE %]
+                    <span>SUSHI returned: [% m.message %] [% m.code %]</span>
             [% END %]
         </div>
     [% END %]
