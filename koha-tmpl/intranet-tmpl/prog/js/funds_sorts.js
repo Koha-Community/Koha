@@ -6,12 +6,29 @@ $(document).ready(function() {
     $("select[name='all_budget_id'] .b_inactive").remove();
     $("select[name='budget_id'] .b_inactive").remove();
 
+    $(".budget_code_item").each(function(){
+        let active_only = $(this).clone();
+        active_only.children().remove('.budget_item_inactive');
+        active_only.attr('id', this.id + '_active');
+        active_only.prop('hidden',false);
+        active_only.prop('disabled',false);
+        active_only.removeClass('bci_all').addClass('bci_active');
+        $(this).after(active_only);
+    });
+    $(".budget_code_item").change(function(){
+        $(this).siblings('select').val( $(this).val() );
+    });
+
     $("#showallbudgets").click(function() {
         if ($(this).is(":checked")) {
             $("select[name='budget_id']").html(disabledBudgetsCopy)
+            $(".bci_active").prop('disabled',true).prop('hidden',true);
+            $(".bci_all").prop('disabled',false).prop('hidden',false);
         }
         else {
             $("select[name='budget_id'] .b_inactive").remove();
+            $(".bci_active").prop('disabled',false).prop('hidden',false);
+            $(".bci_all").prop('disabled',true).prop('hidden',true);
         }
     });
 
