@@ -33,9 +33,8 @@ primary key
 
 =head2 title
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 item title
 
@@ -51,7 +50,7 @@ platform the title is harvested by
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 DOI number for the title
 
@@ -59,7 +58,7 @@ DOI number for the title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 Print ISSN number for the title
 
@@ -67,7 +66,7 @@ Print ISSN number for the title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 Online ISSN number for the title
 
@@ -75,7 +74,7 @@ Online ISSN number for the title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 URI number for the title
 
@@ -91,7 +90,7 @@ Publisher for the title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 Publisher ID for the title
 
@@ -99,7 +98,7 @@ Publisher ID for the title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 year of publication of the title
 
@@ -107,7 +106,7 @@ year of publication of the title
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 ISBN of the title
 
@@ -117,25 +116,25 @@ __PACKAGE__->add_columns(
   "title_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "title",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "usage_data_provider_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "title_doi",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "print_issn",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "online_issn",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "title_uri",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "publisher",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "publisher_id",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "yop",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "isbn",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -198,8 +197,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-18 15:59:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mgP48bpl+C3oD/7IHLgQTw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-24 09:31:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VfDbgXBq+c2rSXC1A6js5Q
 
 
 sub koha_object_class {

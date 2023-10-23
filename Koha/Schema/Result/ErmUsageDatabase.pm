@@ -59,7 +59,7 @@ Publisher for the database
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 24
+  size: 255
 
 Publisher ID for the database
 
@@ -83,7 +83,7 @@ __PACKAGE__->add_columns(
   "publisher",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "publisher_id",
-  { data_type => "varchar", is_nullable => 1, size => 24 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "usage_data_provider_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
@@ -148,8 +148,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-18 15:59:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aKPQT+piqnU4mqUHDXTXQw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-23 12:49:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O8PzChQgNwsjoLfWZhPwiQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
