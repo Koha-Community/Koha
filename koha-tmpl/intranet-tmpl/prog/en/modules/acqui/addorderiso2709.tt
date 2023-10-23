@@ -342,11 +342,21 @@
                                                                                 </li>
                                                                                 <li>
                                                                                     <label for="budget_code_item_[% item.item_id | html %]">budget_code</label>
-                                                                                    <select class="budget_code_item" id="budget_code_item_[% item.item_id | html %]" name="budget_code_[% biblio.import_record_id | html %]">
+                                                                                    <select class="budget_code_item bci_all" id="budget_code_item_[% item.item_id | html %]" name="budget_code_[% biblio.import_record_id | html %]" hidden="hidden" disabled="disabled">
                                                                                         <option value="">Select a fund (will use default if set)</option>
                                                                                         [% FOREACH budget_loo IN budget_loop %]
-                                                                                            [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]<option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
-                                                                                            [% ELSE %]<option value="[% budget_loo.b_id | html %]">[% budget_loo.b_txt | html %]</option>
+                                                                                            [% IF ( budget_loo.b_active ) %]
+                                                                                                [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]
+                                                                                                    <option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
+                                                                                                [% ELSE %]
+                                                                                                    <option value="[% budget_loo.b_id | html %]">[% budget_loo.b_txt | html %]</option>
+                                                                                                [% END %]
+                                                                                            [% ELSE %]
+                                                                                                [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]
+                                                                                                <option value="[% budget_loo.b_id | html %]" class="buget_item_inactive" selected="selected">[% budget_loo.b_txt | html %] (inactive)</option>
+                                                                                                [% ELSE %]
+                                                                                                <option value="[% budget_loo.b_id | html %]" class="budget_item_inactive">[% budget_loo.b_txt | html %] (inactive)</option>
+                                                                                                [% END %]
                                                                                             [% END %]
                                                                                         [% END %]
                                                                                     </select>
