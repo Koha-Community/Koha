@@ -444,7 +444,12 @@ sub _search_for_usage_object {
     } elsif ( $self->type =~ /TR/i ) {
         return Koha::ERM::EUsage::UsageTitles->search(
             {
-                title_doi              => $row->{DOI},
+                print_issn             => $row->{Print_ISSN},
+                online_issn            => $row->{Online_ISSN},
+                proprietary_id         => $row->{Proprietary_ID},
+                publisher              => $row->{Publisher},
+                platform               => $row->{Platform},
+                title                  => $row->{Title},
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id
             }
         )->last;
@@ -474,7 +479,38 @@ sub _is_same_usage_object {
             && $previous_object->item eq $row->{Item}
             && $previous_object->publisher eq $row->{Publisher};
     } elsif ( $self->type =~ /TR/i ) {
-        return $previous_object && $previous_object->title_doi eq $row->{DOI};
+
+        return unless $previous_object;
+
+        if ( $previous_object->print_issn && $row->{Print_ISSN} ){
+            return unless $previous_object->print_issn eq $row->{Print_ISSN};
+        }
+
+        if ( $previous_object->online_issn && $row->{Online_ISSN} ){
+            return unless $previous_object->online_issn eq $row->{Online_ISSN};
+        }
+
+        if ( $previous_object->proprietary_id && $row->{Proprietary_ID} ){
+            return unless $previous_object->proprietary_id eq $row->{Proprietary_ID};
+        }
+
+        if ( $previous_object->publisher && $row->{Publisher} ){
+            return unless $previous_object->publisher eq $row->{Publisher};
+        }
+
+        if ( $previous_object->platform && $row->{Platform} ){
+            return unless $previous_object->platform eq $row->{Platform};
+        }
+
+        if ( $previous_object->title_doi && $row->{DOI} ){
+            return unless $previous_object->title_doi eq $row->{DOI};
+        }
+
+        if ( $previous_object->title && $row->{Title} ){
+            return unless $previous_object->title eq $row->{Title};
+        }
+
+        return 1;
     }
 
     return 0;
