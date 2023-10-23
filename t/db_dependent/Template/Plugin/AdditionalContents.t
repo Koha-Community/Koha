@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 1;
 
 use C4::Context;
 use Koha::Caches;
@@ -37,52 +37,29 @@ subtest 'get' => sub {
 
     my $additional_contents = Koha::Template::Plugin::AdditionalContents->get({ category => 'news', location => ['opac_only', 'staff_and_opac'], lang => 'default', library => '%' });
     my $before_count = $additional_contents ? $additional_contents->{content}->count() : 0;
-    $builder->build_object({
+    my $additional_content = $builder->build_object({
         class => 'Koha::AdditionalContents',
         value => {
             category   => 'news',
             location   => 'opac_only',
-            lang       => 'default',
             branchcode => undef
         }
     });
+    $builder->build_object(
+        {
+            class => 'Koha::AdditionalContentsLocalizations',
+            value => {
+                additional_content_id => $additional_content->id,
+                lang                  => 'default',
+            }
+        }
+    );
     $additional_contents = Koha::Template::Plugin::AdditionalContents->get({ category => 'news', location => ['opac_only', 'staff_and_opac'], lang => 'default' });
     is( $additional_contents->{content}->count, $before_count + 1, "We get the additional one we added");
 
     $additional_contents = Koha::Template::Plugin::AdditionalContents->get({ category => 'news', location => ['opac_only', 'staff_and_opac'], lang => 'default', blocktitle => 'blockhead' });
 
     is( $additional_contents->{blocktitle}, 'blockhead', "Block title is passed through");
-
-
-};
-
-subtest 'get_opac_news_by_id' => sub {
-
-    plan tests => 4;
-
-    my $news_item = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            category => 'news',
-            location => 'opac_only'
-        }
-    });
-
-   my $fetched_news = Koha::Template::Plugin::AdditionalContents->get_opac_news_by_id({ news_id => $news_item->id });
-   is( $fetched_news->{content}->next->content, $news_item->content, "Correct news fetched for opac location" );
-
-   $news_item->location('staff_and_opac')->store();
-   $fetched_news = Koha::Template::Plugin::AdditionalContents->get_opac_news_by_id({ news_id => $news_item->id });
-   is( $fetched_news->{content}->next->content, $news_item->content, "Correct news fetched for oac and staff location" );
-
-   $news_item->location('staff_only')->store();
-   $fetched_news = Koha::Template::Plugin::AdditionalContents->get_opac_news_by_id({ news_id => $news_item->id });
-   is( $fetched_news, 0, "News item not fetched when location is staff_only" );
-
-   $news_item->location('opac_only')->category('HtmlCustomizations')->store();
-   $fetched_news = Koha::Template::Plugin::AdditionalContents->get_opac_news_by_id({ news_id => $news_item->id });
-   is( $fetched_news, 0, "News not fetched from a different category" );
-
 
 
 };

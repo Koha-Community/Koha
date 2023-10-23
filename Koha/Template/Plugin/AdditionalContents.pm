@@ -36,13 +36,14 @@ sub get {
     my $blocktitle = $params->{blocktitle};
     my $lang       = $params->{lang} || 'default';
     my $library    = $params->{library};
+    my $id         = $params->{id};
 
     my $content = Koha::AdditionalContents->search_for_display(
         {
             category   => $category,
             location   => $location,
             lang       => $lang,
-            library_id => $library,
+            ( $library ? ( library_id => $library ) : () ),
         }
     );
 
@@ -54,26 +55,6 @@ sub get {
         };
     }
     return;
-}
-
-sub get_opac_news_by_id {
-    my ( $self, $params ) = @_;
-
-    my $news_id   = $params->{news_id};
-
-    my $content = Koha::AdditionalContents->search(
-        {
-            location   => ['opac_only', 'staff_and_opac'],
-            idnew => $news_id,
-            category => 'news',
-        }
-    );
-
-    if ( $content->count ) {
-        return {
-            content    => $content,
-        };
-    }
 }
 
 1;
