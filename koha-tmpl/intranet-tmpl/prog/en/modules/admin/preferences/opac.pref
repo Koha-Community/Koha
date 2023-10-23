@@ -641,18 +641,18 @@ OPAC:
                 0: "Don't block"
             - expired patrons from OPAC actions such as placing a hold or renewing. Note that the setting for a patron category takes priority over this system preference.
         -
-            - The cleanup_database.pl cronjob will automatically delete unaccepted private list share invites after a period of
+            - The cleanup_database.pl cronjob automatically deletes unaccepted private list share invites after
             - pref: PurgeListShareInvitesOlderThan
               class: integer
             - "days."
-            - "<p>Example: [14] Sets purgation of unaccepted private list share invites for those older than 14 days.</p>"
-            - "<p><strong>WARNING</strong>: Unaccepted private list shares will be purged by the following 3 options:"
+            - "<p>Example: [14] Deletes unaccepted private list share invites older than 14 days.</p>"
+            - "<p><strong>WARNING</strong>: Unaccepted private list shares are deleted using these priorities:"
             - "<ul>"
-            - "<li>[First priority]: Use the --list-invites parameter when the cleanup_database.pl cronjob is run with a --list-invites parameter defining a number of days."
-            - "<li>[Second priority]: Use the PurgeListShareInvitesOlderThan syspref when it contains a value.</li>"
-            - "<li>[Third priority]: Use a default of 14 days when the cleanup_database.pl cronjob is run with a --list-invites parameter but no value AND the PurgeListShareInvitesOlderThan syspref is empty.</li>"
+            - "<li>First priority: Use the --list-invites parameter when the cleanup_database.pl cronjob is run with a --list-invites parameter defining a number of days."
+            - "<li>Second priority: Use the PurgeListShareInvitesOlderThan system preference when it contains a value.</li>"
+            - "<li>Third priority: Use a default of 14 days when the cleanup_database.pl cronjob is run with a --list-invites parameter, but no value AND the PurgeListShareInvitesOlderThan system preference is empty.</li>"
             - "</ul>"
-            - "<br><strong>Note:</strong> This system preference requires the <i>misc/cronjobs/cleanup_database.pl</i> cronjob. Ask your system administrator to schedule it."
+            - "<strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: OpacTrustedCheckout
               default: 0
