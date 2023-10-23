@@ -347,7 +347,6 @@ sub _COUNTER_report_body {
 
     my @report_body = ();
 
-    my $total_records = 0;
     foreach my $report_row ( @{$body} ) {
 
         my @metric_types = ();
@@ -366,7 +365,6 @@ sub _COUNTER_report_body {
         foreach my $metric_type (@metric_types) {
             push( @report_body, $self->_COUNTER_report_row( $report_row, $metric_type ) );
         }
-        $self->{total_records} = ++$total_records;
     }
 
     return @report_body;

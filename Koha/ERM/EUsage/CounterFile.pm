@@ -546,14 +546,19 @@ sub _add_usage_object_entry {
     my $specific_fields     = Koha::ERM::EUsage::SushiCounter->get_report_type_specific_fields( $self->type );
 
     if ( $self->type =~ /PR/i ) {
-        return Koha::ERM::EUsage::UsagePlatform->new(
+        my $new_usage_platform = Koha::ERM::EUsage::UsagePlatform->new(
             {
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
                 platform               => $row->{Platform},
             }
         )->store;
+
+        $self->{job_callbacks}->{report_info_callback}->('added_usage_objects')
+            if $self->{job_callbacks} && $new_usage_platform;
+
+        return $new_usage_platform;
     } elsif ( $self->type =~ /DR/i ) {
-        return Koha::ERM::EUsage::UsageDatabase->new(
+        my $new_usage_database = Koha::ERM::EUsage::UsageDatabase->new(
             {
                 database               => $row->{Database},
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
@@ -562,8 +567,13 @@ sub _add_usage_object_entry {
                 publisher_id           => $row->{Publisher_ID},
             }
         )->store;
+
+        $self->{job_callbacks}->{report_info_callback}->('added_usage_objects')
+            if $self->{job_callbacks} && $new_usage_database;
+
+        return $new_usage_database;
     } elsif ( $self->type =~ /IR/i ) {
-        return Koha::ERM::EUsage::UsageItem->new(
+        my $new_usage_item = Koha::ERM::EUsage::UsageItem->new(
             {
                 item                   => $row->{Item},
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
@@ -571,8 +581,13 @@ sub _add_usage_object_entry {
                 publisher              => $row->{Publisher},
             }
         )->store;
+
+        $self->{job_callbacks}->{report_info_callback}->('added_usage_objects')
+            if $self->{job_callbacks} && $new_usage_item;
+
+        return $new_usage_item;
     } elsif ( $self->type =~ /TR/i ) {
-        return Koha::ERM::EUsage::UsageTitle->new(
+        my $new_usage_title = Koha::ERM::EUsage::UsageTitle->new(
             {
                 title                  => $row->{Title},
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
@@ -590,6 +605,11 @@ sub _add_usage_object_entry {
                 : (),
             }
         )->store;
+
+        $self->{job_callbacks}->{report_info_callback}->('added_usage_objects')
+            if $self->{job_callbacks} && $new_usage_title;
+
+        return $new_usage_title;
     }
 }
 

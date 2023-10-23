@@ -18,20 +18,18 @@
                         <td>Report rows processed</td>
                         <td>[% job.progress %]</td>
                     </tr>
-                    [% IF report.total_records %]
-                        <tr>
-                        [% IF report.report_type.match( '^PR' ) %]
-                            <td>SUSHI Platforms processed</td>
-                        [% ELSIF report.report_type.match( '^DR' ) %]
-                            <td>SUSHI Databases processed</td>
-                        [% ELSIF report.report_type.match( '^IR' ) %]
-                            <td>SUSHI Items processed</td>
-                        [% ELSIF report.report_type.match( '^TR' ) %]
-                            <td>SUSHI Titles processed</td>
-                        [% END %]
-                            <td>[% report.total_records | html %]</td>
-                        </tr>
+                    <tr>
+                    [% IF report.report_type.match( '^PR' ) %]
+                        <td>Platforms added</td>
+                    [% ELSIF report.report_type.match( '^DR' ) %]
+                        <td>Databases added</td>
+                    [% ELSIF report.report_type.match( '^IR' ) %]
+                        <td>Items added</td>
+                    [% ELSIF report.report_type.match( '^TR' ) %]
+                        <td>Titles added</td>
                     [% END %]
+                        <td>[% report.us_report_info.added_usage_objects | html %]</td>
+                    </tr>
                     <tr>
                         <td>Monthly usages skipped</td>
                         <td>[% report.us_report_info.skipped_mus | html %]</td>

@@ -61,10 +61,11 @@ sub process {
     }
 
     $self->{us_report_info} = {
-        skipped_mus => 0,
-        skipped_yus => 0,
-        added_mus   => 0,
-        added_yus   => 0
+        skipped_mus         => 0,
+        skipped_yus         => 0,
+        added_mus           => 0,
+        added_yus           => 0,
+        added_usage_objects => 0,
     };
 
     # FIXME If the job has already been started, but started again (worker has been restart for instance)
@@ -111,7 +112,6 @@ sub process {
     # Prepare job report
     my $report = {
         report_type      => $job_report_report_type,
-        total_records    => $ud_provider->{total_records},
         us_report_info   => $self->{us_report_info},
         ud_provider_id   => $ud_provider->erm_usage_data_provider_id,
         ud_provider_name => $ud_provider->name,
