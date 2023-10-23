@@ -951,8 +951,13 @@ sub AUTOLOAD {
                 return $self->_result()->get_column($method);
             }
         };
-        no strict 'refs'; ## no critic (strict)
-        *{$AUTOLOAD} = $accessor;
+        # If called from child class as $self->SUPER-><accessor_name>
+        # $AUTOLOAD will contain ::SUPER which breaks method lookup
+        # therefore we cannot write those entries into the symbol table
+        unless ( $AUTOLOAD =~ /::SUPER::/ ) {
+            no strict 'refs'; ## no critic (strict)
+            *{$AUTOLOAD} = $accessor;
+        }
         return $accessor->( $self, @_ );
     }
 
