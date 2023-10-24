@@ -54,6 +54,22 @@ platform the title is harvested by
 
 DOI number for the title
 
+=head2 proprietary_id
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+Proprietary_ID for the title
+
+=head2 platform
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+platform for the title
+
 =head2 print_issn
 
   data_type: 'varchar'
@@ -120,6 +136,10 @@ __PACKAGE__->add_columns(
   "usage_data_provider_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "title_doi",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "proprietary_id",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "platform",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "print_issn",
   { data_type => "varchar", is_nullable => 1, size => 255 },
@@ -197,8 +217,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-24 09:31:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VfDbgXBq+c2rSXC1A6js5Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-24 10:15:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:V8yMHBVRFQrSm5Vj+V7Y+Q
 
 
 sub koha_object_class {

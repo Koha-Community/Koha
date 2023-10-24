@@ -89,6 +89,8 @@ return {
                 `title` mediumtext DEFAULT NULL COMMENT 'item title',
                 `usage_data_provider_id` int(11) NOT NULL COMMENT 'platform the title is harvested by',
                 `title_doi` varchar(255) DEFAULT NULL COMMENT 'DOI number for the title',
+                `proprietary_id` varchar(255) DEFAULT NULL COMMENT 'Proprietary_ID for the title',
+                `platform` varchar(255) DEFAULT NULL COMMENT 'platform for the title',
                 `print_issn` varchar(255) DEFAULT NULL COMMENT 'Print ISSN number for the title',
                 `online_issn` varchar(255) DEFAULT NULL COMMENT 'Online ISSN number for the title',
                 `title_uri` varchar(255) DEFAULT NULL COMMENT 'URI number for the title',

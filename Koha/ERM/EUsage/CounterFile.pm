@@ -592,6 +592,8 @@ sub _add_usage_object_entry {
                 title                  => $row->{Title},
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
                 title_doi              => $row->{DOI},
+                proprietary_id         => $row->{Proprietary_ID},
+                platform               => $row->{Platform},
                 print_issn             => $row->{Print_ISSN},
                 online_issn            => $row->{Online_ISSN},
                 title_uri              => $row->{URI},
