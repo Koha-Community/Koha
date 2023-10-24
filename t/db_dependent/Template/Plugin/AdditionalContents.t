@@ -33,18 +33,21 @@ my $builder = t::lib::TestBuilder->new;
 $schema->storage->txn_begin;
 
 subtest 'get' => sub {
-    plan tests => 2;
+    plan tests => 4;
 
-    my $additional_contents = Koha::Template::Plugin::AdditionalContents->get({ category => 'news', location => ['opac_only', 'staff_and_opac'], lang => 'default', library => '%' });
-    my $before_count = $additional_contents ? $additional_contents->{content}->count() : 0;
-    my $additional_content = $builder->build_object({
-        class => 'Koha::AdditionalContents',
-        value => {
-            category   => 'news',
-            location   => 'opac_only',
-            branchcode => undef
+    my $additional_contents = Koha::Template::Plugin::AdditionalContents->get(
+        { category => 'news', location => [ 'opac_only', 'staff_and_opac' ], lang => 'default', library => '%' } );
+    my $before_count       = $additional_contents ? $additional_contents->{content}->count() : 0;
+    my $additional_content = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => {
+                category   => 'news',
+                location   => 'opac_only',
+                branchcode => undef
+            }
         }
-    });
+    );
     $builder->build_object(
         {
             class => 'Koha::AdditionalContentsLocalizations',
@@ -54,13 +57,34 @@ subtest 'get' => sub {
             }
         }
     );
-    $additional_contents = Koha::Template::Plugin::AdditionalContents->get({ category => 'news', location => ['opac_only', 'staff_and_opac'], lang => 'default' });
-    is( $additional_contents->{content}->count, $before_count + 1, "We get the additional one we added");
+    $additional_contents = Koha::Template::Plugin::AdditionalContents->get(
+        { category => 'news', location => [ 'opac_only', 'staff_and_opac' ], lang => 'default' } );
+    is( $additional_contents->{content}->count, $before_count + 1, "We get the additional one we added" );
 
-    $additional_contents = Koha::Template::Plugin::AdditionalContents->get({ category => 'news', location => ['opac_only', 'staff_and_opac'], lang => 'default', blocktitle => 'blockhead' });
+    $additional_contents = Koha::Template::Plugin::AdditionalContents->get(
+        {
+            category   => 'news', location => [ 'opac_only', 'staff_and_opac' ], lang => 'default',
+            blocktitle => 'blockhead'
+        }
+    );
 
-    is( $additional_contents->{blocktitle}, 'blockhead', "Block title is passed through");
+    is( $additional_contents->{blocktitle}, 'blockhead', "Block title is passed through" );
 
+    $additional_contents = Koha::Template::Plugin::AdditionalContents->get(
+        {
+            id   => $additional_content->id, category => 'news', location => [ 'opac_only', 'staff_and_opac' ],
+            lang => 'default'
+        }
+    );
+    is( $additional_contents->{content}->count, 1 );
+
+    $additional_contents = Koha::Template::Plugin::AdditionalContents->get(
+        {
+            id       => $additional_content->id,           category => 'html_customizations',
+            location => [ 'opac_only', 'staff_and_opac' ], lang     => 'default'
+        }
+    );
+    is( $additional_contents, undef );
 
 };
 
