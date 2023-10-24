@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 94;
+use Test::More tests => 99;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -520,32 +520,63 @@ t::lib::Mocks::mock_preference( 'ClaimsLog', 'on' );
 t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
 
 {
-warning_like {
-    $err = SendAlerts( 'orderacquisition', $basketno , 'TESTACQORDER' ) }
+    warning_like {
+        $err = SendAlerts( 'orderacquisition', $basketno, 'TESTACQORDER' )
+    }
     qr|Fake send_or_die|,
-    "SendAlerts is using the mocked send_or_die routine (orderacquisition)";
-is($err, 1, "Successfully sent order.");
-is($email_object->email->header('To'), 'testemail@mydomain.com', "mailto correct in sent order");
-is($email_object->email->body, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered) Basket name: The basket name', 'Order notice text constructed successfully');
+        "SendAlerts is using the mocked send_or_die routine (orderacquisition)";
+    is( $err,                                                1,                        "Successfully sent order." );
+    is( $email_object->email->header('To'),                  'testemail@mydomain.com', "mailto correct in sent order" );
+    is( defined( $email_object->email->header('Reply-To') ), '',                       "No reply-to address is set" );
+    is(
+        $email_object->email->body,
+        'my vendor|John Smith|Ordernumber '
+            . $ordernumber
+            . ' (Silence in the library) (1 ordered) Basket name: The basket name',
+        'Order notice text constructed successfully'
+    );
 
-my $mocked_koha_email = Test::MockModule->new('Koha::Email');
-$mocked_koha_email->mock( 'send_or_die', sub {
-    Email::Sender::Failure->throw('something went wrong');
-});
+    # SendAlerts should use specific email addresses if set
+    t::lib::Mocks::mock_preference( 'AcquisitionsDefaultEMailAddress', 'acq-default@domain.com' );
+    t::lib::Mocks::mock_preference( 'AcquisitionsDefaultReplyTo',      'acq-replyto@domain.com' );
 
-warning_like {
-    $err = SendAlerts( 'orderacquisition', $basketno , 'TESTACQORDER' ); }
+    warning_like {
+        $err = SendAlerts( 'orderacquisition', $basketno, 'TESTACQORDER' )
+    }
+    qr|Fake send_or_die|,
+        "SendAlerts is using the mocked send_or_die routine (orderacquisition)";
+    is(
+        $email_object->email->header('From'), 'acq-default@domain.com',
+        "AcquisitionsDefaultEMailAddress is used to sent acq notification"
+    );
+    is(
+        $email_object->email->header('Reply-To'), 'acq-replyto@domain.com',
+        "AcquisitionsDefaultReplyTo is used to sent acq notification"
+    );
+
+    my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+    $mocked_koha_email->mock(
+        'send_or_die',
+        sub {
+            Email::Sender::Failure->throw('something went wrong');
+        }
+    );
+
+    warning_like {
+        $err = SendAlerts( 'orderacquisition', $basketno, 'TESTACQORDER' );
+    }
     qr{something went wrong},
-    'Warning is printed';
+        'Warning is printed';
 
-is($err->{error}, 'something went wrong', "Send exception, error message returned");
+    is( $err->{error}, 'something went wrong', "Send exception, error message returned" );
 
-$dbh->do(q{DELETE FROM letter WHERE code = 'TESTACQORDER';});
-warning_like {
-    $err = SendAlerts( 'orderacquisition', $basketno , 'TESTACQORDER' ) }
+    $dbh->do(q{DELETE FROM letter WHERE code = 'TESTACQORDER';});
+    warning_like {
+        $err = SendAlerts( 'orderacquisition', $basketno, 'TESTACQORDER' )
+    }
     qr/No orderacquisition TESTACQORDER letter transported by email/,
-    "GetPreparedLetter warns about missing notice template";
-is($err->{'error'}, 'no_letter', "No TESTACQORDER letter was defined.");
+        "GetPreparedLetter warns about missing notice template";
+    is( $err->{'error'}, 'no_letter', "No TESTACQORDER letter was defined." );
 }
 
 {
@@ -656,7 +687,7 @@ subtest '_parseletter' => sub {
 };
 
 subtest 'SendAlerts - claimissue' => sub {
-    plan tests => 13;
+    plan tests => 18;
 
     use C4::Serials;
 
@@ -733,11 +764,27 @@ subtest 'SendAlerts - claimissue' => sub {
     is( $err, 1, "Successfully sent claim" );
     is( $email_object->email->header('To'),
         'testemail@mydomain.com', "mailto correct in sent claim" );
+    is( defined($email_object->email->header('Reply-To')),
+        '', "reply-to is not set" );
     is(
         $email_object->email->body,
         "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy",
         'Serial claim letter for 1 issue constructed successfully'
     );
+    }
+
+    t::lib::Mocks::mock_preference( 'SerialsDefaultEMailAddress', 'ser-default@domain.com' );
+    t::lib::Mocks::mock_preference( 'SerialsDefaultReplyTo', 'ser-replyto@domain.com' );
+
+    {
+    warning_like {
+        $err = SendAlerts( 'claimissues', \@serialids , 'TESTSERIALCLAIM' ) }
+        qr|Fake send_or_die|,
+        "SendAlerts is using the mocked send_or_die routine (claimissues)";
+    is( $email_object->email->header('From'),
+        'ser-default@domain.com', "SerialsDefaultEMailAddress is used to serial claim issue" );
+    is( $email_object->email->header('Reply-To'),
+        'ser-replyto@domain.com', "SerialsDefaultReplyTo is used to sent serial claim issue" );
 
     my $mocked_koha_email = Test::MockModule->new('Koha::Email');
     $mocked_koha_email->mock( 'send_or_die', sub {
