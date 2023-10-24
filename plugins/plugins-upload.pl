@@ -35,24 +35,27 @@ my $plugins_enabled    = C4::Context->config("enable_plugins");
 my $plugins_restricted = C4::Context->config("plugins_restricted");
 
 my $input = CGI->new;
+my $uploadlocation = $input->param('uploadlocation');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name => $plugins_enabled ? "plugins/plugins-upload.tt" : "plugins/plugins-disabled.tt",
+        template_name => ( !$plugins_enabled || $plugins_restricted && !$uploadlocation )
+        ? 'plugins/plugins-disabled.tt'
+        : 'plugins/plugins-upload.tt',
         query         => $input,
         type          => "intranet",
         flagsrequired => { plugins => 'manage' },
     }
 );
 
-my $uploadlocation = $input->param('uploadlocation');
-
-# Early exists if uploads are not enabled direct upload attempted when uploads are restricted
+# Early exist if uploads are not enabled direct upload attempted when uploads are restricted
 if (!$plugins_enabled) {
     output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
 } elsif ( $plugins_restricted && !$uploadlocation ) {
     $template->param( plugins_restricted => $plugins_restricted );
     output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
 }
 
 my $uploadfilename = $input->param('uploadfile');
@@ -132,3 +135,5 @@ if ( ( $uploadfile || $uploadlocation ) && !%errors && !$template->param('ERRORS
 } else {
     output_html_with_http_headers $input, $cookie, $template->output;
 }
+
+exit;
