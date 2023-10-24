@@ -211,8 +211,17 @@ sub process_bib {
 
     my $frameworkcode = GetFrameworkCode($biblionumber);
 
-    my ( $headings_changed, $results ) =
-      LinkBibHeadingsToAuthorities( $linker, $record, $frameworkcode, $allowrelink, $tagtolink );
+    my ( $headings_changed, $results );
+
+    eval {
+        ( $headings_changed, $results ) =
+            LinkBibHeadingsToAuthorities( $linker, $record, $frameworkcode, $allowrelink, $tagtolink );
+    };
+    if ($@) {
+        warn "Error while searching for authorities for biblionumber $biblionumber at " . localtime(time);
+        return;
+    }
+
     foreach my $key ( keys %{ $results->{'unlinked'} } ) {
         $unlinked_headings{$key} += $results->{'unlinked'}->{$key};
     }
