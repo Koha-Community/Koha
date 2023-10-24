@@ -29,6 +29,15 @@ __PACKAGE__->table("search_marc_to_field");
   default_value: 1
   is_nullable: 0
 
+=head2 filter
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 100
+
+specify a filter to be applied to field
+
 =head2 search_marc_map_id
 
   data_type: 'integer'
@@ -70,6 +79,8 @@ Sort defaults to 1 (Yes) and creates sort fields in the index, 0 (no) will preve
 __PACKAGE__->add_columns(
   "search",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "filter",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "search_marc_map_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "search_field_id",
@@ -90,11 +101,13 @@ __PACKAGE__->add_columns(
 
 =item * L</search_field_id>
 
+=item * L</filter>
+
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("search_marc_map_id", "search_field_id");
+__PACKAGE__->set_primary_key("search_marc_map_id", "search_field_id", "filter");
 
 =head1 RELATIONS
 
@@ -129,8 +142,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-21 12:39:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F/uoQ4AbA16vTZJAGm3WuQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-24 18:41:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rJQhUx0rIc6RVz4HJ5vy/g
 
 __PACKAGE__->add_columns(
     '+facet' => { is_boolean => 1 },
