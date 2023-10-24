@@ -23,7 +23,7 @@
 [%# - sort2: select patron sort2 field %]
 [%# - search_field: select patron field list %]
 [%# - search_type: select 'contains' or 'starts with' %]
-[%- SET searchtype = Koha.Preference('DefaultPatronSearchMethod') -%]
+[%- searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
 [% BLOCK patron_search_filters %]
     <form id="patron_search_form">
         <fieldset class="brief">
@@ -318,7 +318,7 @@
                 "-and": function(){
                     let filters = [];
 
-                    let search_type = $("#searchtype_filter").val() || "contains";
+                    let search_type = $("#searchtype_filter").val();
                     let search_fields = $("#searchfieldstype_filter").val();
                     let pattern = $("#search_patron_filter").val();
 
@@ -815,7 +815,7 @@
 
         function clearFilters() {
             $("#searchfieldstype_filter option:first").prop("selected", true);
-            $("#searchtype_filter option[value='[% searchtype || 'contains' | html %]']").prop("selected", true);
+            $("#searchtype_filter option[value='[% searchtype | html %]']").prop("selected", true);
             $("#categorycode_filter option:first").prop("selected", true);
             $("#branchcode_filter option:first").prop("selected", true);
             $("#sort1_filter").val('').trigger("change");
