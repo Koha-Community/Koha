@@ -11,7 +11,7 @@
 [% SET libraries = Branches.all %]
 [% SET categories = Categories.all.unblessed %]
 [% SET columns = ['cardnumber', 'name-address', 'dateofbirth', 'branch', 'category', 'dateexpiry', 'checkouts', 'account_balance', 'borrowernotes', 'action'] %]
-[% SET searchtype = Koha.Preference('DefaultPatronSearchMethod') %]
+[% SET searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') %]
 [% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
