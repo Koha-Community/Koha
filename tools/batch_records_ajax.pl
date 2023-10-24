@@ -44,10 +44,11 @@ my @sort_columns =
   qw/import_record_id title status overlay_status overlay_status/;
 
 my $import_batch_id   = $input->param('import_batch_id');
-my $offset            = $input->param('iDisplayStart');
-my $results_per_page  = $input->param('iDisplayLength');
-my $sorting_column    = $sort_columns[ $input->param('iSortCol_0') // 0 ];
-my $sorting_direction = $input->param('sSortDir_0');
+my $offset            = $input->param('start');
+my $results_per_page  = $input->param('length');
+# FIXME We handle sorting on one column only!
+my $sorting_column    = $sort_columns[ $input->param('order[0][column]') // 0 ];
+my $sorting_direction = $input->param('order[0][dir]');
 
 $results_per_page = undef if $results_per_page && $results_per_page == -1;
 
@@ -108,10 +109,11 @@ foreach my $record (@$records) {
       };
 }
 
-my $data;
-$data->{'iTotalRecords'}        = $batch->{'num_records'};
-$data->{'iTotalDisplayRecords'} = $batch->{'num_records'};
-$data->{'sEcho'}                = $input->param('sEcho') || undef;
-$data->{'aaData'}               = \@list;
+my $data = {
+    recordsTotal    => $batch->{num_records},
+    recordsFiltered => $batch->{num_records},
+    draw            => $input->param('draw') || undef,
+    data            => \@list,
+};
 
 print to_json($data);
