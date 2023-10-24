@@ -472,23 +472,19 @@
 
             $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
                 "destroy": true,
-                "serverSide":  true,
+                "serverSide": true,
                 "processing": true,
-                "ajax":  '/cgi-bin/koha/catalogue/itemsearch.pl',
-                'fnServerData': function(sSource, aoData, fnCallback) {
-                    aoData.push( { 'name': 'format', 'value': 'json' } );
-                    for (i in params) {
-                        aoData.push(params[i]);
-                    }
-                    $.ajax({
-                        'dataType': 'json',
-                        'type': 'POST',
-                        'url': sSource,
-                        'data': aoData,
-                        'success': function(json){
-                            fnCallback(json);
+                "ajax": {
+                    url: '/cgi-bin/koha/catalogue/itemsearch.pl',
+                    type: 'POST',
+                    data: function ( d ) {
+                        for (i in params) {
+                            d[params[i].name] = params[i].value;
                         }
-                    });
+                        d.format = 'json';
+                        d.columns = JSON.stringify( d.columns );
+                        return d;
+                    }
                 },
                 'dom': '<"top pager"ilp>t<"bottom pager"ip>r',
                 'order': [[1, 'asc']],
