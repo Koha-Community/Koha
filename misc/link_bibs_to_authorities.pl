@@ -201,7 +201,8 @@ sub process_bib {
     my $tagtolink    = $args->{tagtolink};
     my $allowrelink = $args->{allowrelink};
     my $biblio = Koha::Biblios->find($biblionumber);
-    my $record = $biblio->metadata->record;
+    my $record;
+    eval{ $record = $biblio->metadata->record; };
     unless ( defined $record ) {
         print
 "\nCould not retrieve bib $biblionumber from the database - record is corrupt.\n";
