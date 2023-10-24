@@ -81,7 +81,7 @@
         [% END %]
 
         [% IF news_id %]
-            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, news_id => news_id ) %]
+            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, id => news_id ) %]
         [% ELSE %]
             [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, library => branchcode ) %]
         [% END %]

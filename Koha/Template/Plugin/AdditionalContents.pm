@@ -40,10 +40,11 @@ sub get {
 
     my $content = Koha::AdditionalContents->search_for_display(
         {
-            category   => $category,
-            location   => $location,
-            lang       => $lang,
+            category => $category,
+            location => $location,
+            lang     => $lang,
             ( $library ? ( library_id => $library ) : () ),
+            ( $id      ? ( id         => $id )      : () ),
         }
     );
 
