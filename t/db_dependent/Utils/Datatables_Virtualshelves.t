@@ -177,8 +177,8 @@ for my $i ( 6 .. 15 ) {
 
 # Set common datatables params
 my %dt_params = (
-    iDisplayLength   => 10,
-    iDisplayStart    => 0
+    length   => 10,
+    start    => 0
 );
 my $search_results;
 
@@ -187,14 +187,14 @@ t::lib::Mocks::mock_userenv({ patron => $john_doe_patron });
 # Search private lists by title
 $search_results = C4::Utils::DataTables::VirtualShelves::search({
     shelfname => "ist",
-    dt_params => \%dt_params,
+    %dt_params,
     public    => 0,
 });
 
-is( $search_results->{ iTotalRecords }, 2,
+is( $search_results->{ recordsTotal }, 2,
     "There should be 2 private shelves in total" );
 
-is( $search_results->{ iTotalDisplayRecords }, 2,
+is( $search_results->{ recordsFiltered }, 2,
     "There should be 2 private shelves with title like '%ist%" );
 
 is( @{ $search_results->{ shelves } }, 2,
@@ -202,13 +202,13 @@ is( @{ $search_results->{ shelves } }, 2,
 
 # Search by type only
 $search_results = C4::Utils::DataTables::VirtualShelves::search({
-    dt_params => \%dt_params,
+    %dt_params,
     public    => 1,
 });
-is( $search_results->{ iTotalRecords }, 12,
+is( $search_results->{ recordsTotal }, 12,
     "There should be 12 public shelves in total" );
 
-is( $search_results->{ iTotalDisplayRecords }, 12,
+is( $search_results->{ recordsFiltered }, 12,
     "There should be 12 private shelves" );
 
 is( @{ $search_results->{ shelves } }, 10,
@@ -217,13 +217,13 @@ is( @{ $search_results->{ shelves } }, 10,
 # Search by owner
 $search_results = C4::Utils::DataTables::VirtualShelves::search({
     owner => "jane",
-    dt_params => \%dt_params,
+    %dt_params,
     public    => 1,
 });
-is( $search_results->{ iTotalRecords }, 12,
+is( $search_results->{ recordsTotal }, 12,
     "There should be 12 public shelves in total" );
 
-is( $search_results->{ iTotalDisplayRecords }, 2,
+is( $search_results->{ recordsFiltered }, 2,
     "There should be 1 public shelves for jane" );
 
 is( @{ $search_results->{ shelves } }, 2,
@@ -233,13 +233,13 @@ is( @{ $search_results->{ shelves } }, 2,
 $search_results = C4::Utils::DataTables::VirtualShelves::search({
     owner => "smith",
     shelfname => "public list 1",
-    dt_params => \%dt_params,
+    %dt_params,
     public    => 1,
 });
-is( $search_results->{ iTotalRecords }, 12,
+is( $search_results->{ recordsTotal }, 12,
     "There should be 12 public shelves in total" );
 
-is( $search_results->{ iTotalDisplayRecords }, 6,
+is( $search_results->{ recordsFiltered }, 6,
     "There should be 6 public shelves for john with name like %public list 1%" );
 
 is( @{ $search_results->{ shelves } }, 6,

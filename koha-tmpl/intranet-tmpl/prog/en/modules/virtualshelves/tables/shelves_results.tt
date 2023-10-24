@@ -3,30 +3,30 @@
 [% USE To %]
 [% PROCESS 'i18n.inc' %]
 {
-    "sEcho": [% sEcho | html %],
-    "iTotalRecords": [% iTotalRecords | html %],
-    "iTotalDisplayRecords": [% iTotalDisplayRecords | html %],
+    "draw": [% draw | html %],
+    "recordsTotal": [% recordsTotal | html %],
+    "recordsFiltered": [% recordsFiltered | html %],
     "data": [
-        [% FOREACH data IN aaData %]
+        [% FOREACH d IN data %]
             {
                 "dt_public":
-                    "[% data.public | html %]",
+                    "[% d.public | html %]",
                 "dt_shelfname":
-                    "<a href='/cgi-bin/koha/virtualshelves/shelves.pl?op=view&shelfnumber=[% data.shelfnumber | html %]'>[% data.shelfname | html | $To %]</a>",
+                    "<a href='/cgi-bin/koha/virtualshelves/shelves.pl?op=view&shelfnumber=[% d.shelfnumber | html %]'>[% d.shelfname | html | $To %]</a>",
                 "dt_count":
-                    "[% tnx('{count} item', '{count} items', count, { count = data.count }) | $raw %]",
+                    "[% tnx('{count} item', '{count} items', count, { count = d.count }) | $raw %]",
                 "dt_is_shared":
-                    "[% IF data.public %]<span>Public</span>[% ELSIF data.is_shared %]<span>Shared</span>[% ELSE %]<span>Private</span>[% END %]",
+                    "[% IF d.public %]<span>Public</span>[% ELSIF d.is_shared %]<span>Shared</span>[% ELSE %]<span>Private</span>[% END %]",
                 "dt_owner":
-                    "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner | html %]'>[% data.firstname | html | $To %] [% data.surname | html | $To %]</a>",
+                    "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% d.owner | html %]'>[% d.firstname | html | $To %] [% d.surname | html | $To %]</a>",
                 "dt_sortby":
-                    [% IF data.sortby == "author" %]"<span>Author</span>"[% ELSIF data.sortby == "copyrightdate" %]"<span>Year</span>"[% ELSIF data.sortby == "itemcallnumber" %]"<span>Call number</span>"[% ELSIF data.sortby == "dateadded" %]"<span>Date added</span>"[% ELSE %]"<span>Title</span>"[% END %],
+                    [% IF d.sortby == "author" %]"<span>Author</span>"[% ELSIF d.sortby == "copyrightdate" %]"<span>Year</span>"[% ELSIF d.sortby == "itemcallnumber" %]"<span>Call number</span>"[% ELSIF d.sortby == "dateadded" %]"<span>Date added</span>"[% ELSE %]"<span>Title</span>"[% END %],
                 "dt_created_on":
-                    "[% data.created_on | $KohaDates %]",
+                    "[% d.created_on | $KohaDates %]",
                 "dt_modification_time":
-                    "[% data.modification_time | $KohaDates %]",
+                    "[% d.modification_time | $KohaDates %]",
                 "dt_action":
-                    "[% PROCESS action_form shelfnumber=data.shelfnumber can_manage_shelf=data.can_manage_shelf can_delete_shelf=data.can_delete_shelf type=data.type %]"
+                    "[% PROCESS action_form shelfnumber=d.shelfnumber can_manage_shelf=d.can_manage_shelf can_delete_shelf=d.can_delete_shelf type=d.type %]"
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]
