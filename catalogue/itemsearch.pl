@@ -19,7 +19,7 @@
 use Modern::Perl;
 use CGI;
 
-use JSON qw( to_json );
+use JSON qw( to_json from_json );
 
 use C4::Auth qw( get_template_and_user );
 use C4::Circulation qw( barcodedecode );
@@ -34,7 +34,6 @@ use Koha::ItemTypes;
 use Koha::Libraries;
 
 my $cgi = CGI->new;
-my %params = $cgi->Vars;
 
 my $format = $cgi->param('format');
 my $template_name = 'catalogue/itemsearch.tt';
@@ -43,11 +42,11 @@ if (defined $format and $format eq 'json') {
     $template_name = 'catalogue/itemsearch_json.tt';
 
     # Map DataTables parameters with 'regular' parameters
-    $cgi->param('rows', scalar $cgi->param('iDisplayLength'));
-    $cgi->param('page', (scalar $cgi->param('iDisplayStart') / scalar $cgi->param('iDisplayLength')) + 1);
-    my @columns = split /,/, scalar $cgi->param('sColumns');
-    $cgi->param('sortby', $columns[ scalar $cgi->param('iSortCol_0') ]);
-    $cgi->param('sortorder', scalar $cgi->param('sSortDir_0'));
+    $cgi->param('rows', scalar $cgi->param('length'));
+    $cgi->param('page', (scalar $cgi->param('start') / scalar $cgi->param('length')) + 1);
+    my @columns = @{ from_json $cgi->param('columns') };
+    $cgi->param('sortby', $columns[ $cgi->param('order[0][column]') ]->{name});
+    $cgi->param('sortorder', scalar $cgi->param('order[0][dir]'));
 
     my @f = $cgi->multi_param('f');
     my @q = $cgi->multi_param('q');
@@ -60,16 +59,16 @@ if (defined $format and $format eq 'json') {
     push @q, '' if @q == 0;
     my @op = $cgi->multi_param('op');
     my @c = $cgi->multi_param('c');
-    my $iColumns = $cgi->param('iColumns');
-    foreach my $i (0 .. ($iColumns - 1)) {
-        my $sSearch = $cgi->param("sSearch_$i");
-        if (defined $sSearch and $sSearch ne '') {
-            my @words = split /\s+/, $sSearch;
+    for my $column (@columns) {
+        my $search = $column->{search}->{value};
+        my $column_name = $column->{name};
+        if (defined $search and $search ne '') {
+            my @words = split /\s+/, $search;
             foreach my $word (@words) {
-                push @f, $columns[$i];
+                push @f, $column_name;
                 push @c, 'and';
 
-                if ( grep { $_ eq $columns[$i] } qw( ccode homebranch holdingbranch location itype notforloan itemlost onloan ) ) {
+                if ( grep { $_ eq $column_name } qw( ccode homebranch holdingbranch location itype notforloan itemlost onloan ) ) {
                     push @q, "$word";
                     push @op, '=';
                 } else {
@@ -275,7 +274,7 @@ if ( defined $format ) {
             print "$line\n" unless $line =~ m|^\s*$|;
         }
     } elsif ($format eq 'json') {
-        $template->param(sEcho => scalar $cgi->param('sEcho'));
+        $template->param(draw => scalar $cgi->param('draw'));
         output_with_http_headers $cgi, $cookie, $template->output, 'json';
     }
 
