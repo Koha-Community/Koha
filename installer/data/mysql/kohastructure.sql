@@ -3171,6 +3171,7 @@ CREATE TABLE `erm_usage_mus` (
   `usage_count` int(11) DEFAULT NULL COMMENT 'usage count for the title',
   `metric_type` varchar(50) DEFAULT NULL COMMENT 'metric type for the usage statistic',
   `access_type` varchar(50) DEFAULT NULL COMMENT 'access type for the usage statistic',
+  `yop` varchar(255) DEFAULT NULL COMMENT 'year of publication for the usage statistic',
   `report_type` varchar(50) DEFAULT NULL COMMENT 'report type for the usage statistic',
   PRIMARY KEY (`monthly_usage_summary_id`),
   CONSTRAINT `erm_usage_mus_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_usage_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -3215,7 +3216,6 @@ CREATE TABLE `erm_usage_titles` (
   `title_uri` varchar(255) DEFAULT NULL COMMENT 'URI number for the title',
   `publisher` varchar(255) DEFAULT NULL COMMENT 'Publisher for the title',
   `publisher_id` varchar(255) DEFAULT NULL COMMENT 'Publisher ID for the title',
-  `yop` varchar(255) DEFAULT NULL COMMENT 'year of publication of the title',
   `isbn` varchar(255) DEFAULT NULL COMMENT 'ISBN of the title',
   PRIMARY KEY (`title_id`),
   CONSTRAINT `erm_usage_titles_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -3293,6 +3293,7 @@ CREATE TABLE `erm_usage_yus` (
   `totalcount` int(11) DEFAULT NULL COMMENT 'usage count for the title',
   `metric_type` varchar(50) DEFAULT NULL COMMENT 'metric type for the usage statistic',
   `access_type` varchar(50) DEFAULT NULL COMMENT 'access type for the usage statistic',
+  `yop` varchar(255) DEFAULT NULL COMMENT 'year of publication for the usage statistic',
   `report_type` varchar(50) DEFAULT NULL COMMENT 'report type for the usage statistic',
   PRIMARY KEY (`yearly_usage_summary_id`),
   CONSTRAINT `erm_usage_yus_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_usage_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,

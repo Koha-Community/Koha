@@ -133,9 +133,9 @@ sub _add_usage_objects {
         if $self->{job_callbacks};
     foreach my $row ( @{$rows} ) {
         try {
-            # INFO: A single row may have multiple instances in the COUNTER report, one for each metric_type or access_type
+            # INFO: A single row may have multiple instances in the COUNTER report, one for each metric_type or access_type or yop
             # If we're on a row that we've already gone through, use the same usage object
-            # and add usage statistics for the different metric_type or access_type
+            # and add usage statistics for the different metric_type or access_type or yop
             if ( $self->_is_same_usage_object( $previous_object, $row ) ) {
                 $usage_object = $previous_object;
             } else {
@@ -239,6 +239,9 @@ sub _add_monthly_usage_entries {
                 grep ( /Access_Type/, @{$specific_fields} )
                 ? ( access_type => $row->{Access_Type} )
                 : (),
+                grep ( /YOP/, @{$specific_fields} )
+                ? ( yop => $row->{YOP} )
+                : (),
                 report_type => $self->type
             }
         ],
@@ -274,6 +277,9 @@ sub _add_yearly_usage_entries {
                     metric_type            => $metric_type,
                     grep ( /Access_Type/, @{$specific_fields} )
                     ? ( access_type => $row->{Access_Type} )
+                    : (),
+                    grep ( /YOP/, @{$specific_fields} )
+                    ? ( yop => $row->{YOP} )
                     : (),
                     report_type => $self->type
                 }
@@ -635,9 +641,6 @@ sub _add_usage_object_entry {
                 title_uri              => $row->{URI},
                 publisher              => $row->{Publisher},
                 publisher_id           => $row->{Publisher_ID},
-                grep ( /YOP/, @{$specific_fields} )
-                ? ( yop => $row->{YOP} )
-                : (),
                 grep ( /ISBN/, @{$specific_fields} )
                 ? ( isbn => $row->{ISBN} )
                 : (),

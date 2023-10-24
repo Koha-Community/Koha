@@ -101,6 +101,14 @@ metric type for the usage statistic
 
 access type for the usage statistic
 
+=head2 yop
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+year of publication for the usage statistic
+
 =head2 report_type
 
   data_type: 'varchar'
@@ -132,6 +140,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "access_type",
   { data_type => "varchar", is_nullable => 1, size => 50 },
+  "yop",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "report_type",
   { data_type => "varchar", is_nullable => 1, size => 50 },
 );
@@ -251,8 +261,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-08-02 15:57:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B439wdXto/YBcahGqalurg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-24 15:06:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EkDx9M0j385DbHo4PVxyiQ
 
 
 sub koha_object_class {
