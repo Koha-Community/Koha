@@ -5,7 +5,6 @@ use CGI;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_with_http_headers );
-use C4::Utils::DataTables qw( dt_get_params );
 use C4::Utils::DataTables::VirtualShelves qw( search );
 
 my $input = CGI->new;
@@ -25,14 +24,12 @@ my $owner = $input->param('owner');
 my $public = $input->param('public');
 my $sortby = $input->param('sortby');
 my $allow_transfer = $input->param('allow_transfer');
+my $order_by = $input->param('order_by');
+my $start    = $input->param('start');
+my $length   = $input->param('length');
 
 # variable information for DataTables (id)
-my $sEcho = $input->param('sEcho');
-
-my %dt_params = dt_get_params($input);
-foreach (grep {$_ =~ /^mDataProp/} keys %dt_params) {
-    $dt_params{$_} =~ s/^dt_//;
-}
+my $draw = $input->param('draw');
 
 my $results = C4::Utils::DataTables::VirtualShelves::search(
     {
@@ -41,15 +38,17 @@ my $results = C4::Utils::DataTables::VirtualShelves::search(
         owner     => $owner,
         public    => $public,
         sortby    => $sortby,
-        dt_params => \%dt_params,
+        order_by  => $order_by,
+        start     => $start,
+        length    => $length,
     }
 );
 
 $template->param(
-    sEcho => $sEcho,
-    iTotalRecords => $results->{iTotalRecords},
-    iTotalDisplayRecords => $results->{iTotalDisplayRecords},
-    aaData => $results->{shelves},
+    draw => $draw,
+    recordsTotal => $results->{recordsTotal},
+    recordsFiltered => $results->{recordsFiltered},
+    data => $results->{shelves},
     public => $public,
     allow_transfer => $allow_transfer,
 );

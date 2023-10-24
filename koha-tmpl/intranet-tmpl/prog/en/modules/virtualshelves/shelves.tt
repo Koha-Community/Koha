@@ -622,57 +622,35 @@
             $(document).ready(function(){
                 var public = [% public | html %];
 
+                let sorton = [
+                            'vs.shelfname',
+                            'count',
+                            'vs.public',
+                            'vs.owner',
+                            'vs.sortfield',
+                            'vs.created_on',
+                            'vs.lastmodified',
+                            ];
+
                 var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "order": [[ 5, "asc" ]],
-                    "serverSide":  true,
-                    "ajax":  "/cgi-bin/koha/svc/virtualshelves/search",
-                    'fnServerData': function(sSource, aoData, fnCallback) {
-                        aoData.push({
-                            'name': 'public',
-                            'value': public,
-                        },{
-                            'name': 'shelfname',
-                            'value': $("#searchshelfname_filter").val(),
-                        },{
-                            'name': 'owner',
-                            'value': $("#searchowner_filter").val(),
-                        },{
-                            'name': 'sortby',
-                            'value': $("#searchsortby_filter").val(),
-                        },{
-                            'name': 'template_path',
-                            'value': 'virtualshelves/tables/shelves_results.tt',
-                        },{
-                            'name': 'allow_transfer',
-                            'value': '[% allow_transfer | html %]',
-                        },{
-                            'name': 'shelfname_sorton',
-                            'value': 'vs.shelfname',
-                        },{
-                            'name': 'is_shared_sorton',
-                            'value': 'vs.public',
-                        },{
-                            'name': 'owner_sorton',
-                            'value': 'vs.owner',
-                        },{
-                            'name': 'sortby_sorton',
-                            'value': 'vs.sortfield',
-                        },{
-                            'name': 'created_on_sorton',
-                            'value': 'vs.created_on',
-                        },{
-                            'name': 'modification_time_sorton',
-                            'value': 'vs.lastmodified',
-                        });
-                        $.ajax({
-                            'dataType': 'json',
-                            'type': 'POST',
-                            'url': sSource,
-                            'data': aoData,
-                            'success': function(json){
-                                fnCallback(json);
-                            }
-                        });
+                    order: [[ 5, "asc" ]],
+                    serverSide:  true,
+                    ajax:  {
+                        url: "/cgi-bin/koha/svc/virtualshelves/search",
+                        type: "POST",
+                        data: function ( d ) {
+                            let order_by = [];
+                            d.order.forEach((o, i) => order_by.push(sorton[o.column - 1] + " " + o.dir));
+                            return $.extend( {}, d, {
+                                public,
+                                order_by: order_by.join(','),
+                                shelfname: $("#searchshelfname_filter").val(),
+                                owner: $("#searchowner_filter").val(),
+                                sortby: $("#searchsortby_filter").val(),
+                                template_path: 'virtualshelves/tables/shelves_results.tt',
+                                allow_transfer: '[% allow_transfer | html %]',
+                            });
+                        }
                     },
                     'columns':[
                         { "data": 'dt_public' },

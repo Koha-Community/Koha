@@ -2,7 +2,6 @@ package C4::Utils::DataTables::VirtualShelves;
 
 use Modern::Perl;
 use C4::Context;
-use C4::Utils::DataTables qw( dt_build_orderby );
 use Koha::Virtualshelves;
 
 sub search {
@@ -13,13 +12,15 @@ sub search {
     my $sortby = $params->{sortby};
     my $public = $params->{public} // 1;
     $public = $public ? 1 : 0;
-    my $dt_params = $params->{dt_params};
+    my $order_by = $params->{order_by};
+    my $start    = $params->{start};
+    my $length   = $params->{length};
 
     # If not logged in user, be carreful and set the borrowernumber to 0
     # to prevent private lists lack
     my $loggedinuser = C4::Context->userenv->{'number'} || 0;
 
-    my ($iTotalRecords, $iTotalDisplayRecords);
+    my ($recordsTotal, $recordsFiltered);
 
     my $dbh = C4::Context->dbh;
 
@@ -62,8 +63,8 @@ sub search {
     }
     if ( defined $owner and $owner ne '' ) {
         push @where_strs, '( bo.firstname LIKE ? OR bo.surname LIKE ? )';
-        push @args, "%$owner%", "%$owner%";
-    }
+    push @args, "%$owner%", "%$owner%";
+}
     if ( defined $sortby and $sortby ne '' ) {
         push @where_strs, 'sortfield = ?';
         push @args, $sortby;
@@ -79,18 +80,32 @@ sub search {
 
     my $where;
     $where = " WHERE " . join (" AND ", @where_strs) if @where_strs;
-    my $orderby = dt_build_orderby($dt_params);
-    $orderby =~ s|shelfnumber|vs.shelfnumber| if $orderby;
+
+
+    if ($order_by) {
+        my @order_by;
+        $order_by =~ s|shelfnumber|vs.shelfnumber|;
+        my @sanitized_orderbys;
+        for my $order ( split ',', $order_by ) {
+            my ( $identifier, $direction ) = split / /,  $order,      2;
+            my ( $table,      $column )    = split /\./, $identifier, 2;
+            my $sanitized_identifier = $dbh->quote_identifier( undef, $table, $column );
+            my $sanitized_direction  = $direction eq 'asc' ? 'ASC' : 'DESC';
+            push @sanitized_orderbys, "$sanitized_identifier $sanitized_direction";
+        }
+
+        $order_by = ' ORDER BY ' . join( ',', @sanitized_orderbys );
+    }
 
     my $limit;
-    # If iDisplayLength == -1, we want to display all shelves
-    if ( $dt_params->{iDisplayLength} > -1 ) {
+    # If length == -1, we want to display all shelves
+    if ( $length > -1 ) {
         # In order to avoid sql injection
-        $dt_params->{iDisplayStart} =~ s/\D//g;
-        $dt_params->{iDisplayLength} =~ s/\D//g;
-        $dt_params->{iDisplayStart} //= 0;
-        $dt_params->{iDisplayLength} //= 20;
-        $limit = "LIMIT $dt_params->{iDisplayStart},$dt_params->{iDisplayLength}";
+        $start  =~ s/\D//g;
+        $length =~ s/\D//g;
+        $start  //= 0;
+        $length //= 20;
+        $limit = sprintf "LIMIT %s,%s", $start, $length;
     }
 
     my $group_by = " GROUP BY vs.shelfnumber, vs.shelfname, vs.owner, vs.public,
@@ -102,20 +117,20 @@ sub search {
         $from,
         ($where ? $where : ""),
         $group_by,
-        ($orderby ? $orderby : ""),
+        ($order_by ? $order_by : ""),
         ($limit ? $limit : "")
     );
     my $shelves = $dbh->selectall_arrayref( $query, { Slice => {} }, @args );
 
-    # Get the iTotalDisplayRecords DataTable variable
+    # Get the recordsFiltered DataTable variable
     $query = "SELECT COUNT(vs.shelfnumber) " . $from_total . ($where ? $where : "");
-    ($iTotalDisplayRecords) = $dbh->selectrow_array( $query, undef, @args );
+    ($recordsFiltered) = $dbh->selectrow_array( $query, undef, @args );
 
-    # Get the iTotalRecords DataTable variable
+    # Get the recordsTotal DataTable variable
     $query = q|SELECT COUNT(vs.shelfnumber)| . $from_total . q| WHERE public = ?|;
     $query .= q| AND (vs.owner = ? OR sh.borrowernumber = ?)| if !$public;
     @args = !$public ? ( $loggedinuser, $public, $loggedinuser, $loggedinuser ) : ( $public );
-    ( $iTotalRecords ) = $dbh->selectrow_array( $query, undef, @args );
+    ( $recordsTotal ) = $dbh->selectrow_array( $query, undef, @args );
 
     for my $shelf ( @$shelves ) {
         my $s = Koha::Virtualshelves->find( $shelf->{shelfnumber} );
@@ -124,8 +139,8 @@ sub search {
         $shelf->{is_shared} = $s->is_shared;
     }
     return {
-        iTotalRecords => $iTotalRecords,
-        iTotalDisplayRecords => $iTotalDisplayRecords,
+        recordsTotal => $recordsTotal,
+        recordsFiltered => $recordsFiltered,
         shelves => $shelves,
     }
 }
