@@ -460,7 +460,14 @@
                     "searching": false,
                     "processing": true,
                     "serverSide":  true,
-                    "ajax":  'batch_records_ajax.pl',
+                    ajax: {
+                        url: "batch_records_ajax.pl",
+                        type: "POST",
+                        data: function ( d ) {
+                            d.import_batch_id = [% import_batch_id | html %];
+                            return d;
+                        },
+                    },
                     "pagingType": "full_numbers",
                     "dom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
                     "columns": [
@@ -472,19 +479,6 @@
                         { "data": null, "defaultContent": "" },
                         { "data": "matched" }
                     ],
-                    "fnServerData": function(sSource, aoData, fnCallback) {
-                        aoData.push({ "name": "import_batch_id", "value": [% import_batch_id | html %] });
-
-                        $.ajax({
-                            'dataType': 'json',
-                            'type': 'POST',
-                            'url': sSource,
-                            'data': aoData,
-                            'success': function(json) {
-                                fnCallback(json);
-                            }
-                        });
-                    },
                     "rowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                         [% IF(record_type == 'auth') %]
                             var record_details_url = "/cgi-bin/koha/authorities/detail.pl?authid=";
