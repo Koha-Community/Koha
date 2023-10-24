@@ -121,7 +121,7 @@ return {
             SELECT id, code
             FROM letter
             WHERE content LIKE "%<<additional_content%" OR content LIKE "%<< additional_content%"
-        }
+        }, { Slice => {} }
         );
 
         if (@$notice_templates) {
