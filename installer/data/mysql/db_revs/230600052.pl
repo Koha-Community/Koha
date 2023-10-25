@@ -13,11 +13,16 @@ return {
         }
         );
 
+        say $out "Added new notice 'HOLDDGST' (email)";
+
         $dbh->do(
             q{
             INSERT IGNORE INTO `letter` VALUES (NULL,'reserves','HOLDDGST','','Hold available for pickup (digest)',0,'Hold(s) available for pickup','You have one or more holds available for pickup:\r\n----\r\n[% hold.biblio.title %]\r\n----','sms','default','2023-08-29 18:42:15');
         }
         );
+
+        say $out "Added new notice 'HOLDDGST' (sms)";
+
         $dbh->do(
             q{
             INSERT IGNORE INTO message_transports VALUES
@@ -26,9 +31,5 @@ return {
             ( 4, "phone", 1, "reserves", "HOLDDGST", "");
         }
         );
-
-        # Print useful stuff here
-        # tables
-        say $out "Added new notice 'HOLDDGST'";
     },
 };
