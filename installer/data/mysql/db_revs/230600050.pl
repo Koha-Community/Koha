@@ -2,12 +2,11 @@ use Modern::Perl;
 
 return {
     bug_number  => "31846",
-    description => "Add SerialsSearchResultsLimit syspref",
+    description => "Allow setting serials search results limit",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
@@ -15,7 +14,6 @@ return {
         }
         );
 
-        # Print useful stuff here
-        say $out "SerialsSearchResultsLimit syspref added";
+        say $out "Added new system preference 'SerialsSearchResultsLimit'";
     },
 };
