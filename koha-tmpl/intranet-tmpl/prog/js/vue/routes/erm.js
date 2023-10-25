@@ -116,7 +116,7 @@ export const routes = [
                     {
                         path: "local",
                         title: $__("Local"),
-                        icon: "fa-solid fa-location-dot",
+                        icon: "fa fa-map-marker",
                         disabled: true,
                         children: [
                             {
@@ -161,7 +161,7 @@ export const routes = [
                             {
                                 path: "titles",
                                 title: $__("Titles"),
-                                icon: "fa-solid fa-arrow-down-a-z",
+                                icon: "fa fa-sort-alpha-asc",
                                 is_end_node: true,
                                 children: [
                                     {
@@ -247,7 +247,7 @@ export const routes = [
                             {
                                 path: "titles",
                                 title: $__("Titles"),
-                                icon: "fa-solid fa-arrow-down-a-z",
+                                icon: "fa fa-sort-alpha-asc",
                                 is_end_node: true,
                                 children: [
                                     {
