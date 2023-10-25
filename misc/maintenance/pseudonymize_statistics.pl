@@ -22,6 +22,7 @@ use Pod::Usage   qw( pod2usage );
 use Koha::DateUtils qw( dt_from_string format_sqldatetime );
 use Koha::Script;
 use Koha::Statistics;
+use Koha::PseudonymizedTransactions;
 
 use C4::Context;
 
@@ -41,12 +42,30 @@ unless ( C4::Context->preference('Pseudonymization') ) {
 }
 
 $before //= format_sqldatetime( dt_from_string(), 'sql', undef, 1 );
+print "Searching for statistics before $before\n" if $verbose;
 
 my $statistics = Koha::Statistics->search( { datetime => { '<=' => $before } } );
+print $statistics->count() . " statistics found\n" if $verbose;
+
+
+my $existing_pseudo_stats = Koha::PseudonymizedTransactions->search( { datetime => { '<=' => $before } } )->count;
+
+if ( $statistics->count && $existing_pseudo_stats ) {
+    print "There are "
+        . $statistics->count()
+        . " statistics found, and $existing_pseudo_stats already in the database for the date provided.\n";
+    print "You may have already run this script for the time period given.\n";
+    print "Please enter 'Y' if you would like to continue:";
+    chomp( my $continue = <> );
+    exit unless uc($continue) eq 'Y';
+}
+
 
 while ( my $statistic = $statistics->next ) {
     $statistic->pseudonymize();
 }
+
+print $statistics->count() . " statistics pseudonymized\n" if $verbose;
 
 =head1 NAME
 
