@@ -38,6 +38,10 @@
     Show this content on the OPAC login form when a patron is not logged in.
 </div>
 
+<div id="OpacMaintenanceNotice_notes" class="hint customization_note">
+    Show this content on the OPAC when the OpacMaintenance system preference is enabled.
+</div>
+
 <div id="OpacMainUserBlock_notes" class="hint customization_note">
     Show this content in its own column on the main page of the OPAC.
 </div>
