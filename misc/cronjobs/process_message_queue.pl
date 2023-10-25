@@ -97,6 +97,7 @@ if ( C4::Context->config("enable_plugins") ) {
                         limit       => $limit,
                         type        => \@type,
                         letter_code => \@letter_code,
+                        where       => $where,
                     }
                 );
             }
