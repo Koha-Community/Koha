@@ -621,12 +621,24 @@
                                     [% ELSIF force_hold_level == 'record' %]
                                         <input type="radio" id="requestany" checked="checked" value="Any" disabled="true"/>
                                         <input type="hidden" name="request" value="Any"/>
+                                        <span class="error"><i>(Required)</i></span>
                                     [% ELSE %]
                                         <input type="radio" id="requestany" name="request" checked="checked" value="Any" />
                                     [% END %]
                                 </legend>
                                 <input type="hidden" name="alreadyreserved" value="[% alreadyreserved | html %]" />
                                 <fieldset class="enable_request_any disable_request_group disable_request_specific">
+                                [% IF force_hold_level == 'item' # Patron has placed a item level hold previously for this record %]
+                                    <span class="error">
+                                        <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
+                                        Hold must be item level
+                                    </span>
+                                [% ELSIF force_hold_level == 'item_group' # Patron has placed an item group level hold previously for this record %]
+                                    <span class="error">
+                                        <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
+                                        Hold must be item group level
+                                    </span>
+                                [% ELSE %]
                                     <ol>
 
                                         <li>
@@ -659,6 +671,7 @@
                                             <input type="hidden" name="holds_to_place_count" value="1" />
                                         [% END %]
                                     </ol>
+                                [% END %]
 
 
                                 <fieldset class="action">
