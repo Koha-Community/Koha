@@ -2,28 +2,27 @@ use Modern::Perl;
 
 return {
     bug_number  => "33970",
-    description => "Add 'backend' column and to composite primary key in illrequestattributes",
+    description => "Bind ILL attributes to specific backends",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         if ( !column_exists( 'illrequestattributes', 'backend' ) ) {
 
-            say $out "Adding 'backend' column to 'illrequestattributes' table";
             $dbh->do(
                 q{ ALTER TABLE illrequestattributes ADD COLUMN backend varchar(80) NOT NULL COMMENT 'API ILL backend name' AFTER illrequest_id }
             );
+            say $out "Added column 'illrequestattributes.backend'";
 
-            say $out "Dropping illrequestattributes_ifk foreign key in 'illrequestattributes' table ";
             $dbh->do(q{ ALTER TABLE illrequestattributes DROP FOREIGN KEY illrequestattributes_ifk });
+            say $out "Removed 'illrequestattributes.illrequestattributes_ifk' foreign key";
 
-            say $out "Dropping primary key in 'illrequestattributes' table ";
             $dbh->do(q{ ALTER TABLE illrequestattributes DROP PRIMARY KEY });
+            say $out "Removed 'illrequestattributes' primary key";
 
-            say $out "Creating new primary key in 'illrequestattributes' table ";
             $dbh->do(q{ ALTER TABLE illrequestattributes ADD PRIMARY KEY( illrequest_id, backend, type (191)) });
+            say $out "Added new primary key in 'illrequestattributes'";
 
-            say $out "Creating new foreign key constraint in 'illrequestattributes' table ";
             $dbh->do(
                 q{
                     ALTER TABLE illrequestattributes ADD CONSTRAINT illrequestattributes_ifk
@@ -32,8 +31,8 @@ return {
                     ON DELETE CASCADE ON UPDATE CASCADE;
                 }
             );
+            say $out "Added 'illrequestattributes.illrequestattributes_ifk' foreign key";
 
-            say $out "Updating backend value for all pre-existing illrequestattributes";
             $dbh->do(
                 q{
                     UPDATE
@@ -43,6 +42,7 @@ return {
                     WHERE ira . illrequest_id = ir.illrequest_id;
                 }
             );
+            say $out "Updated 'backend' column for all pre-existing rows in 'illrequestattributes'";
         }
     },
 };
