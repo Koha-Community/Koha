@@ -83,7 +83,11 @@
 </div>
 
 <div id="SCOMainUserBlock_notes" class="hint customization_note">
-     Show this content on the the web-based self checkout screen.
+     Show this content on the web-based self checkout screen.
+</div>
+
+<div id="SelfCheckInMainUserBlock_notes" class="hint customization_note">
+      Show this content on the self check-in screen.
 </div>
 
 <div id="StaffAcquisitionsHome_notes" class="hint customization_note">
