@@ -66,6 +66,10 @@
     Show this content in the right hand column of the main page under the main login form.
 </div>
 
+<div id="OPACResultsSidebar_notes" class="hint customization_note">
+    Show this content under the facets in OPAC search results.
+</div>
+
 <div id="OpacSuggestionInstructions_notes" class="hint customization_note">
     Show this content at the top of the purchase suggestion form in the OPAC.
 </div>
