@@ -74,6 +74,10 @@
     Show this content at the top of the purchase suggestion form in the OPAC.
 </div>
 
+<div id="PatronSelfRegistrationAdditionalInstructions_notes" class="hint customization_note">
+    Show the following content on the patron self-registration confirmation page.
+</div>
+
 <div id="StaffAcquisitionsHome_notes" class="hint customization_note">
     Show this content on the acquisitions home page in the staff interface.
 </div>
