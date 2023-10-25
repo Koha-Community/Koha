@@ -88,7 +88,7 @@
                                 [% IF ( invalidShibLogin ) %]
                                     <!-- This is what is displayed if shibboleth login has failed to match a koha user -->
                                     <div class="alert alert-info">
-                                        <p>Sorry, your Shibboleth identity does not match a valid library identity.</p>
+                                        <p class="shib_invalid">Sorry, your Shibboleth identity does not match a valid library identity.</p>
                                         [% UNLESS ( Koha.Preference('OPACShibOnly') ) %]
                                             [% IF ( casAuthentication ) %]
                                                 [% IF ( invalidCasLogin ) %]
@@ -103,16 +103,16 @@
                                         [% END %]
                                     </div>
                                 [% ELSE %]
-                                    <h2>Shibboleth Login</h2>
-                                    <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account.</a></p>
+                                    <h2 class="shib_title">Shibboleth Login</h2>
+                                    <p><a class="shib_url" href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account.</a></p>
                                 [% END # /IF invalidShibLogin %]
                                 [% UNLESS ( Koha.Preference('OPACShibOnly') ) %]
                                     [% IF ( casAuthentication ) %]
                                         <h2>CAS login</h2>
                                         <p>If you do not have a Shibboleth account, but you do have a CAS account, you can use CAS.</p>
                                     [% ELSE %]
-                                        <h2>Local login</h2>
-                                        <p>If you do not have a Shibboleth account, but you do have a local login, then you may login below.</p>
+                                        <h2 class="shib_local_title">Local login</h2>
+                                        <p class="shib_local_text">If you do not have a Shibboleth account, but you do have a local login, then you may login below.</p>
                                     [% END %]
                                 [% END %]
                             [% END # /IF shibbolethAuthentication %]

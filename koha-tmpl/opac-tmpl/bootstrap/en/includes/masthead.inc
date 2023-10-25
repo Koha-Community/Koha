@@ -377,10 +377,10 @@
                                     <p>Sorry, your Shibboleth identity does not match a valid library identity. If you have a local login, you may use that below.</p>
                                 </div>
                             [% ELSE %]
-                                <h3>Shibboleth login</h3>
-                                <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
+                                <h3 class="shib_title">Shibboleth login</h3>
+                                <p><a class="shib_url" href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account</a>.</p>
                                 [% UNLESS Koha.Preference('opacShibOnly') %]
-                                    <h3>Local login</h3>
+                                    <h3 class="shib_local_title">Local login</h3>
                                 [% END %]
                             [% END %]
                         [% END %]
