@@ -86,22 +86,24 @@ sub _get_best_default_xslt_filename {
 
 sub get_xslt_sysprefs {
     my $sysxml = "<sysprefs>\n";
-    foreach my $syspref ( qw/ hidelostitems OPACURLOpenInNewWindow
-                              DisplayOPACiconsXSLT URLLinkText viewISBD
-                              OPACBaseURL TraceCompleteSubfields UseICUStyleQuotes
-                              UseAuthoritiesForTracings TraceSubjectSubdivisions
-                              Display856uAsImage OPACDisplay856uAsImage 
-                              UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
-                              OPACItemLocation DisplayIconsXSLT
-                              AlternateHoldingsField AlternateHoldingsSeparator
-                              TrackClicks opacthemes IdRef OpacSuppression
-                              OPACResultsLibrary OPACShowOpenURL
-                              OpenURLResolverURL OpenURLImageLocation
-                              OPACResultsMaxItems OPACResultsMaxItemsUnavailable OPACResultsUnavailableGroupingBy
-                              OpenURLText OPACShowMusicalInscripts OPACPlayMusicalInscripts ContentWarningField
-                              AuthorLinkSortBy AuthorLinkSortOrder / )
+    foreach my $syspref (
+        qw/ hidelostitems OPACURLOpenInNewWindow
+        DisplayOPACiconsXSLT URLLinkText viewISBD
+        OPACBaseURL TraceCompleteSubfields UseICUStyleQuotes
+        UseAuthoritiesForTracings TraceSubjectSubdivisions
+        Display856uAsImage OPACDisplay856uAsImage
+        UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
+        OPACItemLocation DisplayIconsXSLT
+        AlternateHoldingsField AlternateHoldingsSeparator
+        TrackClicks opacthemes IdRef OpacSuppression
+        OPACResultsLibrary OPACShowOpenURL
+        OpenURLResolverURL OpenURLImageLocation
+        OPACResultsMaxItems OPACResultsMaxItemsUnavailable OPACResultsUnavailableGroupingBy
+        OpenURLText OPACShowMusicalInscripts OPACPlayMusicalInscripts ContentWarningField
+        AuthorLinkSortBy AuthorLinkSortOrder /
+        )
     {
-        my $sp = C4::Context->preference( $syspref );
+        my $sp = C4::Context->preference($syspref);
         next unless defined($sp);
         $sysxml .= "<syspref name=\"$syspref\">$sp</syspref>\n";
     }
