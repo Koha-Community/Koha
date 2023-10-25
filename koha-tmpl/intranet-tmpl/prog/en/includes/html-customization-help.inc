@@ -74,6 +74,10 @@
     Show this content at the top of the purchase suggestion form in the OPAC.
 </div>
 
+<div id="OpacSuggestionInstructions_notes" class="hint customization_note">
+    Display the following message on the redirect page for suppressed bibliographic records. Depends on the system preferences OpacSuppression and OpacSuppressionRedirect.
+</div>
+
 <div id="PatronSelfRegistrationAdditionalInstructions_notes" class="hint customization_note">
     Show the following content on the patron self-registration confirmation page.
 </div>
