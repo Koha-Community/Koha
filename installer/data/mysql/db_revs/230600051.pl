@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "10762",
-    description => "Add 2 columns in 'creator_layouts' which define the width and height of barcodes",
+    description => "Make it possible to adjust the barcode height and width on labels",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -13,6 +13,8 @@ return {
                     ADD COLUMN scale_width FLOAT default 0.8 NOT NULL AFTER font_size
             }
             );
+
+            say $out "Added column 'creator_layouts.scale_width'";
         }
         unless ( column_exists( 'creator_layouts', 'scale_height' ) ) {
             $dbh->do(
@@ -21,7 +23,8 @@ return {
                     ADD COLUMN scale_height FLOAT default 0.01 NOT NULL AFTER scale_width
             }
             );
+
+            say $out "Added column 'creator_layouts.scale_height'";
         }
-        say $out "Table creator_layouts updated with 2 new columns";
     },
     }
