@@ -37,11 +37,10 @@ __PACKAGE__->table("patron_consent");
 
 =head2 type
 
-  data_type: 'enum'
-  extra: {list => ["GDPR_PROCESSING"]}
+  data_type: 'tinytext'
   is_nullable: 1
 
-allows for future extension
+consent type, could be custom type
 
 =head2 given_on
 
@@ -63,11 +62,7 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "type",
-  {
-    data_type => "enum",
-    extra => { list => ["GDPR_PROCESSING"] },
-    is_nullable => 1,
-  },
+  { data_type => "tinytext", is_nullable => 1 },
   "given_on",
   {
     data_type => "datetime",
@@ -112,8 +107,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rkn/K2jtHPFkGoG4QCmLsw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-25 14:33:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LWTvNPA/R0VoWUzcRLnjDg
 
 sub koha_object_class {
     'Koha::Patron::Consent';

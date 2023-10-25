@@ -32,6 +32,14 @@ __PACKAGE__->table("illrequestattributes");
 
 ILL request number
 
+=head2 backend
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 80
+
+API ILL backend name
+
 =head2 type
 
   data_type: 'varchar'
@@ -65,6 +73,8 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable => 0,
   },
+  "backend",
+  { data_type => "varchar", is_nullable => 0, size => 80 },
   "type",
   { data_type => "varchar", is_nullable => 0, size => 200 },
   "value",
@@ -79,13 +89,15 @@ __PACKAGE__->add_columns(
 
 =item * L</illrequest_id>
 
+=item * L</backend>
+
 =item * L</type>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("illrequest_id", "type");
+__PACKAGE__->set_primary_key("illrequest_id", "backend", "type");
 
 =head1 RELATIONS
 
@@ -105,8 +117,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qNhL5kiGVR8WroCHQY5DyQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-25 14:33:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ACb1xoMuMjLHDIit/H29Vw
 
 __PACKAGE__->add_columns(
     '+readonly' => { is_boolean => 1 }
