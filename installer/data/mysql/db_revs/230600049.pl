@@ -8,7 +8,10 @@ return {
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         $dbh->do(
-            q{ALTER TABLE `patron_consent` MODIFY `type` tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'consent type, could be custom type'}
+            q{
+                ALTER TABLE `patron_consent`
+                    MODIFY `type` tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'consent type, could be custom type'
+            }
         );
         say $out "Changed column 'patron_consent.type'";
     },
