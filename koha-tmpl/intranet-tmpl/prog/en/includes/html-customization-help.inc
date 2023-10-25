@@ -82,6 +82,10 @@
     Show the following content on the patron self-registration confirmation page.
 </div>
 
+<div id="SCOMainUserBlock_notes" class="hint customization_note">
+     Show this content on the the web-based self checkout screen.
+</div>
+
 <div id="StaffAcquisitionsHome_notes" class="hint customization_note">
     Show this content on the acquisitions home page in the staff interface.
 </div>
