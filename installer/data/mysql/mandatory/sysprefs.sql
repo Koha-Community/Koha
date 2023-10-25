@@ -248,6 +248,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ERMProviderEbscoApiKey', '', '', 'API key for EBSCO', 'free'),
 ('ERMProviderEbscoCustomerID', '', '', 'Customer ID for EBSCO', 'free'),
 ('ERMProviders', 'local', 'local|ebsco', 'Set the providers for the ERM module', 'Choice'),
+('ESPreventAutoTruncate', 'barcode|control-number|control-number-identifier|date-of-acquisition|date-of-publication|date-time-last-modified|identifier-standard|isbn|issn|itype|lc-card-number|number-local-acquisition|other-control-number|record-control-number', NULL, 'List of searchfields (separated by | or ,) that should not be autotruncated by Elasticsearch even if QueryAutoTruncate is set to Yes', 'free'),
 ('ExcludeHolidaysFromMaxPickUpDelay', '0', NULL, 'If ON, reserves max pickup delay takes into accountthe closed days.', 'YesNo'),
 ('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),
 ('ExpireReservesAutoFill','0',NULL,'Automatically fill the next hold with a automatically canceled expired waiting hold.','YesNo'),
