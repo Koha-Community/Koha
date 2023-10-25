@@ -762,7 +762,15 @@
                                 </ul>
                             [% END %]
                                 <fieldset class="action">
-                                    <button type="submit" id="hold_grp_btn" class="btn btn-primary warning">Place hold</button>
+                                    [% IF ( patron.borrowernumber ) %]
+                                        [% IF ( override_required ) %]
+                                            <button type="submit" id="hold_any_btn" class="btn btn-primary warning"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
+                                        [% ELSIF ( none_available ) %]
+                                            <button type="submit" id="hold_any_btn" disabled="disabled" class="btn btn-primary btn-disabled">Place hold</button>
+                                        [% ELSE %]
+                                            <button type="submit" id="hold_any_btn" class="btn btn-primary">Place hold</button>
+                                        [% END %]
+                                    [% END %]
                                 </fieldset>
                             </fieldset>
                         </fieldset>
