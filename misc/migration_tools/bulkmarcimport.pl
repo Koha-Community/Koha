@@ -126,8 +126,12 @@ if ($all) {
 my $using_elastic_search = (C4::Context->preference('SearchEngine') eq 'Elasticsearch');
 my $mod_biblio_options = {
     disable_autolink => $using_elastic_search,
-    defer_search_engine_indexing => $using_elastic_search,
+    skip_record_index => $using_elastic_search,
     overlay_context => { source => 'bulkmarcimport' }
+};
+my $add_biblio_options = {
+    disable_autolink => $using_elastic_search,
+    skip_record_index => $using_elastic_search
 };
 
 my @search_engine_record_ids;
@@ -542,7 +546,7 @@ RECORD: foreach my $record (@{$marc_records}) {
                 }
             }
             elsif ($insert) {
-                eval { ($record_id, $biblioitemnumber) = AddBiblio($record, $framework, { disable_autolink => 1, defer_marc_save => 1 }) };
+                eval { ($record_id, $biblioitemnumber) = AddBiblio($record, $framework, $add_biblio_options) };
                 if ($@) {
                     warn "ERROR: Insert biblio $originalid failed: $@\n";
                     printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
