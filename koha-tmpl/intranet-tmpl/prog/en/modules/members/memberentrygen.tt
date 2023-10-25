@@ -1658,13 +1658,13 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                             [% ELSE %]
                                                                 [% IF patron_attribute.mandatory %]
                                                                     [% IF patron_attribute.is_date %]
-                                                                        <input type="text" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]"  maxlength="10" size="10" value="[% patron_attribute.value | html %]" required="required" class="flatpickr" data-date_to="to" />
+                                                                        <input type="text" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]"  maxlength="10" size="10" value="[% patron_attribute.value | html %]" required="required" class="flatpickr" />
                                                                     [% ELSE %]
                                                                         <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" required="required">[% patron_attribute.value | html %]</textarea>
                                                                     [% END %]
                                                                 [% ELSE %]
                                                                     [% IF patron_attribute.is_date %]
-                                                                        <input type="text" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]"  maxlength="10" size="10" value="[% patron_attribute.value | html %]" class="flatpickr" data-date_to="to" />
+                                                                        <input type="text" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]"  maxlength="10" size="10" value="[% patron_attribute.value | html %]" class="flatpickr" />
                                                                     [% ELSE %]
                                                                         <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">[% patron_attribute.value | html %]</textarea>
                                                                     [% END %]
