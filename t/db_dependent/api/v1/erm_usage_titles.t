@@ -64,15 +64,12 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No titles, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/usage_titles")->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/usage_titles")->status_is(200)->json_is( [] );
 
-    my $usage_title =
-      $builder->build_object( { class => 'Koha::ERM::EUsage::UsageTitles' } );
+    my $usage_title = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageTitles' } );
 
     # One usage_title created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/usage_titles")->status_is(200)
-      ->json_is( [ $usage_title->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/usage_titles")->status_is(200)->json_is( [ $usage_title->to_api ] );
 
     my $another_usage_title = $builder->build_object(
         {
@@ -82,14 +79,13 @@ subtest 'list() tests' => sub {
 
     # Two usage_titles created, they should both be returned
     $t->get_ok("//$userid:$password@/api/v1/erm/usage_titles")->status_is(200)
-      ->json_is( [ $usage_title->to_api, $another_usage_title->to_api, ] );
+        ->json_is( [ $usage_title->to_api, $another_usage_title->to_api, ] );
 
     # Attempt to search by title like 'ko'
     $usage_title->delete;
     $another_usage_title->delete;
-    $t->get_ok(
-qq~//$userid:$password@/api/v1/erm/usage_titles?q=[{"me.title":{"like":"%ko%"}}]~
-    )->status_is(200)->json_is( [] );
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/usage_titles?q=[{"me.title":{"like":"%ko%"}}]~)->status_is(200)
+        ->json_is( [] );
 
     my $usage_title_to_search = $builder->build_object(
         {
@@ -101,20 +97,15 @@ qq~//$userid:$password@/api/v1/erm/usage_titles?q=[{"me.title":{"like":"%ko%"}}]
     );
 
     # Search works, searching for title like 'ko'
-    $t->get_ok(
-qq~//$userid:$password@/api/v1/erm/usage_titles?q=[{"me.title":{"like":"%ko%"}}]~
-    )->status_is(200)->json_is( [ $usage_title_to_search->to_api ] );
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/usage_titles?q=[{"me.title":{"like":"%ko%"}}]~)->status_is(200)
+        ->json_is( [ $usage_title_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/usage_titles?blah=blah")
-      ->status_is(400)
-      ->json_is(
-        [ { path => '/query/blah', message => 'Malformed query string' } ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/usage_titles?blah=blah")->status_is(400)
+        ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
-    $t->get_ok("//$unauth_userid:$password@/api/v1/erm/usage_titles")
-      ->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/erm/usage_titles")->status_is(403);
 
     $schema->storage->txn_rollback;
 };
-

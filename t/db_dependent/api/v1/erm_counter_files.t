@@ -64,15 +64,12 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No counter files, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files")->status_is(200)
-      ->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files")->status_is(200)->json_is( [] );
 
-    my $counter_file =
-      $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
+    my $counter_file = $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
 
     # One counter_file created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files")->status_is(200)
-      ->json_is( [ $counter_file->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files")->status_is(200)->json_is( [ $counter_file->to_api ] );
 
     my $another_counter_file = $builder->build_object(
         {
@@ -82,14 +79,13 @@ subtest 'list() tests' => sub {
 
     # Two counter_files created, they should both be returned
     $t->get_ok("//$userid:$password@/api/v1/erm/counter_files")->status_is(200)
-      ->json_is( [ $counter_file->to_api, $another_counter_file->to_api, ] );
+        ->json_is( [ $counter_file->to_api, $another_counter_file->to_api, ] );
 
     # Attempt to search by type like 'ko'
     $counter_file->delete;
     $another_counter_file->delete;
-    $t->get_ok(
-qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]~
-    )->status_is(200)->json_is( [] );
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]~)->status_is(200)
+        ->json_is( [] );
 
     my $counter_file_to_search = $builder->build_object(
         {
@@ -101,19 +97,15 @@ qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]
     );
 
     # Search works, searching for type like 'ko'
-    $t->get_ok(
-qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]~
-    )->status_is(200)->json_is( [ $counter_file_to_search->to_api ] );
+    $t->get_ok(qq~//$userid:$password@/api/v1/erm/counter_files?q=[{"me.type":{"like":"%ko%"}}]~)->status_is(200)
+        ->json_is( [ $counter_file_to_search->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files?blah=blah")
-      ->status_is(400)
-      ->json_is(
-        [ { path => '/query/blah', message => 'Malformed query string' } ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files?blah=blah")->status_is(400)
+        ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
-    $t->get_ok("//$unauth_userid:$password@/api/v1/erm/counter_files")
-      ->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/erm/counter_files")->status_is(403);
 
     $schema->storage->txn_rollback;
 };
@@ -124,9 +116,8 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $counter_file =
-      $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
-    my $librarian = $builder->build_object(
+    my $counter_file = $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
+    my $librarian    = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => { flags => 2**28 }
@@ -147,21 +138,22 @@ subtest 'get() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     # This counter_file exists, should get returned
-    $t->get_ok( "//$userid:$password@/api/v1/erm/counter_files/"
-          . $counter_file->erm_counter_files_id . "/file/content" )->status_is(200);
+    $t->get_ok(
+        "//$userid:$password@/api/v1/erm/counter_files/" . $counter_file->erm_counter_files_id . "/file/content" )
+        ->status_is(200);
 
     # Unauthorized access
     $t->get_ok( "//$unauth_userid:$password@/api/v1/erm/counter_files/"
-          . $counter_file->erm_counter_files_id . "/file/content")->status_is(403);
+            . $counter_file->erm_counter_files_id
+            . "/file/content" )->status_is(403);
 
     # Attempt to get non-existent counter_file
-    my $counter_file_to_delete =
-      $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
-    my $non_existent_id = $counter_file_to_delete->erm_counter_files_id;
+    my $counter_file_to_delete = $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } );
+    my $non_existent_id        = $counter_file_to_delete->erm_counter_files_id;
     $counter_file_to_delete->delete;
 
-    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files/$non_existent_id/file/content")
-      ->status_is(404)->json_is( '/error' => 'Counter file not found' );
+    $t->get_ok("//$userid:$password@/api/v1/erm/counter_files/$non_existent_id/file/content")->status_is(404)
+        ->json_is( '/error' => 'Counter file not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -193,23 +185,17 @@ subtest 'delete() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     my $counter_file_id =
-      $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } )
-      ->erm_counter_files_id;
+        $builder->build_object( { class => 'Koha::ERM::EUsage::CounterFiles' } )->erm_counter_files_id;
 
     # Unauthorized attempt to delete
-    $t->delete_ok(
-        "//$unauth_userid:$password@/api/v1/erm/counter_files/$counter_file_id")
-      ->status_is(403);
+    $t->delete_ok("//$unauth_userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is(403);
 
     # Delete existing counter_file
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")
-      ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is( 204, 'SWAGGER3.2.4' )
+        ->content_is( '', 'SWAGGER3.3.4' );
 
     # Attempt to delete non-existent counter_file
-    $t->delete_ok(
-        "//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")
-      ->status_is(404);
+    $t->delete_ok("//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is(404);
 
     $schema->storage->txn_rollback;
 };

@@ -57,10 +57,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $counter_file_id = $c->validation->param('erm_counter_files_id');
-
-        # Do not use $c->objects->find here, we need the file_content
-        my $counter_file = Koha::ERM::EUsage::CounterFiles->find($counter_file_id);
+        my $counter_file = Koha::ERM::EUsage::CounterFiles->find( $c->param('erm_counter_files_id') );
 
         if ( !$counter_file ) {
             return $c->render(
@@ -85,8 +82,8 @@ sub get {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $counter_file_id = $c->validation->param('erm_counter_files_id');
-    my $counter_file    = Koha::ERM::EUsage::CounterFiles->find($counter_file_id);
+    my $counter_file = Koha::ERM::EUsage::CounterFiles->find( $c->param('erm_counter_files_id') );
+
     unless ($counter_file) {
         return $c->render(
             status  => 404,

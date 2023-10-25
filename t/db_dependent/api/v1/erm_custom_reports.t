@@ -335,8 +335,3 @@ subtest "metric_types_report" => sub {
 
     $schema->storage->txn_rollback;
 };
-
-
-
-
-

@@ -79,11 +79,10 @@ subtest 'list() tests' => sub {
     );
 
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
-    my $udp_result = { %{ $usage_data_provider->to_api }, %additional_fields };
+    my $udp_result          = { %{ $usage_data_provider->to_api }, %additional_fields };
 
     # One usage_data_provider created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/erm/usage_data_providers")->status_is(200)
-        ->json_is( [ $udp_result ] );
+    $t->get_ok("//$userid:$password@/api/v1/erm/usage_data_providers")->status_is(200)->json_is( [$udp_result] );
 
     my $another_usage_data_provider = $builder->build_object(
         {
@@ -116,10 +115,9 @@ subtest 'list() tests' => sub {
     );
     my $search_udp_result = { %{ $usage_data_provider_to_search->to_api }, %additional_fields };
 
-
     # Search works, searching for name like 'ko'
     $t->get_ok(qq~//$userid:$password@/api/v1/erm/usage_data_providers?q=[{"me.name":{"like":"%ko%"}}]~)
-        ->status_is(200)->json_is( [ $search_udp_result ] );
+        ->status_is(200)->json_is( [$search_udp_result] );
 
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/erm/usage_data_providers?blah=blah")->status_is(400)

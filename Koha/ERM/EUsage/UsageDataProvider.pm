@@ -104,11 +104,11 @@ sub enqueue_sushi_harvest_jobs {
 
         my $job_id = Koha::BackgroundJob::ErmSushiHarvester->new->enqueue(
             {
-                ud_provider_id       => $self->erm_usage_data_provider_id,
-                report_type          => $report_type,
-                begin_date           => $args->{begin_date},
-                end_date             => $args->{end_date},
-                ud_provider_name     => $self->name,
+                ud_provider_id   => $self->erm_usage_data_provider_id,
+                report_type      => $report_type,
+                begin_date       => $args->{begin_date},
+                end_date         => $args->{end_date},
+                ud_provider_name => $self->name,
             }
         );
 
@@ -220,15 +220,14 @@ sub harvest_sushi {
     return if $self->_sushi_errors($decoded_response);
 
     # Parse the SUSHI response
-    my $sushi_counter =
-        Koha::ERM::EUsage::SushiCounter->new( { response => $decoded_response } );
-    my $counter_file = $sushi_counter->get_COUNTER_from_SUSHI;
+    my $sushi_counter = Koha::ERM::EUsage::SushiCounter->new( { response => $decoded_response } );
+    my $counter_file  = $sushi_counter->get_COUNTER_from_SUSHI;
 
     return if $self->_counter_file_size_too_large($counter_file);
 
-    $self->counter_files( 
+    $self->counter_files(
         [
-            { 
+            {
                 usage_data_provider_id => $self->erm_usage_data_provider_id,
                 file_content           => $counter_file,
                 date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
@@ -272,7 +271,7 @@ Tests the connection of the harvester to the SUSHI service and returns any alert
 sub test_connection {
     my ($self) = @_;
 
-    my $url = _validate_url($self->service_url, 'status');
+    my $url = _validate_url( $self->service_url, 'status' );
     $url .= 'status';
     $url .= '?customer_id=' . $self->customer_id;
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
@@ -389,18 +388,17 @@ sub _build_url_query {
             $self->erm_usage_data_provider_id;
     }
 
-    my $url = _validate_url($self->service_url, 'harvest');
+    my $url = _validate_url( $self->service_url, 'harvest' );
 
     $url .= lc $self->{report_type};
     $url .= '?customer_id=' . $self->customer_id;
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
     $url .= '&api_key=' . $self->api_key           if $self->api_key;
-    $url .= '&begin_date=' . substr $self->{begin_date}, 0, 7   if $self->{begin_date};
-    $url .= '&end_date=' . substr $self->{end_date}, 0, 7       if $self->{end_date};
+    $url .= '&begin_date=' . substr $self->{begin_date}, 0, 7 if $self->{begin_date};
+    $url .= '&end_date=' . substr $self->{end_date},     0, 7 if $self->{end_date};
 
     return $url;
 }
-
 
 =head3 _validate_url
 
@@ -415,9 +413,11 @@ $caller is either the harvest_sushi function ("harvest") or the test_connection 
 sub _validate_url {
     my ( $url, $caller ) = @_;
 
-    if($caller eq 'harvest') {
+    if ( $caller eq 'harvest' ) {
+
         # Not all urls will end in "/" - add one so they are standardised
         $url = _check_trailing_character($url);
+
         # All SUSHI report requests should be to the "/reports" endpoint
         # Not all providers in the counter registry include this in their data so we need to check and add it
         my $reports_param = substr $url, -8;
@@ -436,7 +436,7 @@ Checks whether a url string ends in a "/" before we concatenate further params t
 =cut
 
 sub _check_trailing_character {
-    my ( $url ) = @_;
+    my ($url) = @_;
 
     my $trailing_char = substr $url, -1;
     if ( $trailing_char ne '/' ) {

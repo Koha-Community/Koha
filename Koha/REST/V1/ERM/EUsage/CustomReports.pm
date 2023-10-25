@@ -60,7 +60,7 @@ sub monthly_report {
             }
         }
 
-        my $data_type = $c->validation->param('data_type');
+        my $data_type = $c->param('data_type');
         my $data_set  = _get_data_set($data_type);
         my $data      = $c->objects->search($data_set);
 
@@ -128,7 +128,7 @@ sub yearly_report {
             }
         }
 
-        my $data_type = $c->validation->param('data_type');
+        my $data_type = $c->param('data_type');
         my $data_set  = _get_data_set($data_type);
         my $data      = $c->objects->search($data_set);
 
@@ -197,7 +197,7 @@ sub metric_types_report {
             }
         }
 
-        my $data_type = $c->validation->param('data_type');
+        my $data_type = $c->param('data_type');
         my $data_set  = _get_data_set($data_type);
         my $data      = $c->objects->search($data_set);
 

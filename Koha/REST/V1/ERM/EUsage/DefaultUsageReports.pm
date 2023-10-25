@@ -61,7 +61,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->param('body');
 
                 my $default_report = Koha::ERM::EUsage::DefaultUsageReport->new_from_api($body)->store;
 
@@ -114,8 +114,7 @@ Controller function that handles updating a Koha::ERM::EUsage::DefaultUsageRepor
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $default_report_id = $c->validation->param('erm_default_usage_report_id');
-    my $default_report    = Koha::ERM::EUsage::DefaultUsageReports->find($default_report_id);
+    my $default_report = Koha::ERM::EUsage::DefaultUsageReports->find( $c->param('erm_default_usage_report_id') );
 
     unless ($default_report) {
         return $c->render(
@@ -128,7 +127,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 $default_report->set_from_api($body)->store;
 
@@ -173,8 +172,7 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $default_report_id = $c->validation->param('erm_default_usage_report_id');
-    my $default_report    = Koha::ERM::EUsage::DefaultUsageReports->find($default_report_id);
+    my $default_report = Koha::ERM::EUsage::DefaultUsageReports->find( $c->param('erm_default_usage_report_id') );
     unless ($default_report) {
         return $c->render(
             status  => 404,

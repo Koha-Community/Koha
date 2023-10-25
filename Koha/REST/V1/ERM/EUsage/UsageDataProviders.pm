@@ -43,70 +43,66 @@ sub list {
     return try {
         my $usage_data_providers_set = Koha::ERM::EUsage::UsageDataProviders->new;
         my $usage_data_providers     = $c->objects->search($usage_data_providers_set);
-        # if (   $c->validation->output->{"x-koha-embed"}[0]
-        #     && $c->validation->output->{"x-koha-embed"}[0] eq 'counter_files' )
-        # {
-            foreach my $provider (@$usage_data_providers) {
-                my $title_dates = _get_earliest_and_latest_dates(
-                    'TR',
-                    $provider->{erm_usage_data_provider_id}
-                );
-                $provider->{earliest_title} =
-                      $title_dates->{earliest_date}
-                    ? $title_dates->{earliest_date}
-                    : '';
-                $provider->{latest_title} =
-                      $title_dates->{latest_date}
-                    ? $title_dates->{latest_date}
-                    : '';
+        foreach my $provider (@$usage_data_providers) {
+            my $title_dates = _get_earliest_and_latest_dates(
+                'TR',
+                $provider->{erm_usage_data_provider_id}
+            );
+            $provider->{earliest_title} =
+                    $title_dates->{earliest_date}
+                ? $title_dates->{earliest_date}
+                : '';
+            $provider->{latest_title} =
+                    $title_dates->{latest_date}
+                ? $title_dates->{latest_date}
+                : '';
 
-                my $platform_dates = _get_earliest_and_latest_dates(
-                    'PR',
-                    $provider->{erm_usage_data_provider_id}
-                );
-                $provider->{earliest_platform} =
-                      $platform_dates->{earliest_date}
-                    ? $platform_dates->{earliest_date}
-                    : '';
-                $provider->{latest_platform} =
-                      $platform_dates->{latest_date}
-                    ? $platform_dates->{latest_date}
-                    : '';
+            my $platform_dates = _get_earliest_and_latest_dates(
+                'PR',
+                $provider->{erm_usage_data_provider_id}
+            );
+            $provider->{earliest_platform} =
+                    $platform_dates->{earliest_date}
+                ? $platform_dates->{earliest_date}
+                : '';
+            $provider->{latest_platform} =
+                    $platform_dates->{latest_date}
+                ? $platform_dates->{latest_date}
+                : '';
 
-                my $item_dates = _get_earliest_and_latest_dates(
-                    'IR',
-                    $provider->{erm_usage_data_provider_id}
-                );
-                $provider->{earliest_item} =
-                      $item_dates->{earliest_date}
-                    ? $item_dates->{earliest_date}
-                    : '';
-                $provider->{latest_item} =
-                    $item_dates->{latest_date} ? $item_dates->{latest_date} : '';
+            my $item_dates = _get_earliest_and_latest_dates(
+                'IR',
+                $provider->{erm_usage_data_provider_id}
+            );
+            $provider->{earliest_item} =
+                    $item_dates->{earliest_date}
+                ? $item_dates->{earliest_date}
+                : '';
+            $provider->{latest_item} =
+                $item_dates->{latest_date} ? $item_dates->{latest_date} : '';
 
-                my $database_dates = _get_earliest_and_latest_dates(
-                    'DR',
-                    $provider->{erm_usage_data_provider_id}
-                );
-                $provider->{earliest_database} =
-                      $database_dates->{earliest_date}
-                    ? $database_dates->{earliest_date}
-                    : '';
-                $provider->{latest_database} =
-                      $database_dates->{latest_date}
-                    ? $database_dates->{latest_date}
-                    : '';
+            my $database_dates = _get_earliest_and_latest_dates(
+                'DR',
+                $provider->{erm_usage_data_provider_id}
+            );
+            $provider->{earliest_database} =
+                    $database_dates->{earliest_date}
+                ? $database_dates->{earliest_date}
+                : '';
+            $provider->{latest_database} =
+                    $database_dates->{latest_date}
+                ? $database_dates->{latest_date}
+                : '';
 
-                my @last_run = Koha::ERM::EUsage::CounterFiles->search(
-                    {
-                        usage_data_provider_id => $provider->{erm_usage_data_provider_id},
-                    },
-                    { columns => [ { date_uploaded => { max => "date_uploaded" } }, ] }
-                )->unblessed;
-                $provider->{last_run} = $last_run[0][0]->{date_uploaded} ? $last_run[0][0]->{date_uploaded} : '';
+            my @last_run = Koha::ERM::EUsage::CounterFiles->search(
+                {
+                    usage_data_provider_id => $provider->{erm_usage_data_provider_id},
+                },
+                { columns => [ { date_uploaded => { max => "date_uploaded" } }, ] }
+            )->unblessed;
+            $provider->{last_run} = $last_run[0][0]->{date_uploaded} ? $last_run[0][0]->{date_uploaded} : '';
 
-            }
-        # }
+        }
 
         return $c->render( status => 200, openapi => $usage_data_providers );
     } catch {
@@ -125,11 +121,8 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $usage_data_provider_id = $c->validation->param('erm_usage_data_provider_id');
-        my $usage_data_provider    = $c->objects->find(
-            Koha::ERM::EUsage::UsageDataProviders->search,
-            $usage_data_provider_id
-        );
+        my $usage_data_provider =
+            Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
         unless ($usage_data_provider) {
             return $c->render(
@@ -160,7 +153,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $usage_data_provider = Koha::ERM::EUsage::UsageDataProvider->new_from_api($body)->store;
 
@@ -213,8 +206,7 @@ Controller function that handles updating a Koha::ERM::EUsage::UsageDataProvider
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $usage_data_provider_id = $c->validation->param('erm_usage_data_provider_id');
-    my $usage_data_provider    = Koha::ERM::EUsage::UsageDataProviders->find($usage_data_provider_id);
+    my $usage_data_provider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
     unless ($usage_data_provider) {
         return $c->render(
@@ -227,7 +219,7 @@ sub update {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 $usage_data_provider->set_from_api($body)->store;
 
@@ -272,8 +264,7 @@ sub update {
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $usage_data_provider_id = $c->validation->param('erm_usage_data_provider_id');
-    my $usage_data_provider    = Koha::ERM::EUsage::UsageDataProviders->find($usage_data_provider_id);
+    my $usage_data_provider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
     unless ($usage_data_provider) {
         return $c->render(
             status  => 404,
@@ -306,7 +297,7 @@ sub process_COUNTER_file {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->validation->param('body');
+                my $body = $c->req->json;
 
                 my $file_content =
                     defined( $body->{file_content} )
@@ -323,7 +314,7 @@ sub process_COUNTER_file {
 
                 # Validation was successful, enqueue the job
                 my $udprovider =
-                    Koha::ERM::EUsage::UsageDataProviders->find( $c->validation->param('erm_usage_data_provider_id') );
+                    Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
                 my $jobs = $udprovider->enqueue_counter_file_processing_job(
                     {
@@ -384,7 +375,7 @@ It will ->enqueue_sushi_harvest_jobs for this usage data provider
 sub process_SUSHI_response {
     my $c = shift->openapi->valid_input or return;
 
-    my $body       = $c->validation->param('body');
+    my $body       = $c->req->json;
     my $begin_date = $body->{begin_date};
     my $end_date   = $body->{end_date};
 
@@ -395,7 +386,7 @@ sub process_SUSHI_response {
         );
     }
 
-    my $udprovider = Koha::ERM::EUsage::UsageDataProviders->find( $c->validation->param('erm_usage_data_provider_id') );
+    my $udprovider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
     unless ($udprovider) {
         return $c->render(
@@ -428,7 +419,7 @@ sub process_SUSHI_response {
 sub test_connection {
     my $c = shift->openapi->valid_input or return;
 
-    my $udprovider = Koha::ERM::EUsage::UsageDataProviders->find( $c->validation->param('erm_usage_data_provider_id') );
+    my $udprovider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
     unless ($udprovider) {
         return $c->render(

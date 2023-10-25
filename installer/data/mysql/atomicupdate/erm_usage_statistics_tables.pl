@@ -1,13 +1,13 @@
 use Modern::Perl;
 
 return {
-    bug_number => "XXXX",
+    bug_number  => "XXXX",
     description => "Creating the tables for ERM Usage Statistics",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        unless( TableExists( 'erm_usage_data_providers')) {
+        unless ( TableExists('erm_usage_data_providers') ) {
             $dbh->do(
                 q{
                 CREATE TABLE `erm_usage_data_providers` (
@@ -30,13 +30,13 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
-            
+
             say $out "Added new table erm_usage_data_providers";
         } else {
             say $out "erm_usage_data_providers table already exists - skipping to next table";
         }
 
-        unless( TableExists( 'erm_counter_files')) {
+        unless ( TableExists('erm_counter_files') ) {
             $dbh->do(
                 q{
                 CREATE TABLE `erm_counter_files` (
@@ -51,13 +51,13 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
-            
+
             say $out "Added new table erm_counter_files";
         } else {
             say $out "erm_counter_files table already exists - skipping to next table";
         }
 
-        unless( TableExists( 'erm_counter_logs')) {
+        unless ( TableExists('erm_counter_logs') ) {
             $dbh->do(
                 q{
                 CREATE TABLE `erm_counter_logs` (
@@ -75,13 +75,13 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
-            
+
             say $out "Added new table erm_counter_logs";
         } else {
             say $out "erm_counter_logs table already exists - skipping to next table";
         }
 
-        unless( TableExists( 'erm_usage_titles')) {
+        unless ( TableExists('erm_usage_titles') ) {
             $dbh->do(
                 q{
                 CREATE TABLE `erm_usage_titles` (
@@ -102,7 +102,7 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
-            
+
             say $out "Added new table erm_usage_titles";
         } else {
             say $out "erm_usage_titles table already exists - skipping to next table";
@@ -167,7 +167,7 @@ return {
             say $out "erm_usage_items table already exists - skipping to next table";
         }
 
-        unless( TableExists( 'erm_usage_mus')) {
+        unless ( TableExists('erm_usage_mus') ) {
             $dbh->do(
                 q{
                 CREATE TABLE `erm_usage_mus` (
@@ -193,13 +193,13 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
-            
+
             say $out "Added new table erm_usage_mus";
         } else {
             say $out "erm_usage_mus table already exists - skipping to next table";
         }
 
-        unless( TableExists( 'erm_usage_yus')) {
+        unless ( TableExists('erm_usage_yus') ) {
             $dbh->do(
                 q{
                 CREATE TABLE `erm_usage_yus` (
@@ -224,13 +224,13 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
-            
+
             say $out "Added new table erm_usage_yus";
         } else {
             say $out "erm_usage_yus table already exists - skipping to next table";
         }
 
-        unless( TableExists( 'erm_default_usage_reports')) {
+        unless ( TableExists('erm_default_usage_reports') ) {
             $dbh->do(
                 q{
                 CREATE TABLE `erm_default_usage_reports` (
@@ -241,13 +241,14 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                 }
             );
-            
+
             say $out "Added new table erm_default_usage_reports";
         } else {
             say $out "erm_default_usage_reports table already exists - skipping to next table";
         }
-        
-        $dbh->do(q{
+
+        $dbh->do(
+            q{
             INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
             VALUES
                 ('ERM_REPORT_TYPES', 1),
@@ -255,8 +256,10 @@ return {
                 ('ERM_DATABASE_REPORTS_METRICS', 1),
                 ('ERM_TITLE_REPORTS_METRICS', 1),
                 ('ERM_ITEM_REPORTS_METRICS', 1);
-            });
-        $dbh->do(q{
+            }
+        );
+        $dbh->do(
+            q{
             INSERT IGNORE INTO authorised_values (category, authorised_value, lib)
             VALUES
                 ('ERM_REPORT_TYPES', 'PR', 'PR - Platform master report'),
@@ -307,6 +310,7 @@ return {
                 ('ERM_ITEM_REPORTS_METRICS', 'Unique_Item_Requests', 'Unique item requests'),
                 ('ERM_ITEM_REPORTS_METRICS', 'Limit_Exceeded', 'Limit exceeded'),
                 ('ERM_ITEM_REPORTS_METRICS', 'No_License', 'No license');
-        });
+        }
+        );
     },
 };

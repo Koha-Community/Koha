@@ -8,7 +8,7 @@
                 <table id="finishedtable">
                     <tr>
                         <td>Usage data provider</td>
-                        <td><a href="/cgi-bin/koha/erm/eusage/usage_data_providers/[% report.ud_provider_id %]" title="Visit usage data provider">[% report.ud_provider_name | html %]</a></td>
+                        <td><a href="/cgi-bin/koha/erm/eusage/usage_data_providers/[% report.ud_provider_id | uri %]" title="Visit usage data provider">[% report.ud_provider_name | html %]</a></td>
                     </tr>
                     <tr>
                         <td>Report type</td>
@@ -16,7 +16,7 @@
                     </tr>
                     <tr>
                         <td>Report rows processed</td>
-                        <td>[% job.progress %]</td>
+                        <td>[% job.progress | html %]</td>
                     </tr>
                     <tr>
                     [% IF report.report_type.match( '^PR' ) %]
@@ -53,7 +53,7 @@
                 <table id="finishedtable">
                     <tr>
                         <td>Usage data provider</td>
-                        <td><a id="failed_provider_name" href="/cgi-bin/koha/erm/eusage/usage_data_providers/[% report.ud_provider_id %]" title="Visit usage data provider"></a></td>
+                        <td><a id="failed_provider_name" href="/cgi-bin/koha/erm/eusage/usage_data_providers/[% report.ud_provider_id | uri %]" title="Visit usage data provider"></a></td>
                     </tr>
                     <tr>
                         <td>Report type</td>
@@ -85,19 +85,19 @@
             [% END %]
             [% SWITCH m.code %]
                 [% CASE 'object_already_exists' %]
-                    <span><strong>[% m.title %]</strong> already exists in this data provider and was not created. New usage statistics were verified anyway</span>
+                    <span><strong>[% m.title | html %]</strong> already exists in this data provider and was not created. New usage statistics were verified anyway</span>
                 [% CASE 'object_added' %]
-                    <span><strong>[% m.title %]</strong> successfully added</span>
+                    <span><strong>[% m.title | html %]</strong> successfully added</span>
                 [% CASE 'object_could_not_be_added' %]
-                    <span><strong>[% m.title %]</strong> could not be processed - please check the logs</span>
+                    <span><strong>[% m.title | html %]</strong> could not be processed - please check the logs</span>
                 [% CASE 'payload_too_large' %]
-                    <span>COUNTER report file size exceeds limit defined by the database. Limit is [% m.message %] MB.</span><br>
+                    <span>COUNTER report file size exceeds limit defined by the database. Limit is [% m.message | html %] MB.</span><br>
                     <span>Please increase this limit or harvest a shorter period.</span>
                 [% CASE 'no_items' %]
                     <span>SUSHI response returned no items.</span><br>
                     <span>Please try a different harvest period.</span>
                 [% CASE %]
-                    <span>SUSHI returned: [% m.message %] [% m.code %]</span>
+                    <span>SUSHI returned: [% m.message | html %] [% m.code | html %]</span>
             [% END %]
         </div>
     [% END %]
@@ -109,7 +109,7 @@
     [% INCLUDE 'str/erm_sushi_harvester.inc' %]
 <script>
         $(document).ready(function(){
-            let job_id = [% job.id | html %];
+            let job_id = [% job.id | $raw %];
             updateProgress(job_id, {
                 progress_callback : function(){
                     $.getJSON('/api/v1/jobs/'+job_id, function(job){
@@ -128,8 +128,8 @@
                     });
                 }
             });
-            
-            let job_data = [% job.data %];
+
+            let job_data = [% job.data | $raw %];
             let report_type = job_data.report_type;
             let ud_provider_name = job_data.ud_provider_name;
             $('#failed_report_type').text(report_type);
