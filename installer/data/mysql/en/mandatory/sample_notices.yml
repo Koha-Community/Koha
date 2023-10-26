@@ -2453,3 +2453,17 @@ tables:
             - "    [%~ END ~%]"
             - "    [% item_attribute.processing_attribute.name %]: [% value %]"
             - "[% END %]"
+
+        - module: reserves
+          code: HOLDPLACED_PATRON
+          branchcode: ""
+          name: "Hold is confirmed"
+          is_html: 0
+          title: "Your hold on [% hold.biblio.title %] is confirmed"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Hello [% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %]),"
+            - "Your hold on [% hold.biblio.title %] ([% hold.biblio.id %]) has been confirmed."
+            - "You will be notified by the library when your item is available for pickup."
+            - "Thank you!"
