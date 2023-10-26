@@ -166,7 +166,7 @@ BEGIN {
         }
     );
 
-Adds reserve and generates HOLDPLACED message.
+Adds reserve and generates HOLDPLACED message and HOLDPLACED_PATRON message.
 
 The following tables are available witin the HOLDPLACED message:
 
@@ -175,6 +175,11 @@ The following tables are available witin the HOLDPLACED message:
     biblio
     biblioitems
     items
+    reserves
+
+The following tables are available within the HOLDPLACED_PATRON message:
+
+    borrowers
     reserves
 
 =cut
@@ -301,6 +306,33 @@ sub AddReserve {
                     borrowernumber         => $borrowernumber,
                     message_transport_type => 'email',
                     to_address             => $branch_email_address,
+                }
+            );
+        }
+    }
+
+    # Send email to patron if syspref is active
+    if ( C4::Context->preference("EmailPatronWhenHoldIsPlaced") ) {
+        my $patron = $hold->patron;
+        if (
+            my $letter = C4::Letters::GetPreparedLetter(
+                module      => 'reserves',
+                letter_code => 'HOLDPLACED_PATRON',
+                branchcode  => $branch,
+                lang        => $patron->lang,
+                tables      => {
+                    borrowers => $patron->unblessed,
+                    reserves  => $hold->unblessed,
+                },
+            )
+            )
+        {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $borrowernumber,
+                    message_transport_type => 'email',
+                    to_address             => $patron->notice_email_address,
                 }
             );
         }
