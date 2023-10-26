@@ -6,7 +6,7 @@
             <ul class="pagination">
                 [% IF ( displayprev ) %]
                     <li class="page-item">
-                        <a class="page-link" href="label-item-search.pl?startfrom=[% startfromprev | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]"><i class="fa fa-arrow-left"></i> Previous</a>
+                        <a class="page-link" href="label-item-search.pl?startfrom=[% startfromprev | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]"><i class="fa fa-arrow-left"></i> Previous</a>
                     </li>
                 [% END %]
                 [% FOREACH number IN numbers %]
@@ -16,13 +16,13 @@
                         </li>
                     [% ELSE %]
                         <li class="page-item">
-                            <a class="page-link" href="label-item-search.pl?startfrom=[% number.startfrom | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]">[% number.number | html %]</a>
+                            <a class="page-link" href="label-item-search.pl?startfrom=[% number.startfrom | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]">[% number.number | html %]</a>
                         </li>
                     [% END %]
                 [% END %]
                 [% IF ( displaynext ) %]
                     <li class="page-item">
-                        <a class="page-link" href="label-item-search.pl?startfrom=[% startfromnext | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]">Next <i class="fa fa-arrow-right"></i></a>
+                        <a class="page-link" href="label-item-search.pl?startfrom=[% startfromnext | html %]&amp;idx=[% idx | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]&amp;ccl_textbox=[% ccl_textbox | html %]&amp;limits=[% limits | html %]">Next <i class="fa fa-arrow-right"></i></a>
                     </li>
                 [% END %]
             </ul>
@@ -60,7 +60,6 @@
             </div>
 
                 <div id="label-search-results" class="page-section">
-                <input type="hidden" name="ccl_query" value="[% ccl_query | html %]" />
             [% FOREACH result_se IN result_set %]
             <div style="border-bottom:1px solid #CCC;padding:1em 0;">
                     <h4>[% result_se.title | html %]</h4>

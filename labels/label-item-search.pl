@@ -40,7 +40,7 @@ my $query = CGI->new;
 my $type      = $query->param('type');
 my $op        = $query->param('op') || '';
 my $batch_id  = $query->param('batch_id');
-my $ccl_query = $query->param('ccl_query');
+my @limits    = split(" AND ", $query->param('limits') || "");
 my $startfrom = $query->param('startfrom') || 1;
 my ($template, $loggedinuser, $cookie) = (undef, undef, undef);
 my (
@@ -68,13 +68,9 @@ if ( $op eq "do_search" ) {
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
-    my @limits;
-    if ($datefrom) {
-        push(@limits, "acqdate,ge,st-date-normalized=$datefrom");
-    }
-
-    if ($dateto) {
-        push(@limits, "acqdate,le,st-date-normalized=$dateto");
+    if (!@limits) {
+        push(@limits, "acqdate,ge,st-date-normalized=$datefrom") if ($datefrom);
+        push(@limits, "acqdate,le,st-date-normalized=$dateto") if ($dateto);
     }
 
     my ( $build_error, $query, $simple_query, $query_cgi,
@@ -90,8 +86,9 @@ if ( $op eq "do_search" ) {
     );
 
     if (!defined $error && @{$results->{biblioserver}{RECORDS}} ) {
-        $show_results = @{$results->{biblioserver}{RECORDS}};
-        $marcresults = $results->{biblioserver}{RECORDS};
+        $show_results = grep { defined $_ } @{$results->{biblioserver}{RECORDS}};
+        $marcresults = [ grep { defined $_ } @{$results->{biblioserver}{RECORDS}} ];
+        $total_hits = $results->{biblioserver}{hits};
     }
     else {
         Koha::Logger->get->warn("ERROR label-item-search: no results from simple_search_compat");
@@ -196,11 +193,13 @@ if ($show_results) {
     );
 
     $template->param(
-        results   => ($show_results ? 1 : 0),
-        result_set=> \@results_set,
-        batch_id  => $batch_id,
-        type      => $type,
-        ccl_query => $ccl_query,
+        results     => ($show_results ? 1 : 0),
+        result_set  => \@results_set,
+        batch_id    => $batch_id,
+        type        => $type,
+        idx         => $idx,
+        ccl_textbox => $ccl_textbox,
+        limits      => join(" AND ", @limits),
     );
 }
 
