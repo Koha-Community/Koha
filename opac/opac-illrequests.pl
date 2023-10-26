@@ -147,8 +147,12 @@ if ( $op eq 'list' ) {
             exit;
         }
 
+        my $patron = Koha::Patrons->find( { borrowernumber => $loggedinuser } );
+
         $params->{cardnumber} = $patron->cardnumber;
-        $params->{opac} = 1;
+        $params->{branchcode} = $patron->branchcode;
+        $params->{opac}       = 1;
+        $params->{lang}       = C4::Languages::getlanguage($query);
         my $backend_result = $request->backend_create($params);
 
         if ($backend_result->{stage} eq 'copyrightclearance') {

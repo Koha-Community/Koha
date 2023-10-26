@@ -6,6 +6,7 @@
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% SET ILLModuleCopyrightClearance = AdditionalContents.get( location => "ILLModuleCopyrightClearance", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your interlibrary loan requests &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -78,13 +79,17 @@
                                 [% INCLUDE messages %]
                                 <div>
                                     <p>
-                                        [% Koha.Preference('ILLModuleCopyrightClearance') | $raw %]
+                                        [% IF ( ILLModuleCopyrightClearance ) %]
+                                            <div id="ILLModuleCopyrightClearance">
+                                                [% PROCESS koha_news_block news => ILLModuleCopyrightClearance %]
+                                            </div>
+                                        [% END %]
                                     </p>
                                     [% USE link_url = url('/cgi-bin/koha/opac-illrequests.pl', whole.value.other) %]
                                     <a href="[% link_url _ '&amp;stage=copyrightclearance' | $raw %]"
-                                    class="btn btn-sm btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Yes</a>
+                                    class="btn btn-sm btn-primary"><i class="fa fa-fw fa-check" aria-hidden="true"></i> Yes</a>
                                     <a href="/cgi-bin/koha/opac-illrequests.pl"
-                                    class="btn btn-sm btn-danger"><i class="fa fa-times" aria-hidden="true"></i> No</a>
+                                    class="btn btn-sm btn-danger"><i class="fa fa-fw fa-times" aria-hidden="true"></i> No</a>
                                 </div>
                             [% ELSE %]
                                 [% INCLUDE messages %]

@@ -18,6 +18,10 @@
     Include this content in the popup message which is displayed in the OPAC when the CookieConsent system preference is enabled and the user clicks the "Your cookies" menu item in the header.
 </div>
 
+<div id="ILLModuleCopyrightClearance_notes" class="hint customization_note">
+    Adding content to this region will enable the copyright clearance stage in request creation. The content will appear on the OPAC during the process of placing an ILL request.
+</div>
+
 <div id="opaccredits_notes" class="hint customization_note">
     Include this content in the footer of all pages in the OPAC.
 </div>

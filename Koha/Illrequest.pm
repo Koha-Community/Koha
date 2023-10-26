@@ -41,6 +41,7 @@ use Koha::Biblios;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
+use Koha::AdditionalContents;
 
 use C4::Circulation qw( CanBookBeIssued AddIssue );
 
@@ -932,9 +933,20 @@ sub backend_create {
     my ( $self, $params ) = @_;
 
     # Establish whether we need to do a generic copyright clearance.
-    if ($params->{opac}) {
+    if ( $params->{opac} ) {
+
+        my $copyright_content = Koha::AdditionalContents->search_for_display(
+            {
+                category   => 'html_customizations',
+                location   => ['ILLModuleCopyrightClearance'],
+                lang       => $params->{lang},
+                library_id => $params->{branchcode},
+            }
+        );
+
         if ( ( !$params->{stage} || $params->{stage} eq 'init' )
-                && C4::Context->preference("ILLModuleCopyrightClearance") ) {
+            && $copyright_content->count )
+        {
             return {
                 error   => 0,
                 status  => '',
