@@ -106,7 +106,7 @@ subtest 'list() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 30;
+    plan tests => 34;
 
     $schema->storage->txn_begin;
 
@@ -182,6 +182,13 @@ subtest 'get() tests' => sub {
       ->status_is( 200, 'SWAGGER3.2.2' )
       ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
       ->json_is( '/effective_not_for_loan_status' => 2, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:1' );
+
+    $itype->notforloan(undef)->store();
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'SWAGGER3.2.2' )
+        ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )->json_is(
+        '/effective_not_for_loan_status' => 0,
+        'effective_not_for_loan_status now picks up itemtype level and falls back to 0 because undef'
+        );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
