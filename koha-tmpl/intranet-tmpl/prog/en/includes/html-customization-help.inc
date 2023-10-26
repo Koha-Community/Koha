@@ -74,7 +74,7 @@
     Show this content at the top of the purchase suggestion form in the OPAC.
 </div>
 
-<div id="OpacSuggestionInstructions_notes" class="hint customization_note">
+<div id="OpacSuppressionMessage_notes" class="hint customization_note">
     Display the following message on the redirect page for suppressed bibliographic records. Depends on the system preferences OpacSuppression and OpacSuppressionRedirect.
 </div>
 
