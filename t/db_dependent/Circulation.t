@@ -431,7 +431,7 @@ subtest "GetIssuingCharges tests" => sub {
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 113;
+    plan tests => 114;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -1010,6 +1010,49 @@ subtest "CanBookBeRenewed tests" => sub {
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $auto_renew_issue );
     is( $renewokay, 1, 'No renewal before is 99, patron opted out of auto_renewal so can renew' );
     $renewing_borrower_obj->autorenew_checkouts(1)->store;
+
+
+    # Bug 31427
+    # Ensure autorenewal errors always take highest precedence
+    subtest "auto_renewal errors first" => sub {
+        plan tests => 4;
+
+        my $auto_renew_item = $builder->build_sample_item(
+            {
+                biblionumber => $biblio->biblionumber,
+                library      => $branch,
+            }
+        );
+
+        my $ten_days_ahead = dt_from_string->add( days => 10 );
+        my $issue          = AddIssue(
+            $renewing_borrower_obj, $auto_renew_item->barcode, $ten_days_ahead, undef, undef, undef,
+            { auto_renew => 1 }
+        );
+
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => undef,
+                rules        => {
+                    noautorenewalbefore => 7,
+                    renewalsallowed     => 2,
+                }
+            }
+        );
+        my ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $issue, undef, 'cron' );
+        is( $renewokay, 0,               'Do not renew, renewal is automatic' );
+        is( $error,     'auto_too_soon', 'Cannot auto renew, too soon - returned code is auto_too_soon' );
+
+        $issue->renewals_count(2)->store;
+        ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $issue, undef, 'cron' );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is(
+            $error, 'auto_too_soon',
+            'Cannot auto renew, too soon - auto renewal error takes precedence over non-autorenewal error too_many'
+        );
+    };
 
     subtest "too_late_renewal / no_auto_renewal_after" => sub {
         plan tests => 16;
