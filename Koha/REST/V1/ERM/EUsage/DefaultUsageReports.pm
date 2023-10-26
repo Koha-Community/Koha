@@ -61,7 +61,7 @@ sub add {
         Koha::Database->new->schema->txn_do(
             sub {
 
-                my $body = $c->param('body');
+                my $body = $c->req->json;
 
                 my $default_report = Koha::ERM::EUsage::DefaultUsageReport->new_from_api($body)->store;
 
@@ -84,66 +84,6 @@ sub add {
                     openapi => { error => $_->error, conflict => $_->duplicate_id }
                 );
             } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
-                return $c->render(
-                    status  => 400,
-                    openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }
-                );
-            } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
-                return $c->render(
-                    status  => 400,
-                    openapi => { error => "Given " . $to_api_mapping->{ $_->parameter } . " does not exist" }
-                );
-            } elsif ( $_->isa('Koha::Exceptions::PayloadTooLarge') ) {
-                return $c->render(
-                    status  => 413,
-                    openapi => { error => $_->error }
-                );
-            }
-        }
-
-        $c->unhandled_exception($_);
-    };
-}
-
-=head3 update
-
-Controller function that handles updating a Koha::ERM::EUsage::DefaultUsageReport object
-
-=cut
-
-sub update {
-    my $c = shift->openapi->valid_input or return;
-
-    my $default_report = Koha::ERM::EUsage::DefaultUsageReports->find( $c->param('erm_default_usage_report_id') );
-
-    unless ($default_report) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Default report not found" }
-        );
-    }
-
-    return try {
-        Koha::Database->new->schema->txn_do(
-            sub {
-
-                my $body = $c->req->json;
-
-                $default_report->set_from_api($body)->store;
-
-                $c->res->headers->location(
-                    $c->req->url->to_string . '/' . $default_report->erm_default_usage_report_id );
-                return $c->render(
-                    status  => 200,
-                    openapi => $default_report->to_api
-                );
-            }
-        );
-    } catch {
-        my $to_api_mapping = Koha::ERM::EUsage::DefaultUsageReport->new->to_api_mapping;
-
-        if ( blessed $_ ) {
-            if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 return $c->render(
                     status  => 400,
                     openapi => { error => "Given " . $to_api_mapping->{ $_->broken_fk } . " does not exist" }

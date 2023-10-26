@@ -49,13 +49,13 @@ sub monthly_report {
 
     return try {
 
-        my $args = $c->param('q');
-        my @query_params_array;
         my $json = JSON->new;
+        my $args = $json->decode($c->param('q'));
+        my @query_params_array;
 
         if ( ref($args) eq 'ARRAY' ) {
             foreach my $q ( @{$args} ) {
-                push @query_params_array, $json->decode($q)
+                push @query_params_array, $q
                     if $q;
             }
         }
@@ -67,10 +67,10 @@ sub monthly_report {
         my $usage_data_providers =
             Koha::ERM::EUsage::UsageDataProviders->search( {}, {} )->unblessed;
         my $metric_types =
-            $query_params_array[0][0]->{'erm_usage_muses.metric_type'};
+            $query_params_array[0]->{'erm_usage_muses.metric_type'};
         my $access_types =
-              $query_params_array[0][0]->{'erm_usage_muses.access_type'}
-            ? $query_params_array[0][0]->{'erm_usage_muses.access_type'}
+              $query_params_array[0]->{'erm_usage_muses.access_type'}
+            ? $query_params_array[0]->{'erm_usage_muses.access_type'}
             : ();
 
         # Objects with no data in the selected range will not be returned by the API - we still want to include them if they have been requested
@@ -117,16 +117,9 @@ sub yearly_report {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $args = $c->param('q');
-        my @query_params_array;
         my $json = JSON->new;
-
-        if ( ref($args) eq 'ARRAY' ) {
-            foreach my $q ( @{$args} ) {
-                push @query_params_array, $json->decode($q)
-                    if $q;
-            }
-        }
+        my $args = $json->decode( $c->param('q') );
+        my @query_params_array;
 
         my $data_type = $c->param('data_type');
         my $data_set  = _get_data_set($data_type);
@@ -137,7 +130,7 @@ sub yearly_report {
 
         # Titles with no data in the selected range will not be returned by the API - we still want to include them if they have been requested
         my $requested_ids = _get_correct_query_param(
-            $data_type, \@query_params_array,
+            $data_type, $args,
             'yearly'
         );
         for my $id ( @{$requested_ids} ) {
@@ -151,10 +144,10 @@ sub yearly_report {
             push @{$data}, $missing_result if $missing_result;
         }
 
-        my $metric_types = $query_params_array[0]->{'erm_usage_yuses.metric_type'};
+        my $metric_types = $args->{'erm_usage_yuses.metric_type'};
         my $access_types =
-              $query_params_array[0]->{'erm_usage_yuses.access_type'}
-            ? $query_params_array[0]->{'erm_usage_yuses.access_type'}
+              $args->{'erm_usage_yuses.access_type'}
+            ? $args->{'erm_usage_yuses.access_type'}
             : ();
 
         my $report_data = _get_report_data(
@@ -186,13 +179,13 @@ sub metric_types_report {
 
     return try {
 
-        my $args = $c->param('q');
-        my @query_params_array;
         my $json = JSON->new;
+        my $args = $json->decode( $c->param('q') );
+        my @query_params_array;
 
         if ( ref($args) eq 'ARRAY' ) {
             foreach my $q ( @{$args} ) {
-                push @query_params_array, $json->decode($q)
+                push @query_params_array, $q
                     if $q;
             }
         }
@@ -220,7 +213,7 @@ sub metric_types_report {
             push @{$data}, $missing_result if $missing_result;
         }
 
-        my @metric_types = ('metric_types_report');
+        my @metric_types = ('metric_types_report'); # Dummy value to ensure the loop triggers at least once in _create_report_rows
         my $report_data  = _get_report_data(
             {
                 data_type            => $data_type,
@@ -250,13 +243,13 @@ sub provider_rollup_report {
 
     return try {
 
-        my $args = $c->param('q');
-        my @query_params_array;
         my $json = JSON->new;
+        my $args = $json->decode( $c->param('q') );
+        my @query_params_array;
 
         if ( ref($args) eq 'ARRAY' ) {
             foreach my $q ( @{$args} ) {
-                push @query_params_array, $json->decode($q)
+                push @query_params_array, $q
                     if $q;
             }
         }
@@ -264,11 +257,11 @@ sub provider_rollup_report {
         my $usage_data_providers_set = Koha::ERM::EUsage::UsageDataProviders->new;
         my $usage_data_providers     = $c->objects->search($usage_data_providers_set);
 
-        my $data_type = $c->validation->param('data_type');
+        my $data_type = $c->param('data_type');
         my $key       = 'erm_usage_' . $data_type . 's';
         my $metric_types =
-            $query_params_array[0][0]->{ $key . '.erm_usage_muses.metric_type' };
-
+            $query_params_array[0]->{ $key . '.erm_usage_muses.metric_type' };
+            
         my @usage_data_provider_report_data;
 
         for my $usage_data_provider ( @{$usage_data_providers} ) {
@@ -377,18 +370,17 @@ e.g. If it is a titles report and the user has requested titles with the ids 1,2
 =cut
 
 sub _get_correct_query_param {
-    my ( $data_type, $array_ref, $period ) = @_;
+    my ( $data_type, $parameters, $period ) = @_;
 
     my $param;
-    my @query_params = @$array_ref;
 
     my $prefix = $period eq 'monthly' ? 'erm_usage_muses' : 'erm_usage_yuses';
     my $key    = $prefix . "." . $data_type . "_id";
 
     if ( $period eq 'monthly' ) {
-        $param = $query_params[0][0]->{$key};
+        $param = @$parameters[0]->{$key};
     } else {
-        $param = $query_params[0]->{$key};
+        $param = $parameters->{$key};
     }
 
     return $param;

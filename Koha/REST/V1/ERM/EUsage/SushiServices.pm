@@ -43,7 +43,7 @@ sub get {
     my $json = JSON->new;
 
     my @query_params_array =
-        map { $_ ? $json->decode($_) : () } @{ $args };
+        map { $_ ? $json->decode($_) : () } $args;
 
     my $service_url = $query_params_array[0]->{url};
 

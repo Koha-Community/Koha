@@ -39,11 +39,12 @@ use Koha::Exceptions;
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $args = $c->validation->output;
+    my $args = $c->param('q');
     my $json = JSON->new;
 
     my @query_params_array =
-        map { $_ ? $json->decode($_) : () } @{ $args->{q} };
+        map { $_ ? $json->decode($_) : () } $args;
+
     my $search_string = $query_params_array[0]->{name};
 
     my $url     = 'https://registry.projectcounter.org/api/v1/platform/';
