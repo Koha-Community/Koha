@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 73;
+use Test::More tests => 74;
 use Test::Exception;
 
 use MARC::Record;
@@ -15,7 +15,7 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Calendar;
 use C4::Items;
-use C4::Reserves qw( AddReserve CalculatePriority ModReserve ToggleSuspend AutoUnsuspendReserves SuspendAll ModReserveMinusPriority AlterPriority CanItemBeReserved CheckReserves );
+use C4::Reserves qw( AddReserve CalculatePriority ModReserve ToggleSuspend AutoUnsuspendReserves SuspendAll ModReserveMinusPriority AlterPriority CanItemBeReserved CheckReserves MoveReserve );
 use C4::Circulation qw( CanBookBeRenewed );
 
 use Koha::Biblios;
@@ -1806,6 +1806,84 @@ subtest 'Koha::Holds->get_items_that_can_fill returns items with datecancelled o
     is($items_that_can_fill3->count, 1, "Koha::Holds->get_items_that_can_fill returns 1 item with correct parameters");
     is($items_that_can_fill4->next, undef, "Koha::Holds->get_items_that_can_fill doesn't return item with undefined datearrived and undefined datecancelled");
     is($items_that_can_fill4->count, 0, "Koha::Holds->get_items_that_can_fill returns 0 item");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'EmailPatronWhenHoldIsPlaced tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item           = $builder->build_sample_item;
+    my $patron         = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $borrowernumber = $patron->id;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rules        => {
+                reservesallowed  => 25,
+                holds_per_record => 99,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'EmailPatronWhenHoldIsPlaced', 0 );
+    my $original_notices_count = Koha::Notice::Messages->search(
+        {
+            letter_code => 'HOLDPLACED_PATRON',
+            to_address  => $patron->notice_email_address,
+        }
+    )->count;
+
+    my $hold_id = AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+    my $post_notices_count = Koha::Notice::Messages->search(
+        {
+            letter_code => 'HOLDPLACED_PATRON',
+            to_address  => $patron->notice_email_address,
+        }
+    )->count;
+    is(
+        $post_notices_count, $original_notices_count,
+        "EmailPatronWhenHoldIsPlaced is disabled so no email is queued"
+    );
+    MoveReserve( $item->itemnumber, $borrowernumber, 1 );
+
+    $original_notices_count = Koha::Notice::Messages->search(
+        {
+            letter_code => 'HOLDPLACED_PATRON',
+            to_address  => $patron->notice_email_address,
+        }
+    )->count;
+    t::lib::Mocks::mock_preference( 'EmailPatronWhenHoldIsPlaced', 1 );
+    AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+    $post_notices_count = Koha::Notice::Messages->search(
+        {
+            letter_code => 'HOLDPLACED_PATRON',
+            to_address  => $patron->notice_email_address,
+        }
+    )->count;
+    is(
+        $post_notices_count,
+        $original_notices_count + 1,
+        "EmailPatronWhenHoldIsPlaced is enabled so HOLDPLACED_PATRON email is queued"
+    );
 
     $schema->storage->txn_rollback;
 };
