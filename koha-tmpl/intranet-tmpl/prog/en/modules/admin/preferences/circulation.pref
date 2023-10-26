@@ -1029,6 +1029,12 @@ Circulation:
                   1: block
                   0: allow
             - renewing of items from the staff interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> cronjob.
+        -
+            - pref: EmailPatronWhenHoldIsPlaced
+              choices:
+                  1: Email
+                  0:  "Don't email"
+            - a patron when they have placed a hold.
     Fines Policy:
         -
             - pref: finesCalendar

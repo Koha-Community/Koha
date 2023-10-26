@@ -226,6 +226,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('emailLibrarianWhenHoldIsPlaced','0',NULL,'If ON, emails the librarian whenever a hold is placed','YesNo'),
 ('EmailOverduesNoEmail','1',NULL,'Send send overdues of patrons without email address to staff','YesNo'),
 ('EmailPatronRegistrations', '0', '0|EmailAddressForPatronRegistrations|BranchEmailAddress|KohaAdminEmailAddress', 'Choose email address that new patron registrations will be sent to: ', 'Choice'),
+('EmailPatronWhenHoldIsPlaced', '0', NULL, 'Email patron when a hold has been placed for them', 'YesNo'),
 ('EmailPurchaseSuggestions','0','0|EmailAddressForSuggestions|BranchEmailAddress|KohaAdminEmailAddress','Choose email address that new purchase suggestions will be sent to: ','Choice'),
 ('EnableAdvancedCatalogingEditor','0','','Enable the Rancor advanced cataloging editor','YesNo'),
 ('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
