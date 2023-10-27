@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 38;
+use Test::More tests => 40;
 use C4::Context;
 
 BEGIN {
@@ -27,21 +27,23 @@ BEGIN {
 }
 
 my $default_layout = {
-        creator         =>      'Labels',
-        layout_xml      =>      '',
-        units           =>      'POINT',
-        start_label     =>      1,
-        barcode_type    =>      'CODE39',
-        printing_type   =>      'BAR',
-        layout_name     =>      'TEST',
-        guidebox        =>      0,
-        oblique_title   =>      1,
-        font            =>      'TR',
-        font_size       =>      3,
-        callnum_split   =>      0,
-        text_justify    =>      'L',
-        format_string   =>      'title, author, isbn, issn, itemtype, barcode, itemcallnumber',
-    };
+    barcode_type  => 'CODE39',
+    callnum_split => 0,
+    creator       => 'Labels',
+    font          => 'TR',
+    font_size     => 3,
+    format_string => 'title, author, isbn, issn, itemtype, barcode, itemcallnumber',
+    guidebox      => 0,
+    layout_name   => 'TEST',
+    layout_xml    => '',
+    oblique_title => 1,
+    printing_type => 'BAR',
+    scale_height  => 0.01,
+    scale_width   => 0.8,
+    start_label   => 1,
+    text_justify  => 'L',
+    units         => 'POINT',
+};
 
 my $layout;
 
