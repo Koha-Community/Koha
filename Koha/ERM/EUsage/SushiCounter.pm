@@ -143,15 +143,88 @@ https://cop5.projectcounter.org/en/5.0.2/04-reports/04-item-reports.html#column-
 sub _COUNTER_item_report_row {
     my ( $self, $item_row, $metric_type, $total_usage, $monthly_usages ) = @_;
 
+    my $header          = $self->{sushi}->{header};
+    my $specific_fields = $self->get_report_type_specific_fields( $header->{Report_ID} );
+
     return (
         [
             $item_row->{Item}                                                 || "",
             $item_row->{Publisher}                                            || "",
             $self->_get_SUSHI_Type_Value( $item_row->{Publisher_ID}, "ISNI" ) || "",
             $item_row->{Platform}                                             || "",
-            $self->_get_SUSHI_Type_Value( $item_row->{Item_ID}, "DOI" )       || "",
-            $item_row->{Proprietary_ID}                                       || "",
+
+            # Authors
+            grep ( /Authors/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Contributors}, "Author" ) || "" )
+            : (),
+
+            # Publication_Date
+            grep ( /Publication_Date/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Dates}, "Publication_Date" ) || "" )
+            : (),
+
+            # Article_Version
+            grep ( /Article_Version/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Attributes}, "Article_Version" ) || "" )
+            : (),
+            $self->_get_SUSHI_Type_Value( $item_row->{Item_ID}, "DOI" ) || "",
+
+            $self->_get_SUSHI_Type_Value( $item_row->{Item_ID}, "Proprietary" ) || "",
+
+            # Print_ISSN
+            grep ( /Print_ISSN/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_ID}, "Print_ISSN" ) || "" )
+            : (),
+
+            # Online_ISSN
+            grep ( /Online_ISSN/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_ID}, "Online_ISSN" ) || "" )
+            : (),
             "",    #FIXME: What goes in URI?
+
+            # Parent_Title
+            grep ( /Parent_Title/, @{$specific_fields} ) ? ( $item_row->{Item_Parent}->{Item_Name} || "" ) : (),
+
+            # Parent_Authors
+            grep ( /Parent_Authors/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Parent}->{Item_Contributors}, "Author" ) || "" )
+            : (),
+
+            # Parent_Article_Version
+            grep ( /Parent_Article_Version/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Parent}->{Item_Attributes}, "Article_Version" ) || "" )
+            : (),
+
+            # Parent_DOI
+            grep ( /Parent_DOI/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Parent}->{Item_ID}, "DOI" )
+                    || "" )
+            : (),
+
+            # Parent_Proprietary_ID
+            grep ( /Parent_Proprietary_ID/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Parent}->{Item_ID}, "Proprietary" )
+                    || "" )
+            : (),
+
+            # Parent_Print_ISSN
+            grep ( /Parent_Print_ISSN/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Parent}->{Item_ID}, "Print_ISSN" )
+                    || "" )
+            : (),
+
+            # Parent_Online_ISSN
+            grep ( /Parent_Online_ISSN/, @{$specific_fields} )
+            ? ( $self->_get_SUSHI_Type_Value( $item_row->{Item_Parent}->{Item_ID}, "Online_ISSN" )
+                    || "" )
+            : (),
+
+            # Parent_URI
+            grep ( /Parent_Online_ISSN/, @{$specific_fields} ) ? "" : (),
+
+            # Access_Type
+            grep ( /Access_Type/, @{$specific_fields} ) ? ( $item_row->{Access_Type} || "" ) : (),
+
             $metric_type,
             $total_usage,
             @{$monthly_usages}
@@ -433,8 +506,9 @@ Return items report column headings
 sub _COUNTER_items_report_column_headings {
     my ($self) = @_;
 
-    my $header         = $self->{sushi}->{header};
-    my @month_headings = $self->_get_usage_months( $header, 1 );
+    my $header          = $self->{sushi}->{header};
+    my @month_headings  = $self->_get_usage_months( $header, 1 );
+    my $specific_fields = $self->get_report_type_specific_fields( $header->{Report_ID} );
 
     return (
         [
@@ -442,29 +516,31 @@ sub _COUNTER_items_report_column_headings {
             "Publisher",
             "Publisher_ID",
             "Platform",
-
-            # "Authors", #IR_A1 only
-            # "Publication_Date", #IR_A1 only
-            # "Article_Version", #IR_A1 only
+            grep ( /Authors/,          @{$specific_fields} ) ? ("Authors")          : (),
+            grep ( /Publication_Date/, @{$specific_fields} ) ? ("Publication_Date") : (),
+            grep ( /Article_Version/,  @{$specific_fields} ) ? ("Article_Version")  : (),
             "DOI",
             "Proprietary_ID",
 
             # "ISBN", #IR only
-            # "Print_ISSN", #IR_A1 only
-            # "Online_ISSN", #IR_A1 only
+            grep ( /Print_ISSN/,  @{$specific_fields} ) ? ("Print_ISSN")  : (),
+            grep ( /Online_ISSN/, @{$specific_fields} ) ? ("Online_ISSN") : (),
             "URI",
+            grep ( /Parent_Title/,   @{$specific_fields} ) ? ("Parent_Title")   : (),
+            grep ( /Parent_Authors/, @{$specific_fields} ) ? ("Parent_Authors") : (),
 
-            # "Parent_Title", #IR_A1 only
-            # "Parent_Authors", #IR_A1 only
             # "Parent_Publication_Date", #IR only
-            # "Parent_Article_Version", #IR_A1 only
+            grep ( /Parent_Article_Version/, @{$specific_fields} ) ? ("Parent_Article_Version") : (),
+
             # "Parent_Data_Type", #IR only
-            # "Parent_DOI", #IR_A1 only
-            # "Parent_Proprietary_ID", #IR_A1 only
+            grep ( /Parent_DOI/,            @{$specific_fields} ) ? ("Parent_DOI")            : (),
+            grep ( /Parent_Proprietary_ID/, @{$specific_fields} ) ? ("Parent_Proprietary_ID") : (),
+
             # "Parent_ISBN", #IR only
-            # "Parent_Print_ISSN", #IR_A1 only
-            # "Parent_Online_ISSN", #IR_A1 only
-            # "Parent_URI", #IR_A1 only
+            grep ( /Parent_Print_ISSN/,  @{$specific_fields} ) ? ("Parent_Print_ISSN")  : (),
+            grep ( /Parent_Online_ISSN/, @{$specific_fields} ) ? ("Parent_Online_ISSN") : (),
+            grep ( /Parent_URI/,         @{$specific_fields} ) ? ("Parent_URI")         : (),
+
             # "Component_Title", #IR only
             # "Component_Authors", #IR only
             # "Component_Publication_Date", #IR only
@@ -477,7 +553,8 @@ sub _COUNTER_items_report_column_headings {
             # "Component_URI", #IR only
             # "Data_Type", #IR only
             # "YOP", #IR only
-            # "Access_Type", #IR_A1 only
+            grep ( /Access_Type/, @{$specific_fields} ) ? ("Access_Type") : (),
+
             # "Access_Method", #IR only
             "Metric_Type",
             "Reporting_Period_Total",
@@ -637,6 +714,11 @@ sub get_report_type_specific_fields {
         "TR_B3" => [ 'YOP', 'Access_Type', 'ISBN' ],
         "TR_J3" => ['Access_Type'],
         "TR_J4" => ['YOP'],
+        "IR_A1" => [
+            'Authors',            'Publication_Date', 'Article_Version',  'Print_ISSN', 'Online_ISSN', 'Parent_Title',
+            'Parent_Authors',     'Parent_Article_Version', 'Parent_DOI', 'Parent_Proprietary_ID', 'Parent_Print_ISSN',
+            'Parent_Online_ISSN', 'Parent_URI',             'Access_Type'
+        ],
     );
 
     return $report_type_map{$report_type};
