@@ -451,8 +451,33 @@
 
                                 [% IF ( STATS ) %]
                                     <li>Local use recorded</li>
+                                    [% IF ( CHECKEDIN ) %]
+                                        <li>Item returned from: [% INCLUDE 'patron-title.inc' patron=BORROWER %]</li>
+                                    [% END %]
+                                    [% IF ( MESSAGES.ResFound ) %]
+                                        <li>Item on hold, please checkin.</li>
+                                    [% END %]
+                                    [% IF ( MESSAGES.ReturnClaims ) %]
+                                        <li>Item claimed returned, please checkin.</li>
+                                    [% END %]
+                                    [% IF ( MESSAGES.RecallFound ) %]
+                                        <li>Item can fill a recall, please checkin.</li>
+                                    [% END %]
+                                    [% IF ( MESSAGES.WasLost ) %]
+                                        [% IF ( Koha.Preference('BlockReturnOfLostItems') ) %]
+                                            <li>Item was lost, cannot be returned.</li>
+                                        [% ELSE %]
+                                            <li>Item was lost, now found.</li>
+                                        [% END %]
+                                    [% END %]
+                                    [% IF ( MESSAGES.withdrawn ) %]
+                                        [% IF ( Koha.Preference('BlockReturnOfWithdrawnItems') ) %]
+                                            <li>Item was withdrawn, cannot be returned.</li>
+                                        [% ELSE %]
+                                            <li>Item was withdrawn</li>
+                                        [% END %]
+                                    [% END %]
                                 [% END %]
-
                                 [% IF ( INVALID_DATE ) %]
                                     <li>The due date &quot;[% INVALID_DATE | $KohaDates %]&quot; is invalid</li>
                                 [% END %]

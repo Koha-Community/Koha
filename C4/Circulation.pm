@@ -826,8 +826,20 @@ sub CanBookBeIssued {
                 interface      => C4::Context->interface,
             }
         );
-        ModDateLastSeen( $item_object->itemnumber ); # FIXME Move to Koha::Item
-        return( { STATS => 1 }, {});
+        my $block_lost_return = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
+        my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower) =
+        AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'} );
+        ModDateLastSeen( $item_object->itemnumber, $block_lost_return ); # FIXME Move to Koha::Item
+        return (
+            {
+                STATS     => 1,
+                CHECKEDIN => $stats_return,
+                MESSAGES  => $stats_messages,
+                ITEM      => $stats_iteminformation,
+                BORROWER  => $stats_borrower,
+            },
+            {}
+        );
     }
 
     if ( $patron->gonenoaddress && $patron->gonenoaddress == 1 ) {
