@@ -219,7 +219,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 60;
+    plan tests => 63;
 
     my $qb;
 
@@ -406,6 +406,9 @@ subtest 'build_query tests' => sub {
         "all quoted strings are unaltered if more than one in query"
     );
 
+    # Reset ESPreventAutoTruncate syspref
+    t::lib::Mocks::mock_preference( 'ESPreventAutoTruncate', '' );
+
     ( undef, $query ) = $qb->build_query_compat( undef, ['barcode:123456'] );
     is(
         $query->{query}{query_string}{query},
@@ -413,32 +416,56 @@ subtest 'build_query tests' => sub {
         "query of specific field is truncated"
     );
 
-    ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number:"123456"'] );
+    ( undef, $query ) = $qb->build_query_compat( undef, ['Personal-name:"donald"'] );
     is(
         $query->{query}{query_string}{query},
-        '(local-number:"123456")',
+        '(personal-name:"donald")',
         "query of specific field including hyphen and quoted is not truncated, field name is converted to lower case"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['Personal-name:donald'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(personal-name:donald*)',
+        "query of specific field including hyphen and not quoted is truncated, field name is converted to lower case"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['Personal-name.raw:donald'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(personal-name.raw:donald*)',
+        "query of specific field including period and not quoted is truncated, field name is converted to lower case"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['Personal-name.raw:"donald"'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(personal-name.raw:"donald")',
+        "query of specific field including period and quoted is not truncated, field name is converted to lower case"
+    );
+
+    # Set ESPreventAutoTruncate syspref
+    t::lib::Mocks::mock_preference( 'ESPreventAutoTruncate', 'barcode' );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['barcode:123456'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(barcode:123456)',
+        "query of specific field excluded by ESPreventAutoTruncate is not truncated"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number:123456'] );
     is(
         $query->{query}{query_string}{query},
-        '(local-number:123456*)',
-        "query of specific field including hyphen and not quoted is truncated, field name is converted to lower case"
+        '(local-number:123456)',
+        "query of identifier is not truncated even if QueryAutoTruncate is set"
     );
 
-    ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number.raw:123456'] );
+    ( undef, $query ) = $qb->build_query_compat( undef, ['onloan:true'] );
     is(
         $query->{query}{query_string}{query},
-        '(local-number.raw:123456*)',
-        "query of specific field including period and not quoted is truncated, field name is converted to lower case"
-    );
-
-    ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number.raw:"123456"'] );
-    is(
-        $query->{query}{query_string}{query},
-        '(local-number.raw:"123456")',
-        "query of specific field including period and quoted is not truncated, field name is converted to lower case"
+        '(onloan:true)',
+        "query of boolean type field is not truncated even if QueryAutoTruncate is set"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['J.R.R'] );

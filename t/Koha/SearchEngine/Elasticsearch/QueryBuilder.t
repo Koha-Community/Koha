@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use t::lib::Mocks;
 
 use_ok('Koha::SearchEngine::Elasticsearch::QueryBuilder');
@@ -150,6 +150,36 @@ subtest '_truncate_terms() tests' => sub {
 
     $res = $qb->_truncate_terms(' "donald   duck" ');
     is_deeply($res, '"donald   duck"', 'quoted search terms surrounded by spaces correctly');
+};
+
+subtest '_is_safe_to_auto_truncate() tests' => sub {
+    plan tests => 7;
+
+    my $qb;
+    ok(
+        $qb = Koha::SearchEngine::Elasticsearch::QueryBuilder->new(
+            { 'index' => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX }
+        ),
+        'Creating a new QueryBuilder object'
+    );
+
+    my $res = $qb->_is_safe_to_auto_truncate( undef, 'local-number:1' );
+    is( $res, '0', 'no truncation for biblionumber - OK' );
+
+    $res = $qb->_is_safe_to_auto_truncate( undef, 'koha-auth-number:1' );
+    is( $res, '0', 'no truncation for authid - OK' );
+
+    $res = $qb->_is_safe_to_auto_truncate( undef, 'title:some title' );
+    is( $res, '1', 'do truncate titles - OK' );
+
+    $res = $qb->_is_safe_to_auto_truncate( 'local-number', undef );
+    is( $res, '0', 'no truncation for biblionumber - OK' );
+
+    $res = $qb->_is_safe_to_auto_truncate( 'koha-auth-number', undef );
+    is( $res, '0', 'no truncation for authid - OK' );
+
+    $res = $qb->_is_safe_to_auto_truncate( 'title', undef );
+    is( $res, '1', 'do truncate titles - OK' );
 };
 
 subtest '_split_query() tests' => sub {
