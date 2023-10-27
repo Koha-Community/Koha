@@ -171,7 +171,7 @@ cy.get_usage_data_provider = () => {
         "end_date": dates['tomorrow_iso'],
         "erm_usage_data_provider_id": 1,
         "method": "test",
-        "name": "Cypress test provider",
+        "name": "Wiley Online Library",
         "report_release": "test_report_release",
         "report_types": "TR_J1;",
         "requestor_email": "test_requestor_email",
@@ -189,7 +189,16 @@ cy.get_usage_data_provider = () => {
                 "date_uploaded": dates['tomorrow_iso']
             },
 
-        ]
+        ],
+        "earliest_title": "2023-01-01",
+        "latest_title": "2023-01-01",
+        "earliest_item": "",
+        "latest_item": "",
+        "earliest_platform": "2023-01-01",
+        "latest_platform": "2023-01-01",
+        "earliest_database": "",
+        "latest_database": "",
+        "last_run": "2023-10-01"
     }
 }
 
@@ -427,4 +436,137 @@ cy.get_multiple_providers = () => {
             "service_url": "www.url.com",
         },
     ]
+}
+
+cy.getCounterRegistryProvider = () => {
+    return [
+        {
+            "abbrev": "Wiley",
+            "address": "John Wiley & Sons, Inc.\t\nCorporate Headquarters\tSuite 300\n111 River Street\t\nHoboken, NJ 07030-5774\nUSA",
+            "address_country": {
+                "code": "US",
+                "name": "United States of America"
+            },
+            "contact": {
+                "email": "eal@wiley.com",
+                "form_url": "",
+                "person": "",
+                "phone": ""
+            },
+            "content_provider_name": "John Wiley & Sons",
+            "host_types": [
+                {
+                    "name": "Aggregated_Full_Content"
+                }
+            ],
+            "id": "60c7aa79-272d-4610-8ad5-c399bd938c8e",
+            "name": "Wiley Online Library",
+            "reports": [
+                {
+                    "counter_release": "5",
+                    "report_id": "TR_J4",
+                    "report_name": "Title Report - Journal Report 4"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "DR_D2",
+                    "report_name": "Database Report - Report 2"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "TR_J3",
+                    "report_name": "Title Report - Journal Report 3"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "DR_D1",
+                    "report_name": "Database Report - Report 1"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "TR_J2",
+                    "report_name": "Title Report - Journal Report 2"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "PR",
+                    "report_name": "Platform Master Report"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "TR_B2",
+                    "report_name": "Title Report - Book Report 2"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "TR_B3",
+                    "report_name": "Title Report - Book Report 3"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "TR",
+                    "report_name": "Title Master Report"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "TR_B1",
+                    "report_name": "Title Report - Book Report 1"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "PR_P1",
+                    "report_name": "Platform Report - Report 1"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "TR_J1",
+                    "report_name": "Title Report - Journal Report 1"
+                },
+                {
+                    "counter_release": "5",
+                    "report_id": "DR",
+                    "report_name": "Database Master Report"
+                }
+            ],
+            "sushi_services": [
+                {
+                    "counter_release": "5",
+                    "url": "https:\/\/registry.projectcounter.org\/api\/v1\/sushi-service\/101d3199-5878-4421-b9c2-88826bee3ad6\/"
+                }
+            ],
+            "website": "https:\/\/onlinelibrary.wiley.com\/"
+        }
+    ]
+}
+
+cy.getSushiService = () => {
+    return {
+        "api_key_info": "",
+        "api_key_required": false,
+        "contact": {
+            "email": "eal@wiley.com",
+            "form_url": "",
+            "person": "",
+            "phone": ""
+        },
+        "counter_release": "5",
+        "credentials_auto_expire": false,
+        "credentials_auto_expire_info": "",
+        "customer_id_info": "EAL0000123 (EAL followed by 7 to 11 digits)",
+        "customizations_in_place": true,
+        "customizations_info": "Consortia reporting extension",
+        "data_host": "https:\/\/registry.projectcounter.org\/api\/v1\/usage-data-host\/761269a2-27ed-44ce-8a8f-cca4f198c23f\/",
+        "id": "101d3199-5878-4421-b9c2-88826bee3ad6",
+        "ip_address_authorization": false,
+        "ip_address_authorization_info": "",
+        "notification_count": 0,
+        "notifications_url": "https:\/\/registry.projectcounter.org\/api\/v1\/sushi-service\/101d3199-5878-4421-b9c2-88826bee3ad6\/notification\/",
+        "platform_attr_required": false,
+        "platform_specific_info": "",
+        "request_volume_limits_applied": false,
+        "request_volume_limits_info": "",
+        "requestor_id_info": "EAL0000123 (EAL followed by 7 to 11 digits)*\r\n(Only required for those operating outside of their approved institutional IP range).",
+        "requestor_id_required": true,
+        "url": "https:\/\/onlinelibrary.wiley.com\/reports\/"
+    }
 }
