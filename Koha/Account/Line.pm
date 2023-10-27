@@ -52,7 +52,7 @@ Return the patron linked to this account line
 
 sub patron {
     my ( $self ) = @_;
-    my $rs = $self->_result->borrowernumber;
+    my $rs = $self->_result->patron;
     return unless $rs;
     return Koha::Patron->_new_from_dbic( $rs );
 }
