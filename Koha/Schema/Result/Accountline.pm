@@ -399,6 +399,26 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-28 20:21:02
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PjQR7oUkefiDt+eV69jZ3A
 
+=head2 patron
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+    "patron",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "borrowernumber" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "SET NULL",
+        on_update     => "CASCADE",
+    },
+);
+
 =head2 library
 
 Type: belongs_to
