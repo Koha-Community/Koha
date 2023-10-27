@@ -148,10 +148,10 @@ sub sftp_download {
     }
     $sftp->setcwd( $self->{account}->download_directory )
       or return $self->_abort_download( $sftp,
-        "Cannot change remote dir : $sftp->error" );
+        "Cannot change remote dir: " . $sftp->error );
     my $file_list = $sftp->ls()
       or return $self->_abort_download( $sftp,
-        "cannot get file list from server: $sftp->error" );
+        "cannot get file list from server: " . $sftp->error );
     foreach my $file ( @{$file_list} ) {
         my $filename = $file->{filename};
 
@@ -159,7 +159,7 @@ sub sftp_download {
             $sftp->get( $filename, "$self->{working_dir}/$filename" );
             if ( $sftp->error ) {
                 $self->_abort_download( $sftp,
-                    "Error retrieving $filename: $sftp->error" );
+                    "Error retrieving $filename: " . $sftp->error );
                 last;
             }
             push @downloaded_files, $filename;
@@ -170,7 +170,7 @@ sub sftp_download {
             my $ret = $sftp->rename( $filename, $processed_name );
             if ( !$ret ) {
                 $self->_abort_download( $sftp,
-                    "Error renaming $filename: $sftp->error" );
+                    "Error renaming $filename: " . $sftp->error );
                 last;
             }
 
@@ -302,7 +302,7 @@ sub sftp_upload {
     $sftp->die_on_error("Cannot ssh to $self->{account}->host");
     $sftp->setcwd( $self->{account}->upload_directory )
       or return $self->_abort_download( $sftp,
-        "Cannot change remote dir : $sftp->error" );
+        "Cannot change remote dir : " . $sftp->error );
     foreach my $m (@messages) {
         my $content = $m->raw_msg;
         if ($content) {
