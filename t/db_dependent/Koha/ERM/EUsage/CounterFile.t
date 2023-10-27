@@ -22,7 +22,7 @@ use Test::More tests => 2;
 use Koha::Database;
 use Koha::ERM::EUsage::CounterFile;
 
-use JSON           qw( decode_json );
+use JSON qw( decode_json );
 use File::Basename qw( dirname );
 use File::Slurp;
 

@@ -275,7 +275,7 @@ sub test_connection {
     $url .= 'status';
     $url .= '?customer_id=' . $self->customer_id;
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
-    $url .= '&api_key=' . $self->api_key           if $self->api_key;
+    $url .= '&api_key=' . $self->api_key if $self->api_key;
 
     my $request  = HTTP::Request->new( 'GET' => $url );
     my $ua       = LWP::UserAgent->new;
@@ -342,7 +342,7 @@ Method to embed erm_usage_platforms to platforms for report formatting
 =cut
 
 sub erm_usage_platforms {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $usage_platform_rs = $self->_result->erm_usage_platforms;
     return Koha::ERM::EUsage::UsagePlatforms->_new_from_dbic($usage_platform_rs);
 }
@@ -354,7 +354,7 @@ Method to embed erm_usage_items to items for report formatting
 =cut
 
 sub erm_usage_items {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $usage_item_rs = $self->_result->erm_usage_items;
     return Koha::ERM::EUsage::UsageItems->_new_from_dbic($usage_item_rs);
 }
@@ -366,7 +366,7 @@ Method to embed erm_usage_databases to databases for report formatting
 =cut
 
 sub erm_usage_databases {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my $usage_database_rs = $self->_result->erm_usage_databases;
     return Koha::ERM::EUsage::UsageDatabases->_new_from_dbic($usage_database_rs);
 }
@@ -393,9 +393,9 @@ sub _build_url_query {
     $url .= lc $self->{report_type};
     $url .= '?customer_id=' . $self->customer_id;
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
-    $url .= '&api_key=' . $self->api_key           if $self->api_key;
+    $url .= '&api_key=' . $self->api_key if $self->api_key;
     $url .= '&begin_date=' . substr $self->{begin_date}, 0, 7 if $self->{begin_date};
-    $url .= '&end_date=' . substr $self->{end_date},     0, 7 if $self->{end_date};
+    $url .= '&end_date=' . substr $self->{end_date}, 0, 7 if $self->{end_date};
 
     return $url;
 }

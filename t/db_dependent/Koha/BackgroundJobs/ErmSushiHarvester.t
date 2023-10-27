@@ -23,7 +23,7 @@ use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::ErmSushiHarvester;
 
-use JSON           qw( decode_json );
+use JSON qw( decode_json );
 use File::Basename qw( dirname );
 use File::Slurp;
 

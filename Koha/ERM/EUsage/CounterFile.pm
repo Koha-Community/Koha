@@ -488,31 +488,31 @@ sub _is_same_usage_object {
 
         return unless $previous_object;
 
-        if ( $previous_object->print_issn && $row->{Print_ISSN} ){
+        if ( $previous_object->print_issn && $row->{Print_ISSN} ) {
             return unless $previous_object->print_issn eq $row->{Print_ISSN};
         }
 
-        if ( $previous_object->online_issn && $row->{Online_ISSN} ){
+        if ( $previous_object->online_issn && $row->{Online_ISSN} ) {
             return unless $previous_object->online_issn eq $row->{Online_ISSN};
         }
 
-        if ( $previous_object->proprietary_id && $row->{Proprietary_ID} ){
+        if ( $previous_object->proprietary_id && $row->{Proprietary_ID} ) {
             return unless $previous_object->proprietary_id eq $row->{Proprietary_ID};
         }
 
-        if ( $previous_object->publisher && $row->{Publisher} ){
+        if ( $previous_object->publisher && $row->{Publisher} ) {
             return unless $previous_object->publisher eq $row->{Publisher};
         }
 
-        if ( $previous_object->platform && $row->{Platform} ){
+        if ( $previous_object->platform && $row->{Platform} ) {
             return unless $previous_object->platform eq $row->{Platform};
         }
 
-        if ( $previous_object->title_doi && $row->{DOI} ){
+        if ( $previous_object->title_doi && $row->{DOI} ) {
             return unless $previous_object->title_doi eq $row->{DOI};
         }
 
-        if ( $previous_object->title && $row->{Title} ){
+        if ( $previous_object->title && $row->{Title} ) {
             return unless $previous_object->title eq $row->{Title};
         }
 

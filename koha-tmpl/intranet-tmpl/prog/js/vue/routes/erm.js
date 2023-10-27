@@ -301,33 +301,43 @@ export const routes = [
                             {
                                 path: "",
                                 name: "UsageStatisticsDataProvidersList",
-                                component: markRaw(UsageStatisticsDataProvidersList),
+                                component: markRaw(
+                                    UsageStatisticsDataProvidersList
+                                ),
                             },
                             {
                                 path: ":usage_data_provider_id",
                                 name: "UsageStatisticsDataProvidersShow",
-                                component: markRaw(UsageStatisticsDataProvidersShow),
-                                title: $__("Show provider")
+                                component: markRaw(
+                                    UsageStatisticsDataProvidersShow
+                                ),
+                                title: $__("Show provider"),
                             },
                             {
                                 path: "add",
                                 name: "UsageStatisticsDataProvidersFormAdd",
-                                component: markRaw(UsageStatisticsDataProvidersFormAdd),
-                                title: $__("Add data provider")
+                                component: markRaw(
+                                    UsageStatisticsDataProvidersFormAdd
+                                ),
+                                title: $__("Add data provider"),
                             },
                             {
                                 path: "edit/:usage_data_provider_id",
                                 name: "UsageStatisticsDataProvidersFormAddEdit",
-                                component: markRaw(UsageStatisticsDataProvidersFormAdd),
-                                title: $__("Edit data provider")
+                                component: markRaw(
+                                    UsageStatisticsDataProvidersFormAdd
+                                ),
+                                title: $__("Edit data provider"),
                             },
                             {
                                 path: "summary",
                                 name: "UsageStatisticsDataProvidersSummary",
-                                component: markRaw(UsageStatisticsDataProvidersSummary),
-                                title: $__("Data providers summary")
+                                component: markRaw(
+                                    UsageStatisticsDataProvidersSummary
+                                ),
+                                title: $__("Data providers summary"),
                             },
-                        ]
+                        ],
                     },
                     {
                         path: "reports",
@@ -343,13 +353,15 @@ export const routes = [
                             {
                                 path: "viewer",
                                 name: "UsageStatisticsReportsViewer",
-                                component: markRaw(UsageStatisticsReportsViewer),
-                                title: $__("View report")
-                            }
-                        ]
-                    }
-                ]
-            }
+                                component: markRaw(
+                                    UsageStatisticsReportsViewer
+                                ),
+                                title: $__("View report"),
+                            },
+                        ],
+                    },
+                ],
+            },
         ],
     },
 ];

@@ -23,8 +23,8 @@ use Mojo::Base 'Mojolicious::Controller';
 use HTTP::Request;
 use LWP::UserAgent;
 use Scalar::Util qw( blessed );
-use JSON         qw( from_json decode_json encode_json );
-use Try::Tiny    qw( catch try );
+use JSON qw( from_json decode_json encode_json );
+use Try::Tiny qw( catch try );
 
 use Koha::Exceptions;
 

@@ -21,7 +21,7 @@ use Test::More tests => 15;
 
 use Koha::ERM::EUsage::SushiCounter;
 use Koha::Database;
-use JSON           qw( decode_json );
+use JSON qw( decode_json );
 use File::Basename qw( dirname );
 use File::Slurp;
 
@@ -803,8 +803,8 @@ subtest 'TR_B3 _COUNTER_report_body' => sub {
     is( $report_body[8][10], '2002',                        '1st title, 2nd yop has 6 metric types' );
 
     # The data is in the correct column
-    is( $report_body[2][0],  'Insect Cell Culture: Fundamental and Applied Aspects', '1st column is title' );
-    is( $report_body[2][1],  'Test Publisher',                                       '2nd column is publisher' );
+    is( $report_body[2][0], 'Insect Cell Culture: Fundamental and Applied Aspects', '1st column is title' );
+    is( $report_body[2][1], 'Test Publisher',                                       '2nd column is publisher' );
     is( $report_body[2][2],  '',                          '3rd column heading is publisher ID' );
     is( $report_body[2][3],  'Test Platform',             '4th column is platform' );
     is( $report_body[2][4],  '10.1007/0-306-46850-6',     '5th column is DOI' );

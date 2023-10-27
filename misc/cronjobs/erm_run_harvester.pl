@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Getopt::Long    qw( GetOptions );
+use Getopt::Long qw( GetOptions );
 use Koha::DateUtils qw( dt_from_string );
 use POSIX;
 

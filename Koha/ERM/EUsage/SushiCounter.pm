@@ -110,10 +110,10 @@ sub _COUNTER_report_header {
     my $end_date   = $self->_get_SUSHI_Name_Value( $header->{Report_Filters}, "End_Date" );
 
     return (
-        [ Report_Name      => $header->{Report_Name}                                                            || "" ],
-        [ Report_ID        => $header->{Report_ID}                                                              || "" ],
-        [ Release          => $header->{Release}                                                                || "" ],
-        [ Institution_Name => $header->{Institution_Name}                                                       || "" ],
+        [ Report_Name      => $header->{Report_Name}      || "" ],
+        [ Report_ID        => $header->{Report_ID}        || "" ],
+        [ Release          => $header->{Release}          || "" ],
+        [ Institution_Name => $header->{Institution_Name} || "" ],
         [ Institution_ID => join( "; ", map( $_->{Type} . ":" . $_->{Value}, @{ $header->{Institution_ID} } ) ) || "" ],
         [ Metric_Types   => join( "; ", split( /\|/, $metric_types_string[0] ) )                                || "" ],
         [ Report_Filters => join( "; ", map( $_->{Name} . ":" . $_->{Value}, @{ $header->{Report_Filters} } ) ) || "" ],
@@ -127,7 +127,7 @@ sub _COUNTER_report_header {
                 || ""
         ],
         [ Reporting_Period => "Begin_Date=" . $begin_date . "; End_Date=" . $end_date ],
-        [ Created          => $header->{Created}    || "" ],
+        [ Created          => $header->{Created} || "" ],
         [ Created_By       => $header->{Created_By} || "" ],
         [""]    #empty 13th line (COUNTER 5)
     );
@@ -269,7 +269,7 @@ sub _COUNTER_platform_report_row {
     return (
         [
             $platform_row->{Platform} || "", $metric_type,
-            $total_usage,                    @{$monthly_usages}
+            $total_usage, @{$monthly_usages}
         ]
     );
 }
@@ -715,7 +715,7 @@ sub get_report_type_specific_fields {
         "TR_J3" => ['Access_Type'],
         "TR_J4" => ['YOP'],
         "IR_A1" => [
-            'Authors',            'Publication_Date', 'Article_Version',  'Print_ISSN', 'Online_ISSN', 'Parent_Title',
+            'Authors', 'Publication_Date', 'Article_Version', 'Print_ISSN', 'Online_ISSN', 'Parent_Title',
             'Parent_Authors',     'Parent_Article_Version', 'Parent_DOI', 'Parent_Proprietary_ID', 'Parent_Print_ISSN',
             'Parent_Online_ISSN', 'Parent_URI',             'Access_Type'
         ],

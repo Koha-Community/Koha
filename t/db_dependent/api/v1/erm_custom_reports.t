@@ -30,7 +30,7 @@ use Koha::ERM::EUsage::SushiCounter;
 use Koha::ERM::EUsage::MonthlyUsages;
 use Koha::ERM::EUsage::YearlyUsages;
 
-use JSON           qw( decode_json );
+use JSON qw( decode_json );
 use File::Basename qw( dirname );
 use File::Slurp;
 

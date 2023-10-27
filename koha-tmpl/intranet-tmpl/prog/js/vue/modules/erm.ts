@@ -24,7 +24,7 @@ import { useVendorStore } from "../stores/vendors";
 import { useAVStore } from "../stores/authorised-values";
 import { useERMStore } from "../stores/erm";
 import { useNavigationStore } from "../stores/navigation";
-import { useReportsStore } from "../stores/usage-reports"
+import { useReportsStore } from "../stores/usage-reports";
 import i18n from "../i18n";
 
 const pinia = createPinia();
@@ -56,8 +56,8 @@ app.provide("AVStore", AVStore);
 app.provide("navigationStore", navigationStore);
 const ERMStore = useERMStore(pinia);
 app.provide("ERMStore", ERMStore);
-const reportsStore = useReportsStore(pinia)
-app.provide("reportsStore", reportsStore)
+const reportsStore = useReportsStore(pinia);
+app.provide("reportsStore", reportsStore);
 
 app.mount("#erm");
 
