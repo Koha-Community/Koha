@@ -124,8 +124,8 @@ subtest 'Bibliographic record detail page must not explode even with invalid met
 
     $driver->get( $base_url . "/catalogue/detail.pl?biblionumber=$biblionumber" );
 
-    my $biberror = $driver->find_element('//span[@class="biberror"]')->get_text();
-    is( $biberror, "There is an error with this bibliographic record, the view may be degraded.");
+    my $biberror = $driver->find_element('//p[@class="biberror"]')->get_text();
+    is( $biberror, "There is at least one encoding error with this bibliographic record, the view may be degraded.");
     push @cleanup, $biblio;
 };
 

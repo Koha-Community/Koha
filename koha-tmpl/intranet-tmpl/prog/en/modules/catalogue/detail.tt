@@ -107,12 +107,12 @@
                <h1>Errors found</h1>
                [% IF decoding_error %]
                    <h2>Encoding errors</h2>
-                   <p>There is at least one encoding error with this bibliographic record, the view may be degraded.</p>
+                   <p class="biberror">There is at least one encoding error with this bibliographic record, the view may be degraded.</p>
                    <pre class="error">[% decoding_error | html %]</pre>
                [% END %]
                [% IF analytics_error %]
                    <h2>Analytics errors</h2>
-                   <p>There was an error searching for analytic records, please see the logs for details.</p>
+                   <p class="analytics_error">There was an error searching for analytic records, please see the logs for details.</p>
                [% END %]
             </div>
         [% END %]
