@@ -46,7 +46,7 @@ export const useReportsStore = defineStore("reports", {
                 id: 3,
                 name: "Platform",
                 active: false,
-                used_by: ["item", "database", "platforms"],
+                used_by: ["item", "database", "platform"],
                 column: {
                     title: __("Platform"),
                     data: "platform",
