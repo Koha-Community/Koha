@@ -202,10 +202,9 @@ sub process_bib {
     my $allowrelink = $args->{allowrelink};
     my $biblio = Koha::Biblios->find($biblionumber);
     my $record;
-    eval{ $record = $biblio->metadata->record; };
+    eval { $record = $biblio->metadata->record; };
     unless ( defined $record ) {
-        print
-"\nCould not retrieve bib $biblionumber from the database - record is corrupt.\n";
+        warn "Could not retrieve bib $biblionumber from the database - record is corrupt.";
         $num_bad_bibs++;
         return;
     }
@@ -220,6 +219,7 @@ sub process_bib {
     };
     if ($@) {
         warn "Error while searching for authorities for biblionumber $biblionumber at " . localtime(time);
+        $num_bad_bibs++;
         return;
     }
 
