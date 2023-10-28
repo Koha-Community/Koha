@@ -190,88 +190,73 @@ msgstr ""
 
 EOF
     my $directory_re = quotemeta("$directory/");
-
-    for my $t ( keys %text ) {
-        my @ordered_tokens = sort {
-                   $a->pathname cmp $b->pathname
-                || $a->line_number cmp $b->line_number
-        } @{$text{$t}};
-        my $token = $ordered_tokens[0];
-
-        if ( $token->type == C4::TmplTokenType::TEXT_PARAMETRIZED ) {
-            my $n = 0;
-            printf $OUTPUT "#. For the first occurrence,\n"
-                if @{ $text{$t} } > 1 && $token->parameters_and_fields > 0;
-            for my $param ( $token->parameters_and_fields ) {
-                $n += 1;
-                my $type    = $param->type;
-                my $subtype = ( $type == C4::TmplTokenType::TAG
-                        && $param->string =~ /^<input\b/is?
-                        $param->attributes->{'type'}->[1] : undef );
-                my $fmt = TmplTokenizer::_formalize($param);
-                $fmt =~ s/^%/%$n\$/;
-                if ( $type == C4::TmplTokenType::DIRECTIVE ) {
-
-                    #		    $type = "Template::Toolkit Directive";
-                    $type = $param->string =~ /\[%(.*?)%\]/is ? $1 : 'ERROR';
-                    my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is?
-                        $2: undef;
-                    printf $OUTPUT "#. %s: %s\n", $fmt,
-                        "$type" . ( defined $name ? " name=$name" : '' );
-                } else {
-                    my $name = $param->attributes->{'name'};
-                    my $value;
-                    $value = $param->attributes->{'value'}
-                        unless $subtype =~ /^(?:text)$/;
-                    printf $OUTPUT "#. %s: %s\n", $fmt, "type=$subtype"
-                        . ( defined $name  ? " name=$name->[1]"   : '' )
-                        . ( defined $value ? " value=$value->[1]" : '' );
-                }
-            }
-        } elsif ( $token->type == C4::TmplTokenType::TAG ) {
-            printf $OUTPUT "#. For the first occurrence,\n"
-                if @{ $text{$t} } > 1 && $token->parameters_and_fields > 0;
-            if ( $token->string =~ /^<meta\b/is ) {
-                my $type = $token->attributes->{'http-equiv'}->[1];
-                print $OUTPUT "#. META http-equiv=$type\n" if defined $type;
-            } elsif ( $token->string =~ /^<([a-z0-9]+)/is ) {
-                my $tag  = uc($1);
-                my $type = ( lc($tag) eq 'input'?
-                    $token->attributes->{'type'}: undef );
-                my $name = $token->attributes->{'name'};
-                printf $OUTPUT "#. %s\n", $tag
-                   . (defined $type? " type=$type->[1]": '')
-                   . (defined $name? " name=$name->[1]": '');
-            }
-        } elsif ( $token->has_js_data ) {
-            printf $OUTPUT "#. For the first occurrence,\n" if @{ $text{$t} } > 1;
-            printf $OUTPUT "#. SCRIPT\n";
-        }
-        my $cformat_p;
-        my $location = {};
-        for my $token ( @{ $text{$t} } ) {
-            my $pathname = $token->pathname;
-            $pathname =~ s/^$directory_re//os;
-            $pathname =~ s/^.*\/koha-tmpl\/(.*)$/$1/;
-            push @{ $location->{$pathname} }, $token->line_number
-                if defined $pathname && defined $token->line_number;
-            $cformat_p = 1 if $token->type == C4::TmplTokenType::TEXT_PARAMETRIZED;
-        }
-
-        for my $pathname ( sort keys %$location ) {
-            for my $line_number ( @{ $location->{$pathname} } ) {
-                printf $OUTPUT "#: %s:%d\n", $pathname, $line_number;
-            }
-        }
-
+    for my $t (string_list) {
+	if ($text{$t}->[0]->type == C4::TmplTokenType::TEXT_PARAMETRIZED) {
+	    my($token, $n) = ($text{$t}->[0], 0);
+        printf $OUTPUT "#. For the first occurrence,\n"
+		    if @{$text{$t}} > 1 && $token->parameters_and_fields > 0;
+	    for my $param ($token->parameters_and_fields) {
+		$n += 1;
+		my $type = $param->type;
+		my $subtype = ($type == C4::TmplTokenType::TAG
+			&& $param->string =~ /^<input\b/is?
+				$param->attributes->{'type'}->[1]: undef);
+		my $fmt = TmplTokenizer::_formalize( $param );
+		$fmt =~ s/^%/%$n\$/;
+		if ($type == C4::TmplTokenType::DIRECTIVE) {
+#		    $type = "Template::Toolkit Directive";
+		    $type = $param->string =~ /\[%(.*?)%\]/is? $1: 'ERROR';
+		    my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is?
+			    $2: undef;
+            printf $OUTPUT "#. %s: %s\n", $fmt,
+			"$type" . (defined $name? " name=$name": '');
+		} else {
+		    my $name = $param->attributes->{'name'};
+            my $value;
+            $value = $param->attributes->{'value'}
+			    unless $subtype =~ /^(?:text)$/;
+            printf $OUTPUT "#. %s: %s\n", $fmt, "type=$subtype"
+			    . (defined $name?  " name=$name->[1]": '')
+			    . (defined $value? " value=$value->[1]": '');
+		}
+	    }
+	} elsif ($text{$t}->[0]->type == C4::TmplTokenType::TAG) {
+	    my($token) = ($text{$t}->[0]);
+        printf $OUTPUT "#. For the first occurrence,\n"
+		    if @{$text{$t}} > 1 && $token->parameters_and_fields > 0;
+	    if ($token->string =~ /^<meta\b/is) {
+		my $type = $token->attributes->{'http-equiv'}->[1];
+        print $OUTPUT "#. META http-equiv=$type\n" if defined $type;
+	    } elsif ($token->string =~ /^<([a-z0-9]+)/is) {
+		my $tag = uc($1);
+		my $type = (lc($tag) eq 'input'?
+			$token->attributes->{'type'}: undef);
+		my $name = $token->attributes->{'name'};
+        printf $OUTPUT "#. %s\n", $tag
+		    . (defined $type? " type=$type->[1]": '')
+		    . (defined $name? " name=$name->[1]": '');
+	    }
+	} elsif ($text{$t}->[0]->has_js_data) {
+        printf $OUTPUT "#. For the first occurrence,\n" if @{$text{$t}} > 1;
+        printf $OUTPUT "#. SCRIPT\n";
+	}
+	my $cformat_p;
+	for my $token (@{$text{$t}}) {
+	    my $pathname = $token->pathname;
+	    $pathname =~ s/^$directory_re//os;
+        $pathname =~ s/^.*\/koha-tmpl\/(.*)$/$1/;
+        printf $OUTPUT "#: %s:%d\n", $pathname, $token->line_number
+		    if defined $pathname && defined $token->line_number;
+	    $cformat_p = 1 if $token->type == C4::TmplTokenType::TEXT_PARAMETRIZED;
+	}
         printf $OUTPUT "#, c-format\n" if $cformat_p;
         printf $OUTPUT "msgid %s\n", TmplTokenizer::quote_po(
             TmplTokenizer::string_canon(
-                TmplTokenizer::charset_convert( $t, $charset_in, $charset_out )
+                TmplTokenizer::charset_convert($t, $charset_in, $charset_out)
             )
         );
         printf $OUTPUT "msgstr %s\n\n", (defined $translation{$t}?
-            TmplTokenizer::quote_po( $translation{$t} ): "\"\"");
+		TmplTokenizer::quote_po( $translation{$t} ): "\"\"");
     }
 }
 
