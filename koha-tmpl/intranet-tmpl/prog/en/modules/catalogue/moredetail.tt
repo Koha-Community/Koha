@@ -144,7 +144,7 @@
                                         [% IF ( ITEM_DAT.location ) %]
                                             <li>
                                                 <span class="label">Shelving location:</span>
-                                                [% AuthorisedValues.GetByCode( 'LOC', ITEM_DAT.location ) | html %]
+                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_DAT.location ) | html %]
                                             </li>
                                         [% END %]
                                         [% IF ( ITEM_DAT.replacementprice ) %]
