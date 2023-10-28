@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 40;
+use Test::More tests => 58;
 use C4::Context;
 
 BEGIN {
@@ -59,21 +59,23 @@ foreach my $key (keys %{$default_layout}) {
 
 # Testing Layout->set_attr()
 my $new_attr = {
-        creator         =>      'Labels',
-        layout_xml      =>      '',
-        units           =>      'POINT',
-        start_label     =>      1,
-        barcode_type    =>      'CODE39',
-        printing_type   =>      'BIBBAR',
-        layout_name     =>      'TEST',
-        guidebox        =>      1,
-        oblique_title   =>      0,
-        font            =>      'TR',
-        font_size       =>      10,
-        callnum_split   =>      1,
-        text_justify    =>      'L',
-        format_string   =>      'callnumber, title, author, barcode',
-    };
+    barcode_type  => 'CODE39',
+    callnum_split => 1,
+    creator       => 'Labels',
+    font          => 'TR',
+    font_size     => 10,
+    format_string => 'callnumber, title, author, barcode',
+    guidebox      => 1,
+    layout_name   => 'TEST',
+    layout_xml    => '',
+    oblique_title => 0,
+    printing_type => 'BIBBAR',
+    scale_height  => 0.02,
+    scale_width   => 0.9,
+    start_label   => 1,
+    text_justify  => 'L',
+    units         => 'POINT',
+};
 
 foreach my $key (keys %{$new_attr}) {
     $layout->set_attr($key => $new_attr->{$key});
@@ -81,19 +83,24 @@ foreach my $key (keys %{$new_attr}) {
         "Layout->set_attr() success on attribute $key.");
 }
 
-
 # Testing Layout->save() method with a new object
 my $sav_results = $layout->save();
 ok($sav_results ne -1, "Layout->save() success");
 
 my $saved_layout;
-if ($sav_results ne -1) {
-    # Testing Layout->retrieve()
-    $new_attr->{'layout_id'} = $sav_results;
-    ok($saved_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results),
-        "Layout->retrieve() success");
-    is_deeply($saved_layout, $new_attr,
-        "Retrieved layout object is the expected");
+# Testing Layout->retrieve()
+$new_attr->{'layout_id'} = $sav_results;
+ok($saved_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results),
+    "Layout->retrieve() success");
+
+foreach my $key ( keys %{$new_attr} ) {
+    if ( $key eq 'scale_height' || $key eq 'scale_width' ) {
+        # workaround for is_deeply failing to compare scale_height and scale_width
+        is( $saved_layout->{$key} + 0.00, $new_attr->{$key} );
+    }
+    else {
+        is( $saved_layout->{$key}, $new_attr->{$key} );
+    }
 }
 
 # Testing Layout->save() method with an updated object
