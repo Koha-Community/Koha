@@ -56,7 +56,7 @@ subtest 'list() tests' => sub {
     # One erm_user created, should get returned
     $librarian->discard_changes;
     $t->get_ok("//$userid:$password@/api/v1/erm/users")->status_is(200)
-      ->json_is( [ $librarian->to_api ] );
+        ->json_is( [ $librarian->to_api( { user => $librarian } ) ] );
 
     my $another_erm_user = $builder->build_object(
         {
@@ -67,7 +67,7 @@ subtest 'list() tests' => sub {
 
     # Two erm_users created, they should both be returned
     $t->get_ok("//$userid:$password@/api/v1/erm/users")->status_is(200)
-      ->json_is( [ $librarian->to_api ] );
+        ->json_is( [ $librarian->to_api( { user => $librarian } ) ] );
 
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/erm/users?blah=blah")

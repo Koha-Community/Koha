@@ -69,7 +69,10 @@ subtest 'get_user() tests' => sub {
     my $data = { id_token => $id_token };
 
     my ( $resolved_patron, $mapped_data, $resolved_domain ) = $client->get_user( { provider => $provider->code, data => $data, interface => 'opac' } );
-    is_deeply( $resolved_patron->to_api, $patron->to_api, 'Patron correctly retrieved' );
+    is_deeply(
+        $resolved_patron->to_api( { user => $patron } ), $patron->to_api( { user => $patron } ),
+        'Patron correctly retrieved'
+    );
     is( $mapped_data->{firstname},            'test name',                                   'Data mapped correctly' );
     is( $mapped_data->{surname},              undef,                                         'No surname mapped' );
     is( $domain->identity_provider_domain_id, $resolved_domain->identity_provider_domain_id, 'Is the same domain' );

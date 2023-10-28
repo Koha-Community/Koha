@@ -40,7 +40,7 @@ post '/register_user' => sub {
                 interface => $params->{interface}
             }
         );
-        $c->render( status => 200, json => $patron->to_api );
+        $c->render( status => 200, json => $patron->unblessed );
     } catch {
         if ( ref($_) eq 'Koha::Exceptions::Auth::Unauthorized' ) {
             $c->render( status => 401, json => { message => 'unauthorized' } );

@@ -169,7 +169,7 @@ subtest 'list() tests' => sub {
     # Three requests exist, expect all three to be returned
     $t->get_ok("//$userid:$password@/api/v1/ill/requests")
       ->status_is(200)
-      ->json_is( [ $req_1->to_api, $req_2->to_api, $ret->to_api ]);
+      ->json_is( [ $req_1->to_api({user=> $librarian}), $req_2->to_api({user=> $librarian}), $ret->to_api({user=> $librarian}) ]);
 
     my $status_query = encode_json({ status => 'REQ' });
     my $status_alias_query = encode_json({ status_av => $av_code });
@@ -177,29 +177,34 @@ subtest 'list() tests' => sub {
     # x-koha-embed: +strings
     # Two requests exist with status 'REQ', expect them to be returned
     # One of which also has a status_alias, expect that to be in that request's body
-    $t->get_ok("//$userid:$password@/api/v1/ill/requests?q=$status_query" => {"x-koha-embed" => "+strings"} )
-      ->status_is(200)
-      ->json_is( [
-                { _strings => { status => $response_status }, %{$req_1->to_api} },
-                { _strings => { status => $response_status, status_av => $response_status_av }, %{$req_2->to_api} }
-            ]
+    $t->get_ok( "//$userid:$password@/api/v1/ill/requests?q=$status_query" => { "x-koha-embed" => "+strings" } )
+        ->status_is(200)->json_is(
+        [
+            { _strings => { status => $response_status }, %{ $req_1->to_api( { user => $librarian } ) } },
+            {
+                _strings => { status => $response_status, status_av => $response_status_av },
+                %{ $req_2->to_api( { user => $librarian } ) }
+            }
+        ]
         );
 
     # One request with status_alias 'print_copy' exists, expect that to be returned
-    $t->get_ok("//$userid:$password@/api/v1/ill/requests?q=$status_alias_query" => {"x-koha-embed" => "+strings"} )
-      ->status_is(200)
-      ->json_is( [
-                { _strings => { status => $response_status, status_av => $response_status_av }, %{$req_2->to_api} }
-            ]
+    $t->get_ok( "//$userid:$password@/api/v1/ill/requests?q=$status_alias_query" => { "x-koha-embed" => "+strings" } )
+        ->status_is(200)->json_is(
+        [
+            {
+                _strings => { status => $response_status, status_av => $response_status_av },
+                %{ $req_2->to_api( { user => $librarian } ) }
+            }
+        ]
         );
 
     # x-koha-embed: patron
     my $patron_query = encode_json({ borrowernumber => $patron->borrowernumber });
 
     # One request related to $patron, make sure it comes back
-    $t->get_ok("//$userid:$password@/api/v1/ill/requests" => {"x-koha-embed" => "patron"} )
-      ->status_is(200)
-      ->json_has('/0/patron', $patron->to_api);
+    $t->get_ok( "//$userid:$password@/api/v1/ill/requests" => { "x-koha-embed" => "patron" } )->status_is(200)
+        ->json_has( '/0/patron', $patron->to_api( { user => $librarian } ) );
 
     # x-koha-embed: comments
     # Create comment
@@ -226,15 +231,13 @@ subtest 'list() tests' => sub {
     # ILLHiddenRequestStatuses syspref
     # Hide 'REQ', expect to return just 1 'RET'
     t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', 'REQ' );
-    $t->get_ok( "//$userid:$password@/api/v1/ill/requests" )
-      ->status_is(200)
-      ->json_is( [ $ret->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/ill/requests")->status_is(200)
+        ->json_is( [ $ret->to_api( { user => $librarian } ) ] );
 
     # Hide 'RET', expect to return 2 'REQ'
     t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', 'RET' );
-    $t->get_ok( "//$userid:$password@/api/v1/ill/requests?_order_by=staff_notes" )
-      ->status_is(200)
-      ->json_is( [ $req_1->to_api, $req_2->to_api ]);
+    $t->get_ok("//$userid:$password@/api/v1/ill/requests?_order_by=staff_notes")->status_is(200)
+        ->json_is( [ $req_1->to_api( { user => $librarian } ), $req_2->to_api( { user => $librarian } ) ] );
 
     # Status code
     # Warn on unsupported query parameter
