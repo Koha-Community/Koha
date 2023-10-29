@@ -1341,7 +1341,6 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "<html>"
             - "<p>This email has been sent in response to your password recovery request for the account <strong><<user>></strong>."
             - "</p>"
             - "<p>"
@@ -1350,8 +1349,6 @@ tables:
             - "</p>"
             - "<p>This link will be valid for 2 days from this email's reception, then you must reapply if you do not change your password.</p>"
             - "<p>Thank you.</p>"
-            - "</html>"
-            - ""
 
         - module: members
           code: STAFF_PASSWORD_RESET
@@ -1362,7 +1359,6 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "<html>"
             - "<p>A librarian has reset the password for the account <strong><<user>></strong>."
             - "</p>"
             - "<p>"
@@ -1371,8 +1367,6 @@ tables:
             - "</p>"
             - "<p>This link will be valid for 5 days from this email's reception, then you must reapply if you do not change your password.</p>"
             - "<p>Thank you.</p>"
-            - "</html>"
-            - ""
 
         - module: members
           code: SHARE_ACCEPT
