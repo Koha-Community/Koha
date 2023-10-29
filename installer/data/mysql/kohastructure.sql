@@ -1076,7 +1076,7 @@ CREATE TABLE `biblioitems` (
   `issn` longtext DEFAULT NULL COMMENT 'ISSN (MARC21 022$a)',
   `ean` longtext DEFAULT NULL,
   `publicationyear` mediumtext DEFAULT NULL,
-  `publishercode` text DEFAULT NULL COMMENT 'publisher (MARC21 260$b and 246$b)',
+  `publishercode` text DEFAULT NULL COMMENT 'publisher (MARC21 260$b and 264$b)',
   `volumedate` date DEFAULT NULL,
   `volumedesc` mediumtext DEFAULT NULL COMMENT 'volume information (MARC21 362$a)',
   `collectiontitle` longtext DEFAULT NULL,
