@@ -134,9 +134,9 @@ subtest 'read_from_file() tests' => sub {
             'shibboleth' => {
                 'autocreate' => '1',
                 'matchpoint' => 'userid',
-                'mapping' => {
-                    'userid' => { 'is' => 'uid' },
-                    'branchcode' => { 'content' => 'MAIN', 'is' => 'MAIN' },
+                'mapping'    => {
+                    'userid'       => { 'is'      => 'uid' },
+                    'branchcode'   => { 'content' => 'MAIN', 'is' => 'MAIN' },
                     'categorycode' => { 'content' => 'STAFF' },
                 },
             },
