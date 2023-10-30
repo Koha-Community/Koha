@@ -121,7 +121,7 @@ subtest 'AddBiblio' => sub {
 };
 
 subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
-    plan tests => 25;
+    plan tests => 27;
 
     my @columns = qw(
         tagfield tagsubfield liblibrarian libopac repeatable mandatory kohafield tab
@@ -132,23 +132,24 @@ subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
     # biblio.biblionumber must be mapped so this should return something
     my $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('biblio.biblionumber');
 
-    ok(defined $marc_subfield_structure, "There is a result");
-    is(ref $marc_subfield_structure, "HASH", "Result is a hashref");
+    is( ref $marc_subfield_structure, "ARRAY", "Result is an arrayref" );
+    is( @$marc_subfield_structure, 1, 'Expecting one hit only' );
     foreach my $col (@columns) {
-        ok(exists $marc_subfield_structure->{$col}, "Hashref contains key '$col'");
+        ok( exists $marc_subfield_structure->[0]->{$col}, "Hashref contains key '$col'" );
     }
-    is($marc_subfield_structure->{kohafield}, 'biblio.biblionumber', "Result is the good result");
-    like($marc_subfield_structure->{tagfield}, qr/^\d{3}$/, "tagfield is a valid tagfield");
+    is( $marc_subfield_structure->[0]->{kohafield}, 'biblio.biblionumber', "Result is the good result" );
+    like( $marc_subfield_structure->[0]->{tagfield}, qr/^\d{3}$/, "tagfield is a valid tagfield" );
 
-    # Add a test for list context (BZ 10306)
-    my @results = GetMarcSubfieldStructureFromKohaField('biblio.biblionumber');
-    is( @results, 1, 'We expect only one mapping' );
-    is_deeply( $results[0], $marc_subfield_structure,
-        'The first entry should be the same hashref as we had before' );
+    # Multiple mappings expected for kohafield biblio.copyrightdate (in 260, 264)
+    $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('biblio.copyrightdate');
+    is( ref $marc_subfield_structure, "ARRAY", "Result is again an arrayref" );
+    is( @$marc_subfield_structure,    2,       'We expect two hits' );
+    ok( exists $marc_subfield_structure->[0]->{tagsubfield}, 'Testing a random column for existence in 1st hash' );
+    ok( exists $marc_subfield_structure->[1]->{hidden}, 'Testing a random column for existence in 2nd hash' );
 
-    # foo.bar does not exist so this should return undef
+    # foo.bar does not exist so this should return []
     $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('foo.bar');
-    is($marc_subfield_structure, undef, "invalid kohafield returns undef");
+    is_deeply( $marc_subfield_structure, [], "invalid kohafield returns empty arrayref" );
 
 };
 

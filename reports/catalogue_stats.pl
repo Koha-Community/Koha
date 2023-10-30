@@ -118,7 +118,7 @@ if ($do_it) {
     my @locations = map { { code => $_->{authorised_value}, description => $_->{lib} } } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } );
 
     foreach my $kohafield (qw(items.notforloan items.materials)) {
-        my $subfield_structure = GetMarcSubfieldStructureFromKohaField($kohafield);
+        my $subfield_structure = GetMarcSubfieldStructureFromKohaField($kohafield)->[0];    # assuming one result..
         if($subfield_structure) {
             my $avlist;
             my $avcategory = $subfield_structure->{authorised_value};

@@ -173,7 +173,7 @@ else {
 
     my $libraries = Koha::Libraries->search({}, { order_by => 'branchname' });
 
-    my $ccode_subfield_structure = GetMarcSubfieldStructureFromKohaField('items.ccode');
+    my $ccode_subfield_structure = GetMarcSubfieldStructureFromKohaField('items.ccode')->[0];    # assuming one result..
     my $ccode_label;
     my $ccode_avlist;
     if($ccode_subfield_structure) {

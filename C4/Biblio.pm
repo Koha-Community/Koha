@@ -1222,13 +1222,17 @@ sub GetMarcFromKohaField {
 
 =head2 GetMarcSubfieldStructureFromKohaField
 
-    my $str = GetMarcSubfieldStructureFromKohaField( $kohafield );
+    my $arrayref = GetMarcSubfieldStructureFromKohaField($kohafield);
+    my $hashref  = GetMarcSubfieldStructureFromKohaField($kohafield)->[0];
 
     Returns marc subfield structure information for $kohafield.
     The Default framework is used, since it is authoritative for kohafield
     mappings.
-    In list context returns a list of all hashrefs, since there may be
-    multiple mappings. In scalar context the first hashref is returned.
+
+    Since there MAY be multiple mappings (not that often), you receive an
+    arrayref of all mappings found. In the second example above the first
+    one is picked only. If there are no mappings, you get an empty arrayref
+    (so in the call above $hashref will be undefined - without warnings).
 
 =cut
 
@@ -1240,8 +1244,7 @@ sub GetMarcSubfieldStructureFromKohaField {
     # The next call uses the Default framework since it is AUTHORITATIVE
     # for all Koha to MARC mappings.
     my $mss = GetMarcSubfieldStructure( '', { unsafe => 1 } ); # Do not change framework
-    return unless $mss->{$kohafield};
-    return wantarray ? @{$mss->{$kohafield}} : $mss->{$kohafield}->[0];
+    return $mss->{$kohafield} // [];
 }
 
 =head2 GetXmlBiblio
