@@ -49,21 +49,23 @@ my @messages;
 
 if ( $op eq 'add' ) {
     my $name = $input->param('name') // q{};
-    my $authorised_value_category = $input->param('authorised_value_category') // q{};
+    my $authorised_value_category = $input->param('authorised_value_category');
     my $marcfield = $input->param('marcfield') // q{};
     my $marcfield_mode = $input->param('marcfield_mode') // 'get';
     my $searchable = $input->param('searchable') ? 1 : 0;
     if ( $field_id and $name ) {
-        my $updated = 0;
+        my $updated    = 0;
+        my $set_fields = {
+            name           => $name,
+            marcfield      => $marcfield,
+            marcfield_mode => $marcfield_mode,
+            searchable     => $searchable,
+        };
+        $set_fields->{authorised_value_category} = $authorised_value_category if $authorised_value_category;
+
         eval {
             my $af = Koha::AdditionalFields->find($field_id);
-            $af->set({
-                name => $name,
-                authorised_value_category => $authorised_value_category,
-                marcfield => $marcfield,
-                marcfield_mode => $marcfield_mode,
-                searchable => $searchable,
-            });
+            $af->set($set_fields);
             $updated = $af->store ? 1 : 0;
         };
         push @messages, {
@@ -71,16 +73,18 @@ if ( $op eq 'add' ) {
             number => $updated,
         };
     } elsif ( $name ) {
-        my $inserted = 0;
+        my $inserted   = 0;
+        my $set_fields = {
+            tablename      => $tablename,
+            name           => $name,
+            marcfield      => $marcfield,
+            marcfield_mode => $marcfield_mode,
+            searchable     => $searchable,
+        };
+        $set_fields->{authorised_value_category} = $authorised_value_category if $authorised_value_category;
+
         eval {
-            my $af = Koha::AdditionalField->new({
-                tablename => $tablename,
-                name => $name,
-                authorised_value_category => $authorised_value_category,
-                marcfield => $marcfield,
-                marcfield_mode => $marcfield_mode,
-                searchable => $searchable,
-            });
+            my $af = Koha::AdditionalField->new($set_fields);
             $inserted = $af->store ? 1 : 0;
         };
         push @messages, {
