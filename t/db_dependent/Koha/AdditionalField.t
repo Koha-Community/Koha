@@ -30,7 +30,7 @@ subtest 'effective_authorised_value_category' => sub {
     );
     $field->store()->discard_changes();
 
-    is($field->effective_authorised_value_category, '', 'no default category');
+    is($field->effective_authorised_value_category, undef, 'no default category');
 
     $field = Koha::AdditionalField->new(
         {
