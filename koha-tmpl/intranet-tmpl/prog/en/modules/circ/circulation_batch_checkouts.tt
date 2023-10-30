@@ -100,10 +100,11 @@
           </li>
         </ol>
       </fieldset>
+      [% IF Koha.Preference('SpecifyDueDate') || Koha.Preference('OnSiteCheckouts') %]
       <fieldset class="rows">
-          <legend>Due date</legend>
           <ol>
           [% IF Koha.Preference('SpecifyDueDate') %]
+          <legend>Due date</legend>
             <li>
               <label for="duedatespec">Hard due date: [% INCLUDE 'date-format.inc' %]</label>
               <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true"/>
@@ -119,6 +120,7 @@
           [% END %]
           </ol>
       </fieldset>
+      [% END %]
 
       <input type="hidden" name="op" value="show" />
     </fieldset>
