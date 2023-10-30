@@ -46,12 +46,11 @@
 [% END %]
 [% BLOCK items_table %]
     <div class="[% tab | html %]_table_table_controls">
+        <span class="show_hide_filters">
+            <a href="#" class="show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</a>
+            <a href="#" class="hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</a>
+        </span>
         [% IF (StaffDetailItemSelection) %]
-
-            <span class="show_hide_filters">
-                <a href="#" class="show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</a>
-                <a href="#" class="hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</a>
-            </span>
             | <a href="#" class="SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
             | <a href="#" class="ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</a>
             <span class="itemselection_actions">
@@ -142,30 +141,37 @@
                 itemSelectionBuildActionLinks(tab_id);
             });
 
-            $(".show_filters").on("click",function(e){
-                e.preventDefault();
-                let tab_id = $(this).data("tab");
-                let tab = $("#"+tab_id);
-                tab.find(".show_filters").hide();
-                tab.find(".hide_filters").show();
-                $("#"+tab_id+"_table thead tr:eq(1)").remove();
-                build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback );
-                itemSelectionBuildActionLinks(tab_id);
-            });
-
-            $(".hide_filters").on("click",function(e){
-                e.preventDefault();
-                let tab_id = $(this).data("tab");
-                let tab = $("#"+tab_id);
-                tab.find(".hide_filters").hide();
-                tab.find(".show_filters").show();
-                $("#"+tab_id+"_table thead tr:eq(1)").remove();
-                build_items_table(tab_id, false, { destroy: true }, build_items_table_drawncallback );
-                itemSelectionBuildActionLinks(tab_id);
-            });
         });
     [% END %]
 
+
+    $(document).ready(function() {
+        $(".show_filters").on("click",function(e){
+            e.preventDefault();
+            let tab_id = $(this).data("tab");
+            let tab = $("#"+tab_id);
+            tab.find(".show_filters").hide();
+            tab.find(".hide_filters").show();
+            $("#"+tab_id+"_table thead tr:eq(1)").remove();
+            build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback );
+            [% IF StaffDetailItemSelection %]
+                itemSelectionBuildActionLinks(tab_id);
+            [% END %]
+        });
+
+        $(".hide_filters").on("click",function(e){
+            e.preventDefault();
+            let tab_id = $(this).data("tab");
+            let tab = $("#"+tab_id);
+            tab.find(".hide_filters").hide();
+            tab.find(".show_filters").show();
+            $("#"+tab_id+"_table thead tr:eq(1)").remove();
+            build_items_table(tab_id, false, { destroy: true }, build_items_table_drawncallback );
+            [% IF StaffDetailItemSelection %]
+                itemSelectionBuildActionLinks(tab_id);
+            [% END %]
+        });
+    });
 
     const all_libraries = [% To.json(Branches.all) | $raw %];
     const libraries_filters = all_libraries.map(e => {
