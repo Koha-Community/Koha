@@ -35,7 +35,7 @@
             <th id="[% tab | html %]_materials" data-colname="[% tab | html %]_materials">Materials specified</th>
             <th id="[% tab | html %]_itemnotes" data-colname="[% tab | html %]_itemnotes">Public notes</th>
             <th id="[% tab | html %]_itemnotes_nonpublic" data-colname="[% tab | html %]_itemnotes_nonpublic">Non-public notes</th>
-            <th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>
+            [% IF Koha.Preference('EasyAnalyticalRecords') %]<th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>[% END %]
             [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="[% tab | html %]_usedin">Used in</th><th></th>[% END %]
             [% IF Koha.Preference('UseCourseReserves') %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course reserves</th>[% END %]
             [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="[% tab | html %]_spinelabel" class="NoSort">Spine label</th>[% END %]
@@ -222,8 +222,10 @@
         embed.push('course_item.course_reserves.course');
     [% END %]
 
-    // For host records
-    embed.push('biblio.title');
+    [% IF Koha.Preference('EasyAnalyticalRecords') %]
+        // For host records
+        embed.push('biblio.title');
+    [% END %]
 
     [% IF analyze %]
         embed.push('analytics_count');
@@ -659,6 +661,7 @@
                     return escape_str(row.internal_notes);
                 }
             },
+            [% IF Koha.Preference('EasyAnalyticalRecords') %]
             {
                 data: "biblio.title",
                 searchable: false,
@@ -668,6 +671,7 @@
                     return '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=%s">%s</a>'.format(row.biblio_id, row.biblio.title);
                 }
             },
+            [% END %]
             [% IF analyze %]
             {
                 data: "analytics_count",
