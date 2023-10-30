@@ -802,6 +802,14 @@
                     container.find(".bottom.pager").remove();
                 }
 
+                [% IF ( SpineLabelShowPrintOnBibDetails ) %]
+                     $(".print-label").on("click", function(e){
+                        e.preventDefault();
+                        link = $(this).attr("href");
+                        openWindow(link,"Print spine label",400,400);
+                    });
+                [% END %]
+
                 if ( drawcallback ) { drawcallback(this); }
             },
             [% END %]
