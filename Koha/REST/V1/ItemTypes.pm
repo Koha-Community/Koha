@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ItemTypes;
 
-use Try::Tiny;
+use Try::Tiny qw(catch try);
 
 =head1 API
 
@@ -35,14 +35,12 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $itemtypes_set = Koha::ItemTypes->new;
-        my $itemtypes     = $c->objects->search( $itemtypes_set );
+        my $item_types = $c->objects->search( Koha::ItemTypes->new );
 
-        return $c->render( status => 200, openapi => $itemtypes );
+        return $c->render( status => 200, openapi => $item_types );
     } catch {
         $c->unhandled_exception($_);
     };
-
 }
 
 1;
