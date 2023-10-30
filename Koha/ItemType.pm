@@ -221,7 +221,20 @@ on the API.
 =cut
 
 sub to_api_mapping {
-    return { 'itemtype' => 'item_type_id' };
+    return {
+        checkinmsg                   => 'checkin_message',
+        checkinmsgtype               => 'checkin_message_type',
+        defaultreplacecost           => 'default_replacement_cost',
+        hideinopac                   => 'hide_in_opac',
+        imageurl                     => 'image_url',
+        itemtype                     => 'item_type_id',
+        notforloan                   => 'not_for_loan_status',
+        processfee                   => 'process_fee',
+        rentalcharge_daily           => 'daily_rental_charge',
+        rentalcharge_daily_calendar  => 'daily_rental_charge_calendar',
+        rentalcharge_hourly          => 'hourly_rental_charge',
+        rentalcharge_hourly_calendar => 'hourly_rental_charge_calendar',
+    };
 }
 
 =head2 Internal methods

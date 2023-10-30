@@ -337,9 +337,11 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SoRKIMEqXE2+RkGq6zBejA
 
 __PACKAGE__->add_columns(
-    '+rentalcharge_hourly_calendar' => { is_boolean => 1 },
-    '+rentalcharge_daily_calendar'  => { is_boolean => 1 },
     '+automatic_checkin'            => { is_boolean => 1 },
+    '+hideinopac'                   => { is_boolean => 1 },
+    '+notforloan'                   => { is_boolean => 1 },
+    '+rentalcharge_daily_calendar'  => { is_boolean => 1 },
+    '+rentalcharge_hourly_calendar' => { is_boolean => 1 },
 );
 
 # Use the ItemtypeLocalization view to create the join on localization
