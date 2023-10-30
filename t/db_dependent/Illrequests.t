@@ -723,15 +723,15 @@ subtest 'Backend core methods' => sub {
     # Now load the mocked backend
     $illrq->_backend($backend);
 
-    # expandTemplate:
-    is_deeply($illrq->expandTemplate({ test => 1, method => "bar" }),
+    # expand_template:
+    is_deeply($illrq->expand_template({ test => 1, method => "bar" }),
               {
                   test => 1,
                   method => "bar",
                   template => "/tmp/Mock/intra-includes/bar.inc",
                   opac_template => "/tmp/Mock/opac-includes/bar.inc",
               },
-              "ExpandTemplate");
+              "expand_template");
 
     # backend_create
     # we are testing simple cases.
