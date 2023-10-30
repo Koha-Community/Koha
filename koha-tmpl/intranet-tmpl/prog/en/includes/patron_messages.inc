@@ -74,12 +74,6 @@
                     </em><br/>
                 [% END %]
                 <a class="btn btn-xs btn-default" href="#reldebarments-tab" onclick="$('#reldebarments-tab').click()"><i class="fa fa-ban"></i> View restrictions</a>
-
-                [% IF (noissues && CAN_user_circulate_force_checkout && !moremember) %]
-                    <span class="override_debarment">
-                        <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% patron.borrowernumber | uri %]" class="btn btn-xs btn-default">Override restriction temporarily</a>
-                    </span>
-                [% END %]
             </li> <!-- /.blocker -->
         [% END # /IF userdebarred %]
 
@@ -126,7 +120,13 @@
                 <span class="circ-hlt">Credits:</span> Patron has a credit[% IF ( creditsamount ) %] of <span class="credit"><strong>[% creditsamount | $Price %]</strong></span>[% END %]
             </li>
         [% END %]
-
+        [% IF (noissues && CAN_user_circulate_force_checkout && !moremember) %]
+            <li>
+                <span class="override_debarment">
+                    <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% patron.borrowernumber | uri %]" class="btn btn-xs btn-default">Override restriction temporarily</a>
+                </span>
+            </li>
+        [% END %]
     </ul>
 
 [% END # /F ( has_modifications || warndeparture... %]
