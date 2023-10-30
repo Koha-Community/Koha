@@ -18,38 +18,36 @@ properties:
     type:
       - number
       - "null"
-  rentalcharge_daily:
+  daily_rental_charge:
     description: The amount charged for each day between checkout date and due date
     type:
       - number
       - "null"
-  rentalcharge_daily_calendar:
+  daily_rental_charge_calendar:
     description: Controls if the daily rental fee is calculated directly or using finesCalendar
     type: boolean
-  rentalcharge_hourly:
+  hourly_rental_charge:
     description: The amount charged for each hour between checkout date and due date
     type:
       - number
       - "null"
-  rentalcharge_hourly_calendar:
+  hourly_rental_charge_calendar:
     description: Controls if the hourly rental fee is calculated directly or using finesCalendar
     type: boolean
-  defaultreplacecost:
+  default_replacement_cost:
     description: Default replacement cost
     type:
       - number
       - "null"
-  processfee:
+  process_fee:
     description: Default text be recorded in the column note when the processing fee is applied
     type:
       - number
       - "null"
-  notforloan:
-    description: Controls if the item is available for loan
-    type:
-      - boolean
-      - "null"
-  imageurl:
+  not_for_loan_status:
+    description: If items of this type are not for loan
+    type: boolean
+  image_url:
     description: URL for the item type icon
     type:
       - string
@@ -59,13 +57,13 @@ properties:
     type:
       - string
       - "null"
-  checkinmsg:
+  checkin_message:
     description: Message that is displayed when an item with the given item type is checked in
     type:
       - string
       - "null"
-  checkinmsgtype:
-    description: Type (CSS class) for the checkinmsg, can be 'alert' or 'message'
+  checkin_message_type:
+    description: Type (CSS class) for the checkin_message, can be 'alert' or 'message'
     type:
       - string
       - "null"
@@ -74,7 +72,7 @@ properties:
     type:
       - string
       - "null"
-  hideinopac:
+  hide_in_opac:
     description: Hide the item type from the search options in OPAC
     type: boolean
   searchcategory:
@@ -86,7 +84,7 @@ properties:
     description: Controls if automatic checkin is enabled for items of this type
     type: boolean
   translated_descriptions:
-    description: Translations of description plain text
+    description: Translations of description plain text (x-koha-embed)
     type: array
     items:
       $ref: "item_type_translated_description.yaml"

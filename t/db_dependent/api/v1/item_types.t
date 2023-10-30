@@ -23,6 +23,8 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use Mojo::JSON qw(encode_json);
+
 use Koha::ItemTypes;
 use Koha::Database;
 
@@ -34,7 +36,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -42,7 +44,6 @@ subtest 'list() tests' => sub {
         {
             class => 'Koha::ItemTypes',
             value => {
-                itemtype                     => 'TEST_IT',
                 parent_type                  => undef,
                 description                  => 'Test item type',
                 rentalcharge                 => 100.0,
@@ -70,7 +71,7 @@ subtest 'list() tests' => sub {
             class => 'Koha::Localizations',
             value => {
                 entity      => 'itemtypes',
-                code        => 'TEST_IT',
+                code        => $item_type->id,
                 lang        => 'en',
                 translation => 'English word "test"',
             }
@@ -81,7 +82,7 @@ subtest 'list() tests' => sub {
             class => 'Koha::Localizations',
             value => {
                 entity      => 'itemtypes',
-                code        => 'TEST_IT',
+                code        => $item_type->id,
                 lang        => 'sv_SE',
                 translation => 'Swedish word "test"',
             }
@@ -109,30 +110,19 @@ subtest 'list() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     ## Authorized user tests
-    $t->get_ok("//$userid:$password@/api/v1/item_types")->status_is(200)->json_has('/0');
+    my $query = encode_json( { item_type_id => $item_type->id } );
+    $t->get_ok("//$userid:$password@/api/v1/item_types?q=$query")->status_is(200)->json_has('/0')
+        ->json_is( '/0/description', $item_type->description )->json_hasnt('/0/translated_descriptions');
 
-    for my $json ( @{ $t->tx->res->json } ) {
-        if ( $json->{item_type_id} eq 'TEST_IT' ) {
-            is( $json->{description}, 'Test item type' );
-            ok( !exists $json->{translated_descriptions} );
-        }
-    }
-
-    $t->get_ok( "//$userid:$password@/api/v1/item_types" => { 'x-koha-embed' => 'translated_descriptions' } )
-        ->status_is(200)->json_has('/0');
-
-    for my $json ( @{ $t->tx->res->json } ) {
-        if ( $json->{item_type_id} eq 'TEST_IT' ) {
-            is( $json->{description}, 'Test item type' );
-            is_deeply(
-                $json->{translated_descriptions},
-                [
-                    { lang => 'en',    translation => 'English word "test"' },
-                    { lang => 'sv_SE', translation => 'Swedish word "test"' },
-                ]
-            );
-        }
-    }
+    $t->get_ok( "//$userid:$password@/api/v1/item_types?q=$query" => { 'x-koha-embed' => 'translated_descriptions' } )
+        ->status_is(200)->json_has('/0')->json_is( '/0/description', $item_type->description )
+        ->json_has('/0/translated_descriptions')->json_is(
+        '/0/translated_descriptions',
+        [
+            { lang => 'en',    translation => 'English word "test"' },
+            { lang => 'sv_SE', translation => 'Swedish word "test"' },
+        ]
+        );
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/item_types")->status_is(403);
