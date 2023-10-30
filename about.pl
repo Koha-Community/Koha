@@ -529,13 +529,13 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
     );
     if ( @$patrons or @$biblios or @$biblioitems or @$items or @$checkouts or @$holds ) {
         $template->param(
-            has_ai_issues => 1,
-            ai_patrons    => $patrons,
-            ai_biblios    => $biblios,
-            ai_biblioitems=> $biblioitems,
-            ai_items      => $items,
-            ai_checkouts  => $checkouts,
-            ai_holds      => $holds,
+            has_ai_issues  => 1,
+            ai_patrons     => $patrons,
+            ai_biblios     => $biblios,
+            ai_biblioitems => $biblioitems,
+            ai_items       => $items,
+            ai_checkouts   => $checkouts,
+            ai_holds       => $holds,
         );
     }
 }
