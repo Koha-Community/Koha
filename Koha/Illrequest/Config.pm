@@ -23,6 +23,8 @@ use File::Basename qw( basename );
 
 use C4::Context;
 
+use List::MoreUtils qw( uniq );
+
 =head1 NAME
 
 Koha::Illrequest::Config - Koha ILL Configuration Object
@@ -102,6 +104,28 @@ sub backend_dir {
     return $self->{configuration}->{backend_directory};
 }
 
+=head3 get_installed_backend_plugins
+
+    $backends = $config->get_installed_backend_plugins;
+
+Returns a list of all installed ILL backend plugins
+
+=cut
+
+sub get_installed_backend_plugins {
+    my ( $self, $reduce ) = @_;
+
+    my @backend_plugins = Koha::Plugins->new()->GetPlugins(
+        {
+            method => 'ill_backend',
+            all    => 1,
+            errors => 1
+        }
+    );
+
+    return map { $_->{metadata}->{name} } @backend_plugins;
+}
+
 =head3 available_backends
 
   $backends = $config->available_backends;
@@ -114,12 +138,23 @@ will filter those backends down to only those present in the list.
 
 sub available_backends {
     my ( $self, $reduce ) = @_;
+
+    # New way of loading backends: Through plugins
+    my @backend_plugins_names = $self->get_installed_backend_plugins;
+
+    # Old way of loading backends: Through backend_dir config
     my $backend_dir = $self->backend_dir;
     my @backends = ();
     @backends = glob "$backend_dir/*" if ( $backend_dir );
     @backends = map { basename($_) } @backends;
     @backends = grep { $_ =~ /$reduce/ } @backends if $reduce;
-    return \@backends;
+
+    # Return unique list of backend names in the event that the same backend is
+    # installed as a plugin AND as the old way through backend_dir
+    my @all_backends = ( @backends, @backend_plugins_names );
+    my @all_uniq_backends = uniq(@all_backends);
+
+    return \@all_uniq_backends;
 }
 
 =head3 has_branch

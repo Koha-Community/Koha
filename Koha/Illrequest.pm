@@ -397,6 +397,29 @@ sub status {
     }
 }
 
+=head3 get_backend_plugin
+
+    my $backend_plugin = $self->get_backend_plugin($backend_name);
+
+Returns the installed I<Koha::Plugin> corresponding to the given backend_id
+
+=cut
+
+sub get_backend_plugin {
+    my ( $self, $backend_id ) = @_;
+
+    my @backend_plugins = Koha::Plugins->new()->GetPlugins(
+        {
+            method   => 'ill_backend',
+            metadata => { name => $backend_id },
+            all      => 1,
+            errors   => 1
+        }
+    );
+
+    return $backend_plugins[0];
+}
+
 =head3 load_backend
 
 Require "Base.pm" from the relevant ILL backend.
@@ -406,8 +429,6 @@ Require "Base.pm" from the relevant ILL backend.
 sub load_backend {
     my ( $self, $backend_id ) = @_;
 
-    my @raw = qw/Koha Illbackends/; # Base Path
-
     my $backend_name = $backend_id || $self->backend;
 
     unless ( defined $backend_name && $backend_name ne '' ) {
@@ -415,13 +436,33 @@ sub load_backend {
             "An invalid backend ID was requested ('')");
     }
 
-    my $location = join "/", @raw, $backend_name, "Base.pm";    # File to load
-    my $backend_class = join "::", @raw, $backend_name, "Base"; # Package name
-    require $location;
-    $self->{_my_backend} = $backend_class->new({
-        config => $self->_config,
-        logger => Koha::Illrequest::Logger->new
-    });
+    my $backend_plugin = $self->get_backend_plugin($backend_name);
+    if ($backend_plugin) {
+
+        # New way of loading backends: Through plugins
+        my $backend_plugin_class = $backend_plugin->{class};
+
+        $self->{_my_backend} = $backend_plugin_class->new_backend(
+            {
+                config => $self->_config,
+                logger => Koha::Illrequest::Logger->new
+            }
+        );
+    } elsif ($backend_name) {
+
+        # Old way of loading backends: Through backend_dir config
+        my @raw           = qw/Koha Illbackends/;                         # Base Path
+        my $location      = join "/",  @raw, $backend_name, "Base.pm";    # File to load
+        my $backend_class = join "::", @raw, $backend_name, "Base";       # Package name
+        require $location;
+        $self->{_my_backend} = $backend_class->new(
+            {
+                config => $self->_config,
+                logger => Koha::Illrequest::Logger->new
+            }
+        );
+    }
+
     return $self;
 }
 
@@ -507,7 +548,16 @@ sub _config {
 
 sub metadata {
     my ( $self ) = @_;
-    return $self->_backend->metadata($self);
+
+    if ( $self->_backend->can('metadata') ) {
+
+        # Old way of loading backends: Previous expected method was 'metadata'
+        return $self->_backend->metadata($self);
+    } else {
+
+        # New way of loading backends (as plugins): New expected method is 'backend_metadata'
+        return $self->_backend->backend_metadata($self);
+    }
 }
 
 =head3 _core_status_graph
@@ -1042,8 +1092,22 @@ sub expand_template {
     my ( $self, $params ) = @_;
     my $backend = $self->_backend->name;
     # Generate path to file to load
-    my $backend_dir = $self->_config->backend_dir;
-    my $backend_tmpl = join "/", $backend_dir, $backend;
+    my $backend_dir;
+    my $backend_tmpl;
+
+    my $backend_plugin = $self->get_backend_plugin( $self->_backend->name );
+    if ($backend_plugin) {
+
+        # New way of loading backends: Through plugins
+        $backend_dir  = $backend_plugin->bundle_path;
+        $backend_tmpl = $backend_dir;
+    } else {
+
+        # Old way of loading backends: Through backend_dir config
+        $backend_dir  = $self->_config->backend_dir;
+        $backend_tmpl = join "/", $backend_dir, $backend;
+    }
+
     my $intra_tmpl =  join "/", $backend_tmpl, "intra-includes",
         ( $params->{method}//q{} ) . ".inc";
     my $opac_tmpl =  join "/", $backend_tmpl, "opac-includes",
