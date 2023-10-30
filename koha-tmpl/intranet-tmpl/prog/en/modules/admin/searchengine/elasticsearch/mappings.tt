@@ -9,6 +9,7 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" href="/intranet-tmpl/lib/datatables/rowReorder.dataTables.min.css">
 <style>
 a.add, a.delete {
     cursor: pointer;
@@ -484,10 +485,12 @@ a.add, a.delete {
 
                         [% IF index.index_name == 'biblios' %]
                             <h3>Facet order</h3>
-                            <div id="facet_[% index.index_name | html %]" class="ui-tabs-panel">
-                                <table>
+                            <div class="hint">Drag and drop rows to change the order</div>
+                            <div id="facet_[% index.index_name | html %]">
+                                <table id="facetst">
                                     <thead>
                                         <tr>
+                                            <th>Order</th>
                                             <th>Search field</th>
                                             <th>Label</th>
                                             <th>Display</th>
@@ -496,7 +499,8 @@ a.add, a.delete {
                                     <tbody>
                                         [% FOREACH f IN facetable_fields %]
                                             <tr>
-                                                <td>
+                                                <td>[% loop.count | html %]</td>
+                                                <td class="drag_handle">
                                                     [% f.name | html %]
                                                 </td>
                                                 <td>
@@ -555,7 +559,7 @@ a.add, a.delete {
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.tablednd.js") | $raw %]
+    [% Asset.js("lib/datatables/dataTables.rowReorder.min.js") | $raw %]
     [% Asset.js("js/elasticsearch-mappings.js") | $raw %]
 [% END %]
 

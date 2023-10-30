@@ -99,9 +99,18 @@ $(document).ready(function () {
             clean_line(line);
         }
     });
-    $("#facet_biblios > table").tableDnD({
-        onDragClass: "dragClass highlighted-row",
-    });
+
+    $("#facetst").DataTable(
+        $.extend(true, {}, dataTablesDefaults, {
+            "columnDefs": [
+                { "orderable": false, "searchable": false, 'targets': ['NoSort'] },
+                { "searchable": false, "visible": false, "targets": 0 }
+            ],
+            "dom": "t",
+            "paging": false,
+            "autoWidth": false,
+            "rowReorder": true
+        }));
 
     $("#es_mappings").on("submit", function(e){
         let table_ids = ['search_fields_table', 'mapping_biblios_table', 'mapping_authorities_table'];
