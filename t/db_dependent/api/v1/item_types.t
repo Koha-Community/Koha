@@ -32,7 +32,7 @@ my $builder = t::lib::TestBuilder->new;
 my $t = Test::Mojo->new('Koha::REST::V1');
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-subtest 'list_item_types() tests' => sub {
+subtest 'list() tests' => sub {
 
     plan tests => 12;
 
@@ -109,11 +109,10 @@ subtest 'list_item_types() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     ## Authorized user tests
-    # No category, 404 expected
     $t->get_ok("//$userid:$password@/api/v1/item_types")->status_is(200)->json_has('/0');
 
     for my $json ( @{ $t->tx->res->json } ) {
-        if ( $json->{item_type} eq 'TEST_IT' ) {
+        if ( $json->{item_type_id} eq 'TEST_IT' ) {
             is( $json->{description}, 'Test item type' );
             ok( !exists $json->{translated_descriptions} );
         }
@@ -123,7 +122,7 @@ subtest 'list_item_types() tests' => sub {
         ->status_is(200)->json_has('/0');
 
     for my $json ( @{ $t->tx->res->json } ) {
-        if ( $json->{item_type} eq 'TEST_IT' ) {
+        if ( $json->{item_type_id} eq 'TEST_IT' ) {
             is( $json->{description}, 'Test item type' );
             is_deeply(
                 $json->{translated_descriptions},

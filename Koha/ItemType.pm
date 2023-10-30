@@ -221,14 +221,12 @@ on the API.
 =cut
 
 sub to_api_mapping {
-    return { 'itemtype' => 'item_type' };
+    return { 'itemtype' => 'item_type_id' };
 }
 
-sub from_api_mapping {
-    return { 'item_type' => 'itemtype' };
-}
+=head2 Internal methods
 
-=head3 type
+=head3 _type
 
 =cut
 
