@@ -990,11 +990,24 @@ elsif ($phase eq 'Export'){
                 unlink $ods_filepath;
             }
             elsif ( $format eq 'template' ) {
-                my $template_id = $input->param('template');
+                my $template_id     = $input->param('template');
                 my $notice_template = Koha::Notice::Templates->find($template_id);
-                my $data = $sth->fetchall_arrayref({});
-                $content = process_tt( $notice_template->content, { data => $data, report_id => $report_id, for_download => 1 } );
-                $reportfilename = process_tt( $notice_template->title, { data => $data, report_id => $report_id } );
+                my $data            = $sth->fetchall_arrayref( {} );
+                $content = process_tt(
+                    $notice_template->content,
+                    {
+                        data         => $data,
+                        report_id    => $report_id,
+                        for_download => 1,
+                    }
+                );
+                $reportfilename = process_tt(
+                    $notice_template->title,
+                    {
+                        data      => $data,
+                        report_id => $report_id,
+                    }
+                );
             }
         }
         print $input->header(
