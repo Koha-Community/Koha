@@ -1192,24 +1192,25 @@ sub GetMarcSubfieldStructure {
 
 =head2 GetMarcFromKohaField
 
-    ( $field,$subfield ) = GetMarcFromKohaField( $kohafield );
-    @fields = GetMarcFromKohaField( $kohafield );
-    $field = GetMarcFromKohaField( $kohafield );
+    my ( $field, $subfield )    = GetMarcFromKohaField($kohafield);
+    my ( $f1, $sf1, $f2, $sf2 ) = GetMarcFromKohaField($kohafield);
 
-    Returns the MARC fields & subfields mapped to $kohafield.
+    Returns list of MARC fields and subfields mapped to $kohafield.
     Since the Default framework is considered as authoritative for such
     mappings, the former frameworkcode parameter is obsoleted.
 
-    In list context all mappings are returned; there can be multiple
-    mappings. Note that in the above example you could miss a second
-    mappings in the first call.
-    In scalar context only the field tag of the first mapping is returned.
+    NOTE: There may be multiple mappings! In the first example above
+    you could miss the second mapping (altough only a few of these
+    will normally exist).
+    Calling in scalar context has been deprecated as of 10/2023.
 
 =cut
 
 sub GetMarcFromKohaField {
-    my ( $kohafield ) = @_;
+    my ($kohafield) = @_;
+    warn "GetMarcFromKohaField: framework parameter has been obsoleted for long" if @_ > 1;    # TODO Remove later
     return unless $kohafield;
+
     # The next call uses the Default framework since it is AUTHORITATIVE
     # for all Koha to MARC mappings.
     my $mss = GetMarcSubfieldStructure( '', { unsafe => 1 } ); # Do not change framework
@@ -1217,7 +1218,7 @@ sub GetMarcFromKohaField {
     foreach( @{ $mss->{$kohafield} } ) {
         push @retval, $_->{tagfield}, $_->{tagsubfield};
     }
-    return wantarray ? @retval : ( @retval ? $retval[0] : undef );
+    return @retval;
 }
 
 =head2 GetMarcSubfieldStructureFromKohaField

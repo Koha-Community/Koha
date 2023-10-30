@@ -176,9 +176,9 @@ subtest "GetMarcSubfieldStructure" => sub {
 };
 
 subtest "GetMarcFromKohaField" => sub {
-    plan tests => 8;
+    plan tests => 7;
 
-    #NOTE: We are building on data from the previous subtest
+    # NOTE: We are building on data from the previous subtest
     # With: field 399 / mytable.nicepages
 
     # Check call in list context for multiple mappings
@@ -190,19 +190,14 @@ subtest "GetMarcFromKohaField" => sub {
     is( $retval[3], 'b', 'Check second subfield' );
 
     # Check same call in scalar context
-    is( C4::Biblio::GetMarcFromKohaField('mytable.nicepages'), '399',
-        'GetMarcFromKohaField returns first tag in scalar context' );
+    is( C4::Biblio::GetMarcFromKohaField('mytable.nicepages'), 4,
+        'GetMarcFromKohaField returns list count in scalar context' );
 
-    # Bug 19096 Default is authoritative
-    # If we add a new empty framework, we should still get the mappings
-    # from Default. CAUTION: This test passes intentionally the obsoleted
-    # framework parameter.
-    my $new_fw = t::lib::TestBuilder->new->build({source => 'BiblioFramework'});
-    @retval = C4::Biblio::GetMarcFromKohaField(
-        'mytable.nicepages', $new_fw->{frameworkcode},
-    );
-    is( @retval, 4, 'Still got two pairs of tags/subfields' );
-    is( $retval[0].$retval[1], '399a', 'Including 399a' );
+    # Check for warning about obsoleted framework parameter
+    warning_like
+        { @retval = C4::Biblio::GetMarcFromKohaField( 'mytable.nicepages', 1 ) }
+        qr/obsoleted for long/,
+        'Found warning about obsoleted parameter';
 };
 
 subtest "Authority creation with default linker" => sub {
