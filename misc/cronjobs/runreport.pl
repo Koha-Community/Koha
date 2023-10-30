@@ -54,7 +54,8 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    --format=s      selects format. Choice of text, html, csv or tsv
 
    -e --email      whether to use e-mail (implied by --to or --from)
-   --send_empty    whether to send an email when there are no results from the specified report
+   --send_empty    whether to send an email when there are no results from the
+                   specified report
    -a --attachment additionally attach the report as a file. cannot be used with html format
    --username      username to pass to the SMTP server for authentication
    --password      password to pass to the SMTP server for authentication
@@ -62,7 +63,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    --to=s          e-mail address to send report to
    --from=s        e-mail address to send report from
    --subject=s     subject for the e-mail
-   --param=s      parameters for the report
+   --param=s       parameters for the report
    --store-results store the result of the report
    --csv-header    add column names as first line of csv output
 
