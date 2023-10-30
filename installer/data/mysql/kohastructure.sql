@@ -243,7 +243,7 @@ CREATE TABLE `additional_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key identifier',
   `tablename` varchar(255) NOT NULL DEFAULT '' COMMENT 'tablename of the new field',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT 'name of the field',
-  `authorised_value_category` varchar(32) NOT NULL DEFAULT '' COMMENT 'is an authorised value category',
+  `authorised_value_category` varchar(32) DEFAULT NULL COMMENT 'is an authorised value category',
   `marcfield` varchar(16) NOT NULL DEFAULT '' COMMENT 'contains the marc field to copied into the record',
   `marcfield_mode` enum('get','set') NOT NULL DEFAULT 'get' COMMENT 'mode of operation (get or set) for marcfield',
   `searchable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is the field searchable?',
