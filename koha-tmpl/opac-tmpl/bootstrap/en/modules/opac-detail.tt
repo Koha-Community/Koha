@@ -1674,6 +1674,7 @@
                         q_array[x] = q_array[x].toLowerCase();
                         var myStopwords = "[% Koha.Preference('NotHighlightedWords') | html %]".toLowerCase().split('|');
                         if( $.inArray(q_array[x], myStopwords) == -1 ) {
+                            $("#marcnotes").highlight(q_array[x]);
                             $(".title").highlight(q_array[x]);
                             $(".author").highlight(q_array[x]);
                             $(".results_summary").highlight(q_array[x]);
