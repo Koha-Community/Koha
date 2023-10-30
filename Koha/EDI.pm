@@ -476,8 +476,7 @@ sub receipt_items {
             my $order = Koha::Acquisition::Orders->find($ordernumber);
             $biblionumber = $order->biblionumber;
             my $frameworkcode = GetFrameworkCode($biblionumber);
-            ($itemfield) = GetMarcFromKohaField( 'items.itemnumber',
-                $frameworkcode );
+            ($itemfield) = GetMarcFromKohaField('items.itemnumber');
         }
     }
 

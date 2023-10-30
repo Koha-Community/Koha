@@ -2245,8 +2245,7 @@ sub TransformHtmlToMarc {
     my $record = MARC::Record->new();
     my @fields;
     my ($biblionumbertagfield, $biblionumbertagsubfield) = (-1, -1);
-    ($biblionumbertagfield, $biblionumbertagsubfield) =
-        &GetMarcFromKohaField( "biblio.biblionumber", '' ) if $isbiblio;
+    ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField("biblio.biblionumber") if $isbiblio;
 #FIXME This code assumes that the CGI params will be in the same order as the fields in the template; this is no absolute guarantee!
     for (my $i = 0; $params[$i]; $i++ ) {    # browse all CGI params
         my $param    = $params[$i];
