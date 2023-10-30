@@ -297,17 +297,17 @@ subtest 'Search patrons' => sub {
         $s->fill_form( { search_patron_filter => 'test_patron' } );
         $s->submit_form;
         $s->wait_for_ajax;
-        my $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        my $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
         is( $patron_selected_text, "", "Patrons selected is not displayed" );
 
         my @checkboxes = $driver->find_elements(
             '//input[@type="checkbox"][@name="borrowernumber"]');
         $checkboxes[2]->click;
-        $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
         is( $patron_selected_text, "Patrons selected: 1", "One patron selected" );
 
         $checkboxes[4]->click;
-        $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
         is( $patron_selected_text, "Patrons selected: 2", "Two patrons are selected" );
 
         $driver->find_element('//*[@id="memberresultst_next"]')->click;
@@ -315,7 +315,7 @@ subtest 'Search patrons' => sub {
         @checkboxes = $driver->find_elements(
             '//input[@type="checkbox"][@name="borrowernumber"]');
         $checkboxes[0]->click;
-        $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
         is( $patron_selected_text, "Patrons selected: 3", "Three patrons are selected" );
 
         # Perform another search
@@ -323,7 +323,7 @@ subtest 'Search patrons' => sub {
         $s->fill_form( { search_patron_filter => 'test_patron' } );
         $s->submit_form;
         $s->wait_for_ajax;
-        $patron_selected_text = $driver->find_element('//div[@id="patron_search_selected"]/span')->get_text;
+        $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
         is( $patron_selected_text, "Patrons selected: 3", "Three patrons still selected" );
 
         $driver->find_element('//*[@id="patronlist-menu"]')->click;
