@@ -1451,6 +1451,7 @@ CREATE TABLE `borrower_modifications` (
   `extended_attributes` mediumtext DEFAULT NULL,
   `gdpr_proc_consent` datetime DEFAULT NULL COMMENT 'data processing consent',
   `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
+  `lang` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`verification_token`(191),`borrowernumber`),
   KEY `verification_token` (`verification_token`(191)),
   KEY `borrowernumber` (`borrowernumber`)
