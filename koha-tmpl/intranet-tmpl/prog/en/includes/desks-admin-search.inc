@@ -5,11 +5,11 @@
         <div id="desk_search" role="tabpanel" class="tab-pane active">
             <form action="[% script_name|html %]" method="post">
                 <div class="form-title">
-                    <label class="control-label" for="desk_name">Search desks</label>
+                    <label class="control-label" for="search_desk_name">Search desks</label>
                 </div>
 
                 <div class="form-content">
-                    <input class="head-searchbox form-control" type="text" name="desk_name" placeholder="Search desks" id="desk_name" value="[% searchfield|html %]" size="40" />
+                    <input class="head-searchbox form-control" type="text" name="desk_name" placeholder="Search desks" id="search_desk_name" value="[% searchfield|html %]" size="40" />
                 </div>
 
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
