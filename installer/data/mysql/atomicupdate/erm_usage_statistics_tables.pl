@@ -1,8 +1,8 @@
 use Modern::Perl;
 
 return {
-    bug_number  => "XXXX",
-    description => "Creating the tables for ERM Usage Statistics",
+    bug_number  => "34587",
+    description => "Add ERM Usage Statistics module",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -31,9 +31,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_usage_data_providers";
-        } else {
-            say $out "erm_usage_data_providers table already exists - skipping to next table";
+            say $out "Added new table 'erm_usage_data_providers'";
         }
 
         unless ( TableExists('erm_counter_files') ) {
@@ -52,9 +50,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_counter_files";
-        } else {
-            say $out "erm_counter_files table already exists - skipping to next table";
+            say $out "Added new table 'erm_counter_files'";
         }
 
         unless ( TableExists('erm_counter_logs') ) {
@@ -76,9 +72,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_counter_logs";
-        } else {
-            say $out "erm_counter_logs table already exists - skipping to next table";
+            say $out "Added new table 'erm_counter_logs'";
         }
 
         unless ( TableExists('erm_usage_titles') ) {
@@ -103,9 +97,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_usage_titles";
-        } else {
-            say $out "erm_usage_titles table already exists - skipping to next table";
+            say $out "Added new table 'erm_usage_titles'";
         }
 
         unless ( TableExists('erm_usage_platforms') ) {
@@ -121,9 +113,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_usage_platforms";
-        } else {
-            say $out "erm_usage_platforms table already exists - skipping to next table";
+            say $out "Added new table 'erm_usage_platforms'";
         }
 
         unless ( TableExists('erm_usage_databases') ) {
@@ -142,9 +132,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_usage_databases";
-        } else {
-            say $out "erm_usage_databases table already exists - skipping to next table";
+            say $out "Added new table 'erm_usage_databases'";
         }
 
         unless ( TableExists('erm_usage_items') ) {
@@ -162,9 +150,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_usage_items";
-        } else {
-            say $out "erm_usage_items table already exists - skipping to next table";
+            say $out "Added new table 'erm_usage_items'";
         }
 
         unless ( TableExists('erm_usage_mus') ) {
@@ -194,9 +180,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_usage_mus";
-        } else {
-            say $out "erm_usage_mus table already exists - skipping to next table";
+            say $out "Added new table 'erm_usage_mus'";
         }
 
         unless ( TableExists('erm_usage_yus') ) {
@@ -225,9 +209,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_usage_yus";
-        } else {
-            say $out "erm_usage_yus table already exists - skipping to next table";
+            say $out "Added new table 'erm_usage_yus'";
         }
 
         unless ( TableExists('erm_default_usage_reports') ) {
@@ -242,9 +224,7 @@ return {
                 }
             );
 
-            say $out "Added new table erm_default_usage_reports";
-        } else {
-            say $out "erm_default_usage_reports table already exists - skipping to next table";
+            say $out "Added new table 'erm_default_usage_reports'";
         }
 
         $dbh->do(
