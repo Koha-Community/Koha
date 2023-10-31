@@ -1185,7 +1185,7 @@ subtest item_circulation_status => sub {
     $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
     $status   = $sip_item->sip_circulation_status;
     is( $status, '12', "Item circulation status is lost" );
-    $status = $sip_item->sip_circulation_status( { account => { missing_lost_status => "1" } } );
+    $status = $sip_item->sip_circulation_status( { account => { lost_status_for_missing => "1" } } );
     is( $status, '13', "Item circulation status is missing" );
     $item->itemlost(0)->store();
 

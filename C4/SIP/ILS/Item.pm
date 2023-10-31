@@ -264,7 +264,8 @@ sub sip_circulation_status {
     my $self = shift;
     my $server = shift;
 
-    my $missing_status = $server->{account}->{missing_lost_status};
+    # Defines what lost status means "missing" for this SIP account
+    my $missing_status = $server->{account}->{lost_status_for_missing};
 
     if ( $self->{_object}->get_transfer ) {
         return '10'; # in transit between libraries
