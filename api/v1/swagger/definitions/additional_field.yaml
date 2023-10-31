@@ -1,0 +1,35 @@
+---
+type: object
+properties:
+  id:
+    type: integer
+    description: internally assigned additional field identifier
+    readOnly: true
+  tablename:
+    description: name of the table this additional field corresponds to
+    type: string
+  name:
+    description: name of the additional field
+    type: string
+  authorised_value_category:
+    description: authorised value category of the additional field
+    type:
+      - string
+      - "null"
+  marcfield:
+    description: marcfield of the additional field
+    type: string
+  marcfield_mode:
+    description: marcfield mode of the additional field
+    type: string
+    enum:
+      - get
+      - set
+  searchable:
+    description: is the additional field searchable
+    type: boolean
+
+additionalProperties: false
+required:
+  - id
+  - tablename

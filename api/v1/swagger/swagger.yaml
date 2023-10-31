@@ -4,6 +4,8 @@ basePath: /api/v1
 definitions:
   account_line:
     $ref: ./definitions/account_line.yaml
+  additional_field:
+    $ref: ./definitions/additional_field.yaml
   advancededitormacro:
     $ref: ./definitions/advancededitormacro.yaml
   allows_renewal:
@@ -197,6 +199,8 @@ paths:
     $ref: "./paths/acquisitions_vendors.yaml#/~1acquisitions~1vendors~1{vendor_id}"
   "/acquisitions/vendors/{vendor_id}/issues":
     $ref: "./paths/acquisitions_vendor_issues.yaml#/~1acquisitions~1vendors~1{vendor_id}~1issues"
+  /additional_fields:
+    $ref: ./paths/additional_fields.yaml#/~1additional_fields
   /advanced_editor/macros:
     $ref: ./paths/advancededitormacros.yaml#/~1advanced_editor~1macros
   /advanced_editor/macros/shared:
