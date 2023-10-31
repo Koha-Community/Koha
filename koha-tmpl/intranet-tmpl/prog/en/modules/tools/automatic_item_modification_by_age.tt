@@ -97,7 +97,7 @@
                           <div class="blocks">
                               <select name="agefield_[% id | html %]">
                                   <option value="">Choose an age field</option>
-                                  [% FOR field IN agefields %]
+                                  [% FOR field IN agefields.sort %]
                                     [% IF rule.agefield == field %]
                                      <option value="[% field | html %]" selected="selected">[% field | html %]</option>
                                     [% ELSE %]
@@ -114,7 +114,7 @@
                         <div class="block">
                           <select name="condition_field_[% id | html %]">
                             <option value="">Choose a field name</option>
-                            [% FOR field IN condition_fields %]
+                            [% FOR field IN condition_fields.sort %]
                               [% IF condition.field == field %]
                                 <option value="[% field | html %]" selected="selected">[% field | html %]</option>
                               [% ELSE %]
@@ -135,7 +135,7 @@
                         <div class="block">
                           <select class="required" required="required" name="substitution_field_[% id | html %]">
                             <option value="">Choose a field name</option>
-                            [% FOR field IN substitution_fields %]
+                            [% FOR field IN substitution_fields.sort %]
                               [% IF substitution.field == field %]
                                 <option value="[% field | html %]" selected="selected">[% field | html %]</option>
                               [% ELSE %]
@@ -172,7 +172,7 @@
               <div class="block">
                   <select name="agefield">
                       <option value="">Choose an age field</option>
-                      [% FOR field IN agefields %]
+                      [% FOR field IN agefields.sort %]
                            <option value="[% field | html %]">[% field | html %]</option>
                       [% END %]
                   </select>
@@ -184,7 +184,7 @@
               <div class="block">
                 <select name="condition_field">
                   <option value="">Choose a field name</option>
-                  [% FOR field IN condition_fields %]
+                  [% FOR field IN condition_fields.sort %]
                     <option value="[% field | html %]">[% field | html %]</option>
                   [% END %]
                 </select>
@@ -199,7 +199,7 @@
               <div class="block">
                 <select required="required" class="required" name="substitution_field">
                   <option value="">Choose a field name</option>
-                  [% FOR field IN substitution_fields %]
+                  [% FOR field IN substitution_fields.sort %]
                     <option value="[% field | html %]">[% field | html %]</option>
                   [% END %]
                 </select>
