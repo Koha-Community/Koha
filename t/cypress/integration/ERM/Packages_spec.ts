@@ -38,12 +38,11 @@ describe("Package CRUD operations", () => {
         // GET package returns 500
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Packages").click();
         cy.get("main div[class='dialog alert']").contains(
-            /Something went wrong/
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // GET packages returns empty list
@@ -113,11 +112,10 @@ describe("Package CRUD operations", () => {
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/eholdings/local/packages", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: SyntaxError: Unexpected end of JSON input"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
@@ -187,11 +185,10 @@ describe("Package CRUD operations", () => {
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/erm/eholdings/local/packages/*", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.get("#packages_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: SyntaxError: Unexpected end of JSON input"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
@@ -304,11 +301,10 @@ describe("Package CRUD operations", () => {
         // Accept the confirmation dialog, get 500
         cy.intercept("DELETE", "/api/v1/erm/eholdings/local/packages/*", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: SyntaxError: Unexpected end of JSON input"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Accept the confirmation dialog, success!

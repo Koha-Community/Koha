@@ -24,13 +24,16 @@ class HttpClient {
             .then(response => {
                 if (!response.ok) {
                     return response.text().then(text => {
-                        let json = JSON.parse(text);
-                        let message =
-                            json.error ||
-                            json.errors.map(e => e.message).join("\n") ||
-                            json;
-                        console.log("Server returned an error:");
-                        console.log(response);
+                        let message;
+                        if (text) {
+                            let json = JSON.parse(text);
+                            message =
+                                json.error ||
+                                json.errors.map(e => e.message).join("\n") ||
+                                json;
+                        } else {
+                            message = response.statusText;
+                        }
                         throw new Error(message);
                     });
                 }
@@ -134,9 +137,7 @@ class HttpClient {
                     return response.headers.get("X-Total-Count");
                 }
             },
-            error => {
-                setError(error.toString());
-            }
+            error => {}
         );
     }
 

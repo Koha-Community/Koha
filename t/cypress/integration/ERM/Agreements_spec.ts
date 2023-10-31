@@ -132,12 +132,11 @@ describe("Agreement CRUD operations", () => {
         // GET agreements returns 500
         cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Agreements").click();
         cy.get("main div[class='dialog alert']").contains(
-            /Something went wrong/
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // GET agreements returns empty list
@@ -386,11 +385,10 @@ describe("Agreement CRUD operations", () => {
         // Submit the form, get 500
         cy.intercept("POST", "/api/v1/erm/agreements", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.get("#agreements_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: SyntaxError: Unexpected end of JSON input"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
@@ -577,7 +575,6 @@ describe("Agreement CRUD operations", () => {
         cy.intercept("PUT", "/api/v1/erm/agreements/*", req => {
             req.reply({
                 statusCode: 500,
-                error: "Something went wrong",
                 delay: 1000,
             });
         });
@@ -585,7 +582,7 @@ describe("Agreement CRUD operations", () => {
         cy.get("main div[class='modal_centered']").contains("Submitting...");
         cy.wait(1000);
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: SyntaxError: Unexpected end of JSON input"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Submit the form, success!
@@ -664,11 +661,10 @@ describe("Agreement CRUD operations", () => {
         // Accept the confirmation dialog, get 500
         cy.intercept("DELETE", "/api/v1/erm/agreements/*", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog alert']").contains(
-            "Something went wrong: SyntaxError: Unexpected end of JSON input"
+            "Something went wrong: Error: Internal Server Error"
         );
 
         // Accept the confirmation dialog, success!
