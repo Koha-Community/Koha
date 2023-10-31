@@ -38,19 +38,10 @@ describe("Processings", () => {
         cy.title().should("eq", "Koha staff interface");
         cy.intercept(
             "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationModule",
-            '{"value":"1"}'
+            "/api/v1/preservation/config",
+            '{"permissions":{"manage_sysprefs":"1"},"settings":{"enabled":"1","not_for_loan_default_train_in":"42","not_for_loan_waiting_list_in": "24"}}'
         );
-        cy.intercept(
-            "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationNotForLoanWaitingListIn",
-            '{"value":"24"}'
-        );
-        cy.intercept(
-            "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationNotForLoanDefaultTrainIn",
-            '{"value":"42"}'
-        );
+
         cy.intercept(
             "GET",
             "/api/v1/authorised_value_categories/NOT_LOAN/authorised_values",
