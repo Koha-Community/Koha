@@ -21,32 +21,31 @@ function get_items() {
         },
     ];
 }
+let config = {
+    permissions: { manage_sysprefs: "1" },
+    settings: {
+        enabled: "1",
+        not_for_loan_default_train_in: "42",
+        not_for_loan_waiting_list_in: "24",
+    },
+};
 describe("WaitingList", () => {
     beforeEach(() => {
         cy.login();
         cy.title().should("eq", "Koha staff interface");
         cy.intercept(
             "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationModule",
-            '{"value":"1"}'
-        );
-        cy.intercept(
-            "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationNotForLoanWaitingListIn",
-            '{"value":"24"}'
-        );
-        cy.intercept(
-            "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationNotForLoanDefaultTrainIn",
-            '{"value":"42"}'
+            "/api/v1/preservation/config",
+            JSON.stringify(config)
         );
     });
 
     it("List", () => {
+        config.settings.not_for_loan_waiting_list_in = "";
         cy.intercept(
             "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationNotForLoanWaitingListIn",
-            '{"value":""}'
+            "/api/v1/preservation/config",
+            JSON.stringify(config)
         );
         cy.visit("/cgi-bin/koha/preservation/home.pl");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
@@ -55,10 +54,11 @@ describe("WaitingList", () => {
             "You need to configure this module first."
         );
 
+        config.settings.not_for_loan_waiting_list_in = "42";
         cy.intercept(
             "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationNotForLoanWaitingListIn",
-            '{"value":"42"}'
+            "/api/v1/preservation/config",
+            JSON.stringify(config)
         );
         cy.visit("/cgi-bin/koha/preservation/home.pl");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
@@ -73,7 +73,6 @@ describe("WaitingList", () => {
         cy.visit("/cgi-bin/koha/preservation/waiting-list");
         cy.intercept("POST", "/api/v1/preservation/waiting-list/items", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.get("#waiting-list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
@@ -117,7 +116,6 @@ describe("WaitingList", () => {
         // Submit the form, get 500
         cy.intercept("DELETE", "/api/v1/preservation/waiting-list/items/*", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.get("#waiting-list table tbody tr:first").contains("Remove").click();
         cy.contains("Yes, remove").click();

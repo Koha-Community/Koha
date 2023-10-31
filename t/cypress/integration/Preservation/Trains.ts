@@ -208,19 +208,10 @@ describe("Trains", () => {
         cy.title().should("eq", "Koha staff interface");
         cy.intercept(
             "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationModule",
-            '{"value":"1"}'
+            "/api/v1/preservation/config",
+            '{"permissions":{"manage_sysprefs":"1"},"settings":{"enabled":"1","not_for_loan_default_train_in":"42","not_for_loan_waiting_list_in": "24"}}'
         );
-        cy.intercept(
-            "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationNotForLoanWaitingListIn",
-            '{"value":"24"}'
-        );
-        cy.intercept(
-            "GET",
-            "/cgi-bin/koha/svc/config/systempreferences/?pref=PreservationNotForLoanDefaultTrainIn",
-            '{"value":"42"}'
-        );
+
         cy.intercept(
             "GET",
             "/api/v1/authorised_value_categories/NOT_LOAN/authorised_values",
@@ -277,7 +268,7 @@ describe("Trains", () => {
         );
 
         // GET trains returns empty list
-        cy.intercept("GET", "/api/v1/*", []);
+        cy.intercept("GET", "/api/v1/preservation/trains*", []);
         cy.visit("/cgi-bin/koha/preservation/trains");
         cy.get("#trains_list").contains("There are no trains defined");
 
@@ -345,7 +336,15 @@ describe("Trains", () => {
         let train = get_train();
         let processings = get_processings();
         cy.intercept("GET", "/api/v1/preservation/trains/*", train);
-        cy.intercept("GET", "/api/v1/preservation/trains", [train]);
+        cy.intercept("GET", "/api/v1/preservation/trains*", {
+            statusCode: 200,
+            body: [train],
+            headers: {
+                "X-Base-Total-Count": "1",
+                "X-Total-Count": "1",
+            },
+        });
+
         cy.intercept("GET", "/api/v1/preservation/processings*", processings);
         cy.visit("/cgi-bin/koha/preservation/trains");
         cy.get("#trains_list table tbody tr:first").contains("Edit").click();
@@ -361,7 +360,6 @@ describe("Trains", () => {
         // Submit the form, get 500
         cy.intercept("PUT", "/api/v1/preservation/trains/*", {
             statusCode: 500,
-            error: "Something went wrong",
         });
         cy.get("#trains_add").contains("Submit").click();
         cy.get("main div[class='dialog alert']").contains(

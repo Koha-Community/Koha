@@ -97,7 +97,7 @@ export const routes = [
             },
             {
                 path: "/cgi-bin/koha/preservation/waiting-list",
-                title: $__("Waiting List"),
+                title: $__("Waiting list"),
                 icon: "fa fa-recycle",
                 is_end_node: true,
                 children: [
