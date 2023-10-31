@@ -36,8 +36,20 @@
                 name = firstname + ' ' + surname;
             }
 
+            if ( name.replace(' ', '').length == 0 ) {
+                return _("A patron from library %s".format(patron.library.name));
+            }
+
+            if ( config && config.hide_patron_name ) {
+                name = '';
+            }
+
             if ( config && config.display_cardnumber ) {
-                name = name + ' (' + escape_str(patron.cardnumber)  + ')';
+                if ( name.length > 0 ) {
+                    name = name + ' (' + escape_str(patron.cardnumber)  + ')';
+                } else {
+                    name = escape_str(patron.cardnumber);
+                }
             }
 
             if (config && config.url) {
@@ -47,10 +59,6 @@
                 else {
                     name = '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='+ encodeURIComponent(patron.patron_id) +'">' + name + '</a>';
                 }
-            }
-
-            if ( name.replace(' ', '').length == 0 ) {
-                name = _("A patron from library %s".format(patron.library.name));
             }
 
             return name;

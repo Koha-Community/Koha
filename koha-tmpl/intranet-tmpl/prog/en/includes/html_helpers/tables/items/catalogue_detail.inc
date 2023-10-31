@@ -76,6 +76,7 @@
 [% BLOCK build_items_table_js %]
 <script>
 
+    let hide_patron_name = [% !Koha.Preference('HidePatronName') ? 'false' : 'true' %];
     [% IF StaffDetailItemSelection %]
 
         let items_selection = {};
@@ -454,11 +455,11 @@
 
                         nodes += '<span>';
                         if ( row.checkout.onsite_checkout ) {
-                            let patron_to_html = $patron_to_html(row.checkout.patron, { url: true });
+                            let patron_to_html = $patron_to_html(row.checkout.patron, { url: true, display_cardnumber: true, hide_patron_name });
                             nodes += _("Currently in local use by %s").format(patron_to_html);
                         } else {
                             nodes += '<span class="datedue">';
-                            let patron_to_html = $patron_to_html(row.checkout.patron, { url: true });
+                            let patron_to_html = $patron_to_html(row.checkout.patron, { url: true, display_cardnumber: true, hide_patron_name });
                             nodes += _("Checked out to %s").format(patron_to_html);
                         }
                         nodes += ': ';
@@ -504,7 +505,7 @@
                                     [%# Hacky for patron_to_html in case we simply want to display the patron's library name %]
                                     row.first_hold.patron.library = { name: libraries_names.get(row.first_hold.patron.library_id) };
 
-                                    let patron_to_html = $patron_to_html(row.first_hold.patron, { url: true });
+                                    let patron_to_html = $patron_to_html(row.first_hold.patron, { url: true, display_cardnumber: true, hide_patron_name });
                                     nodes += ' <span class="heldfor">%s</span>'.format(_("Hold for: %s").format(patron_to_html));
                                 }
                             [% END %]
@@ -521,7 +522,7 @@
                                 [%# Hacky for patron_to_html in case we simply want to display the patron's library name %]
                                 row.recall.patron.library = { name: libraries_names.get(row.recall.patron.library_id) };
 
-                                let patron_to_html = $patron_to_html(row.recall.patron, {url: true });
+                                let patron_to_html = $patron_to_html(row.recall.patron, {url: true, display_cardnumber: true, hide_patron_name });
                                 nodes += '<span>%s</span>'.format(_("recalled by %s on %s").format(patron_to_html, $date(row.recall.created_date)))
                             }
                         }
