@@ -1040,9 +1040,11 @@
 
         // On-site checkout
         function toggle_onsite_checkout(){
+            const duedatespec_fp = document.querySelector("#duedatespec")._flatpickr;
             if ( $("#onsite_checkout").prop('checked') ) {
-                const duedatespec_fp = document.querySelector("#duedatespec")._flatpickr;
                 duedatespec_fp.setDate("[% today_due_date_and_time | $KohaDates dateformat => 'iso', with_hours => 1 %]");
+            } else {
+                duedatespec_fp.setDate("");
             }
         }
 
