@@ -473,8 +473,10 @@ subtest 'EmailPurchaseSuggestions' => sub {
         'New suggestion does not send an email when EmailPurchaseSuggestions disabled' );
 
     # EmailPurchaseSuggestions set to BranchEmailAddress
-    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions",
-        "BranchEmailAddress" );
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "BranchEmailAddress" );
+    t::lib::Mocks::mock_preference( "ReplytoDefault", "" );
+    t::lib::Mocks::mock_preference( "EmailAddressForSuggestions", "" );
+    Koha::Libraries->find('CPL')->update( { branchemail => '', branchreplyto => '' } );
     Koha::Suggestion->new($my_suggestion)->store;
 
     t::lib::Mocks::mock_preference( "ReplytoDefault", 'library@b.c' );
