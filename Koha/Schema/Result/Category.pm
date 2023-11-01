@@ -162,6 +162,14 @@ Default privacy setting for this patron category
 
 produce a warning for this patron category if this item has previously been checked out to this patron if 'yes', not if 'no', defer to syspref setting if 'inherit'.
 
+=head2 can_place_ill_in_opac
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
+
+can this patron category place interlibrary loan requests
+
 =head2 can_be_guarantee
 
   data_type: 'tinyint'
@@ -259,6 +267,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 7,
   },
+  "can_place_ill_in_opac",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "can_be_guarantee",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "reset_password",
@@ -378,8 +388,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-08 17:35:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B89OgAY/KnJbQaHpu5Xdfg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-01 20:49:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:r0Mftlw4TU7x+Ze2pAlwYQ
 
 sub koha_object_class {
     'Koha::Patron::Category';
@@ -390,6 +400,7 @@ sub koha_objects_class {
 
 __PACKAGE__->add_columns(
     '+can_be_guarantee'                  => { is_boolean => 1 },
+    '+can_place_ill_in_opac'             => { is_boolean => 1 },
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
     '+require_strong_password'           => { is_boolean => 1 },
 );
