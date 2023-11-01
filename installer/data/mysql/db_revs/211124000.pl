@@ -5,3 +5,4 @@ return {
     description => 'Koha 21.11.24 release',
     up => sub {},
 }
+
