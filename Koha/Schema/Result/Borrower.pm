@@ -647,6 +647,14 @@ flag for allowing auto-renewal
 
 useful for reporting purposes
 
+=head2 protected
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+boolean flag to mark selected patrons as protected from deletion
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -850,6 +858,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "primary_contact_method",
   { data_type => "varchar", is_nullable => 1, size => 45 },
+  "protected",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -2133,8 +2143,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-10 14:16:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nIMnqyBVBam7NvIx4aDfHw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-01 18:21:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5wLpO0InLt7EnwlICnhqHg
 
 __PACKAGE__->has_many(
   "restrictions",

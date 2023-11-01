@@ -644,6 +644,14 @@ flag for allowing auto-renewal
 
 useful for reporting purposes
 
+=head2 protected
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+boolean flag to mark selected patrons as protected from deletion
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -835,11 +843,13 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "primary_contact_method",
   { data_type => "varchar", is_nullable => 1, size => 45 },
+  "protected",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-06 15:46:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dqGu9iDgO+u09l9X1G0NuA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-01 18:21:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WdNGUFdglTb3Heu+VjLWFw
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
