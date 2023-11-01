@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "26170",
-    description => "Create system patrons that cannot be (easily) deleted via the web UI",
+    description => "Add protected status for patrons",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -14,8 +14,9 @@ return {
                 AFTER `primary_contact_method`;
             }
             );
+            say $out "Added column 'borrowers.protected'";
         }
-        say $out "Added column borrowers.protected";
+
         if ( !column_exists( 'deletedborrowers', 'protected' ) ) {
             $dbh->do(
                 q{
@@ -24,7 +25,7 @@ return {
                 AFTER `primary_contact_method`;
             }
             );
+            say $out "Added column 'deletedborrowers.protected'";
         }
-        say $out "Added column deletedborrowers.protected";
     },
 };
