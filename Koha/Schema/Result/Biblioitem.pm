@@ -87,7 +87,7 @@ ISSN (MARC21 022$a)
   data_type: 'text'
   is_nullable: 1
 
-publisher (MARC21 260$b and 246$b)
+publisher (MARC21 260$b and 264$b)
 
 =head2 volumedate
 
@@ -352,8 +352,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-06-26 12:47:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6a9kLpJoQrsMu+CIx7KMBg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-01 18:20:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fNII5fQeY3BY5JPXOMY48Q
 
 __PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
 
