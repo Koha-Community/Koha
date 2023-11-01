@@ -832,7 +832,8 @@ subtest 'delete() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access test' => sub {
-        plan tests => 18;
+
+        plan tests => 21;
 
         $schema->storage->txn_begin;
 
@@ -911,6 +912,18 @@ subtest 'delete() tests' => sub {
 
         # Remove guarantee
         $patron->guarantee_relationships->delete;
+
+        $patron->protected(1)->store();
+
+        $t->delete_ok( "//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber )
+            ->status_is( 409, 'Protected patron cannot be deleted' )->json_is(
+            {
+                error      => 'Protected patrons cannot be deleted',
+                error_code => 'is_protected'
+            }
+            );
+
+        $patron->protected(0)->store();
 
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
           ->status_is(204, 'SWAGGER3.2.4')
