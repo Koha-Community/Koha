@@ -1,82 +1,82 @@
 [%- BLOCK patron_fields -%]
-     [%- SWITCH name -%]
-     [%- CASE 'standard' -%]<span>Standard</span>
-     [%- CASE 'full_address' -%]<span>Full address</span>
-     [%- CASE 'all_emails' -%]<span>All emails</span>
-     [%- CASE 'all_phones' -%]<span>All phones</span>
-     [%- CASE 'borrowernumber' -%]<span>Borrowernumber</span>
-     [%- CASE 'cardnumber' -%]<span>Card number</span>
-     [%- CASE 'surname' -%]<span>Surname</span>
-     [%- CASE 'firstname' -%]<span>First name</span>
-     [%- CASE 'middle_name' -%]<span>Middle name</span>
-     [%- CASE 'title' -%]<span>Salutation</span>
-     [%- CASE 'othernames' -%]<span>Other name</span>
-     [%- CASE 'initials' -%]<span>Initials</span>
-     [%- CASE 'pronouns' -%]<span>Pronouns</span>
-     [%- CASE 'streetnumber' -%]<span>Street number</span>
-     [%- CASE 'streettype' -%]<span>Street type</span>
-     [%- CASE 'address' -%]<span>Address</span>
-     [%- CASE 'address2' -%]<span>Address 2</span>
-     [%- CASE 'city' -%]<span>City</span>
-     [%- CASE 'state' -%]<span>State</span>
-     [%- CASE 'zipcode' -%]<span>ZIP/Postal code</span>
-     [%- CASE 'country' -%]<span>Country</span>
-     [%- CASE 'email' -%]<span>Primary email</span>
-     [%- CASE 'phone' -%]<span>Primary phone</span>
-     [%- CASE 'mobile' -%]<span>Mobile phone</span>
-     [%- CASE 'fax' -%]<span>Fax</span>
-     [%- CASE 'emailpro' -%]<span>Secondary email</span>
-     [%- CASE 'phonepro' -%]<span>Secondary phone</span>
-     [%- CASE 'B_streetnumber' -%]<span>Alternate street number</span>
-     [%- CASE 'B_streettype' -%]<span>Alternate street type</span>
-     [%- CASE 'B_address' -%]<span>Alternate address</span>
-     [%- CASE 'B_address2' -%]<span>Alternate address line 2</span>
-     [%- CASE 'B_city' -%]<span>Alternate city</span>
-     [%- CASE 'B_state' -%]<span>Alternate state</span>
-     [%- CASE 'B_zipcode' -%]<span>Alternate zip code</span>
-     [%- CASE 'B_country' -%]<span>Alternate country</span>
-     [%- CASE 'B_email' -%]<span>Alternate email</span>
-     [%- CASE 'B_phone' -%]<span>Alternate phone</span>
-     [%- CASE 'dateofbirth' -%]<span>Date of birth</span>
-     [%- CASE 'branchcode' -%]<span>Library (code)</span>
-     [%- CASE 'categorycode' -%]<span>Category (code)</span>
-     [%- CASE 'dateenrolled' -%]<span>Registration date</span>
-     [%- CASE 'dateexpiry' -%]<span>Expiry date</span>
-     [%- CASE 'gonenoaddress' -%]<span>Gone no address</span>
-     [%- CASE 'lost' -%]<span>Lost card</span>
-     [%- CASE 'debarred' -%]<span>Restricted</span>
-     [%- CASE 'debarredcomment' -%]<span>Restriction reason</span>
-     [%- CASE 'contactname' -%]<span>Guarantor surname</span>
-     [%- CASE 'contactfirstname' -%]<span>Guarantor firstname</span>
-     [%- CASE 'contacttitle' -%]<span>Guarantor title</span>
-     [%- CASE 'guarantorid' -%]<span>Guarantor ID</span>
-     [%- CASE 'borrowernotes' -%]<span>Circulation note</span>
-     [%- CASE 'relationship' -%]<span>Guarantor relationship</span>
-     [%- CASE 'sex' -%]<span>Gender</span>
-     [%- CASE 'flags' -%]<span>Permissions (code)</span>
-     [%- CASE 'userid' -%]<span>Username</span>
-     [%- CASE 'opacnote' -%]<span>OPAC note</span>
-     [%- CASE 'contactnote' -%]<span>Contact note</span>
-     [%- CASE 'sort1' -%]<span>Sort 1</span>
-     [%- CASE 'sort2' -%]<span>Sort 2</span>
-     [%- CASE 'altcontactfirstname' -%]<span>Alternate contact first name</span>
-     [%- CASE 'altcontactsurname' -%]<span>Alternate contact surname</span>
-     [%- CASE 'altcontactaddress1' -%]<span>Alternate contact address</span>
-     [%- CASE 'altcontactaddress2' -%]<span>Alternate contact address 2</span>
-     [%- CASE 'altcontactaddress3' -%]<span>Alternate contact city</span>
-     [%- CASE 'altcontactstate' -%]<span>Alternate contact state</span>
-     [%- CASE 'altcontactzipcode' -%]<span>Alternate contact ZIP/postal code</span>
-     [%- CASE 'altcontactcountry' -%]<span>Alternate contact country</span>
-     [%- CASE 'altcontactphone' -%]<span>Alternate contact phone</span>
-     [%- CASE 'smsalertnumber' -%]<span>SMS alert number</span>
-     [%- CASE 'sms_provider_id' -%]<span>SMS provider</span>
-     [%- CASE 'privacy' -%]<span>Privacy (code)</span>
-     [%- CASE 'privacy_guarantor_checkouts' -%]<span>Guarantor can view checkouts</span>
-     [%- CASE 'updated_on' -%]<span>Last updated</span>
-     [%- CASE 'lastseen' -%]<span>Last seen</span>
-     [%- CASE 'checkprevcheckout' -%]<span>Check previous checkout</span>
-     [%- CASE DEFAULT -%]
-     [%- END -%]
+    [%- SWITCH name -%]
+    [%- CASE 'standard' -%][% t("Standard") | html %]
+    [%- CASE 'full_address' -%][% t("Full address") | html %]
+    [%- CASE 'all_emails' -%][% t("All emails") | html %]
+    [%- CASE 'all_phones' -%][% t("All phones") | html %]
+    [%- CASE 'borrowernumber' -%][% t("Borrowernumber") | html %]
+    [%- CASE 'cardnumber' -%][% t("Card number") | html %]
+    [%- CASE 'surname' -%][% t("Surname") | html %]
+    [%- CASE 'firstname' -%][% t("First name") | html %]
+    [%- CASE 'middle_name' -%][% t("Middle name") | html %]
+    [%- CASE 'title' -%][% t("Salutation") | html %]
+    [%- CASE 'othernames' -%][% t("Other name") | html %]
+    [%- CASE 'initials' -%][% t("Initials") | html %]
+    [%- CASE 'pronouns' -%][% t("Pronouns") | html %]
+    [%- CASE 'streetnumber' -%][% t("Street number") | html %]
+    [%- CASE 'streettype' -%][% t("Street type") | html %]
+    [%- CASE 'address' -%][% t("Address") | html %]
+    [%- CASE 'address2' -%][% t("Address 2") | html %]
+    [%- CASE 'city' -%][% t("City") | html %]
+    [%- CASE 'state' -%][% t("State") | html %]
+    [%- CASE 'zipcode' -%][% t("ZIP/Postal code") | html %]
+    [%- CASE 'country' -%][% t("Country") | html %]
+    [%- CASE 'email' -%][% t("Primary email") | html %]
+    [%- CASE 'phone' -%][% t("Primary phone") | html %]
+    [%- CASE 'mobile' -%][% t("Mobile phone") | html %]
+    [%- CASE 'fax' -%][% t("Fax") | html %]
+    [%- CASE 'emailpro' -%][% t("Secondary email") | html %]
+    [%- CASE 'phonepro' -%][% t("Secondary phone") | html %]
+    [%- CASE 'B_streetnumber' -%][% t("Alternate street number") | html %]
+    [%- CASE 'B_streettype' -%][% t("Alternate street type") | html %]
+    [%- CASE 'B_address' -%][% t("Alternate address") | html %]
+    [%- CASE 'B_address2' -%][% t("Alternate address line 2") | html %]
+    [%- CASE 'B_city' -%][% t("Alternate city") | html %]
+    [%- CASE 'B_state' -%][% t("Alternate state") | html %]
+    [%- CASE 'B_zipcode' -%][% t("Alternate zip code") | html %]
+    [%- CASE 'B_country' -%][% t("Alternate country") | html %]
+    [%- CASE 'B_email' -%][% t("Alternate email") | html %]
+    [%- CASE 'B_phone' -%][% t("Alternate phone") | html %]
+    [%- CASE 'dateofbirth' -%][% t("Date of birth") | html %]
+    [%- CASE 'branchcode' -%][% t("Library (code)") | html %]
+    [%- CASE 'categorycode' -%][% t("Category (code)") | html %]
+    [%- CASE 'dateenrolled' -%][% t("Registration date") | html %]
+    [%- CASE 'dateexpiry' -%][% t("Expiry date") | html %]
+    [%- CASE 'gonenoaddress' -%][% t("Gone no address") | html %]
+    [%- CASE 'lost' -%][% t("Lost card") | html %]
+    [%- CASE 'debarred' -%][% t("Restricted") | html %]
+    [%- CASE 'debarredcomment' -%][% t("Restriction reason") | html %]
+    [%- CASE 'contactname' -%][% t("Guarantor surname") | html %]
+    [%- CASE 'contactfirstname' -%][% t("Guarantor firstname") | html %]
+    [%- CASE 'contacttitle' -%][% t("Guarantor title") | html %]
+    [%- CASE 'guarantorid' -%][% t("Guarantor ID") | html %]
+    [%- CASE 'borrowernotes' -%][% t("Circulation note") | html %]
+    [%- CASE 'relationship' -%][% t("Guarantor relationship") | html %]
+    [%- CASE 'sex' -%][% t("Gender") | html %]
+    [%- CASE 'flags' -%][% t("Permissions (code)") | html %]
+    [%- CASE 'userid' -%][% t("Username") | html %]
+    [%- CASE 'opacnote' -%][% t("OPAC note") | html %]
+    [%- CASE 'contactnote' -%][% t("Contact note") | html %]
+    [%- CASE 'sort1' -%][% t("Sort 1") | html %]
+    [%- CASE 'sort2' -%][% t("Sort 2") | html %]
+    [%- CASE 'altcontactfirstname' -%][% t("Alternate contact first name") | html %]
+    [%- CASE 'altcontactsurname' -%][% t("Alternate contact surname") | html %]
+    [%- CASE 'altcontactaddress1' -%][% t("Alternate contact address") | html %]
+    [%- CASE 'altcontactaddress2' -%][% t("Alternate contact address 2") | html %]
+    [%- CASE 'altcontactaddress3' -%][% t("Alternate contact city") | html %]
+    [%- CASE 'altcontactstate' -%][% t("Alternate contact state") | html %]
+    [%- CASE 'altcontactzipcode' -%][% t("Alternate contact ZIP/postal code") | html %]
+    [%- CASE 'altcontactcountry' -%][% t("Alternate contact country") | html %]
+    [%- CASE 'altcontactphone' -%][% t("Alternate contact phone") | html %]
+    [%- CASE 'smsalertnumber' -%][% t("SMS alert number") | html %]
+    [%- CASE 'sms_provider_id' -%][% t("SMS provider") | html %]
+    [%- CASE 'privacy' -%][% t("Privacy (code)") | html %]
+    [%- CASE 'privacy_guarantor_checkouts' -%][% t("Guarantor can view checkouts") | html %]
+    [%- CASE 'updated_on' -%][% t("Last updated") | html %]
+    [%- CASE 'lastseen' -%][% t("Last seen") | html %]
+    [%- CASE 'checkprevcheckout' -%][% t("Check previous checkout") | html %]
+    [%- CASE DEFAULT -%]
+    [%- END -%]
 [%- END -%]
 [%- BLOCK patron_fields_dropdown -%]
     [% IF search_box %]
