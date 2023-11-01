@@ -99,16 +99,16 @@ Patrons:
                0: "Don't"
          - charge a fee when a patron changes to a category with an enrollment fee.
      -
-         - Select which patron activities should be tracked to signify patron activity. The first time each day that one of these activities occurs, borrowers.lastseen will update with the current date and time.
+         - Select which patron activities should be tracked to signify patron activity. Each time that one of these activities occurs, borrowers.lastseen will update with the current date and time.
          - pref: TrackLastPatronActivityTriggers
            multiple:
-               login: "Login"
-               connection: "Connection to Koha via SIP or ILSDI"
+               login: "Logging in"
+               connection: "Connecting to Koha via SIP or ILSDI"
                check_out: "Checking out an item"
                renewal: "Renewing an item"
-               check_in: "Returning an item"
+               check_in: "Checking in an item"
                hold: "Placing a hold on an item"
-               article: "Places an article request"
+               article: "Placing an article request"
      -
          - pref: AutoApprovePatronProfileSettings
            choices:
