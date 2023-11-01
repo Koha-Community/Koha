@@ -1645,7 +1645,10 @@ sub get_enrollable_clubs {
 
 =head3 get_lists_with_patron
 
-my @lists = $patron->get_lists_with_patron;
+    my @lists = $patron->get_lists_with_patron;
+
+FIXME: This method returns a DBIC resultset instead of a Koha::Objects-based
+iterator.
 
 =cut
 
