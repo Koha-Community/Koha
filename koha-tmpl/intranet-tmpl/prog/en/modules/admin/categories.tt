@@ -386,9 +386,9 @@
                 [% END %]
                 [% IF ( Koha.Preference('ILLModule') ) %]
                     <li>
-                        <label for="canplaceillopac">Can place ILL in OPAC: </label>
-                        <select id="canplaceillopac" name="canplaceillopac">
-                            [% IF category.canplaceillopac %]
+                        <label for="can_place_ill_in_opac">Can place ILL in OPAC: </label>
+                        <select id="can_place_ill_in_opac" name="can_place_ill_in_opac">
+                            [% IF category.can_place_ill_in_opac %]
                                 <option value="0">No</option>
                                 <option value="1" selected="selected">Yes</option>
                             [% ELSE %]
@@ -507,7 +507,7 @@
             [% IF ( Koha.Preference('ILLModule') ) %]
                 <tr>
                     <th scope="row">Can place ILL in OPAC: </th>
-                    <td>[% IF category.canplaceillopac %]Yes[% ELSE %]No[% END %]</td>
+                    <td>[% IF category.can_place_ill_in_opac %]Yes[% ELSE %]No[% END %]</td>
                 </tr>
             [% END %]
             <tr><th scope="row">Can be guarantee</th><td>[% IF category.can_be_guarantee %]Yes[% ELSE %]No[% END %]</td></tr>
@@ -697,7 +697,7 @@
                           </td>
                         [% END %]
                          [% IF ( Koha.Preference('ILLModule') ) %]
-                            <td>[% IF category.canplaceillopac %] Yes [% ELSE %] No [% END %]</td>
+                            <td>[% IF category.can_place_ill_in_opac %] Yes [% ELSE %] No [% END %]</td>
                         [% END %]
                         <td>[% IF category.can_be_guarantee %] Yes [% ELSE %] No [% END %]</td>
                         <td>

@@ -72,7 +72,7 @@ if ( $illrequest_id = $params->{illrequest_id} ) {
     }
 }
 
-if ( ( $op eq 'create' || $op eq 'cancreq' || $op eq 'update' ) && !$patron->_result->categorycode->canplaceillopac ) {
+if ( ( $op eq 'create' || $op eq 'cancreq' || $op eq 'update' ) && !$patron->_result->categorycode->can_place_ill_in_opac ) {
     print $query->redirect('/cgi-bin/koha/errors/403.pl');
     exit;
 }
@@ -179,7 +179,7 @@ if ( $op eq 'list' ) {
 }
 
 $template->param(
-    canplaceillopac => $patron->_result->categorycode->canplaceillopac,
+    can_place_ill_in_opac => $patron->_result->categorycode->can_place_ill_in_opac,
     message         => $params->{message},
     illrequestsview => 1,
     method          => $op

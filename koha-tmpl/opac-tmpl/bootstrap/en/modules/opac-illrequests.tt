@@ -112,7 +112,7 @@
                             <h1>Interlibrary loan requests</h1>
                             [% INCLUDE messages %]
 
-                            [% IF canplaceillopac %]
+                            [% IF can_place_ill_in_opac %]
                                 <div id="illrequests-create-button" class="dropdown btn-group">
                                     [% IF backends.size > 1 %]
                                         <button class="btn btn-primary dropdown-toggle" type="button" id="ill-backend-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -234,7 +234,7 @@
                                         </div>
                                     [% END %]
                                 </div>
-                            [% IF canplaceillopac %]
+                            [% IF can_place_ill_in_opac %]
                                 <fieldset class="action illrequest-actions">
                                     <input type="hidden" name="illrequest_id" value="[% request.illrequest_id | html %]" />
                                     <input type="hidden" name="method" value="update" />

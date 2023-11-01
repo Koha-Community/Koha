@@ -6,10 +6,10 @@ return {
     up => sub {
         my ($args) = @_;
         my ($dbh, $out) = @$args{qw(dbh out)};
-        unless ( column_exists('categories', 'canplaceillopac') ) {
+        unless ( column_exists('categories', 'can_place_ill_in_opac') ) {
             $dbh->do(q{
                 ALTER TABLE `categories`
-                ADD COLUMN `canplaceillopac` TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'can this patron category place interlibrary loan requests'
+                ADD COLUMN `can_place_ill_in_opac` TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'can this patron category place interlibrary loan requests'
                 AFTER `checkprevcheckout`;
             });
         }
