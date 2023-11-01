@@ -6,7 +6,7 @@
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Editing issue note for [% title | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+<title>Editing checkout note for [% title | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -23,7 +23,7 @@
                 <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
             </li>
             <li class="breadcrumb-item active">
-                <a href="#" aria-current="page">Editing issue note for '[% title | html %]' [% author | html %]</a>
+                <a href="#" aria-current="page">Editing checkout note for '[% title | html %]' [% author | html %]</a>
             </li>
         </ol>
     </nav> <!-- /#breadcrumbs -->
@@ -37,12 +37,12 @@
             </div>
             <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="issuenote" class="maincontent">
-                    <h1>Editing issue note for [% title | html %] [% author | html %]</h1>
+                    <h1>Editing checkout note for [% title | html %] [% author | html %]</h1>
                         [% IF not(Koha.Preference("AllowCheckoutNotes")) %]
-                            Issue notes have not been enabled. Please contact the library.
+                            Checkout notes have not been enabled. Please contact the library.
                         [% ELSE %]
                             <form id="issue-note" action="/cgi-bin/koha/opac-issue-note.pl" method="post">
-                                <legend class="sr-only">Edit issue note</legend>
+                                <legend class="sr-only">Edit checkout note</legend>
                                 <fieldset>
                                     <label for="note" class="required">Note:</label>
                                     <input type="text" name="note" value="[% note | html %]">
