@@ -317,9 +317,9 @@ if (@$barcodes) {
         };
 
         # always check for blockers on issuing
-        my ( $error, $question, $alerts, $messages );
+        my ( $error, $needsconfirmation, $alerts, $messages );
         try {
-            ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
+            ( $error, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued(
                 $patron,
                 $barcode, $datedue,
                 $inprocess,
@@ -403,7 +403,7 @@ if (@$barcodes) {
         }
     }
 
-    delete $question->{'DEBT'} if ($debt_confirmed);
+    delete $needsconfirmation->{'DEBT'} if ($debt_confirmed);
 
     if( $item and ( !$blocker or $force_allow_issue ) ){
         my $confirm_required = 0;
@@ -416,15 +416,15 @@ if (@$barcodes) {
             $template_params->{itemhomebranch} = $item->homebranch;
 
             # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
-            foreach my $needsconfirmation ( keys %$question ) {
-                $template_params->{$needsconfirmation} = $$question{$needsconfirmation};
+            foreach my $needsconfirmation_key ( keys %$needsconfirmation ) {
+                $template_params->{$needsconfirmation_key} = $needsconfirmation->{$needsconfirmation_key};
                 $template_params->{getTitleMessageIteminfo} = $biblio->title;
                 $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
                 $template_params->{NEEDSCONFIRMATION} = 1;
                 $confirm_required = 1;
                 if ( $needsconfirmation eq 'BOOKED_TO_ANOTHER' ) {
                     my $reduceddue =
-                        dt_from_string( $$question{$needsconfirmation}->start_date )->subtract( days => 1 );
+                        dt_from_string( $$needsconfirmation{$needsconfirmation_key}->start_date )->subtract( days => 1 );
                     $template_params->{reduceddue} = $reduceddue;
                 }
             }
@@ -445,7 +445,7 @@ if (@$barcodes) {
             }
 
             # If booked (alerts or confirmation) update datedue to end of booking
-            if ( my $booked = $question->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
+            if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
                 $datedue = $booked->end_date;
             }
             my $issue = AddIssue(
@@ -464,10 +464,10 @@ if (@$barcodes) {
         }
     }
 
-    if ($question->{RESERVE_WAITING} or $question->{RESERVED} or $question->{TRANSFERRED} or $question->{PROCESSING}){
+    if ($needsconfirmation->{RESERVE_WAITING} or $needsconfirmation->{RESERVED} or $needsconfirmation->{TRANSFERRED} or $needsconfirmation->{PROCESSING}){
         $template->param(
-            reserveborrowernumber => $question->{'resborrowernumber'},
-            reserve_id => $question->{reserve_id},
+            reserveborrowernumber => $needsconfirmation->{'resborrowernumber'},
+            reserve_id => $needsconfirmation->{reserve_id},
         );
     }
 
