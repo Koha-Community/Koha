@@ -6,7 +6,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE To %]
-
+[% USE AuthorisedValues %]
 [% SET search_results_block_id = 'searchresults' %]
 
 [%# Display a simple form %]
@@ -308,6 +308,10 @@
         [% CASE %]
             let patron_search_url = '/api/v1/patrons';
         [% END %]
+
+        const av_bsort1= new Map([% To.json(AuthorisedValues.Get('Bsort1')) | $raw %].map( av => [av.authorised_value, av.lib]));
+        const av_bsort2= new Map([% To.json(AuthorisedValues.Get('Bsort2')) | $raw %].map( av => [av.authorised_value, av.lib]));
+
         $(document).ready(function(){
 
             let parent_block = $("#[% search_results_block_id | html %]");
@@ -623,7 +627,8 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    return escape_str(data);
+                                    let bsort2_lib = av_bsort2.get( data.toString() ) || data;
+                                    return escape_str( bsort2_lib );
                                 }
                             }
 
@@ -633,7 +638,8 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    return escape_str(data);
+                                    let bsort1_lib = av_bsort1.get( data.toString() ) || data;
+                                    return escape_str( bsort1_lib );
                                 }
                             }
 
