@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 30;
+use Test::More tests => 31;
 use Test::Exception;
 use Test::Warn;
 use Time::Fake;
@@ -29,6 +29,7 @@ use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::ArticleRequests;
 use Koha::Patrons;
+use Koha::List::Patron qw(AddPatronList AddPatronsToList);
 use Koha::Patron::Relationships;
 use C4::Circulation qw( AddIssue AddReturn );
 
@@ -2112,5 +2113,35 @@ subtest 'update_lastseen tests' => sub {
     is( $patron->lastseen, undef, 'Patron should still have last seen unchanged when TrackLastPatronActivityTriggers is unset' );
 
     Time::Fake->reset;
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_lists_with_patron() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $owner = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $list_1 = AddPatronList( { name => ' Ya',  owner => $owner->id } );
+    my $list_2 = AddPatronList( { name => 'Hey!', owner => $owner->id } );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my @lists = $patron->get_lists_with_patron();
+
+    is( scalar @lists, 0, 'Patron not included in any list' );
+
+    AddPatronsToList( { list => $list_1, cardnumbers => [ $patron->cardnumber ] } );
+    AddPatronsToList( { list => $list_2, cardnumbers => [ $patron->cardnumber ] } );
+
+    @lists = $patron->get_lists_with_patron();
+    foreach my $list (@lists) {
+        is( ref($list), 'Koha::Schema::Result::PatronList', 'Type is correct' );
+    }
+
+    is( join( ' ', map { $_->name } @lists ), ' Ya Hey!', 'Lists are the correct ones, and sorted alphabetically' );
+
     $schema->storage->txn_rollback;
 };
