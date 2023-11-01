@@ -480,6 +480,9 @@ my $itemnumber2 = Koha::Item->new(
     }
 )->store->itemnumber;
 
+t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', q{} );
+t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin',  q{} );
+
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', q{} );
 AddReturn( 'barcode_4', $branchcode_1 );
 my $item2 = Koha::Items->find( $itemnumber2 );
@@ -655,49 +658,79 @@ my $itemnumber5 = Koha::Item->new(
 )->store->itemnumber;
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', q{} );
-t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', q{} );
-AddIssue( $patron_1, 'barcode_7');
-my $item5 = Koha::Items->find( $itemnumber5 );
+t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin',  q{} );
+AddIssue( $patron_1, 'barcode_7' );
+my $item5 = Koha::Items->find($itemnumber5);
 ok( $item5->location eq 'FIC', 'UpdateItemLocationOnCheckout does not modify value when not enabled' );
 
 #---
 AddReturn( 'barcode_7', $branchcode_1 );
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', 'FIC: GEN' );
-$log_count_before = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
+$log_count_before = $schema->resultset('ActionLog')->search( { module => 'CATALOGUING' } )->count();
 AddIssue( $patron_1, 'barcode_7' );
-$item5 = Koha::Items->find( $itemnumber5 );
-is( $item5->location, 'GEN', q{UpdateItemLocationOnCheckout updates location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
-is( $item5->permanent_location, 'GEN', q{UpdateItemLocationOnCheckout updates permanent_location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
-$log_count_after = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
-is($log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckout is not logged");
+$item5 = Koha::Items->find($itemnumber5);
+is(
+    $item5->location, 'GEN',
+    q{UpdateItemLocationOnCheckout updates location value from 'FIC' to 'GEN' with setting "FIC: GEN"}
+);
+is(
+    $item5->permanent_location, 'GEN',
+    q{UpdateItemLocationOnCheckout updates permanent_location value from 'FIC' to 'GEN' with setting "FIC: GEN"}
+);
+$log_count_after = $schema->resultset('ActionLog')->search( { module => 'CATALOGUING' } )->count();
+is( $log_count_before, $log_count_after, "Change from UpdateNotForLoanStatusOnCheckout is not logged" );
 AddReturn( 'barcode_7', $branchcode_1 );
 AddIssue( $patron_1, 'barcode_7' );
-$item5 = Koha::Items->find( $itemnumber5 );
-ok( $item5->location eq 'GEN', q{UpdateItemLocationOnCheckout does not update location value from 'GEN' with setting "FIC: GEN"} );
+$item5 = Koha::Items->find($itemnumber5);
+ok(
+    $item5->location eq 'GEN',
+    q{UpdateItemLocationOnCheckout does not update location value from 'GEN' with setting "FIC: GEN"}
+);
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', '_ALL_: CART' );
 AddReturn( 'barcode_7', $branchcode_1 );
 AddIssue( $patron_1, 'barcode_7' );
-$item5 = Koha::Items->find( $itemnumber5 );
-ok( $item5->location eq 'CART', q{UpdateItemLocationOnCheckout updates location value from 'GEN' with setting "_ALL_: CART"} );
-ok( $item5->permanent_location eq 'GEN', q{UpdateItemLocationOnCheckout does not update permanent_location value from 'GEN' with setting "_ALL_: CART"} );
+$item5 = Koha::Items->find($itemnumber5);
+ok(
+    $item5->location eq 'CART',
+    q{UpdateItemLocationOnCheckout updates location value from 'GEN' with setting "_ALL_: CART"}
+);
+ok(
+    $item5->permanent_location eq 'GEN',
+    q{UpdateItemLocationOnCheckout does not update permanent_location value from 'GEN' with setting "_ALL_: CART"}
+);
 
 $item5->location('GEN')->store;
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', "GEN: _BLANK_\n_BLANK_: PROC\nPROC: _PERM_" );
 AddReturn( 'barcode_7', $branchcode_1 );
 AddIssue( $patron_1, 'barcode_7' );
-$item5 = Koha::Items->find( $itemnumber5 );
-ok( $item5->location eq '', q{UpdateItemLocationOnCheckout updates location value from 'GEN' to '' with setting "GEN: _BLANK_"} );
+$item5 = Koha::Items->find($itemnumber5);
+ok(
+    $item5->location eq '',
+    q{UpdateItemLocationOnCheckout updates location value from 'GEN' to '' with setting "GEN: _BLANK_"}
+);
 AddReturn( 'barcode_7', $branchcode_1 );
 AddIssue( $patron_1, 'barcode_7' );
-$item5 = Koha::Items->find( $itemnumber5 );
-ok( $item5->location eq 'PROC' , q{UpdateItemLocationOnCheckout updates location value from '' to 'PROC' with setting "_BLANK_: PROC"} );
-ok( $item5->permanent_location eq '' , q{UpdateItemLocationOnCheckout does not update permanent_location value from '' to 'PROC' with setting "_BLANK_: PROC"} );
+$item5 = Koha::Items->find($itemnumber5);
+ok(
+    $item5->location eq 'PROC',
+    q{UpdateItemLocationOnCheckout updates location value from '' to 'PROC' with setting "_BLANK_: PROC"}
+);
+ok(
+    $item5->permanent_location eq '',
+    q{UpdateItemLocationOnCheckout does not update permanent_location value from '' to 'PROC' with setting "_BLANK_: PROC"}
+);
 AddReturn( 'barcode_7', $branchcode_1 );
 AddIssue( $patron_1, 'barcode_7' );
-$item5 = Koha::Items->find( $itemnumber5 );
-ok( $item5->location eq '' , q{UpdateItemLocationOnCheckout updates location value from 'PROC' to '' with setting "PROC: _PERM_" } );
-ok( $item5->permanent_location eq '' , q{UpdateItemLocationOnCheckout does not update permanent_location from '' with setting "PROC: _PERM_" } );
+$item5 = Koha::Items->find($itemnumber5);
+ok(
+    $item5->location eq '',
+    q{UpdateItemLocationOnCheckout updates location value from 'PROC' to '' with setting "PROC: _PERM_" }
+);
+ok(
+    $item5->permanent_location eq '',
+    q{UpdateItemLocationOnCheckout does not update permanent_location from '' with setting "PROC: _PERM_" }
+);
 
 # Bug 28472
 my $itemnumber6 = Koha::Item->new(
@@ -714,9 +747,11 @@ my $itemnumber6 = Koha::Item->new(
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', '_ALL_: CART' );
 AddIssue( $patron_1, 'barcode_8' );
-my $item6 = Koha::Items->find( $itemnumber6 );
-is( $item6->location, 'CART', q{UpdateItemLocationOnCheckout updates location value from NULL (i.e. the item has no shelving location set) to 'CART' with setting "_ALL_: CART"} );
-
+my $item6 = Koha::Items->find($itemnumber6);
+is(
+    $item6->location, 'CART',
+    q{UpdateItemLocationOnCheckout updates location value from NULL (i.e. the item has no shelving location set) to 'CART' with setting "_ALL_: CART"}
+);
 
 #End transaction
 $schema->storage->txn_rollback;
