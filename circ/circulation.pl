@@ -317,9 +317,9 @@ if (@$barcodes) {
         };
 
         # always check for blockers on issuing
-        my ( $error, $needsconfirmation, $alerts, $messages );
+        my ( $issuingimpossible, $needsconfirmation, $alerts, $messages );
         try {
-            ( $error, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued(
+            ( $issuingimpossible, $needsconfirmation, $alerts, $messages ) = CanBookBeIssued(
                 $patron,
                 $barcode, $datedue,
                 $inprocess,
@@ -333,7 +333,7 @@ if (@$barcodes) {
             die $_ unless blessed $_ && $_->can('rethrow');
 
             if ( $_->isa('Koha::Exceptions::Calendar::NoOpenDays') ) {
-                $error = { NO_OPEN_DAYS => 1 };
+                $issuingimpossible = { NO_OPEN_DAYS => 1 };
             } else {
                 $_->rethrow;
             }
@@ -353,7 +353,7 @@ if (@$barcodes) {
 
     # Fix for bug 7494: optional checkout-time fallback search for a book
 
-    if ( $error->{'UNKNOWN_BARCODE'}
+    if ( $issuingimpossible->{'UNKNOWN_BARCODE'}
         && C4::Context->preference("itemBarcodeFallbackSearch")
         && not $batch
     )
@@ -386,17 +386,17 @@ if (@$barcodes) {
     my @blocking_error_codes =
         ( $onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce") )
         ? qw( UNKNOWN_BARCODE NO_OPEN_DAYS )
-        : ( keys %$error );
+        : ( keys %$issuingimpossible );
 
-    if ( $error->{BOOKED_TO_ANOTHER} ) {
-        $template_params->{BOOKED_TO_ANOTHER} = $error->{BOOKED_TO_ANOTHER};
+    if ( $issuingimpossible->{BOOKED_TO_ANOTHER} ) {
+        $template_params->{BOOKED_TO_ANOTHER} = $issuingimpossible->{BOOKED_TO_ANOTHER};
         $template_params->{IMPOSSIBLE}        = 1;
         $blocker                              = 1;
     }
 
     foreach my $code ( @blocking_error_codes ) {
-        if ($error->{$code}) {
-            $template_params->{$code} = $error->{$code};
+        if ($issuingimpossible->{$code}) {
+            $template_params->{$code} = $issuingimpossible->{$code};
 
             $template_params->{IMPOSSIBLE} = 1;
             $blocker = 1;
