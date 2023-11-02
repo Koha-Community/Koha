@@ -19,12 +19,6 @@ function activate_filters(id, bShowFilters) {
                 ,'bFiltersAlreadyActivated': false
             });
             filters_row.addClass('columnFilter');
-        } else {
-            table.dataTable().columnFilter({
-                'sPlaceHolder': 'head:after'
-                ,   "columns": aoColumns
-                ,'bFiltersAlreadyActivated': true
-            });
         }
 
         if (bShowFilters) {
