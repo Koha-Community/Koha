@@ -1200,7 +1200,7 @@ sub GetMarcSubfieldStructure {
     mappings, the former frameworkcode parameter is obsoleted.
 
     NOTE: There may be multiple mappings! In the first example above
-    you could miss the second mapping (altough only a few of these
+    you could miss the second mapping (although only a few of these
     will normally exist).
     Calling in scalar context has been deprecated as of 10/2023.
 
