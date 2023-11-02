@@ -246,6 +246,7 @@
 
                             [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                                    <fieldset>
                                     <input type="hidden" name="restoreduedatespec" />
 
                                     [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
@@ -333,6 +334,7 @@
 
                                     <input type="hidden" name="onsite_checkout" value="[% onsite_checkout | html %]" />
                                     <input type="hidden" name="auto_renew" value="[% auto_renew | html %]" />
+                                    </fieldset>
                                 </form>
                             [% END # /IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
 
