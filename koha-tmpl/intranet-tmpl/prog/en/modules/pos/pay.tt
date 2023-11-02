@@ -51,8 +51,13 @@
         [% ELSE %]
 
         [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
-        <div class="dialog alert audio-alert-action">
-            Payment received: <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print receipt</a> <a type="button" data-toggle="modal" data-target="#emailReceiptModal" class="btn btn-default btn-xs"><i class="fa-solid fa-envelope"></i> Email receipt</a>
+        <div class="dialog message audio-alert-action">
+            <p>Payment received</p>
+            <p>
+                <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default"><i class="fa fa-print"></i> Print receipt</a>
+                <a href="#" data-toggle="modal" data-target="#emailReceiptModal" class="btn btn-default"><i class="fa-solid fa-envelope"></i> Email receipt</a>
+
+            </p>
         </div>
         [% END %]
 
@@ -143,7 +148,7 @@
                             <li>
                                 <label for="registerid" class="required">Cash register: </label>
                                 <select name="registerid" id="registerid" class="required" required="required">
-                                    <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
+                                    <option id="noregister" disabled="disabled" value="">-- Select an option--</option>
                                     [% PROCESS options_for_registers %]
                                 </select>
                                 <span class="required">Required</span>
@@ -152,10 +157,10 @@
 
                     </fieldset>
 
-                    <div class="action">
+                    <fieldset class="action">
                         <input type="submit" id="submitbutton" name="submitbutton" class="btn btn-primary" value="Confirm" />
                         <a class="cancel" href="/cgi-bin/koha/pos/pay.pl">Cancel</a>
-                    </div>
+                    </fieldset>
                 </div>
             </div>
         </form>
@@ -180,9 +185,9 @@
 <!-- Email receipt modal -->
 <div class="modal" id="emailReceiptModal" tabindex="-1" role="dialog" aria-labelledby="emailReceiptLabel">
     <form id="email_form" action="/cgi-bin/koha/pos/pay.pl" method="get" enctype="multipart/form-data" class="validated">
-        <input type="hidden" name="payment_id" id="payment_id" value="[% payment_id | uri %]">
-        <input type="hidden" name="collected" id="collected" value="[% collected | uri %]">
-        <input type="hidden" name="change" id="change" value="[% change | uri %]">"
+        <input type="hidden" name="payment_id" value="[% payment_id | uri %]">
+        <input type="hidden" name="collected" value="[% collected | uri %]">
+        <input type="hidden" name="change" value="[% change | uri %]">"
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -208,7 +213,7 @@
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
     </form> <!-- /#email_form -->
-</div> <!-- /#emailReceiptModal
+</div> <!-- /#emailReceiptModal -->
 
 <!-- Change modal -->
 <div id="confirm_change_form" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -224,7 +229,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default approve" id="modal_submit" type="button"><i class="fa fa-check"></i> Yes</button>
-                <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true" type="button"><i class="fa fa-times"></i> No</button>
+                <button class="btn btn-default deny cancel" data-dismiss="modal" aria-hidden="true" type="button"><i class="fa fa-times"></i> No</button>
             </div>
         </div>
     </div>
