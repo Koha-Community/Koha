@@ -4,7 +4,7 @@
     x-mojo-to: ERM::EUsage::UsageDataProviders#list
     operationId: listErmUsageDataProviders
     tags:
-      - usage_data_provider
+      - erm_usage_data_providers
     summary: List usage_data_providers
     produces:
       - application/json
@@ -132,7 +132,7 @@
     x-mojo-to: ERM::EUsage::UsageDataProviders#add
     operationId: addErmUsageDataProviders
     tags:
-      - usage_data_provider
+      - erm_usage_data_providers
     summary: Add usage_data_provider
     consumes:
       - application/json
@@ -193,7 +193,7 @@
     x-mojo-to: ERM::EUsage::UsageDataProviders#get
     operationId: getERMUsageDataProvider
     tags:
-      - usage_data_provider
+      - erm_usage_data_providers
     summary: get usage_data_provider
     produces:
       - application/json
@@ -245,7 +245,7 @@
     x-mojo-to: ERM::EUsage::UsageDataProviders#update
     operationId: updateERMUsageDataProviders
     tags:
-      - usage_data_provider
+      - erm_usage_data_providers
     summary: update usage_data_provider
     consumes:
       - application/json
@@ -310,7 +310,7 @@
     x-mojo-to: ERM::EUsage::UsageDataProviders#delete
     operationId: deleteERMUsageDataProviders
     tags:
-      - usage_data_provider
+      - erm_usage_data_providers
     summary: Delete usage_data_provider
     produces:
       - application/json
@@ -357,7 +357,7 @@
     x-mojo-to: ERM::EUsage::UsageDataProviders#process_SUSHI_response
     operationId: processSUSHICounterUsageDataProviderHarvester
     tags:
-      - usage data provider harvester
+      - erm_usage_data_providers
     summary: Process SUSHI COUNTER for this data provider's harvester
     produces:
       - application/json
@@ -411,7 +411,7 @@
     x-mojo-to: ERM::EUsage::UsageDataProviders#process_COUNTER_file
     operationId: processCOUNTERFileUsageDataProviderHarvester
     tags:
-      - usage data provider harvester
+      - erm_usage_data_providers
     summary: Process COUNTER file upload for this data provider's harvester
     produces:
       - application/json
@@ -459,7 +459,7 @@
     x-mojo-to: ERM::EUsage::UsageDataProviders#test_connection
     operationId: testUsageDataProviderHarvester
     tags:
-      - usage data provider harvester
+      - erm_usage_data_providers
     summary: Test this data provider's harvester
     produces:
       - application/json
@@ -468,60 +468,6 @@
     responses:
       200:
         description: Successful connection test
-        schema:
-          items:
-            $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
-      400:
-        description: Bad request
-        schema:
-          $ref: "../swagger.yaml#/definitions/error"
-      403:
-        description: Access forbidden
-        schema:
-          $ref: "../swagger.yaml#/definitions/error"
-      500:
-        description: |-
-          Internal server error. Possible `error_code` attribute values:
-          * `internal_server_error`
-        schema:
-          $ref: "../swagger.yaml#/definitions/error"
-      503:
-        description: Under maintenance
-        schema:
-          $ref: "../swagger.yaml#/definitions/error"
-    x-koha-authorization:
-      permissions:
-        erm: 1
-"/erm/usage_data_providers/report":
-  get:
-    x-mojo-to: ERM::EUsage::UsageDataProviders#providers_report
-    operationId: reportUsageDataProvider
-    tags:
-      - usage data provider report
-    summary: Run a report for this data provider
-    produces:
-      - application/json
-    parameters:
-      - $ref: "../swagger.yaml#/parameters/match"
-      - $ref: "../swagger.yaml#/parameters/order_by"
-      - $ref: "../swagger.yaml#/parameters/page"
-      - $ref: "../swagger.yaml#/parameters/per_page"
-      - $ref: "../swagger.yaml#/parameters/q_param"
-      - $ref: "../swagger.yaml#/parameters/q_body"
-      - $ref: "../swagger.yaml#/parameters/q_header"
-      - name: x-koha-embed
-        in: header
-        required: false
-        description: Embed list sent as a request header
-        type: array
-        items:
-          type: string
-          enum:
-            - counter_files
-            - erm_usage_titles.erm_usage_muses
-    responses:
-      200:
-        description: Successful report run
         schema:
           items:
             $ref: "../swagger.yaml#/definitions/erm_usage_data_provider"
