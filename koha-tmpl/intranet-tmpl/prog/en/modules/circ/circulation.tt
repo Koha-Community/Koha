@@ -391,12 +391,16 @@
                             [% END # /IF ADDITIONAL_MATERIALS %]
 
                             [% IF ( RESERVED or RESERVE_WAITING or TRANSFERRED or PROCESSING ) %]
-                                <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
+                                <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
                                     <input type="hidden" name="restoreduedatespec" />
                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                     <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
+                                    <input type="hidden" name="confirm_hold" value="[% reserve_id | html %]" />
+                                    <input type="hidden" name="hold_branch" value="[% resbranchcode | html %]" />
+                                    <input type="hidden" name="hold_borrower" value="[% resborrowernumber | html %]" />
+                                    <input type="hidden" name="hold_itemnumber" value="[% item.itemnumber | html %]" />
                                     <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
-                                    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
+                                    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]&itemnumber=[% item.id | html %]');this.form.submit();"><i class="fa fa-print"></i> Don't check out, confirm hold, and print slip (P)</button>
                                 </form>
                             [% END %]
 

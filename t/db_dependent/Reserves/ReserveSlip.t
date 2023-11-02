@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use t::lib::TestBuilder;
 
 use C4::Reserves qw( ReserveSlip );
@@ -110,6 +110,46 @@ is (ReserveSlip({
         reserve_id     => $hold1->reserve_id,
     })->{content},
     sprintf( "Hold found for %s: Please pick up %s with barcode %s at %s.", $patron->{firstname}, $biblio->title, $item1->barcode, $library->{branchcode}),"Hold slip contains correctly parsed content");
+
+subtest 'title level hold' => sub {
+    plan tests => 2;
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->{branchcode},
+        }
+    );
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                branchcode     => $library->{branchcode},
+                borrowernumber => $patron->{borrowernumber},
+                biblionumber   => $biblio->id,
+                itemnumber     => undef,
+            }
+        }
+    );
+
+    my $slip = ReserveSlip(
+        {
+            branchcode => $hold->branchcode,
+            reserve_id => $hold->id,
+            itemnumber => $item->id
+        }
+    );
+    is( $slip->{code}, 'HOLD_SLIP', "We get expected letter" );
+    is(
+        $slip->{content},
+        sprintf(
+            "Hold found for %s: Please pick up %s with barcode %s at %s.", $patron->{firstname}, $biblio->title,
+            $item->barcode,                                                $library->{branchcode}
+        ),
+        "Hold slip contents correctly use the passed item"
+    );
+};
 
 $schema->storage->txn_rollback;
 
