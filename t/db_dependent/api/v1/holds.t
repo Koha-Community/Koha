@@ -1530,7 +1530,7 @@ subtest 'delete() tests' => sub {
                 borrowernumber => $patron->borrowernumber,
                 biblionumber   => $biblio->biblionumber,
                 priority       => 1,
-                itemnumber     => undef,
+                itemnumber     => $item->id,
             }
         )
     );
