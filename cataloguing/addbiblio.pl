@@ -342,6 +342,9 @@ sub build_tabs {
                                         index_tag => $index_tag,
                                         record => $record,
                                         hostitemnumber => scalar $input->param('hostitemnumber'),
+                                        op => scalar $input->param('op'),
+                                        changed_framework => scalar $input->param('changed_framework'),
+                                        breedingid => scalar $input->param('breedingid'),
                                         tagslib => $tagslib,
                                         mandatory_z3950 => $mandatory_z3950,
                                     }
@@ -380,6 +383,9 @@ sub build_tabs {
                                     index_tag => $index_tag,
                                     record => $record,
                                     hostitemnumber => scalar $input->param('hostitemnumber'),
+                                    op => scalar $input->param('op'),
+                                    changed_framework => scalar $input->param('changed_framework'),
+                                    breedingid => scalar $input->param('breedingid'),
                                     tagslib => $tagslib,
                                     mandatory_z3950 => $mandatory_z3950,
                                 }
@@ -444,6 +450,9 @@ sub build_tabs {
                                 index_tag => $index_tag,
                                 record => $record,
                                 hostitemnumber => scalar $input->param('hostitemnumber'),
+                                op => scalar $input->param('op'),
+                                changed_framework => scalar $input->param('changed_framework'),
+                                breedingid => scalar $input->param('breedingid'),
                                 tagslib => $tagslib,
                                 mandatory_z3950 => $mandatory_z3950,
                             }
