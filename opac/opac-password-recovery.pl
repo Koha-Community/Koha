@@ -162,7 +162,7 @@ elsif ( $query->param('passwordReset') ) {
         $min_password_length = $borrower->category->effective_min_password_length;
         $require_strong_password = $borrower->category->effective_require_strong_password;
         try {
-            $borrower->set_password({ password => $password });
+            $borrower->set_password({ password => $password, action => 'RESET PASS' });
 
             CompletePasswordRecovery($uniqueKey);
             $template->param(

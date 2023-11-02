@@ -902,9 +902,11 @@ sub is_going_to_expire {
 
 =head3 set_password
 
-    $patron->set_password({ password => $plain_text_password [, skip_validation => 1 ] });
+    $patron->set_password({ password => $plain_text_password [, skip_validation => 1, action => NAME ] });
 
 Set the patron's password.
+
+Allows optional action parameter to change name of action logged (when enabled). Used for reset password.
 
 =head4 Exceptions
 
@@ -931,6 +933,7 @@ sub set_password {
     my ( $self, $args ) = @_;
 
     my $password = $args->{password};
+    my $action   = $args->{action} || "CHANGE PASS";
 
     unless ( $args->{skip_validation} ) {
         my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password, $self->category );
@@ -1019,7 +1022,7 @@ sub set_password {
     $self->login_attempts(0);
     $self->SUPER::store;
 
-    logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" )
+    logaction( "MEMBERS", $action, $self->borrowernumber, "" )
         if C4::Context->preference("BorrowersLog");
 
     return $self;
