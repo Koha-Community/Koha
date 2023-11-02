@@ -1921,7 +1921,7 @@ subtest '->store' => sub {
 
 subtest '->set_password' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'emailpro|email' );
 
@@ -1994,10 +1994,25 @@ subtest '->set_password' => sub {
 
     # Enable logging password changes
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
-    $patron->set_password({ password => 'abcd   b' });
-
-    $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $patron->borrowernumber } )->count;
+    $patron->set_password( { password => 'abcd   b' } );
+    $number_of_logs = $schema->resultset('ActionLog')->search(
+        {
+            module => 'MEMBERS',
+            action => 'CHANGE PASS',
+            object => $patron->borrowernumber
+        }
+    )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->set_password does log password changes' );
+    # add other action name
+    $patron->set_password( { password => 'abcd   b2', action => 'RESET PASS' } );
+    $number_of_logs = $schema->resultset('ActionLog')->search(
+        {
+            module => 'MEMBERS',
+            action => 'RESET PASS',
+            object => $patron->borrowernumber
+        }
+    )->count;
+    is( $number_of_logs, 1, 'set_password allows another action name' );
 
     # Enable notifying patrons of password changes
     t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 1 );
