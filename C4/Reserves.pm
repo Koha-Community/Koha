@@ -2178,6 +2178,7 @@ sub ReserveSlip {
     my ($args) = @_;
     my $branchcode     = $args->{branchcode};
     my $reserve_id = $args->{reserve_id};
+    my $itemnumber = $args->{itemnumber};
 
     my $hold = Koha::Holds->find($reserve_id);
     return unless $hold;
@@ -2196,7 +2197,7 @@ sub ReserveSlip {
             'borrowers'   => $reserve->{borrowernumber},
             'biblio'      => $reserve->{biblionumber},
             'biblioitems' => $reserve->{biblionumber},
-            'items'       => $reserve->{itemnumber},
+            'items'       => $reserve->{itemnumber} || $itemnumber,
         },
     );
 }
