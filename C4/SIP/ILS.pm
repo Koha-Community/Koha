@@ -264,14 +264,14 @@ sub checkin {
         $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
 
         my $message = '';
-        if ($account->{show_checkin_message}) {
+        if ( $account->{show_checkin_message} ) {
             my $permanent_location;
-            if (C4::Context->preference("UseLocationAsAQInSIP")) {
+            if ( C4::Context->preference("UseLocationAsAQInSIP") ) {
                 $permanent_location = $item->{'permanent_location'};
             } else {
-                $permanent_location = Koha::Libraries->find($item->{permanent_location})->branchname;
+                $permanent_location = Koha::Libraries->find( $item->{permanent_location} )->branchname;
             }
-            $message .= "Item checked-in: " . $permanent_location . " - " . $item->{location} . ".";
+            $message .= "Item checked-in: $permanent_location - $item->{location}.";
         }
 
         # Check for overdue fines to display
