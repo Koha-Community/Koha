@@ -541,7 +541,10 @@ if ($op eq "additem") {
 
     my $itemnumber = $input->param('itemnumber');
     my $item = Koha::Items->find($itemnumber);
-    # FIXME Handle non existent item
+    unless ($item) {
+        C4::Output::output_error( $input, '404' );
+        exit;
+    }
     my $olditemlost = $item->itemlost;
     my @columns = Koha::Items->columns;
     my $new_values = $item->unblessed;
