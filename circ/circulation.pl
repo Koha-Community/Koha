@@ -38,7 +38,7 @@ use C4::Circulation qw( barcodedecode CanBookBeIssued AddIssue );
 use C4::Members;
 use C4::Biblio qw( TransformMarcToKoha );
 use C4::Search qw( new_record_from_zebra );
-use C4::Reserves;
+use C4::Reserves qw( ModReserveAffect );
 use Koha::Holds;
 use C4::Context;
 use CGI::Session;
@@ -69,6 +69,10 @@ my $override_high_holds_tmp = $query->param('override_high_holds_tmp');
 my $sessionID = $query->cookie("CGISESSID") ;
 my $session = get_session($sessionID);
 
+my $userenv = C4::Context->userenv;
+my $branch  = $userenv->{'branch'} // '';
+my $desk_id = $userenv->{"desk_id"} || '';
+
 my $barcodes = [];
 my $barcode =  $query->param('barcode');
 my $findborrower;
@@ -87,6 +91,18 @@ if (C4::Context->preference("AutoSwitchPatron") && $barcode) {
 }
 $findborrower ||= $query->param('findborrower') || q{};
 $findborrower =~ s|,| |g;
+
+if ( $query->param('confirm_hold') ) {
+    my $reserve_id          = $query->param('confirm_hold');
+    my $hold_branch         = $query->param('hold_branch');
+    my $hold_itemnumber     = $query->param('hold_itemnumber');
+    my $hold_borrowernumber = $query->param('hold_borrowernumber');
+    my $diffBranchSend      = ( $branch ne $hold_branch );
+
+    # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
+    # i.e., whether to apply waiting status
+    ModReserveAffect( $hold_itemnumber, $hold_borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
+}
 
 # Barcode given by user could be '0'
 if ( $barcode || ( defined($barcode) && $barcode eq '0' ) ) {
@@ -134,7 +150,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 
 my $force_allow_issue = $query->param('forceallow') || 0;
-if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force_checkout' } )) {
+if (!C4::Auth::haspermission( $userenv->{id} , { circulate => 'force_checkout' } )) {
     $force_allow_issue = 0;
 }
 my $onsite_checkout = $query->param('onsite_checkout');
@@ -150,8 +166,6 @@ for (@failedrenews) { $renew_failed{$_} = 1; }
 my @failedreturns = $query->multi_param('failedreturn');
 our %return_failed = ();
 for (@failedreturns) { $return_failed{$_} = 1; }
-
-my $branch = C4::Context->userenv->{'branch'};
 
 for my $barcode ( @$barcodes ) {
     $barcode = barcodedecode( $barcode ) if $barcode;
