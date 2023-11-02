@@ -55,6 +55,46 @@ $(document).ready(function() {
     });
 
     $('.printModal').click(function() {
-        window.print();
+
+        let contents = $('#cashupSummaryModal .modal-body').html();
+        let win = window.open('','');
+        win.document.write(`
+            <style>
+                table {
+                    background-color: #FFFFFF;
+                    border-bottom: 1px solid #CCCCCC;
+                    border-collapse: collapse;
+                    border-left: 1px solid #CCCCCC;
+                    margin: 3px 0 5px 0;
+                    padding: 0;
+                    width: 99%;
+                }
+
+                td {
+                    background-color: #FFF;
+                    border-bottom: 1px solid #CCCCCC;
+                    border-left: 0;
+                    border-right: 1px solid #CCCCCC;
+                    border-top: 0;
+                    font-size: 12px;
+                    padding: 5px 5px 5px 5px;
+                }
+
+                th {
+                    background-color: #E9E9E9;
+                    border-bottom: 1px solid #CCCCCC;
+                    border-left: 0;
+                    border-right: 1px solid #CCCCCC;
+                    border-top: 0;
+                    font-size: 14px;
+                    font-weight: bold;
+                    padding: 5px 5px 5px 5px;
+                    text-align: left;
+                }
+            </style>
+        `)
+        win.document.write( contents );
+        win.print();
+        win.close();
     });
 });
