@@ -108,7 +108,7 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
                 '/cgi-bin/koha/svc/bib/'+ id
             ).done( function( metadata, status, xhr ) {
                 let encoding_issues = xhr.getResponseHeader('invalid-metadata');
-                if( encoding_issues ){
+                if( encoding_issues > 0 ){
                     humanMsg.displayAlert( _("Record had encoding issues, please switch to the basic editor to view details") );
                 }
                 $.get(

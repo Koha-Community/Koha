@@ -69,7 +69,7 @@ sub fetch_bib {
     my $biblio = Koha::Biblios->find( $biblionumber );
     my $record;
     my $exception;
-    my $invalid_metadata;
+    my $invalid_metadata = 0;
     eval { $record = $biblio->metadata->record( { embed_items => scalar $query->param('items') } ) };
     if ($@) {
         $exception = $@;
