@@ -692,6 +692,7 @@ MoveReserve( $item->itemnumber, $borrowernumber );
 ($status)=CheckReserves( $item );
 is( $status, '', 'MoveReserve filled hold');
 #   hold from A waiting, today, no fut holds: MoveReserve should fill it
+my $other_item = $builder->build_sample_item({ biblionumber => $biblio->id });
 AddReserve(
     {
         branchcode     => $branch_1,
@@ -699,6 +700,7 @@ AddReserve(
         biblionumber   => $bibnum,
         priority       => 1,
         found          => 'W',
+        itemnumber     => $other_item->id,
     }
 );
 MoveReserve( $item->itemnumber, $borrowernumber );
