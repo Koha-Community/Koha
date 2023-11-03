@@ -7,7 +7,8 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
         if ( !TableExists('bookings') ) {
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 CREATE TABLE `bookings` (
                   `booking_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
                   `patron_id` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the borrowers table defining which patron this booking is for',
@@ -23,28 +24,35 @@ return {
                 CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
                 CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-            });
+            }
+            );
         }
 
         if ( !column_exists( 'items', 'bookable' ) ) {
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 ALTER TABLE items ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
-            });
+            }
+            );
         }
 
         if ( !column_exists( 'deleteditems', 'bookable' ) ) {
-            $dbh->do(q{
+            $dbh->do(
+                q{
                 ALTER TABLE deleteditems ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
-            });
+            }
+            );
         }
 
-        $dbh->do(q{
+        $dbh->do(
+            q{
           INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (
             1,
             'manage_bookings',
             'Manage item bookings'
           );
-        });
+        }
+        );
         say $out "Added new permissions 'manage_bookings'";
 
     },

@@ -219,6 +219,7 @@ sub can_article_request {
 }
 
 
+
 =head3 check_booking
 
   my $bookable =
@@ -240,7 +241,7 @@ sub check_booking {
     my $bookable_items = $self->bookable_items;
     my $total_bookable = $bookable_items->count;
 
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $dtf               = Koha::Database->new->schema->storage->datetime_parser;
     my $existing_bookings = $self->bookings(
         [
             start_date => {
@@ -263,10 +264,9 @@ sub check_booking {
     );
 
     my $booked_count =
-      defined($booking_id)
-      ? $existing_bookings->search( { booking_id => { '!=' => $booking_id } } )
-      ->count
-      : $existing_bookings->count;
+        defined($booking_id)
+        ? $existing_bookings->search( { booking_id => { '!=' => $booking_id } } )->count
+        : $existing_bookings->count;
 
     my $checkouts = $self->current_checkouts->search( { date_due => { '>=' => $dtf->format_datetime($start_date) } } );
     $booked_count += $checkouts->count;
@@ -285,6 +285,7 @@ sub assign_item_for_booking {
     my $end_date   = dt_from_string( $params->{end_date} );
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
     my $existing_bookings = $self->bookings(
         [
             start_date => {
@@ -311,8 +312,7 @@ sub assign_item_for_booking {
     my $bookable_items = $self->bookable_items->search(
         {
             itemnumber => [
-                '-and' => 
-                { '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query },
+                '-and' => { '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query },
                 { '-not_in' => $checkouts->_resultset->get_column('itemnumber')->as_query }
             ]
         },
@@ -344,8 +344,7 @@ sub place_booking {
     my @mandatory = ( 'start_date', 'end_date', 'patron' );
     for my $param (@mandatory) {
         unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw(
-                error => "The $param parameter is mandatory" );
+            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
         }
     }
     my $patron = $params->{patron};
@@ -353,10 +352,10 @@ sub place_booking {
     # New booking object
     my $booking = Koha::Booking->new(
         {
-            start_date     => $params->{start_date},
-            end_date       => $params->{end_date},
-            patron_id      => $patron->borrowernumber,
-            biblio_id      => $self->biblionumber
+            start_date => $params->{start_date},
+            end_date   => $params->{end_date},
+            patron_id  => $patron->borrowernumber,
+            biblio_id  => $self->biblionumber
         }
     )->store();
     return $booking;
@@ -660,7 +659,6 @@ sub bookable_items {
     return $self->items->filter_by_bookable;
 }
 
-
 =head3 host_items
 
 my $host_items = $biblio->host_items();
@@ -774,7 +772,7 @@ Returns the bookings attached to this biblio.
 sub bookings {
     my ( $self, $params ) = @_;
     my $bookings_rs = $self->_result->bookings->search($params);
-    return Koha::Bookings->_new_from_dbic( $bookings_rs );
+    return Koha::Bookings->_new_from_dbic($bookings_rs);
 }
 
 =head3 suggestions

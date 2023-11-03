@@ -40,8 +40,7 @@ sub list {
         my $bookings_set = Koha::Bookings->new;
         my $bookings     = $c->objects->search($bookings_set);
         return $c->render( status => 200, openapi => $bookings );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -57,8 +56,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $booking =
-          Koha::Bookings->find( $c->validation->param('booking_id') );
+        my $booking = Koha::Bookings->find( $c->validation->param('booking_id') );
         unless ($booking) {
             return $c->render(
                 status  => 404,
@@ -67,8 +65,7 @@ sub get {
         }
 
         return $c->render( status => 200, openapi => $booking->to_api );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     }
 }
@@ -83,17 +80,14 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $booking =
-          Koha::Booking->new_from_api( $c->validation->param('body') );
+        my $booking = Koha::Booking->new_from_api( $c->validation->param('body') );
         $booking->store;
-        $c->res->headers->location(
-            $c->req->url->to_string . '/' . $booking->booking_id );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $booking->booking_id );
         return $c->render(
             status  => 201,
             openapi => $booking->to_api
         );
-    }
-    catch {
+    } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Booking::Clash') ) {
             return $c->render(
                 status  => 400,
@@ -127,8 +121,7 @@ sub update {
         $booking->set_from_api( $c->validation->param('body') );
         $booking->store();
         return $c->render( status => 200, openapi => $booking->to_api );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -156,8 +149,7 @@ sub delete {
             status  => 204,
             openapi => q{}
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

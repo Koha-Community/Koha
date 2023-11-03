@@ -71,7 +71,7 @@ sub RecallsCount {
 sub CanBook {
     my ( $self, $biblionumber ) = @_;
 
-    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $biblio = Koha::Biblios->find($biblionumber);
     return $biblio->bookable_items->count ? 1 : 0;
 }
 
@@ -82,11 +82,7 @@ sub BookingsCount {
 
     my $now = dt_from_string;
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    return $biblio->bookings->search(
-        {
-            start_date => { '>' => $dtf->format_datetime($now) }
-        }
-    )->count;
+    return $biblio->bookings->search( { start_date => { '>' => $dtf->format_datetime($now) } } )->count;
 }
 
 1;

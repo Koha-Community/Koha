@@ -185,25 +185,22 @@ sub get_bookings {
 
     my $item = Koha::Items->find( { itemnumber => $c->validation->param('item_id') }, { prefetch => ['bookings'] } );
 
-    unless ( $item ) {
+    unless ($item) {
         return $c->render(
             status  => 404,
-            openapi => {
-                error => "Object not found."
-            }
+            openapi => { error => "Object not found." }
         );
     }
 
     return try {
 
         my $bookings_rs = $item->bookings;
-        my $bookings    = $c->objects->search( $bookings_rs );
+        my $bookings    = $c->objects->search($bookings_rs);
         return $c->render(
             status  => 200,
             openapi => $bookings
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

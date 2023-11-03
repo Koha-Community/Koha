@@ -1228,21 +1228,22 @@ sub CanBookBeIssued {
                 patron_id     => $patron->borrowernumber
             }
         )
-      )
+        )
     {
         # Booked to this patron :)
         if ( $booking->patron_id == $patron->borrowernumber ) {
-            if ( $now < dt_from_string($booking->start_date) ) {
+            if ( $now < dt_from_string( $booking->start_date ) ) {
                 $needsconfirmation{'BOOKED_EARLY'} = $booking;
-            }
-            else {
+            } else {
                 $alerts{'BOOKED'} = $booking;
             }
         }
+
         # Booking starts before due date, reduce loan?
-        elsif ( $duedate > dt_from_string($booking->start_date) ) {
+        elsif ( $duedate > dt_from_string( $booking->start_date ) ) {
             $needsconfirmation{'BOOKED_TO_ANOTHER'} = $booking;
         }
+
         # Loan falls inside booking
         else {
             $issuingimpossible{'BOOKED_TO_ANOTHER'} = $booking;

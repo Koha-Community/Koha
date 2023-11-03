@@ -171,7 +171,7 @@ sub filter_by_bookable {
 
     my $params = { bookable => 1 };
 
-    return $self->search( $params );
+    return $self->search($params);
 }
 
 =head3 move_to_biblio

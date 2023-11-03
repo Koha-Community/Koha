@@ -246,6 +246,7 @@ sub get_public {
     };
 }
 
+
 =head3 get_bookings
 
 Controller function that handles retrieving biblio's bookings
@@ -257,25 +258,22 @@ sub get_bookings {
 
     my $biblio = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, { prefetch => ['bookings'] } );
 
-    unless ( $biblio ) {
+    unless ($biblio) {
         return $c->render(
             status  => 404,
-            openapi => {
-                error => "Object not found."
-            }
+            openapi => { error => "Object not found." }
         );
     }
 
     return try {
 
         my $bookings_rs = $biblio->bookings;
-        my $bookings    = $c->objects->search( $bookings_rs );
+        my $bookings    = $c->objects->search($bookings_rs);
         return $c->render(
             status  => 200,
             openapi => $bookings
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -289,15 +287,13 @@ Controller function that handles retrieving biblio's items
 sub get_items {
     my $c = shift->openapi->valid_input or return;
 
-    my $biblio = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, { prefetch => ['items'] } );
+    my $biblio        = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, { prefetch => ['items'] } );
     my $bookable_only = $c->param('bookable');
 
-    unless ( $biblio ) {
+    unless ($biblio) {
         return $c->render(
             status  => 404,
-            openapi => {
-                error => "Object not found."
-            }
+            openapi => { error => "Object not found." }
         );
     }
 
@@ -305,13 +301,12 @@ sub get_items {
 
         my $items_rs = $biblio->items;
         $items_rs = $items_rs->filter_by_bookable if $bookable_only;
-        my $items    = $c->objects->search( $items_rs );
+        my $items = $c->objects->search($items_rs);
         return $c->render(
             status  => 200,
             openapi => $items
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

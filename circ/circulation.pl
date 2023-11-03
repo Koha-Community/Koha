@@ -376,8 +376,8 @@ if (@$barcodes) {
 
     if ( $error->{BOOKED_TO_ANOTHER} ) {
         $template_params->{BOOKED_TO_ANOTHER} = $error->{BOOKED_TO_ANOTHER};
-        $template_params->{IMPOSSIBLE} = 1;
-        $blocker = 1;
+        $template_params->{IMPOSSIBLE}        = 1;
+        $blocker                              = 1;
     }
 
     foreach my $code ( @blocking_error_codes ) {
@@ -409,18 +409,19 @@ if (@$barcodes) {
                 $template_params->{NEEDSCONFIRMATION} = 1;
                 $confirm_required = 1;
                 if ( $needsconfirmation eq 'BOOKED_TO_ANOTHER' ) {
-                    my $reduceddue = dt_from_string($$question{$needsconfirmation}->start_date)->subtract( days => 1 );
+                    my $reduceddue =
+                        dt_from_string( $$question{$needsconfirmation}->start_date )->subtract( days => 1 );
                     $template_params->{reduceddue} = $reduceddue;
                 }
             }
         }
-        unless($confirm_required) {
+        unless ($confirm_required) {
             my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
             if ( C4::Context->preference('UseRecalls') && !$recall_id ) {
                 my $recall = Koha::Recalls->find(
                     {
                         biblio_id => $item->biblionumber,
-                        item_id   => [ undef, $item->itemnumber ],
+                        item_id   => [ undef,       $item->itemnumber ],
                         status    => [ 'requested', 'waiting' ],
                         completed => 0,
                         patron_id => $patron->borrowernumber,
@@ -428,6 +429,7 @@ if (@$barcodes) {
                 );
                 $recall_id = ( $recall and $recall->id ) ? $recall->id : undef;
             }
+
             # If booked (alerts or confirmation) update datedue to end of booking
             if ( my $booked = $question->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
                 $datedue = $booked->end_date;

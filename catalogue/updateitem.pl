@@ -39,7 +39,7 @@ my $itemnotes_nonpublic=$cgi->param('itemnotes_nonpublic');
 my $withdrawn=$cgi->param('withdrawn');
 my $damaged=$cgi->param('damaged');
 my $exclude_from_local_holds_priority = $cgi->param('exclude_from_local_holds_priority');
-my $bookable=$cgi->param('bookable');
+my $bookable = $cgi->param('bookable');
 
 my $confirm=$cgi->param('confirm');
 my $dbh = C4::Context->dbh;
@@ -76,7 +76,7 @@ elsif ( $op eq "set_public_note" ) { # i.e., itemnotes parameter passed from for
 } elsif ( $op eq "set_exclude_priority" && $exclude_from_local_holds_priority ne $item_data_hashref->{'exclude_from_local_holds_priority'}) {
     $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority);
     $messages = "updated_exclude_from_local_holds_priority=$exclude_from_local_holds_priority&";
-} elsif ( $op eq "set_bookable" && $bookable ne $item_data_hashref->{'bookable'}) {
+} elsif ( $op eq "set_bookable" && $bookable ne $item_data_hashref->{'bookable'} ) {
     $item->bookable($bookable);
 } elsif ( $op eq "set_damaged" && $damaged ne $item_data_hashref->{'damaged'}) {
     $item->damaged($damaged);
