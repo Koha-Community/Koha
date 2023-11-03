@@ -134,6 +134,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_catalogue'                                        => 1,
         'CAN_user_circulate_circulate_remaining_permissions'        => 1,
         'CAN_user_circulate_force_checkout'                         => 1,
+        'CAN_user_circulate_manage_bookings'                        => 1,
         'CAN_user_circulate_manage_checkout_notes'                  => 1,
         'CAN_user_circulate_manage_curbside_pickups'                => 1,
         'CAN_user_circulate_manage_restrictions'                    => 1,
