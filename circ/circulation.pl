@@ -630,15 +630,8 @@ if ( $patron ) {
     $template->param( patron_messages => $patron_messages );
 
     if ( C4::Context->preference("WaitingNotifyAtCheckout") ) {
-
-        #Check for waiting holds
-        my $waiting_holds          = $patron->holds->search( { found => 'W', branchcode => $branch } );
-        my @waiting_holds_barcodes = ();
-        while ( my $hold = $waiting_holds->next ) {
-            push( @waiting_holds_barcodes, $hold->item->barcode );
-        }
-
-        $template->param( waiting_holds_barcodes => \@waiting_holds_barcodes );
+        my $waiting_holds = $patron->holds->search( { found => 'W', branchcode => $branch } );
+        $template->param( waiting_holds => $waiting_holds );
     }
 }
 

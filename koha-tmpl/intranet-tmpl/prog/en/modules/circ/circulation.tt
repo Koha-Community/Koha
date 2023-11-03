@@ -961,7 +961,7 @@
     </div> <!-- /.modal-dialog -->
 </div> <!-- /#barcodeSubmittedModal -->
 
-[% IF waiting_holds_barcodes %]
+[% IF waiting_holds %]
     <div id="circ-warnwaitingholds-modal" class="modal fade audio-alert-action block">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1050,14 +1050,14 @@
             var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
         }
         $(document).ready(function() {
-            [% IF waiting_holds_barcodes %]
+            [% IF waiting_holds %]
                 $('#circ-warnwaitingholds-modal .btn-primary').on('click',function() {
                     $('#mainform').submit();
                 });
 
                 var waiting_holds_barcodes = new Array();
-                [% FOREACH b IN waiting_holds_barcodes %]
-                    waiting_holds_barcodes.push("[% b | html %]");
+                [% FOREACH wh IN waiting_holds %]
+                    waiting_holds_barcodes.push("[% wh.item.barcode | html %]");
                 [% END %]
                 $("#mainform").on('submit', function(){
                     if( $("#checkout_confirmed").length > 0 ){
