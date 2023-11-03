@@ -144,13 +144,6 @@ if ($op eq ""){
     my $duplinbatch;
     my $imported = 0;
     my @import_record_id_selected = $input->multi_param("import_record_id");
-    my @quantities = $input->multi_param('quantity');
-    my @prices = $input->multi_param('price');
-    my @orderreplacementprices = $input->multi_param('replacementprice');
-    my @budgets_id = $input->multi_param('budget_id');
-    my @discount = $input->multi_param('discount');
-    my @sort1 = $input->multi_param('sort1');
-    my @sort2 = $input->multi_param('sort2');
     my $matcher_id = $input->param('matcher_id');
     my $active_currency = Koha::Acquisition::Currencies->get_active;
     my $biblio_count = 0;
@@ -163,13 +156,20 @@ if ($op eq ""){
         my $matches = $import_record->get_import_record_matches({ chosen => 1 });
         my $match = $matches->count ? $matches->next : undef;
         my $biblionumber = $match ? $match->candidate_match_id : 0;
-        my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
-        my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
-        my $c_discount = shift ( @discount);
-        my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
-        my $c_sort2 = shift( @sort2 ) || $input->param('all_sort2') || '';
-        my $c_replacement_price = shift( @orderreplacementprices );
-        my $c_price = shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
+        my $c_quantity =
+               $input->param( 'quantity_' . $import_record->import_record_id )
+            || GetMarcQuantity( $marcrecord, C4::Context->preference('marcflavour') )
+            || 1;
+        my $c_budget_id =
+               $input->param( 'budget_id_' . $import_record->import_record_id )
+            || $input->param('all_budget_id')
+            || $budget_id;
+        my $c_discount = $input->param( 'discount_' . $import_record->import_record_id );
+        my $c_sort1 = $input->param( 'sort1_' . $import_record->import_record_id ) || $input->param('all_sort1') || '';
+        my $c_sort2 = $input->param( 'sort2_' . $import_record->import_record_id ) || $input->param('all_sort2') || '';
+        my $c_replacement_price = $input->param( 'replacementprice_' . $import_record->import_record_id );
+        my $c_price             = $input->param( 'price_' . $import_record->import_record_id )
+            || GetMarcPrice( $marcrecord, C4::Context->preference('marcflavour') );
 
         # Insert the biblio, or find it through matcher
         if ( $biblionumber ) { # If matched during staging we can continue

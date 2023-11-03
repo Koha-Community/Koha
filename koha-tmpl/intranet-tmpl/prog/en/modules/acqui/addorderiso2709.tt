@@ -182,20 +182,20 @@
                                                                 </li>
                                                                 <li class="quantity">
                                                                     <label for="quantity_record_[% biblio.import_record_id | html %]" class="required">Quantity: </label>
-                                                                    <input id="quantity_record_[% biblio.import_record_id | html %]" type="text" pattern="[0-9]+" value="[% biblio.quantity.length ? biblio.quantity : 1 | html %]" name="quantity" />
+                                                                    <input id="quantity_record_[% biblio.import_record_id | html %]" type="text" pattern="[0-9]+" value="[% biblio.quantity.length ? biblio.quantity : 1 | html %]" name="quantity_[% biblio.import_record_id | html %]" />
                                                                     <span class="required">Required</span>
                                                                 </li>
                                                                 <li class="price">
                                                                     <label for="price_record_[% biblio.import_record_id | html %]">Price: </label>
-                                                                    <input id="price_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.price | $Price on_editing => 1 %]" name="price" />
+                                                                    <input id="price_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.price | $Price on_editing => 1 %]" name="price_[% biblio.import_record_id | html %]" />
                                                                 </li>
                                                                 <li class="replacementprice">
                                                                     <label for="replacementprice_record_[% biblio.import_record_id | html %]">Replacement price: </label>
-                                                                    <input id="replacementprice_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.replacementprice | $Price on_editing => 1 %]" name="replacementprice" />
+                                                                    <input id="replacementprice_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.replacementprice | $Price on_editing => 1 %]" name="replacementprice_[% biblio.import_record_id | html %]" />
                                                                 </li>
                                                                 <li class="discount">
                                                                     <label for="discount_record_[% biblio.import_record_id | html %]">Discount: </label>
-                                                                    <input id="discount_record_[% biblio.import_record_id | html %]" type="text" value="[% biblio.discount | html %]" name="discount" size="6" /> %
+                                                                    <input id="discount_record_[% biblio.import_record_id | html %]" type="text" value="[% biblio.discount | html %]" name="discount_[% biblio.import_record_id | html %]" size="6" /> %
                                                                     <div class="hint">If empty, discount rate from vendor will be used</div>
                                                                 </li>
                                                                 <li class="fund">
@@ -204,7 +204,7 @@
                                                                         <input type="hidden" size="20" name="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
                                                                     [% ELSE %]
                                                                         <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
-                                                                        <select id="fund_record_[% biblio.import_record_id | html %]" name="budget_id">
+                                                                        <select id="fund_record_[% biblio.import_record_id | html %]" name="budget_id_[% biblio.import_record_id | html %]">
                                                                             <option value="">Select a fund (will use default if set)</option>
                                                                             [% FOREACH budget IN budget_loop %]
                                                                                 [% IF ( budget.b_id == biblio.budget_id ) %]
@@ -225,11 +225,11 @@
                                                                 </li>
                                                                 <li class="sort1">
                                                                     <label for="sort1_record_[% biblio.import_record_id | html %]">Statistic 1: </label>
-                                                                    <input id="sort1_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort1" value="[% biblio.sort1 | html %]" />
+                                                                    <input id="sort1_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort1_[% biblio.import_record_id | html %]" value="[% biblio.sort1 | html %]" />
                                                                 </li>
                                                                 <li class="sort2">
                                                                     <label for="sort2_record_[% biblio.import_record_id | html %]">Statistic 2: </label>
-                                                                    <input id="sort2_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort2" value="[% biblio.sort2 | html %]" />
+                                                                    <input id="sort2_record_[% biblio.import_record_id | html %]" type="text" size="20" name="sort2_[% biblio.import_record_id | html %]" value="[% biblio.sort2 | html %]" />
                                                                 </li>
                                                             </ol>
                                                             [% IF ( biblio.iteminfos.size ) %]
