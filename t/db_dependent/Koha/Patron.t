@@ -2153,12 +2153,12 @@ subtest 'guarantor requirements tests' => sub {
     $schema->storage->txn_begin;
 
     my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
-    my $child_category = $builder->build(
-        { source => 'Category', value => { category_type => 'C', can_be_guarantee => 1 } } )
-      ->{categorycode};
-    my $patron_category = $builder->build(
-        { source => 'Category', value => { category_type => 'A', can_be_guarantee => 0 } } )
-      ->{categorycode};
+    my $child_category =
+        $builder->build( { source => 'Category', value => { category_type => 'C', can_be_guarantee => 1 } } )
+        ->{categorycode};
+    my $patron_category =
+        $builder->build( { source => 'Category', value => { category_type => 'A', can_be_guarantee => 0 } } )
+        ->{categorycode};
 
     t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
 
@@ -2200,36 +2200,37 @@ subtest 'guarantor requirements tests' => sub {
 
     throws_ok { $child2->store(); }
     'Koha::Exceptions::Patron::Relationship::NoGuarantor',
-      'Exception thrown when guarantor is required but not provided.';
+        'Exception thrown when guarantor is required but not provided.';
 
     my @guarantors = ( $patron, $child3 );
     throws_ok { $child2->store( { guarantors => \@guarantors } ); }
     'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
-      'Exception thrown when child patron is added as guarantor.';
+        'Exception thrown when child patron is added as guarantor.';
 
     #test ModMember
-    @guarantors = ( $patron );
+    @guarantors = ($patron);
     $child2->store( { guarantors => \@guarantors } )->discard_changes();
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', '' );
 
     my $relationship = Koha::Patron::Relationship->new(
-        {   guarantor_id => $patron->borrowernumber,
+        {
+            guarantor_id => $patron->borrowernumber,
             guarantee_id => $child2->borrowernumber,
             relationship => ''
         }
     );
     $relationship->store();
 
-    ok( $child2->store(), 'Child patron can be modified and stored when guarantor is stored');
+    ok( $child2->store(), 'Child patron can be modified and stored when guarantor is stored' );
 
-    @guarantors = ( $child3 );
+    @guarantors = ($child3);
     throws_ok { $child2->store( { guarantors => \@guarantors } ); }
     'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
-      'Exception thrown when child patron is modified and child patron is added as guarantor.';
+        'Exception thrown when child patron is modified and child patron is added as guarantor.';
 
     $relationship->delete;
     throws_ok { $child2->store(); }
     'Koha::Exceptions::Patron::Relationship::NoGuarantor',
-      'Exception thrown when guarantor is deleted.';
+        'Exception thrown when guarantor is deleted.';
 };

@@ -1,16 +1,18 @@
 use Modern::Perl;
 
 return {
-    bug_number => "12133",
+    bug_number  => "12133",
     description => "Add system preference ChildNeedsGuarantor",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do( q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
             VALUES('ChildNeedsGuarantor', 0, 'If ON, a child patron must have a guarantor when adding the patron.', '', 'YesNo');
-        } );
+        }
+        );
 
         say $out "Added new system preference 'ChildNeedsGuarantor')\n";
     },

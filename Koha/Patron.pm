@@ -191,7 +191,7 @@ to db
 =cut
 
 sub store {
-    my $self = shift;
+    my $self   = shift;
     my $params = @_ ? shift : {};
 
     my $guarantors = $params->{guarantors} // [];
@@ -202,7 +202,7 @@ sub store {
                 C4::Context->preference("autoMemberNum")
                 and ( not defined $self->cardnumber
                     or $self->cardnumber eq '' )
-              )
+                )
             {
                 # Warning: The caller is responsible for locking the members table in write
                 # mode, to avoid database corruption.
@@ -210,7 +210,7 @@ sub store {
                 $self->fixup_cardnumber;
             }
 
-            unless( $self->category->in_storage ) {
+            unless ( $self->category->in_storage ) {
                 Koha::Exceptions::Object::FKConstraint->throw(
                     broken_fk => 'categorycode',
                     value     => $self->categorycode,
@@ -221,15 +221,15 @@ sub store {
 
             my $new_cardnumber = $self->cardnumber;
             Koha::Plugins->call( 'patron_barcode_transform', \$new_cardnumber );
-            $self->cardnumber( $new_cardnumber );
+            $self->cardnumber($new_cardnumber);
 
             # Set surname to uppercase if uppercasesurname is true
-            $self->surname( uc($self->surname) )
+            $self->surname( uc( $self->surname ) )
                 if C4::Context->preference("uppercasesurnames");
 
-            $self->relationship(undef) # We do not want to store an empty string in this field
-              if defined $self->relationship
-                     and $self->relationship eq "";
+            $self->relationship(undef)    # We do not want to store an empty string in this field
+                if defined $self->relationship
+                and $self->relationship eq "";
 
             unless ( $self->in_storage ) {    #AddMember
 
@@ -251,18 +251,21 @@ sub store {
                 # Set the privacy depending on the patron's category
                 my $default_privacy = $self->category->default_privacy || q{};
                 $default_privacy =
-                    $default_privacy eq 'default' ? 1
-                  : $default_privacy eq 'never'   ? 2
-                  : $default_privacy eq 'forever' ? 0
-                  :                                                   undef;
+                      $default_privacy eq 'default' ? 1
+                    : $default_privacy eq 'never'   ? 2
+                    : $default_privacy eq 'forever' ? 0
+                    :                                 undef;
                 $self->privacy($default_privacy);
 
                 # Call any check_password plugins if password is passed
                 if ( C4::Context->config("enable_plugins") && $self->password ) {
-                    my @plugins = Koha::Plugins->new()->GetPlugins({
-                        method => 'check_password',
-                    });
-                    foreach my $plugin ( @plugins ) {
+                    my @plugins = Koha::Plugins->new()->GetPlugins(
+                        {
+                            method => 'check_password',
+                        }
+                    );
+                    foreach my $plugin (@plugins) {
+
                         # This plugin hook will also be used by a plugin for the Norwegian national
                         # patron database. This is why we need to pass both the password and the
                         # borrowernumber to the plugin.
@@ -281,17 +284,22 @@ sub store {
                 # Make a copy of the plain text password for later use
                 $self->plain_text_password( $self->password );
 
-                $self->password_expiration_date( $self->password
+                $self->password_expiration_date(
+                      $self->password
                     ? $self->category->get_password_expiry_date || undef
-                    : undef );
+                    : undef
+                );
+
                 # Create a disabled account if no password provided
-                $self->password( $self->password
+                $self->password(
+                    $self->password
                     ? Koha::AuthUtils::hash_password( $self->password )
-                    : '!' );
+                    : '!'
+                );
 
                 $self->borrowernumber(undef);
 
-                if ( C4::Context->preference('ChildNeedsGuarantor')
+                if (    C4::Context->preference('ChildNeedsGuarantor')
                     and ( $self->is_child or $self->category->can_be_guarantee )
                     and $self->contactname eq ""
                     and !@$guarantors )
@@ -300,9 +308,8 @@ sub store {
                 }
 
                 foreach my $guarantor (@$guarantors) {
-                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee) {
-                        Koha::Exceptions::Patron::Relationship::InvalidRelationship
-                        ->throw( invalid_guarantor => 1 );
+                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee ) {
+                        Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
                     }
                 }
 
@@ -311,50 +318,45 @@ sub store {
                 $self->add_enrolment_fee_if_needed(0);
 
                 logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
-                  if C4::Context->preference("BorrowersLog");
-            }
-            else {    #ModMember
+                    if C4::Context->preference("BorrowersLog");
+            } else {    #ModMember
 
                 my $self_from_storage = $self->get_from_storage;
 
                 # Do not accept invalid userid here
                 $self->generate_userid unless $self->userid;
                 Koha::Exceptions::Patron::InvalidUserid->throw( userid => $self->userid )
-                      unless $self->has_valid_userid;
+                    unless $self->has_valid_userid;
 
                 # If a borrower has set their privacy to never we should immediately anonymize
                 # their checkouts
-                if( $self->privacy() == 2 && $self_from_storage->privacy() != 2 ){
-                    try{
+                if ( $self->privacy() == 2 && $self_from_storage->privacy() != 2 ) {
+                    try {
                         $self->old_checkouts->anonymize;
-                    }
-                    catch {
-                        Koha::Exceptions::Patron::FailedAnonymizing->throw(
-                            error => @_
-                        );
+                    } catch {
+                        Koha::Exceptions::Patron::FailedAnonymizing->throw( error => @_ );
                     };
                 }
 
                 # Password must be updated using $self->set_password
-                $self->password($self_from_storage->password);
+                $self->password( $self_from_storage->password );
 
-                if ( $self->category->categorycode ne
-                    $self_from_storage->category->categorycode )
-                {
+                if ( $self->category->categorycode ne $self_from_storage->category->categorycode ) {
+
                     # Add enrolement fee on category change if required
                     $self->add_enrolment_fee_if_needed(1)
-                      if C4::Context->preference('FeeOnChangePatronCategory');
+                        if C4::Context->preference('FeeOnChangePatronCategory');
 
                     # Clean up guarantors on category change if required
                     $self->guarantor_relationships->delete
-                      unless ( $self->category->can_be_guarantee );
+                        unless ( $self->category->can_be_guarantee );
 
                 }
 
                 my @existing_guarantors = $self->guarantor_relationships()->guarantors->as_list;
                 push @$guarantors, @existing_guarantors;
 
-                if ( C4::Context->preference('ChildNeedsGuarantor')
+                if (    C4::Context->preference('ChildNeedsGuarantor')
                     and ( $self->is_child or $self->category->can_be_guarantee )
                     and $self->contactname eq ""
                     and !@$guarantors )
@@ -363,9 +365,8 @@ sub store {
                 }
 
                 foreach my $guarantor (@$guarantors) {
-                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee) {
-                        Koha::Exceptions::Patron::Relationship::InvalidRelationship
-                        ->throw( invalid_guarantor => 1 );
+                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee ) {
+                        Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
                     }
                 }
 
@@ -378,19 +379,13 @@ sub store {
                     for my $key ( keys %{$from_storage} ) {
                         next if any { /$key/ } @skip_fields;
                         if (
-                            (
-                                  !defined( $from_storage->{$key} )
-                                && defined( $from_object->{$key} )
-                            )
+                            ( !defined( $from_storage->{$key} ) && defined( $from_object->{$key} ) )
                             || ( defined( $from_storage->{$key} )
                                 && !defined( $from_object->{$key} ) )
-                            || (
-                                   defined( $from_storage->{$key} )
+                            || (   defined( $from_storage->{$key} )
                                 && defined( $from_object->{$key} )
-                                && ( $from_storage->{$key} ne
-                                    $from_object->{$key} )
+                                && ( $from_storage->{$key} ne $from_object->{$key} ) )
                             )
-                          )
                         {
                             $info->{$key} = {
                                 before => $from_storage->{$key},

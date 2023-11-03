@@ -261,13 +261,14 @@ if ( ( $op eq 'insert' ) and !$nodouble ) {
 
 #Attempt to delete guarantors
 my @delete_guarantor = $input->multi_param('delete_guarantor');
-if(@delete_guarantor){
+if (@delete_guarantor) {
     if ( C4::Context->preference('ChildNeedsGuarantor')
-        && scalar @guarantors - scalar @delete_guarantor == 0 ) {
+        && scalar @guarantors - scalar @delete_guarantor == 0 )
+    {
         push @errors, 'ERROR_cannot_delete_guarantor';
     } else {
-        foreach my $id ( @delete_guarantor ) {
-            my $r = Koha::Patron::Relationships->find( $id );
+        foreach my $id (@delete_guarantor) {
+            my $r = Koha::Patron::Relationships->find($id);
             $r->delete() if $r;
         }
     }
@@ -275,7 +276,7 @@ if(@delete_guarantor){
 
 #Check if guarantor requirements are met
 my $valid_guarantor = @guarantors ? @guarantors : $newdata{'contactname'};
-if ( ( $op eq 'save' || $op eq 'insert' )
+if (   ( $op eq 'save' || $op eq 'insert' )
     && C4::Context->preference('ChildNeedsGuarantor')
     && ( $category->category_type eq 'C' || $category->can_be_guarantee )
     && !$valid_guarantor )
@@ -427,7 +428,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         delete $newdata{password2};
         $success = 1;
         $patron = try {
-            Koha::Patron->new(\%newdata)->store({ guarantors => \@guarantors });
+            Koha::Patron->new( \%newdata )->store( { guarantors => \@guarantors } );
         } catch {
             $success = 0;
             $nok = 1;
@@ -521,7 +522,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         delete $newdata{password2};
 
         try {
-            $patron->set(\%newdata)->store({ guarantors => \@guarantors }) if scalar(keys %newdata) > 1;
+            $patron->set( \%newdata )->store( { guarantors => \@guarantors } ) if scalar( keys %newdata ) > 1;
                 # bug 4508 - avoid crash if we're not updating any columns in the borrowers table (editing patron attrs or msg prefs)
             $success = 1;
         } catch {
