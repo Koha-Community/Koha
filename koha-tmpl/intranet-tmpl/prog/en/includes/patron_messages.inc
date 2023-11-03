@@ -46,13 +46,13 @@
 
         [% IF ( patron.gonenoaddress ) %]
             <li class="gonenoaddress blocker">
-                <span title="gonenoaddress flag is set in patron record"><span class="circ-hlt">Address:</span> Patron's address flagged as in doubt</span>
+                <span title="gonenoaddress flag is set in patron record"><span class="circ-hlt">Address:</span> Patron's address flagged as in doubt</span> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3#memberentry_account_flags"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
             </li>
         [% END %]
 
         [% IF ( patron.lost ) %]
             <li class="lost blocker">
-                <span title="lost flag is set in patron record"><span class="circ-hlt">Lost: </span> Patron's card is flagged as lost</span>
+                <span title="lost flag is set in patron record"><span class="circ-hlt">Lost: </span> Patron's card is flagged as lost</span> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3#memberentry_account_flags"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
             </li>
         [% END %]
 

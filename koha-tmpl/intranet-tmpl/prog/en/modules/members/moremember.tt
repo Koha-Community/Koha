@@ -539,6 +539,26 @@
                                                 [% translated_language | html %]
                                             </li>
                                         [% END %]
+
+                                        <li id="patron-flags-gonenoaddress">
+                                            [% IF patron.gonenoaddress %]
+                                                <span class="label error">Address in doubt:</span>
+                                                <span class="error">Yes</span>
+                                            [% ELSE %]
+                                                <span class="label">Address in doubt:</span>
+                                                <span>No</span>
+                                            [% END %]
+                                        </li>
+
+                                        <li id="patron-flags-lostcard">
+                                            [% IF patron.lost %]
+                                                <span class="label error">Card lost:</span>
+                                                <span class="error">Yes</span>
+                                            [% ELSE %]
+                                                <span class="label">Card lost:</span>
+                                                <span>No</span>
+                                            [% END %]
+                                        </li>
                                     </ol>
                                 </div> [% # /div.rows %]
                             </div> [% # /div#patron-library-details %]
