@@ -5,14 +5,15 @@
 <title>[% IF ( authid ) %]Modify authority #[% authid | html %] ([% authtypetext | html %])[% ELSE %]Adding authority ([% authtypetext | html %])[% END %] &rsaquo; Authorities &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
+[% INCLUDE 'select2.inc' %]
 <script>
     [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]
         var auth_values_creation = 1;
     [% ELSE %]
         var auth_values_creation = 0;
     [% END %]
+    $.fn.select2.defaults.set("width", "100%" );
 </script>
-[% INCLUDE 'select2.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]
 
 <script>
