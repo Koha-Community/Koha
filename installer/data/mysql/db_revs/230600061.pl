@@ -26,6 +26,7 @@ return {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             }
             );
+            say $out "Added new table 'bookings'";
         }
 
         if ( !column_exists( 'items', 'bookable' ) ) {
@@ -34,6 +35,8 @@ return {
                 ALTER TABLE items ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
             }
             );
+
+            say $out "Added column 'items.bookable'";
         }
 
         if ( !column_exists( 'deleteditems', 'bookable' ) ) {
@@ -42,6 +45,8 @@ return {
                 ALTER TABLE deleteditems ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
             }
             );
+
+            say $out "Added column 'deleteditems.bookable'";
         }
 
         $dbh->do(
@@ -53,7 +58,7 @@ return {
           );
         }
         );
-        say $out "Added new permissions 'manage_bookings'";
+        say $out "Added new permission 'manage_bookings'";
 
     },
 };
