@@ -151,9 +151,9 @@ $sth->execute(@query_params);
 
 my @reservedata;
 while ( my $data = $sth->fetchrow_hashref ) {
-    my $thisratio = $data->{reservecount} / $data->{itemcount};
-    my $copies_to_buy = ceil($data->{reservecount}/$ratio - $data->{itemcount});
-    $thisratio >= $ratio or next;  # TODO: tighter targeting -- get ratio limit into SQL using HAVING clause
+    my $thisratio     = $data->{reservecount} / $data->{itemcount};
+    my $copies_to_buy = ceil( $data->{reservecount} / $ratio - $data->{itemcount} );
+    $thisratio >= $ratio or next;    # TODO: tighter targeting -- get ratio limit into SQL using HAVING clause
     push(
         @reservedata,
         {
@@ -169,19 +169,19 @@ while ( my $data = $sth->fetchrow_hashref ) {
             itemnum            => $data->{itemnumber},
             biblionumber       => $data->{biblionumber},
             holdingbranch      => $data->{holdingbranch},
-            homebranch_list    => [split('\|', $data->{homebranch_list})],
-            holdingbranch_list => [split('\|', $data->{holdingbranch_list})],
+            homebranch_list    => [ split( '\|', $data->{homebranch_list} ) ],
+            holdingbranch_list => [ split( '\|', $data->{holdingbranch_list} ) ],
             branch             => $data->{branch},
             itemcallnumber     => $data->{itemcallnumber},
-            location           => [split('\|', $data->{l_location})],
-            itype              => [split('\|', $data->{l_itype})],
-            ccode              => [split('\|', $data->{l_ccode})],
+            location           => [ split( '\|', $data->{l_location} ) ],
+            itype              => [ split( '\|', $data->{l_itype} ) ],
+            ccode              => [ split( '\|', $data->{l_ccode} ) ],
             reservecount       => $data->{reservecount},
             itemcount          => $data->{itemcount},
             copies_to_buy      => sprintf( "%d", $copies_to_buy ),
-            thisratio => sprintf( "%.2f", $thisratio ),
+            thisratio          => sprintf( "%.2f", $thisratio ),
             thisratio_atleast1 => ( $thisratio >= 1 ) ? 1 : 0,
-            listcall           => [split('\|', $data->{listcall})]
+            listcall           => [ split( '\|', $data->{listcall} ) ]
         }
     );
 }
