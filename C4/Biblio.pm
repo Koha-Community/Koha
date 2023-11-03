@@ -2841,8 +2841,8 @@ sub ModBiblioMarc {
     }
 
     if ( C4::Context->preference('StripWhitespaceChars') ) {
-        my $p = Koha::RecordProcessor->new({ filters => qw(TrimFields) });
-        $p->process( $record );
+        my $p = Koha::RecordProcessor->new( { filters => qw(TrimFields) } );
+        $p->process($record);
     }
 
     my $metadata = {

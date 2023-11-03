@@ -562,136 +562,141 @@ returns authid of the newly created authority
 =cut
 
 sub AddAuthority {
-# pass the MARC::Record to this function, and it will create the records in the authority table
+
+    # pass the MARC::Record to this function, and it will create the records in the authority table
     my ( $record, $authid, $authtypecode, $params ) = @_;
 
     my $skip_record_index = $params->{skip_record_index} || 0;
 
-  my $dbh=C4::Context->dbh;
-	my $leader='     nz  a22     o  4500';#Leader for incomplete MARC21 record
+    my $dbh    = C4::Context->dbh;
+    my $leader = '     nz  a22     o  4500';    #Leader for incomplete MARC21 record
 
-# if authid empty => true add, find a new authid number
+    # if authid empty => true add, find a new authid number
     my $format;
-    if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC') {
-        $format= 'UNIMARCAUTH';
-    }
-    else {
-        $format= 'MARC21';
+    if ( uc( C4::Context->preference('marcflavour') ) eq 'UNIMARC' ) {
+        $format = 'UNIMARCAUTH';
+    } else {
+        $format = 'MARC21';
     }
 
     #update date/time to 005 for marc and unimarc
-    my $time=POSIX::strftime("%Y%m%d%H%M%S",localtime);
-    my $f5=$record->field('005');
-    if (!$f5) {
-      $record->insert_fields_ordered( MARC::Field->new('005',$time.".0") );
-    }
-    else {
-      $f5->update($time.".0");
+    my $time = POSIX::strftime( "%Y%m%d%H%M%S", localtime );
+    my $f5   = $record->field('005');
+    if ( !$f5 ) {
+        $record->insert_fields_ordered( MARC::Field->new( '005', $time . ".0" ) );
+    } else {
+        $f5->update( $time . ".0" );
     }
 
     SetUTF8Flag($record);
-	if ($format eq "MARC21") {
+    if ( $format eq "MARC21" ) {
         my $userenv = C4::Context->userenv;
         my $library;
         my $marcorgcode = C4::Context->preference('MARCOrgCode');
         if ( $userenv && $userenv->{'branch'} ) {
             $library = Koha::Libraries->find( $userenv->{'branch'} );
+
             # userenv's library could not exist because of a trick in misc/commit_file.pl (see FIXME and set_userenv statement)
             $marcorgcode = $library ? $library->get_effective_marcorgcode : $marcorgcode;
         }
-		if (!$record->leader) {
-			$record->leader($leader);
-		}
-		if (!$record->field('003')) {
-			$record->insert_fields_ordered(
-                MARC::Field->new('003', $marcorgcode),
-			);
-		}
-		my $date=POSIX::strftime("%y%m%d",localtime);
-		if (!$record->field('008')) {
+        if ( !$record->leader ) {
+            $record->leader($leader);
+        }
+        if ( !$record->field('003') ) {
+            $record->insert_fields_ordered(
+                MARC::Field->new( '003', $marcorgcode ),
+            );
+        }
+        my $date = POSIX::strftime( "%y%m%d", localtime );
+        if ( !$record->field('008') ) {
+
             # Get a valid default value for field 008
             my $default_008 = C4::Context->preference('MARCAuthorityControlField008');
-            if(!$default_008 or length($default_008)<34) {
+            if ( !$default_008 or length($default_008) < 34 ) {
                 $default_008 = '|| aca||aabn           | a|a     d';
-            }
-            else {
-                $default_008 = substr($default_008,0,34);
+            } else {
+                $default_008 = substr( $default_008, 0, 34 );
             }
 
-            $record->insert_fields_ordered( MARC::Field->new('008',$date.$default_008) );
-		}
-		if (!$record->field('040')) {
-		 $record->insert_fields_ordered(
-        MARC::Field->new('040','','',
-            'a' => $marcorgcode,
-            'c' => $marcorgcode,
-				) 
-			);
+            $record->insert_fields_ordered( MARC::Field->new( '008', $date . $default_008 ) );
+        }
+        if ( !$record->field('040') ) {
+            $record->insert_fields_ordered(
+                MARC::Field->new(
+                    '040', '', '',
+                    'a' => $marcorgcode,
+                    'c' => $marcorgcode,
+                )
+            );
+        }
     }
-	}
 
-  if ($format eq "UNIMARCAUTH") {
-        $record->leader("     nx  j22             ") unless ($record->leader());
-        my $date=POSIX::strftime("%Y%m%d",localtime);
-	my $defaultfield100 = C4::Context->preference('UNIMARCAuthorityField100');
-    if (my $string=$record->subfield('100',"a")){
-      	$string=~s/fre50/frey50/;
-      	$record->field('100')->update('a'=>$string);
+    if ( $format eq "UNIMARCAUTH" ) {
+        $record->leader("     nx  j22             ") unless ( $record->leader() );
+        my $date            = POSIX::strftime( "%Y%m%d", localtime );
+        my $defaultfield100 = C4::Context->preference('UNIMARCAuthorityField100');
+        if ( my $string = $record->subfield( '100', "a" ) ) {
+            $string =~ s/fre50/frey50/;
+            $record->field('100')->update( 'a' => $string );
+        } elsif ( $record->field('100') ) {
+            $record->field('100')->update( 'a' => $date . $defaultfield100 );
+        } else {
+            $record->append_fields(
+                MARC::Field->new(
+                    '100', ' ', ' '
+                    , 'a' => $date . $defaultfield100
+                )
+            );
+        }
     }
-    elsif ($record->field('100')){
-          $record->field('100')->update('a'=>$date.$defaultfield100);
-    } else {      
-        $record->append_fields(
-        MARC::Field->new('100',' ',' '
-            ,'a'=>$date.$defaultfield100)
-        );
-    }      
-  }
-  my ($auth_type_tag, $auth_type_subfield) = get_auth_type_location($authtypecode);
-  if (!$authid and $format eq "MARC21") {
-    # only need to do this fix when modifying an existing authority
-    C4::AuthoritiesMarc::MARC21::fix_marc21_auth_type_location($record, $auth_type_tag, $auth_type_subfield);
-  } 
-  if (my $field=$record->field($auth_type_tag)){
-    $field->update($auth_type_subfield=>$authtypecode);
-  }
-  else {
-    $record->add_fields($auth_type_tag,'','', $auth_type_subfield=>$authtypecode);
-  }
+    my ( $auth_type_tag, $auth_type_subfield ) = get_auth_type_location($authtypecode);
+    if ( !$authid and $format eq "MARC21" ) {
+
+        # only need to do this fix when modifying an existing authority
+        C4::AuthoritiesMarc::MARC21::fix_marc21_auth_type_location( $record, $auth_type_tag, $auth_type_subfield );
+    }
+    if ( my $field = $record->field($auth_type_tag) ) {
+        $field->update( $auth_type_subfield => $authtypecode );
+    } else {
+        $record->add_fields( $auth_type_tag, '', '', $auth_type_subfield => $authtypecode );
+    }
 
     if ( C4::Context->preference('StripWhitespaceChars') ) {
-        my $p = Koha::RecordProcessor->new({ filters => qw(TrimFields) });
-        $p->process( $record );
+        my $p = Koha::RecordProcessor->new( { filters => qw(TrimFields) } );
+        $p->process($record);
     }
 
     # Save record into auth_header, update 001
     my $action;
     my $authority;
-    if (!$authid ) {
+    if ( !$authid ) {
         $action = 'create';
+
         # Save a blank record, get authid
-        $authority = Koha::Authority->new({ datecreated => \'NOW()', marcxml => '' })->store();
+        $authority = Koha::Authority->new( { datecreated => \'NOW()', marcxml => '' } )->store();
         $authority->discard_changes();
         $authid = $authority->authid;
         logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     } else {
-        $action = 'modify';
+        $action    = 'modify';
         $authority = Koha::Authorities->find($authid);
     }
 
     # Insert/update the recordID in MARC record
     $record->delete_field( $record->field('001') );
     $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
-    # Update
-    $authority->update({ authtypecode => $authtypecode, marc => $record->as_usmarc, marcxml => $record->as_xml_record($format) });
 
-    unless ( $skip_record_index ) {
-        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
+    # Update
+    $authority->update(
+        { authtypecode => $authtypecode, marc => $record->as_usmarc, marcxml => $record->as_xml_record($format) } );
+
+    unless ($skip_record_index) {
+        my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
         $indexer->index_records( $authid, "specialUpdate", "authorityserver", $record );
     }
 
-    _after_authority_action_hooks({ action => $action, authority_id => $authid });
-    return ( $authid );
+    _after_authority_action_hooks( { action => $action, authority_id => $authid } );
+    return ($authid);
 }
 
 =head2 DelAuthority

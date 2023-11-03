@@ -51,7 +51,7 @@ sub filter {
     my ( $self, $record ) = @_;
 
     return
-      unless $record and ref($record) eq 'MARC::Record';
+        unless $record and ref($record) eq 'MARC::Record';
 
     foreach my $field ( $record->fields ) {
         unless ( $field->is_control_field ) {
@@ -60,8 +60,8 @@ sub filter {
                 my $value = $subfield->[1];
                 $value =~ s/[\n\r]+/ /g;
                 $value =~ s/^\s+|\s+$//g;
-                $field->add_subfields( $key => $value ); # add subfield to the end of the subfield list
-                $field->delete_subfield( pos => 0 ); # delete the subfield at the top of the subfield list
+                $field->add_subfields( $key => $value );    # add subfield to the end of the subfield list
+                $field->delete_subfield( pos => 0 );        # delete the subfield at the top of the subfield list
             }
         }
     }
