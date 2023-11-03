@@ -183,7 +183,7 @@ Controller function that handles retrieving item's bookings
 sub get_bookings {
     my $c = shift->openapi->valid_input or return;
 
-    my $item = Koha::Items->find( { itemnumber => $c->validation->param('item_id') }, { prefetch => ['bookings'] } );
+    my $item = Koha::Items->find( { itemnumber => $c->param('item_id') }, { prefetch => ['bookings'] } );
 
     unless ($item) {
         return $c->render(

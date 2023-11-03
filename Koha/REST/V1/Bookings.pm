@@ -37,13 +37,11 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $bookings_set = Koha::Bookings->new;
-        my $bookings     = $c->objects->search($bookings_set);
+        my $bookings = $c->objects->search( Koha::Bookings->new );
         return $c->render( status => 200, openapi => $bookings );
     } catch {
         $c->unhandled_exception($_);
     };
-
 }
 
 =head3 get
@@ -56,7 +54,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $booking = Koha::Bookings->find( $c->validation->param('booking_id') );
+        my $booking = $c->objects->find( Koha::Bookings->new, $c->param('booking_id') );
         unless ($booking) {
             return $c->render(
                 status  => 404,
@@ -64,7 +62,7 @@ sub get {
             );
         }
 
-        return $c->render( status => 200, openapi => $booking->to_api );
+        return $c->render( status => 200, openapi => $booking );
     } catch {
         $c->unhandled_exception($_);
     }
@@ -80,12 +78,12 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $booking = Koha::Booking->new_from_api( $c->validation->param('body') );
+        my $booking = Koha::Booking->new_from_api( $c->req->json );
         $booking->store;
         $c->res->headers->location( $c->req->url->to_string . '/' . $booking->booking_id );
         return $c->render(
             status  => 201,
-            openapi => $booking->to_api
+            openapi => $c->objects->to_api( $booking ),
         );
     } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Booking::Clash') ) {
@@ -108,7 +106,7 @@ Controller function that handles updating an existing booking
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $booking = Koha::Bookings->find( $c->validation->param('booking_id') );
+    my $booking = $c->objects->find_rs( Koha::Bookings->new, $c->param('booking_id') );
 
     if ( not defined $booking ) {
         return $c->render(
@@ -118,9 +116,9 @@ sub update {
     }
 
     return try {
-        $booking->set_from_api( $c->validation->param('body') );
+        $booking->set_from_api( $c->req->json );
         $booking->store();
-        return $c->render( status => 200, openapi => $booking->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($booking) );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -135,8 +133,9 @@ Controller function that handles removing an existing booking
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $booking = Koha::Bookings->find( $c->validation->param('booking_id') );
-    if ( not defined $booking ) {
+    my $booking = Koha::Bookings->find( $c->param('booking_id') );
+
+    unless ( $booking ) {
         return $c->render(
             status  => 404,
             openapi => { error => "Object not found" }
