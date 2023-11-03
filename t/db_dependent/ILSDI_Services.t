@@ -178,8 +178,8 @@ subtest 'GetPatronInfo test for holds' => sub {
     my $reply = C4::ILSDI::Services::GetPatronInfo( $query );
 
     # Check that this loan is not on hold
-    is ( $reply->{loans}->{loan}[0]->{recordonhold}, "0", "Record is not on hold");
-    is ( $reply->{loans}->{loan}[0]->{itemonhold}, "0", "Item is not on hold");
+    is ( $reply->{loans}->{loan}[0]->{holds_on_record}, "0", "Record is not on hold");
+    is ( $reply->{loans}->{loan}[0]->{holds_on_item}, "0", "Item is not on hold");
 
     # Place a loan
     # Add a hold on the biblio
@@ -187,8 +187,8 @@ subtest 'GetPatronInfo test for holds' => sub {
 
     # Check that it is on hold on biblio level
     $reply = C4::ILSDI::Services::GetPatronInfo( $query );
-    is ( $reply->{loans}->{loan}[0]->{recordonhold}, "1", "Record is on hold");
-    is ( $reply->{loans}->{loan}[0]->{itemonhold}, "0", "Item is on hold");
+    is ( $reply->{loans}->{loan}[0]->{holds_on_record}, "1", "Record is on hold");
+    is ( $reply->{loans}->{loan}[0]->{holds_on_item}, "0", "Item is on hold");
 
     # Delete holds
     $schema->resultset( 'Reserve' )->delete_all;
@@ -203,16 +203,16 @@ subtest 'GetPatronInfo test for holds' => sub {
 
     # When a specific item has a reserve, the item is on hold as well as the record
     $reply = C4::ILSDI::Services::GetPatronInfo( $query );
-    is ( $reply->{loans}->{loan}[0]->{recordonhold}, "1", "Record is on hold");
-    is ( $reply->{loans}->{loan}[0]->{itemonhold}, "1", "Item is on hold");
+    is ( $reply->{loans}->{loan}[0]->{holds_on_record}, "1", "Record is on hold");
+    is ( $reply->{loans}->{loan}[0]->{holds_on_item}, "1", "Item is on hold");
 
     # Add another hold on the biblio
     $biblioreserve = AddReserve({ branchcode => $library->branchcode, borrowernumber => $brwr3->borrowernumber, biblionumber => $biblio->biblionumber });
 
     # Check that there are 2 holds on the biblio and 1 on this specific item
     $reply = C4::ILSDI::Services::GetPatronInfo( $query );
-    is ( $reply->{loans}->{loan}[0]->{recordonhold}, "2", "Record is on hold twice");
-    is ( $reply->{loans}->{loan}[0]->{itemonhold}, "1", "Item is on hold");
+    is ( $reply->{loans}->{loan}[0]->{holds_on_record}, "2", "Record is on hold twice");
+    is ( $reply->{loans}->{loan}[0]->{holds_on_item}, "1", "Item is on hold");
 
     # Cleanup
     $schema->storage->txn_rollback;
