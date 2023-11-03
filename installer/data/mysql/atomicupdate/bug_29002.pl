@@ -37,5 +37,15 @@ return {
                 ALTER TABLE deleteditems ADD COLUMN `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not' AFTER `barcode`
             });
         }
+
+        $dbh->do(q{
+          INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (
+            1,
+            'manage_bookings',
+            'Manage item bookings'
+          );
+        });
+        say $out "Added new permissions 'manage_bookings'";
+
     },
 };

@@ -117,6 +117,11 @@
             Override blocked renewals
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_bookings' %]
+        <span class="sub_permission manage_bookings_subpermission">
+            Manage item bookings
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_checkout_notes' %]
         <span class="sub_permission manage_checkout_notes_subpermission">
             Mark checkout notes as seen/not seen

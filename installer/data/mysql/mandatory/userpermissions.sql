@@ -4,6 +4,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'overdues_report', 'Execute overdue items report'),
    ( 1, 'force_checkout', 'Force checkout if a limitation exists'),
    ( 1, 'manage_restrictions', 'Manage restrictions for accounts'),
+   ( 1, 'manage_bookings', 'Manage item bookings'),
    ( 1, 'manage_checkout_notes', 'Mark checkout notes as seen/not seen'),
    ( 1, 'manage_curbside_pickups', 'Manage curbside pickups'),
    ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
