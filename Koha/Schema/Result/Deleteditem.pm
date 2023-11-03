@@ -527,6 +527,7 @@ __PACKAGE__->set_primary_key("itemnumber");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Afgr1jl6aeSy/rS9RJGq2g
 
 __PACKAGE__->add_columns(
+    '+bookable'                          => { is_boolean => 1 },
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
 );
 

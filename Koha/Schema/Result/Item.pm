@@ -983,8 +983,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-02 10:58:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XTlINIMqB3LroE66IjZP3A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-03 14:18:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0jargxEw3HZOK57+ijsMHA
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
@@ -996,6 +996,7 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->add_columns(
+    '+bookable'                          => { is_boolean => 1 },
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
 );
 
