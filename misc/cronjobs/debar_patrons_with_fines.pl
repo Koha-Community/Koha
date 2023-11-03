@@ -66,8 +66,7 @@ Confirm that the script should actually undertake the debarments
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage   qw( pod2usage );
 
@@ -77,7 +76,7 @@ use Koha::Patron::Debarments;
 
 use C4::Log qw( cronlogaction );
 
-my ( $amount, $help, $confirm, $message, $expiration, $file );
+my ( $amount, $help, $confirm, $message, $expiration, $file, $verbose );
 GetOptions(
     'a|amount:i'     => \$amount,
     'h|help'         => \$help,
@@ -85,35 +84,51 @@ GetOptions(
     'm|message:s'    => \$message,
     'f|file:s'       => \$file,
     'e|expiration:s' => \$expiration,
+    'v|verbose'      => \$verbose,
 ) || pod2usage(2);
 pod2usage(1) if $help;
-pod2usage(1) unless ( $confirm && ( $message || $file ) );
+pod2usage(1) unless $message || $file;
 
 cronlogaction();
-my $badBorrowers = Koha::Patrons->filter_by_amount_owed( { more_than => $amount // 0 } );
+my $patrons = Koha::Patrons->filter_by_amount_owed( { more_than => $amount // 0 } );
 $message = getMessageContent();
 
-while ( my $bb = $badBorrowers->next ) {
+my $count_patrons = 0;
+my $errors        = 0;
+while ( my $patron = $patrons->next ) {
+    print "Found patron " . $patron->id . "\n" if $verbose;
+    if ( !$confirm ) {
+        $count_patrons++;
+        next;
+    }
 
-    #Don't crash, but keep debarring as long as you can!
+    # Don't crash, but keep debarring as long as you can!
     eval {
-        my $success = Koha::Patron::Debarments::AddDebarment(
+        Koha::Patron::Debarments::AddDebarment(
             {
-                borrowernumber => $bb->borrowernumber,
+                borrowernumber => $patron->id,
                 expiration     => $expiration,
                 type           => 'MANUAL',
                 comment        => $message,
             }
         );
     };
-    if ($@) {
-        print $@. "\n";
+    if ( my $error = $@ ) {
+        warn 'debarment failed for patron ' . $patron->id . ": $error";
+        $errors++;
+        next;
     }
+    $count_patrons++;
 }
+
+# Print totals
+my $verb = $confirm ? 'Debarred' : 'Found';
+print "debar_patrons_with_fines: $verb $count_patrons patrons";
+print( $errors ? ", had $errors failures\n" : "\n" );
 
 sub getMessageContent {
     return $message if ($message);
-    open( my $FH, "<:encoding(UTF-8)", $file ) or die "$!\n";
+    open( my $FH, "<:encoding(UTF-8)", $file ) or die "Could not open $file: $!\n";
     my @msg = <$FH>;
     close $FH;
     return join( "", @msg );
