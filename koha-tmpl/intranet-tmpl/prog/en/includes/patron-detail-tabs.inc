@@ -4,7 +4,7 @@
 [% WRAPPER tabs id= "finesholdsissues" %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "checkouts" bt_active= 1 %]
-            <span>Checkouts ([% issuecount || 0 | html %])</span>
+            <span>Checkouts (<span class="checkout_count">[% issuecount || 0 | html %]</span>)</span>
         [% END %]
 
         [% IF relatives_issues_count %]

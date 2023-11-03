@@ -316,6 +316,8 @@ $(document).ready(function() {
                     $('.checkin[value="'+checked+'"]').prop('checked' , true );
                 });
             }
+        var checkout_count = table.page.info().recordsTotal;
+        $('.checkout_count').text(checkout_count);
         });
     }
 
