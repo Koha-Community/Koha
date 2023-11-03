@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::MockModule;
 use Test::Warn;
 
@@ -25,7 +25,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Biblio qw( AddBiblio );
-use C4::Circulation qw( AddOfflineOperation ProcessOfflineOperation GetOfflineOperation );
+use C4::Circulation qw( AddOfflineOperation ProcessOfflineOperation GetOfflineOperation ProcessOfflineIssue );
 use C4::Context;
 use C4::Reserves qw( AddReserve );
 use Koha::DateUtils qw( dt_from_string );
@@ -54,6 +54,55 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new();
+
+subtest "Bug 34529: Offline circulation should be able to accept userid as well as cardnumber" => sub {
+
+    plan tests => 2;
+
+    $dbh->do("DELETE FROM pending_offline_operations");
+
+    $branch = $builder->build( { source => 'Branch' } )->{branchcode};
+
+    my $borrower1 = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { branchcode => $branch }
+        }
+    );
+
+    my $biblio = t::lib::TestBuilder->new->build_sample_biblio;
+    my $item1  = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->id,
+            library      => $branch,
+        }
+    );
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->id,
+            library      => $branch,
+        }
+    );
+
+    is(
+        ProcessOfflineIssue(
+            {
+                cardnumber => $borrower1->{cardnumber},
+                barcode    => $item1->barcode
+            }
+        ),
+        "Success.",
+        "ProcessOfflineIssue succeeds with cardnumber"
+    );
+    is(
+        ProcessOfflineIssue(
+            { cardnumber => $borrower1->{userid}, barcode => $item2->barcode }
+        ),
+        "Success.",
+        "ProcessOfflineIssue succeeds with user id"
+    );
+
+  };
 
 subtest "Bug 30114 - Koha offline circulation will always cancel the next hold when issuing item to a patron" => sub {
 
