@@ -147,6 +147,8 @@ if ( $query->param('reserve_id') ) {
     my $reserve_id     = $query->param('reserve_id');
     my $diffBranchReturned = $query->param('diffBranch');
     my $cancel_reserve = $query->param('cancel_reserve');
+    my $cancel_reason = $query->param('cancel_reason');
+
     # fix up item type for display
     my $item = Koha::Items->find( $itemnumber );
     my $biblio = $item->biblio;
@@ -154,7 +156,7 @@ if ( $query->param('reserve_id') ) {
     if ( $cancel_reserve ) {
         my $hold = Koha::Holds->find( $reserve_id );
         if ( $hold ) {
-            $hold->cancel( { charge_cancel_fee => !$forgivemanualholdsexpire } );
+            $hold->cancel( { charge_cancel_fee => !$forgivemanualholdsexpire, cancellation_reason => $cancel_reason} );
         } # FIXME else?
     } else {
         my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
