@@ -341,9 +341,6 @@
     x-koha-authorization:
       permissions:
         circulation: "1"
-    x-koha-embed:
-      - item
-      - patron
 "/biblios/{biblio_id}/checkouts":
   get:
     x-mojo-to: Biblios#get_checkouts
