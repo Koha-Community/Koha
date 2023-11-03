@@ -249,7 +249,6 @@ $(document).ready(function() {
         if ( refresh_table ) {
             RefreshIssuesTable();
         }
-        $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
         // Prevent form submit
         return false;
     });
@@ -297,7 +296,27 @@ $(document).ready(function() {
 
     function RefreshIssuesTable() {
         var table = $('#issues-table').DataTable();
-        table.ajax.reload();
+        var renewchecked = $('input[name=renew]:checked').map(function(){
+            return this.value;
+        }).get();
+        var checkinchecked = $('input[name=checkin]:checked').map(function(){
+            return this.value;
+        }).get();
+        table.ajax.reload( function() {
+            $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
+            if ( renewchecked.length ) {
+                $('#RenewChecked').prop('disabled' , false );
+                renewchecked.forEach( function(checked) {
+                    $('.renew[value="'+checked+'"]').prop('checked' , true );
+                });
+            }
+            if ( checkinchecked.length ) {
+                $('#CheckinChecked').prop('disabled' , false );
+                checkinchecked.forEach( function(checked) {
+                    $('.checkin[value="'+checked+'"]').prop('checked' , true );
+                });
+            }
+        });
     }
 
     function LoadIssuesTable() {
