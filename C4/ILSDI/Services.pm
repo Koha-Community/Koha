@@ -531,10 +531,10 @@ sub GetPatronInfo {
             delete $issue->{'more_subfields_xml'};
 
             # Is the item already on hold by another user?
-            $issue->{'itemonhold'} = Koha::Holds->search({ itemnumber => $issue->{'itemnumber'} })->count;
+            $issue->{'holds_on_item'} = Koha::Holds->search({ itemnumber => $issue->{'itemnumber'} })->count;
 
             # Is the record (next available item) on hold by another user?
-            $issue->{'recordonhold'} = Koha::Holds->search({ biblionumber => $issue->{'biblionumber'} })->count;
+            $issue->{'holds_on_record'} = Koha::Holds->search({ biblionumber => $issue->{'biblionumber'} })->count;
 
             push @checkouts, $issue
         }
