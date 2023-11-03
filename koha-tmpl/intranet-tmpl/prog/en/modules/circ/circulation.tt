@@ -72,7 +72,9 @@
                     [% END %]
 
                     [% IF ADDITIONAL_MATERIALS && !NEEDSCONFIRMATION %]
-                        <div id="materials" class="dialog message">Note about the accompanying materials: [% ADDITIONAL_MATERIALS | html %]
+                        <div id="materials" class="dialog message">
+                            <span class="mats_spec_label">Note about the accompanying materials: </span>
+                            <span class="mats_spec_message">[% ADDITIONAL_MATERIALS | html %]</span>
                         </div>
                     [% END %]
 
