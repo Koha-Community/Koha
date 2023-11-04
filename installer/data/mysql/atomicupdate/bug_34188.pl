@@ -13,7 +13,7 @@ return {
         );
 
         # sysprefs
-        say $out "Added new system preference 'ForcedLibrarySelection'";
+        say $out "Added new system preference 'ForceLibrarySelection'";
 
     },
 };
