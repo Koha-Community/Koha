@@ -310,17 +310,17 @@ sub build_tabs {
                             @subfields_data,
                             $biblio_form_builder->generate_subfield_form(
                                 {
-                                    tag => $tag,
-                                    subfield => $subfield,
-                                    value => $value,
-                                    index_tag => $index_tag,
-                                    record => $record,
-                                    hostitemnumber => scalar $input->param('hostitemnumber'),
-                                    op => scalar $input->param('op'),
+                                    tag               => $tag,
+                                    subfield          => $subfield,
+                                    value             => $value,
+                                    index_tag         => $index_tag,
+                                    record            => $record,
+                                    hostitemnumber    => scalar $input->param('hostitemnumber'),
+                                    op                => scalar $input->param('op'),
                                     changed_framework => scalar $input->param('changed_framework'),
-                                    breedingid => scalar $input->param('breedingid'),
-                                    tagslib => $tagslib,
-                                    mandatory_z3950 => $mandatory_z3950,
+                                    breedingid        => scalar $input->param('breedingid'),
+                                    tagslib           => $tagslib,
+                                    mandatory_z3950   => $mandatory_z3950,
                                 }
                             )
                         );
@@ -336,17 +336,17 @@ sub build_tabs {
                                 @subfields_data,
                                 $biblio_form_builder->generate_subfield_form(
                                     {
-                                        tag => $tag,
-                                        subfield => $subfield,
-                                        value => $value,
-                                        index_tag => $index_tag,
-                                        record => $record,
-                                        hostitemnumber => scalar $input->param('hostitemnumber'),
-                                        op => scalar $input->param('op'),
+                                        tag               => $tag,
+                                        subfield          => $subfield,
+                                        value             => $value,
+                                        index_tag         => $index_tag,
+                                        record            => $record,
+                                        hostitemnumber    => scalar $input->param('hostitemnumber'),
+                                        op                => scalar $input->param('op'),
                                         changed_framework => scalar $input->param('changed_framework'),
-                                        breedingid => scalar $input->param('breedingid'),
-                                        tagslib => $tagslib,
-                                        mandatory_z3950 => $mandatory_z3950,
+                                        breedingid        => scalar $input->param('breedingid'),
+                                        tagslib           => $tagslib,
+                                        mandatory_z3950   => $mandatory_z3950,
                                     }
                                 )
                             );
@@ -377,17 +377,17 @@ sub build_tabs {
                             @subfields_data,
                             $biblio_form_builder->generate_subfield_form(
                                 {
-                                    tag => $tag,
-                                    subfield => $subfield,
-                                    value => '',
-                                    index_tag => $index_tag,
-                                    record => $record,
-                                    hostitemnumber => scalar $input->param('hostitemnumber'),
-                                    op => scalar $input->param('op'),
+                                    tag               => $tag,
+                                    subfield          => $subfield,
+                                    value             => '',
+                                    index_tag         => $index_tag,
+                                    record            => $record,
+                                    hostitemnumber    => scalar $input->param('hostitemnumber'),
+                                    op                => scalar $input->param('op'),
                                     changed_framework => scalar $input->param('changed_framework'),
-                                    breedingid => scalar $input->param('breedingid'),
-                                    tagslib => $tagslib,
-                                    mandatory_z3950 => $mandatory_z3950,
+                                    breedingid        => scalar $input->param('breedingid'),
+                                    tagslib           => $tagslib,
+                                    mandatory_z3950   => $mandatory_z3950,
                                 }
                             )
                         );
@@ -440,24 +440,24 @@ sub build_tabs {
                            # always include in the form regardless of the hidden setting - bug 2206 and 28022
                     next
                       if ( $subfield->{tab} ne $tabloop );
-			push(
-                        @subfields_data,
-                        $biblio_form_builder->generate_subfield_form(
-                            {
-                                tag => $tag,
-                                subfield => $subfield->{subfield},
-                                value => '',
-                                index_tag => $index_tag,
-                                record => $record,
-                                hostitemnumber => scalar $input->param('hostitemnumber'),
-                                op => scalar $input->param('op'),
-                                changed_framework => scalar $input->param('changed_framework'),
-                                breedingid => scalar $input->param('breedingid'),
-                                tagslib => $tagslib,
-                                mandatory_z3950 => $mandatory_z3950,
-                            }
-                        )
-                    );
+                        push(
+                            @subfields_data,
+                            $biblio_form_builder->generate_subfield_form(
+                                {
+                                    tag               => $tag,
+                                    subfield          => $subfield->{subfield},
+                                    value             => '',
+                                    index_tag         => $index_tag,
+                                    record            => $record,
+                                    hostitemnumber    => scalar $input->param('hostitemnumber'),
+                                    op                => scalar $input->param('op'),
+                                    changed_framework => scalar $input->param('changed_framework'),
+                                    breedingid        => scalar $input->param('breedingid'),
+                                    tagslib           => $tagslib,
+                                    mandatory_z3950   => $mandatory_z3950,
+                                }
+                            )
+                        );
                 }
                 if ( $#subfields_data >= 0 ) {
                     my %tag_data = (
