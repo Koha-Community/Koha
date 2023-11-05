@@ -175,11 +175,11 @@ Searching:
                   az: from A to Z.
                   za: from Z to A.
         -
-            - By default, sort search results from author links by
+            - By default, sort search results from author links in MARC21 detail pages and result lists by
             - pref: AuthorLinkSortBy
               default: default
               choices:
-                  default: obey default sort field and order specified in defaultSortField or OPACdefaultSortField
+                  default: default sort field and order specified in defaultSortField or OPACdefaultSortField
                   call_number: call number
                   pubdate: date of publication
                   acqdate: date added
@@ -187,10 +187,11 @@ Searching:
             - ','
             - pref: AuthorLinkSortOrder
               choices:
-                  asc: ascending.
-                  dsc: descending.
-                  az: from A to Z.
-                  za: from Z to A.
+                  asc: ascending
+                  dsc: descending
+                  az: from A to Z
+                  za: from Z to A
+            - .
         -
             - When limiting search results with a library or library group, limit by the item's
             - pref: SearchLimitLibrary
