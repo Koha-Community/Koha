@@ -2317,17 +2317,17 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
     is( $stat->categorycode,   $patron->categorycode,            'Recorded a categorycode' );
     is( $stat->location,       $item_1->location,                'Recorded a location' );
 
-
-    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
-    my $patron_2  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+    my $patron_2 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
     my $item_2 = $builder->build_sample_item( { library => $library->branchcode } );
-    my $issue = AddIssue( $patron_2, $item_2->barcode );
+    my $issue  = AddIssue( $patron_2, $item_2->barcode );
     $item_2->discard_changes;
-    ok($item_2->onloan, "Item is checked out");
+    ok( $item_2->onloan, "Item is checked out" );
 
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->barcode );
     $item_2->discard_changes;
-    ok(!$item_2->onloan, "Checked out item is returned");
+    ok( !$item_2->onloan, "Checked out item is returned" );
 
     # TODO There are other tests to provide here
 };
