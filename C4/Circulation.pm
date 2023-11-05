@@ -827,9 +827,9 @@ sub CanBookBeIssued {
             }
         );
         my $block_lost_return = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
-        my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower) =
-        AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'} );
-        ModDateLastSeen( $item_object->itemnumber, $block_lost_return ); # FIXME Move to Koha::Item
+        my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
+            AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'} );
+        ModDateLastSeen( $item_object->itemnumber, $block_lost_return );    # FIXME Move to Koha::Item
         return (
             {
                 STATS     => 1,
