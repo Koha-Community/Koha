@@ -7,7 +7,6 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
@@ -15,6 +14,6 @@ return {
             ('AuthorLinkSortOrder','asc','asc|dsc|az|za','Specify the default sort order for author links','Choice')
         }
         );
-        say $out "Added new system preferences 'AuthorLinkSortBy' 'AuthorLinkSortOrder'";
+        say $out "Added new system preferences 'AuthorLinkSortBy' and 'AuthorLinkSortOrder'";
     },
 };
