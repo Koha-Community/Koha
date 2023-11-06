@@ -1728,7 +1728,7 @@ sub AddIssue {
             }
 
             # Update item location
-            $item_object->update_item_location( 'checkout' );
+            $item_object->location_update_trigger( 'checkout' );
 
             if ( C4::Context->preference('UpdateTotalIssuesOnCirc') ) {
                 UpdateTotalIssues( $item_object->biblionumber, 1, undef, { skip_holds_queue => 1 } );
@@ -2199,7 +2199,7 @@ sub AddReturn {
     my $patron_unblessed = $patron ? $patron->unblessed : {};
 
     # Update item location
-    my $loc_messages = $item->update_item_location( 'checkin' );
+    my $loc_messages = $item->location_update_trigger( 'checkin' );
     foreach my $loc_msg_key ( keys %$loc_messages ) {
         $messages->{ $loc_msg_key } = $loc_messages->{ $loc_msg_key };
     }

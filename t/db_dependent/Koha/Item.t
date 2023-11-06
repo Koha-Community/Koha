@@ -2302,7 +2302,7 @@ subtest 'current_branchtransfers relationship' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'update_item_location() tests' => sub {
+subtest 'location_update_trigger() tests' => sub {
 
     plan tests => 10;
 
@@ -2320,26 +2320,26 @@ subtest 'update_item_location() tests' => sub {
 
         my $item = $builder->build_sample_item( { location => $location, permanent_location => $permanent_location } );
 
-        $item->update_item_location($action);
+        $item->location_update_trigger($action);
 
         is( $item->location, $location, "$pref does not modify value when not enabled" );
 
         t::lib::Mocks::mock_preference( $pref, qq{$location: GEN} );
 
-        $item->update_item_location($action);
+        $item->location_update_trigger($action);
 
         is( $item->location, 'GEN', qq{'location' value set from '$location' to 'GEN' with setting `$location: GEN`} );
 
         t::lib::Mocks::mock_preference( $pref, q{_ALL_: BOO} );
 
-        $item->update_item_location($action);
+        $item->location_update_trigger($action);
 
         is( $item->location, 'BOO', q{`_ALL_` does the job} );
 
         t::lib::Mocks::mock_preference( $pref, qq{$location: _BLANK_} );
         $item->location($location)->store();
 
-        $item->update_item_location($action);
+        $item->location_update_trigger($action);
         is( $item->location, q{}, q{`_BLANK_` does the job} );
 
         t::lib::Mocks::mock_preference( $pref, qq{GEN: _BLANK_\n_BLANK_: PROC\n$location: _PERM_} );
@@ -2352,7 +2352,7 @@ subtest 'update_item_location() tests' => sub {
             }
         )->store;
 
-        $item->update_item_location($action);
+        $item->location_update_trigger($action);
 
         is(
             $item->location, $permanent_location,

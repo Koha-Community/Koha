@@ -2356,15 +2356,15 @@ sub strings_map {
 }
 
 
-=head3 update_item_location
+=head3 location_update_trigger
 
-    $item->update_item_location( $action );
+    $item->location_update_trigger( $action );
 
 Update the item location on checkin or checkout.
 
 =cut
 
-sub update_item_location {
+sub location_update_trigger {
     my ( $self, $action ) = @_;
 
     my ( $update_loc_rules, $messages );
