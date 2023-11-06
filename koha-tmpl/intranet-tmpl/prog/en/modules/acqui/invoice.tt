@@ -520,6 +520,7 @@
 </div> <!-- /#updateFund.modal -->
 
 <span style="display:none;" id="all_fund_dropdown">
+    <option value="">No fund</option>
     [% FOREACH budget IN budgets %]
         [% IF ( budget.b_active ) %]
             <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
