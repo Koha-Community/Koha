@@ -2360,7 +2360,17 @@ sub strings_map {
 
     $item->location_update_trigger( $action );
 
-Update the item location on checkin or checkout.
+Updates the item location based on I<$action>. It is done like this:
+
+=over 4
+
+=item For B<checkin>, location is updated following the I<UpdateItemLocationOnCheckin> preference.
+
+=item For B<checkout>, location is updated following the I<UpdateItemLocationOnCheckout> preference.
+
+=back
+
+FIXME: It should return I<$self>. See bug 35270.
 
 =cut
 
