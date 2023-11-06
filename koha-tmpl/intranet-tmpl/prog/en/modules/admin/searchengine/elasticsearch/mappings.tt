@@ -261,7 +261,7 @@ a.add, a.delete {
                     [% WRAPPER tab_panel tabname="mapping_${ index.index_name }" %]
                         <table class="mappings" data-index_name="[% index.index_name | html %]" data-ordering="false" id="mapping_[% index.index_name | html %]_table">
                             <thead>
-                                <tr class="nodrag nodrop">
+                                <tr>
                                 <th>Search field</th>
                                 <th>Sortable</th>
                                 <th>Facetable</th>
@@ -387,7 +387,7 @@ a.add, a.delete {
                                 [% END %]
                             </tbody>
                             <tfoot>
-                                <tr class="nodrag nodrop">
+                                <tr>
                                     <td>
                                         <input data-id="mapping_index_name" type="hidden" value="[% index.index_name | html %]" />
                                         <select data-id="mapping_search_field_name">
