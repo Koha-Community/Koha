@@ -198,6 +198,17 @@ SKIP: {
         $s->fill_form( { categorycode => $category_code, description => 'Test category', enrolmentperiod => 12, category_type => 'A' } );
         $s->submit_form;
 
+        $s->click(
+            {
+                href       => '/admin/categories.pl?op=add_form&categorycode=' . $category_code,
+                main_class => 'main container-fluid'
+            }
+        );    # Edit button
+        $s->submit_form;
+
+        # Make sure the category is updated
+        $s->driver->find_element('//div[@class="dialog message"]');
+
         # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our category is not hidden
         $s->show_all_entries('//div[@id="patron_categories_wrapper"]');
 
