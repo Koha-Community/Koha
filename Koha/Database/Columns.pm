@@ -180,6 +180,7 @@ sub columns {
             "privacy_guarantor_fines"     => __("Show fines to guarantor"),
             "privacy"                     => __("Privacy settings"),
             "pronouns"                    => __("Pronouns"),
+            "protected"                   => __("Protected"),
             "relationship"                => __("Relationship"),
             "secret"                      => __("Secret (2FA)"),
             "sex"                         => __("Gender"),
