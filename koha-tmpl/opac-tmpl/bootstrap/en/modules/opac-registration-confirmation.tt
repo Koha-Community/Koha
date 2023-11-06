@@ -30,15 +30,19 @@
                 </div>
             [% END %]
 
-            [% IF ( OpacNav || OpacNavBottom  ) %]
+            [% IF ( OpacNav ||  OpacNavBottom && OpacNavRight ) %]
                 [% #  Three-column layout with right and left sidebars %]
                 <div class="col-12 col-lg-7 order-md-1 maincontent">
             [% ELSIF ( OpacNavRight ) %]
                 [% #  Two-column layout with right sidebar %]
                 <div class="col-12 col-lg-9 order-md-1 maincontent">
+            [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
+                <div class="col-12 col-lg-10 order-md-1 maincontent">
+            [% ELSE %]
+                <div class="col order-md-1 maincontent">
             [% END %]
 
-                    <div id="registration-complete" class="maincontent">
+                    <div id="registration-complete">
                         <h1>Registration complete!</h1>
 
                         <p>You have successfully registered your new account.</p>
