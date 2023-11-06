@@ -72,7 +72,7 @@ elsif ( $op eq 'add_validate' ) {
     my $category_type = $input->param('category_type');
     my $BlockExpiredPatronOpacActions = $input->param('BlockExpiredPatronOpacActions');
     my $checkPrevCheckout = $input->param('checkprevcheckout');
-    my $can_place_ill_in_opac = $input->param('can_place_ill_in_opac');
+    my $can_place_ill_in_opac = defined $input->param('can_place_ill_in_opac') ? $input->param('can_place_ill_in_opac') : 1;
     my $default_privacy = $input->param('default_privacy');
     my $reset_password = $input->param('reset_password');
     my $change_password = $input->param('change_password');
