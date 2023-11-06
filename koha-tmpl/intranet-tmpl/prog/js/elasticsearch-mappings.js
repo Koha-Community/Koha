@@ -7,7 +7,6 @@ function clean_line(line) {
 
 function clone_line(line) {
     var new_line = $(line).clone();
-    $(new_line).removeClass("nodrag nodrop");
     $(new_line).find('td:last-child>a').removeClass("add").addClass("delete").html( __("Delete") );
     $(new_line).find('[data-id]').each(function () {
         $(this).attr({ name: $(this).attr('data-id') }).removeAttr('data-id');
@@ -58,10 +57,6 @@ $(document).ready(function () {
         }
     });
 
-    $("table.mappings").tableDnD({
-        onDragClass: "dragClass highlighted-row",
-    });
-
     $('.add').click(function () {
         var table = $(this).closest('table');
         let table_id = table.attr('id');
@@ -81,10 +76,6 @@ $(document).ready(function () {
             } );
 
             clean_line(line);
-
-            $(table).tableDnD({
-                onDragClass: "dragClass highlighted-row",
-            });
         }
     });
     $("#facet_biblios > table").tableDnD({
