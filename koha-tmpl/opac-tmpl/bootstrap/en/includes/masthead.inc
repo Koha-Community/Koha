@@ -439,12 +439,12 @@
                                 [% END %]
                                 [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
                                     <div id="forgotpassword-modal" class="forgotpassword">
-                                        <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
+                                        <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
                                     </div>
                                 [% END %]
                                 [% IF Koha.Preference('PatronSelfRegistration') && Categories.all( categorycode => Koha.Preference('PatronSelfRegistrationDefaultCategory') ).count %]
                                     <div id="patronregistration-modal" class="patronregistration">
-                                        <p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p>
+                                        <p><a href="/cgi-bin/koha/opac-memberentry.pl">Create an account</a></p>
                                     </div>
                                 [% END %]
                             </fieldset>

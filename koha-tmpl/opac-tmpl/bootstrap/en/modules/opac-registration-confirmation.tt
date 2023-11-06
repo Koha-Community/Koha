@@ -96,7 +96,11 @@
                                     <fieldset class="action">
                                         <input type="submit" value="Log in" class="btn btn-primary" />
                                     </fieldset>
-                                    [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div id="patronregistration"><p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p></div>[% END %]
+                                    [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
+                                        <div id="patronregistration">
+                                            <p><a href="/cgi-bin/koha/opac-memberentry.pl">Create an account</a></p>
+                                        </div>
+                                    [% END %]
                                     </fieldset>
                                 </form> <!-- /#auth -->
                             </div> <!-- /#login -->

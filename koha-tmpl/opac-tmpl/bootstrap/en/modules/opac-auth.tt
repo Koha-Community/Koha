@@ -243,14 +243,12 @@
                                 </div>
                                 [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
                                     <div id="forgotpassword">
-                                        <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
+                                        <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
                                     </div>
                                 [% END %]
                                 [% IF Koha.Preference('PatronSelfRegistration') && Categories.all( categorycode => Koha.Preference('PatronSelfRegistrationDefaultCategory') ).count %]
                                     <div id="registrationinstructions">
-                                        <span>
-                                            <a href="/cgi-bin/koha/opac-memberentry.pl">You may register here.</a>
-                                        </span>
+                                        <p><a href="/cgi-bin/koha/opac-memberentry.pl">Create an account</a></p>
                                     </div>
                                 [% END %]
                             </form>
