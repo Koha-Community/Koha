@@ -92,8 +92,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $patron = Koha::Patrons->find($loggedinuser);
 my $biblio = Koha::Biblios->find($biblionumber);
-my $record = $biblio->metadata->record;
 
+my $record = $biblio ? $biblio->metadata->record : undef;
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
