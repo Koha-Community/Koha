@@ -46,11 +46,7 @@
                                     >{{ $__("Searching...") }}
                                 </template>
                                 <template v-else v-slot:no-options
-                                    >{{
-                                        $__(
-                                            "Type at least two characters to search"
-                                        )
-                                    }}
+                                    >{{ $__("No results found") }}
                                 </template>
                                 <template #search="{ attributes, events }">
                                     <input
@@ -504,7 +500,7 @@ export default {
                     api_key_required && this.required_fields.push("API")
                     requestor_id_required &&
                         this.required_fields.push("Requestor")
-                    this.sushi_service = sushi_service
+                    this.sushi_service = sushi_service || {}
                 },
                 error => {}
             )
