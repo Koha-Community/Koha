@@ -17,7 +17,6 @@ package Koha::Notice::Message;
 
 use Modern::Perl;
 
-
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -31,6 +30,40 @@ Koha::Notice::Message - Koha notice message Object class, related to the message
 =head2 Class Methods
 
 =cut
+
+=head3 html_content
+
+  my $wrapped_content = $message->html_content;
+
+This method returns the message content appropriately wrapped
+with HTML headers and CSS includes for HTML formatted notices.
+
+=cut
+
+sub html_content {
+    my ($self) = @_;
+
+    my $title   = $self->subject;
+    my $content = $self->content;
+    my $css     = C4::Context->preference("NoticeCSS") || '';
+    $css = qq{<link rel="stylesheet" type="text/css" href="$css">} if $css;
+
+    return <<EOS;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>$title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    $css
+  </head>
+  <body>
+  $content
+  </body>
+</html>
+EOS
+
+}
 
 =head3 type
 
