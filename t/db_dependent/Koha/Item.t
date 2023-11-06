@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 30;
+use Test::More tests => 31;
 use Test::Exception;
 use Test::MockModule;
 
@@ -2298,6 +2298,67 @@ subtest 'current_branchtransfers relationship' => sub {
 
     is( $item->_result->current_branchtransfers()->count,
         1, "One transfer found for item" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'update_item_location() tests' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $location           = 'YA';
+    my $permanent_location = 'HEY';
+
+    foreach my $action (qw{ checkin checkout }) {
+
+        my $pref = $action eq 'checkin' ? 'UpdateItemLocationOnCheckin' : 'UpdateItemLocationOnCheckout';
+
+        t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin',  q{} );
+        t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', q{} );
+
+        my $item = $builder->build_sample_item( { location => $location, permanent_location => $permanent_location } );
+
+        $item->update_item_location($action);
+
+        is( $item->location, $location, "$pref does not modify value when not enabled" );
+
+        t::lib::Mocks::mock_preference( $pref, qq{$location: GEN} );
+
+        $item->update_item_location($action);
+
+        is( $item->location, 'GEN', qq{'location' value set from '$location' to 'GEN' with setting `$location: GEN`} );
+
+        t::lib::Mocks::mock_preference( $pref, q{_ALL_: BOO} );
+
+        $item->update_item_location($action);
+
+        is( $item->location, 'BOO', q{`_ALL_` does the job} );
+
+        t::lib::Mocks::mock_preference( $pref, qq{$location: _BLANK_} );
+        $item->location($location)->store();
+
+        $item->update_item_location($action);
+        is( $item->location, q{}, q{`_BLANK_` does the job} );
+
+        t::lib::Mocks::mock_preference( $pref, qq{GEN: _BLANK_\n_BLANK_: PROC\n$location: _PERM_} );
+
+        $item->set(
+            {
+                location           => $location,
+                permanent_location =>
+                    $permanent_location,    # setting `permanent_location` explicitly because ->store messes with it.
+            }
+        )->store;
+
+        $item->update_item_location($action);
+
+        is(
+            $item->location, $permanent_location,
+            q{_PERM_ does the job"}
+        );
+    }
 
     $schema->storage->txn_rollback;
 };
