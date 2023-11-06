@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE String %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -60,7 +61,11 @@
                                         <tr>
                                             <td>
                                                 <a class="notice-title" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]">[% QUEUED_MESSAGE.subject | html %]</a>
+                                                [% IF QUEUED_MESSAGE.content_type.search('html') %]
+                                                <iframe class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]" srcdoc="[% QUEUED_MESSAGE.content | html %]"></iframe>
+                                                [% ELSE %]
                                                 <iframe class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]" srcdoc="[% QUEUED_MESSAGE.content | html | html_line_break %]"></iframe>
+                                                [% END %]
                                             </td>
                                             <td>
                                                 [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]<span>email</span>
