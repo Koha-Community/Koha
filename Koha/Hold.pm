@@ -967,13 +967,14 @@ sub store {
         if ( exists $updated_columns{reservedate} || $hold_reverted ) {
             if (
                 ( C4::Context->preference('DefaultHoldExpirationdate')
-                && ! exists $updated_columns{expirationdate} )
-                || ( C4::Context->preference('DefaultHoldExpirationdate')
-                && exists $updated_columns{expirationdate}
-                && $hold_reverted )
-              )
+                    && ( ! exists $updated_columns{expirationdate} || $hold_reverted ) )
+            )
             {
-                $self->_set_default_expirationdate;
+                if($self->patron_expiration_date){
+                    $self->expirationdate($self->patron_expiration_date);
+                } else {
+                    $self->_set_default_expirationdate;
+                }
             }
         }
     }
