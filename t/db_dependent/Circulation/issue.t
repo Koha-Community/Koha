@@ -483,7 +483,6 @@ my $itemnumber2 = Koha::Item->new(
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckout', q{} );
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin',  q{} );
 
-t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', q{} );
 AddReturn( 'barcode_4', $branchcode_1 );
 my $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq 'FIC', 'UpdateItemLocationOnCheckin does not modify value when not enabled' );
