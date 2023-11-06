@@ -50,11 +50,12 @@
             <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         [% END %]
             <main>
-            <h1>Batch check out</h1>
+                [% IF patron %]
+                    [% INCLUDE 'members-toolbar.inc' %]
+                [% END %]
 
-[% IF patron %]
-[% INCLUDE 'members-toolbar.inc' %]
-[% END %]
+                <h1>Batch check out</h1>
+
 
 [% IF patron and not batch_allowed %]
   <div class="dialog alert">You are not allowed to use batch checkout for this patron</div>
@@ -83,47 +84,44 @@
   </div>
 [% ELSIF patron and not checkout_infos %]
   <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
-    <fieldset id="circ_circulation_issue">
-      <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
-      <fieldset class="rows">
-        <legend>Use a file</legend>
-        <ol>
-          <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
-        </ol>
-      </fieldset>
-      <fieldset class="rows">
-        <legend>Or list barcodes one by one</legend>
-        <ol>
-          <li>
-            <label for="barcodelist">Barcode list (one barcode per line): </label>
-            <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
-          </li>
-        </ol>
-      </fieldset>
-      [% IF Koha.Preference('SpecifyDueDate') || Koha.Preference('OnSiteCheckouts') %]
-      <fieldset class="rows">
-          <ol>
-          [% IF Koha.Preference('SpecifyDueDate') %]
-          <legend>Due date</legend>
-            <li>
-              <label for="duedatespec">Hard due date: [% INCLUDE 'date-format.inc' %]</label>
-              <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true"/>
-            </li>
-          [% END %]
-          [% IF Koha.Preference('OnSiteCheckouts') %]
-            <li>
-              <div id="onsite_checkout-select">
-                  <label for="onsite_checkout">On-site checkout:</label>
-                  <input type="checkbox" id="onsite_checkout" name="onsite_checkout" class="circ_setting"/>
-              </div>
-            </li>
-          [% END %]
-          </ol>
-      </fieldset>
-      [% END %]
+    <div id="circ_circulation_issue">
+        <fieldset>
+            <legend>Checking out to [% INCLUDE 'patron-title.inc' %]</legend>
+            <ol>
+                <li>
+                    <label for="barcodelist">Enter barcodes (one barcode per line): </label>
+                    <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
+                </li>
+                <li>
+                    <label for="uploadfile">Or use a file: </label>
+                    <input type="file" id="uploadfile" name="uploadfile" />
+                </li>
+            </ol>
+        </fieldset>
+
+        [% IF Koha.Preference('SpecifyDueDate') || Koha.Preference('OnSiteCheckouts') %]
+            <fieldset>
+                <ol>
+                    [% IF Koha.Preference('SpecifyDueDate') %]
+                        <li>
+                            <label for="duedatespec">Specify due date: [% INCLUDE 'date-format.inc' %]</label>
+                            <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true"/>
+                        </li>
+                    [% END %]
+                    [% IF Koha.Preference('OnSiteCheckouts') %]
+                        <li class="radio">
+                            <div id="onsite_checkout-select">
+                                <input type="checkbox" id="onsite_checkout" name="onsite_checkout" class="circ_setting"/>
+                                <label for="onsite_checkout">On-site checkout</label>
+                            </div>
+                        </li>
+                    [% END %]
+                </ol>
+            </fieldset>
+       [% END %]
 
       <input type="hidden" name="op" value="show" />
-    </fieldset>
+    </div>
 
     <fieldset class="action">
         <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
@@ -135,11 +133,12 @@
 
 [% ELSIF patron %]
   [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-    <h3>Batch checkout confirmation [% IF patron %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h3>
+    <h3>Batch checkout confirmation</h3>
     <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
   [% ELSE %]
-    <h3>Batch checkout information [% IF patron.borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] |[% batch | html %]|[% END %]</h3>
+    <h3>Batch checkout results</h3>
   [% END %]
+    <div class="page-section">
     <table id="checkout_infos">
       <thead>
         <tr>
@@ -308,13 +307,16 @@
               [% END %]
 
               [% IF checkout_info.issue.date_due %]
-                <li>Due on [% checkout_info.issue.date_due | $KohaDates as_due_date => 1 %]</li>
+                    <ul>
+                        <li>Due on [% checkout_info.issue.date_due | $KohaDates as_due_date => 1 %]</li>
+                    </ul>
               [% END %]
             </td>
           </tr>
         [% END %]
       </tbody>
     </table>
+    </div>
 
     [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
         <fieldset>

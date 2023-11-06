@@ -2514,6 +2514,23 @@ td.bundle {
 
 #circ_circulation_issue {
     position: relative;
+
+    fieldset {
+        label {
+            display: block;
+            font-size: 105%;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            max-width: 75%;
+        }
+
+        #onsite_checkout-select {
+            label {
+                display: inline;
+                margin: 0;
+            }
+        }
+    }
 }
 
 #renew_as_unseen_label {
@@ -3610,14 +3627,6 @@ input.renew {
             color: #000;
             font-weight: bold;
         }
-    }
-}
-
-.onsite_checkout-select {
-    label,
-    #circ_circulation_issue & {
-        font-size: inherit;
-        font-weight: normal;
     }
 }
 
