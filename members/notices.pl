@@ -110,7 +110,7 @@ if ( $op eq 'send_password_reset' ) {
 }
 
 # Getting the messages
-my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
+my $queued_messages = Koha::Notice::Messages->search({borrowernumber => $borrowernumber});
 
 $template->param(
     patron             => $patron,
