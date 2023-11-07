@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-20 11:46-0300\n"
-"PO-Revision-Date: 2023-09-28 09:43+0000\n"
+"PO-Revision-Date: 2023-10-13 05:47+0000\n"
 "Last-Translator: plumflower <jeff_lindqvist@hotmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /sv/22.11/sv-SE-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1695894194.749810\n"
+"X-POOTLE-MTIME: 1697176059.874376\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -51,6 +51,8 @@ msgid ""
 "enabled for each credit type (<a href=\"/cgi-bin/koha/admin/credit_types.pl"
 "\">Configure credit types</a>)"
 msgstr ""
+"Automatisk generering måste vara aktiverad för varje kredittyp (<a href=\"/"
+"cgi-bin/koha/admin/credit_types.pl\">Konfigurera kredittyper</a>)"
 
 # Accounting > Features
 msgid ""
@@ -84,9 +86,8 @@ msgid ""
 "\">UseCashRegisters</a>)"
 msgstr ""
 "  funktionen 'försäljningsställe' för att tillåta anonyma transaktioner i "
-"redovisningssystemet. (Kräver <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=UseCashRegisters\""
-">UseCashRegisters</a>)"
+"redovisningssystemet. (Kräver <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=UseCashRegisters\">UseCashRegisters</a>)"
 
 # Accounting > Features
 msgid "accounting.pref#EnablePointOfSale# Disable"
@@ -193,6 +194,11 @@ msgid ""
 "ensure your SIP configurations are updated to map a register to your SIP "
 "device.</p>"
 msgstr ""
+"<p class='text-danger'><strong>Varning:</strong> Aktivering av denna "
+"inställning kommer att göra registret till ett obligatoriskt fält för alla "
+"transaktioner av CASH-typ; Detta inkluderar SIP00-transaktioner, så se till "
+"att dina SIP-konfigurationer är uppdaterade för att mappa ett register till "
+"din SIP-enhet.</p>"
 
 # Accounting > Features
 msgid "accounting.pref#UseCashRegisters# Don't use"
@@ -357,7 +363,7 @@ msgstr "Avaktivera"
 
 # Acquisitions > EDIFACT > EDIFACT
 msgid "acquisitions.pref#EDIFACT# EDIFACT message exchange for acquisitions"
-msgstr ""
+msgstr "meddelandeutbyte för förvärv"
 
 # Acquisitions > EDIFACT
 msgid "acquisitions.pref#EDIFACT# Enable"
@@ -378,23 +384,20 @@ msgid "acquisitions.pref#EdifactInvoiceImport# Don't"
 msgstr "Importera inte"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ#  in items."
-msgstr " Tillåt"
+msgstr "  i exemplar."
 
 # Acquisitions > EDIFACT > EdifactLSQ
 msgid "acquisitions.pref#EdifactLSQ# Map sequence code (GIR:LSQ) field to "
-msgstr ""
+msgstr "Mappa sekvenskod (GIR:LSQ) fältet till "
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ# collection"
-msgstr " Tillåt"
+msgstr "avdelning"
 
 # Acquisitions > EDIFACT
-#, fuzzy
 msgid "acquisitions.pref#EdifactLSQ# location"
-msgstr " Tillåt"
+msgstr "placering"
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
 msgid ""
@@ -435,7 +438,7 @@ msgid ""
 "947$c<br/>quantity: 969$h<br/>budget_code: 922$a"
 msgstr ""
 "<br/>Till exempel:<br/>price: 947$a|947$c<br/>kvantitet: 969$h<br/"
-">budget_code: 922$a "
+">budget_code: 922$a"
 
 # Acquisitions > Policy
 msgid ""
@@ -479,9 +482,8 @@ msgstr ""
 "replacementprice och itemcallnumber. Specialfält: quantity och budget_code"
 
 # Acquisitions > Printing
-#, fuzzy
 msgid "acquisitions.pref#OrderPdfFormat# English 1-page"
-msgstr "Engelska 2 sidor"
+msgstr "Engelska 1 sida"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -835,11 +837,10 @@ msgid "admin.pref#EmailOverduesNoEmail# Send"
 msgstr "Skicka"
 
 # Circulation > Checkout Policy
-#, fuzzy
 msgid ""
 "admin.pref#EmailOverduesNoEmail# overdue notices for patrons without email "
 "address to staff."
-msgstr "Skicka alla meddelanden som BCC till denna e-postadress"
+msgstr "förseningsmeddelanden för låntagare utan e-postadress till personalen."
 
 # OPAC > Appearance
 msgid ""
@@ -2392,14 +2393,12 @@ msgid "authorities.pref#AutoCreateAuthorities# generate"
 msgstr "generera"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#AutoLinkBiblios# Do"
-msgstr "Gör"
+msgstr "Försök att"
 
 # Authorities > Linker
-#, fuzzy
 msgid "authorities.pref#AutoLinkBiblios# Don't"
-msgstr "Gör inte"
+msgstr "Försök inte att"
 
 # Circulation > Checkin policy > StoreLastBorrower
 msgid ""
@@ -2410,8 +2409,8 @@ msgid ""
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
 "record edits."
 msgstr ""
-"att automatiskt försöka länka rubriker när du sparar poster i "
-"katalogiseringsmodulen, följer <a href='/cgi-bin/koha/admin/preferences.pl?"
+"automatiskt länka rubriker när du sparar poster i katalogiseringsmodulen, "
+"följer <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=LinkerRelink'>LinkerRelink</a> och <a href='/cgi-bin/"
 "koha/admin/preferences.pl?"
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> för "
@@ -2432,7 +2431,7 @@ msgid ""
 "(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
-"att automatiskt återskapa länkar för rubriker som tidigare var länkade när "
+"automatiskt återskapa länkar för rubriker som tidigare var länkade när "
 "poster sparas i katalogmodulen (kräver <a href='/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 
@@ -2560,10 +2559,9 @@ msgstr ""
 "(position 00-05)."
 
 # Authorities > General
-#, fuzzy
 msgid ""
 "authorities.pref#RequireChoosingExistingAuthority# When editing records,"
-msgstr "Vid redigering av poster, "
+msgstr "Vid redigering av poster,"
 
 # Authorities > General > RequireChoosingExistingAuthority
 msgid ""
@@ -2571,16 +2569,17 @@ msgid ""
 "existing authorities. If set to don't, catalogers can manually enter "
 "uncontrolled terms into controlled fields"
 msgstr ""
+"katalogiserare för att referera till befintliga auktoriteter. Om inställt på "
+"kräv inte kan katalogiserare manuellt ange okontrollerade termer i "
+"kontrollerade fält"
 
 # Authorities > General
-#, fuzzy
 msgid "authorities.pref#RequireChoosingExistingAuthority# don't require"
-msgstr "generera inte"
+msgstr "kräv inte"
 
 # Authorities > General
-#, fuzzy
 msgid "authorities.pref#RequireChoosingExistingAuthority# require"
-msgstr "generera "
+msgstr "kräv"
 
 # Authorities > General
 msgid ""
@@ -2733,31 +2732,28 @@ msgstr ""
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid "cataloguing.pref#ApplyFrameworkDefaults# Apply framework default values"
-msgstr ""
+msgstr "Tillämpa standardvärden för ramverk"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid "cataloguing.pref#ApplyFrameworkDefaults# when cataloguing new records"
-msgstr ""
+msgstr "vid katalogisering av nya poster"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid ""
 "cataloguing.pref#ApplyFrameworkDefaults# when changing the framework while "
 "editing the existing record"
-msgstr ""
+msgstr "när du ändrar ramverket medan du redigerar den befintliga posten"
 
 # Cataloging > Record structure > ApplyFrameworkDefaults
 msgid ""
 "cataloguing.pref#ApplyFrameworkDefaults# when editing records as new "
 "(duplicating)"
-msgstr ""
+msgstr "när du redigerar poster som nya (duplicerar)"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#ApplyFrameworkDefaults# when importing a record via z39.50"
-msgstr ""
-"taggar (separerade av komman) till rätt författartaggar när poster "
-"importeras via Z39.50."
+msgstr "när du importerar en post via z39.50"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
@@ -2890,9 +2886,8 @@ msgid "cataloguing.pref#DefaultSaveRecordFileID# bibliographic record number"
 msgstr "biblionummer"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid "cataloguing.pref#DefaultSaveRecordFileID# control number"
-msgstr "i filnamnet."
+msgstr "kontrollnummer"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#DefaultSaveRecordFileID# in the file name."
@@ -3004,6 +2999,8 @@ msgid ""
 "cataloguing.pref#MARCOverlayRules# MARC overlay rules for incoming records, "
 "to decide which action to take for each field."
 msgstr ""
+"Regler för MARC-postmatchning för inkommande poster, för att bestämma vilken "
+"åtgärd som ska vidtas för varje fält."
 
 # Cataloging > Display
 msgid "cataloguing.pref#MARCOverlayRules# Use"
@@ -3564,20 +3561,20 @@ msgstr ""
 "bibliografiska poster."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#UseOCLCEncodingLevels# Display"
-msgstr "Visning"
+msgstr "Visa"
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#UseOCLCEncodingLevels# Don't display"
-msgstr "Separera inte "
+msgstr "Visa inte"
 
 # Cataloging > Record structure > UseOCLCEncodingLevels
 msgid ""
 "cataloguing.pref#UseOCLCEncodingLevels# OCLC defined values for MARC "
 "encoding level in leader value builder for position 17."
 msgstr ""
+"OCLC definierade värden för MARC-kodningsnivån i leader value builder för "
+"position 17."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#advancedMARCeditor# Don't show"
@@ -3620,17 +3617,14 @@ msgid "cataloguing.pref#autoBarcode# not generated automatically."
 msgstr "inte genererade automatiskt."
 
 # Cataloging > Display
-#, fuzzy
 msgid "cataloguing.pref#autoControlNumber# Control Number (001) is"
-msgstr "Använd inte "
+msgstr "Kontrollnummer (001)"
 
 # Cataloging > Spine labels
-#, fuzzy
 msgid "cataloguing.pref#autoControlNumber# generated as biblionumber."
-msgstr "gör inte"
+msgstr "genereras som biblionnummer."
 
 # Cataloging > Record structure
-#, fuzzy
 msgid "cataloguing.pref#autoControlNumber# not generated automatically."
 msgstr "genereras inte automatiskt."
 
@@ -3653,7 +3647,6 @@ msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
 msgstr "Använd exemplartypen för"
 
 # Cataloging > Record structure
-#, fuzzy
 msgid ""
 "cataloguing.pref#item-level_itypes# as the authoritative item type (for "
 "determining circulation and fine rules, for displaying an item type icon on "
@@ -3738,9 +3731,8 @@ msgid "circulation.pref"
 msgstr "circulation.pref"
 
 # Circulation > Article Requests
-#, fuzzy
 msgid "circulation.pref Article requests"
-msgstr "Artikelförfrågningar"
+msgstr "Artikelbeställningar"
 
 # Circulation > Batch checkout
 msgid "circulation.pref Batch checkout"
@@ -3755,14 +3747,12 @@ msgid "circulation.pref Checkout policy"
 msgstr "Lånepolicy"
 
 # Circulation > Course Reserves
-#, fuzzy
 msgid "circulation.pref Course reserves"
 msgstr "Kurslistor"
 
 # Circulation > Housebound module
-#, fuzzy
 msgid "circulation.pref Curbside pickup module"
-msgstr "Housebound module"
+msgstr "Upphämtningsmodulen"
 
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
@@ -3781,19 +3771,16 @@ msgid "circulation.pref Interface"
 msgstr "Gränssnitt "
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref Item bundles"
-msgstr "Gränssnitt "
+msgstr "Paket"
 
 # Circulation > Accounts
-#, fuzzy
 msgid "circulation.pref Patron restrictions"
-msgstr "Konton"
+msgstr "Låntagarbegränsningar"
 
 # Circulation
-#, fuzzy
 msgid "circulation.pref Recalls"
-msgstr "circulation.pref"
+msgstr "Återkrav"
 
 # Circulation > Accounts
 msgid "circulation.pref Return claims"
@@ -3804,18 +3791,16 @@ msgid "circulation.pref SIP2"
 msgstr "SIP2"
 
 # Circulation > Self check-out module
-#, fuzzy
 msgid "circulation.pref Self check-in module"
-msgstr "Självutcheckningsmodul"
+msgstr "Självåterlämningsmodulen"
 
 # Circulation > Self check-out module
 msgid "circulation.pref Self check-out module"
 msgstr "Självutcheckningsmodul"
 
 # Circulation > Stock rotation module
-#, fuzzy
 msgid "circulation.pref Stock rotation module"
-msgstr "Aktivera"
+msgstr "modulen för beståndsrotation"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4180,12 +4165,10 @@ msgid ""
 msgstr "endast på det bibliotek exemplaret lånades ut från."
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#AllowSetAutomaticRenewal# Allow"
 msgstr "Tillåt"
 
 # Circulation > Interface
-#, fuzzy
 msgid "circulation.pref#AllowSetAutomaticRenewal# Don't allow"
 msgstr "Tillåt inte"
 
@@ -4495,21 +4478,18 @@ msgstr ""
 "istället för en streckkod."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#AutomaticConfirmTransfer# Do"
-msgstr "Gör"
+msgstr "Godkänn"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#AutomaticConfirmTransfer# Don't"
-msgstr "Gör inte"
+msgstr "Godkänn inte"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#AutomaticConfirmTransfer# automatically confirm a transfer "
 "when the modal is dismissed without clicking 'Yes'."
-msgstr "överför automatiskt exemplar till sitt hembibliotek när de återlämnas."
+msgstr "automatiskt överföring när dialogfönstret stängs utan att klicka 'Ja'."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -4577,13 +4557,14 @@ msgid ""
 "circulation.pref#BundleLostValue# Use the <a href=\"/cgi-bin/koha/admin/"
 "authorised_values.pl?searchfield=LOST\">LOST</a> authorized value"
 msgstr ""
+"Använd det auktoriserade <a href=\"/cgi-bin/koha/admin/authorised_values.pl?"
+"searchfield=LOST\">LOST</a>-värdet"
 
 # Circulation > Return claims
-#, fuzzy
 msgid ""
 "circulation.pref#BundleLostValue# to represent 'missing from bundle' at "
 "return."
-msgstr "för att markera \"hävdas återlämnad\"."
+msgstr "för att representera \"saknas från paketet\" vid återlämning."
 
 # Circulation > Item bundles > BundleNotLoanValue
 msgid ""
@@ -4594,11 +4575,12 @@ msgstr ""
 "searchfield=NOT_LOAN\">NOT_LOAN</a>-värdet"
 
 # Circulation > Return claims
-#, fuzzy
 msgid ""
 "circulation.pref#BundleNotLoanValue# to represent 'added to bundle' when an "
 "item is attached to bundle."
-msgstr "för att markera \"hävdas återlämnad\"."
+msgstr ""
+"för att representera \"läggs till i paketet\" när ett exemplar är kopplat "
+"till paketet."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnBackdate# Do"
@@ -4895,24 +4877,20 @@ msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
 msgstr "begränsningsperioderna."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "circulation.pref#CurbsidePickup# Disable"
 msgstr "Avaktivera"
 
 # Circulation > Self check-out module
-#, fuzzy
 msgid "circulation.pref#CurbsidePickup# Enable"
 msgstr "Aktivera"
 
 # Circulation > Housebound module
-#, fuzzy
 msgid "circulation.pref#CurbsidePickup# the curbside pickup module."
-msgstr "housebound module"
+msgstr "upphämtningsmodulen."
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldExpirationdate# Don't set"
-msgstr "månader"
+msgstr "Ställ inte in"
 
 # Circulation > Interface
 msgid ""
@@ -4928,11 +4906,10 @@ msgid "circulation.pref#DefaultHoldExpirationdate# days"
 msgstr "dagar"
 
 # Circulation > Interface
-#, fuzzy
 msgid ""
 "circulation.pref#DefaultHoldExpirationdate# default expiration date for "
 "holds automatically."
-msgstr "Om aktiverad, ställ in ett utgångsdatum"
+msgstr "ett standardutgångsdatum för reservationer automatiskt."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultHoldExpirationdate# from reserve date."
@@ -4947,9 +4924,8 @@ msgid "circulation.pref#DefaultHoldExpirationdate# years"
 msgstr "år"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# ."
-msgstr "nuvarande plats"
+msgstr "."
 
 # Circulation > Holds policy > DefaultHoldPickupLocation
 msgid ""
@@ -4959,19 +4935,16 @@ msgstr ""
 "När reservationer görs via personalgränssnittet är avhämtningsbiblioteket"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# item's holding library"
-msgstr "exemplarets nuvarande plats (holding branch). "
+msgstr "exemplarets aktuella bibliotek"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# item's home library"
-msgstr "månader"
+msgstr "exemplarets hembibliotek"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#DefaultHoldPickupLocation# logged in library"
-msgstr "nuvarande plats"
+msgstr "det bibliotek du är inloggad på"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5120,37 +5093,34 @@ msgid ""
 msgstr "möjligheten att i träfflistan välja flera poster för reservation"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#EnableItemGroupHolds# Don't enable"
 msgstr "Aktivera inte"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "circulation.pref#EnableItemGroupHolds# Enable"
 msgstr "Aktivera"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#EnableItemGroupHolds# the ability to place holds on item "
 "groups."
-msgstr "möjligheten att i träfflistan välja flera poster för reservation"
+msgstr "funktionen att lägga reservationer i exemplargrupper."
 
 # Circulation > Article requests
-#, fuzzy
 msgid "circulation.pref#EnableItemGroups# Don't enable"
-msgstr "Aktivera inte "
+msgstr "Aktivera inte"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#EnableItemGroups# Enable"
-msgstr "Aktivera "
+msgstr "Aktivera"
 
 # Circulation > Holds policy > EnableItemGroups
 msgid ""
 "circulation.pref#EnableItemGroups# the item groups feature to allow "
 "collecting groups of items on a record together."
 msgstr ""
+"exemplargruppsfunktionen som tillåter dig att att samla grupper av exemplar "
+"under en post."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
@@ -5424,20 +5394,19 @@ msgstr ""
 "op=search&searchfield=noissuescharge\">noissuescharge</a>."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Don't fulfill"
-msgstr "Tillåt inte "
+msgstr "Genomför inte"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Fulfill"
-msgstr "Tillåt "
+msgstr "Genomför"
 
 # Circulation > Checkin policy
 msgid ""
 "circulation.pref#HoldsNeedProcessingSIP# holds automatically if matching "
 "item is returned via SIP protocol."
 msgstr ""
+"reservationer automatiskt om matchande exemplar returneras via SIP-protokoll."
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# ."
@@ -5506,7 +5475,6 @@ msgstr ""
 "op=search&searchfield=ConfirmFutureHolds\">ConfirmFutureHolds</a>."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#HomeOrHoldingBranch# Use the circulation and fine rules of"
 msgstr "Använd utlånings- och avgiftsreglerna för"
@@ -5573,7 +5541,6 @@ msgstr ""
 "gränsen."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#ItemsDeniedRenewal# <br /> <strong>NOTE:</strong> The word "
 "'null' can be used to block renewal on undefined fields, while an empty "
@@ -5592,7 +5559,6 @@ msgstr ""
 "kolon och sedan ett mellanslag och sedan"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,null,DVD]"
 msgstr "<br />ccode: [NEWFIC,NULL,DVD]"
 
@@ -5703,11 +5669,10 @@ msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr "när ett exemplar katalogiseras"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#MarkLostItemsAsReturned# when marking an item as a return "
 "claim"
-msgstr "när ett exemplar katalogiseras"
+msgstr "när du sätter exemplaret som 'påstås återlämnad'"
 
 # Circulation > Checkout policy
 msgid ""
@@ -5879,9 +5844,10 @@ msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Don't allow"
 msgstr "Tillåt inte"
 
 # Circulation > Holds policy
+#, fuzzy
 msgid ""
-"circulation.pref#OPACHoldsIfAvailableAtPickup# to pickup holds at libraries "
-"where the item is available."
+"circulation.pref#OPACHoldsIfAvailableAtPickup# patrons to place a hold at "
+"pickup locations (libraries) where the item is available."
 msgstr "att hämta reservationer vid bibliotek där exemplaret är tillgängligt."
 
 # Circulation > Holds policy > OPACHoldsIfAvailableAtPickupExceptions
@@ -5994,31 +5960,26 @@ msgid ""
 msgstr "när perioden för förseningsmeddelanden tas fram."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeFrom# ."
-msgstr "Blockera "
+msgstr "."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid ""
 "circulation.pref#OverdueNoticeFrom# Organize and send overdue notices using "
 "the"
-msgstr "när perioden för förseningsmeddelanden tas fram."
+msgstr "Organisera och skicka förseningsmeddelanden med hjälp av"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeFrom# checkout library"
-msgstr "Använd kalender"
+msgstr "utlånande bibliotek"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeFrom# command-line option"
-msgstr "Använd kalender"
+msgstr "kommandoradsalternativ"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#OverdueNoticeFrom# item home library"
-msgstr "exemplarets hembibliotek "
+msgstr "exemplarets hembibliotek"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
@@ -6081,21 +6042,18 @@ msgstr ""
 "gissa vilken låntagare det gäller när det söks i Låna ut eller Sök låntagare."
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#PatronRestrictionTypes# Allow"
-msgstr "Tillåt "
+msgstr "Tillåt"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#PatronRestrictionTypes# Don't allow"
-msgstr "Tillåt inte "
+msgstr "Tillåt inte"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#PatronRestrictionTypes# the type of patron restriction to "
 "be specified when applying manually."
-msgstr "minskningen av låneperioden till "
+msgstr "vilken typ av låntagarbegränsning som ska anges vid manuell ansökan."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -6125,32 +6083,27 @@ msgstr ""
 "när behandlingsavgiften (definierad för exemplartypen) tillämpas:"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "circulation.pref#RealTimeHoldsQueue# Disable"
 msgstr "Avaktivera"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "circulation.pref#RealTimeHoldsQueue# Enable"
 msgstr "Aktivera"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#RealTimeHoldsQueue# updating the holds queue in real time."
-msgstr "."
+msgstr "realtidsuppdateringar för reservationskön."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid ""
 "circulation.pref#RecallsMaxPickUpDelay# Mark a recall as problematic if it "
 "has been waiting to be picked up for"
-msgstr "Markera en reservation som problematisk om den väntat längre än "
+msgstr "Markera en reservation som problematisk om den har väntat längre än"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#RecallsMaxPickUpDelay# days."
-msgstr "dagar. "
+msgstr "dagar."
 
 # Circulation > Interface
 msgid "circulation.pref#RecordLocalUseOnReturn# Don't record"
@@ -6448,24 +6401,29 @@ msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'branchcode' is the location where "
 "the checkin is being performed (i.e. branch assigned to SIP user)<br/>"
 msgstr ""
+"'filialkod' är platsen där återlämningen utförs (d.v.s. filial tilldelad SIP-"
+"användare)<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'comparator' is the type of "
 "comparison, possible values are: eq,<,<=,>,>=,ne<br/>"
 msgstr ""
+"'comparator' är typen av jämförelse, möjliga värden är: eq,<,<=,>,>=,ne<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'item field value' is the value to "
 "compare against the value in the specified 'item field'<br/>"
 msgstr ""
+"'exemplarfältsvärde' är värdet som ska jämföras med värdet i det angivna "
+"'exemplarfältet'<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# - 'item field' is a database column in "
 "the items table<br/>"
-msgstr ""
+msgstr "- 'exemplarfält' är en databaskolumn i exemplartabellen<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6473,6 +6431,8 @@ msgid ""
 "return value in the CL field of the SIP response for an item matching a "
 "rule<br/><br/>"
 msgstr ""
+"- 'sort bin number' är det förväntade returvärdet i CL-fältet i SIP-svaret "
+"för en artikel som matchar en regel<br/><br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6481,6 +6441,10 @@ msgid ""
 "is not equal to the homebranch (i.e. any item belonging to a different "
 "branch than CPL).<br/><br/>"
 msgstr ""
+"CPL:homebranch:ne:\\$holdingbranch:X - Returnerar sorteringsfack 'X' för ett "
+"exemplar som returneras till CPL där nuvarande plats inte är lika med "
+"hembibliotek (dvs. alla föremål som tillhör en annan filial än CPL).<br/ "
+"><br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6488,15 +6452,18 @@ msgid ""
 "return sort bin 3 for an item with a callnumber less than 339.6 returned to "
 "CPL .<br/>"
 msgstr ""
+"CPL:itemcallnumber:<:339.6:3 - Returnerar sorteringsfack 3 för ett exemplar "
+"med ett anropsnummer mindre än 339.6 som returneras till CPL .<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# CPL:itype:eq:BOOK:1 - Will return sort "
 "bin 1 for an item of itemtype 'BOOK' returned to CPL.<br/>"
 msgstr ""
+"CPL:itype:eq:BOOK:1 - Returnerar sorteringsfack 1 för ett exemplar av "
+"exemplartypen 'BOOK' som returneras till CPL.<br/>"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid "circulation.pref#SIP2SortBinMapping# Examples:<br/>"
 msgstr "Exempel:<br/>"
 
@@ -6506,6 +6473,9 @@ msgid ""
 "with a leading '\\$' and an item field name will use the value of that field "
 "in the item for comparison:<br/>"
 msgstr ""
+"OBS: Om du anger 'item_field_value' med ett inledande '\\$' och ett "
+"exemplarfältnamn används värdet för det fältet i exemplaret för jämförelse:"
+"<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
@@ -6513,16 +6483,20 @@ msgid ""
 "'branchcode:item field:comparator:item field value:sort bin number', with "
 "one mapping per line.<br/>"
 msgstr ""
+"Mappningen bör ha formen 'branchcode:item field:comparator:item field value:"
+"sort bin number', med en mappning per rad.<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid ""
 "circulation.pref#SIP2SortBinMapping# Use the following mappings to determine "
 "the sort_bin of a returned item.<br/>"
 msgstr ""
+"Använd följande mappningar för att bestämma sort_bin för en återlämnat "
+"exemplar.<br/>"
 
 # Circulation > SIP2 > SIP2SortBinMapping
 msgid "circulation.pref#SIP2SortBinMapping# i.e. \\$holdingbranch<br/></br>"
-msgstr ""
+msgstr "dvs \\$holdingbranch<br/></br>"
 
 # Circulation > Self check-out module
 msgid ""
@@ -6684,16 +6658,14 @@ msgid ""
 msgstr "(lista med värden för Inte för lån med lodstreck \"|\")"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid ""
 "circulation.pref#SkipHoldTrapOnNotForLoanValue# Never trap items with 'not "
 "for loan' values of"
-msgstr "(lista med värden för Inte för lån med lodstreck \"|\")"
+msgstr "Fånga inte in exemplar med följande 'ej för utlån'-värden"
 
 # Circulation > Checkin policy
-#, fuzzy
 msgid "circulation.pref#SkipHoldTrapOnNotForLoanValue# to fill holds."
-msgstr "(lista med värden för Inte för lån med lodstreck \"|\")"
+msgstr "för att fylla reservationer."
 
 # Circulation > Interface
 msgid "circulation.pref#SpecifyDueDate# Allow"
@@ -6793,9 +6765,8 @@ msgid "circulation.pref#StockRotation# Enable"
 msgstr "Aktivera"
 
 # Circulation > Stock rotation module
-#, fuzzy
 msgid "circulation.pref#StockRotation# the stock rotation module."
-msgstr "Inaktivera"
+msgstr "modulen för beståndsrotation."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#StoreLastBorrower# Don't store"
@@ -6855,11 +6826,10 @@ msgid "circulation.pref#SuspensionsCalendar# Use the calendar"
 msgstr "Ta hänsyn till kalendern"
 
 # Circulation > Fines Policy
-#, fuzzy
 msgid ""
 "circulation.pref#SuspensionsCalendar# when calculating the period for "
 "suspension expiration."
-msgstr "när avgifter beräknas."
+msgstr "när perioden för avstängning beräknas."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#SwitchOnSiteCheckouts# Don't switch"
@@ -6918,20 +6888,20 @@ msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr "dagar efter att den skickades."
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
-msgstr "Tillåt inte "
+msgstr "Fånga inte in"
 
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#TrapHoldsOnOrder# Trap"
-msgstr "."
+msgstr "Fånga in"
 
 # Circulation > Checkin policy
 msgid ""
 "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable "
 "( notforloan < 0 ) to fill holds."
 msgstr ""
+"exemplar som är 'ej för utlån' men som går att reservera ( notforloan < 0) "
+"för att fylla reservationer."
 
 # Circulation > Holds policy
 msgid "circulation.pref#UnseenRenewals# Allow"
@@ -7181,34 +7151,29 @@ msgid "circulation.pref#UseCourseReserves# course reserves."
 msgstr "kurslistor."
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "circulation.pref#UseLocationAsAQInSIP# Use"
-msgstr "Avaktivera"
+msgstr "Använd"
 
 # Circulation > SIP2 > UseLocationAsAQInSIP
 msgid "circulation.pref#UseLocationAsAQInSIP# for AQ field in SIP protocol."
-msgstr ""
+msgstr "för AQ-fältet i SIP-protokollet."
 
 # Circulation > Holds policy
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#UseLocationAsAQInSIP# homebranch"
-msgstr "hembibliotek "
+msgstr "hembibliotek"
 
 # Circulation > Checkout policy
-#, fuzzy
 msgid "circulation.pref#UseLocationAsAQInSIP# permanent_location"
-msgstr "kräv bekräftelse "
+msgstr "permanent plats"
 
 # Circulation > Course reserves
-#, fuzzy
 msgid "circulation.pref#UseRecalls# Don't use"
-msgstr "Använd inte "
+msgstr "Använd inte"
 
 # Circulation > Course reserves
-#, fuzzy
 msgid "circulation.pref#UseRecalls# Use"
-msgstr "Använd "
+msgstr "Använd"
 
 # Circulation > Recalls > UseRecalls
 msgid ""
@@ -7216,6 +7181,8 @@ msgid ""
 "bin/koha/admin/smart-rules.pl\">circulation and fine rules</a> for recalls "
 "once enabled."
 msgstr ""
+"återkrav. Konfigurera <a href=\"/cgi-bin/koha/admin/smart-rules.pl"
+"\">cirkulationsregler</a> för återkrav så snart de har aktiverats."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#UseTransportCostMatrix# Don't use"
@@ -7647,16 +7614,14 @@ msgid "enhanced_content.pref Baker and Taylor"
 msgstr "Baker and Taylor"
 
 # Enhanced Content > Coce Cover images cache
-#, fuzzy
 msgid "enhanced_content.pref Coce cover images cache"
-msgstr "Lokala omslagsbilder"
+msgstr "Coce-bildbank"
 
 # Enhanced content > Google
 msgid "enhanced_content.pref Google"
 msgstr "Google"
 
 # Enhanced Content > HTML5 Media
-#, fuzzy
 msgid "enhanced_content.pref HTML5 media"
 msgstr "HTML5-media"
 
@@ -7665,14 +7630,12 @@ msgid "enhanced_content.pref Library Thing"
 msgstr "Library Thing"
 
 # Enhanced Content > Local Cover Images
-#, fuzzy
 msgid "enhanced_content.pref Local or remote cover images"
-msgstr "Lokala omslagsbilder"
+msgstr "Lokala eller externa omslagsbilder"
 
 # Enhanced content > All
-#, fuzzy
 msgid "enhanced_content.pref Manual"
-msgstr "Alla"
+msgstr "Manual"
 
 # Enhanced content > Novelist Select
 msgid "enhanced_content.pref Novelist Select"
@@ -8196,7 +8159,6 @@ msgstr ""
 "och ett lösenord, som kan ses i bildlänkar)."
 
 # Enhanced content > Novelist Select
-#, fuzzy
 msgid "enhanced_content.pref#NovelistSelectPassword# ."
 msgstr "."
 
@@ -8384,13 +8346,15 @@ msgid ""
 "individual branch authname not set in the <a href=\"/cgi-bin/koha/admin/"
 "overdrive.pl\">OverDrive library authnames table</a>)."
 msgstr ""
+"(kommer att användas som default om 'authname' för den enskilda enheten inte "
+"är angivet i <a href=\"/cgi-bin/koha/admin/overdrive.pl\">OverDrive library "
+"authnames-tabellen</a>)."
 
 # Enhanced content > OverDrive
-#, fuzzy
 msgid ""
 "enhanced_content.pref#OverDriveAuthName# Authenticate using OverDrive "
 "Authname"
-msgstr "användarnamn"
+msgstr "Autentisera med OverDrive Authname"
 
 # Enhanced content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# A password is"
@@ -8474,7 +8438,6 @@ msgid ""
 msgstr "Visa exemplar från bibliotekets OverDrive-katalog #"
 
 # Enhanced content > OverDrive
-#, fuzzy
 msgid "enhanced_content.pref#OverDriveWebsiteID# ."
 msgstr "."
 
@@ -8788,53 +8751,48 @@ msgid "erm.pref"
 msgstr "erm.pref"
 
 # Circulation > Interface
-#, fuzzy
 msgid "erm.pref Interface"
-msgstr "Gränssnitt "
+msgstr "Gränssnitt"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "erm.pref#ERMModule# Disable"
 msgstr "Avaktivera"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "erm.pref#ERMModule# Enable"
 msgstr "Aktivera"
 
 # Circulation > Interlibrary loans
-#, fuzzy
 msgid "erm.pref#ERMModule# the e-resource management module"
-msgstr "Aktivera"
+msgstr "modulen för e-resurshantering"
 
 # E-Resource management > Interface > ERMProviderEbscoApiKey
 msgid "erm.pref#ERMProviderEbscoApiKey# API key for EBSCO HoldingsIQ"
-msgstr ""
+msgstr "API-nyckel för EBSCO HoldingsIQ"
 
 # E-Resource management > Interface > ERMProviderEbscoCustomerID
 msgid "erm.pref#ERMProviderEbscoCustomerID# Customer ID for EBSCO HoldingsIQ"
-msgstr ""
+msgstr "kund-ID för EBSCO HoldingsIQ"
 
 # E-Resource management > Interface > ERMProviders
 msgid "erm.pref#ERMProviders# EBSCO"
-msgstr ""
+msgstr "EBSCO"
 
 # E-Resource management > Interface > ERMProviders
 msgid "erm.pref#ERMProviders# Local"
-msgstr ""
+msgstr "Lokalt"
 
 # E-resource management > Interface > ERMProviders
 msgid "erm.pref#ERMProviders# Providers for the e-resource management module"
-msgstr ""
+msgstr "Leverantörer för e-resurshanteringsmodulen"
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
 msgstr "i18n_l10n.pref"
 
 # I18N/L10N
-#, fuzzy
 msgid "i18n_l10n.pref Global"
-msgstr "i18n_l10n.pref"
+msgstr "Globala"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# ."
@@ -9029,17 +8987,15 @@ msgid "interlibrary_loans.pref"
 msgstr "interlibrary_loans.pref"
 
 # Searching > Features
-#, fuzzy
 msgid "interlibrary_loans.pref Features"
 msgstr "Funktioner"
 
-#, fuzzy
 msgid "interlibrary_loans.pref Notifications"
-msgstr "Låntagare som begärt modifieringar"
+msgstr "Notifieringar"
 
 # Interlibrary loans
 msgid "interlibrary_loans.pref OPAC"
-msgstr ""
+msgstr "OPAC"
 
 # Circulation > Interlibrary loans
 msgid "interlibrary_loans.pref#CirculateILL# Disable"
@@ -9172,9 +9128,8 @@ msgid "local_use.pref"
 msgstr "local_use.pref"
 
 # Local Use
-#, fuzzy
 msgid "local_use.pref Local use"
-msgstr "local_use.pref"
+msgstr "Lokal användning"
 
 # Local Use
 msgid "local_use.pref## Nothing defined yet."
@@ -9694,6 +9649,8 @@ msgid ""
 "opac.pref#COinSinOPACResults# <br/>If you want to display a link to an "
 "OpenURL resolver, look at the following system preferences:"
 msgstr ""
+"<br />Om ni vill visa en länk till en OpenURL-uppslagningstjänst, titta på "
+"följande systeminställningar:"
 
 # OPAC > Appearance
 msgid ""
@@ -9843,12 +9800,11 @@ msgstr ""
 "Giltiga källkoder i $2 är för närvarande: orcid, scopus, loop, rid och viaf."
 
 # OPAC > Appearance
-#, fuzzy
 msgid ""
 "opac.pref#OPACAuthorIdentifiers# identifiers for authors and contributors to "
 "the detail pages in the OPAC."
 msgstr ""
-"namnet på den låntagare som har ett lånat exemplar på sidan med "
+"identifierare för författare och bidragsgivare på sidan med "
 "detaljinformation för exemplar i OPAC."
 
 # OPAC > Appearance
@@ -10204,6 +10160,10 @@ msgid ""
 "substatus. Similarly the option 'library only' results in unavailable item "
 "counts per library.)"
 msgstr ""
+". (OBS: (OBS: För stora samlingar rekommenderar vi att gruppera "
+"otillgängliga objekt efter 'endast understatus', och lista antal exemplar "
+"enligt denna. På samma sätt resulterar alternativet 'endast bibliotek' i "
+"antalet otillgängliga exemplar per bibliotek.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Group unavailable items by"
@@ -10216,6 +10176,10 @@ msgid ""
 "\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
 "show no more than"
 msgstr ""
+"Om <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> är inställd på \"bibliotek och "
+"understatus\", visa inte fler än"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# Show no more than"
@@ -10237,7 +10201,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# library and substatus"
-msgstr ""
+msgstr "bibliotek och understatus"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsMaxItems# library only"
@@ -10363,11 +10327,10 @@ msgid "opac.pref#OPACShowOpenURL# Enable"
 msgstr "Aktivera"
 
 # OPAC > Features
-#, fuzzy
 msgid ""
 "opac.pref#OPACShowOpenURL# display of OpenURL link in OPAC search results "
 "and detail page."
-msgstr "bläddra i och byta sida i sökresultat från OPAC:s detaljsida."
+msgstr "visning av OpenURL-länk i träfflistan och på detaljsidan i OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowUnusedAuthorities# Don't show"
@@ -11026,6 +10989,9 @@ msgid ""
 "<a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> "
 "administration page."
 msgstr ""
+"<br />Observera: Om 'separat kolumn' är vald, behöver du fortfarande "
+"aktivera visning av item_shelving_location på <a href='/cgi-bin/koha/admin/"
+"columns_settings.pl'>configure columns</a> administrationsidan."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
@@ -11363,6 +11329,8 @@ msgid ""
 "opac.pref#OpenURLResolverURL# Complete URL of OpenURL resolver (starting "
 "with <code>http://</code> or <code>https://</code>):"
 msgstr ""
+"Fyll i URL till OpenURL-uppslagstjänst (börjar med <code>http://</code> "
+"eller <code>https://</code>):"
 
 # OPAC > Appearance
 msgid ""
@@ -11924,11 +11892,10 @@ msgid ""
 "\">AnonSuggestions</a> is disabled, following patron categories are not "
 "allowed to make purchase suggestions:"
 msgstr ""
-"När inställningen <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=suggestion\""
-">suggestion</a> är aktiverad och <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions\""
-">AnonSuggestions</a> är inaktiverad, får inte följande låntagarkategorier "
+"När inställningen <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=suggestion\">suggestion</a> är aktiverad och <a href="
+"\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonSuggestions"
+"\">AnonSuggestions</a> är inaktiverad, får inte följande låntagarkategorier "
 "lämna inköpsförslag."
 
 # OPAC > Features
@@ -12868,6 +12835,8 @@ msgid ""
 "patron fill the following fields in the guarantee's member entry form from "
 "the guarantors record:"
 msgstr ""
+"När vårdnadstagare läggs till ett konto för vårdnadshavare, komplettera "
+"följande fält vårdnadstagares formulär baserat på vårdnadstagares konto:"
 
 # Patrons > Privacy
 msgid ""
@@ -12915,8 +12884,8 @@ msgid ""
 "op=search&searchfield=PrivacyPolicyConsent\">PrivacyPolicyConsent</a> is set."
 msgstr ""
 "<br><strong>OBS:</strong> URL:en kommer bara vara synlig om <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent\""
-">PrivacyPolicyConsent</a> är aktiverad."
+"bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyConsent"
+"\">PrivacyPolicyConsent</a> är aktiverad."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -13230,9 +13199,9 @@ msgid ""
 "interpreted as no delay (do it now)! The actions are performed by the "
 "cleanup database cron job."
 msgstr ""
-"dagar.<br>VIKTIGT: Ingen åtgärd utförs när detta fält är blankt (ingen text)"
-". Men ett nollvärde ('0') tolkas som ingen fördröjning (verkställ omgående)! "
-"Åtgärderna utförs i samband med cronjobbet 'cleanup database'."
+"dagar.<br>VIKTIGT: Ingen åtgärd utförs när detta fält är blankt (ingen "
+"text). Men ett nollvärde ('0') tolkas som ingen fördröjning (verkställ "
+"omgående)! Åtgärderna utförs i samband med cronjobbet 'cleanup database'."
 
 # Patrons > Notices and notifications
 msgid "patrons.pref#UseEmailReceipts# Don't send"
@@ -13439,9 +13408,9 @@ msgid ""
 msgstr ""
 "  postens exemplartypinformation på detaljsidorna och resultatsidorna i OPAC "
 "och personalgränssnittet. Denna information visas också om "
-"systeminställningen <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=item-level_itypes\">item-"
-"level_itypes</a> är inställd på postnivå."
+"systeminställningen <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=item-level_itypes\">item-level_itypes</a> är inställd "
+"på postnivå."
 
 # Searching > Features
 msgid "searching.pref#BiblioItemtypeInfo# Don't show"
@@ -14396,9 +14365,9 @@ msgid ""
 "stylesheet.</li></ul>{langcode} will be replaced with current interface "
 "language and {authtypecode} will be replaced by the authority type code"
 msgstr ""
-"<br />Alternativ:<ul><li>Ange sökväg för att definera en xslt-fil</li><li>"
-"Ange URL för extern stilmall.</li></ul>{langcode} kommer att ersättas med "
-"kod för auktoritetsypen"
+"<br />Alternativ:<ul><li>Ange sökväg för att definera en xslt-fil</"
+"li><li>Ange URL för extern stilmall.</li></ul>{langcode} kommer att ersättas "
+"med kod för auktoritetsypen"
 
 # Staff interface > Appearance
 msgid ""
@@ -14950,8 +14919,8 @@ msgid ""
 "Possible candidates to include also are pipe char |, hyphen (precede with "
 "backslash), comma, semicolon, dot, etc."
 msgstr ""
-"i satsmodifiering och inventering.<br/>OBS: Skriv \\r för vagnretur, \\n"
-" för ny rad och \\s för blanksteg. Övriga som kan inkluderas är lodsteck |, "
+"i satsmodifiering och inventering.<br/>OBS: Skriv \\r för vagnretur, \\n för "
+"ny rad och \\s för blanksteg. Övriga som kan inkluderas är lodsteck |, "
 "bindestreck (inled med omvänt snedstreck), komma, semikolon, punkt etc."
 
 # Tools > Patron cards
@@ -15169,8 +15138,8 @@ msgid ""
 "web_services.pref#ManaToken# Get a security token on the <a href=\"/cgi-bin/"
 "koha/admin/share_content.pl\">Mana KB administration page</a>."
 msgstr ""
-"Skaffa säkerhetstoken på <a href=\"/cgi-bin/koha/admin/share_content.pl\">"
-"administrationssidan för Mana KB</a>."
+"Skaffa säkerhetstoken på <a href=\"/cgi-bin/koha/admin/share_content.pl"
+"\">administrationssidan för Mana KB</a>."
 
 # Web services > Mana KB
 msgid ""
@@ -15329,8 +15298,8 @@ msgid ""
 "HTTP/1.0/spec.html#BasicAA\" target=\"_blank\">Basic authentication</a> for "
 "the REST API."
 msgstr ""
-"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target=\""
-"_blank\">Autentisering</a> för REST API."
+"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target="
+"\"_blank\">Autentisering</a> för REST API."
 
 # Web services > REST API
 msgid "web_services.pref#RESTBasicAuth# Disable"
@@ -15380,7 +15349,8 @@ msgstr "Aktivera"
 msgid ""
 "web_services.pref#RESTPublicAnonymousRequests# anonymous access to public "
 "routes (that don't require authenticated access)"
-msgstr "anonym access till publika vägar (som inte kräver autentiserad access)."
+msgstr ""
+"anonym access till publika vägar (som inte kräver autentiserad access)."
 
 # Web services > REST API
 msgid ""
