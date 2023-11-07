@@ -88,6 +88,29 @@ if ( $op eq 'send_welcome' ) {
                 }
             );
         };
+    } else {
+        eval {
+            my $print = GetPreparedLetter(
+                module      => 'members',
+                letter_code => 'WELCOME',
+                branchcode  => $patron->branchcode,,
+                lang        => $patron->lang || 'default',
+                tables      => {
+                    'branches'  => $patron->branchcode,
+                    'borrowers' => $patron->borrowernumber,
+                },
+                want_librarian         => 1,
+                message_transport_type => 'print'
+            ) or return;
+
+            my $message_id = EnqueueLetter(
+                {
+                    letter                 => $print,
+                    borrowernumber         => $patron->id,
+                    message_transport_type => 'print'
+                }
+            );
+        };
     }
 
     # redirect to self to avoid form submission on refresh
