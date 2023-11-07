@@ -502,6 +502,11 @@
                             item._checked = $(tr).find('input[type="checkbox"]').prop('checked');
                             tr.html('');
                             _build_item(item, tr);
+
+                            var row = $("#order_edit").data('row');
+                            row.items.forEach((it, i) => { if (it.item_id == itemnumber) {
+                                row.items[i] = item;
+                            }});
                         }
                     });
                 }
