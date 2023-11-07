@@ -1612,22 +1612,6 @@
                 "order": [[ 1, 'asc' ], [ 0, 'asc' ]]
             }));
 
-            // print modals
-            $('.modal.printable').on('shown.bs.modal', function() {
-                $('.modal-dialog', this).addClass('focused');
-                $('body').addClass('modalprinter');
-
-                if ($(this).hasClass('autoprint')) {
-                    window.print();
-                }
-            }).on('hidden.bs.modal', function() {
-                $('.modal-dialog', this).removeClass('focused');
-                $('body').removeClass('modalprinter');
-            });
-
-            $('.printModal').click(function() {
-                window.print();
-            });
             [% IF ( !(Koha.Preference('TransfersBlockCirc')) && Koha.Preference('AutomaticConfirmTransfer') ) %]
                 $("#wrong-transfer-modal").on('hidden.bs.modal',function(){
                     $("#wrongtransferform").submit();
@@ -1639,6 +1623,7 @@
                 [% END %]
             [% END %]
         });
+        [% Asset.js("js/modal_printer.js") | $raw %]
     </script>
 
 [% END %]
