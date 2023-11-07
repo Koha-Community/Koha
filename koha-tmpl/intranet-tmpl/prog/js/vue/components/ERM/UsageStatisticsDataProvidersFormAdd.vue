@@ -11,7 +11,6 @@
         <h2 v-else>{{ $__("New usage data provider") }}</h2>
         <div class="page-section">
             <form @submit="onSubmit($event)">
-                <!-- <div class="page-section"> This is on other components such as AgreementsFormAdd.vue and just makes it look messy - what purpose is it serving?-->
                 <legend>{{ $__("Data provider") }}</legend>
                 <fieldset class="rows">
                     <ol>
