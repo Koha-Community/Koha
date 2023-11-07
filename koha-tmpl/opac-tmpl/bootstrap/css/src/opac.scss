@@ -774,19 +774,28 @@ th {
     padding: 3px 4px;
 }
 
-div {
-    &.required_label {
-        display: none;
+.required_label {
+    display: none;
 
-        &.required {
-            color: #C00;
-            display: block;
-            font-size: 95%;
-            margin-left: 10rem;
-            margin-top: 3px;
-        }
+    &.required {
+        color: #C00;
+        display: block;
+        font-size: 95%;
+        margin-left: 10rem;
+        margin-top: 3px;
     }
+}
 
+.attr-control {
+    margin-left: 9.5rem;
+
+    .required {
+        display: inline-block;
+        margin-left: 0;
+    }
+}
+
+div {
     &.rows {
         clear: left;
         float: left;
