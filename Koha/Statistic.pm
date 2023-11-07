@@ -23,7 +23,7 @@ use C4::Context;
 use Koha::Database;
 use Koha::DateUtils qw/dt_from_string/;
 use Koha::Items;
-use Koha::PseudonymizedTransaction;
+use Koha::BackgroundJob::PseudonymizeStatistic;
 
 use base qw(Koha::Object);
 
@@ -121,7 +121,7 @@ sub new {
 sub store {
     my ($self) = @_;
     $self->SUPER::store;
-    Koha::PseudonymizedTransaction->new_from_statistic($self)->store
+    Koha::BackgroundJob::PseudonymizeStatistic->new->enqueue( { statistic => $self->unblessed } )
         if C4::Context->preference('Pseudonymization')
         && $self->borrowernumber    # Not a real transaction if the patron does not exist
                                     # For instance can be a transfer, or hold trigger
