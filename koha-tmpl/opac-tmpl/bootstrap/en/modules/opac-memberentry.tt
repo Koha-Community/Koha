@@ -960,13 +960,15 @@
                                                             [% ELSE %]
                                                                 <textarea rows="2" cols="30" id="[% form_id | html %]" name="patron_attribute_value">[% pa_value | html %]</textarea>
                                                             [% END %]
-                                                            [% IF pa.type.mandatory %]
-                                                                <div class="required">Required</div>
-                                                            [% END %]
-                                                            <a href="#" class="clear-attribute">Clear</a>
-                                                            [% IF ( pa.type.repeatable ) %]
-                                                            <a href="#" class="clone-attribute">New</a>
-                                                            [% END %]
+                                                            <div class="attr-control">
+                                                                <a href="#" class="btn btn-sm btn-link clear-attribute"><i class="fa fa-remove" aria-hidden="true"></i> Clear</a>
+                                                                [% IF ( pa.type.repeatable ) %]
+                                                                    <a href="#" class="btn btn-sm btn-link clone-attribute"><i class="fa fa-plus" aria-hidden="true"></i> New</a>
+                                                                [% END %]
+                                                                [% IF pa.type.mandatory %]
+                                                                    <span class="required_label required">Required</span>
+                                                                [% END %]
+                                                            </div>
                                                         [% ELSE %]
                                                             [% IF ( pa.type.authorised_value_category ) %]
                                                                 [% AuthorisedValues.GetByCode( pa.type.authorised_value_category, pa_value, 1 ) | html_line_break %]
@@ -1185,13 +1187,14 @@
 
             $(".patron-attributes").on( 'click', '.clear-attribute', function(e) {
                 e.preventDefault();
-                $(this).parent()
+                $(this).closest("li")
                     .find('textarea').val("").end()
                     .find('select').val("").end();
             } );
 
             $(".patron-attributes").on( 'click', '.clone-attribute', function() {
-                var clone = $(this).parent().clone().insertAfter( $(this).parent() );
+                let li = $(this).closest("li");
+                var clone = li.clone().insertAfter( li );
 
                 var newId = 50 + parseInt(Math.random() * 100000);
                 $('input[type!="hidden"],select,textarea', clone).attr('id', 'patron-attr-' + newId).attr('value', '');
