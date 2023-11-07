@@ -4485,36 +4485,3 @@ div .suggestion_note {
         border-bottom-right-radius: 5px;
     }
 }
-
-@media print {
-    body.modalprinter * {
-        visibility: hidden;
-    }
-
-    body.modalprinter .modal-dialog.focused {
-        position: absolute;
-        padding: 0;
-        margin: 0;
-        left: 0;
-        top: 0;
-    }
-
-    body.modalprinter .modal-dialog.focused .modal-content {
-        border-width: 0;
-    }
-
-    body.modalprinter .modal-dialog.focused .modal-content .modal-header .modal-title,
-    body.modalprinter .modal-dialog.focused .modal-content .modal-body,
-    body.modalprinter .modal-dialog.focused .modal-content .modal-body * {
-        visibility: visible;
-    }
-
-    body.modalprinter .modal-dialog.focused .modal-content .modal-header,
-    body.modalprinter .modal-dialog.focused .modal-content .modal-body {
-        padding: 0;
-    }
-
-    body.modalprinter .modal-dialog.focused .modal-content .modal-header .modal-title {
-        margin-bottom: 20px;
-    }
-}

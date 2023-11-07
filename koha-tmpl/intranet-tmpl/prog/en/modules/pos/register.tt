@@ -351,6 +351,7 @@
     [% INCLUDE 'format_price.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/cashup_modal.js") | $raw %]
+    [% Asset.js("js/modal_printer.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script>
         var sales_table = $("#sales").dataTable($.extend(true, {}, dataTablesDefaults, {
