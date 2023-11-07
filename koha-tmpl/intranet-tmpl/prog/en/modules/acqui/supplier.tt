@@ -93,10 +93,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Vendor [% name | html %] &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-div.rows p{ margin-left: 1rem; }
-div.rows { padding: 1rem; }
-</style>
 </head>
 
 <body id="acq_supplier" class="acq">
@@ -395,7 +391,7 @@ div.rows { padding: 1rem; }
                     [% END %]
                 </div> <!-- /#supplier-contact-details -->
 
-                <div id="subscription-details" class="page-section rows">
+                <div id="subscription-details" class="page-section">
                     <h2>Subscription details</h2>
                     <p><strong>Number of subscriptions: </strong>
                         [% IF (  CAN_user_serials ) %]
@@ -407,7 +403,7 @@ div.rows { padding: 1rem; }
                 </div> <!-- /#subscription-details -->
             </div> <!-- /.col-sm-6 -->
 
-        </div>
+        </div> <!-- /.row -->
 
         [% IF ( contracts ) %]
             <div id="supplier-contracts" class="page-section rows">
