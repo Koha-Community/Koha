@@ -261,40 +261,33 @@ sub title_id {
 }
 
 sub sip_circulation_status {
-    my $self = shift;
+    my $self   = shift;
     my $server = shift;
 
     # Defines what lost status means "missing" for this SIP account
     my $missing_status = $server->{account}->{lost_status_for_missing};
 
     if ( $self->{_object}->get_transfer ) {
-        return '10'; # in transit between libraries
-    }
-    elsif ( Koha::Checkouts::ReturnClaims->search({ itemnumber => $self->{_object}->id, resolution => undef })->count ) {
+        return '10';    # in transit between libraries
+    } elsif (
+        Koha::Checkouts::ReturnClaims->search( { itemnumber => $self->{_object}->id, resolution => undef } )->count )
+    {
         return '11';    # claimed returned
-    }
-    elsif ( $missing_status && $self->{itemlost} && $missing_status eq $self->{itemlost} ) {
+    } elsif ( $missing_status && $self->{itemlost} && $missing_status eq $self->{itemlost} ) {
         return '13';    # missing
-    }
-    elsif ( $self->{itemlost} ) {
+    } elsif ( $self->{itemlost} ) {
         return '12';    # lost
-    }
-    elsif ( $self->{borrowernumber} ) {
+    } elsif ( $self->{borrowernumber} ) {
         return '04';    # charged
-    }
-    elsif ( grep { $_->{itemnumber} == $self->{itemnumber}  } @{ $self->{hold_attached} } ) {
+    } elsif ( grep { $_->{itemnumber} == $self->{itemnumber} } @{ $self->{hold_attached} } ) {
         return '08';    # waiting on hold shelf
-    }
-    elsif ( $self->{location} and $self->{location} eq 'CART' ) {
+    } elsif ( $self->{location} and $self->{location} eq 'CART' ) {
         return '09';    # waiting to be re-shelved
-    }
-    elsif ( $self->{damaged} ) {
+    } elsif ( $self->{damaged} ) {
         return '01';    # damaged
-    }
-    elsif ( $self->{notforloan} < 0 ) {
+    } elsif ( $self->{notforloan} < 0 ) {
         return '02';    # on order
-    }
-    else {
+    } else {
         return '03';    # available
     }    # FIXME: 01-13 enumerated in spec.
 }
