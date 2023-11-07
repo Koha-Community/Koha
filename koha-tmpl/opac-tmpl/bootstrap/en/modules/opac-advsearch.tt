@@ -453,7 +453,7 @@
 [% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") | $raw %]
 <script>
 window.addEventListener('pageshow', function( e ){
-    $('.form-control').prop('disabled' , false );
+    $('.form-control:visible').prop('disabled' , false );
 });
 $(document).ready(function() {
     [% IF search_groups %]
