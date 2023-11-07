@@ -1199,12 +1199,11 @@
                 [% END %]
             [% END %]
 
-            $(".patron-attributes").on( 'click', '.clear-attribute', function() {
+            $(".patron-attributes").on( 'click', '.clear-attribute', function(e) {
+                e.preventDefault();
                 $(this).parent()
-                    .find('textarea').attr('value', '').end()
-                    .find('select').attr('value', '').end();
-
-                return false;
+                    .find('textarea').val("").end()
+                    .find('select').val("").end();
             } );
 
             $(".patron-attributes").on( 'click', '.clone-attribute', function() {
