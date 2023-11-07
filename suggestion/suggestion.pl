@@ -107,7 +107,9 @@ my $columns = ' '.join(' ', $schema->source('Suggestion')->columns).' ';
 my $suggestion_only = { map { $columns =~ / $_ / ? ($_ => $suggestion_ref->{$_}) : () } keys %$suggestion_ref };
 $suggestion_only->{STATUS} = $suggestion_ref->{STATUS};
 
-delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode notify filter_archived );
+delete $$suggestion_ref{$_}
+    foreach
+    qw( suggestedbyme op displayby tabcode notify filter_archived koha_login_context auth_forwarded_hash password userid );
 foreach (keys %$suggestion_ref){
     delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' ));
 }
