@@ -17,8 +17,17 @@ return {
 
             # Insert any values found from system preference into additional_contents
             $dbh->do(
-                "INSERT INTO additional_contents ( category, code, location, branchcode, title, content, lang, published_on ) VALUES ('html_customizations', 'OpacMaintenanceNotice', 'OpacMaintenanceNotice', NULL, 'OpacMaintenanceNotice default', ?, 'default', CAST(NOW() AS date) )",
-                undef, $opacmaintenancenotice
+                "INSERT INTO additional_contents ( category, code, location, branchcode, published_on ) VALUES ('html_customizations', 'OpacMaintenanceNotice', 'OpacMaintenanceNotice', NULL, CAST(NOW() AS date) )"
+            );
+
+            my ($insert_id) = $dbh->selectrow_array(
+                "SELECT id FROM additional_contents WHERE category = 'html_customizations' AND code = 'OpacMaintenanceNotice' AND location = 'OpacMaintenanceNotice' LIMIT 1",
+                {}
+            );
+
+            $dbh->do(
+                "INSERT INTO additional_contents_localizations ( additional_content_id, title, content, lang ) VALUES ( ?, 'OpacMaintenanceNotice default', ?, 'default' )",
+                undef, $insert_id, $opacmaintenancenotice
             );
 
             # Remove old system preference
