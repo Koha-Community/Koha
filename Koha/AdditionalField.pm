@@ -59,6 +59,7 @@ sub to_api {
         'accountlines:debit'  => 'debit',
         'aqbasket'            => 'basket',
         'aqinvoices'          => 'invoice',
+        'erm_licenses'        => 'license',
         'aqorders'            => 'order',
     };
 

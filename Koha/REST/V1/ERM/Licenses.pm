@@ -87,10 +87,14 @@ sub add {
 
                 my $user_roles = delete $body->{user_roles} // [];
                 my $documents = delete $body->{documents} // [];
+                my $extended_attributes = delete $body->{extended_attributes} // [];
 
                 my $license = Koha::ERM::License->new_from_api($body)->store;
                 $license->user_roles($user_roles);
                 $license->documents($documents);
+
+                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                $license->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
                 return $c->render(
@@ -165,10 +169,14 @@ sub update {
 
                 my $user_roles = delete $body->{user_roles} // [];
                 my $documents = delete $body->{documents} // [];
+                my $extended_attributes = delete $body->{extended_attributes} // [];
 
                 $license->set_from_api($body)->store;
                 $license->user_roles($user_roles);
                 $license->documents($documents);
+
+                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                $license->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
                 return $c->render(

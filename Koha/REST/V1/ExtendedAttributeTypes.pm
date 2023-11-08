@@ -50,6 +50,7 @@ sub list {
         credit  => 'accountlines:credit',
         debit   => 'accountlines:debit',
         invoice => 'aqinvoices',
+        license => 'erm_licenses',
         order   => 'aqorders',
     };
 

@@ -59,6 +59,9 @@
           type: string
           enum:
             - vendor
+            - extended_attributes
+            - +strings
+        collectionFormat: csv
     responses:
       200:
         description: A list of agreements' licenses
@@ -173,6 +176,8 @@
             - user_roles.patron
             - vendor
             - documents
+            - extended_attributes
+            - +strings
         collectionFormat: csv
     responses:
       200:
@@ -237,6 +242,8 @@
           enum:
             - user_roles
             - documents
+            - extended_attributes
+            - +strings
         collectionFormat: csv
     responses:
       200:

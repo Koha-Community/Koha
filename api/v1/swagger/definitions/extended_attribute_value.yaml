@@ -1,0 +1,18 @@
+---
+type: object
+properties:
+  id:
+    description: id of the field
+    type: string
+    readOnly: true
+  field_id:
+    type: integer
+    description: FK in corresponding to id in additional_fields table
+  record_id:
+    description: ID corresponding to the object ID this additional field relates to
+    type: string
+  value:
+    description: value of the additional field
+    type: string
+
+additionalProperties: false
