@@ -30,9 +30,12 @@ return {
                 undef, $insert_id, $opacresultssidebar
             );
 
-            # Remove old system preference
-            $dbh->do("DELETE FROM systempreferences WHERE variable='OPACResultsSidebar'");
-            say $out "Bug 34869 update done";
+            say $out "Added 'OpacMaintenanceNotice' additional content";
         }
-    }
-    }
+
+        # Remove old system preference
+        $dbh->do("DELETE FROM systempreferences WHERE variable='OPACResultsSidebar'");
+        say $out "Removed system preference 'OPACResultsSidebar'";
+
+    },
+};
