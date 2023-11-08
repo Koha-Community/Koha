@@ -158,9 +158,9 @@ if ($fileID) {
                           :                     "";
 
                         unless ( $delim eq "," || $delim eq "\t" ) {
-                            warn
-"Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
+                            warn "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
                             $error = 'DELERR';
+                            next;
                         }
                         else {
                             ( $biblionumber, $filename ) = split $delim, $line, 2;
@@ -169,9 +169,6 @@ if ($fileID) {
                             $filename =~ s/[\"\r\n]//g;
                             $filename =~ s/^\s+//;
                             $filename =~ s/\s+$//;
-                            if (C4::Context->preference("CataloguingLog")) {
-                                logaction('CATALOGUING', 'MODIFY', $biblionumber, "biblio cover image: $filename");
-                            }
                             my $srcimage = GD::Image->new("$dir/$filename");
                             if ( defined $srcimage ) {
                                 $total++;
@@ -201,6 +198,11 @@ if ($fileID) {
                                 $error = 'OPNIMG';
                             }
                             undef $srcimage;
+
+                            if (!$error && C4::Context->preference("CataloguingLog")) {
+                                logaction('CATALOGUING', 'MODIFY', $biblionumber, "biblio cover image: $filename");
+                            }
+
                         }
                     }
                     close($fh);
