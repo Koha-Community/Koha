@@ -443,6 +443,12 @@ data processing consent
 
 useful for reporting purposes
 
+=head2 lang
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 25
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -621,6 +627,8 @@ __PACKAGE__->add_columns(
   },
   "primary_contact_method",
   { data_type => "varchar", is_nullable => 1, size => 45 },
+  "lang",
+  { data_type => "varchar", is_nullable => 1, size => 25 },
 );
 
 =head1 PRIMARY KEY
@@ -638,8 +646,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-04-06 15:46:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TzG6Q5PymhBXCVxJi3C/sA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-08 13:26:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pgmClJsT12pxLZHRYrRY9g
 
 sub koha_object_class {
     'Koha::Patron::Modification';
