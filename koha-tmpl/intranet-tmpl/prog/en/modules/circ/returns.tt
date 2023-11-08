@@ -1396,6 +1396,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/pages/circulation.js") | $raw %]
+    [% Asset.js("js/modal_printer.js") | $raw %]
     [% IF ( ReturnClaims ) %]
         <script>
             /* Set a variable needed by resolve_claim_modal.js */
@@ -1650,7 +1651,6 @@
                 [% END %]
             [% END %]
         });
-        [% Asset.js("js/modal_printer.js") | $raw %]
     </script>
 
 [% END %]
