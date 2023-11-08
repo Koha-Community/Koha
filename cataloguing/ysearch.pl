@@ -37,7 +37,8 @@ my $table = $input->param('table');
 my $field = $input->param('field');
 
 # Prevent from disclosing data
-die() unless ($table eq "biblioitems"); 
+die() unless ($table eq "biblioitems");
+die() unless ($field eq 'publishercode' || $field eq 'collectiontitle');
 
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
