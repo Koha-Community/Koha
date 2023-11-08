@@ -30,9 +30,12 @@ return {
                 undef, $insert_id, $patronselfregistrationadditionalinstructions
             );
 
-            # Remove old system preference
-            $dbh->do("DELETE FROM systempreferences WHERE variable='PatronSelfRegistrationAdditionalInstructions'");
-            say $out "Bug 34889 update done";
+            say $out "Added 'PatronSelfRegistrationAdditionalInstructions' additional content";
         }
-    }
-    }
+
+        # Remove old system preference
+        $dbh->do("DELETE FROM systempreferences WHERE variable='PatronSelfRegistrationAdditionalInstructions'");
+        say $out "Removed system preference 'PatronSelfRegistrationAdditionalInstructions'";
+
+    },
+};
