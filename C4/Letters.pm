@@ -1116,7 +1116,7 @@ sub GetQueuedMessages {
 
     my $dbh = C4::Context->dbh();
     my $statement = << 'ENDSQL';
-SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued, updated_on, failure_code
+SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued, updated_on, failure_code, from_address, to_address, cc_address
 FROM message_queue
 ENDSQL
 
