@@ -99,20 +99,28 @@
                                             <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
                                             <td>
                                                 [% IF ( QUEUED_MESSAGE.failure_code ) %]
-                                                    [% IF ( QUEUED_MESSAGE.failure_code == "INVALID_BORNUMBER" ) %]<span>Invalid borrowernumber [% borrowernumber | html %]</span>
-                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_EMAIL' ) %]<span>Unable to find an email address for this borrower</span>
-                                                    [% ELSIF (matches = QUEUED_MESSAGE.failure_code.match('INVALID_EMAIL:(\w+)') ) %]<span>Invalid [% matches.0 | html %] email address found [% borrowernumber | html %]</span>
-                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_FROM' ) %]<span>Missing from email address</span>
-                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'MISSING_SMS' ) %]<span>Missing SMS number</span>
-                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) %]<span>Message is duplicate</span>
-                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_NOTES' ) %]<span>No notes from SMS driver</span>
-                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SENDMAIL' ) %]<span>Unhandled email failure, check the logs for further details</span>
-                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == "UNKNOWN_ERROR" ) %]<span>Unknown error</span>
-                                                    [% ELSE %]<span>Error occurred while sending email.</span>
+                                                    [% IF ( QUEUED_MESSAGE.failure_code == "INVALID_BORNUMBER" ) %]<span class="clearfix">Invalid borrowernumber [% borrowernumber | html %]</span>
+                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_EMAIL' ) %]<span class="clearfix">Unable to find an email address for this borrower</span>
+                                                    [% ELSIF (matches = QUEUED_MESSAGE.failure_code.match('INVALID_EMAIL:(\w+)') ) %]<span class="clearfix">Invalid [% matches.0 | html %] email address found [% borrowernumber | html %]</span>
+                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_FROM' ) %]<span class="clearfix">Missing from email address</span>
+                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'MISSING_SMS' ) %]<span class="clearfix">Missing SMS number</span>
+                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) %]<span class="clearfix">Message is duplicate</span>
+                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_NOTES' ) %]<span class="clearfix">No notes from SMS driver</span>
+                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SENDMAIL' ) %]<span class="clearfix">Unhandled email failure, check the logs for further details</span>
+                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == "UNKNOWN_ERROR" ) %]<span class="clearfix">Unknown error</span>
+                                                    [% ELSE %]<span class="clearfix">Error occurred while sending email.</span>
                                                     [% END %]
                                                 [% END %]
-                                                [% IF ( QUEUED_MESSAGE.cc_address ) %]
-                                                    <span>Notice copied to: [% QUEUED_MESSAGE.cc_address | html %]</span>
+                                                [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]
+                                                    [% IF ( QUEUED_MESSAGE.from_address ) %]
+                                                        <span class="clearfix"><span class="label">from:</span> [% QUEUED_MESSAGE.from_address | html %]</span>
+                                                    [% END %]
+                                                    [% IF ( QUEUED_MESSAGE.to_address ) %]
+                                                        <span class="clearfix"><span class="label">to:</span> [% QUEUED_MESSAGE.to_address | html %]</span>
+                                                    [% END %]
+                                                    [% IF ( QUEUED_MESSAGE.cc_address ) %]
+                                                        <span class="clearfix"><span class="label">cc:</span> [% QUEUED_MESSAGE.cc_address | html %]</span>
+                                                    [% END %]
                                                 [% END %]
                                             </td>
                                         </tr>
