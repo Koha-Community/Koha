@@ -31,6 +31,20 @@ Koha::Notice::Message - Koha notice message Object class, related to the message
 
 =cut
 
+=head3 is_html
+
+  my $bool = $message->is_html;
+
+Returns a boolean denoting whether the message was generated using a preformatted html template.
+
+=cut
+
+sub is_html {
+    my ($self) = @_;
+    my $content_type = $self->content_type // '';
+    return $content_type =~ m/html/io;
+}
+
 =head3 html_content
 
   my $wrapped_content = $message->html_content;
@@ -45,10 +59,14 @@ sub html_content {
 
     my $title   = $self->subject;
     my $content = $self->content;
-    my $css     = C4::Context->preference("NoticeCSS") || '';
-    $css = qq{<link rel="stylesheet" type="text/css" href="$css">} if $css;
 
-    return <<EOS;
+    my $wrapped;
+    if ( $self->is_html ) {
+
+        my $css = C4::Context->preference("NoticeCSS") || '';
+        $css = qq{<link rel="stylesheet" type="text/css" href="$css">} if $css;
+
+        $wrapped = <<EOS;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -62,7 +80,12 @@ sub html_content {
   </body>
 </html>
 EOS
-
+    } else {
+        $wrapped = "<div style=\"white-space: pre-wrap;\">";
+        $wrapped .= $content;
+        $wrapped .= "</div>";
+    }
+    return $wrapped;
 }
 
 =head3 type
