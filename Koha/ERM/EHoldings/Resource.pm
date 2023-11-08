@@ -21,7 +21,6 @@ use MARC::Record;
 
 use Koha::Database;
 
-use C4::Biblio qw( AddBiblio TransformKohaToMarc );
 use Koha::Acquisition::Booksellers;
 use Koha::Biblios;
 use Koha::ERM::EHoldings::Titles;
@@ -38,44 +37,6 @@ Koha::ERM::EHoldings::Resource - Koha EHolding resource Object class
 =head2 Class Methods
 
 =cut
-
-=head3 store
-
-=cut
-
-sub store {
-    my ($self) = @_;
-
-    # FIXME This is terrible and ugly, we need to:
-    # * Provide a mapping for each attribute of title
-    # * Create a txn
-    my $title = $self->title;
-    my $biblio =
-      $title->biblio_id
-      ? Koha::Biblios->find( $title->biblio_id )->unblessed
-      : {};
-
-    my $marc_record = TransformKohaToMarc(
-        {
-            %$biblio,
-            'biblio.title' => $title->publication_title,
-
-        }
-    );
-
-    my $biblio_id;
-    if ( %$biblio ) {
-        $biblio_id = $title->biblio_id;
-        C4::Biblio::ModBiblio($marc_record, $title->biblio_id, '');
-    } else {
-        ( $biblio_id ) = C4::Biblio::AddBiblio($marc_record, '');
-    }
-
-    $title->biblio_id($biblio_id)->store;
-
-    $self = $self->SUPER::store;
-    return $self;
-}
 
 =head3 package
 
