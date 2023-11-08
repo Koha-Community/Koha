@@ -51,7 +51,6 @@ You can learn about the system components (like OS and database) needed for runn
 
 - [32305](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=32305) Background worker doesn't check job status when received from rabbitmq
 - [34204](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34204) Koha user needs to be able to login
-- [34959](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34959) Translator tool generates too many changes
 - [35014](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35014) Times should only be set for enable-time flatpickrs
 - [35111](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35111) Background jobs worker crashes on SIGPIPE when database connection lost in Ubuntu 22.04
 - [35199](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35199) Fix error handling in http-client.js
@@ -68,7 +67,6 @@ You can learn about the system components (like OS and database) needed for runn
 - [34982](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34982) Administration currencies table not showing pagination
 - [34990](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34990) Backgroundjob->enqueue does not send persistent header
 - [35000](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35000) OPACMandatoryHoldDates does not work well with flatpickr
-- [35024](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35024) Do not wrap PO files
 - [35064](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35064) Syntax error in db_revs/220600072.pl
 
 ### Cataloging
