@@ -21,6 +21,8 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcFromKohaField );
+
 use Koha::ERM::EHoldings::Resources;
 
 =head1 NAME
@@ -30,6 +32,41 @@ Koha::ERM::EHoldings::Title - Koha ERM Title Object class
 =head1 API
 
 =head2 Class Methods
+
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    # FIXME This is terrible and ugly, we need to:
+    # * Provide a mapping for each attribute of title
+    # * Create a txn
+
+    # If the 'title' is alreay linked to a biblio, then we update the title subfield only
+    if ( $self->biblio_id ){
+        my $biblio = Koha::Biblios->find( $self->biblio_id );
+        my ($title_tag, $title_subfield) = GetMarcFromKohaField( 'biblio.title' );
+        my $record = $biblio->metadata->record();
+        my $title_field = $record->field($title_tag);
+        $title_field->update( $title_subfield => $self->publication_title );
+        C4::Biblio::ModBiblio( $record, $self->biblio_id, '' );
+    } else {
+    # If it's not linked, we create a simple biblio and save the biblio id to the 'title'
+        my $marc_record = TransformKohaToMarc(
+            {
+                'biblio.title' => $self->publication_title,
+            }
+        );
+        my ( $biblio_id ) = C4::Biblio::AddBiblio($marc_record, '');
+        $self->biblio_id($biblio_id);
+    }
+
+    $self = $self->SUPER::store;
+    return $self;
+
+}
 
 =head3 resources
 

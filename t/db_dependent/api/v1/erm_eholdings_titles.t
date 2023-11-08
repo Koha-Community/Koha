@@ -23,6 +23,8 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use C4::Biblio qw( GetMarcFromKohaField );
+
 use Koha::ERM::EHoldings::Titles;
 use Koha::ERM::EHoldings::Packages;
 use Koha::Virtualshelves;
@@ -337,7 +339,7 @@ subtest 'add() tests' => sub {
 
 subtest 'update() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -362,8 +364,8 @@ subtest 'update() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     my $ehtitle_id =
-      $builder->build_object( { class => 'Koha::ERM::EHoldings::Titles' } )
-      ->title_id;
+        $builder->build_object( { class => 'Koha::ERM::EHoldings::Titles', value => { biblio_id => undef } } )
+        ->title_id;
 
     # Unauthorized attempt to update
     $t->put_ok(
@@ -459,6 +461,40 @@ subtest 'update() tests' => sub {
     $t->post_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id" =>
           json => $ehtitle_with_updated_field )->status_is(404);
+
+    subtest 'update eholdings title linked to biblio tests' => sub {
+
+        plan tests => 6;
+
+        my $biblio = $builder->build_sample_biblio();
+        my $record = $biblio->metadata->record();
+
+        my $ehtitle_id =
+            $builder->build_object( { class => 'Koha::ERM::EHoldings::Titles', value => { biblio_id => $biblio->id } } )
+            ->title_id;
+        my $ehtitle_updated_title = { publication_title => "The journal of writing unit tests :" };
+
+        $t->put_ok(
+            "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id" => json => $ehtitle_updated_title )
+            ->status_is(200)->json_is( '/publication_title' => 'The journal of writing unit tests :' );
+
+        $biblio->discard_changes;
+        warn $biblio->title;
+        my $record_after = $biblio->metadata->record;
+
+        my ( $title_tag, $title_subfield ) = GetMarcFromKohaField('biblio.title');
+        is(
+            $record_after->subfield( $title_tag, $title_subfield ), "The journal of writing unit tests :",
+            "Biblio title is correctly update by eholding title update"
+        );
+
+        is( $record->fields(), $record_after->fields(), "We have the same number of fields after edit" );
+        my ($author_tag) = GetMarcFromKohaField('biblio.author');
+        my $old_author   = $record->field($author_tag);
+        my $new_author   = $record_after->field($author_tag);
+        is( $old_author->as_string, $new_author->as_string, "The record is otherwise untouched" );
+
+    };
 
     $schema->storage->txn_rollback;
 };
