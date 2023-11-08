@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Koha 22.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 07:32-0300\n"
-"PO-Revision-Date: 2023-09-28 07:31+0000\n"
+"PO-Revision-Date: 2023-10-03 06:37+0000\n"
 "Last-Translator: plumflower <jeff_lindqvist@hotmail.com>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Revision: 1\n"
 "X-Pootle-Path: /sv/22.11/sv-SE-pref.po\n"
-"X-POOTLE-MTIME: 1695886309.221323\n"
+"X-POOTLE-MTIME: 1696315079.348994\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -2836,12 +2836,12 @@ msgstr "generera"
 # Authorities > Linker > AutoLinkBiblios
 # Authorities > Linker
 msgid "authorities.pref#AutoLinkBiblios# Do"
-msgstr "Gör"
+msgstr "Försök att"
 
 # Authorities > Linker > AutoLinkBiblios
 # Authorities > Linker
 msgid "authorities.pref#AutoLinkBiblios# Don't"
-msgstr "Gör inte"
+msgstr "Försök inte att"
 
 # Authorities > Linker > AutoLinkBiblios
 msgid ""
@@ -2852,8 +2852,8 @@ msgid ""
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> for "
 "record edits."
 msgstr ""
-"att automatiskt försöka länka rubriker när du sparar poster i "
-"katalogiseringsmodulen, följer <a href='/cgi-bin/koha/admin/preferences.pl?"
+"automatiskt länka rubriker när du sparar poster i katalogiseringsmodulen, "
+"följer <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=LinkerRelink'>LinkerRelink</a> och <a href='/cgi-bin/"
 "koha/admin/preferences.pl?"
 "op=search&searchfield=CatalogModuleRelink'>CatalogModuleRelink</a> för "
@@ -2877,7 +2877,7 @@ msgid ""
 "(requires <a href='/cgi-bin/koha/admin/preferences.pl?"
 "op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 msgstr ""
-"att automatiskt återskapa länkar för rubriker som tidigare var länkade när "
+"automatiskt återskapa länkar för rubriker som tidigare var länkade när "
 "poster sparas i katalogmodulen (kräver <a href='/cgi-bin/koha/admin/"
 "preferences.pl?op=search&searchfield=AutoLinkBiblios'>AutoLinkBiblios</a>)."
 
@@ -6903,9 +6903,10 @@ msgstr "Tillåt inte"
 
 # Circulation > Holds policy > OPACHoldsIfAvailableAtPickup
 # Circulation > Holds policy
+#, fuzzy
 msgid ""
-"circulation.pref#OPACHoldsIfAvailableAtPickup# to pickup holds at libraries "
-"where the item is available."
+"circulation.pref#OPACHoldsIfAvailableAtPickup# patrons to place a hold at "
+"pickup locations (libraries) where the item is available."
 msgstr "att hämta reservationer vid bibliotek där exemplaret är tillgängligt."
 
 # Circulation > Holds policy > OPACHoldsIfAvailableAtPickupExceptions
@@ -7950,9 +7951,8 @@ msgstr "Aktivera"
 
 # Circulation > Stock rotation module > StockRotation
 # Circulation > Stock rotation module
-#, fuzzy
 msgid "circulation.pref#StockRotation# the stock rotation module."
-msgstr "Inaktivera"
+msgstr "modulen för beståndsrotation."
 
 # Circulation > Checkin policy > StoreLastBorrower
 # Circulation > Checkin policy
@@ -8098,21 +8098,21 @@ msgstr "dagar efter att den skickades."
 
 # Circulation > Checkin policy > TrapHoldsOnOrder
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
-msgstr "Tillåt inte "
+msgstr "Fånga inte in"
 
 # Circulation > Checkin policy > TrapHoldsOnOrder
 # Circulation > Holds policy
-#, fuzzy
 msgid "circulation.pref#TrapHoldsOnOrder# Trap"
-msgstr "."
+msgstr "Fånga in"
 
 # Circulation > Checkin policy > TrapHoldsOnOrder
 msgid ""
 "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable "
 "( notforloan < 0 ) to fill holds."
 msgstr ""
+"exemplar som är 'ej för utlån' men som går att reservera ( notforloan < 0) "
+"för att fylla reservationer."
 
 # Circulation > Checkout policy > UnseenRenewals
 # Circulation > Holds policy
@@ -12020,9 +12020,10 @@ msgid ""
 "\">OPACResultsUnavailableGroupingBy</a> is set to \"library and substatus\", "
 "show no more than"
 msgstr ""
-"Om <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield="
-"OPACResultsUnavailableGroupingBy\">OPACResultsUnavailableGroupingBy</a> är "
-"inställd på \"bibliotek och understatus\", visa inte fler än"
+"Om <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=OPACResultsUnavailableGroupingBy"
+"\">OPACResultsUnavailableGroupingBy</a> är inställd på \"bibliotek och "
+"understatus\", visa inte fler än"
 
 # OPAC > Appearance > OPACResultsMaxItems
 # OPAC > Appearance
@@ -12728,10 +12729,9 @@ msgid ""
 "\">CatalogConcerns</a>` will allow concern submissions from the staff "
 "interface.</p>"
 msgstr ""
-"<p><strong>OBS:</strong> Aktivera `<a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=CatalogConcerns\""
-">CatalogConcerns</a>` för att tillåta rapportering av ärenden via "
-"personalgränssnittet.</p>"
+"<p><strong>OBS:</strong> Aktivera `<a href=\"/cgi-bin/koha/admin/preferences."
+"pl?op=search&searchfield=CatalogConcerns\">CatalogConcerns</a>` för att "
+"tillåta rapportering av ärenden via personalgränssnittet.</p>"
 
 # OPAC > Features > OpacCatalogConcerns
 msgid "opac.pref#OpacCatalogConcerns# Allow"
@@ -13033,9 +13033,8 @@ msgid ""
 "administration page."
 msgstr ""
 "<br />Observera: Om 'separat kolumn' är vald, behöver du fortfarande "
-"aktivera visning av item_shelving_location på <a href='/cgi-"
-"bin/koha/admin/columns_settings.pl'>configure columns</a> "
-"administrationsidan."
+"aktivera visning av item_shelving_location på <a href='/cgi-bin/koha/admin/"
+"columns_settings.pl'>configure columns</a> administrationsidan."
 
 # OPAC > Appearance > OpacLocationOnDetail
 # OPAC > Appearance
@@ -14572,10 +14571,9 @@ msgid ""
 "target='blank'>database columns</a> of the borrowers table, separated by | "
 "(pipe)."
 msgstr ""
-"Giltiga alternativ är <a href='http://schema.koha-"
-"community.org/__VERSION__/tables/borrowers.html' "
-"target='blank'>databaskolumner</a> från tabellen 'borrowers', åtskilda av | "
-"(lodstreck)."
+"Giltiga alternativ är <a href='http://schema.koha-community.org/__VERSION__/"
+"tables/borrowers.html' target='blank'>databaskolumner</a> från tabellen "
+"'borrowers', åtskilda av | (lodstreck)."
 
 # Acquisitions > Policy > EmailPurchaseSuggestions
 msgid ""
@@ -14866,9 +14864,8 @@ msgid ""
 "preference requires the misc/cronjobs/cleanup_database.pl cronjob. Ask your "
 "system administrator to schedule it."
 msgstr ""
-"<br><strong>OBS:</strong> Denna systeminställning kräver cronjobbet "
-"misc/cronjobs/cleanup_database.pl. Be din systemadministratör att "
-"schemalägga det."
+"<br><strong>OBS:</strong> Denna systeminställning kräver cronjobbet misc/"
+"cronjobs/cleanup_database.pl. Be din systemadministratör att schemalägga det."
 
 # Patrons > General > LockExpiredDelay
 msgid "patrons.pref#LockExpiredDelay# Lock expired patrons after"
@@ -15639,9 +15636,9 @@ msgid ""
 "interpreted as no delay (do it now)! The actions are performed by the "
 "cleanup database cron job."
 msgstr ""
-"dagar.<br>VIKTIGT: Ingen åtgärd utförs när detta fält är blankt (ingen text)"
-". Men ett nollvärde ('0') tolkas som ingen fördröjning (verkställ omgående)! "
-"Åtgärderna utförs i samband med cronjobbet 'cleanup database'."
+"dagar.<br>VIKTIGT: Ingen åtgärd utförs när detta fält är blankt (ingen "
+"text). Men ett nollvärde ('0') tolkas som ingen fördröjning (verkställ "
+"omgående)! Åtgärderna utförs i samband med cronjobbet 'cleanup database'."
 
 # Patrons > Notices and notifications > UseEmailReceipts
 # Patrons > Notices and notifications
@@ -15850,9 +15847,9 @@ msgid ""
 "Item types (<strong>itemtypes</strong>), Collection, (<strong>ccode</"
 "strong>) and Shelving location (<strong>loc</strong>)."
 msgstr ""
-"<em>För närvarande stödda värden</em>: Exemplartyper "
-"(<strong>itemtypes</strong>), Avdelningar (<strong>ccode</strong>) och "
-"Placering (<strong>loc</strong>)."
+"<em>För närvarande stödda värden</em>: Exemplartyper (<strong>itemtypes</"
+"strong>), Avdelningar (<strong>ccode</strong>) och Placering (<strong>loc</"
+"strong>)."
 
 # Searching > Search form > AdvancedSearchTypes
 # Searching > Search form
@@ -15882,9 +15879,9 @@ msgid ""
 msgstr ""
 "  postens exemplartypinformation på detaljsidorna och resultatsidorna i OPAC "
 "och personalgränssnittet. Denna information visas också om "
-"systeminställningen <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=item-level_itypes\">item-"
-"level_itypes</a> är inställd på postnivå."
+"systeminställningen <a href=\"/cgi-bin/koha/admin/preferences.pl?"
+"op=search&searchfield=item-level_itypes\">item-level_itypes</a> är inställd "
+"på postnivå."
 
 # Searching > Results display > BiblioItemtypeInfo
 # Searching > Features
@@ -17004,9 +17001,9 @@ msgid ""
 "stylesheet.</li></ul>{langcode} will be replaced with current interface "
 "language and {authtypecode} will be replaced by the authority type code"
 msgstr ""
-"<br />Alternativ:<ul><li>Ange sökväg för att definera en xslt-fil</li><li>"
-"Ange URL för extern stilmall.</li></ul>{langcode} kommer att ersättas med "
-"kod för auktoritetsypen"
+"<br />Alternativ:<ul><li>Ange sökväg för att definera en xslt-fil</"
+"li><li>Ange URL för extern stilmall.</li></ul>{langcode} kommer att ersättas "
+"med kod för auktoritetsypen"
 
 # Staff interface > Appearance > AuthorityXSLTResultsDisplay
 # Staff interface > Appearance
@@ -17897,8 +17894,8 @@ msgid ""
 "web_services.pref#ManaToken# Get a security token on the <a href=\"/cgi-bin/"
 "koha/admin/share_content.pl\">Mana KB administration page</a>."
 msgstr ""
-"Skaffa säkerhetstoken på <a href=\"/cgi-bin/koha/admin/share_content.pl\">"
-"administrationssidan för Mana KB</a>."
+"Skaffa säkerhetstoken på <a href=\"/cgi-bin/koha/admin/share_content.pl"
+"\">administrationssidan för Mana KB</a>."
 
 # Web services > Mana KB > ManaToken
 msgid ""
@@ -17989,11 +17986,11 @@ msgid ""
 msgstr ""
 ". Om tomt fungerar Koha OAI-servern i normalt läge, annars fungerar den i "
 "utökat läge. I utökat läge är det möjligt att använda parametrar för andra "
-"format än marcxml eller Dublin Core. <a href=\"/cgi-"
-"bin/koha/admin/preferences.pl?op=search&searchfield=OAI-PMH:ConfFile\">OAI-"
-"PMH:ConfFile</a> specificerar en YAML-konfigurationsfil som listar "
-"tillgängliga metadataformat och XSL-filer som används för att skapa dem från "
-"marcxml-poster."
+"format än marcxml eller Dublin Core. <a href=\"/cgi-bin/koha/admin/"
+"preferences.pl?op=search&searchfield=OAI-PMH:ConfFile\">OAI-PMH:ConfFile</a> "
+"specificerar en YAML-konfigurationsfil som listar tillgängliga "
+"metadataformat och XSL-filer som används för att skapa dem från marcxml-"
+"poster."
 
 # Web services > OAI-PMH > OAI-PMH:ConfFile
 # Web services > OAI-PMH
@@ -18080,8 +18077,8 @@ msgid ""
 "HTTP/1.0/spec.html#BasicAA\" target=\"_blank\">Basic authentication</a> for "
 "the REST API."
 msgstr ""
-"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target=\""
-"_blank\">Autentisering</a> för REST API."
+"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target="
+"\"_blank\">Autentisering</a> för REST API."
 
 # Web services > REST API > RESTBasicAuth
 # Web services > REST API
@@ -18140,7 +18137,8 @@ msgstr "Aktivera"
 msgid ""
 "web_services.pref#RESTPublicAnonymousRequests# anonymous access to public "
 "routes (that don't require authenticated access)"
-msgstr "anonym access till publika vägar (som inte kräver autentiserad access)."
+msgstr ""
+"anonym access till publika vägar (som inte kräver autentiserad access)."
 
 # Web services > REST API > RESTdefaultPageSize
 msgid ""
