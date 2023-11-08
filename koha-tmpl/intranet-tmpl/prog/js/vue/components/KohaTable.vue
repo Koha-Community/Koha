@@ -16,6 +16,7 @@ import "datatables.net-buttons"
 import "datatables.net-buttons/js/buttons.html5"
 import "datatables.net-buttons/js/buttons.print"
 import "datatables.net-buttons/js/buttons.colVis"
+
 DataTable.use(DataTablesLib)
 
 export default {
@@ -81,6 +82,57 @@ export default {
     },
     beforeMount() {
         if (this.actions.hasOwnProperty("-1")) {
+            if (this.searchable_additional_fields.length) {
+                this.searchable_additional_fields.forEach(searchable_field => {
+                    var _customRender = (function (searchable_field) {
+                        var _render = function (data, type, row, meta) {
+                            return row._strings.additional_field_values
+                                .filter(
+                                    field =>
+                                        field.field_id ==
+                                        searchable_field.extended_attribute_type_id
+                                )
+                                .map(el => el.value_str)
+                        }
+                        return _render
+                    })(searchable_field)
+
+                    this.tableColumns.push({
+                        name: searchable_field.name,
+                        data: "extended_attributes",
+                        datatype: "related-object",
+                        related: "extended_attributes",
+                        relatedKey: "field_id",
+                        relatedValue:
+                            searchable_field.extended_attribute_type_id,
+                        relatedSearchOn: "value",
+                        className:
+                            "searchable-additional-column-" +
+                            searchable_field.extended_attribute_type_id,
+                        title: searchable_field.name,
+                        searchable: true,
+                        sortable: false,
+                        render: _customRender,
+                    })
+
+                    if (searchable_field.authorised_value_category_name) {
+                        let options =
+                            this.searchable_av_options[
+                                searchable_field.authorised_value_category_name
+                            ]
+
+                        options.map(e => {
+                            e["_id"] = e["value"]
+                            e["_str"] = e["label"]
+                            return e
+                        })
+
+                        this.filters_options[this.tableColumns.length - 1] =
+                            options
+                    }
+                })
+            }
+
             this.tableColumns = [
                 ...this.tableColumns,
                 {
@@ -241,6 +293,16 @@ export default {
         filters_options: {
             type: Object,
             required: false,
+        },
+        searchable_additional_fields: {
+            type: Array,
+            required: false,
+            default: [],
+        },
+        searchable_av_options: {
+            type: Array,
+            required: false,
+            default: [],
         },
     },
 }
