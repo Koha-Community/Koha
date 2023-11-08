@@ -23,7 +23,7 @@
 </head>
 
 [% marcfield_tables = ['subscription', 'aqorders'] %]
-[% searchable_tables = ['subscription', 'aqbasket', 'aqinvoices'] %]
+[% searchable_tables = ['subscription', 'aqbasket', 'aqinvoices', 'erm_licenses'] %]
 [% show_marcfield = marcfield_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
 [% show_searchable = searchable_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
 
@@ -134,6 +134,9 @@
                 [% IF CAN_user_updatecharges_remaining_permissions %]
                     [% WRAPPER table_option value="accountlines:credit" %]Account lines (credit)[% END %]
                     [% WRAPPER table_option value="accountlines:debit" %]Account lines (debit)[% END %]
+                [% END %]
+                [% IF CAN_user_erm %]
+                    [% WRAPPER table_option value="erm_licenses" %]ERM Licenses[% END %]
                 [% END %]
             </ul>
             [% ELSE %]
