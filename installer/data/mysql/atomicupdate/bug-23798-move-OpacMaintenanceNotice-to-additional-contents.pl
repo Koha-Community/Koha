@@ -30,9 +30,12 @@ return {
                 undef, $insert_id, $opacmaintenancenotice
             );
 
-            # Remove old system preference
-            $dbh->do("DELETE FROM systempreferences WHERE variable='OpacMaintenanceNotice'");
-            say $out "Bug 23798 update done";
+            say $out "Added 'OpacMaintenanceNotice' additional content";
         }
-    }
-    }
+
+        # Remove old system preference
+        $dbh->do("DELETE FROM systempreferences WHERE variable='OpacMaintenanceNotice'");
+        say $out "Removed system preference 'OpacMaintenanceNotice'";
+
+    },
+};
