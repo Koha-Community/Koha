@@ -136,6 +136,12 @@
                     </li>
                 </ol>
             </fieldset>
+            <AdditionalFieldsDisplay
+                resource_type="license"
+                :additional_field_values="
+                    license._strings.additional_field_values
+                "
+            />
             <fieldset class="action">
                 <router-link
                     :to="{ name: 'LicensesList' }"
@@ -153,6 +159,7 @@ import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import Toolbar from "../Toolbar.vue"
 import ToolbarButton from "../ToolbarButton.vue"
+import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue"
 
 export default {
     setup() {
@@ -183,6 +190,8 @@ export default {
                 type: "",
                 status: "",
                 user_roles: [],
+                extended_attributes: [],
+                _strings: [],
                 started_on: undefined,
                 ended_on: undefined,
             },
@@ -233,7 +242,7 @@ export default {
             )
         },
     },
-    components: { Toolbar, ToolbarButton },
+    components: { Toolbar, ToolbarButton, AdditionalFieldsDisplay },
     name: "LicensesShow",
 }
 </script>

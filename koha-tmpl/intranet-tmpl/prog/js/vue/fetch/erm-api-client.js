@@ -66,7 +66,7 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "licenses/" + id,
                     headers: {
                         "x-koha-embed":
-                            "user_roles,user_roles.patron,vendor,documents",
+                            "user_roles,user_roles.patron,vendor,documents,extended_attributes,+strings",
                     },
                 }),
             getAll: (query, params) =>

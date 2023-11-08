@@ -109,6 +109,11 @@
                         </li>
                     </ol>
                 </fieldset>
+                <AdditionalFieldsEntry
+                    resource_type="license"
+                    :additional_field_values="license.extended_attributes"
+                    @additional-fields-changed="additionalFieldsChanged"
+                />
                 <UserRoles
                     :user_type="$__('License user %s')"
                     :user_roles="license.user_roles"
@@ -138,6 +143,7 @@ import { inject } from "vue"
 import flatPickr from "vue-flatpickr-component"
 import UserRoles from "./UserRoles.vue"
 import Documents from "./Documents.vue"
+import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue"
 import FormSelectVendors from "../FormSelectVendors.vue"
 import { setMessage, setWarning } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
@@ -170,6 +176,7 @@ export default {
                 ended_on: undefined,
                 user_roles: [],
                 documents: [],
+                extended_attributes: [],
             },
             initialized: false,
         }
@@ -232,6 +239,7 @@ export default {
 
             delete license.license_id
             delete license.vendor
+            delete license._strings
 
             if (license.vendor_id == "") {
                 license.vendor_id = null
@@ -264,12 +272,16 @@ export default {
                 )
             }
         },
+        additionalFieldsChanged(additionalFieldValues) {
+            this.license.extended_attributes = additionalFieldValues
+        },
     },
     components: {
         flatPickr,
         UserRoles,
         Documents,
         FormSelectVendors,
+        AdditionalFieldsEntry,
     },
     name: "LicensesFormAdd",
 }
