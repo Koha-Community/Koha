@@ -51,7 +51,7 @@ var dataTablesDefaults = {
     "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, __('All')]],
     "pageLength": 20,
     "fixedHeader": true,
-    initComplete: function( settings) {
+    initComplete: function( settings ) {
         var tableId = settings.nTable.id
         var state =  settings.oLoadedState;
         state && toggledClearFilter(state.search.search, tableId);
@@ -61,6 +61,10 @@ var dataTablesDefaults = {
         $(this).on( 'search.dt', function ( e, settings ) {
             toggledClearFilter(settings.oPreviousSearch.sSearch, tableId);
         });
+
+        if (settings.ajax) {
+            _dt_add_delay($("#"+tableId));
+        }
     }
 };
 
@@ -922,6 +926,39 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
     } );
 }
 
+// List of unbind keys (Ctrl, Alt, Direction keys, etc.)
+// These keys must not launch filtering
+var blacklist_keys = new Array(0, 16, 17, 18, 37, 38, 39, 40);
+
+function _dt_add_delay(table_node, delay_ms) {
+
+    let dt = table_node.DataTable();
+    delay = (typeof delay == 'undefined') ? 500 : delay;
+
+    var previousSearch = null;
+    var timerId = null;
+    $("#"+table_node.attr('id')+"_wrapper").find(".dataTables_filter input")
+    .unbind()
+    .bind("keyup", function(event) {
+        var input = $(this);
+        if (blacklist_keys.indexOf(event.keyCode) != -1) {
+            return;
+        } else if ( event.keyCode == '13' ) {
+            dt.search($(input).val()).draw();
+        } else {
+            let val = $(input).val();
+            if (previousSearch === null || previousSearch != val){
+                window.clearTimeout(timerId);
+                previousSearch = val;
+                timerId = window.setTimeout(function(){
+                    dt.search($(input).val()).draw();
+                }, delay);
+            }
+        }
+
+        return;
+    });
+}
 
 (function($) {
 
