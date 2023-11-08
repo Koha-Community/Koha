@@ -198,7 +198,7 @@ my $quote         = '"';
 my $store_results = 0;
 my $csv_header    = 0;
 my $csv_separator = "";
-my $csv_quote = "";
+my $csv_quote     = "";
 
 my $username = undef;
 my $password = undef;
