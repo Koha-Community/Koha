@@ -91,8 +91,14 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
     <script>
         $(document).ready(function() {
+            $( ".pluginlist" ).each( (i, e) => {
+                Sortable.create(e, {
+                    animation: 150
+                });
+            });
             $( ".plugin" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
                 .find( ".pluginname" )
                         .addClass( "ui-widget-header ui-corner-all" )
