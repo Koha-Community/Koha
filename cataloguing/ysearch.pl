@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+    #!/usr/bin/perl
 
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
@@ -37,8 +37,8 @@ my $table = $input->param('table');
 my $field = $input->param('field');
 
 # Prevent from disclosing data
-die() unless ($table eq "biblioitems");
-die() unless ($field eq 'publishercode' || $field eq 'collectiontitle');
+die() unless ( $table eq "biblioitems" );
+die() unless ( $field eq 'publishercode' || $field eq 'collectiontitle' );
 
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
