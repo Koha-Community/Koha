@@ -329,21 +329,13 @@ sub _add_binding {
         #click event applies to buttonDot
 
     if( $pars =~ /^(e|ev|event)$/i ) { # new style event handler assumed
-
-        if ($ev eq "click"){
-          # remove already registered click listeners
-          $bind= qq|    \$("#$ctl").off('click');\n|;
-          $bind.= qq|    \$("#$ctl").$ev(\{id: '$id'\}, $fname);\n|;
-        } else {
-          $bind= qq|    \$("#$ctl").$ev(\{id: '$id'\}, $fname);\n|;
-        }
-
-        $script='';
+        $bind   = qq|    \$("#$ctl").off('$ev').on('$ev', \{id: '$id'\}, $fname);\n|;    # remove old handler if any
+        $script = q{};
     } elsif( $fname eq 'noclick' ) { # no click: return false, no scroll
-        $bind= qq|    \$("#$ctl").$ev(function () { return false; });\n|;
-        $script='';
+        $bind   = qq|    \$("#$ctl").$ev(function () { return false; });\n|;
+        $script = q{};
     } else { # add real event handler calling the function found
-        $bind=qq|    \$("#$ctl").$ev(\{id: '$id'\}, ${fname}_handler);\n|;
+        $bind   = qq|    \$("#$ctl").off('$ev').on('$ev', \{id: '$id'\}, ${fname}_handler);\n|;
         $script = $self->_add_handler( $ev, $fname );
     }
     return ( $bind, $script );
