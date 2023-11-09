@@ -20,7 +20,7 @@ use C4::SIP::ILS::Transaction::Hold;
 use C4::SIP::ILS::Transaction::Renew;
 use C4::SIP::ILS::Transaction::RenewAll;
 
-use C4::Context; #BZ 18317
+use C4::Context;    #BZ 18317
 
 my %supports = (
     'magnetic media'        => 1,
@@ -162,9 +162,11 @@ sub checkout {
     elsif ( !$item ) {
         $circ->screen_msg("Invalid Item");
     }
-    elsif ( $item->{borrowernumber}
-        && ! C4::Context->preference('AllowItemsOnLoanCheckoutSIP') #BZ 18317
-        && !_ci_cardnumber_cmp( $item->{borrowernumber}, $patron->borrowernumber ) )
+    elsif (
+        $item->{borrowernumber}
+        && !C4::Context->preference('AllowItemsOnLoanCheckoutSIP')    #BZ 18317
+        && !_ci_cardnumber_cmp( $item->{borrowernumber}, $patron->borrowernumber )
+        )
     {
         $circ->screen_msg("Item checked out to another patron");
     }
