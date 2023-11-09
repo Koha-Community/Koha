@@ -324,8 +324,6 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
 
-    $("ul.sortable_subfield", clone).sortable();
-
     Select2Utils.initSelect2($(original).find('select'));
     Select2Utils.initSelect2($(clone).find('select'));
 }

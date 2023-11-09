@@ -59,7 +59,6 @@ $(document).ready(function() {
                         $('#ajax_saving_icon').hide();
                         $('#ajax_failed_icon').show();
                         $('#ajax_failed_msg').show();
-                        // $('#sortable_stages').sortable('cancel');
                     })
                     .always(function() {
                         sortable_stages.option("disabled", false );
