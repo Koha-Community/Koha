@@ -30,7 +30,7 @@ return {
                 undef, $insert_id, $opacsuppressionmessage
             );
 
-            say $out "Added 'OpacSuppressionMessage' additional content";
+            say $out "Added 'OpacSuppressionMessage' HTML customization";
         }
 
         # Remove old system preference

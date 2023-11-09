@@ -30,7 +30,7 @@ return {
                 undef, $insert_id, $patronselfregistrationadditionalinstructions
             );
 
-            say $out "Added 'PatronSelfRegistrationAdditionalInstructions' additional content";
+            say $out "Added 'PatronSelfRegistrationAdditionalInstructions' HTML customization";
         }
 
         # Remove old system preference
