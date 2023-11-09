@@ -30,9 +30,12 @@ return {
                 undef, $insert_id, $opacsuppressionmessage
             );
 
-            # Remove old system preference
-            $dbh->do("DELETE FROM systempreferences WHERE variable='OpacSuppressionMessage'");
-            say $out "Bug 34894 update done";
+            say $out "Added 'OpacSuppressionMessage' additional content";
         }
-    }
-    }
+
+        # Remove old system preference
+        $dbh->do("DELETE FROM systempreferences WHERE variable='OpacSuppressionMessage'");
+        say $out "Removed system preference 'OpacSuppressionMessage'";
+
+    },
+};
