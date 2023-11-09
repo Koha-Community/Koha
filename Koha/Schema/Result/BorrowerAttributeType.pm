@@ -79,6 +79,14 @@ defines if this field is editable by patrons on their account in the OPAC (1 for
 
 defines if this field is searchable via the patron search in the staff interface (1 for yes, 0 for no)
 
+=head2 searched_by_default
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+defines if this field is included in "Standard" patron searches in the staff interface (1 for yes, 0 for no)
+
 =head2 authorised_value_category
 
   data_type: 'varchar'
@@ -145,6 +153,8 @@ __PACKAGE__->add_columns(
   "opac_editable",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "staff_searchable",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "searched_by_default",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "authorised_value_category",
   { data_type => "varchar", is_nullable => 1, size => 32 },
@@ -240,8 +250,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-04-25 12:50:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VgJP4Ugfz0sN3YoJk/tshA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-09 13:06:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oeyBHoK+4epL1s+IAKNY7w
 
 __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },
