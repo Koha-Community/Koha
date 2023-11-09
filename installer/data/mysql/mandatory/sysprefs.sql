@@ -79,6 +79,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AuthoritySeparator','--','10','Used to separate a list of authorities in a display. Usually --','free'),
 ('AuthorityXSLTOpacDetailsDisplay','','','Enable XSL stylesheet control over authority details page in the OPAC','Free'),
 ('AuthorityXSLTOpacResultsDisplay','','','Enable XSL stylesheet control over authority results page in the OPAC','Free'),
+('AuthorityXSLTDetailsDisplay','','','Enable XSL stylesheet control over authority details page display on intranet','Free'),
 ('AuthorityXSLTResultsDisplay','','','Enable XSL stylesheet control over authority results page display on intranet','Free'),
 ('AuthorLinkSortBy','default','call_number|pubdate|acqdate|title','Specify the default field used for sorting when click author links','Choice'),
 ('AuthorLinkSortOrder','asc','asc|dsc|az|za','Specify the default sort order for author links','Choice'),

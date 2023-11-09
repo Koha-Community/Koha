@@ -38,16 +38,19 @@ parameters tables.
 
 use Modern::Perl;
 
+use CGI qw ( -utf8 );
+
 use C4::Auth qw( get_template_and_user );
 use C4::AuthoritiesMarc qw( GetAuthority GenerateHierarchy GetTagsLabels );
 use C4::Context;
-use C4::Output qw( output_html_with_http_headers );
-use CGI qw ( -utf8 );
 use C4::Koha;
-use Koha::Authorities;
+use C4::Languages;
+use C4::Output qw( output_html_with_http_headers );
 
+use Koha::Authorities;
 use Koha::Authority::Types;
 use Koha::Token;
+use Koha::XSLT::Base;
 use Koha::Z3950Servers;
 
 our ($tagslib);
@@ -213,7 +216,24 @@ while (my ($tagfield) = $sth->fetchrow) {
 }
 chop $biblio_fields if $biblio_fields;
 
-build_tabs ($template, $record, $dbh,"",$query);
+my $AuthorityXSLTDetailsDisplay = C4::Context->preference('AuthorityXSLTDetailsDisplay');
+if ( $AuthorityXSLTDetailsDisplay ) {
+    my $xsl = $AuthorityXSLTDetailsDisplay;
+    my $lang = C4::Languages::getlanguage();
+    $xsl =~ s/\{langcode\}/$lang/g;
+    $xsl =~ s/\{authtypecode\}/$authtypecode/g;
+
+    my $xslt_engine = Koha::XSLT::Base->new;
+    my $output = $xslt_engine->transform({ xml => $authobj->marcxml, file => $xsl });
+    if ($xslt_engine->err) {
+        warn "XSL transformation failed ($xsl): " . $xslt_engine->err;
+        next;
+    }
+
+    $template->param( html => $output );
+} else {
+    build_tabs ($template, $record, $dbh,"",$query);
+}
 
 my $servers = Koha::Z3950Servers->search(
     {

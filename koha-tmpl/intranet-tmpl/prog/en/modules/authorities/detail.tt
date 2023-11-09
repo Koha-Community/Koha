@@ -75,6 +75,10 @@
                     [% END %]
                 </div>
 
+                [% IF html %]
+                    [% html | $raw %]
+                [% ELSE %]
+
                 [% WRAPPER tabs id= "authoritiestabs" %]
                     [% WRAPPER tabs_nav %]
                         [% FOREACH BIG_LOO IN BIG_LOOP %]
@@ -128,6 +132,7 @@
                         [% END # /FOREACH BIG_LOO %]
                     [% END # /WRAPPER tab_panels %]
                 [% END # /WRAPPER tabs %]
+                [% END # /IF html %]
 
             [% END # /IF ( unknownauthid ) %]
         </div> <!-- /.col-md-8 offset-md-2 -->
