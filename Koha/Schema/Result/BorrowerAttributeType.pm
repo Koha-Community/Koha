@@ -255,18 +255,9 @@ __PACKAGE__->has_many(
 
 __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },
-);
-
-__PACKAGE__->add_columns(
-    '+mandatory' => { is_boolean => 1 },
-);
-
-__PACKAGE__->add_columns(
-    '+staff_searchable' => { is_boolean => 1 },
-);
-
-__PACKAGE__->add_columns(
-    '+searched_by_default' => { is_boolean => 1 },
+    '+mandatory'                 => { is_boolean => 1 },
+    '+searched_by_default'       => { is_boolean => 1 },
+    '+staff_searchable'          => { is_boolean => 1 },
 );
 
 sub koha_object_class {
