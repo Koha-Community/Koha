@@ -916,7 +916,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                     .column( i )
                     .search( val )
                     .draw();
-            }, 1000 );
+            }, 500);
 
             $( input_type, this ).on( 'keyup change', function () {
                 if ( table_dt.column(i).search() !== this.value ) {
