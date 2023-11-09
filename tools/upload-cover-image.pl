@@ -38,6 +38,7 @@ resized, maintaining aspect ratio.
 =cut
 
 use Modern::Perl;
+use Cwd;
 
 use File::Temp;
 use CGI qw ( -utf8 );
@@ -187,7 +188,11 @@ if ($fileID) {
                             $filename =~ s/[\"\r\n]//g;
                             $filename =~ s/^\s+//;
                             $filename =~ s/\s+$//;
-                            my $srcimage = GD::Image->new("$dir/$filename");
+                            my $full_filename = Cwd::abs_path("$dir/$filename"); #Resolve any relative filepath references
+                            my $srcimage;
+                            if ( $full_filename =~ /^\Q$dir\E/ ){
+                                $srcimage = GD::Image->new($full_filename);
+                            }
                             my $biblio;
                             my $item;
                             if ( defined $srcimage ) {
