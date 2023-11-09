@@ -101,26 +101,6 @@
                                 :disabled="!selected_provider && !manual_form"
                             />
                         </li>
-                        <!-- <li>
-                            <label for="usage_data_provider_method"
-                                >{{ $__("Method") }}:
-                            </label>
-                            <input
-                                id="usage_data_provider_method"
-                                v-model="usage_data_provider.method"
-                                :disabled="!selected_provider && !manual_form"
-                            />
-                        </li>
-                        <li>
-                            <label for="usage_data_provider_aggregator"
-                                >{{ $__("Aggregator") }}:
-                            </label>
-                            <input
-                                id="usage_data_provider_aggregator"
-                                v-model="usage_data_provider.aggregator"
-                                :disabled="!selected_provider && !manual_form"
-                            />
-                        </li> -->
                         <li>
                             <label for="usage_data_provider_service_type"
                                 >{{ $__("Service type") }}:
@@ -393,7 +373,6 @@ import { setMessage, setWarning } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
 import { inject } from "vue"
 import { storeToRefs } from "pinia"
-import flatPickr from "vue-flatpickr-component"
 
 export default {
     setup() {
@@ -429,7 +408,6 @@ export default {
                 { description: "Active", value: 1 },
                 { description: "Inactive", value: 0 },
             ],
-            fp_config: flatpickr_defaults,
             registry_data: [],
             valid_report_types: [...this.av_report_types],
             selected_provider: null,
@@ -623,7 +601,6 @@ export default {
     },
     components: {
         ButtonSubmit,
-        flatPickr,
     },
     name: "UsageStatisticsDataProvidersFormAdd",
 }
