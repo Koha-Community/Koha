@@ -63,7 +63,13 @@ var dataTablesDefaults = {
         });
 
         if (settings.ajax) {
-            _dt_add_delay($("#"+tableId));
+            let table_node = $("#" + tableId);
+            if ( typeof this.api === 'function' ) {
+                _dt_add_delay(this.api(), table_node);
+            } else {
+                let dt = $(table_node).DataTable();
+                _dt_add_delay(dt, table_node);
+            }
         }
     }
 };
@@ -925,9 +931,8 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
 // These keys must not launch filtering
 var blacklist_keys = new Array(0, 16, 17, 18, 37, 38, 39, 40);
 
-function _dt_add_delay(table_node, delay_ms) {
+function _dt_add_delay(table_dt, table_node, delay_ms) {
 
-    let dt = table_node.DataTable();
     delay = (typeof delay == 'undefined') ? 500 : delay;
 
     var previousSearch = null;
@@ -939,14 +944,14 @@ function _dt_add_delay(table_node, delay_ms) {
         if (blacklist_keys.indexOf(event.keyCode) != -1) {
             return;
         } else if ( event.keyCode == '13' ) {
-            dt.search($(input).val()).draw();
+            table_dt.search($(input).val()).draw();
         } else {
             let val = $(input).val();
             if (previousSearch === null || previousSearch != val){
                 window.clearTimeout(timerId);
                 previousSearch = val;
                 timerId = window.setTimeout(function(){
-                    dt.search($(input).val()).draw();
+                    table_dt.search($(input).val()).draw();
                 }, delay);
             }
         }
