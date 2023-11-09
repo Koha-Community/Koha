@@ -5,19 +5,18 @@
   <!-- ****************** Authority display *************** -->
   <xsl:template match="marc:record">
     <xsl:variable name="authid" select="marc:controlfield[@tag='001']"/>
-    <div class="authority-summary">
+    <xsl:element name="div">
+      <xsl:attribute name="class">
+        <xsl:text>authority-summary</xsl:text>
+      </xsl:attribute>
       <!-- *********** Personal Name 200 ********* -->
       <xsl:if test="marc:datafield[@tag='200']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=200]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="marc:subfield[@code='b']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="marc:subfield[@code='b']"/>
               <xsl:if test="marc:subfield[@code='f']"> (<xsl:value-of select="marc:subfield[@code='f']"/>) </xsl:if>
               <xsl:if test="marc:subfield[@code='j'] or marc:subfield[@code='x'] or marc:subfield[@code='y'] or marc:subfield[@code='z']">
                 <xsl:for-each select="marc:subfield[@code='j']">
@@ -56,15 +55,11 @@
       <!-- *********** Corporate Name 210 ********* -->
       <xsl:if test="marc:datafield[@tag='210']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=210]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="marc:subfield[@code='b']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="marc:subfield[@code='b']"/>
               <xsl:if test="marc:subfield[@code='f']"> (<xsl:value-of select="marc:subfield[@code='f']"/>) </xsl:if>
               <xsl:if test="marc:subfield[@code='j'] or marc:subfield[@code='x'] or marc:subfield[@code='y'] or marc:subfield[@code='z']">
                 <xsl:for-each select="marc:subfield[@code='j']">
@@ -103,13 +98,9 @@
       <!-- *********** Geographic Name 215 ********* -->
       <xsl:if test="marc:datafield[@tag='215']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=215]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
               <xsl:if test="marc:subfield[@code='j'] or marc:subfield[@code='x'] or marc:subfield[@code='y'] or marc:subfield[@code='z']">
                 <xsl:for-each select="marc:subfield[@code='j']">
                   <xsl:text> -- </xsl:text>
@@ -147,13 +138,9 @@
       <!-- *********** Trademark 216 ********* -->
       <xsl:if test="marc:datafield[@tag='216']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=216]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
               <xsl:if test="marc:subfield[@code='f']"> (<xsl:value-of select="marc:subfield[@code='f']"/>) </xsl:if>
               <xsl:if test="marc:subfield[@code='j'] or marc:subfield[@code='x'] or marc:subfield[@code='y'] or marc:subfield[@code='z']">
                 <xsl:for-each select="marc:subfield[@code='j']">
@@ -192,13 +179,9 @@
       <!-- *********** Family Name 220 ********* -->
       <xsl:if test="marc:datafield[@tag='220']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=220]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
               <xsl:if test="marc:subfield[@code='f']"> (<xsl:value-of select="marc:subfield[@code='f']"/>) </xsl:if>
               <xsl:if test="marc:subfield[@code='j'] or marc:subfield[@code='x'] or marc:subfield[@code='y'] or marc:subfield[@code='z']">
                 <xsl:for-each select="marc:subfield[@code='j']">
@@ -237,13 +220,9 @@
       <!-- *********** Uniform Title 230 ********* -->
       <xsl:if test="marc:datafield[@tag='230']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=230]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
               <xsl:if test="marc:subfield[@code='b']">
                 <xsl:text> [</xsl:text>
                 <xsl:value-of select="."/>
@@ -294,15 +273,11 @@
       <!-- *********** Author Title 240 ********* -->
       <xsl:if test="marc:datafield[@tag='240']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=240]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="marc:subfield[@code='t']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="marc:subfield[@code='t']"/>
               <xsl:if test="marc:subfield[@code='j'] or marc:subfield[@code='x'] or marc:subfield[@code='y'] or marc:subfield[@code='z']">
                 <xsl:for-each select="marc:subfield[@code='j']">
                   <xsl:text> -- </xsl:text>
@@ -340,13 +315,9 @@
       <!-- *********** Subject 250 ********* -->
       <xsl:if test="marc:datafield[@tag='250']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=250]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
               <xsl:if test="marc:subfield[@code='j'] or marc:subfield[@code='x'] or marc:subfield[@code='y'] or marc:subfield[@code='z']">
                 <xsl:for-each select="marc:subfield[@code='j']">
                   <xsl:text> -- </xsl:text>
@@ -384,13 +355,9 @@
       <!-- *********** Genre/Form 280 ********* -->
       <xsl:if test="marc:datafield[@tag='280']">
         <ul>
-          <xsl:call-template name="tag_152"/>
           <xsl:for-each select="marc:datafield[@tag=280]">
             <li class="heading">
-              <a>
-                <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="$authid"/></xsl:attribute>
-                <xsl:value-of select="marc:subfield[@code='a']"/>
-              </a>
+              <xsl:value-of select="marc:subfield[@code='a']"/>
               <xsl:if test="marc:subfield[@code='j'] or marc:subfield[@code='x'] or marc:subfield[@code='y'] or marc:subfield[@code='z']">
                 <xsl:for-each select="marc:subfield[@code='j']">
                   <xsl:text> -- </xsl:text>
@@ -425,7 +392,8 @@
         </ul>
       </xsl:if>
       <!-- *** End Genre/Form **-->
-    </div> <!-- /div.authority-summary -->
+      <!-- end div class authority-summary-->
+    </xsl:element>
     <!-- end template -->
   </xsl:template>
 </xsl:stylesheet>
