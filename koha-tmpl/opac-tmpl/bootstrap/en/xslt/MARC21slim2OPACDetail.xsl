@@ -1222,7 +1222,7 @@
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:call-template name="subfieldSelect">
-                                        <xsl:with-param name="codes">abcdefgijklnou</xsl:with-param>
+                                        <xsl:with-param name="codes">abcdefghijklnou</xsl:with-param>
                                     </xsl:call-template>
                                 </xsl:otherwise>
                             </xsl:choose>
