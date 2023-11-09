@@ -25,5 +25,8 @@ return {
 
         # letters
         say $out "Added new letter 'XXX' (TRANSPORT)";
+
+        # HTML customizations
+        say $out "Added 'XXX' HTML customization";
     },
 };
