@@ -158,11 +158,12 @@ if ($fileID) {
             }
             foreach my $dir (@directories) {
                 my $file;
-                if ( -e "$dir/idlink.txt" ) {
-                    $file = "$dir/idlink.txt";
-                }
-                elsif ( -e "$dir/datalink.txt" ) {
-                    $file = "$dir/datalink.txt";
+                my $idlink   = "$dir/idlink.txt";
+                my $datalink = "$dir/datalink.txt";
+                if ( -e $idlink && !-l $idlink ) {
+                    $file = $idlink;
+                } elsif ( -e $datalink && !-l $datalink ) {
+                    $file = $datalink;
                 }
                 else {
                     next;
