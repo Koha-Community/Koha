@@ -36,7 +36,6 @@
     <div class="row">
         <div class="col-sm-12">
             <main>
-                [% INCLUDE 'messages.inc' %]
                 <div class="row">
 
                     [% IF Koha.Preference('CircSidebar') %]
@@ -44,6 +43,7 @@
                     [% ELSE %]
                         <div class="col-sm-12">
                     [% END %]
+                    [% INCLUDE 'messages.inc' %]
 
                         <h1>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]</h1>
                         <h2>
