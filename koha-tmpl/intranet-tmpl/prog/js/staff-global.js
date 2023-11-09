@@ -605,7 +605,7 @@ function buildPatronSearchQuery(term, options) {
         });
     // If not, we use DefaultPatronSearchFields system preference instead
     } else {
-        search_fields = defaultPatronSearchFields;
+        search_fields = defaultPatronSearchFields.split('\|');
     }
 
     // Add each pattern for each search field
