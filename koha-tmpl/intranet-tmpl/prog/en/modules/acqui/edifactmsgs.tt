@@ -40,58 +40,7 @@
 <h1>EDIFACT messages</h1>
 <div id="acqui_edifactmsgs" class="page-section">
 
-[% IF ( messages ) %]
-<table id="edi_msgs">
-<thead>
-<tr>
-<th>Type</th>
-<th>Transferred</th>
-<th>Status</th>
-<th>Vendor</th>
-<th>Details</th>
-<th>Filename</th>
-<th class="noExport">Actions</th>
-</tr>
-</thead>
-<tbody>
-[% FOREACH msg IN messages %]
-<tr>
-<td>[% msg.message_type | html %]</td>
-<td data-order="[% msg.transfer_date | html %]">[% msg.transfer_date | $KohaDates %]</td>
-<td>[% msg.status | html %]</td>
-<td>
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% msg.vendor_id | uri %]">
-        [% msg.vendor.name | html %]
-    </a>
-</td>
-<td>
-[% IF msg.message_type == 'QUOTE' || msg.message_type == 'ORDERS' %]
-    [% IF msg.basketno %]
-    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% msg.basketno.basketno | uri %]">
-    Basket: [% msg.basketno.basketno | html %]
-    </a>
-    [% END %]
-[% ELSE %]
-<!-- Assuming invoices -->
-     <a href="/cgi-bin/koha/acqui/invoices.pl?message_id=[% msg.id | uri %]&op=do_search">
-      Invoices
-     </a>
-[% END %]
-</td>
-<td>[% msg.filename | html %]</td>
-
-<td class="actions">
-    <a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id=[% msg.id | html %]"><i class="fa fa-search"></i> View message</a>
-    <a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id=[% msg.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-    [% IF msg.status == 'new' %]
-        <a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id=[% msg.id | html %]"><i class="fa fa-cog"></i> Import</a>
-    [% END %]
-</td>
-</tr>
-[% END %]
-
-</tbody>
-</table>
+<table id="edi_msgs"></table>
 
 <!-- Modal to display EDIFACT messages -->
 <div class="modal" id="EDI_modal" tabindex="-1" role="dialog" aria-labelledby="EDI_modal_label" aria-hidden="true">
@@ -111,11 +60,6 @@
     </div>
 </div>
 
-
-[% ELSE %]
-    <div class="dialog message">There are no EDIFACT messages.</div>
-[% END %]
-
 </div> <!-- /#acqui_edifactmsgs -->
 </main>
 </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -132,13 +76,83 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
-            $('#edi_msgs').dataTable($.extend(true, {}, dataTablesDefaults, {
-                'aaSorting': [[1, "desc" ]],
-                'sPaginationType': "full",
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+            let edi_msgs_table_url = '/api/v1/acquisitions/edifiles?';
+
+            var edi_msgs_table = $("#edi_msgs").kohaTable({
+                "ajax": {
+                    "url": edi_msgs_table_url
+                },
+                "embed": [
+                    "vendor",
+                    "basket"
+                ],
+                "columns": [
+                    {
+                        "data": "type",
+                        "title": "Type",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "transfer_date",
+                        "title": "Transferred",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return $date(row.transfer_date);
+                        }
+                    },
+                    {
+                        "data": "status",
+                        "title": "Status",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "vendor.name",
+                        "title": "Vendor",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            return '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid="'+row.vendor_id+'>'+row.vendor.name+'</a>';
+                        }
+                    },
+                    {
+                        "title": "Details",
+                        "searchable": false,
+                        "orderable": false,
+                        "render": function(data, type, row, meta) {
+                            if ( row.type == 'QUOTE' || row.type == 'ORDERS' ) {
+                                if ( row.basked_id ) {
+                                    return '<a href="/cgi-bin/koha/acqui/basket.pl?basketno='+row.basked_id+'">Basket: '+row.basket_id+'</a>';
+                                }
+                            } else {
+                                return '<a href="/cgi-bin/koha/acqui/invoices.pl?message_id='+row.id+'&op=do_search">Invoices</a>';
+                            }
+                        }
+                    },
+                    {
+                        "data": "filename",
+                        "title": "Filename",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "title": "Actions",
+                        "searchable": false,
+                        "orderable": false,
+                        "render": function( row, type, val, meta ) {
+
+                            var result = '<a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id='+encodeURIComponent(row.id)+'"><i class="fa fa-search"></i> View message</a>';
+                            result += '<a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-trash-can"></i> Delete</a>';
+                            if ( row.status == 'new' ) {
+                                reslt += '<a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-cog"></i> Import</a>';
+                            }
+                            return result;
+                        }
+                    }
                 ]
-            }));
+            }, {}, 0);
 
             var EDIModal = $("#EDI_modal");
             var EDIModalBody = $("#EDI_modal .modal-body");

@@ -50,17 +50,4 @@ if ( $cmd && $cmd eq 'import' ) {
     process_invoice($invoice);
 }
 
-my @msgs = $schema->resultset('EdifactMessage')->search(
-    {
-        deleted => 0,
-    },
-    {
-        join     => 'vendor',
-        order_by => { -desc => 'transfer_date' },
-    }
-
-)->all;
-
-$template->param( messages => \@msgs );
-
 output_html_with_http_headers( $q, $cookie, $template->output );
