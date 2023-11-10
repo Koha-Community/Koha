@@ -479,13 +479,13 @@ subtest 'update() tests' => sub {
             ->status_is(200)->json_is( '/publication_title' => 'The journal of writing unit tests :' );
 
         $biblio->discard_changes;
-        warn $biblio->title;
+
         my $record_after = $biblio->metadata->record;
 
         my ( $title_tag, $title_subfield ) = GetMarcFromKohaField('biblio.title');
         is(
             $record_after->subfield( $title_tag, $title_subfield ), "The journal of writing unit tests :",
-            "Biblio title is correctly update by eholding title update"
+            "Biblio title is correctly updated by eholding title update"
         );
 
         is( $record->fields(), $record_after->fields(), "We have the same number of fields after edit" );
