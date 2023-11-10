@@ -79,59 +79,60 @@
                     [% html | $raw %]
                 [% ELSE %]
 
-                [% WRAPPER tabs id= "authoritiestabs" %]
-                    [% WRAPPER tabs_nav %]
-                        [% FOREACH BIG_LOO IN BIG_LOOP %]
-                            [% WRAPPER tab_item tabname= "tab${ BIG_LOO.number }XX" %]
-                                [% BIG_LOO.number | html %]
+                    [% WRAPPER tabs id= "authoritiestabs" %]
+                        [% WRAPPER tabs_nav %]
+                            [% FOREACH BIG_LOO IN BIG_LOOP %]
+                                [% WRAPPER tab_item tabname= "tab${ BIG_LOO.number }XX" %]
+                                    [% BIG_LOO.number | html %]
+                                [% END %]
                             [% END %]
-                        [% END %]
-                    [% END # /WRAPPER tabs_nav %]
+                        [% END # /WRAPPER tabs_nav %]
 
-                    [% WRAPPER tab_panels %]
-                        [% FOREACH BIG_LOO IN BIG_LOOP %]
-                            [% WRAPPER tab_panel tabname="tab${ BIG_LOO.number }XX" %]
-                                [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                                    [% IF ( innerloo.tag_number ) %]
-                                        <div class="tag">
-                                            <div class="tag_title">
-                                                <span class="tag_num marc_field">[% innerloo.tag_number | html %]</span>
-                                                [% IF (innerloo.defined("ind1") ) %]
-                                                    <span class="tag_ind1">[% innerloo.ind1 | html %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
-                                                [% END %]
-                                                [% IF (innerloo.tag_desc) %]
-                                                    <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
-                                                [% END %]
-                                            </div> <!-- /.tag_title -->
-                                    [% ELSE %]
-                                        <div class="tag">
-                                    [% END # /IF ( innerloo.tag_number ) %]
-
-                                        [% FOREACH subfiel IN innerloo.subfield %]
-                                            <div class="auth_subfield">
-                                                <div class="subfield_info marc_field">
-                                                    [% UNLESS ( subfiel.hide_marc ) %]
-                                                        <span class="marc_subfield">[% subfiel.marc_subfield | html %]</span>
+                        [% WRAPPER tab_panels %]
+                            [% FOREACH BIG_LOO IN BIG_LOOP %]
+                                [% WRAPPER tab_panel tabname="tab${ BIG_LOO.number }XX" %]
+                                    [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                                        [% IF ( innerloo.tag_number ) %]
+                                            <div class="tag">
+                                                <div class="tag_title">
+                                                    <span class="tag_num marc_field">[% innerloo.tag_number | html %]</span>
+                                                    [% IF (innerloo.defined("ind1") ) %]
+                                                        <span class="tag_ind1">[% innerloo.ind1 | html %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
                                                     [% END %]
-                                                    <span class="marc_subfield_desc">[% subfiel.long_desc | html %]</span>
-                                                </div> <!-- /.subfield_info.marc_field -->
-                                                <div class="subfield_content marc_field">
-                                                    <span class="subfield_value">
-                                                        [% IF ( subfiel.is_url ) %]
-                                                            <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
-                                                        [% ELSE %]
-                                                            [% subfiel.marc_value | html %]
+                                                    [% IF (innerloo.tag_desc) %]
+                                                        <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
+                                                    [% END %]
+                                                </div> <!-- /.tag_title -->
+                                        [% ELSE %]
+                                            <div class="tag">
+                                        [% END # /IF ( innerloo.tag_number ) %]
+
+                                            [% FOREACH subfiel IN innerloo.subfield %]
+                                                <div class="auth_subfield">
+                                                    <div class="subfield_info marc_field">
+                                                        [% UNLESS ( subfiel.hide_marc ) %]
+                                                            <span class="marc_subfield">[% subfiel.marc_subfield | html %]</span>
                                                         [% END %]
-                                                    </span>
-                                                </div> <!-- /.subfield_content.marc_field -->
-                                            </div> <!-- /.auth_subfield -->
-                                        [% END #/FOREACH subfiel %]
-                                    </div> <!-- /.tag -->
-                                [% END # /FOREACH innerloo %]
-                            [% END # /tab_panel#tab${ BIG_LOO.number }XX  %]
-                        [% END # /FOREACH BIG_LOO %]
-                    [% END # /WRAPPER tab_panels %]
-                [% END # /WRAPPER tabs %]
+                                                        <span class="marc_subfield_desc">[% subfiel.long_desc | html %]</span>
+                                                    </div> <!-- /.subfield_info.marc_field -->
+                                                    <div class="subfield_content marc_field">
+                                                        <span class="subfield_value">
+                                                            [% IF ( subfiel.is_url ) %]
+                                                                <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
+                                                            [% ELSE %]
+                                                                [% subfiel.marc_value | html %]
+                                                            [% END %]
+                                                        </span>
+                                                    </div> <!-- /.subfield_content.marc_field -->
+                                                </div> <!-- /.auth_subfield -->
+                                            [% END #/FOREACH subfiel %]
+                                        </div> <!-- /.tag -->
+                                    [% END # /FOREACH innerloo %]
+                                [% END # /tab_panel#tab${ BIG_LOO.number }XX  %]
+                            [% END # /FOREACH BIG_LOO %]
+                        [% END # /WRAPPER tab_panels %]
+                    [% END # /WRAPPER tabs %]
+
                 [% END # /IF html %]
 
             [% END # /IF ( unknownauthid ) %]
