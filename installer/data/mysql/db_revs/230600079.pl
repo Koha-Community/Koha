@@ -14,6 +14,6 @@ return {
         }
         );
 
-        say $out "Added new system preference 'ChildNeedsGuarantor')\n";
+        say $out "Added new system preference 'ChildNeedsGuarantor'";
     },
 };
