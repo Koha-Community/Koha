@@ -193,11 +193,11 @@
                                                 [% END %]
                                             [% END %]
                                         </li>
-                                        [% IF ITEM_DAT.renewals && ITEM_DAT.object.checkout %]
+                                        [% IF ITEM_DAT.object.checkout.renewals.count && ITEM_DAT.object.checkout %]
                                             <li>
                                                 <span class="label">Current renewals:</span>
-                                                [% ITEM_DAT.renewals | html %]
-                                                    [ <a class="checkout_renewals_view" data-renewals="[% ITEM_DAT.renewals | html | html %]" data-issueid="[% ITEM_DAT.object.checkout.id | html %]" href="#">View</a> ]
+                                                [% ITEM_DAT.object.checkout.renewals.count | html %]
+                                                    [ <a class="checkout_renewals_view" data-renewals="[% ITEM_DAT.object.checkout.renewals.count | html | html %]" data-issueid="[% ITEM_DAT.object.checkout.id | html %]" href="#">View</a> ]
                                             </li>
                                         [% END %]
                                         [% IF itemlostloop %]
