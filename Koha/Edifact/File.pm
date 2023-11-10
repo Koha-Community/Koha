@@ -27,6 +27,48 @@ Koha::Edifact::File - Koha::Object class for single edifact file
 
 =head2 Class methods
 
+=head3 vendor
+
+  my $vendor = $edifile->vendor;
+
+Returns the I<Koha::Acquisition::Bookseller> associated with this edifact file
+
+=cut
+
+sub vendor {
+    my ($self) = @_;
+    my $vendor_rs = $self->_result->vendor;
+    return Koha::Acquisition::Bookseller->_new_from_dbic( $vendor_rs );
+}
+
+=head3 basket
+
+  my $basket = $edifile->basket;
+
+Returns the I<Koha::Acquisition::Basket> associated with this edifact file.
+
+=cut
+
+sub basket {
+    my ( $self )  = @_;
+    my $basket_rs = $self->_result->basketno;
+    return Koha::Acquisition::Basket->_new_from_dbic( $basket_rs );
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Edifact::File object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        message_type  => 'type',
+        basketno => 'basket_id',
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type

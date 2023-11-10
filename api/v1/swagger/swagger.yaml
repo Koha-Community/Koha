@@ -38,6 +38,8 @@ definitions:
     $ref: ./definitions/credit.yaml
   debit:
     $ref: ./definitions/debit.yaml
+  edifact_file:
+    $ref: ./definitions/edifact_file.yaml
   erm_config:
     $ref: ./definitions/erm_config.yaml
   erm_agreement:
@@ -163,6 +165,8 @@ definitions:
 paths:
   /acquisitions/baskets/managers:
     $ref: ./paths/acquisitions_baskets.yaml#/~1acquisitions~1baskets~1managers
+  /acquisitions/edifiles:
+    $ref: ./paths/acquisitions_edifiles.yaml#/~1acquisitions~1edifiles
   /acquisitions/funds:
     $ref: ./paths/acquisitions_funds.yaml#/~1acquisitions~1funds
   /acquisitions/funds/owners:
