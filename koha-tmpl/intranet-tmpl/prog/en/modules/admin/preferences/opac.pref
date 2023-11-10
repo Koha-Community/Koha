@@ -63,7 +63,9 @@ OPAC:
         -
             - "Improve search engine crawling."
             - pref: OpacMetaRobots
-              type: textarea
+              multiple:
+               noindex: "noindex"
+               nofollow: "nofollow"
         -
             - By default, show bibliographic records
             - pref: BiblioDefaultView

@@ -509,7 +509,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACMandatoryHoldDates', '', '|start|end|both', 'Define which hold dates are required on OPAC reserve form', 'Choice'),
 ('OpacMaxItemsToDisplay','50','','Max items to display at the OPAC on a biblio detail','Integer'),
 ('OpacMetaDescription','','','This description will show in search engine results (160 characters).','Textarea'),
-('OpacMetaRobots','','','Improve search engine crawling.','Textarea'),
+('OpacMetaRobots', 'noindex,nofollow', NULL, 'Improve search engine crawling.', 'Multiple'),
 ('OPACMySummaryHTML','','70|10','Enter the HTML that will appear in a column on the \'my summary\' and \'my checkout history\' tabs when a user is logged in to the OPAC. Enter {BIBLIONUMBER}, {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the HTML. Leave blank to disable.','Textarea'),
 ('OpacNewsLibrarySelect','0','','Show selector for branches on OPAC news page','YesNo'),
 ('OpacNoItemTypeImages','0',NULL,'If ON, disables itemtype images in the OPAC','YesNo'),
