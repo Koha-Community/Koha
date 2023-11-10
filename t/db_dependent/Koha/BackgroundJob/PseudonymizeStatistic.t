@@ -27,8 +27,6 @@ use Koha::BackgroundJob::PseudonymizeStatistic;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Carp::Always;
-
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
