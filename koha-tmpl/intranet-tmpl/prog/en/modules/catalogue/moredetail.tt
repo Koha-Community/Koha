@@ -193,13 +193,13 @@
                                                 [% END %]
                                             [% END %]
                                         </li>
-                                        <li>
-                                            <span class="label">Current renewals:</span>
-                                            [% ITEM_DAT.renewals | html %]
-                                            [% IF ITEM_DAT.renewals %]
-                                                [ <a class="checkout_renewals_view" data-renewals="[% ITEM_DAT.renewals | html | html %]" data-issueid="[% ITEM_DAT.object.checkout.id | html %]" href="#">View</a> ]
-                                            [% END %]
-                                        </li>
+                                        [% IF ITEM_DAT.renewals %]
+                                            <li>
+                                                <span class="label">Current renewals:</span>
+                                                [% ITEM_DAT.renewals | html %]
+                                                    [ <a class="checkout_renewals_view" data-renewals="[% ITEM_DAT.renewals | html | html %]" data-issueid="[% ITEM_DAT.object.checkout.id | html %]" href="#">View</a> ]
+                                            </li>
+                                        [% END %]
                                         [% IF itemlostloop %]
                                             <li>
                                                 <span class="label">Lost status:</span>
