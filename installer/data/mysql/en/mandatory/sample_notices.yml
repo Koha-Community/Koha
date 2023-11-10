@@ -1253,15 +1253,15 @@ tables:
           lang: default
           content:
             - "[% USE Koha %]"
-            - "Hello [% borrower.title %] [% borrower.firstname %] [% borrower.surname %]."
-            - ""
-            - "Thank you for joining [% IF Koha.Preference('LibraryName') %][% Koha.Preference('LibraryName') %][% ELSE %]the library[% END %]"
-            - ""
-            - "You can search for all our materials in our <a href='[% Koha.Preference('OPACBaseURL') %]'>catalog</a>."
-            - ""
-            - "Your library card number is [% borrower.cardnumber %]"
-            - ""
-            - "If you have any problems or questions regarding your account, please contact the library."
+            - "Hello [% borrower.title %] [% borrower.firstname %] [% borrower.surname %].<br>"
+            - "<br>"
+            - "Thank you for joining [% IF Koha.Preference('LibraryName') %][% Koha.Preference('LibraryName') %][% ELSE %]the library[% END %]<br>"
+            - "<br>"
+            - "You can search for all our materials in our <a href='[% Koha.Preference('OPACBaseURL') %]'>catalog</a>.<br>"
+            - "<br>"
+            - "Your library card number is [% borrower.cardnumber %]<br>"
+            - "<br>"
+             - "If you have any problems or questions regarding your account, please contact the library."
 
         - module: members
           code: 2FA_OTP_TOKEN
