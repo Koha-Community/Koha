@@ -72,6 +72,8 @@ subtest 'html_content() tests' => sub {
         }
     );
 
+    t::lib::Mocks::mock_preference( 'NoticeCSS', '' );
+    my $css_import      = '';
     my $message         = Koha::Notice::Messages->find($message_id);
     my $wrapped_compare = <<"WRAPPED";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -80,7 +82,7 @@ subtest 'html_content() tests' => sub {
   <head>
     <title>$firstname</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+    $css_import
   </head>
   <body>
   This is a test template using borrower $borrowernumber
@@ -92,6 +94,7 @@ WRAPPED
 
     my $css_sheet = 'https://localhost/shiny.css';
     t::lib::Mocks::mock_preference( 'NoticeCSS', $css_sheet );
+    $css_import = qq{<link rel="stylesheet" type="text/css" href="$css_sheet">};
 
     $wrapped_compare = <<"WRAPPED";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -100,7 +103,7 @@ WRAPPED
   <head>
     <title>$firstname</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" type="text/css" href="$css_sheet">
+    $css_import
   </head>
   <body>
   This is a test template using borrower $borrowernumber
