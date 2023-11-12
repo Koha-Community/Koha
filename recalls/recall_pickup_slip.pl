@@ -58,16 +58,18 @@ my $letter = C4::Letters::GetPreparedLetter(
     }
 );
 
-my ($slip, $is_html);
+my ( $slip, $is_html, $style );
 if ($letter) {
-    $slip = $letter->{content};
+    $slip    = $letter->{content};
     $is_html = $letter->{is_html};
+    $style   = $letter->{style};
 }
 
 $template->param(
-    slip => $slip,
-    plain => !$is_html,
+    slip   => $slip,
+    plain  => !$is_html,
     caller => 'recall',
+    style  => $style,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
