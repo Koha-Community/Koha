@@ -113,12 +113,13 @@ $is_html = $letter->{is_html};
 
 
 $template->param(
-    slip => $slip,
-    plain => !$is_html,
+    slip           => $slip,
+    plain          => !$is_html,
     borrowernumber => $borrowernumber,
-    caller => 'members',
-    stylesheet => C4::Context->preference("SlipCSS"),
-    error           => $error,
+    caller         => 'members',
+    stylesheet     => C4::Context->preference("SlipCSS"),
+    error          => $error,
+    style          => $letter->{style},
 );
 
 $template->param( IntranetSlipPrinterJS => C4::Context->preference('IntranetSlipPrinterJS' ) );
