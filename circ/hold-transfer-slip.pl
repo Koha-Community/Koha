@@ -41,17 +41,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $userenv = C4::Context->userenv;
-my ($slip, $is_html);
+my ( $slip, $is_html, $style );
 if ( my $letter = ReserveSlip ({
     branchcode     => $session->param('branch') || $userenv->{branch},
     reserve_id => $reserve_id,
 }) ) {
-    $slip = $letter->{content};
+    $slip    = $letter->{content};
     $is_html = $letter->{is_html};
+    $style   = $letter->{style};
 }
-$template->param( slip => $slip ) if ($slip);
+$template->param( slip   => $slip ) if ($slip);
 $template->param( caller => 'hold-transfer' );
-$template->param( plain => !$is_html );
+$template->param( plain  => !$is_html );
+$template->param( style  => $style );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
