@@ -91,6 +91,7 @@ $template->param(
     slip   => $letter->{content},
     plain  => !$letter->{is_html},
     patron => $patron,
+    style  => $letter->{style},
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
