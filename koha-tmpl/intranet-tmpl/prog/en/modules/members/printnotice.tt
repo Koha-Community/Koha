@@ -18,7 +18,7 @@
 [% IF ( Koha.Preference('SlipCSS') ) %]
 <link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
 [% END %]
-[% IF slip.style %]<style>[% slip.style | $raw %]</style>[% END %]
+[% IF style %]<style>[% style | $raw %]</style>[% END %]
 </head>
 
 <body id="members_printslip" class="member">
