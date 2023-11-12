@@ -69,7 +69,8 @@ my $letter = C4::Letters::GetPreparedLetter(
 
 $template->param(
     slip  => $letter->{content},
-    plain => !$letter->{is_html}
+    plain => !$letter->{is_html},
+    style => $letter->{style},
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
