@@ -62,6 +62,7 @@
         <th class="anti-the">Title</th>
         <th>Author</th>
         <th>Barcode</th>
+        <th>Call number</th>
         <th>Library</th>
         <th>Hold date</th>
         <th>Expiration date</th>
@@ -79,6 +80,7 @@
           <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link = 1 %]</td>
           <td>[% hold.biblio.author | html %]</td>
           <td>[% hold.item.barcode | html %]</td>
+          <td>[% hold.item.itemcallnumber | html %]</td>
           <td>[% Branches.GetName( hold.branchcode ) | html %]</td>
           <td data-order="[% hold.reservedate | html %]">[% hold.reservedate | $KohaDates %]</td>
           <td data-order="[% hold.expirationdate | html %]">
