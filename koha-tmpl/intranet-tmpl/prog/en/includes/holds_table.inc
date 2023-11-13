@@ -129,6 +129,7 @@
                     <input type="text" class="flatpickr" data-flatpickr-futuredate="true" value="[% hold.expirationdate | html %]" size="10" name="expirationdate" />
                 [% ELSE %]
                     <span class="expiredon"><label>Expired:</label> [% hold.expirationdate | $KohaDates %]</span>
+                    <input type="hidden" value="[% hold.expirationdate | html %]" name="expirationdate" />
                 [% END %]
             </td>
             <td>
