@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 
@@ -29,8 +29,80 @@ use t::lib::TestBuilder;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest 'html_content() tests' => sub {
+subtest 'is_html() tests' => sub {
     plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $template = $builder->build_object(
+        {
+            class => 'Koha::Notice::Templates',
+            value => {
+                module                 => 'test',
+                code                   => 'TEST',
+                message_transport_type => 'email',
+                is_html                => '0',
+                name                   => 'test notice template',
+                title                  => '[% borrower.firstname %]',
+                content                => 'This is a test template using borrower [% borrower.id %]',
+                branchcode             => "",
+                lang                   => 'default',
+            }
+        }
+    );
+
+    my $patron         = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $firstname      = $patron->firstname;
+    my $borrowernumber = $patron->id;
+
+    my $prepared_letter = GetPreparedLetter(
+        (
+            module      => 'test',
+            letter_code => 'TEST',
+            tables      => {
+                borrowers => $patron->id,
+            },
+        )
+    );
+
+    my $message_id = EnqueueLetter(
+        {
+            letter                 => $prepared_letter,
+            borrowernumber         => $patron->id,
+            message_transport_type => 'email'
+        }
+    );
+    my $message = Koha::Notice::Messages->find($message_id);
+
+    ok( !$message->is_html, "Non html template yields a non html message" );
+
+    $template->is_html(1)->store;
+    $prepared_letter = GetPreparedLetter(
+        (
+            module      => 'test',
+            letter_code => 'TEST',
+            tables      => {
+                borrowers => $patron->id,
+            },
+        )
+    );
+
+    $message_id = EnqueueLetter(
+        {
+            letter                 => $prepared_letter,
+            borrowernumber         => $patron->id,
+            message_transport_type => 'email'
+        }
+    );
+
+    $message = Koha::Notice::Messages->find($message_id);
+    ok( $message->is_html, "HTML template yields a html message" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'html_content() tests' => sub {
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -114,6 +186,33 @@ WRAPPED
     is(
         $message->html_content, $wrapped_compare,
         "html_content returned the correct html wrapped letter including stylesheet"
+    );
+
+    $template->is_html(0)->store;
+    $prepared_letter = GetPreparedLetter(
+        (
+            module      => 'test',
+            letter_code => 'TEST',
+            tables      => {
+                borrowers => $patron->id,
+            },
+        )
+    );
+
+    $message_id = EnqueueLetter(
+        {
+            letter                 => $prepared_letter,
+            borrowernumber         => $patron->id,
+            message_transport_type => 'email'
+        }
+    );
+
+    $wrapped_compare = "<div style=\"white-space: pre-wrap;\">This is a test template using borrower $borrowernumber</div>";
+
+    $message = Koha::Notice::Messages->find($message_id);
+    is(
+        $message->html_content, $wrapped_compare,
+        "html_content returned the correct html wrapped letter for a plaintext template"
     );
 
     $schema->storage->txn_rollback;
