@@ -56,6 +56,9 @@
     <div class="row">
 
         [% IF op == 'illlist' %]
+            <script>
+                var ill_table_actions = [% table_actions | $raw %];
+            </script>
             <div class="col-sm-2">
                 <aside>
                     <form method="get" id="illfilter_form">

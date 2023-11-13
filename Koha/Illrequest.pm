@@ -2003,7 +2003,6 @@ sub strings_map {
     return $strings;
 }
 
-
 =head3 get_op_param_deprecation
 
     my $op = Koha::Illrequest->check_url_param_deprecation($params);
@@ -2060,6 +2059,36 @@ sub get_op_param_deprecation {
         $op = 'cud-delete' if $op eq 'delete';
     }
     return $op;
+}
+
+=head3 get_staff_table_actions
+
+    my $ill_table_actions = $self->get_staff_table_actions;
+
+Returns the table actions available in the Staff ILL list table
+A total join of core static actions with custom actions provided by
+installed plugins that implement the ill_table_actions hook
+
+=cut
+
+sub get_staff_table_actions {
+    my ( $self, $params ) = @_;
+
+    my $ill_table_actions = [
+        {
+            button_class                  => 'btn btn-default btn-sm',
+            button_link                   => '/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=',
+            append_column_data_to_link    => 1,
+            button_link_translatable_text => 'ill_manage',
+        }
+    ];
+
+    my @plugin_responses = Koha::Plugins->call('ill_table_actions');
+    for my $plugin_variables (@plugin_responses) {
+        push( @{$ill_table_actions}, $plugin_variables );
+    }
+
+    return $ill_table_actions;
 }
 
 =head3 _type

@@ -408,17 +408,27 @@ $(document).ready(function() {
                 "orderable": false,
                 "searchable": false,
                 "render": function( data, type, row, meta ) {
-                    return '<a class="btn btn-default btn-sm" ' +
-                            'href="/cgi-bin/koha/ill/ill-requests.pl?' +
-                            'op=illview&amp;illrequest_id=' +
-                            encodeURIComponent(data) +
-                            '">' + ill_manage + '</a>';
+                    return render_table_actions(data);
                 }
             }
         ]
     }, table_settings, null, additional_filters);
 
     $("#illfilter_form").on('submit', filter);
+
+    function render_table_actions(data) {
+        let actions_string = "";
+        ill_table_actions.forEach((ill_table_action) => {
+            let link_data = ill_table_action.append_column_data_to_link
+                ? encodeURIComponent(data)
+                : "";
+            let link_text = ill_table_action.button_link_translatable_text
+                ? eval(ill_table_action.button_link_translatable_text)
+                : ill_table_action.button_link_text;
+            actions_string += `<a class="${ill_table_action.button_class}" href="${ill_table_action.button_link}${link_data}">${link_text}</a>`;
+        });
+        return actions_string;
+    }
 
     function redrawTable() {
         let table_dt = ill_requests_table.DataTable();

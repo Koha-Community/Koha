@@ -409,6 +409,7 @@ if ( $backends_available ) {
             }
         }
 
+        $template->param( table_actions => encode_json( Koha::Illrequest->get_staff_table_actions ) )
     } elsif ( $op eq "cud-save_comment" ) {
         my $comment = Koha::Illcomment->new({
             illrequest_id  => scalar $params->{illrequest_id},
