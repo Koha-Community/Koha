@@ -61,7 +61,7 @@ my $builder       = t::lib::TestBuilder->new;
 my $schema        = Koha::Database->schema;
 
 subtest 'Search patrons' => sub {
-    plan tests => 26;
+    plan tests => 27;
 
     if ( Koha::Patrons->search({surname => {-like => "test_patron_%"}})->count ) {
         BAIL_OUT("Cannot run this test, data we need to create already exist in the DB");
@@ -79,9 +79,13 @@ subtest 'Search patrons' => sub {
             value => { category_type => 'A' }
         }
     );
+    push @cleanup, $patron_category;
+
     my $library = $builder->build_object(
         { class => 'Koha::Libraries', value => { branchname => $branchname } }
     );
+    push @cleanup, $library;
+
     for my $i ( 1 .. 25 ) {
         push @patrons,
           $builder->build_object(
@@ -115,9 +119,13 @@ subtest 'Search patrons' => sub {
         }
     );
 
+    unshift @cleanup, $_ for @patrons;
+
     my $library_2 = $builder->build_object(
         { class => 'Koha::Libraries', value => { branchname => 'X' . $branchname } }
     );
+    push @cleanup, $library_2;
+
     my $patron_27 =
       $builder->build_object(
         {
@@ -134,7 +142,7 @@ subtest 'Search patrons' => sub {
             }
         }
       );
-    push @patrons, $patron_27;
+    unshift @cleanup, $patron_27;
 
     my $attribute_type = Koha::Patron::Attribute::Type->new(
         {
@@ -153,13 +161,26 @@ subtest 'Search patrons' => sub {
             searched_by_default => 1
         }
     )->store;
+    my $attribute_type_searchable_not_default = Koha::Patron::Attribute::Type->new(
+        {
+            code             => 'mycode3',
+            description      => 'my description3',
+            opac_display     => 1,
+            staff_searchable => 1,
+            searched_by_default => 0
+        }
+    )->store;
+    push @cleanup, $attribute_type, $attribute_type_searchable, $attribute_type_searchable_not_default;
+
     $patrons[0]->extended_attributes([
         { code => $attribute_type->code, attribute => 'test_attr_1' },
         { code => $attribute_type_searchable->code, attribute => 'test_attr_2'},
+        { code => $attribute_type_searchable_not_default->code, attribute => 'test_attr_3'},
     ]);
     $patrons[1]->extended_attributes([
         { code => $attribute_type->code, attribute => 'test_attr_1' },
         { code => $attribute_type_searchable->code, attribute => 'test_attr_2'},
+        { code => $attribute_type_searchable_not_default->code, attribute => 'test_attr_3'},
     ]);
 
     my $total_number_of_patrons = Koha::Patrons->search->count;
@@ -280,6 +301,17 @@ subtest 'Search patrons' => sub {
 
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
 
+    # clear form
+    $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
+
+    # Search on searchable attribute as specific field, we expect 2 patrons
+    $s->fill_form( { search_patron_filter => 'test_attr_3' } );
+    $driver->find_element('//form[@id="patron_search_form"]//*[@id="searchfieldstype_filter"]//option[@value="_ATTR_'.$attribute_type_searchable_not_default->code.'"]')->click();
+    $s->submit_form;
+    sleep $DT_delay && $s->wait_for_ajax;
+
+    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute as a specific field returns correct results' );
+
     # Refine search and search for test_patron in all the data using the DT global search
     # No change in result expected, still 2 patrons
     $s->driver->find_element('//*[@id="'.$table_id.'_filter"]//input')->send_keys('test_patron');
@@ -394,12 +426,6 @@ subtest 'Search patrons' => sub {
         is( is_patron_shown($patron_27), 0, 'search by incorrect full formatted date does not show the patron' );
         $dob_search_filter->clear;
     };
-
-    push @cleanup, $_ for @patrons;
-    push @cleanup, $library;
-    push @cleanup, $library_2;
-    push @cleanup, $patron_category;
-    push @cleanup, $attribute_type, $attribute_type_searchable;
 
     $driver->quit();
 };
