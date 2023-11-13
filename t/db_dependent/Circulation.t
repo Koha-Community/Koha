@@ -2321,7 +2321,7 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
     my $patron_2 = $builder->build_object(
         { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
     my $item_2 = $builder->build_sample_item( { library => $library->branchcode } );
-    my $issue  = AddIssue( $patron_2, $item_2->barcode );
+    my $issue  = AddIssue( $patron_2->unblessed, $item_2->barcode );
     $item_2->discard_changes;
     ok( $item_2->onloan, "Item is checked out" );
 
