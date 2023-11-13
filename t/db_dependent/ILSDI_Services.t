@@ -178,7 +178,7 @@ subtest 'GetPatronInfo test for holds' => sub {
         $builder->build_object( { class => 'Koha::Biblioitems', value => { biblionumber => $biblio->biblionumber } } );
     my $item = $builder->build_sample_item(
         { biblionumber => $biblio->biblionumber, library => $library->branchcode, itype => $itemtype->itemtype } );
-    my $issue = AddIssue( $brwr, $item->barcode );
+    my $issue = AddIssue( $brwr->unblessed, $item->barcode );
 
     # Prepare and send web request for IL-SDI server:
     my $query = CGI->new();
