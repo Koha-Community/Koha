@@ -140,6 +140,8 @@ subtest 'Search patrons' => sub {
         {
             code        => 'my code1',
             description => 'my description1',
+            staff_searchable => 0,
+            searched_by_default => 0
         }
     )->store;
     my $attribute_type_searchable = Koha::Patron::Attribute::Type->new(
@@ -147,7 +149,8 @@ subtest 'Search patrons' => sub {
             code             => 'my code2',
             description      => 'my description2',
             opac_display     => 1,
-            staff_searchable => 1
+            staff_searchable => 1,
+            searched_by_default => 1
         }
     )->store;
     $patrons[0]->extended_attributes([
