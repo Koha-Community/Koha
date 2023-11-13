@@ -1176,7 +1176,7 @@ sub CanBookBeIssued {
         }
     }
 
-    unless ( $ignore_reserves and defined $recall ) {
+    unless ( $ignore_reserves || $recall ) {
         # See if the item is on reserve.
         my ( $restype, $res ) = CheckReserves( $item_object );
         if ($restype) {
