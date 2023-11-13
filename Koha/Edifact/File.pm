@@ -38,7 +38,8 @@ Returns the I<Koha::Acquisition::Bookseller> associated with this edifact file
 sub vendor {
     my ($self) = @_;
     my $vendor_rs = $self->_result->vendor;
-    return Koha::Acquisition::Bookseller->_new_from_dbic( $vendor_rs );
+    return unless $vendor_rs;
+    return Koha::Acquisition::Bookseller->_new_from_dbic($vendor_rs);
 }
 
 =head3 basket
@@ -50,9 +51,10 @@ Returns the I<Koha::Acquisition::Basket> associated with this edifact file.
 =cut
 
 sub basket {
-    my ( $self )  = @_;
+    my ($self) = @_;
     my $basket_rs = $self->_result->basketno;
-    return Koha::Acquisition::Basket->_new_from_dbic( $basket_rs );
+    return unless $basket_rs;
+    return Koha::Acquisition::Basket->_new_from_dbic($basket_rs);
 }
 
 =head3 to_api_mapping
@@ -64,8 +66,8 @@ on the API.
 
 sub to_api_mapping {
     return {
-        message_type  => 'type',
-        basketno => 'basket_id',
+        message_type => 'type',
+        basketno     => 'basket_id',
     };
 }
 
