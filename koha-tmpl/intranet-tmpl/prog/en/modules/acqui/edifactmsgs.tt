@@ -139,14 +139,14 @@
                     },
                     {
                         "title": "Actions",
+                        "className": "actions",
                         "searchable": false,
                         "orderable": false,
-                        "render": function( row, type, val, meta ) {
-
-                            var result = '<a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id='+encodeURIComponent(row.id)+'"><i class="fa fa-search"></i> View message</a>';
-                            result += '<a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-trash-can"></i> Delete</a>';
+                        "render": function(data, type, row, meta) {
+                            var result = '<a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id='+encodeURIComponent(row.id)+'"><i class="fa fa-search"></i> View message</a> ';
+                            result += '<a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-trash-can"></i> Delete</a> ';
                             if ( row.status == 'new' ) {
-                                reslt += '<a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-cog"></i> Import</a>';
+                                result += '<a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-cog"></i> Import</a> ';
                             }
                             return result;
                         }
@@ -157,7 +157,7 @@
             var EDIModal = $("#EDI_modal");
             var EDIModalBody = $("#EDI_modal .modal-body");
 
-            $(".view_message").on("click", function(e){
+            $("body").on("click", ".view_message", function(e){
                 e.preventDefault();
                 var page = $(this).attr("href");
                 EDIModalBody.load(page + " #edimsg");
@@ -170,7 +170,7 @@
             EDIModal.on("hidden.bs.modal", function(){
                 EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
-            $(".delete_msg").on("click",function(){
+            $("body").on("click", ".delete_msg" ,function(){
                 return confirm(_("Are you sure you want to delete this message?"));
             });
         });
