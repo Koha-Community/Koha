@@ -1032,10 +1032,18 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
     plan tests => 19;
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 1 );
 
     my $patron     = Koha::Patrons->find($borrowernumber);
-    my $guarantor1 = $builder->build_object( { class => 'Koha::Patrons', value => { email => 'g1@email.com' } } );
-    my $guarantor2 = $builder->build_object( { class => 'Koha::Patrons', value => { email => 'g2@email.com' } } );
+
+    my $patron_category =
+        $builder->build( { source => 'Category', value => { category_type => 'A', can_be_guarantee => 0 } } )
+        ->{categorycode};
+    my $guarantor1 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { email => 'g1@email.com', categorycode => $patron_category } } );
+    my $guarantor2 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { email => 'g2@email.com', categorycode => $patron_category } } );
+
     $patron->add_guarantor( { guarantor_id => $guarantor1->borrowernumber, relationship => 'test' } );
     $patron->add_guarantor( { guarantor_id => $guarantor2->borrowernumber, relationship => 'test' } );
 

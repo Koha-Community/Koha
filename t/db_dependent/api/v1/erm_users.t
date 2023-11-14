@@ -31,6 +31,7 @@ my $builder = t::lib::TestBuilder->new;
 
 my $t = Test::Mojo->new('Koha::REST::V1');
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
 
 subtest 'list() tests' => sub {
 
@@ -38,7 +39,11 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Patrons->search->update( { flags => 0 } );
+    my $patron_category =
+        $builder->build( { source => 'Category', value => { category_type => 'A', can_be_guarantee => 0 } } )
+        ->{categorycode};
+
+    Koha::Patrons->search->update( { flags => 0, categorycode => $patron_category } );
     $schema->resultset('UserPermission')->delete;
 
     my $librarian = $builder->build_object(
