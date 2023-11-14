@@ -36,7 +36,6 @@ use Koha::Quotes;
 use Koha::Suggestions;
 use Koha::BackgroundJobs;
 use Koha::CurbsidePickups;
-use Koha::Tickets;
 use Koha::Token;
 
 my $query = CGI->new;
