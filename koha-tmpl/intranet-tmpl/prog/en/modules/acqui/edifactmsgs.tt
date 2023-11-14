@@ -114,7 +114,13 @@
                         "searchable": true,
                         "orderable": true,
                         "render": function(data, type, row, meta) {
-                            return '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid="'+row.vendor_id+'>'+row.vendor.name+'</a>';
+                            let link;
+                            if ( row.vendor ) {
+                               link = '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid='+row.vendor_id+'">'+row.vendor.name+'</a>';
+                            } else {
+                               link = '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid='+row.vendor_id+'">'+row.vendor_id+'</a>';
+                            }
+                            return link;
                         }
                     },
                     {
@@ -122,13 +128,15 @@
                         "searchable": false,
                         "orderable": false,
                         "render": function(data, type, row, meta) {
+                            let rendered = '';
                             if ( row.type == 'QUOTE' || row.type == 'ORDERS' ) {
-                                if ( row.basked_id ) {
-                                    return '<a href="/cgi-bin/koha/acqui/basket.pl?basketno='+row.basked_id+'">Basket: '+row.basket_id+'</a>';
+                                if ( row.basket_id ) {
+                                    rendered = '<a href="/cgi-bin/koha/acqui/basket.pl?basketno='+row.basket_id+'">Basket: '+row.basket_id+'</a>';
                                 }
                             } else {
-                                return '<a href="/cgi-bin/koha/acqui/invoices.pl?message_id='+row.id+'&op=do_search">Invoices</a>';
+                                rendered = '<a href="/cgi-bin/koha/acqui/invoices.pl?message_id='+row.id+'&op=do_search">Invoices</a>';
                             }
+                            return rendered;
                         }
                     },
                     {
