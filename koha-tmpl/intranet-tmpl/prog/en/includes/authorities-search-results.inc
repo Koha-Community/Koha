@@ -112,6 +112,12 @@
               </div>
             [% END %]
         [% ELSE %]
+            [% IF summary.notes.size %]
+                <div class="authres_notes">
+                    [% PROCESS notesmodal notes=summary.notes authid=authid %]
+                    <span><a href="#" data-toggle="modal" data-target="#notesModal_[% authid | html %]">Notes</a></span>
+                </div>
+            [% END %]
             [% IF ( summary.seefrom.size >= 1 ) %]
             <div class="seefrom">
                 <span class="seefrom">used for/see from:</span>
@@ -151,4 +157,28 @@
    [% CASE ['grc'] %]<span>Greek (to 1453)</span>
    [% CASE %]<span>[% lang | html %]</span>
   [% END %]
+[% END %]
+
+[% BLOCK notesmodal %]
+<!-- notes modal -->
+<div style='font-style:normal;' class="modal fade notesModal" id="notesModal_[% authid | html %]" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="notesModalLabel">Notes</h4>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    [% FOREACH note IN notes %]
+                        <li>[% note.note | html %]</li>
+                    [% END %]
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 [% END %]
