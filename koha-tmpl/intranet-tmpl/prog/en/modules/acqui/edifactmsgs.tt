@@ -10,9 +10,6 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-#EDI_modal { width : 80%; } @media (max-width: 767px) { #EDI_modal { margin: 0; width : auto; } }
-</style>
 </head>
 
 <body id="acq_edifactmsgs" class="acq">
@@ -44,7 +41,7 @@
 
 <!-- Modal to display EDIFACT messages -->
 <div class="modal" id="EDI_modal" tabindex="-1" role="dialog" aria-labelledby="EDI_modal_label" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
     <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
