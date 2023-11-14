@@ -202,4 +202,11 @@ __PACKAGE__->add_columns(
     '+deleted' => { is_boolean => 1 },
 );
 
+sub koha_objects_class {
+    'Koha::Edifact::Files';
+}
+sub koha_object_class {
+    'Koha::Edifact::File';
+}
+
 1;
