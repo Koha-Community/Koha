@@ -66,15 +66,21 @@ subtest 'list() tests' => sub {
     # No acquisitions\/edifiles, so empty array should be returned
     $t->get_ok("//$userid:$password@/api/v1/acquisitions/edifiles")->status_is(200)->json_is( [] );
 
-    my $file = $builder->build_object( { class => 'Koha::Edifact::Files', value => { message_type => 'ORDER' } } );
+    my $file = $builder->build_object(
+        { class => 'Koha::Edifact::Files', value => { message_type => 'ORDER', deleted => 0 } } );
 
-    # One file created, should get returned
+    my $deleted_file = $builder->build_object(
+        { class => 'Koha::Edifact::Files', value => { message_type => 'ORDER', deleted => 1 } } );
+
+    # One file undeleted, should get returned
     $t->get_ok("//$userid:$password@/api/v1/acquisitions/edifiles")->status_is(200)->json_is( [ $file->to_api ] );
 
     my $another_file_ORDER =
-        $builder->build_object( { class => 'Koha::Edifact::Files', value => { message_type => 'ORDER' } } );
+        $builder->build_object(
+        { class => 'Koha::Edifact::Files', value => { message_type => 'ORDER', deleted => 0 } } );
     my $another_file_QUOTE =
-        $builder->build_object( { class => 'Koha::Edifact::Files', value => { message_type => 'QUOTE' } } );
+        $builder->build_object(
+        { class => 'Koha::Edifact::Files', value => { message_type => 'QUOTE', deleted => 0 } } );
 
     # Two files created, they should both be returned
     $t->get_ok("//$userid:$password@/api/v1/acquisitions/edifiles")->status_is(200)->json_is(

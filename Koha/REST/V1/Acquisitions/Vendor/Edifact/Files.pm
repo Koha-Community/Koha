@@ -46,16 +46,18 @@ Return the list of edifact files
 sub list {
     my $c = shift->openapi->valid_input or return;
 
+    my $filter = { deleted => 0 };
     return try {
 
-        my $files_rs = Koha::Edifact::Files->new;
+        my $files_rs = Koha::Edifact::Files->search($filter);
         my $files    = $c->objects->search($files_rs);
 
         return $c->render(
             status  => 200,
             openapi => $files,
         );
-    } catch {
+    }
+    catch {
         $c->unhandled_exception($_);
     };
 }

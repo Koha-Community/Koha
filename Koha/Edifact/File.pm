@@ -68,6 +68,7 @@ sub to_api_mapping {
     return {
         message_type => 'type',
         basketno     => 'basket_id',
+        deleted      => undef,
     };
 }
 
