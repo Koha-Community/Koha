@@ -16,13 +16,14 @@ package Koha::MarcOverlayRules;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use List::Util qw(first);
+use List::Util qw(first any);
 use Koha::MarcOverlayRule;
 use Carp;
 
 use Koha::Exceptions::MarcOverlayRule;
 use Try::Tiny;
 use Scalar::Util qw(looks_like_number);
+use Clone qw(clone);
 
 use parent qw(Koha::Objects);
 
@@ -46,6 +47,16 @@ sub operations {
     return ('add', 'append', 'remove', 'delete');
 }
 
+=head3 modules
+
+Returns a list of all modules in order of priority.
+
+=cut
+
+sub modules {
+    return ( 'userid', 'categorycode', 'source' );
+}
+
 =head3 context_rules
 
     my $rules = Koha::MarcOverlayRules->context_rules($context);
@@ -55,61 +66,120 @@ Gets all MARC overlay rules for the supplied C<$context> (hashref with { module 
 =cut
 
 sub context_rules {
-    my ($self, $context) = @_;
+    my ( $self, $context ) = @_;
 
     return unless %{$context};
 
-    my $rules = $cache->get_from_cache('marc_overlay_rules', { unsafe => 1 });
+    my $rules = $cache->get_from_cache( 'marc_overlay_rules', { unsafe => 1 } );
 
-    if (!$rules) {
+    if ( !$rules ) {
         $rules = {};
         my @rules_rows = $self->_resultset()->search(
             undef,
-            {
-                order_by => { -desc => [qw/id/] }
-            }
+            { order_by => { -desc => [qw/id/] } }
         );
         foreach my $rule_row (@rules_rows) {
-            my %rule = $rule_row->get_columns();
+            my %rule       = $rule_row->get_columns();
             my $operations = {};
 
-            foreach my $operation ($self->operations) {
+            foreach my $operation ( $self->operations ) {
                 $operations->{$operation} = { allow => $rule{$operation}, rule => $rule{id} };
             }
 
             # TODO: Remove unless check and validate on saving rules?
-            if ($rule{tag} eq '*') {
-                unless (exists $rules->{$rule{module}}->{$rule{filter}}->{'*'}) {
-                    $rules->{$rule{module}}->{$rule{filter}}->{'*'} = $operations;
+            if ( $rule{tag} eq '*' ) {
+                unless ( exists $rules->{ $rule{module} }->{ $rule{filter} }->{'*'} ) {
+                    $rules->{ $rule{module} }->{ $rule{filter} }->{'*'} = $operations;
                 }
-            }
-            elsif ($rule{tag} =~ /^(\d{3})$/) {
-                unless (exists $rules->{$rule{module}}->{$rule{filter}}->{tags}->{$rule{tag}}) {
-                    $rules->{$rule{module}}->{$rule{filter}}->{tags}->{$rule{tag}} = $operations;
+            } elsif ( $rule{tag} =~ /^(\d{3})$/ ) {
+                unless ( exists $rules->{ $rule{module} }->{ $rule{filter} }->{tags}->{ $rule{tag} } ) {
+                    $rules->{ $rule{module} }->{ $rule{filter} }->{tags}->{ $rule{tag} } = $operations;
                 }
-            }
-            else {
-                my $regexps = ($rules->{$rule{module}}->{$rule{filter}}->{regexps} //= []);
-                push @{$regexps}, [$rule{tag}, $operations];
+            } else {
+                my $regexps = ( $rules->{ $rule{module} }->{ $rule{filter} }->{regexps} //= [] );
+                push @{$regexps}, [ $rule{tag}, $operations ];
             }
         }
-        $cache->set_in_cache('marc_overlay_rules', $rules);
+        $cache->set_in_cache( 'marc_overlay_rules', $rules );
     }
 
-    my $context_rules = undef;
-    foreach my $module_name (keys %{$context}) {
-        if (
-            exists $rules->{$module_name} &&
-            exists $rules->{$module_name}->{$context->{$module_name}}
-        ) {
-            $context_rules = $rules->{$module_name}->{$context->{$module_name}};
+    my $context_rules;
+    my @context_modules = grep { exists $context->{$_} } $self->modules();
+
+    foreach my $module_name (@context_modules) {
+        if (   exists $rules->{$module_name}
+            && exists $rules->{$module_name}->{ $context->{$module_name} } )
+        {
+            $context_rules = $rules->{$module_name}->{ $context->{$module_name} };
+
+            unless ( exists $rules->{$module_name}->{'*'} ) {
+
+                # No wildcard filter rules defined
+                last;
+            }
+
+            # Merge in all wildcard filter rules which has not been overridden
+            # by the matching context
+            if ( $context_rules->{'*'} ) {
+
+                # Wildcard tag for matching context will override all rules,
+                # nothing left to do
+                last;
+            }
+
+            # Clone since we will potentially be modified cached value
+            # fetched with unsafe => 1
+            $context_rules = clone($context_rules);
+
+            if ( exists $rules->{$module_name}->{'*'}->{'*'} ) {
+
+                # Merge in wildcard filter wildcard tag rule if exists
+                $context_rules->{'*'} = $rules->{$module_name}->{'*'}->{'*'};
+            }
+
+            if ( exists $rules->{$module_name}->{'*'}->{tags} ) {
+                if ( exists $context_rules->{regexps} ) {
+
+                    # If the current context has regexp rules, we have to make sure
+                    # to not only to skip tags already present but also those matching
+                    # any of those rules
+
+                    my @regexps = map { qr/^$_->[0]$/ } @{ $context_rules->{regexps} };
+
+                    foreach my $tag ( keys %{ $rules->{$module_name}->{'*'}->{tags} } ) {
+                        unless ( ( any { $tag =~ $_ } @regexps ) || exists $context_rules->{tags}->{$tag} ) {
+                            $context_rules->{tags}->{$tag} = $rules->{$module_name}->{'*'}->{tags}->{$tag};
+                        }
+                    }
+                } else {
+
+                    # Merge in wildcard filter tag rules not already present
+                    # in the matching context
+                    foreach my $tag ( keys %{ $rules->{$module_name}->{'*'}->{tags} } ) {
+                        unless ( exists $context_rules->{tags}->{$tag} ) {
+                            $context_rules->{tags}->{$tag} = $rules->{$module_name}->{'*'}->{tags}->{$tag};
+                        }
+                    }
+                }
+            }
+
+            if ( exists $rules->{$module_name}->{'*'}->{regexps} ) {
+
+                # Merge in wildcard filter regexp rules last, making sure rules from the
+                # matching context have precedence
+                $context_rules->{regexps} //= [];
+                push @{ $context_rules->{regexps} }, @{ $rules->{$module_name}->{'*'}->{regexps} };
+            }
+
             last;
         }
     }
-    if (!$context_rules) {
-        # No perms matching specific context conditions found, try wildcard value for each active context
-        foreach my $module_name (keys %{$context}) {
-            if (exists $rules->{$module_name}->{'*'}) {
+
+    if ( !$context_rules ) {
+
+        # No rules matching specific context conditions found, try wildcard value for each active context
+        foreach my $module_name (@context_modules) {
+            if ( exists $rules->{$module_name}->{'*'} ) {
                 $context_rules = $rules->{$module_name}->{'*'};
                 last;
             }
