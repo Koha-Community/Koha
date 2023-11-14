@@ -202,9 +202,18 @@ __PACKAGE__->add_columns(
     '+deleted' => { is_boolean => 1 },
 );
 
+=head2 koha_objects_class
+
+=cut
+
 sub koha_objects_class {
     'Koha::Edifact::Files';
 }
+
+=head2 koha_object_class
+
+=cut
+
 sub koha_object_class {
     'Koha::Edifact::File';
 }

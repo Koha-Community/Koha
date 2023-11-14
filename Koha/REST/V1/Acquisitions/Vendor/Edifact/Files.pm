@@ -56,8 +56,7 @@ sub list {
             status  => 200,
             openapi => $files,
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
