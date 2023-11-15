@@ -2083,10 +2083,7 @@ sub get_staff_table_actions {
         }
     ];
 
-    my @plugin_responses = Koha::Plugins->call('ill_table_actions');
-    for my $plugin_variables (@plugin_responses) {
-        push( @{$ill_table_actions}, $plugin_variables );
-    }
+    Koha::Plugins->call( 'ill_table_actions', \$ill_table_actions );
 
     return $ill_table_actions;
 }

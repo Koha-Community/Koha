@@ -378,14 +378,17 @@ sub template_include_paths {
 }
 
 sub ill_table_actions {
-    my ( $self ) = @_;
+    my ( $self, $table_actions ) = @_;
 
-    return {
-        button_link_text           => 'Test text',
-        append_column_data_to_link => 1,
-        button_class               => 'test class',
-        button_link                => 'test link'
-    };
+    push(
+        @{$$table_actions},
+        {
+            button_link_text           => 'Test text',
+            append_column_data_to_link => 1,
+            button_class               => 'test class',
+            button_link                => 'test link'
+        }
+    );
 }
 
 sub _private_sub {
