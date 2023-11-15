@@ -1841,7 +1841,7 @@ subtest '_Findgroupreserves' => sub {
     );
 
     # When the hold is title level and in the hold fill targets we expect this to be the only hold returned
-    @reserves = C4::Reserves::_Findgroupreserve( $item->biblionumber, $item_2->id, 0, [] );
+    @reserves = C4::Reserves::_Findgroupreserve( undef, $item->biblionumber, $item_2->id, 0, [] );
     is( scalar @reserves,           1,             "We should still only get the item level hold that is in the map" );
     is( $reserves[0]->{reserve_id}, $reserve_id_1, "We got the expected reserve which has been updated" );
 
