@@ -1168,6 +1168,8 @@ subtest 'Test guarantor handling in SendQueuedMessages' => sub {
 
     # clear borrower queue
     Koha::Notice::Messages->find($message_id)->delete;
+
+    t::lib::Mocks::mock_preference( 'ChildNeedsGuarantor', 0 );
 };
 
 subtest 'get_item_content' => sub {
