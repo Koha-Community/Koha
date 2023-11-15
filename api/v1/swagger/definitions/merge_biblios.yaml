@@ -1,0 +1,28 @@
+---
+type: object
+properties:
+  biblio_id_to_merge:
+    type: integer
+    description: Biblionumber from which to merge
+  rules:
+    type:
+      - string
+      - "null"
+    description: Internally identifier of a merge algoritm. Now two identifier are supported, 'override' and 'override_ext'.
+      'override' is to use when you the bibliographic data of biblio_id as resulting bibliographic data. The null value is equivalent
+       of 'override'.
+      'override_ext' is to use only with a value in datarecord field. In fact is mandatory to use if you insert a record inside datarecord field.
+  framework_to_use:
+    type:
+      - string
+      - "null"
+    description: Framework code, you can use it only with a value in datarecord field. With null value it uses the framework
+      code of record to be merged into.
+  datarecord:
+    description: Bibliographic record used as result of the merge. It uses the format MARC-in-JSON
+    type:
+      - object
+      - "null"
+additionalProperties: false
+required:
+  - biblio_id_to_merge

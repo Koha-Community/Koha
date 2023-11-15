@@ -35,6 +35,7 @@ use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
 
 use Try::Tiny qw( catch try );
+use JSON qw( decode_json );
 
 =head1 API
 
@@ -890,6 +891,89 @@ sub list {
     catch {
         $c->unhandled_exception($_);
     };
+}
+
+=head3 merge
+
+Controller function that handles merging two biblios. If an optional
+MARCXML is provided as the request body, this MARCXML replaces the
+bibliodata of the merge target biblio. Syntax format inside the request body
+must match with the Marc format used into Koha installation (MARC21 or UNIMARC)
+
+=cut
+
+sub merge {
+    my $c                = shift->openapi->valid_input or return;
+    my $ref_biblionumber = $c->param('biblio_id');
+    my $json             = decode_json( $c->req->body );
+    my $bn_merge         = $json->{'biblio_id_to_merge'};
+    my $framework        = $json->{'framework_to_use'};
+    my $rules            = $json->{'rules'};
+    my $override_rec     = $json->{'datarecord'};
+
+    if ( ( !defined $rules ) || ( $rules eq '' ) ) { $rules        = 'override'; }
+    if ( ( !defined $override_rec ) )              { $override_rec = ''; }
+    if ( ( !defined $framework ) )                 { $framework    = ''; }
+
+    my $biblio = Koha::Biblios->find($ref_biblionumber);
+    if ( not defined $biblio ) {
+        return $c->render(
+            status => 404,
+            json   => { error => sprintf( "[%s] biblio to merge into not found", $ref_biblionumber ) }
+        );
+    }
+    my $frombib = Koha::Biblios->find($bn_merge);
+    if ( not defined $frombib ) {
+        return $c->render(
+            status => 404,
+            json   => { error => sprintf( "[%s] from which to merge not found", $bn_merge ) }
+        );
+    }
+
+    if ( ( $rules eq 'override_ext' ) && ( $override_rec eq '' ) ) {
+        return $c->render(
+            status => 404,
+            json   => {
+                error =>
+                    "With the rule 'override_ext' you need to insert a bib record in marc-in-json format into 'record' field."
+            }
+        );
+    }
+
+    if ( ( $rules eq 'override' ) && ( $framework ne '' ) ) {
+        return $c->render(
+            status => 404,
+            json   => { error => "With the rule 'override' you can not use the field 'framework_to_use'." }
+        );
+    }
+
+    my $results;
+    eval {
+        if ( $rules eq 'override_ext' ) {
+            my $record = MARC::Record::MiJ->new_from_mij_structure($override_rec);
+            $record->encoding('UTF-8');
+            if ( $framework eq '' ) { $framework = $biblio->frameworkcode; }
+            my $chk = ModBiblio( $record, $ref_biblionumber, $framework );
+            if ( $chk != 1 ) { die "Error on ModBiblio"; }    # ModBiblio returns 1 if everything as gone well
+            my @biblio_ids_to_merge = ($bn_merge);
+            $results = $biblio->merge_with( \@biblio_ids_to_merge );
+        }
+        if ( $rules eq 'override' ) {
+            my @biblio_ids_to_merge = ($bn_merge);
+            $results = $biblio->merge_with( \@biblio_ids_to_merge );
+        }
+    };
+    if ($@) {
+        return $c->render( status => 400, json => { error => $@ } );
+    } else {
+        $c->respond_to(
+            mij => {
+                status => 200,
+                format => 'mij',
+                data   => $biblio->metadata->record->to_mij
+            }
+        );
+    }
 }
 
 1;

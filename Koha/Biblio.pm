@@ -22,11 +22,17 @@ use Modern::Perl;
 use List::MoreUtils qw( any );
 use URI;
 use URI::Escape qw( uri_escape_utf8 );
+use Try::Tiny;
 
 use C4::Koha qw( GetNormalizedISBN GetNormalizedUPC GetNormalizedOCLCNumber );
+use C4::Biblio qw( DelBiblio );
+use C4::Serials qw( CountSubscriptionFromBiblionumber );
+use C4::Reserves qw( MergeHolds );
+use C4::Acquisition qw( ModOrder GetOrdersByBiblionumber );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Exception;
 
 use base qw(Koha::Object);
 
@@ -1830,6 +1836,70 @@ sub opac_summary_html {
     $summary_html =~ s/{BIBLIONUMBER}/$biblionumber/g;
 
     return $summary_html;
+}
+
+=head3 merge_with
+
+    my $biblio = Koha::Biblios->find($biblionumber);
+    $biblio->merge_with(\@biblio_ids);
+
+    This subroutine merges a list of bibliographic records into the bibliographic record.
+    This function DOES NOT CHANGE the bibliographic metadata of the record. But it links all
+    items, holds, subscriptions, serials issues and article_requests to the record. After doing changes
+    bibliographic records listed are deleted
+
+=cut
+
+sub merge_with {
+    my ( $self, $biblio_ids ) = @_;
+
+    my $schema           = Koha::Database->new()->schema();
+    my $ref_biblionumber = $self->biblionumber;
+    my %results          = ( 'biblio_id' => $ref_biblionumber, 'merged_ids' => [] );
+
+    # Ensure the keeper isn't in the list of records to merge
+    my @biblio_ids_to_merge = grep { $_ ne $ref_biblionumber } @$biblio_ids;
+
+    try {
+        $schema->txn_do(
+            sub {
+                foreach my $bn_merge (@biblio_ids_to_merge) {
+                    my $from_biblio = Koha::Biblios->find($bn_merge);
+                    $from_biblio->items->move_to_biblio($self);
+                    $from_biblio->article_requests->update(
+                        { biblionumber => $ref_biblionumber },
+                        { no_triggers  => 1 }
+                    );
+
+                    for my $resultset_name (qw(Subscription Subscriptionhistory Serial Suggestion)) {
+                        $schema->resultset($resultset_name)->search( { biblionumber => $bn_merge } )
+                            ->update( { biblionumber => $ref_biblionumber } );
+                    }
+
+                    # TODO should this be ported to more modern DB usage (i.e. DBIx::Class)?
+                    my @allorders = GetOrdersByBiblionumber($bn_merge);
+                    foreach my $myorder (@allorders) {
+                        $myorder->{'biblionumber'} = $ref_biblionumber;
+                        ModOrder($myorder);
+
+                        # TODO : add error control (in ModOrder?)
+                    }
+
+                    # Move holds
+                    MergeHolds( $schema->storage->dbh, $ref_biblionumber, $bn_merge );
+                    my $error = DelBiblio($bn_merge);    #DelBiblio return undef unless an error occurs
+                    if ($error) {
+                        die $error;
+                    } else {
+                        push( @{ $results{merged_ids} }, $bn_merge );
+                    }
+                }
+            }
+        );
+    } catch {
+        Koha::Exception->throw($_);
+    };
+    return \%results;
 }
 
 =head2 Internal methods

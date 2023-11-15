@@ -1,0 +1,49 @@
+"/biblios/{biblio_id}/merge":
+  post:
+    x-mojo-to: Biblios#merge
+    operationId: mergeBiblios
+    tags:
+        - merge_biblios
+    summary: Merge Biblios
+    parameters:
+      - name: biblio_id
+        in: path
+        description: Bilblionumber
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        description: JSON Object with params and an optional marc record in MARC-in-JSON format
+        schema:
+          $ref: "../swagger.yaml#/definitions/merge_biblios"
+    consumes:
+      - application/json
+    produces:
+      - application/marc-in-json
+    responses:
+      '200':
+        description: The merge result as a biblio record
+      '404':
+        description: Biblio not found
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '500':
+        description: Internal server error
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "editcatalogue"
