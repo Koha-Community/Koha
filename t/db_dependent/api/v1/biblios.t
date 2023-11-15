@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -1911,3 +1911,252 @@ subtest 'update_item() tests' => sub {
 
   $schema->storage->txn_rollback;
 };
+
+subtest 'merge() tests' => sub {
+    plan tests => 12;
+    $schema->storage->txn_begin;
+
+    my $mij_rec = q|{
+      "fields": [
+        {
+          "001": "2504398"
+        },
+        {
+          "005": "20200421093816.0"
+        },
+        {
+          "008": "920610s1993    caub         s001 0 eng  "
+        },
+        {
+          "010": {
+            "ind1": " ",
+            "subfields": [
+              {
+                "a": "   92021731 "
+              }
+            ],
+            "ind2": " "
+          }
+        },
+        {
+          "020": {
+            "subfields": [
+              {
+                "a": "05200784462 (Test mij)"
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
+          }
+        },
+        {
+          "040": {
+            "subfields": [
+              {
+                "a": "DLC"
+              },
+              {
+                "c": "DLC"
+              },
+              {
+                "d": "DLC"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
+          }
+        },
+        {
+          "041": {
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "enggrc"
+              }
+            ],
+            "ind1": "0"
+          }
+        },
+        {
+          "082": {
+            "subfields": [
+              {
+                "a": "480"
+              },
+              {
+                "2": "20"
+              }
+            ],
+            "ind2": "0",
+            "ind1": "0"
+          }
+        },
+        {
+          "100": {
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "Mastronarde, Donald J."
+              },
+              {
+                "9": "389"
+              }
+            ],
+            "ind1": "1"
+          }
+        },
+        {
+          "245": {
+            "ind1": "1",
+            "subfields": [
+              {
+                "a": "Introduction to Attic Greek  (Using mij) /"
+              },
+              {
+                "c": "Donald J. Mastronarde."
+              }
+            ],
+            "ind2": "0"
+          }
+        },
+        {
+          "260": {
+            "subfields": [
+              {
+                "a": "Berkeley :"
+              },
+              {
+                "b": "University of California Press,"
+              },
+              {
+                "c": "c1993."
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
+          }
+        },
+        {
+          "300": {
+            "ind1": " ",
+            "subfields": [
+              {
+                "a": "ix, 425 p. :"
+              },
+              {
+                "b": "maps ;"
+              },
+              {
+                "c": "26 cm."
+              }
+            ],
+            "ind2": " "
+          }
+        },
+        {
+          "650": {
+            "subfields": [
+              {
+                "a": "Attic Greek dialect"
+              },
+              {
+                "9": "7"
+              }
+            ],
+            "ind2": "0",
+            "ind1": " "
+          }
+        },
+        {
+          "942": {
+            "subfields": [
+              {
+                "2": "ddc"
+              },
+              {
+                "c": "BK"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
+          }
+        },
+        {
+          "955": {
+            "subfields": [
+              {
+                "a": "pc05 to ea00 06-11-92; ea04 to SCD 06-11-92; fd11 06-11-92 (PA522.M...); fr21 06-12-92; fs62 06-15-92; CIP ver. pv07 11-12-93"
+              }
+            ],
+            "ind2": " ",
+            "ind1": " "
+          }
+        },
+        {
+          "999": {
+            "subfields": [
+              {
+                "c": "3"
+              },
+              {
+                "d": "3"
+              }
+            ],
+            "ind1": " ",
+            "ind2": " "
+          }
+        }
+      ],
+      "leader": "01102pam a2200289 a 8500"
+    }|;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $title_1     = 'Title number 1';
+    my $title_2     = 'Title number 2';
+    my $biblio1     = $builder->build_sample_biblio( { title => $title_1 } );
+    my $biblio2     = $builder->build_sample_biblio( { title => $title_2 } );
+    my $biblio_id1  = $biblio1->biblionumber;
+    my $biblio_id2  = $biblio2->biblionumber;
+    my $json_input1 = '{ "biblio_id_to_merge": "' . $biblio_id2 . '" }';
+
+    $t->post_ok( "//$userid:$password@/api/v1/biblios/$biblio_id1/merge" =>
+            { 'Content-Type' => 'application/json', 'Accept' => 'application/marc-in-json' } => $json_input1 )
+        ->status_is( 403, 'Not enough permissions to merge two bib records' );
+
+    # Add permissions
+    $patron->flags(516)->store;
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/biblios/$biblio_id1/merge" => { 'Content-Type' => 'application/weird+format' } =>
+            $json_input1 )->status_is( 400, 'Not correct headers' );
+
+    my $result =
+        $t->post_ok( "//$userid:$password@/api/v1/biblios/$biblio_id1/merge" =>
+            { 'Content-Type' => 'application/json', 'Accept' => 'application/marc-in-json' } => $json_input1 )
+        ->status_is(200)->tx->res->body;
+    like( $result, qr/$title_1/, "Merged record has the correct title" );
+    unlike( $result, qr/$title_2/, "Merged record doesn't have the wrong title" );
+
+    my $biblio3     = $builder->build_sample_biblio( { title => 'Title number 3' } );
+    my $biblio_id3  = $biblio3->biblionumber;
+    my $json_input2 = '{ "biblio_id_to_merge": "' . $biblio_id3 . '",
+                         "rules": "override_ext",
+                         "datarecord": ' . $mij_rec . ' }';
+    $result =
+        $t->post_ok( "//$userid:$password@/api/v1/biblios/$biblio_id1/merge" =>
+            { 'Content-Type' => 'application/json', 'Accept' => 'application/marc-in-json' } => $json_input2 )
+        ->status_is(200)->tx->res->body;
+    like( $result, qr/Using mij/, "Update with Marc-in-json record" );
+    unlike( $result, qr/$title_1/, "Change all record with dat in the 'datarecord' field" );
+
+    $schema->storage->txn_rollback;
+    }

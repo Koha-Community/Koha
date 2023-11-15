@@ -86,32 +86,11 @@ if ($merge) {
     # Rewriting the leader
     my $biblio = Koha::Biblios->find($ref_biblionumber);
     $record->leader($biblio->metadata->record->leader());
-
+    #Take new framework code
     my $frameworkcode = $input->param('frameworkcode');
 
     # Modifying the reference record
     ModBiblio($record, $ref_biblionumber, $frameworkcode);
-
-    # Moving items and article requests from the other record to the reference record
-    $biblio = $biblio->get_from_storage;
-    foreach my $biblionumber (@biblionumbers) {
-        my $from_biblio = Koha::Biblios->find($biblionumber);
-        $from_biblio->items->move_to_biblio($biblio);
-        $from_biblio->article_requests->update({ biblionumber => $ref_biblionumber }, { no_triggers => 1 });
-    }
-
-    my $sth_subscription = $dbh->prepare("
-        UPDATE subscription SET biblionumber = ? WHERE biblionumber = ?
-    ");
-    my $sth_subscriptionhistory = $dbh->prepare("
-        UPDATE subscriptionhistory SET biblionumber = ? WHERE biblionumber = ?
-    ");
-    my $sth_serial = $dbh->prepare("
-        UPDATE serial SET biblionumber = ? WHERE biblionumber = ?
-    ");
-    my $sth_suggestions = $dbh->prepare("
-        UPDATE suggestions SET biblionumber = ? WHERE biblionumber = ?
-    ");
 
     my $report_header = {};
     foreach my $biblionumber ($ref_biblionumber, @biblionumbers) {
@@ -148,42 +127,20 @@ if ($merge) {
         push @report_records, \%report_record;
     }
 
-    foreach my $biblionumber (@biblionumbers) {
-        # Moving subscriptions from the other record to the reference record
-        my $subcount = CountSubscriptionFromBiblionumber($biblionumber);
-        if ($subcount > 0) {
-            $sth_subscription->execute($ref_biblionumber, $biblionumber);
-            $sth_subscriptionhistory->execute($ref_biblionumber, $biblionumber);
-        }
-
-    # Moving serials
-    $sth_serial->execute($ref_biblionumber, $biblionumber);
-
-    # Moving suggestions
-    $sth_suggestions->execute($ref_biblionumber, $biblionumber);
-
-    # Moving orders (orders linked to items of frombiblio have already been moved by move_to_biblio)
-    my @allorders = GetOrdersByBiblionumber($biblionumber);
-    foreach my $myorder (@allorders) {
-        $myorder->{'biblionumber'} = $ref_biblionumber;
-        ModOrder ($myorder);
-    # TODO : add error control (in ModOrder?)
+    my $rmerge;
+    eval {
+        my $newbiblio = Koha::Biblios->find($ref_biblionumber);
+        $rmerge = $newbiblio->merge_with( \@biblionumbers );
+    };
+    if ($@) {
+        push @errors, $@;
     }
-
-    # Deleting the other records
-    if (scalar(@errors) == 0) {
-        # Move holds
-        MergeHolds($dbh, $ref_biblionumber, $biblionumber);
-        my $error = DelBiblio($biblionumber);
-        push @errors, $error if ($error);
-    }
-}
 
     # Parameters
     $template->param(
-        result => 1,
-        report_records => \@report_records,
-        report_header => $report_header,
+        result           => 1,
+        report_records   => \@report_records,
+        report_header    => $report_header,
         ref_biblionumber => scalar $input->param('ref_biblionumber')
     );
 

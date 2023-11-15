@@ -118,6 +118,8 @@ definitions:
     $ref: ./definitions/job.yaml
   library:
     $ref: ./definitions/library.yaml
+  merge_biblios:
+    $ref: ./definitions/merge_biblios.yaml
   order:
     $ref: ./definitions/order.yaml
   patron:
@@ -243,6 +245,8 @@ paths:
     $ref: "./paths/biblios_item_groups.yaml#/~1biblios~1{biblio_id}~1item_groups~1{item_group_id}~1items"
   "/biblios/{biblio_id}/item_groups/{item_group_id}/items/{item_id}":
     $ref: "./paths/biblios_item_groups.yaml#/~1biblios~1{biblio_id}~1item_groups~1{item_group_id}~1items~1{item_id}"
+  "/biblios/{biblio_id}/merge":
+    $ref: "./paths/biblios_merge.yaml#/~1biblios~1{biblio_id}~1merge"
   "/cash_registers/{cash_register_id}/cashups":
     $ref: "./paths/cash_registers.yaml#/~1cash_registers~1{cash_register_id}~1cashups"
   "/cashups/{cashup_id}":
