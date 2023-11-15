@@ -86,13 +86,13 @@
                 "columns": [
                     {
                         "data": "type",
-                        "title": "Type",
+                        "title": _("Type"),
                         "searchable": true,
                         "orderable": true
                     },
                     {
                         "data": "transfer_date",
-                        "title": "Transferred",
+                        "title": _("Transferred"),
                         "searchable": true,
                         "orderable": true,
                         "render": function(data, type, row, meta) {
@@ -101,13 +101,13 @@
                     },
                     {
                         "data": "status",
-                        "title": "Status",
+                        "title": _("Status"),
                         "searchable": true,
                         "orderable": true
                     },
                     {
                         "data": "vendor.name",
-                        "title": "Vendor",
+                        "title": _("Vendor"),
                         "searchable": true,
                         "orderable": true,
                         "render": function(data, type, row, meta) {
@@ -121,37 +121,37 @@
                         }
                     },
                     {
-                        "title": "Details",
+                        "title": _("Details"),
                         "searchable": false,
                         "orderable": false,
                         "render": function(data, type, row, meta) {
                             let rendered = '';
                             if ( row.type == 'QUOTE' || row.type == 'ORDERS' ) {
                                 if ( row.basket_id ) {
-                                    rendered = '<a href="/cgi-bin/koha/acqui/basket.pl?basketno='+row.basket_id+'">Basket: '+row.basket_id+'</a>';
+                                    rendered = '<a href="/cgi-bin/koha/acqui/basket.pl?basketno='+row.basked_id+'">'+_("Basket")+': '+row.basket_id+'</a>';
                                 }
                             } else {
-                                rendered = '<a href="/cgi-bin/koha/acqui/invoices.pl?message_id='+row.id+'&op=do_search">Invoices</a>';
+                                rendered = '<a href="/cgi-bin/koha/acqui/invoices.pl?message_id='+row.id+'&op=do_search">'+_("Invoices")+'</a>';
                             }
                             return rendered;
                         }
                     },
                     {
                         "data": "filename",
-                        "title": "Filename",
+                        "title": _("Filename"),
                         "searchable": true,
                         "orderable": true
                     },
                     {
-                        "title": "Actions",
+                        "title": _("Actions"),
                         "className": "actions",
                         "searchable": false,
                         "orderable": false,
                         "render": function(data, type, row, meta) {
-                            var result = '<a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id='+encodeURIComponent(row.id)+'"><i class="fa fa-search"></i> View message</a> ';
-                            result += '<a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-trash-can"></i> Delete</a> ';
+                            var result = '<a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id='+encodeURIComponent(row.id)+'"><i class="fa fa-search"></i> '+_("View message")+'</a> ';
+                            result += '<a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-trash-can"></i> '+_("Delete")+'</a> ';
                             if ( row.status == 'new' ) {
-                                result += '<a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-cog"></i> Import</a> ';
+                                result += '<a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-cog"></i> '+_("Import")+'</a> ';
                             }
                             return result;
                         }
