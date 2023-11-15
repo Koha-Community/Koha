@@ -692,21 +692,25 @@ describe("Data providers action buttons", () => {
             .click();
         cy.get(".modal_centered p").contains(dataProvider.name);
 
-        cy.intercept("GET", "/api/v1/erm/usage_data_providers/1/run*", {
-            statusCode: 200,
-            body: {
-                jobs: [
-                    {
-                        report_type: "TR_J1",
-                        job_id: 1,
-                    },
-                ],
-            },
-            headers: {
-                "X-Base-Total-Count": "1",
-                "X-Total-Count": "1",
-            },
-        });
+        cy.intercept(
+            "POST",
+            "/api/v1/erm/usage_data_providers/1/process_SUSHI_response*",
+            {
+                statusCode: 200,
+                body: {
+                    jobs: [
+                        {
+                            report_type: "TR_J1",
+                            job_id: 1,
+                        },
+                    ],
+                },
+                headers: {
+                    "X-Base-Total-Count": "1",
+                    "X-Total-Count": "1",
+                },
+            }
+        );
         cy.get("#confirmation_input_begin_date+input").click();
         cy.get(".flatpickr-current-month select")
             .invoke("val")
