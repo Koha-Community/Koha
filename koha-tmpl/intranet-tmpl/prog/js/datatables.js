@@ -120,56 +120,9 @@ $.fn.dataTableExt.oApi.fnGetColumnData = function ( oSettings, iColumn, bUnique,
 // These keys must not launch filtering
 var blacklist_keys = new Array(0, 16, 17, 18, 37, 38, 39, 40);
 
-// Set a filtering delay for global search field
-jQuery.fn.dataTableExt.oApi.fnSetFilteringDelay = function ( oSettings, iDelay ) {
-    /*
-     * Inputs:      object:oSettings - dataTables settings object - automatically given
-     *              integer:iDelay - delay in milliseconds
-     * Usage:       $('#example').dataTable().fnSetFilteringDelay(250);
-     * Author:      Zygimantas Berziunas (www.zygimantas.com) and Allan Jardine
-     * License:     GPL v2 or BSD 3 point style
-     * Contact:     zygimantas.berziunas /AT\ hotmail.com
-     */
-    var
-        _that = this,
-        iDelay = (typeof iDelay == 'undefined') ? 250 : iDelay;
-
-    this.each( function ( i ) {
-        $.fn.dataTableExt.iApiIndex = i;
-        var
-            $this = this,
-            oTimerId = null,
-            sPreviousSearch = null,
-            anControl = $( 'input', _that.fnSettings().aanFeatures.f );
-
-        anControl.unbind( 'keyup.DT' ).bind( 'keyup.DT', function(event) {
-            var $$this = $this;
-            if (blacklist_keys.indexOf(event.keyCode) != -1) {
-                return this;
-            }else if ( event.keyCode == '13' ) {
-                $.fn.dataTableExt.iApiIndex = i;
-                _that.fnFilter( $(this).val() );
-            } else {
-                if (sPreviousSearch === null || sPreviousSearch != anControl.val()) {
-                    window.clearTimeout(oTimerId);
-                    sPreviousSearch = anControl.val();
-                    oTimerId = window.setTimeout(function() {
-                        $.fn.dataTableExt.iApiIndex = i;
-                        _that.fnFilter( anControl.val() );
-                    }, iDelay);
-                }
-            }
-        });
-
-        return this;
-    } );
-    return this;
-}
-
 // Add a filtering delay on general search and on all input (with a class 'filter')
 jQuery.fn.dataTableExt.oApi.fnAddFilters = function ( oSettings, sClass, iDelay ) {
     var table = this;
-    this.fnSetFilteringDelay(iDelay);
     var filterTimerId = null;
     $(table).find("input."+sClass).keyup(function(event) {
       if (blacklist_keys.indexOf(event.keyCode) != -1) {
