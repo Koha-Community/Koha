@@ -1625,11 +1625,13 @@ legend:hover {
                                         <input type="hidden" name="setting_messaging_prefs" value="1" />
                                         [% INCLUDE 'messaging-preference-form.inc' %]
                                         [% IF ( SMSSendDriver ) %]
-                                            <p>
-                                                <label for="SMSnumber">SMS number:</label>
-                                                <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" />
-                                                <span class="hint sms_number_help">Please enter numbers only. Prefix the number with + or 00 if including the country code.</span>
-                                            </p>
+                                            [% IF !nosmsalertnumber %]
+                                                <p>
+                                                    <label for="SMSnumber">SMS number:</label>
+                                                    <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" />
+                                                    <span class="hint sms_number_help">Please enter numbers only. Prefix the number with + or 00 if including the country code.</span>
+                                                </p>
+                                            [% END %]
                                             [% IF SMSSendDriver == 'Email' && !nosms_provider_id %]
                                                 <p>
                                                     <label for="sms_provider_id">SMS provider:</label>
