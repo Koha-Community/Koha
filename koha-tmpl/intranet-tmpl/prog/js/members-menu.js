@@ -87,7 +87,7 @@ $(document).ready(function(){
         $("#patronImageEdit").on("hidden.bs.modal", function(){
             /* Stop using the user's camera when modal is closed */
             let viewfinder = document.getElementById("viewfinder");
-            if( viewfinder.srcObject ){
+            if( viewfinder && viewfinder.srcObject ){
                 viewfinder.srcObject.getTracks().forEach( track => {
                     if( track.readyState == 'live' && track.kind === 'video'){
                         track.stop();

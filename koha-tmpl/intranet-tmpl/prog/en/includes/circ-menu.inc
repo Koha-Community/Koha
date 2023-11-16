@@ -200,6 +200,7 @@
                 <h4 class="modal-title" id="patronImageEditLabel">Patron photo</h4>
             </div>
             <div class="modal-body">
+                [% IF ( patron.cardnumber ) %]
                 <div id="upload-patron-image" class="patroninfo-section">
                     <h5>Upload patron photo</h5>
                     <form method="post" id="picture-upload" action="/cgi-bin/koha/tools/picture-upload.pl"
@@ -277,6 +278,11 @@
                         <span id="camera-error-message"></span>
                     </div>
                 </div>
+                [% ELSE %]
+                    <div id="missing-cardnumber-picture-upload">
+                        <p>The patron must have a cardnumber before a patron photo can be uploaded.</p>
+                    </div>
+                [% END %]
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
