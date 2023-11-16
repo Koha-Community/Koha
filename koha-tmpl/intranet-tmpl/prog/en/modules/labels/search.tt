@@ -12,103 +12,143 @@
 <body id="labels_search" class="tools labels">
     <div class="main container-fluid">
 
-<h1>Search for items
-[% IF ( batch_id ) %]
-to add to Batch [% batch_id | html %]
-[% END %]
-</h1>
+        <h1>Search for items
+            [% IF ( batch_id ) %]
+                to add to Batch [% batch_id | html %]
+            [% END %]
+        </h1>
 
-<form name="f" method="post" action="/cgi-bin/koha/labels/label-item-search.pl">
-	<input type="hidden" name="op" value="do_search" />
-	<input type="hidden" name="batch_id" value="[% batch_id | html %]" />
-	<input type="hidden" name="type" value="[% type | html %]" />
+        <form name="f" method="post" action="/cgi-bin/koha/labels/label-item-search.pl">
+            <input type="hidden" name="op" value="do_search" />
+            <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
+            <input type="hidden" name="type" value="[% type | html %]" />
 
-	<fieldset class="rows">
-<ol><li>
-<select name="idx" >   <!-- FIXME: script does keyword search regardless -->
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <select name="idx" >   <!-- FIXME: script does keyword search regardless -->
+                            [% IF idx == 'kw' %]
+                                <option value="kw" selected="selected">Keyword</option>
+                            [% ELSE %]
+                                <option value="kw">Keyword</option>
+                            [% END %]
 
-[% IF idx == 'kw' %]<option value="kw" selected="selected">Keyword</option>
-[% ELSE %]<option value="kw">Keyword</option>[% END %]
+                            [% IF idx == 'au'  %]
+                                <option value="au" selected="selected">Author</option>
+                            [% ELSE %]
+                                <option value="au">Author</option>
+                            [% END %]
 
-[% IF idx == 'au'  %]<option value="au" selected="selected">Author</option>
-[% ELSE %]<option value="au">Author</option>[% END %]
+                            [% IF idx == 'yr'  %]
+                                <option value="yr" selected="selected">Publication date</option>
+                            [% ELSE %]
+                                <option value="yr">Publication date</option>
+                            [% END %]
 
-[% IF idx == 'yr'  %]<option value="yr" selected="selected">Publication date</option>
-[% ELSE %]<option value="yr">Publication date</option>[% END %]
+                            [% IF idx == 'sn' %]
+                                <option value="ident" selected="selected">Standard number</option>
+                            [% ELSE %]
+                                <option value="sn">Standard number</option>
+                            [% END %]
 
-[% IF idx == 'sn' %]<option value="ident" selected="selected">Standard number</option>
-[% ELSE %]<option value="sn">Standard number</option>[% END %]
+                            [% IF idx == 'nb' %]
+                                <option value="nb" selected="selected">ISBN</option>
+                            [% ELSE %]
+                                <option value="nb">ISBN</option>
+                            [% END %]
 
-[% IF idx == 'nb' %]<option value="nb" selected="selected">ISBN</option>
-[% ELSE %]<option value="nb">ISBN</option>[% END %]
+                            [% IF idx == 'ns' %]
+                                <option value="ns" selected="selected">ISSN</option>
+                            [% ELSE %]
+                                <option value="ns">ISSN</option>
+                            [% END %]
 
-[% IF idx == 'ns' %]<option value="ns" selected="selected">ISSN</option>
-[% ELSE %]<option value="ns">ISSN</option>[% END %]
+                            [% IF idx == 'lcn,phr' %]
+                                <option value="lcn,phr" selected="selected">Call number</option>
+                            [% ELSE %]
+                                <option value="lcn,phr">Call number</option>
+                            [% END %]
 
-[% IF idx == 'lcn,phr' %]<option value="lcn,phr" selected="selected">Call number</option>
-[% ELSE %]<option value="lcn,phr">Call number</option>[% END %]
+                            [% IF idx == 'su' %]
+                                <option value="su" selected="selected">Subject</option>
+                            [% ELSE %]
+                                <option value="su">Subject</option>
+                            [% END %]
 
-[% IF idx == 'su' %]<option value="su" selected="selected">Subject</option>
-[% ELSE %]<option value="su">Subject</option>[% END %]
+                            [% IF idx == 'ti' %]
+                                <option value="ti" selected="selected">Title</option>
+                            [% ELSE %]
+                                <option value="ti">Title</option>
+                            [% END %]
 
-[% IF idx == 'ti' %]
-   <option value="ti" selected="selected">Title</option>
-[% ELSE %]
-   <option value="ti">Title</option>[% END %]
+                            [% IF idx == 'ti,phr' %]
+                                <option value="ti,phr" selected="selected">Title phrase</option>
+                            [% ELSE %]
+                                <option value="ti,phr">Title phrase</option>
+                            [% END %]
 
-[% IF idx == 'ti,phr' %]<option value="ti,phr" selected="selected">Title phrase</option>
-[% ELSE %]<option value="ti,phr">Title phrase</option>[% END %]
+                            [% IF idx == 'se' %]
+                                <option value="se" selected="selected">Series title</option>
+                            [% ELSE %]
+                                <option value="se">Series title</option>
+                            [% END %]
 
-[% IF idx == 'se' %]<option value="se" selected="selected">Series title</option>
-[% ELSE %]<option value="se">Series title</option>[% END %]
+                            [% IF idx == 'bc' or not idx %]
+                                <option value="bc" selected="selected">Barcode</option>
+                            [% ELSE %]
+                                <option value="bc">Barcode</option>
+                            [% END %]
 
-[% IF idx == 'bc' or not idx %]<option value="bc" selected="selected">Barcode</option>
-[% ELSE %]<option value="bc">Barcode</option>[% END %]
+                            [% IF idx == 'acqdate' %]
+                                <option value="acqdate" selected="selected">Acquisition date</option>
+                            [% ELSE %]
+                                <option value="acqdate">Acquisition date</option>
+                            [% END %]
+                        </select>
+                        <input type="text" size="30" id="ccl_textbox" name="ccl_textbox" class="focus" title="Enter search terms" value=""/>
+                    </li>
+                </ol>
+            </fieldset>
 
-[% IF idx == 'acqdate' %]<option value="acqdate" selected="selected">Acquisition date</option>
-[% ELSE %]<option value="acqdate">Acquisition date</option>[% END %]
-</select>
+            [% IF ( sort_by_loop ) %]
+                <fieldset>
+                    <legend>Sort by: </legend>
+                    <p>
+                        <select id="sort_by" name="sort_by">
+                            <option value="">Field-weighted, relevance ranked</option>
+                            [% FOREACH sort_by_loo IN sort_by_loop %]
+                                [% IF ( sort_by_loo.selected ) %]
+                                    <option value="[% sort_by_loo.value | html %]" selected="selected">[% sort_by_loo.label | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% sort_by_loo.value | html %]">[% sort_by_loo.label | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </p>
+                </fieldset>
+            [% END %]
 
-   <input type="text" size="30" id="ccl_textbox" name="ccl_textbox" class="focus" title="Enter search terms" value=""/>
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="from">Added on or after date: </label>
+                        <input type="text" size="10" id="from" name="datefrom" class="flatpickr" data-date_to="to" value="" />
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
+                    <li>
+                        <label for="to">Added on or before date: </label>
+                        <input type="text" size="10" id="to" name="dateto" class="flatpickr" value="" />
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                    </li>
+                </ol>
+            </fieldset>
 
-</li>
-</ol>
-</fieldset>
-
-[% IF ( sort_by_loop ) %]
-<fieldset><legend>Sort by: </legend>
-    <p><select id="sort_by" name="sort_by">
-        <option value="">Field-weighted, relevance ranked</option>
-        [% FOREACH sort_by_loo IN sort_by_loop %]
-
-[% IF ( sort_by_loo.selected ) %]<option value="[% sort_by_loo.value | html %]" selected="selected">[% sort_by_loo.label | html %]</option>[% ELSE %]<option value="[% sort_by_loo.value | html %]">[% sort_by_loo.label | html %]</option>[% END %]
-
-        [% END %]
-    </select>
-        </p>
-</fieldset>[% END %]
-
-
-
-
-<fieldset class="rows">
-<ol>
-    <li>
-        <label for="from">Added on or after date: </label>
-        <input type="text" size="10" id="from" name="datefrom" class="flatpickr" data-date_to="to" value="" />
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-    <li>
-        <label for="to">Added on or before date: </label>
-        <input type="text" size="10" id="to" name="dateto" class="flatpickr" value="" />
-        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-    </li>
-</ol>
-</fieldset>
-
-<fieldset class="action"><input type="submit" class="btn btn-primary" value="Search" /> <a class="cancel close" href="#">Cancel</a></fieldset>
-</form>
-</div>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Search" />
+                <a class="cancel close" href="#">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
