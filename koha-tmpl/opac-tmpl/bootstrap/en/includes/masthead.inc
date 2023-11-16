@@ -470,8 +470,8 @@
                     <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
                     [% IF ( JSConsents.all('opacConsent').size ) %]
                         <button type="button" class="btn btn-primary consentAcceptEssential">Accept only essential cookies</button>
-                        <button type="button" class="btn btn-info" id="consentMoreInfo" aria-label="Click to view more information about your cookie consents">More information</button>
                     [% END %]
+                    <button type="button" class="btn btn-info" id="consentMoreInfo" aria-label="Click to view more information about your cookie consents">More information</button>
                 </div>
             </div> <!-- /#cookieConsentBar -->
         <!-- Cookie consent modal -->
