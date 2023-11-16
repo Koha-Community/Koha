@@ -69,6 +69,8 @@
             var prefilters = '[% prefilters | html %]';
             // Set column settings
             var table_settings = [% TablesSettings.GetTableSettings( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) | $raw %];
+
+            var ill_table_actions = [% table_actions | $raw %];
         </script>
         [% INCLUDE 'ill-list-table-strings.inc' %]
         [% Asset.js("js/ill-list-table.js") | $raw %]
