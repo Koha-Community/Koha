@@ -455,8 +455,8 @@
                                     </div>
                                 [% END %]
 
-                                <div id="acqui_basket_content" class="page-section">
-                                    [% IF ( books_loop ) %]
+                                [% IF ( books_loop ) %]
+                                    <div id="acqui_basket_content" class="page-section">
                                         <h2>Orders</h2>
                                         <table id="orders">
                                             <thead>
@@ -728,9 +728,9 @@
                                                 [% END %]
                                             </tbody>
                                         </table> <!-- /#orders -->
-                                    [% END # / IF ( books_loop ) %]
-                                    [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>[% END %]
-                                </div> <!-- /#acqui_basket_content -->
+                                        [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>[% END %]
+                                    </div> <!-- /#acqui_basket_content -->
+                                [% END # / IF ( books_loop ) %]
 
                                 [% IF (cancelledorders_loop) %]
                                     <div id="cancelledorders" class="page-section">
