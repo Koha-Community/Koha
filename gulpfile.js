@@ -412,6 +412,11 @@ function getLanguages () {
 exports.build = build;
 exports.css = css;
 
+if (args['_'][0].match("po:") && !fs.existsSync('misc/translator/po')) {
+    console.log("misc/translator/po does not exist. You should clone koha-l10n there. See https://wiki.koha-community.org/wiki/Translation_files for more details.");
+    process.exit(1);
+}
+
 exports['po:create'] = parallel(...poTypes.map(type => poTasks[type].create));
 exports['po:update'] = parallel(...poTypes.map(type => poTasks[type].update));
 exports['po:extract'] = parallel(...poTypes.map(type => poTasks[type].extract));
