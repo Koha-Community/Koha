@@ -183,7 +183,7 @@
         });
 
         // "More information" handler
-        $('#consentMoreInfo, #cookieConsentButton, #viewCookieConsents').on(
+        $('#consentMoreInfo, #cookieConsentFooter, #cookieConsentButton, #viewCookieConsents').on(
             'click',
             function (e) {
                 e.preventDefault();

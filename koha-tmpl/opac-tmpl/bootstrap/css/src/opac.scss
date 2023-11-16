@@ -431,6 +431,24 @@ th {
     }
 }
 
+#footernav {
+    li {
+        display: inline-block;
+        padding-right: 5px;
+        white-space: nowrap;
+
+        &::after {
+            content: " | ";
+        }
+
+        &:last-child {
+            &::after {
+                content: "";
+            }
+        }
+    }
+}
+
 #news {
     margin: .5em 0;
     padding: 1em;
