@@ -467,10 +467,10 @@
                     [% PROCESS koha_news_block news => CookieConsentBar %]
                 [% END %]
                 <div id="consentButtons">
-                    <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
                     [% IF ( JSConsents.all('opacConsent').size ) %]
-                        <button type="button" class="btn btn-primary consentAcceptEssential">Accept only essential cookies</button>
+                        <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
                     [% END %]
+                    <button type="button" class="btn btn-primary consentAcceptEssential">Accept essential cookies</button>
                     <button type="button" class="btn btn-info" id="consentMoreInfo" aria-label="Click to view more information about your cookie consents">More information</button>
                 </div>
             </div> <!-- /#cookieConsentBar -->
