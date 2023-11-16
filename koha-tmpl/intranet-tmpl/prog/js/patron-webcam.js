@@ -43,6 +43,11 @@ function startup() {
     camera = document.getElementById("camera");
     uploadfiletext = document.getElementById("uploadfiletext");
 
+    if ( ! video ){
+        //If there is no video element, don't try to start up camera
+        return;
+    }
+
     try {
         navigator.mediaDevices.getUserMedia({
             video: true,
