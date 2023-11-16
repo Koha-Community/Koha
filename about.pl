@@ -46,6 +46,7 @@ use Koha::BackgroundJob;
 use Koha::BiblioFrameworks;
 use Koha::Biblios;
 use Koha::Email;
+use Koha::I18N;
 use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Caches;
@@ -282,6 +283,10 @@ if ( ! C4::Context->config('tmp_path') ) {
 # Test Zebra facets configuration
 if ( !defined C4::Context->config('use_zebra_facets') ) {
     push @xml_config_warnings, { error => 'use_zebra_facets_entry_missing' };
+}
+
+unless ( Koha::I18N->_base_directory ) {
+    $template->param( warnI18nMissing => 1 );
 }
 
 # ILL module checks
