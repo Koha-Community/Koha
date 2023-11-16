@@ -20,11 +20,13 @@ use Modern::Perl;
 use Test::More tests => 2;
 use Test::MockModule;
 use t::lib::Mocks;
+use Encode       qw( encode );
+use MIME::Base64 qw( encode_base64 );
 
 use_ok('Koha::SearchEngine::Elasticsearch::Search');
 
 subtest 'search_auth_compat' => sub {
-    plan tests => 4;
+    plan tests => 7;
 
     t::lib::Mocks::mock_preference( 'QueryRegexEscapeOptions', 'dont_escape' );
     t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
@@ -65,6 +67,10 @@ subtest 'search_auth_compat' => sub {
             $marc_record->append_fields(
                 MARC::Field->new( '001', 'Wrong001Number' ),
             );
+            $marc_record->append_fields(
+                MARC::Field->new( '008', '100803n||a| nnaban          |a aaa    |d' ),
+            );
+            my $marc_data = encode_base64( encode( 'UTF-8', $marc_record->as_usmarc() ) );
             return {
                 hits => {
                     hits => [
@@ -72,7 +78,7 @@ subtest 'search_auth_compat' => sub {
                             '_id'     => 8675309,
                             '_source' => {
                                 'local-number' => ['Wrong001Number'],
-                                'marc_data'    => $marc_record,
+                                'marc_data'    => $marc_data,
                                 'marc_format'  => 'base64ISO2709',
                             },
                         }
@@ -82,10 +88,17 @@ subtest 'search_auth_compat' => sub {
         }
     );
 
+    t::lib::Mocks::mock_preference( 'ShowHeadingUse', 1 );
     my ( $results, undef ) = $search->search_auth_compat('faked');
 
     is( @$results[0]->{authid}, '8675309', 'We get the expected record _id and not the 001' );
 
+    is( @$results[0]->{main}, 1, 'Valid main heading with ShowHeadingUse' );
+    is(
+        @$results[0]->{subject},
+        undef, 'Valid main heading with ShowHeadingUse'
+    );
+    is( @$results[0]->{series}, 1, 'Valid main heading with ShowHeadingUse' );
 };
 
 1;
