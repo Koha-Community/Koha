@@ -194,7 +194,7 @@ sub _base_directory {
     my $dir = first { -d } @dirs;
 
     unless ($dir) {
-        die "The PO directory has not been found. There is a problem in your Koha installation.";
+        warn "The PO directory has not been found. There is a problem in your Koha installation.";
     }
 
     return $dir;
