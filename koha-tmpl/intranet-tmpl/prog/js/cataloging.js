@@ -326,6 +326,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
 
     $(clone).find("ul.sortable_subfield").each((i, e) => {
         Sortable.create(e, {
+            handle: '.handle',
+            direction: 'vertical',
             animation: 150,
         });
     });
