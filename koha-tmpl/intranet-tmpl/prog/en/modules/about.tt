@@ -273,7 +273,7 @@
                         [% SET warnMissingCompiledFiles = 1 %]
                     [% END %]
                     [% WRAPPER tab_panel tabname= "sysinfo" %]
-                        [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnPrefPatronSelfRegistrationDefaultCategory || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing || warnMissingCompiledFiles || warnDbRowFormat %]
+                        [% IF weasyprint_missing || warnPrefRequireChoosingExistingAuthority || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnPrefOpacHiddenItems || warnPrefPatronSelfRegistrationDefaultCategory || invalid_yesno.count || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || warnI18nMissing || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker || elasticsearch_has_missing || warnMissingCompiledFiles || warnDbRowFormat %]
                             [% IF ( warnDbRowFormat ) %]
                                 <h2>Database row format incorrect</h2>
                                 <p>Database tables with a row format other than 'DYNAMIC': [% warnDbRowFormat | html %]</p>
@@ -516,6 +516,14 @@
                                             <td>
                                                 You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml file.
                                                 That will bring a performance boost to enable it.
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                    [% IF warnI18nMissing %]
+                                        <tr>
+                                            <th scope="row"><strong>Warning</strong> </th>
+                                            <td>
+                                                The PO directory has not been found. See <a href="https://wiki.koha-community.org/wiki/Translation_files">the dedicated wiki page</a> for more information.
                                             </td>
                                         </tr>
                                     [% END %]
