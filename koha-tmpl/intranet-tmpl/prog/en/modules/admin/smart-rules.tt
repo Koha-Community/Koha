@@ -279,17 +279,14 @@
                                                         <span>Undefined</span>
                                                     [% END %]
                                                 </td>
-                                                <td data-code="[% hardduedatecompare | html %]">
+                                                <td data-code="[% hardduedatecompare | html %]" data-duedate="[% hardduedate | $KohaDates %]">
                                                   [% IF ( hardduedate ) %]
                                                     [% IF ( hardduedatecompare == '-1' ) %]
                                                       before [% hardduedate | $KohaDates %]
-                                                      <input type="hidden" name="hardduedatecomparebackup" value="-1" />
                                                     [% ELSIF ( hardduedatecompare == '0' ) %]
                                                       on [% hardduedate | $KohaDates %]
-                                                      <input type="hidden" name="hardduedatecomparebackup" value="0" />
                                                     [% ELSIF ( hardduedatecompare == '1' ) %]
                                                       after [% hardduedate | $KohaDates %]
-                                                      <input type="hidden" name="hardduedatecomparebackup" value="1" />
                                                     [% END %]
                                                   [% ELSE %]
                                                     <span>None defined</span>
@@ -475,7 +472,7 @@
                                        <option value="0">Exactly on</option>
                                        <option value="1">After</option>
                                     </select>
-                                    <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate | html %]" class="flatpickr" />
+                                    <input type="text" size="10" id="hardduedate" name="hardduedate" class="flatpickr" />
                                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </td>
                                 <td><input type="text" name="decreaseloanholds" id="decreaseloanholds" size="2" /></td>
@@ -508,7 +505,7 @@
                                 </td>
                                 <td><input type="text" name="no_auto_renewal_after" id="no_auto_renewal_after" size="3" /></td>
                                 <td>
-                                    <input type="text" size="10" name="no_auto_renewal_after_hard_limit" id="no_auto_renewal_after_hard_limit" value="[% no_auto_renewal_after_hard_limit | html %]" class="flatpickr"/>
+                                    <input type="text" size="10" name="no_auto_renewal_after_hard_limit" id="no_auto_renewal_after_hard_limit" class="flatpickr"/>
                                     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </td>
                                 <td><input type="text" name="reservesallowed"  id="reservesallowed"  size="2" /></td>
@@ -1503,16 +1500,22 @@
                         var note = $(this).find("a[name='viewnote']").data("content");
                         $(current_column).find("input[type='text']").val(note);
                     } else if ( i == 9 ) {
-                        // specific processing for the Hard due date column
-                        var select_value = $(this).find("input[type='hidden'][name='hardduedatecomparebackup']").val();
-                        var input_value = '';
-                        if (typeof select_value === 'undefined'){
-                            select_value = '-1';
-                        }else {
-                            input_value = itm_text.split(' ')[1];
+                        // specific processing for Hard due date
+                        $(current_column).find("select").val(itm_code);
+                        var hardduedate = $(this).data('duedate');
+                        if (hardduedate) {
+                            var fp = document.querySelector("#hardduedate")._flatpickr;
+                            hardduedate = fp.parseDate( hardduedate, flatpickr_dateformat_string );
+                            if( hardduedate) fp.setDate( hardduedate, 1 );
                         }
-                        $(current_column).find("input[type='text']").val(input_value);
-                        $(current_column).find("select").val(select_value);
+                    } else if ( i == 26 ) {
+                        // specific processing for No automatic renewal after (hard limit)
+                        var renewdate = itm_text;
+                        if (renewdate) {
+                            var fp = document.querySelector("#no_auto_renewal_after_hard_limit")._flatpickr;
+                            renewdate = fp.parseDate( renewdate, flatpickr_dateformat_string );
+                            if( renewdate) fp.setDate( renewdate, 1 );
+                        }
                     } else if ( i == 16 ) {
                         // specific processing for cap_fine_to_replacement_price
                         var cap_fine_to_replacement_price = $(this).find("input[type='checkbox']");
