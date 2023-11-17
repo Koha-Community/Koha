@@ -13,29 +13,38 @@
 [% UNLESS count %]
     <h2>Your search returned no results.</h2>
 [% ELSIF ( supplier.length < 1 ) %]
-    <h2>Vendor search: [% count | html %] result(s) found</h2>
+    <h2>[% count | html %] result(s) found</h2>
 [% ELSE %]
-    <h2>Vendor search: [% count | html %] result(s) found for '[% supplier | html %]'</h2>
+    <h2>[% count | html %] result(s) found for '[% supplier | html %]'</h2>
 [% END %]
 
 [% IF ( loop_suppliers ) %]
-<table>
-	<tr>
-		<th>Vendor</th>
-		<th>Select</th>
-	</tr>
-	[% FOREACH loop_supplier IN loop_suppliers %]
+    <div class="page-section">
+    <table>
         <tr>
-            <td>[% loop_supplier.name | html %]</td>
-            <td><a class="btn btn-default btn-xs select_vendor" href="#" data-vendorid="[% loop_supplier.aqbooksellerid | html %]" data-vendorname="[% loop_supplier.name | html %]">Choose</a></td>
-		</tr>
-	[% END %]
-</table>
+            <th>Vendor</th>
+            <th>Select</th>
+        </tr>
+        [% FOREACH loop_supplier IN loop_suppliers %]
+            <tr>
+                <td>[% loop_supplier.name | html %]</td>
+                <td><a class="btn btn-default btn-xs select_vendor" href="#" data-vendorid="[% loop_supplier.aqbooksellerid | html %]" data-vendorname="[% loop_supplier.name | html %]">Choose</a></td>
+            </tr>
+        [% END %]
+    </table>
+    </div> <!-- /.page-section -->
 [% END %]
 
-    <p><a href="/cgi-bin/koha/serials/acqui-search.pl">Perform a new search</a></p>
-
-    <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Cancel</a></div>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid">
+        <fieldset class="action">
+            <form action="/cgi-bin/koha/serials/acqui-search.pl">
+                <button class="btn btn-default" type="submit"><i class="fa fa-arrow-left"></i> Perform a new search</button>
+            </form>
+            <button type="button" class="btn btn-default close_window">Close window</button>
+        </fieldset>
+    </div>
+</nav>
 
 [% MACRO jsinclude BLOCK %]
   <script>

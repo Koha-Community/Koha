@@ -9,9 +9,22 @@
 
 <h1>Serial subscription: search for vendor </h1>
     <form action="/cgi-bin/koha/serials/acqui-search-result.pl" method="get">
-        <label for="text">Vendor name: </label>
-        <input id="text" type="text"  size="25" name="supplier" autofocus="autofocus" />
-        <input type="submit" class="btn btn-primary" value="OK" />
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="text">Vendor name: </label>
+                    <input id="text" type="text"  size="25" name="supplier" autofocus="autofocus" />
+                </li>
+            </ol>
+        </fieldset>
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                    <button type="button" class="btn btn-default close_window">Close window</button>
+                </fieldset>
+            </div>
+        </nav>
     </form>
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

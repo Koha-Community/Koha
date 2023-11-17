@@ -51,6 +51,8 @@
 
 [% END %]
 
+
+
 <div class="pages">
     [% IF ( displayprev ) %]
         <a class="nav" href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromprev |url %]&amp;q=[% query |url %]">&lt;&lt; Previous</a>
@@ -60,9 +62,16 @@
     [% END %]
 </div>
 
-<p><a href="subscription-bib-search.pl">Search for another record</a></p>
-
-<div id="closewindow"><a class="btn btn-default btn-default close" href="#">Close</a></div>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid">
+        <fieldset class="action">
+            <form action="/cgi-bin/koha/serials/subscription-bib-search.pl">
+                <button class="btn btn-default" type="submit"><i class="fa fa-arrow-left"></i> Perform a new search</button>
+            </form>
+            <button type="button" class="btn btn-default close_window">Close window</button>
+        </fieldset>
+    </div>
+</nav>
 
 [% MACRO jsinclude BLOCK %]
     <script>

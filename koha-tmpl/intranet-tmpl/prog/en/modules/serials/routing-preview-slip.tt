@@ -11,7 +11,7 @@
 
 <body id="ser_routing-preview-slip" class="ser">
     <div class="container-fluid">
-
+        <div class="page-section">
 <table>
     <tr>
         <td colspan="2"><h3>[% libraryname | html %]</h3></td>
@@ -30,13 +30,21 @@
     </tr>
     [% END %]
 </table>
+        </div> <!-- /.page-section -->
 
 <div id="routingnotes">
     <p id="generalroutingnote">[% Koha.Preference('RoutingListNote') | $raw %]</p>
     <p id="routingnote">[% routingnotes | html %]</p>
 </div>
 
-    <div id="closewindow" class="noprint"><a class="btn btn-default btn-default" id="print_slip" href="#"><i class="fa fa-print"></i> Print</a> <a class="btn btn-default btn-default close" href="#">Close</a></div>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid">
+        <fieldset class="action">
+            <a class="btn btn-default btn-primary" id="print_slip" href="#"><i class="fa fa-print"></i> Print</a>
+            <button type="button" class="btn btn-default close_window">Close window</button>
+        </fieldset>
+    </div>
+</nav>
 
 [% MACRO jsinclude BLOCK %]
     <script>

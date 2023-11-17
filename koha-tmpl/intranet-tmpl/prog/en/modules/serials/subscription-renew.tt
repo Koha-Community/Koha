@@ -24,9 +24,13 @@
         <span>Subscriptions renewed.<span>
     [% END %]
 
-    <div id="closewindow">
-        <a class="btn btn-default btn-default close" href="#">Close</a>
-    </div>
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <button type="button" class="btn btn-default close_window">Close window</button>
+            </fieldset>
+        </div>
+    </nav>
 [% ELSIF op == 'multi_renew' %]
 
     <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
@@ -100,7 +104,14 @@
     [% END %]
 </ol>
 </fieldset>
-<fieldset class="action"><input type="submit" class="btn btn-primary" value="Submit" /></fieldset>
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Submit" />
+                <button type="button" class="btn btn-default close_window">Close window</button>
+            </fieldset>
+        </div>
+    </nav>
 </form>
 [% END %]
 
