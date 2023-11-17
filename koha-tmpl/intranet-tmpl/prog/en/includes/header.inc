@@ -206,7 +206,7 @@
                             <a class="toplinks" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% loggedinusernumber | html %]">My checkouts</a>
                         </li>
                     [% END %]
-                    [% IF Koha.Preference( 'CookieConsent' ) && JSConsents.all('staffConsent').size %]
+                    [% IF Koha.Preference( 'CookieConsent' ) %]
                         <li class="toplinks-myconsents">
                             <a id="viewCookieConsents" href="#" class="toplinks">My consents</a>
                         </li>
