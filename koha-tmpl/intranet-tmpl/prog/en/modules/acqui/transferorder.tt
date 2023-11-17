@@ -14,60 +14,36 @@
 <body id="acq_transferorder" class="acq">
     <div class="container-fluid">
         <h1>Transfer order</h1>
-        [% IF ( bookselleridfrom ) %]
-            <h3>Search for a vendor to transfer to</h3>
-              <div class="transferinfo">
-                <ul>
-                  <li><span class="label">From vendor: </span>[% booksellerfromname | html %]</li>
-                  <li><span class="label">Basket: </span>[% basketfromname | html %]</li>
-                  <li><span class="label">[% tp('noun', 'Order') | html %]: </span>[% ordernumber | html %]</li>
-                </ul>
-              </div>
-        [% ELSE %]
-            <h3>Search for a vendor to transfer from</h3>
-        [% END %]
-        <form method="get" action="transferorder.pl">
-            <fieldset>
-            <input type="hidden" name="op" value="do_search" />
-            [% IF ( ordernumber ) %]
-                <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
-            [% END %]
-            [% IF ( bookselleridfrom ) %]
-                <input type="hidden" name="bookselleridfrom" value="[% bookselleridfrom | html %]" />
-            [% END %]
-            <label for="query">Vendor:</label>
-            <input type="text" id="query" name="query" />
-            <input type="submit" class="btn btn-primary" value="Search" />
-            </fieldset>
-        </form>
+
         [% IF ( show_baskets ) %]
-            <h3>Baskets for [% booksellertoname | html %]</h3>
             [% IF ( basketsloop ) %]
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Basket (#)</th>
-                            <th>[% tp('basket created by', 'Created by') | html %]</th>
-                            <th>Date</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        [% FOREACH basket IN basketsloop %]
-                          <tr>
-                            <td>[% basket.basketname | html %] (#[% basket.basketno | html %])</td>
-                            <td>[% basket.createdby | html %]</td>
-                            <td>[% basket.creationdate | $KohaDates %]</td>
-                            <td><a class="btn btn-default btn-xs confirm_transfer" href="transferorder.pl?basketno=[% basket.basketno | html %]&ordernumber=[% ordernumber | html %]">Choose</a>
-                          </tr>
-                        [% END %]
-                    </tbody>
-                </table>
+                <div class="page-section">
+                    <h3>Baskets for [% booksellertoname | html %]</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Basket (#)</th>
+                                <th>[% tp('basket created by', 'Created by') | html %]</th>
+                                <th>Date</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH basket IN basketsloop %]
+                            <tr>
+                                <td>[% basket.basketname | html %] (#[% basket.basketno | html %])</td>
+                                <td>[% basket.createdby | html %]</td>
+                                <td>[% basket.creationdate | $KohaDates %]</td>
+                                <td><a class="btn btn-default btn-xs confirm_transfer" href="transferorder.pl?basketno=[% basket.basketno | html %]&ordernumber=[% ordernumber | html %]">Choose</a>
+                            </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div>
             [% ELSE %]
                 <p>There are no open baskets for this vendor.</p>
             [% END %]
-        [% END %]
-        [% IF ( ordersloop ) %]
+        [% ELSIF ( ordersloop ) %]
             <h3>Orders for [% booksellerfromname | html %]</h3>
             <table>
                 <thead>
@@ -97,36 +73,89 @@
                     [% END %]
                 </tbody>
             </table>
-        [% END %]
-        [% IF ( do_search ) %]
-            [% IF ( bookselleridfrom ) %]
-                <h3>Choose a vendor to transfer to</h3>
-            [% ELSE %]
-                <h3>Choose a vendor to transfer from</h3>
-            [% END %]
+        [% ELSIF ( do_search ) %]
             [% IF booksellers.count %]
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        [% FOREACH bookseller IN booksellers %]
-                          <tr>
-                            <td>[% bookseller.name | html %]</td>
-                            <td><a class="btn btn-default btn-xs" href="transferorder.pl?[% IF (bookselleridfrom) %]bookselleridto[% ELSE %]bookselleridfrom[% END %]=[% bookseller.id | html %][% IF (ordernumber) %]&ordernumber=[% ordernumber | html %][% END %]">Choose</a></td>
-                          </tr>
-                        [% END %]
-                    </tbody>
-                 </table>
+                [% IF ( bookselleridfrom ) %]
+                    <h3>Choose a vendor to transfer to</h3>
+                [% ELSE %]
+                    <h3>Choose a vendor to transfer from</h3>
+                [% END %]
+                <div class="page-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH bookseller IN booksellers %]
+                            <tr>
+                                <td>[% bookseller.name | html %]</td>
+                                <td><a class="btn btn-default btn-xs" href="transferorder.pl?[% IF (bookselleridfrom) %]bookselleridto[% ELSE %]bookselleridfrom[% END %]=[% bookseller.id | html %][% IF (ordernumber) %]&ordernumber=[% ordernumber | html %][% END %][% IF (query) %]&query=[% query | html %][% END %]">Choose</a></td>
+                            </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div>
             [% ELSE %]
                 <p>No results found.</p>
             [% END %]
+        [% ELSE %]
+            [% IF ( bookselleridfrom ) %]
+                <h3>Search for a vendor to transfer to</h3>
+                <div class="transferinfo">
+                    <ul>
+                    <li><span class="label">From vendor: </span>[% booksellerfromname | html %]</li>
+                    <li><span class="label">Basket: </span>[% basketfromname | html %]</li>
+                    <li><span class="label">[% tp('noun', 'Order') | html %]: </span>[% ordernumber | html %]</li>
+                    </ul>
+                </div>
+            [% ELSE %]
+                <h3>Search for a vendor to transfer from</h3>
+            [% END %]
+            <form method="get" id="vendor_search_form" action="transferorder.pl">
+                <fieldset class="brief">
+                    <input type="hidden" name="op" value="do_search" />
+                    [% IF ( ordernumber ) %]
+                        <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
+                    [% END %]
+                    [% IF ( bookselleridfrom ) %]
+                        <input type="hidden" name="bookselleridfrom" value="[% bookselleridfrom | html %]" />
+                    [% END %]
+                    <ol>
+                        <li>
+                            <label for="query">Vendor:</label>
+                            <input type="text" id="query" name="query" autofocus="autofocus" />
+                        </li>
+                    </ol>
+                </fieldset>
+            </form>
         [% END %]
 
-<div id="closewindow"><a href="#" class="btn btn-default btn-default close">Cancel</a></div>
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    [% IF ( show_baskets ) %]
+                        <form action="/cgi-bin/koha/acqui/transferorder.pl">
+                            <input type="hidden" name="op" value="do_search" />
+                            <input type="hidden" name="query" value="[% query | html %]" />
+                            <input type="hidden" name="bookselleridfrom" value="[% bookselleridfrom | html %]" />
+                            <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
+                            <button class="btn btn-default" type="submit"><i class="fa fa-arrow-left"></i> Select a different vendor</button>
+                        </form>
+                    [% ELSIF ( do_search ) %]
+                        <form action="/cgi-bin/koha/acqui/transferorder.pl">
+                            <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
+                            <button class="btn btn-default" type="submit"><i class="fa fa-arrow-left"></i> Search again</button>
+                        </form>
+                    [% ELSE %]
+                        <input type="submit" id="vendor_search_submit" class="btn btn-primary" value="Search" />
+                    [% END %]
+                    <button type="button" class="btn btn-default close_window">Close window</button>
+                </fieldset>
+            </div>
+        </nav>
 
 [% MACRO jsinclude BLOCK %]
     [% IF transferred %]
@@ -141,6 +170,10 @@
             $(document).ready(function(){
                 $(".confirm_transfer").on("click",function(){
                     return confirm( _("Transfer order to this basket?") );
+                });
+                $("#vendor_search_submit").on("click", function(e){
+                    e.preventDefault();
+                    $("#vendor_search_form").submit();
                 });
             });
         </script>

@@ -94,6 +94,7 @@ if( $basketno && $ordernumber) {
     }
     $template->param(
         show_baskets => 1,
+        query          => $query,
         basketsloop => \@basketsloop,
         basketfromname => $basketfrom->{basketname},
     );
