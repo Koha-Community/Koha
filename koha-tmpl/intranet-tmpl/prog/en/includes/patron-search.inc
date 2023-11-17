@@ -157,7 +157,7 @@
                             [% CASE 'address-library' %]<th>Address</th>
                             [% CASE 'branch' %]<th data-filter="libraries">Library</th>
                             [% CASE 'category' %]<th data-filter="categories">Category</th>
-                            [% CASE 'dateexpiry' %]<th>Expires on</td>
+                            [% CASE 'dateexpiry' %]<th>Expires on</th>
                             [% CASE 'borrowernotes' %]<th>Notes</th>
                             [% CASE 'phone' %]<th>Phone</th>
                             [% CASE 'checkouts' %]<th>Checkouts</th>
