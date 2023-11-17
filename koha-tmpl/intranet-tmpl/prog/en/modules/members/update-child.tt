@@ -19,7 +19,7 @@
     <h1> Choose adult category </h1>
 
     [% IF patron_categories %]
-        <form method="post" action="update-child.pl">
+        <form method="post" id="updatechildf" action="update-child.pl">
             [% INCLUDE 'csrf-token.inc' %]
             <fieldset>
                 <table id="catst">
@@ -45,11 +45,15 @@
                 <input type="hidden" name="op" value="cud-update" />
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                 <input type="hidden" name="cattype" value="[% cattype | html %]" />
-                <fieldset class="action">
-                    <input class="submit" type="submit" value="Submit" />
-                    <a href="#" class="cancel close">Cancel</a>
-                </fieldset>
             </fieldset>
+            <nav class="navbar navbar-default navbar-fixed-bottom">
+                <div class="container-fluid">
+                    <fieldset class="action">
+                        <input class="btn btn-primary" type="submit" value="Submit" />
+                        <button type="button" class="btn btn-default close_window">Cancel</button>
+                    </fieldset>
+                </div>
+            </nav>
         </form>
     [% END %]
 [% END %]
@@ -68,6 +72,13 @@
                 ],
                 "paginate": false
             }));
+            $("#updatechildf").validate({
+                rules: {
+                    catcode: {
+                        required: true,
+                    },
+                }
+            });
         });
     </script>
     [% IF ( SUCCESS ) %]

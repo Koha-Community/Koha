@@ -127,7 +127,7 @@ function confirm_updatechild() {
 
 function update_child() {
     if( number_of_adult_categories > 1 ){
-        window.open('/cgi-bin/koha/members/update-child.pl?op=multi&borrowernumber=' + borrowernumber,'UpdateChild','width=400,height=300,toolbar=no,scrollbars=yes,resizable=yes');
+        openWindow('/cgi-bin/koha/members/update-child.pl?op=multi&borrowernumber=' + borrowernumber,'UpdateChild');
     } else {
         confirm_updatechild();
     }
