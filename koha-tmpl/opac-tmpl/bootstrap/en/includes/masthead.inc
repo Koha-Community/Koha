@@ -479,7 +479,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title" id="cookieConsentModalLabel">Cookie consent</h2>
+                        <h2 class="modal-title" id="cookieConsentModalLabel">Cookies policy</h2>
                     </div>
                     <div class="modal-body">
                         [% IF ( CookieConsentPopup ) %]
