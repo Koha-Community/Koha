@@ -354,11 +354,13 @@
                                     [% IF Koha.Preference('SMSSendDriver') %]
                                         <div class="rows">
                                             <ol>
-                                                <li>
-                                                    <span class="label">SMS number:</span>
-                                                    <a href="sms:[% patron.smsalertnumber | uri %]">[% patron.smsalertnumber | html %]</a>
-                                                </li>
-                                                [% IF Koha.Preference( 'SMSSendDriver') == 'Email' %]
+                                                [% IF patron.smsalertnumber %]
+                                                    <li>
+                                                        <span class="label">SMS number:</span>
+                                                        <a href="sms:[% patron.smsalertnumber | uri %]">[% patron.smsalertnumber | html %]</a>
+                                                    </li>
+                                                [% END %]
+                                                [% IF Koha.Preference( 'SMSSendDriver') == 'Email' && patron.sms_provider.name %]
                                                 <li>
                                                     <span class="label">SMS provider:</span>
                                                     [% patron.sms_provider.name | html %]
