@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% USE AdditionalContents %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -276,17 +277,21 @@
                     </div> <!-- /.col-sm-12 -->
                 </div> <!-- /.row -->
 
-                [% IF ( IntranetmainUserblock ) %]
+                [% SET IntranetmainUserblock = AdditionalContents.get( location => "IntranetmainUserblock", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
+
+                [% IF ( IntranetmainUserblock.content && IntranetmainUserblock.content.count > 0 ) %]
                     <div class="row">
                         <div class="col-sm-12">
-                            <div id="area-userblock" class="page-section">
-                                <div class="user-info">
-                                    [% IntranetmainUserblock | $raw %]
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                [% END %]
+                            <div id="[% IntranetmainUserblock.location | html %]" class="page-section">
+                                [% FOREACH n IN IntranetmainUserblock.content %]
+                                    <div class="[% n.lang | html %]_item">
+                                        <div class="[% n.lang | html %]_body">[% n.content | $raw %]</div>
+                                    </div>
+                                [% END %]
+                            </div> <!-- /#IntranetmainUserblock -->
+                        </div> <!-- /.col-sm-12 -->
+                    </div> <!-- /.row -->
+                [% END # /IF IntranetmainUserblock %]
 
                 <div class="row">
                     <div class="col-sm-12">
