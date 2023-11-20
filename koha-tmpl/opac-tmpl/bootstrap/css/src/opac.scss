@@ -2908,23 +2908,27 @@ $star-selected: #EDB867;
 
 /* Cookie consent bar */
 #cookieConsentBar {
+    background: rgba( 0, 0, 0, .7 );
+    bottom: 0;
+    color: rgba( 255, 255, 255, .9 );
     display: none;
+    left: 0;
     padding: 20px;
     position: fixed;
-    bottom: 0;
-    left: 0;
     right: 0;
-    background: rgba(0,0,0,0.7);
-    color: rgba(255,255,255,0.9);
     z-index: 1;
-    a:link, a:visited {
-        color: #c5ecff;
+
+    a:link,
+    a:visited {
+        color: #C5ECFF;
     }
+
     #consentButtons {
         margin-top: 10px;
         text-align: right;
     }
-    button:not(:last-child) {
+
+    button:not( :last-child ) {
         margin-right: 10px;
     }
 }
@@ -2934,30 +2938,35 @@ $star-selected: #EDB867;
     .modal-dialog {
         max-width: 1000px;
     }
+
     .consentModalItem {
-        display: flex;
         align-items: center;
-        border: 1px solid #ccc;
-        padding: 10px 20px;
+        border: 1px solid #CCC;
         border-radius: 5px;
+        display: flex;
+        padding: 10px 20px;
     }
-    .consentModalItem:not(:last-child) {
+
+    .consentModalItem:not( :last-child ) {
         margin-bottom: 20px;
     }
+
     .consentItemCheckbox {
         padding-right: 20px;
     }
+
     .consentItemName {
         font-weight: bold;
     }
+
     #cookieConsentPopupText {
         margin: 20px 0;
     }
 }
 
 #patronconsents h2 {
-    margin-top: 30px;
     font-size: 1.1rem;
+    margin-top: 30px;
 }
 
 .chocolat-wrapper {
