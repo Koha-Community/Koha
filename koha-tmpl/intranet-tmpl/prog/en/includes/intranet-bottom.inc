@@ -86,7 +86,7 @@
         <!-- Cookie consent bar -->
         <div id="cookieConsentBar" aria-hidden="true">
             [% IF ( CookieConsentBar && CookieConsentBar.content && CookieConsentBar.content.count >0 ) %]
-                <div id="cookieConsentBarText">
+                <div id="cookieConsentBar_content">
                     [%- FOREACH item IN CookieConsentBar.content -%]
                         [%- item.content | $raw -%]
                     [%- END -%]
@@ -97,7 +97,7 @@
                     <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
                 [% END %]
                 <button type="button" class="btn btn-primary consentAcceptEssential">Accept essential cookies</button>
-                <button type="button" class="btn btn-info" id="consentMoreInfo">More information</button>
+                <button type="button" class="btn btn-default" id="consentMoreInfo">More information</button>
             </div>
         </div> <!-- /#cookieConsentBar -->
         <!-- Cookie consent modal -->

@@ -4619,10 +4619,12 @@ div .suggestion_note {
 
 /* Cookie consent bar */
 #cookieConsentBar {
+    align-items: center;
     background: rgba( 0, 0, 0, .7 );
     bottom: 0;
     color: rgba( 255, 255, 255, .9 );
     display: none;
+    flex-wrap: wrap;
     left: 0;
     padding: 20px;
     position: fixed;
@@ -4634,14 +4636,21 @@ div .suggestion_note {
         color: #D7EBFF;
     }
 
-    #consentButtons {
-        margin-top: 10px;
-        text-align: right;
-    }
+    button {
+        margin-bottom: .5rem;
+        margin-top: .5rem;
 
-    button:not( :last-child ) {
-        margin-right: 10px;
+        &:not( :last-child ) {
+            margin-right: 10px;
+        }
     }
+}
+
+#consentButtons {
+    flex-grow: 1;
+    margin-top: 10px;
+    text-align: left;
+    white-space: normal;
 }
 
 /* Cookie consent modal */
@@ -4698,6 +4707,13 @@ div .suggestion_note {
 @import "header";
 @import "toolbar";
 @import "forms";
+
+@media only screen and ( min-width: 608px ) {
+    #consentButtons {
+        text-align: right;
+        white-space: nowrap;
+    }
+}
 
 @media ( max-width: 767px ) {
     .header-menu-link {

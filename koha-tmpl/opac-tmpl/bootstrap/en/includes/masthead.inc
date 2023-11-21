@@ -464,7 +464,9 @@
             <!-- Cookie consent bar -->
             <div id="cookieConsentBar" aria-hidden="true">
                 [% IF ( CookieConsentBar ) %]
-                    [% PROCESS koha_news_block news => CookieConsentBar %]
+                    <div id="cookieConsentBar_content">
+                        [% PROCESS koha_news_block news => CookieConsentBar %]
+                    </div>
                 [% END %]
                 <div id="consentButtons">
                     [% IF ( JSConsents.all('opacConsent').size ) %]

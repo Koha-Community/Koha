@@ -40,7 +40,7 @@
             consentBar.css('bottom', height);
         };
         consentBar.attr('aria-hidden', 'false');
-        consentBar.show();
+        consentBar.css("display", "flex");
     }
 
     function hideConsentBar() {

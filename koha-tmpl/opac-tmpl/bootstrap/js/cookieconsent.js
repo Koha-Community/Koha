@@ -27,6 +27,20 @@
         initialiseSelected();
     });
 
+    $(window).on("scroll", function() {
+        const consentBar = $("#cookieConsentBar");
+        const langmenu = $("#changelanguage");
+        const wrapper = $("#wrapper");
+        if( langmenu ) {
+            const height = langmenu.height();
+            if( $(window).scrollTop() >= wrapper.offset().top + wrapper.outerHeight() - window.innerHeight ) {
+                consentBar.css("bottom", height);
+            } else {
+                consentBar.css("bottom", 0);
+            }
+        };
+    });
+
     // Initialise existing consent based on local storage
     function getExistingConsent() {
         existingConsent = localStorage.getItem('cookieConsent') ?
@@ -36,13 +50,8 @@
 
     function showConsentBar() {
         const consentBar = $('#cookieConsentBar');
-        const langmenu = $('#changelanguage');
-        if(langmenu) {
-            const height = langmenu.height();
-            consentBar.css('bottom', height);
-        };
         consentBar.attr('aria-hidden', 'false');
-        consentBar.show();
+        consentBar.css("display", "flex");
     }
 
     function hideConsentBar() {

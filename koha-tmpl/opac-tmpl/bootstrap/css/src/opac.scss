@@ -2908,10 +2908,12 @@ $star-selected: #EDB867;
 
 /* Cookie consent bar */
 #cookieConsentBar {
+    align-items: center;
     background: rgba( 0, 0, 0, .7 );
     bottom: 0;
     color: rgba( 255, 255, 255, .9 );
     display: none;
+    flex-wrap: wrap;
     left: 0;
     padding: 20px;
     position: fixed;
@@ -2923,14 +2925,21 @@ $star-selected: #EDB867;
         color: #C5ECFF;
     }
 
-    #consentButtons {
-        margin-top: 10px;
-        text-align: right;
-    }
+    button {
+        margin-bottom: .5rem;
+        margin-top: .5rem;
 
-    button:not( :last-child ) {
-        margin-right: 10px;
+        &:not( :last-child ) {
+            margin-right: 10px;
+        }
     }
+}
+
+#consentButtons {
+    flex-grow: 1;
+    margin-top: 10px;
+    text-align: left;
+    white-space: normal;
 }
 
 /* Cookie consent modal */
@@ -2940,7 +2949,6 @@ $star-selected: #EDB867;
     }
 
     .consentModalItem {
-        align-items: center;
         border: 1px solid #CCC;
         border-radius: 5px;
         display: flex;
