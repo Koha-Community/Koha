@@ -146,7 +146,12 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% tx("Vendor {vendor}", { vendor = name }) | html %] &rsaquo;
+    [% IF ( enter ) %]
+        [% tx("Modify vendor {vendor}", { vendor = name }) | html %]
+    [% ELSE %]
+        [% tx("Vendor {vendor}", { vendor = name }) | html %]
+    [% END %] &rsaquo;
+    [% t("Acquisitions") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -168,7 +173,7 @@
                     <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify [% name | html %]</span>
+                    <span>Modify vendor [% name | html %]</span>
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
