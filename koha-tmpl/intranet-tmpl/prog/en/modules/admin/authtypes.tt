@@ -164,7 +164,7 @@
         [% IF authorities_using_it %]
             <h1>This authority type cannot be deleted</h1>
             <p><strong><span class="ex">[% authority_type.authtypecode | html %]</span></strong></p>
-            <p>[% tnx('This authority type is used {count} time.', 'This authority type is used {count} times', authorities_using_it, { count = authorities_using_it }) %]</p>
+            <p>[% tnx('This authority type is used {count} time.', 'This authority type is used {count} times.', authorities_using_it, { count = authorities_using_it }) %]</p>
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="get">
                 <button type="submit"><i class="fa fa-fw fa-arrow-left"></i> Return to authority types</button>
             </form>
