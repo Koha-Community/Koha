@@ -35,8 +35,10 @@ my $builder = sub {
 
 function Click$function_name(ev) {
     ev.preventDefault();
+    let window_width = screen.width / 2;
+    let window_height = screen.height;
     q = document.getElementById(ev.data.id);
-    window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+encodeURIComponent(q.value),\"cnbrowser\",\"width=500,height=400,toolbar=false,scrollbars=yes\");
+    window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+encodeURIComponent(q.value),\"cnbrowser\",\"width=\"+window_width+\"\,height=\"+window_height+\"\,toolbar=false,scrollbars=yes\");
 }
 
 </script>
