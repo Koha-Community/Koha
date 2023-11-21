@@ -119,7 +119,7 @@
                             <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
                             [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                                 [% SET issuer = checkout.issuer %]
-                                <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issuer.issuer_id | uri %]">[% issuer.firstname | html %] [% issuer.surname | html %]</a></td>
+                                <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issuer.borrowernumber | uri %]">[% issuer.firstname | html %] [% issuer.surname | html %]</a></td>
                             [% END %]
                             <td data-order="[% checkout.date_due | html %]">
                                 [% checkout.date_due | $KohaDates as_due_date => 1 %]
