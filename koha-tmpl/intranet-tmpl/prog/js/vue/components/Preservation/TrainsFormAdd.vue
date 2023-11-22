@@ -11,7 +11,7 @@
                     <ol>
                         <li>
                             <label class="required" for="train_name"
-                                >{{ $__("name") }}:</label
+                                >{{ $__("Name") }}:</label
                             >
                             <input
                                 id="train_name"
