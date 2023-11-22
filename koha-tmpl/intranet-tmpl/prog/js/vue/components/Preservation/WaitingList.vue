@@ -286,7 +286,7 @@ export default {
                 },
                 {
                     data: "callnumber",
-                    title: __("Callnumber"),
+                    title: __("Call number"),
                     searchable: true,
                     orderable: true,
                 },
