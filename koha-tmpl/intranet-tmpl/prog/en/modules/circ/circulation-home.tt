@@ -131,9 +131,11 @@
                             <a class="circ-button" href="/cgi-bin/koha/circ/branchtransfers.pl"><i class="fa-solid fa-right-left"></i> Transfer</a>
                         </li>
                     [% END %]
-                    <li>
-                        <a class="circ-button" href="/cgi-bin/koha/circ/transfers_to_send.pl"><i class="fa-solid fa-right-from-bracket"></i> Transfers to send</a>
-                    </li>
+                    [% IF Koha.Preference('StockRotation') %]
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/transfers_to_send.pl"><i class="fa-solid fa-right-from-bracket"></i> Transfers to send</a>
+                        </li>
+                    [% END %]
                     <li>
                         <a class="circ-button" href="/cgi-bin/koha/circ/transferstoreceive.pl"><i class="fa-solid fa-right-to-bracket"></i> Transfers to receive</a>
                     </li>
