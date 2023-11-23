@@ -117,7 +117,6 @@ function hideAllColumns() {
 }
 
 $(document).ready(function () {
-    hideColumns();
     var items_table = KohaTable("itemst", {
         "aoColumnDefs": [
             { "aTargets": [0, 1], "bSortable": false, "bSearchable": true },
@@ -126,6 +125,9 @@ $(document).ready(function () {
         ],
         "bPaginate": false,
     });
+
+    hideColumns();
+
     // Highlight in yellow item rows that cannot be deleted
     $(".error").parents('tr').find('td').css('background-color', '#ffff99');
 
