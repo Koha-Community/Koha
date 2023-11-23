@@ -110,12 +110,12 @@
                     <ol>
                         <li>
                             <label class="required" for="barcode"
-                                >{{ $__("barcode") }}:</label
+                                >{{ $__("Barcode") }}:</label
                             >
                             <input
                                 id="barcode"
                                 v-model="barcode"
-                                :placeholder="$__('barcode')"
+                                :placeholder="$__('Enter item barcode')"
                                 required
                             />
                             <span class="required">{{ $__("Required") }}</span>
