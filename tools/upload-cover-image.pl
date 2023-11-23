@@ -242,8 +242,8 @@ if ($fileID) {
                             }
                             undef $srcimage;
 
-                            if (!$error && C4::Context->preference("CataloguingLog")) {
-                                logaction('CATALOGUING', 'MODIFY', $biblionumber, "biblio cover image: $filename");
+                            if ( !$error && C4::Context->preference("CataloguingLog") ) {
+                                logaction( 'CATALOGUING', 'MODIFY', $biblionumber, "biblio cover image: $filename" );
                             }
 
                         }
