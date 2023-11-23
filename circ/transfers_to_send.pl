@@ -17,6 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+# Display items which have been triggered for transfer, but not yet sent.
+# CAVEAT: Currently limited to transfers prompted by stockrotation only.
+# See also bug 22569.
+
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
