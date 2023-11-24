@@ -43,6 +43,8 @@
 [% INCLUDE 'members-toolbar.inc' %]
 <h1>Circulation history</h1>
 
+[% UNLESS checkouts %][% checkouts = [] %][% END %]
+[% UNLESS old_checkouts %][% old_checkouts = [] %][% END %]
 [% SET all_checkouts = checkouts.merge(old_checkouts) %]
 [% UNLESS Koha.Preference('intranetreadinghistory') %]
     <div class="dialog alert">Staff members are not allowed to access patron's checkout history</div>
