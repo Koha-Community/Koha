@@ -1191,7 +1191,7 @@ subtest "filter_by_last_update" => sub {
     subtest 'Parameters older_than, younger_than' => sub {
         my $now = dt_from_string();
         my $rs  = Koha::Patrons->search( { borrowernumber => { -in => \@borrowernumbers } } );
-        $rs->update( { updated_on => $now->clone->subtract( hours => 25 ) } );
+        $rs->update( { updated_on => $now->clone->subtract( hours => 24 ) } );
         is(
             $rs->filter_by_last_update( { timestamp_column_name => 'updated_on', from => $now } )->count, 0,
             'All updated yesterday'
@@ -1208,17 +1208,17 @@ subtest "filter_by_last_update" => sub {
         );
         is(
             $rs->filter_by_last_update(
-                { timestamp_column_name => 'updated_on', from => $now->clone->subtract( days => 1 ), }
+                { timestamp_column_name => 'updated_on', from => $now->clone->subtract( minutes => 24 * 60 - 1 ), }
             )->count,
             0,
-            'Yesterday, not truncated, one hour too late'
+            'Yesterday + 1m, not truncated, no results'
         );
         is(
             $rs->filter_by_last_update(
-                { timestamp_column_name => 'updated_on', from => $now->clone->subtract( hours => 25 ), }
+                { timestamp_column_name => 'updated_on', from => $now->clone->subtract( hours => 24 ), }
             )->count,
             6,
-            'Yesterday - 1h, not truncated, within time frame'
+            'Yesterday, not truncated, results'
         );
     };
 
