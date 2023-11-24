@@ -74,11 +74,12 @@ sub under {
             $is_plugin = 1;
         }
 
-        if ( $is_public
-            and !C4::Context->preference('RESTPublicAPI') )
-        {
+        if ($is_public) {
+            Koha::Exceptions::UnderMaintenance->throw('Under maintenance')
+                if C4::Context->preference('OPACMaintenance');
             Koha::Exceptions::Authorization->throw(
-                "Configuration prevents the usage of this endpoint by unprivileged users");
+                "Configuration prevents the usage of this endpoint by unprivileged users")
+                if !C4::Context->preference('RESTPublicAPI');
         }
 
         if ( $c->req->url->to_abs->path =~ m#^/api/v1/oauth/# || $c->req->url->to_abs->path =~ m#^/api/v1/public/oauth/#) {
