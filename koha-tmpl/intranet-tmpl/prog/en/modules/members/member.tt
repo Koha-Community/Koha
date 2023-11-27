@@ -155,6 +155,7 @@
                     <div class="modal-footer">
                         <button type="submit" id="add_to_patron_list_submit" class="btn btn-default approve">Submit</button>
                         <button type="button" class="btn btn-default deny" data-dismiss="modal">Cancel</button>
+                        [% PROCESS 'members-patron-selections.inc' id="new-patron-list_form" %]
                     </div> <!-- /.modal-footer -->
                 </form> <!-- /#new-patron-list_form -->
             </div> <!-- /.modal-content -->
@@ -166,12 +167,9 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("js/members-patron-selections.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     <script>
-        function showPatronSelections( number ){
-            $("#table_search_selections").show().find("span").text(_("Patrons selected: " + number ) );
-        }
-
         $(document).ready(function() {
             $('#merge-patrons, #batch-mod-patrons').prop('disabled', true);
             $('#memberresultst').on('change', 'input.selection', function() {
@@ -335,6 +333,8 @@
                             /* Add a new entry to the menu */
                             $("#patronlist-dropdown .divider").before('<li><a class="patron-list-add" href="#" data-listid="' + data.patron_list.patron_list_id + '">' + data.patron_list.name + '</li>');
                         }
+                        persistPatronSelections('new-patron-list_form');
+                        prepSelections();
                     },
                     error: function() {
                         alert( _("An error occurred. Patron list could not be updated.") );
@@ -344,25 +344,6 @@
             } else {
                 alert( _("You have not selected any patrons to add to a list!") );
                 return false;
-            }
-        }
-
-        function prepSelections(){
-            var selected_patrons = JSON.parse( localStorage.getItem("patron_search_selections") );
-            if( selected_patrons && selected_patrons.length > 0 ){
-                showPatronSelections( selected_patrons.length );
-
-                $('#merge-patrons').prop('disabled', true);
-                $("input.selection").each(function(){
-                    var cardnumber = $(this).val();
-                    if( selected_patrons.indexOf( cardnumber ) >= 0 ){
-                        $(this).prop("checked", true );
-                    }
-                });
-
-                if( selected_patrons.length > 1 ){
-                    $('#batch-mod-patrons, #merge-patrons, #patronlist-menu').removeClass("disabled").prop('disabled', false);
-                }
             }
         }
 
