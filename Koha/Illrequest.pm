@@ -1113,7 +1113,7 @@ Return the value submitted in the type disclaimer workflow stage
 
 sub get_type_disclaimer_value {
     my ($self) = @_;
-    my $attr = $self->illrequestattributes->find( { type => 'type_disclaimer_value' } );
+    my $attr = $self->extended_attributes->find( { type => 'type_disclaimer_value' } );
     return if !$attr;
     return $attr->value;
 }
@@ -1128,7 +1128,7 @@ Return the time the disclaimer was submitted in the type disclaimer workflow sta
 
 sub get_type_disclaimer_date {
     my ($self) = @_;
-    my $attr = $self->illrequestattributes->find( { type => 'type_disclaimer_date' } );
+    my $attr = $self->extended_attributes->find( { type => 'type_disclaimer_date' } );
     return if !$attr;
     return $attr->value;
 }
