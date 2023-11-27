@@ -297,12 +297,13 @@ sub SearchAuthorities {
         my %newline;
         $newline{authid} = $authid;
         if ( !$skipmetadata ) {
-            my $auth_tag_to_report;
-            $auth_tag_to_report = Koha::Authority::Types->find($authtypecode)->auth_tag_to_report
-                if $authtypecode;
-            my $reported_tag;
-            my $mainentry = $authrecord->field($auth_tag_to_report);
+            my ( $auth_tag_to_report, $reported_tag, $mainentry );
+            if ( $authtypecode ) {
+                $auth_tag_to_report = Koha::Authority::Types->find($authtypecode)->auth_tag_to_report;
+                $mainentry          = $authrecord->field($auth_tag_to_report) if $auth_tag_to_report;
+            }
             if ($mainentry) {
+                $reported_tag = q{};
                 foreach ( $mainentry->subfields() ) {
                     $reported_tag .= '$' . $_->[0] . $_->[1];
                 }
