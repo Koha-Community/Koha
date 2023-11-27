@@ -1019,49 +1019,140 @@ subtest 'deletion' => sub {
 };
 
 subtest 'renewal_branchcode' => sub {
-    plan tests => 13;
+    plan tests => 25;
 
     $schema->storage->txn_begin;
 
-    my $item = $builder->build_sample_item();
-    my $branch = $builder->build_object({ class => 'Koha::Libraries' });
-    my $checkout = $builder->build_object({
-        class => 'Koha::Checkouts',
-        value => {
-            itemnumber => $item->itemnumber,
+    my $item     = $builder->build_sample_item();
+    my $branch   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber => $item->itemnumber,
+            }
         }
-    });
+    );
 
+    C4::Context->interface('intranet');
+    t::lib::Mocks::mock_userenv( { branchcode => $branch->branchcode } );
 
-    C4::Context->interface( 'intranet' );
-    t::lib::Mocks::mock_userenv({ branchcode => $branch->branchcode });
+    is( $item->renewal_branchcode, $branch->branchcode, "If interface not opac, we get the branch from context" );
+    is(
+        $item->renewal_branchcode( { branch => "PANDA" } ), $branch->branchcode,
+        "If interface not opac, we get the branch from context even if we pass one in"
+    );
+    C4::Context->set_userenv( 51, 'userid4tests', undef, 'firstname', 'surname', undef, undef, 0, undef, undef, undef )
+        ;    #mock userenv doesn't let us set null branch
+    is(
+        $item->renewal_branchcode( { branch => "PANDA" } ), "PANDA",
+        "If interface not opac, we get the branch we pass one in if context not set"
+    );
 
-    is( $item->renewal_branchcode, $branch->branchcode, "If interface not opac, we get the branch from context");
-    is( $item->renewal_branchcode({ branch => "PANDA"}), $branch->branchcode, "If interface not opac, we get the branch from context even if we pass one in");
-    C4::Context->set_userenv(51, 'userid4tests', undef, 'firstname', 'surname', undef, undef, 0, undef, undef, undef ); #mock userenv doesn't let us set null branch
-    is( $item->renewal_branchcode({ branch => "PANDA"}), "PANDA", "If interface not opac, we get the branch we pass one in if context not set");
+    C4::Context->interface('opac');
 
-    C4::Context->interface( 'opac' );
+    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', undef );
+    is( $item->renewal_branchcode, 'OPACRenew', "If interface opac and OpacRenewalBranch undef, we get OPACRenew" );
+    is(
+        $item->renewal_branchcode( { branch => 'COW' } ), 'OPACRenew',
+        "If interface opac and OpacRenewalBranch undef, we get OPACRenew even if branch passed"
+    );
 
-    t::lib::Mocks::mock_preference('OpacRenewalBranch', undef);
-    is( $item->renewal_branchcode, 'OPACRenew', "If interface opac and OpacRenewalBranch undef, we get OPACRenew");
-    is( $item->renewal_branchcode({branch=>'COW'}), 'OPACRenew', "If interface opac and OpacRenewalBranch undef, we get OPACRenew even if branch passed");
+    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'none' );
+    is( $item->renewal_branchcode, '', "If interface opac and OpacRenewalBranch is none, we get blank string" );
+    is(
+        $item->renewal_branchcode( { branch => 'COW' } ), '',
+        "If interface opac and OpacRenewalBranch is none, we get blank string even if branch passed"
+    );
 
-    t::lib::Mocks::mock_preference('OpacRenewalBranch', 'none');
-    is( $item->renewal_branchcode, '', "If interface opac and OpacRenewalBranch is none, we get blank string");
-    is( $item->renewal_branchcode({branch=>'COW'}), '', "If interface opac and OpacRenewalBranch is none, we get blank string even if branch passed");
+    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'checkoutbranch' );
+    is(
+        $item->renewal_branchcode, $checkout->branchcode,
+        "If interface opac and OpacRenewalBranch set to checkoutbranch, we get branch of checkout"
+    );
+    is(
+        $item->renewal_branchcode( { branch => 'MONKEY' } ), $checkout->branchcode,
+        "If interface opac and OpacRenewalBranch set to checkoutbranch, we get branch of checkout even if branch passed"
+    );
 
-    t::lib::Mocks::mock_preference('OpacRenewalBranch', 'checkoutbranch');
-    is( $item->renewal_branchcode, $checkout->branchcode, "If interface opac and OpacRenewalBranch set to checkoutbranch, we get branch of checkout");
-    is( $item->renewal_branchcode({branch=>'MONKEY'}), $checkout->branchcode, "If interface opac and OpacRenewalBranch set to checkoutbranch, we get branch of checkout even if branch passed");
+    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'patronhomebranch' );
+    is(
+        $item->renewal_branchcode, $checkout->patron->branchcode,
+        "If interface opac and OpacRenewalBranch set to patronbranch, we get branch of patron"
+    );
+    is(
+        $item->renewal_branchcode( { branch => 'TURKEY' } ), $checkout->patron->branchcode,
+        "If interface opac and OpacRenewalBranch set to patronbranch, we get branch of patron even if branch passed"
+    );
 
-    t::lib::Mocks::mock_preference('OpacRenewalBranch','patronhomebranch');
-    is( $item->renewal_branchcode, $checkout->patron->branchcode, "If interface opac and OpacRenewalBranch set to patronbranch, we get branch of patron");
-    is( $item->renewal_branchcode({branch=>'TURKEY'}), $checkout->patron->branchcode, "If interface opac and OpacRenewalBranch set to patronbranch, we get branch of patron even if branch passed");
+    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'itemhomebranch' );
+    is(
+        $item->renewal_branchcode, $item->homebranch,
+        "If interface opac and OpacRenewalBranch set to itemhomebranch, we get homebranch of item"
+    );
+    is(
+        $item->renewal_branchcode( { branch => 'MANATEE' } ), $item->homebranch,
+        "If interface opac and OpacRenewalBranch set to itemhomebranch, we get homebranch of item even if branch passed"
+    );
 
-    t::lib::Mocks::mock_preference('OpacRenewalBranch','itemhomebranch');
-    is( $item->renewal_branchcode, $item->homebranch, "If interface opac and OpacRenewalBranch set to itemhomebranch, we get homebranch of item");
-    is( $item->renewal_branchcode({branch=>'MANATEE'}), $item->homebranch, "If interface opac and OpacRenewalBranch set to itemhomebranch, we get homebranch of item even if branch passed");
+    C4::Context->interface('api');
+
+    t::lib::Mocks::mock_preference( 'RESTAPIRenewalBranch', undef );
+    is( $item->renewal_branchcode, 'APIRenew', "If interface api and RESTAPIRenewalBranch undef, we get APIRenew" );
+    is(
+        $item->renewal_branchcode( { branch => 'COW' } ), 'APIRenew',
+        "If interface api and RESTAPIRenewalBranch undef, we get APIRenew even if branch passed"
+    );
+
+    t::lib::Mocks::mock_preference( 'RESTAPIRenewalBranch', 'none' );
+    is( $item->renewal_branchcode, '', "If interface api and RESTAPIRenewalBranch is none, we get blank string" );
+    is(
+        $item->renewal_branchcode( { branch => 'COW' } ), '',
+        "If interface api and RESTAPIRenewalBranch is none, we get blank string even if branch passed"
+    );
+
+    t::lib::Mocks::mock_preference( 'RESTAPIRenewalBranch', 'checkoutbranch' );
+    is(
+        $item->renewal_branchcode, $checkout->branchcode,
+        "If interface api and RESTAPIRenewalBranch set to checkoutbranch, we get branch of checkout"
+    );
+    is(
+        $item->renewal_branchcode( { branch => 'MONKEY' } ), $checkout->branchcode,
+        "If interface api and RESTAPIRenewalBranch set to checkoutbranch, we get branch of checkout even if branch passed"
+    );
+
+    t::lib::Mocks::mock_preference( 'RESTAPIRenewalBranch', 'patronhomebranch' );
+    is(
+        $item->renewal_branchcode, $checkout->patron->branchcode,
+        "If interface api and RESTAPIRenewalBranch set to patronbranch, we get branch of patron"
+    );
+    is(
+        $item->renewal_branchcode( { branch => 'TURKEY' } ), $checkout->patron->branchcode,
+        "If interface api and RESTAPIRenewalBranch set to patronbranch, we get branch of patron even if branch passed"
+    );
+
+    t::lib::Mocks::mock_preference( 'RESTAPIRenewalBranch', 'itemhomebranch' );
+    is(
+        $item->renewal_branchcode, $item->homebranch,
+        "If interface api and RESTAPIRenewalBranch set to itemhomebranch, we get homebranch of item"
+    );
+    is(
+        $item->renewal_branchcode( { branch => 'MANATEE' } ), $item->homebranch,
+        "If interface api and RESTAPIRenewalBranch set to itemhomebranch, we get homebranch of item even if branch passed"
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $branch->branchcode } );
+    t::lib::Mocks::mock_preference( 'RESTAPIRenewalBranch', 'apiuserbranch' );
+    is(
+        $item->renewal_branchcode, $branch->branchcode,
+        "If interface api and RESTAPIRenewalBranch set to apiuserbranch, we get branch from userenv"
+    );
+    is(
+        $item->renewal_branchcode( { branch => 'MANATEE' } ), $branch->branchcode,
+        "If interface api and RESTAPIRenewalBranch set to apiuserbranch, we get branch from userenv even if branch passed"
+    );
+    C4::Context->set_userenv( 51, 'userid4tests', undef, 'firstname', 'surname', undef, undef, 0, undef, undef, undef )
+        ;    #mock userenv doesn't let us set null branch
 
     $schema->storage->txn_rollback;
 };

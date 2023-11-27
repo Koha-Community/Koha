@@ -35,6 +35,17 @@ Web services:
                   1: Enable
                   0: "Disable"
             - "the /public namespace of the API."
+        -
+            - Use
+            - pref: RESTAPIRenewalBranch
+              choices:
+                  apiuserbranch: "the library of the API user"
+                  itemhomebranch: "the item's home library"
+                  patronhomebranch: "the patron's home library"
+                  checkoutbranch: "the library the item was checked out from"
+                  none: "NULL"
+                  apirenew: "'APIRenew'"
+            - as branchcode to store in the statistics table.
     OAI-PMH:
         -
             - pref: OAI-PMH

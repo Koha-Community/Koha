@@ -1161,30 +1161,46 @@ Returns the branchcode to be recorded in statistics renewal of the item
 
 sub renewal_branchcode {
 
-    my ($self, $params ) = @_;
+    my ( $self, $params ) = @_;
 
     my $interface = C4::Context->interface;
     my $branchcode;
-    if ( $interface eq 'opac' ){
-        my $renewal_branchcode = C4::Context->preference('OpacRenewalBranch');
-        if( !defined $renewal_branchcode || $renewal_branchcode eq 'opacrenew' ){
+    my $renewal_branchcode;
+
+    if ( $interface eq 'opac' ) {
+        $renewal_branchcode = C4::Context->preference('OpacRenewalBranch');
+        if ( !defined $renewal_branchcode || $renewal_branchcode eq 'opacrenew' ) {
             $branchcode = 'OPACRenew';
         }
-        elsif ( $renewal_branchcode eq 'itemhomebranch' ) {
+    } elsif ( $interface eq 'api' ) {
+        $renewal_branchcode = C4::Context->preference('RESTAPIRenewalBranch');
+        if ( !defined $renewal_branchcode || $renewal_branchcode eq 'apirenew' ) {
+            $branchcode = 'APIRenew';
+        }
+    }
+
+    return $branchcode if $branchcode;
+
+    if ($renewal_branchcode) {
+        if ( $renewal_branchcode eq 'itemhomebranch' ) {
             $branchcode = $self->homebranch;
-        }
-        elsif ( $renewal_branchcode eq 'patronhomebranch' ) {
+        } elsif ( $renewal_branchcode eq 'patronhomebranch' ) {
             $branchcode = $self->checkout->patron->branchcode;
-        }
-        elsif ( $renewal_branchcode eq 'checkoutbranch' ) {
+        } elsif ( $renewal_branchcode eq 'checkoutbranch' ) {
             $branchcode = $self->checkout->branchcode;
-        }
-        else {
+        } elsif ( $renewal_branchcode eq 'apiuserbranch' ) {
+            $branchcode =
+                ( C4::Context->userenv && defined C4::Context->userenv->{branch} )
+                ? C4::Context->userenv->{branch}
+                : $params->{branch};
+        } else {
             $branchcode = "";
         }
     } else {
-        $branchcode = ( C4::Context->userenv && defined C4::Context->userenv->{branch} )
-            ? C4::Context->userenv->{branch} : $params->{branch};
+        $branchcode =
+            ( C4::Context->userenv && defined C4::Context->userenv->{branch} )
+            ? C4::Context->userenv->{branch}
+            : $params->{branch};
     }
     return $branchcode;
 }

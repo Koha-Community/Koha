@@ -650,6 +650,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice'),
 ('ReservesMaxPickUpDelay','7','','Define the Maximum delay to pick up an item on hold','Integer'),
 ('ReservesNeedReturns','1','','If ON, a hold placed on an item available in this library must be checked-in, otherwise, a hold on a specific item, that is in the library & available is considered available','YesNo'),
+('RESTAPIRenewalBranch','apiuserbranch','itemhomebranch|patronhomebranch|checkoutbranch|apiuserbranch|none','Choose how the branch for an API renewal is recorded in statistics','Choice'),
 ('RESTBasicAuth','0',NULL,'If enabled, Basic authentication is enabled for the REST API.','YesNo'),
 ('RESTdefaultPageSize','20','','Default page size for endpoints listing objects','Integer'),
 ('RESTOAuth2ClientCredentials','0',NULL,'If enabled, the OAuth2 client credentials flow is enabled for the REST API.','YesNo'),
