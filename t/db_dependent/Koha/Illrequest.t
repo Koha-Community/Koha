@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 3;
 
 use Koha::Illrequests;
 
@@ -45,6 +45,70 @@ subtest 'patron() tests' => sub {
     $request = $builder->build_object( { class => 'Koha::Illrequests', value => { borrowernumber => undef } } );
 
     is( $request->patron, undef );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_type_disclaimer_value() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $request = $builder->build_object( { class => 'Koha::Illrequests' } );
+
+    is(
+        $request->get_type_disclaimer_value, undef,
+        'get_type_disclaimer_value() returns undef if no get_type_disclaimer_value is set'
+    );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Illrequestattributes',
+            value => {
+                illrequest_id => $request->illrequest_id,
+                type          => 'type_disclaimer_value',
+                value         => 'Yes'
+            }
+        }
+    );
+
+    is(
+        $request->get_type_disclaimer_value, "Yes",
+        'get_type_disclaimer_value() returns the value if is set'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_type_disclaimer_date() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $request = $builder->build_object( { class => 'Koha::Illrequests' } );
+
+    is(
+        $request->get_type_disclaimer_date, undef,
+        'get_type_disclaimer_date() returns undef if no get_type_disclaimer_date is set'
+    );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Illrequestattributes',
+            value => {
+                illrequest_id => $request->illrequest_id,
+                type          => 'type_disclaimer_date',
+                value         => '2023-11-27T14:27:01'
+            }
+        }
+    );
+
+    is(
+        $request->get_type_disclaimer_date, "2023-11-27T14:27:01",
+        'get_type_disclaimer_date() returns the value if is set'
+    );
 
     $schema->storage->txn_rollback;
 };
