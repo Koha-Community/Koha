@@ -219,7 +219,7 @@
                     [% END %]
 
                     [% IF ( op == 'show' ) %]
-                    <form name="f" action="modborrowers.pl" method="post">
+                    <form name="f" action="modborrowers.pl" method="post" id="batchmod-borrowers-form">
                         <input type="hidden" name="op" value="do" />
                         [% IF ( borrowers ) %]
                             <div class="btn-toolbar selections-toolbar"><a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-times"></i> Clear all</a></div>
@@ -409,6 +409,7 @@
                                 <fieldset class="action">
                                     <input type="submit" name="mainformsubmit" class="btn btn-primary" value="Save" />
                                     <a href="/cgi-bin/koha/tools/modborrowers.pl" class="cancel">Cancel</a>
+                                    [% PROCESS 'members-patron-selections.inc' id="batchmod-borrowers-form" %]
                                 </fieldset>
                             </div>
                         </form>
@@ -436,6 +437,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("js/members-patron-selections.js") | $raw %]
     <script>
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();

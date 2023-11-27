@@ -158,6 +158,7 @@
                             [% END %]
                             <input type="hidden" name="action" value="merge" />
                             <input type="submit" id="merge-patrons" class="btn btn-primary" value="Merge patrons" />
+                            [% PROCESS 'members-patron-selections.inc' id="patron-merge-form" %]
                         </fieldset>
 
                     [% ELSE %]
@@ -296,6 +297,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("js/members-patron-selections.js") | $raw %]
     [% Asset.js("lib/jsdiff/jsdiff.min.js") | $raw %]
     <script>
     $(document).ready(function() {
