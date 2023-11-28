@@ -2,20 +2,26 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>
+<title>[% FILTER collapse %]
     [% IF op =='add_form' %]
         [% IF issue.issue_id %]
-            Modify vendor issue
+            [% tx("Modify vendor issue {issue_number}", { issue_number = issue.issue_id }) | html %]
         [% ELSE %]
-            New vendor issue
-        [% END %] &rsaquo; [% ELSE %]
+            [% t("New vendor issue") | html %]
+        [% END %] &rsaquo;
+    [% ELSE %]
         [% IF op == 'delete_confirm' %]
-            Confirm deletion of vendor issue &rsaquo; [% END %]
+            [% t("Confirm deletion of vendor issue") | html %] &rsaquo;
+        [% END %]
     [% END %]
-    Vendor issue &rsaquo; Acquisition &rsaquo; Koha
-</title>
+    [% t("Vendor issues") | html %] &rsaquo;
+    [% vendor.name | html %] &rsaquo;
+    [% t("Acquisition") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -25,38 +31,32 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-        </li>
-        <li>
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]">[% vendor.name | html %]</a>
-        </li>
-        [% IF op == 'list' %]
-            <li>
-                <a href="#" aria-current="page">Issues</a>
-            </li>
-        [% ELSE %]
-            <li>
-                <a href="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]">Issues</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    [% IF issue %]
-                        Issue #[% issue.issue_id| html %]
-                    [% ELSE %]
-                        New issue
-                    [% END %]
-                </a>
-            </li>
         [% END %]
-    </ol>
-</nav>
-[% END %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]">[% vendor.name | html %]</a>
+        [% END %]
+        [% IF op == 'list' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% t("Vendor issues") | html %]
+            [% END %]
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]">Vendor issues</a>
+            [% END %]
+
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% IF issue %]
+                    [% tx("Modify vendor issue {issue_number}", { issue_number = issue.issue_id }) | html %]
+                [% ELSE %]
+                    [% t("New vendor issue") | html %]
+                [% END %]
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
@@ -86,7 +86,7 @@
 
 [% IF op == 'add_form' %]
     [% IF issue %]
-        <h1>Modify a vendor issue</h1>
+        <h1>[% tx("Modify vendor issue {issue_number}", { issue_number = issue.issue_id }) | html %]</h1>
     [% ELSE %]
         <h1>New vendor issue</h1>
     [% END %]
@@ -131,7 +131,7 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h1>Delete issue #[% issue.issue_id | html %]?<h1>
+        <h1>Delete issue [% issue.issue_id | html %]?</h1>
         <form action="/cgi-bin/koha/acqui/vendor_issues.pl" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="issue_id" value="[% issue.issue_id | html %]" />
@@ -145,7 +145,7 @@
 [% END %]
 
 [% IF op == 'show' %]
-    <h1>Vendor issue #[% issue.issue_id | html %]</h1>
+    <h1>Vendor issue [% issue.issue_id | html %]</h1>
 
         <fieldset class="rows">
             <ol>
