@@ -31,7 +31,6 @@ use vars qw{ $VERSION };
 #        and is automatically called by Auth.pm when needed.
 $VERSION = "22.11.11.001";
 
-$VERSION = "22.11.11.000";
 sub version {
     return $VERSION;
 }
