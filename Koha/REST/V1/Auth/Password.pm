@@ -71,7 +71,7 @@ sub validate {
     my $password = $body->{password} // "";
 
     return try {
-        my ( $status, $THE_cardnumber, $THE_userid ) = C4::Auth::checkpw( $identifier, $password );
+        my ( $status, $THE_cardnumber, $THE_userid, $patron ) = C4::Auth::checkpw( $identifier, $password );
         unless ( $status && $status > 0 ) {
             my $error_response = $status == -2 ? 'Password expired' : 'Validation failed';
             return $c->render(
@@ -79,8 +79,6 @@ sub validate {
                 openapi => { error => $error_response }
             );
         }
-
-        my $patron = Koha::Patrons->find( { cardnumber => $THE_cardnumber } );
 
         return $c->render(
             status  => 201,
