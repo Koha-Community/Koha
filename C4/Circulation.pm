@@ -541,6 +541,8 @@ sub TooMany {
             max_checkouts_allowed        => $maxissueqty_rule ? $maxissueqty_rule->rule_value : undef,
             max_onsite_checkouts_allowed => $maxonsiteissueqty_rule ? $maxonsiteissueqty_rule->rule_value : undef,
             switch_onsite_checkout       => $switch_onsite_checkout,
+            circulation_rule             => $maxissueqty_rule,
+            onsite_circulation_rule      => $maxonsiteissueqty_rule,
         };
         # If parent rules exists
         if ( defined($parent_maxissueqty_rule) and defined($parent_maxissueqty_rule->rule_value) ){
@@ -589,7 +591,8 @@ sub TooMany {
                 onsite_checkout              => $onsite_checkout,
                 max_checkouts_allowed        => $max_checkouts_allowed,
                 max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
-                switch_onsite_checkout       => $switch_onsite_checkout
+                switch_onsite_checkout       => $switch_onsite_checkout,
+                circulation_rule             => $branch_borrower_circ_rule,
             }
         );
         return $qty_over if defined $qty_over;
@@ -611,14 +614,17 @@ sub _check_max_qty {
     my $max_checkouts_allowed        = $params->{max_checkouts_allowed};
     my $max_onsite_checkouts_allowed = $params->{max_onsite_checkouts_allowed};
     my $switch_onsite_checkout       = $params->{switch_onsite_checkout};
+    my $circulation_rule             = $params->{circulation_rule};
+    my $onsite_circulation_rule      = $params->{onsite_circulation_rule};
 
     if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
         if ( $max_onsite_checkouts_allowed eq '' ) { return; }
         if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed ) {
             return {
-                reason      => 'TOO_MANY_ONSITE_CHECKOUTS',
-                count       => $onsite_checkout_count,
-                max_allowed => $max_onsite_checkouts_allowed,
+                reason           => 'TOO_MANY_ONSITE_CHECKOUTS',
+                count            => $onsite_checkout_count,
+                max_allowed      => $max_onsite_checkouts_allowed,
+                circulation_rule => $onsite_circulation_rule,
             };
         }
     }
@@ -627,9 +633,10 @@ sub _check_max_qty {
         my $delta = $switch_onsite_checkout ? 1 : 0;
         if ( $checkout_count >= $max_checkouts_allowed + $delta ) {
             return {
-                reason      => 'TOO_MANY_CHECKOUTS',
-                count       => $checkout_count,
-                max_allowed => $max_checkouts_allowed,
+                reason           => 'TOO_MANY_CHECKOUTS',
+                count            => $checkout_count,
+                max_allowed      => $max_checkouts_allowed,
+                circulation_rule => $circulation_rule,
             };
         }
     }
@@ -639,9 +646,10 @@ sub _check_max_qty {
             $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )
         {
             return {
-                reason      => 'TOO_MANY_CHECKOUTS',
-                count       => $checkout_count - $onsite_checkout_count,
-                max_allowed => $max_checkouts_allowed,
+                reason           => 'TOO_MANY_CHECKOUTS',
+                count            => $checkout_count - $onsite_checkout_count,
+                max_allowed      => $max_checkouts_allowed,
+                circulation_rule => $circulation_rule,
             };
         }
     }
@@ -1019,16 +1027,19 @@ sub CanBookBeIssued {
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
     if ( $toomany && not exists $needsconfirmation{RENEW_ISSUE} ) {
         if ( $toomany->{max_allowed} == 0 ) {
-            $needsconfirmation{PATRON_CANT} = 1;
+            $needsconfirmation{PATRON_CANT}      = 1;
+            $needsconfirmation{circulation_rule_PATRON_CANT} = $toomany->{circulation_rule};
         }
         if ( C4::Context->preference("AllowTooManyOverride") ) {
-            $needsconfirmation{TOO_MANY} = $toomany->{reason};
+            $needsconfirmation{TOO_MANY}           = $toomany->{reason};
             $needsconfirmation{current_loan_count} = $toomany->{count};
-            $needsconfirmation{max_loans_allowed} = $toomany->{max_allowed};
+            $needsconfirmation{max_loans_allowed}  = $toomany->{max_allowed};
+            $needsconfirmation{circulation_rule_TOO_MANY}   = $toomany->{circulation_rule};
         } else {
-            $issuingimpossible{TOO_MANY} = $toomany->{reason};
+            $issuingimpossible{TOO_MANY}           = $toomany->{reason};
             $issuingimpossible{current_loan_count} = $toomany->{count};
-            $issuingimpossible{max_loans_allowed} = $toomany->{max_allowed};
+            $issuingimpossible{max_loans_allowed}  = $toomany->{max_allowed};
+            $needsconfirmation{circulation_rule_TOO_MANY}   = $toomany->{circulation_rule};
         }
     }
 
