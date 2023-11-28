@@ -464,7 +464,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'issue_manage' -%]
         <span class="sub_permission issues_manage_subpermission">
-            Manage issues
+            Manage vendor issues
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'order_receive' -%]
