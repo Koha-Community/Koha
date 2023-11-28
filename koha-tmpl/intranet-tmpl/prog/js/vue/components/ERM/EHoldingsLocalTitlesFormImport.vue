@@ -2,9 +2,12 @@
     <h2>{{ $__("Import from a list") }}</h2>
     <div v-if="job_id" class="dialog message">
         {{ $__("Import in progress,") }}
-        <router-link :to="`/cgi-bin/koha/admin/background_jobs/${job_id}`">
+        <a
+            :href="`/cgi-bin/koha/admin/background_jobs.pl?op=view&id=${job_id}`"
+            target="_blank"
+        >
             {{ $__("see job #%s").format(job_id) }}
-        </router-link>
+        </a>
     </div>
     <fieldset id="package_list" class="rows">
         {{ $__("To the following local package") }}:

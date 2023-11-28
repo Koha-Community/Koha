@@ -25,15 +25,6 @@ import { $__ } from "../i18n";
 
 export const routes = [
     {
-        path: "/cgi-bin/koha/admin/background_jobs/:id",
-        is_base: true,
-        beforeEnter(to, from, next) {
-            window.location.href =
-                "/cgi-bin/koha/admin/background_jobs.pl?op=view&id=" +
-                to.params.id;
-        },
-    },
-    {
         path: "/cgi-bin/koha/erm/erm.pl",
         is_default: true,
         is_base: true,
