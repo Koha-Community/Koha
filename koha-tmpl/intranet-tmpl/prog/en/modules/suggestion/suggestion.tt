@@ -14,7 +14,7 @@
         [% IF ( suggestionid ) %]
             [% tx("Edit suggestion #{suggestion_number}", { suggestion_number = suggestionid }) | html %] &rsaquo;
         [% ELSE %]
-            Add suggestion &rsaquo;
+            [% t("Add suggestion") | html %] &rsaquo;
         [% END %]
     [% ELSIF ( op == 'show' ) %]
         [% tx("Show suggestion #{suggestion_number}", { suggestion_number = suggestionid }) | html %] &rsaquo;
