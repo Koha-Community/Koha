@@ -46,7 +46,7 @@
                     >
                         {{
                             $__(
-                                "Be careful removing attribute to this processing, the items using it will be impacted as well!"
+                                "Be careful when removing attributes from this processing: the items using it will be impacted as well!"
                             )
                         }}
                     </div>
