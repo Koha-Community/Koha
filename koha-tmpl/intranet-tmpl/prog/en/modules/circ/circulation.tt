@@ -171,10 +171,18 @@
 
                                 [% IF TOO_MANY and TOO_MANY == 'TOO_MANY_CHECKOUTS' %]
                                     <li>Too many checked out. [% current_loan_count | html %] checked out, only [% max_loans_allowed | html %] are allowed.</li>
+                                    <li>
+                                        Maximum checkouts calculated from the circulation rule for
+                                        [% INCLUDE circulation_rule_criteria rule=circulation_rule_TOO_MANY %]
+                                    </li>
                                 [% END %]
 
                                 [% IF TOO_MANY and TOO_MANY == 'TOO_MANY_ONSITE_CHECKOUTS' %]
                                     <li>Too many on-site checked out. [% current_loan_count | html %] on-site checked out, only [% max_loans_allowed | html %] are allowed.</li>
+                                    <li>
+                                        Maximum checkouts calculated from the circulation rule for
+                                        [% INCLUDE circulation_rule_criteria rule=circulation_rule_TOO_MANY %]
+                                    </li>
                                 [% END %]
 
                                 [% IF ( BORRNOTSAMEBRANCH ) %]
@@ -557,6 +565,10 @@
 
                                 [% IF ( TOO_MANY ) %]
                                     <li>Too many checked out. [% current_loan_count | html %] checked out, only [% max_loans_allowed | html %] are allowed.</li>
+                                    <li>
+                                        Maximum checkouts calculated from the circulation rule for
+                                        [% INCLUDE circulation_rule_criteria rule=circulation_rule_TOO_MANY %]
+                                    </li>
                                 [% END %]
 
                                 [% IF ( ITEMNOTSAMEBRANCH ) %]
@@ -1055,3 +1067,32 @@
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
+
+[% BLOCK circulation_rule_criteria %]
+    <ul>
+        <li>
+            Item type:
+            [% IF rule.itemtype %]
+                [% ItemTypes.GetDescription( rule.itemtype ) | html %]
+            [% ELSE %]
+                <i>All</i>
+            [% END %]
+        </li>
+        <li>
+            Patron category:
+            [% IF rule.categorycode %]
+                [% Categories.GetName( rule.categorycode ) | html %]
+            [% ELSE %]
+                <i>All</i>
+            [% END %]
+        </li>
+        <li>
+            Library:
+            [% IF rule.branchcode %]
+                [% Branches.GetName( rule.branchcode ) | html %]
+            [% ELSE %]
+                <i>All libraries</i>
+            [% END %]
+        </li>
+    </ul>
+[% END %]
