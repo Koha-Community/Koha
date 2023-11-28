@@ -681,7 +681,7 @@ sub _get_usage_months {
     my $end_year  = substr( $end_date[0], 0, 4 );
 
     my @month_headings = ();
-    while ( $begin_month <= $end_month || $begin_year < $end_year ) {
+    while ( $begin_year <= $end_year && ( $begin_year != $end_year || $begin_month <= $end_month ) ) {
         push(
             @month_headings,
             $column_headings_formatting
