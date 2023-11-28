@@ -9,14 +9,13 @@
                 </div>
                 <div class="modal-body">
                     <div id="booking_result"></div>
-                    <fieldset class="rows">
+                    <fieldset class="brief">
                         <input type="hidden" name="biblio_id" id="booking_id">
                         <input type="hidden" name="biblio_id" id="booking_biblio_id">
                         <input type="hidden" name="start_date" id="booking_start_date">
                         <input type="hidden" name="end_date" id="booking_end_date">
                         <ol>
                             <li>
-                                <div class="hint">Enter patron card number or partial name:</div>
                                 <label class="required" for="booking_patron_id">Patron: </label>
                                 <select name="booking_patron_id" id="booking_patron_id" required="required">
                                     <option></option>
@@ -24,6 +23,7 @@
                                     <option value="[% borrowernumber | uri %]" selected="selected">[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %] )</option>
                                     [% END %]
                                 </select>
+                                <div class="hint">Enter patron card number or partial name</div>
                             </li>
                             <label for="booking_item_id">Item: </label>
                                 <select name="booking_item_id" id="booking_item_id" disabled="true">
