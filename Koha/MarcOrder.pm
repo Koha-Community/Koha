@@ -90,7 +90,7 @@ sub import_record_and_create_order_lines {
     my $budget_id                 = $args->{budget_id};
     my $vendor                    = $args->{vendor};
 
-    my $result = add_biblios_from_import_record(
+    my $result = add_biblio_from_import_record(
         {
             import_batch_id           => $import_batch_id,
             import_record             => $import_record,
@@ -167,8 +167,8 @@ sub _get_MarcFieldsToOrder_syspref_data {
 =cut
 
 sub _get_MarcItemFieldsToOrder_syspref_data {
-    my ( $syspref_name, $record, $field_list ) = @_;
-    my $syspref = C4::Context->preference($syspref_name);
+    my ($record) = @_;
+    my $syspref = C4::Context->preference('MarcItemFieldsToOrder');
     $syspref = "$syspref\n\n";
     my $yaml = eval { YAML::XS::Load( Encode::encode_utf8($syspref) ); };
     if ($@) {
@@ -179,8 +179,7 @@ sub _get_MarcItemFieldsToOrder_syspref_data {
     my @tags_list;
 
     # Check tags in syspref definition
-    for my $field_name (@$field_list) {
-        next unless exists $yaml->{$field_name};
+    for my $field_name ( keys %$yaml ) {
         my @fields = split /\|/, $yaml->{$field_name};
         for my $field (@fields) {
             my ( $f, $sf ) = split /\$/, $field;
@@ -208,8 +207,7 @@ sub _get_MarcItemFieldsToOrder_syspref_data {
     if ( $tags_count->{count} ) {
         for ( my $i = 0 ; $i < $tags_count->{count} ; $i++ ) {
             my $r;
-            for my $field_name (@$field_list) {
-                next unless exists $yaml->{$field_name};
+            for my $field_name ( keys %$yaml ) {
                 my @fields = split /\|/, $yaml->{$field_name};
                 for my $field (@fields) {
                     my ( $f, $sf ) = split /\$/, $field;
@@ -254,9 +252,9 @@ sub _verify_number_of_fields {
     return { error => 0, count => $tags_count };
 }
 
-=head3 add_biblios_from_import_record
+=head3 add_biblio_from_import_record
 
-    my ($record_results, $duplicates_in_batch) = add_biblios_from_import_record({
+    my ($record_results, $duplicates_in_batch) = add_biblio_from_import_record({
         import_record             => $import_record,
         matcher_id                => $matcher_id,
         overlay_action            => $overlay_action,
@@ -271,7 +269,7 @@ sub _verify_number_of_fields {
 
 =cut
 
-sub add_biblios_from_import_record {
+sub add_biblio_from_import_record {
     my ($args) = @_;
 
     my $import_batch_id           = $args->{import_batch_id};
@@ -369,270 +367,88 @@ sub add_items_from_import_record {
     my $active_currency    = Koha::Acquisition::Currencies->get_active;
     my $biblionumber       = $record_result->{biblionumber};
     my $marcrecord         = $record_result->{marcrecord};
-    my @order_line_details;
 
     if ( $agent eq 'cron' ) {
         my $marc_fields_to_order = _get_MarcFieldsToOrder_syspref_data(
             'MarcFieldsToOrder', $marcrecord,
             [ 'price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2' ]
         );
-        my $quantity = $marc_fields_to_order->{quantity};
-        my $budget_code =
-            $marc_fields_to_order->{budget_code} || $budget_id;    # Use fallback from ordering profile if not mapped
-        my $price    = $marc_fields_to_order->{price};
-        my $discount = $marc_fields_to_order->{discount};
-        my $sort1    = $marc_fields_to_order->{sort1};
-        my $sort2    = $marc_fields_to_order->{sort2};
-        my $mapped_budget;
 
-        if ($budget_code) {
-            my $biblio_budget = GetBudgetByCode($budget_code);
-            if ($biblio_budget) {
-                $mapped_budget = $biblio_budget->{budget_id};
-            } else {
-                $mapped_budget = $budget_id;
-            }
-        }
+        my $marc_item_fields_to_order = _get_MarcItemFieldsToOrder_syspref_data($marcrecord);
 
-        my $marc_item_fields_to_order = _get_MarcItemFieldsToOrder_syspref_data(
-            'MarcItemFieldsToOrder',
-            $marcrecord,
-            [
-                'homebranch', 'holdingbranch', 'itype', 'nonpublic_note',   'public_note', 'loc', 'ccode', 'notforloan',
-                'uri',        'copyno',        'price', 'replacementprice', 'itemcallnumber', 'quantity', 'budget_code'
-            ]
-        );
-        my $item_homebranch     = $marc_item_fields_to_order->{homebranch};
-        my $item_holdingbranch  = $marc_item_fields_to_order->{holdingbranch};
-        my $item_itype          = $marc_item_fields_to_order->{itype};
-        my $item_nonpublic_note = $marc_item_fields_to_order->{nonpublic_note};
-        my $item_public_note    = $marc_item_fields_to_order->{public_note};
-        my $item_loc            = $marc_item_fields_to_order->{loc};
-        my $item_ccode          = $marc_item_fields_to_order->{ccode};
-        my $item_notforloan     = $marc_item_fields_to_order->{notforloan};
-        my $item_uri            = $marc_item_fields_to_order->{uri};
-        my $item_copyno         = $marc_item_fields_to_order->{copyno};
-        my $item_quantity       = $marc_item_fields_to_order->{quantity} || 0;
-        my $item_budget_code    = $marc_item_fields_to_order->{budget_code};
-        my $item_budget_id;
+        my $item_fields = {
+            homebranch       => $marc_item_fields_to_order->{homebranch},
+            holdingbranch    => $marc_item_fields_to_order->{holdingbranch},
+            itype            => $marc_item_fields_to_order->{itype},
+            nonpublic_note   => $marc_item_fields_to_order->{nonpublic_note},
+            public_note      => $marc_item_fields_to_order->{public_note},
+            loc              => $marc_item_fields_to_order->{loc},
+            ccode            => $marc_item_fields_to_order->{ccode},
+            notforloan       => $marc_item_fields_to_order->{notforloan},
+            uri              => $marc_item_fields_to_order->{uri},
+            copyno           => $marc_item_fields_to_order->{copyno},
+            quantity         => $marc_item_fields_to_order->{quantity},
+            price            => $marc_item_fields_to_order->{price},
+            replacementprice => $marc_item_fields_to_order->{replacementprice},
+            itemcallnumber   => $marc_item_fields_to_order->{itemcallnumber},
+            budget_code      => $marc_item_fields_to_order->{budget_code},
+            c_quantity       => $marc_fields_to_order->{quantity},
+            c_budget_code    => $marc_fields_to_order->{budget_code},
+            c_price          => $marc_fields_to_order->{price},
+            c_discount       => $marc_fields_to_order->{discount},
+            c_sort1          => $marc_fields_to_order->{sort1},
+            c_sort2          => $marc_fields_to_order->{sort2},
+        };
 
-        if ( $marc_item_fields_to_order->{budget_code} ) {
-            my $item_budget = GetBudgetByCode( $marc_item_fields_to_order->{budget_code} );
-            if ($item_budget) {
-                $item_budget_id = $item_budget->{budget_id};
-            } else {
-                $item_budget_id = $budget_id;
-            }
-        } else {
-            $item_budget_id = $budget_id;
-        }
-        my $item_price             = $marc_item_fields_to_order->{price};
-        my $item_replacement_price = $marc_item_fields_to_order->{replacementprice};
-        my $item_callnumber        = $marc_item_fields_to_order->{itemcallnumber};
-        my $itemcreation           = 0;
-
-        for ( my $i = 0 ; $i < $item_quantity ; $i++ ) {
-            $itemcreation = 1;
-            my $item = Koha::Item->new(
-                {
-                    biblionumber        => $biblionumber,
-                    homebranch          => $item_homebranch,
-                    holdingbranch       => $item_holdingbranch,
-                    itype               => $item_itype,
-                    itemnotes_nonpublic => $item_nonpublic_note,
-                    itemnotes           => $item_public_note,
-                    location            => $item_loc,
-                    ccode               => $item_ccode,
-                    notforloan          => $item_notforloan,
-                    uri                 => $item_uri,
-                    copynumber          => $item_copyno,
-                    price               => $item_price,
-                    replacementprice    => $item_replacement_price,
-                    itemcallnumber      => $item_callnumber,
-                }
-            )->store;
-
-            my %order_detail_hash = (
+        my $order_line_fields = parse_input_into_order_line_fields(
+            {
+                agent        => $agent,
                 biblionumber => $biblionumber,
-                basketno     => $basket_id,
-                itemnumbers  => ( $item->itemnumber ),
-                quantity     => 1,
-                budget_id    => $item_budget_id,
-                currency     => $vendor->listprice,
-            );
-
-            if ($item_price) {
-                $order_detail_hash{tax_rate_on_ordering}  = $vendor->tax_rate;
-                $order_detail_hash{tax_rate_on_receiving} = $vendor->tax_rate;
-                $order_detail_hash{discount}              = $vendor->discount;
-                $order_detail_hash{rrp}                   = $item_price;
-                $order_detail_hash{ecost} =
-                    $vendor->discount ? $item_price * ( 1 - $vendor->discount / 100 ) : $item_price;
-                $order_detail_hash{listprice} = $order_detail_hash{rrp} / $active_currency->rate;
-                $order_detail_hash{unitprice} = $order_detail_hash{ecost};
-            } else {
-                $order_detail_hash{listprice} = 0;
+                budget_id    => $budget_id,
+                basket_id    => $basket_id,
+                fields       => $item_fields,
             }
-            $order_detail_hash{replacementprice} = $item_replacement_price || 0;
-            $order_detail_hash{uncertainprice}   = 0 if $order_detail_hash{listprice};
+        );
 
-            push @order_line_details, \%order_detail_hash;
-        }
-
-        if ( !$itemcreation ) {
-            my %order_detail_hash = (
-                biblionumber   => $biblionumber,
-                basketno       => $basket_id,
-                quantity       => $quantity,
-                budget_id      => $mapped_budget,
-                uncertainprice => 1,
-                sort1          => $sort1,
-                sort2          => $sort2,
-            );
-
-            if ($price) {
-                $order_detail_hash{tax_rate_on_ordering}  = $vendor->tax_rate;
-                $order_detail_hash{tax_rate_on_receiving} = $vendor->tax_rate;
-                my $order_discount = $discount ? $discount : $vendor->discount;
-                $order_detail_hash{discount}  = $order_discount;
-                $order_detail_hash{rrp}       = $price;
-                $order_detail_hash{ecost}     = $order_discount ? $price * ( 1 - $order_discount / 100 ) : $price;
-                $order_detail_hash{listprice} = $order_detail_hash{rrp} / $active_currency->rate;
-                $order_detail_hash{unitprice} = $order_detail_hash{ecost};
-            } else {
-                $order_detail_hash{listprice} = 0;
+        my $order_line_details = create_items_and_generate_order_hash(
+            {
+                fields          => $order_line_fields,
+                vendor          => $vendor,
+                agent           => $agent,
+                active_currency => $active_currency,
             }
+        );
 
-            $order_detail_hash{uncertainprice} = 0 if $order_detail_hash{listprice};
-            push @order_line_details, \%order_detail_hash;
-        }
+        return $order_line_details;
     }
 
     if ( $agent eq 'client' ) {
-        my $homebranches      = $client_item_fields->{homebranches};
-        my $count             = scalar @$homebranches;
-        my $holdingbranches   = $client_item_fields->{holdingbranches};
-        my $itypes            = $client_item_fields->{itypes};
-        my $nonpublic_notes   = $client_item_fields->{nonpublic_notes};
-        my $public_notes      = $client_item_fields->{public_notes};
-        my $locs              = $client_item_fields->{locs};
-        my $ccodes            = $client_item_fields->{ccodes};
-        my $notforloans       = $client_item_fields->{notforloans};
-        my $uris              = $client_item_fields->{uris};
-        my $copynos           = $client_item_fields->{copynos};
-        my $budget_codes      = $client_item_fields->{budget_codes};
-        my $itemprices        = $client_item_fields->{itemprices};
-        my $replacementprices = $client_item_fields->{replacementprices};
-        my $itemcallnumbers   = $client_item_fields->{itemcallnumbers};
-
-        my $itemcreation;
-        for ( my $i = 0 ; $i < $count ; $i++ ) {
-            $itemcreation = 1;
-            my $item = Koha::Item->new(
-                {
-                    biblionumber        => $biblionumber,
-                    homebranch          => @$homebranches[$i],
-                    holdingbranch       => @$holdingbranches[$i],
-                    itemnotes_nonpublic => @$nonpublic_notes[$i],
-                    itemnotes           => @$public_notes[$i],
-                    location            => @$locs[$i],
-                    ccode               => @$ccodes[$i],
-                    itype               => @$itypes[$i],
-                    notforloan          => @$notforloans[$i],
-                    uri                 => @$uris[$i],
-                    copynumber          => @$copynos[$i],
-                    price               => @$itemprices[$i],
-                    replacementprice    => @$replacementprices[$i],
-                    itemcallnumber      => @$itemcallnumbers[$i],
-                }
-            )->store;
-
-            my %order_detail_hash = (
+        my $order_line_fields = parse_input_into_order_line_fields(
+            {
+                agent        => $agent,
                 biblionumber => $biblionumber,
-                itemnumbers  => ( $item->itemnumber ),
-                basketno     => $basket_id,
-                quantity     => 1,
-                budget_id    => @$budget_codes[$i]
-                    || $budget_id,    # If no budget selected in the UI, default to the budget on the ordering account
-                currency => $vendor->listprice,
-            );
-
-            if ( @$itemprices[$i] ) {
-                $order_detail_hash{tax_rate_on_ordering}  = $vendor->tax_rate;
-                $order_detail_hash{tax_rate_on_receiving} = $vendor->tax_rate;
-                my $order_discount =
-                    $client_item_fields->{c_discount} ? $client_item_fields->{c_discount} : $vendor->discount;
-                $order_detail_hash{discount} = $order_discount;
-                $order_detail_hash{rrp}      = @$itemprices[$i];
-                $order_detail_hash{ecost} =
-                    $order_discount ? @$itemprices[$i] * ( 1 - $order_discount / 100 ) : @$itemprices[$i];
-                $order_detail_hash{listprice} = $order_detail_hash{rrp} / $active_currency->rate;
-                $order_detail_hash{unitprice} = $order_detail_hash{ecost};
-            } else {
-                $order_detail_hash{listprice} = 0;
+                budget_id    => $budget_id,
+                basket_id    => $basket_id,
+                fields       => $client_item_fields,
             }
-            $order_detail_hash{replacementprice} = @$replacementprices[$i] || 0;
-            $order_detail_hash{uncertainprice}   = 0 if $order_detail_hash{listprice};
+        );
 
-            push @order_line_details, \%order_detail_hash;
-        }
-
-        if ( !$itemcreation ) {
-            my $quantity          = GetMarcQuantity( $marcrecord, C4::Context->preference('marcflavour') ) || 1;
-            my %order_detail_hash = (
-                biblionumber       => $biblionumber,
-                basketno           => $basket_id,
-                quantity           => $client_item_fields->{c_quantity},
-                budget_id          => $client_item_fields->{c_budget_id},
-                uncertainprice     => 1,
-                sort1              => $client_item_fields->{c_sort1},
-                sort2              => $client_item_fields->{c_sort2},
-                order_internalnote => $client_item_fields->{all_order_internalnote},
-                order_vendornote   => $client_item_fields->{all_order_vendornote},
-                currency           => $client_item_fields->{all_currency},
-                replacementprice   => $client_item_fields->{c_replacement_price},
-            );
-            if ( $client_item_fields->{c_price} ) {
-                $order_detail_hash{tax_rate_on_ordering}  = $vendor->tax_rate;
-                $order_detail_hash{tax_rate_on_receiving} = $vendor->tax_rate;
-                my $order_discount =
-                    $client_item_fields->{c_discount} ? $client_item_fields->{c_discount} : $vendor->discount;
-                $order_detail_hash{discount} = $order_discount;
-                $order_detail_hash{rrp}      = $client_item_fields->{c_price};
-                $order_detail_hash{ecost} =
-                      $order_discount
-                    ? $client_item_fields->{c_price} * ( 1 - $order_discount / 100 )
-                    : $client_item_fields->{c_price};
-                $order_detail_hash{listprice} = $order_detail_hash{rrp} / $active_currency->rate;
-                $order_detail_hash{unitprice} = $order_detail_hash{ecost};
-            } else {
-                $order_detail_hash{listprice} = 0;
+        my $order_line_details = create_items_and_generate_order_hash(
+            {
+                fields          => $order_line_fields,
+                vendor          => $vendor,
+                agent           => $agent,
+                active_currency => $active_currency,
             }
+        );
 
-            $order_detail_hash{uncertainprice} = 0 if $order_detail_hash{listprice};
-
-            # Add items if applicable parsing the item sent by the form, and create an item just for the import_record_id we are dealing with
-            my $basket = Koha::Acquisition::Baskets->find($basket_id);
-            $order_detail_hash{itemnumbers} = ();
-            if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
-                my @tags         = $client_item_fields->{tag};
-                my @subfields    = $client_item_fields->{subfield};
-                my @field_values = $client_item_fields->{field_value};
-                my @serials      = $client_item_fields->{serial};
-                my $xml          = TransformHtmlToXml( \@tags, \@subfields, \@field_values );
-                my $record       = MARC::Record::new_from_xml( $xml, 'UTF-8' );
-                for ( my $qtyloop = 1 ; $qtyloop <= $client_item_fields->{c_quantity} ; $qtyloop++ ) {
-                    my ( $biblionumber, undef, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
-                    push @{ $order_detail_hash{itemnumbers} }, $itemnumber;
-                }
-            }
-            push @order_line_details, \%order_detail_hash;
-        }
+        return $order_line_details;
     }
-    return \@order_line_details;
+
+    # return \@order_line_details;
 }
 
-=head3 create_order_lines
+=head3 create_items_and_generate_order_hash
 
     my $order_lines = create_order_lines({
         order_line_details => $order_line_details
@@ -663,14 +479,14 @@ sub create_order_lines {
 
 =head3 import_batches_list
 
-Fetches import batches matching the batch to be added to the basket and adds these to the $template
+Fetches import batches matching the batch to be added to the basket and returns these to the template
 
-Koha::MarcOrder->import_batches_list($template);
+Koha::MarcOrder->import_batches_list();
 
 =cut
 
 sub import_batches_list {
-    my ( $self, $template ) = @_;
+    my ($self) = @_;
     my $batches = GetImportBatchRangeDesc();
 
     my @list = ();
@@ -702,22 +518,25 @@ sub import_batches_list {
             }
         }
     }
-    $template->param( batch_list => \@list );
     my $num_batches = GetNumberOfNonZ3950ImportBatches();
-    $template->param( num_results => $num_batches );
+
+    return {
+        list        => \@list,
+        num_results => $num_batches
+    };
 }
 
 =head3
 
 For an import batch, this function reads the files and creates all the relevant data pertaining to that file
-It then passes this to the $template variable to be shown in the UI
+It then returns this to the template to be shown in the UI
 
-Koha::MarcOrder->import_biblios_list( $template, $cgiparams->{'import_batch_id'} );
+Koha::MarcOrder->import_biblios_list( $cgiparams->{'import_batch_id'} );
 
 =cut
 
 sub import_biblios_list {
-    my ( $self, $template, $import_batch_id ) = @_;
+    my ( $self, $import_batch_id ) = @_;
     my $batch = GetImportBatch( $import_batch_id, 'staged' );
     return () unless $batch and $batch->{import_status} =~ /^staged$|^reverted$/;
     my $import_records = Koha::Import::Records->search(
@@ -806,63 +625,33 @@ sub import_biblios_list {
         # Items
         my @itemlist           = ();
         my $all_items_quantity = 0;
-        my $alliteminfos       = _get_MarcItemFieldsToOrder_syspref_data(
-            'MarcItemFieldsToOrder',
-            $marcrecord,
-            [
-                'homebranch', 'holdingbranch', 'itype', 'nonpublic_note',   'public_note', 'loc', 'ccode', 'notforloan',
-                'uri',        'copyno',        'price', 'replacementprice', 'itemcallnumber', 'quantity', 'budget_code'
-            ]
-        );
+        my $alliteminfos       = _get_MarcItemFieldsToOrder_syspref_data($marcrecord);
         if ( !$alliteminfos || %$alliteminfos != -1 ) {
-            my $item_homebranch     = $alliteminfos->{homebranch};
-            my $item_holdingbranch  = $alliteminfos->{holdingbranch};
-            my $item_itype          = $alliteminfos->{itype};
-            my $item_nonpublic_note = $alliteminfos->{nonpublic_note};
-            my $item_public_note    = $alliteminfos->{public_note};
-            my $item_loc            = $alliteminfos->{loc};
-            my $item_ccode          = $alliteminfos->{ccode};
-            my $item_notforloan     = $alliteminfos->{notforloan};
-            my $item_uri            = $alliteminfos->{uri};
-            my $item_copyno         = $alliteminfos->{copyno};
-            my $item_quantity       = $alliteminfos->{quantity} || 1;
-            my $item_budget_code    = $alliteminfos->{budget_code};
-            my $item_budget_id;
 
-            if ( $alliteminfos->{budget_code} ) {
-                my $item_budget = GetBudgetByCode( $alliteminfos->{budget_code} );
-                if ($item_budget) {
-                    $item_budget_id = $item_budget->{budget_id};
-                }
+            # Quantity is required, default to one if not supplied
+            my $quantity = delete $alliteminfos->{quantity} || 1;
+
+            # Handle incorrectly named original parameters for MarcItemFieldsToOrder
+            $alliteminfos->{location}   = delete $alliteminfos->{loc}    if $alliteminfos->{loc};
+            $alliteminfos->{copynumber} = delete $alliteminfos->{copyno} if $alliteminfos->{copyno};
+
+            # Convert budget code to a budget id
+            my $item_budget_code = delete $alliteminfos->{budget_code};
+            if ($item_budget_code) {
+                my $item_budget = GetBudgetByCode($item_budget_code);
+                $alliteminfos->{budget_id} = $item_budget->{budget_id} || $budget_id;
             }
-            my $item_price             = $alliteminfos->{price};
-            my $item_replacement_price = $alliteminfos->{replacementprice};
-            my $item_callnumber        = $alliteminfos->{itemcallnumber};
 
-            for ( my $i = 0 ; $i < $item_quantity ; $i++ ) {
+            # Clone the item data for the needed quantity
+            # Add the incremented item id for each item in that quantity
+            for ( my $i = 0 ; $i < $quantity ; $i++ ) {
+                my $itemrecord = {%$alliteminfos};
+                $itemrecord->{item_id} = $item_id++;
 
-                my %itemrecord = (
-                    'item_id'          => $item_id++,
-                    'biblio_count'     => $biblio_count,
-                    'homebranch'       => $item_homebranch,
-                    'holdingbranch'    => $item_holdingbranch,
-                    'itype'            => $item_itype,
-                    'nonpublic_note'   => $item_nonpublic_note,
-                    'public_note'      => $item_public_note,
-                    'loc'              => $item_loc,
-                    'ccode'            => $item_ccode,
-                    'notforloan'       => $item_notforloan,
-                    'uri'              => $item_uri,
-                    'copyno'           => $item_copyno,
-                    'quantity'         => $item_quantity,
-                    'budget_id'        => $item_budget_id         || $budget_id,
-                    'itemprice'        => $item_price             || $price,
-                    'replacementprice' => $item_replacement_price || $replacementprice,
-                    'itemcallnumber'   => $item_callnumber,
-                );
+                # Rename price field to match UI
+                $itemrecord->{itemprice} = delete $itemrecord->{price} if $itemrecord->{price};
                 $all_items_quantity++;
-                push @itemlist, \%itemrecord;
-
+                push @itemlist, $itemrecord;
             }
 
             $cellrecord{'iteminfos'} = \@itemlist;
@@ -893,81 +682,226 @@ sub import_biblios_list {
     my $overlay_action = GetImportBatchOverlayAction($import_batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
     my $item_action    = GetImportBatchItemAction($import_batch_id);
-    $template->param(
-        import_biblio_list                 => \@list,
-        num_results                        => $num_records,
-        import_batch_id                    => $import_batch_id,
-        "overlay_action_${overlay_action}" => 1,
-        overlay_action                     => $overlay_action,
-        "nomatch_action_${nomatch_action}" => 1,
-        nomatch_action                     => $nomatch_action,
-        "item_action_${item_action}"       => 1,
-        item_action                        => $item_action,
-        item_error                         => $item_error,
-        libraries                          => Koha::Libraries->search,
-        locationloop                       => \@locations,
-        itemtypes                          => Koha::ItemTypes->search,
-        ccodeloop                          => \@ccodes,
-        notforloanloop                     => \@notforloans,
-    );
-    _batch_info( $template, $batch );
-}
+    my $result         = {
+        import_biblio_list => \@list,
+        num_results        => $num_records,
+        import_batch_id    => $import_batch_id,
+        overlay_action     => $overlay_action,
+        nomatch_action     => $nomatch_action,
+        item_action        => $item_action,
+        item_error         => $item_error,
+        locationloop       => \@locations,
+        ccodeloop          => \@ccodes,
+        notforloanloop     => \@notforloans,
+        batch              => $batch,
+    };
 
-=head3
-
-Creates a hash of information to be used about an import batch in the template
-
-=cut
-
-sub _batch_info {
-    my ( $template, $batch ) = @_;
-    $template->param(
-        batch_info       => 1,
-        file_name        => $batch->{'file_name'},
-        comments         => $batch->{'comments'},
-        import_status    => $batch->{'import_status'},
-        upload_timestamp => $batch->{'upload_timestamp'},
-        num_records      => $batch->{'num_records'},
-        num_items        => $batch->{'num_items'}
-    );
     if ( $batch->{'num_records'} > 0 ) {
         if ( $batch->{'import_status'} eq 'staged' or $batch->{'import_status'} eq 'reverted' ) {
-            $template->param( can_commit => 1 );
+            $result->{can_commit} = 1;
         }
         if ( $batch->{'import_status'} eq 'imported' ) {
-            $template->param( can_revert => 1 );
+            $result->{can_revert} = 1;
         }
     }
     if ( defined $batch->{'matcher_id'} ) {
         my $matcher = C4::Matcher->fetch( $batch->{'matcher_id'} );
         if ( defined $matcher ) {
-            $template->param(
-                'current_matcher_id'          => $batch->{'matcher_id'},
-                'current_matcher_code'        => $matcher->code(),
-                'current_matcher_description' => $matcher->description()
-            );
+            $result->{'current_matcher_id'}          = $batch->{'matcher_id'};
+            $result->{'current_matcher_code'}        = $matcher->code();
+            $result->{'current_matcher_description'} = $matcher->description();
         }
     }
-    _add_matcher_list( $batch->{'matcher_id'}, $template );
-}
 
-=head3
-
-Adds a list of available matchers based on an import batch
-
-=cut
-
-sub _add_matcher_list {
-    my ( $current_matcher_id, $template ) = @_;
     my @matchers = C4::Matcher::GetMatcherList();
-    if ( defined $current_matcher_id ) {
+    if ( defined $batch->{'matcher_id'} ) {
         for ( my $i = 0 ; $i <= $#matchers ; $i++ ) {
-            if ( $matchers[$i]->{'matcher_id'} == $current_matcher_id ) {
+            if ( $matchers[$i]->{'matcher_id'} == $batch->{'matcher_id'} ) {
                 $matchers[$i]->{'selected'} = 1;
             }
         }
     }
-    $template->param( available_matchers => \@matchers );
+    $result->{available_matchers} = \@matchers;
+
+    return $result;
+}
+
+=head3 parse_input_into_order_line_fields
+
+This function takes inputs from either the cronjob or UI and then parses that into a single set of order line fields that can be used to create items and order lines
+
+my $order_line_fields = parse_input_into_order_line_fields(
+    {
+        agent        => $agent,
+        biblionumber => $biblionumber,
+        budget_id    => $budget_id,
+        basket_id    => $basket_id,
+        fields       => $item_fields,
+    }
+);
+
+
+=cut
+
+sub parse_input_into_order_line_fields {
+    my ($args) = @_;
+
+    my $agent        = $args->{agent};
+    my $client       = $agent eq 'client' ? 1 : 0;
+    my $biblionumber = $args->{biblionumber};
+    my $budget_id    = $args->{budget_id};
+    my $basket_id    = $args->{basket_id};
+    my $fields       = $args->{fields};
+
+    my $quantity        = $fields->{quantity} || 1;
+    my @homebranches    = $client ? @{ $fields->{homebranches} }    : ( ( $fields->{homebranch} ) x $quantity );
+    my @holdingbranches = $client ? @{ $fields->{holdingbranches} } : ( ( $fields->{holdingbranch} ) x $quantity );
+    my @itypes          = $client ? @{ $fields->{itypes} }          : ( ( $fields->{itype} ) x $quantity );
+    my @nonpublic_notes = $client ? @{ $fields->{nonpublic_notes} } : ( ( $fields->{nonpublic_note} ) x $quantity );
+    my @public_notes    = $client ? @{ $fields->{public_notes} }    : ( ( $fields->{public_note} ) x $quantity );
+    my @locs            = $client ? @{ $fields->{locs} }            : ( ( $fields->{loc} ) x $quantity );
+    my @ccodes          = $client ? @{ $fields->{ccodes} }          : ( ( $fields->{ccode} ) x $quantity );
+    my @notforloans     = $client ? @{ $fields->{notforloans} }     : ( ( $fields->{notforloan} ) x $quantity );
+    my @uris            = $client ? @{ $fields->{uris} }            : ( ( $fields->{uri} ) x $quantity );
+    my @copynos         = $client ? @{ $fields->{copynos} }         : ( ( $fields->{copyno} ) x $quantity );
+    my @itemprices      = $client ? @{ $fields->{itemprices} }      : ( ( $fields->{price} ) x $quantity );
+    my @replacementprices =
+        $client ? @{ $fields->{replacementprices} } : ( ( $fields->{replacementprice} ) x $quantity );
+    my @itemcallnumbers     = $client ? @{ $fields->{itemcallnumbers} } : ( ( $fields->{itemcallnumber} ) x $quantity );
+    my $c_quantity          = $client ? $fields->{c_quantity}           : $fields->{c_quantity};
+    my $c_budget_id         = $client ? $fields->{c_budget_id}          : $fields->{c_budget_id};
+    my $c_discount          = $client ? $fields->{c_discount}           : $fields->{c_discount};
+    my $c_sort1             = $client ? $fields->{c_sort1}              : $fields->{c_sort1};
+    my $c_sort2             = $client ? $fields->{c_sort2}              : $fields->{c_sort2};
+    my $c_replacement_price = $client ? $fields->{c_replacement_price}  : $fields->{c_replacement_price};
+    my $c_price             = $client ? $fields->{c_price}              : $fields->{c_price};
+
+    # If using the cronjob, we want to default to the account budget if not mapped on the record
+    my $item_budget_id;
+    if ( !$client && ( $fields->{budget_code} || $fields->{c_budget_code} ) ) {
+        my $budget_code = $fields->{budget_code} || $fields->{c_budget_code};
+        my $item_budget = GetBudgetByCode($budget_code);
+        if ($item_budget) {
+            $item_budget_id = $item_budget->{budget_id};
+        } else {
+            $item_budget_id = $budget_id;
+        }
+    } else {
+        $item_budget_id = $budget_id;
+    }
+    my @budget_codes = $client ? @{ $fields->{budget_codes} } : ($item_budget_id);
+    my $loop_limit   = $client ? scalar(@homebranches)        : $quantity;
+
+    my $order_line_fields = {
+        biblionumber        => $biblionumber,
+        homebranch          => \@homebranches,
+        holdingbranch       => \@holdingbranches,
+        itemnotes_nonpublic => \@nonpublic_notes,
+        itemnotes           => \@public_notes,
+        location            => \@locs,
+        ccode               => \@ccodes,
+        itype               => \@itypes,
+        notforloan          => \@notforloans,
+        uri                 => \@uris,
+        copynumber          => \@copynos,
+        price               => \@itemprices,
+        replacementprice    => \@replacementprices,
+        itemcallnumber      => \@itemcallnumbers,
+        budget_code         => \@budget_codes,
+        loop_limit          => $loop_limit,
+        basket_id           => $basket_id,
+        budget_id           => $budget_id,
+        c_quantity          => $c_quantity,
+        c_budget_id         => $c_budget_id,
+        c_discount          => $c_discount,
+        c_sort1             => $c_sort1,
+        c_sort2             => $c_sort2,
+        c_replacement_price => $c_replacement_price,
+        c_price             => $c_price,
+    };
+
+    return $order_line_fields;
+}
+
+=head3 create_items_and_generate_order_hash
+
+This method is used from both the cronjob and the UI to create items and generate order line details for those new items
+
+my $order_line_details = create_items_and_generate_order_hash(
+    {
+        fields          => $order_line_fields,
+        vendor          => $vendor,
+        agent           => $agent,
+        active_currency => $active_currency,
+    }
+);
+
+=cut
+
+sub create_items_and_generate_order_hash {
+    my ($args) = @_;
+
+    my $agent           = $args->{agent};
+    my $fields          = $args->{fields};
+    my $loop_limit      = $fields->{loop_limit};
+    my $basket_id       = $fields->{basket_id};
+    my $budget_id       = $fields->{budget_id};
+    my $vendor          = $args->{vendor};
+    my $active_currency = $args->{active_currency};
+    my @order_line_details;
+    my $itemcreation = 0;
+
+    for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
+        $itemcreation = 1;
+        my $item = Koha::Item->new(
+            {
+                biblionumber        => $fields->{biblionumber},
+                homebranch          => @{ $fields->{homebranch} }[$i],
+                holdingbranch       => @{ $fields->{holdingbranch} }[$i],
+                itemnotes_nonpublic => @{ $fields->{itemnotes_nonpublic} }[$i],
+                itemnotes           => @{ $fields->{itemnotes} }[$i],
+                location            => @{ $fields->{location} }[$i],
+                ccode               => @{ $fields->{ccode} }[$i],
+                itype               => @{ $fields->{itype} }[$i],
+                notforloan          => @{ $fields->{notforloan} }[$i],
+                uri                 => @{ $fields->{uri} }[$i],
+                copynumber          => @{ $fields->{copynumber} }[$i],
+                price               => @{ $fields->{price} }[$i],
+                replacementprice    => @{ $fields->{replacementprice} }[$i],
+                itemcallnumber      => @{ $fields->{itemcallnumber} }[$i],
+            }
+        )->store;
+
+        my %order_detail_hash = (
+            biblionumber => $fields->{biblionumber},
+            itemnumbers  => ( $item->itemnumber ),
+            basketno     => $basket_id,
+            quantity     => 1,
+            budget_id    => @{ $fields->{budget_code} }[$i]
+                || $budget_id,
+            currency => $vendor->listprice,
+        );
+
+        if ( @{ $fields->{price} }[$i] ) {
+            $order_detail_hash{tax_rate_on_ordering}  = $vendor->tax_rate;
+            $order_detail_hash{tax_rate_on_receiving} = $vendor->tax_rate;
+            my $order_discount = $fields->{c_discount} ? $fields->{c_discount} : $vendor->discount;
+            $order_detail_hash{discount} = $order_discount;
+            $order_detail_hash{rrp}      = @{ $fields->{price} }[$i];
+            $order_detail_hash{ecost} =
+                $order_discount ? @{ $fields->{price} }[$i] * ( 1 - $order_discount / 100 ) : @{ $fields->{price} }[$i];
+            $order_detail_hash{listprice} = $order_detail_hash{rrp} / $active_currency->rate;
+            $order_detail_hash{unitprice} = $order_detail_hash{ecost};
+        } else {
+            $order_detail_hash{listprice} = 0;
+        }
+        $order_detail_hash{replacementprice} = @{ $fields->{replacementprice} }[$i] || 0;
+        $order_detail_hash{uncertainprice}   = 0 if $order_detail_hash{listprice};
+
+        push @order_line_details, \%order_detail_hash;
+
+    }
+    return \@order_line_details;
 }
 
 1;

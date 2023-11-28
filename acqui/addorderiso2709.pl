@@ -95,7 +95,11 @@ if ( $op eq "" ) {
     $template->param( "basketno" => $cgiparams->{'basketno'} );
 
     #display batches
-    Koha::MarcOrder->import_batches_list($template);
+    my $batches_list = Koha::MarcOrder->import_batches_list();
+    $template->param(
+        batch_list => $batches_list->{list},
+        num_results => $batches_list->{num_results}
+    );
     #
     # 2nd step = display the content of the chosen file
     #
@@ -112,7 +116,43 @@ if ( $op eq "" ) {
         bookseller => $bookseller,
         "allmatch" => $allmatch,
     );
-    Koha::MarcOrder->import_biblios_list( $template, $cgiparams->{'import_batch_id'} );
+    my $biblios_list = Koha::MarcOrder->import_biblios_list( $cgiparams->{'import_batch_id'} );
+    my $overlay_action = $biblios_list->{overlay_action};
+    my $nomatch_action = $biblios_list->{nomatch_action};
+    my $item_action    = $biblios_list->{item_action};
+    my $batch          = $biblios_list->{batch};
+
+    $template->param(
+        import_biblio_list                 => $biblios_list->{import_biblio_list},
+        num_results                        => $biblios_list->{num_results},
+        import_batch_id                    => $biblios_list->{import_batch_id},
+        "overlay_action_${overlay_action}" => 1,
+        overlay_action                     => $overlay_action,
+        "nomatch_action_${nomatch_action}" => 1,
+        nomatch_action                     => $nomatch_action,
+        "item_action_${item_action}"       => 1,
+        item_action                        => $biblios_list->{item_action},
+        item_error                         => $biblios_list->{item_error},
+        libraries                          => Koha::Libraries->search,
+        locationloop                       => $biblios_list->{locationloop},
+        itemtypes                          => Koha::ItemTypes->search,
+        ccodeloop                          => $biblios_list->{ccodeloop},
+        notforloanloop                     => $biblios_list->{notforloanloop},
+        can_commit                         => $biblios_list->{can_commit},
+        can_revert                         => $biblios_list->{can_revert},
+        current_matcher_id                 => $biblios_list->{current_matcher_id},
+        current_matcher_code               => $biblios_list->{current_matcher_code},
+        current_matcher_description        => $biblios_list->{current_matcher_description},
+        available_matchers                 => $biblios_list->{available_matchers},
+        batch_info                         => 1,
+        file_name                          => $batch->{'file_name'},
+        comments                           => $batch->{'comments'},
+        import_status                      => $batch->{'import_status'},
+        upload_timestamp                   => $batch->{'upload_timestamp'},
+        num_records                        => $batch->{'num_records'},
+        num_items                          => $batch->{'num_items'}
+    );
+
     if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
 
         # prepare empty item form
@@ -156,13 +196,6 @@ if ( $op eq "" ) {
     my $duplinbatch;
     my $imported                  = 0;
     my @import_record_id_selected = $input->multi_param("import_record_id");
-    my @quantities                = $input->multi_param('quantity');
-    my @prices                    = $input->multi_param('price');
-    my @orderreplacementprices    = $input->multi_param('replacementprice');
-    my @budgets_id                = $input->multi_param('budget_id');
-    my @discount                  = $input->multi_param('discount');
-    my @sort1                     = $input->multi_param('sort1');
-    my @sort2                     = $input->multi_param('sort2');
     my $matcher_id                = $input->param('matcher_id');
     my $active_currency           = Koha::Acquisition::Currencies->get_active;
 
@@ -184,6 +217,7 @@ if ( $op eq "" ) {
         my @itemcallnumbers   = $input->multi_param( 'itemcallnumber_' . $import_record->import_record_id );
 
         my $client_item_fields = {
+            quantity          => scalar(@homebranches),
             homebranches      => \@homebranches,
             holdingbranches   => \@holdingbranches,
             itypes            => \@itypes,
@@ -198,15 +232,20 @@ if ( $op eq "" ) {
             itemprices        => \@itemprices,
             replacementprices => \@replacementprices,
             itemcallnumbers   => \@itemcallnumbers,
-            c_quantity        => shift(@quantities)
+            c_quantity =>
+                $input->param( 'quantity_' . $import_record->import_record_id )
                 || GetMarcQuantity( $marcrecord, C4::Context->preference('marcflavour') )
                 || 1,
-            c_budget_id         => shift(@budgets_id) || $input->param('all_budget_id') || $budget_id,
-            c_discount          => shift(@discount),
-            c_sort1             => shift(@sort1) || $input->param('all_sort1') || '',
-            c_sort2             => shift(@sort2) || $input->param('all_sort2') || '',
-            c_replacement_price => shift(@orderreplacementprices),
-            c_price => shift(@prices) || GetMarcPrice( $marcrecord, C4::Context->preference('marcflavour') ),
+            c_budget_id =>
+                $input->param( 'budget_id_' . $import_record->import_record_id )
+                || $input->param('all_budget_id')
+                || $budget_id,
+            c_discount => $input->param( 'discount_' . $import_record->import_record_id ),
+            c_sort1 => $input->param( 'sort1_' . $import_record->import_record_id ) || $input->param('all_sort1') || '',
+            c_sort2 => $input->param( 'sort2_' . $import_record->import_record_id ) || $input->param('all_sort2') || '',
+            c_replacement_price => $input->param( 'replacementprice_' . $import_record->import_record_id ),
+            c_price             => $input->param( 'price_' . $import_record->import_record_id )
+                || GetMarcPrice( $marcrecord, C4::Context->preference('marcflavour') ),
         };
 
         my $args = {
