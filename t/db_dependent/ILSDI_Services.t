@@ -926,3 +926,50 @@ subtest 'GetAvailability itemcallnumber' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'Bug 34893: ILS-DI can return the wrong patron for AuthenticatePatron' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $plain_password = 'tomasito';
+
+    $builder->build({
+        source => 'Borrower',
+        value => {
+            cardnumber => undef,
+        }
+    });
+
+    my $borrower0 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            cardnumber => "cardnumber1",
+            userid => undef,
+            password => Koha::AuthUtils::hash_password( $plain_password ),
+            lastseen => "2001-01-01 12:34:56"
+        }
+    });
+
+    my $borrower = $builder->build({
+        source => 'Borrower',
+        value  => {
+            cardnumber => "cardnumber2",
+            userid => undef,
+            password => Koha::AuthUtils::hash_password( $plain_password ),
+            lastseen => "2001-01-01 12:34:56"
+        }
+    });
+
+    my $query = CGI->new;
+    $query->param( 'username', $borrower->{cardnumber});
+    $query->param( 'password', $plain_password);
+
+    my $reply = C4::ILSDI::Services::AuthenticatePatron( $query );
+    is( $reply->{id}, $borrower->{borrowernumber}, "userid and password - Patron authenticated" );
+    is( $reply->{code}, undef, "Error code undef");
+    my $seen_patron = Koha::Patrons->find({ borrowernumber => $reply->{id} });
+
+    $schema->storage->txn_rollback;
+};
