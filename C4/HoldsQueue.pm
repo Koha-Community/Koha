@@ -395,7 +395,16 @@ sub _checkHoldPolicy {
 
 =head2 MapItemsToHoldRequests
 
-  MapItemsToHoldRequests($hold_requests, $available_items, $branches, $transport_cost_matrix)
+  my $item_map = MapItemsToHoldRequests($hold_requests, $available_items, $branches, $transport_cost_matrix)
+
+  Parameters:
+  $hold_requests is a hash containing hold information built by GetPendingHoldRequestsForBib
+  $available_items is a hash containing item information built by GetItemsAvailableToFillHoldRequestsForBib
+  $branches is an arrayref to a list of branches filled by load_branches_to_pull_from
+  $transport_cost_matrix is a hash of hashes with branchcodes as keys, listing the cost to transfer from that branch to another
+
+  Returns a hash of hashes with itemnumbers as keys, each itemnumber containing a hash with the information
+  about the hold it has been mapped to.
 
 =cut
 
@@ -548,9 +557,14 @@ sub MapItemsToHoldRequests {
         next if $request->{allocated};
         next if defined($request->{itemnumber}); # already handled these
 
-        # look for local match first
+        # HoldsQueuePrioritizeBranch check
+        # ********************************
         my $pickup_branch = $request->{branchcode} || $request->{borrowerbranch};
-        my ($itemnumber, $holdingbranch);
+        my ($itemnumber, $holdingbranch); # These variables are used for tracking the filling of the hold
+        # $itemnumber, when set, is the item that has been chosen for the hold
+        # $holdingbranch gets set to the pickup branch of the request if there are items held at that branch
+        # otherwise it gets set to the least cost branch of the transport cost matrix
+        # otherwise it gets sets to the first branch from the list of branches to pull from
 
         my $holding_branch_items = $items_by_branch{$pickup_branch};
         my $priority_branch = C4::Context->preference('HoldsQueuePrioritizeBranch') // 'homebranch';
@@ -605,6 +619,9 @@ sub MapItemsToHoldRequests {
                 next;
             }
         }
+        # End HoldsQueuePrioritizeBranch check
+        # ********************************
+
 
         unless ($itemnumber) {
             # not found yet, fall back to basics
@@ -620,7 +637,9 @@ sub MapItemsToHoldRequests {
                 my $holding_branch_items = $items_by_branch{$branch}
                   or next;
 
-                $holdingbranch ||= $branch;
+                $holdingbranch ||= $branch; # We set this as the first from the list of pull branches
+                # unless we set it above to the pickupbranch or the least cost branch
+                # FIXME: The itention is to follow StaticHoldsQueueWeight, but we don't check that pref
                 foreach my $item (@$holding_branch_items) {
                     next if $pickup_branch ne $item->{homebranch};
                     next unless _checkHoldPolicy($item, $request);
