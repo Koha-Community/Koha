@@ -93,7 +93,7 @@
                     <span id="logged-in-info-full">
                         [% SET is_superlibrarian = CAN_user_superlibrarian ? 'is_superlibrarian' : '' %]
                         <span class="loggedinusername [% is_superlibrarian | html %]">[% logged_in_user.userid | html %]</span>
-
+                        <span class="loggedincategorycode content_hidden">[% logged_in_user.categorycode | html %]</span>
                         [% IF ( AutoLocation ) %]
                             <brand>
                                 [% Branches.GetLoggedInBranchname | html %]
