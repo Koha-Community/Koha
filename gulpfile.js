@@ -386,6 +386,7 @@ function xgettext (cmd, filename) {
                         file.contents = data;
                         callback(null, file);
                     });
+                    fs.rmSync(folder, { recursive: true });
                 });
             });
         })
