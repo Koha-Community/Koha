@@ -1,4 +1,4 @@
-package Koha::REST::V1::Stage;
+package Koha::REST::V1::StockRotation::Stage;
 
 # This file is part of Koha.
 #
