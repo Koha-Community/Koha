@@ -42,7 +42,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
         template_name   => "circ/branchoverdues.tt",
         query           => $input,
         type            => "intranet",
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+        flagsrequired   => { circulate => "overdues_report" },
 });
 
 my $default = C4::Context->userenv->{'branch'};
