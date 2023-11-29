@@ -1,0 +1,27 @@
+---
+type: object
+properties:
+  rota_id:
+    type: integer
+    description: internally assigned rota identifier
+    readOnly: true
+  title:
+    description: rota title
+    type: string
+  description:
+    description: rota description
+    type:
+      - string
+      - "null"
+  cyclical:
+    description: rota is cyclical
+    type: boolean
+  active:
+    description: rota is active
+    type: boolean
+additionalProperties: false
+required:
+  - title
+  - description
+  - cyclical
+  - active

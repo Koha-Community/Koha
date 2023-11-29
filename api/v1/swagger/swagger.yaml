@@ -162,6 +162,8 @@ definitions:
     $ref: ./definitions/renewals.yaml
   return_claim:
     $ref: ./definitions/return_claim.yaml
+  rota:
+    $ref: ./definitions/rota.yaml
   search_filter:
     $ref: ./definitions/search_filter.yaml
   smtp_server:
@@ -531,6 +533,10 @@ paths:
     $ref: "./paths/return_claims.yaml#/~1return_claims~1{claim_id}~1notes"
   "/return_claims/{claim_id}/resolve":
     $ref: "./paths/return_claims.yaml#/~1return_claims~1{claim_id}~1resolve"
+  "/rotas":
+    $ref: "./paths/rotas.yaml#/~1rotas"
+  "/rotas/{rota_id}":
+    $ref: "./paths/rotas.yaml#/~1rotas~1{rota_id}"
   "/rotas/{rota_id}/stages/{stage_id}/position":
     $ref: "./paths/rotas.yaml#/~1rotas~1{rota_id}~1stages~1{stage_id}~1position"
   /suggestions:
@@ -889,6 +895,12 @@ parameters:
     name: x-koha-request-id
     required: false
     type: integer
+  rota_id_pp:
+    description: Rota internal identifier
+    in: path
+    name: rota_id
+    required: true
+    type: integer
   search_filter_id_pp:
     name: search_filter_id
     in: path
@@ -1228,8 +1240,8 @@ tags:
   - description: "Manage return claims\n"
     name: return_claims
     x-displayName: Return claims
-  - description: "Manage rotas\n"
-    name: rotas
+  - description: "Manage stock rotation\n"
+    name: stockrotation
     x-displayName: Rotas
   - description: "Manage search filters"
     name: search_filters
