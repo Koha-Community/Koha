@@ -163,26 +163,24 @@
                             <p>
                                 [% INCLUDE 'biblio-title.inc' biblio=itemsloo.biblio link = 1 %]
                             </p>
-                            <p>
-                                <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
-                                <div class="hq-author">[% itemsloo.biblio.author | html %]</div>
-                                [% IF ( itemsloo.biblio.biblioitem.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.biblio.biblioitem.editionstatement | html %]</div>[% END %]
-                                <div class="hq-pubdata">
-                                    [% IF ( itemsloo.biblio.biblioitem.publishercode ) %][% itemsloo.biblio.biblioitem.publishercode | html %][% END %]
+                            <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
+                            <div class="hq-author">[% itemsloo.biblio.author | html %]</div>
+                            [% IF ( itemsloo.biblio.biblioitem.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.biblio.biblioitem.editionstatement | html %]</div>[% END %]
+                            <div class="hq-pubdata">
+                                [% IF ( itemsloo.biblio.biblioitem.publishercode ) %][% itemsloo.biblio.biblioitem.publishercode | html %][% END %]
 
-                                    [% IF ( itemsloo.biblio.biblioitem.publicationyear ) %]
-                                        , [% itemsloo.biblio.biblioitem.publicationyear | html %]
-                                    [% ELSIF ( itemsloo.biblio.copyrightdate ) %]
-                                        , [% itemsloo.biblio.copyrightdate | html %]
-                                    [% END %]
+                                [% IF ( itemsloo.biblio.biblioitem.publicationyear ) %]
+                                    , [% itemsloo.biblio.biblioitem.publicationyear | html %]
+                                [% ELSIF ( itemsloo.biblio.copyrightdate ) %]
+                                    , [% itemsloo.biblio.copyrightdate | html %]
+                                [% END %]
 
-                                    [% IF ( itemsloo.biblio.biblioitem.pages ) %]: [% itemsloo.biblio.biblioitem.pages | html %] [% END %]
+                                [% IF ( itemsloo.biblio.biblioitem.pages ) %]: [% itemsloo.biblio.biblioitem.pages | html %] [% END %]
 
-                                    [% IF ( itemsloo.biblio.biblioitem.size ) %][% itemsloo.biblio.biblioitem.size | html %][% END %]
+                                [% IF ( itemsloo.biblio.biblioitem.size ) %][% itemsloo.biblio.biblioitem.size | html %][% END %]
 
-                                    [% IF ( itemsloo.biblio.biblioitem.isbn ) %]<span>ISBN: [% itemsloo.biblio.biblioitem.isbn | html %]</span>[% END %]
-                                </div>
-                            </p>
+                                [% IF ( itemsloo.biblio.biblioitem.isbn ) %]<span>ISBN: [% itemsloo.biblio.biblioitem.isbn | html %]</span>[% END %]
+                            </div>
                         </td>
                         <td class="hq-holdingbranch">[% Branches.GetName( itemsloo.holdingbranch ) | html %]</td>
                         <td class="hq-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemsloo.item.ccode ) | html %]</td>
@@ -194,7 +192,7 @@
                             [% IF ( itemsloo.item_level_request ) %]
                                 <em>Only item:</em> <strong><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% itemsloo.itemnumber | uri %]&biblionumber=[% itemsloo.biblionumber | uri %]#item[% itemsloo.itemnumber | uri %]">[% itemsloo.barcode | html %]</a></strong>
                             [% ELSIF itemsloo.item.item_group %]
-                                <strong><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% itemsloo.itemnumber | uri %]&biblionumber=[% itemsloo.biblionumber | uri %]#item[% itemsloo.itemnumber | uri %]">[% itemsloo.barcode | html %]</a>/strong> <em>or any item from item group <strong>[% itemsloo.item.item_group.description | html %]</strong></em>
+                                <strong><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% itemsloo.itemnumber | uri %]&biblionumber=[% itemsloo.biblionumber | uri %]#item[% itemsloo.itemnumber | uri %]">[% itemsloo.barcode | html %]</a></strong> <em>or any item from item group <strong>[% itemsloo.item.item_group.description | html %]</strong></em>
                             [% ELSE %]
                                 <strong><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% itemsloo.itemnumber | uri %]&biblionumber=[% itemsloo.biblionumber | uri %]#item[% itemsloo.itemnumber | uri %]">[% itemsloo.barcode | uri %]</a></strong> <em>or any available</em>
                             [% END %]
@@ -275,7 +273,7 @@
                     </select>
                 </li>
                 <li>
-                    <label for="locationsslimit">Shelving location: </label>
+                    <label for="locationslimit">Shelving location: </label>
                     <select name="locationslimit" id="locationslimit">
                         <option value="">All</option>
                         [% PROCESS options_for_authorised_values authorised_values => AuthorisedValues.GetAuthValueDropbox( 'LOC' ), selected_av => locationslimit %]
