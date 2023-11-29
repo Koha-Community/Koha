@@ -135,17 +135,16 @@
                     </li>
                 </ul>
 
+                [% IF ( CAN_user_circulate_overdues_report ) %]
                 <h3>Overdues</h3>
 
                 <ul class="buttons-list">
-                     [% IF ( CAN_user_circulate_overdues_report ) %]
                         <li>
                             <a class="circ-button"
                                 href="/cgi-bin/koha/circ/overdue.pl"
                                 title="Warning: This report is very resource intensive on systems with large numbers of overdue items."
                             ><i class="fa fa-clock-o"></i> Overdues</a>
                         </li>
-                    [% END %]
                     <li>
                         <a class="circ-button"
                             href="/cgi-bin/koha/circ/branchoverdues.pl"
@@ -153,6 +152,7 @@
                         ><i class="fa fa-clock-o"></i> Overdues with fines</a>
                     </li>
                 </ul>
+                [% END %]
             </div>
         </div>
         <div class="row" id="intranet-circulation-home-html">

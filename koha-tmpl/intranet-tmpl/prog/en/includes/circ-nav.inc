@@ -109,16 +109,16 @@
             </li>
         </ul>
 
+        [% IF ( CAN_user_circulate_overdues_report ) %]
         <h5>Overdues</h5>
         <ul>
-            [% IF ( CAN_user_circulate_overdues_report ) %]
             <li>
                 <a href="/cgi-bin/koha/circ/overdue.pl" title="Warning: This report is very resource intensive on systems with large numbers of overdue items.">Overdues</a>
             </li>
-            [% END %]
             <li>
                 <a href="/cgi-bin/koha/circ/branchoverdues.pl" title="Limited to your library. See report help for other details.">Overdues with fines</a>
              </li>
         </ul>
+        [% END %]
     </div>
 </div>
