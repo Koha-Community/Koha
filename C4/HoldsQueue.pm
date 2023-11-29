@@ -585,24 +585,25 @@ sub MapItemsToHoldRequests {
             } else {
                 $pull_branches = [keys %items_by_branch];
             }
+            $holdingbranch ||= $pull_branches->[0];    # We set this as the first from the list of pull branches
+                 # unless we set it above to the pickupbranch or the least cost branch
+                 # FIXME: The itention is to follow StaticHoldsQueueWeight, but we don't check that pref
 
             # Try picking items where the home and pickup branch match first
-            PULL_BRANCHES:
             foreach my $branch (@$pull_branches) {
                 my $holding_branch_items = $items_by_branch{$branch}
-                  or next;
+                    or next;
 
-                $holdingbranch ||= $branch; # We set this as the first from the list of pull branches
-                # unless we set it above to the pickupbranch or the least cost branch
-                # FIXME: The itention is to follow StaticHoldsQueueWeight, but we don't check that pref
                 foreach my $item (@$holding_branch_items) {
-                    next if $pickup_branch ne $item->{homebranch};
-                    next unless _can_item_fill_request( $item, $request, $libraries );
-
-                    $itemnumber = $item->{itemnumber};
-                    $holdingbranch = $branch;
-                    last PULL_BRANCHES;
+                    if ( $pickup_branch eq $item->{homebranch}
+                        && _can_item_fill_request( $item, $request, $libraries ) )
+                    {
+                        $itemnumber    = $item->{itemnumber};
+                        $holdingbranch = $branch;
+                        last;
+                    }
                 }
+                last if $itemnumber;
             }
 
             # Now try items from the least cost branch based on the transport cost matrix or StaticHoldsQueueWeight
@@ -617,19 +618,18 @@ sub MapItemsToHoldRequests {
 
             # Now try for items for any item that can fill this hold
             unless ( $itemnumber ) {
-                PULL_BRANCHES2:
                 foreach my $branch (@$pull_branches) {
                     my $holding_branch_items = $items_by_branch{$branch}
                       or next;
 
                     foreach my $item (@$holding_branch_items) {
-
-                        next unless _can_item_fill_request( $item, $request, $libraries );
-
-                        $itemnumber = $item->{itemnumber};
-                        $holdingbranch = $branch;
-                        last PULL_BRANCHES2;
+                        if( _can_item_fill_request( $item, $request, $libraries ) ){
+                            $itemnumber = $item->{itemnumber};
+                            $holdingbranch = $branch;
+                            last;
+                        }
                     }
+                    last if $itemnumber;
                 }
             }
         }
