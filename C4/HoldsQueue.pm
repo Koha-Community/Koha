@@ -406,6 +406,15 @@ sub _checkHoldPolicy {
   Returns a hash of hashes with itemnumbers as keys, each itemnumber containing a hash with the information
   about the hold it has been mapped to.
 
+  This routine attempts to match the holds in the following priority
+  1 - If local holds priority is enabled we check all requests to see if local matches can be found
+  2 - We check for item level matches and fill those
+  3 - We now loop the remaining requests in priority order attempting to fill with
+      a - Items where HoldsQueuePrioritizeBranch matches either from items held at the pickup branch, or at the least cost branch (if Transport Cost Matrix is being used)
+      b - Items where the homebranch of the item and the pickup library match
+      c - Items from the least cost branch (or items at the pickup location if available)
+      d - Any item that can fill the hold
+
 =cut
 
 sub MapItemsToHoldRequests {
@@ -495,6 +504,10 @@ sub MapItemsToHoldRequests {
         }
     }
 
+    # Handle item level requests
+    # Note that we loop the requests in priority order reserving an item for each title level hold
+    # So we will only fill item level requests if there are enough items to fill higher priority
+    # title level holds.
     foreach my $request (@$hold_requests) {
         last if $num_items_remaining == 0;
         next if $request->{allocated};
@@ -557,11 +570,12 @@ sub MapItemsToHoldRequests {
         if ($holding_branch_items) {
             $holdingbranch = $pickup_branch;
         } elsif ($transport_cost_matrix) {
+            # If there are items available at the pickup branch they will always be the least cost (no transfer needed) so we only check here in the case where there are none
             $pull_branches = [ keys %items_by_branch ];
             $holdingbranch = least_cost_branch( $pickup_branch, $pull_branches, $transport_cost_matrix );
             next
                 unless $holdingbranch
-                ; # If using the matrix, and nothing is least cost, it means we cannot transfer to the pikcup branch for this request
+                ; # If using the matrix, and nothing is least cost, it means we cannot transfer to the pickup branch for this request
             $holding_branch_items = $items_by_branch{$holdingbranch};
         }
 
@@ -578,8 +592,8 @@ sub MapItemsToHoldRequests {
         # ********************************
 
 
+        # Not found yet, fall back to basics
         unless ($itemnumber) {
-            # not found yet, fall back to basics
             if ($branches_to_use) {
                 $pull_branches = $branches_to_use;
             } else {
@@ -587,7 +601,7 @@ sub MapItemsToHoldRequests {
             }
             $holdingbranch ||= $pull_branches->[0];    # We set this as the first from the list of pull branches
                  # unless we set it above to the pickupbranch or the least cost branch
-                 # FIXME: The itention is to follow StaticHoldsQueueWeight, but we don't check that pref
+                 # FIXME: The intention is to follow StaticHoldsQueueWeight, but we don't check that pref
 
             # Try picking items where the home and pickup branch match first
             foreach my $branch (@$pull_branches) {
@@ -662,7 +676,7 @@ sub MapItemsToHoldRequests {
   my $bool = _can_item_fill_request( $item, $request, $libraries );
 
   This is an internal function of MapItemsToHoldRequests for checking an item against a hold. It uses the custom hashes for item and hold information
-  used by thta routine
+  used by that routine
 
 =cut
 
