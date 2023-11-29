@@ -1032,6 +1032,8 @@ is not passed.
 sub pickup_locations {
     my ( $self, $params ) = @_;
 
+    return Koha::Libraries->search( { branchcode => $self->holdingbranch } ) if C4::Context->preference("IndependentBranches") && !C4::Context->IsSuperLibrarian();
+
     Koha::Exceptions::MissingParameter->throw( parameter => 'patron' )
         unless exists $params->{patron};
 
