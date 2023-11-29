@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 67;
+use Test::More tests => 68;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -5885,6 +5885,65 @@ subtest 'Tests for RecordLocalUseOnReturn' => sub {
         \@return2,
         [ 0, { NotIssued => $item->barcode, withdrawn => 1, LocalUse => 1  }, undef, {} ], "Local use is recorded");
 };
+
+subtest 'Test CanBookBeIssued param ignore_reserves (Bug 35322)' => sub {
+    plan tests => 4;
+
+    my $homebranch    = $builder->build( { source => 'Branch' } );
+    my $holdingbranch = $builder->build( { source => 'Branch' } );
+    my $patron_1      = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron_2      = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
+
+    my $item = $builder->build_sample_item(
+        {
+            homebranch    => $homebranch->{branchcode},
+            holdingbranch => $holdingbranch->{branchcode},
+        }
+    );
+
+    Koha::CirculationRules->search()->delete();
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rules        => {
+                reservesallowed => 25,
+                issuelength     => 14,
+                lengthunit      => 'days',
+                renewalsallowed => 1,
+                renewalperiod   => 7,
+                chargeperiod    => 1,
+                maxissueqty     => 20,
+            }
+        }
+    );
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode       => $homebranch,
+            borrowernumber   => $patron_1->id,
+            biblionumber     => $item->biblionumber,
+            priority         => 1,
+            reservation_date => dt_from_string,
+            expiration_date  => dt_from_string,
+            itemnumber       => $item->id,
+            found            => 'W',
+        }
+    );
+
+    set_userenv($holdingbranch);
+
+    my ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->barcode, undef, undef, 0 );
+    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $question->{RESERVE_WAITING}, 1, 'RESERVE_WAITING is set' );
+
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->barcode, undef, undef, 1 );
+    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    isnt( exists $question->{RESERVE_WAITING}, 1, 'RESERVE_WAITING is not set' );
+
+};
+
 
 $schema->storage->txn_rollback;
 C4::Context->clear_syspref_cache();
