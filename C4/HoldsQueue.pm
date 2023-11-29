@@ -547,41 +547,31 @@ sub MapItemsToHoldRequests {
         # HoldsQueuePrioritizeBranch check
         # ********************************
         my $pickup_branch = $request->{branchcode} || $request->{borrowerbranch};
-        my ($itemnumber, $holdingbranch); # These variables are used for tracking the filling of the hold
-        # $itemnumber, when set, is the item that has been chosen for the hold
-        # $holdingbranch gets set to the pickup branch of the request if there are items held at that branch
-        # otherwise it gets set to the least cost branch of the transport cost matrix
-        # otherwise it gets sets to the first branch from the list of branches to pull from
+        my ( $itemnumber, $holdingbranch );    # These variables are used for tracking the filling of the hold
+                                               # $itemnumber, when set, is the item that has been chosen for the hold
+            # $holdingbranch gets set to the pickup branch of the request if there are items held at that branch
+            # otherwise it gets set to the least cost branch of the transport cost matrix
+            # otherwise it gets sets to the first branch from the list of branches to pull from
 
         my $holding_branch_items = $items_by_branch{$pickup_branch};
-        my $priority_branch = C4::Context->preference('HoldsQueuePrioritizeBranch') // 'homebranch';
         if ($holding_branch_items) {
-            foreach my $item (@$holding_branch_items) {
-                next unless _can_item_fill_request( $item, $request, $libraries );
-
-                if ( $request->{borrowerbranch} eq $item->{$priority_branch} ) {
-                    $itemnumber = $item->{itemnumber};
-                    last;
-                }
-            }
             $holdingbranch = $pickup_branch;
-        }
-        elsif ($transport_cost_matrix) {
-            $pull_branches = [keys %items_by_branch];
+        } elsif ($transport_cost_matrix) {
+            $pull_branches = [ keys %items_by_branch ];
             $holdingbranch = least_cost_branch( $pickup_branch, $pull_branches, $transport_cost_matrix );
-            if ( $holdingbranch ) {
+            next
+                unless $holdingbranch
+                ; # If using the matrix, and nothing is least cost, it means we cannot transfer to the pikcup branch for this request
+            $holding_branch_items = $items_by_branch{$holdingbranch};
+        }
 
-                my $holding_branch_items = $items_by_branch{$holdingbranch};
-                foreach my $item (@$holding_branch_items) {
-                    next if $request->{borrowerbranch} ne $item->{$priority_branch};
-                    next unless _can_item_fill_request( $item, $request, $libraries );
-
-                    $itemnumber = $item->{itemnumber};
-                    last;
-                }
-            }
-            else {
-                next;
+        my $priority_branch = C4::Context->preference('HoldsQueuePrioritizeBranch') // 'homebranch';
+        foreach my $item (@$holding_branch_items) {
+            if ( _can_item_fill_request( $item, $request, $libraries )
+                && $request->{borrowerbranch} eq $item->{$priority_branch} )
+            {
+                $itemnumber = $item->{itemnumber};
+                last;
             }
         }
         # End HoldsQueuePrioritizeBranch check
