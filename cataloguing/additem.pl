@@ -238,7 +238,7 @@ if ($op eq "additem") {
     my $add_duplicate_submit       = $input->param('add_duplicate_submit');
     my $add_multiple_copies_submit = $input->param('add_multiple_copies_submit');
     my $save_as_template_submit    = $input->param('save_as_template_submit');
-    my $number_of_copies           = min( scalar $input->param('number_of_copies'), 1000 ); # TODO refine hardcoded maximum?
+    my $number_of_copies           = min( scalar $input->param('number_of_copies') || 0, 1000 ); # TODO refine hardcoded maximum?
 
     my @columns = Koha::Items->columns;
     my $item = Koha::Item->new;
