@@ -198,7 +198,7 @@ function cloneItemBlock(index, unique_item_fields, callback) {
             buttonPlus += '<span id="add_multiple_copies" style="display:none">'
                 +     '<input type="text" inputmode="numeric" pattern="[0-9]*" class="addItemControl" id="multiValue" name="multiValue" placeholder="' + __("Number of items to add") + '" />'
                 +     '<input type="button" class="addItemControl" name="buttonAddMulti" style="cursor:pointer; margin:0 1em;" onclick="checkCount( this ,\'' + unique_item_fields + '\')" value="' + __("Add") + '" />'
-                +     '<div class="dialog message">' + __("NOTE: Fields listed in the 'UniqueItemsFields' system preference will not be copied") + '</div>'
+                +     '<div class="dialog message">' + __("NOTE: Fields listed in the 'UniqueItemFields' system preference will not be copied") + '</div>'
                 + '</span>';
             buttonPlus += "</fieldset>";
             $(clone).append(buttonPlus);
