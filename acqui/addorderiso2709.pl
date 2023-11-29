@@ -212,25 +212,26 @@ if ($op eq ""){
         $import_record->import_biblio->matched_biblionumber($biblionumber)->store;
 
         # Add items from MarcItemFieldsToOrder
-        my @homebranches = $input->multi_param('homebranch_' . $import_record->import_record_id);
-        my $count = scalar @homebranches;
-        my @holdingbranches = $input->multi_param('holdingbranch_' . $import_record->import_record_id);
-        my @itypes = $input->multi_param('itype_' . $import_record->import_record_id);
-        my @nonpublic_notes = $input->multi_param('nonpublic_note_' . $import_record->import_record_id);
-        my @public_notes = $input->multi_param('public_note_' . $import_record->import_record_id);
-        my @locs = $input->multi_param('loc_' . $import_record->import_record_id);
-        my @ccodes = $input->multi_param('ccode_' . $import_record->import_record_id);
-        my @notforloans = $input->multi_param('notforloan_' . $import_record->import_record_id);
-        my @uris = $input->multi_param('uri_' . $import_record->import_record_id);
-        my @copynos = $input->multi_param('copyno_' . $import_record->import_record_id);
+        my @homebranches    = $input->multi_param( 'homebranch_' . $import_record->import_record_id );
+        my $count           = scalar @homebranches;
+        my @holdingbranches = $input->multi_param( 'holdingbranch_' . $import_record->import_record_id );
+        my @itypes          = $input->multi_param( 'itype_' . $import_record->import_record_id );
+        my @nonpublic_notes = $input->multi_param( 'nonpublic_note_' . $import_record->import_record_id );
+        my @public_notes    = $input->multi_param( 'public_note_' . $import_record->import_record_id );
+        my @locs            = $input->multi_param( 'loc_' . $import_record->import_record_id );
+        my @ccodes          = $input->multi_param( 'ccode_' . $import_record->import_record_id );
+        my @notforloans     = $input->multi_param( 'notforloan_' . $import_record->import_record_id );
+        my @uris            = $input->multi_param( 'uri_' . $import_record->import_record_id );
+        my @copynos         = $input->multi_param( 'copyno_' . $import_record->import_record_id );
         my @budget_ids =
             $input->multi_param( 'budget_code_' . $import_record->import_record_id ); # bad field name used in template!
-        my @itemprices = $input->multi_param('itemprice_' . $import_record->import_record_id);
-        my @replacementprices = $input->multi_param('replacementprice_' . $import_record->import_record_id);
-        my @itemcallnumbers = $input->multi_param('itemcallnumber_' . $import_record->import_record_id);
-        my @coded_location_qualifiers = $input->multi_param('coded_location_qualifier_' . $import_record->import_record_id);
-        my @barcodes = $input->multi_param('barcode_' . $import_record->import_record_id);
-        my @enumchrons = $input->multi_param('enumchron_' . $import_record->import_record_id);
+        my @itemprices        = $input->multi_param( 'itemprice_' . $import_record->import_record_id );
+        my @replacementprices = $input->multi_param( 'replacementprice_' . $import_record->import_record_id );
+        my @itemcallnumbers   = $input->multi_param( 'itemcallnumber_' . $import_record->import_record_id );
+        my @coded_location_qualifiers =
+            $input->multi_param( 'coded_location_qualifier_' . $import_record->import_record_id );
+        my @barcodes     = $input->multi_param( 'barcode_' . $import_record->import_record_id );
+        my @enumchrons   = $input->multi_param( 'enumchron_' . $import_record->import_record_id );
         my $itemcreation = 0;
 
         my @itemnumbers;
@@ -534,6 +535,8 @@ sub import_biblios_list {
                 # Handle incorrectly named original parameters for MarcItemFieldsToOrder
                 $iteminfos->{location}   = delete $iteminfos->{loc}    if $iteminfos->{loc};
                 $iteminfos->{copynumber} = delete $iteminfos->{copyno} if $iteminfos->{copyno};
+                # Price is handled as "itemprice" in the UI form to distinguish from MarcFieldsToOrder
+                $iteminfos->{itemprice}  = delete $iteminfos->{price}  if $iteminfos->{price};
 
                 # Convert budge code to a budget id
                 my $item_budget_code = delete $iteminfos->{budget_code};
