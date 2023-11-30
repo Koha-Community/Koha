@@ -35,7 +35,7 @@ my ($template, $loggedinuser, $cookie, $flags)
     = get_template_and_user({template_name => "members/member.tt",
                  query => $query,
                  type => "intranet",
-                 flagsrequired => {borrowers => 'edit_borrowers'},
+                 flagsrequired => { borrowers => ['edit_borrowers', 'list_borrowers'] },
                  });
 
 my $no_add = 0;
