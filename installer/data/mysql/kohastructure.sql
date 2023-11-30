@@ -247,10 +247,12 @@ DROP TABLE IF EXISTS `additional_field_values`;
 CREATE TABLE `additional_field_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key identifier',
   `field_id` int(11) NOT NULL COMMENT 'foreign key references additional_fields(id)',
+  `record_table` varchar(255) NOT NULL DEFAULT '' COMMENT 'tablename of the related record',
   `record_id` varchar(80) NOT NULL DEFAULT '' COMMENT 'record_id',
   `value` varchar(255) NOT NULL DEFAULT '' COMMENT 'value for this field',
   PRIMARY KEY (`id`),
   KEY `afv_fk` (`field_id`),
+  KEY `record_table` (`record_table`),
   CONSTRAINT `afv_fk` FOREIGN KEY (`field_id`) REFERENCES `additional_fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
