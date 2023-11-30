@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE TablesSettings %]
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
@@ -289,16 +290,18 @@
 
 [% BLOCK jsinclude %]
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 <script>
 
     var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete selected search history entries?");
     $(document).ready(function() {
         // We show table ordered by descending dates by default
         // (so that the more recent query is shown first)
-        $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
+        var columns_settings = []; // Empty because there are no columns we want to be configurable
+        var table = KohaTable(".historyt", {
             "order": [[ 1, "desc" ]],
             "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
-            "columnDefs": [
+            "aoColumnDefs": [
                 { "targets": [ 0 ], "sortable": false, "searchable": false },
                 { "className": 'dtr-control', "orderable": false, "targets": -1 }
             ],
@@ -310,11 +313,12 @@
             "responsive": {
                 "details": { "type": 'column',"target": -1 }
             },
-        }));
+        }, columns_settings);
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            $(".historyt").DataTable().responsive.recalc();
+            table.DataTable().responsive.recalc();
         });
+
         $(".CheckNone").click(function(e){
             e.preventDefault();
             var form = $(this).parents("form").get(0);
