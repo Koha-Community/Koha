@@ -312,6 +312,11 @@
             Add, modify and view patron information
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'list_borrowers' -%]
+        <span class="sub_permission list_borrowers_subpermission">
+            Search and list patrons
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'view_borrower_infos_from_any_libraries' -%]
         <span class="sub_permission view_borrower_infos_from_any_libraries_subpermission">
             View patron infos from any libraries. If not set the logged in user could only access patron infos from its own library or group of libraries.

@@ -37,7 +37,7 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member.tt",
                  query => $input,
                  type => "intranet",
-                 flagsrequired => {borrowers => 'edit_borrowers'},
+                 flagsrequired => { borrowers => ['edit_borrowers', 'list_borrowers'] },
                  });
 
 my $theme = $input->param('theme') || "default";

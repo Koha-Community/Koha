@@ -64,7 +64,7 @@
                             </li>
                             [% END %]
 
-                            [% IF CAN_user_borrowers_edit_borrowers %]
+                            [% IF (CAN_user_borrowers_edit_borrowers) || (CAN_user_borrowers_list_borrowers) %]
                             <li>
                                 <a class="icon_general icon_patrons" href="/cgi-bin/koha/members/members-home.pl"><i class="fa fa-fw fa-id-card"></i>Patrons</a>
                             </li>
