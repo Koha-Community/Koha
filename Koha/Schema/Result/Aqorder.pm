@@ -891,10 +891,7 @@ __PACKAGE__->has_many(
 
     return {
         "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.ordernumber" },
-
-        # TODO Add column additional_field_values.tablename to avoid subquery ?
-        "$args->{foreign_alias}.field_id" =>
-            { -in => \'(SELECT id FROM additional_fields WHERE tablename = "aqorders")' },
+        "$args->{foreign_alias}.record_table" => __PACKAGE__->table,
     };
   },
   { cascade_copy => 0, cascade_delete => 0 },
