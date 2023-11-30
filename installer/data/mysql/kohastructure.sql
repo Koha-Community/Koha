@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.5.19-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.5.21-MariaDB, for debian-linux-gnu (aarch64)
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	10.11.3-MariaDB-1:10.11.3+maria~ubu2204
+-- Server version	11.2.2-MariaDB-1:11.2.2+maria~ubu2204
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -444,6 +444,26 @@ CREATE TABLE `aqbookseller_interfaces` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `aqbookseller_issues`
+--
+
+DROP TABLE IF EXISTS `aqbookseller_issues`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aqbookseller_issues` (
+  `issue_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
+  `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
+  `type` varchar(80) DEFAULT NULL COMMENT 'type of the issue, authorised value VENDOR_ISSUE_TYPE',
+  `started_on` date DEFAULT NULL COMMENT 'start of the issue',
+  `ended_on` date DEFAULT NULL COMMENT 'end of the issue',
+  `notes` longtext DEFAULT NULL COMMENT 'notes',
+  PRIMARY KEY (`issue_id`),
+  KEY `aqbookseller_issues_ibfk_1` (`vendor_id`),
+  CONSTRAINT `aqbookseller_issues_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `aqbooksellers`
 --
 
@@ -480,25 +500,6 @@ CREATE TABLE `aqbooksellers` (
   KEY `name` (`name`(191)),
   CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `aqbookseller_issues`
---
-
-DROP TABLE IF EXISTS `aqbookseller_issues`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `aqbookseller_issues` (
-  `issue_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key and unique identifier assigned by Koha',
-  `vendor_id` int(11) NOT NULL COMMENT 'link to the vendor',
-  `type` varchar(80) DEFAULT NULL COMMENT 'type of the issue, authorised value VENDOR_ISSUE_TYPE',
-  `started_on` date DEFAULT NULL COMMENT 'start of the issue',
-  `ended_on` date DEFAULT NULL COMMENT 'end of the issue',
-  `notes` longtext DEFAULT NULL COMMENT 'notes',
-  PRIMARY KEY (`issue_id`),
-  CONSTRAINT `aqbookseller_issues_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2376,8 +2377,8 @@ CREATE TABLE `creator_layouts` (
   `oblique_title` int(1) DEFAULT 1,
   `font` char(10) NOT NULL DEFAULT 'TR',
   `font_size` int(4) NOT NULL DEFAULT 10,
-  `scale_width` decimal(28,6) NOT NULL DEFAULT 0.08,
-  `scale_height` decimal(28,6) NOT NULL DEFAULT 0.01,
+  `scale_width` decimal(28,6) NOT NULL DEFAULT 0.080000,
+  `scale_height` decimal(28,6) NOT NULL DEFAULT 0.010000,
   `units` char(20) NOT NULL DEFAULT 'POINT',
   `callnum_split` int(1) DEFAULT 0,
   `text_justify` char(1) NOT NULL DEFAULT 'L',
@@ -2972,8 +2973,9 @@ CREATE TABLE `erm_counter_files` (
   `type` varchar(80) DEFAULT NULL COMMENT 'type of counter file',
   `filename` varchar(80) DEFAULT NULL COMMENT 'name of the counter file',
   `file_content` longblob DEFAULT NULL COMMENT 'content of the counter file',
-  `date_uploaded` timestamp DEFAULT NULL DEFAULT current_timestamp() COMMENT 'counter file upload date',
+  `date_uploaded` timestamp NULL DEFAULT current_timestamp() COMMENT 'counter file upload date',
   PRIMARY KEY (`erm_counter_files_id`),
+  KEY `erm_counter_files_ibfk_1` (`usage_data_provider_id`),
   CONSTRAINT `erm_counter_files_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2990,13 +2992,31 @@ CREATE TABLE `erm_counter_logs` (
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key to borrowers',
   `counter_files_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_counter_files',
   `usage_data_provider_id` int(11) DEFAULT NULL COMMENT 'foreign key to erm_usage_data_providers',
-  `importdate` timestamp DEFAULT NULL DEFAULT current_timestamp() COMMENT 'counter file import date',
+  `importdate` timestamp NULL DEFAULT current_timestamp() COMMENT 'counter file import date',
   `filename` varchar(80) DEFAULT NULL COMMENT 'name of the counter file',
   `logdetails` longtext DEFAULT NULL COMMENT 'details from the counter log',
   PRIMARY KEY (`erm_counter_log_id`),
+  KEY `erm_counter_log_ibfk_1` (`borrowernumber`),
+  KEY `erm_counter_log_ibfk_2` (`counter_files_id`),
+  KEY `erm_counter_log_ibfk_3` (`usage_data_provider_id`),
   CONSTRAINT `erm_counter_log_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `erm_counter_log_ibfk_2` FOREIGN KEY (`counter_files_id`) REFERENCES `erm_counter_files` (`erm_counter_files_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `erm_counter_log_ibfk_3` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `erm_default_usage_reports`
+--
+
+DROP TABLE IF EXISTS `erm_default_usage_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_default_usage_reports` (
+  `erm_default_usage_report_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `report_name` varchar(50) DEFAULT NULL COMMENT 'name of the default report',
+  `report_url_params` longtext DEFAULT NULL COMMENT 'url params for the default report',
+  PRIMARY KEY (`erm_default_usage_report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3183,6 +3203,45 @@ CREATE TABLE `erm_usage_data_providers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `erm_usage_databases`
+--
+
+DROP TABLE IF EXISTS `erm_usage_databases`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_usage_databases` (
+  `database_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `database` varchar(255) DEFAULT NULL COMMENT 'item title',
+  `platform` varchar(255) DEFAULT NULL COMMENT 'database platform',
+  `publisher` varchar(255) DEFAULT NULL COMMENT 'Publisher for the database',
+  `publisher_id` varchar(255) DEFAULT NULL COMMENT 'Publisher ID for the database',
+  `usage_data_provider_id` int(11) NOT NULL COMMENT 'data provider the database is harvested by',
+  PRIMARY KEY (`database_id`),
+  KEY `erm_usage_databases_ibfk_1` (`usage_data_provider_id`),
+  CONSTRAINT `erm_usage_databases_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `erm_usage_items`
+--
+
+DROP TABLE IF EXISTS `erm_usage_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `erm_usage_items` (
+  `item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `item` varchar(500) DEFAULT NULL COMMENT 'item title',
+  `platform` varchar(255) DEFAULT NULL COMMENT 'item platform',
+  `publisher` varchar(255) DEFAULT NULL COMMENT 'Publisher for the item',
+  `usage_data_provider_id` int(11) NOT NULL COMMENT 'data provider the database is harvested by',
+  PRIMARY KEY (`item_id`),
+  KEY `erm_usage_items_ibfk_1` (`usage_data_provider_id`),
+  CONSTRAINT `erm_usage_items_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `erm_usage_mus`
 --
 
@@ -3204,6 +3263,11 @@ CREATE TABLE `erm_usage_mus` (
   `yop` varchar(255) DEFAULT NULL COMMENT 'year of publication for the usage statistic',
   `report_type` varchar(50) DEFAULT NULL COMMENT 'report type for the usage statistic',
   PRIMARY KEY (`monthly_usage_summary_id`),
+  KEY `erm_usage_mus_ibfk_1` (`title_id`),
+  KEY `erm_usage_mus_ibfk_2` (`usage_data_provider_id`),
+  KEY `erm_usage_mus_ibfk_3` (`platform_id`),
+  KEY `erm_usage_mus_ibfk_4` (`database_id`),
+  KEY `erm_usage_mus_ibfk_5` (`item_id`),
   CONSTRAINT `erm_usage_mus_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_usage_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `erm_usage_mus_ibfk_2` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `erm_usage_mus_ibfk_3` FOREIGN KEY (`platform_id`) REFERENCES `erm_usage_platforms` (`platform_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -3213,17 +3277,19 @@ CREATE TABLE `erm_usage_mus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `erm_default_usage_reports`
+-- Table structure for table `erm_usage_platforms`
 --
 
-DROP TABLE IF EXISTS `erm_default_usage_reports`;
+DROP TABLE IF EXISTS `erm_usage_platforms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `erm_default_usage_reports` (
-  `erm_default_usage_report_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `report_name` varchar(50) DEFAULT NULL COMMENT 'name of the default report',
-  `report_url_params` longtext DEFAULT NULL COMMENT 'url params for the default report',
-  PRIMARY KEY (`erm_default_usage_report_id`)
+CREATE TABLE `erm_usage_platforms` (
+  `platform_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `platform` varchar(255) DEFAULT NULL COMMENT 'item title',
+  `usage_data_provider_id` int(11) NOT NULL COMMENT 'data provider the platform is harvested by',
+  PRIMARY KEY (`platform_id`),
+  KEY `erm_usage_platforms_ibfk_1` (`usage_data_provider_id`),
+  CONSTRAINT `erm_usage_platforms_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3248,60 +3314,8 @@ CREATE TABLE `erm_usage_titles` (
   `publisher_id` varchar(255) DEFAULT NULL COMMENT 'Publisher ID for the title',
   `isbn` varchar(255) DEFAULT NULL COMMENT 'ISBN of the title',
   PRIMARY KEY (`title_id`),
+  KEY `erm_usage_titles_ibfk_1` (`usage_data_provider_id`),
   CONSTRAINT `erm_usage_titles_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `erm_usage_platforms`
---
-
-DROP TABLE IF EXISTS `erm_usage_platforms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `erm_usage_platforms` (
-  `platform_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `platform` varchar(255) DEFAULT NULL COMMENT 'item title',
-  `usage_data_provider_id` int(11) NOT NULL COMMENT 'data provider the platform is harvested by',
-  PRIMARY KEY (`platform_id`),
-  CONSTRAINT `erm_usage_platforms_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `erm_usage_databases`
---
-
-DROP TABLE IF EXISTS `erm_usage_databases`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `erm_usage_databases` (
-  `database_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `database` varchar(255) DEFAULT NULL COMMENT 'item title',
-  `platform` varchar(255) DEFAULT NULL COMMENT 'database platform',
-  `publisher` varchar(255) DEFAULT NULL COMMENT 'Publisher for the database',
-  `publisher_id` varchar(255) DEFAULT NULL COMMENT 'Publisher ID for the database',
-  `usage_data_provider_id` int(11) NOT NULL COMMENT 'data provider the database is harvested by',
-  PRIMARY KEY (`database_id`),
-  CONSTRAINT `erm_usage_databases_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `erm_usage_items`
---
-
-DROP TABLE IF EXISTS `erm_usage_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `erm_usage_items` (
-  `item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `item` varchar(500) DEFAULT NULL COMMENT 'item title',
-  `platform` varchar(255) DEFAULT NULL COMMENT 'item platform',
-  `publisher` varchar(255) DEFAULT NULL COMMENT 'Publisher for the item',
-  `usage_data_provider_id` int(11) NOT NULL COMMENT 'data provider the database is harvested by',
-  PRIMARY KEY (`item_id`),
-  CONSTRAINT `erm_usage_items_ibfk_1` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3326,6 +3340,11 @@ CREATE TABLE `erm_usage_yus` (
   `yop` varchar(255) DEFAULT NULL COMMENT 'year of publication for the usage statistic',
   `report_type` varchar(50) DEFAULT NULL COMMENT 'report type for the usage statistic',
   PRIMARY KEY (`yearly_usage_summary_id`),
+  KEY `erm_usage_yus_ibfk_1` (`title_id`),
+  KEY `erm_usage_yus_ibfk_2` (`usage_data_provider_id`),
+  KEY `erm_usage_yus_ibfk_3` (`platform_id`),
+  KEY `erm_usage_yus_ibfk_4` (`database_id`),
+  KEY `erm_usage_yus_ibfk_5` (`item_id`),
   CONSTRAINT `erm_usage_yus_ibfk_1` FOREIGN KEY (`title_id`) REFERENCES `erm_usage_titles` (`title_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `erm_usage_yus_ibfk_2` FOREIGN KEY (`usage_data_provider_id`) REFERENCES `erm_usage_data_providers` (`erm_usage_data_provider_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `erm_usage_yus_ibfk_3` FOREIGN KEY (`platform_id`) REFERENCES `erm_usage_platforms` (`platform_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -3536,6 +3555,48 @@ CREATE TABLE `identity_providers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `illbatch_statuses`
+--
+
+DROP TABLE IF EXISTS `illbatch_statuses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `illbatch_statuses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Status ID',
+  `name` varchar(100) NOT NULL COMMENT 'Name of status',
+  `code` varchar(20) NOT NULL COMMENT 'Unique, immutable code for status',
+  `is_system` tinyint(1) DEFAULT NULL COMMENT 'Is this status required for system operation',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_illbatchstatuses__code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `illbatches`
+--
+
+DROP TABLE IF EXISTS `illbatches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `illbatches` (
+  `ill_batch_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Batch ID',
+  `name` varchar(100) NOT NULL COMMENT 'Unique name of batch',
+  `backend` varchar(20) NOT NULL COMMENT 'Name of batch backend',
+  `patron_id` int(11) DEFAULT NULL COMMENT 'Patron associated with batch',
+  `library_id` varchar(50) DEFAULT NULL COMMENT 'Branch associated with batch',
+  `status_code` varchar(20) DEFAULT NULL COMMENT 'Status of batch',
+  PRIMARY KEY (`ill_batch_id`),
+  UNIQUE KEY `u_illbatches__name` (`name`),
+  KEY `illbatches_bnfk` (`patron_id`),
+  KEY `illbatches_bcfk` (`library_id`),
+  KEY `illbatches_sfk` (`status_code`),
+  CONSTRAINT `illbatches_bcfk` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `illbatches_bnfk` FOREIGN KEY (`patron_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `illbatches_sfk` FOREIGN KEY (`status_code`) REFERENCES `illbatch_statuses` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `illcomments`
 --
 
@@ -3573,36 +3634,6 @@ CREATE TABLE `illrequestattributes` (
   CONSTRAINT `illrequestattributes_ifk` FOREIGN KEY (`illrequest_id`) REFERENCES `illrequests` (`illrequest_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
---
--- Table structure for table `illbatch_statuses`
---
-DROP TABLE IF EXISTS `illbatch_statuses`;
-CREATE TABLE `illbatch_statuses` (
-    `id` int(11) NOT NULL auto_increment COMMENT "Status ID",
-    `name` varchar(100) NOT NULL COMMENT "Name of status",
-    `code` varchar(20) NOT NULL COMMENT "Unique, immutable code for status",
-    `is_system` tinyint(1) COMMENT "Is this status required for system operation",
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `u_illbatchstatuses__code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Table structure for table `illbatches`
---
-DROP TABLE IF EXISTS `illbatches`;
-CREATE TABLE `illbatches` (
-    `ill_batch_id` int(11) NOT NULL auto_increment COMMENT "Batch ID",
-    `name` varchar(100) NOT NULL COMMENT "Unique name of batch",
-    `backend` varchar(20) NOT NULL COMMENT "Name of batch backend",
-    `patron_id` int(11) NULL DEFAULT NULL COMMENT "Patron associated with batch",
-    `library_id` varchar(50) NULL DEFAULT NULL COMMENT "Branch associated with batch",
-    `status_code` varchar(20) NULL DEFAULT NULL COMMENT "Status of batch",
-    PRIMARY KEY (`ill_batch_id`),
-    UNIQUE KEY `u_illbatches__name` (`name`),
-    CONSTRAINT `illbatches_bnfk` FOREIGN KEY (`patron_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT `illbatches_bcfk` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT `illbatches_sfk` FOREIGN KEY (`status_code`) REFERENCES `illbatch_statuses` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `illrequests`
@@ -3632,7 +3663,7 @@ CREATE TABLE `illrequests` (
   `notesstaff` mediumtext DEFAULT NULL COMMENT 'Staff notes attached to request',
   `orderid` varchar(50) DEFAULT NULL COMMENT 'Backend id attached to request',
   `backend` varchar(20) DEFAULT NULL COMMENT 'The backend used to create request',
-  `batch_id` int(11) COMMENT 'Optional ID of batch that this request belongs to',
+  `batch_id` int(11) DEFAULT NULL COMMENT 'Optional ID of batch that this request belongs to',
   PRIMARY KEY (`illrequest_id`),
   KEY `illrequests_bnfk` (`borrowernumber`),
   KEY `illrequests_bcfk_2` (`branchcode`),
@@ -3642,8 +3673,8 @@ CREATE TABLE `illrequests` (
   CONSTRAINT `illrequests_bcfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `illrequests_bibfk` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `illrequests_bnfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `illrequests_safk` FOREIGN KEY (`status_alias`) REFERENCES `authorised_values` (`authorised_value`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `illrequests_ibfk` FOREIGN KEY (`batch_id`) REFERENCES `illbatches` (`ill_batch_id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `illrequests_ibfk` FOREIGN KEY (`batch_id`) REFERENCES `illbatches` (`ill_batch_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `illrequests_safk` FOREIGN KEY (`status_alias`) REFERENCES `authorised_values` (`authorised_value`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -4944,7 +4975,7 @@ DROP TABLE IF EXISTS `patron_consent`;
 CREATE TABLE `patron_consent` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `borrowernumber` int(11) NOT NULL,
-  `type` tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'consent type, could be custom type',
+  `type` tinytext DEFAULT NULL COMMENT 'consent type, could be custom type',
   `given_on` datetime DEFAULT NULL,
   `refused_on` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -5072,24 +5103,41 @@ CREATE TABLE `plugin_methods` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `preservation_trains`
+-- Table structure for table `preservation_processing_attributes`
 --
 
-DROP TABLE IF EXISTS `preservation_trains`;
+DROP TABLE IF EXISTS `preservation_processing_attributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `preservation_trains` (
-  `train_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `name` varchar(80) NOT NULL COMMENT 'name of the train',
-  `description` varchar(255) NULL COMMENT 'description of the train',
-  `default_processing_id` int(11) NULL COMMENT 'default processing, link to preservation_processings.processing_id',
-  `not_for_loan` varchar(80) NOT NULL DEFAULT 0 COMMENT 'NOT_LOAN authorised value to apply toitem added to this train',
-  `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'creation date',
-  `closed_on` datetime DEFAULT NULL COMMENT 'closing date',
-  `sent_on` datetime DEFAULT NULL COMMENT 'sending date',
-  `received_on` datetime DEFAULT NULL COMMENT 'receiving date',
-  PRIMARY KEY (`train_id`),
-  CONSTRAINT `preservation_trains_ibfk_1` FOREIGN KEY (`default_processing_id`) REFERENCES `preservation_processings` (`processing_id`) ON DELETE SET NULL ON UPDATE CASCADE
+CREATE TABLE `preservation_processing_attributes` (
+  `processing_attribute_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `processing_id` int(11) NOT NULL COMMENT 'link to the processing',
+  `name` varchar(80) NOT NULL COMMENT 'name of the processing attribute',
+  `type` enum('authorised_value','free_text','db_column') NOT NULL COMMENT 'Type of the processing attribute',
+  `option_source` varchar(80) DEFAULT NULL COMMENT 'source of the possible options for this attribute',
+  PRIMARY KEY (`processing_attribute_id`),
+  KEY `preservation_processing_attributes_ibfk_1` (`processing_id`),
+  CONSTRAINT `preservation_processing_attributes_ibfk_1` FOREIGN KEY (`processing_id`) REFERENCES `preservation_processings` (`processing_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `preservation_processing_attributes_items`
+--
+
+DROP TABLE IF EXISTS `preservation_processing_attributes_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `preservation_processing_attributes_items` (
+  `processing_attribute_item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `processing_attribute_id` int(11) NOT NULL COMMENT 'link with preservation_processing_attributes',
+  `train_item_id` int(11) NOT NULL COMMENT 'link with preservation_trains_items',
+  `value` varchar(255) DEFAULT NULL COMMENT 'value for this attribute',
+  PRIMARY KEY (`processing_attribute_item_id`),
+  KEY `preservation_processing_attributes_items_ibfk_1` (`processing_attribute_id`),
+  KEY `preservation_processing_attributes_items_ibfk_2` (`train_item_id`),
+  CONSTRAINT `preservation_processing_attributes_items_ibfk_1` FOREIGN KEY (`processing_attribute_id`) REFERENCES `preservation_processing_attributes` (`processing_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `preservation_processing_attributes_items_ibfk_2` FOREIGN KEY (`train_item_id`) REFERENCES `preservation_trains_items` (`train_item_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5109,38 +5157,25 @@ CREATE TABLE `preservation_processings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `preservation_processing_attributes`
+-- Table structure for table `preservation_trains`
 --
 
-DROP TABLE IF EXISTS `preservation_processing_attributes`;
+DROP TABLE IF EXISTS `preservation_trains`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `preservation_processing_attributes` (
-  `processing_attribute_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `processing_id` int(11) NOT NULL COMMENT 'link to the processing',
-  `name` varchar(80) NOT NULL COMMENT 'name of the processing attribute',
-  `type` enum('authorised_value', 'free_text', 'db_column') NOT NULL COMMENT 'Type of the processing attribute',
-  `option_source` varchar(80) NULL COMMENT 'source of the possible options for this attribute',
-  PRIMARY KEY (`processing_attribute_id`),
-  CONSTRAINT `preservation_processing_attributes_ibfk_1` FOREIGN KEY (`processing_id`) REFERENCES `preservation_processings` (`processing_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `preservation_processing_attributes_items`
---
-
-DROP TABLE IF EXISTS `preservation_processing_attributes_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `preservation_processing_attributes_items` (
-  `processing_attribute_item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `processing_attribute_id` int(11) NOT NULL COMMENT 'link with preservation_processing_attributes',
-  `train_item_id` int(11) NOT NULL COMMENT 'link with preservation_trains_items',
-  `value` varchar(255) NULL COMMENT 'value for this attribute',
-  PRIMARY KEY (`processing_attribute_item_id`),
-  CONSTRAINT `preservation_processing_attributes_items_ibfk_1` FOREIGN KEY (`processing_attribute_id`) REFERENCES `preservation_processing_attributes` (`processing_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `preservation_processing_attributes_items_ibfk_2` FOREIGN KEY (`train_item_id`) REFERENCES `preservation_trains_items` (`train_item_id`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `preservation_trains` (
+  `train_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `name` varchar(80) NOT NULL COMMENT 'name of the train',
+  `description` varchar(255) DEFAULT NULL COMMENT 'description of the train',
+  `default_processing_id` int(11) DEFAULT NULL COMMENT 'default processing, link to preservation_processings.processing_id',
+  `not_for_loan` varchar(80) NOT NULL DEFAULT '0' COMMENT 'NOT_LOAN authorised value to apply toitem added to this train',
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'creation date',
+  `closed_on` datetime DEFAULT NULL COMMENT 'closing date',
+  `sent_on` datetime DEFAULT NULL COMMENT 'sending date',
+  `received_on` datetime DEFAULT NULL COMMENT 'receiving date',
+  PRIMARY KEY (`train_id`),
+  KEY `preservation_trains_ibfk_1` (`default_processing_id`),
+  CONSTRAINT `preservation_trains_ibfk_1` FOREIGN KEY (`default_processing_id`) REFERENCES `preservation_processings` (`processing_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5155,11 +5190,13 @@ CREATE TABLE `preservation_trains_items` (
   `train_item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `train_id` int(11) NOT NULL COMMENT 'link with preservation_train',
   `item_id` int(11) NOT NULL COMMENT 'link with items',
-  `processing_id` int(11) NULL COMMENT 'specific processing for this item',
+  `processing_id` int(11) DEFAULT NULL COMMENT 'specific processing for this item',
   `user_train_item_id` int(11) NOT NULL COMMENT 'train item id for this train, starts from 1',
   `added_on` datetime DEFAULT NULL COMMENT 'added date',
   PRIMARY KEY (`train_item_id`),
-  UNIQUE KEY (`train_id`,`item_id`),
+  UNIQUE KEY `train_id` (`train_id`,`item_id`),
+  KEY `preservation_item_ibfk_2` (`item_id`),
+  KEY `preservation_item_ibfk_3` (`processing_id`),
   CONSTRAINT `preservation_item_ibfk_1` FOREIGN KEY (`train_id`) REFERENCES `preservation_trains` (`train_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `preservation_item_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `preservation_item_ibfk_3` FOREIGN KEY (`processing_id`) REFERENCES `preservation_processings` (`processing_id`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -5941,7 +5978,7 @@ CREATE TABLE `subscription` (
   `previousitemtype` varchar(10) DEFAULT NULL,
   `mana_id` int(11) DEFAULT NULL,
   `ccode` varchar(80) DEFAULT NULL COMMENT 'collection code to assign to serial items',
-  `published_on_template` TEXT DEFAULT NULL COMMENT 'Template Toolkit syntax to generate the default "Published on (text)" field when receiving an issue this serial',
+  `published_on_template` text DEFAULT NULL COMMENT 'Template Toolkit syntax to generate the default "Published on (text)" field when receiving an issue this serial',
   PRIMARY KEY (`subscriptionid`),
   KEY `subscription_ibfk_1` (`periodicity`),
   KEY `subscription_ibfk_2` (`numberpattern`),
@@ -6538,4 +6575,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-31 12:31:12
+-- Dump completed on 2023-11-30 17:38:08
