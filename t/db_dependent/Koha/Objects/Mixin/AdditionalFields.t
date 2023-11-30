@@ -42,16 +42,18 @@ my $bar = Koha::AdditionalField->new(
 
 Koha::AdditionalFieldValue->new(
     {
-        field_id  => $foo->id,
-        record_id => $basket1->basketno,
-        value     => 'foo value for basket1',
+        field_id     => $foo->id,
+        record_table => 'aqbasket',
+        record_id    => $basket1->basketno,
+        value        => 'foo value for basket1',
     }
 )->store;
 Koha::AdditionalFieldValue->new(
     {
-        field_id  => $bar->id,
-        record_id => $basket1->basketno,
-        value     => 'bar value for basket1',
+        field_id     => $bar->id,
+        record_table => 'aqbasket',
+        record_id    => $basket1->basketno,
+        value        => 'bar value for basket1',
     }
 )->store;
 
