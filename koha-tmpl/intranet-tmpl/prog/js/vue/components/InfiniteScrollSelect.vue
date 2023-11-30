@@ -7,6 +7,7 @@
         :reduce="item => item[dataIdentifier]"
         @open="onOpen"
         @close="onClose"
+        @option:selected="onSelected"
         @search="searchFilter($event)"
         ref="select"
     >
@@ -17,6 +18,9 @@
                 v-bind="attributes"
                 v-on="events"
             />
+        </template>
+        <template #selected-option="option">
+            {{ selectedOptionLabel }}
         </template>
         <template #list-footer>
             <li v-show="hasNextPage && !this.search" ref="load">
@@ -48,6 +52,7 @@ export default {
             scrollPage: null,
             data: [this.selectedData],
             paginationRequired: false,
+            selectedOptionLabel: this.selectedData[this.label],
         }
     },
     computed: {
@@ -130,6 +135,9 @@ export default {
         },
         onClose() {
             this.observer.disconnect()
+        },
+        onSelected(option) {
+            this.selectedOptionLabel = option[this.label]
         },
         async infiniteScroll([{ isIntersecting, target }]) {
             setTimeout(async () => {
