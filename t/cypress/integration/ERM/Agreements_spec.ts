@@ -8,106 +8,6 @@ const dates = {
     tomorrow_iso: dayjs().add(1, "day").format("YYYY-MM-DD"),
     tomorrow_us: dayjs().add(1, "day").format("MM/DD/YYYY"),
 };
-function get_agreement() {
-    let licenses = get_licenses_to_relate();
-    return {
-        agreement_id: 1,
-        closure_reason: "",
-        description: "my first agreement",
-        is_perpetual: false,
-        license_info: "",
-        name: "agreement 1",
-        renewal_priority: "",
-        status: "active",
-        vendor_id: 1,
-        vendor: [cy.get_vendors_to_relate()[0]],
-        periods: [
-            {
-                started_on: dates["today_iso"],
-                ended_on: dates["tomorrow_iso"],
-                cancellation_deadline: null,
-                notes: null,
-            },
-            {
-                started_on: dates["today_iso"],
-                ended_on: null,
-                cancellation_deadline: dates["tomorrow_iso"],
-                notes: "this is a note",
-            },
-        ],
-        user_roles: [],
-        agreement_licenses: [
-            {
-                agreement_id: 1,
-                agreement_license_id: 3,
-                license: licenses[0],
-                license_id: licenses[0].license_id,
-                notes: "license notes",
-                physical_location: "cupboard",
-                status: "controlling",
-                uri: "license uri",
-            },
-            {
-                agreement_id: 1,
-                agreement_license_id: 4,
-                license: licenses[1],
-                license_id: licenses[1].license_id,
-                notes: "second license notes",
-                physical_location: "cupboard",
-                status: "future",
-                uri: "license uri",
-            },
-        ],
-        agreement_relationships: [
-            {
-                agreement_id: 1,
-                notes: "related agreement notes",
-                related_agreement: {
-                    agreement_id: 2,
-                    description: "agreement description",
-                    name: "agreement name",
-                },
-                related_agreement_id: 2,
-                relationship: "supersedes",
-            },
-        ],
-        agreement_packages: [],
-        documents: [
-            {
-                agreement_id: 1,
-                file_description: "file description",
-                file_name: "file.json",
-                notes: "file notes",
-                physical_location: "file physical location",
-                uri: "file uri",
-                uploaded_on: "2022-10-27T11:57:02+00:00",
-            },
-        ],
-    };
-}
-
-function get_licenses_to_relate() {
-    return [
-        {
-            license_id: 1,
-            description: "license description",
-            license_id: 1,
-            name: "first license name",
-            status: "expired",
-            type: "alliance",
-        },
-        {
-            license_id: 2,
-            description: "a second license",
-            name: "second license name",
-        },
-        {
-            license_id: 3,
-            description: "a third license",
-            name: "third license name",
-        },
-    ];
-}
 
 describe("Agreement CRUD operations", () => {
     beforeEach(() => {
@@ -137,7 +37,7 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_list").contains("There are no agreements defined");
 
         // GET agreements returns something
-        let agreement = get_agreement();
+        let agreement = cy.get_agreement();
         let agreements = [agreement];
 
         cy.intercept("GET", "/api/v1/erm/agreements*", {
@@ -233,7 +133,7 @@ describe("Agreement CRUD operations", () => {
     });
 
     it("Add agreement", () => {
-        let agreement = get_agreement();
+        let agreement = cy.get_agreement();
         let vendors = cy.get_vendors_to_relate();
         // No agreement, no license yet
         cy.intercept("GET", "/api/v1/erm/agreements*", {
@@ -399,7 +299,7 @@ describe("Agreement CRUD operations", () => {
         });
 
         // Add new license
-        let licenses_to_relate = get_licenses_to_relate();
+        let licenses_to_relate = cy.get_licenses_to_relate();
         let related_license = agreement.agreement_licenses[0];
         let licenses_count = licenses_to_relate.length.toString();
         cy.intercept("GET", "/api/v1/erm/licenses*", {
@@ -460,8 +360,8 @@ describe("Agreement CRUD operations", () => {
     });
 
     it("Edit agreement", () => {
-        let licenses_to_relate = get_licenses_to_relate();
-        let agreement = get_agreement();
+        let licenses_to_relate = cy.get_licenses_to_relate();
+        let agreement = cy.get_agreement();
         let agreements = [agreement];
         let vendors = cy.get_vendors_to_relate();
 
@@ -599,7 +499,7 @@ describe("Agreement CRUD operations", () => {
     });
 
     it("Show agreement", () => {
-        let agreement = get_agreement();
+        let agreement = cy.get_agreement();
         let agreements = [agreement];
         // Click the "name" link from the list
         cy.intercept("GET", "/api/v1/erm/agreements*", {
@@ -636,7 +536,7 @@ describe("Agreement CRUD operations", () => {
         // Tables for periods and users
     });
     it("Delete agreement", () => {
-        let agreement = get_agreement();
+        let agreement = cy.get_agreement();
         let agreements = [agreement];
 
         // Delete from list
