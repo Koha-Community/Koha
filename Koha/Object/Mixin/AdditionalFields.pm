@@ -47,6 +47,8 @@ sub set_additional_fields {
 
     $self->additional_field_values->delete;
 
+    my $table = $self->_result->table;
+
     my $biblionumber;
     my $record;
     my $record_updated;
@@ -80,9 +82,10 @@ sub set_additional_fields {
         if ( defined $value && $value ne '' ) {
             my $field_value = Koha::AdditionalFieldValue->new(
                 {
-                    field_id  => $additional_field->{id},
-                    record_id => $self->id,
-                    value     => $value,
+                    field_id     => $additional_field->{id},
+                    record_table => $table,
+                    record_id    => $self->id,
+                    value        => $value,
                 }
             )->store;
         }
