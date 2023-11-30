@@ -67,7 +67,7 @@ content of the counter file
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
-  is_nullable: 0
+  is_nullable: 1
 
 counter file upload date
 
@@ -89,7 +89,7 @@ __PACKAGE__->add_columns(
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable => 0,
+    is_nullable => 1,
   },
 );
 
@@ -143,8 +143,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-15 09:43:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+cy3yVUyED7b16dNoC6dSQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-30 17:43:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PnXyJtZQBhfxPPNnkyxJ8Q
 
 
 sub koha_object_class {

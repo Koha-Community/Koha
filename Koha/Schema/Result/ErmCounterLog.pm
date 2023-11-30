@@ -60,7 +60,7 @@ foreign key to erm_usage_data_providers
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
-  is_nullable: 0
+  is_nullable: 1
 
 counter file import date
 
@@ -95,7 +95,7 @@ __PACKAGE__->add_columns(
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable => 0,
+    is_nullable => 1,
   },
   "filename",
   { data_type => "varchar", is_nullable => 1, size => 80 },
@@ -178,8 +178,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-11 10:09:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5tmoa4Our5qmolU0OWXjcQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-30 17:43:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fEB6HZDsjTTJVWlnW+y/Ng
 
 
 sub koha_object_class {
