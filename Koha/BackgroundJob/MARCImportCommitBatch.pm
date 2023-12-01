@@ -78,7 +78,6 @@ sub process {
             progress_interval => 50,
             progress_callback =>
                 sub { my $job_progress = shift; $self->progress( $job_progress )->store },
-            skip_intermediate_commit => 1,
             });
         my $count = $num_added + $num_updated;
         if( $count ) {
