@@ -117,13 +117,13 @@ sub checkpw_cas {
             # we should store the CAS ticekt too, we need this for single logout https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#233-single-logout
 
             # Does it match one of our users ?
-            my $dbh = C4::Context->dbh;
-            my $patron = Koha::Patrons->find({ userid => $userid });
-            if ( $patron ) {
+            my $dbh    = C4::Context->dbh;
+            my $patron = Koha::Patrons->find( { userid => $userid } );
+            if ($patron) {
                 return ( 1, $patron->cardnumber, $patron->userid, $ticket, $patron );
             }
-            $patron = Koha::Patrons->find({ cardnumber => $userid });
-            if ( $patron ) {
+            $patron = Koha::Patrons->find( { cardnumber => $userid } );
+            if ($patron) {
                 return ( 1, $patron->cardnumber, $patron->userid, $ticket, $patron );
             }
 

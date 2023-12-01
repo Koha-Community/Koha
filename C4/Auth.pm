@@ -1940,29 +1940,31 @@ sub checkpw {
     $type = 'opac' unless $type;
 
     # Get shibboleth login attribute
-    my $shib = C4::Context->config('useshibboleth') && shib_ok();
+    my $shib       = C4::Context->config('useshibboleth') && shib_ok();
     my $shib_login = $shib ? get_login_shib() : undef;
 
     my @return;
     my $patron;
-    if ( defined $userid ){
-        $patron = Koha::Patrons->find({ userid => $userid });
-        $patron = Koha::Patrons->find({ cardnumber => $userid }) unless $patron;
+    if ( defined $userid ) {
+        $patron = Koha::Patrons->find( { userid     => $userid } );
+        $patron = Koha::Patrons->find( { cardnumber => $userid } ) unless $patron;
     }
     my $check_internal_as_fallback = 0;
-    my $passwd_ok = 0;
+    my $passwd_ok                  = 0;
+
     # Note: checkpw_* routines returns:
     # 1 if auth is ok
     # 0 if auth is nok
     # -1 if user bind failed (LDAP only)
 
-    if ( $patron and ( $patron->account_locked )  ) {
+    if ( $patron and ( $patron->account_locked ) ) {
+
         # Nothing to check, account is locked
-    } elsif ($ldap && defined($password)) {
+    } elsif ( $ldap && defined($password) ) {
         my ( $retval, $retcard, $retuserid );
         ( $retval, $retcard, $retuserid, $patron ) = checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval == 1 ) {
-            @return = ( $retval, $retcard, $retuserid, $patron );
+            @return    = ( $retval, $retcard, $retuserid, $patron );
             $passwd_ok = 1;
         }
         $check_internal_as_fallback = 1 if $retval == 0;
@@ -1971,9 +1973,10 @@ sub checkpw {
 
         # In case of a CAS authentication, we use the ticket instead of the password
         my $ticket = $query->param('ticket');
-        $query->delete('ticket');                                   # remove ticket to come back to original URL
-        my ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) = checkpw_cas( $ticket, $query, $type );    # EXTERNAL AUTH
-        if ( $retval ) {
+        $query->delete('ticket');                                         # remove ticket to come back to original URL
+        my ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) =
+            checkpw_cas( $ticket, $query, $type );                        # EXTERNAL AUTH
+        if ($retval) {
             @return = ( $retval, $retcard, $retuserid, $patron, $cas_ticket );
         } else {
             @return = (0);
@@ -1992,8 +1995,9 @@ sub checkpw {
 
         # Then, we check if it matches a valid koha user
         if ($shib_login) {
-            my ( $retval, $retcard, $retuserid, $patron ) = C4::Auth_with_shibboleth::checkpw_shib($shib_login);    # EXTERNAL AUTH
-            if ( $retval ) {
+            my ( $retval, $retcard, $retuserid, $patron ) =
+                C4::Auth_with_shibboleth::checkpw_shib($shib_login);    # EXTERNAL AUTH
+            if ($retval) {
                 @return = ( $retval, $retcard, $retuserid, $patron );
             }
             $passwd_ok = $retval;
@@ -2003,27 +2007,27 @@ sub checkpw {
     }
 
     # INTERNAL AUTH
-    if ( $check_internal_as_fallback ) {
-        @return = checkpw_internal( $userid, $password, $no_set_userenv);
-        push(@return, $patron);
-        $passwd_ok = 1 if $return[0] > 0; # 1 or 2
+    if ($check_internal_as_fallback) {
+        @return = checkpw_internal( $userid, $password, $no_set_userenv );
+        push( @return, $patron );
+        $passwd_ok = 1 if $return[0] > 0;    # 1 or 2
     }
 
-    if( $patron ) {
-        if ( $passwd_ok ) {
-            $patron->update({ login_attempts => 0 });
-            if( $patron->password_expired ){
+    if ($patron) {
+        if ($passwd_ok) {
+            $patron->update( { login_attempts => 0 } );
+            if ( $patron->password_expired ) {
                 @return = (-2);
             }
-        } elsif( !$patron->account_locked ) {
-            $patron->update({ login_attempts => $patron->login_attempts + 1 });
+        } elsif ( !$patron->account_locked ) {
+            $patron->update( { login_attempts => $patron->login_attempts + 1 } );
         }
     }
 
     # Optionally log success or failure
-    if( $patron && $passwd_ok && C4::Context->preference('AuthSuccessLog') ) {
+    if ( $patron && $passwd_ok && C4::Context->preference('AuthSuccessLog') ) {
         logaction( 'AUTH', 'SUCCESS', $patron->id, "Valid password for $userid", $type );
-    } elsif( !$passwd_ok && C4::Context->preference('AuthFailureLog') ) {
+    } elsif ( !$passwd_ok && C4::Context->preference('AuthFailureLog') ) {
         logaction( 'AUTH', 'FAILURE', $patron ? $patron->id : 0, "Wrong password for $userid", $type );
     }
 
