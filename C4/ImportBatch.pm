@@ -520,10 +520,7 @@ sub BatchFindDuplicates {
             overlay_framework => $overlay_framework,
             progress_interval => $progress_interval,
             progress_callback => $progress_callback,
-            skip_intermediate_commit => $skip_intermediate_commit
         });
-
-    Parameter skip_intermediate_commit does what is says.
 =cut
 
 sub BatchCommitRecords {
@@ -531,7 +528,6 @@ sub BatchCommitRecords {
     my $batch_id          = $params->{batch_id};
     my $framework         = $params->{framework};
     my $overlay_framework = $params->{overlay_framework};
-    my $skip_intermediate_commit = $params->{skip_intermediate_commit};
     my $progress_interval = $params->{progress_interval} // 0;
     my $progress_callback = $params->{progress_callback};
     $progress_interval = 0 unless $progress_interval && $progress_interval =~ /^\d+$/;
