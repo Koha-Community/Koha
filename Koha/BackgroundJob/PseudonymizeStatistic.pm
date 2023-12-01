@@ -23,7 +23,7 @@ use base 'Koha::BackgroundJob';
 
 =head1 NAME
 
-Koha::BackgroundJob::BatchCancelHold - Batch cancel holds
+Koha::BackgroundJob::PseudonymizedTransactions - Pseudonymize transactions background job
 
 This is a subclass of Koha::BackgroundJob.
 
