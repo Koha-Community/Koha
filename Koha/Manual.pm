@@ -234,6 +234,16 @@ our $mapping = {
     'patroncards/manage'                       => '/tools.html#patron-card-creator',
     'plugins/plugins-home'                     => '/plugins.html',
     'plugins/plugins-upload'                   => '/plugins.html',
+    'preservation/home'                        => '/preservation.html',
+    'preservation/settings/processings/add'    => '/preservation.html#add-a-new-processing',
+    'preservation/settings/processings/edit/'  => '/preservation.html#add-a-new-processing',
+    'preservation/settings'                    => '/preservation.html#settings',
+    'preservation/settings/'                   => '/preservation.html#settings',
+    'preservation/trains'                      => '/preservation.html#trains',
+    'preservation/trains/'                     => '/preservation.html#trains',
+    'preservation/trains/add'                  => '/preservation.html#new-train',
+    'preservation/trains//items/add'           => '/preservation.html#add-items',
+    'preservation/waiting-list'                => '/preservation.html#waiting-list',
     'reports/acquisitions_stats'               => '/reports.html#acquisitions-statistics',
     'reports/bor_issues_top'                   => '/reports.html#patrons-with-the-most-checkouts',
     'reports/borrowers_out'                    => '/reports.html#patrons-with-no-checkouts',
@@ -298,15 +308,15 @@ our $mapping = {
 sub get_url {
     my ( $url, $preferred_language ) = @_;
     my $file;
-    if ($url =~ /koha\/(.*)\.pl/ || $url =~ '/koha/(erm.*)') {
+    if ($url =~ /koha\/(.*)\.pl/ || $url =~ '/koha/(erm.*)' || $url =~ '/koha/(preservation.*)') {
         $file = $1;
     } else {
         $file = 'mainpage';
     }
     $file =~ s/[^a-zA-Z0-9_\-\/]*//g;
 
-    if ( $file =~ m|^erm| ) {
-        $file =~ s|\d*$||;
+    if ( $file =~ m|^erm| || $file =~ m|^preservation|) {
+        $file =~ s|\d*+||g;
     }
 
     my $view;
