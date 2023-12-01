@@ -82,7 +82,7 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
                       amountoutstanding is 0 or NULL.
                       In the case of --fees, DAYS must be greater than
                       or equal to 1.
-   --log-modules      Specify which action log modules to trim. Repeatable.
+   --log-module       Specify which action log modules to trim. Repeatable.
    --preserve-log     Specify which action logs to exclude. Repeatable.
    --log-action       Specify which action log action entries to trim. Repeatable.
    --logs DAYS        purge entries from action_logs older than DAYS days.
