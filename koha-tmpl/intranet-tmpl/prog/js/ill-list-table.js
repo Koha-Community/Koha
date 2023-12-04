@@ -344,7 +344,14 @@ $(document).ready(function () {
                                 ) +
                                 "</span>";
                         }
-                        if (display_extended_attribute(row, "title") !== "") {
+                        if (row.biblio_id !== null) {
+                            display +=
+                                '<span style="display:block"> Title: ' +
+                                $biblio_to_html(row.biblio, { link: 1 }) +
+                                "</span>";
+                        } else if (
+                            display_extended_attribute(row, "title") !== ""
+                        ) {
                             display +=
                                 '<span style="display:block"> Title: ' +
                                 display_extended_attribute(row, "title") +
@@ -420,19 +427,6 @@ $(document).ready(function () {
                                   url: true,
                               })
                             : "";
-                    },
-                },
-                {
-                    data: "biblio_id",
-                    orderable: true,
-                    render: function (data, type, row, meta) {
-                        if (data === null) {
-                            return "";
-                        }
-                        return $biblio_to_html(row.biblio, {
-                            biblio_id_only: 1,
-                            link: 1,
-                        });
                     },
                 },
                 {
