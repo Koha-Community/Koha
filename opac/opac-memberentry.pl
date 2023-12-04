@@ -263,6 +263,8 @@ if ( $action eq 'create' ) {
                 $template->param( password_cleartext => $patron->plain_text_password );
                 $template->param( borrower => $patron->unblessed );
 
+                $template->param( confirmed => 1 );
+
                 # If 'AutoEmailNewUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
                 if ( C4::Context->preference("AutoEmailNewUser") ) {
                     #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead

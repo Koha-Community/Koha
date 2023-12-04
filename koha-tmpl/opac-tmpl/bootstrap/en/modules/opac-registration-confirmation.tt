@@ -16,7 +16,11 @@
 <div class="main">
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            <span>Registration complete</span>
+            [% IF ( ! confirmed ) %]
+                <span>Registration pending</span>
+            [% ELSE %]
+                <span>Registration complete</span>
+            [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 
@@ -42,6 +46,17 @@
                 <div class="col order-md-1 maincontent">
             [% END %]
 
+                [% IF ( ! confirmed ) %]
+                    <div id="registration-pending">
+                        <h1>Registration pending</h1>
+                        <p id="confirm-instruction" class="registration-line">Click the button below to confirm registration.</p>
+                        <form action="/cgi-bin/koha/opac-registration-verify.pl" method="post" name="confirm_registration" id="confirm_registration">
+                            <input type="hidden" name="token" value="[% token | html %]">
+                            <input type="hidden" name="op" value="confirmed">
+                            <input type="submit" value="Confirm" class="btn btn-primary">
+                        </form>
+                    </div>
+                [% ELSE %]
                     <div id="registration-complete">
                         <h1>Registration complete!</h1>
 
@@ -80,6 +95,7 @@
                             </div>
                         [% END %]
                     </div> <!-- /#registration-complete -->
+                [% END %]
                 </div> <!-- / .col-7/9 -->
 
                 <div class="col-12 col-lg-3 order-md-2">
