@@ -22,7 +22,7 @@
                         </ol>
                     </fieldset>
                     <fieldset class="action">
-                        <input type="submit" value="Submit" />
+                        <input type="submit" :value="$__('Submit')" />
                         <input
                             type="button"
                             @click="show_modal_add_to_waiting_list = false"
@@ -69,7 +69,7 @@
                         </ol>
                     </fieldset>
                     <fieldset class="action">
-                        <input type="submit" value="Submit" />
+                        <input type="submit" :value="$__('Submit')" />
                         <input
                             type="button"
                             @click="show_modal_add_to_train = false"

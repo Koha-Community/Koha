@@ -67,7 +67,7 @@
                     :package_agreements="erm_package.package_agreements"
                 />
                 <fieldset class="action">
-                    <input type="submit" value="Submit" />
+                    <input type="submit" :value="$__('Submit')" />
                     <router-link
                         :to="{ name: 'EHoldingsLocalPackagesList' }"
                         role="button"

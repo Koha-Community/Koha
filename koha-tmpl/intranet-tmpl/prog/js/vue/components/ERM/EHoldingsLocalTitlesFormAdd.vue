@@ -368,7 +368,7 @@
                 </fieldset>
                 <EHoldingsTitlesFormAddResources :resources="title.resources" />
                 <fieldset class="action">
-                    <input type="submit" value="Submit" />
+                    <input type="submit" :value="$__('Submit')" />
                     <router-link
                         :to="{ name: 'EHoldingsLocalTitlesList' }"
                         role="button"

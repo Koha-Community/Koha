@@ -180,7 +180,7 @@
                 </fieldset>
 
                 <fieldset class="action">
-                    <input type="submit" value="Submit" />
+                    <input type="submit" :value="$__('Submit')" />
                     <router-link
                         :to="{ name: 'Settings' }"
                         role="button"
