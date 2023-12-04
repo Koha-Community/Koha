@@ -22,10 +22,14 @@ if ( C4::Context->config("enable_plugins") ) {
     );
 
     foreach my $plugin (@plugins) {
+        my $plugin_name = ref $plugin;
         try {
+            cronlogaction({ info => "running nightly cronjob for plugin $plugin_name" });
             $plugin->cronjob_nightly();
+            cronlogaction({ info => "finished nightly cronjob for plugin $plugin_name" });
         }
         catch {
+            cronlogaction({ info => "failed to running nightly cronjob for plugin $plugin_name with error: $_" });
             warn "$_";
             $logger->warn("$_");
         };
