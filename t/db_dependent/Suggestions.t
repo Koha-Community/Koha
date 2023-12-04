@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 91;
+use Test::More tests => 92;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -29,6 +29,7 @@ use C4::Letters qw( GetQueuedMessages GetMessage );
 use C4::Budgets qw( AddBudgetPeriod AddBudget GetBudget );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Holds;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Suggestions;
@@ -592,6 +593,51 @@ subtest 'ModSuggestion should work on suggestions without a suggester' => sub {
     $suggestion = GetSuggestion($my_suggestionid);
 
     is( $suggestion->{note}, "Test note", "ModSuggestion works on suggestions without a suggester" );
+};
+
+subtest 'place_hold tests' => sub {
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( "PlaceHoldsOnOrdersFromSuggestions", "0" );
+
+    my $biblio     = $builder->build_sample_biblio();
+    my $patron     = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $suggestion = $builder->build_object(
+        {
+            class => 'Koha::Suggestions',
+            value => {
+                branchcode   => $patron->branchcode,
+                biblionumber => undef,
+                suggestedby  => $patron->id
+            }
+        }
+    );
+
+    my $hold_id = $suggestion->place_hold();
+    is( $hold_id, undef, "No suggestion placed when preference is disabled" );
+
+    t::lib::Mocks::mock_preference( "PlaceHoldsOnOrdersFromSuggestions", "1" );
+
+    $hold_id = $suggestion->place_hold();
+    is(
+        $hold_id, undef,
+        "No suggestion placed when preference is enabled and suggestion does not have a biblionumber"
+    );
+
+    $suggestion->biblionumber( $biblio->id )->store();
+    $suggestion->discard_changes();
+
+    $hold_id = $suggestion->place_hold();
+    ok( $hold_id, "Suggestion placed when preference is enabled and suggestion does have a biblionumber" );
+
+    my $hold = Koha::Holds->find($hold_id);
+    $hold->delete();
+
+    t::lib::Mocks::mock_preference( "PlaceHoldsOnOrdersFromSuggestions", "0" );
+
+    $hold_id = $suggestion->place_hold();
+    is( $hold_id, undef, "Suggestion not placed when preference is disabled and suggestion does have a biblionumber" );
+
 };
 
 subtest 'Suggestion with ISBN' => sub {

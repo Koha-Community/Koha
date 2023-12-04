@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Letters;
+use C4::Reserves qw( AddReserve );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -205,6 +206,30 @@ sub fund {
     my $fund_rs = $self->_result->budgetid;
     return unless $fund_rs;
     return Koha::Acquisition::Fund->_new_from_dbic($fund_rs);
+}
+
+=head3 place_hold
+
+my $hold_id = $suggestion->place_hold();
+
+Places a hold for the suggester if the suggestion is tied to a biblio.
+
+=cut
+
+sub place_hold {
+    my ($self) = @_;
+
+    return unless C4::Context->preference('PlaceHoldsOnOrdersFromSuggestions');
+    return unless $self->biblionumber;
+
+    my $hold_id = AddReserve(
+        {
+            borrowernumber => $self->suggestedby,
+            biblionumber   => $self->biblionumber,
+            branchcode     => $self->branchcode,
+            title          => $self->title,
+        }
+    );
 }
 
 =head3 type
