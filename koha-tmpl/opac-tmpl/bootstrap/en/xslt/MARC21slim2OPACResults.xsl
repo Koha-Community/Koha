@@ -1196,7 +1196,7 @@
 
     <xsl:if test="marc:datafield[@tag=856]">
          <div class="results_summary online_resources">
-			   <span class="label">Online access: </span>
+               <span class="label">Online resources: </span>
                     <ul class="resource_list">
                             <xsl:for-each select="marc:datafield[@tag=856]">
                             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
