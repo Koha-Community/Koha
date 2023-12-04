@@ -45,8 +45,8 @@
             [% more_less_labels.Topics          = { more = t("Show more topics"),            less = t("Show fewer topics") }            %]
             [% more_less_labels.Places          = { more = t("Show more places"),            less = t("Show fewer places") }            %]
             [% more_less_labels.Series          = { more = t("Show more series"),            less = t("Show fewer series") }            %]
-            [% more_less_labels.ItemTypes       = { more = t("Show more types"),             less = t("Show fewer types") }             %]
-            [% more_less_labels.CollectionCodes = { more = t("Show more collection codes"),  less = t("Show fewer collection codes") }  %]
+            [% more_less_labels.ItemTypes       = { more = t("Show more item types"),        less = t("Show fewer item types") }        %]
+            [% more_less_labels.CollectionCodes = { more = t("Show more collections"),       less = t("Show fewer collections") }       %]
             [% more_less_labels.Language        = { more = t("Show more languages"),         less = t("Show fewer languages") }         %]
             [% more_less_labels.HomeLibrary     = { more = t("Show more home libraries"),    less = t("Show fewer home libraries") }    %]
             [% more_less_labels.HoldingLibrary  = { more = t("Show more holding libraries"), less = t("Show fewer holding libraries") } %]
@@ -103,14 +103,14 @@
                                 <li class="moretoggle">
                                     [% FOR label IN more_less_labels.keys %]
                                         [% IF facets_loo.item('type_label_' _ label) %]
-                                            <a href="#" aria-label="[% more_less_labels.item(label).more | uri %]"><strong>Show more</strong></a>
+                                            <a href="#" aria-label="[% more_less_labels.item(label).more | html | trim %]"><strong>Show more</strong></a>
                                         [% END %]
                                     [% END %]
                                 </li>
                                 <li class="moretoggle" style="display:none">
                                     [% FOR label IN more_less_labels.keys %]
                                         [% IF facets_loo.item('type_label_' _ label) %]
-                                            <a href="#" aria-label="[% more_less_labels.item(label).less | uri %]"><strong>Show less</strong></a>
+                                            <a href="#" aria-label="[% more_less_labels.item(label).less | html | trim %]"><strong>Show less</strong></a>
                                         [% END %]
                                     [% END %]
                                 </li>
