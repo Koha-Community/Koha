@@ -41,18 +41,41 @@ unless ( C4::Context->preference('PatronSelfRegistration') ) {
 }
 
 my $token = $cgi->param('token');
+my $op = $cgi->param('op');
+my $confirmed;
+if ( $op && $op eq 'confirmed' ) {
+    $confirmed = 1;
+}
 my $m = Koha::Patron::Modifications->find( { verification_token => $token } );
 
 my ( $template, $borrowernumber, $cookie );
 my ( $error_type, $error_info );
 
+my $rego_found;
 if (
-    $m # The token exists and the email is unique if requested
-    and not(
-            C4::Context->preference('PatronSelfRegistrationEmailMustBeUnique')
-        and Koha::Patrons->search( { email => $m->email } )->count
+    $m    # The token exists and the email is unique if requested
+    and not(C4::Context->preference('PatronSelfRegistrationEmailMustBeUnique')
+        and Koha::Patrons->search( { email => $m->email } )->count )
     )
-  )
+{
+    $rego_found = 1;
+}
+
+if ( $rego_found
+    and !$confirmed )
+{
+    ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+        {
+            template_name   => "opac-registration-confirmation.tt",
+            type            => "opac",
+            query           => $cgi,
+            authnotrequired => C4::Context->preference("OpacPublic") ? 1 : 0,
+        }
+    );
+    $template->param( "token" => $token );
+}
+elsif ( $rego_found
+    and $confirmed )
 {
     my $patron_attrs = $m->unblessed;
     $patron_attrs->{password} ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($patron_attrs->{categorycode}));
@@ -88,6 +111,7 @@ if (
                 authnotrequired => C4::Context->preference("OpacPublic") ? 1 : 0,
             }
         );
+        $template->param( "confirmed" => 1 );
         C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $patron->borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $patron->plain_text_password );
