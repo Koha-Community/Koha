@@ -601,6 +601,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PatronSelfRegistrationVerifyByEmail','0',NULL,'If enabled, any patron attempting to register themselves via the OPAC will be required to verify themselves via email to activate their account.','YesNo'),
 ('PatronsPerPage','20','20','Number of Patrons Per Page displayed by default','Integer'),
 ('PhoneNotification','0',NULL,'If ON, enables generation of phone notifications to be sent by plugins','YesNo'),
+('PlaceHoldsOnOrdersFromSuggestions','0',NULL,'If ON, enables generation of holds when orders are placed from suggestions','YesNo'),
 ('PrefillGuaranteeField', 'phone,email,streetnumber,address,city,state,zipcode,country', NULL, 'Prefill these fields in guarantee member entry form from guarantor patron record', 'Multiple'),
 ('PrefillItem','0','','When a new item is added, should it be prefilled with last created item values?','YesNo'),
 ('PreservationModule', '0', NULL, 'Enable the preservation module', 'YesNo'),
