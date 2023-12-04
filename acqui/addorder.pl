@@ -343,6 +343,12 @@ if ( $op eq 'cud-order' ) {
                     STATUS       => 'ORDERED',
                 }
             );
+            if ( C4::Context->preference('PlaceHoldsOnOrdersFromSuggestions') ) {
+                my $suggestion = Koha::Suggestions->find($suggestionid);
+                if ($suggestion) {
+                    $suggestion->place_hold();
+                }
+            }
         }
 
         $orderinfo->{unitprice} = $orderinfo->{ecost}
