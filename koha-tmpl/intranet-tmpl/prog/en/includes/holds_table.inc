@@ -175,6 +175,7 @@
                     [%- ELSE -%]
                         [%- IF ( hold.item_level_hold ) -%]
                             <em>
+                                [%- IF ! hold.change_hold_type_allowed -%]
                                 <span>Only item</span>
                                 <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
                                     [%- IF ( hold.barcodenumber ) -%]
@@ -184,6 +185,25 @@
                                     [%- END -%]
                                     <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                                 </a>
+                                [%- ELSE -%]
+                                        <select name="change_hold_type_[% hold.reserve_id | html %]">
+                                        <option selected="selected" value="">Only item [%- IF ( hold.barcodenumber ) -%]
+                                            [%- hold.barcodenumber | html -%]
+                                        [%- ELSE -%]
+                                            No barcode
+                                        [%- END -%]
+                                        </option>
+                                        <option value="1">Next available</option>
+                                    </select>
+                                    [%- IF ( hold.barcodenumber ) -%]
+                                        <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
+                                    [%- END -%]
+                                    [%- IF hold.itemtype -%]
+                                        <span style="display:none">Next available [% ItemTypes.GetDescription( hold.itemtype ) | html %] item</span>
+                                    [%- ELSE -%]
+                                        <span style="display:none">Next available</span>
+                                    [%- END -%]
+                                [%- END -%]
                             </em>
                         [%- ELSE -%]
                             [%- IF hold.itemtype -%]
