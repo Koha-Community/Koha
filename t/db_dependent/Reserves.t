@@ -989,7 +989,7 @@ subtest 'reserves.item_level_hold' => sub {
     );
 
     subtest 'item level hold' => sub {
-        plan tests => 3;
+        plan tests => 5;
         my $reserve_id = AddReserve(
             {
                 branchcode     => $item->homebranch,
@@ -1017,24 +1017,39 @@ subtest 'reserves.item_level_hold' => sub {
         } );
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
+        t::lib::Mocks::mock_preference( 'HoldsLog',           1 );
 
         # Revert the waiting status
-        C4::Reserves::RevertWaitingStatus(
-            { itemnumber => $item->itemnumber } );
+        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
 
         $hold = Koha::Holds->find($reserve_id);
 
-        is( $hold->itemnumber, $item->itemnumber, 'Itemnumber should not be removed when the waiting status is revert' );
+        is(
+            $hold->itemnumber, $item->itemnumber,
+            'Itemnumber should not be removed when the waiting status is revert'
+        );
+
+        my $log =
+            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->next;
+        my $expected = sprintf q{'timestamp' => '%s'}, $hold->timestamp;
+        like( $log->info, qr{$expected}, 'Timestamp logged is the current one' );
+        my $log_count =
+            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->count;
 
         t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+        t::lib::Mocks::mock_preference( 'HoldsLog',           0 );
 
         $hold->set_waiting;
 
         # Revert the waiting status, RealTimeHoldsQueue => shouldn't add a test
-        C4::Reserves::RevertWaitingStatus(
-            { itemnumber => $item->itemnumber } );
+        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
 
         $hold->delete;    # cleanup
+
+        my $log_count_after =
+            Koha::ActionLogs->search( { module => 'HOLDS', action => 'MODIFY', object => $hold->reserve_id } )->count;
+        is( $log_count, $log_count_after, "No logging is added for RevertWaitingStatus when HoldsLog is disabled" );
+
     };
 
     subtest 'biblio level hold' => sub {
