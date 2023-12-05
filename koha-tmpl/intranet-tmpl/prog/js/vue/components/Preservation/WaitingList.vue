@@ -135,13 +135,19 @@ export default {
         const PreservationStore = inject("PreservationStore")
         const { config } = PreservationStore
 
-        const { setMessage, setConfirmationDialog, loading, loaded } =
-            inject("mainStore")
+        const {
+            setMessage,
+            setWarning,
+            setConfirmationDialog,
+            loading,
+            loaded,
+        } = inject("mainStore")
 
         return {
             table,
             config,
             setMessage,
+            setWarning,
             setConfirmationDialog,
             loading,
             loaded,
@@ -213,12 +219,24 @@ export default {
             client.waiting_list_items.createAll(items).then(
                 result => {
                     if (result.length) {
-                        this.setMessage(
-                            this.$__("%s new items added.").format(
-                                result.length
-                            ),
-                            true
-                        )
+                        if (result.length != items.length) {
+                            this.setWarning(
+                                this.$__(
+                                    "%s new items added. %s items not found."
+                                ).format(
+                                    result.length,
+                                    items.length - result.length
+                                ),
+                                true
+                            )
+                        } else {
+                            this.setMessage(
+                                this.$__("%s new items added.").format(
+                                    result.length
+                                ),
+                                true
+                            )
+                        }
                         this.last_items = result
                         if (this.$refs.table) {
                             this.$refs.table.redraw(
@@ -228,7 +246,7 @@ export default {
                             this.getCountWaitingListItems()
                         }
                     } else {
-                        this.setMessage(this.$__("No items added"))
+                        this.setWarning(this.$__("No items added"))
                     }
                 },
                 error => {}
