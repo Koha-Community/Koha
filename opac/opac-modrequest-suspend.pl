@@ -45,4 +45,4 @@ else {
     );
 }
 
-print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");
+print $query->redirect("/cgi-bin/koha/opac-user.pl?opac-user-holds=1");
