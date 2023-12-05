@@ -213,7 +213,7 @@ legend:hover {
                                         [% CASE 'login' %] <span>OPAC/Staff interface login</span> |
                                         [% CASE 'flags' %] <span>Patron account flags</span> |
                                         [% CASE 'debarments' %] <span>Patron restrictions</span> |
-                                        [% CASE 'housebound' %] <span>Housebound roles</span> |
+                                        [% CASE 'housebound' %][% IF Koha.Preference('HouseboundModule')%] <span>Housebound roles</span> |[% END %]
                                         [% CASE 'additional' %] <span>Additional attributes and identifiers</span> |
                                         [% CASE 'messaging' %] <span>Patron messaging preferences</span> |
                                     [% END %]
