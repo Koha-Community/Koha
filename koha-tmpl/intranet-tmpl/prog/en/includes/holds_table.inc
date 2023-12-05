@@ -169,10 +169,10 @@
                     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
                         [%- IF ( hold.barcodenumber ) -%]
                             [%- hold.barcodenumber | html -%]
-                            <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                         [%- ELSE -%]
                             <span>No barcode</span>
                         [%- END -%]
+                            <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                     </a>
                 [%- ELSE -%]
                     [%- IF ( hold.item_level_hold ) -%]
@@ -181,10 +181,10 @@
                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
                                 [%- IF ( hold.barcodenumber ) -%]
                                     [%- hold.barcodenumber | html -%]
-                                    <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                                 [%- ELSE -%]
                                     <span>No barcode</span>
                                 [%- END -%]
+                                    <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                             </a>
                         </em>
                     [%- ELSE -%]
