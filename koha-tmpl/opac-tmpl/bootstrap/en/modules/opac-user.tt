@@ -1091,6 +1091,9 @@
             }
         }
         $(document).ready(function(){
+            [% IF ( opac_user_holds ) %]
+                $("#opac-user-views a[href='#opac-user-holds_panel']").tab("show");
+            [% END %]
             $('#opac-user-article-requests caption .count').html(AR_CAPTION_COUNT.format('[% current_article_requests.size | html %]'));
 
             $(".modal-nojs").addClass("modal").addClass("hide").removeClass("modal-nojs");
