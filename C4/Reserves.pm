@@ -2120,6 +2120,9 @@ sub RevertWaitingStatus {
         }
     )->store();
 
+    logaction( 'HOLDS', 'MODIFY', $hold->id, $hold )
+        if C4::Context->preference('HoldsLog');
+
     _FixPriority( { biblionumber => $hold->biblionumber } );
 
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
