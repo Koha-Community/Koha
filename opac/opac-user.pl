@@ -418,6 +418,7 @@ $template->param(
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     OpacHoldNotes            => C4::Context->preference('OpacHoldNotes'),
     failed_holds             => scalar $query->param('failed_holds'),
+    opac_user_holds          => scalar $query->param('opac-user-holds') || 0,
 );
 
 # if not an empty string this indicates to return
