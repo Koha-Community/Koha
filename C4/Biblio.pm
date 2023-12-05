@@ -98,7 +98,6 @@ use C4::Charset qw(
 use C4::Languages;
 use C4::Linker;
 use C4::OAI::Sets;
-use C4::Items qw( GetMarcItem );
 
 use Koha::Logger;
 use Koha::Caches;
