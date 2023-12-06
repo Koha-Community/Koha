@@ -1,7 +1,10 @@
 [% USE Koha %]
 [% BLOCK 'alt-contact-style' %]
     <fieldset class="rows" id="memberentry_altaddress">
-        <legend id="alt_contact_lgd">Alternate contact</legend>
+        <legend class="expanded" id="alt_contact_lgd">
+            <i class="fa fa-caret-down"></i>
+            Alternate contact
+        </legend>
         <ol>
             [% IF Koha.Preference( 'AddressFormat' ) %]
                 [% PROCESS "member-alt-contact-style-${ Koha.Preference( 'AddressFormat' ) }" %]

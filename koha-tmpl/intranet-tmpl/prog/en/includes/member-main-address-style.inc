@@ -2,7 +2,10 @@
 [% USE AuthorisedValues %]
 [% BLOCK 'main-address-style' %]
     <fieldset class="rows" id="memberentry_mainaddress">
-        <legend id="main_address_lgd">Main address</legend>
+        <legend class="expanded" id="main_address_lgd">
+            <i class="fa fa-caret-down"></i>
+            Main address
+        </legend>
         <ol>
             [% IF Koha.Preference( 'AddressFormat' ) %]
                 [% PROCESS "member-main-address-style-${ Koha.Preference( 'AddressFormat' ) }" %]

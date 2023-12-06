@@ -2,7 +2,10 @@
 [% USE AuthorisedValues %]
 [% BLOCK 'alt-address-style' %]
     <fieldset class="rows" id="memberentry_address">
-        <legend id="alt_address_lgd">Alternate address</legend>
+        <legend class="expanded" id="alt_address_lgd">
+            <i class="fa fa-caret-down"></i>
+            Alternate address
+        </legend>
         <ol>
             [% IF Koha.Preference( 'AddressFormat' ) %]
                 [% PROCESS "member-alt-address-style-${ Koha.Preference( 'AddressFormat' ) }" %]
