@@ -835,7 +835,7 @@ sub GetNextSeq {
 
     my ( $newlastvalue1, $newlastvalue2, $newlastvalue3,
     $newinnerloop1, $newinnerloop2, $newinnerloop3 );
-    my $count = $count_forward ? $count_forward : 1;
+    my $count = $count_forward || 1;
 
     if ($subscription->{'skip_serialseq'}) {
         my @irreg = split /;/, $subscription->{'irregularity'};
@@ -1088,7 +1088,7 @@ sub ModSerialStatus {
 
     return unless ($serialid);
 
-    my $count = $count_forward ? $count_forward : 1;
+    my $count = $count_forward || 1;
 
     #It is a usual serial
     # 1st, get previous status :

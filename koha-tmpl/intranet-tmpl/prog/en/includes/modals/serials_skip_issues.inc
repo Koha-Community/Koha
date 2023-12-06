@@ -9,12 +9,12 @@
                         <ol>
                             <li>
                             <label for="nbissues" class="required">How many issues do you want to skip?</label>
-                            <input type="text" pattern="^\d+$" size="10" id="skip_issues" name="skip_issues" required="required" />
+                            <input type="text" pattern="^\d$" size="10" id="skip_issues" name="skip_issues" required="required" />
                             </li>
                         </ol>
                         <input type="hidden" name="op" value="cud-gennext" />
 
-                        [%# subscriptionidlist is used from serials-collection, subscriptionid is used from serils-edit %]
+                        [%# subscriptionidlist is used from serials-collection, subscriptionid is used from serials-edit %]
                         <input type="hidden" name="subscriptionid" value="[% subscriptionidlist || subscriptionid | html %]" />
                     </fieldset>
                 </div>

@@ -47,7 +47,7 @@ my ($template, $loggedinuser, $cookie)
 my $biblionumber = $query->param('biblionumber');
 my @subscriptionid = $query->multi_param('subscriptionid');
 my $skip_issues = $query->param('skip_issues') || 0;
-my $count_forward = int $skip_issues + 1;
+my $count_forward = $skip_issues + 1;
 
 @subscriptionid= uniq @subscriptionid;
 @subscriptionid= sort @subscriptionid;

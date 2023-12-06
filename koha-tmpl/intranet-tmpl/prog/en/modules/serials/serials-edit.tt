@@ -12,26 +12,6 @@
         $('#multi_receiving').on('show', function () {
            $(this).find(".modal-body").html($(".serials_multi_receiving")[0].outerHTML);
         });
-
-        $("form").on("submit", function(){
-                let issues = $('input[name="skip_issues"]').val() ? $('input[name="skip_issues"]').val() : '';
-                let too_many = _("Choose a value between 0-10 in issues to skip!");
-                let no_number = _("Not a number in skip issues!");
-
-                if ( issues == '' || ( issues.match(/^\d+$/) && issues <= 10 )  ) {
-                    return true;
-                }
-                else if ( issues.match(/^\d+$/) && issues > 10  ) {
-                    alert(too_many);
-                    return false;
-                }  else if ( !issues.match(/^\d+$/) ) {
-                    alert(no_number);
-                    return false;
-                }
-                else {
-                    return false;
-                }
-            });
     });
 
 function popup(subscriptionid) {
@@ -356,7 +336,7 @@ $(document).ready(function() {
   [% END %]
 [% END %]
     <tr>
-        <td colspan="6">Skip issues:<input type="checkbox" id="toggle_skip_issues"> <input id="skip_issues" type="text" pattern="^\d+$" name="skip_issues" class="collapse" value="1" disabled required="required"/></td>
+        <td colspan="6">Skip issues:<input type="checkbox" id="toggle_skip_issues"> <input id="skip_issues" type="text" pattern="^\d$" name="skip_issues" class="collapse" value="1" disabled required="required"/></td>
     </tr>
 [% FOREACH newserialloo IN newserialloop %]
     [% UNLESS ( newserialloo.subscriptionexpired ) %]
