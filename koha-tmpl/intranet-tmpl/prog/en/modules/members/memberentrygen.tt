@@ -204,6 +204,7 @@ legend:hover {
                                     [% SWITCH field %]
                                         [% CASE 'identity' %] <span>Patron identity</span> |
                                         [% CASE 'guarantor' %] <span>Guarantor information</span> |
+                                        [% CASE 'nonpatron_guarantor' %] <span>Non-patron guarantor</span> |
                                         [% CASE 'primary_address' %] <span>Main address</span> |
                                         [% CASE 'primary_contact' %] <span>Contact information</span> |
                                         [% CASE 'alt_address' %] <span>Alternate address</span> |
@@ -1699,6 +1700,9 @@ legend:hover {
                     [% IF fieldstohide.match('guarantor') %]
                         $("#memberentry_guarantor").find('legend').nextAll().toggle();
                         $("#guarantor_template").toggle();
+                    [% END %]
+                    [% IF fieldstohide.match('nonpatron_guarantor') %]
+                        $("#non_patron_guarantor").find('legend').nextAll().toggle();
                     [% END %]
                 [% END %]
                 [% IF fieldstohide.match('primary_address') %]
