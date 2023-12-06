@@ -72,10 +72,11 @@ sub validate {
 
     return try {
         my ( $status, $THE_cardnumber, $THE_userid ) = C4::Auth::checkpw( $identifier, $password );
-        unless ($status) {
+        unless ( $status && $status > 0 ) {
+            my $error_response = $status == -2 ? 'Password expired' : 'Validation failed';
             return $c->render(
                 status  => 400,
-                openapi => { error => "Validation failed" }
+                openapi => { error => $error_response }
             );
         }
 
