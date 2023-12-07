@@ -66,7 +66,7 @@ function addMulti( count, node, unique_item_fields){
             $("#" + cloneIndex).find("input[name='multiValue']").remove();
             $("#" + cloneIndex).hide();
             current_qty++;
-            $('#quantity').val( current_qty );
+            $('#quantity').val( current_qty ).change();
         });
     }
 }
