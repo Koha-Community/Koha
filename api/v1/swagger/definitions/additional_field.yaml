@@ -1,26 +1,26 @@
 ---
 type: object
 properties:
-  id:
+  additional_field_id:
     type: integer
     description: internally assigned additional field identifier
     readOnly: true
-  tablename:
+  table_name:
     description: name of the table this additional field corresponds to
     type: string
   name:
     description: name of the additional field
     type: string
-  authorised_value_category:
+  authorised_value_category_name:
     description: authorised value category of the additional field
     type:
       - string
       - "null"
-  marcfield:
-    description: marcfield of the additional field
+  marc_field:
+    description: marc field of the additional field
     type: string
-  marcfield_mode:
-    description: marcfield mode of the additional field
+  marc_field_mode:
+    description: marc field mode of the additional field
     type: string
     enum:
       - get
@@ -31,5 +31,5 @@ properties:
 
 additionalProperties: false
 required:
-  - id
-  - tablename
+  - additional_field_id
+  - table_name

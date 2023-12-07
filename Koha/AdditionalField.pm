@@ -42,6 +42,23 @@ sub effective_authorised_value_category {
     return $category;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing an AdditionalField object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id                        => 'additional_field_id',
+        tablename                 => 'table_name',
+        authorised_value_category => 'authorised_value_category_name',
+        marcfield                 => 'marc_field',
+        marcfield_mode            => 'marc_field_mode'
+    };
+}
+
 sub _type { 'AdditionalField' }
 
 =head1 AUTHOR
