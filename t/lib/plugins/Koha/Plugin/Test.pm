@@ -6,6 +6,7 @@ use Modern::Perl;
 use Koha::Exception;
 use Koha::Plugins::Tab;
 
+use MARC::Field;
 use Mojo::JSON qw( decode_json );
 
 ## Required for all plugins
@@ -146,6 +147,19 @@ sub api_namespace {
 sub after_hold_create {
     my ( $self, $param ) = @_;
     Koha::Exception->throw("after_hold_create called with parameter " . ref($param) );
+}
+
+sub before_biblio_metadata_store {
+    my ( $self, $record ) = @_;
+
+    $record->insert_fields_ordered(
+        MARC::Field->new(
+            '990', '', '',
+            'a' => 'Arte club'
+        )
+    );
+
+    return $record;
 }
 
 sub after_biblio_action {

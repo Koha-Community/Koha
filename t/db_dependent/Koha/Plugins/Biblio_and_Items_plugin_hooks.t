@@ -16,11 +16,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Warn;
 
 use File::Basename;
 
+use C4::Biblio qw(AddBiblio ModBiblio);
 use C4::Items;
 
 use t::lib::Mocks;
@@ -82,6 +83,56 @@ subtest 'after_biblio_action() and after_item_action() hooks tests' => sub {
     warning_like { C4::Biblio::DelBiblio( $biblio_id ); }
             qr/after_biblio_action called with action: delete, id: $biblio_id/,
             'DelBiblio calls the hook with action=delete biblio_id passed';
+
+    $schema->storage->txn_rollback;
+    Koha::Plugins::Methods->delete;
+};
+
+subtest 'before_biblio_metadata_store() hooks tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+
+    my $plugin = Koha::Plugin::Test->new->enable;
+
+    my $subfield_contents = 'Arte club';
+
+    my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
+    $test_plugin->mock( 'after_biblio_action', undef );
+
+    # Defaults to avoid noise
+    my $options = {
+        disable_autolink  => 1,
+        skip_holds_queue  => 1,
+        skip_record_index => 1,
+    };
+
+    # Add a record
+    my ( $biblio_id, undef ) = C4::Biblio::AddBiblio( MARC::Record->new(), '' );
+
+    my $record = Koha::Biblios->find($biblio_id)->metadata->record;
+
+    my @fields_990 = $record->field('990');
+
+    is( scalar @fields_990, 1, 'One field added' );
+    is( $fields_990[0]->subfield('a'), $subfield_contents );
+
+    # Simulate editing the record
+    ModBiblio( $record, $biblio_id, '', $options );
+
+    $record = Koha::Biblios->find($biblio_id)->record;
+
+    @fields_990 = $record->field('990');
+    # This is to highlight that is the plugin responsibility to choose what to do on the record
+    is( scalar @fields_990, 2, 'Two saves, two fields' );
+
+    foreach my $index (qw(0 1)) {
+        is( $fields_990[$index]->subfield('a'), $subfield_contents );
+    }
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
