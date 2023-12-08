@@ -3,7 +3,7 @@
 [% USE Categories %]
 [% USE Koha %]
 [% PROCESS 'patronfields.inc' %]
-[% IF CAN_user_borrowers_edit_borrowers %]
+[% IF CAN_user_borrowers_edit_borrowers || CAN_user_borrowers_list_borrowers %]
     [%- SET searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
     [% IF( bs_tab_active ) %]
         <div id="patron_search" role="tabpanel" class="tab-pane active">
