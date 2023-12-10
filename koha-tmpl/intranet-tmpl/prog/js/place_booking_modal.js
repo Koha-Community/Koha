@@ -16,10 +16,10 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
     // Get booking id if this is an edit
     booking_id = button.data('booking');
     if (booking_id) {
-        $('#placeBookingLabel').html('Edit booking');
+        $('#placeBookingLabel').html(__("Edit booking"));
         $('#booking_id').val(booking_id);
     } else {
-        $('#placeBookingLabel').html('Place booking');
+        $('#placeBookingLabel').html(__("Place booking"));
         // Ensure we don't accidentally update a booking
         $('#booking_id').val('');
     }
@@ -103,7 +103,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                 escape_str(patron.surname) + ", " + escape_str(patron.firstname)
             );
         },
-        placeholder: "Search for a patron"
+        placeholder: __("Search for a patron")
     });
 
     $('#booking_patron_id').on('select2:select', function (e) {
@@ -164,7 +164,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
                     width: '50%',
                     dropdownAutoWidth: true,
                     minimumResultsForSearch: 20,
-                    placeholder: "Select item"
+                    placeholder: __("Select item")
                 });
     
                 // Update flatpickr mode
@@ -494,7 +494,7 @@ $("#placeBookingForm").on('submit', function(e) {
         });
     
         posting.fail(function(data) {
-            $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">Failure</div>');
+            $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">'+_("Failure")+'</div>');
         });
     } else {
         url += '/' + booking_id;
@@ -545,7 +545,7 @@ $("#placeBookingForm").on('submit', function(e) {
         });
     
         putting.fail(function(data) {
-            $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">Failure</div>');
+            $('#booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">'+__("Failure")+'</div>');
         });
     }
 });
