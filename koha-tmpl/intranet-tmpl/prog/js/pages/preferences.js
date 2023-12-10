@@ -211,17 +211,17 @@ $( document ).ready( function () {
 
     addCollapseHandler();
 
-    $("h3").attr("class", "expanded").attr("title", __("Click to collapse this section"));
+    $("h3").attr("class", "expanded").attr("title", __("Collapse this section"));
     var collapsible = $(".collapsed,.expanded");
 
     $(collapsible).on("click",function(){
         var h3Id = $(this).attr("id");
         var panel = $("#collapse_" + h3Id);
         if(panel.is(":visible")){
-            $(this).addClass("collapsed").removeClass("expanded").attr("title", __("Click to expand this section") );
+            $(this).addClass("collapsed").removeClass("expanded").attr("title", __("Expand this section") );
             panel.hide();
         } else {
-            $(this).addClass("expanded").removeClass("collapsed").attr("title", __("Click to collapse this section") );
+            $(this).addClass("expanded").removeClass("collapsed").attr("title", __("Collapse this section") );
             panel.show();
         }
     });
@@ -233,7 +233,7 @@ $( document ).ready( function () {
         href = href.replace("#","");
         var panel = $("#collapse_" + href );
         if( panel.is(":hidden") ){
-            $("#" + href).addClass("expanded").removeClass("collapsed").attr("title", __("Click to collapse this section") );
+            $("#" + href).addClass("expanded").removeClass("collapsed").attr("title", __("Collapse this section") );
             panel.show();
         }
     });
@@ -406,8 +406,8 @@ $( document ).ready( function () {
                '    <div class="consentRow codeRow">' +
                '        <textarea style="display:none;" id="pref_' + id + '" class="preference preference-code codemirror" rows="10" cols="40">' + code + '</textarea>' +
                '        <div>' +
-               '            <a id="expand_' + id + '" class="expand-textarea" data-target="' + id + '" data-syntax="javascript" href="#">' + __('Click to expand') + '</a>' +
-               '            <a id="collapse_' + id + '" class="collapse-textarea" data-target="' + id + '" data-syntax="javascript" href="#" style="display:none">' + __('Click to collapse') + '</a>' +
+               '            <a id="expand_' + id + '" class="expand-textarea" data-target="' + id + '" data-syntax="javascript" href="#">' + __('Expand') + '</a>' +
+               '            <a id="collapse_' + id + '" class="collapse-textarea" data-target="' + id + '" data-syntax="javascript" href="#" style="display:none">' + __('Collapse') + '</a>' +
                '        </div >' +
                '    </div>' +
                '    <a class="consentDelete" data-target="' + id + '" href="#">' + __('Delete') + '</a>' +

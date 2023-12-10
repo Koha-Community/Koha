@@ -103,7 +103,7 @@
                                     [Overridden]
                                 </span>
                             [% END %]
-						</label>
+                        </label>
                         [% UNLESS ( loop.last ) %]<br />[% END %]
                         [% END %]
                     </code>
@@ -154,9 +154,9 @@
                         [% IF ( CHUNK.syntax == "text/html" && Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
                             <textarea name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] mce" rows="20" cols="60">[% CHUNK.value | html %]</textarea>
                         [% ELSE %]
-                            <a class="expand-textarea" id="expand_[% CHUNK.name | html %]" data-target="[% CHUNK.name | html %]" data-syntax="[% CHUNK.syntax | html %]" href="#">Click to edit</a>
+                            <a class="expand-textarea" id="expand_[% CHUNK.name | html %]" data-target="[% CHUNK.name | html %]" data-syntax="[% CHUNK.syntax | html %]" href="#">Edit</a>
                             <textarea style="display:none" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] codemirror" rows="10" cols="40">[% CHUNK.value | html %]</textarea>
-                            <a class="collapse-textarea" id="collapse_[% CHUNK.name | html %]" data-target="[% CHUNK.name | html %]" data-syntax="[% CHUNK.syntax | html %]" style="display:none" href="#">Click to collapse</br></a>
+                            <a class="collapse-textarea" id="collapse_[% CHUNK.name | html %]" data-target="[% CHUNK.name | html %]" data-syntax="[% CHUNK.syntax | html %]" style="display:none" href="#">Collapse</br></a>
                         [% END %]
                     [% ELSIF ( CHUNK.type_languages ) %]
                         <ul class="sortable">
