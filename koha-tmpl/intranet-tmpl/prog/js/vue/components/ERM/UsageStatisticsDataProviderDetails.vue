@@ -21,7 +21,7 @@
                 </span>
             </li>
             <li>
-                <label>{{ $__("Service Type") }}:</label>
+                <label>{{ $__("Service type") }}:</label>
                 <span id="usage_data_provider_service_type">
                     {{ usage_data_provider.service_type }}
                 </span>
@@ -34,7 +34,7 @@
             </li>
         </ol>
     </fieldset>
-    <legend>{{ $__("Sushi credentials") }}</legend>
+    <legend>{{ $__("SUSHI credentials") }}</legend>
     <fieldset class="rows">
         <ol>
             <li>
@@ -44,37 +44,37 @@
                 </span>
             </li>
             <li>
-                <label>{{ $__("Report Release") }}:</label>
+                <label>{{ $__("Report release") }}:</label>
                 <span id="usage_data_provider_report_release">
                     {{ usage_data_provider.report_release }}
                 </span>
             </li>
             <li>
-                <label>{{ $__("Customer Id") }}:</label>
+                <label>{{ $__("Customer ID") }}:</label>
                 <span id="usage_data_provider_customer_id">
                     {{ usage_data_provider.customer_id }}
                 </span>
             </li>
             <li>
-                <label>{{ $__("Requestor Id") }}:</label>
+                <label>{{ $__("Requestor ID") }}:</label>
                 <span id="usage_data_provider_requestor_id">
                     {{ usage_data_provider.requestor_id }}
                 </span>
             </li>
             <li>
-                <label>{{ $__("API Key") }}:</label>
+                <label>{{ $__("API key") }}:</label>
                 <span id="usage_data_provider_api_key">
                     {{ usage_data_provider.api_key }}
                 </span>
             </li>
             <li>
-                <label>{{ $__("Requestor Name") }}:</label>
+                <label>{{ $__("Requestor name") }}:</label>
                 <span id="usage_data_provider_requestor_name">
                     {{ usage_data_provider.requestor_name }}
                 </span>
             </li>
             <li>
-                <label>{{ $__("Requestor Email") }}:</label>
+                <label>{{ $__("Requestor email") }}:</label>
                 <span id="usage_data_provider_requestor_email">
                     {{ usage_data_provider.requestor_email }}
                 </span>

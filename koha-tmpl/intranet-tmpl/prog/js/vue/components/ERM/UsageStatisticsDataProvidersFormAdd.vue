@@ -218,7 +218,7 @@
                                         : ''
                                 "
                                 for="usage_data_provider_customer_id"
-                                >{{ $__("Customer Id") }}:
+                                >{{ $__("Customer ID") }}:
                             </label>
                             <input
                                 id="usage_data_provider_customer_id"
@@ -241,7 +241,7 @@
                                         : ''
                                 "
                                 for="usage_data_provider_requestor_id"
-                                >{{ $__("Requestor Id") }}:
+                                >{{ $__("Requestor ID") }}:
                             </label>
                             <input
                                 id="usage_data_provider_requestor_id"
@@ -308,7 +308,7 @@
                         <h3>{{ $__("Credentials information") }}</h3>
                         <li>
                             <label for="customer_id_info"
-                                >{{ $__("Customer id info") }}:
+                                >{{ $__("Customer ID info") }}:
                             </label>
                             <span id="customer_id_info">{{
                                 sushi_service.customer_id_info
@@ -318,7 +318,7 @@
                         </li>
                         <li>
                             <label for="requestor_id_info"
-                                >{{ $__("Requestor id info") }}:
+                                >{{ $__("Requestor ID info") }}:
                             </label>
                             <span id="requestor_id_info">{{
                                 sushi_service.requestor_id_info
@@ -339,7 +339,7 @@
                         <span
                             >{{ $__("Please refer to the ") }}
                             <a href="https://registry.projectcounter.org/">{{
-                                $__("counter registry")
+                                $__("COUNTER registry")
                             }}</a>
                             {{ $__("for more information.") }}</span
                         >
@@ -497,7 +497,7 @@ export default {
             if (this.valid_report_types.length === 0) {
                 setWarning(
                     this.$__(
-                        "This provider does not currently support any counter 5 reports via SUSHI."
+                        "This provider does not currently support any COUNTER 5 reports via SUSHI."
                     )
                 )
             }
