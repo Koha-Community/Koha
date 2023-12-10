@@ -7,6 +7,7 @@
 [% USE KohaDates %]
 [% USE Math %]
 [% USE AdditionalContents %]
+[% PROCESS 'i18n.inc' %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET userupdateview = 1 %]
@@ -433,7 +434,7 @@
                                                     <input type="radio" name="borrower_sex" id="sex-male" value="M" />
                                                 [% END %]
 
-                                                <label for="sex-other" class="radio inline"><span class="patronsex-other">Other:</span></label>
+                                                <label for="sex-other" class="radio inline"><span class="patronsex-other">[% tp('gender','Other:') | html %]</span></label>
                                                 [% IF borrower.sex == 'O' %]
                                                     <input type="radio" name="borrower_sex" id="sex-other" value="O" checked="checked" />
                                                 [% ELSE %]

@@ -185,7 +185,7 @@
                                             [% IF ( patron.sex ) %]
                                                 <li>
                                                     <span class="label">Gender:</span>
-                                                    [% IF ( patron.sex == 'F' ) %]<span class="patronsex-female">Female</span>[% ELSIF ( patron.sex == 'M' ) %]<span class="patronsex-male">Male</span>[% ELSIF (patron.sex == 'O' ) %]<span class="patronsex-other">Other</span>[% ELSE %][% patron.sex | html %][% END %]
+                                                    [% IF ( patron.sex == 'F' ) %]<span class="patronsex-female">Female</span>[% ELSIF ( patron.sex == 'M' ) %]<span class="patronsex-male">Male</span>[% ELSIF (patron.sex == 'O' ) %]<span class="patronsex-other">[% tp('gender', 'Other') | html %]</span>[% ELSE %][% patron.sex | html %][% END %]
                                                 </li>
                                             [% END %]
                                         [% END %]

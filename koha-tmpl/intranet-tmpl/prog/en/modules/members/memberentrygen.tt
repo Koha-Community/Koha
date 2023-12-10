@@ -440,9 +440,9 @@ legend:hover {
                                                                 <label for="sex-male"><input type="radio" name="sex" id="sex-male" value="M" /><span class="patronsex-male"> Male</span></label>
                                                             [% END %]
                                                             [% IF ( other ) %]
-                                                                <label for="sex-other"><input type="radio" name="sex" id="sex-other" value="O" checked="checked" /><span class="patronsex-other"> Other</span></label>
+                                                                <label for="sex-other"><input type="radio" name="sex" id="sex-other" value="O" checked="checked" /><span class="patronsex-other"> [% tp('gender', 'Other') | html %]</span></label>
                                                             [% ELSE %]
-                                                                <label for="sex-other"><input type="radio" name="sex" id="sex-other" value="O" /><span class="patronsex-other"> Other</span></label>
+                                                                <label for="sex-other"><input type="radio" name="sex" id="sex-other" value="O" /><span class="patronsex-other"> [% tp('gender', 'Other') | html %]</span></label>
                                                             [% END %]
                                                             [% IF ( none ) %]
                                                                 <label for="sex-none"><input type="radio" name="sex" id="sex-none" value=""  checked="checked" /><span class="patronsex-none"> None specified</span></label>
@@ -452,7 +452,7 @@ legend:hover {
                                                         [% ELSE %]
                                                             <label for="sex-female"><span class="patronsex-female">Female </span></label><input type="radio" name="sex" id="sex-female" value="F" />
                                                             <label for="sex-male"><span class="patronsex-male">Male </span></label><input type="radio" name="sex" id="sex-male" value="M" />
-                                                            <label for="sex-other"><span class="patronsex-other">Other </span></label><input type="radio" name="sex" id="sex-other" value="O" />
+                                                            <label for="sex-other"><span class="patronsex-other">[% tp('gender', 'Other') | html %] </span></label><input type="radio" name="sex" id="sex-other" value="O" />
                                                             <label for="sex-none"><span class="patronsex-none">None specified </span></label><input type="radio" name="sex" id="sex-none" value="" checked="checked" />
                                                         [% END # /UNLESS ( op == 'duplicate' )%]
                                                     </li>
