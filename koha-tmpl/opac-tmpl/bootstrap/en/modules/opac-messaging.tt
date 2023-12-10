@@ -78,7 +78,7 @@
                                                 [% ELSIF ( messaging_preference.Auto_Renewals ) %]<span>Auto renewal</span>
                                                 [% ELSE %]<span>Unknown</span> [% END %]</td>
                                             [% IF ( messaging_preference.takes_days ) %]
-                                                <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS" aria-label="Choose how many days in advance you wish to receive notice">
+                                                <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS" aria-label="Choose how many days in advance you wish to receive the message">
                                                 [% FOREACH select_day IN messaging_preference.select_days %]
                                                     [% IF ( select_day.selected ) %]
                                                         <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
@@ -94,9 +94,9 @@
                                                 [% IF ( messaging_preference.transport_sms ) %]
                                                     <td class="selectcol">
                                                         [% IF ( messaging_preference.transports_sms ) %]
-                                                        <input type="checkbox" aria-label="Unselect sms messaging" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
+                                                        <input type="checkbox" aria-label="Unselect SMS messaging" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
                                                         [% ELSE %]
-                                                            <input type="checkbox" aria-label="Select sms messaging" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
+                                                            <input type="checkbox" aria-label="Select SMS messaging" class="pmp_sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
                                                         [% END %]
                                                     </td>
                                                 [% ELSE %]
@@ -138,7 +138,7 @@
                                                             value="itiva" checked="checked" />
                                                 [% ELSE %]
                                                 <input type="checkbox"
-                                                            aria-label="Select notification by phone"
+                                                            aria-label="Select itiva messaging"
                                                             class="itiva"
                                                             id="itiva[% messaging_preference.message_attribute_id | html %]"
                                                             name="[% messaging_preference.message_attribute_id | html %]"
