@@ -13,7 +13,7 @@
             [% t("New cash register") | html %]
         [% END %] &rsaquo;
     [% ELSIF op == 'delete_confirm' %]
-        [% tx("Confirm deletion of cash register ''{cash_register}''", { cash_register = cash_register.name }) | html %] &rsaquo;
+        [% tx("Confirm deletion of cash register '{cash_register}'", { cash_register = cash_register.name }) | html %] &rsaquo;
     [% END %]
     [% t("Cash registers") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
