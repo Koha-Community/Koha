@@ -229,6 +229,43 @@ sub can_make_suggestions {
     return 0;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Patron:Category
+object on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        categorycode                      => 'patron_category_id',
+        description                       => 'name',
+        enrolmentperiod                   => 'enrolment_period',
+        enrolmentperioddate               => 'enrolment_period_date',
+        password_expiry_days              => 'password_expiry_days',
+        upperagelimit                     => 'upper_age_limit',
+        dateofbirthrequired               => 'lower_age_limit',
+        finetype                          => undef,                                 # Unused
+        bulk                              => undef,                                 # Unused
+        enrolmentfee                      => 'enrolment_fee',
+        overduenoticerequired             => 'overdue_notice_required',
+        issuelimit                        => undef,                                 # Unused
+        reservefee                        => 'reserve_fee',
+        hidelostitems                     => 'hide_lost_items',
+        category_type                     => 'category_type',
+        BlockExpiredPatronOpacActions     => 'block_expired_patron_opac_actions',
+        default_privacy                   => 'default_privacy',
+        checkprevcheckout                 => 'check_prev_checkout',
+        can_place_ill_in_opac             => 'can_place_ill_in_opac',
+        can_be_guarantee                  => 'can_be_guarantee',
+        reset_password                    => 'reset_password',
+        change_password                   => 'change_password',
+        min_password_length               => 'min_password_length',
+        require_strong_password           => 'require_strong_password',
+        exclude_from_local_holds_priority => 'exclude_from_local_holds_priority'
+    };
+}
+
 =head2 Internal methods
 
 =head3 _library_limits
