@@ -136,6 +136,8 @@ definitions:
     $ref: ./definitions/patron_account_credit.yaml
   patron_balance:
     $ref: ./definitions/patron_balance.yaml
+  patron_category:
+    $ref: ./definitions/patron_category.yaml
   patron_extended_attribute:
     $ref: ./definitions/patron_extended_attribute.yaml
   preservation_config:
@@ -453,6 +455,8 @@ paths:
     $ref: "./paths/patrons_password.yaml#/~1patrons~1{patron_id}~1password~1expiration_date"
   "/patrons/{patron_id}/recalls":
     $ref: "./paths/patrons_recalls.yaml#/~1patrons~1{patron_id}~1recalls"
+  /patron_categories:
+    $ref: ./paths/patron_categories.yaml#/~1patron_categories
   /preservation/config:
     $ref: ./paths/preservation_config.yaml#/~1preservation~1config
   /preservation/trains:
