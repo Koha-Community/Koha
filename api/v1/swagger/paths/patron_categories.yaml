@@ -1,0 +1,40 @@
+---
+/patron_categories:
+  get:
+    x-mojo-to: Patrons::Categories#list
+    operationId: listPatronCategories
+    tags:
+      - patron_categories
+    summary: List patron categories
+    produces:
+      - application/json
+    parameters: []
+    responses:
+      "200":
+        description: A list of patron categories
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/patron_category"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_patron_categories
