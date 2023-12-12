@@ -554,7 +554,7 @@
                                             [% INCLUDE 'csrf-token.inc' %]
                                             <legend class="sr-only">Renew</legend>
                                             <input type="hidden" name="from" value="opac_user" />
-                                            <input type="hidden" name="op-cud" value="renew" />
+                                            <input type="hidden" name="op" value="cud-renew" />
                                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                             [% FOREACH ISSUE IN ISSUES %]
                                                 [% IF ISSUE.status %]
@@ -898,7 +898,7 @@
                                                     [% IF ( RECALL.requested or RECALL.overdue ) %]
                                                         <form action="/cgi-bin/koha/opac-recall.pl" method="post">
                                                             [% INCLUDE 'csrf-token.inc' %]
-                                                            <input type="hidden" name="op-cud" value="cancel">
+                                                            <input type="hidden" name="op" value="cud-cancel">
                                                             <input type="hidden" name="recall_id" value="[% RECALL.id | html %]">
                                                             <input type="hidden" name="biblionumber" value="[% RECALL.biblio_id | html %]">
                                                             <button type="submit" name="submit" class="btn btn-sm btn-danger cancel_recall"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>

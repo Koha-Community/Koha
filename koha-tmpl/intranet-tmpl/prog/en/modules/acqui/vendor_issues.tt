@@ -94,7 +94,7 @@
 
     <form action="/cgi-bin/koha/acqui/vendor_issues.pl" name="Aform" method="post" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op-cud" value="add_validate" />
+        <input type="hidden" name="op" value="cud-add_validate" />
         <input type="hidden" name="booksellerid" value="[% vendor.id | html %]" />
         <input type="hidden" name="issue_id" value="[% issue.issue_id| html %]" />
 
@@ -136,7 +136,7 @@
         <h1>Delete issue [% issue.issue_id | html %]?</h1>
         <form action="/cgi-bin/koha/acqui/vendor_issues.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op-cud" value="delete_confirmed" />
+            <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="issue_id" value="[% issue.issue_id | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>

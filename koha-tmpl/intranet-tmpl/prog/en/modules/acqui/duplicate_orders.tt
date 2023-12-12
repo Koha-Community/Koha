@@ -68,7 +68,7 @@
         </legend>
         <div id="orders_filters">
             [% INCLUDE 'filter-orders.inc' %]
-            <input type="hidden" name="op-cud" value="select" />
+            <input type="hidden" name="op" value="cud-select" />
             <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
 
             <input type="hidden" name="ordernumbers" value="[% ordernumbers.join(',') | html %]" />
@@ -177,7 +177,7 @@
         </table>
     </div>
     <fieldset class="action">
-        <input type="hidden" name="op-cud" value="batch_edit" />
+        <input type="hidden" name="op" value="cud-batch_edit" />
         <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
         <button type="submit" class="btn btn-primary go_to_batch_edit">Next <i class="fa fa-fw fa-arrow-right"></i></button>
     </fieldset>
@@ -256,7 +256,7 @@
         [% FOREACH ordernumber IN ordernumbers %]
             <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
         [% END %]
-        <input type="hidden" name="op-cud" value="do_duplicate" />
+        <input type="hidden" name="op" value="cud-do_duplicate" />
         <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
         <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
         <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />

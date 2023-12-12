@@ -137,7 +137,7 @@
                     </fieldset>
                     [% UNLESS readonly %]
                         <fieldset class="action">
-                            <input type="hidden" name="op-cud" value="mod" />
+                            <input type="hidden" name="op" value="cud-mod" />
                             <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
                             <input type="submit" class="btn btn-primary" value="Save" />
                             [% IF CAN_user_acquisition_delete_invoices AND NOT orders_loop.size %]
@@ -292,7 +292,7 @@
                     </fieldset>
                     [% UNLESS readonly %]
                         <fieldset class="action" id="submit_invoice_adjustment">
-                            <input type="hidden" name="op-cud" value="mod_adj" />
+                            <input type="hidden" name="op" value="cud-mod_adj" />
                             <input type="submit" class="btn btn-primary" value="Update adjustments" />
                             <a href="#" id="cancel_invoice_adjustment" class="toggle_invoice_adjustment cancel" style="display:none"><i class="fa fa-times"></i> Cancel</a>
                         </fieldset>

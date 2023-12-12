@@ -100,7 +100,7 @@
 
     <form action="/cgi-bin/koha/admin/desks.pl" name="Aform" method="post" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op-cud" value="add_validate" />
+        <input type="hidden" name="op" value="cud-add_validate" />
         <input type="hidden" name="desk_id" value="[% desk.desk_id | html %]" />
 
         <fieldset class="rows">
@@ -157,7 +157,7 @@
         </table>
         <form action="/cgi-bin/koha/admin/desks.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op-cud" value="delete_confirmed" />
+            <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="desk_id" value="[% desk.desk_id | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>

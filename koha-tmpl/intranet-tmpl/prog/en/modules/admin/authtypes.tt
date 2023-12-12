@@ -124,7 +124,7 @@
                 <li>
                     [% IF authority_type.authtypecode.defined %]
                             <span class="label">Authority type</span>
-                            <input type="hidden" name="op-cud" value="add_validate" />
+                            <input type="hidden" name="op" value="cud-add_validate" />
                             <input type="hidden" name="checked" value="0" />
                             <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />[% authority_type.authtypecode | html %]
                     [% ELSE %]
@@ -147,7 +147,7 @@
                     <label for="auth_tag_to_report">Authority field to copy: </label>
                     <input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="[% authority_type.auth_tag_to_report | html %]" />
                     <div class="hint">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</div>
-                    <input type="hidden" name="op-cud" value="add_validate" />
+                    <input type="hidden" name="op" value="cud-add_validate" />
                     [% IF authority_type.authtypecode.defined %]
                         <input type="hidden" name="is_a_modif" value="1" />
                     [% END %]
@@ -174,7 +174,7 @@
             <h1>Confirm deletion of authority structure definition for <span class="ex">'[% authority_type.authtypetext | html %]' ([% authority_type.authtypecode | html %])</span></h1>
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op-cud" value="delete_confirmed" />
+                <input type="hidden" name="op" value="cud-delete_confirmed" />
                 <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>

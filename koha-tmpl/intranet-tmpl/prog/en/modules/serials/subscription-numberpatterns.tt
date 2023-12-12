@@ -63,9 +63,9 @@
           <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post" class="validated">
               [% INCLUDE 'csrf-token.inc' %]
             [% IF (new) %]
-              <input type="hidden" name="op-cud" value="savenew" />
+              <input type="hidden" name="op" value="cud-savenew" />
             [% ELSE %]
-              <input type="hidden" name="op-cud" value="savemod" />
+              <input type="hidden" name="op" value="cud-savemod" />
               <input type="hidden" name="id" value="[% id | html %]" />
             [% END %]
             <fieldset class="rows">

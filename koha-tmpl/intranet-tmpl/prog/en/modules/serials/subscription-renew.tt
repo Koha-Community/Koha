@@ -31,7 +31,7 @@
 
 <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
     [% INCLUDE 'csrf-token.inc' %]
-		<input type="hidden" name="op-cud" value="renew" />
+		<input type="hidden" name="op" value="cud-renew" />
 		<input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
 		<fieldset class="rows"><legend>Subscription renewal for [% subscription.bibliotitle | html %]</legend>
         <ol>

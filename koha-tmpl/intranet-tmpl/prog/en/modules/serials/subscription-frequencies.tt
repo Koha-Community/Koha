@@ -46,9 +46,9 @@
             [% INCLUDE 'csrf-token.inc' %]
           [% IF (modify) %]
             <input type="hidden" name="id" value="[% id | html %]" />
-            <input type="hidden" name="op-cud" value="savemod" />
+            <input type="hidden" name="op" value="cud-savemod" />
           [% ELSE %]
-            <input type="hidden" name="op-cud" value="savenew" />
+            <input type="hidden" name="op" value="cud-savenew" />
           [% END %]
           <fieldset class="rows">
             <ol>

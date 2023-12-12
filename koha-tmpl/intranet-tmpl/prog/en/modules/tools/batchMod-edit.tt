@@ -158,7 +158,7 @@
 
         <form name="f" action="batchMod.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op-cud" value="[% op | html %]" />
+            <input type="hidden" name="op" value="cud-[% op | html %]" />
             <input type="hidden" name="searchid" value="[% searchid | html %]" />
             <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
             <input type="hidden" name="src" id="src" value="[% src | html %]" />

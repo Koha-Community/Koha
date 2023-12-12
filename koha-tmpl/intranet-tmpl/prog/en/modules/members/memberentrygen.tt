@@ -254,11 +254,11 @@ legend:hover {
                                 <input type="hidden" name="step"  value="[% step | html %]" />
                             [% END %]
                             [% IF ( opadd ) %]
-                                <input type="hidden" name="op-cud" value="insert" />
+                                <input type="hidden" name="op" value="cud-insert" />
                             [% ELSIF ( opduplicate ) %]
-                                <input type="hidden" name="op-cud" value="insert" />
+                                <input type="hidden" name="op" value="cud-insert" />
                             [% ELSE %]
-                                <input type="hidden" name="op-cud" value="save" />
+                                <input type="hidden" name="op" value="cud-save" />
                                 [% IF step == 4 || step == 5 || step == 6 || step == 2 || step == 1 || step == 7 %]
                                     [%# Only put the card number if we arent showing it in the form later %]
                                     [% IF borrower_data.cardnumber %]

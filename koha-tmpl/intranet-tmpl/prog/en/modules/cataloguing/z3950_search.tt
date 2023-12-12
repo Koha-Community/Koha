@@ -45,7 +45,7 @@
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="row">
                     <div class="col-xs-6">
-                        <input type="hidden" name="op-cud" id="op" value="do_search" />
+                        <input type="hidden" name="op" id="op" value="cud-do_search" />
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -227,7 +227,7 @@
 
                             <form method="post" action="z3950_search.pl" id="page_form" name="page_form" class="checkboxed">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op-cud" id="op" value="do_search" />
+                                <input type="hidden" name="op" id="op" value="cud-do_search" />
                                 <input type="hidden" name="current_page" id="current_page" value="[% current_page | html %]" />
                                 <input type="hidden" id="title"  name="title" value="[% title | html %]" />
                                 <input type="hidden" id="isbn" name="isbn" value="[% isbn | html %]" />

@@ -207,7 +207,7 @@
         <td>
             <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op-cud" value="cancel_reserve" />
+                <input type="hidden" name="op" value="cud-cancel_reserve" />
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
 
                 [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
@@ -236,10 +236,10 @@
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                     [% IF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow' %]
-                        <input type="hidden" name="op-cud" value="mark_as_lost" />
+                        <input type="hidden" name="op" value="cud-mark_as_lost" />
                         <input type="submit" class="btn btn-primary" value="Mark item as lost" />
                     [% ELSIF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow_and_notify' %]
-                        <input type="hidden" name="op-cud" value="mark_as_lost_and_notify" />
+                        <input type="hidden" name="op" value="cud-mark_as_lost_and_notify" />
                         <input type="submit" class="btn btn-primary" value="Mark lost and notify patron" />
                     [% END %]
                 </form>

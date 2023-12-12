@@ -25,7 +25,7 @@
                     <div class="btn-group">
                         <form action="/cgi-bin/koha/acqui/supplier.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op-cud" value="delete" />
+                            <input type="hidden" name="op" value="cud-delete" />
                             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                             <button class="btn btn-default" id="deletesupplier" type="submit"><i class="fa fa-trash-can"></i> Delete vendor</button>
                         </form>

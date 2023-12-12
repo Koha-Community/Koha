@@ -946,7 +946,7 @@
                                 <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="batch_record_modification" target="_blank">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="recordtype" value="biblio" />
-                                    <input type="hidden" name="op-cud" value="list" />
+                                    <input type="hidden" name="op" value="cud-list" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
                                         [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
@@ -956,7 +956,7 @@
                                 <form method="POST" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="batch_record_deletion" target="_blank">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="recordtype" value="biblio" />
-                                    <input type="hidden" name="op-cud" value="list" />
+                                    <input type="hidden" name="op" value="cud-list" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
                                         [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
@@ -965,7 +965,7 @@
 
                                 <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_modification" target="_blank">
                                     [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op-cud" value="show" />
+                                    <input type="hidden" name="op" value="cud-show" />
                                     [% FOREACH result IN results %]
                                         [% FOREACH cells IN result.cells %]
                                             [% place = loop.index %]
@@ -981,7 +981,7 @@
 
                                 <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_deletion" target="_blank">
                                     [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op-cud" value="show" />
+                                    <input type="hidden" name="op" value="cud-show" />
                                     <input type="hidden" name="del" value="1" />
                                     [% FOREACH result IN results %]
                                         [% FOREACH cells IN result.cells %]
@@ -1012,7 +1012,7 @@
 
                                 <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification" target="_blank">
                                     [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op-cud" value="show" />
+                                    <input type="hidden" name="op" value="cud-show" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">
                                         [%- cardnumbers = PROCESS batch_list results=results batch_type='cardnumber' | trim | html %][% IF cardnumbers %][% SET batch_cardnumbers = 1 %][% cardnumbers | html %][% END -%]
@@ -1021,7 +1021,7 @@
 
                                 <form action="/cgi-bin/koha/patroncards/edit-batch.pl" id="patron_card_creator" method="post" target="_blank">
                                     [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op-cud" value="add" />
+                                    <input type="hidden" name="op" value="cud-add" />
                                     <input type="hidden" name="batch_id" value="0" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none;" name="bor_num_list" id="bor_num_list">

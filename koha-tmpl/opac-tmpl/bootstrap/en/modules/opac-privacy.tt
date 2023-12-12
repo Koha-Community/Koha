@@ -72,7 +72,7 @@
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-update-form">
                             [% INCLUDE 'csrf-token.inc' %]
                             <legend class="sr-only">Privacy rule</legend>
-                            <input type="hidden" name="op-cud" value="update_privacy" />
+                            <input type="hidden" name="op" value="cud-update_privacy" />
                             <fieldset>
                                 <label for="privacy">Please choose your privacy rule:</label>
                                 <div class="form-group row">
@@ -155,19 +155,19 @@
 
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-checkouts">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op-cud" value="delete_record" />
+                            <input type="hidden" name="op" value="cud-delete_record" />
                             <input type="hidden" name="checkouts" value="1" />
                         </form>
 
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-holds">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op-cud" value="delete_record" />
+                            <input type="hidden" name="op" value="cud-delete_record" />
                             <input type="hidden" name="holds" value="1" />
                         </form>
 
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-all">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op-cud" value="delete_record" />
+                            <input type="hidden" name="op" value="cud-delete_record" />
                             <input type="hidden" name="all" value="1" />
                         </form>
                         <table class="table table-bordered table-condensed table-striped">

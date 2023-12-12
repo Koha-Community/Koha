@@ -19,7 +19,7 @@
                     <a id="deleteshelf_toolbar" href="#">Delete list</a>
                     <form id="deleteshelf_toolbar_form" action="shelves.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op-cud" value="delete">
+                        <input type="hidden" name="op" value="cud-delete">
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]">
                     </form>
                 </li>

@@ -120,7 +120,7 @@ $(document).ready(function() {
 </div>
 [% END %]
 
-    <input type="hidden" name="op-cud" value="serialchangestatus" />
+    <input type="hidden" name="op" value="cud-serialchangestatus" />
     [% FOREACH subscription IN subscriptions %]
     <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
     [% END %]

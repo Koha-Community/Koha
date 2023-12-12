@@ -131,7 +131,7 @@
                         <input id="input-srw" type="radio" name="format" value="srwdc">
                         <label class="label_dc" for="input-srw">SRW-DC</label>
                         <br>
-                        <input type="hidden" name="op-cud" value="export">
+                        <input type="hidden" name="op" value="cud-export">
                         <input type="hidden" name="bib" value="[% biblio.biblionumber | html %]">
                     </fieldset>
                 </div>

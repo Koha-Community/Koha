@@ -24,7 +24,7 @@
         <h1>Z39.50 authority search points</h1>
         <form method="post" action="z3950_auth_search.pl" name="f" class="checkboxed">
             [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op-cud" id="op" value="do_search" />
+        <input type="hidden" name="op" id="op" value="cud-do_search" />
         <input type="hidden" name="authid" value="[% authid | html %]" />
         <input type="hidden" name="index" value="[% index | html %]" />
             <div class="row">
@@ -140,7 +140,7 @@
 
     <form method="post" action="z3950_auth_search.pl" id="page_form" name="page_form" class="checkboxed">
         [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op-cud" id="op" value="do_search" />
+        <input type="hidden" name="op" id="op" value="cud-do_search" />
         <input type="hidden" name="current_page" id="current_page" value="[% current_page | html %]" />
         <input type="hidden" id="nameany"  name="nameany" value="[% nameany | html %]" />
         <input type="hidden" id="authorany"  name="authorany" value="[% authorany | html %]" />

@@ -152,7 +152,7 @@
 
     <form action="/cgi-bin/koha/tools/csv-profiles.pl" class="validated" method="post">
         [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op-cud" value="add_validate" />
+        <input type="hidden" name="op" value="cud-add_validate" />
         <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id | html %]" />
         <fieldset class="rows">
             <ol>
@@ -281,7 +281,7 @@
             <h1>[% tx("Delete CSV profile '{csv_profile_name}'?", {csv_profile_name = csv_profile.profile }) | html %]</h1>
             <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op-cud" value="delete_confirmed" />
+                <input type="hidden" name="op" value="cud-delete_confirmed" />
                 <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id | html %]" />
                 <button type="submit" class="approve"><i class="fa fa-check" aria-hidden="true"></i> Yes, delete</button>
             </form>

@@ -308,7 +308,7 @@
                 [% END %]
                 </select>
                 <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
-                <input type="hidden" value="mod_basket" name="op-cud" />
+                <input type="hidden" value="cud-mod_basket" name="op" />
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             </li>
             <fieldset class="action"><input type="submit" class="btn btn-primary" value="Change basketgroup" /></fieldset>
@@ -338,7 +338,7 @@
                       [% END %]
                     </ul>
                     <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
-                    <input type="hidden" id="op" name="op-cud" value="mod_users" />
+                    <input type="hidden" id="op" name="op" value="cud-mod_users" />
                     <input type="button" id="add_user" class="btn btn-default" onclick="UserSearchPopup();" value="Add user" />
                 </div>
             </li>

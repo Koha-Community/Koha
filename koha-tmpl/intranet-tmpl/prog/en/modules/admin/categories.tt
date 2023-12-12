@@ -116,7 +116,7 @@
 [% IF op == 'add_form' %]
     <form id="category_form" action="/cgi-bin/koha/admin/categories.pl" method="post">
         [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op-cud" value="add_validate" />
+        <input type="hidden" name="op" value="cud-add_validate" />
         <input type="hidden" name="checked" value="0" />
         [% IF category %]
             <h1>[% tx("Modify category '{categorycode}'", { categorycode = categorycode }) | html %]</h1>
@@ -535,7 +535,7 @@
             [% IF patrons_in_category > 0 %]
                 <input type="submit" class="btn btn-primary" value="OK" />
             [% ELSE %]
-                <input type="hidden" name="op-cud" value="delete_confirmed" />
+                <input type="hidden" name="op" value="cud-delete_confirmed" />
                 <input type="hidden" name="categorycode" value="[% categorycode | html %]" />
                 <input type="submit" class="btn btn-primary" value="Delete this category" />
                 <a class="cancel" href="/cgi-bin/koha/admin/categories.pl">Cancel</a>

@@ -11,7 +11,7 @@
 [% BLOCK delete_shelf %]
     <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="deleteshelf[% shelf.shelfnumber | html %]" class="d-inline">
         [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op-cud" value="delete" />
+        <input type="hidden" name="op" value="cud-delete" />
         <input type="hidden" name="referer" value="list" />
         <input type='hidden' name='public' value='[% public | html %]' />
         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -247,7 +247,7 @@
                                             <span class="sep">|</span>
                                             <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
                                                 [% INCLUDE 'csrf-token.inc' %]
-                                                <input type="hidden" name="op-cud" value="edit_form" />
+                                                <input type="hidden" name="op" value="cud-edit_form" />
                                                 <input type="hidden" name="referer" value="view" />
                                                 <input type='hidden' name='public' value='[% shelf.public | html %]' />
                                                 <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -262,7 +262,7 @@
                                         [% ELSIF !public # not manageshelf and private means shared %]
                                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="unshare[% shelf.shelfnumber | html %]" class="d-inline">
                                                 [% INCLUDE 'csrf-token.inc' %]
-                                                <input type="hidden" name="op-cud" value="remove_share" />
+                                                <input type="hidden" name="op" value="cud-remove_share" />
                                                 <input type="hidden" name="referer" value="list" />
                                                 <input type='hidden' name='public' value='[% public | html %]' />
                                                 <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -393,7 +393,7 @@
                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="bookbag_form">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 [% IF can_manage_shelf %]
-                                    <input type="hidden" name="op-cud" value="remove_biblios" />
+                                    <input type="hidden" name="op" value="cud-remove_biblios" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                 [% END %]
                                 <div class="searchresults">
@@ -542,7 +542,7 @@
                                 [% END %]
 
                                 [% IF can_remove_biblios %]
-                                    <input type="hidden" name="op-cud" value="remove_biblios" />
+                                    <input type="hidden" name="op" value="cud-remove_biblios" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                     <input type="hidden" name="modifyshelfcontents" value="1" />
                                     <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger removeitems"/>
@@ -556,7 +556,7 @@
                                         <span class="sep">|</span>
                                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
                                             [% INCLUDE 'csrf-token.inc' %]
-                                            <input type="hidden" name="op-cud" value="edit_form" />
+                                            <input type="hidden" name="op" value="cud-edit_form" />
                                             <input type="hidden" name="referer" value="view" />
                                             <input type="hidden" name="public" value="[% shelf.public | html %]" />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -586,10 +586,10 @@
                                 [% IF op == 'add_form' %]
                                     <div id="addshelf">
                                         <legend><h1>Create a new list</h1></legend>
-                                    <input type="hidden" name="op-cud" value="add" />
+                                    <input type="hidden" name="op" value="cud-add" />
                                 [% ELSE %]
                                 <legend><h1>Editing <em>[% shelf.shelfname | html %]</em></h1></legend>
-                                    <input type="hidden" name="op-cud" value="edit" />
+                                    <input type="hidden" name="op" value="cud-edit" />
                                     <input type="hidden" name="referer" value="[% referer | html %]" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                 [% END %]
@@ -672,7 +672,7 @@
                         <form action="/cgi-bin/koha/opac-shelves.pl" id="transferform" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                         <fieldset>
-                            <input type="hidden" name="op-cud" value="transfer" />
+                            <input type="hidden" name="op" value="cud-transfer" />
                             <input type="hidden" name="public" value="0" />
                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                             <div>
@@ -770,7 +770,7 @@
                                                                 [% INCLUDE 'csrf-token.inc' %]
                                                                 <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
                                                                 <input type="hidden" name="public" value="[% s.public | html %]" />
-                                                                <input type="hidden" name="op-cud" value="edit_form" />
+                                                                <input type="hidden" name="op" value="cud-edit_form" />
                                                                 <input type="hidden" name="referer" value="list" />
                                                                 <button type="submit" class="btn btn-link editshelf"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</button>
                                                             </form>
@@ -786,7 +786,7 @@
                                                                 [% INCLUDE 'csrf-token.inc' %]
                                                                 <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
                                                                 <input type="hidden" name="public" value="0" />
-                                                                <input type="hidden" name="op-cud" value="transfer" />
+                                                                <input type="hidden" name="op" value="cud-transfer" />
                                                                 <input type="hidden" name="referer" value="list" />
                                                                 <button type="submit" class="btn btn-link transfershelf"> Transfer</button>
                                                             </form>
@@ -794,7 +794,7 @@
                                                         [% IF s.is_shared_with( loggedinusernumber ) %]
                                                             <form action="opac-shelves.pl" method="post" id="unshare[% s.shelfnumber | html %]" class="d-inline">
                                                                 [% INCLUDE 'csrf-token.inc' %]
-                                                                <input type="hidden" name="op-cud" value="remove_share" />
+                                                                <input type="hidden" name="op" value="cud-remove_share" />
                                                                 <input type="hidden" name="referer" value="list" />
                                                                 <input type='hidden' name='public' value='[% public | html %]' />
                                                                 <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />

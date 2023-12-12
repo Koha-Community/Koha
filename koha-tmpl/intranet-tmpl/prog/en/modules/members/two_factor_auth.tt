@@ -60,7 +60,7 @@
 
                             <form id="two-factor-auth" action="/cgi-bin/koha/members/two_factor_auth.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op-cud" value="disable-2FA" />
+                                <input type="hidden" name="op" value="cud-disable-2FA" />
                                 <input type="submit" value="Disable two-factor authentication" />
                             </form>
                         </div>

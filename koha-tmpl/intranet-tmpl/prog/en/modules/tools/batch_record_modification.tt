@@ -161,7 +161,7 @@
                                 </ol>
                             </fieldset>
                             <fieldset class="action">
-                                <input type="hidden" name="op-cud" value="list" />
+                                <input type="hidden" name="op" value="cud-list" />
                                 <input type="submit" class="btn btn-primary" value="Continue" />
                                 <a class="cancel" href="/cgi-bin/koha/cataloguing/cataloging-home.pl">Cancel</a>
                             </fieldset>
@@ -257,7 +257,7 @@
                                     <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will modify all selected authorities!</div>
                                 [% END %]
                                 <fieldset class="action">
-                                    <input type="hidden" name="op-cud" value="modify" />
+                                    <input type="hidden" name="op" value="cud-modify" />
                                     <input type="hidden" name="recordtype" value="[% recordtype | html %]" />
                                     <input type="submit" id="mainformsubmit" value="Modify selected records" class="button" />
                                 </fieldset>

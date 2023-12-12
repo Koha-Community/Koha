@@ -92,7 +92,7 @@ a.add, a.delete {
             <h3>The current mappings you see on the screen will be erased and replaced by the mappings in the mappings.yaml file.</h3>
             <form method="post">
                 [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op-cud" value="reset_confirmed" />
+                <input type="hidden" name="op" value="cud-reset_confirmed" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, reset mappings</button>
             </form>
 
@@ -505,8 +505,8 @@ a.add, a.delete {
         [% END # /WRAPPER tabs %]
 
         <fieldset class="action">
-            <button class="btn btn-primary" type="submit" name="op-cud" value="edit"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> Save</button>
-            <button class="btn btn-default" type="submit" name="op-cud" value="reset_confirm"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Reset mappings</button>
+            <button class="btn btn-primary" type="submit" name="op" value="cud-edit"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> Save</button>
+            <button class="btn btn-default" type="submit" name="op" value="cud-reset_confirm"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Reset mappings</button>
         </fieldset>
     </form>
 

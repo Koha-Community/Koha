@@ -16,7 +16,7 @@
                                 <input type="checkbox" id="date_received_today" name="date_received_today" />
                             </li>
                         </ol>
-                        <input type="hidden" name="op-cud" value="gennext" />
+                        <input type="hidden" name="op" value="cud-gennext" />
 
                         [%# subscriptionidlist is used from serials-collection, subscriptionid is used from serils-edit %]
                         <input type="hidden" name="subscriptionid" value="[% subscriptionidlist || subscriptionid | html %]" />
