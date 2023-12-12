@@ -197,15 +197,22 @@ subtest 'Reduce log size by unblessing Koha objects' => sub {
 };
 
 subtest 'Test storing diff of objects' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     my $builder = t::lib::TestBuilder->new;
     my $item = $builder->build_sample_item;
     my $original = $item->unblessed();
+    my $original_item = $item->get_from_storage();
     $item->barcode('_MY_TEST_BARCODE_')->store();
+
     logaction( 'MY_MODULE', 'TEST01', $item->itemnumber, $item, 'opac', $original );
     my $logs = Koha::ActionLogs->search({ module => 'MY_MODULE', action => 'TEST01', object => $item->itemnumber })->next;
     my $diff = decode_json( $logs->diff );
+    is( $diff->{D}->{barcode}->{N}, '_MY_TEST_BARCODE_', 'Diff of changes logged successfully' );
+
+    logaction( 'MY_MODULE', 'TEST02', $item->itemnumber, $item, 'opac', $original_item );
+    $logs = Koha::ActionLogs->search({ module => 'MY_MODULE', action => 'TEST02', object => $item->itemnumber })->next;
+    $diff = decode_json( $logs->diff );
     is( $diff->{D}->{barcode}->{N}, '_MY_TEST_BARCODE_', 'Diff of changes logged successfully' );
 };
 

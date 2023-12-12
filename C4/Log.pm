@@ -60,7 +60,7 @@ The functions in this module perform various functions in order to log all the o
 
 =item logaction
 
-  &logaction($modulename, $actionname, $objectnumber, $infos, $interface, $hashref_of_original);
+  &logaction($modulename, $actionname, $objectnumber, $infos, $interface, $original_as_hashref_or_object);
 
 Adds a record into action_logs table to report the different changes upon the database.
 Each log entry includes the number of the user currently logged in.  For batch
@@ -118,7 +118,11 @@ sub logaction {
     }
     my $trace = @trace ? to_json( \@trace, { utf8 => 1, pretty => 0 } ) : undef;
 
-    my $diff = ( $original && ref $updated eq 'HASH' ) ? encode_json( diff( $original, $updated, noU => 1 ) ) : undef;
+    my $diff = undef;
+    $diff = encode_json( diff( $original->unblessed, $updated, noU => 1 ) )
+        if blessed($original) && $original->isa('Koha::Object');
+    $diff //= encode_json( diff( $original, $updated, noU => 1 ) )
+        if $original && ref $updated eq 'HASH';
 
     Koha::ActionLog->new(
         {
