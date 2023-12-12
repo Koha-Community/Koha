@@ -202,6 +202,22 @@
             [% END %]
         [% END %]
 
+        [% IF t.ktd %]
+             [% IF t.ktd.size == 1 %]
+            <li><strong><a href="https://gitlab.com/koha-community/koha-testing-docker">KTD</a> maintainer:</strong>
+                [% INCLUDE person p=t.ktd.0 %]
+            </li>
+            [% ELSE %]
+            <li><strong><a href="https://gitlab.com/koha-community/koha-testing-docker">KTD</a> maintainers:</strong>
+                <ul>
+                    [% FOREACH j IN t.ktd %]
+                    <li>[% INCLUDE person p=j %]
+                    [% END %]
+                </ul>
+            </li>
+            [% END %]
+        [% END %]
+
         [% IF t.bugwrangler %]
         <li><strong>Bug wranglers:</strong>
             <ul>
