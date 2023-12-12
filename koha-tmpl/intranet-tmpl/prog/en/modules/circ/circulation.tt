@@ -1075,7 +1075,7 @@
             [% IF rule.itemtype %]
                 [% ItemTypes.GetDescription( rule.itemtype ) | html %]
             [% ELSE %]
-                <i>All</i>
+                <i>All item types</i>
             [% END %]
         </li>
         <li>
@@ -1083,7 +1083,7 @@
             [% IF rule.categorycode %]
                 [% Categories.GetName( rule.categorycode ) | html %]
             [% ELSE %]
-                <i>All</i>
+                <i>All patron categories</i>
             [% END %]
         </li>
         <li>
