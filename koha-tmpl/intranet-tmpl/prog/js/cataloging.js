@@ -56,7 +56,7 @@ function openAuth(tagsubfieldid,authtype,source) {
         }
     }
     mainstring = mainstring.join(' ');
-    window.open("../authorities/auth_finder.pl?source="+source+"&authtypecode="+authtype+"&index="+tagsubfieldid+"&value_mainstr="+encodeURIComponent(mainmainstring)+"&value_main="+encodeURIComponent(mainstring), "_blank",'width=700,height=550,toolbar=false,scrollbars=yes');
+    window.open("../authorities/auth_finder.pl?source="+source+"&authtypecode="+authtype+"&index="+tagsubfieldid+"&value_mainstr="+encodeURIComponent(mainmainstring)+"&value_main="+encodeURIComponent(mainstring), "_blank",'width=800,height=550,toolbar=false,scrollbars=yes');
 }
 
 function ExpandField() {
