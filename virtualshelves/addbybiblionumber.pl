@@ -170,6 +170,7 @@ if ($newvirtualshelf) {
                     owner     => $loggedinuser,
                 },
                 allow_change_from_others => 1,
+                allow_change_from_staff  => 1,
             ],
         },
         { order_by => 'shelfname' }
