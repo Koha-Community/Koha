@@ -209,8 +209,8 @@ subtest '1 Issuingrule exist with onsiteissueqty=unlimited' => sub {
     is_deeply(
         $data,
         {
-            reason => 'TOO_MANY_CHECKOUTS',
-            count => 1,
+            reason      => 'TOO_MANY_CHECKOUTS',
+            count       => 1,
             max_allowed => 1,
         },
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
@@ -289,15 +289,15 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed. Do a CO' => sub {
     my $issue = C4::Circulation::AddIssue( $patron, $item->barcode, dt_from_string() );
     like( $issue->issue_id, qr|^\d+$|, 'The issue should have been inserted' );
 
-    t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
+    t::lib::Mocks::mock_preference( 'ConsiderOnSiteCheckoutsAsNormalCheckouts', 0 );
     my $data = C4::Circulation::TooMany( $patron, $item );
     my $rule = delete $data->{circulation_rule};
     is( ref $rule, 'Koha::CirculationRule', 'Circulation rule was returned' );
     is_deeply(
         $data,
         {
-            reason => 'TOO_MANY_CHECKOUTS',
-            count => 1,
+            reason      => 'TOO_MANY_CHECKOUTS',
+            count       => 1,
             max_allowed => 1,
         },
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
@@ -357,7 +357,7 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed, Do a OSCO' => sub {
     my $issue = C4::Circulation::AddIssue( $patron, $item->barcode, dt_from_string(), undef, undef, undef, { onsite_checkout => 1 } );
     like( $issue->issue_id, qr|^\d+$|, 'The issue should have been inserted' );
 
-    t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
+    t::lib::Mocks::mock_preference( 'ConsiderOnSiteCheckoutsAsNormalCheckouts', 0 );
     is(
         C4::Circulation::TooMany( $patron, $item ),
         undef,
@@ -369,22 +369,22 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed, Do a OSCO' => sub {
     is_deeply(
         $data,
         {
-            reason => 'TOO_MANY_ONSITE_CHECKOUTS',
-            count => 1,
+            reason      => 'TOO_MANY_ONSITE_CHECKOUTS',
+            count       => 1,
             max_allowed => 1,
         },
         'OSCO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
 
-    t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
+    t::lib::Mocks::mock_preference( 'ConsiderOnSiteCheckoutsAsNormalCheckouts', 1 );
     $data = C4::Circulation::TooMany( $patron, $item );
     $rule = delete $data->{circulation_rule};
     is( ref $rule, 'Koha::CirculationRule', 'Circulation rule was returned' );
     is_deeply(
         $data,
         {
-            reason => 'TOO_MANY_CHECKOUTS',
-            count => 1,
+            reason      => 'TOO_MANY_CHECKOUTS',
+            count       => 1,
             max_allowed => 1,
         },
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'

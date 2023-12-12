@@ -1027,19 +1027,19 @@ sub CanBookBeIssued {
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
     if ( $toomany && not exists $needsconfirmation{RENEW_ISSUE} ) {
         if ( $toomany->{max_allowed} == 0 ) {
-            $needsconfirmation{PATRON_CANT}      = 1;
+            $needsconfirmation{PATRON_CANT}                  = 1;
             $needsconfirmation{circulation_rule_PATRON_CANT} = $toomany->{circulation_rule};
         }
         if ( C4::Context->preference("AllowTooManyOverride") ) {
-            $needsconfirmation{TOO_MANY}           = $toomany->{reason};
-            $needsconfirmation{current_loan_count} = $toomany->{count};
-            $needsconfirmation{max_loans_allowed}  = $toomany->{max_allowed};
-            $needsconfirmation{circulation_rule_TOO_MANY}   = $toomany->{circulation_rule};
+            $needsconfirmation{TOO_MANY}                  = $toomany->{reason};
+            $needsconfirmation{current_loan_count}        = $toomany->{count};
+            $needsconfirmation{max_loans_allowed}         = $toomany->{max_allowed};
+            $needsconfirmation{circulation_rule_TOO_MANY} = $toomany->{circulation_rule};
         } else {
-            $issuingimpossible{TOO_MANY}           = $toomany->{reason};
-            $issuingimpossible{current_loan_count} = $toomany->{count};
-            $issuingimpossible{max_loans_allowed}  = $toomany->{max_allowed};
-            $needsconfirmation{circulation_rule_TOO_MANY}   = $toomany->{circulation_rule};
+            $issuingimpossible{TOO_MANY}                  = $toomany->{reason};
+            $issuingimpossible{current_loan_count}        = $toomany->{count};
+            $issuingimpossible{max_loans_allowed}         = $toomany->{max_allowed};
+            $needsconfirmation{circulation_rule_TOO_MANY} = $toomany->{circulation_rule};
         }
     }
 
