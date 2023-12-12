@@ -69,8 +69,7 @@
 
       [% ELSE %]
             <p>This is the team who are responsible for the next release of Koha and the ongoing maintenance of your
-            currently installed Koha version. They will be in these roles up until <strong>[% t.release_date | $KohaDates %]</strong>, when the next
-            team will be elected.</p>
+            currently installed Koha version. They will be in these roles up until <strong>[% t.release_date | $KohaDates %]</strong>, when the next team will be elected.</p>
 
             [% FOREACH m IN t.maintainer %]
                 [% IF m.version == ( v ) %]
@@ -139,12 +138,6 @@
         </li>
         [% END %]
 
-        [% IF t.newsletter %]
-        <li><strong>Newsletter editor:</strong>
-            [% INCLUDE person p=t.newsletter %]
-        </li>
-        [% END %]
-
         [% IF t.translation %]
         <li><strong>Translation manager:</strong>
             [% INCLUDE person p=t.translation %]
@@ -170,6 +163,22 @@
             <li><strong>Packaging team:</strong>
                 <ul>
                     [% FOREACH pa IN t.packaging %]
+                    <li>[% INCLUDE person p = pa %]</li>
+                    [% END %]
+                </ul>
+            </li>
+            [% END %]
+        [% END %]
+
+        [% IF t.packaging_assistant %]
+            [% IF t.packaging_assistant.size / 2 == 1 %]
+            <li><strong>Packaging assistant:</strong>
+                [% INCLUDE person p=t.packaging_assistant %]
+            </li>
+            [% ELSE %]
+            <li><strong>Packaging assistants:</strong>
+                <ul>
+                    [% FOREACH pa IN t.packaging_assistant %]
                     <li>[% INCLUDE person p = pa %]</li>
                     [% END %]
                 </ul>
@@ -215,6 +224,34 @@
         <li><strong>Accessibility advocate:</strong>
            [% INCLUDE person p=t.accessibility_advocate %]
         </li>
+        [% END %]
+
+        [% IF t.newsletter %]
+        <li><strong>Newsletter editor:</strong>
+            [% INCLUDE person p=t.newsletter %]
+        </li>
+        [% END %]
+
+        [% IF t.website %]
+        <li><strong>Website maintainer:</strong>
+            [% INCLUDE person p=t.website %]
+        </li>
+        [% END %]
+
+        [% IF t.wiki %]
+            [% IF t.wiki.size == 1 %]
+            <li><strong>Wiki manager:</strong>
+                [% INCLUDE person p=t.wiki %]
+            </li>
+            [% ELSE %]
+            <li><strong>Wiki team:</strong>
+                <ul>
+                    [% FOREACH wi IN t.wiki %]
+                    <li>[% INCLUDE person p = wi %]</li>
+                    [% END %]
+                </ul>
+            </li>
+            [% END %]
         [% END %]
 
       [% IF v != 'release' %]
