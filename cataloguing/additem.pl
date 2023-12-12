@@ -187,7 +187,7 @@ output_and_exit_if_error( $input, $cookie, $template,
     { module => 'cataloguing', record => $record } );
 
 my $current_item;
-my $nextop="additem";
+my $nextop="cud-additem";
 my @errors; # store errors found while checking data BEFORE saving item.
 
 # Getting last created item cookie
@@ -232,7 +232,7 @@ $template->param(
 );
 
 #-------------------------------------------------------------------------------
-if ($op eq "additem") {
+if ($op eq "cud-additem") {
 
     my $add_submit                 = $input->param('add_submit');
     my $add_duplicate_submit       = $input->param('add_duplicate_submit');
@@ -355,7 +355,7 @@ if ($op eq "additem") {
             }
 
         }
-        $nextop = "additem";
+        $nextop = "cud-additem";
 
     }
 
@@ -500,7 +500,7 @@ if ($op eq "additem") {
         $current_item->{barcode} = undef;    # Don't save it!
     }
 
-    $nextop = "additem";
+    $nextop = "cud-additem";
 #-------------------------------------------------------------------------------
 } elsif ($op eq "delitem") {
 #-------------------------------------------------------------------------------
@@ -518,7 +518,7 @@ if ($op eq "additem") {
     }
     else {
         push @errors, @{ $deleted->messages }[0]->message;
-        $nextop = "additem";
+        $nextop = "cud-additem";
     }
 #-------------------------------------------------------------------------------
 } elsif ($op eq "delallitems") {
@@ -531,7 +531,7 @@ if ($op eq "additem") {
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
     if ( @errors ) {
-        $nextop="additem";
+        $nextop="cud-additem";
     } else {
         my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
         my $views = { C4::Search::enabled_staff_search_views };
@@ -616,7 +616,7 @@ if ($op eq "additem") {
         $item->store;
     }
 
-    $nextop="additem";
+    $nextop="cud-additem";
 } elsif ($op eq "delinkitem"){
 
     my $analyticfield = '773';
@@ -690,7 +690,7 @@ my @header_value_loop = map {
 
 # Using last created item if it exists
 if (
-    $op ne "additem"
+    $op ne "cud-additem"
     && $op ne "edititem"
     && $op ne "dupeitem" )
 {
@@ -715,7 +715,7 @@ my $branchcode = $input->param('branch') || C4::Context->userenv->{branch};
 # OR
 # If the subfield must be prefilled with last catalogued item
 my @subfields_to_prefill;
-if ( $nextop eq 'additem' && $op ne 'dupeitem' && $prefillitem ) {
+if ( $nextop eq 'cud-additem' && $op ne 'dupeitem' && $prefillitem ) {
     @subfields_to_prefill = split(' ', C4::Context->preference('SubfieldsToUseWhenPrefill'));
 }
 
