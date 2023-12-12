@@ -43,9 +43,8 @@
                     You must have at least one cash register associated with the library before you can record payments.
                 </p>
                 [% IF ( CAN_user_parameters_manage_cash_registers ) %]
-                    <form action="/cgi-bin/koha/admin/cash_registers.pl" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-add_form" />
+                    <form action="/cgi-bin/koha/admin/cash_registers.pl" method="get">
+                        <input type="hidden" name="op" value="add_form" />
                         <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
                     </form>
                 [% END %]
