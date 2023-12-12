@@ -354,7 +354,7 @@ subtest 'OPAC - Suggest for purchase' => sub {
     my $biblio = Koha::Biblios->find($biblionumber);
     $driver->get( $opac_base_url . "opac-detail.pl?biblionumber=$biblionumber" );
 
-    $s->click({ href => '/opac-suggestions.pl?op=add&biblionumber=' . $biblionumber });
+    $s->click({ href => '/opac-suggestions.pl?op=cud-add&biblionumber=' . $biblionumber });
     is( $driver->find_element('//a[@id="title"]')->get_text(),
         $biblio->title,
         "Suggestion's title correctly filled in with biblio's title" );
