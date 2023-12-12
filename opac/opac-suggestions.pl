@@ -144,7 +144,7 @@ if ( $op eq "add_validate" && not $biblionumber ) { # If we are creating the sug
     if ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) {
         push @messages, { type => 'error', code => 'biblio_exists', id => $duplicatebiblionumber, title => $duplicatetitle };
         $need_confirm = 1;
-        $op = 'add';
+        $op = 'add_form';
     }
 }
 
@@ -245,7 +245,7 @@ if ( $op eq "delete_confirm" ) {
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG", "opac");
 
 my @mandatoryfields;
-if ( $op eq 'add' ) {
+if ( $op eq 'add_form' ) {
     my $fldsreq_sp = C4::Context->preference("OPACSuggestionMandatoryFields") || 'title';
     @mandatoryfields = sort split(/\s*\|\s*/, $fldsreq_sp);
     foreach (@mandatoryfields) {
@@ -268,7 +268,7 @@ if ( $op eq 'add' ) {
 
 my @unwantedfields;
 {
-    last unless ($op eq 'add');
+    last unless ($op eq 'add_form');
     my $fldsreq_sp = C4::Context->preference("OPACSuggestionUnwantedFields");
     @unwantedfields = sort split(/\s*\|\s*/, $fldsreq_sp);
     foreach (@unwantedfields) {
