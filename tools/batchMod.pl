@@ -86,7 +86,7 @@ my $display_items;
 
 my @messages;
 
-if ( $op eq "action" ) {
+if ( $op eq "cud-action" ) {
 
     if ($del) {
         try {
@@ -294,7 +294,8 @@ if ($op eq "cud-show"){
         notfoundbarcodes    => \@notfoundbarcodes,
         notfounditemnumbers => \@notfounditemnumbers
     );
-    $nextop="action"
+    $nextop="cud-action";
+    $template->param( show => 1 );
 } # -- End action="cud-show"
 
 if ( $display_items ) {
