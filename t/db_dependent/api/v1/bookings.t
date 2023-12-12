@@ -194,7 +194,17 @@ subtest 'add() tests' => sub {
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2**1 }    # circulate flag = 1
+            value => { flags => 0 }     # no additional permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->borrowernumber,
+                module_bit     => 1,
+                code           => 'manage_bookings',
+            },
         }
     );
     my $password = 'thePassword123';
@@ -273,7 +283,17 @@ subtest 'update() tests' => sub {
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2**1 }    # circulate flag = 1
+            value => { flags => 0 }     # no additional permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->borrowernumber,
+                module_bit     => 1,
+                code           => 'manage_bookings',
+            },
         }
     );
     my $password = 'thePassword123';
@@ -371,7 +391,17 @@ subtest 'delete() tests' => sub {
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2**1 }    # circulate flag = 1
+            value => { flags => 0 }     # no additional permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->borrowernumber,
+                module_bit     => 1,
+                code           => 'manage_bookings',
+            },
         }
     );
     my $password = 'thePassword123';
