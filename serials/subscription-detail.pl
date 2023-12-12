@@ -50,7 +50,7 @@ if ( $op and $op eq "close" ) {
 
 # Permission needed if it is a deletion (del) : delete_subscription
 # Permission needed otherwise : *
-my $permission = ($op eq "del") ? "delete_subscription" : "*";
+my $permission = ($op eq "cud-del") ? "delete_subscription" : "*";
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-detail.tt",
@@ -69,7 +69,7 @@ $subs->{enddate} ||= GetExpirationDate($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 
-if ($op eq 'del') {
+if ($op eq 'cud-del') {
     if ($$subs{'cannotedit'}){
         carp "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
         print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");

@@ -58,7 +58,7 @@ my $srchany          = $input->param('srchany');
 
 # If replacing an existing record we want to initially populate the form with record info,
 # however, we want to use entered inputs when searching
-if ( $record && $op ne 'do_search' ) {
+if ( $record && $op ne 'cud-do_search' ) {
     $authorcorp ||=
       $record->subfield( $authfields_mapping->{'authorcorp'}, 'a' );
     $authorpersonal ||=
@@ -98,13 +98,13 @@ $template->param(
     index => $index,
 );
 
-if ( $op ne "do_search" ) {
+if ( $op ne "cud-do_search" ) {
     my $sth = $dbh->prepare("SELECT id,host,servername,checked FROM z3950servers WHERE recordtype = 'authority' ORDER BY `rank`, servername");
     $sth->execute();
     my $serverloop = $sth->fetchall_arrayref( {} );
     $template->param(
         serverloop   => $serverloop,
-        opsearch     => "search",
+        opsearch     => "cud-search",
         index        => $index,
     );
     output_html_with_http_headers $input, $cookie, $template->output;

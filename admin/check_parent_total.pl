@@ -28,7 +28,7 @@ use C4::Budgets qw( GetBudget GetBudgetPeriod );
 
 This script checks the amount unallocated from the new parent budget , or the period - if no parent_id is given
 
-This script is called from aqbudgets.pl during an 'add' or 'mod' budget, from the JSscript Check() function, 
+This script is called from aqbudgets.pl during an 'cud-add' or 'cud-mod' budget, from the JSscript Check() function, 
 to determine whether the new parent budget (or period) has enough unallocated funds for the save to complete.
 
 =cut

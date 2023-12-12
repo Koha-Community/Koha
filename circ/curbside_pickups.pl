@@ -65,7 +65,7 @@ if ( $op eq 'find-patron' ) {
         existing_curbside_pickups => $existing_curbside_pickups,
     );
 }
-elsif ( $op eq 'create-pickup' ) {
+elsif ( $op eq 'cud-create-pickup' ) {
     my $borrowernumber            = $input->param('borrowernumber');
     my $scheduled_pickup_datetime = $input->param('pickup_time');
     my $notes                     = $input->param('notes');
@@ -122,27 +122,27 @@ elsif ( $op eq 'create-pickup' ) {
         }
     }
 }
-elsif ( $op eq 'cancel' ) {
+elsif ( $op eq 'cud-cancel' ) {
     my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     $curbside_pickup->delete() if $curbside_pickup;
 }
-elsif ( $op eq 'mark-as-staged' ) {
+elsif ( $op eq 'cud-mark-as-staged' ) {
     my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     $curbside_pickup->mark_as_staged if $curbside_pickup;
 }
-elsif ( $op eq 'mark-as-unstaged' ) {
+elsif ( $op eq 'cud-mark-as-unstaged' ) {
     my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     $curbside_pickup->mark_as_unstaged if $curbside_pickup;
 }
-elsif ( $op eq 'mark-patron-has-arrived' ) {
+elsif ( $op eq 'cud-mark-patron-has-arrived' ) {
     my $id              = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     $curbside_pickup->mark_patron_has_arrived if $curbside_pickup;
 }
-elsif ( $op eq 'mark-as-delivered' ) {
+elsif ( $op eq 'cud-mark-as-delivered' ) {
     my $id = $input->param('id');
     my $curbside_pickup = Koha::CurbsidePickups->find($id);
     # FIXME Add a try-catch here

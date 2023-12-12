@@ -19,7 +19,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $action = $input->param('action') // 'list';
 
-if ( $action eq 'save' ) {
+if ( $action eq 'cud-save' ) {
     my $module = $input->param('module');
     my @columnids = $input->multi_param("columnid");
     my @columns;

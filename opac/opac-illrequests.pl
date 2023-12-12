@@ -72,7 +72,7 @@ if ( $illrequest_id = $params->{illrequest_id} ) {
     }
 }
 
-if ( ( $op eq 'create' || $op eq 'cancreq' || $op eq 'update' ) && !$patron->_result->categorycode->can_place_ill_in_opac ) {
+if ( ( $op eq 'create' || $op eq 'cancreq' || $op eq 'cud-update' ) && !$patron->_result->categorycode->can_place_ill_in_opac ) {
     print $query->redirect('/cgi-bin/koha/errors/403.pl');
     exit;
 }
@@ -92,7 +92,7 @@ if ( $op eq 'list' ) {
         request => $request
     );
 
-} elsif ( $op eq 'update') {
+} elsif ( $op eq 'cud-update') {
     $request->notesopac($params->{notesopac})->store;
     # Send a notice to staff alerting them of the update
     $request->send_staff_notice('ILL_REQUEST_MODIFIED');

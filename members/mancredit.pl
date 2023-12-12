@@ -66,7 +66,7 @@ output_and_exit_if_error(
 my $library_id =
   C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
 
-my $add = $input->param('add');
+my $add = $input->param('cud-add');
 if ($add) {
 
 # Note: If the logged in user is not allowed to see this patron an invoice can be forced

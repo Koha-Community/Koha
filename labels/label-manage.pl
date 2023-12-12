@@ -81,7 +81,7 @@ my $error = $cgi->param('error') || 0;
 
 my $branch_code = ($label_element eq 'batch' ? C4::Context->userenv->{'branch'} : '');
 
-if ($op eq 'delete') {
+if ($op eq 'cud-delete') {
     if          ($label_element eq 'layout')    {$error = C4::Labels::Layout::delete(layout_id => $element_id);}
     elsif       ($label_element eq 'template')  {$error = C4::Labels::Template::delete(template_id => $element_id);}
     elsif       ($label_element eq 'profile')   {$error = C4::Labels::Profile::delete(profile_id => $element_id);}

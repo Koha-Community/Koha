@@ -52,7 +52,7 @@ my $basket = GetBasket($order->{basketno});
 my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
 
 
-if($op and $op eq 'save') {
+if($op and $op eq 'cud-save') {
     my $ordernotes = $input->param('ordernotes');
     if ($type eq "vendor") {
         $order->{'order_vendornote'} = $ordernotes;

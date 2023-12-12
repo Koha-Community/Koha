@@ -55,7 +55,7 @@ else {
         token      => scalar $cgi->param('csrf_token'),
     };
 
-    if ( $op eq 'disable-2FA' ) {
+    if ( $op eq 'cud-disable-2FA' ) {
         my $auth =
           Koha::Auth::TwoFactorAuth->new( { patron => $logged_in_user } );
         $logged_in_user->secret(undef);
@@ -73,7 +73,7 @@ else {
                             borrowers => $logged_in_user->id
                         },
                     },
-                    message_transports => ['email'],
+                    message_transports => ['cud-email'],
                 }
             );
         }

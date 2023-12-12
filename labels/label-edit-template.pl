@@ -44,7 +44,7 @@ my $profile_list = undef;
 
 my $units = get_unit_values();
 
-if ($op eq 'edit') {
+if ($op eq 'cud-edit') {
     $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
     $profile_list = get_all_profiles({ fields => [ qw( profile_id printer_name paper_bin ) ], filters => { template_id => [ $template_id, '' ], creator => 'Labels'} } );
     push @$profile_list, {paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile'};
@@ -57,7 +57,7 @@ if ($op eq 'edit') {
         }
     }
 }
-elsif ($op eq 'save') {
+elsif ($op eq 'cud-save') {
     my @params = (      profile_id      => scalar $cgi->param('profile_id'),
                         template_code   => scalar $cgi->param('template_code') || 'DEFAULT_TEMPLATE',
                         template_desc   => scalar $cgi->param('template_desc') || 'Default description',

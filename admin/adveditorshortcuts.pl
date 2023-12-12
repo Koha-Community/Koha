@@ -54,7 +54,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $shortcuts = Koha::KeyboardShortcuts->search();
 
-if ( $op eq 'save' ) {
+if ( $op eq 'cud-save' ) {
     my @shortcut_names = $input->multi_param('shortcut_name');
     my @shortcut_keys  = $input->multi_param('shortcut_keys');
     my %updated_shortcuts;

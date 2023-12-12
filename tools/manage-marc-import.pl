@@ -87,7 +87,7 @@ if ($op eq "") {
     } else {
         import_records_list($template, $import_batch_id, $offset, $results_per_page);
     }
-} elsif ($op eq "commit-batch") {
+} elsif ($op eq "cud-commit-batch") {
     my $frameworkcode = $input->param('framework');
     my $overlay_framework = $input->param('overlay_framework');
     $overlay_framework = undef if $overlay_framework eq '_USE_ORIG_';
@@ -115,7 +115,7 @@ if ($op eq "") {
             error => $_,
           };
     };
-} elsif ($op eq "revert-batch") {
+} elsif ($op eq "cud-revert-batch") {
     try {
         my $job_id = Koha::BackgroundJob::MARCImportRevertBatch->new->enqueue(
             { import_batch_id => $import_batch_id } );
@@ -135,20 +135,20 @@ if ($op eq "") {
             error => $_,
           };
     };
-} elsif ($op eq "clean-batch") {
+} elsif ($op eq "cud-clean-batch") {
     CleanBatch($import_batch_id);
     import_batches_list($template, $offset, $results_per_page);
     $template->param( 
         did_clean       => 1,
         import_batch_id => $import_batch_id,
     );
-} elsif ($op eq "delete-batch") {
+} elsif ($op eq "cud-delete-batch") {
     DeleteBatch($import_batch_id);
     import_batches_list($template, $offset, $results_per_page);
     $template->param(
         did_delete      => 1,
     );
-} elsif ($op eq "redo-matching") {
+} elsif ($op eq "cud-redo-matching") {
     my $new_matcher_id = $input->param('new_matcher_id');
     my $current_matcher_id = $input->param('current_matcher_id');
     my $overlay_action = $input->param('overlay_action');

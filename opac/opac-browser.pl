@@ -47,7 +47,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 # the level of browser to display
 my $level = $query->param('level') || 0;
-my $filter = $query->param('filter');
+my $filter = $query->param('cud-filter');
 $filter = '' unless defined $filter;
 $level++; # the level passed is the level of the PREVIOUS list, not the current one. Thus the ++
 

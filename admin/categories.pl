@@ -56,7 +56,7 @@ if ( $op eq 'add_form' ) {
             { categorycode => $categorycode }, $template );
     }
 }
-elsif ( $op eq 'add_validate' ) {
+elsif ( $op eq 'cud-add_validate' ) {
 
     my $categorycode = $input->param('categorycode');
     my $description = $input->param('description');
@@ -75,7 +75,7 @@ elsif ( $op eq 'add_validate' ) {
     my $can_place_ill_in_opac = $input->param('can_place_ill_in_opac') // 1;
     my $default_privacy = $input->param('default_privacy');
     my $reset_password = $input->param('reset_password');
-    my $change_password = $input->param('change_password');
+    my $change_password = $input->param('cud-change_password');
     my $exclude_from_local_holds_priority = $input->param('exclude_from_local_holds_priority');
     my $min_password_length = $input->param('min_password_length');
     my $require_strong_password = $input->param('require_strong_password');
@@ -168,7 +168,7 @@ elsif ( $op eq 'add_validate' ) {
     $searchfield = q||;
     $op = 'list';
 }
-elsif ( $op eq 'delete_confirm' ) {
+elsif ( $op eq 'cud-delete_confirm' ) {
 
     my $count = Koha::Patrons->search({
         categorycode => $categorycode
@@ -182,7 +182,7 @@ elsif ( $op eq 'delete_confirm' ) {
     );
 
 }
-elsif ( $op eq 'delete_confirmed' ) {
+elsif ( $op eq 'cud-delete_confirmed' ) {
     my $categorycode = uc( $input->param('categorycode') );
 
     my $category = Koha::Patron::Categories->find( $categorycode );

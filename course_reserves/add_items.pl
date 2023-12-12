@@ -123,7 +123,7 @@ if ( $action eq 'lookup' and $item ) {
         return    => $return,
     );
 
-} elsif ( $action eq 'add' ) {
+} elsif ( $action eq 'cud-add' ) {
     my $itype         = scalar $cgi->param('itype');
     my $ccode         = scalar $cgi->param('ccode');
     my $homebranch    = $cgi->param('homebranch');

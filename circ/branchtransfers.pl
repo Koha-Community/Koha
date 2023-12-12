@@ -76,7 +76,7 @@ my $reqmessage;
 my $cancelled;
 my $settransit;
 
-my $request        = $query->param('request')        || '';
+my $request        = $query->param('cud-request')        || '';
 my $borrowernumber = $query->param('borrowernumber') ||  0;
 my $tobranchcd     = $query->param('tobranchcd')     || '';
 my $trigger        = 'Manual';

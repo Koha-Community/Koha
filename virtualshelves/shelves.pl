@@ -63,7 +63,7 @@ my ( $shelf, $shelfnumber, @messages, $allow_transfer );
 if ( $op eq 'add_form' ) {
     # Only pass default
     $shelf = { allow_change_from_owner => 1 };
-} elsif ( $op eq 'edit_form' ) {
+} elsif ( $op eq 'cud-edit_form' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
@@ -78,7 +78,7 @@ if ( $op eq 'add_form' ) {
     } else {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
-} elsif ( $op eq 'add' ) {
+} elsif ( $op eq 'cud-add' ) {
     output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     my $allow_changes_from = $query->param('allow_changes_from');
     eval {
@@ -105,7 +105,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'message', code => 'success_on_insert' };
         $op = 'view';
     }
-} elsif ( $op eq 'edit' ) {
+} elsif ( $op eq 'cud-edit' ) {
     output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
@@ -127,7 +127,7 @@ if ( $op eq 'add_form' ) {
 
             if ($@) {
                 push @messages, { type => 'alert', code => 'error_on_update' };
-                $op = 'edit_form';
+                $op = 'cud-edit_form';
             } else {
                 push @messages, { type => 'message', code => 'success_on_update' };
             }
@@ -137,7 +137,7 @@ if ( $op eq 'add_form' ) {
     } else {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
-} elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
@@ -156,7 +156,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
     $op = 'list';
-} elsif ( $op eq 'add_biblio' ) {
+} elsif ( $op eq 'cud-add_biblio' ) {
     output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
@@ -213,7 +213,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
     $op = $referer;
-} elsif ( $op eq 'remove_biblios' ) {
+} elsif ( $op eq 'cud-remove_biblios' ) {
     output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
@@ -242,7 +242,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
     $op = $referer;
-} elsif ( $op eq 'transfer' ) {
+} elsif ( $op eq 'cud-transfer' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber) if $shelfnumber;
     my $new_owner = $query->param('new_owner'); # is a borrowernumber

@@ -39,7 +39,7 @@ my $action = $cgi->param('action') || q{list};
 my $previous = $cgi->param('previous');
 
 # Deleting search history
-if ( $action eq 'delete' ) {
+if ( $action eq 'cud-delete' ) {
     my $sessionid = defined $previous
         ? $cgi->cookie("CGISESSID")
         : q{};

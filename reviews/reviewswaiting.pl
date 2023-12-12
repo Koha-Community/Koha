@@ -50,7 +50,7 @@ elsif ( $op eq 'unapprove' ) {
     my $review = Koha::Reviews->find( $reviewid );
     $review->unapprove if $review;
 }
-elsif ( $op eq 'delete' ) {
+elsif ( $op eq 'cud-delete' ) {
     my $review = Koha::Reviews->find( $reviewid );
     $review->delete if $review;
 }

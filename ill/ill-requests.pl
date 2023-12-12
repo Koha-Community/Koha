@@ -201,8 +201,8 @@ if ( $backends_available ) {
         # handle special commit rules & update type
         handle_commit_maybe($backend_result, $request);
 
-    } elsif ( $op eq 'cancel' ) {
-        # Backend 'cancel' method
+    } elsif ( $op eq 'cud-cancel' ) {
+        # Backend 'cud-cancel' method
         # cancel requires a specific request, so first, find it.
         my $request = Koha::Illrequests->find($params->{illrequest_id});
         my $backend_result = $request->backend_cancel($params);
@@ -270,14 +270,14 @@ if ( $backends_available ) {
         # Currently still needs to be implemented.
         redirect_to_list();
 
-    } elsif ( $op eq 'delete_confirm') {
+    } elsif ( $op eq 'cud-delete_confirm') {
         my $request = Koha::Illrequests->find($params->{illrequest_id});
 
         $template->param(
             request => $request
         );
 
-    } elsif ( $op eq 'delete' ) {
+    } elsif ( $op eq 'cud-delete' ) {
 
         # Check if the request is confirmed, if not, redirect
         # to the confirmation view
@@ -530,7 +530,7 @@ sub get_metadata_enrichment {
     my @services = ();
     foreach my $plugin(@candidates) {
         my $supported = $plugin->provides_api();
-        if ($supported->{type} eq 'search') {
+        if ($supported->{type} eq 'cud-search') {
             push @services, $supported;
         }
     }

@@ -220,7 +220,7 @@ if ( $op =~ /save/i ) {
                         {
                             letter                 => $letter,
                             borrowernumber         => $patron->borrowernumber,
-                            message_transport_type => 'email'
+                            message_transport_type => 'cud-email'
                         }
                     );
                 }
@@ -253,7 +253,7 @@ if ( $op =~ /save/i ) {
 elsif ($op=~/add/) {
     #Adds suggestion
     Init($suggestion_ref);
-    $op ='save';
+    $op ='cud-save';
 }
 elsif ($op=~/edit/) {
     #Edit suggestion
@@ -269,7 +269,7 @@ elsif ($op=~/edit/) {
     $other_reason = 0 unless $suggestion_ref->{reason};
     $template->param(other_reason => $other_reason);
     Init($suggestion_ref);
-    $op ='save';
+    $op ='cud-save';
 }  
 elsif ($op eq "update_status" ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
@@ -308,7 +308,7 @@ elsif ($op eq "update_status" ) {
         &ModSuggestion($suggestion);
     }
     redirect_with_params($input);
-}elsif ($op eq "delete" ) {
+}elsif ($op eq "cud-delete" ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     foreach my $delete_field (@editsuggestions) {
         &DelSuggestion( $borrowernumber, $delete_field,'intranet' );
@@ -341,7 +341,7 @@ elsif ( $op eq 'update_manager' ) {
     }
     redirect_with_params($input);
 }
-elsif ( $op eq 'show' ) {
+elsif ( $op eq 'cud-show' ) {
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
     my $budget = GetBudget $$suggestion_ref{budgetid};
     $$suggestion_ref{budgetname} = $$budget{budget_name};

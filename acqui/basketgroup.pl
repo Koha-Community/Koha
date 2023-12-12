@@ -252,7 +252,7 @@ my $rs = $schema->resultset('VendorEdiAccount')->search(
     { vendor_id => $booksellerid, } );
 $template->param( ediaccount => ($rs->count > 0));
 
-if ( $op eq "add" ) {
+if ( $op eq "cud-add" ) {
 #
 # if no param('basketgroupid') is not defined, adds a new basketgroup
 # else, edit (if it is open) or display (if it is close) the basketgroup basketgroupid
@@ -300,7 +300,7 @@ if ( $op eq "add" ) {
     my $basketgroups = &GetBasketgroups($booksellerid);
     my $baskets = &GetBasketsByBookseller($booksellerid);
     displaybasketgroups($basketgroups, $bookseller, $baskets);
-} elsif ($op eq 'mod_basket') {
+} elsif ($op eq 'cud-mod_basket') {
 #
 # edit an individual basket contained in this basketgroup
 #
@@ -324,7 +324,7 @@ if ( $op eq "add" ) {
     my $basketgroupid = $input->param('basketgroupid');
     printbasketgrouppdf($basketgroupid);
     exit;
-}elsif ( $op eq "export" ) {
+}elsif ( $op eq "cud-export" ) {
 #
 # export a closed basketgroup in csv
 #
@@ -336,7 +336,7 @@ if ( $op eq "add" ) {
     );
     print GetBasketGroupAsCSV( $basketgroupid, $input );
     exit;
-}elsif( $op eq "delete"){
+}elsif( $op eq "cud-delete"){
 #
 # delete an closed basketgroup
 #
@@ -352,7 +352,7 @@ if ( $op eq "add" ) {
     ReOpenBasketgroup($basketgroupid);
     my $redirectpath = ((defined $input->param('mode'))&& ($input->param('mode') eq 'singlebg')) ?'/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;basketgroupid='.$basketgroupid.'&amp;booksellerid='.$booksellerid : '/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' .$booksellerid.'&amp;listclosed=1';
     print $input->redirect($redirectpath);
-} elsif ( $op eq 'attachbasket') {
+} elsif ( $op eq 'cud-attachbasket') {
 #
 # save a modified basketgroup, or creates a new basketgroup when a basket is closed. called from basket page
 #

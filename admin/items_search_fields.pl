@@ -35,7 +35,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 
 my $op = $cgi->param('op') || '';
 
-if ($op eq 'del') {
+if ($op eq 'cud-del') {
     my $name = $cgi->param('name');
     my $rv = DelItemSearchField($name);
     if ($rv) {

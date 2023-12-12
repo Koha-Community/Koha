@@ -68,7 +68,7 @@ my $multi_batch_count = scalar(@batch_ids) || ($from && $to) ? 1 : 0;
 my $label_count = scalar(@label_ids);
 my $item_count = scalar(@item_numbers);
 
-if ($op eq 'export') {
+if ($op eq 'cud-export') {
     if (@label_ids) {
         my $label_id_param = '&amp;label_id=';
         $label_id_param .= join ('&amp;label_id=',@label_ids);

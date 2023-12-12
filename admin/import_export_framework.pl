@@ -41,10 +41,10 @@ unless ($auth_status eq 'ok') {
 }
 
 my $frameworkcode = $input->param('frameworkcode') || 'default';
-my $action = $input->param('action') || 'export';
+my $action = $input->param('action') || 'cud-export';
 
 ## Exporting
-if ($action eq 'export' && $input->request_method() eq 'GET') {
+if ($action eq 'cud-export' && $input->request_method() eq 'GET') {
     my $strXml = '';
     my $format = $input->param('type_export_' . $frameworkcode);
     if ($frameworkcode eq 'default') {

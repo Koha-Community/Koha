@@ -63,7 +63,7 @@ if ( $op eq 'view' ) {
     }
 }
 
-if ( $op eq 'cancel' ) {
+if ( $op eq 'cud-cancel' ) {
     my $id = $input->param('id');
     my $job = Koha::BackgroundJobs->find($id);
     if (   $can_manage_background_jobs

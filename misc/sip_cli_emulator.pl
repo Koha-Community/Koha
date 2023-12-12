@@ -194,7 +194,7 @@ my $handlers = {
             'item_properties',
             'patron_password',
             'fee_acknowledged',
-            'cancel',
+            'cud-cancel',
         ],
     },
     checkin => {
@@ -215,7 +215,7 @@ my $handlers = {
             'return_date',    # defaults to transaction date
             'item_properties',
             'patron_password',
-            'cancel',
+            'cud-cancel',
         ],
     },
     renew => {
@@ -301,7 +301,7 @@ my $handlers = {
     },
 };
 
-my $data = run_command_message('login');
+my $data = run_command_message('cud-login');
 
 if ( $data =~ '^941' ) {    ## we are logged in
     foreach my $m (@messages) {

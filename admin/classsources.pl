@@ -64,7 +64,7 @@ if ( $op eq "add_source" ) {
         split_rules  => Koha::ClassSplitRules->search,
     );
 }
-elsif ( $op eq "add_source_validate" ) {
+elsif ( $op eq "cud-add_source_validate" ) {
     my $class_source = Koha::ClassSources->find($cn_source);
     if ($class_source) {
         $class_source->set(
@@ -130,7 +130,7 @@ elsif ( $op eq "add_sort_rule" ) {
         sort_routines => get_class_sort_routines(),
     );
 }
-elsif ( $op eq "add_sort_rule_validate" ) {
+elsif ( $op eq "cud-add_sort_rule_validate" ) {
     my $sort_rule = Koha::ClassSortRules->find($class_sort_rule);
     if ($sort_rule) {
         $sort_rule->set(
@@ -189,7 +189,7 @@ elsif ( $op eq "add_split_rule" ) {
         split_routines => get_class_split_routines(),
     );
 }
-elsif ( $op eq "add_split_rule_validate" ) {
+elsif ( $op eq "cud-add_split_rule_validate" ) {
     my $split_rule = Koha::ClassSplitRules->find($class_split_rule);
 
     @split_regex =  grep {!/^$/} @split_regex; # Remove empty

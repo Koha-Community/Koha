@@ -80,7 +80,7 @@ sub _set_selected {
     return \@select_list;
 }
 
-if ($op eq 'edit') {
+if ($op eq 'cud-edit') {
     warn sprintf("Error performing '%s': No 'layout_id' passed in.", $op) unless ($layout_id);
     $layout = C4::Patroncards::Layout->retrieve(layout_id => $layout_id);
     $layout_xml = XMLin($layout->get_attr('layout_xml'), ForceArray => 1);
@@ -169,7 +169,7 @@ if ($op eq 'edit') {
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
-elsif  ($op eq 'save') {
+elsif  ($op eq 'cud-save') {
     my $format_string = undef;
     my $layout = {};
     my $layout_name = undef;

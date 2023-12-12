@@ -47,7 +47,7 @@ my $privacy_guarantor_fines     = $query->param("privacy_guarantor_fines");
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 
-if ( $op eq "update_privacy" ) {
+if ( $op eq "cud-update_privacy" ) {
     if ( $patron ) {
         $patron->set({
             privacy                    => $privacy,
@@ -57,7 +57,7 @@ if ( $op eq "update_privacy" ) {
         $template->param( 'privacy_updated' => 1 );
     }
 }
-elsif ( $op eq "delete_record" ) {
+elsif ( $op eq "cud-delete_record" ) {
 
     my $holds     = $query->param('holds');
     my $checkouts = $query->param('checkouts');

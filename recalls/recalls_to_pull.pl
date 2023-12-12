@@ -37,7 +37,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 
 my $op = $query->param('op') || 'list';
 my $recall_id = $query->param('recall_id');
-if ( $op eq 'cancel' ) {
+if ( $op eq 'cud-cancel' ) {
     my $recall = Koha::Recalls->find( $recall_id );
     if ( $recall->in_transit ) {
         C4::Items::ModItemTransfer(

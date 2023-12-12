@@ -122,7 +122,7 @@ if ( $action eq 'payout' ) {
     }
 }
 
-if ( $action eq 'refund' ) {
+if ( $action eq 'cud-refund' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $charge_id   = scalar $input->param('accountlines_id');
     my $charge      = Koha::Account::Lines->find($charge_id);
@@ -187,7 +187,7 @@ if ( $action eq 'send_receipt' ) {
         my $letter = C4::Letters::GetPreparedLetter(
             module      => 'circulation',
             letter_code => uc( "ACCOUNT_" . $credit->credit_type_code ),
-            message_transport_type => 'email',
+            message_transport_type => 'cud-email',
             lang                   => $patron->lang,
             tables                 => {
                 borrowers => $patron->borrowernumber,
@@ -204,7 +204,7 @@ if ( $action eq 'send_receipt' ) {
             {
                 letter                 => $letter,
                 borrowernumber         => $patron->borrowernumber,
-                message_transport_type => 'email',
+                message_transport_type => 'cud-email',
             }
         );
         C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;

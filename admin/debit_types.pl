@@ -72,7 +72,7 @@ if ( $op eq 'add_form' ) {
         branches_loop => \@branches_loop
     );
 }
-elsif ( $op eq 'add_validate' ) {
+elsif ( $op eq 'cud-add_validate' ) {
     my $description           = $input->param('description');
     my $can_be_invoiced = $input->param('can_be_invoiced') || 0;
     my $can_be_sold = $input->param('can_be_sold') || 0;

@@ -96,7 +96,7 @@ my ( $shelf, $shelfnumber, @messages );
 if ( $op eq 'add_form' ) {
     # Only pass default
     $shelf = { allow_change_from_owner => 1 };
-} elsif ( $op eq 'edit_form' ) {
+} elsif ( $op eq 'cud-edit_form' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
@@ -111,7 +111,7 @@ if ( $op eq 'add_form' ) {
     } else {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
-} elsif ( $op eq 'add' ) {
+} elsif ( $op eq 'cud-add' ) {
     if ( $loggedinuser ) {
         my $allow_changes_from = $query->param('allow_changes_from');
         eval {
@@ -141,7 +141,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'error', code => 'unauthorized_on_insert' };
         $op = 'list';
     }
-} elsif ( $op eq 'edit' ) {
+} elsif ( $op eq 'cud-edit' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
     if ( $shelf ) {
@@ -161,7 +161,7 @@ if ( $op eq 'add_form' ) {
 
             if ($@) {
                 push @messages, { type => 'error', code => 'error_on_update' };
-                $op = 'edit_form';
+                $op = 'cud-edit_form';
             } else {
                 push @messages, { type => 'message', code => 'success_on_update' };
             }
@@ -171,7 +171,7 @@ if ( $op eq 'add_form' ) {
     } else {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
-} elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
     if ($shelf) {
@@ -189,7 +189,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
     $op = $referer;
-} elsif ( $op eq 'remove_share' ) {
+} elsif ( $op eq 'cud-remove_share' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     if ($shelf) {
@@ -206,7 +206,7 @@ if ( $op eq 'add_form' ) {
     }
     $op = $referer;
 
-} elsif ( $op eq 'add_biblio' ) {
+} elsif ( $op eq 'cud-add_biblio' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     if ($shelf) {
@@ -233,7 +233,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
     $op = $referer;
-} elsif ( $op eq 'remove_biblios' ) {
+} elsif ( $op eq 'cud-remove_biblios' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     my @biblionumber = $query->multi_param('biblionumber');
@@ -261,7 +261,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
     $op = 'view';
-} elsif( $op eq 'transfer' ) {
+} elsif( $op eq 'cud-transfer' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber) if $shelfnumber;
     my $new_owner = $query->param('new_owner'); # borrowernumber or undef
@@ -278,7 +278,7 @@ if ( $op eq 'add_form' ) {
         }
         if( @$patrons ) {
             $template->param( shared_users => $patrons );
-            $op = 'transfer';
+            $op = 'cud-transfer';
         } else {
             push @messages, { type => 'error', code => 'no_email_found' };
         }

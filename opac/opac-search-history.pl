@@ -51,7 +51,7 @@ my $previous = $cgi->param('previous');
 # If the user is not logged in, we deal with the session
 unless ( $loggedinuser ) {
     # Deleting search history
-    if ( $action eq 'delete') {
+    if ( $action eq 'cud-delete') {
         # Deleting session's search history
         my @id = $cgi->multi_param('id');
         my $all = not scalar( @id );
@@ -96,7 +96,7 @@ unless ( $loggedinuser ) {
     my $dbh = C4::Context->dbh;
 
     # Deleting search history
-    if ( $action eq 'delete' ) {
+    if ( $action eq 'cud-delete' ) {
         my @id = $cgi->multi_param('id');
         if ( @id ) {
             C4::Search::History::delete(

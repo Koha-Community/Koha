@@ -83,7 +83,7 @@ sub build_authorized_values_list {
     }
 
     return {
-        type     => 'select',
+        type     => 'cud-select',
         id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
         name     => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
         values   => \@authorised_values,
@@ -585,7 +585,7 @@ if ($authid) {
 }
 $op ||= q{};
 #------------------------------------------------------------------------------------------------------------------------------
-if ($op eq "add") {
+if ($op eq "cud-add") {
 #------------------------------------------------------------------------------------------------------------------------------
     # rebuild
     my @tags = $input->multi_param('tag');
@@ -597,7 +597,7 @@ if ($op eq "add") {
     my $record = TransformHtmlToMarc($input, 0);
 
     my ($duplicateauthid,$duplicateauthvalue);
-     ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
+     ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "cud-add") && (!$is_a_modif);
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if (!$duplicateauthid or $confirm_not_duplicate) {
@@ -621,7 +621,7 @@ if ($op eq "add") {
                         duplicateauthvalue  => $duplicateauthvalue->{'authorized'}->[0]->{'heading'},
                         );
     }
-} elsif ($op eq "delete") {
+} elsif ($op eq "cud-delete") {
 #------------------------------------------------------------------------------------------------------------------------------
         DelAuthority({ authid => $authid });
         if ($nonav){

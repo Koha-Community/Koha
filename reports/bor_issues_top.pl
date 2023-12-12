@@ -38,7 +38,7 @@ plugin that shows a stats on borrowers
 
 my $input = CGI->new;
 my $fullreportname = "reports/bor_issues_top.tt";
-my $do_it   = $input->param('do_it');
+my $do_it   = $input->param('cud-do_it');
 my $limit   = $input->param("Limit");
 my $column  = $input->param("Criteria");
 my @filters = $input->multi_param("Filter");

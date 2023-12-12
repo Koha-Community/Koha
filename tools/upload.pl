@@ -59,7 +59,7 @@ if ( $op eq 'new' ) {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
-} elsif ( $op eq 'browse' ) {
+} elsif ( $op eq 'cud-browse' ) {
     my $uploads;
     if ($browsecategory){
         $uploads = Koha::UploadedFiles->search({
@@ -76,7 +76,7 @@ if ( $op eq 'new' ) {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
-} elsif ( $op eq 'search' ) {
+} elsif ( $op eq 'cud-search' ) {
     my $uploads;
     if( $id ) { # might be a comma separated list
         my @id = split /,/, $id;
@@ -100,7 +100,7 @@ if ( $op eq 'new' ) {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
-} elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     # delete only takes the id parameter
     my $rec = Koha::UploadedFiles->find($id);
     undef $rec if $rec && $plugin && !$rec->public;

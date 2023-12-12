@@ -39,7 +39,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $op = $query->param('op');
 
-if ( $op eq 'update' ) {
+if ( $op eq 'cud-update' ) {
     my $userid          = $query->param('userid');
     my $currentpassword = $query->param('currentpassword');
     my $newpassword     = $query->param('newpassword');

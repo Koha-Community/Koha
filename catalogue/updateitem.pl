@@ -58,27 +58,27 @@ for ($damaged,$itemlost,$withdrawn) {
 my $messages = q{};
 
 # modify MARC item if input differs from items table.
-if ( $op eq "set_non_public_note" ) {
+if ( $op eq "cud-set_non_public_note" ) {
     checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
     if ((not defined  $item_data_hashref->{'itemnotes_nonpublic'}) or $itemnotes_nonpublic ne $item_data_hashref->{'itemnotes_nonpublic'}) {
         $item->itemnotes_nonpublic($itemnotes_nonpublic);
     }
 }
-elsif ( $op eq "set_public_note" ) { # i.e., itemnotes parameter passed from form
+elsif ( $op eq "cud-set_public_note" ) { # i.e., itemnotes parameter passed from form
     checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
     if ((not defined  $item_data_hashref->{'itemnotes'}) or $itemnotes ne $item_data_hashref->{'itemnotes'}) {
         $item->itemnotes($itemnotes);
     }
-} elsif ( $op eq "set_lost" && $itemlost ne $item_data_hashref->{'itemlost'}) {
+} elsif ( $op eq "cud-set_lost" && $itemlost ne $item_data_hashref->{'itemlost'}) {
     $item->itemlost($itemlost);
-} elsif ( $op eq "set_withdrawn" && $withdrawn ne $item_data_hashref->{'withdrawn'}) {
+} elsif ( $op eq "cud-set_withdrawn" && $withdrawn ne $item_data_hashref->{'withdrawn'}) {
     $item->withdrawn($withdrawn);
-} elsif ( $op eq "set_exclude_priority" && $exclude_from_local_holds_priority ne $item_data_hashref->{'exclude_from_local_holds_priority'}) {
+} elsif ( $op eq "cud-set_exclude_priority" && $exclude_from_local_holds_priority ne $item_data_hashref->{'exclude_from_local_holds_priority'}) {
     $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority);
     $messages = "updated_exclude_from_local_holds_priority=$exclude_from_local_holds_priority&";
-} elsif ( $op eq "set_bookable" && $bookable ne $item_data_hashref->{'bookable'} ) {
+} elsif ( $op eq "cud-set_bookable" && $bookable ne $item_data_hashref->{'bookable'} ) {
     $item->bookable($bookable);
-} elsif ( $op eq "set_damaged" && $damaged ne $item_data_hashref->{'damaged'}) {
+} elsif ( $op eq "cud-set_damaged" && $damaged ne $item_data_hashref->{'damaged'}) {
     $item->damaged($damaged);
 } else {
     #nothings changed, so do nothing.
@@ -88,6 +88,6 @@ elsif ( $op eq "set_public_note" ) { # i.e., itemnotes parameter passed from for
 
 $item->store;
 
-LostItem($itemnumber, 'moredetail') if $op eq "set_lost";
+LostItem($itemnumber, 'moredetail') if $op eq "cud-set_lost";
 
 print $cgi->redirect("moredetail.pl?" . $messages . "biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");

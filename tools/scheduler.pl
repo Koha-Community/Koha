@@ -78,7 +78,7 @@ if ( $mode eq 'job_add' ) {
             $format = undef;
         }
     }
-    my $email = $input->param('email');
+    my $email = $input->param('cud-email');
     if ($email) {
         my $is_valid = Koha::Email->is_valid($email);
         if ( !$is_valid ) {
@@ -104,7 +104,7 @@ if ( $mode eq 'job_add' ) {
 
 if ( $mode eq 'job_change' ) {
     my $jobid = $input->param('jobid');
-    if ( $input->param('delete') ) {
+    if ( $input->param('cud-delete') ) {
         remove_at_job($jobid);
     }
 }

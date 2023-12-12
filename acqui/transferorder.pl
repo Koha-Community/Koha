@@ -116,7 +116,7 @@ if( $basketno && $ordernumber) {
 } else {
     # Search for booksellers to transfer from/to
     $op = '' unless $op;
-    if( $op eq "do_search" ) {
+    if( $op eq "cud-do_search" ) {
         my $booksellers = Koha::Acquisition::Booksellers->search(
                             { name     => { -like => "%$query%" } },
                             { order_by => { -asc => 'name' } } );

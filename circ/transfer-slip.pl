@@ -56,7 +56,7 @@ else {
 $template->param(
     slip => $slip,
     plain => !$is_html,
-    caller => 'transfer',
+    caller => 'cud-transfer',
     stylesheet => C4::Context->preference("SlipCSS"),
 );
 

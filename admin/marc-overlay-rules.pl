@@ -37,11 +37,11 @@ my $rule_from_cgi = sub {
     my %rule = map { $_ => scalar $cgi->param($_) } (
         'tag',
         'module',
-        'filter',
-        'add',
+        'cud-filter',
+        'cud-add',
         'append',
         'remove',
-        'delete'
+        'cud-delete'
     );
 
     my $id = $cgi->param('id');
@@ -84,17 +84,17 @@ if ($op eq 'remove' || $op eq 'doremove') {
         $rules = $get_rules->();
     }
 }
-elsif ($op eq 'edit') {
+elsif ($op eq 'cud-edit') {
     $template->param( edit => 1 );
     my $id = $input->param('id');
     for my $rule(@{$rules}) {
         if ($rule->{id} == $id) {
-            $rule->{'edit'} = 1;
+            $rule->{'cud-edit'} = 1;
             last;
         }
     }
 }
-elsif ($op eq 'doedit' || $op eq 'add') {
+elsif ($op eq 'doedit' || $op eq 'cud-add') {
     my $rule_data = $rule_from_cgi->($input);
     if (!@{$errors}) {
         try {

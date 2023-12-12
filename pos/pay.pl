@@ -84,7 +84,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     );
 }
 
-if ( $action eq 'send' ) {
+if ( $action eq 'cud-send' ) {
     my $payment_id = $input->param('payment_id');
     my $change     = $input->param('change');
     my $collected  = $input->param('collected');
@@ -95,7 +95,7 @@ if ( $action eq 'send' ) {
         module                 => 'pos',
         letter_code            => 'RECEIPT',
         branchcode             => C4::Context->userenv->{'branch'},
-        message_transport_type => 'email',
+        message_transport_type => 'cud-email',
         tables                 => {
             credits => $payment_id,
         },
@@ -109,7 +109,7 @@ if ( $action eq 'send' ) {
     my $message_id = EnqueueLetter(
         {
             letter                 => $letter,
-            message_transport_type => 'email',
+            message_transport_type => 'cud-email',
             from_address => C4::Context->preference('KohaAdminEmailAddress'),
             to_address   => $toaddr,
         }

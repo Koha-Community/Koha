@@ -66,7 +66,7 @@ my ( $tempfile, $tfh );
 
 my %errors;
 
-if ( ( $op eq 'Upload' ) && ( $uploadfile || $uploadlocation ) ) {
+if ( ( $op eq 'cud-Upload' ) && ( $uploadfile || $uploadlocation ) ) {
     my $plugins_dir = C4::Context->config("pluginsdir");
     $plugins_dir = ref($plugins_dir) eq 'ARRAY' ? $plugins_dir->[0] : $plugins_dir;
 
@@ -126,7 +126,7 @@ if ( ( $op eq 'Upload' ) && ( $uploadfile || $uploadlocation ) ) {
 
         Koha::Plugins->new()->InstallPlugins();
     }
-} elsif ( ( $op eq 'Upload' ) && !$uploadfile && !$uploadlocation ) {
+} elsif ( ( $op eq 'cud-Upload' ) && !$uploadfile && !$uploadlocation ) {
     warn "Problem uploading file or no file uploaded.";
 }
 

@@ -47,7 +47,7 @@ my $table = html_table($display_columns->{'image'}, get_image(undef, "image_id, 
 my $image_limit = C4::Context->preference('ImageLimit') || '';
 my $errstr = '';        # NOTE: For error codes see error-messages.inc
 
-if ($op eq 'upload') {
+if ($op eq 'cud-upload') {
     # Checking for duplicate image name
     my $dbh = C4::Context->dbh;
     my $query = "SELECT COUNT(*) FROM creator_images WHERE image_name=?";
@@ -118,7 +118,7 @@ if ($op eq 'upload') {
         }
     }
 }
-elsif ($op eq 'delete') {
+elsif ($op eq 'cud-delete') {
     my $err = '';
     my $errstr = '';
     if (@image_ids) {

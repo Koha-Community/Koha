@@ -146,7 +146,7 @@ if ($op eq 'add_form') {
 												# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
-} elsif ($op eq 'add_validate') {
+} elsif ($op eq 'cud-add_validate') {
 	$template->param(tagfield => "$input->param('tagfield')");
 	my @tagsubfield	= $input->multi_param('tagsubfield');
 	my @liblibrarian	= $input->multi_param('liblibrarian');
@@ -227,7 +227,7 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 }
-elsif ( $op eq 'delete_confirm' ) {
+elsif ( $op eq 'cud-delete_confirm' ) {
   my $ass = Koha::Authority::Subfields->find(
       {
           authtypecode => $authtypecode,
@@ -240,7 +240,7 @@ elsif ( $op eq 'delete_confirm' ) {
       delete_link => $script_name,
   );
 }
-elsif ( $op eq 'delete_confirmed' ) {
+elsif ( $op eq 'cud-delete_confirmed' ) {
     Koha::Authority::Subfields->find(
         {
             authtypecode => $authtypecode,

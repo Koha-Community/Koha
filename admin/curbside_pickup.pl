@@ -38,7 +38,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
-if ( $op eq 'save' ) {
+if ( $op eq 'cud-save' ) {
     foreach my $library ( $libraries->as_list ) {
         my $branchcode = $library->branchcode;
 

@@ -50,7 +50,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my @messages;
 
-if ( !$domain_ops && $op eq 'add' ) {
+if ( !$domain_ops && $op eq 'cud-add' ) {
 
     # IdP configuration params
     my $code        = $input->param('code');
@@ -113,7 +113,7 @@ if ( !$domain_ops && $op eq 'add' ) {
     # list servers after adding
     $op = 'list';
 }
-elsif ( $domain_ops && $op eq 'add' ) {
+elsif ( $domain_ops && $op eq 'cud-add' ) {
 
     my $allow_opac              = $input->param('allow_opac');
     my $allow_staff             = $input->param('allow_staff');
@@ -155,7 +155,7 @@ elsif ( $domain_ops && $op eq 'add' ) {
     # list servers after adding
     $op = 'list';
 }
-elsif ( !$domain_ops && $op eq 'edit_form' ) {
+elsif ( !$domain_ops && $op eq 'cud-edit_form' ) {
 
     if ( $identity_provider ) {
         $template->param(
@@ -171,7 +171,7 @@ elsif ( !$domain_ops && $op eq 'edit_form' ) {
             };
     }
 }
-elsif ( $domain_ops && $op eq 'edit_form' ) {
+elsif ( $domain_ops && $op eq 'cud-edit_form' ) {
     my $identity_provider_domain_id = $input->param('identity_provider_domain_id');
     my $identity_provider_domain;
 
@@ -192,7 +192,7 @@ elsif ( $domain_ops && $op eq 'edit_form' ) {
             };
     }
 }
-elsif ( !$domain_ops && $op eq 'edit_save' ) {
+elsif ( !$domain_ops && $op eq 'cud-edit_save' ) {
 
     if ( $identity_provider ) {
 
@@ -243,7 +243,7 @@ elsif ( !$domain_ops && $op eq 'edit_save' ) {
             };
     }
 }
-elsif ( $domain_ops && $op eq 'edit_save' ) {
+elsif ( $domain_ops && $op eq 'cud-edit_save' ) {
 
     my $identity_provider_domain_id = $input->param('identity_provider_domain_id');
     my $identity_provider_domain;

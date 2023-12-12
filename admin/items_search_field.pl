@@ -36,7 +36,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 my $op = $cgi->param('op') || '';
 my $name = $cgi->param('name');
 
-if ($op eq 'mod') {
+if ($op eq 'cud-mod') {
     my %vars = $cgi->Vars;
     my $field = { name => $name };
     my @params = qw(label tagfield tagsubfield authorised_values_category);
@@ -48,7 +48,7 @@ if ($op eq 'mod') {
     my $updated = ($field) ? 1 : 0;
     print $cgi->redirect('/cgi-bin/koha/admin/items_search_fields.pl?updated=' . $updated);
     exit;
-} elsif ( $op eq 'add' ) {
+} elsif ( $op eq 'cud-add' ) {
     my %vars = $cgi->Vars;
     my $field;
     my @params = qw(name label tagfield tagsubfield authorised_values_category);

@@ -109,7 +109,7 @@ sub dispatch {
         toggle => \&toggle,
     );
     my $input  = CGI->new;
-    my $action = $input->param('action') || 'show';
+    my $action = $input->param('action') || 'cud-show';
     if (not exists $handler{$action}) {
         my $status = 400;
         print $input->header(-status => $status);

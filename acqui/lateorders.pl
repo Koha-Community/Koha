@@ -84,7 +84,7 @@ if ( $delay and not $delay =~ /^\d{1,3}$/ ) {
     push @errors, {delay_digits => 1, bad_delay => $delay};
 }
 
-if ($op and $op eq "send_alert"){
+if ($op and $op eq "cud-send_alert"){
     my @ordernums = $input->multi_param("ordernumber");
     my $err;
     eval {

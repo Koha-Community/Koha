@@ -41,7 +41,7 @@ my $biblionumber = $input->param('biblionumber');
 my $recalls = Koha::Recalls->search({ biblio_id => $biblionumber, completed => 0 });
 my $biblio = Koha::Biblios->find( $biblionumber );
 
-if ( $op eq 'cancel_multiple_recalls' ) {
+if ( $op eq 'cud-cancel_multiple_recalls' ) {
     foreach my $id ( @recall_ids ) {
         Koha::Recalls->find( $id )->set_cancelled;
     }

@@ -47,7 +47,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $field_id = $input->param('field_id');
 my @messages;
 
-if ( $op eq 'add' ) {
+if ( $op eq 'cud-add' ) {
     my $name = $input->param('name') // q{};
     my $authorised_value_category = $input->param('authorised_value_category');
     my $marcfield = $input->param('marcfield') // q{};
@@ -69,7 +69,7 @@ if ( $op eq 'add' ) {
             $updated = $af->store ? 1 : 0;
         };
         push @messages, {
-            code => 'update',
+            code => 'cud-update',
             number => $updated,
         };
     } elsif ( $name ) {
@@ -88,26 +88,26 @@ if ( $op eq 'add' ) {
             $inserted = $af->store ? 1 : 0;
         };
         push @messages, {
-            code => 'insert',
+            code => 'cud-insert',
             number => $inserted,
         };
     } else {
         push @messages, {
-            code => 'insert',
+            code => 'cud-insert',
             number => 0,
         };
     }
     $op = 'list';
 }
 
-if ( $op eq 'delete' ) {
+if ( $op eq 'cud-delete' ) {
     my $deleted = 0;
     eval {
         my $af = Koha::AdditionalFields->find($field_id);
         $deleted = $af->delete;
     };
     push @messages, {
-        code => 'delete',
+        code => 'cud-delete',
         number => $deleted,
     };
     $op = 'list';

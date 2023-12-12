@@ -180,7 +180,7 @@ sub notify_owner {
     C4::Letters::EnqueueLetter(
         {
             letter                 => $letter,
-            message_transport_type => 'email',
+            message_transport_type => 'cud-email',
             from_address => C4::Context->preference('KohaAdminEmailAddress'),
             to_address   => $toaddr,
         }
@@ -249,7 +249,7 @@ sub send_invitekey {
         C4::Letters::EnqueueLetter(
             {
                 letter                 => $letter,
-                message_transport_type => 'email',
+                message_transport_type => 'cud-email',
                 from_address           => $fromaddr,
                 to_address             => $a,
             }

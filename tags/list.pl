@@ -46,7 +46,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-if ( $op eq "del" ) {
+if ( $op eq "cud-del" ) {
     remove_tag($tag_id);
     print $query->redirect("/cgi-bin/koha/tags/list.pl?tag=$tag");
 }

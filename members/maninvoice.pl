@@ -88,7 +88,7 @@ $template->param(
     barcode => $barcode
 );
 
-my $add = $input->param('add');
+my $add = $input->param('cud-add');
 if ($add) {
     # Note: If the logged in user is not allowed to see this patron an invoice can be forced
     # Here we are trusting librarians not to hack the system

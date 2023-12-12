@@ -54,7 +54,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user(
 );
 my $dbh = C4::Context->dbh;
 # Displaying results
-my $do_it = $input->param('do_it') || 0; # as form been posted
+my $do_it = $input->param('cud-do_it') || 0; # as form been posted
 my $limit = $input->param('limit');
 $limit = 10 unless ($limit && $limit =~ /^\d+$/); # control user input for SQL query
 $limit = 100 if $limit > 100;

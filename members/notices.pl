@@ -51,7 +51,7 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 # Allow resending of messages in Notices tab
 my $op = $input->param('op') || q{};
-if ( $op eq 'resend_notice' ) {
+if ( $op eq 'cud-resend_notice' ) {
     my $message_id = $input->param('message_id');
     my $message = C4::Letters::GetMessage( $message_id );
     if ( $message->{borrowernumber} = $borrowernumber ) {
@@ -84,7 +84,7 @@ if ( $op eq 'send_welcome' ) {
                     letter                 => $letter,
                     borrowernumber         => $patron->id,
                     to_address             => $emailaddr,
-                    message_transport_type => 'email'
+                    message_transport_type => 'cud-email'
                 }
             );
         };

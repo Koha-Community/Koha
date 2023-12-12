@@ -60,7 +60,7 @@ if( $patron_id != $loggedinuser && !C4::Context->IsSuperLibrarian() ) {
 my $op = $cgi->param('op') // '';
 
 if ($op) {
-    if ( $op eq 'generate' ) {
+    if ( $op eq 'cud-generate' ) {
         my $description = $cgi->param('description') // '';
         my $api_key = Koha::ApiKey->new(
             {   patron_id   => $patron_id,
@@ -75,7 +75,7 @@ if ($op) {
         );
     }
 
-    if ( $op eq 'delete' ) {
+    if ( $op eq 'cud-delete' ) {
         my $api_key_id = $cgi->param('key');
         my $key = Koha::ApiKeys->find({ patron_id => $patron_id, client_id => $api_key_id });
         if ($key) {
@@ -85,7 +85,7 @@ if ($op) {
         exit;
     }
 
-    if ( $op eq 'revoke' ) {
+    if ( $op eq 'cud-revoke' ) {
         my $api_key_id = $cgi->param('key');
         my $key = Koha::ApiKeys->find({ patron_id => $patron_id, client_id => $api_key_id });
         if ($key) {
@@ -96,7 +96,7 @@ if ($op) {
         exit;
     }
 
-    if ( $op eq 'activate' ) {
+    if ( $op eq 'cud-activate' ) {
         my $api_key_id = $cgi->param('key');
         my $key = Koha::ApiKeys->find({ patron_id => $patron_id, client_id => $api_key_id });
         if ($key) {

@@ -452,7 +452,7 @@ elsif ( $phase eq 'Choose these criteria' ) {
     foreach my $col (@columns) {
         my %total = (name => $col);
         my @selects = map {+{ value => $_ }} (qw(sum min max avg count));
-        $total{'select'} = \@selects;
+        $total{'cud-select'} = \@selects;
         push @total_by, \%total;
     }
 
@@ -493,7 +493,7 @@ elsif ( $phase eq 'Choose these operations' ) {
     foreach my $col (@columns) {
         my %order = (name => $col);
         my @selects = map {+{ value => $_ }} (qw(asc desc));
-        $order{'select'} = \@selects;
+        $order{'cud-select'} = \@selects;
         push @order_by, \%order;
     }
 
@@ -544,7 +544,7 @@ elsif ( $phase eq 'Save' ) {
     my $sql  = $input->param('sql');
     my $type = $input->param('type');
     $template->param(
-        'save' => 1,
+        'cud-save' => 1,
         'area'  => $area,
         'sql'  => $sql,
         'type' => $type,

@@ -35,7 +35,7 @@ plugin that shows a stats on serials
 
 my $input      = CGI->new;
 my $templatename   = "reports/serials_stats.tt";
-my $do_it      = $input->param("do_it");
+my $do_it      = $input->param("cud-do_it");
 my $bookseller = $input->param("bookseller");
 my $branchcode = $input->param("branchcode");
 my $expired    = $input->param("expired");

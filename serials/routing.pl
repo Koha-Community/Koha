@@ -62,14 +62,14 @@ my $subs = GetSubscription($subscriptionid);
 output_and_exit( $query, $cookie, $template, 'unknown_subscription')
     unless $subs;
 
-if($op eq 'delete'){
+if($op eq 'cud-delete'){
     delroutingmember($routingid,$subscriptionid);
 }
 
-if($op eq 'add'){
+if($op eq 'cud-add'){
     addroutingmember($borrowernumber,$subscriptionid);
 }
-if($op eq 'save'){
+if($op eq 'cud-save'){
     my $sth = $dbh->prepare('UPDATE serial SET routingnotes = ? WHERE subscriptionid = ?');
     $sth->execute($notes,$subscriptionid);
     my $urldate = URI::Escape::uri_escape_utf8($date_selected);

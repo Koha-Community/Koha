@@ -66,7 +66,7 @@ if ( $course_id && $course ) {
     if ( !$action ) {
         $template->param( action => 'display_form' );
     }
-    elsif ( $action eq 'add' ) {
+    elsif ( $action eq 'cud-add' ) {
         my @barcodes = uniq( split( /\s\n/, $barcodes ) );
         my @biblionumbers = uniq( split( /\s\n/, $biblionumbers ) );
 

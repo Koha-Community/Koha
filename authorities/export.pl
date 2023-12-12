@@ -20,7 +20,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $op     = $query->param("op");
 my $format = $query->param("format");
 my $error  = '';
-if ( $op eq "export" ) {
+if ( $op eq "cud-export" ) {
     my $authid = $query->param("authid");
     if ($authid) {
 

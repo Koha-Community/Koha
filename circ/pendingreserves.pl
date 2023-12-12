@@ -53,7 +53,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my @messages;
-if ( $op eq 'cancel_reserve' and $reserve_id ) {
+if ( $op eq 'cud-cancel_reserve' and $reserve_id ) {
     my $hold = Koha::Holds->find( $reserve_id );
     if ( $hold ) {
         my $cancellation_reason = $input->param('cancellation-reason');
@@ -67,7 +67,7 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
     if ( $item and C4::Context->preference('CanMarkHoldsToPullAsLost') =~ m|^allow| ) {
         my $patron = $hold->borrower;
         C4::Circulation::LostItem( $item->itemnumber, "pendingreserves" );
-        if ( $op eq 'mark_as_lost_and_notify' and C4::Context->preference('CanMarkHoldsToPullAsLost') eq 'allow_and_notify' ) {
+        if ( $op eq 'cud-mark_as_lost_and_notify' and C4::Context->preference('CanMarkHoldsToPullAsLost') eq 'allow_and_notify' ) {
             my $library = $hold->branch;
             my $letter = C4::Letters::GetPreparedLetter(
                 module => 'reserves',
@@ -89,7 +89,7 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
                 C4::Letters::EnqueueLetter(
                     {   letter                 => $letter,
                         borrowernumber         => $patron->borrowernumber,
-                        message_transport_type => 'email',
+                        message_transport_type => 'cud-email',
                         from_address           => $from_address,
                     }
                 );

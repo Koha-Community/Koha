@@ -56,7 +56,7 @@ if ( $op eq 'add_form' ) {
         add_form    => 1
     );
 }
-elsif ( $op eq 'add_validate' ) {
+elsif ( $op eq 'cud-add_validate' ) {
     my $name = $cgi->param('name');
     $name ||= q{};
     my $description = $cgi->param('description');

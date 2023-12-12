@@ -46,7 +46,7 @@ my ($template, $loggedinuser, $cookie)
             flagsrequired => { tools => 'marc_modification_templates' },
     });
 
-if ( $op eq "create_template" ) {
+if ( $op eq "cud-create_template" ) {
   $template_id = '' unless $cgi->param('duplicate_current_template');
   $template_id = AddModificationTemplate( scalar $cgi->param('template_name'), $template_id );
 
@@ -55,7 +55,7 @@ if ( $op eq "create_template" ) {
   DelModificationTemplate( $template_id );
   $template_id = '';
 
-} elsif ( $op eq "add_action" ) {
+} elsif ( $op eq "cud-add_action" ) {
 
   my $mmta_id = $cgi->param('mmta_id');
   my $action = $cgi->param('action');

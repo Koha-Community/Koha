@@ -63,7 +63,7 @@ $template->param(
 );
 
 my $op = $input->param('op') || '';
-if ( $op eq 'addreport' ) {
+if ( $op eq 'cud-addreport' ) {
 
     my $subject = $input->param('subject');
     my $message = $input->param('message');
@@ -97,7 +97,7 @@ if ( $op eq 'addreport' ) {
                     }
                 );
 
-                my $transport = 'email';
+                my $transport = 'cud-email';
                 my $reply_address = $patron->email || $patron->emailpro || $patron->B_email;
 
                 if ( $recipient eq 'library' and defined($library->inbound_email_address) and $library->inbound_email_address ne C4::Context->preference('KohaAdminEmailAddress') ) {

@@ -119,7 +119,7 @@ if (!defined $op) {
     # Return to rotas page
     print $input->redirect('stockrotation.pl');
 
-} elsif ($op eq 'process_rota') {
+} elsif ($op eq 'cud-process_rota') {
 
     # Get a hashref of the submitted rota data
     my $rota = get_rota_from_form();
@@ -257,7 +257,7 @@ if (!defined $op) {
     # Return to the stages list
     print $input->redirect("?op=manage_stages&rota_id=$rota_id");
 
-} elsif ($op eq 'process_stage') {
+} elsif ($op eq 'cud-process_stage') {
 
     # Get a hashref of the submitted stage data
     my $stage = get_stage_from_form();
@@ -338,7 +338,7 @@ if (!defined $op) {
     # Return to the items list
     print $input->redirect("?op=manage_items&rota_id=".$params{rota_id});
 
-} elsif ($op eq 'add_items_to_rota') {
+} elsif ($op eq 'cud-add_items_to_rota') {
 
     # The item's barcode,
     # which we may or may not have been passed
@@ -415,7 +415,7 @@ if (!defined $op) {
 
     }
 
-} elsif ($op eq 'move_items_to_rota') {
+} elsif ($op eq 'cud-move_items_to_rota') {
 
     # The barcodes of the items we're moving
     my @move = $input->multi_param('move_item');

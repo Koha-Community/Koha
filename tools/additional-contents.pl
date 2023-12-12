@@ -76,7 +76,7 @@ if ( $op eq 'add_form' ) {
         translated_contents => $translated_contents,
     );
 }
-elsif ( $op eq 'add_validate' ) {
+elsif ( $op eq 'cud-add_validate' ) {
     output_and_exit_if_error( $cgi, $cookie, $template, { check => 'csrf_token' } );
     my $location   = $cgi->param('location');
     my $code       = $cgi->param('code');
@@ -188,7 +188,7 @@ elsif ( $op eq 'add_validate' ) {
         $op = 'list';
     }
 }
-elsif ( $op eq 'delete_confirmed' ) {
+elsif ( $op eq 'cud-delete_confirmed' ) {
     output_and_exit_if_error($cgi, $cookie, $template, { check => 'csrf_token' });
     my @ids = $cgi->multi_param('ids');
 

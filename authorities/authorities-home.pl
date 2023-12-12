@@ -47,7 +47,7 @@ my ( $template, $loggedinuser, $cookie );
 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
 my $pending_deletion_authid;
 
-if ( $op eq "delete" ) {
+if ( $op eq "cud-delete" ) {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "authorities/authorities-home.tt",
@@ -63,13 +63,13 @@ if ( $op eq "delete" ) {
 
     if ( $query->param('operator') ) {
         # query contains search params so perform search
-        $op = "do_search";
+        $op = "cud-do_search";
     }
     else {
         $op = '';
     }
 }
-if ( $op eq "do_search" ) {
+if ( $op eq "cud-do_search" ) {
     my $marclist  = $query->param('marclist')  || '';
     my $and_or    = $query->param('and_or')    || '';
     my $excluding = $query->param('excluding') || '';

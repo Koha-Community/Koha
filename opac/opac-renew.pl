@@ -33,7 +33,7 @@ use Koha::Patrons;
 my $query = CGI->new;
 my $op = $query->param('op') || q{};
 
-die "op must be set" unless $op eq 'renew';
+die "op must be set" unless $op eq 'cud-renew';
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	{

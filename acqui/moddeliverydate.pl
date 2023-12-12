@@ -53,7 +53,7 @@ my $order = GetOrder($ordernumber);
 my $basket = GetBasket($order->{basketno});
 my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
 
-if($op and $op eq 'save') {
+if($op and $op eq 'cud-save') {
     my $estimated_delivery_date = $input->param('estimated_delivery_date');
     $order->{'estimated_delivery_date'} = $estimated_delivery_date ? dt_from_string( $estimated_delivery_date ) : undef;
     ModOrder($order);

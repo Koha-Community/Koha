@@ -131,7 +131,7 @@ if ( $op eq 'form' ) {
         records => \@records,
         op => 'list',
     );
-} elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     # We want to delete selected records!
     my @record_ids = $input->multi_param('record_id');
 

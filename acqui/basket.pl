@@ -118,7 +118,7 @@ $template->param( skip_confirm_reopen => 1) if $confirm_pref eq '2';
 
 my @messages;
 
-if ( $op eq 'delete_confirm' ) {
+if ( $op eq 'cud-delete_confirm' ) {
 
     output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
       unless $logged_in_patron->has_permission( { acquisition => 'delete_baskets' } );
@@ -162,7 +162,7 @@ if ( $op eq 'delete_confirm' ) {
     );
 } elsif ( !$bookseller ) {
     $template->param( NO_BOOKSELLER => 1 );
-} elsif ($op eq 'export') {
+} elsif ($op eq 'cud-export') {
     print $query->header(
         -type       => 'text/csv',
         -attachment => 'basket' . $basket->{'basketno'} . '.csv',
@@ -170,7 +170,7 @@ if ( $op eq 'delete_confirm' ) {
     my $csv_profile_id = $query->param('csv_profile');
     print GetBasketAsCSV( scalar $query->param('basketno'), $query, $csv_profile_id ); # if no csv_profile_id passed, using default rows
     exit;
-} elsif ($op eq 'email') {
+} elsif ($op eq 'cud-email') {
     my $err = eval {
         SendAlerts( 'orderacquisition', scalar $query->param('basketno'), 'ACQORDER' );
     };
@@ -227,13 +227,13 @@ if ( $op eq 'delete_confirm' ) {
 }
 elsif ( $op eq 'ediorder' ) {
     edi_close_and_order()
-} elsif ( $op eq 'mod_users' ) {
+} elsif ( $op eq 'cud-mod_users' ) {
     my $basketusers_ids = $query->param('users_ids');
     my @basketusers = split( /:/, $basketusers_ids );
     ModBasketUsers($basketno, @basketusers);
     print $query->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
     exit;
-} elsif ( $op eq 'mod_branch' ) {
+} elsif ( $op eq 'cud-mod_branch' ) {
     my $branch = $query->param('branch');
     $branch = undef if(defined $branch and $branch eq '');
     ModBasket({

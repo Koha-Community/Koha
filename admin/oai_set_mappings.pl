@@ -49,7 +49,7 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
 my $id = $input->param('id');
 my $op = $input->param('op');
 
-if($op && $op eq "save") {
+if($op && $op eq "cud-save") {
     my @marcfields = $input->multi_param('marcfield');
     my @marcsubfields = $input->multi_param('marcsubfield');
     my @operators = $input->multi_param('operator');

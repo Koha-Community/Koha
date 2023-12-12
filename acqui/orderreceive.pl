@@ -202,7 +202,7 @@ foreach my $budget (@{$budgets}) {
 $template->{'VARS'}->{'budget_loops'} = \%budget_loops;
 
 my $op = $input->param('op');
-if ($op and $op eq 'edit'){
+if ($op and $op eq 'cud-edit'){
     $template->param(edit   =>   1);
 }
 output_html_with_http_headers $input, $cookie, $template->output;

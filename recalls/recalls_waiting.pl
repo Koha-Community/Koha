@@ -38,7 +38,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 
 my $op = $query->param('op') || 'list';
 
-if ( $op eq 'modify' ) {
+if ( $op eq 'cud-modify' ) {
     my $expire = $query->param('expire') || '';
     my $revert = $query->param('revert') || '';
     my $recall_id = $query->param('recall_id');

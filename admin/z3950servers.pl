@@ -54,7 +54,7 @@ my $schema = Koha::Database->new()->schema();
 # Main code
 # First process a confirmed delete, or save a validated record
 
-if( $op eq 'delete_confirmed' && $id ) {
+if( $op eq 'cud-delete_confirmed' && $id ) {
     my $server = Koha::Z3950Servers->find($id);
     if ( $server ) {
         $server->delete;
@@ -63,7 +63,7 @@ if( $op eq 'delete_confirmed' && $id ) {
         $template->param( msg_notfound => 1, msg_add => $id );
     }
     $id = 0;
-} elsif ( $op eq 'add_validated' ) {
+} elsif ( $op eq 'cud-add_validated' ) {
     my @fields=qw/host port db userid password rank syntax encoding timeout
         recordtype checked servername servertype sru_options sru_fields attributes
         add_xslt/;
@@ -89,11 +89,11 @@ if( $op eq 'delete_confirmed' && $id ) {
 # Now list multiple records, or edit one record
 
 my $data = [];
-if ( $op eq 'add' || $op eq 'edit' ) {
+if ( $op eq 'cud-add' || $op eq 'cud-edit' ) {
     $data = ServerSearch( $schema, $id, $searchfield ) if $searchfield || $id;
-    delete $data->[0]->{id} if @$data && $op eq 'add'; #cloning record
+    delete $data->[0]->{id} if @$data && $op eq 'cud-add'; #cloning record
     $template->param( add_form => 1, server => @$data? $data->[0]: undef,
-        op => $op, type => $op eq 'add'? lc $type: '' );
+        op => $op, type => $op eq 'cud-add'? lc $type: '' );
 } else {
     $data = ServerSearch( $schema, $id, $searchfield );
     $template->param( loop => \@$data, searchfield => $searchfield, id => $id,

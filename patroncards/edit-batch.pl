@@ -78,14 +78,14 @@ if ($op eq 'remove') {
         exit;
     }
 }
-elsif ($op eq 'delete') {
+elsif ($op eq 'cud-delete') {
     $err = C4::Creators::Batch::delete(batch_id => $batch_id, branch_code => $branch_code);
     if ($err) {
         print $cgi->redirect("edit-batch.pl?op=edit&batch_id=$batch_id&error=404");
         exit;
     }
 }
-elsif ($op eq 'add') {
+elsif ($op eq 'cud-add') {
 if ($bor_num_list) {
         my @bor_nums_unchecked = split /\n/, $bor_num_list; # $bor_num_list is effectively passed in as a <cr> separated list
         foreach my $number (@bor_nums_unchecked) {
@@ -123,7 +123,7 @@ elsif ($op eq 'de_duplicate') {
         exit;
     }
 }
-elsif ($op eq 'edit') {
+elsif ($op eq 'cud-edit') {
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
     $template->param( description => $batch->{'description'} );
 }

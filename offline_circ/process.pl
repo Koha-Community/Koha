@@ -40,7 +40,7 @@ my $result;
 if ( $action eq 'process' ) {
     my $operation = GetOfflineOperation( $operationid );
     $result = ProcessOfflineOperation( $operation );
-} elsif ( $action eq 'delete' ) {
+} elsif ( $action eq 'cud-delete' ) {
     $result = DeleteOfflineOperation( $operationid );
 }
 

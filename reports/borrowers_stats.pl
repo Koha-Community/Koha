@@ -42,7 +42,7 @@ plugin that shows a stats on borrowers
 =cut
 
 my $input = CGI->new;
-my $do_it=$input->param('do_it');
+my $do_it=$input->param('cud-do_it');
 my $fullreportname = "reports/borrowers_stats.tt";
 my $line = $input->param("Line");
 my $column = $input->param("Column");

@@ -54,7 +54,7 @@ my $pending = Koha::Patron::Discharge::count({
 });
 my $available = Koha::Patron::Discharge::is_discharged({borrowernumber => $loggedinuser});
 
-if ( $op eq 'request' ) {
+if ( $op eq 'cud-request' ) {
     if ($pending || $available) {
         # Request already done
         print $input->redirect("/cgi-bin/koha/opac-discharge.pl");

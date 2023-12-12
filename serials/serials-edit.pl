@@ -197,7 +197,7 @@ foreach my $subscriptionid (@subscriptionids) {
 $template->param( newserialloop => \@newserialloop );
 $template->param( subscriptions => \@subscriptionloop );
 
-if ( $op and $op eq 'serialchangestatus' ) {
+if ( $op and $op eq 'cud-serialchangestatus' ) {
 
     # Convert serialseqs to UTF-8 to prevent encoding problems
     foreach my $seq (@serialseqs) {

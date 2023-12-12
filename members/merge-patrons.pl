@@ -37,10 +37,10 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-my $action = $cgi->param('action') || 'show';
+my $action = $cgi->param('action') || 'cud-show';
 my @ids    = $cgi->multi_param('id');
 
-if ( $action eq 'show' ) {
+if ( $action eq 'cud-show' ) {
     my $patrons = Koha::Patrons->search({ borrowernumber => { -in => \@ids } });
     $template->param( patrons => $patrons );
 } elsif ( $action eq 'merge' ) {

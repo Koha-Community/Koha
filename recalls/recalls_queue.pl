@@ -35,7 +35,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 
 my $op = $query->param('op') || 'list';
 my @recall_ids = $query->multi_param('recall_ids');
-if ( $op eq 'cancel_multiple_recalls' ) {
+if ( $op eq 'cud-cancel_multiple_recalls' ) {
     foreach my $id ( @recall_ids ) {
         Koha::Recalls->find( $id )->set_cancelled;
     }

@@ -54,7 +54,7 @@ if ( $op eq 'ean_form' ) {
         ean      => $e,
     );
 }
-elsif ( $op eq 'delete_confirm' ) {
+elsif ( $op eq 'cud-delete_confirm' ) {
     my $e = $schema->resultset('EdifactEan')->find($id);
     $template->param(
         delete_confirm => 1,
@@ -62,7 +62,7 @@ elsif ( $op eq 'delete_confirm' ) {
     );
 }
 else {
-    if ( $op eq 'save' ) {
+    if ( $op eq 'cud-save' ) {
         my $change = $id;
         if ($change) {
             $schema->resultset('EdifactEan')->find($id)->update(
@@ -86,7 +86,7 @@ else {
             $new_ean->insert();
         }
     }
-    elsif ( $op eq 'delete_confirmed' ) {
+    elsif ( $op eq 'cud-delete_confirmed' ) {
         my $e = $schema->resultset('EdifactEan')->find($id);
         $e->delete if $e;
     }

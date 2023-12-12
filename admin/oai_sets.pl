@@ -46,7 +46,7 @@ my $op = $input->param('op');
 
 if($op && $op eq "new") {
     $template->param( op_new => 1 );
-} elsif($op && $op eq "savenew") {
+} elsif($op && $op eq "cud-savenew") {
     my $spec = $input->param('spec');
     my $name = $input->param('name');
     my @descriptions = $input->multi_param('description');
@@ -55,7 +55,7 @@ if($op && $op eq "new") {
         name => $name,
         descriptions => \@descriptions
     });
-} elsif($op && $op eq "mod") {
+} elsif($op && $op eq "cud-mod") {
     my $id = $input->param('id');
     my $set = GetOAISet($id);
     $template->param(
@@ -65,7 +65,7 @@ if($op && $op eq "new") {
         name => $set->{'name'},
         descriptions => [ map { {description => $_} } @{ $set->{'descriptions'} } ],
     );
-} elsif($op && $op eq "savemod") {
+} elsif($op && $op eq "cud-savemod") {
     my $id = $input->param('id');
     my $spec = $input->param('spec');
     my $name = $input->param('name');
@@ -76,7 +76,7 @@ if($op && $op eq "new") {
         name => $name,
         descriptions => \@descriptions
     });
-} elsif($op && $op eq "del") {
+} elsif($op && $op eq "cud-del") {
     my $id = $input->param('id');
     DelOAISet($id);
 }

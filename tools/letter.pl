@@ -100,7 +100,7 @@ $template->param(
     action             => $script_name
 );
 
-if ( $op eq 'add_validate' or $op eq 'copy_validate' ) {
+if ( $op eq 'cud-add_validate' or $op eq 'cud-copy_validate' ) {
     add_validate();
     if( $redirect eq "just_save" ){
         print $input->redirect("/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=$branchcode&module=$module&code=$code&redirect=done&section=$section&langtab=$langtab");
@@ -109,7 +109,7 @@ if ( $op eq 'add_validate' or $op eq 'copy_validate' ) {
         $op = q{}; # we return to the default screen for the next operation
     }
 }
-if ($op eq 'copy_form') {
+if ($op eq 'cud-copy_form') {
     my $oldbranchcode = $input->param('oldbranchcode') || q||;
     my $branchcode = $input->param('branchcode');
     add_form($oldbranchcode, $module, $code);
@@ -123,10 +123,10 @@ if ($op eq 'copy_form') {
 elsif ( $op eq 'add_form' ) {
     add_form($branchcode, $module, $code);
 }
-elsif ( $op eq 'delete_confirm' ) {
+elsif ( $op eq 'cud-delete_confirm' ) {
     delete_confirm($branchcode, $module, $code);
 }
-elsif ( $op eq 'delete_confirmed' ) {
+elsif ( $op eq 'cud-delete_confirmed' ) {
     delete_confirmed($branchcode, $module, $code);
     $op = q{}; # next operation is to return to default screen
 }

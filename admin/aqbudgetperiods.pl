@@ -109,7 +109,7 @@ if ( $op eq 'add_form' ) {
     } # IF-MOD
 }
 
-elsif ( $op eq 'add_validate' ) {
+elsif ( $op eq 'cud-add_validate' ) {
 ## add or modify a budget period (confirmation)
 
     ## update budget period data
@@ -145,7 +145,7 @@ elsif ( $op eq 'add_validate' ) {
 }
 
 #--------------------------------------------------
-elsif ( $op eq 'delete_confirm' ) {
+elsif ( $op eq 'cud-delete_confirm' ) {
 ## delete a budget period (preparation)
     my $funds = GetBudgets({ budget_period_id => $budget_period_id });
     my $fund_count = scalar @$funds;
@@ -161,7 +161,7 @@ elsif ( $op eq 'delete_confirm' ) {
     );
 }
 
-elsif ( $op eq 'delete_confirmed' ) {
+elsif ( $op eq 'cud-delete_confirmed' ) {
     ## confirm no funds have been added to budget
     my $funds = GetBudgets({ budget_period_id => $budget_period_id });
     my $fund_count = scalar @$funds;
@@ -186,7 +186,7 @@ elsif ( $op eq 'duplicate_form'){
 }
 
 # handle the actual duplication
-elsif ( $op eq 'duplicate_budget' ){
+elsif ( $op eq 'cud-duplicate_budget' ){
     die "please specify a budget period id\n" if( !defined $budget_period_id || $budget_period_id eq '' );
 
     my $budget_period_startdate = $input->param('budget_period_startdate');
@@ -253,7 +253,7 @@ elsif ( $op eq 'close_form' ) {
     );
 }
 
-elsif ( $op eq 'close_confirmed' ) {
+elsif ( $op eq 'cud-close_confirmed' ) {
     my $to_budget_period_id    = $input->param('to_budget_period_id');
     my $move_remaining_unspent = $input->param('move_remaining_unspent');
     my $report                 = MoveOrders(

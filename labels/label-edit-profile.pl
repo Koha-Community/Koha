@@ -45,11 +45,11 @@ my @label_template = ();
 
 my $units = get_unit_values();
 
-if ($op eq 'edit') {
+if ($op eq 'cud-edit') {
     $profile = C4::Labels::Profile->retrieve(profile_id => $profile_id);
     $template_list = get_all_templates( { fields => [ qw( template_id template_code profile_id) ] } );
 }
-elsif ($op eq 'save') {
+elsif ($op eq 'cud-save') {
     my @params = (
         printer_name        => scalar $cgi->param('printer_name') || 'DEFAULT PRINTER',
         paper_bin           => scalar $cgi->param('paper_bin') || 'Tray 1',

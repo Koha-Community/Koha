@@ -88,7 +88,7 @@ if ( $op eq 'display' ) {
         vendor        => $supplier,
         contracts     => $contracts,
     );
-} elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     # no further message needed for the user
     # the DELETE button only appears in the template if basketcount == 0 AND subscriptioncount == 0
     if ( $supplier->baskets->count == 0 && $supplier->subscriptions->count == 0) {

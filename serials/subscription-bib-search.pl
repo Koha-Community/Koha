@@ -74,7 +74,7 @@ my $itype_or_itemtype =
 my $query = $input->param('q');
 
 # don't run the search if no search term !
-if ( $op eq "do_search" && $query ) {
+if ( $op eq "cud-do_search" && $query ) {
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
@@ -180,7 +180,7 @@ if ( $op eq "do_search" && $query ) {
         to             => $to,
         numbers        => \@numbers,
     );
-}    # end of if ($op eq "do_search" & $query)
+}    # end of if ($op eq "cud-do_search" & $query)
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
@@ -225,7 +225,7 @@ else {
     $template->param(
         itemtypeloop => \@itemtypesloop,
         ccodeloop    => \@ccodesloop,
-        no_query     => $op eq "do_search" ? 1 : 0,
+        no_query     => $op eq "cud-do_search" ? 1 : 0,
     );
 }
 

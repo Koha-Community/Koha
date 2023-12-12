@@ -48,7 +48,7 @@ if ( $op eq 'add_form' ) {
     }
 
     $template->param( city => $city, );
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $city_name    = $input->param('city_name');
     my $city_state   = $input->param('city_state');
     my $city_zipcode = $input->param('city_zipcode');
@@ -83,10 +83,10 @@ if ( $op eq 'add_form' ) {
     }
     $city_name = q||;
     $op        = 'list';
-} elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'cud-delete_confirm' ) {
     my $city = Koha::Cities->find($cityid);
     $template->param( city => $city, );
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     my $city = Koha::Cities->find($cityid);
     my $deleted = eval { $city->delete; };
 

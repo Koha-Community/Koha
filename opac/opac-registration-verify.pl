@@ -141,7 +141,7 @@ elsif ( $rego_found
                             letter                 => $letter,
                             borrowernumber         => $patron->id,
                             to_address             => $emailaddr,
-                            message_transport_type => 'email'
+                            message_transport_type => 'cud-email'
                         }
                     );
                     SendQueuedMessages( { message_id => $message_id } ) if $message_id;

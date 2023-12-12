@@ -50,7 +50,7 @@ if ( $op eq 'add_form' ) {
     }
 
     $template->param( currency => $currency, );
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $currency_code = $input->param('currency_code');
     my $symbol        = $input->param('symbol');
     my $isocode       = $input->param('isocode');
@@ -91,7 +91,7 @@ if ( $op eq 'add_form' ) {
     }
     $searchfield = q||;
     $op          = 'list';
-} elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'cud-delete_confirm' ) {
     my $currency = Koha::Acquisition::Currencies->find($currency_code);
 
     my $nb_of_orders = Koha::Acquisition::Orders->search( { currency => $currency->currency } )->count;
@@ -101,7 +101,7 @@ if ( $op eq 'add_form' ) {
         nb_of_orders => $nb_of_orders,
         nb_of_vendors => $nb_of_vendors,
     );
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     my $currency = Koha::Acquisition::Currencies->find($currency_code);
     my $deleted = eval { $currency->delete; };
 

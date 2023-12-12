@@ -97,7 +97,7 @@ elsif ( $op && $op eq 'reopen' ) {
         exit 0;
     }
 }
-elsif ( $op && $op eq 'mod' ) {
+elsif ( $op && $op eq 'cud-mod' ) {
     my $shipmentcost       = $input->param('shipmentcost');
     my $shipment_budget_id = $input->param('shipment_budget_id');
     my $invoicenumber      = $input->param('invoicenumber');
@@ -141,7 +141,7 @@ elsif ( $op && $op eq 'mod' ) {
 
     $template->param( modified => 1 );
 }
-elsif ( $op && $op eq 'delete' ) {
+elsif ( $op && $op eq 'cud-delete' ) {
 
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'delete_invoices' } );
@@ -180,7 +180,7 @@ elsif ( $op && $op eq 'del_adj' ) {
         $del_adj->delete();
     }
 }
-elsif ( $op && $op eq 'mod_adj' ) {
+elsif ( $op && $op eq 'cud-mod_adj' ) {
 
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );

@@ -38,7 +38,7 @@ my $relationship = $query->param('relationship') || '';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name => ( $op eq 'do_search' )
+        template_name => ( $op eq 'cud-do_search' )
         ? 'authorities/searchresultlist-auth.tt'
         : 'authorities/auth_finder.tt',
         query           => $query,
@@ -50,7 +50,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
 
 # If search form posted
-if ( $op eq "do_search" ) {
+if ( $op eq "cud-do_search" ) {
     my @marclist  = $query->multi_param('marclist');
     my @and_or    = $query->multi_param('and_or');
     my @excluding = $query->multi_param('excluding');

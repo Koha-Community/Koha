@@ -138,8 +138,8 @@ $suggestion = {
 };
 $suggestion->{suggestedby} = $borrowernumber;
 
-if ( $op eq "add_validate" && not $biblionumber ) { # If we are creating the suggestion from an existing record we do not want to search for duplicates
-    $op = 'add_confirm';
+if ( $op eq "cud-add_validate" && not $biblionumber ) { # If we are creating the suggestion from an existing record we do not want to search for duplicates
+    $op = 'cud-add_confirm';
     my $biblio = MarcRecordFromNewSuggestion($suggestion);
     if ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) {
         push @messages, { type => 'error', code => 'biblio_exists', id => $duplicatebiblionumber, title => $duplicatetitle };
@@ -161,7 +161,7 @@ if ( $borrowernumber ){
     }
 }
 
-if ( $op eq "add_confirm" ) {
+if ( $op eq "cud-add_confirm" ) {
     my $suggestions = Koha::Suggestions->search($suggestion);
     if ( C4::Context->preference("MaxTotalSuggestions") ne '' && $patrons_total_suggestions_count >= C4::Context->preference("MaxTotalSuggestions") )
     {
@@ -232,7 +232,7 @@ my $suggestions = [ Koha::Suggestions->search_limited(
     }
 )->as_list ];
 
-if ( $op eq "delete_confirm" ) {
+if ( $op eq "cud-delete_confirm" ) {
     my @delete_field = $input->multi_param("delete_field");
     foreach my $delete_field (@delete_field) {
         &DelSuggestion( $borrowernumber, $delete_field );

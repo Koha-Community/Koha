@@ -37,7 +37,7 @@ my ($template, $loggedinuser, $cookie)
                             });
 my $use_transport_cost_matrix = C4::Context->preference("UseTransportCostMatrix");
 
-my $update = ( $input->param('op') // '' ) eq 'set-cost-matrix';
+my $update = ( $input->param('op') // '' ) eq 'cud-set-cost-matrix';
 
 my ($cost_matrix, $have_matrix);
 unless ($update) {

@@ -85,7 +85,7 @@ sub edit_holiday {
                         );
                 }
             }
-    } elsif ($showoperation eq 'edit') {
+    } elsif ($showoperation eq 'cud-edit') {
         if ( $holidaytype eq 'weekday' ) {
             my $isHoliday = $calendar->isHoliday( $day, $month, $year );
             if ($isHoliday) {
@@ -164,7 +164,7 @@ sub edit_holiday {
                 );
             }
         }
-    } elsif ($showoperation eq 'delete') {
+    } elsif ($showoperation eq 'cud-delete') {
         $calendar->delete_holiday(weekday => $weekday,
                                 day => $day,
                                 month => $month,

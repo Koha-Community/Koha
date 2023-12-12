@@ -108,7 +108,7 @@ sub GetPrefParams {
     if ( not defined( $data->{'type'} ) ) {
         $params->{'type_free'} = 1;
         $params->{'fieldlength'} = ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 );
-    } elsif ( $data->{'type'} eq 'Upload' ) {
+    } elsif ( $data->{'type'} eq 'cud-Upload' ) {
         $params->{'type_upload'} = 1;
     } elsif ( $data->{'type'} eq 'Choice' ) {
         $params->{'type_choice'} = 1;
@@ -302,7 +302,7 @@ if ( $op eq 'add_form' ) {
 
 ################## ADD_VALIDATE ##################################
     # called by add_form, used to insert/modify data in DB
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     # to handle multiple values
     my $value;
@@ -328,7 +328,7 @@ if ( $op eq 'add_form' ) {
         }
     }
 
-    if ( $type eq 'Upload' ) {
+    if ( $type eq 'cud-Upload' ) {
         my $lgtfh = $input->upload('value');
         $value = join '', <$lgtfh>;
         $value = encode_base64($value);
@@ -339,7 +339,7 @@ if ( $op eq 'add_form' ) {
     exit;
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB
-} elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'cud-delete_confirm' ) {
     my $value = C4::Context->preference($searchfield);
     $template->param(
         searchfield => $searchfield,
@@ -349,7 +349,7 @@ if ( $op eq 'add_form' ) {
     # END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
     # called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     C4::Context->delete_preference($searchfield);
     # END $OP eq DELETE_CONFIRMED

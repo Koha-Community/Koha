@@ -46,7 +46,7 @@ if ( $patron->category->effective_change_password ) {
         && $query->param('Newkey')
         && $query->param('Confirm') )
     {
-        die "op must be set" unless $op eq 'change_password';
+        die "op must be set" unless $op eq 'cud-change_password';
         my $error;
         my $new_password = $query->param('Newkey');
         my $confirm_password = $query->param('Confirm');

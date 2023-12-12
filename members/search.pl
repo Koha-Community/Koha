@@ -37,8 +37,8 @@ my $referer = $input->referer();
 
 my @columns = split ',', $input->param('columns');
 my $callback = $input->param('callback');
-my $selection_type = $input->param('selection_type') || 'select';
-my $filter = $input->param('filter');
+my $selection_type = $input->param('selection_type') || 'cud-select';
+my $filter = $input->param('cud-filter');
 
 $template->param(
     view           => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",

@@ -67,7 +67,7 @@ my $language = C4::Languages::getlanguage();
 my $cache = Koha::Caches->get_instance;
 $cache->clear_from_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY );
 
-if ($op eq 'delete') {
+if ($op eq 'cud-delete') {
     my $itemtype     = $input->param('itemtype');
     my $categorycode = $input->param('categorycode');
 
@@ -252,7 +252,7 @@ elsif ($op eq 'delete-branch-item') {
     }
 }
 # save the values entered
-elsif ( $op eq 'add' ) {
+elsif ( $op eq 'cud-add' ) {
     my $br                      = $branch;                          # branch
     my $bor                     = $input->param('categorycode');    # borrower category
     my $itemtype                = $input->param('itemtype');        # item type
@@ -356,7 +356,7 @@ elsif ( $op eq 'add' ) {
     );
 
 }
-elsif ($op eq "set-branch-defaults") {
+elsif ($op eq "cud-set-branch-defaults") {
     my $categorycode  = $input->param('categorycode');
     my $patron_maxissueqty = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
@@ -420,7 +420,7 @@ elsif ($op eq "set-branch-defaults") {
         }
     );
 }
-elsif ($op eq "add-branch-cat") {
+elsif ($op eq "cud-add-branch-cat") {
     my $categorycode  = $input->param('categorycode');
     my $patron_maxissueqty = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
@@ -480,7 +480,7 @@ elsif ($op eq "add-branch-cat") {
         );
     }
 }
-elsif ( $op eq "add-open-article-requests-limit" ) {
+elsif ( $op eq "cud-add-open-article-requests-limit" ) {
     my $categorycode                = $input->param('categorycode');
     my $open_article_requests_limit = strip_non_numeric( scalar $input->param('open_article_requests_limit') );
 
@@ -553,7 +553,7 @@ elsif ( $op eq "add-open-article-requests-limit" ) {
         );
     }
 }
-elsif ( $op eq "set-article-request-fee" ) {
+elsif ( $op eq "cud-set-article-request-fee" ) {
 
     my $category = $input->param('article_request_fee_category');
     my $fee      = strip_non_numeric( scalar $input->param('article_request_fee') );
@@ -580,7 +580,7 @@ elsif ( $op eq "set-article-request-fee" ) {
         }
     );
 }
-elsif ($op eq "add-branch-item") {
+elsif ($op eq "cud-add-branch-item") {
     my $itemtype                = $input->param('itemtype');
     my $holdallowed             = $input->param('holdallowed');
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
@@ -638,7 +638,7 @@ elsif ($op eq "add-branch-item") {
         );
     }
 }
-elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
+elsif ( $op eq 'cud-mod-refund-lost-item-fee-rule' ) {
 
     my $lostreturn = $input->param('lostreturn');
 
@@ -689,7 +689,7 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
             }
         );
     }
-} elsif ( $op eq "set-waiting-hold-cancellation" ) {
+} elsif ( $op eq "cud-set-waiting-hold-cancellation" ) {
 
     my $category = $input->param('waiting_hold_cancellation_category');
     my $itemtype = $input->param('waiting_hold_cancellation_itemtype');
@@ -730,9 +730,9 @@ my $refundProcessingFeeRule = Koha::CirculationRules->find({ branchcode => ($bra
 my $defaultProcessingFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'processingreturn' });
 $template->param(
     refundLostItemFeeRule => $refundLostItemFeeRule,
-    defaultRefundRule     => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 'refund',
+    defaultRefundRule     => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 'cud-refund',
     refundProcessingFeeRule => $refundProcessingFeeRule,
-    defaultProcessingRefundRule => $defaultProcessingFeeRule ? $defaultProcessingFeeRule->rule_value : 'refund',
+    defaultProcessingRefundRule => $defaultProcessingFeeRule ? $defaultProcessingFeeRule->rule_value : 'cud-refund',
 );
 
 my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description'] });

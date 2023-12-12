@@ -44,7 +44,7 @@ my @messages;
 
 my $smtp_servers = Koha::SMTP::Servers->search;
 
-if ( $op eq 'add' ) {
+if ( $op eq 'cud-add' ) {
 
     my $name       = $input->param('smtp_name');
     my $host       = $input->param('smtp_host');
@@ -88,7 +88,7 @@ if ( $op eq 'add' ) {
     # list servers after adding
     $op = 'list';
 }
-elsif ( $op eq 'edit_form' ) {
+elsif ( $op eq 'cud-edit_form' ) {
     my $smtp_server_id = $input->param('smtp_server_id');
     my $smtp_server;
 
@@ -110,7 +110,7 @@ elsif ( $op eq 'edit_form' ) {
             };
     }
 }
-elsif ( $op eq 'edit_save' ) {
+elsif ( $op eq 'cud-edit_save' ) {
 
     my $smtp_server_id = $input->param('smtp_server_id');
     my $smtp_server;

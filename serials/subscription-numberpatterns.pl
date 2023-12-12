@@ -59,7 +59,7 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
 
 my $op = $input->param('op');
 
-if($op && $op eq 'savenew') {
+if($op && $op eq 'cud-savenew') {
     my $label = $input->param('label');
     my $numberpattern;
     foreach(@NUMBERPATTERN_FIELDS) {
@@ -77,7 +77,7 @@ if($op && $op eq 'savenew') {
         $template->param(error_existing_numberpattern => 1);
         $template->param(%$numberpattern);
     }
-} elsif ($op && $op eq 'savemod') {
+} elsif ($op && $op eq 'cud-savemod') {
     my $id = $input->param('id');
     my $label = $input->param('label');
     my $numberpattern = GetSubscriptionNumberpattern($id);
@@ -97,13 +97,13 @@ if($op && $op eq 'savenew') {
         }
         ModSubscriptionNumberpattern($numberpattern);
     } else {
-        $op = 'modify';
+        $op = 'cud-modify';
         $template->param(error_existing_numberpattern => 1);
     }
 }
 
-if($op && ($op eq 'new' || $op eq 'modify')) {
-    if($op eq 'modify') {
+if($op && ($op eq 'new' || $op eq 'cud-modify')) {
+    if($op eq 'cud-modify') {
         my $id = $input->param('id');
         if(defined $id) {
             my $numberpattern = GetSubscriptionNumberpattern($id);
@@ -129,7 +129,7 @@ if($op && ($op eq 'new' || $op eq 'modify')) {
     exit;
 }
 
-if($op && $op eq 'del') {
+if($op && $op eq 'cud-del') {
     my $id = $input->param('id');
     if ($id) {
         my $confirm = $input->param('confirm');

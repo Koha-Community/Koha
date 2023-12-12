@@ -82,7 +82,7 @@ if ($email_add) {
             tables      => {
                 borrowers => $borrowernumber,
             },
-            message_transport_type => 'email',
+            message_transport_type => 'cud-email',
             loops                  => \%loops,
             substitute             => \%substitute,
         );
@@ -96,7 +96,7 @@ if ($email_add) {
         my $message_id = C4::Letters::EnqueueLetter(
             {
                 letter                 => $letter,
-                message_transport_type => 'email',
+                message_transport_type => 'cud-email',
                 to_address             => $email_add,
                 reply_address          => $user_email,
                 attachments            => [$attachment],

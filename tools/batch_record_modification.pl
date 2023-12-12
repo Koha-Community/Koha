@@ -152,7 +152,7 @@ if ( $op eq 'form' ) {
         mmtid => $mmtid,
         view => 'list',
     );
-} elsif ( $op eq 'modify' ) {
+} elsif ( $op eq 'cud-modify' ) {
     # We want to modify selected records!
     my @record_ids = $input->multi_param('record_id');
 

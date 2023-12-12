@@ -32,7 +32,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 my $input    = CGI->new;
 my $basketno = $input->param('basketno');
-my $op       = $input->param('op') || 'search';    # search, select, batch_edit
+my $op       = $input->param('op') || 'cud-search';    # search, select, batch_edit
 
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
@@ -81,7 +81,7 @@ $filters->{to_placed_on}   = $to_placed_on;
 
   my ( @result_order_loop, @selected_order_loop );
 my @ordernumbers = split ',', scalar $input->param('ordernumbers') || '';
-if ( $op eq 'select' ) {
+if ( $op eq 'cud-select' ) {
 
     # Set filter for 'all status'
     if ( $filters->{orderstatus} eq "any" ) {
@@ -98,7 +98,7 @@ if ( $op eq 'select' ) {
       ? @{ C4::Acquisition::GetHistory( ordernumbers => \@ordernumbers ) }
       : ();
 }
-elsif ( $op eq 'batch_edit' ) {
+elsif ( $op eq 'cud-batch_edit' ) {
     @ordernumbers = $input->multi_param('ordernumber');
 
     # build budget list
@@ -126,7 +126,7 @@ elsif ( $op eq 'batch_edit' ) {
         budget_loop => $budget_loop,
     );
 }
-elsif ( $op eq 'do_duplicate' ) {
+elsif ( $op eq 'cud-do_duplicate' ) {
     my @fields_to_copy = $input->multi_param('copy_existing_value');
 
     my $default_values;

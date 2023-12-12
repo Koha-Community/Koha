@@ -75,7 +75,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { serials => 'renew_subscription' },
     }
 );
-if ( $op eq "renew" ) {
+if ( $op eq "cud-renew" ) {
     # Do not use this script with op=renew and @subscriptionids > 1!
     my $subscriptionid = $subscriptionids[0];
     # Make sure the subscription exists

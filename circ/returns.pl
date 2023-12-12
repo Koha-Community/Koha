@@ -146,7 +146,7 @@ if ( $query->param('reserve_id') ) {
     my $borrowernumber = $query->param('borrowernumber');
     my $reserve_id     = $query->param('reserve_id');
     my $diffBranchReturned = $query->param('diffBranch');
-    my $cancel_reserve = $query->param('cancel_reserve');
+    my $cancel_reserve = $query->param('cud-cancel_reserve');
     my $cancel_reason = $query->param('cancel_reason');
 
     # fix up item type for display

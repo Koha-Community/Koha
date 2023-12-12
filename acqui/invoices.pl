@@ -80,7 +80,7 @@ for my $field (@additional_fields) {
 }
 
 my $invoices = [];
-if ( $op and $op eq 'do_search' ) {
+if ( $op and $op eq 'cud-do_search' ) {
     @{$invoices} = GetInvoices(
         invoicenumber     => $invoicenumber,
         supplierid        => $supplierid,
@@ -142,7 +142,7 @@ $template->{'VARS'}->{'budgets_loop'} = \@budgets_loop;
 $template->param(
     openedinvoices => \@openedinvoices,
     closedinvoices => \@closedinvoices,
-    do_search => ( $op and $op eq 'do_search' ) ? 1 : 0,
+    do_search => ( $op and $op eq 'cud-do_search' ) ? 1 : 0,
     invoices => $invoices,
     invoicenumber   => $invoicenumber,
     booksellerid    => $supplierid,

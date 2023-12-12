@@ -56,7 +56,7 @@ $template->param( CanUpdatePasswordExpiration => 1 ) if $logged_in_user->is_supe
 my $dbh       = C4::Context->dbh;
 
 # Show borrower informations
-if ( $op eq 'show' ) {
+if ( $op eq 'cud-show' ) {
     my @borrowers;
     my @patronidnumbers;
     my @notfoundcardnumbers;
@@ -155,7 +155,7 @@ if ( $op eq 'show' ) {
                 attribute_code => $attr_type->code,
                 attribute_lib  => $attr_type->description,
                 category_lib   => $category_lib,
-                type           => $attr_type->authorised_value_category ? 'select' : 'text',
+                type           => $attr_type->authorised_value_category ? 'cud-select' : 'text',
             };
     }
 
@@ -206,14 +206,14 @@ if ( $op eq 'show' ) {
         ,
         {
             name => "branchcode",
-            type => "select",
+            type => "cud-select",
             option => \@branches_option,
             mandatory => ( grep /branchcode/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "categorycode",
-            type => "select",
+            type => "cud-select",
             option => \@categories_option,
             mandatory => ( grep /categorycode/, @mandatoryFields ) ? 1 : 0,
         }
@@ -261,7 +261,7 @@ if ( $op eq 'show' ) {
         }
         ,
         {
-            name => "email",
+            name => "cud-email",
             type => "text",
             mandatory => ( grep /email/, @mandatoryFields ) ? 1 : 0,
         }
@@ -280,14 +280,14 @@ if ( $op eq 'show' ) {
         ,
         {
             name => "sort1",
-            type => @sort1_option ? "select" : "text",
+            type => @sort1_option ? "cud-select" : "text",
             option => \@sort1_option,
             mandatory => ( grep /sort1/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "sort2",
-            type => @sort2_option ? "select" : "text",
+            type => @sort2_option ? "cud-select" : "text",
             option => \@sort2_option,
             mandatory => ( grep /sort2/, @mandatoryFields ) ? 1 : 0,
         }
@@ -338,7 +338,7 @@ if ( $op eq 'show' ) {
 }
 
 # Process modifications
-if ( $op eq 'do' ) {
+if ( $op eq 'cud-do' ) {
 
     my @disabled = $input->multi_param('disable_input');
     my $infos;

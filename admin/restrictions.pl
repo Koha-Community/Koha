@@ -51,7 +51,7 @@ if ( $op eq 'add_form') {
             restriction => scalar Koha::Patron::Restriction::Types->find($code)
         );
     }
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
 
     my $display_text       = $input->param('display_text');
     my $lift_after_payment = $input->param('lift_after_payment');
@@ -103,11 +103,11 @@ if ( $op eq 'add_form') {
     my $restriction = Koha::Patron::Restriction::Types->find($code);
     $restriction->make_default;
     $op = 'list';
-} elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'cud-delete_confirm' ) {
     $template->param(
         restriction => scalar Koha::Patron::Restriction::Types->find($code)
     );
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     try {
         Koha::Patron::Restriction::Types->find($code)->delete;
         push @messages, { type => 'message', code => 'delete_success' };

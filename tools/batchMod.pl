@@ -47,7 +47,7 @@ my $error        = $input->param('error');
 my @itemnumbers  = $input->multi_param('itemnumber');
 my $biblionumber = $input->param('biblionumber');
 my $op           = $input->param('op');
-my $del          = $input->param('del');
+my $del          = $input->param('cud-del');
 my $del_records  = $input->param('del_records');
 my $src          = $input->param('src');
 my $use_default_values = $input->param('use_default_values');
@@ -206,7 +206,7 @@ $template->param(
 # build screen with existing items. and "new" one
 #-------------------------------------------------------------------------------
 
-if ($op eq "show"){
+if ($op eq "cud-show"){
     my $filefh = $input->upload('uploadfile');
     my $filecontent = $input->param('filecontent');
     my ( @notfoundbarcodes, @notfounditemnumbers);
@@ -295,7 +295,7 @@ if ($op eq "show"){
         notfounditemnumbers => \@notfounditemnumbers
     );
     $nextop="action"
-} # -- End action="show"
+} # -- End action="cud-show"
 
 if ( $display_items ) {
     my $items_table =

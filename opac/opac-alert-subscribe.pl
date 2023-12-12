@@ -46,7 +46,7 @@ my $biblionumber   = $query->param('biblionumber');
 my $subscription     = Koha::Subscriptions->find($subscriptionid);
 my $logged_in_patron = Koha::Patrons->find($loggedinuser);
 
-if ( $op eq 'alert_confirmed' ) {
+if ( $op eq 'cud-alert_confirmed' ) {
     $subscription->add_subscriber($logged_in_patron);
     if ( $referer eq 'serial' ) {
         print $query->redirect("opac-serial-issues.pl?biblionumber=$biblionumber");
@@ -55,7 +55,7 @@ if ( $op eq 'alert_confirmed' ) {
         print $query->redirect("opac-detail.pl?biblionumber=$biblionumber");
         exit;
     }
-} elsif ( $op eq 'cancel_confirmed' ) {
+} elsif ( $op eq 'cud-cancel_confirmed' ) {
     $subscription->remove_subscriber($logged_in_patron);
     warn "CANCEL confirmed : $loggedinuser, $subscriptionid";
     if ( $referer eq 'serial' ) {

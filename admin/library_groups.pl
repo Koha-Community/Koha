@@ -41,7 +41,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $action = $cgi->param('action') || q{};
 my @messages;
 
-if ( $action eq 'add' ) {
+if ( $action eq 'cud-add' ) {
     my $parent_id   = $cgi->param('parent_id')   || undef;
     my $title       = $cgi->param('title')       || undef;
     my $description = $cgi->param('description') || undef;
@@ -81,7 +81,7 @@ if ( $action eq 'add' ) {
         }
     }
 }
-elsif ( $action eq 'edit' ) {
+elsif ( $action eq 'cud-edit' ) {
     my $id          = $cgi->param('id')          || undef;
     my $title       = $cgi->param('title')       || undef;
     my $description = $cgi->param('description') || undef;
@@ -111,7 +111,7 @@ elsif ( $action eq 'edit' ) {
         $template->param( edited => $group );
     }
 }
-elsif ( $action eq 'delete' ) {
+elsif ( $action eq 'cud-delete' ) {
     my $id = $cgi->param('id');
 
     my $group = Koha::Library::Groups->find($id);

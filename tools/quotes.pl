@@ -43,7 +43,7 @@ my @messages;
 if ( $op eq 'add_form' ) {
     $template->param( quote => Koha::Quotes->find($id), );
 }
-elsif ( $op eq 'add_validate' ) {
+elsif ( $op eq 'cud-add_validate' ) {
     my @fields = qw(
       source
       text

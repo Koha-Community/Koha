@@ -57,7 +57,7 @@ my @messages;
 
 if ( $step == 1 ) {
 
-    if ( $op eq 'add_validate_library' ) {
+    if ( $op eq 'cud-add_validate_library' ) {
 
         my $branchcode = $input->param('branchcode');
         $branchcode = uc($branchcode);
@@ -84,7 +84,7 @@ if ( $step == 1 ) {
     $step++ if Koha::Libraries->count;
 }
 if ( $step == 2 ) {
-    if ( $op eq "add_validate_category" ) {
+    if ( $op eq "cud-add_validate_category" ) {
 
         my $searchfield = $input->param('description') // q||;
         my $categorycode = $input->param('categorycode');
@@ -125,7 +125,7 @@ if ( $step == 2 ) {
     $step++ if Koha::Patron::Categories->count;
 }
 if ( $step == 3 ) {
-    if ( $op eq 'add_validate_patron' ) {
+    if ( $op eq 'cud-add_validate_patron' ) {
 
         #Create a patron
         my $firstpassword  = $input->param('password')  || '';
@@ -199,7 +199,7 @@ if ( $step == 3 ) {
     $step++ if Koha::Patrons->search( { flags => 1 } )->count;
 }
 if ( $step == 4 ) {
-    if ( $op eq 'add_validate_itemtype' ) {
+    if ( $op eq 'cud-add_validate_itemtype' ) {
         my $description   = $input->param('description');
         my $itemtype_code = $input->param('itemtype');
         $itemtype_code = uc($itemtype_code);
@@ -224,7 +224,7 @@ if ( $step == 4 ) {
 }
 if ( $step == 5 ) {
 
-    if ( $op eq 'add_validate_circ_rule' ) {
+    if ( $op eq 'cud-add_validate_circ_rule' ) {
 
         #If no libraries exist then set the $branch value to *
         my $branch = $input->param('branch') || '*';

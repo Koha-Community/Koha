@@ -46,7 +46,7 @@ if ($mana_base) {
     $bad_url = 1 unless (exists($result->{version}));
 }
 
-if ( $op eq 'save' ) {
+if ( $op eq 'cud-save' ) {
     my $auto_share = $query->param('autosharewithmana') || q{};
     my $mana = $query->param('mana');
 
@@ -59,13 +59,13 @@ if ( $op eq 'save' ) {
     }
 }
 
-if ( $op eq 'reset' ) {
+if ( $op eq 'cud-reset' ) {
     C4::Context->set_preference('ManaToken', '');
 }
 
-if ( $op eq 'send' && not $bad_url ) {
+if ( $op eq 'cud-send' && not $bad_url ) {
     my $name = $query->param('name');
-    my $email = $query->param('email');
+    my $email = $query->param('cud-email');
 
     my $content = to_json({name => $name,
                            email => $email});

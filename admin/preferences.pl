@@ -75,8 +75,8 @@ sub _get_chunk {
 
     if ( $options{'class'} && $options{'class'} eq 'password' ) {
         $chunk->{'input_type'} = 'password';
-    } elsif ( $options{'class'} && $options{'class'} eq 'email' ) {
-        $chunk->{'input_type'} = 'email';
+    } elsif ( $options{'class'} && $options{'class'} eq 'cud-email' ) {
+        $chunk->{'input_type'} = 'cud-email';
     } elsif ( $options{'class'} && $options{'class'} eq 'date' ) {
         $chunk->{'dateinput'} = 1;
     } elsif ( $options{'type'} && ( $options{'type'} eq 'opac-languages' || $options{'type'} eq 'staff-languages' ) ) {
@@ -120,7 +120,7 @@ sub _get_chunk {
 
         $value ||= 0;
 
-        $chunk->{'type'} = ( $options{class} && $options{class} eq 'multiple' ) ? 'multiple' : 'select';
+        $chunk->{'type'} = ( $options{class} && $options{class} eq 'multiple' ) ? 'multiple' : 'cud-select';
 
         my @values;
         @values = split /,/, $value if defined($value);
@@ -143,7 +143,7 @@ sub _get_chunk {
         unshift @{ $chunk->{CHOICES} }, {
             text  => '',
             value => '',
-        } if $add_blank && $chunk->{type} eq 'select';
+        } if $add_blank && $chunk->{type} eq 'cud-select';
 
     } elsif ( $options{'multiple'} ) {
         my @values;
@@ -358,7 +358,7 @@ $tab ||= 'accounting'; # Ideally this should be "local-use" but preferences.pl
 
 my $highlighted;
 
-if ( $op eq 'save' ) {
+if ( $op eq 'cud-save' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     foreach my $param ( $input->param() ) {
         my ( $pref ) = ( $param =~ /pref_(.*)/ );
@@ -376,7 +376,7 @@ if ( $op eq 'save' ) {
 
 my @TABS;
 
-if ( $op eq 'search' ) {
+if ( $op eq 'cud-search' ) {
     my $searchfield = $input->param( 'searchfield' );
 
     $searchfield =~ s/\p{IsC}//g;

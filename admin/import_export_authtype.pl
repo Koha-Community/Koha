@@ -41,10 +41,10 @@ unless ($auth_status eq 'ok') {
 }
 
 my $authtypecode = $input->param('authtypecode') || 'default';
-my $action = $input->param('action') || 'export';
+my $action = $input->param('action') || 'cud-export';
 
 ## Exporting
-if ($action eq 'export' && $input->request_method() eq 'GET') {
+if ($action eq 'cud-export' && $input->request_method() eq 'GET') {
     my $strXml = '';
     my $format = $input->param('type_export_' . $authtypecode);
     if ($authtypecode eq 'default') {

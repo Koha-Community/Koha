@@ -21,7 +21,7 @@ my $dbh = C4::Context->dbh;
 my $sthDelBor   = $dbh->prepare("SELECT * FROM deletedborrowers WHERE borrowernumber = ? ");
 my $sthUpdateStat   = $dbh->prepare("UPDATE statistics SET categorycode = ? WHERE datetime = ? AND branch = ? AND type = ? AND itemnumber = ? ");
 
-my $query2 = "SELECT * FROM statistics WHERE type = 'issue' OR type = 'renew' OR type = 'localuse'";
+my $query2 = "SELECT * FROM statistics WHERE type = 'issue' OR type = 'cud-renew' OR type = 'localuse'";
 my $sth2   = $dbh->prepare($query2);
 $sth2->execute();
 my $stats =  $sth2->fetchall_arrayref({});

@@ -51,7 +51,7 @@ if ( $op eq 'add_form' ) {
     if ($status) {
         $template->param( status => $status );
     }
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $name = $input->param('name');
     my $code = $input->param('code');
 
@@ -75,7 +75,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'error', code => 'error_on_saving' };
     };
     $op = 'list';
-} elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     try {
         $status->delete_and_log;
         push @messages, { code => 'success_on_delete', type => 'message' };

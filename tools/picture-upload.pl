@@ -85,7 +85,7 @@ our @counts = ();
 our %errors = ();
 
 # Case is important in these operational values as the template must use case to be visually pleasing!
-if ( ( $op eq 'Upload' ) && ($uploadfile || $uploadfiletext) ) {
+if ( ( $op eq 'cud-Upload' ) && ($uploadfile || $uploadfiletext) ) {
 
     output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf({
@@ -185,7 +185,7 @@ if ( ( $op eq 'Upload' ) && ($uploadfile || $uploadfiletext) ) {
           if $borrowernumber;
     }
 }
-elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
+elsif ( ( $op eq 'cud-Upload' ) && !$uploadfile ) {
     warn "Problem uploading file or no file uploaded.";
     $template->param( cardnumber => $cardnumber );
     $template->param( filetype   => $filetype );

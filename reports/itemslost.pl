@@ -49,7 +49,7 @@ my $params = $query->Vars;
 my $get_items = $params->{'get_items'};
 my $op = $query->param('op') || '';
 
-if ( $op eq 'export' ) {
+if ( $op eq 'cud-export' ) {
     my @itemnumbers = $query->multi_param('itemnumber');
     my $csv_profile_id = $query->param('csv_profile_id');
     my @rows;

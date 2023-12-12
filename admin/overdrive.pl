@@ -39,7 +39,7 @@ our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( $op && $op eq 'update' ) {
+if ( $op && $op eq 'cud-update' ) {
     my %od_info;
     @od_info{ @branchcodes } = @authnames;
     while( my($branchcode,$authname) = each %od_info){

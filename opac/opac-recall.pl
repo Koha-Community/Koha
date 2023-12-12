@@ -60,7 +60,7 @@ if ( C4::Context->preference('UseRecalls') ) {
     }
 
     # submitting recall request
-    if ($op eq 'request'){
+    if ($op eq 'cud-request'){
 
         if ( defined $error and $error eq 'unavailable' ){
             # no items available for recall
@@ -112,7 +112,7 @@ if ( C4::Context->preference('UseRecalls') ) {
                 $error = 'failed';
             }
         }
-    } elsif ($op eq 'cancel'){
+    } elsif ($op eq 'cud-cancel'){
         my $recall_id = $query->param('recall_id');
         Koha::Recalls->find( $recall_id )->set_cancelled;
         print $query->redirect('/cgi-bin/koha/opac-user.pl');

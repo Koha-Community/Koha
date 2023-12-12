@@ -56,11 +56,11 @@ my $display_list = 0;
 if ($op eq "edit_attribute_type") {
     edit_attribute_type_form($template, $code);
 } elsif ($op eq "edit_attribute_type_confirmed") {
-    $display_list = add_update_attribute_type('edit', $template, $code);
+    $display_list = add_update_attribute_type('cud-edit', $template, $code);
 } elsif ($op eq "add_attribute_type") {
     add_attribute_type_form($template);
 } elsif ($op eq "add_attribute_type_confirmed") {
-    $display_list = add_update_attribute_type('add', $template, $code);
+    $display_list = add_update_attribute_type('cud-add', $template, $code);
 } elsif ($op eq "delete_attribute_type") {
     $display_list = delete_attribute_type_form($template, $code);
 } elsif ($op eq "delete_attribute_type_confirmed") {
@@ -126,7 +126,7 @@ sub add_update_attribute_type {
     my $class                     = $input->param('class');
 
     my $attr_type = Koha::Patron::Attribute::Types->find($code);
-    if ( $op eq 'edit' ) {
+    if ( $op eq 'cud-edit' ) {
         $attr_type->description($description);
     }
     else {
@@ -166,7 +166,7 @@ sub add_update_attribute_type {
     my @branches = grep { ! /^\s*$/ } $input->multi_param('branches');
     $attr_type->library_limits( \@branches );
 
-    if ( $op eq 'edit' ) {
+    if ( $op eq 'cud-edit' ) {
         $template->param( edited_attribute_type => $attr_type->code() );
     }
     else {

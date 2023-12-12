@@ -117,7 +117,7 @@ else {
             $template->param( error_cashup_permission => 1 );
         }
     }
-    elsif ( $op eq 'refund' ) {
+    elsif ( $op eq 'cud-refund' ) {
         if ( $logged_in_user->has_permission( { cash_management => 'anonymous_refund' } ) ) {
             my $amount           = $input->param('amount');
             my $quantity         = $input->param('quantity');

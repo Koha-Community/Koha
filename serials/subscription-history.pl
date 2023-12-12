@@ -53,7 +53,7 @@ if(!defined $subscriptionid || $subscriptionid eq '') {
     exit;
 }
 
-if($op && $op eq 'mod') {
+if($op && $op eq 'cud-mod') {
     my $histstartdate   = $input->param('histstartdate');
     my $histenddate     = $input->param('histenddate');
     my $receivedlist    = $input->param('receivedlist');

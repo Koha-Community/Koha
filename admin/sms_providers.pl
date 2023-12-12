@@ -44,7 +44,7 @@ my $id     = $cgi->param('id');
 my $name   = $cgi->param('name');
 my $domain = $cgi->param('domain');
 
-if ( $op eq 'add_update' ) {
+if ( $op eq 'cud-add_update' ) {
     if ( $name && $domain ) {
         if ($id) {
             my $provider = Koha::SMS::Providers->find($id);
@@ -57,7 +57,7 @@ if ( $op eq 'add_update' ) {
         }
     }
 }
-elsif ( $op eq 'delete' ) {
+elsif ( $op eq 'cud-delete' ) {
     my $provider = Koha::SMS::Providers->find($id);
     $provider->delete() if $provider;
 }

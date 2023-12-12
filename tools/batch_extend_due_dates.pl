@@ -138,11 +138,11 @@ elsif ( $op eq 'list' ) {
             view          => 'list',
         );
     } else {
-        $op = 'modify';
+        $op = 'cud-modify';
     }
 }
 
-if ( $op eq 'modify' ) {
+if ( $op eq 'cud-modify' ) {
 
     # We want to modify selected checkouts!
     my $new_hard_due_date = $input->param('new_hard_due_date');

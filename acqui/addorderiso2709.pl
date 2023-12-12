@@ -122,7 +122,7 @@ if ($op eq ""){
 #
 # 3rd step = import the records
 #
-} elsif ( $op eq 'import_records' ) {
+} elsif ( $op eq 'cud-import_records' ) {
 #import selected lines
     $template->param('basketno' => $cgiparams->{'basketno'});
 # Budget_id is mandatory for adding an order, we just add a default, the user needs to modify this aftewards

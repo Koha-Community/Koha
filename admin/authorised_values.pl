@@ -91,7 +91,7 @@ if ($op eq 'add_form') {
         branches_loop    => \@branches_loop,
     );
 
-} elsif ($op eq 'add') {
+} elsif ($op eq 'cud-add') {
     my $new_authorised_value = $input->param('authorised_value');
     my $new_category = $input->param('category');
     my $image = $input->param( 'image' ) || '';
@@ -149,7 +149,7 @@ if ($op eq 'add_form') {
 
     $op = 'list';
     $searchfield = $new_category;
-} elsif ($op eq 'add_category' ) {
+} elsif ($op eq 'cud-add_category' ) {
     my $new_category = $input->param('category');
 
     my $already_exists = Koha::AuthorisedValueCategories->find(
@@ -183,7 +183,7 @@ if ($op eq 'add_form') {
     }
 
     $op = 'list';
-} elsif ($op eq 'delete') {
+} elsif ($op eq 'cud-delete') {
     my $av = Koha::AuthorisedValues->new->find( $id );
     my $deleted = eval {$av->delete};
     if ( $@ or not $deleted ) {
@@ -193,7 +193,7 @@ if ($op eq 'add_form') {
     }
 
     $op = 'list';
-} elsif ($op eq 'delete_category') {
+} elsif ($op eq 'cud-delete_category') {
     my $category_name = $input->param('category_name');
     my $avc = Koha::AuthorisedValueCategories->find( $category_name );
     my $deleted = eval {$avc->delete};

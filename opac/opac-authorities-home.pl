@@ -48,7 +48,7 @@ my ( $template, $loggedinuser, $cookie );
 
 my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypetext']});
 
-if ( $op eq "do_search" ) {
+if ( $op eq "cud-do_search" ) {
     my @input_marclist = $query->multi_param('marclist');
     my @and_or = $query->multi_param('and_or');
     my @excluding = $query->multi_param('excluding');

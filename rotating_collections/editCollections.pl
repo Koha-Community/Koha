@@ -63,7 +63,7 @@ if ( $action eq 'create' ) {
 }
 
 ## Delete a club or service
-elsif ( $action eq 'delete' ) {
+elsif ( $action eq 'cud-delete' ) {
     my $colId = $query->param('colId');
     my ( $success, $errorCode, $errorMessage ) = DeleteCollection($colId);
 
@@ -78,7 +78,7 @@ elsif ( $action eq 'delete' ) {
 }
 
 ## Edit a club or service: grab data, put in form.
-elsif ( $action eq 'edit' ) {
+elsif ( $action eq 'cud-edit' ) {
     my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection( $query->param('colId') );
 
     $template->param(
@@ -90,7 +90,7 @@ elsif ( $action eq 'edit' ) {
 }
 
 # Update a Club or Service
-elsif ( $action eq 'update' ) {
+elsif ( $action eq 'cud-update' ) {
     my $colId       = $query->param('colId');
     my $title       = $query->param('title');
     my $description = $query->param('description');

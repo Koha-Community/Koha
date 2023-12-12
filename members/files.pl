@@ -69,7 +69,7 @@ else {
 
     my %errors;
 
-    if ( $op eq 'upload' ) {
+    if ( $op eq 'cud-upload' ) {
         my $uploaded_file = $cgi->upload('uploadfile');
 
         if ($uploaded_file) {
@@ -98,7 +98,7 @@ else {
         else {
             $errors{'no_file'} = 1;
         }
-    } elsif ( $op eq 'delete' ) {
+    } elsif ( $op eq 'cud-delete' ) {
         $bf->DelFile( id => scalar $cgi->param('file_id') );
     }
 

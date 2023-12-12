@@ -47,7 +47,7 @@ if ( $op eq 'add_form' ) {
     }
 
     $template->param( authority_type => $authority_type );
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $authtypecode       = $input->param('authtypecode');
     my $authtypetext       = $input->param('authtypetext');
     my $auth_tag_to_report = $input->param('auth_tag_to_report');
@@ -82,14 +82,14 @@ if ( $op eq 'add_form' ) {
     }
     $op = 'list';
 
-} elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'cud-delete_confirm' ) {
     my $authority_type = Koha::Authority::Types->find($authtypecode);
     my $authorities_using_it = Koha::Authorities->search( { authtypecode => $authtypecode } )->count;
     $template->param(
         authority_type       => $authority_type,
         authorities_using_it => $authorities_using_it,
     );
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     my $authorities_using_it = Koha::Authorities->search( { authtypecode => $authtypecode } )->count;
     if ( $authorities_using_it == 0 ) {
         my $authority_type = Koha::Authority::Types->find($authtypecode);

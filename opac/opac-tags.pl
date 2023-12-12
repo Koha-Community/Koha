@@ -122,7 +122,7 @@ unless ( C4::Context->preference('TagsEnabled') ) {
 
 if ($add_op) {
 	unless ($loggedinuser) {
-		push @errors, {+'login' => 1 };
+		push @errors, {+'cud-login' => 1 };
         push @globalErrorIndexes, $#errors;
 		%newtags=();	# zero out any attempted additions
 		@deltags=();	# zero out any attempted deletions

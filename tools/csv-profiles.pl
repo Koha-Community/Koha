@@ -65,7 +65,7 @@ if ( $op eq 'add_form' ) {
         $csv_profile = Koha::CsvProfiles->find($export_format_id);
     }
     $template->param( csv_profile => $csv_profile, );
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $profile     = $input->param("profile");
     my $description = $input->param("description");
     my $type        = $input->param("type");
@@ -125,10 +125,10 @@ if ( $op eq 'add_form' ) {
         }
     }
     $op = 'list';
-} elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'cud-delete_confirm' ) {
     my $csv_profile = Koha::CsvProfiles->find($export_format_id);
     $template->param( csv_profile => $csv_profile, );
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     my $csv_profile = Koha::CsvProfiles->find($export_format_id);
     my $deleted = eval { $csv_profile->delete; };
 

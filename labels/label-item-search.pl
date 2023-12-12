@@ -55,7 +55,7 @@ my $display_columns = [ {_add                   => {label => "Add Item", link_fi
                         {select                 => {label => "Select", value => "_item_number"}},
                       ];
 
-if ( $op eq "do_search" ) {
+if ( $op eq "cud-do_search" ) {
     $idx         = $query->param('idx');
     $ccl_textbox = $query->param('ccl_textbox');
     if ( $ccl_textbox && $idx ) {

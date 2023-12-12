@@ -46,7 +46,7 @@ my $sub_length;
 # Permission needed if it is a modification : edit_subscription
 # Permission needed otherwise (nothing or dup) : create_subscription
 my $permission =
-  ( $op eq 'modify' || $op eq 'modsubscription' ) ? "edit_subscription" : "create_subscription";
+  ( $op eq 'cud-modify' || $op eq 'cud-modsubscription' ) ? "edit_subscription" : "create_subscription";
 
 our ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-add.tt",
@@ -66,7 +66,7 @@ my $mana_url = C4::Context->config('mana_config');
 $template->param( 'mana_url' => $mana_url );
 my $subscriptionid = $query->param('subscriptionid');
 
-if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
+if ($op eq 'cud-modify' || $op eq 'dup' || $op eq 'cud-modsubscription') {
 
     $subs = GetSubscription($subscriptionid);
 
@@ -74,7 +74,7 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
         unless $subs;
 
     ## FIXME : Check rights to edit if mod. Could/Should display an error message.
-    if ($subs->{'cannotedit'} && $op eq 'modify'){
+    if ($subs->{'cannotedit'} && $op eq 'cud-modify'){
       carp "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     }
@@ -84,8 +84,8 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
     }
     my $nextexpected = GetNextExpected($subscriptionid);
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate} eq $firstissuedate ;
-    $subs->{nextacquidate} = $nextexpected->{planneddate}  if($op eq 'modify');
-    unless($op eq 'modsubscription') {
+    $subs->{nextacquidate} = $nextexpected->{planneddate}  if($op eq 'cud-modify');
+    unless($op eq 'cud-modsubscription') {
         foreach my $length_unit (qw(numberlength weeklength monthlength)) {
             if ($subs->{$length_unit}) {
                 $sub_length=$subs->{$length_unit};
@@ -99,11 +99,11 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
                     $op => 1,
                     "subtype_$sub_on" => 1,
                     sublength =>$sub_length,
-                    history => ($op eq 'modify'),
+                    history => ($op eq 'cud-modify'),
                     firstacquiyear => substr($firstissuedate,0,4),
                     );
 
-        if($op eq 'modify') {
+        if($op eq 'cud-modify') {
             my ($serials_number) = GetSerials($subscriptionid);
             if($serials_number > 1) {
                 $template->param(more_than_one_serial => 1);
@@ -167,9 +167,9 @@ if ($op!~/^mod/) {
     $template->param( letterloop => $letters );
 }
 
-if ($op eq 'addsubscription') {
+if ($op eq 'cud-addsubscription') {
     redirect_add_subscription();
-} elsif ($op eq 'modsubscription') {
+} elsif ($op eq 'cud-modsubscription') {
     redirect_mod_subscription();
 } else {
 
@@ -178,7 +178,7 @@ if ($op eq 'addsubscription') {
         subtype => $sub_on,
     );
 
-    if ( $op ne 'modsubscription' && $op ne 'dup' && $op ne 'modify' ) {
+    if ( $op ne 'cud-modsubscription' && $op ne 'dup' && $op ne 'cud-modify' ) {
         my $letters = get_letter_loop();
         $template->param( letterloop => $letters );
     }

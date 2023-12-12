@@ -70,7 +70,7 @@ if ( $op eq 'add_form' ) {
         searchcategory => $searchcategory,
         can_be_translated => ( scalar(@$translated_languages) > 1 ? 1 : 0 ),
     );
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $is_a_modif   = $input->param('is_a_modif');
     my $itemtype     = Koha::ItemTypes->find($itemtype_code);
     my $parent_type  = $input->param('parent_type') || undef;
@@ -173,7 +173,7 @@ if ( $op eq 'add_form' ) {
     $searchfield = '';
     $op          = 'list';
 
- } elsif ( $op eq 'delete_confirm' ) {
+ } elsif ( $op eq 'cud-delete_confirm' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
     my $can_be_deleted = $itemtype->can_be_deleted();
     if ($can_be_deleted == 0) {
@@ -183,7 +183,7 @@ if ( $op eq 'add_form' ) {
         $template->param( itemtype => $itemtype, );
     }
 
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
 
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
     my $deleted = eval { $itemtype->delete };

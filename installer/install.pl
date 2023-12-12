@@ -237,7 +237,7 @@ elsif ( $step && $step == 3 ) {
         print $query->redirect("/cgi-bin/koha/mainpage.pl");
         exit;
     }
-    elsif ( $op && $op eq 'finish' ) {
+    elsif ( $op && $op eq 'cud-finish' ) {
         $installer->set_version_syspref();
 
         my $langchoice = $query->param('fwklanguage');
@@ -252,7 +252,7 @@ elsif ( $step && $step == 3 ) {
         $template->param( "$op" => 1 );
     }
 
-    elsif ( $op && $op eq 'addframeworks' ) {
+    elsif ( $op && $op eq 'cud-addframeworks' ) {
 
         # 1ST install, 3rd sub-step : insert the SQL files the user has selected
         my $langchoice = $query->param('fwklanguage');
@@ -270,7 +270,7 @@ elsif ( $step && $step == 3 ) {
         Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
         $template->param( "$op" => 1 );
     }
-    elsif ( $op && $op eq 'selectframeworks' ) {
+    elsif ( $op && $op eq 'cud-selectframeworks' ) {
 #
 #
 # 1ST install, 2nd sub-step : show the user the sql datas they can insert in the database.
@@ -313,7 +313,7 @@ elsif ( $step && $step == 3 ) {
         $template->param( "$op"            => 1 );
 
     }
-    elsif ( $op && $op eq 'choosemarc' ) {
+    elsif ( $op && $op eq 'cud-choosemarc' ) {
         #
         #
         # 1ST install, 2nd sub-step : show the user the marcflavour available.
@@ -367,7 +367,7 @@ elsif ( $step && $step == 3 ) {
         $template->param( "flavourloop" => \@flavourlist );
         $template->param( "$op"         => 1 );
     }
-    elsif ( $op && $op eq 'importdatastructure' ) {
+    elsif ( $op && $op eq 'cud-importdatastructure' ) {
         #
         #
         # 1st install, 1st "sub-step" : import kohastructure

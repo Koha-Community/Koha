@@ -34,7 +34,7 @@ checkauth($cgi, 0, { coursereserves => 'manage_courses' }, 'intranet');
 my $action = $cgi->param('action') || '';
 my $course_id = $cgi->param('course_id');
 
-if ( $action eq 'del' ) {
+if ( $action eq 'cud-del' ) {
     DelCourse( $course_id );
     print $cgi->redirect("/cgi-bin/koha/course_reserves/course-reserves.pl");
 } else {

@@ -214,7 +214,7 @@ if ( $op eq 'add_form' ) {
 ################## ADD_VALIDATE ##################################
     # called by add_form, used to insert/modify data in DB
 }
-elsif ( $op eq 'add_validate' ) {
+elsif ( $op eq 'cud-add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
     my $tagfield    = $input->param('tagfield');
@@ -312,7 +312,7 @@ elsif ( $op eq 'add_validate' ) {
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB
 }
-elsif ( $op eq 'delete_confirm' ) {
+elsif ( $op eq 'cud-delete_confirm' ) {
     my $mss = Koha::MarcSubfieldStructures->find(
         {
             tagfield      => $tagfield,
@@ -329,7 +329,7 @@ elsif ( $op eq 'delete_confirm' ) {
 ################## DELETE_CONFIRMED ##################################
   # called by delete_confirm, used to effectively confirm deletion of data in DB
 }
-elsif ( $op eq 'delete_confirmed' ) {
+elsif ( $op eq 'cud-delete_confirmed' ) {
     Koha::MarcSubfieldStructures->find(
         {
             tagfield      => $tagfield,

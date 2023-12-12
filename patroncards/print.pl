@@ -56,7 +56,7 @@ my $multi_batch_count = scalar(@batch_ids);
 my $card_count = scalar(@label_ids);
 my $borrower_count = scalar(@borrower_numbers);
 
-if ($op eq 'export') {
+if ($op eq 'cud-export') {
     if (@label_ids) {
         my $label_id_param = '&amp;label_id=';
         $label_id_param .= join ('&amp;label_id=',@label_ids);

@@ -45,7 +45,7 @@ Plugin that shows reserve stats
 
 my $input = CGI->new;
 my $fullreportname = "reports/reserves_stats.tt";
-my $do_it    = $input->param('do_it');
+my $do_it    = $input->param('cud-do_it');
 my $line     = $input->param("Line");
 my $column   = $input->param("Column");
 my $calc     = $input->param("Cellvalue");

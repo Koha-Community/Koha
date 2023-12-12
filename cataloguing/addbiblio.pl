@@ -517,7 +517,7 @@ my $userflags = 'edit_catalogue';
 
 my $changed_framework = $input->param('changed_framework') // q{};
 $frameworkcode = &GetFrameworkCode($biblionumber)
-  if ( $biblionumber and not( defined $frameworkcode) and $op ne 'addbiblio' );
+  if ( $biblionumber and not( defined $frameworkcode) and $op ne 'cud-addbiblio' );
 
 if ($frameworkcode eq 'FA'){
     $userflags = 'fast_cataloging';
@@ -551,7 +551,7 @@ if ($frameworkcode eq 'FA'){
         'stickyduedate'      => $fa_stickyduedate,
         'duedatespec'        => $fa_duedatespec,
     );
-} elsif ( $op ne "delete" &&
+} elsif ( $op ne "cud-delete" &&
             C4::Context->preference('EnableAdvancedCatalogingEditor') &&
             C4::Auth::haspermission(C4::Context->userenv->{id},{'editcatalogue'=>'advanced_editor'}) &&
             $input->cookie( 'catalogue_editor_' . $loggedinuser ) eq 'advanced' &&
@@ -657,7 +657,7 @@ if ($biblionumber) {
 }
 
 #-------------------------------------------------------------------------------------
-if ( $op eq "addbiblio" ) {
+if ( $op eq "cud-addbiblio" ) {
 #-------------------------------------------------------------------------------------
     $template->param(
         biblionumberdata => $biblionumber,
@@ -761,7 +761,7 @@ if ( $op eq "addbiblio" ) {
         );
     }
 }
-elsif ( $op eq "delete" ) {
+elsif ( $op eq "cud-delete" ) {
     
     my $error = &DelBiblio($biblionumber);
     if ($error) {

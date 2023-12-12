@@ -37,8 +37,8 @@ my $subscriptionid = $query->param('subscriptionid');
 my $issue = $query->param('issue');
 my $routingid;
 my $ok = $query->param('ok');
-my $edit = $query->param('edit');
-my $delete = $query->param('delete');
+my $edit = $query->param('cud-edit');
+my $delete = $query->param('cud-delete');
 my $dbh = C4::Context->dbh;
 
 if($delete){

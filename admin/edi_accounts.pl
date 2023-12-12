@@ -63,12 +63,12 @@ if ( $op eq 'acct_form' ) {
         $template->param( plugins => \@plugins );
     }
 }
-elsif ( $op eq 'delete_confirm' ) {
+elsif ( $op eq 'cud-delete_confirm' ) {
     show_account($crypt);
     $template->param( delete_confirm => 1 );
 }
 else {
-    if ( $op eq 'save' ) {
+    if ( $op eq 'cud-save' ) {
 
         # validate & display
         my $id     = $input->param('id');
@@ -105,7 +105,7 @@ else {
             $schema->resultset('VendorEdiAccount')->create($fields);
         }
     }
-    elsif ( $op eq 'delete_confirmed' ) {
+    elsif ( $op eq 'cud-delete_confirmed' ) {
 
         $schema->resultset('VendorEdiAccount')
           ->search( { id => scalar $input->param('id'), } )->delete_all;

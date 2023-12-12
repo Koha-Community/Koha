@@ -35,7 +35,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $op = $query->param('op') || q||;
 
-if ( $op eq 'update' ) {
+if ( $op eq 'cud-update' ) {
     my $UsageStats = $query->param('UsageStats');
     my $UsageStatsCountry = $query->param('UsageStatsCountry');
     my $UsageStatsLibraryName = $query->param('UsageStatsLibraryName');

@@ -64,7 +64,7 @@ if ( $borrowernumber && ( $action eq 'create' || $action eq 'new' ) ) {
 
 if ( $action eq q{} ) {
     if ($borrowernumber) {
-        $action = 'edit';
+        $action = 'cud-edit';
     }
     else {
         $action = 'new';
@@ -189,7 +189,7 @@ if ( $action eq 'create' ) {
                     authnotrequired => 1,
                 }
             );
-            $template->param( 'email' => $borrower{'email'} );
+            $template->param( 'cud-email' => $borrower{'cud-email'} );
 
             my $verification_token = md5_hex( time().{}.rand().{}.$$ );
             while ( Koha::Patron::Modifications->search( { verification_token => $verification_token } )->count() ) {
@@ -215,8 +215,8 @@ if ( $action eq 'create' ) {
             my $message_id = C4::Letters::EnqueueLetter(
                 {
                     letter                 => $letter,
-                    message_transport_type => 'email',
-                    to_address             => $borrower{'email'},
+                    message_transport_type => 'cud-email',
+                    to_address             => $borrower{'cud-email'},
                     from_address =>
                       C4::Context->preference('KohaAdminEmailAddress'),
                 }
@@ -288,7 +288,7 @@ if ( $action eq 'create' ) {
                                     letter                 => $letter,
                                     borrowernumber         => $patron->id,
                                     to_address             => $emailaddr,
-                                    message_transport_type => 'email'
+                                    message_transport_type => 'cud-email'
                                 }
                             );
                             SendQueuedMessages( { message_id => $message_id } ) if $message_id;
@@ -311,7 +311,7 @@ if ( $action eq 'create' ) {
         }
     }
 }
-elsif ( $action eq 'update' ) {
+elsif ( $action eq 'cud-update' ) {
 
     my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
@@ -333,7 +333,7 @@ elsif ( $action eq 'update' ) {
         );
         $template->param( patron_attribute_classes => GeneratePatronAttributesForm( $borrowernumber, $attributes ) );
 
-        $template->param( action => 'edit' );
+        $template->param( action => 'cud-edit' );
     }
     else {
         my %borrower_changes = DelUnchangedFields( $borrowernumber, %borrower );
@@ -371,7 +371,7 @@ elsif ( $action eq 'update' ) {
         else {
             my $patron = Koha::Patrons->find( $borrowernumber );
             $template->param(
-                action => 'edit',
+                action => 'cud-edit',
                 nochanges => 1,
                 borrower => $patron->unblessed,
                 patron_attribute_classes => GeneratePatronAttributesForm( $borrowernumber, $attributes ),
@@ -379,13 +379,13 @@ elsif ( $action eq 'update' ) {
         }
     }
 }
-elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
+elsif ( $action eq 'cud-edit' ) {    #Display logged in borrower's data
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $borrower = $patron->unblessed;
 
     $template->param(
         borrower  => $borrower,
-        hidden => GetHiddenFields( $mandatory, 'edit' ),
+        hidden => GetHiddenFields( $mandatory, 'cud-edit' ),
     );
 
     if (C4::Context->preference('OPACpatronimages')) {
@@ -416,7 +416,7 @@ sub GetHiddenFields {
     my ( $mandatory, $action ) = @_;
     my %hidden_fields;
 
-    my $BorrowerUnwantedField = $action eq 'edit' || $action eq 'update' ?
+    my $BorrowerUnwantedField = $action eq 'cud-edit' || $action eq 'cud-update' ?
       C4::Context->preference( "PatronSelfModificationBorrowerUnwantedField" ) :
       C4::Context->preference( "PatronSelfRegistrationBorrowerUnwantedField" );
 
@@ -436,7 +436,7 @@ sub GetMandatoryFields {
 
     my %mandatory_fields;
 
-    my $BorrowerMandatoryField = $action eq 'edit' || $action eq 'update' ?
+    my $BorrowerMandatoryField = $action eq 'cud-edit' || $action eq 'cud-update' ?
       C4::Context->preference("PatronSelfModificationMandatoryField") :
       C4::Context->preference("PatronSelfRegistrationBorrowerMandatoryField");
 
@@ -448,7 +448,7 @@ sub GetMandatoryFields {
     }
 
     if ( $action eq 'create' || $action eq 'new' ) {
-        $mandatory_fields{'email'} = 1
+        $mandatory_fields{'cud-email'} = 1
           if C4::Context->preference(
             'PatronSelfRegistrationVerifyByEmail');
     }
@@ -489,9 +489,9 @@ sub CheckMandatoryAttributes{
 sub CheckForInvalidFields {
     my $borrower = shift;
     my @invalidFields;
-    if ($borrower->{'email'}) {
+    if ($borrower->{'cud-email'}) {
         unless ( Koha::Email->is_valid($borrower->{email}) ) {
-            push(@invalidFields, "email");
+            push(@invalidFields, "cud-email");
         } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
             my $patrons_with_same_email = Koha::Patrons->search( # FIXME Should be search_limited?
                 {
@@ -508,7 +508,7 @@ sub CheckForInvalidFields {
                 push @invalidFields, "duplicate_email";
             }
         } elsif ( C4::Context->preference("PatronSelfRegistrationConfirmEmail")
-            && $borrower->{'email'} ne $borrower->{'repeat_email'}
+            && $borrower->{'cud-email'} ne $borrower->{'repeat_email'}
             && !defined $borrower->{borrowernumber} ) {
             push @invalidFields, "email_match";
         }
@@ -569,11 +569,11 @@ sub ParseCgiForBorrower {
 sub DelUnchangedFields {
     my ( $borrowernumber, %new_data ) = @_;
     # get the mandatory fields so we can get the hidden fields
-    my $mandatory = GetMandatoryFields('edit');
+    my $mandatory = GetMandatoryFields('cud-edit');
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $current_data = $patron->unblessed;
     # get the hidden fields so we don't obliterate them should they have data patrons aren't allowed to modify
-    my $hidden_fields = GetHiddenFields($mandatory, 'edit');
+    my $hidden_fields = GetHiddenFields($mandatory, 'cud-edit');
 
 
     foreach my $key ( keys %new_data ) {

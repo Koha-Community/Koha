@@ -53,9 +53,9 @@ unless ($vendor) {
     exit;
 }
 
-if ( $op eq 'add_form' || $op eq 'show' ) {
+if ( $op eq 'add_form' || $op eq 'cud-show' ) {
     $template->param( issue => $issue );
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
     my $type       = $input->param('type');
     my $started_on = $input->param('started_on');
     my $ended_on   = $input->param('ended_on');
@@ -92,9 +92,9 @@ if ( $op eq 'add_form' || $op eq 'show' ) {
         };
     }
     $op = 'list';
-} elsif ( $op eq 'delete_confirm' ) {
+} elsif ( $op eq 'cud-delete_confirm' ) {
     $template->param( issue => $issue );
-} elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'cud-delete_confirmed' ) {
     try {
         $issue->delete;
         push @messages, { type => 'message', code => 'success_on_delete' };

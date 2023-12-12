@@ -46,11 +46,11 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
 
 my $op = $input->param('op');
 
-if($op && ($op eq 'new' || $op eq 'modify')) {
+if($op && ($op eq 'new' || $op eq 'cud-modify')) {
     my @units_loop;
     push @units_loop, {val => $_} for (qw/ day week month year /);
 
-    if($op eq 'modify') {
+    if($op eq 'cud-modify') {
         my $frequencyid = $input->param('frequencyid');
         my $frequency = GetSubscriptionFrequency($frequencyid);
         foreach (@units_loop) {
@@ -70,7 +70,7 @@ if($op && ($op eq 'new' || $op eq 'modify')) {
     exit;
 }
 
-if($op && ($op eq 'savenew' || $op eq 'savemod')) {
+if($op && ($op eq 'cud-savenew' || $op eq 'cud-savemod')) {
     my $frequency;
     foreach (qw/ description unit issuesperunit unitsperissue displayorder /) {
         $frequency->{$_} = $input->param($_);
@@ -82,13 +82,13 @@ if($op && ($op eq 'savenew' || $op eq 'savemod')) {
     $frequency->{issuesperunit} = 1 if $frequency->{issuesperunit} < 1;
     $frequency->{unitsperissue} = 1 if $frequency->{issuesperunit} != 1;
 
-    if($op eq 'savemod') {
+    if($op eq 'cud-savemod') {
         $frequency->{id} = $input->param('id');
         ModSubscriptionFrequency($frequency);
     } else {
         AddSubscriptionFrequency($frequency);
     }
-} elsif($op && $op eq 'del') {
+} elsif($op && $op eq 'cud-del') {
     my $frequencyid = $input->param('frequencyid');
 
     if ($frequencyid) {

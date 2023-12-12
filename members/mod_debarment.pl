@@ -40,9 +40,9 @@ my $patron         = Koha::Patrons->find($borrowernumber);
 # But a librarian is not supposed to hack the system
 $action = '' unless $logged_in_user->can_see_patron_infos( $patron );
 
-if ( $action eq 'del' ) {
+if ( $action eq 'cud-del' ) {
     DelDebarment( scalar $cgi->param('borrower_debarment_id') );
-} elsif ( $action eq 'add' ) {
+} elsif ( $action eq 'cud-add' ) {
     my $expiration = $cgi->param('expiration');
     my $type = $cgi->param('debarred_type') // 'MANUAL';
     if ($expiration) {

@@ -135,7 +135,7 @@ if ( $op eq 'add_form' ) {
     $template->param( deliveryplace => $deliveryplace );
 
 #End Edit
-} elsif ( $op eq 'add_validate' ) {
+} elsif ( $op eq 'cud-add_validate' ) {
 #we are confirming the changes, save the basket
     if ( $is_an_edit ) {
         ModBasketHeader(

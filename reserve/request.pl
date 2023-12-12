@@ -110,7 +110,7 @@ if ( $action eq 'move' ) {
         );
     }
 }
-elsif ( $action eq 'cancel' ) {
+elsif ( $action eq 'cud-cancel' ) {
     my $reserve_id          = $input->param('reserve_id');
     my $cancellation_reason = $input->param("cancellation-reason");
     my $hold                = Koha::Holds->find($reserve_id);

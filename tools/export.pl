@@ -73,7 +73,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 my @branch = $query->multi_param("branch");
 
 my @messages;
-if ( $op eq 'export' ) {
+if ( $op eq 'cud-export' ) {
     my $filename = $query->param('id_list_file');
     if ( $filename ) {
         my $mimetype = $query->uploadInfo($filename)->{'Content-Type'};
@@ -85,7 +85,7 @@ if ( $op eq 'export' ) {
     }
 }
 
-if ( $op eq "export" ) {
+if ( $op eq "cud-export" ) {
 
     my $export_remove_fields = $query->param("export_remove_fields") || q||;
     my @biblionumbers      = $query->multi_param("biblionumbers");

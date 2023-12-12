@@ -63,7 +63,7 @@ my ($frameworkexist) = $sth->fetchrow;
 unless ($frameworkexist) {
 	# if frameworkcode does not exists, then OP must be changed to "create framework" if we are not on the way to create it
 	# (op = itemtyp_create_confirm)
-	if ($op eq "framework_create_confirm") {
+	if ($op eq "cud-framework_create_confirm") {
 		duplicate_framework($frameworkcode, $existingframeworkcode);
 		$op = ""; # unset $op to go back to framework list
 	} else {
@@ -110,7 +110,7 @@ if ($op eq 'add_form') {
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
-} elsif ($op eq 'add_validate') {
+} elsif ($op eq 'cud-add_validate') {
 	my $tagfield         = $input->param('tagfield');
 	my $liblibrarian     = $input->param('liblibrarian');
 	my $libopac          = $input->param('libopac');
@@ -160,7 +160,7 @@ if ($op eq 'add_form') {
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'delete_confirm') {
+} elsif ($op eq 'cud-delete_confirm') {
     $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,ind1_defaultvalue,ind2_defaultvalue from marc_tag_structure where tagfield=? and frameworkcode=?");
     $sth->execute($searchfield, $frameworkcode);
     my $data = $sth->fetchrow_hashref;
@@ -171,7 +171,7 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ($op eq 'delete_confirmed') {
+} elsif ($op eq 'cud-delete_confirmed') {
     my $sth1 = $dbh->prepare("DELETE FROM marc_tag_structure      WHERE tagfield=? AND frameworkcode=?");
     my $sth2 = $dbh->prepare("DELETE FROM marc_subfield_structure WHERE tagfield=? AND frameworkcode=?");
     $sth1->execute($searchfield, $frameworkcode);
@@ -198,7 +198,7 @@ if ($op eq 'add_form') {
 
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	# here, $op can be unset or set to "framework_create_confirm".
+	# here, $op can be unset or set to "cud-framework_create_confirm".
     if ($searchfield ne '') {
         $template->param(searchfield => $searchfield);
     }

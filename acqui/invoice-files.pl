@@ -83,7 +83,7 @@ else {
         datereceived     => $details->{'datereceived'},
     );
 
-    if ( $op eq 'upload' ) {
+    if ( $op eq 'cud-upload' ) {
         my $uploaded_file = $input->upload('uploadfile');
 
         if ($uploaded_file) {
@@ -107,7 +107,7 @@ else {
         else {
             $errors{'no_file'} = 1;
         }
-    } elsif ( $op eq 'delete' ) {
+    } elsif ( $op eq 'cud-delete' ) {
         $mf->DelFile( id => scalar $input->param('file_id') );
     }
 

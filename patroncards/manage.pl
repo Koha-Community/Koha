@@ -88,7 +88,7 @@ my $display_columns = { layout =>   [  # db column       => {col label          
 my $errstr = ($cgi->param('error') ? $cgi->param('error') : '');
 my $branch_code = ($card_element eq 'batch' ? C4::Context->userenv->{'branch'} : '');
 
-if ($op eq 'delete') {
+if ($op eq 'cud-delete') {
     my $err = 0;
     my @element_ids = split(/,/, $element_id);
     foreach my $element_id (@element_ids) {

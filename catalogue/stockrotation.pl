@@ -150,7 +150,7 @@ if (!defined $op) {
     # Return to items list
     print $input->redirect("?biblionumber=" . $params{biblionumber});
 
-} elsif ($op eq "add_item_to_rota") {
+} elsif ($op eq "cud-add_item_to_rota") {
 
     my $item = Koha::Items->find($params{item_id});
 

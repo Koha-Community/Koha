@@ -80,7 +80,7 @@ my $pendingorders = SearchOrders({
 });
 my @orders = grep { $_->{'uncertainprice'} } @$pendingorders;
 
-if ( $op eq 'validate' ) {
+if ( $op eq 'cud-validate' ) {
     $template->param( validate => 1);
     my $count = scalar(@orders);
     for (my $i=0; $i < $count; $i++) {

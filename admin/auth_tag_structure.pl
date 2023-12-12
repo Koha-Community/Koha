@@ -55,7 +55,7 @@ my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authty
 
 my $sth;
 # check that authtype framework is defined in auth_tag_structure if we are on a default action
-if (!$op or $op eq 'authtype_create_confirm') {
+if (!$op or $op eq 'cud-authtype_create_confirm') {
     $sth=$dbh->prepare("select count(*) from auth_tag_structure where authtypecode=?");
     $sth->execute($authtypecode);
     my ($authtypeexist) = $sth->fetchrow;
@@ -63,7 +63,7 @@ if (!$op or $op eq 'authtype_create_confirm') {
     } else {
         # if authtype does not exists, then OP must be changed to "create authtype" if we are not on the way to create it
         # (op = authtyp_create_confirm)
-        if ($op eq "authtype_create_confirm") {
+        if ($op eq "cud-authtype_create_confirm") {
             duplicate_auth_framework($authtypecode, $existingauthtypecode);
         } else {
             $op = "authtype_create";
@@ -72,7 +72,7 @@ if (!$op or $op eq 'authtype_create_confirm') {
 }
 $template->param(script_name  => $script_name);
 $template->param(authority_types => $authority_types );
-if ($op && $op ne 'authtype_create_confirm') {
+if ($op && $op ne 'cud-authtype_create_confirm') {
     $template->param($op  => 1);
 } else {
     $template->param(else => 1);
@@ -106,7 +106,7 @@ if ($op eq 'add_form') {
                                                     # END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
-} elsif ($op eq 'add_validate') {
+} elsif ($op eq 'cud-add_validate') {
     my $tagfield         = $input->param('tagfield');
     my $liblibrarian     = $input->param('liblibrarian');
     my $libopac          = $input->param('libopac');
@@ -142,7 +142,7 @@ if ($op eq 'add_form') {
                                                     # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'delete_confirm') {
+} elsif ($op eq 'cud-delete_confirm') {
     $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from auth_tag_structure where tagfield=?");
     $sth->execute($searchfield);
     my $data=$sth->fetchrow_hashref;
@@ -153,7 +153,7 @@ if ($op eq 'add_form') {
                                                     # END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ($op eq 'delete_confirmed') {
+} elsif ($op eq 'cud-delete_confirmed') {
     $dbh->do(q|delete from auth_tag_structure where tagfield=? and authtypecode=?|, undef, $searchfield, $authtypecode);
     $dbh->do(q|delete from auth_subfield_structure where tagfield=? and authtypecode=?|, undef, $searchfield, $authtypecode);
     my $tagfield = $input->param('tagfield');
@@ -180,7 +180,7 @@ if ($op eq 'add_form') {
                     );
 ################## DEFAULT ##################################
 } else { # DEFAULT
-    # here, $op can be unset or set to "authtype_create_confirm".
+    # here, $op can be unset or set to "cud-authtype_create_confirm".
 #   warn "authtype : $authtypecode";
     if  ($searchfield ne '') {
          $template->param(searchfield => $searchfield);
