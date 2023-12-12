@@ -198,6 +198,9 @@ SKIP: {
         $s->fill_form( { categorycode => $category_code, description => 'Test category', enrolmentperiod => 12, category_type => 'A' } );
         $s->submit_form;
 
+        # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our category is not hidden
+        $s->show_all_entries('//div[@id="patron_categories_wrapper"]');
+
         $s->click(
             {
                 href       => '/admin/categories.pl?op=add_form&categorycode=' . $category_code,
