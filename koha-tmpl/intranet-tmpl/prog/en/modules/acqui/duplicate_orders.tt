@@ -54,8 +54,7 @@
 <h1>Duplicate existing orders</h1>
 
 [% IF op == 'search' || op == 'select' %]
-<form action="/cgi-bin/koha/acqui/duplicate_orders.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
+<form action="/cgi-bin/koha/acqui/duplicate_orders.pl" method="get">
     <fieldset class="rows">
         <legend>
             [% IF op == 'search' %]
@@ -68,7 +67,7 @@
         </legend>
         <div id="orders_filters">
             [% INCLUDE 'filter-orders.inc' %]
-            <input type="hidden" name="op" value="cud-select" />
+            <input type="hidden" name="op" value="select" />
             <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
 
             <input type="hidden" name="ordernumbers" value="[% ordernumbers.join(',') | html %]" />

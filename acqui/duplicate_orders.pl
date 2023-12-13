@@ -32,7 +32,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 my $input    = CGI->new;
 my $basketno = $input->param('basketno');
-my $op       = $input->param('op') || 'cud-search';    # search, select, batch_edit
+my $op       = $input->param('op') || 'search';    # search, select, batch_edit
 
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
@@ -81,7 +81,7 @@ $filters->{to_placed_on}   = $to_placed_on;
 
   my ( @result_order_loop, @selected_order_loop );
 my @ordernumbers = split ',', scalar $input->param('ordernumbers') || '';
-if ( $op eq 'cud-select' ) {
+if ( $op eq 'select' ) {
 
     # Set filter for 'all status'
     if ( $filters->{orderstatus} eq "any" ) {
