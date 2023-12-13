@@ -477,6 +477,14 @@ sub get_template_and_user {
         OPACBaseURL        => C4::Context->preference('OPACBaseURL'),
         minPasswordLength  => $minPasswordLength,
     );
+    if ( C4::Context->config('dev_install') ) {
+        # Dealing with debug_programming_error ( set from plack.psgi)
+        $template->param(
+            dev_install        => 1,
+            debug_programming_error => scalar $in->{query}->param('debug_programming_error'),
+        );
+        $in->{query}->delete('debug_programming_error');
+    }
     if ( $in->{'type'} eq "intranet" ) {
 
         $template->param(
