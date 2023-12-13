@@ -24,11 +24,13 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Warn;
 
 use C4::Context;
+use Koha::Cache::Memory::Lite;
 use Koha::Database;
+use Koha::Plugins::Datas;
 use Koha::Plugins::Methods;
 
 use t::lib::Mocks;
@@ -323,7 +325,92 @@ subtest 'Koha::Plugin::Test' => sub {
     $schema->storage->txn_rollback;
 };
 
-$schema->storage->txn_begin;    # matching rollback at the very end
+subtest 'RemovePlugins' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+
+    our $class_basename = 'Koha::Plugin::TestMR::' . time;
+
+    sub reload_plugin {
+        my ( $i, $mocks ) = @_;
+        Koha::Plugins::Data->new(
+            { plugin_class => "$class_basename$i", plugin_key => '__ENABLED__', plugin_value => 1 } )->store;
+        Koha::Plugins::Method->new( { plugin_class => "$class_basename$i", plugin_method => "testmr$i" } )->store;
+
+        # no_auto => 1 here prevents loading of a not-existing module
+        $mocks->[$i] = Test::MockModule->new( "$class_basename$i", no_auto => 1 )->mock( new => 1 )
+            unless $mocks->[$i];
+    }
+
+    # We will (re)create new plugins (without modules)
+    # This requires mocking can_load from Module::Load::Conditional
+    my $mlc_mock     = Test::MockModule->new('Koha::Plugins')->mock( can_load => 1 );
+    my $plugin_mocks = [];
+    my @enabled_plugins;
+
+    subtest 'Destructive flag' => sub {
+        reload_plugin( $_, $plugin_mocks ) for 1 .. 3;
+        Koha::Plugins->RemovePlugins( { destructive => 1 } );
+        is( Koha::Plugins::Datas->count,   0, 'No data in plugin_data' );
+        is( Koha::Plugins::Methods->count, 0, 'No data in plugin_methods' );
+        @enabled_plugins = Koha::Plugins->get_enabled_plugins;    # testing if cache cleared
+        is( scalar @enabled_plugins, 0, 'No enabled plugins' );
+
+        reload_plugin( $_, $plugin_mocks ) for 1 .. 3;
+        Koha::Plugins->RemovePlugins( { plugin_class => "${class_basename}2", destructive => 1 } );
+        is( Koha::Plugins::Datas->count,   2, '2 in plugin_data' );
+        is( Koha::Plugins::Methods->count, 2, '2 in plugin_methods' );
+        @enabled_plugins = Koha::Plugins->get_enabled_plugins;
+        is( scalar @enabled_plugins, 2, '2 enabled plugins' );
+        Koha::Plugins->RemovePlugins( { destructive => 1 } );
+    };
+
+    subtest 'Disable flag' => sub {
+        reload_plugin( $_, $plugin_mocks ) for 1 .. 4;
+        Koha::Plugins->RemovePlugins( { disable => 1 } );
+        is( Koha::Plugins::Datas->count,   4, '4 in plugin_data' );
+        is( Koha::Plugins::Methods->count, 0, 'No data in plugin_methods' );
+        @enabled_plugins = Koha::Plugins->get_enabled_plugins;
+        is( scalar @enabled_plugins, 0, '0 enabled plugins' );
+
+        reload_plugin( $_, $plugin_mocks ) for 5 .. 6;
+        Koha::Plugins->RemovePlugins( { plugin_class => "${class_basename}5", disable => 1 } );
+        is( Koha::Plugins::Datas->count,   6, '6 in plugin_data' );
+        is( Koha::Plugins::Methods->count, 1, '1 in plugin_methods' );
+        @enabled_plugins = Koha::Plugins->get_enabled_plugins;
+        is( scalar @enabled_plugins, 1, '1 enabled plugins' );
+        Koha::Plugins->RemovePlugins( { destructive => 1 } );
+    };
+
+    subtest 'No flags' => sub {
+        reload_plugin( $_, $plugin_mocks ) for 1 .. 2;
+        Koha::Plugins->RemovePlugins;
+        is( Koha::Plugins::Datas->count,   2, '2 in plugin_data' );
+        is( Koha::Plugins::Methods->count, 0, 'No data in plugin_methods' );
+        @enabled_plugins = Koha::Plugins->get_enabled_plugins;
+        is( scalar @enabled_plugins, 2, '2 enabled plugins' );
+
+        reload_plugin( $_, $plugin_mocks ) for 3 .. 4;
+        Koha::Plugins->RemovePlugins( { plugin_class => "${class_basename}4" } );
+        is( Koha::Plugins::Datas->count,   4, '4 in plugin_data' );
+        is( Koha::Plugins::Methods->count, 1, '1 in plugin_methods' );
+        @enabled_plugins = Koha::Plugins->get_enabled_plugins;
+        is( scalar @enabled_plugins, 2, '2 enabled plugins (from cache)' );
+
+        # clear cache and try again, expect 4 since RemovePlugins did not touch plugin_data here
+        Koha::Cache::Memory::Lite->clear_from_cache( Koha::Plugins->ENABLED_PLUGINS_CACHE_KEY );
+        @enabled_plugins = Koha::Plugins->get_enabled_plugins;
+        is( scalar @enabled_plugins, 4, '4 enabled plugins' );
+        Koha::Plugins->RemovePlugins( { destructive => 1 } );
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+
+$schema->storage->txn_begin;    # Matching rollback at very end
 
 subtest 'output and output_html tests' => sub {
 
@@ -412,5 +499,5 @@ subtest 'new() tests' => sub {
     is( ref($result), 'Koha::Plugins', 'calling new with enable_plugins makes it override the config' );
 };
 
-Koha::Plugins::Methods->delete;
 $schema->storage->txn_rollback;
+#!/usr/bin/perl
