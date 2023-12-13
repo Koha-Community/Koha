@@ -409,16 +409,16 @@ if ( C4::Context->preference("ArticleRequests") ) {
 }
 
 $template->param(
-    patron_messages          => $patron_messages,
-    opacnote                 => $borr->{opacnote},
-    patronupdate             => $patronupdate,
-    OpacRenewalAllowed       => C4::Context->preference("OpacRenewalAllowed"),
-    userview                 => 1,
-    SuspendHoldsOpac         => C4::Context->preference('SuspendHoldsOpac'),
-    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
-    OpacHoldNotes            => C4::Context->preference('OpacHoldNotes'),
-    failed_holds             => scalar $query->param('failed_holds'),
-    opac_user_holds          => scalar $query->param('opac-user-holds') || 0,
+    patron_messages            => $patron_messages,
+    opacnote                   => $borr->{opacnote},
+    patronupdate               => $patronupdate,
+    OpacRenewalAllowed         => C4::Context->preference("OpacRenewalAllowed"),
+    userview                   => 1,
+    SuspendHoldsOpac           => C4::Context->preference('SuspendHoldsOpac'),
+    AutoResumeSuspendedHolds   => C4::Context->preference('AutoResumeSuspendedHolds'),
+    OpacHoldNotes              => C4::Context->preference('OpacHoldNotes'),
+    failed_holds               => scalar $query->param('failed_holds'),
+    opac_user_holds            => scalar $query->param('opac-user-holds')            || 0,
     opac_user_article_requests => scalar $query->param('opac-user-article-requests') || 0,
 );
 
