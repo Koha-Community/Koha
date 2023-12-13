@@ -24,7 +24,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 50;
+use Test::More tests => 16;
 use Test::Warn;
 
 use C4::Context;
@@ -230,94 +230,100 @@ subtest 'is_enabled() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-$schema->storage->txn_begin;
-Koha::Plugins::Methods->delete;
-$schema->resultset('PluginData')->delete;
+subtest 'Koha::Plugin::Test' => sub {
+    $schema->storage->txn_begin;
+    Koha::Plugins::Methods->delete;
+    $schema->resultset('PluginData')->delete;
 
-warning_is { Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins(); } undef;
+    warning_is { Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins(); } undef;
 
-ok( Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test' } )->count, 'Test plugin methods added to database' );
-is( Koha::Plugins::Methods->search({ plugin_class => 'Koha::Plugin::Test', plugin_method => '_private_sub' })->count, 0, 'Private methods are skipped' );
+    ok( Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test' } )->count, 'Test plugin methods added to database' );
+    is( Koha::Plugins::Methods->search({ plugin_class => 'Koha::Plugin::Test', plugin_method => '_private_sub' })->count, 0, 'Private methods are skipped' );
 
-my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );
-$mock_plugin->mock( 'test_template', sub {
-    my ( $self, $file ) = @_;
-    my $template = $self->get_template({ file => $file });
-    $template->param( filename => $file );
-    return $template->output;
-});
+    my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );
+    $mock_plugin->mock( 'test_template', sub {
+        my ( $self, $file ) = @_;
+        my $template = $self->get_template({ file => $file });
+        $template->param( filename => $file );
+        return $template->output;
+    });
 
-ok( can_load( modules => { "Koha::Plugin::Test" => undef } ), 'Test can_load' );
+    ok( can_load( modules => { "Koha::Plugin::Test" => undef } ), 'Test can_load' );
 
-my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1, cgi => CGI->new });
+    my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1, cgi => CGI->new });
 
-isa_ok( $plugin, "Koha::Plugin::Test", 'Test plugin class' );
-isa_ok( $plugin, "Koha::Plugins::Base", 'Test plugin parent class' );
+    isa_ok( $plugin, "Koha::Plugin::Test", 'Test plugin class' );
+    isa_ok( $plugin, "Koha::Plugins::Base", 'Test plugin parent class' );
 
-ok( $plugin->can('report'), 'Test plugin can report' );
-ok( $plugin->can('tool'), 'Test plugin can tool' );
-ok( $plugin->can('to_marc'), 'Test plugin can to_marc' );
-ok( $plugin->can('intranet_catalog_biblio_enhancements'), 'Test plugin can intranet_catalog_biblio_enhancements');
-ok( $plugin->can('intranet_catalog_biblio_enhancements_toolbar_button'), 'Test plugin can intranet_catalog_biblio_enhancements_toolbar_button' );
-ok( $plugin->can('opac_online_payment'), 'Test plugin can opac_online_payment' );
-ok( $plugin->can('after_hold_create'), 'Test plugin can after_hold_create' );
-ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_payment_begin' );
-ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );
-ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );
-ok( $plugin->can('opac_js'), 'Test plugin can opac_js' );
-ok( $plugin->can('intranet_head'), 'Test plugin can intranet_head' );
-ok( $plugin->can('intranet_js'), 'Test plugin can intranet_js' );
-ok( $plugin->can('item_barcode_transform'), 'Test plugin can barcode_transform' );
-ok( $plugin->can('configure'), 'Test plugin can configure' );
-ok( $plugin->can('install'), 'Test plugin can install' );
-ok( $plugin->can('upgrade'), 'Test plugin can upgrade' );
-ok( $plugin->can('uninstall'), 'Test plugin can install' );
+    ok( $plugin->can('report'), 'Test plugin can report' );
+    ok( $plugin->can('tool'), 'Test plugin can tool' );
+    ok( $plugin->can('to_marc'), 'Test plugin can to_marc' );
+    ok( $plugin->can('intranet_catalog_biblio_enhancements'), 'Test plugin can intranet_catalog_biblio_enhancements');
+    ok( $plugin->can('intranet_catalog_biblio_enhancements_toolbar_button'), 'Test plugin can intranet_catalog_biblio_enhancements_toolbar_button' );
+    ok( $plugin->can('opac_online_payment'), 'Test plugin can opac_online_payment' );
+    ok( $plugin->can('after_hold_create'), 'Test plugin can after_hold_create' );
+    ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_payment_begin' );
+    ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );
+    ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );
+    ok( $plugin->can('opac_js'), 'Test plugin can opac_js' );
+    ok( $plugin->can('intranet_head'), 'Test plugin can intranet_head' );
+    ok( $plugin->can('intranet_js'), 'Test plugin can intranet_js' );
+    ok( $plugin->can('item_barcode_transform'), 'Test plugin can barcode_transform' );
+    ok( $plugin->can('configure'), 'Test plugin can configure' );
+    ok( $plugin->can('install'), 'Test plugin can install' );
+    ok( $plugin->can('upgrade'), 'Test plugin can upgrade' );
+    ok( $plugin->can('uninstall'), 'Test plugin can install' );
 
-is( Koha::Plugins::Handler->run({ class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 }), "Koha::Plugin::Test::report", 'Test run plugin report method' );
+    is( Koha::Plugins::Handler->run({ class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 }), "Koha::Plugin::Test::report", 'Test run plugin report method' );
 
-my $metadata = $plugin->get_metadata();
-is( $metadata->{'name'}, 'Test Plugin', 'Test $plugin->get_metadata()' );
+    my $metadata = $plugin->get_metadata();
+    is( $metadata->{'name'}, 'Test Plugin', 'Test $plugin->get_metadata()' );
 
-is( $plugin->get_qualified_table_name('mytable'), 'koha_plugin_test_mytable', 'Test $plugin->get_qualified_table_name()' );
-is( $plugin->get_plugin_http_path(), '/plugin/Koha/Plugin/Test', 'Test $plugin->get_plugin_http_path()' );
+    is( $plugin->get_qualified_table_name('mytable'), 'koha_plugin_test_mytable', 'Test $plugin->get_qualified_table_name()' );
+    is( $plugin->get_plugin_http_path(), '/plugin/Koha/Plugin/Test', 'Test $plugin->get_plugin_http_path()' );
 
-# test absolute path change in get_template with Koha::Plugin::Test
-# using the mock set before
-# we also add tmpdir as an approved template dir
-t::lib::Mocks::mock_config( 'pluginsdir', [ C4::Context->temporary_directory ] );
-my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1, DIR => C4::Context->temporary_directory );
-print $fh 'I am [% filename %]';
-close $fh;
-my $classname = ref($plugin);
-like( $plugin->test_template($fn), qr/^I am $fn/, 'Template works' );
+    # test absolute path change in get_template with Koha::Plugin::Test
+    # using the mock set before
+    # we also add tmpdir as an approved template dir
+    t::lib::Mocks::mock_config( 'pluginsdir', [ C4::Context->temporary_directory ] );
+    my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1, DIR => C4::Context->temporary_directory );
+    print $fh 'I am [% filename %]';
+    close $fh;
+    my $classname = ref($plugin);
+    like( $plugin->test_template($fn), qr/^I am $fn/, 'Template works' );
 
-my $result = $plugin->enable;
-is( ref($result), 'Koha::Plugin::Test' );
+    my $result = $plugin->enable;
+    is( ref($result), 'Koha::Plugin::Test' );
 
-# testing GetPlugins
-my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
-    method => 'report'
-});
+    # testing GetPlugins
+    my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
+        method => 'report'
+    });
 
-my @names = map { $_->get_metadata()->{'name'} } @plugins;
-is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functions correctly" );
-@plugins =  Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
-    metadata => { my_example_tag  => 'find_me' },
-});
+    my @names = map { $_->get_metadata()->{'name'} } @plugins;
+    is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functions correctly" );
+    @plugins =  Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
+        metadata => { my_example_tag  => 'find_me' },
+    });
 
-@names = map { $_->get_metadata()->{'name'} } @plugins;
-is( scalar grep( /^Test Plugin$/, @names), 1, "GetPlugins also found Test Plugin via a metadata tag" );
+    @names = map { $_->get_metadata()->{'name'} } @plugins;
+    is( scalar grep( /^Test Plugin$/, @names), 1, "GetPlugins also found Test Plugin via a metadata tag" );
 
-$result = $plugin->disable;
-is( ref($result), 'Koha::Plugin::Test' );
+    $result = $plugin->disable;
+    is( ref($result), 'Koha::Plugin::Test' );
 
-@plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins();
-@names = map { $_->get_metadata()->{'name'} } @plugins;
-is( scalar grep( /^Test Plugin$/, @names), 0, "GetPlugins does not found disabled Test Plugin" );
+    @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins();
+    @names = map { $_->get_metadata()->{'name'} } @plugins;
+    is( scalar grep( /^Test Plugin$/, @names), 0, "GetPlugins does not found disabled Test Plugin" );
 
-@plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({ all => 1 });
-@names = map { $_->get_metadata()->{'name'} } @plugins;
-is( scalar grep( /^Test Plugin$/, @names), 1, "With all param, GetPlugins found disabled Test Plugin" );
+    @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({ all => 1 });
+    @names = map { $_->get_metadata()->{'name'} } @plugins;
+    is( scalar grep( /^Test Plugin$/, @names), 1, "With all param, GetPlugins found disabled Test Plugin" );
+
+    $schema->storage->txn_rollback;
+};
+
+$schema->storage->txn_begin;    # matching rollback at the very end
 
 subtest 'output and output_html tests' => sub {
 
