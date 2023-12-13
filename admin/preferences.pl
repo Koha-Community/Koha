@@ -376,7 +376,7 @@ if ( $op eq 'cud-save' ) {
 
 my @TABS;
 
-if ( $op eq 'cud-search' ) {
+if ( $op eq 'search' ) {
     my $searchfield = $input->param( 'searchfield' );
 
     $searchfield =~ s/\p{IsC}//g;
