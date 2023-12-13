@@ -231,10 +231,6 @@ $(document).ready(function() {
         }
     }
 
-    if( PREF_LocalCoverImages ){
-        KOHA.LocalCover.LoadResultsCovers();
-    }
-
     if( PREF_IntranetCoce && PREF_CoceProviders ){
         KOHA.coce.getURL( CoceHost, CoceProviders );
     }
