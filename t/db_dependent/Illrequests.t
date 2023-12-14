@@ -23,7 +23,7 @@ use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Database;
 use Koha::ILL::Request::Attributes;
-use Koha::Illrequest::Config;
+use Koha::ILL::Request::Config;
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::ItemTypes;
@@ -60,7 +60,7 @@ subtest 'Basic object tests' => sub {
 
     isa_ok($illrq_obj, 'Koha::Illrequest',
            "Correctly create and load an illrequest object.");
-    isa_ok($illrq_obj->_config, 'Koha::Illrequest::Config',
+    isa_ok($illrq_obj->_config, 'Koha::ILL::Request::Config',
            "Created a config object as part of Illrequest creation.");
 
     is($illrq_obj->illrequest_id, $illrq->{illrequest_id},

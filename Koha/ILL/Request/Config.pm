@@ -1,4 +1,4 @@
-package Koha::Illrequest::Config;
+package Koha::ILL::Request::Config;
 
 # Copyright 2013,2014 PTFS Europe Ltd
 #
@@ -27,7 +27,7 @@ use List::MoreUtils qw( uniq );
 
 =head1 NAME
 
-Koha::Illrequest::Config - Koha ILL Configuration Object
+Koha::ILL::Request::Config - Koha ILL Configuration Object
 
 =head1 SYNOPSIS
 
@@ -54,9 +54,9 @@ The config file also provides mappings for Record Object accessors.
 
 =head3 new
 
-    my $config = Koha::Illrequest::Config->new();
+    my $config = Koha::ILL::Request::Config->new();
 
-Create a new Koha::Illrequest::Config object, with mapping data loaded from the
+Create a new Koha::ILL::Request::Config object, with mapping data loaded from the
 ILL configuration file.
 
 =cut

@@ -27,7 +27,7 @@ use C4::Koha;
 use C4::Output qw( output_html_with_http_headers );
 use POSIX qw( strftime );
 
-use Koha::Illrequest::Config;
+use Koha::ILL::Request::Config;
 use Koha::Illrequests;
 use Koha::Illrequest;
 use Koha::Libraries;
@@ -56,7 +56,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 
 # Are we able to actually work?
 my $reduced  = C4::Context->preference('ILLOpacbackends');
-my $backends = Koha::Illrequest::Config->new->available_backends($reduced);
+my $backends = Koha::ILL::Request::Config->new->available_backends($reduced);
 my $backends_available = ( scalar @{$backends} > 0 );
 $template->param( backends_available => $backends_available );
 my $patron = Koha::Patrons->find($loggedinuser);

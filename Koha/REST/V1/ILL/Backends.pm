@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::Illrequest::Config;
+use Koha::ILL::Request::Config;
 use Koha::Illrequests;
 use Koha::ILL::Backend;
 

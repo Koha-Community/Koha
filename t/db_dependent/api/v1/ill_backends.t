@@ -40,8 +40,8 @@ subtest 'list() tests' => sub {
 
     plan tests => 16;
 
-    # Mock Illrequest::Config (as module)
-    my $illconfig_module = Test::MockModule->new('Koha::Illrequest::Config');
+    # Mock ILL::Request::Config (as module)
+    my $illconfig_module = Test::MockModule->new('Koha::ILL::Request::Config');
 
     # Start with no backends installed
     $illconfig_module->mock( 'available_backends', sub { () } );

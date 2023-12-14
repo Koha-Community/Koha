@@ -217,10 +217,10 @@ subtest 'list() tests' => sub {
       ->json_has('/0/comments', $comment_text);
 
     # x-koha-embed: id_prefix
-    # Mock Illrequest::Config to return a static prefix
+    # Mock ILL::Request::Config to return a static prefix
     my $id_prefix = 'ILL';
     my $config = Test::MockObject->new;
-    $config->set_isa('Koha::Illrequest::Config::Mock');
+    $config->set_isa('Koha::ILL::Request::Config::Mock');
     $config->set_always('getPrefixes', $id_prefix);
 
     # Make sure id_prefix comes back

@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Illrequest;
-use Koha::Illrequest::Config;
+use Koha::ILL::Request::Config;
 
 use base qw(Koha::Objects);
 
@@ -50,7 +50,7 @@ sub new {
 
     my $self = $class->SUPER::new($class, $attributes);
 
-    my $config = Koha::Illrequest::Config->new; # <- Necessary
+    my $config = Koha::ILL::Request::Config->new; # <- Necessary
     $self->{_config} = $config;                 # <- Necessary
 
     return $self;

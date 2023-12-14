@@ -62,7 +62,7 @@ my ( $template, $patronnumber, $cookie ) = get_template_and_user( {
 } );
 
 # Are we able to actually work?
-my $cfg = Koha::Illrequest::Config->new;
+my $cfg = Koha::ILL::Request::Config->new;
 my $backends = $cfg->available_backends;
 my $has_branch = $cfg->has_branch;
 my $backends_available = ( scalar @{$backends} > 0 );

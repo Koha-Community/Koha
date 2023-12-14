@@ -58,7 +58,7 @@ if (!$backend) {
 }
 
 # First check we can proceed
-my $cfg = Koha::Illrequest::Config->new;
+my $cfg = Koha::ILL::Request::Config->new;
 my $backends = $cfg->available_backends;
 my $has_branch = $cfg->has_branch;
 my $backends_available = ( scalar @{$backends} > 0 );

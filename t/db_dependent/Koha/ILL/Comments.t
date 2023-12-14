@@ -21,7 +21,7 @@ use File::Basename qw/basename/;
 use Koha::Database;
 use Koha::Illrequests;
 use Koha::ILL::Request::Attributes;
-use Koha::Illrequest::Config;
+use Koha::ILL::Request::Config;
 use Koha::Patrons;
 use t::lib::Mocks;
 use t::lib::TestBuilder;

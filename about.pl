@@ -53,7 +53,7 @@ use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Caches;
 use Koha::Config::SysPrefs;
-use Koha::Illrequest::Config;
+use Koha::ILL::Request::Config;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::Logger;
 use Koha::Filter::MARC::ViewPolicy;
@@ -300,7 +300,7 @@ unless ( Koha::I18N->_base_directory ) {
 if ( C4::Context->preference('ILLModule') ) {
     my $warnILLConfiguration = 0;
     my $ill_config_from_file = C4::Context->config("interlibrary_loans");
-    my $ill_config = Koha::Illrequest::Config->new;
+    my $ill_config = Koha::ILL::Request::Config->new;
 
     my $available_ill_backends =
       ( scalar @{ $ill_config->available_backends } > 0 );

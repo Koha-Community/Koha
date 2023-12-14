@@ -27,7 +27,7 @@ use Test::More tests => 5;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
-use_ok('Koha::Illrequest::Config');
+use_ok('Koha::ILL::Request::Config');
 
 my $base_limits = {
     branch => { CPL => { count => 1, method => 'annual' } },
@@ -46,8 +46,8 @@ subtest 'Basics' => sub {
     t::lib::Mocks::mock_config("interlibrary_loans", {});
     t::lib::Mocks::mock_preference('ILLPartnerCode', undef);
 
-    my $config = Koha::Illrequest::Config->new;
-    isa_ok($config, "Koha::Illrequest::Config",
+    my $config = Koha::ILL::Request::Config->new;
+    isa_ok($config, "Koha::ILL::Request::Config",
            "Correctly create and load a config object.");
 
     # backend:
@@ -98,22 +98,22 @@ subtest '_load_unit_config' => sub {
 
     $schema->storage->txn_begin;
 
-    my $config = Koha::Illrequest::Config->new;
+    my $config = Koha::ILL::Request::Config->new;
 
     dies_ok(
-        sub { Koha::Illrequest::Config::_load_unit_config({
+        sub { Koha::ILL::Request::Config::_load_unit_config({
             id => 'durineadu', type => 'baz'
         }) },
         "_load_unit_config: die if ID is not default, and type is not branch or brw_cat."
     );
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => {}, id => 'default', config => {}, test => 1
         }), {}, "_load_unit_config: invocation without id returns unmodified config."
     );
 
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => { api_key => 'foo', api_auth => 'bar' },
             id => "CPL", type => 'branch', config => {}
         }),
@@ -123,19 +123,19 @@ subtest '_load_unit_config' => sub {
 
     # Populate request_limits
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => { request_limit => [ 'heelo', 1234 ] },
             id => "CPL", type => 'branch', config => {}
         }), {}, "_load_unit_config: invalid request_limit structure."
     );
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => { request_limit => { method => 'eudiren', count => '-5465' } },
             id => "CPL", type => 'branch', config => {}
         }), {}, "_load_unit_config: invalid method & count."
     );
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => { request_limit => { method => 'annual', count => 6 } },
             id => "default", config => {}
         }),
@@ -145,7 +145,7 @@ subtest '_load_unit_config' => sub {
 
     # Populate prefix
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => { prefix => 'Foo-ill' },
             id => "default", config => {}
         }),
@@ -153,7 +153,7 @@ subtest '_load_unit_config' => sub {
         "_load_unit_config: correct default prefix."
     );
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => { prefix => 'Foo-ill' },
             id => "A", config => {}, type => 'brw_cat'
         }),
@@ -163,7 +163,7 @@ subtest '_load_unit_config' => sub {
 
     # Populate digital_recipient
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => { digital_recipient => 'borrower' },
             id => "default", config => {}
         }),
@@ -171,7 +171,7 @@ subtest '_load_unit_config' => sub {
         "_load_unit_config: correct default digital_recipient."
     );
     is_deeply(
-        Koha::Illrequest::Config::_load_unit_config({
+        Koha::ILL::Request::Config::_load_unit_config({
             unit => { digital_recipient => 'branch' },
             id => "A", config => {}, type => 'brw_cat'
         }),
@@ -198,12 +198,12 @@ subtest '_load_configuration' => sub {
 
     $schema->storage->txn_begin;
 
-    my $config = Koha::Illrequest::Config->new;
+    my $config = Koha::ILL::Request::Config->new;
     t::lib::Mocks::mock_preference('ILLPartnerCode', 'IL');
 
     # Return basic configuration
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration({}, 0),
+        Koha::ILL::Request::Config::_load_configuration( {}, 0 ),
         {
             backend_directory  => undef,
             censorship         => {
@@ -221,7 +221,7 @@ subtest '_load_configuration' => sub {
 
     # Return correct backend_dir
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration({ backend_directory => '/tmp/' }, 0),
+        Koha::ILL::Request::Config::_load_configuration( { backend_directory => '/tmp/' }, 0 ),
         {
             backend_directory  => '/tmp/',
             censorship         => {
@@ -247,7 +247,7 @@ subtest '_load_configuration' => sub {
         ]
     };
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration($xml_config, 0),
+        Koha::ILL::Request::Config::_load_configuration( $xml_config, 0 ),
         {
             backend_directory  => '/tmp/',
             censorship         => {
@@ -273,7 +273,7 @@ subtest '_load_configuration' => sub {
         }
     };
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration($xml_config, 0),
+        Koha::ILL::Request::Config::_load_configuration( $xml_config, 0 ),
         {
             backend_directory  => '/tmp/',
             censorship         => {
@@ -299,7 +299,7 @@ subtest '_load_configuration' => sub {
         ]
     };
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration($xml_config, 0),
+        Koha::ILL::Request::Config::_load_configuration( $xml_config, 0 ),
         {
             backend_directory  => '/tmp/',
             censorship         => {
@@ -325,7 +325,7 @@ subtest '_load_configuration' => sub {
         }
     };
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration($xml_config, 0),
+        Koha::ILL::Request::Config::_load_configuration( $xml_config, 0 ),
         {
             backend_directory  => '/tmp/',
             censorship         => {
@@ -349,7 +349,7 @@ subtest '_load_configuration' => sub {
         digital_recipient => 'branch',
     };
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration($xml_config, 0),
+        Koha::ILL::Request::Config::_load_configuration( $xml_config, 0 ),
         {
             backend_directory  => '/tmp/',
             censorship         => {
@@ -372,7 +372,7 @@ subtest '_load_configuration' => sub {
         reply_date => 'hide'
     };
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration($xml_config, 0),
+        Koha::ILL::Request::Config::_load_configuration( $xml_config, 0 ),
         {
             backend_directory  => '/tmp/',
             censorship         => {
@@ -390,7 +390,7 @@ subtest '_load_configuration' => sub {
 
     # Partner library category
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration( { partner_code => 'FOOBAR' } ),
+        Koha::ILL::Request::Config::_load_configuration( { partner_code => 'FOOBAR' } ),
         {
             backend_directory => undef,
             censorship        => {
@@ -409,7 +409,7 @@ subtest '_load_configuration' => sub {
     t::lib::Mocks::mock_preference( 'ILLPartnerCode', 'FOOBAR' );
 
     is_deeply(
-        Koha::Illrequest::Config::_load_configuration(),
+        Koha::ILL::Request::Config::_load_configuration(),
         {
             backend_directory => undef,
             censorship        => {
@@ -437,7 +437,7 @@ subtest 'Final tests' => sub {
 
     t::lib::Mocks::mock_config("interlibrary_loans", {});
 
-    my $config = Koha::Illrequest::Config->new;
+    my $config = Koha::ILL::Request::Config->new;
 
     # getPrefixes (error & undef):
     is($config->getPrefixes(), undef,
@@ -453,7 +453,7 @@ subtest 'Final tests' => sub {
     is_deeply($config->getDigitalRecipients("branch"), { default => undef},
               "getDigitalRecipients: Undefined branch dig rec is undefined.");
 
-    $config->{configuration} = Koha::Illrequest::Config::_load_configuration({
+    $config->{configuration} = Koha::ILL::Request::Config::_load_configuration({
             backend_directory => '/tmp/',
             prefix => 'DEFAULT-prefix',
             digital_recipient => 'branch',

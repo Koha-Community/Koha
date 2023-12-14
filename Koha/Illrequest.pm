@@ -534,7 +534,7 @@ sub _config {
     $self->{_my_config} = $config if ( $config );
     # Load our config object, as late as possible.
     unless ( $self->{_my_config} ) {
-        $self->{_my_config} = Koha::Illrequest::Config->new;
+        $self->{_my_config} = Koha::ILL::Request::Config->new;
     }
     return $self->{_my_config};
 }
