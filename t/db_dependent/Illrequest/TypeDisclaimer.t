@@ -25,7 +25,7 @@ use Test::MockObject;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::Illrequest::Workflow::TypeDisclaimer;
+use Koha::ILL::Request::Workflow::TypeDisclaimer;
 use Koha::Database;
 
 my $schema = Koha::Database->new->schema;
@@ -33,7 +33,7 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 
-use_ok('Koha::Illrequest::Workflow::TypeDisclaimer');
+use_ok('Koha::ILL::Request::Workflow::TypeDisclaimer');
 
 my $metadata = {
     title  => 'This is a title',
@@ -48,9 +48,9 @@ foreach my $key ( keys %{$metadata} ) {
 }
 
 my $type_disclaimer =
-  Koha::Illrequest::Workflow::TypeDisclaimer->new( $sorted, 'staff' );
+  Koha::ILL::Request::Workflow::TypeDisclaimer->new( $sorted, 'staff' );
 
-isa_ok( $type_disclaimer, 'Koha::Illrequest::Workflow::TypeDisclaimer' );
+isa_ok( $type_disclaimer, 'Koha::ILL::Request::Workflow::TypeDisclaimer' );
 
 is(
     $type_disclaimer->prep_metadata($sorted),
@@ -108,7 +108,7 @@ is( $type_disclaimer->show_type_disclaimer($request),
 
 # Mock ILLModuleDisclaimerByType with invalid YAML
 my $type_disclaimer_module =
-  Test::MockModule->new('Koha::Illrequest::Workflow::TypeDisclaimer');
+  Test::MockModule->new('Koha::ILL::Request::Workflow::TypeDisclaimer');
 $type_disclaimer_module->mock( '_get_type_disclaimer_sys_pref', {} );
 
 is( $type_disclaimer->show_type_disclaimer($request),

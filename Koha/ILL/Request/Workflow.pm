@@ -1,4 +1,4 @@
-package Koha::Illrequest::Workflow;
+package Koha::ILL::Request::Workflow;
 
 # Copyright 2023 PTFS Europe Ltd
 #
@@ -28,7 +28,7 @@ use Koha::Plugins;
 
 =head1 NAME
 
-Koha::Illrequest::Workflow - Koha ILL Workflow parent class
+Koha::ILL::Request::Workflow - Koha ILL Workflow parent class
 
 =head1 SYNOPSIS
 
@@ -44,9 +44,9 @@ This class contains methods do be used by ILL workflow stages
 
 =head3 new
 
-    my $availability = Koha::Illrequest::Workflow::Availability->new( $params, 'opac' )
+    my $availability = Koha::ILL::Request::Workflow::Availability->new( $params, 'opac' )
 
-Create a new Koha::Illrequest::Workflow child class object.
+Create a new Koha::ILL::Request::Workflow child class object.
 We store the metadata and ui_context
 
 =cut
@@ -65,7 +65,7 @@ sub new {
 
 =head3 prep_metadata
 
-    my $prepared = Koha::Illrequest::Workflow->prep_metadata($metadata);
+    my $prepared = Koha::ILL::Request::Workflow->prep_metadata($metadata);
 
 Given our metadata, return a string representing that metadata that can be
 passed in a URL (encoded in JSON then Base64 encoded)

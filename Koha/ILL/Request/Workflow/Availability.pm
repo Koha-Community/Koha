@@ -1,4 +1,4 @@
-package Koha::Illrequest::Workflow::Availability;
+package Koha::ILL::Request::Workflow::Availability;
 
 # Copyright 2019 PTFS Europe Ltd
 #
@@ -21,13 +21,13 @@ use Modern::Perl;
 
 use JSON;
 
-use base qw(Koha::Illrequest::Workflow);
+use base qw(Koha::ILL::Request::Workflow);
 
 use Koha::Plugins;
 
 =head1 NAME
 
-Koha::Illrequest::Workflow::Availability - Koha ILL Availability Searching
+Koha::ILL::Request::Workflow::Availability - Koha ILL Availability Searching
 
 =head1 SYNOPSIS
 
@@ -46,7 +46,7 @@ that can be used to search for item availability
 =head3 get_services
 
     my $services =
-      Koha::Illrequest::Workflow::Availability->get_services($params);
+      Koha::ILL::Request::Workflow::Availability->get_services($params);
 
 Given our metadata, iterate plugins with the right method and
 check if they can service our request and, if so, return an arrayref
@@ -84,7 +84,7 @@ sub get_services {
 =head3 show_availability
 
     my $show_availability =
-    Koha::Illrequest::Workflow::Availability->show_availability($params);
+    Koha::ILL::Request::Workflow::Availability->show_availability($params);
 
 Given $params, return true if availability should be shown
 
@@ -114,7 +114,7 @@ sub show_availability {
 =head3 availability_template_params
 
     my $availability_template_params =
-    Koha::Illrequest::Workflow::Availability->availability_template_params(
+    Koha::ILL::Request::Workflow::Availability->availability_template_params(
         $params);
 
 Given $params, return true if availability should be shown

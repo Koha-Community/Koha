@@ -25,7 +25,7 @@ use Test::MockObject;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::Illrequest::Workflow::Availability;
+use Koha::ILL::Request::Workflow::Availability;
 use Koha::Database;
 
 my $schema = Koha::Database->new->schema;
@@ -33,7 +33,7 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 
-use_ok('Koha::Illrequest::Workflow::Availability');
+use_ok('Koha::ILL::Request::Workflow::Availability');
 
 my $metadata = {
     title  => 'This is a title',
@@ -48,9 +48,9 @@ foreach my $key ( keys %{$metadata} ) {
 }
 
 my $availability =
-  Koha::Illrequest::Workflow::Availability->new( $sorted, 'staff' );
+  Koha::ILL::Request::Workflow::Availability->new( $sorted, 'staff' );
 
-isa_ok( $availability, 'Koha::Illrequest::Workflow::Availability' );
+isa_ok( $availability, 'Koha::ILL::Request::Workflow::Availability' );
 
 is(
     $availability->prep_metadata($sorted),
@@ -85,7 +85,7 @@ t::lib::Mocks::mock_preference( 'ILLCheckAvailability', 1 );
 
 # Mock not empty availability services
 my $availability_module =
-  Test::MockModule->new('Koha::Illrequest::Workflow::Availability');
+  Test::MockModule->new('Koha::ILL::Request::Workflow::Availability');
 $availability_module->mock( 'get_services', [ { name => 'service' } ] );
 
 my $req_1 = $builder->build_object(

@@ -1,4 +1,4 @@
-package Koha::Illrequest::Workflow::TypeDisclaimer;
+package Koha::ILL::Request::Workflow::TypeDisclaimer;
 
 # Copyright 2023 PTFS Europe Ltd
 #
@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use POSIX qw( strftime );
 
-use base qw(Koha::Illrequest::Workflow);
+use base qw(Koha::ILL::Request::Workflow);
 
 =head1 NAME
 
@@ -54,27 +54,30 @@ sub show_type_disclaimer {
 
     my $disc_sys_pref = $self->_get_type_disclaimer_sys_pref;
 
-    my $disc_info =
-      $self->_get_type_disclaimer_info( $self->_get_type_disclaimer_sys_pref,
-        $self->{metadata}->{type} );
+    my $disc_info = $self->_get_type_disclaimer_info(
+        $self->_get_type_disclaimer_sys_pref,
+        $self->{metadata}->{type}
+    );
 
     return
 
-      # ILLModuleDisclaimerByType contains correct YAML
-      %{$disc_sys_pref}
+        # ILLModuleDisclaimerByType contains correct YAML
+        %{$disc_sys_pref}
 
-      # Check that we have info to display for this type
-      && $disc_info
+        # Check that we have info to display for this type
+        && $disc_info
 
-      # ILLModuleDisclaimerByType contains at least 'all'
-      && $disc_sys_pref->{all}
+        # ILLModuleDisclaimerByType contains at least 'all'
+        && $disc_sys_pref->{all}
 
-      # Type disclaimer has not yet been submitted
-      && !$self->{metadata}->{type_disclaimer_submitted}
+        # Type disclaimer has not yet been submitted
+        && !$self->{metadata}->{type_disclaimer_submitted}
 
-     # The form has been submitted and the backend is able to create the request
-      && $request->_backend_capability( 'can_create_request',
-        $self->{metadata} );
+        # The form has been submitted and the backend is able to create the request
+        && $request->_backend_capability(
+        'can_create_request',
+        $self->{metadata}
+        );
 }
 
 =head3 type_disclaimer_template_params
@@ -90,12 +93,13 @@ Given $params, return true if type disclaimer should be rendered
 sub type_disclaimer_template_params {
     my ( $self, $params ) = @_;
 
-    my $disc_info =
-      $self->_get_type_disclaimer_info( $self->_get_type_disclaimer_sys_pref,
-        $params->{type} );
+    my $disc_info = $self->_get_type_disclaimer_info(
+        $self->_get_type_disclaimer_sys_pref,
+        $params->{type}
+    );
 
     $params->{method} = 'typedisclaimer' if $self->{ui_context} eq 'staff';
-    delete $params->{stage}              if $self->{ui_context} eq 'staff';
+    delete $params->{stage} if $self->{ui_context} eq 'staff';
 
     return (
         whole      => $params,
@@ -129,7 +133,7 @@ sub after_request_created {
         value         => strftime( "%Y-%m-%dT%H:%M:%S", localtime( time() ) ),
         readonly      => 0
     };
-    Koha::Illrequestattribute->new($type_disclaimer_date)->store;
+    Koha::ILL::Request::Attribute->new($type_disclaimer_date)->store;
 
     my $type_disclaimer_value = {
         illrequest_id => $request->illrequest_id,
@@ -137,7 +141,7 @@ sub after_request_created {
         value         => $params->{type_disclaimer_value},
         readonly      => 0
     };
-    Koha::Illrequestattribute->new($type_disclaimer_value)->store;
+    Koha::ILL::Request::Attribute->new($type_disclaimer_value)->store;
 }
 
 =head3 _get_type_disclaimer_info
@@ -154,7 +158,7 @@ sub _get_type_disclaimer_info {
     my ( $self, $disc_sys_pref, $type ) = @_;
 
     my @matching_request_type =
-      map ( $_ eq $type ? $_ : (), keys %$disc_sys_pref );
+        map ( $_ eq $type ? $_ : (), keys %$disc_sys_pref );
 
     my $disc_info = undef;
     if ( scalar @matching_request_type ) {
@@ -162,8 +166,7 @@ sub _get_type_disclaimer_info {
 
         $disc_info->{text}   = $disc_sys_pref->{$type}->{text};
         $disc_info->{av_cat} = $disc_sys_pref->{$type}->{av_category_code};
-    }
-    elsif ( $disc_sys_pref->{all} ) {
+    } elsif ( $disc_sys_pref->{all} ) {
         $disc_info->{text}   = $disc_sys_pref->{all}->{text};
         $disc_info->{av_cat} = $disc_sys_pref->{all}->{av_category_code};
     }
