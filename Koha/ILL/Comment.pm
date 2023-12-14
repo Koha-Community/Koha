@@ -1,4 +1,4 @@
-package Koha::Illcomment;
+package Koha::ILL::Comment;
 
 # Copyright Magnus Enger Libriotech 2017
 #
@@ -23,13 +23,13 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Illcomment - Koha Illcomment Object class
+Koha::ILL::Comment - Koha Illcomment Object class
 
 =head2 Class methods
 
 =head3 patron
 
-    my $patron = Koha::Illcomment->patron;
+    my $patron = Koha::ILL::Comment->patron;
 
 Return the patron object associated with this comment
 
@@ -46,7 +46,7 @@ sub patron {
 
 =head3 _type
 
-    my $type = Koha::IllComment->_type;
+    my $type = Koha::ILL::Comment->_type;
 
 Return this object's type
 

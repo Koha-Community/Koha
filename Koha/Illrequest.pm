@@ -30,7 +30,7 @@ use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Ill;
-use Koha::Illcomments;
+use Koha::ILL::Comments;
 use Koha::Illrequestattributes;
 use Koha::AuthorisedValue;
 use Koha::Illrequest::Logger;
@@ -209,7 +209,7 @@ sub illrequestattributes {
 
 sub illcomments {
     my ( $self ) = @_;
-    return Koha::Illcomments->_new_from_dbic(
+    return Koha::ILL::Comments->_new_from_dbic(
         scalar $self->_result->illcomments
     );
 }
@@ -218,13 +218,13 @@ sub illcomments {
 
     my $ill_comments = $req->comments;
 
-Returns a I<Koha::Illcomments> resultset for the linked comments.
+Returns a I<Koha::ILL::Comments> resultset for the linked comments.
 
 =cut
 
 sub comments {
     my ( $self ) = @_;
-    return Koha::Illcomments->_new_from_dbic(
+    return Koha::ILL::Comments->_new_from_dbic(
         scalar $self->_result->comments
     );
 }

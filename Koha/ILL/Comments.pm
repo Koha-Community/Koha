@@ -1,4 +1,4 @@
-package Koha::Illcomments;
+package Koha::ILL::Comments;
 
 # Copyright Magnus Enger Libriotech 2017
 #
@@ -19,18 +19,18 @@ package Koha::Illcomments;
 
 use Modern::Perl;
 use Koha::Database;
-use Koha::Illcomment;
+use Koha::ILL::Comment;
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Illcomments - Koha Illcomments Object class
+Koha::ILL::Comments - Koha Illcomments Object class
 
 =head2 Internal methods
 
 =head3 _type
 
-    my $type = Koha::IllComments->_type;
+    my $type = Koha::ILL::Comments->_type;
 
 Return this object's type
 
@@ -42,14 +42,14 @@ sub _type {
 
 =head3 object_class
 
-    my $class = Koha::IllComments->object_class;
+    my $class = Koha::ILL::Comments->object_class;
 
 Return this object's class name
 
 =cut
 
 sub object_class {
-    return 'Koha::Illcomment';
+    return 'Koha::ILL::Comment';
 }
 
 =head1 AUTHOR

@@ -209,7 +209,7 @@ subtest 'list() tests' => sub {
     # x-koha-embed: comments
     # Create comment
     my $comment_text = "This is the comment";
-    my $comment = $builder->build_object({ class => 'Koha::Illcomments', value => { illrequest_id => $req_1->illrequest_id, comment => $comment_text , borrowernumber => $patron->borrowernumber } } );
+    my $comment = $builder->build_object({ class => 'Koha::ILL::Comments', value => { illrequest_id => $req_1->illrequest_id, comment => $comment_text , borrowernumber => $patron->borrowernumber } } );
 
     # Make sure comments come back
     $t->get_ok("//$userid:$password@/api/v1/ill/requests" => {"x-koha-embed" => "comments"} )
