@@ -222,7 +222,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="title_query">
-                            <xsl:text>Host-item:(</xsl:text>
+                            <xsl:value-of select="'Host-item:('"/>
                             <xsl:call-template name="quote_search_term">
                                 <xsl:with-param name="term"><xsl:value-of select="marc:datafield[@tag=245]/marc:subfield[@code='a']"/></xsl:with-param>
                             </xsl:call-template>
