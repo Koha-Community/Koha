@@ -340,7 +340,7 @@
           $ref: ../swagger.yaml#/definitions/error
     x-koha-authorization:
       permissions:
-        circulation: "1"
+        circulate: "manage_bookings"
 "/biblios/{biblio_id}/checkouts":
   get:
     x-mojo-to: Biblios#get_checkouts
