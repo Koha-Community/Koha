@@ -410,6 +410,15 @@ sub ill_table_actions {
     );
 }
 
+sub transform_prepared_letter {
+    my ( $self, $params ) = @_;
+
+    $params->{letter}->{title}   .= '!';
+    $params->{letter}->{content} .= "\nThank you for using your local library!";
+
+    Koha::Exception->throw("transform_prepared_letter called with letter content $params->{letter}->{content}");
+}
+
 sub _private_sub {
     return "";
 }

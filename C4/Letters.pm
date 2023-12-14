@@ -712,6 +712,8 @@ sub GetPreparedLetter {
 
     $letter->{content} =~ s/<<\S*>>//go; #remove any stragglers
 
+    Koha::Plugins->call( 'transform_prepared_letter', { letter => $letter, params => \%params } );
+
     return $letter;
 }
 
