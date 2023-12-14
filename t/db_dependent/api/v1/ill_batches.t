@@ -25,8 +25,8 @@ use t::lib::Mocks;
 
 use JSON qw(encode_json);
 
-use Koha::Illbatch;
-use Koha::Illbatches;
+use Koha::ILL::Batch;
+use Koha::ILL::Batches;
 use Koha::Illrequests;
 use Koha::IllbatchStatuses;
 use Koha::Database;
@@ -58,7 +58,7 @@ subtest 'list() tests' => sub {
     $librarian->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $librarian->userid;
 
-    my $batch_to_delete  = $builder->build_object( { class => 'Koha::Illbatches' } );
+    my $batch_to_delete  = $builder->build_object( { class => 'Koha::ILL::Batches' } );
     my $deleted_batch_id = $batch_to_delete->id;
     $batch_to_delete->delete;
 
@@ -70,7 +70,7 @@ subtest 'list() tests' => sub {
 
     my $batch_1 = $builder->build_object(
         {
-            class => 'Koha::Illbatches',
+            class => 'Koha::ILL::Batches',
             value => {
                 backend    => "Mock",
                 patron_id  => $librarian->id,
@@ -100,7 +100,7 @@ subtest 'list() tests' => sub {
         ->json_has( '/0/library',      'branch embedded' )->json_has( '/0/requests_count', 'request count' );
 
     # Create a second batch with a different name
-    my $batch_2 = $builder->build_object( { class => 'Koha::Illbatches' } );
+    my $batch_2 = $builder->build_object( { class => 'Koha::ILL::Batches' } );
 
     $query = { ill_batch_id => [ $batch_1->id, $batch_2->id ] };
 
@@ -155,7 +155,7 @@ subtest 'get() tests' => sub {
 
     my $batch = $builder->build_object(
         {
-            class => 'Koha::Illbatches',
+            class => 'Koha::ILL::Batches',
             value => {
                 backend    => "Mock",
                 patron_id  => $librarian->id,
@@ -176,7 +176,7 @@ subtest 'get() tests' => sub {
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/ill/batches/" . $batch->id )->status_is(403);
 
-    my $batch_to_delete = $builder->build_object( { class => 'Koha::Illbatches' } );
+    my $batch_to_delete = $builder->build_object( { class => 'Koha::ILL::Batches' } );
     my $non_existent_id = $batch_to_delete->id;
     $batch_to_delete->delete;
 
@@ -288,7 +288,7 @@ subtest 'update() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $batch_id = $builder->build_object( { class => 'Koha::Illbatches' } )->id;
+    my $batch_id = $builder->build_object( { class => 'Koha::ILL::Batches' } )->id;
 
     # Unauthorized attempt to update
     $t->put_ok( "//$unauth_userid:$password@/api/v1/ill/batches/$batch_id" => json =>
@@ -336,7 +336,7 @@ subtest 'update() tests' => sub {
         ]
         );
 
-    my $batch_to_delete = $builder->build_object( { class => 'Koha::Illbatches' } );
+    my $batch_to_delete = $builder->build_object( { class => 'Koha::ILL::Batches' } );
     my $non_existent_id = $batch_to_delete->id;
     $batch_to_delete->delete;
 
@@ -378,7 +378,7 @@ subtest 'delete() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $batch_id = $builder->build_object( { class => 'Koha::Illbatches' } )->id;
+    my $batch_id = $builder->build_object( { class => 'Koha::ILL::Batches' } )->id;
 
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/ill/batches/$batch_id")->status_is(403);

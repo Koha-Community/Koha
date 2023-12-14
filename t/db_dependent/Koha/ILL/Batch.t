@@ -34,7 +34,7 @@ subtest 'ill_batch() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $batch   = $builder->build_object( { class => 'Koha::Illbatches' } );
+    my $batch   = $builder->build_object( { class => 'Koha::ILL::Batches' } );
     my $request = $builder->build_object( { class => 'Koha::Illrequests', value => { batch_id => undef } } );
 
     is( $request->ill_batch, undef, 'Not having a linked batch makes the method return undef' );
@@ -42,7 +42,7 @@ subtest 'ill_batch() tests' => sub {
     $request->batch_id( $batch->id )->store;
 
     my $linked_batch = $request->ill_batch;
-    is( ref($linked_batch), 'Koha::Illbatch' );
+    is( ref($linked_batch), 'Koha::ILL::Batch' );
     is( $linked_batch->id, $batch->id, 'Correct batch linked' );
 
     $schema->storage->txn_rollback;

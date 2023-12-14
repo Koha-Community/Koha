@@ -1,4 +1,4 @@
-package Koha::Illbatch;
+package Koha::ILL::Batch;
 
 # Copyright PTFS Europe 2022
 #
@@ -32,13 +32,13 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Illbatch - Koha Illbatch Object class
+Koha::ILL::Batch - Koha Illbatch Object class
 
 =head2 Class methods
 
 =head3 status
 
-    my $status = Koha::Illbatch->status;
+    my $status = Koha::ILL::Batch > status;
 
 Return the status object associated with this batch
 
@@ -51,7 +51,7 @@ sub status {
 
 =head3 patron
 
-    my $patron = Koha::Illbatch->patron;
+    my $patron = Koha::ILL::Batch->patron;
 
 Return the I<Koha::Patron> object associated with this batch
 
@@ -66,7 +66,7 @@ sub patron {
 
 =head3 library
 
-    my $library = Koha::Illbatch->library;
+    my $library = Koha::ILL::Batch->library;
 
 Return the I<Koha::Library> object associated with this batch
 
@@ -232,7 +232,7 @@ sub strings_map {
 
 =head3 _type
 
-    my $type = Koha::Illbatch->_type;
+    my $type = Koha::ILL::Batch->_type;
 
 Return this object's type
 

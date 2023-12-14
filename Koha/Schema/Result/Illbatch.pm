@@ -205,11 +205,11 @@ __PACKAGE__->has_many(
 );
 
 sub koha_object_class {
-    'Koha::Illbatch';
+    'Koha::ILL::Batch';
 }
 
 sub koha_objects_class {
-    'Koha::Illbatches';
+    'Koha::ILL::Batches';
 }
 
 1;

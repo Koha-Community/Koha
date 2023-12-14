@@ -28,7 +28,7 @@ use Koha::AuthorisedValues;
 use Koha::Illcomment;
 use Koha::Illrequests;
 use Koha::Illrequest;
-use Koha::Illbatches;
+use Koha::ILL::Batches;
 use Koha::Illrequest::Workflow::Availability;
 use Koha::Illrequest::Workflow::TypeDisclaimer;
 use Koha::Libraries;
@@ -221,7 +221,7 @@ if ( $backends_available ) {
         # We simulate the API for backend requests for uniformity.
         # So, init:
         my $request = Koha::Illrequests->find($params->{illrequest_id});
-        my $batches = Koha::Illbatches->search(undef, {
+        my $batches = Koha::ILL::Batches->search(undef, {
             order_by => { -asc => 'name' }
         });
         if ( !$params->{stage} ) {
@@ -402,7 +402,7 @@ if ( $backends_available ) {
         if ($active_filters->{batch_id}) {
             my $batch_id = $active_filters->{batch_id};
             if ($batch_id) {
-                my $batch = Koha::Illbatches->find($batch_id);
+                my $batch = Koha::ILL::Batches->find($batch_id);
                 $template->param(
                     batch => $batch
                 );

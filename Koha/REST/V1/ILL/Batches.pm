@@ -1,4 +1,4 @@
-package Koha::REST::V1::Illbatches;
+package Koha::REST::V1::ILL::Batches;
 
 # This file is part of Koha.
 #
@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::Illbatches;
+use Koha::ILL::Batches;
 use Koha::IllbatchStatuses;
 use Koha::Illrequests;
 
@@ -27,7 +27,7 @@ use Try::Tiny qw( catch try );
 
 =head1 NAME
 
-Koha::REST::V1::Illbatches
+Koha::REST::V1::ILL::Batches
 
 =head2 Operations
 
@@ -43,7 +43,7 @@ sub list {
     return try {
         return $c->render(
             status  => 200,
-            openapi => $c->objects->search( Koha::Illbatches->new )
+            openapi => $c->objects->search( Koha::ILL::Batches->new )
         );
     } catch {
         warn "$_";
@@ -61,7 +61,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $ill_batch = $c->objects->find( Koha::Illbatches->new, $c->param('ill_batch_id') );
+        my $ill_batch = $c->objects->find( Koha::ILL::Batches->new, $c->param('ill_batch_id') );
 
         unless ($ill_batch) {
             return $c->render(
@@ -103,12 +103,12 @@ sub add {
     $body->{patron_id} = $patron->id;
 
     return try {
-        my $batch = Koha::Illbatch->new_from_api($body);
+        my $batch = Koha::ILL::Batch->new_from_api($body);
         $batch->create_and_log;
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $batch->id );
 
-        my $ill_batch = $c->objects->find( Koha::Illbatches->new, $batch->id );
+        my $ill_batch = $c->objects->find( Koha::ILL::Batches->new, $batch->id );
 
         return $c->render(
             status  => 201,
@@ -136,7 +136,7 @@ Update a batch
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $batch = Koha::Illbatches->find( $c->param('ill_batch_id') );
+    my $batch = Koha::ILL::Batches->find( $c->param('ill_batch_id') );
 
     unless ($batch) {
         return $c->render(
@@ -170,7 +170,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $batch = Koha::Illbatches->find( $c->param('ill_batch_id') );
+    my $batch = Koha::ILL::Batches->find( $c->param('ill_batch_id') );
 
     if ( not defined $batch ) {
         return $c->render( status => 404, openapi => { error => "ILL batch not found" } );

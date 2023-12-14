@@ -35,7 +35,7 @@ use Koha::Illrequestattributes;
 use Koha::AuthorisedValue;
 use Koha::Illrequest::Logger;
 use Koha::Patron;
-use Koha::Illbatches;
+use Koha::ILL::Batches;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::Items;
@@ -152,7 +152,7 @@ sub push_processor {
 
     my $ill_batch = $request->ill_batch;
 
-Returns the I<Koha::Illbatch> associated with the request
+Returns the I<Koha::ILL::Batch> associated with the request
 
 =cut
 
@@ -161,7 +161,7 @@ sub ill_batch {
 
     my $ill_batch = $self->_result->ill_batch;
     return unless $ill_batch;
-    return Koha::Illbatch->_new_from_dbic($ill_batch);
+    return Koha::ILL::Batch->_new_from_dbic($ill_batch);
 }
 
 =head3 statusalias

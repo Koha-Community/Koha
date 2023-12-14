@@ -1,4 +1,4 @@
-package Koha::Illbatches;
+package Koha::ILL::Batches;
 
 # Copyright PTFS Europe 2022
 #
@@ -19,18 +19,18 @@ package Koha::Illbatches;
 
 use Modern::Perl;
 use Koha::Database;
-use Koha::Illbatch;
+use Koha::ILL::Batch;
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Illbatches - Koha Illbatches Object class
+Koha::ILL::Batches - Koha Illbatches Object class
 
 =head2 Internal methods
 
 =head3 _type
 
-    my $type = Koha::Illbatches->_type;
+    my $type = Koha::ILL::Batches->_type;
 
 Return this object's type
 
@@ -42,14 +42,14 @@ sub _type {
 
 =head3 object_class
 
-    my $class = Koha::Illbatches->object_class;
+    my $class = Koha::ILL::Batches->object_class;
 
 Return this object's class name
 
 =cut
 
 sub object_class {
-    return 'Koha::Illbatch';
+    return 'Koha::ILL::Batch';
 }
 
 =head1 AUTHOR

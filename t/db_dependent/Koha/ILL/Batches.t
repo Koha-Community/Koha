@@ -18,8 +18,8 @@
 use Modern::Perl;
 
 use Koha::Database;
-use Koha::Illbatch;
-use Koha::Illbatches;
+use Koha::ILL::Batch;
+use Koha::ILL::Batches;
 use Koha::Illrequests;
 use Koha::Patrons;
 use t::lib::Mocks;
@@ -31,8 +31,8 @@ use Test::More tests => 6;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
-use_ok('Koha::Illbatch');
-use_ok('Koha::Illbatches');
+use_ok('Koha::ILL::Batch');
+use_ok('Koha::ILL::Batches');
 
 $schema->storage->txn_begin;
 
@@ -53,8 +53,8 @@ my $branch = $builder->build( { source => 'Branch' } );
 # Create a batch
 my $illbatch = $builder->build_object(
     {
-        class => 'Koha::Illbatches',
-        value  => {
+        class => 'Koha::ILL::Batches',
+        value => {
             name       => "My test batch",
             backend    => "Mock",
             patron_id  => $librarian->{borrowernumber},

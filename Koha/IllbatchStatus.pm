@@ -20,7 +20,7 @@ package Koha::IllbatchStatus;
 use Modern::Perl;
 use Koha::Database;
 use Koha::Illrequest::Logger;
-use Koha::Illbatch;
+use Koha::ILL::Batch;
 use JSON qw( to_json );
 use base qw(Koha::Object);
 
@@ -124,7 +124,7 @@ sub delete_and_log {
     }
 
     # Update all batches that use this status to have status UNKNOWN
-    my $affected = Koha::Illbatches->search( { status_code => $self->code } );
+    my $affected = Koha::ILL::Batches->search( { status_code => $self->code } );
     $affected->update( { status_code => 'UNKNOWN' } );
 
     my $logger = Koha::Illrequest::Logger->new;

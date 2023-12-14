@@ -1,7 +1,7 @@
 ---
 /ill/batches:
   get:
-    x-mojo-to: Illbatches#list
+    x-mojo-to: ILL::Batches#list
     operationId: listIllbatches
     tags:
       - ill_batches
@@ -62,7 +62,7 @@
       permissions:
         ill: "1"
   post:
-    x-mojo-to: Illbatches#add
+    x-mojo-to: ILL::Batches#add
     operationId: addIllbatch
     tags:
       - ill_batches
@@ -131,7 +131,7 @@
         ill: "1"
 "/ill/batches/{ill_batch_id}":
   get:
-    x-mojo-to: Illbatches#get
+    x-mojo-to: ILL::Batches#get
     operationId: getIllbatches
     tags:
       - ill_batches
@@ -197,7 +197,7 @@
       permissions:
         ill: "1"
   put:
-    x-mojo-to: Illbatches#update
+    x-mojo-to: ILL::Batches#update
     operationId: updateIllBatch
     tags:
       - ill_batches
@@ -250,7 +250,7 @@
       permissions:
         ill: "1"
   delete:
-    x-mojo-to: Illbatches#delete
+    x-mojo-to: ILL::Batches#delete
     operationId: deleteBatch
     tags:
       - ill_batches
