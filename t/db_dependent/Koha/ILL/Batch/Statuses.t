@@ -47,7 +47,7 @@ my $effects = {
 };
 
 # Mock a logger so we can check it is called
-my $logger = Test::MockModule->new('Koha::Illrequest::Logger');
+my $logger = Test::MockModule->new('Koha::ILL::Request::Logger');
 $logger->mock(
     'log_something',
     sub {

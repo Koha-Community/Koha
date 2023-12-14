@@ -22,7 +22,7 @@ use Modern::Perl;
 use Koha::Database;
 
 use Koha::Illrequests;
-use Koha::Illrequest::Logger;
+use Koha::ILL::Request::Logger;
 use Koha::ILL::Batch::Statuses;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -104,7 +104,7 @@ sub create_and_log {
 
     $self->store;
 
-    my $logger = Koha::Illrequest::Logger->new;
+    my $logger = Koha::ILL::Request::Logger->new;
 
     $logger->log_something(
         {
@@ -140,7 +140,7 @@ sub update_and_log {
         library_id => $self->library_id,
     };
 
-    my $logger = Koha::Illrequest::Logger->new;
+    my $logger = Koha::ILL::Request::Logger->new;
 
     $logger->log_something(
         {
@@ -168,7 +168,7 @@ Log batch delete
 sub delete_and_log {
     my ($self) = @_;
 
-    my $logger = Koha::Illrequest::Logger->new;
+    my $logger = Koha::ILL::Request::Logger->new;
 
     $logger->log_something(
         {

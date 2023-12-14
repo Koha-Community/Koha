@@ -19,7 +19,7 @@ package Koha::ILL::Batch::Status;
 
 use Modern::Perl;
 use Koha::Database;
-use Koha::Illrequest::Logger;
+use Koha::ILL::Request::Logger;
 use Koha::ILL::Batch;
 use JSON qw( to_json );
 use base qw(Koha::Object);
@@ -59,7 +59,7 @@ sub create_and_log {
         }
     )->store;
 
-    my $logger = Koha::Illrequest::Logger->new;
+    my $logger = Koha::ILL::Request::Logger->new;
 
     $logger->log_something(
         {
@@ -90,7 +90,7 @@ sub update_and_log {
 
     my $after = { name => $self->name };
 
-    my $logger = Koha::Illrequest::Logger->new;
+    my $logger = Koha::ILL::Request::Logger->new;
 
     $logger->log_something(
         {
@@ -127,7 +127,7 @@ sub delete_and_log {
     my $affected = Koha::ILL::Batches->search( { status_code => $self->code } );
     $affected->update( { status_code => 'UNKNOWN' } );
 
-    my $logger = Koha::Illrequest::Logger->new;
+    my $logger = Koha::ILL::Request::Logger->new;
 
     $logger->log_something(
         {

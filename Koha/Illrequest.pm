@@ -33,7 +33,7 @@ use Koha::Exceptions::Ill;
 use Koha::ILL::Comments;
 use Koha::ILL::Request::Attributes;
 use Koha::AuthorisedValue;
-use Koha::Illrequest::Logger;
+use Koha::ILL::Request::Logger;
 use Koha::Patron;
 use Koha::ILL::Batches;
 use Koha::AuthorisedValues;
@@ -235,7 +235,7 @@ sub comments {
 
 sub logs {
     my ( $self ) = @_;
-    my $logger = Koha::Illrequest::Logger->new;
+    my $logger = Koha::ILL::Request::Logger->new;
     return $logger->get_request_logs($self);
 }
 
@@ -318,7 +318,7 @@ sub status_alias {
         my $ret = $self->SUPER::status_alias($val);
         my $val_to_log = $val ? $new_status_alias : scalar $self->status;
         if ($ret) {
-            my $logger = Koha::Illrequest::Logger->new;
+            my $logger = Koha::ILL::Request::Logger->new;
             $logger->log_status_change({
                 request => $self,
                 value   => $val_to_log
@@ -380,7 +380,7 @@ sub status {
             # so we pass -1, which is special cased in the overloaded setter
             $self->status_alias("-1");
         } else {
-            my $logger = Koha::Illrequest::Logger->new;
+            my $logger = Koha::ILL::Request::Logger->new;
             $logger->log_status_change({
                 request => $self,
                 value   => $new_status
@@ -442,7 +442,7 @@ sub load_backend {
         $self->{_my_backend} = $backend_plugin->new_ill_backend(
             {
                 config => $self->_config,
-                logger => Koha::Illrequest::Logger->new
+                logger => Koha::ILL::Request::Logger->new
             }
         );
     } elsif ($backend_name) {
@@ -455,7 +455,7 @@ sub load_backend {
         $self->{_my_backend} = $backend_class->new(
             {
                 config => $self->_config,
-                logger => Koha::Illrequest::Logger->new
+                logger => Koha::ILL::Request::Logger->new
             }
         );
     }
@@ -1714,7 +1714,7 @@ sub send_patron_notice {
         }
     }
     if (scalar @success > 0) {
-        my $logger = Koha::Illrequest::Logger->new;
+        my $logger = Koha::ILL::Request::Logger->new;
         $logger->log_patron_notice({
             request => $self,
             notice_code => $notice_code
@@ -1960,7 +1960,7 @@ sub store {
     $attrs->{log_origin} = 'core';
 
     if ($ret && defined $attrs) {
-        my $logger = Koha::Illrequest::Logger->new;
+        my $logger = Koha::ILL::Request::Logger->new;
         $logger->log_maybe({
             request => $self,
             attrs   => $attrs

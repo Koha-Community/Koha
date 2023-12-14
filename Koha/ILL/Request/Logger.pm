@@ -1,4 +1,4 @@
-package Koha::Illrequest::Logger;
+package Koha::ILL::Request::Logger;
 
 # Copyright 2018 PTFS Europe Ltd
 #
@@ -29,7 +29,7 @@ use Koha::Notice::Template;
 
 =head1 NAME
 
-Koha::Illrequest::Logger - Koha ILL Action / Event logger
+Koha::ILL::ILL::Request::Logger - Koha ILL Action / Event logger
 
 =head1 SYNOPSIS
 
@@ -47,9 +47,9 @@ relating to Illrequest to the action log.
 
 =head3 new
 
-    my $config = Koha::Illrequest::Logger->new();
+    my $config = Koha::ILL::Request::Logger->new();
 
-Create a new Koha::Illrequest::Logger object.
+Create a new Koha::ILL::Request::Logger object .
 We also set up what can be logged, how to do it and how to display
 log entries we get back out
 
@@ -84,7 +84,7 @@ sub new {
 
 =head3 log_maybe
 
-    Koha::IllRequest::Logger->log_maybe($params);
+    Koha::ILL::Request::Logger->log_maybe($params);
 
 Receive params hashref, containing a request object and an attrs
 hashref (which may or may not be defined) If the attrs hashref contains
@@ -109,7 +109,7 @@ sub log_maybe {
 
 =head3 log_patron_notice
 
-    Koha::IllRequest::Logger->log_patron_notice($params);
+    Koha::ILL::Request::Logger->log_patron_notice($params);
 
 Receive a hashref containing a request object and params to log,
 and log it
@@ -134,7 +134,7 @@ sub log_patron_notice {
 
 =head3 log_status_change
 
-    Koha::IllRequest::Logger->log_status_change($params);
+    Koha::ILL::Request::Logger->log_status_change($params);
 
 Receive a hashref containing a request object and a status to log,
 and log it
@@ -160,7 +160,7 @@ sub log_status_change {
 
 =head3 log_something
 
-    Koha::IllRequest::Logger->log_something({
+    Koha::ILL::Request::Logger->log_something({
         modulename   => 'ILL',
         actionname   => 'STATUS_CHANGE',
         objectnumber => $req->id,
@@ -226,7 +226,7 @@ sub get_log_template {
 
 =head3 get_request_logs
 
-    $requestlogs = Koha::IllRequest::Logger->get_request_logs($request_id);
+    $requestlogs = Koha::ILL::Request::Logger->get_request_logs($request_id);
 
 Get all logged actions for a given request
 

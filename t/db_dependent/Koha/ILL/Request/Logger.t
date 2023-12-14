@@ -34,7 +34,7 @@ my $c4_tpl = Test::MockModule->new('C4::Templates');
 $c4_tpl->mock('_get_template_file',
     sub { return ('htdocs', 'theme', 'lang', 'base/'); });
 
-use_ok('Koha::Illrequest::Logger');
+use_ok('Koha::ILL::Request::Logger');
 
 subtest 'Basics' => sub {
 
@@ -42,12 +42,12 @@ subtest 'Basics' => sub {
 
     $schema->storage->txn_begin;
 
-    my $logger = Koha::Illrequest::Logger->new;
+    my $logger = Koha::ILL::Request::Logger->new;
 
     # new()
     #
     ok( defined($logger), 'new() returned something' );
-    ok( $logger->isa('Koha::Illrequest::Logger'),
+    ok( $logger->isa('Koha::ILL::Request::Logger'),
         'new() returns the correct object' );
 
     # This is an incomplete data hashref, we use it to
