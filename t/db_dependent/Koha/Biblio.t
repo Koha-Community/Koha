@@ -546,36 +546,32 @@ subtest 'bookings() tests' => sub {
 };
 
 subtest 'merge of records' => sub {
-    plan tests => 3;
+    plan tests => 9;
     $schema->storage->txn_begin;
 
-    #Three biblio
-    my $biblio1 = $builder->build_sample_biblio( { title => 'Title number 1' } );
-    my $biblio2 = $builder->build_sample_biblio( { title => 'Title number 2' } );
-    my $biblio3 = $builder->build_sample_biblio( { title => 'Title number 3' } );
+    # 3 items from 3 different biblio records
+    my $item1    = $builder->build_sample_item;
+    my $item2    = $builder->build_sample_item;
+    my $item3    = $builder->build_sample_item;
 
-    # One items each
-    my $item1_1 = $builder->build_sample_item( { biblionumber => $biblio1->biblionumber, barcode => 'bar11' } );
-    my $item2_1 = $builder->build_sample_item( { biblionumber => $biblio2->biblionumber, barcode => 'bar22' } );
-    my $item3_1 = $builder->build_sample_item( { biblionumber => $biblio3->biblionumber, barcode => 'bar33' } );
-    my $results = '';
-    my @to_merge = ( $biblio2->biblionumber, $biblio3->biblionumber );
+    my $biblio1 = $item1->biblio;
+    my $biblio2 = $item2->biblio;
+    my $biblio3 = $item3->biblio;
 
     my $pre_merged_rs = Koha::Biblios->search(
         { biblionumber => [ $biblio1->biblionumber, $biblio2->biblionumber, $biblio3->biblionumber ] } );
     is( $pre_merged_rs->count, 3, '3 biblios exist' );
 
-    eval { $results = $biblio1->merge_with( \@to_merge ); };
-    if ($@) {
-        is( 0, 1, "Not working. Error: " . $@ );
-    } else {
-        my $items = $biblio1->items;
-        is( $items->count, 3, "After merge we have 3 items on first record" );
+    warning_like { $biblio1->merge_with( [ $biblio2->biblionumber, $biblio3->biblionumber ] ) } q{};
+    is( $biblio1->items->count, 3, "After merge we have 3 items on first record" );
 
-        my $merged_rs = Koha::Biblios->search(
-            { biblionumber => [ $biblio1->biblionumber, $biblio2->biblionumber, $biblio3->biblionumber ] } );
-        is( $merged_rs->count, 1, 'only 1 biblio left, the merged ones are gone' );
-    }
+    is( ref( $biblio1->get_from_storage ), 'Koha::Biblio', 'biblio record 1 still exists' );
+    is( $biblio2->get_from_storage,        undef,          'biblio record 2 no longer exists' );
+    is( $biblio3->get_from_storage,        undef,          'biblio record 3 no longer exists' );
+
+    is( $item1->get_from_storage->biblionumber, $biblio1->biblionumber );
+    is( $item2->get_from_storage->biblionumber, $biblio1->biblionumber );
+    is( $item3->get_from_storage->biblionumber, $biblio1->biblionumber );
 
     $schema->storage->txn_rollback;
 };
