@@ -25,6 +25,7 @@ use File::Path qw( remove_tree );
 use Module::Load qw( load );
 
 use C4::Context;
+use Koha::Plugins;
 use Koha::Plugins::Methods;
 
 BEGIN {
@@ -76,7 +77,9 @@ sub run {
 
 =item delete
 
-Deletes a plugin
+Deletes a plugin.
+
+Called in plugins/plugins-uninstall.pl.
 
 =cut
 
@@ -101,8 +104,8 @@ sub delete {
         enable_plugins => $args->{enable_plugins},
     });
 
-    C4::Context->dbh->do( "DELETE FROM plugin_data WHERE plugin_class = ?", undef, ($plugin_class) );
-    Koha::Plugins::Methods->search({ plugin_class => $plugin_class })->delete();
+    # TODO Would next call be a candidate for replacing destructive by disable ?
+    Koha::Plugins->RemovePlugins( { plugin_class => $plugin_class, destructive => 1 } );
 
     unlink "$plugin_path.pm" or warn "Could not unlink $plugin_path.pm: $!";
     remove_tree($plugin_path);

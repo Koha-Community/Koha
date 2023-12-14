@@ -26,7 +26,6 @@ use t::lib::TestBuilder;
 use Koha::Database;
 use C4::Circulation qw();
 use Koha::CirculationRules;
-use Koha::Plugins::Methods;
 use Koha::Recalls;
 
 BEGIN {
@@ -95,6 +94,6 @@ subtest 'after_recall_action hook' => sub {
     qr/after_recall_action called with action: add, ref: Koha::Recall/,
       '->add_recall calls the after_recall_action hook with action add';
 
-    Koha::Plugins::Methods->delete;
+    Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;
 };

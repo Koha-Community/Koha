@@ -66,5 +66,5 @@ subtest 'after_authority_action hook' => sub {
             'DelAuthority calls the hook with action=delete, id passed';
 
     $schema->storage->txn_rollback;
-    Koha::Plugins::Methods->delete;
+    Koha::Plugins->RemovePlugins;
 };

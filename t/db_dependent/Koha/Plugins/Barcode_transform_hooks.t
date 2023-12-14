@@ -100,5 +100,5 @@ subtest 'patron_barcode_transform() and item_barcode_transform() hook tests' => 
         'Koha::Item->store calls the item_barcode_transform hook';
 
     $schema->storage->txn_rollback;
-    Koha::Plugins::Methods->delete;
+    Koha::Plugins->RemovePlugins;
 };

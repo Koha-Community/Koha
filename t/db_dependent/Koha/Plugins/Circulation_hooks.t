@@ -121,5 +121,5 @@ subtest 'after_circ_action() hook tests' => sub {
     };
 
     $schema->storage->txn_rollback;
-    Koha::Plugins::Methods->delete;
+    Koha::Plugins->RemovePlugins;
 };
