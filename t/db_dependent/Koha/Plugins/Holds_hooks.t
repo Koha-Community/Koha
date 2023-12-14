@@ -80,7 +80,7 @@ subtest 'after_hold_create() hook tests' => sub {
           qr/after_hold_create called with parameter Koha::Hold/ ],
           'AddReserve calls the after_hold_create hook, deprecation warning found';
 
-    Koha::Plugins::Methods->delete;
+    Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;
 };
 
@@ -124,7 +124,7 @@ subtest 'after_hold_action (placed) hook tests' => sub {
     }
     [ qr/after_hold_create is deprecated and will be removed soon/, qr/after_hold_action called with action: place, ref: Koha::Hold/,  ], 'AddReserve calls the after_hold_action hook';
 
-    Koha::Plugins::Methods->delete;
+    Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;
 };
 
@@ -205,6 +205,6 @@ subtest 'Koha::Hold tests' => sub {
     qr/after_hold_action called with action: cancel, ref: Koha::Old::Hold/,
       '->cancel calls the after_hold_action hook';
 
-    Koha::Plugins::Methods->delete;
+    Koha::Plugins->RemovePlugins;
     $schema->storage->txn_rollback;
 };

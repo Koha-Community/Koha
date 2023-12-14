@@ -57,8 +57,7 @@ subtest 'call() tests' => sub {
 
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
-    Koha::Plugins::Methods->delete;
-    $schema->resultset('PluginData')->delete();
+    Koha::Plugins->RemovePlugins( { destructive => 1 } );
 
     t::lib::Mocks::mock_config('enable_plugins', 1);
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
@@ -95,8 +94,7 @@ subtest 'more call() tests' => sub {
 
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
-    Koha::Plugins::Methods->delete;
-    $schema->resultset('PluginData')->delete();
+    Koha::Plugins->RemovePlugins( { destructive => 1 } );
 
     t::lib::Mocks::mock_config('enable_plugins', 1);
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
@@ -138,8 +136,7 @@ subtest 'feature_enabled tests' => sub {
     $schema->storage->txn_begin;
 
     # Temporarily remove any installed plugins data
-    Koha::Plugins::Methods->delete;
-    $schema->resultset('PluginData')->delete();
+    Koha::Plugins->RemovePlugins( { destructive => 1 } );
 
     t::lib::Mocks::mock_config( 'enable_plugins', 0 );
     my $enabled = Koha::Plugins->feature_enabled('check_password');
@@ -169,8 +166,8 @@ subtest 'GetPlugins() tests' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
-    # Temporarily remove any installed plugins data
-    Koha::Plugins::Methods->delete;
+    # Temporarily remove any installed plugins data (FIXME not done)
+    Koha::Plugins->RemovePlugins;
 
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
 
@@ -215,8 +212,7 @@ subtest 'is_enabled() tests' => sub {
     $schema->storage->txn_begin;
 
     # Make sure there's no previous installs or leftovers on DB
-    Koha::Plugins::Methods->delete;
-    $schema->resultset('PluginData')->delete;
+    Koha::Plugins->RemovePlugins( { destructive => 1 } );
 
     my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1, cgi => CGI->new });
     ok( $plugin->is_enabled, 'Plugins enabled by default' );
@@ -234,8 +230,7 @@ subtest 'is_enabled() tests' => sub {
 
 subtest 'Koha::Plugin::Test' => sub {
     $schema->storage->txn_begin;
-    Koha::Plugins::Methods->delete;
-    $schema->resultset('PluginData')->delete;
+    Koha::Plugins->RemovePlugins( { destructive => 1 } );
 
     warning_is { Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins(); } undef;
 

@@ -234,7 +234,7 @@ subtest 'needs_install use case tests' => sub {
 
     t::lib::Mocks::mock_preference('Version', '3.0.0');
 
-    $schema->resultset('PluginData')->delete;
+    Koha::Plugins->RemovePlugins( { destructive => 1 } );    # FIXME destructive seems not to be needed here
     $plugins->InstallPlugins;
 
     # re-initialize Koha::REST::V1 after mocking
