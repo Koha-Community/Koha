@@ -15,15 +15,13 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use Test::More tests => 3;
-use Test::MockModule;
+use File::Basename;
+use Test::More tests => 2;
 use Test::Warn;
 
-use File::Basename;
-
 use t::lib::Mocks;
-use t::lib::TestBuilder;
+
+use Koha::Database;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
@@ -31,17 +29,19 @@ BEGIN {
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
 
     use_ok('Koha::Plugins');
-    use_ok('Koha::Plugins::Handler');
 }
 
-my $schema  = Koha::Database->new->schema;
-my $builder = t::lib::TestBuilder->new;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 my $plugins = Koha::Plugins->new;
 
-warnings_are
- { $plugins->InstallPlugins; }
- [ "Calling 'install' died for plugin Koha::Plugin::BrokenInstall",
-   "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade" ];
+warnings_are { $plugins->InstallPlugins; }
+[
+    "Calling 'install' died for plugin Koha::Plugin::BrokenInstall",
+    "Calling 'upgrade' died for plugin Koha::Plugin::BrokenUpgrade"
+];
+
+$schema->storage->txn_begin;

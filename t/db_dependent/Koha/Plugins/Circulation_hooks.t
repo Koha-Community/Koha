@@ -120,6 +120,6 @@ subtest 'after_circ_action() hook tests' => sub {
           'AddReturn calls the after_circ_action hook';
     };
 
-    $schema->storage->txn_rollback;
     Koha::Plugins->RemovePlugins;
+    $schema->storage->txn_rollback;
 };

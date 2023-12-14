@@ -65,6 +65,6 @@ subtest 'after_authority_action hook' => sub {
             qr/after_authority_action called with action: delete, id: $id/,
             'DelAuthority calls the hook with action=delete, id passed';
 
-    $schema->storage->txn_rollback;
     Koha::Plugins->RemovePlugins;
+    $schema->storage->txn_rollback;
 };

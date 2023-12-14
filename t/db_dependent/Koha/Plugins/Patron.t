@@ -87,8 +87,6 @@ subtest 'check_password hook tests' => sub {
     ok( $patron->set_password({ password => '4321' }), 'Patron password updated with good string' );
     ok( $patron->set_password({ password => 'explosion', skip_validation => 1}), 'Patron password updated via skip validation');
 
-    $schema->storage->txn_rollback;
     Koha::Plugins->RemovePlugins;
+    $schema->storage->txn_rollback;
 };
-
-1;

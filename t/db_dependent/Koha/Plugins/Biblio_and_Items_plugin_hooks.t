@@ -83,6 +83,6 @@ subtest 'after_biblio_action() and after_item_action() hooks tests' => sub {
             qr/after_biblio_action called with action: delete, id: $biblio_id/,
             'DelBiblio calls the hook with action=delete biblio_id passed';
 
-    $schema->storage->txn_rollback;
     Koha::Plugins->RemovePlugins;
+    $schema->storage->txn_rollback;
 };
