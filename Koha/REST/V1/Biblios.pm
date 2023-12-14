@@ -907,13 +907,9 @@ sub merge {
     my $ref_biblionumber = $c->param('biblio_id');
     my $json             = decode_json( $c->req->body );
     my $bn_merge         = $json->{'biblio_id_to_merge'};
-    my $framework        = $json->{'framework_to_use'};
-    my $rules            = $json->{'rules'};
-    my $override_rec     = $json->{'datarecord'};
-
-    if ( ( !defined $rules ) || ( $rules eq '' ) ) { $rules        = 'override'; }
-    if ( ( !defined $override_rec ) )              { $override_rec = ''; }
-    if ( ( !defined $framework ) )                 { $framework    = ''; }
+    my $framework        = $json->{'framework_to_use'} // q{};
+    my $rules            = $json->{'rules'} || q{override};
+    my $override_rec     = $json->{'datarecord'} // q{};
 
     my $biblio = Koha::Biblios->find($ref_biblionumber);
     if ( not defined $biblio ) {
@@ -947,25 +943,17 @@ sub merge {
         );
     }
 
-    my $results;
-    eval {
+    return try {
         if ( $rules eq 'override_ext' ) {
             my $record = MARC::Record::MiJ->new_from_mij_structure($override_rec);
             $record->encoding('UTF-8');
-            if ( $framework eq '' ) { $framework = $biblio->frameworkcode; }
+            $framework ||= $biblio->frameworkcode;
             my $chk = ModBiblio( $record, $ref_biblionumber, $framework );
             if ( $chk != 1 ) { die "Error on ModBiblio"; }    # ModBiblio returns 1 if everything as gone well
-            my @biblio_ids_to_merge = ($bn_merge);
-            $results = $biblio->merge_with( \@biblio_ids_to_merge );
         }
-        if ( $rules eq 'override' ) {
-            my @biblio_ids_to_merge = ($bn_merge);
-            $results = $biblio->merge_with( \@biblio_ids_to_merge );
-        }
-    };
-    if ($@) {
-        return $c->render( status => 400, json => { error => $@ } );
-    } else {
+
+        $biblio->merge_with( [$bn_merge] );
+
         $c->respond_to(
             mij => {
                 status => 200,
@@ -973,7 +961,9 @@ sub merge {
                 data   => $biblio->metadata->record->to_mij
             }
         );
-    }
+    } catch {
+        $c->render( status => 400, json => { error => $@ } );
+    };
 }
 
 1;
