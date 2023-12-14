@@ -908,6 +908,34 @@ sub subscriptions {
     return Koha::Subscriptions->_new_from_dbic($rs);
 }
 
+=head3 serials
+
+my $serials = $self->serials
+
+Returns the related Koha::Serials object for this Biblio object
+
+=cut
+
+sub serials {
+    my ($self) = @_;
+    my $rs = $self->_result->serials;
+    return Koha::Serials->_new_from_dbic($rs);
+}
+
+=head3 subscription_histories
+
+my $subscription_histories = $self->subscription_histories
+
+Returns the related Koha::Subscription::Histories object for this Biblio object
+
+=cut
+
+sub subscription_histories {
+    my ($self) = @_;
+    my $rs = $self->_result->subscriptionhistories;
+    return Koha::Subscription::Histories->_new_from_dbic($rs);
+}
+
 =head3 has_items_waiting_or_intransit
 
 my $itemsWaitingOrInTransit = $biblio->has_items_waiting_or_intransit
@@ -1866,27 +1894,50 @@ sub merge_with {
                 foreach my $bn_merge (@biblio_ids_to_merge) {
                     my $from_biblio = Koha::Biblios->find($bn_merge);
                     $from_biblio->items->move_to_biblio($self);
+
+                    # Move article requests
                     $from_biblio->article_requests->update(
                         { biblionumber => $ref_biblionumber },
                         { no_triggers  => 1 }
                     );
 
-                    for my $resultset_name (qw(Subscription Subscriptionhistory Serial Suggestion)) {
-                        $schema->resultset($resultset_name)->search( { biblionumber => $bn_merge } )
-                            ->update( { biblionumber => $ref_biblionumber } );
-                    }
+                    # Move subscriptions
+                    $from_biblio->subscriptions->update(
+                        { biblionumber => $ref_biblionumber },
+                        { no_triggers  => 1 }
+                    );
 
-                    # TODO should this be ported to more modern DB usage (i.e. DBIx::Class)?
-                    my @allorders = GetOrdersByBiblionumber($bn_merge);
-                    foreach my $myorder (@allorders) {
-                        $myorder->{'biblionumber'} = $ref_biblionumber;
-                        ModOrder($myorder);
+                    # Move subscription histories
+                    $from_biblio->subscription_histories->update(
+                        { biblionumber => $ref_biblionumber },
+                        { no_triggers  => 1 }
+                    );
+
+                    # Move serials
+                    $from_biblio->serials->update(
+                        { biblionumber => $ref_biblionumber },
+                        { no_triggers  => 1 }
+                    );
+
+                    # Move suggestions
+                    $from_biblio->suggestions->update(
+                        { biblionumber => $ref_biblionumber },
+                        { no_triggers  => 1 }
+                    );
+
+                    my $orders = $from_biblio->orders->unblessed;
+                    for my $order (@$orders) {
+                        $order->{'biblionumber'} = $ref_biblionumber;
+
+                        # TODO Do we really need to call ModOrder here?
+                        ModOrder($order);
 
                         # TODO : add error control (in ModOrder?)
                     }
 
                     # Move holds
                     MergeHolds( $schema->storage->dbh, $ref_biblionumber, $bn_merge );
+
                     my $error = DelBiblio($bn_merge);    #DelBiblio return undef unless an error occurs
                     if ($error) {
                         die $error;

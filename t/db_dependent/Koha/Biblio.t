@@ -971,6 +971,41 @@ subtest 'tickets() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'serials() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $serials = $biblio->serials;
+    is(
+        ref($serials), 'Koha::Serials',
+        'Koha::Biblio->serials should return a Koha::Serials object'
+    );
+    is( $serials->count, 0, 'Koha::Biblio->serials should return the correct number of serials' );
+
+    # Add two serials
+    foreach ( 1 .. 2 ) {
+        $builder->build_object(
+            {
+                class => 'Koha::Serials',
+                value => { biblionumber => $biblio->biblionumber }
+            }
+        );
+    }
+
+    $serials = $biblio->serials;
+    is(
+        ref($serials), 'Koha::Serials',
+        'Koha::Biblio->serials should return a Koha::Serials object'
+    );
+    is( $serials->count, 2, 'Koha::Biblio->serials should return the correct number of serials' );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'subscriptions() tests' => sub {
 
     plan tests => 4;
@@ -1000,6 +1035,47 @@ subtest 'subscriptions() tests' => sub {
         'Koha::Biblio->subscriptions should return a Koha::Subscriptions object'
     );
     is( $subscriptions->count, 2, 'Koha::Biblio->subscriptions should return the correct number of subscriptions');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'subscription_histories() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $sub_histories = $biblio->subscription_histories;
+    is(
+        ref($sub_histories), 'Koha::Subscription::Histories',
+        'Koha::Biblio->subscription_histories should return a Koha::Subscription::Histories object'
+    );
+    is(
+        $sub_histories->count, 0,
+        'Koha::Biblio->subscription_histories should return the correct number of subscription histories'
+    );
+
+    # Add two subscription histories
+    foreach ( 1 .. 2 ) {
+        $builder->build_object(
+            {
+                class => 'Koha::Subscription::Histories',
+                value => { biblionumber => $biblio->biblionumber }
+            }
+        );
+    }
+
+    $sub_histories = $biblio->subscription_histories;
+    is(
+        ref($sub_histories), 'Koha::Subscription::Histories',
+        'Koha::Biblio->subscription_histories should return a Koha::Subscription::Histories object'
+    );
+    is(
+        $sub_histories->count, 2,
+        'Koha::Biblio->subscription_histories should return the correct number of subscription histories'
+    );
 
     $schema->storage->txn_rollback;
 };
