@@ -28,7 +28,7 @@ use JSON qw(encode_json);
 use Koha::ILL::Batch;
 use Koha::ILL::Batches;
 use Koha::Illrequests;
-use Koha::IllbatchStatuses;
+use Koha::ILL::Batch::Statuses;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -214,7 +214,7 @@ subtest 'add() tests' => sub {
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    my $batch_status = $builder->build_object( { class => 'Koha::IllbatchStatuses' } );
+    my $batch_status = $builder->build_object( { class => 'Koha::ILL::Batch::Statuses' } );
 
     my $batch_metadata = {
         name        => "Anakin's requests",
@@ -294,7 +294,7 @@ subtest 'update() tests' => sub {
     $t->put_ok( "//$unauth_userid:$password@/api/v1/ill/batches/$batch_id" => json =>
             { name => 'These are not the droids you are looking for' } )->status_is(403);
 
-    my $batch_status = $builder->build_object( { class => 'Koha::IllbatchStatuses' } );
+    my $batch_status = $builder->build_object( { class => 'Koha::ILL::Batch::Statuses' } );
 
     # Attempt partial update on a PUT
     my $batch_with_missing_field = {

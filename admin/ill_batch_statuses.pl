@@ -25,8 +25,8 @@ use C4::Context;
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
-use Koha::IllbatchStatus;
-use Koha::IllbatchStatuses;
+use Koha::ILL::Batch::Status;
+use Koha::ILL::Batch::Statuses;
 
 my $input = CGI->new;
 my $code  = $input->param('code');
@@ -44,7 +44,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $status;
 if ($code) {
-    $status = Koha::IllbatchStatuses->find( { code => $code } );
+    $status = Koha::ILL::Batch::Statuses->find( { code => $code } );
 }
 
 if ( $op eq 'add_form' ) {
@@ -56,7 +56,7 @@ if ( $op eq 'add_form' ) {
     my $code = $input->param('code');
 
     if ( not defined $status ) {
-        $status = Koha::IllbatchStatus->new(
+        $status = Koha::ILL::Batch::Status->new(
             {
                 name => $name,
                 code => $code
@@ -86,7 +86,7 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 }
 if ( $op eq 'list' ) {
-    my $statuses = Koha::IllbatchStatuses->search();
+    my $statuses = Koha::ILL::Batch::Statuses->search();
     $template->param( statuses => $statuses );
 }
 

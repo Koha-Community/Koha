@@ -23,8 +23,8 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Koha::IllbatchStatus;
-use Koha::IllbatchStatuses;
+use Koha::ILL::Batch::Status;
+use Koha::ILL::Batch::Statuses;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -39,7 +39,7 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::IllbatchStatuses->search->delete;
+    Koha::ILL::Batch::Statuses->search->delete;
 
     # Create an admin user
     my $librarian = $builder->build_object(
@@ -60,7 +60,7 @@ subtest 'list() tests' => sub {
 
     my $status = $builder->build_object(
         {
-            class => 'Koha::IllbatchStatuses',
+            class => 'Koha::ILL::Batch::Statuses',
             value => {
                 name      => "Han Solo",
                 code      => "SOLO",
@@ -94,7 +94,7 @@ subtest 'get() tests' => sub {
 
     my $status = $builder->build_object(
         {
-            class => 'Koha::IllbatchStatuses',
+            class => 'Koha::ILL::Batch::Statuses',
             value => {
                 name      => "Han Solo",
                 code      => "SOLO",
@@ -119,7 +119,7 @@ subtest 'get() tests' => sub {
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/ill/batchstatuses/" . $status->id )->status_is(403);
 
-    my $status_to_delete  = $builder->build_object( { class => 'Koha::IllbatchStatuses' } );
+    my $status_to_delete  = $builder->build_object( { class => 'Koha::ILL::Batch::Statuses' } );
     my $non_existent_code = $status_to_delete->code;
     $status_to_delete->delete;
 
@@ -218,7 +218,7 @@ subtest 'update() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $status_code = $builder->build_object( { class => 'Koha::IllbatchStatuses' } )->code;
+    my $status_code = $builder->build_object( { class => 'Koha::ILL::Batch::Statuses' } )->code;
 
     # Unauthorized attempt to update
     $t->put_ok( "//$unauth_userid:$password@/api/v1/ill/batchstatuses/$status_code" => json =>
@@ -260,7 +260,7 @@ subtest 'update() tests' => sub {
         ]
         );
 
-    my $status_to_delete  = $builder->build_object( { class => 'Koha::IllbatchStatuses' } );
+    my $status_to_delete  = $builder->build_object( { class => 'Koha::ILL::Batch::Statuses' } );
     my $non_existent_code = $status_to_delete->code;
     $status_to_delete->delete;
 
@@ -299,14 +299,14 @@ subtest 'delete() tests' => sub {
 
     my $non_system_status = $builder->build_object(
         {
-            class => 'Koha::IllbatchStatuses',
+            class => 'Koha::ILL::Batch::Statuses',
             value => { is_system => 0 }
         }
     );
 
     my $system_status = $builder->build_object(
         {
-            class => 'Koha::IllbatchStatuses',
+            class => 'Koha::ILL::Batch::Statuses',
             value => { is_system => 1 }
         }
     );

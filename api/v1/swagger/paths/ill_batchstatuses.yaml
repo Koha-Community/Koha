@@ -1,7 +1,7 @@
 ---
 /ill/batchstatuses:
   get:
-    x-mojo-to: IllbatchStatuses#list
+    x-mojo-to: ILL::Batch::Statuses#list
     operationId: listIllbatchstatuses
     tags:
       - ill_batchstatuses
@@ -41,7 +41,7 @@
       permissions:
         ill: "1"
   post:
-    x-mojo-to: IllbatchStatuses#add
+    x-mojo-to: ILL::Batch::Statuses#add
     operationId: addIllbatchstatus
     tags:
       - ill_batchstatuses
@@ -92,7 +92,7 @@
         ill: "1"
 "/ill/batchstatuses/{ill_batchstatus_code}":
   get:
-    x-mojo-to: IllbatchStatuses#get
+    x-mojo-to: ILL::Batch::Statuses#get
     operationId: getIllbatchstatuses
     tags:
       - ill_batchstatuses
@@ -137,7 +137,7 @@
       permissions:
         ill: "1"
   put:
-    x-mojo-to: IllbatchStatuses#update
+    x-mojo-to: ILL::Batch::Statuses#update
     operationId: updateIllBatchstatus
     tags:
       - ill_batchstatuses
@@ -190,7 +190,7 @@
       permissions:
         ill: "1"
   delete:
-    x-mojo-to: IllbatchStatuses#delete
+    x-mojo-to: ILL::Batch::Statuses#delete
     operationId: deleteBatchstatus
     tags:
       - ill_batchstatuses

@@ -1,4 +1,4 @@
-package Koha::REST::V1::IllbatchStatuses;
+package Koha::REST::V1::ILL::Batch::Statuses;
 
 # This file is part of Koha.
 #
@@ -19,11 +19,11 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::IllbatchStatuses;
+use Koha::ILL::Batch::Statuses;
 
 =head1 NAME
 
-Koha::REST::V1::IllbatchStatuses
+Koha::REST::V1::ILL::Batch::Statuses
 
 =head2 Operations
 
@@ -36,7 +36,7 @@ Return a list of available ILL batch statuses
 sub list {
     my $c = shift->openapi->valid_input;
 
-    my @statuses = Koha::IllbatchStatuses->search()->as_list;
+    my @statuses = Koha::ILL::Batch::Statuses->search()->as_list;
 
     return $c->render( status => 200, openapi => \@statuses );
 }
@@ -52,7 +52,7 @@ sub get {
 
     my $status_code = $c->param('ill_batchstatus_code');
 
-    my $status = Koha::IllbatchStatuses->find( { code => $status_code } );
+    my $status = Koha::ILL::Batch::Statuses->find( { code => $status_code } );
 
     if ( not defined $status ) {
         return $c->render(
@@ -78,7 +78,7 @@ sub add {
 
     my $body = $c->req->json;
 
-    my $status = Koha::IllbatchStatus->new($body);
+    my $status = Koha::ILL::Batch::Status->new($body);
 
     return try {
         my $return = $status->create_and_log;
@@ -107,7 +107,7 @@ Update a batch status
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $status = Koha::IllbatchStatuses->find( { code => $c->param('ill_batchstatus_code') } );
+    my $status = Koha::ILL::Batch::Statuses->find( { code => $c->param('ill_batchstatus_code') } );
 
     if ( not defined $status ) {
         return $c->render(
@@ -142,7 +142,7 @@ sub delete {
 
     my $c = shift->openapi->valid_input or return;
 
-    my $status = Koha::IllbatchStatuses->find( { code => $c->param('ill_batchstatus_code') } );
+    my $status = Koha::ILL::Batch::Statuses->find( { code => $c->param('ill_batchstatus_code') } );
 
     if ( not defined $status ) {
         return $c->render( status => 404, openapi => { errors => [ { message => "ILL batch status not found" } ] } );

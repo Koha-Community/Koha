@@ -23,7 +23,7 @@ use Koha::Database;
 
 use Koha::Illrequests;
 use Koha::Illrequest::Logger;
-use Koha::IllbatchStatuses;
+use Koha::ILL::Batch::Statuses;
 use Koha::Libraries;
 use Koha::Patrons;
 
@@ -46,7 +46,7 @@ Return the status object associated with this batch
 
 sub status {
     my ($self) = @_;
-    return Koha::IllbatchStatus->_new_from_dbic( scalar $self->_result->status_code );
+    return Koha::ILL::Batch::Status->_new_from_dbic( scalar $self->_result->status_code );
 }
 
 =head3 patron

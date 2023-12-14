@@ -20,7 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ILL::Batches;
-use Koha::IllbatchStatuses;
+use Koha::ILL::Batch::Statuses;
 use Koha::Illrequests;
 
 use Try::Tiny qw( catch try );

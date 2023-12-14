@@ -1,4 +1,4 @@
-package Koha::IllbatchStatus;
+package Koha::ILL::Batch::Status;
 
 # Copyright PTFS Europe 2022
 #
@@ -26,7 +26,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::IllbatchStatus - Koha IllbatchStatus Object class
+Koha::ILL::Batch::Status - Koha IllbatchStatus Object class
 
 =head2 Class methods
 
@@ -46,7 +46,7 @@ sub create_and_log {
     $fixed_code =~ s/\W/_/;
 
     # Ensure this status doesn't already exist
-    my $status = Koha::IllbatchStatuses->find( { code => $fixed_code } );
+    my $status = Koha::ILL::Batch::Statuses->find( { code => $fixed_code } );
     if ($status) {
         return { error => "Duplicate status found" };
     }
@@ -145,7 +145,7 @@ sub delete_and_log {
 
 =head3 _type
 
-    my $type = Koha::IllbatchStatus->_type;
+    my $type = Koha::ILL::Batch::Statuses->_type;
 
 Return this object's type
 

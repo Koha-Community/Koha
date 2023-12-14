@@ -119,11 +119,11 @@ __PACKAGE__->add_columns(
 );
 
 sub koha_object_class {
-    'Koha::IllbatchStatus';
+    'Koha::ILL::Batch::Status';
 }
 
 sub koha_objects_class {
-    'Koha::IllbatchStatuses';
+    'Koha::ILL::Batch::Statuses';
 }
 
 1;

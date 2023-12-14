@@ -1,4 +1,4 @@
-package Koha::IllbatchStatuses;
+package Koha::ILL::Batch::Statuses;
 
 # Copyright PTFS Europe 2022
 #
@@ -19,18 +19,18 @@ package Koha::IllbatchStatuses;
 
 use Modern::Perl;
 use Koha::Database;
-use Koha::IllbatchStatus;
+use Koha::ILL::Batch::Status;
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::IllbatchStatuses - Koha IllbatchStatuses Object class
+Koha::ILL::Batch::Statuses - Koha IllbatchStatuses Object class
 
 =head2 Internal methods
 
 =head3 _type
 
-    my $type = Koha::IllbatchStatuses->_type;
+    my $type = Koha::ILL::Batch::Statuses->_type;
 
 Return this object's type
 
@@ -49,7 +49,7 @@ Return this object's class name
 =cut
 
 sub object_class {
-    return 'Koha::IllbatchStatus';
+    return 'Koha::ILL::Batch::Status';
 }
 
 =head1 AUTHOR

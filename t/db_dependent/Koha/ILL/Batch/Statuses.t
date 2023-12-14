@@ -19,8 +19,8 @@ use Modern::Perl;
 
 use File::Basename qw/basename/;
 use Koha::Database;
-use Koha::IllbatchStatus;
-use Koha::IllbatchStatuses;
+use Koha::ILL::Batch::Status;
+use Koha::ILL::Batch::Statuses;
 use Koha::Patrons;
 use Koha::Libraries;
 use t::lib::Mocks;
@@ -32,12 +32,12 @@ use Test::More tests => 13;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
-use_ok('Koha::IllbatchStatus');
-use_ok('Koha::IllbatchStatuses');
+use_ok('Koha::ILL::Batch::Status');
+use_ok('Koha::ILL::Batch::Statuses');
 
 $schema->storage->txn_begin;
 
-Koha::IllbatchStatuses->search->delete;
+Koha::ILL::Batch::Statuses->search->delete;
 
 # Keep track of whether our CRUD logging side-effects are happening
 my $effects = {
@@ -68,18 +68,18 @@ my $status = $builder->build(
     }
 );
 
-my $status_obj = Koha::IllbatchStatuses->find( { code => $status->{code} } );
-isa_ok( $status_obj, 'Koha::IllbatchStatus' );
+my $status_obj = Koha::ILL::Batch::Statuses->find( { code => $status->{code} } );
+isa_ok( $status_obj, 'Koha::ILL::Batch::Status' );
 
 # Try to delete the status, it's a system status, so this should fail
 $status_obj->delete_and_log;
-my $status_obj_del = Koha::IllbatchStatuses->find( { code => $status->{code} } );
-isa_ok( $status_obj_del, 'Koha::IllbatchStatus' );
+my $status_obj_del = Koha::ILL::Batch::Statuses->find( { code => $status->{code} } );
+isa_ok( $status_obj_del, 'Koha::ILL::Batch::Status' );
 
 ## Status create
 
 # Try creating a duplicate status
-my $status2 = Koha::IllbatchStatus->new(
+my $status2 = Koha::ILL::Batch::Status->new(
     {
         name      => "Obi-wan",
         code      => $status->{code},
@@ -93,7 +93,7 @@ is_deeply(
 );
 
 # Create a non-duplicate status and ensure that the logger is called
-my $status3 = Koha::IllbatchStatus->new(
+my $status3 = Koha::ILL::Batch::Status->new(
     {
         name      => "Kylo",
         code      => "DARK_SIDE",
@@ -108,7 +108,7 @@ is(
 );
 
 # Try creating a system status and ensure it's not created
-my $cannot_create_system = Koha::IllbatchStatus->new(
+my $cannot_create_system = Koha::ILL::Batch::Status->new(
     {
         name      => "Jar Jar Binks",
         code      => "GUNGAN",
@@ -116,7 +116,7 @@ my $cannot_create_system = Koha::IllbatchStatus->new(
     }
 );
 $cannot_create_system->create_and_log;
-my $created_but_not_system = Koha::IllbatchStatuses->find( { code => "GUNGAN" } );
+my $created_but_not_system = Koha::ILL::Batch::Statuses->find( { code => "GUNGAN" } );
 is( $created_but_not_system->{is_system}, undef, "is_system statuses cannot be created" );
 
 ## Status update
@@ -131,7 +131,7 @@ $status3->update_and_log(
 );
 
 # Get our updated status, if we can get it by it's code, we know that hasn't changed
-my $not_updated = Koha::IllbatchStatuses->find( { code => "DARK_SIDE" } )->unblessed;
+my $not_updated = Koha::ILL::Batch::Statuses->find( { code => "DARK_SIDE" } )->unblessed;
 is( $not_updated->{is_system}, 0,     "is_system cannot be changed" );
 is( $not_updated->{name},      "Rey", "name can be changed" );
 
@@ -143,14 +143,14 @@ is(
 );
 
 ## Status delete
-my $cannot_delete = Koha::IllbatchStatus->new(
+my $cannot_delete = Koha::ILL::Batch::Status->new(
     {
         name      => "Palapatine",
         code      => "SITH",
         is_system => 1
     }
 )->store;
-my $can_delete = Koha::IllbatchStatus->new(
+my $can_delete = Koha::ILL::Batch::Status->new(
     {
         name      => "Windu",
         code      => "JEDI",
@@ -158,8 +158,8 @@ my $can_delete = Koha::IllbatchStatus->new(
     }
 );
 $cannot_delete->delete_and_log;
-my $not_deleted = Koha::IllbatchStatuses->find( { code => "SITH" } );
-isa_ok( $not_deleted, 'Koha::IllbatchStatus', "is_system statuses cannot be deleted" );
+my $not_deleted = Koha::ILL::Batch::Statuses->find( { code => "SITH" } );
+isa_ok( $not_deleted, 'Koha::ILL::Batch::Status', "is_system statuses cannot be deleted" );
 $can_delete->create_and_log;
 $can_delete->delete_and_log;
 
@@ -171,7 +171,7 @@ is(
 );
 
 # Create a system "UNKNOWN" status
-my $status_unknown = Koha::IllbatchStatus->new(
+my $status_unknown = Koha::ILL::Batch::Status->new(
     {
         name      => "Unknown",
         code      => "UNKNOWN",
@@ -183,7 +183,7 @@ $status_unknown->create_and_log;
 # Create a batch and assign it a status
 my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
 my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-my $status5 = Koha::IllbatchStatus->new(
+my $status5 = Koha::ILL::Batch::Status->new(
     {
         name      => "Plagueis",
         code      => "DEAD_SITH",
