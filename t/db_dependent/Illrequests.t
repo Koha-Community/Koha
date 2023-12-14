@@ -952,7 +952,7 @@ subtest 'Helpers' => sub {
     my $type = 'test_type_1';
     my $name = 'test_name_1';
     my $update = Test::MockObject->new;
-    $update->set_isa('Koha::Illrequest::SupplierUpdate');
+    $update->set_isa('Koha::ILL::Request::SupplierUpdate');
     $update->{source_type} = $type;
     $update->{source_name} = $name;
     $update->{processors} = [];

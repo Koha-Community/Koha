@@ -1,4 +1,4 @@
-package Koha::Illrequest::SupplierUpdateProcessor;
+package Koha::ILL::Request::SupplierUpdateProcessor;
 
 # Copyright 2022 PTFS Europe Ltd
 #
@@ -51,11 +51,11 @@ Create a new Koha::Illrequest::SupplierUpdateProcessor object.
 
 sub new {
     my ( $class, $target_source_type, $target_source_name, $processor_name ) = @_;
-    my $self  = {};
+    my $self = {};
 
     $self->{target_source_type} = $target_source_type;
     $self->{target_source_name} = $target_source_name;
-    $self->{name} = $processor_name;
+    $self->{name}               = $processor_name;
 
     bless $self, $class;
 
@@ -71,7 +71,7 @@ Runs the processor
 =cut
 
 sub run {
-    my ( $self ) = @_;
+    my ($self) = @_;
     my ( $package, $filename ) = caller;
     warn __PACKAGE__ . " run should only be invoked by a subclass\n";
 }

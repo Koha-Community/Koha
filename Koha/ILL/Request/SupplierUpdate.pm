@@ -1,4 +1,4 @@
-package Koha::Illrequest::SupplierUpdate;
+package Koha::ILL::Request::SupplierUpdate;
 
 # Copyright 2022 PTFS Europe Ltd
 #
@@ -21,7 +21,7 @@ use Modern::Perl;
 
 =head1 NAME
 
-Koha::Illrequest::SupplierUpdate - Represents a single request update from a supplier
+Koha::ILL::Request::SupplierUpdate - Represents a single request update from a supplier
 
 =head1 SYNOPSIS
 
@@ -39,13 +39,13 @@ an update from a supplier
 
 =head3 new
 
-    my $update = Koha::Illrequest::SupplierUpdate->new(
+    my $update = Koha::ILL::Request::SupplierUpdate->new(
         $source_type,
         $source_name,
         $update
     );
 
-Create a new Koha::Illrequest::SupplierUpdate object.
+Create a new Koha::ILL::Request::SupplierUpdate object .
 
 =cut
 
@@ -66,7 +66,7 @@ sub new {
 
 =head3 attach_processor
 
-    Koha::Illrequest::SupplierUpdate->attach_processor($processor);
+    Koha::ILL::Request::SupplierUpdate->attach_processor($processor);
 
 Pushes a processor function onto the 'processors' arrayref
 
@@ -79,7 +79,7 @@ sub attach_processor {
 
 =head3 run_processors
 
-    Koha::Illrequest::SupplierUpdate->run_processors();
+    Koha::ILL::Request::SupplierUpdate->run_processors();
 
 Iterates all processors on this object and runs each
 

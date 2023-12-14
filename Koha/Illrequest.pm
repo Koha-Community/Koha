@@ -1852,7 +1852,7 @@ sub get_notice {
 
 =head3 attach_processors
 
-Receive a Koha::Illrequest::SupplierUpdate and attach
+Receive a Koha::ILL::Request::SupplierUpdate and attach
 any processors we have for it
 
 =cut

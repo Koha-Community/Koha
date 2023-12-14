@@ -20,22 +20,22 @@ use Modern::Perl;
 use Test::MockObject;
 
 use Koha::Illrequest;
-use Koha::Illrequest::SupplierUpdate;
+use Koha::ILL::Request::SupplierUpdate;
 
 use Test::More tests => 4;
 
-use_ok('Koha::Illrequest::SupplierUpdate');
+use_ok('Koha::ILL::Request::SupplierUpdate');
 
-my $update = Koha::Illrequest::SupplierUpdate->new(
+my $update = Koha::ILL::Request::SupplierUpdate->new(
     'test_type',
     'test_name',
     'Arbitrary update text'
 );
 
-isa_ok( $update, 'Koha::Illrequest::SupplierUpdate' );
+isa_ok( $update, 'Koha::ILL::Request::SupplierUpdate' );
 
 my $processor = Test::MockObject->new;
-$processor->set_isa('Koha::Illrequest::Processor');
+$processor->set_isa('Koha::ILL::Request::Processor');
 $processor->{name} = 'Test processor';
 $processor->mock('run', sub {
     my ( $self, $update, $options, $result ) = @_;

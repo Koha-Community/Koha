@@ -129,7 +129,7 @@ while (my $request = $requests->next) {
         # process it
         #
         # Since each backend's update format is different, it may
-        # be necessary for a backend to subclass Koha::Illrequest::SupplierUpdate
+        # be necessary for a backend to subclass Koha::ILL::Request::SupplierUpdate
         # so it can provide methods (corresponding to a generic interface) that
         # return pertinent info to core ILL when it is processing updates
         #
