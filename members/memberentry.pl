@@ -594,6 +594,7 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
             $patron->extended_attributes->filter_by_branch_limitations->delete;
             $patron->extended_attributes($extended_patron_attributes);
+            $patron->set( { updated_on => "" } )->store;
         }
 
         if ( $destination eq 'circ' and not C4::Auth::haspermission( C4::Context->userenv->{id}, { circulate => 'circulate_remaining_permissions' } ) ) {
