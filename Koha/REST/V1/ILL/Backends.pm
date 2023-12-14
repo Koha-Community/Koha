@@ -1,19 +1,19 @@
-package Koha::REST::V1::Illbackends;
+package Koha::REST::V1::ILL::Backends;
 
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 3 of the License, or (at your option) any later
-# version.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
 
@@ -21,11 +21,11 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Illrequest::Config;
 use Koha::Illrequests;
-use Koha::Illbackend;
+use Koha::ILL::Backend;
 
 =head1 NAME
 
-Koha::REST::V1::Illbackends
+Koha::REST::V1::ILL::Backends
 
 =head2 Operations
 
@@ -38,9 +38,9 @@ Return a list of available ILL backends and its capabilities
 sub list {
     my $c = shift->openapi->valid_input;
 
-    my $config   = Koha::Illrequest::Config->new;
-    my $backends = $config->available_backends;
-    my $backend_module = Koha::Illbackend->new;
+    my $config         = Koha::ILL::Request::Config->new;
+    my $backends       = $config->available_backends;
+    my $backend_module = Koha::ILL::Backend->new;
 
     my @data;
     foreach my $b (@$backends) {
@@ -73,18 +73,19 @@ sub get {
 
     return try {
 
-        #FIXME: Should we move load_backend into Koha::Illbackend...
+        #FIXME: Should we move load_backend into Koha::ILL::Backend...
         #       or maybe make Koha::Ill::Backend a base class for all
         #       backends?
         my $backend = Koha::Illrequest->new->load_backend($backend_id);
 
-        my $backend_module = Koha::Illbackend->new;
+        my $backend_module = Koha::ILL::Backend->new;
 
-        my $embed =
-          $backend_module->embed( $backend_id,
-            $c->req->headers->header('x-koha-embed') );
+        my $embed = $backend_module->embed(
+            $backend_id,
+            $c->req->headers->header('x-koha-embed')
+        );
 
-        #TODO: We need a to_api method in Koha::Illbackend
+        #TODO: We need a to_api method in Koha::ILL::Backend
         my $return = {
             ill_backend_id => $backend_id,
             capabilities   => $backend->capabilities,
@@ -94,8 +95,7 @@ sub get {
             status  => 200,
             openapi => $embed ? { %$return, %$embed } : $return,
         );
-    }
-    catch {
+    } catch {
         return $c->render(
             status  => 404,
             openapi => { error => "ILL backend does not exist" }

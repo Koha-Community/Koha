@@ -1,4 +1,4 @@
-package Koha::Illbackend;
+package Koha::ILL::Backend;
 
 # Copyright PTFS Europe 2023
 #
@@ -23,19 +23,19 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Illbackend - Koha Illbackend Object class
+Koha::ILL::Backend - Koha Illbackend Object class
 
 =head2 Class methods
 
 =head3 new
 
-New illbackend
+New ILL Backend
 
 =cut
 
 sub new {
     my $class = shift;
-    my $self = {};
+    my $self  = {};
     return bless $self, $class;
 }
 
@@ -119,7 +119,7 @@ sub embed {
 
     foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
         if ( $embed_req eq 'statuses+strings' ) {
-            $return_embed->{statuses} = $self->existing_statuses( $backend_id );
+            $return_embed->{statuses} = $self->existing_statuses($backend_id);
         }
     }
     return $return_embed;
@@ -129,7 +129,7 @@ sub embed {
 
 =head3 _type
 
-    my $type = Koha::Illbackend->_type;
+    my $type = Koha::ILL::Backend->_type;
 
 Return this object's type
 

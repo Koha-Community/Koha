@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 1;
 
-use Koha::Illbackend;
+use Koha::ILL::Backend;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -36,7 +36,7 @@ subtest 'existing_statuses() tests' => sub {
     $schema->storage->txn_begin;
     Koha::Illrequests->search->delete;
 
-    # Mock ILLBackend (as object)
+    # Mock external ILLBackend (as object)
     my $backend = Test::MockObject->new;
     $backend->set_isa('Koha::Illbackends::Mock');
     $backend->set_always( 'name', 'Mock' );
@@ -133,7 +133,7 @@ subtest 'existing_statuses() tests' => sub {
         }
     );
 
-    my $backend_module = Koha::Illbackend->new;
+    my $backend_module = Koha::ILL::Backend->new;
 
     my $existing_statuses = $backend_module->existing_statuses('Mock');
 
