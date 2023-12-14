@@ -25,8 +25,8 @@ use t::lib::TestBuilder;
 use Test::More tests => 3;
 
 my $schema = Koha::Database->new->schema;
-use_ok('Koha::Illrequestattribute');
-use_ok('Koha::Illrequestattributes');
+use_ok('Koha::ILL::Request::Attribute');
+use_ok('Koha::ILL::Request::Attributes');
 
 subtest 'Basic object tests' => sub {
 
@@ -34,19 +34,19 @@ subtest 'Basic object tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Illrequestattributes->search->delete;
+    Koha::ILL::Request::Attributes->search->delete;
 
     my $builder = t::lib::TestBuilder->new;
 
     my $illrqattr = $builder->build( { source => 'Illrequestattribute' } );
 
-    my $illrqattr_obj = Koha::Illrequestattributes->find(
+    my $illrqattr_obj = Koha::ILL::Request::Attributes->find(
         $illrqattr->{illrequest_id},
         $illrqattr->{backend},
         $illrqattr->{type}
     );
     isa_ok(
-        $illrqattr_obj, 'Koha::Illrequestattribute',
+        $illrqattr_obj, 'Koha::ILL::Request::Attribute',
         "Correctly create and load an illrequestattribute object."
     );
     is(
@@ -69,7 +69,7 @@ subtest 'Basic object tests' => sub {
     $illrqattr_obj->delete;
 
     is(
-        Koha::Illrequestattributes->search->count, 0,
+        Koha::ILL::Request::Attributes->search->count, 0,
         "No attributes found after delete."
     );
 

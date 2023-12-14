@@ -1,4 +1,4 @@
-package Koha::Illrequestattribute;
+package Koha::ILL::Request::Attributes;
 
 # Copyright PTFS Europe 2016
 #
@@ -20,47 +20,35 @@ package Koha::Illrequestattribute;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::ILL::Request::Attribute;
 
-use base qw(Koha::Object);
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Illrequestattribute - Koha Illrequestattribute Object class
+Koha::ILL::Request::Attributes - Koha Illrequestattributes Object class
 
 =head1 API
 
-=head2 Class methods
-
-=head3 store
-
-Overloaded store method to ensure we have backend filled if not already passed
+=head2 Class Methods
 
 =cut
 
-sub store {
-    my ($self) = @_;
+=head3 search
 
-    if ( !$self->backend ) {
-        $self->backend( $self->request->backend );
-    }
-
-    return $self->SUPER::store;
-}
-
-=head3 request
-
-Returns a Koha::Illrequest object representing the core request.
+my $attributes = Koha::ILL::Request::Attributes->search( $params );
 
 =cut
 
-sub request {
-    my ($self) = @_;
-    return Koha::Illrequest->_new_from_dbic( $self->_result->illrequest );
+sub search {
+    my ( $self, $params, $attributes ) = @_;
+
+    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = ['me.type', 'value'] }
+
+    return $self->SUPER::search( $params, $attributes );
 }
 
-=head2 Internal methods
-
-=head3 _type
+=head3 type
 
 =cut
 
@@ -68,18 +56,12 @@ sub _type {
     return 'Illrequestattribute';
 }
 
-=head3 to_api_mapping
-
-This method returns the mapping for representing a Koha::Illrequestattribute object
-on the API.
+=head3 object_class
 
 =cut
 
-sub to_api_mapping {
-    return {
-        illrequest_id => 'ill_request_id',
-        readonly      => 'read_only',
-    };
+sub object_class {
+    return 'Koha::ILL::Request::Attribute';
 }
 
 =head1 AUTHOR

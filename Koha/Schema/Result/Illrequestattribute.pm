@@ -124,4 +124,12 @@ __PACKAGE__->add_columns(
     '+readonly' => { is_boolean => 1 }
 );
 
+sub koha_object_class {
+    'Koha::ILL::Request::Attribute';
+}
+
+sub koha_objects_class {
+    'Koha::ILL::Request::Attributes';
+}
+
 1;

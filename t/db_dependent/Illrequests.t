@@ -22,7 +22,7 @@ use File::Basename qw/basename/;
 use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Database;
-use Koha::Illrequestattributes;
+use Koha::ILL::Request::Attributes;
 use Koha::Illrequest::Config;
 use Koha::Biblios;
 use Koha::Patrons;
@@ -220,7 +220,7 @@ subtest 'Working with related objects' => sub {
         }
     );
 
-    my $rs = Koha::Illrequestattributes->search( { illrequest_id => $illrq->id } );
+    my $rs = Koha::ILL::Request::Attributes->search( { illrequest_id => $illrq->id } );
 
     is( $illrq->extended_attributes->count,
         $rs->count, "Fetching expected number of Illrequestattributes for our request." );

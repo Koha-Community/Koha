@@ -20,7 +20,7 @@ use Modern::Perl;
 use File::Basename qw/basename/;
 use Koha::Database;
 use Koha::Illrequests;
-use Koha::Illrequestattributes;
+use Koha::ILL::Request::Attributes;
 use Koha::Illrequest::Config;
 use Koha::Patrons;
 use t::lib::Mocks;

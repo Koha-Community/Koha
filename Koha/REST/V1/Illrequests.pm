@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use C4::Context;
 use Koha::Illrequests;
-use Koha::Illrequestattributes;
+use Koha::ILL::Request::Attributes;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Libraries;

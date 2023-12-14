@@ -31,7 +31,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Ill;
 use Koha::ILL::Comments;
-use Koha::Illrequestattributes;
+use Koha::ILL::Request::Attributes;
 use Koha::AuthorisedValue;
 use Koha::Illrequest::Logger;
 use Koha::Patron;
@@ -198,7 +198,7 @@ sub statusalias {
 sub illrequestattributes {
     deprecated 'illrequestattributes is DEPRECATED in favor of extended_attributes';
     my ( $self ) = @_;
-    return Koha::Illrequestattributes->_new_from_dbic(
+    return Koha::ILL::Request::Attributes->_new_from_dbic(
         scalar $self->_result->illrequestattributes
     );
 }
@@ -274,7 +274,7 @@ sub library {
 
     my $extended_attributes = $request->extended_attributes;
 
-Returns the linked I<Koha::Illrequestattributes> resultset object.
+Returns the linked I<Koha::ILL::Request::Attributes> resultset object.
 
 =cut
 
@@ -282,8 +282,8 @@ sub extended_attributes {
     my ( $self ) = @_;
 
     my $rs = $self->_result->extended_attributes;
-    # We call search to use the filters in Koha::Illrequestattributes->search
-    return Koha::Illrequestattributes->_new_from_dbic($rs)->search;
+    # We call search to use the filters in Koha::ILL::Request::Attributes->search
+    return Koha::ILL::Request::Attributes->_new_from_dbic($rs)->search;
 }
 
 =head3 status_alias
