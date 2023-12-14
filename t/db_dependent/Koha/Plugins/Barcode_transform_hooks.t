@@ -99,6 +99,6 @@ subtest 'patron_barcode_transform() and item_barcode_transform() hook tests' => 
         qr/Plugin error \(Test Plugin\): Exception 'Koha::Exception' thrown 'item_barcode_transform called with parameter: THISISATEST'/,
         'Koha::Item->store calls the item_barcode_transform hook';
 
-    $schema->storage->txn_rollback;
     Koha::Plugins->RemovePlugins;
+    $schema->storage->txn_rollback;
 };
