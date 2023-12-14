@@ -193,7 +193,7 @@
                         <td class="hq-homebranch">[% Branches.GetName( itemsloo.item.homebranch ) | html %]</td>
                         <td class="hq-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemsloo.item.ccode ) | html %]</td>
                         <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.item.effective_itemtype ) | html %]</td>
-                        <td class="hq-callnumber">[% IF ( itemsloo.item.location ) %]<em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => itemsloo.item.location ) | html %]</em> [% END %][% itemsloo.item.itemcallnumber | html %]</td>
+                        <td class="hq-callnumber">[% IF ( itemsloo.item.location ) %]<span class="location"><em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => itemsloo.item.location ) | html %]</em></span> [% END %]<span class="itemcallnumber">[% itemsloo.item.itemcallnumber | html %]</span></td>
                         <td class="hq-copynumber">[% itemsloo.item.copynumber | html %]</td>
                         <td class="hq-enumchron">[% itemsloo.item.enumchron | html %]</td>
                         <td class="hq-barcode">
