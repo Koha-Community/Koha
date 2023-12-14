@@ -17,12 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 34;
+use Test::More tests => 36;
 use Test::Exception;
 use Test::Warn;
 
 use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
 use C4::Circulation qw( AddIssue AddReturn );
+use C4::Reserves qw( AddReserve );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -546,34 +547,179 @@ subtest 'bookings() tests' => sub {
 };
 
 subtest 'merge of records' => sub {
-    plan tests => 9;
-    $schema->storage->txn_begin;
+    plan tests => 8;
 
-    # 3 items from 3 different biblio records
-    my $item1    = $builder->build_sample_item;
-    my $item2    = $builder->build_sample_item;
-    my $item3    = $builder->build_sample_item;
+    subtest 'move items' => sub {
+        plan tests => 9;
+        $schema->storage->txn_begin;
 
-    my $biblio1 = $item1->biblio;
-    my $biblio2 = $item2->biblio;
-    my $biblio3 = $item3->biblio;
+        # 3 items from 3 different biblio records
+        my $item1 = $builder->build_sample_item;
+        my $item2 = $builder->build_sample_item;
+        my $item3 = $builder->build_sample_item;
 
-    my $pre_merged_rs = Koha::Biblios->search(
-        { biblionumber => [ $biblio1->biblionumber, $biblio2->biblionumber, $biblio3->biblionumber ] } );
-    is( $pre_merged_rs->count, 3, '3 biblios exist' );
+        my $biblio1 = $item1->biblio;
+        my $biblio2 = $item2->biblio;
+        my $biblio3 = $item3->biblio;
 
-    warning_like { $biblio1->merge_with( [ $biblio2->biblionumber, $biblio3->biblionumber ] ) } q{};
-    is( $biblio1->items->count, 3, "After merge we have 3 items on first record" );
+        my $pre_merged_rs = Koha::Biblios->search(
+            { biblionumber => [ $biblio1->biblionumber, $biblio2->biblionumber, $biblio3->biblionumber ] } );
+        is( $pre_merged_rs->count, 3, '3 biblios exist' );
 
-    is( ref( $biblio1->get_from_storage ), 'Koha::Biblio', 'biblio record 1 still exists' );
-    is( $biblio2->get_from_storage,        undef,          'biblio record 2 no longer exists' );
-    is( $biblio3->get_from_storage,        undef,          'biblio record 3 no longer exists' );
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber, $biblio3->biblionumber ] ) } q{};
+        is( $biblio1->items->count, 3, "After merge we have 3 items on first record" );
 
-    is( $item1->get_from_storage->biblionumber, $biblio1->biblionumber );
-    is( $item2->get_from_storage->biblionumber, $biblio1->biblionumber );
-    is( $item3->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( ref( $biblio1->get_from_storage ), 'Koha::Biblio', 'biblio record 1 still exists' );
+        is( $biblio2->get_from_storage,        undef,          'biblio record 2 no longer exists' );
+        is( $biblio3->get_from_storage,        undef,          'biblio record 3 no longer exists' );
 
-    $schema->storage->txn_rollback;
+        is( $item1->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $item2->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $item3->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'move holds' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $biblio1 = $builder->build_sample_biblio;
+        my $biblio2 = $builder->build_sample_biblio;
+
+        my $hold1 =
+            $builder->build_object( { class => 'Koha::Holds', value => { biblionumber => $biblio1->biblionumber } } );
+        my $hold2 =
+            $builder->build_object( { class => 'Koha::Holds', value => { biblionumber => $biblio2->biblionumber } } );
+
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber ] ) } q{};
+
+        is( $hold1->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $hold2->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'move article requests' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $biblio1 = $builder->build_sample_biblio;
+        my $biblio2 = $builder->build_sample_biblio;
+
+        my $ar1 = $builder->build_object(
+            { class => 'Koha::ArticleRequests', value => { biblionumber => $biblio1->biblionumber } } );
+        my $ar2 = $builder->build_object(
+            { class => 'Koha::ArticleRequests', value => { biblionumber => $biblio2->biblionumber } } );
+
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber ] ) } q{};
+
+        is( $ar1->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $ar2->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'move subscriptions' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $biblio1 = $builder->build_sample_biblio;
+        my $biblio2 = $builder->build_sample_biblio;
+
+        my $sub1 = $builder->build_object(
+            { class => 'Koha::Subscriptions', value => { biblionumber => $biblio1->biblionumber } } );
+        my $sub2 = $builder->build_object(
+            { class => 'Koha::Subscriptions', value => { biblionumber => $biblio2->biblionumber } } );
+
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber ] ) } q{};
+
+        is( $sub1->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $sub2->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'move serials' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $biblio1 = $builder->build_sample_biblio;
+        my $biblio2 = $builder->build_sample_biblio;
+
+        my $serial1 =
+            $builder->build_object( { class => 'Koha::Serials', value => { biblionumber => $biblio1->biblionumber } } );
+        my $serial2 =
+            $builder->build_object( { class => 'Koha::Serials', value => { biblionumber => $biblio2->biblionumber } } );
+
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber ] ) } q{};
+
+        is( $serial1->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $serial2->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'move subscription history' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $biblio1 = $builder->build_sample_biblio;
+        my $biblio2 = $builder->build_sample_biblio;
+
+        my $sh1 = $builder->build_object(
+            { class => 'Koha::Subscription::Histories', value => { biblionumber => $biblio1->biblionumber } } );
+        my $sh2 = $builder->build_object(
+            { class => 'Koha::Subscription::Histories', value => { biblionumber => $biblio2->biblionumber } } );
+
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber ] ) } q{};
+
+        is( $sh1->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $sh2->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'move suggestions' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $biblio1 = $builder->build_sample_biblio;
+        my $biblio2 = $builder->build_sample_biblio;
+
+        my $suggestion1 = $builder->build_object(
+            { class => 'Koha::Suggestions', value => { biblionumber => $biblio1->biblionumber } } );
+        my $suggestion2 = $builder->build_object(
+            { class => 'Koha::Suggestions', value => { biblionumber => $biblio2->biblionumber } } );
+
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber ] ) } q{};
+
+        is( $suggestion1->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $suggestion2->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'move orders' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $biblio1 = $builder->build_sample_biblio;
+        my $biblio2 = $builder->build_sample_biblio;
+
+        my $order1 = $builder->build_object(
+            { class => 'Koha::Acquisition::Orders', value => { biblionumber => $biblio1->biblionumber } } );
+        my $order2 = $builder->build_object(
+            { class => 'Koha::Acquisition::Orders', value => { biblionumber => $biblio2->biblionumber } } );
+
+        warning_like { $biblio1->merge_with( [ $biblio2->biblionumber ] ) } q{};
+
+        is( $order1->get_from_storage->biblionumber, $biblio1->biblionumber );
+        is( $order2->get_from_storage->biblionumber, $biblio1->biblionumber );
+
+        $schema->storage->txn_rollback;
+    };
+
 };
 
 subtest 'suggestions() tests' => sub {
