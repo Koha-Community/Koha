@@ -47,13 +47,28 @@ my ( $template, $loggedinuser, $cookie );
 my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypetext']});
 
 if ( $op eq "do_search" ) {
-    my @marclist = $query->multi_param('marclist');
+    my @input_marclist = $query->multi_param('marclist');
     my @and_or = $query->multi_param('and_or');
     my @excluding = $query->multi_param('excluding');
     my @operator = $query->multi_param('operator');
     my $orderby = $query->param('orderby');
     my @value = $query->multi_param('value');
     $value[0] ||= q||;
+
+    my $valid_marc_list = {
+        "all"       => 1,
+        "match"     => 1,
+        "mainentry" => 1,
+    };
+    my @marclist = ();
+    foreach my $entry (@input_marclist) {
+        if ( $valid_marc_list->{$entry} ) {
+            push( @marclist, $entry );
+        }
+    }
+    if ( !@marclist ) {
+        push( @marclist, 'all' );
+    }
 
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
