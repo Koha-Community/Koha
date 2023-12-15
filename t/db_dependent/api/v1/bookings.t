@@ -27,7 +27,7 @@ use JSON qw(encode_json);
 
 use Koha::Bookings;
 use Koha::Database;
-use Koha::DateUtils qw (dt_from_string);
+use Koha::DateUtils qw (dt_from_string output_pref);
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -86,8 +86,8 @@ subtest 'list() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/bookings")->status_is(200)->json_is( [ $booking_0->to_api ] );
 
     # More bookings
-    my $start_1 = dt_from_string->add( days => 1 )->truncate( to => 'day' );
-    my $end_1   = dt_from_string->add( days => 6 )->truncate( to => 'day' );
+    my $start_1   = dt_from_string->add( days => 1 )->truncate( to => 'day' );
+    my $end_1     = dt_from_string->add( days => 6 )->truncate( to => 'day' );
     my $booking_1 = $builder->build_object(
         {
             class => 'Koha::Bookings',
@@ -98,8 +98,8 @@ subtest 'list() tests' => sub {
         }
     );
 
-    my $start_2 = dt_from_string->add( days => 4 )->truncate( to => 'day' );
-    my $end_2   = dt_from_string->add( days => 8 )->truncate( to => 'day' );
+    my $start_2   = dt_from_string->add( days => 4 )->truncate( to => 'day' );
+    my $end_2     = dt_from_string->add( days => 8 )->truncate( to => 'day' );
     my $booking_2 = $builder->build_object(
         {
             class => 'Koha::Bookings',
@@ -121,7 +121,8 @@ subtest 'list() tests' => sub {
     );
 
     # Filtering works, two bookings after today
-    my $api_filter = encode_json( { 'me.start_date' => { '>=' => dt_from_string->rfc3339 } } );
+    my $api_filter = encode_json(
+        { 'me.start_date' => { '>=' => output_pref( { dateformat => "rfc3339", dt => dt_from_string } ) } } );
     $t->get_ok("//$userid:$password@/api/v1/bookings?q=$api_filter")->status_is(200)->json_is(
         '' => [
             $booking_1->to_api,
@@ -130,7 +131,8 @@ subtest 'list() tests' => sub {
         'filtered returns two future bookings'
     );
 
-    $api_filter = encode_json( { 'me.start_date' => { '<=' => dt_from_string->rfc3339 } } );
+    $api_filter = encode_json(
+        { 'me.start_date' => { '<=' => output_pref( { dateformat => "rfc3339", dt => dt_from_string } ) } } );
     $t->get_ok("//$userid:$password@/api/v1/bookings?q=$api_filter")->status_is(200)
         ->json_is( '' => [ $booking_0->to_api ], 'filtering to before today also works' );
 
@@ -227,8 +229,8 @@ subtest 'add() tests' => sub {
         biblio_id  => $biblio->id,
         item_id    => undef,
         patron_id  => $patron->id,
-        start_date => dt_from_string->add( days => 2 )->rfc3339,
-        end_date   => dt_from_string->add( days => 6 )->rfc3339,
+        start_date => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
+        end_date   => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
     };
 
     # Unauthorized attempt to write
@@ -324,8 +326,8 @@ subtest 'update() tests' => sub {
     my $booking_with_missing_field = {
         item_id    => undef,
         patron_id  => $patron->id,
-        start_date => dt_from_string->add( days => 2 )->rfc3339,
-        end_date   => dt_from_string->add( days => 6 )->rfc3339,
+        start_date => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
+        end_date   => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_missing_field )
@@ -336,8 +338,8 @@ subtest 'update() tests' => sub {
         biblio_id  => $biblio->id,
         item_id    => undef,
         patron_id  => $patron->id,
-        start_date => dt_from_string->add( days => 2 )->rfc3339,
-        end_date   => dt_from_string->add( days => 6 )->rfc3339,
+        start_date => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
+        end_date   => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_updated_field )
@@ -349,8 +351,8 @@ subtest 'update() tests' => sub {
         biblio_id  => $biblio->id,
         item_id    => undef,
         patron_id  => $patron->id,
-        start_date => dt_from_string->add( days => 2 )->rfc3339,
-        end_date   => dt_from_string->add( days => 6 )->rfc3339,
+        start_date => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
+        end_date   => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_invalid_field )
