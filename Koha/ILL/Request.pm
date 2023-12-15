@@ -25,23 +25,25 @@ use DateTime;
 
 use C4::Letters;
 use Mojo::Util qw(deprecated);
+use File::Basename qw( dirname );
 
+use Koha::AuthorisedValue;
+use Koha::AuthorisedValues;
+use Koha::Biblios;
 use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Ill;
+use Koha::ILL::Backend::Standard;
+use Koha::ILL::Batches;
 use Koha::ILL::Comments;
 use Koha::ILL::Request::Attributes;
-use Koha::AuthorisedValue;
 use Koha::ILL::Request::Logger;
-use Koha::Patron;
-use Koha::ILL::Batches;
-use Koha::AuthorisedValues;
-use Koha::Biblios;
-use Koha::Items;
 use Koha::ItemTypes;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::AdditionalContents;
+use Koha::Patron;
 
 use C4::Circulation qw( CanBookBeIssued AddIssue );
 
@@ -435,16 +437,21 @@ sub load_backend {
             "An invalid backend ID was requested ('')");
     }
 
+    my $backend_params = {
+        config => $self->_config,
+        logger => Koha::ILL::Request::Logger->new
+    };
+
     # Find plugin implementing the backend for the request
     my $backend_plugin = $self->get_backend_plugin($backend_name);
-    if ($backend_plugin) {
 
-        $self->{_my_backend} = $backend_plugin->new_ill_backend(
-            {
-                config => $self->_config,
-                logger => Koha::ILL::Request::Logger->new
-            }
-        );
+    if ( $backend_name eq 'Standard' ) {
+
+        # Load the Standard core backend
+        $self->{_my_backend} = Koha::ILL::Backend::Standard->new($backend_params);
+    } elsif ($backend_plugin) {
+
+        $self->{_my_backend} = $backend_plugin->new_ill_backend($backend_params);
     } elsif ($backend_name) {
 
         # Fallback to loading through backend_dir config
@@ -452,12 +459,7 @@ sub load_backend {
         my $location      = join "/",  @raw, $backend_name, "Base.pm";    # File to load
         my $backend_class = join "::", @raw, $backend_name, "Base";       # Package name
         require $location;
-        $self->{_my_backend} = $backend_class->new(
-            {
-                config => $self->_config,
-                logger => Koha::ILL::Request::Logger->new
-            }
-        );
+        $self->{_my_backend} = $backend_class->new($backend_params);
     }
 
     return $self;
@@ -1098,6 +1100,11 @@ sub expand_template {
         # New way of loading backends: Through plugins
         $backend_dir  = $backend_plugin->bundle_path;
         $backend_tmpl = $backend_dir;
+
+    } elsif ( $backend eq 'Standard' ) {
+
+        # Check for core Standard backend
+        $backend_tmpl = dirname(__FILE__) . '/Backend';
     } else {
 
         # Old way of loading backends: Through backend_dir config
