@@ -1975,7 +1975,7 @@ sub checkpw {
         if ($passwd_ok) {
             $patron->update( { login_attempts => 0 } );
             if ( $patron->password_expired ) {
-                @return = (-2);
+                @return = ( -2, $patron );
             }
         } elsif ( !$patron->account_locked ) {
             $patron->update( { login_attempts => $patron->login_attempts + 1 } );
