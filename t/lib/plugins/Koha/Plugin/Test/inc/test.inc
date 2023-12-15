@@ -1,1 +1,1 @@
-[% 'included content' ~%]
+[% 'included content' | html ~%]

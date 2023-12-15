@@ -62,8 +62,10 @@ sub new {
         push @includes, "$htdocs/$_/en/includes" unless $lang eq 'en';
     }
 
-    my @plugins_include_paths = Koha::Plugins->call( 'template_include_paths',
-        { interface => $interface, lang => $lang } );
+    my @plugins_include_paths = Koha::Plugins->call(
+        'template_include_paths',
+        { interface => $interface, lang => $lang }
+    );
     push @includes, map { $_ ? @$_ : () } @plugins_include_paths;
 
     # Do not use template cache if script is called from commandline
