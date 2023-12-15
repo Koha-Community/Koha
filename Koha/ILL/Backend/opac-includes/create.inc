@@ -14,7 +14,7 @@
 
 [% IF whole.stage == "form" %]
 <h2>Create a manual ILL request</h2>
-<form id="create_form" method="POST" action=[% here %]>
+<form id="create_form" method="POST" action="">
   <fieldset class="rows">
     <legend>General details</legend>
     <ol id="general-standard-fields">
@@ -86,12 +86,12 @@
           <option value="" />
           [% FOREACH branch IN branches %]
             [% IF whole.value.other.branchcode && branch.branchcode == whole.value.other.branchcode %]
-            <option value="[% branch.branchcode %]" selected>
-              [% branch.branchname %]
+            <option value="[% branch.branchcode | html %]" selected>
+              [% branch.branchname | html %]
             </option>
             [% ELSE %]
-            <option value="[% branch.branchcode %]">
-              [% branch.branchname %]
+            <option value="[% branch.branchcode | html %]">
+              [% branch.branchname | html %]
             </option>
             [% END %]
           [% END %]
@@ -114,7 +114,7 @@
 
 [% END %]
 [% BLOCK backend_jsinclude %]
-<script type="text/javascript">
+<script>
     // <![CDATA[]
     [% INCLUDE "${cwd}/shared-includes/shared.js" %]
     // ]]>

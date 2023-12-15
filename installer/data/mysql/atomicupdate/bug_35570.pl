@@ -66,6 +66,5 @@ return {
             say $out "Bug 35570: Finished database update.";
         }
 
-
     },
 };

@@ -14,7 +14,7 @@
 
 [% IF whole.stage == "form" %]
 <h2>Migrating an ILL request</h2>
-<form id="standard_migrate_form" method="POST" action=[% here %]>
+<form id="standard_migrate_form" method="POST" action="">
   <fieldset class="rows">
     <legend>General details</legend>
     <ol id="general-standard-fields">
@@ -92,8 +92,8 @@
         <select id="branchcode" name="branchcode">
           <option value="" />
           [% FOREACH branch IN branches %]
-            <option value="[% branch.branchcode %]">
-              [% branch.branchname %]
+            <option value="[% branch.branchcode | html %]">
+              [% branch.branchname | html %]
             </option>
           [% END %]
         </select>
@@ -106,7 +106,7 @@
   </fieldset>
 </form>
 [% BLOCK backend_jsinclude %]
-<script type="text/javascript">
+<script>
     // <![CDATA[]
     [% INCLUDE "${cwd}/shared-includes/shared.js" %]
     // ]]>

@@ -15,7 +15,7 @@
 
 [% IF whole.stage == "form" %]
 <h2>Create a manual ILL request</h2>
-<form id="create_form" method="POST" action=[% here %]>
+<form id="create_form" method="POST" action="">
   <fieldset class="rows">
     <legend>General details</legend>
     <ol id="general-standard-fields">
@@ -93,8 +93,8 @@
         <select id="branchcode" name="branchcode">
           <option value="" />
           [% FOREACH branch IN branches %]
-            <option value="[% branch.branchcode %]">
-              [% branch.branchname %]
+            <option value="[% branch.branchcode | html %]">
+              [% branch.branchname | html %]
             </option>
           [% END %]
         </select>
@@ -110,7 +110,7 @@
   <input type="hidden" name="backend" value="Standard" />
 </form>
 [% BLOCK backend_jsinclude %]
-<script type="text/javascript">
+<script>
     // <![CDATA[]
     [% INCLUDE "${cwd}/shared-includes/shared.js" %]
     // Require a username and branch selection
@@ -157,22 +157,22 @@
 [% ELSIF whole.stage == "borrowers" %]
 <!-- We need to clarify the borrower that has been requested. -->
 <h2>Borrower selection</h2>
-<form method="POST" action=[% here %]>
+<form method="POST" action="">
   [% FOREACH prop IN whole.value.other.keys %]
     [% IF prop != 'custom_key' &&  prop != 'custom_value' && prop != 'cardnumber' %]
-    <input type="hidden" name="[% prop %]" value="[% whole.value.other.$prop %]">
+    <input type="hidden" name="[% prop | html %]" value="[% whole.value.other.$prop | html %]">
     [% END %]
   [% END %]
   [% keys = whole.value.other.custom_key.split('\0') %]
   [% values = whole.value.other.custom_value.split('\0') %]
   [% i = 0 %]
   [% FOREACH key IN keys %]
-    <input type="hidden" name="custom_key" value="[% key %]">
-    <input type="hidden" name="custom_value" value="[% values.$i %]">
+    <input type="hidden" name="custom_key" value="[% key | html %]">
+    <input type="hidden" name="custom_value" value="[% values.$i | html %]">
   [% i = i + 1 %]
   [% END %]
   <fieldset class="rows">
-    <legend>Available borrowers for surname [% surname %]</legend>
+    <legend>Available borrowers for surname [% surname | html %]</legend>
     [% FOREACH opt IN whole.value %]
     [% IF opt.key == "brw" %]
     <ol>
@@ -181,8 +181,8 @@
         <select name="cardnumber" id="cardnumber">
           <option value=""></option>
           [% FOREACH brw IN opt.value %]
-          <option value="[% brw.cardnumber %]">
-            [% brw.firstname %] [% brw.surname %] ([% brw.cardnumber %])
+          <option value="[% brw.cardnumber | html %]">
+            [% brw.firstname | html %] [% brw.surname | html %] ([% brw.cardnumber | html %])
           </option>
           [% END %]
         </select>
@@ -193,7 +193,7 @@
   </fieldset>
   <fieldset class="action">
     <input type="submit" value="Select"/>
-    <a class="cancel" href=[% parent %]>Cancel</a>
+    <a class="cancel" href=[% parent | url %]>Cancel</a>
   </fieldset>
 </form>
 

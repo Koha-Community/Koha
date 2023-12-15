@@ -22,9 +22,10 @@ use DateTime;
 use File::Basename qw( dirname );
 use C4::Installer;
 
+use Koha::DateUtils qw/ dt_from_string /;
 use Koha::ILL::Requests;
 use Koha::ILL::Request::Attribute;
-use C4::Biblio  qw( AddBiblio );
+use C4::Biblio qw( AddBiblio );
 use C4::Charset qw( MarcToUTF8Record );
 
 =head1 NAME
@@ -225,7 +226,7 @@ sub create {
         };
     } elsif ( $stage eq 'form' ) {
 
-        # We may be recieving a submitted form due to an additional
+        # We may be receiving a submitted form due to an additional
         # custom field being added or deleted, or the material type
         # having been changed, so check for these things
         if ( !_can_create_request($other) ) {
@@ -383,7 +384,7 @@ sub edititem {
         };
     } elsif ( $stage eq 'form' ) {
 
-        # We may be recieving a submitted form due to an additional
+        # We may be receiving a submitted form due to an additional
         # custom field being added or deleted, or the material type
         # having been changed, so check for these things
         if (   defined $other->{'add_new_custom'}
@@ -452,7 +453,7 @@ sub edititem {
 
         # ...Update Illrequest
         my $request = $params->{request};
-        $request->updated( DateTime->now );
+        $request->updated( dt_from_string() );
         $request->store;
 
         # ...Populate Illrequestattributes
@@ -638,7 +639,7 @@ sub migrate {
 
     my $core_fields = _get_core_string();
 
-    # We may be recieving a submitted form due to an additional
+    # We may be receiving a submitted form due to an additional
     # custom field being added or deleted, or the material type
     # having been changed, so check for these things
     if (   defined $other->{'add_new_custom'}
@@ -679,7 +680,7 @@ sub migrate {
         };
     }
 
-    # Recieve a new request from another backend and suppliment it with
+    # Receive a new request from another backend and supplement it with
     # anything we require specifically for this backend.
     if ( !$stage || $stage eq 'immigrate' ) {
         my $original_request = Koha::ILL::Requests->find( $other->{illrequest_id} );
@@ -688,8 +689,8 @@ sub migrate {
         $new_request->branchcode( $original_request->branchcode );
         $new_request->status('NEW');
         $new_request->backend( $self->name );
-        $new_request->placed( DateTime->now );
-        $new_request->updated( DateTime->now );
+        $new_request->placed( dt_from_string() );
+        $new_request->updated( dt_from_string() );
         $new_request->store;
 
         my @default_attributes = (qw/title type author year volume isbn issn article_title article_author pages/);
@@ -972,8 +973,8 @@ sub add_request {
     $request->branchcode( $params->{other}->{branchcode} );
     $request->status('NEW');
     $request->backend( $params->{other}->{backend} );
-    $request->placed( DateTime->now );
-    $request->updated( DateTime->now );
+    $request->placed( dt_from_string() );
+    $request->updated( dt_from_string() );
     $request->batch_id(
         $params->{other}->{ill_batch_id} ? $params->{other}->{ill_batch_id} : $params->{other}->{batch_id} )
         if column_exists( 'illrequests', 'batch_id' );
@@ -1151,9 +1152,9 @@ sub _standard_request2biblio {
     return 0 unless $metadata->{type} eq 'book';
 
     # We're going to try and populate author, title & ISBN
-    my $author = $metadata->{author} if $metadata->{author};
-    my $title  = $metadata->{title}  if $metadata->{title};
-    my $isbn   = $metadata->{isbn}   if $metadata->{isbn};
+    my $author = $metadata->{author} // '';
+    my $title  = $metadata->{title}  // '';
+    my $isbn   = $metadata->{isbn}   // '';
 
     # Create the MARC::Record object and populate
     my $record = MARC::Record->new();

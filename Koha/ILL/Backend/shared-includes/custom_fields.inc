@@ -6,8 +6,8 @@
         [% i = 0 %]
         [% FOREACH key IN keys %]
             <li class="form-horizontal">
-                <input type="text" class="custom-name" name="custom_key" value="[% key %]"><input type="text" name="custom_value" id="custom-value" value="[% values.$i %]">
-                <button value="[% i %]" name="custom_delete" type="submit" class="btn btn-danger btn-sm delete-new-field">
+                <input type="text" class="custom-name" name="custom_key" value="[% key | html %]"><input type="text" name="custom_value" id="custom-value" value="[% values.$i | html %]">
+                <button value="[% i | html %]" name="custom_delete" type="submit" class="btn btn-danger btn-sm delete-new-field">
                     <span class="fa fa-delete"></span>Delete
                 </button></li>
             </li>
