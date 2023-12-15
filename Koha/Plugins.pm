@@ -104,26 +104,24 @@ sub call {
 
 Returns a list of enabled plugins.
 
-    @plugins = Koha::Plugins->get_enabled_plugins();
+    @plugins = Koha::Plugins->get_enabled_plugins( [ verbose => 1 ] );
 
 =cut
 
 sub get_enabled_plugins {
-    my ($class) = @_;
+    my ( $class, $params ) = @_;
 
     return unless C4::Context->config('enable_plugins');
 
     my $enabled_plugins = Koha::Cache::Memory::Lite->get_from_cache(ENABLED_PLUGINS_CACHE_KEY);
     unless ($enabled_plugins) {
+        my $verbose = $params->{verbose} // $class->_verbose;
         $enabled_plugins = [];
         my $rs = Koha::Database->schema->resultset('PluginData');
         $rs = $rs->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
         my @plugin_classes = $rs->get_column('plugin_class')->all();
         foreach my $plugin_class (@plugin_classes) {
-            unless (can_load(modules => { $plugin_class => undef }, nocache => 1)) {
-                warn "Failed to load $plugin_class: $Module::Load::Conditional::ERROR";
-                next;
-            }
+            next unless can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 );
 
             my $plugin = eval { $plugin_class->new() };
             if ($@ || !$plugin) {
@@ -139,6 +137,11 @@ sub get_enabled_plugins {
     return @$enabled_plugins;
 }
 
+sub _verbose {
+    my $class = shift;
+    # Return false when running unit tests
+    return exists $ENV{_} && $ENV{_} =~ /\/prove(\s|$)|\.t$/ ? 0 : 1;
+}
 
 =head2 feature_enabled
 
@@ -171,6 +174,7 @@ method or metadata value.
     my @plugins = Koha::Plugins::GetPlugins({
         method => 'some_method',
         metadata => { some_key => 'some_value' },
+        [ verbose => 1 ],
     });
 
 The method and metadata parameters are optional.
@@ -183,6 +187,7 @@ sub GetPlugins {
 
     my $method       = $params->{method};
     my $req_metadata = $params->{metadata} // {};
+    my $verbose      = delete $params->{verbose} // $self->_verbose;
 
     my $filter = ( $method ) ? { plugin_method => $method } : undef;
 
@@ -198,7 +203,7 @@ sub GetPlugins {
     # Loop through all plugins that implement at least a method
     while ( my $plugin_class = $plugin_classes->next ) {
 
-        if ( can_load( modules => { $plugin_class => undef }, nocache => 1 ) ) {
+        if ( can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 ) ) {
 
             my $plugin;
             my $failed_instantiation;
@@ -239,7 +244,7 @@ sub GetPlugins {
 
 =head2 InstallPlugins
 
-Koha::Plugins::InstallPlugins()
+Koha::Plugins::InstallPlugins( [ verbose => 1 ] )
 
 This method iterates through all plugins physically present on a system.
 For each plugin module found, it will test that the plugin can be loaded,
@@ -252,12 +257,13 @@ has removed a plugin directly from the system without using the UI
 
 sub InstallPlugins {
     my ( $self, $params ) = @_;
+    my $verbose = $params->{verbose} // $self->_verbose;
 
     my @plugin_classes = $self->plugins();
     my @plugins;
 
     foreach my $plugin_class (@plugin_classes) {
-        if ( can_load( modules => { $plugin_class => undef }, nocache => 1 ) ) {
+        if ( can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 ) ) {
             next unless $plugin_class->isa('Koha::Plugins::Base');
 
             my $plugin;
@@ -285,10 +291,6 @@ sub InstallPlugins {
             }
 
             push @plugins, $plugin;
-        } else {
-            my $error = $Module::Load::Conditional::ERROR;
-            # Do not warn the error if the plugin has been uninstalled
-            warn $error unless $error =~ m|^Could not find or check module '$plugin_class'|;
         }
     }
 
