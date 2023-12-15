@@ -1128,3 +1128,220 @@ subtest 'get_cataloguing_page_permissions() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'checkpw() return values tests' => sub {
+
+    plan tests => 3;
+
+    subtest 'Internal check tests' => sub {
+
+        plan tests => 25;
+
+        $schema->storage->txn_begin;
+
+        my $account_locked;
+        my $password_expired;
+
+        my $mock_patron = Test::MockModule->new('Koha::Patron');
+        $mock_patron->mock( 'account_locked',   sub { return $account_locked; } );
+        $mock_patron->mock( 'password_expired', sub { return $password_expired; } );
+
+        # Only interested here in regular login
+        t::lib::Mocks::mock_config( 'useshibboleth', undef );
+        $C4::Auth::cas  = 0;
+        $C4::Auth::ldap = 0;
+
+        my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $password = 'thePassword123';
+        $patron->set_password( { password => $password, skip_validation => 1 } );
+
+        my $patron_to_delete  = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $unused_userid     = $patron_to_delete->userid;
+        my $unused_cardnumber = $patron_to_delete->cardnumber;
+        $patron_to_delete->delete;
+
+        $account_locked = 1;
+        my @return = checkpw( $patron->userid, $password, undef, );
+        is_deeply( \@return, [], 'If the account is locked, empty list is returned' );
+
+        $account_locked = 0;
+
+        my @matchpoints = qw(userid cardnumber);
+        foreach my $matchpoint (@matchpoints) {
+
+            @return = checkpw( $patron->$matchpoint, $password, undef, );
+
+            is( $return[0],        1,                   "Password validation successful returns 1 ($matchpoint)" );
+            is( $return[1],        $patron->cardnumber, '`cardnumber` returned' );
+            is( $return[2],        $patron->userid,     '`userid` returned' );
+            is( ref( $return[3] ), 'Koha::Patron',      'Koha::Patron object reference returned' );
+            is( $return[3]->id,    $patron->id,         'Correct patron returned' );
+        }
+
+        @return = checkpw( $patron->userid, $password . 'hey', undef, );
+
+        is( scalar @return,    2, "Two results on invalid password scenario" );
+        is( $return[0],        0, '0 returned on invalid password' );
+        is( ref( $return[1] ), 'Koha::Patron' );
+        is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
+
+        $password_expired = 1;
+        @return           = checkpw( $patron->userid, $password, undef, );
+
+        is( scalar @return,    2,  "Two results on expired password scenario" );
+        is( $return[0],        -2, '-2 returned' );
+        is( ref( $return[1] ), 'Koha::Patron' );
+        is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
+
+        @return = checkpw( $unused_userid, $password, undef, );
+
+        is( scalar @return, 2,     "Two results on non-existing userid scenario" );
+        is( $return[0],     0,     '0 returned' );
+        is( $return[1],     undef, 'Undef returned, representing no match' );
+
+        @return = checkpw( $unused_cardnumber, $password, undef, );
+
+        is( scalar @return, 2,     "Only one result on non-existing cardnumber scenario" );
+        is( $return[0],     0,     '0 returned' );
+        is( $return[1],     undef, 'Undef returned, representing no match' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'CAS check (mocked) tests' => sub {
+
+        plan tests => 25;
+
+        $schema->storage->txn_begin;
+
+        my $account_locked;
+        my $password_expired;
+
+        my $mock_patron = Test::MockModule->new('Koha::Patron');
+        $mock_patron->mock( 'account_locked',   sub { return $account_locked; } );
+        $mock_patron->mock( 'password_expired', sub { return $password_expired; } );
+
+        # Only interested here in regular login
+        t::lib::Mocks::mock_config( 'useshibboleth', undef );
+        $C4::Auth::cas  = 1;
+        $C4::Auth::ldap = 0;
+
+        my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $password = 'thePassword123';
+        $patron->set_password( { password => $password, skip_validation => 1 } );
+
+        my $patron_to_delete  = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $unused_userid     = $patron_to_delete->userid;
+        my $unused_cardnumber = $patron_to_delete->cardnumber;
+        $patron_to_delete->delete;
+
+        my $ticket = '123456';
+        my $query  = CGI->new;
+        $query->param( -name => 'ticket', -value => $ticket );
+
+        my @cas_return = ( 1, $patron->cardnumber, $patron->userid, $ticket, Koha::Patrons->find( $patron->id ) );
+
+        my $cas_mock = Test::MockModule->new('C4::Auth');
+        $cas_mock->mock( 'checkpw_cas', sub { return @cas_return; } );
+
+        $account_locked = 1;
+        my @return = checkpw( $patron->userid, $password, $query, );
+        is_deeply( \@return, [], 'If the account is locked, empty list is returned' );
+
+        $account_locked = 0;
+
+        my @matchpoints = qw(userid cardnumber);
+        foreach my $matchpoint (@matchpoints) {
+
+            @return = checkpw( $patron->$matchpoint, $password, $query, );
+
+            is( $return[0],        1,                   "Password validation successful returns 1 ($matchpoint)" );
+            is( $return[1],        $patron->cardnumber, '`cardnumber` returned' );
+            is( $return[2],        $patron->userid,     '`userid` returned' );
+            is( ref( $return[3] ), 'Koha::Patron',      'Koha::Patron object reference returned' );
+            is( $return[3]->id,    $patron->id,         'Correct patron returned' );
+        }
+
+        @return = checkpw( $patron->userid, $password . 'hey', $query, );
+
+        is( scalar @return,    2, "Two results on invalid password scenario" );
+        is( $return[0],        0, '0 returned on invalid password' );
+        is( ref( $return[1] ), 'Koha::Patron' );
+        is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
+
+        $password_expired = 1;
+        @return           = checkpw( $patron->userid, $password, $query, );
+
+        is( scalar @return,    2,  "Two results on expired password scenario" );
+        is( $return[0],        -2, '-2 returned' );
+        is( ref( $return[1] ), 'Koha::Patron' );
+        is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
+
+        @return = checkpw( $unused_userid, $password, $query, );
+
+        is( scalar @return, 2,     "Two results on non-existing userid scenario" );
+        is( $return[0],     0,     '0 returned' );
+        is( $return[1],     undef, 'Undef returned, representing no match' );
+
+        @return = checkpw( $unused_cardnumber, $password, $query, );
+
+        is( scalar @return, 2,     "Only one result on non-existing cardnumber scenario" );
+        is( $return[0],     0,     '0 returned' );
+        is( $return[1],     undef, 'Undef returned, representing no match' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Shibboleth check (mocked) tests' => sub {
+
+        plan tests => 6;
+
+        $schema->storage->txn_begin;
+
+        my $account_locked;
+        my $password_expired;
+
+        my $mock_patron = Test::MockModule->new('Koha::Patron');
+        $mock_patron->mock( 'account_locked',   sub { return $account_locked; } );
+        $mock_patron->mock( 'password_expired', sub { return $password_expired; } );
+
+        # Only interested here in regular login
+        t::lib::Mocks::mock_config( 'useshibboleth', 1 );
+        $C4::Auth::cas  = 0;
+        $C4::Auth::ldap = 0;
+
+        my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $password = 'thePassword123';
+        $patron->set_password( { password => $password, skip_validation => 1 } );
+
+        my $patron_to_delete  = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $unused_userid     = $patron_to_delete->userid;
+        my $unused_cardnumber = $patron_to_delete->cardnumber;
+        $patron_to_delete->delete;
+
+        my @shib_return = ( 1, $patron->cardnumber, $patron->userid, Koha::Patrons->find( $patron->id ) );
+
+        my $auth_mock = Test::MockModule->new('C4::Auth');
+        $auth_mock->mock( 'shib_ok',        1 );
+        $auth_mock->mock( 'get_login_shib', 1 );
+
+        my $shib_mock = Test::MockModule->new('C4::Auth_with_shibboleth');
+        $shib_mock->mock( 'checkpw_shib', sub { return @shib_return; } );
+
+        $account_locked = 1;
+        my @return = checkpw( $patron->userid );
+        is_deeply( \@return, [], 'If the account is locked, empty list is returned' );
+
+        $account_locked = 0;
+
+        @return = checkpw();
+
+        is( $return[0],        1,                   "Password validation successful returns 1" );
+        is( $return[1],        $patron->cardnumber, '`cardnumber` returned' );
+        is( $return[2],        $patron->userid,     '`userid` returned' );
+        is( ref( $return[3] ), 'Koha::Patron',      'Koha::Patron object reference returned' );
+        is( $return[3]->id,    $patron->id,         'Correct patron returned' );
+
+        $schema->storage->txn_rollback;
+    };
+};
