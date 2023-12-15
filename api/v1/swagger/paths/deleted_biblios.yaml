@@ -1,0 +1,109 @@
+---
+"/deleted/biblios":
+  get:
+    x-mojo-to: DeletedBiblios#list
+    operationId: listDeletedBiblios
+    tags:
+      - biblios
+    summary: List deleted biblios
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    produces:
+      - application/json
+      - application/marcxml+xml
+      - application/marc-in-json
+      - application/marc
+      - text/plain
+    responses:
+      "200":
+        description: A list of deleted biblios
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Biblio not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "406":
+        description: Not acceptable
+        schema:
+          type: array
+          description: Accepted content-types
+          items:
+            type: string
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
+"/deleted/biblios/{biblio_id}":
+  get:
+    x-mojo-to: DeletedBiblios#get
+    operationId: getDeletedBiblio
+    tags:
+      - biblios
+    summary: Get deleted biblio
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/biblio_id_pp"
+    produces:
+      - application/json
+      - application/marcxml+xml
+      - application/marc-in-json
+      - application/marc
+      - text/plain
+    responses:
+      "200":
+        description: A deleted biblio
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Biblio not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "406":
+        description: Not acceptable
+        schema:
+          type: array
+          description: Accepted content-types
+          items:
+            type: string
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"
