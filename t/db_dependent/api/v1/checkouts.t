@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 105;
+use Test::More tests => 108;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -69,6 +69,28 @@ my $notexisting_patron_id = $patron_id + 1;
 $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$notexisting_patron_id" )
   ->status_is(200)
   ->json_is([]);
+
+my $bookings_librarian = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => { flags => 0 }     # no additional permissions
+    }
+);
+$builder->build(
+    {
+        source => 'UserPermission',
+        value  => {
+            borrowernumber => $bookings_librarian->borrowernumber,
+            module_bit     => 1,
+            code           => 'manage_bookings',
+        },
+    }
+);
+$bookings_librarian->set_password( { password => $password, skip_validation => 1 } );
+my $bookings_userid = $bookings_librarian->userid;
+
+$t->get_ok("//$bookings_userid:$password@/api/v1/checkouts?patron_id=$patron_id")
+    ->status_is( 200, 'manage_bookings allows checkouts access' )->json_is( [] );
 
 Koha::CirculationRules->set_rules(
     {
