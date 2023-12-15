@@ -696,12 +696,10 @@ subtest 'get_bookings() tests' => sub {
     my $item1  = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
     my $item2  = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
 
-    $t->get_ok("//$unauth_userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings")
-      ->status_is(403);
+    $t->get_ok( "//$unauth_userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings" )->status_is(403);
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings")
-      ->status_is(200)
-      ->json_is( '' => [], 'No bookings on the biblio' );
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings" )->status_is(200)
+        ->json_is( '' => [], 'No bookings on the biblio' );
 
     # One booking
     my $start_0   = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
@@ -718,9 +716,8 @@ subtest 'get_bookings() tests' => sub {
         }
     );
 
-    my $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings")
-      ->status_is(200)
-      ->tx->res->json;
+    my $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings" )->status_is(200)
+        ->tx->res->json;
 
     is_deeply( $ret, [ $booking_0->to_api ] );
 
