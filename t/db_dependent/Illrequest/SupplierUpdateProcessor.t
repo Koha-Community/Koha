@@ -17,20 +17,20 @@
 
 use Modern::Perl;
 
-use Koha::Illrequest::SupplierUpdateProcessor;
+use Koha::ILL::Request::SupplierUpdateProcessor;
 
 use Test::More tests => 3;
 use Test::Warn;
 
-my $processor = Koha::Illrequest::SupplierUpdateProcessor->new(
+my $processor = Koha::ILL::Request::SupplierUpdateProcessor->new(
     'test_type',
     'test_name',
     'Test processor name'
 );
 
-use_ok('Koha::Illrequest::SupplierUpdateProcessor');
+use_ok('Koha::ILL::Request::SupplierUpdateProcessor');
 
-isa_ok( $processor, 'Koha::Illrequest::SupplierUpdateProcessor' );
+isa_ok( $processor, 'Koha::ILL::Request::SupplierUpdateProcessor' );
 
 warning_like {
     $processor->run()

@@ -25,7 +25,7 @@ use base qw(Koha::ILL::Request::Workflow);
 
 =head1 NAME
 
-Koha::Illrequest::TypeDisclaimer - Koha ILL TypeDisclaimer
+Koha::ILL::Request::TypeDisclaimer - Koha ILL TypeDisclaimer
 
 =head1 SYNOPSIS
 
@@ -43,7 +43,7 @@ and handle the template params accordingly
 =head3 show_type_disclaimer
 
     my $show_type_disclaimer =
-    Koha::Illrequest::TypeDisclaimer->show_type_disclaimer($params);
+    Koha::ILL::Request::TypeDisclaimer->show_type_disclaimer($params);
 
 Given $params, return true if type disclaimer should be shown
 
@@ -83,7 +83,7 @@ sub show_type_disclaimer {
 =head3 type_disclaimer_template_params
 
     my $type_disclaimer_template_params =
-    Koha::Illrequest::TypeDisclaimer->type_disclaimer_template_params(
+    Koha::ILL::Request::TypeDisclaimer->type_disclaimer_template_params(
         $params);
 
 Given $params, return true if type disclaimer should be rendered

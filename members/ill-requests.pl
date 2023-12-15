@@ -46,7 +46,7 @@ $template->param(
     prefilters    => "borrowernumber=$borrowernumber",
     patron        => $patron,
     illview       => 1,
-    table_actions => encode_json( Koha::Illrequest->get_staff_table_actions ),
+    table_actions => encode_json( Koha::ILL::Request->get_staff_table_actions ),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

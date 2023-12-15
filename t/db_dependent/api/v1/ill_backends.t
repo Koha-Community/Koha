@@ -27,7 +27,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::AuthorisedValueCategories;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -80,15 +80,15 @@ subtest 'list() tests' => sub {
         }
     );
 
-    # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
-    my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+    # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
+    my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
     $illreqmodule->mock( 'load_backend',
         sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
     );
 
     $schema->storage->txn_begin;
 
-    Koha::Illrequests->search->delete;
+    Koha::ILL::Requests->search->delete;
 
     # create an authorized user
     my $librarian = $builder->build_object(
@@ -169,21 +169,21 @@ subtest 'list() tests' => sub {
     # Create some ILL requests
     my $backend_status_req = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value =>
               { status => $backend_status->{code}, backend => $backend->name }
         }
     );
     my $core_status_req = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value =>
               { status => $core_status->{code}, backend => $backend->name }
         }
     );
     my $alias_status_req = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 status       => $core_status->{code},
                 backend      => $backend->name,

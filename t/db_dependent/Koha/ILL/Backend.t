@@ -34,7 +34,7 @@ subtest 'existing_statuses() tests' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
-    Koha::Illrequests->search->delete;
+    Koha::ILL::Requests->search->delete;
 
     # Mock external ILLBackend (as object)
     my $backend = Test::MockObject->new;
@@ -58,8 +58,8 @@ subtest 'existing_statuses() tests' => sub {
         },
     );
 
-    # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
-    my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+    # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
+    my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
     $illreqmodule->mock(
         'load_backend',
         sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
@@ -78,7 +78,7 @@ subtest 'existing_statuses() tests' => sub {
 
     my $backend_req_status = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 status       => 'READY',
                 status_alias => undef,
@@ -90,7 +90,7 @@ subtest 'existing_statuses() tests' => sub {
 
     my $req = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 status       => 'REQ',
                 status_alias => undef,
@@ -101,7 +101,7 @@ subtest 'existing_statuses() tests' => sub {
     );
     my $chk = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 status       => 'CHK',
                 status_alias => undef,
@@ -112,7 +112,7 @@ subtest 'existing_statuses() tests' => sub {
     );
     my $bob = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 status       => 'REQ',
                 status_alias => 'BOB',
@@ -123,7 +123,7 @@ subtest 'existing_statuses() tests' => sub {
     );
     my $req2 = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 status       => 'REQ',
                 status_alias => undef,

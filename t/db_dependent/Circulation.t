@@ -2424,7 +2424,7 @@ subtest 'AddIssue & illrequests.due_date' => sub {
 
     my $custom_date_due = '9999-12-18 12:34:56';
     my $expected_date_due = '9999-12-18 23:59:00';
-    my $illrequest = Koha::Illrequest->new({
+    my $illrequest = Koha::ILL::Request->new({
         borrowernumber => $patron->borrowernumber,
         biblio_id => $item->biblionumber,
         branchcode => $library->{'branchcode'},
@@ -2438,7 +2438,7 @@ subtest 'AddIssue & illrequests.due_date' => sub {
     $item = $builder->build_sample_item();
     $custom_date_due = '9999-12-19';
     $expected_date_due = '9999-12-19 23:59:00';
-    $illrequest = Koha::Illrequest->new({
+    $illrequest = Koha::ILL::Request->new({
         borrowernumber => $patron->borrowernumber,
         biblio_id => $item->biblionumber,
         branchcode => $library->{'branchcode'},

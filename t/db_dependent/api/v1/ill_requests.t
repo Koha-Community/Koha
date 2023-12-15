@@ -29,7 +29,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::AuthorisedValueCategories;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::DateUtils qw( format_sqldatetime );
 
 my $schema  = Koha::Database->new->schema;
@@ -62,15 +62,15 @@ subtest 'list() tests' => sub {
         'status_graph', sub {},
     );
 
-    # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
-    my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+    # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
+    my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
     $illreqmodule->mock( 'load_backend',
         sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
     );
 
     $schema->storage->txn_begin;
 
-    Koha::Illrequests->search->delete;
+    Koha::ILL::Requests->search->delete;
 
     # create an authorized user
     my $librarian = $builder->build_object(
@@ -141,7 +141,7 @@ subtest 'list() tests' => sub {
     # Create some ILL requests
     my $req_1 = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 borrowernumber => $patron->borrowernumber,
                 batch_id       => undef,
@@ -153,7 +153,7 @@ subtest 'list() tests' => sub {
     );
     my $req_2 = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 batch_id     => undef,
                 status       => $request_status->{code},
@@ -164,7 +164,7 @@ subtest 'list() tests' => sub {
 
         }
     );
-    my $ret = $builder->build_object({ class => 'Koha::Illrequests', value => { status => 'RET' } });
+    my $ret = $builder->build_object({ class => 'Koha::ILL::Requests', value => { status => 'RET' } });
 
     # Three requests exist, expect all three to be returned
     $t->get_ok("//$userid:$password@/api/v1/ill/requests")
@@ -282,7 +282,7 @@ subtest 'add() tests' => sub {
     # Create an ILL request
     my $illrequest = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 backend        => 'Mock',
                 branchcode     => $library->branchcode,
@@ -311,8 +311,8 @@ subtest 'add() tests' => sub {
         'status_graph', sub {},
     );
 
-    # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
-    my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+    # Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
+    my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
     $illreqmodule->mock(
         'load_backend',
         sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
@@ -340,7 +340,7 @@ subtest 'add() tests' => sub {
 
                     my $api_req = $builder->build_object(
                         {
-                            class => 'Koha::Illrequests',
+                            class => 'Koha::ILL::Requests',
                             value => {
                                 borrowernumber => $patron->borrowernumber,
                                 batch_id       => undef,
@@ -360,7 +360,7 @@ subtest 'add() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Illrequests->search->delete;
+    Koha::ILL::Requests->search->delete;
 
     my $body = {
         ill_backend_id => 'Mock',

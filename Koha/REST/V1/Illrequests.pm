@@ -20,7 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use C4::Context;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::ILL::Request::Attributes;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -38,7 +38,7 @@ Koha::REST::V1::Illrequests
 
 =head3 list
 
-Controller function that handles listing Koha::Illrequest objects
+Controller function that handles listing Koha::ILL::Request objects
 
 =cut
 
@@ -47,7 +47,7 @@ sub list {
 
     return try {
 
-        my $reqs = $c->objects->search(Koha::Illrequests->new->filter_by_visible);
+        my $reqs = $c->objects->search(Koha::ILL::Requests->new->filter_by_visible);
 
         return $c->render(
             status  => 200,
@@ -77,7 +77,7 @@ sub add {
                 $body->{borrowernumber} = delete $body->{patron_id};
                 $body->{branchcode} = delete $body->{library_id};
 
-                my $request = Koha::Illrequest->new->load_backend( $body->{backend} );
+                my $request = Koha::ILL::Request->new->load_backend( $body->{backend} );
 
                 my $create_api = $request->_backend->capabilities('create_api');
 
@@ -93,7 +93,7 @@ sub add {
                 my $create_result = &{$create_api}($body, $request);
                 my $new_id = $create_result->illrequest_id;
 
-                my $new_req = Koha::Illrequests->find($new_id);
+                my $new_req = Koha::ILL::Requests->find($new_id);
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $new_req->illrequest_id);
                 return $c->render(
@@ -105,7 +105,7 @@ sub add {
     }
     catch {
 
-        my $to_api_mapping = Koha::Illrequest->new->to_api_mapping;
+        my $to_api_mapping = Koha::ILL::Request->new->to_api_mapping;
 
         if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {

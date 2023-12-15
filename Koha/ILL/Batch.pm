@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::ILL::Request::Logger;
 use Koha::ILL::Batch::Statuses;
 use Koha::Libraries;
@@ -81,14 +81,14 @@ sub library {
 
 =head3 requests
 
-Return the I<Koha::Illrequests> for this batch
+Return the I<Koha::ILL::Requests> for this batch
 
 =cut
 
 sub requests {
     my ($self) = @_;
     my $requests = $self->_result->requests;
-    return Koha::Illrequests->_new_from_dbic($requests);
+    return Koha::ILL::Requests->_new_from_dbic($requests);
 }
 
 =head3 create_and_log

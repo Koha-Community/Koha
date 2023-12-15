@@ -718,8 +718,8 @@ subtest 'DelBiblio' => sub {
         { class => 'Koha::Acquisition::Orders', value => $orderinfo } );
 
     # Add some ILL requests
-    my $ill_req_1 = $builder->build_object({ class => 'Koha::Illrequests', value => { biblio_id => $biblio->id, deleted_biblio_id => undef } });
-    my $ill_req_2 = $builder->build_object({ class => 'Koha::Illrequests', value => { biblio_id => $biblio->id, deleted_biblio_id => undef } });
+    my $ill_req_1 = $builder->build_object({ class => 'Koha::ILL::Requests', value => { biblio_id => $biblio->id, deleted_biblio_id => undef } });
+    my $ill_req_2 = $builder->build_object({ class => 'Koha::ILL::Requests', value => { biblio_id => $biblio->id, deleted_biblio_id => undef } });
 
     C4::Biblio::DelBiblio($biblio->biblionumber); # Or $biblio->delete
     is( $subscription->get_from_storage, undef, 'subscription should be deleted on biblio deletion' );

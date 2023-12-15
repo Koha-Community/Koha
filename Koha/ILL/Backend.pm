@@ -55,7 +55,7 @@ sub existing_statuses {
     # throw 'Koha::Exceptions::Ill::InvalidBackendId' when we're converting to a Koha object.
     # Finally, to get around 'ONLY_FULL_GROUP_BY', we have to be explicit about which
     # 'request_id' we want to return, hense the 'MAX' call.
-    my $ill_requests = Koha::Illrequests->search(
+    my $ill_requests = Koha::ILL::Requests->search(
         { backend => $backend_id },
         {
             select   => [ 'status', \'MAX(illrequest_id)', 'backend' ],
@@ -79,7 +79,7 @@ sub existing_statuses {
     }
 
     # Now do the same to get all status_aliases
-    $ill_requests = Koha::Illrequests->search(
+    $ill_requests = Koha::ILL::Requests->search(
         { backend => $backend_id },
         {
             select   => [ 'status_alias', \'MAX(illrequest_id)', 'backend' ],

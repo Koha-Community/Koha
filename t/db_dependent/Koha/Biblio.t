@@ -1439,13 +1439,13 @@ subtest 'ill_requests() tests' => sub {
     my $biblio = $builder->build_sample_biblio;
 
     my $rs = $biblio->ill_requests;
-    is( ref($rs), 'Koha::Illrequests' );
+    is( ref($rs), 'Koha::ILL::Requests' );
     is( $rs->count, 0, 'No linked requests' );
 
     foreach ( 1..10 ) {
         $builder->build_object(
             {
-                class => 'Koha::Illrequests',
+                class => 'Koha::ILL::Requests',
                 value => { biblio_id => $biblio->id }
             }
         );

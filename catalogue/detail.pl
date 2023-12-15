@@ -50,7 +50,7 @@ use Koha::Biblio::ItemGroup::Items;
 use Koha::Biblio::ItemGroups;
 use Koha::CoverImages;
 use Koha::DateUtils;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
@@ -455,7 +455,7 @@ $template->param( holdcount => $holds->count );
 # Check if there are any ILL requests connected to the biblio
 my $illrequests =
     C4::Context->preference('ILLModule')
-  ? Koha::Illrequests->search( { biblio_id => $biblionumber } )
+  ? Koha::ILL::Requests->search( { biblio_id => $biblionumber } )
   : [];
 $template->param( illrequests => $illrequests );
 

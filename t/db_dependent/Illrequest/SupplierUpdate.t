@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::MockObject;
 
-use Koha::Illrequest;
+use Koha::ILL::Request;
 use Koha::ILL::Request::SupplierUpdate;
 
 use Test::More tests => 4;

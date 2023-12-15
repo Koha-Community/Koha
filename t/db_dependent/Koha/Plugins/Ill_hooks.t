@@ -47,7 +47,7 @@ subtest 'ill_table_actions hook' => sub {
     my $plugins = Koha::Plugins->new;
     $plugins->InstallPlugins;
 
-    my $table_actions = Koha::Illrequest->get_staff_table_actions;
+    my $table_actions = Koha::ILL::Request->get_staff_table_actions;
 
     is_deeply(
         $table_actions,

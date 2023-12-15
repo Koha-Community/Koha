@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 3;
 
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 
 use t::lib::TestBuilder;
 
@@ -36,13 +36,13 @@ subtest 'patron() tests' => sub {
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $request =
-        $builder->build_object( { class => 'Koha::Illrequests', value => { borrowernumber => $patron->id } } );
+        $builder->build_object( { class => 'Koha::ILL::Requests', value => { borrowernumber => $patron->id } } );
 
     my $req_patron = $request->patron;
     is( ref($req_patron), 'Koha::Patron' );
     is( $req_patron->id,  $patron->id );
 
-    $request = $builder->build_object( { class => 'Koha::Illrequests', value => { borrowernumber => undef } } );
+    $request = $builder->build_object( { class => 'Koha::ILL::Requests', value => { borrowernumber => undef } } );
 
     is( $request->patron, undef );
 

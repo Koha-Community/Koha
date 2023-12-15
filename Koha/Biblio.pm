@@ -47,7 +47,7 @@ use Koha::Bookings;
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::Exceptions;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
@@ -178,7 +178,7 @@ sub tickets {
 
     my $ill_requests = $biblio->ill_requests();
 
-Returns a Koha::Illrequests object
+Returns a Koha::ILL::Requests object
 
 =cut
 
@@ -186,7 +186,7 @@ sub ill_requests {
     my ( $self ) = @_;
 
     my $ill_requests = $self->_result->ill_requests;
-    return Koha::Illrequests->_new_from_dbic($ill_requests);
+    return Koha::ILL::Requests->_new_from_dbic($ill_requests);
 }
 
 =head3 item_groups

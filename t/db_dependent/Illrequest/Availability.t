@@ -75,8 +75,8 @@ $backend->mock(
 );
 $backend->mock( 'status_graph', sub { }, );
 
-# Mock Koha::Illrequest::load_backend (to load Mocked Backend)
-my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+# Mock Koha::ILL::Request::load_backend (to load Mocked Backend)
+my $illreqmodule = Test::MockModule->new('Koha::ILL::Request');
 $illreqmodule->mock( 'load_backend',
     sub { my $self = shift; $self->{_my_backend} = $backend; return $self } );
 
@@ -90,7 +90,7 @@ $availability_module->mock( 'get_services', [ { name => 'service' } ] );
 
 my $req_1 = $builder->build_object(
     {
-        class => 'Koha::Illrequests',
+        class => 'Koha::ILL::Requests',
         value => {}
     }
 );

@@ -439,4 +439,12 @@ __PACKAGE__->belongs_to(
   },
 );
 
+sub koha_object_class {
+    'Koha::ILL::Request';
+}
+
+sub koha_objects_class {
+    'Koha::ILL::Requests';
+}
+
 1;

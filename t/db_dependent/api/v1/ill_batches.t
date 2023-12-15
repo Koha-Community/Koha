@@ -27,7 +27,7 @@ use JSON qw(encode_json);
 
 use Koha::ILL::Batch;
 use Koha::ILL::Batches;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::ILL::Batch::Statuses;
 use Koha::Database;
 
@@ -81,7 +81,7 @@ subtest 'list() tests' => sub {
 
     my $illrq = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 batch_id       => $batch_1->id,
                 borrowernumber => $librarian->id,

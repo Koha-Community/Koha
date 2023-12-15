@@ -41,12 +41,12 @@ use Test::Exception;
 use Test::Deep qw/ cmp_deeply ignore /;
 use Test::Warn;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
-use_ok('Koha::Illrequest');
-use_ok('Koha::Illrequests');
+use_ok('Koha::ILL::Request');
+use_ok('Koha::ILL::Requests');
 
 subtest 'Basic object tests' => sub {
 
@@ -54,11 +54,11 @@ subtest 'Basic object tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Illrequests->search->delete;
+    Koha::ILL::Requests->search->delete;
     my $illrq = $builder->build({ source => 'Illrequest' });
-    my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
+    my $illrq_obj = Koha::ILL::Requests->find($illrq->{illrequest_id});
 
-    isa_ok($illrq_obj, 'Koha::Illrequest',
+    isa_ok($illrq_obj, 'Koha::ILL::Request',
            "Correctly create and load an illrequest object.");
     isa_ok($illrq_obj->_config, 'Koha::ILL::Request::Config',
            "Created a config object as part of Illrequest creation.");
@@ -119,7 +119,7 @@ subtest 'Basic object tests' => sub {
 
     $illrq_obj->delete;
 
-    is(Koha::Illrequests->search->count, 0,
+    is(Koha::ILL::Requests->search->count, 0,
        "No illrequest found after delete.");
 
     $schema->storage->txn_rollback;
@@ -130,14 +130,14 @@ subtest 'store borrowernumber change also updates holds' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Illrequests->search->delete;
+    Koha::ILL::Requests->search->delete;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $other_patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
 
     my $request = $builder->build_object({
-        class => 'Koha::Illrequests',
+        class => 'Koha::ILL::Requests',
         value => {
             borrowernumber => $patron->borrowernumber,
             biblio_id => $biblio->biblionumber,
@@ -170,13 +170,13 @@ subtest 'store borrowernumber change also updates holds' => sub {
     is( $request->borrowernumber, $other_patron->borrowernumber,
        'after change, changed borrowernumber found in illrequests' );
 
-    my $new_request = Koha::Illrequest->new({
+    my $new_request = Koha::ILL::Request->new({
         biblio_id => $biblio->biblionumber,
         branchcode => $patron->branchcode,
     })->borrowernumber( $patron->borrowernumber )->store;
 
     is( $new_request->borrowernumber, $patron->borrowernumber,
-       'Koha::Illrequest->new()->store() works as expected');
+       'Koha::ILL::Request->new()->store() works as expected');
 
     my $new_holds_found = Koha::Holds->search({
         biblionumber => $new_request->biblio_id,
@@ -197,7 +197,7 @@ subtest 'Working with related objects' => sub {
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $illrq  = $builder->build_object(
-        {   class => 'Koha::Illrequests',
+        {   class => 'Koha::ILL::Requests',
             value => { borrowernumber => $patron->id, biblio_id => undef }
         }
     );
@@ -228,7 +228,7 @@ subtest 'Working with related objects' => sub {
     is( $illrq->biblio, undef, "->biblio returns undef if no biblio" );
     my $biblio  = $builder->build_object( { class => 'Koha::Biblios' } );
     my $req_bib = $builder->build_object(
-        {   class => 'Koha::Illrequests',
+        {   class => 'Koha::ILL::Requests',
             value => { biblio_id => $biblio->biblionumber }
         }
     );
@@ -249,7 +249,7 @@ subtest 'Status Graph tests' => sub {
     $schema->storage->txn_begin;
 
     my $illrq = $builder->build({source => 'Illrequest'});
-    my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
+    my $illrq_obj = Koha::ILL::Requests->find($ illrq->{illrequest_id}) ;
 
     # _core_status_graph tests: it's just a constant, so here we just make
     # sure it returns a hashref.
@@ -314,7 +314,7 @@ subtest 'Status Graph tests' => sub {
     my $new_graph = $illrq_obj->_status_graph_union( $new_node, $illrq_obj->_core_status_graph);
     # Compare the updated graph to the expected graph
     # The structure we compare against here is just a copy of the structure found
-    # in Koha::Illrequest::_core_status_graph() + the new node we created above
+    # in Koha::ILL::Request::_core_status_graph() + the new node we created above
     cmp_deeply( $new_graph,
         {
         TEST => {
@@ -438,7 +438,7 @@ subtest 'Status Graph tests' => sub {
     my $dupe_graph = $illrq_obj->_status_graph_union( $illrq_obj->_core_status_graph, $dupe_node);
     # Compare the updated graph to the expected graph
     # The structure we compare against here is just a copy of the structure found
-    # in Koha::Illrequest::_core_status_graph() + the new node we created above
+    # in Koha::ILL::Request::_core_status_graph() + the new node we created above
     cmp_deeply( $dupe_graph,
         {
         NEW => {
@@ -561,7 +561,7 @@ subtest 'Backend testing (mocks)' => sub {
 
     my $patron = $builder->build({ source => 'Borrower' });
     my $illrq = $builder->build_object({
-        class => 'Koha::Illrequests',
+        class => 'Koha::ILL::Requests',
     });
 
     $illrq->_backend($backend);
@@ -706,7 +706,7 @@ subtest 'Backend core methods' => sub {
                         { default => { count => 0, method => 'active' } });
 
     my $illrq = $builder->build_object({
-        class => 'Koha::Illrequests',
+        class => 'Koha::ILL::Requests',
         value => { backend => undef }
     });
     $illrq->_config($config);
@@ -944,7 +944,7 @@ subtest 'Helpers' => sub {
         source => 'Illrequest',
         value => { branchcode => "HDE", borrowernumber => $patron->{borrowernumber} }
     });
-    my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
+    my $illrq_obj = Koha::ILL::Requests->find($illrq->{illrequest_id});
     $illrq_obj->_config($config);
     $illrq_obj->_backend($backend);
 
@@ -1168,7 +1168,7 @@ subtest 'Censorship' => sub {
     $config->set_always('backend_dir', "/tmp");
 
     my $illrq = $builder->build({source => 'Illrequest'});
-    my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
+    my $illrq_obj = Koha::ILL::Requests->find($illrq->{illrequest_id});
     $illrq_obj->_config($config);
     $illrq_obj->_backend($backend);
 
@@ -1203,7 +1203,7 @@ subtest 'Checking out' => sub {
     my $biblio = $builder->build_sample_biblio();
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $request = $builder->build_object({
-        class => 'Koha::Illrequests',
+        class => 'Koha::ILL::Requests',
         value => {
             borrowernumber => $patron->borrowernumber,
             biblio_id      => $biblio->biblionumber
@@ -1330,7 +1330,7 @@ subtest 'Checking out with custom due date' => sub {
         }
     });
     my $request = $builder->build_object({
-        class => 'Koha::Illrequests',
+        class => 'Koha::ILL::Requests',
         value => {
             borrowernumber => $patron->borrowernumber,
             biblio_id      => $biblio->biblionumber
@@ -1365,7 +1365,7 @@ subtest 'Checking Limits' => sub {
     $config->set_always('backend_dir', "/tmp");
 
     my $illrq = $builder->build({source => 'Illrequest'});
-    my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
+    my $illrq_obj = Koha::ILL::Requests->find($illrq->{illrequest_id});
     $illrq_obj->_config($config);
     $illrq_obj->_backend($backend);
 
@@ -1554,7 +1554,7 @@ subtest 'Custom statuses' => sub {
 
     my $ill_req = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 status_alias => $av->authorised_value
             }
@@ -1565,7 +1565,7 @@ subtest 'Custom statuses' => sub {
 
     $ill_req->status("COMP");
     is($ill_req->statusalias, undef,
-        "Koha::Illrequest->status overloading resetting status_alias");
+        "Koha::ILL::Request->status overloading resetting status_alias");
 
     $schema->storage->txn_rollback;
 };
@@ -1596,7 +1596,7 @@ subtest 'Checking in hook' => sub {
 
     my $illrq = $builder->build_object(
         {
-            class => 'Koha::Illrequests',
+            class => 'Koha::ILL::Requests',
             value => {
                 biblio_id => $item->biblio->biblionumber,
                 status    => 'NEW'
@@ -1625,6 +1625,37 @@ subtest 'Checking in hook' => sub {
     # refresh request
     $illrq->discard_changes;
     is( $illrq->status, 'RET' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_visible() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $req =
+        $builder->build_object( { class => 'Koha::ILL::Requests', value => { status => 'REQ', biblio_id => undef } } );
+    my $chk =
+        $builder->build_object( { class => 'Koha::ILL::Requests', value => { status => 'CHK', biblio_id => undef } } );
+    my $ret =
+        $builder->build_object( { class => 'Koha::ILL::Requests', value => { status => 'RET', biblio_id => undef } } );
+
+    my $reqs_rs = Koha::ILL::Requests->search( { illrequest_id => [ $req->id, $chk->id, $ret->id ] } );
+
+    is( $reqs_rs->count, 3, 'Count is correct' );
+
+    t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', '' );
+
+    is( $reqs_rs->filter_by_visible->count, 3, 'No hidden statuses, same count' );
+
+    t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', 'CHK|RET' );
+
+    my $filtered_reqs = $reqs_rs->filter_by_visible;
+
+    is( $filtered_reqs->count, 1, 'Count is correct' );
+    is( $filtered_reqs->next->status, 'REQ' );
 
     $schema->storage->txn_rollback;
 };

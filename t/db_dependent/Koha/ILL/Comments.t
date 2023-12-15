@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use File::Basename qw/basename/;
 use Koha::Database;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::ILL::Request::Attributes;
 use Koha::ILL::Request::Config;
 use Koha::Patrons;
@@ -37,7 +37,7 @@ use_ok('Koha::ILL::Comments');
 
 $schema->storage->txn_begin;
 
-Koha::Illrequests->search->delete;
+Koha::ILL::Requests->search->delete;
 
 # Create a patron
 my $patron = $builder->build( { source => 'Borrower' } );
@@ -49,8 +49,8 @@ my $illrq = $builder->build(
         value  => { borrowernumber => $patron->{borrowernumber} }
     }
 );
-my $illrq_obj = Koha::Illrequests->find( $illrq->{illrequest_id} );
-isa_ok( $illrq_obj, 'Koha::Illrequest' );
+my $illrq_obj = Koha::ILL::Requests->find( $illrq->{illrequest_id} );
+isa_ok( $illrq_obj, 'Koha::ILL::Request' );
 
 # Create a librarian
 my $librarian = $builder->build( { source => 'Borrower' } );

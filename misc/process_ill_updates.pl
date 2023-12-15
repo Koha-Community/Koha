@@ -22,7 +22,7 @@ use Getopt::Long qw( GetOptions );
 use POSIX;
 
 use Koha::Script;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 
 # Command line option values
 my $get_help = 0;
@@ -96,7 +96,7 @@ if (scalar @status_alias_arr > 0) {
 debug_msg("DBIC WHERE:");
 debug_msg($where);
 
-my $requests = Koha::Illrequests->search($where);
+my $requests = Koha::ILL::Requests->search($where);
 
 debug_msg("Processing " . $requests->count . " requests");
 

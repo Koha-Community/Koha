@@ -1,4 +1,4 @@
-package Koha::Illrequest;
+package Koha::ILL::Request;
 
 # Copyright PTFS Europe 2016,2018
 #
@@ -49,11 +49,11 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Illrequest - Koha Illrequest Object class
+Koha::ILL::Request - Koha Illrequest Object class
 
 =head1 (Re)Design
 
-An ILLRequest consists of two parts; the Illrequest Koha::Object, and a series
+An ILLRequest consists of two parts; the ILL::Request Koha::Object, and a series
 of related Illrequestattributes.
 
 The former encapsulates the basic necessary information that any ILL requires
@@ -1272,7 +1272,7 @@ sub _limit_counter {
     # Establish parameters of counts
     my $resultset;
     if ($method && $method eq 'annual') {
-        $resultset = Koha::Illrequests->search({
+        $resultset = Koha::ILL::Requests->search({
             -and => [
                 %{$target},
                 \"YEAR(placed) = YEAR(NOW())"
@@ -1282,7 +1282,7 @@ sub _limit_counter {
         # XXX: This status list is ugly. There should be a method in config
         # to return these.
         my $where = { status => { -not_in => [ 'QUEUED', 'COMP' ] } };
-        $resultset = Koha::Illrequests->search({ %{$target}, %{$where} });
+        $resultset = Koha::ILL::Requests->search( { %{$target}, %{$where} } );
     }
 
     # Fetch counts
@@ -2108,7 +2108,7 @@ sub strings_map {
 
 =head3 get_op_param_deprecation
 
-    my $op = Koha::Illrequest->check_url_param_deprecation($params);
+    my $op = $req->check_url_param_deprecation($params);
 
 Issues a deprecation message for the given parameters, if needed.
 Returns the appropriate operation based on the interface type.

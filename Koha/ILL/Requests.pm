@@ -1,4 +1,4 @@
-package Koha::Illrequests;
+package Koha::ILL::Requests;
 
 # Copyright PTFS Europe 2016
 #
@@ -20,14 +20,14 @@ package Koha::Illrequests;
 use Modern::Perl;
 
 use Koha::Database;
-use Koha::Illrequest;
+use Koha::ILL::Request;
 use Koha::ILL::Request::Config;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Illrequests - Koha Illrequests Object class
+Koha::ILL::Requests - Koha Illrequests Object class
 
 =head1 API
 
@@ -37,7 +37,7 @@ Koha::Illrequests - Koha Illrequests Object class
 
 =head3 new
 
-    my $illRequests = Koha::Illrequests->new();
+    my $illRequests = Koha::ILL::Requests->new();
 
 Create an ILLREQUESTS object, a singleton through which we can interact with
 ILLREQUEST objects stored in the database or search for ILL candidates at API
@@ -60,7 +60,7 @@ sub new {
 
     my $visible_requests = $requests->filter_by_visible;
 
-Returns a I<Koha::Illrequests> resultset, filtered by statuses that are not listed
+Returns a I<Koha::ILL::Requests> resultset, filtered by statuses that are not listed
 as hidden in the I<ILLHiddenRequestStatuses> system preference.
 
 =cut
@@ -121,7 +121,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::Illrequest';
+    return 'Koha::ILL::Request';
 }
 
 =head1 AUTHOR

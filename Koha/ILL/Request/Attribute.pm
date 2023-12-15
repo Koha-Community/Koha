@@ -49,13 +49,13 @@ sub store {
 
 =head3 request
 
-Returns a Koha::Illrequest object representing the core request.
+Returns a Koha::ILL::Request object representing the core request .
 
 =cut
 
 sub request {
     my ($self) = @_;
-    return Koha::Illrequest->_new_from_dbic( $self->_result->illrequest );
+    return Koha::ILL::Request->_new_from_dbic( $self->_result->illrequest );
 }
 
 =head2 Internal methods

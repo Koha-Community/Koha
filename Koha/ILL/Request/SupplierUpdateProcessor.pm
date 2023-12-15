@@ -21,7 +21,7 @@ use Modern::Perl;
 
 =head1 NAME
 
-Koha::Illrequest::SupplierUpdateProcessor - Represents a SupplerUpdate processor
+Koha::ILL::Request::SupplierUpdateProcessor - Represents a SupplerUpdate processor
 
 =head1 SYNOPSIS
 
@@ -40,12 +40,12 @@ a SupplierUpdate
 
 =head3 new
 
-    my $processor = Koha::Illrequest::SupplierUpdateProcessor->new(
+    my $processor = Koha::ILL::Request::SupplierUpdateProcessor->new(
         $target_source_type,
         $target_source_name
     );
 
-Create a new Koha::Illrequest::SupplierUpdateProcessor object.
+Create a new Koha::ILL::Request::SupplierUpdateProcessor object .
 
 =cut
 
@@ -64,7 +64,7 @@ sub new {
 
 =head3 run
 
-    Koha::Illrequest::SupplierUpdateProcessor->run();
+    Koha::ILL::Request::SupplierUpdateProcessor->run();
 
 Runs the processor
 

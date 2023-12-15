@@ -26,8 +26,8 @@ use C4::Output qw( output_and_exit output_html_with_http_headers );
 use Koha::Notice::Templates;
 use Koha::AuthorisedValues;
 use Koha::ILL::Comment;
-use Koha::Illrequests;
-use Koha::Illrequest;
+use Koha::ILL::Requests;
+use Koha::ILL::Request;
 use Koha::ILL::Batches;
 use Koha::ILL::Request::Workflow::Availability;
 use Koha::ILL::Request::Workflow::TypeDisclaimer;
@@ -39,7 +39,7 @@ use URI::Escape qw( uri_escape_utf8 );
 use JSON qw( encode_json );
 
 our $cgi = CGI->new;
-my $illRequests = Koha::Illrequests->new;
+my $illRequests = Koha::ILL::Requests->new;
 
 # Grab all passed data
 # 'our' since Plack changes the scoping
@@ -52,7 +52,7 @@ unless ( C4::Context->preference('ILLModule') ) {
     exit;
 }
 
-my $op = Koha::Illrequest->get_op_param_deprecation( 'intranet', $params );
+my $op = Koha::ILL::Request->get_op_param_deprecation( 'intranet', $params );
 
 my ( $template, $patronnumber, $cookie ) = get_template_and_user( {
     template_name => 'ill/ill-requests.tt',
@@ -91,7 +91,7 @@ if ( $backends_available ) {
 
     if ( $op eq 'illview' ) {
         # View the details of an ILL
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find($params->{illrequest_id});
 
         # Get the details for notices that can be sent from here
         my $notices = Koha::Notice::Templates->search(
@@ -124,7 +124,7 @@ if ( $backends_available ) {
 
     } elsif ( $op eq 'cud-create' ) {
         # Load the ILL backend
-        my $request = Koha::Illrequest->new->load_backend( $params->{backend} );
+        my $request = Koha::ILL::Request->new->load_backend( $params->{backend} );
 
         # Before request creation operations - Preparation
         my $availability =
@@ -161,7 +161,7 @@ if ( $backends_available ) {
         }
     } elsif ( $op eq 'migrate' ) {
         # We're in the process of migrating a request
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find($params->{illrequest_id});
         my $backend_result;
         if ( $params->{backend} ) {
             $backend_result = $request->backend_migrate($params);
@@ -192,7 +192,7 @@ if ( $backends_available ) {
     } elsif ( $op eq 'confirm' ) {
         # Backend 'confirm' method
         # confirm requires a specific request, so first, find it.
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find($params->{illrequest_id});
         my $backend_result = $request->backend_confirm($params);
         $template->param(
             whole   => $backend_result,
@@ -205,7 +205,7 @@ if ( $backends_available ) {
     } elsif ( $op eq 'cud-cancel' ) {
         # Backend 'cancel' method
         # cancel requires a specific request, so first, find it.
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find($params->{illrequest_id});
         my $backend_result = $request->backend_cancel($params);
         $template->param(
             whole   => $backend_result,
@@ -220,7 +220,7 @@ if ( $backends_available ) {
         # (not the Illrequestattributes)
         # We simulate the API for backend requests for uniformity.
         # So, init:
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find($params->{illrequest_id});
         my $batches = Koha::ILL::Batches->search(undef, {
             order_by => { -asc => 'name' }
         });
@@ -273,7 +273,7 @@ if ( $backends_available ) {
         redirect_to_list();
 
     } elsif ( $op eq 'delete_confirm') {
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find($params->{illrequest_id});
 
         $template->param(
             request => $request
@@ -285,7 +285,7 @@ if ( $backends_available ) {
         # to the confirmation view
         if ($params->{confirmed}) {
             # We simply delete the request...
-            Koha::Illrequests->find( $params->{illrequest_id} )->delete;
+            Koha::ILL::Requests->find( $params->{illrequest_id} )->delete;
             # ... then return to list view.
             redirect_to_list();
         } else {
@@ -297,7 +297,7 @@ if ( $backends_available ) {
         }
 
     } elsif ( $op eq 'mark_completed' ) {
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find($params->{illrequest_id});
         my $backend_result = $request->mark_completed($params);
         $template->param(
             whole => $backend_result,
@@ -312,7 +312,7 @@ if ( $backends_available ) {
         my $backend_result;
         my $request;
         try {
-            $request = Koha::Illrequests->find($params->{illrequest_id});
+            $request = Koha::ILL::Requests->find($params->{illrequest_id});
             $params->{current_branchcode} = C4::Context->mybranch;
             $backend_result = $request->generic_confirm($params);
 
@@ -369,7 +369,7 @@ if ( $backends_available ) {
         # handle special commit rules & update type
         handle_commit_maybe($backend_result, $request);
     } elsif ( $op eq 'cud-check_out') {
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find($params->{illrequest_id});
         my $backend_result = $request->check_out($params);
         $template->param(
             params  => $params,
@@ -409,9 +409,9 @@ if ( $backends_available ) {
             }
         }
 
-        $template->param( table_actions => encode_json( Koha::Illrequest->get_staff_table_actions ) )
+        $template->param( table_actions => encode_json( Koha::ILL::Request->get_staff_table_actions ) );
     } elsif ( $op eq "cud-save_comment" ) {
-        my $comment = Koha::Illcomment->new({
+        my $comment = Koha::ILL::Comment->new({
             illrequest_id  => scalar $params->{illrequest_id},
             borrowernumber => $patronnumber,
             comment        => scalar $params->{comment},
@@ -425,7 +425,7 @@ if ( $backends_available ) {
 
     } elsif ( $op eq "send_notice" ) {
         my $illrequest_id = $params->{illrequest_id};
-        my $request = Koha::Illrequests->find($illrequest_id);
+        my $request = Koha::ILL::Requests->find($illrequest_id);
         my $ret = $request->send_patron_notice($params->{notice_code});
         my $append = '';
         if ($ret->{result} && scalar @{$ret->{result}->{success}} > 0) {
@@ -446,7 +446,7 @@ if ( $backends_available ) {
         # Do not remove, it prevents us falling through to the 'else'
     } else {
         $op =~ s/^cud-//;
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $request = Koha::ILL::Requests->find( $params->{illrequest_id} );
         my $backend_result = $request->custom_capability($op, $params);
         $template->param(
             whole => $backend_result,
@@ -522,7 +522,7 @@ sub have_batch_backends {
 # FIXME: This should be moved to Koha::Illbackend
 sub can_batch {
     my ( $backend ) = @_;
-    my $request = Koha::Illrequest->new->load_backend( $backend );
+    my $request = Koha::ILL::Request->new->load_backend( $backend );
     return $request->_backend_capability( 'provides_batch_requests' );
 }
 

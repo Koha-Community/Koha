@@ -1861,7 +1861,7 @@ sub _get_tt_params {
             fk       => 'verification_token',
         },
         illrequests => {
-            module   => 'Koha::Illrequests',
+            module   => 'Koha::ILL::Requests',
             singular => 'illrequest',
             plural   => 'illrequests',
             pk       => 'illrequest_id'

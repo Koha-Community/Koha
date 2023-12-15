@@ -20,7 +20,7 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::ILL::Batch;
 use Koha::ILL::Batches;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::Patrons;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -73,7 +73,7 @@ my $illrq = $builder->build(
         }
     }
 );
-my $illrq_obj = Koha::Illrequests->find( $illrq->{illrequest_id} );
+my $illrq_obj = Koha::ILL::Requests->find( $illrq->{illrequest_id} );
 
 # Check patron
 my $batch_patron = $illbatch->patron;

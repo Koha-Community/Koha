@@ -44,7 +44,7 @@ use Koha::Biblioitems;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Calendar;
 use Koha::Checkouts;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Debarments qw( DelUniqueDebarment AddUniqueDebarment );
@@ -1604,7 +1604,7 @@ sub AddIssue {
             # Check if we need to use an exact due date set by the ILL module
             if ( C4::Context->preference('ILLModule') ) {
                 # Check if there is an ILL connected with the biblio of the item we are issuing
-                my $ill_request = Koha::Illrequests->search({
+                my $ill_request = Koha::ILL::Requests->search({
                     biblio_id => $item_object->biblionumber,
                     borrowernumber => $patron->borrowernumber,
                     completed => undef,
@@ -2489,7 +2489,7 @@ sub AddReturn {
     # Check if this item belongs to a biblio record that is attached to an
     # ILL request, if it is we need to update the ILL request's status
     if ( $doreturn and C4::Context->preference('CirculateILL')) {
-        my $request = Koha::Illrequests->find(
+        my $request = Koha::ILL::Requests->find(
             { biblio_id => $item->biblio->biblionumber }
         );
         $request->status('RET') if $request;

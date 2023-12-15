@@ -20,7 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ILL::Request::Config;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 use Koha::ILL::Backend;
 
 =head1 NAME
@@ -44,7 +44,7 @@ sub list {
 
     my @data;
     foreach my $b (@$backends) {
-        my $backend = Koha::Illrequest->new->load_backend($b);
+        my $backend = Koha::ILL::Request->new->load_backend($b);
 
         my $embed = $backend_module->embed(
             $b,
@@ -76,7 +76,7 @@ sub get {
         #FIXME: Should we move load_backend into Koha::ILL::Backend...
         #       or maybe make Koha::Ill::Backend a base class for all
         #       backends?
-        my $backend = Koha::Illrequest->new->load_backend($backend_id);
+        my $backend = Koha::ILL::Request->new->load_backend($backend_id);
 
         my $backend_module = Koha::ILL::Backend->new;
 

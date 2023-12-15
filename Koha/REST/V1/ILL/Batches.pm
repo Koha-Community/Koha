@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::ILL::Batches;
 use Koha::ILL::Batch::Statuses;
-use Koha::Illrequests;
+use Koha::ILL::Requests;
 
 use Try::Tiny qw( catch try );
 
