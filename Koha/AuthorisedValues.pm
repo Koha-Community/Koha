@@ -141,6 +141,38 @@ sub get_descriptions_by_koha_field {
     return @descriptions;
 }
 
+=head3 get_descriptions_by_marc_field
+
+    Return cached descriptions when looking up by MARC field/subfield
+
+=cut
+
+sub get_descriptions_by_marc_field {
+    my ( $self, $params ) = @_;
+    my $frameworkcode = $params->{frameworkcode} || '';
+    my $tagfield      = $params->{tagfield};
+    my $tagsubfield   = $params->{tagsubfield};
+
+    return {} unless defined $params->{tagfield};
+
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
+    my $cache_key    = "AV_descriptions_by_MARC:$frameworkcode:$tagfield";
+    if ($tagsubfield) {
+        $cache_key .= ":$tagsubfield";
+    }
+
+    my $cached = $memory_cache->get_from_cache($cache_key);
+    return $cached if $cached;
+
+    my $descriptions = {};
+    my @avs          = $self->search_by_marc_field($params)->as_list;
+    foreach my $av (@avs) {
+        $descriptions->{ $av->authorised_value } = $av->lib;
+    }
+    $memory_cache->set_in_cache( $cache_key, $descriptions );
+    return $descriptions;
+}
+
 sub categories {
     my ( $self ) = @_;
     my $rs = $self->_resultset->search(
