@@ -357,6 +357,13 @@ if($tab eq 'sysinfo') {
             $warnILLConfiguration = 1;
         }
 
+        # Check if deprecated 'FreeForm' backend is installed
+        my $available_backends = Koha::ILL::Request::Config->new->available_backends;
+        if ( grep( /FreeForm/, @{$available_backends} ) ) {
+            $template->param( ill_deprecated_backend_freeform_is_installed => 1 );
+            $warnILLConfiguration = 1;
+        }
+
         if ( !C4::Context->preference('ILLPartnerCode') ) {
             # partner code not defined
             $template->param( ill_partner_code_not_defined => 1 );

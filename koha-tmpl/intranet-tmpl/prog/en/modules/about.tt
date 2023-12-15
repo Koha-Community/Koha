@@ -594,6 +594,17 @@
                                 </td>
                             </tr>
                         [% END %]
+                        [% IF ill_deprecated_backend_freeform_is_installed %]
+                            <tr>
+                                <th scope="row"><strong>Warning</strong> </th>
+                                <td>
+                                    <p>The ILL module is enabled, but the deprecated 'FreeForm' backend is installed.</p>
+                                    <p>'FreeForm' has since become part of core Koha as 'Standard'.</p>
+                                    <p>All 'FreeForm' ILL content should've been migrated to 'Standard' upon upgrading Koha to 24.05.</p>
+                                    <p>To avoid confusion or redundancy, please uninstall the 'FreeForm' backend before using the ILL module.</p>
+                                </td>
+                            </tr>
+                        [% END %]
                     [% END %]
 
                     [% IF weasyprint_missing %]

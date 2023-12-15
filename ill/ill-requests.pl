@@ -72,6 +72,12 @@ $template->param(
     have_batch         => have_batch_backends($backends)
 );
 
+if ( grep( /FreeForm/, @{$backends} ) ) {
+    $template->param(
+        ill_deprecated_backend_freeform_is_installed => 1,
+    );
+}
+
 if ( $backends_available ) {
     # Establish what metadata enrichment plugins we have available
     my $enrichment_services = get_metadata_enrichment();
