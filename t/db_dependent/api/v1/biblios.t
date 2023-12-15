@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -35,6 +35,7 @@ use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Biblios;
 use Koha::Database;
+use Koha::DateUtils qw (dt_from_string);
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
 
@@ -652,6 +653,76 @@ subtest 'get_items_public() tests' => sub {
         ],
         'The items are returned, the patron category has an override'
           );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_bookings() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }     # no additional permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->borrowernumber,
+                module_bit     => 1,
+                code           => 'manage_bookings',
+            },
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item1  = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $item2  = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+
+    $t->get_ok("//$unauth_userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings")
+      ->status_is(403);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings")
+      ->status_is(200)
+      ->json_is( '' => [], 'No bookings on the biblio' );
+
+    # One booking
+    my $start_0   = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
+    my $end_0     = dt_from_string->add( days => 4 )->truncate( to => 'day' );
+    my $booking_0 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->id,
+                item_id    => $item1->id,
+                start_date => $start_0,
+                end_date   => $end_0
+            }
+        }
+    );
+
+    my $ret = $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/bookings")
+      ->status_is(200)
+      ->tx->res->json;
+
+    is_deeply( $ret, [ $booking_0->to_api ] );
 
     $schema->storage->txn_rollback;
 };
