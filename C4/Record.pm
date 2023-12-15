@@ -576,9 +576,12 @@ sub marcrecord2csv {
                 # If it is a subfield
                 my @loop_values;
                 if (defined $tag->{subfieldtag} ) {
-                    my $av = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, tagsubfield => $tag->{subfieldtag}, });
-                    $av = $av->count ? $av->unblessed : [];
-                    my $av_description_mapping = { map { ( $_->{authorised_value} => $_->{lib} ) } @$av };
+                    my $av_description_mapping = Koha::AuthorisedValues->get_descriptions_by_marc_field(
+                        {
+                            frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag},
+                            tagsubfield   => $tag->{subfieldtag},
+                        }
+                    );
                     # For each field
                     foreach my $field (@fields) {
                         my @subfields = $field->subfield( $tag->{subfieldtag} );
@@ -589,9 +592,8 @@ sub marcrecord2csv {
 
                 # Or a field
                 } else {
-                    my $av = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, });
-                    $av = $av->count ? $av->unblessed : [];
-                    my $authvalues = { map { ( $_->{authorised_value} => $_->{lib} ) } @$av };
+                    my $authvalues = Koha::AuthorisedValues->get_descriptions_by_marc_field(
+                        { frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, } );
 
                     foreach my $field ( @fields ) {
                         my $value;
