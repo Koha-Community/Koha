@@ -332,6 +332,7 @@
                                                 <li>
                                                     [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
                                                     <span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => 1 ) | html %]</span>
+                                                    <span class="ccode">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => ITEM_RESULT.ccode, opac => 1 ) | html %]</span>
                                                     [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                                         ([% ITEM_RESULT.itemcallnumber | html %])
                                                     [% END %]
