@@ -144,7 +144,7 @@ is_deeply(
 );
 
 subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_values' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     my $test_cat = Koha::AuthorisedValueCategories->find('TEST');
     $test_cat->delete if $test_cat;
@@ -252,6 +252,21 @@ subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_v
             ],
         );
     };
+
+    subtest 'get_descriptions_by_marc_field' => sub {
+        plan tests => 1;
+        my $descriptions = Koha::AuthorisedValues->get_descriptions_by_marc_field(
+            { frameworkcode => '', tagfield => '952', tagsubfield => 'c' } );
+        is_deeply(
+            $descriptions,
+            {
+                'location_1' => 'location_1',
+                'location_2' => 'location_2',
+                'location_3' => 'location_3',
+            },
+        );
+    };
+
     subtest 'authorised_values' => sub {
 
         plan tests => 2;
