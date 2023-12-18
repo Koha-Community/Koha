@@ -242,6 +242,14 @@ $(".sortable").each((i, e) => {
     Sortable.create(e, {
         animation: 150,
         onUpdate: function (e) {
+            $(e.target)
+                .find("li label")
+                .each(function (i) {
+                    let newText = $(this)
+                        .text()
+                        .replace(/\d+\./, i + 1 + ".");
+                    $(this).text(newText);
+                });
             $(e.target).find("input:first").change();
         },
     });

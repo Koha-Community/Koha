@@ -164,6 +164,28 @@
                             <textarea style="display:none" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] codemirror" rows="10" cols="40">[% CHUNK.value | html %]</textarea>
                             <a class="collapse-textarea" id="collapse_[% CHUNK.name | html %]" data-target="[% CHUNK.name | html %]" data-syntax="[% CHUNK.syntax | html %]" style="display:none" href="#">Collapse</br></a>
                         [% END %]
+                    [% ELSIF ( CHUNK.type_ill_backends ) %]
+                        [% IF ( !CHUNK.ill_backends.empty ) %]
+                            <ul class="sortable">
+                                [% FOREACH ill_backend IN CHUNK.ill_backends %]
+                                    <li>
+                                        <i class="fa-solid fa-fw fa-grip-vertical" aria-hidden="true" style="color:#B7B7B7"></i>
+                                        [% IF ( ill_backend.enabled ) %]
+                                            <label for="pref_[% CHUNK.name | html %]_[% ill_backend.name | html %]">[% loop.index()+1 | html %]. [% ill_backend.name | html %]</label>
+                                            <input value="[% ill_backend.name | html %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]_[% ill_backend.name | html %]" type="checkbox" class="preference preference-checkbox" checked="checked" />
+                                        [% ELSIF (ill_backend.unable) %]
+                                            <label style="color:red" for="pref_[% CHUNK.name | html %]_[% ill_backend.name | html %]">[% loop.index()+1 | html %]. [% ill_backend.name | html %] (Unable to provide availability)</label>
+                                            <input value="[% ill_backend.name | html %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]_[% ill_backend.name | html %]" type="checkbox" class="preference preference-checkbox" disabled />
+                                        [% ELSE %]
+                                            <label for="pref_[% CHUNK.name | html %]_[% ill_backend.name | html %]">[% ill_backend.name | html %]</label>
+                                            <input value="[% ill_backend.name | html %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]_[% ill_backend.name | html %]" type="checkbox" class="preference preference-checkbox" />
+                                        [% END %]
+                                    </li>
+                                [% END # FOREACH ill_backend %]
+                            </ul> <!-- / ul.sortable -->
+                        [% ELSE %]
+                            <p><strong>No available backends</strong></p>
+                        [% END # IF ( CHUNK.ill_backends ) %]
                     [% ELSIF ( CHUNK.type_languages ) %]
                         <ul class="sortable">
                             [% FOREACH language IN CHUNK.languages %]

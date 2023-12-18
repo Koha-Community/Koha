@@ -29,6 +29,7 @@ use C4::Output      qw( output_html_with_http_headers output_and_exit_if_error )
 use C4::Templates;
 use Koha::Acquisition::Currencies;
 use Koha::Database::Columns;
+use Koha::ILL::Backends;
 use IO::File;
 use YAML::XS;
 use Encode;
@@ -80,6 +81,29 @@ sub _get_chunk {
         $chunk->{'input_type'} = 'email';
     } elsif ( $options{'class'} && $options{'class'} eq 'date' ) {
         $chunk->{'dateinput'} = 1;
+    } elsif ( $options{'type'} && $options{'type'} eq 'ill-backends' ) {
+        my @priority_enabled_backends = split ",", C4::Context->preference('AutoILLBackendPriority');
+        my @sys_pref_backends         = map( { name => $_, enabled => 1 }, @priority_enabled_backends );
+
+        my $installed_backends = Koha::ILL::Backends->installed_backends;
+        foreach my $installed_backend ( @{$installed_backends} ) {
+            if ( not grep { $installed_backend eq $_->{name} } @sys_pref_backends ) {
+                my $backend = Koha::ILL::Request->new->load_backend($installed_backend);
+                push(
+                    @sys_pref_backends,
+                    {
+                        name    => $installed_backend,
+                        enabled => 0,
+                        !$backend->_backend_capability('provides_backend_availability_check')
+                        ? ( unable => 1 )
+                        : ()
+                    }
+                );
+            }
+        }
+
+        $chunk->{'ill_backends'} = \@sys_pref_backends;
+        $chunk->{'type'}         = 'ill_backends';
     } elsif ( $options{'type'} && ( $options{'type'} eq 'opac-languages' || $options{'type'} eq 'staff-languages' ) ) {
         my $current_languages = { map { +$_, 1 } split( /\s*,\s*/, $value ) };
 
