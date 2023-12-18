@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% cwd = whole.cwd %]
 [% PROCESS "${cwd}/shared-includes/form_input_helpers.inc" %]
@@ -29,7 +30,11 @@
 [% SET opac = whole.value.other.opac %]
 
 [% IF whole.stage == "form" %]
-<h2>Create a manual ILL request</h2>
+[% IF Koha.Preference('AutoILLBackendPriority') %]
+  <h2>Create an automatic ILL request</h2>
+[% ELSE %]
+  <h2>Create a manual ILL request</h2>
+[% END %]
 <form id="create_form" method="POST" action="">
   [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">

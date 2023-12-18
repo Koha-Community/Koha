@@ -2,7 +2,9 @@
 [% IF Koha.Preference('ILLModule') && CAN_user_ill %]
     <div id="toolbar" class="btn-toolbar ill-toolbar">
         [% IF backends_available %]
-            [% IF backends.size > 1 %]
+            [% IF Koha.Preference('AutoILLBackendPriority') %]
+                <a id="ill-new" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=create&amp;backend=Standard"> <i class="fa fa-plus"></i> New auto ILL request </a>
+            [% ELSIF backends.size > 1 %]
                 <div class="dropdown btn-group">
                     <button class="btn btn-default dropdown-toggle" type="button" id="ill-backend-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> <i class="fa fa-plus"></i> New ILL request </button>
                     <ul class="dropdown-menu" aria-labelledby="ill-backend-dropdown">
