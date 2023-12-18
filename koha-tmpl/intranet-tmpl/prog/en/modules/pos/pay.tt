@@ -62,10 +62,10 @@
         </div>
         [% END %]
 
+        <div class="row">
         <form name="payForm" id="payForm" method="post" action="/cgi-bin/koha/pos/pay.pl">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-pay">
-            <div class="row">
 
                 <div class="col-md-6">
                     <fieldset class="rows">
@@ -165,15 +165,15 @@
                         <a class="cancel" href="/cgi-bin/koha/pos/pay.pl">Cancel</a>
                     </fieldset>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
         [% END %]
 
         [%- SET StaffPOSHome = AdditionalContents.get( location => "StaffPOSHome", lang => lang, library => logged_in_user.branchcode ) -%]
         [%- FOREACH block IN StaffPOSHome.content -%]
-        <div class="page-section">
-            [%- block.content | $raw -%]
-        </div>
+            <div class="page-section">
+                [%- block.content | $raw -%]
+            </div>
         [%- END -%]
 
     </div>
