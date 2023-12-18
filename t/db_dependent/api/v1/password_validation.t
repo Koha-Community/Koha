@@ -18,13 +18,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -203,6 +204,37 @@ subtest 'Password validation - authorized requests tests' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )
         ->status_is( 400, 'Passing both parameters forbidden' )
         ->json_is( { error => 'Bad request. Only one identifier attribute can be passed.' } );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'password validation - expired password' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**2 }    # catalogue flag = 2
+        }
+    );
+    my $patron_password = 'thePassword123';
+    $patron->set_password( { password => $patron_password, skip_validation => 1 } );
+
+    my $date            = dt_from_string();
+    my $expiration_date = $date->subtract( days => 1 );
+
+    $patron->password_expiration_date($expiration_date)->store;
+
+    my $json = {
+        identifier => $patron->userid,
+        password   => $patron_password,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(400)
+        ->json_is( '/error' => 'Password expired' );
 
     $schema->storage->txn_rollback;
 };
