@@ -24,7 +24,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Warn;
 
 use C4::Context;
@@ -404,6 +404,30 @@ subtest 'RemovePlugins' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'verbose and errors flag' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    Koha::Plugins->RemovePlugins( { destructive => 1 } );    # clean start
+
+    our $class_basename = 'Koha::Plugin::TestMR::' . time;
+    my $plugin_mocks = [];
+
+    # Recreate TestMR plugins without module and mock on Module::Load::Conditional
+    reload_plugin( $_, $plugin_mocks ) for 1 .. 2;
+    warnings_like { Koha::Plugins->new->GetPlugins } [], 'Verbose was off';
+    warnings_like { Koha::Plugins->new->GetPlugins( { verbose => 1 } ) }
+    [ qr/TestMR/, qr/TestMR/ ], 'Verbose was on, two warns';
+
+    my ( $plugins, $failures ) = Koha::Plugins->new->GetPlugins( { errors => 1 } );
+    is( @$plugins,               0,                    'No good plugins left' );
+    is( @$failures,              2,                    'Two failing plugins' );
+    is( $failures->[0]->{error}, 1,                    'Failure hash contains error key' );
+    is( $failures->[0]->{name},  "${class_basename}1", 'Failure hash contains name key' );
+
+    $schema->storage->txn_rollback;
+};
 
 $schema->storage->txn_begin;    # Matching rollback at very end
 

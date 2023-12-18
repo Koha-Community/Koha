@@ -124,7 +124,10 @@ if ( ( $op eq 'cud-Upload' ) && ( $uploadfile || $uploadlocation ) ) {
             exit;
         }
 
-        Koha::Plugins->new()->InstallPlugins();
+        # Install plugins; verbose not needed, we redirect to plugins-home.
+        # FIXME There is no good way to verify the install below; we need an
+        # individual plugin install.
+        Koha::Plugins->new->InstallPlugins( { verbose => 0 } );
     }
 } elsif ( ( $op eq 'cud-Upload' ) && !$uploadfile && !$uploadlocation ) {
     warn "Problem uploading file or no file uploaded.";

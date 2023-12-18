@@ -81,7 +81,7 @@ sub call {
     return unless C4::Context->config('enable_plugins');
 
     my @responses;
-    my @plugins = $class->get_enabled_plugins();
+    my @plugins = $class->get_enabled_plugins( { verbose => 0 } );
     @plugins = grep { $_->can($method) } @plugins;
 
     # TODO: Remove warn when after_hold_create is removed from the codebase
@@ -167,7 +167,7 @@ sub feature_enabled {
     my $key     = "ENABLED_PLUGIN_FEATURE_" . $method;
     my $feature = Koha::Cache::Memory::Lite->get_from_cache($key);
     unless ( defined($feature) ) {
-        my @plugins = $class->get_enabled_plugins();
+        my @plugins = $class->get_enabled_plugins( { verbose => 0 } );
         my $enabled = any { $_->can($method) } @plugins;
         Koha::Cache::Memory::Lite->set_in_cache( $key, $enabled );
     }
@@ -182,11 +182,19 @@ method or metadata value.
     my @plugins = Koha::Plugins::GetPlugins({
         method => 'some_method',
         metadata => { some_key => 'some_value' },
-        [ verbose => 1 ],
+        [ all => 1, errors => 1, verbose => 1 ],
     });
 
 The method and metadata parameters are optional.
 If you pass multiple keys in the metadata hash, all keys must match.
+
+If you pass errors (only used in plugins-home), we return two arrayrefs:
+
+    ( $good, $bad ) = Koha::Plugins::GetPlugins( { errors => 1 } );
+
+If you pass verbose, you can enable or disable explicitly warnings
+from Module::Load::Conditional. Disabled by default to not flood
+the logs.
 
 =cut
 
@@ -195,7 +203,10 @@ sub GetPlugins {
 
     my $method       = $params->{method};
     my $req_metadata = $params->{metadata} // {};
-    my $verbose      = delete $params->{verbose} // $self->_verbose;
+    my $errors       = $params->{errors};
+
+    # By default dont warn here unless asked to do so.
+    my $verbose      = $params->{verbose} // 0;
 
     my $filter = ( $method ) ? { plugin_method => $method } : undef;
 
@@ -206,11 +217,10 @@ sub GetPlugins {
         }
     )->_resultset->get_column('plugin_class');
 
-    my @plugins;
 
     # Loop through all plugins that implement at least a method
+    my ( @plugins, @failing );
     while ( my $plugin_class = $plugin_classes->next ) {
-
         if ( can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 ) ) {
 
             my $plugin;
@@ -241,13 +251,12 @@ sub GetPlugins {
                 and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} } keys %$req_metadata;
 
             push @plugins, $plugin;
-        } elsif ( defined($params->{errors}) && $params->{errors} ){
-            push @plugins, { error => 'cannot_load', name => $plugin_class };
+        } elsif( $errors ) {
+            push @failing, { error => 1, name => $plugin_class };
         }
-
     }
 
-    return @plugins;
+    return $errors ? ( \@plugins, \@failing ) : @plugins;
 }
 
 =head2 InstallPlugins

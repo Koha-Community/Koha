@@ -50,7 +50,7 @@ if ($plugins_enabled) {
         method       => $method,
     );
 
-    my @plugins = Koha::Plugins->new()->GetPlugins(
+    my ( $plugins, $failures ) = Koha::Plugins->new()->GetPlugins(
         {
             method => $method,
             all    => 1,
@@ -58,7 +58,7 @@ if ($plugins_enabled) {
         }
     );
 
-    $template->param( plugins            => \@plugins, );
+    $template->param( plugins            => [ @$plugins, @$failures ] );
     $template->param( plugins_restricted => C4::Context->config('plugins_restricted') );
 
     $template->param( can_search => C4::Context->config('plugin_repos') ? 1 : 0 );
