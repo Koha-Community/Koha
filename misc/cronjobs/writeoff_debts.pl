@@ -170,7 +170,7 @@ with `date -d '-3 month' --iso-8601`.
 
 =item B<--type>
 
-Writeoff debts of the passed type. Accepts a list of CREDIT_TYPE_CODEs.
+Writeoff debts of the passed type. Accepts a list of debit type codes.
 
 =item B<--file>
 
