@@ -90,7 +90,7 @@ if ( $action eq 'create' || $action eq 'new' ) {
     $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } }
       if @PatronSelfRegistrationLibraryList;
 }
-my $libraries = Koha::Libraries->search($params);
+my $libraries = Koha::Libraries->search( $params, { order_by => ['branchname'] } );
 
 my ( $min, $max ) = Koha::Policy::Patrons::Cardnumber->get_valid_length();
 if ( defined $min ) {
