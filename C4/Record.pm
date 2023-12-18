@@ -592,20 +592,26 @@ sub marcrecord2csv {
 
                 # Or a field
                 } else {
-                    my $authvalues = Koha::AuthorisedValues->get_descriptions_by_marc_field(
-                        { frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, } );
 
                     foreach my $field ( @fields ) {
                         my $value;
 
                         # If it is a control field
                         if ($field->is_control_field) {
+                            my $authvalues = Koha::AuthorisedValues->get_descriptions_by_marc_field(
+                                { frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, } );
                             $value = defined $authvalues->{$field->as_string} ? $authvalues->{$field->as_string} : $field->as_string;
                         } else {
                             # If it is a field, we gather all subfields, joined by the subfield separator
                             my @subvaluesarray;
                             my @subfields = $field->subfields;
                             foreach my $subfield (@subfields) {
+                                my $authvalues = Koha::AuthorisedValues->get_descriptions_by_marc_field(
+                                    {
+                                        frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag},
+                                        tagsubfield   => $subfield->[0],
+                                    }
+                                );
                                 push (@subvaluesarray, defined $authvalues->{$subfield->[1]} ? $authvalues->{$subfield->[1]} : $subfield->[1]);
                             }
                             $value = join ($subfieldseparator, @subvaluesarray);
