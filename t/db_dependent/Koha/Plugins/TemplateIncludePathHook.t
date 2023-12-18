@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Warn;
 
@@ -51,7 +51,23 @@ subtest 'template_include_paths' => sub {
     $template->process( \"[% INCLUDE test.inc %]", {}, \$output ) || die $template->error();
     is( $output, 'included content' );
 
-    $schema->storage->txn_commit;
+    $schema->storage->txn_rollback;
+};
 
-    #Koha::Plugins::Methods->delete;
+subtest 'cannot override core templates' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    Koha::Plugins->new->InstallPlugins();
+    Koha::Plugin::Test->new->enable;
+
+    require C4::Templates;
+    my $c4_template = C4::Templates::gettemplate( 'intranet-main.tt', 'intranet' );
+    my $template    = $c4_template->{TEMPLATE};
+    my $output      = '';
+    $template->process( \"[% INCLUDE 'csrf-token.inc' %]", {}, \$output ) || die $template->error();
+    unlike( $output, qr/OVERRIDE/ );
+
+    $schema->storage->txn_rollback;
 };
