@@ -121,9 +121,8 @@ sub get_enabled_plugins {
 
         my @plugin_classes;
         try {
-            my $rs = Koha::Database->schema->resultset('PluginData');
-            $rs = $rs->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
-            @plugin_classes = $rs->get_column('plugin_class')->all();
+            my $rs = Koha::Plugins::Datas->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
+            @plugin_classes = $rs->get_column('plugin_class');
         } catch {
             warn "$_";
         };

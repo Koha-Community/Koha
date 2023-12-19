@@ -194,9 +194,7 @@ subtest 'Version upgrade tests' => sub {
     my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
 
     # make sure there's no version on the DB
-    $schema->resultset('PluginData')
-        ->search( { plugin_class => $plugin->{class}, plugin_key => '__INSTALLED_VERSION__' } )
-        ->delete;
+    Koha::Plugins::Datas->search( { plugin_class => $plugin->{class}, plugin_key => '__INSTALLED_VERSION__' } )->delete;
 
     $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
     my $version = $plugin->retrieve_data('__INSTALLED_VERSION__');
