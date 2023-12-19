@@ -243,8 +243,6 @@ $(document).ready(function() {
 
     var ymd = flatpickr.formatDate(new Date(), "Y-m-d");
 
-    $('#issues-table').hide();
-    $('#issues-table-actions').hide();
     $('#issues-table-load-immediately').change(function(){
         if ( this.checked && typeof issuesTable === 'undefined') {
             $('#issues-table-load-now-button').click();
