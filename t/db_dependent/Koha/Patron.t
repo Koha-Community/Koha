@@ -1790,7 +1790,7 @@ subtest 'notify_library_of_registration()' => sub {
 };
 
 subtest 'notice_email_address' => sub {
-    plan tests => 2;
+    plan tests => 3;
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
@@ -1801,6 +1801,9 @@ subtest 'notice_email_address' => sub {
 
     t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
     is ($patron->notice_email_address, $patron->emailpro, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is emailpro");
+
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'email,emailpro' );
+    is ($patron->notice_email_address, $patron->email.",".$patron->emailpro, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is email|emailpro");
 
     $patron->delete;
     $schema->storage->txn_rollback;
