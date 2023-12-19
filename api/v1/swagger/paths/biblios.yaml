@@ -403,7 +403,8 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        circulate: circulate_remaining_permissions
+        - circulate: circulate_remaining_permissions
+        - circulate: manage_bookings
 "/biblios/{biblio_id}/items":
   get:
     x-mojo-to: Biblios#get_items
