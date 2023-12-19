@@ -265,6 +265,8 @@ SKIP: {
         );
 
         $s->wait_for_ajax; # There is an ajax request to populate the qr_code and the secret
+        $driver->set_window_size( 3840, 1080 );
+        $s->wait_for_element_visible('//*[@id="registration-form"]');
 
         isnt( $driver->find_element('//*[@id="qr_code"]')->get_attribute("src"), "" );
         my $secret32 = $driver->find_element('//*[@id="secret32"]')->get_value;
