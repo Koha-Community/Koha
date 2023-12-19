@@ -148,7 +148,7 @@ sub get_enabled_plugins {
 sub _verbose {
     my $class = shift;
     # Return false when running unit tests
-    return exists $ENV{_} && $ENV{_} =~ /\/prove(\s|$)|\.t$/ ? 0 : 1;
+    return exists $ENV{_} && $ENV{_} =~ /\/prove(\s|$)|\/koha-qa\.pl$|\.t$/ ? 0 : 1;
 }
 
 =head2 feature_enabled
