@@ -16,7 +16,7 @@
         </p>
     </div>
     <form name="issues" action="/cgi-bin/koha/tools/export.pl" method="post">
-        <table id="issues-table" style="width: 100% !Important;">
+        <table id="issues-table" style="width: 100% !Important; display: none;">
             <thead>
                 <tr>
                     <th scope="col">&nbsp;</th>
@@ -49,7 +49,7 @@
         <label for="issues-table-load-immediately">Always show checkouts automatically</label>
         <input id="issues-table-load-immediately" type="checkbox" />
 
-        <div id="issues-table-actions">
+        <div id="issues-table-actions" style="display: none;">
             <fieldset class="action">
                 [% IF ( CAN_user_circulate_override_renewals ) %]
                     [% IF Koha.Preference( 'AllowRenewalLimitOverride' ) || Koha.Preference( 'AllowRenewalOnHoldOverride' ) %]
