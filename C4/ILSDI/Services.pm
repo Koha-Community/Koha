@@ -971,6 +971,10 @@ sub _availability {
         return ( $biblionumber, __('not available'), __('Item withdrawn'), $location, $itemcallnumber );
     } elsif ( $item->damaged ) {
         return ( $biblionumber, __('not available'), __('Item damaged'), $location, $itemcallnumber );
+    } elsif ( $item->get_transfer ) {
+        return ( $biblionumber, __('not available'), __('In transit'), $location, $itemcallnumber );
+    } elsif ( $item->current_holds->next ) {
+        return ( $biblionumber, __('not available'), __('On hold'), $location, $itemcallnumber );
     } else {
         return ( $biblionumber, __('available'), undef, $location, $itemcallnumber );
     }
