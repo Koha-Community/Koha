@@ -93,6 +93,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AutoCreateAuthorities','0',NULL,'Automatically create authorities that do not exist when cataloging records.','YesNo'),
 ('AutoCreditNumber', '', '', 'Automatically generate a number for account credits', 'Choice'),
 ('AutoEmailNewUser','0',NULL,'Send an email to newly created patrons.','YesNo'),
+('AutoILLBackendPriority','',NULL,'Set the automatic backend selection priority','ILLBackends'),
 ('AutoLinkBiblios','0',NULL,'If enabled, link biblio to authorities on creation and edit','YesNo'),
 ('AutomaticCheckinAutoFill','0',NULL,'Automatically fill the next hold with an automatic check in.','YesNo'),
 ('AutomaticConfirmTransfer','0',NULL,'Defines whether transfers should be automatically confirmed at checkin if modal dismissed','YesNo'),
