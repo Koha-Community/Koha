@@ -726,7 +726,7 @@ subtest 'get_bookings() tests' => sub {
 
 subtest 'get_checkouts() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -745,11 +745,43 @@ subtest 'get_checkouts() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts")
       ->status_is(403);
 
-    $patron->flags(1)->store; # circulate permissions
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 1,
+                code           => 'circulate_remaining_permissions',
+            },
+        }
+    );
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts")
-      ->status_is(200)
-      ->json_is( '' => [], 'No checkouts on the biblio' );
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts" )
+        ->status_is( 200, 'circulate_remaining_permissions allows checkouts access' )
+        ->json_is( '' => [], 'No checkouts on the biblio' );
+
+    my $bookings_librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }     # no additional permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $bookings_librarian->borrowernumber,
+                module_bit     => 1,
+                code           => 'manage_bookings',
+            },
+        }
+    );
+    $bookings_librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $bookings_userid = $bookings_librarian->userid;
+
+    $t->get_ok( "//$bookings_userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/checkouts" )
+        ->status_is( 200, 'manage_bookings allows checkouts access' )
+        ->json_is( '' => [], 'No checkouts on the biblio' );
 
     my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
