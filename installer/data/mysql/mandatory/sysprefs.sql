@@ -229,7 +229,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EmailAddressForPatronRegistrations', '', '', ' If you choose EmailAddressForPatronRegistrations you have to enter a valid email address: ', 'free'),
 ('EmailAddressForSuggestions','','',' If you choose EmailAddressForSuggestions you have to enter a valid email address: ','free'),
 ('EmailFieldPrecedence','email|emailpro|B_email','','Ordered list of patron email fields to use when AutoEmailPrimaryAddress is set to first valid','multiple'),
-('EmailFieldPrimary','OFF','email|emailpro|B_email|cardnumber|OFF','Defines the default email address field where patron email notices are sent.','Choice'),
+('EmailFieldPrimary','OFF','email|emailpro|B_email|cardnumber|OFF','Defines the default email address field where patron email notices are sent.','multiple'),
 ('emailLibrarianWhenHoldIsPlaced','0',NULL,'If ON, emails the librarian whenever a hold is placed','YesNo'),
 ('EmailOverduesNoEmail','1',NULL,'Send send overdues of patrons without email address to staff','YesNo'),
 ('EmailPatronRegistrations', '0', '0|EmailAddressForPatronRegistrations|BranchEmailAddress|KohaAdminEmailAddress', 'Choose email address that new patron registrations will be sent to: ', 'Choice'),
