@@ -286,7 +286,7 @@ subtest 'Handle ids duplication' => sub {
 };
 
 subtest 'BlockReturnOfLostItems' => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $checkout = AddIssue( $patron, $item->barcode );
@@ -298,6 +298,7 @@ subtest 'BlockReturnOfLostItems' => sub {
     my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
     is( $doreturn, 0, "With BlockReturnOfLostItems, a checkin of a lost item should be blocked");
     is( $messages->{WasLost}, 1, "... and the WasLost flag should be set");
+    is( $messages->{NeedsTransfer}, undef, "... and no transfer should be triggered");
 
     $item->discard_changes;
     is( $item->itemlost, 1, "Item remains lost" );
