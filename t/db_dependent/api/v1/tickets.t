@@ -172,6 +172,7 @@ subtest 'add() tests' => sub {
 
     my $biblio = $builder->build_sample_biblio();
     my $ticket = {
+        source    => 'catalog',
         biblio_id => $biblio->id,
         title     => "Test ticket",
         body      => "Test ticket details",
@@ -185,6 +186,7 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write invalid data
     my $ticket_with_invalid_field = {
         blah      => "Something wrong",
+        source    => 'catalog',
         biblio_id => $biblio->id,
         title     => "Test ticket",
         body      => "Test ticket details",
@@ -230,6 +232,7 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write missing data
     my $ticket_with_missing_field = {
+        source    => 'catalog',
         biblio_id => $biblio->id,
         body      => "Test ticket details",
     };
@@ -282,6 +285,7 @@ subtest 'update() tests' => sub {
 
     # Attempt partial update on a PUT
     my $ticket_with_missing_field = {
+        source    => 'catalog',
         body      => "Test ticket details",
     };
 
@@ -292,6 +296,7 @@ subtest 'update() tests' => sub {
 
     # Full object update on PUT
     my $ticket_with_updated_field = {
+        source    => 'catalog',
         title     => "Test ticket update",
         body      => "Test ticket update details",
     };
@@ -303,6 +308,7 @@ subtest 'update() tests' => sub {
     # Authorized attempt to write invalid data
     my $ticket_with_invalid_field = {
         blah        => "Ticket Blah",
+        source    => 'catalog',
         title     => "Test ticket update",
         body      => "Test ticket update details",
     };

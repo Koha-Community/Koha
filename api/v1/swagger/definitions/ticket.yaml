@@ -5,6 +5,10 @@ properties:
     type: integer
     description: Internal ticket identifier
     readOnly: true
+  source:
+    type: string
+    enum:
+      - catalog
   reported_date:
     type:
       - string
@@ -60,5 +64,6 @@ properties:
     description: Number of updates
 additionalProperties: false
 required:
+  - source
   - title
   - body
