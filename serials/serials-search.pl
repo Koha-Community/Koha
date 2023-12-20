@@ -52,6 +52,7 @@ my $location      = $query->param('location_filter') || '';
 my $expiration_date = $query->param('expiration_date_filter') || '';
 my $routing       = $query->param('routing') || C4::Context->preference("RoutingSerials");
 my $searched      = $query->param('searched') || 0;
+my $routinglist = $query->param('routinglist');
 my $mana      = $query->param('mana') || 0;
 my @subscriptionids = $query->multi_param('subscriptionid');
 my $op            = $query->param('op');
@@ -105,17 +106,18 @@ if ($searched) {
     else {
         my $subscriptions = SearchSubscriptions(
             {
-                biblionumber => $biblionumber,
-                title        => $title,
-                issn         => $ISSN,
-                ean          => $EAN,
-                callnumber   => $callnumber,
-                publisher    => $publisher,
-                bookseller   => $bookseller,
-                branch       => $branch,
+                biblionumber      => $biblionumber,
+                title             => $title,
+                issn              => $ISSN,
+                ean               => $EAN,
+                callnumber        => $callnumber,
+                publisher         => $publisher,
+                bookseller        => $bookseller,
+                branch            => $branch,
                 additional_fields => \@additional_field_filters,
-                location     => $location,
-                expiration_date => $expiration_date,
+                location          => $location,
+                expiration_date   => $expiration_date,
+                routinglist       => $routinglist,
             },
             { results_limit => C4::Context->preference('SerialsSearchResultsLimit') }
         );

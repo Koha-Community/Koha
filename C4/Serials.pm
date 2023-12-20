@@ -511,6 +511,7 @@ The valid search fields are:
   branch
   expiration_date
   closed
+  routinglist
 
 The expiration_date search field is special; it specifies the maximum
 subscription expiration date.
@@ -554,6 +555,10 @@ sub SearchSubscriptions {
             LEFT JOIN biblioitems ON biblioitems.biblionumber = subscription.biblionumber
             LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
     |;
+    if ( $args->{routinglist} ) {
+        $query .=
+            q| INNER JOIN (SELECT DISTINCT subscriptionid FROM subscriptionroutinglist) srl ON srl.subscriptionid = subscription.subscriptionid|;
+    }
     $query .= q| WHERE 1|;
     my @where_strs;
     my @where_args;
@@ -610,7 +615,6 @@ sub SearchSubscriptions {
         push @where_strs, "subscription.closed = ?";
         push @where_args, "$args->{closed}";
     }
-
     if(@where_strs){
         $query .= ' AND ' . join(' AND ', @where_strs);
     }

@@ -50,6 +50,11 @@
                     <label for="to">Expires before:</label>
                     <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | html %]" size="10" maxlength="10" class="flatpickr" />
                 </li>
+                <li class="local">
+                        <label for="routinglist">Search routing lists only:</label>
+                        <input type="checkbox" id="routinglist" name="routinglist" />
+                </li>
+
                 [% INCLUDE 'additional-fields-entry.inc' available=additional_fields_for_subscription values=additional_field_filters wrap_fieldset=0 %]
             </ol>
             <input type="hidden" name="searched" value="1" />

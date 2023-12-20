@@ -17,7 +17,7 @@ use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::MockModule;
-use Test::More tests => 55;
+use Test::More tests => 57;
 
 BEGIN {
     use_ok('C4::Serials', qw( updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate ));
@@ -197,6 +197,52 @@ is(
     @subscriptions,
     1,
     'SearchSubscriptions returned only one subscription when results_limit is set to "1"'
+);
+
+# Set up fake data
+my $subscriptionwithroutinglistid = NewSubscription(
+    undef,        "",            undef, undef,          $budget_id, $biblionumber,
+    '2013-01-01', $frequency_id, undef, undef,          undef,
+    undef,        undef,         undef, undef,          undef, undef,
+    1,            $notes,        undef, '2013-01-01',   undef, $pattern_id,
+    undef,        undef,         0,     $internalnotes, 0,
+    undef,        undef,         0,     undef,          '2013-12-31', 0
+);
+
+#creating fake patrons
+my $patron = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+    }
+);
+my $patron2 = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+    }
+);
+my $patronid1 = $patron->borrowernumber;
+my $patronid2 = $patron2->borrowernumber;
+
+# Add a fake routing list with fake patrons
+addroutingmember( $patronid1, $subscriptionwithroutinglistid );
+addroutingmember( $patronid2, $subscriptionwithroutinglistid );
+
+# Perform SearchSubscriptions
+my $fake_subscription = GetSubscription($subscriptionwithroutinglistid);
+
+my @subscriptionswithroutinglist = SearchSubscriptions(
+    {
+        issn        => $fake_subscription->{issn},
+        orderby     => 'title',
+        routinglist => 1
+    }
+);
+
+# Check the results
+is( @subscriptionswithroutinglist, 1, 'SearchSubscriptions returned the expected number of subscriptions' );
+is(
+    $subscriptionswithroutinglist[0]->{title}, $fake_subscription->{title},
+    'SearchSubscriptions returned the correct subscription'
 );
 
 my $frequency = GetSubscriptionFrequency($subscriptioninformation->{periodicity});
