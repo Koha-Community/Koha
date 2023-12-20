@@ -1619,19 +1619,25 @@ sub notice_email_address{
     my ( $self ) = @_;
 
     my $which_address = C4::Context->preference("EmailFieldPrimary");
-    my @addresses;
-    for my $email_field ( split ",", $which_address ) {
 
-        # if syspref is set to 'first valid' (value == OFF), look up email address
-        if ( $email_field eq 'OFF' ) {
-            return $self->first_valid_email_address;
-        }
-
-        my $email_address = $self->$email_field;
-        push @addresses, $email_address if $email_address;
+    # if syspref is set to 'first valid' (value == OFF), look up email address
+    if ( $which_address eq 'OFF' ) {
+        return $self->first_valid_email_address;
     }
 
-    return join(",",@addresses);
+    # if syspref is set to 'selected addresses' (value == MULTI), look up email addresses
+    if ( $which_address eq 'MULTI' ) {
+        my @addresses;
+        my $selected_fields = C4::Context->preference("EmailFieldSelection");
+        for my $email_field ( split ",", $selected_fields ) {
+            my $email_address = $self->$email_field;
+            push @addresses, $email_address if $email_address;
+        }
+        return join(",",@addresses);
+    }
+
+    return $self->$which_address || '';
+
 }
 
 =head3 first_valid_email_address

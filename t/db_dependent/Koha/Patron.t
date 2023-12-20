@@ -1793,17 +1793,27 @@ subtest 'notice_email_address' => sub {
     plan tests => 3;
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'email|emailpro' );
-    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
-    is ($patron->notice_email_address, $patron->email, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is off");
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary',    'OFF' );
+    is(
+        $patron->notice_email_address, $patron->email,
+        "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is off"
+    );
 
     t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
-    is ($patron->notice_email_address, $patron->emailpro, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is emailpro");
+    is(
+        $patron->notice_email_address, $patron->emailpro,
+        "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is emailpro"
+    );
 
-    t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'email,emailpro' );
-    is ($patron->notice_email_address, $patron->email.",".$patron->emailpro, "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is email|emailpro");
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary',   'MULTI' );
+    t::lib::Mocks::mock_preference( 'EmailFieldSelection', 'email,emailpro' );
+    is(
+        $patron->notice_email_address, $patron->email . "," . $patron->emailpro,
+        "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is 'MULTI' and EmailFieldSelection is 'email,emailpro'"
+    );
 
     $patron->delete;
     $schema->storage->txn_rollback;

@@ -7,8 +7,15 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do("UPDATE systempreferences SET type='multiple' WHERE variable='EmailFieldPrimary'");
+        $dbh->do(
+            "UPDATE systempreferences SET options='email|emailpro|B_email|cardnumber|OFF|MULTI' WHERE variable='EmailFieldPrimary'"
+        );
+        say $out "Updated system preference 'EmailFieldPrimary' to include 'selected addresses' option";
 
-        say $out "Updated system preference 'EmailFieldPrimary' to have type 'multiple'";
+        $dbh->do(
+            "INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('EmailFieldSelection','email|emailpro|B_email','','Selection list of patron email fields to use whern AutoEmailPrimaryAddress is set to selected addresses','multiple')"
+        );
+
+        say $out "Added new system preference 'EmailFieldSelection'";
     },
 };
