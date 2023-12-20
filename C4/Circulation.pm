@@ -2500,6 +2500,10 @@ sub AddReturn {
         }
     }
 
+    if ( $messages->{WasLost} and C4::Context->preference('BlockReturnOfLostItems') ) {
+        $validTransfer = 0;
+    }
+
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
     if ( $validTransfer && !C4::RotatingCollections::isItemInAnyCollection( $item->itemnumber )
         && ( $doreturn or $messages->{'NotIssued'} )
