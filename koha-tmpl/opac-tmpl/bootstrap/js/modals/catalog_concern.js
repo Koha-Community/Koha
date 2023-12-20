@@ -35,6 +35,7 @@ $(document).ready(function() {
         let reporter_id = $('#concern_reporter').val();
 
         params = {
+            source: 'catalog',
             title: concern_title,
             body: concern_body,
             biblio_id: biblio_id,
