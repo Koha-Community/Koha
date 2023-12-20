@@ -60,7 +60,6 @@ my @es_fields;
 try {
     $es_record = $es->get_elasticsearch()->get({
         index => $es->index_name,
-        type  => 'data',
         id    => $biblionumber,
     });
 }
