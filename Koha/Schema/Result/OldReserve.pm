@@ -467,6 +467,18 @@ __PACKAGE__->belongs_to(
   },
 );
 
+__PACKAGE__->belongs_to(
+  "pickup_library",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 __PACKAGE__->add_columns(
     '+item_level_hold' => { is_boolean => 1 },
     '+lowestPriority'  => { is_boolean => 1 },
