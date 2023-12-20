@@ -6304,6 +6304,7 @@ DROP TABLE IF EXISTS `tickets`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tickets` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `source` enum('catalog') NOT NULL DEFAULT 'catalog' COMMENT 'source of ticket',
   `reporter_id` int(11) NOT NULL DEFAULT 0 COMMENT 'id of the patron who reported the ticket',
   `reported_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date and time this ticket was reported',
   `title` text NOT NULL COMMENT 'ticket title',
