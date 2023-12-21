@@ -250,7 +250,7 @@
                                             [% IF rule.filter != "*" %]
                                                 [% Categories.GetName( rule.filter ) | html %]
                                             [% ELSE %]
-                                                [% rule.filter %]
+                                                [% rule.filter | html %]
                                             [% END %]
                                         [% ELSE %]
                                             [% rule.filter | html %]
@@ -258,10 +258,10 @@
                                     </td>
                                     <td>[% rule.tag | html %]</td>
                                     <td class="rule-preset"></td>
-                                    <td class="rule-operation-action" data-operation="add" data-value="[% rule.add %]">[% IF rule.add %]Add[% ELSE %]Skip[% END %]</td>
-                                    <td class="rule-operation-action" data-operation="append" data-value="[% rule.append %]">[% IF rule.append %]Append[% ELSE %]Skip[% END %]</td>
-                                    <td class="rule-operation-action" data-operation="remove" data-value="[% rule.remove %]">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
-                                    <td class="rule-operation-action" data-operation="delete" data-value="[% rule.delete %]">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="add" data-value="[% rule.add | html %]">[% IF rule.add %]Add[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="append" data-value="[% rule.append | html %]">[% IF rule.append %]Append[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="remove" data-value="[% rule.remove | html %]">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
+                                    <td class="rule-operation-action" data-operation="delete" data-value="[% rule.delete | html %]">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
                                     <td class="actions">
                                         <a href="?op=remove&id=[% rule.id | uri %]" title="Delete" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
                                         <a href="?op=edit&id=[% rule.id | uri %]" title="Edit" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
