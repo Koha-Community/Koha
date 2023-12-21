@@ -31,12 +31,12 @@
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Details for: [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+[% Asset.css("lib/emoji-picker/css/emoji.css") | $raw %]
+[% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]
+    [% Asset.css("lib/verovio/midiplayer.css") | $raw %]
+[% END %]
+[% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
-    [% Asset.css("lib/emoji-picker/css/emoji.css") | $raw %]
-    [% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]
-        [% Asset.css("lib/verovio/midiplayer.css") | $raw %]
-    [% END %]
-    [% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 </head>
 [% BLOCK cssinclude %][% END %]
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
