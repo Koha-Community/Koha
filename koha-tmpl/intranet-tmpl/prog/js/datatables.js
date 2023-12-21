@@ -838,7 +838,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 input_type = 'select'
                 let filter_type = $(this).data('filter');
                 let existing_search = table_dt.column(i).search();
-                let select = $('<select><option value=""></option></select');
+                let select = $('<select class="dt-select-filter"><option value=""></option></select');
 
                 // FIXME eval here is bad and dangerous, how do we workaround that?
                 if ( !filters_options.hasOwnProperty(i) ) {
