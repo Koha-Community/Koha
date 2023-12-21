@@ -31,6 +31,11 @@ properties:
   public:
     type: boolean
     description: Is this update intended to be sent to the patron
+  status:
+    type:
+      - string
+      - "null"
+    description: Status of the ticket after this update
 additionalProperties: true
 required:
   - message
