@@ -489,31 +489,6 @@
                                     return r;
                                 }
                             }
-                            [% CASE 'name-address' %]
-                            {
-                                "data": "me.surname:me.firstname:me.othernames:me.street_number:me.address:me.address2:me.city:me.state:me.postal_code:me.country",
-                                "searchable": true,
-                                "orderable": true,
-                                "render": function( data, type, row, meta ) {
-                                    let patron_id = encodeURIComponent(row.patron_id);
-                                    let r = '';
-                                    [% IF ! open_on_row_click %]
-                                    r += "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=" + patron_id + "\" class=\"patron_name\" data-borrowernumber=\"" + patron_id + "\" style=\"white-space:nowrap\">" + $patron_to_html(row, { invert_name: 1 }) + "</a>";
-                                    [% ELSE %]
-                                    r += $patron_to_html(row, { invert_name: 1 });
-                                    [% END %]
-                                    r += '<br/>';
-                                    r += '<div class="address"><ul>';
-                                    r += $format_address(row, { no_line_break: true, include_li: true });
-
-                                    if ( row.email ) {
-                                        r += "<li>" + _("Email: ") + "<a href='mailto:" + encodeURIComponent(row.email) + "'>" + escape_str(row.email) + "</a></li>";
-                                    }
-                                    r += '</ul></div>'
-
-                                    return r;
-                                }
-                            }
                             [% CASE 'name' %]
                             {
                                 "data": "me.surname:me.firstname:me.middle_name:me.othernames",
