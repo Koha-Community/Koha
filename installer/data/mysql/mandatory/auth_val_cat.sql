@@ -99,4 +99,5 @@ VALUES
 -- For ticket statuses
 INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
 VALUES
-    ('TICKET_STATUS', 1);
+    ('TICKET_STATUS', 1),
+    ('TICKET_RESOLUTION', 1);
