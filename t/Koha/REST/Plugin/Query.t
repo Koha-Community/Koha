@@ -285,6 +285,49 @@ get '/stash_overrides' => sub {
     );
 };
 
+get '/dbic_extended_attributes_join' => sub {
+    my ( $c, $args ) = @_;
+
+    my $filtered_params = [
+        {
+            '-and' => [
+                [
+                    {
+                        'extended_attributes.attribute' => { 'like' => 'abc%' },
+                        'extended_attributes.code'      => [
+                            [
+                                'test1',
+                                'test2'
+                            ]
+                        ]
+                    }
+                ],
+                [
+                    {
+                        'extended_attributes.code' => [
+                            [
+                                'test1',
+                                'test2'
+                            ]
+                        ],
+                        'extended_attributes.attribute' => { 'like' => '123%' }
+                    }
+                ]
+            ]
+        }
+    ];
+    my $attributes = { 'prefetch' => ['extended_attributes'] };
+
+    $c->dbic_extended_attributes_join(
+        {
+            'filtered_params' => $filtered_params,
+            'attributes'      => $attributes
+        }
+    );
+
+    $c->render( json => { 'attributes' => $attributes, 'filtered_params' => $filtered_params }, status => 200 );
+};
+
 sub to_model {
     my ($args) = @_;
     $args->{three} = delete $args->{tres}
@@ -294,7 +337,7 @@ sub to_model {
 
 # The tests
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -542,4 +585,52 @@ subtest 'stash_overrides() tests' => sub {
     $t->get_ok( '/stash_overrides' => { } )
       ->json_is( {} ); # x-koha-ovverride not passed is skipped
 
+};
+
+subtest 'dbic_extended_attributes_join() tests' => sub {
+
+    plan tests => 4;
+
+    my $t = Test::Mojo->new;
+
+    $t->get_ok( '/dbic_extended_attributes_join' => { 'x-koha-embed' => 'extended_attributes' } )->json_has(
+        '/attributes' => {
+            'join' => [
+                'extended_attributes',
+                'extended_attributes'
+            ],
+            'prefetch' => ['extended_attributes']
+        }
+    );
+
+    $t->get_ok( '/dbic_extended_attributes_join' => { 'x-koha-embed' => 'extended_attributes' } )->json_has(
+        '/filtered_params' => [
+            {
+                '-and' => [
+                    [
+                        {
+                            'extended_attributes.code' => [
+                                [
+                                    'test1',
+                                    'test2'
+                                ]
+                            ],
+                            'extended_attributes.attribute' => { 'like' => 'abc%' }
+                        }
+                    ],
+                    [
+                        {
+                            'extended_attributes_2.attribute' => { 'like' => '123%' },
+                            'extended_attributes_2.code'      => [
+                                [
+                                    'test1',
+                                    'test2'
+                                ]
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    );
 };
