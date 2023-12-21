@@ -28,6 +28,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 use Koha::AuthorisedValues;
 use Koha::Exceptions::Suggestion;
+use C4::Log qw(logaction);
 
 use base qw(Koha::Object);
 
@@ -111,7 +112,9 @@ sub store {
             ) or warn "can't enqueue letter $letter";
         }
     }
-
+    if (C4::Context->preference("NewsLog")) {
+        logaction('SUGGESTION', 'CREATE', $result->suggestionid, '' );
+    }
     return $result;
 }
 

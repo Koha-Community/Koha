@@ -27,6 +27,7 @@ use C4::Letters;
 use C4::Biblio qw( GetMarcFromKohaField );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Suggestions;
+use C4::Log qw(logaction);
 
 use base qw(Exporter);
 
@@ -290,6 +291,9 @@ sub ModSuggestion {
             ) or warn "can't enqueue letter $letter";
         }
     }
+    if (C4::Context->preference("SuggestionsLog")) {
+        logaction('SUGGESTION', 'MODIFY', $suggestion->{suggestionid}, $suggestion_object );
+    }
     return 1; # No useful if the exception is raised earlier
 }
 
@@ -343,6 +347,9 @@ sub DelSuggestion {
         };
         $sth = $dbh->prepare($queryDelete);
         my $suggestiondeleted = $sth->execute($suggestionid);
+        if (C4::Context->preference("SuggestionsLog")) {
+            logaction('SUGGESTION', 'DELETE', $suggestionid, '' );
+        }
         return $suggestiondeleted;
     }
 }

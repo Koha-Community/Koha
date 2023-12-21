@@ -101,6 +101,7 @@
 [%        CASE 'NOTICES'      %]<span>Notices</span>[% UNLESS Koha.Preference('NoticesLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 [%        CASE 'NEWS'      %]<span>News</span>[% UNLESS Koha.Preference('NewsLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 [%        CASE 'RECALLS'      %]<span>Recalls</span>[% UNLESS Koha.Preference('RecallsLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
+[%        CASE 'SUGGESTION'      %]<span>Suggestions</span>[% UNLESS Koha.Preference('SuggestionsLog') %] <i class="fa-solid fa-triangle-exclamation" title="Log not enabled"></i>[% END %]
 
 [%        CASE %][% module | html %]
 [%    END %]
@@ -221,7 +222,7 @@
                                         [% ELSE %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value=""> All</label>
                                         [% END %]
-                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'NEWS', 'RECALLS' ] %]
+                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'CLAIMS' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE', 'NOTICES', 'NEWS', 'RECALLS', 'SUGGESTION' ] %]
                                             [% IF modules.grep(modx).size %]
                                                 <label for="module[% modx | html %]" class="viewlog"><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"> [% PROCESS translate_log_module module=modx %]</label>
                                             [% ELSE %]
@@ -387,6 +388,8 @@
                                                 [% ELSE %]
                                                     Basket [% loopro.object | html %]
                                                 [% END %]
+                                            [% ELSIF ( loopro.module == "SUGGESTION" ) %]
+                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loopro.object | uri %]&op=show">[% loopro.object | html %]</a>
                                             [% ELSE %]
                                                 [% loopro.object | html %]
                                             [% END %]
