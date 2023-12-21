@@ -156,7 +156,7 @@
                         "orderable": true
                     },
                     {
-                        "data": "resolver.firstname:resolver.surname:resolved_date",
+                        "data": "resolver.firstname:resolver.surname:resolved_date:status",
                         "render": function(data, type, row, meta) {
                             let result = '';
                             if (row.resolved_date) {
@@ -166,7 +166,11 @@
                                 }) + '</span>';
                                 result += '<span class="clearfix">' + $datetime(row.resolved_date) + '</span>';
                             } else {
-                                result += _("Open");
+                                if (row.status) {
+                                    result += row.status;
+                                } else {
+                                    result += _("Open");
+                                }
                             }
                             return result;
                         },

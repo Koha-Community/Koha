@@ -202,6 +202,12 @@ sub add_update {
             )->store;
         }
 
+        # Update ticket status if needed
+        if ( $ticket_update->{status} ) {
+            my $ticket = $update->ticket;
+            $ticket->set( { status => $ticket_update->{status} } )->store;
+        }
+
         # Optionally add to message_queue here to notify reporter
         if ( $update->public ) {
             my $notice =
