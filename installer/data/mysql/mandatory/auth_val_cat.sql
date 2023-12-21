@@ -95,3 +95,8 @@ VALUES
     ('ERM_DATABASE_REPORTS_METRICS', 1),
     ('ERM_TITLE_REPORTS_METRICS', 1),
     ('ERM_ITEM_REPORTS_METRICS', 1);
+
+-- For ticket statuses
+INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
+VALUES
+    ('TICKET_STATUS', 1);
