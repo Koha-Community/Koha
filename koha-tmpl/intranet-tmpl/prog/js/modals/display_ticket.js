@@ -130,13 +130,15 @@ $(document).ready(function () {
             });
     });
 
-    $("#ticketDetailsModal").on("click", "#resolveTicket", function (e) {
+    $("#ticketDetailsModal").on("click", ".resolveSubmit", function (e) {
+        let clicked = $(this);
         let ticket_id = $("#ticket_id").val();
         let params = {
             public: $("#public").is(":checked"),
             message: $("#update_message").val(),
             user_id: logged_in_user_borrowernumber,
             state: "resolved",
+            status: clicked.data("resolution"),
         };
 
         $("#resolve-spinner").show();

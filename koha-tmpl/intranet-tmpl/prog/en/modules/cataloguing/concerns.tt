@@ -166,10 +166,14 @@
                         "render": function(data, type, row, meta) {
                             let result = '';
                             if (row.resolved_date) {
-                                result += _("Resolved by:") + ' <span>' + $patron_to_html(row.resolver, {
+                                result += _("Resolved by") + ' <span>' + $patron_to_html(row.resolver, {
                                     display_cardnumber: false,
                                     url: true
                                 }) + '</span>';
+                                if (row.status) {
+                                    result += ' ' + _("as") + ' ';
+                                    result += row._strings.status ? escape_str(row._strings.status.str) : "";
+                                }
                                 result += '<span class="clearfix">' + $datetime(row.resolved_date) + '</span>';
                             } else {
                                 if (row.status) {

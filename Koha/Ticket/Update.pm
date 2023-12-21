@@ -85,6 +85,16 @@ sub strings_map {
             }
         );
 
+        # Fall back to TICKET_RESOLUTION as needed
+        if ( !$av->count ) {
+            $av = Koha::AuthorisedValues->search(
+                {
+                    category         => 'TICKET_RESOLUTION',
+                    authorised_value => $self->status,
+                }
+            );
+        }
+
         my $status_str =
               $av->count
             ? $params->{public}
