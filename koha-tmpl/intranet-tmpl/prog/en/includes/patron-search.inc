@@ -268,7 +268,7 @@
     [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-patron-format-address.inc' %]
     [% IF sticky_header %]
-        [% Asset.js("lib/hc-sticky.js") | $raw %]
+        [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% END %]
 
     <script>

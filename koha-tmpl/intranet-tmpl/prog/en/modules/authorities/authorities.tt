@@ -13,7 +13,7 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("lib/hc-sticky.js") | $raw %]
+[% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
 [% INCLUDE 'select2.inc' %]
 <script>
     [% IF Koha.Preference('CreateAVFromCataloguing') && CAN_user_parameters_manage_auth_values %]

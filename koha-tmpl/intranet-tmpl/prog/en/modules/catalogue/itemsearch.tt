@@ -288,7 +288,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
-    [% Asset.js("lib/hc-sticky.js") | $raw %]
+    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     <script>
         var authorised_values = [% authorised_values_json | $raw %];
 

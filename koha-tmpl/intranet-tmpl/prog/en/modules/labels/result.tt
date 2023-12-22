@@ -116,6 +116,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     <script>
         var Sticky;
         $(document).ready(function(){

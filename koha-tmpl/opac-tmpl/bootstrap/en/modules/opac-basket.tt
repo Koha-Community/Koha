@@ -363,7 +363,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 
 [% BLOCK jsinclude %]
-    [% Asset.js("lib/hc-sticky.js") | $raw %]
+    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
         [% INCLUDE 'datatables.inc' %]
         <script>
             [% IF ( TagsInputEnabled && loggedinusername ) %]
