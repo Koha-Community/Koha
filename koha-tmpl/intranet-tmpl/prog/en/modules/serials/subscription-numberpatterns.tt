@@ -84,7 +84,8 @@
                 </li>
                 <li>
                   <label for="displayorder">Display order:</label>
-                  <input type="text" id="displayorder" name="displayorder" value="[% displayorder | html %]" />
+                  <input type="text" inputmode="numeric" pattern="\d*" id="displayorder" name="displayorder" value="[% displayorder | html %]" />
+                  <div class="hint">Only numeric characters are allowed</div>
                 </li>
               </ol>
               <table>
