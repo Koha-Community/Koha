@@ -88,7 +88,7 @@ subtest 'create_index() tests' => sub {
 };
 
 subtest 'index_records() tests' => sub {
-    plan tests => 2;
+    plan tests => 4;
     my $mock_index = Test::MockModule->new("Koha::SearchEngine::Elasticsearch::Indexer");
     $mock_index->mock( update_index => sub {
         my ($self, $record_ids, $records) = @_;
@@ -121,6 +121,24 @@ subtest 'index_records() tests' => sub {
     }
     "Update background " . $biblio->biblionumber,
     "When passing id only to index_records the marc record is fetched and passed through to update_index";
+
+    my $chunks = 0;
+    $mock_index->mock(
+        update_index => sub {
+            my ( $self, $record_ids, $records ) = @_;
+            $chunks++;
+        }
+    );
+
+    t::lib::Mocks::mock_config( 'elasticsearch', { server => 'false', index_name => 'pseudo' } );
+    my @big_array = 1 .. 10000;
+    $indexer->index_records( \@big_array, 'specialUpdate', 'biblioserver', \@big_array );
+    is( $chunks, 2, "We split 10000 records into two chunks when chunk size not set" );
+
+    $chunks = 0;
+    t::lib::Mocks::mock_config( 'elasticsearch', { server => 'false', index_name => 'pseudo', chunk_size => 10 } );
+    $indexer->index_records( \@big_array, 'specialUpdate', 'biblioserver', \@big_array );
+    is( $chunks, 1000, "We split 10000 records into 1000 chunks when chunk size is 10" );
 
 };
 
