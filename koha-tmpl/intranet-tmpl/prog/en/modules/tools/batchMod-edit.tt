@@ -244,7 +244,7 @@
             // two to accommodate control and title columns
             var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count | html %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
             for( x=0; x<allColumns.length; x++ ){
-                allColumns[x] = Number(allColumns[x]) + 2;
+                allColumns[x] = Number(allColumns[x]) + 3;
             }
 
             $(document).ready(function(){
