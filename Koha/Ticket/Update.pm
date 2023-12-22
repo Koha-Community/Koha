@@ -68,6 +68,40 @@ sub to_api_mapping {
     return { id => 'update_id', };
 }
 
+=head3 strings_map
+
+=cut
+
+sub strings_map {
+    my ( $self, $params ) = @_;
+
+    my $strings = {};
+
+    if ( defined $self->status ) {
+        my $av = Koha::AuthorisedValues->search(
+            {
+                category         => 'TICKET_STATUS',
+                authorised_value => $self->status,
+            }
+        );
+
+        my $status_str =
+              $av->count
+            ? $params->{public}
+                ? $av->next->opac_description
+                : $av->next->lib
+            : $self->status;
+
+        $strings->{status} = {
+            category => 'TICKET_STATUS',
+            str      => $status_str,
+            type     => 'av',
+        };
+    }
+
+    return $strings;
+}
+
 =head3 _type
 
 =cut

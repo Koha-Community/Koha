@@ -33,7 +33,7 @@ $(document).ready(function () {
             url: "/api/v1/tickets/" + ticket_id + "/updates",
             method: "GET",
             headers: {
-                "x-koha-embed": "user",
+                "x-koha-embed": ["user", "+strings"],
             },
         })
             .success(function (data) {
@@ -65,13 +65,15 @@ $(document).ready(function () {
                         }) +
                         " (" +
                         $datetime(item.date) +
-                        ")</span>";
+                        ")";
                     if (item.status) {
-                        updates +=
-                            '<span class="pull-right">' +
-                            item.status +
-                            "</span>";
+                        updates += '<span class="wrapfix pull-right">';
+                        updates += item._strings.status
+                            ? escape_str(item._strings.status.str)
+                            : "";
+                        updates += "</span>";
                     }
+                    updates += "</span>";
                     updates += "</div>";
                 });
                 updates_display.html(updates);

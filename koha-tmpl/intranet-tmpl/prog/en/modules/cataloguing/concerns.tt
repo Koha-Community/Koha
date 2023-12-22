@@ -103,6 +103,7 @@
                     "resolver",
                     "biblio",
                     "updates+count",
+                    "+strings"
                 ],
                 'emptyTable': '<div class="dialog message">' + _("Congratulations, there are no catalog concerns.") + '</div>',
                 "columnDefs": [{
@@ -167,7 +168,7 @@
                                 result += '<span class="clearfix">' + $datetime(row.resolved_date) + '</span>';
                             } else {
                                 if (row.status) {
-                                    result += row.status;
+                                    result += row._strings.status ? escape_str(row._strings.status.str) : "";
                                 } else {
                                     result += _("Open");
                                 }
