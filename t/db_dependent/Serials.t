@@ -17,7 +17,7 @@ use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::MockModule;
-use Test::More tests => 54;
+use Test::More tests => 55;
 
 BEGIN {
     use_ok('C4::Serials', qw( updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate ));
@@ -551,6 +551,43 @@ subtest "NewSubscription|ModSubscription" => sub {
     is( $serials->count, 1, "Still only one serial" );
     is( $serials->next->biblionumber, $biblio_2->biblionumber, 'ModSubscription should have updated serial.biblionumber');
 };
+
+subtest "test numbering pattern with dates in GetSeq GetNextSeq" => sub {
+    plan tests => 4;
+    $subscription = {
+        lastvalue1     => 1, lastvalue2 => 1, lastvalue3 => 1,
+        innerloop1     => 0, innerloop2 => 0, innerloop3 => 0,
+        skip_serialseq => 0,
+        irregularity   => '',
+        locale         => 'C',            # locale set to 'C' to ensure we'll have english strings
+        firstaquidate  => '1970-11-01',
+    };
+    $pattern = {
+        numberingmethod => '{Year} {Day} {DayName} {Month} {MonthName}',
+    };
+
+    my $numbering = GetSeq( $subscription, $pattern );
+    is( $numbering, '1970 1 Sunday 11 November', 'GetSeq correctly calculates numbering from first aqui date' );
+    $subscription->{firstaquidate} = '2024-02-29';
+
+    $numbering = GetSeq( $subscription, $pattern );
+    is(
+        $numbering, '2024 29 Thursday 2 February',
+        'GetSeq correctly calculates numbering from first aqui date, leap year'
+    );
+
+    my $planneddate = '1970-11-01';
+    ($numbering) = GetNextSeq( $subscription, $pattern, undef, $planneddate );
+    is( $numbering, '1970 1 Sunday 11 November', 'GetNextSeq correctly calculates numbering from planned date' );
+    $planneddate = '2024-02-29';
+    ($numbering) = GetNextSeq( $subscription, $pattern, undef, $planneddate );
+    is(
+        $numbering, '2024 29 Thursday 2 February',
+        'GetNextSeq correctly calculates numbering from planned date, leap year'
+    );
+
+};
+
 
 subtest "_numeration" => sub {
 
