@@ -42,6 +42,7 @@ use C4::Serials::Frequency qw( GetSubscriptionFrequency );
 use C4::Serials::Numberpattern;
 use Koha::AdditionalFieldValues;
 use Koha::Biblios;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Serial;
 use Koha::SharedContent;
 use Koha::Subscription::Histories;
@@ -909,6 +910,13 @@ sub GetNextSeq {
             $calculated =~ s/\{Z\}/$newlastvalue3string/g;
         }
 
+        my $dt = dt_from_string($planneddate);
+        $calculated =~ s/\{Month\}/$dt->month/eg;
+        $calculated =~ s/\{MonthName\}/$dt->month_name/eg;
+        $calculated =~ s/\{Year\}/$dt->year/eg;
+        $calculated =~ s/\{Day\}/$dt->day/eg;
+        $calculated =~ s/\{DayName\}/$dt->day_name/eg;
+
     }
 
     return ($calculated,
@@ -947,6 +955,14 @@ sub GetSeq {
     my $newlastvalue3 = $subscription->{'lastvalue3'} || 0;
     $newlastvalue3 = _numeration($newlastvalue3, $pattern->{numbering3}, $locale) if ($pattern->{numbering3}); # reset counter if needed.
     $calculated =~ s/\{Z\}/$newlastvalue3/g;
+
+    my $dt = dt_from_string( $subscription->{firstaquidate} );
+    $calculated =~ s/\{Month\}/$dt->month/eg;
+    $calculated =~ s/\{MonthName\}/$dt->month_name/eg;
+    $calculated =~ s/\{Year\}/$dt->year/eg;
+    $calculated =~ s/\{Day\}/$dt->day/eg;
+    $calculated =~ s/\{DayName\}/$dt->day_name/eg;
+
     return $calculated;
 }
 
