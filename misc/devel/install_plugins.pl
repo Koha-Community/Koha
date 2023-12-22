@@ -26,10 +26,10 @@ use Koha::Script;
 use C4::Context;
 use Koha::Plugins;
 
-my ($help, @include, @exclude);
+my ( $help, @include, @exclude );
 
 GetOptions(
-    'help|?' => \$help,
+    'help|?'    => \$help,
     'include=s' => \@include,
     'exclude=s' => \@exclude,
 ) or die "Installation aborted\n";

@@ -25,7 +25,7 @@ use FindBin                   qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More tests => 31;
+use Test::More tests => 20;
 use Test::Warn;
 
 use C4::Context;
@@ -201,23 +201,23 @@ subtest 'InstallPlugins() tests' => sub {
     Koha::Plugins::Methods->delete;
     $schema->resultset('PluginData')->delete;
 
-    # Tests for the exclude paramater
+    # Tests for the exclude parameter
     # Test the returned plugins of the InstallPlugins subroutine
-    my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
-    my @installed_plugins = $plugins->InstallPlugins({ exclude => ["Test", "Koha::Plugin::MarcFieldValues"] });
-    my $plugin_classes = join(" ", map{$_->{class}} @installed_plugins);
+    my $plugins           = Koha::Plugins->new( { enable_plugins => 1 } );
+    my @installed_plugins = $plugins->InstallPlugins( { exclude => [ "Test", "Koha::Plugin::MarcFieldValues" ] } );
+    my $plugin_classes    = join( " ", map { $_->{class} } @installed_plugins );
 
-    my $result = grep { $plugin_classes !~ $_ } [":Test |:Test\$", ":MarcFieldValues |:MarcFieldValues\$"]
+    my $result = grep { $plugin_classes !~ $_ } [ ":Test |:Test\$", ":MarcFieldValues |:MarcFieldValues\$" ]
         && $plugin_classes =~ ":TestItemBarcodeTransform |:TestItemBarcodeTransform\$";
-    ok($result, "Excluded plugins are not returned");
+    ok( $result, "Excluded plugins are not returned" );
 
     # Test the plugins in the database
-    my @plugins = $plugins->GetPlugins({ all => 1, error => 1 });
-    $plugin_classes = join(" ", map{$_->{class}} @plugins);
+    my @plugins = $plugins->GetPlugins( { all => 1, error => 1 } );
+    $plugin_classes = join( " ", map { $_->{class} } @plugins );
 
-    $result = grep { $plugin_classes !~ $_ } [":Test |:Test\$", ":MarcFieldValues |:MarcFieldValues\$"]
+    $result = grep { $plugin_classes !~ $_ } [ ":Test |:Test\$", ":MarcFieldValues |:MarcFieldValues\$" ]
         && $plugin_classes =~ ":TestItemBarcodeTransform |:TestItemBarcodeTransform\$";
-    ok($result, "Excluded plugins are not installed");
+    ok( $result, "Excluded plugins are not installed" );
 
     # Remove installed plugins data
     Koha::Plugins::Methods->delete;
@@ -225,22 +225,22 @@ subtest 'InstallPlugins() tests' => sub {
 
     # Tests for the include parameter
     # Test the returned plugins of the InstallPlugins subroutine
-    @installed_plugins = $plugins->InstallPlugins({ include => ["Test", "Koha::Plugin::MarcFieldValues"]});
+    @installed_plugins = $plugins->InstallPlugins( { include => [ "Test", "Koha::Plugin::MarcFieldValues" ] } );
 
     $result = 1;
-    foreach my $plugin_class ( map{ $_->{class} } @installed_plugins ) {
-        $result = 0 unless("$plugin_class" =~ ":Test\$" || "$plugin_class" =~ ":MarcFieldValues\$");
+    foreach my $plugin_class ( map { $_->{class} } @installed_plugins ) {
+        $result = 0 unless ( "$plugin_class" =~ ":Test\$" || "$plugin_class" =~ ":MarcFieldValues\$" );
     }
-    ok($result, "Only included plugins are returned");
+    ok( $result, "Only included plugins are returned" );
 
     # Test the plugins in the database
-    @plugins = $plugins->GetPlugins({ all => 1, error => 1});
+    @plugins = $plugins->GetPlugins( { all => 1, error => 1 } );
 
     $result = 1;
-    foreach my $plugin_class ( map{ $_->{class} } @plugins ) {
-        $result = 0 unless("$plugin_class" =~ ":Test\$" || "$plugin_class" =~ ":MarcFieldValues\$");
+    foreach my $plugin_class ( map { $_->{class} } @plugins ) {
+        $result = 0 unless ( "$plugin_class" =~ ":Test\$" || "$plugin_class" =~ ":MarcFieldValues\$" );
     }
-    ok($result, "Only included plugins are installed");
+    ok( $result, "Only included plugins are installed" );
 
     $schema->storage->txn_rollback;
 };
