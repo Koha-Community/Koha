@@ -165,14 +165,17 @@ subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_v
     Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'c', frameworkcode => 'ACQ', authorised_value => 'TEST', kohafield => 'items.location' } )->store;
     Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'd', frameworkcode => '', authorised_value => 'ANOTHER_4_TESTS', kohafield => 'items.another_field' } )->store;
     Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => '5', frameworkcode => '', authorised_value => 'restricted_for_testing', kohafield => 'items.restricted' } )->store;
-    Koha::MarcSubfieldStructure->new( { tagfield => '003', frameworkcode => '', authorised_value => 'CONTROL_TEST', } )->store;
+    Koha::MarcSubfieldStructure->new( { tagfield => '003', frameworkcode => '', authorised_value => 'CONTROL_TEST', } )
+        ->store;
     Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_1', lib => 'location_1' } )->store;
     Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_2', lib => 'location_2' } )->store;
     Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_3', lib => 'location_3' } )->store;
     Koha::AuthorisedValue->new( { category => 'ANOTHER_4_TESTS', authorised_value => 'an_av' } )->store;
     Koha::AuthorisedValue->new( { category => 'ANOTHER_4_TESTS', authorised_value => 'another_av' } )->store;
+
     Koha::AuthorisedValue->new( { category => 'CONTROL_TEST', authorised_value => 'lib1', lib => 'lib1' } )->store;
     Koha::AuthorisedValue->new( { category => 'CONTROL_TEST', authorised_value => 'lib2', lib => 'lib2' } )->store;
+
     subtest 'search_by_marc_field' => sub {
         plan tests => 4;
         my $avs;
@@ -262,8 +265,8 @@ subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_v
     subtest 'get_descriptions_by_marc_field' => sub {
         plan tests => 4;
 
-        my $control_descriptions = Koha::AuthorisedValues->get_descriptions_by_marc_field(
-            { frameworkcode => '', tagfield => '003', } );
+        my $control_descriptions =
+            Koha::AuthorisedValues->get_descriptions_by_marc_field( { frameworkcode => '', tagfield => '003', } );
         is_deeply(
             $control_descriptions,
             {
@@ -272,10 +275,13 @@ subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_v
             },
         );
 
-        my $control_descriptions_cached = Koha::AuthorisedValues->get_descriptions_by_marc_field(
-            { frameworkcode => '', tagfield => '003', } );
+        my $control_descriptions_cached =
+            Koha::AuthorisedValues->get_descriptions_by_marc_field( { frameworkcode => '', tagfield => '003', } );
 
-        is("$control_descriptions","$control_descriptions_cached","Same memory address used proves cached control desc data");
+        is(
+            "$control_descriptions", "$control_descriptions_cached",
+            "Same memory address used proves cached control desc data"
+        );
 
         my $descriptions = Koha::AuthorisedValues->get_descriptions_by_marc_field(
             { frameworkcode => '', tagfield => '952', tagsubfield => 'c' } );
@@ -290,7 +296,7 @@ subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_v
 
         my $descriptions_cached = Koha::AuthorisedValues->get_descriptions_by_marc_field(
             { frameworkcode => '', tagfield => '952', tagsubfield => 'c' } );
-        is("$descriptions","$descriptions_cached","Same memory address used proves cached desc data");
+        is( "$descriptions", "$descriptions_cached", "Same memory address used proves cached desc data" );
     };
 
     subtest 'authorised_values' => sub {
