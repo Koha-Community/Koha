@@ -1,7 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% Asset.js("lib/codemirror/codemirror.min.js") | $raw %]
-[% Asset.js("lib/filesaver.js") | $raw %]
+[% Asset.js("lib/filesaver/FileSaver.min.js") | $raw %]
 [% Asset.css("lib/keyboard/css/keyboard.min.css") | $raw %]
 [% Asset.js("lib/keyboard/js/jquery.keyboard.js") | $raw %]
 [% Asset.js("lib/keyboard/languages/all.min.js") | $raw %]
