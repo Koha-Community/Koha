@@ -167,11 +167,6 @@ if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length
     my $date = $input->param('setdate');
     my $date_dt = dt_from_string($date);
 
-    my $strsth  = "select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =?";
-    my $qonloan = $dbh->prepare($strsth);
-    $strsth="select * from items where items.barcode =? and items.withdrawn = 1";
-    my $qwithdrawn = $dbh->prepare($strsth);
-
     my @barcodes;
     my @uploadedbarcodes;
 
@@ -218,33 +213,34 @@ if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length
         $template->param( err_length => $err_length,
                           err_data   => $err_data );
     }
+    my @items = Koha::Items->search( { barcode => { -in => \@barcodes } } )->as_list;
+    my %items = map { $_->barcode => $_ } @items;
     foreach my $barcode (@barcodes) {
-        if ( $qwithdrawn->execute($barcode) && $qwithdrawn->rows ) {
-            push @errorloop, { 'barcode' => $barcode, 'ERR_WTHDRAWN' => 1 };
-        } else {
-            my $item = Koha::Items->find({barcode => $barcode});
-            if ( $item ) {
-                # Modify date last seen for scanned items, remove lost status
-                $item->set({ itemlost => 0, datelastseen => $date_dt })->store;
-                my $item_unblessed = $item->unblessed;
-                $moddatecount++;
-                unless ( $dont_checkin ) {
-                    $qonloan->execute($barcode);
-                    if ($qonloan->rows){
-                        my $data = $qonloan->fetchrow_hashref;
-                        my ($doreturn, $messages, $iteminformation, $borrower) =AddReturn($barcode, $data->{homebranch});
-                        if( $doreturn ) {
-                            $item_unblessed->{onloan} = undef;
-                            $item_unblessed->{datelastseen} = dt_from_string;
-                        } else {
-                            push @errorloop, { barcode => $barcode, ERR_ONLOAN_NOT_RET => 1 };
-                        }
+        my $item = $items{ $barcode };
+        if ( $item ) {
+            if ( $item->withdrawn ) {
+                push @errorloop, { 'barcode' => $barcode, 'ERR_WTHDRAWN' => 1 };
+                next;
+            }
+            # Modify date last seen for scanned items, remove lost status
+            $item->set({ itemlost => 0, datelastseen => $date_dt })->store;
+            my $item_unblessed = $item->unblessed;
+            $moddatecount++;
+            unless ( $dont_checkin ) {
+                if ( $item->onloan ){
+                    #FIXME Is this correct? Shouldn't the item be checked in at the branch we are signed in at?
+                    my ($doreturn, $messages, $iteminformation, $borrower) =AddReturn($barcode, $item->homebranch);
+                    if( $doreturn ) {
+                        $item_unblessed->{onloan} = undef;
+                        $item_unblessed->{datelastseen} = dt_from_string;
+                    } else {
+                        push @errorloop, { barcode => $barcode, ERR_ONLOAN_NOT_RET => 1 };
                     }
                 }
-                push @scanned_items, $item_unblessed;
-            } else {
-                push @errorloop, { barcode => $barcode, ERR_BARCODE => 1 };
             }
+            push @scanned_items, $item_unblessed;
+        } else {
+            push @errorloop, { barcode => $barcode, ERR_BARCODE => 1 };
         }
     }
     $template->param( date => $date );
