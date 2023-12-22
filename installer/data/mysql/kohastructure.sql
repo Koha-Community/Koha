@@ -6018,7 +6018,7 @@ CREATE TABLE `subscription_numberpatterns` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `label` varchar(255) NOT NULL,
   `displayorder` int(11) DEFAULT NULL,
-  `description` mediumtext NOT NULL,
+  `description` mediumtext DEFAULT NULL,
   `numberingmethod` varchar(255) NOT NULL,
   `label1` varchar(255) DEFAULT NULL,
   `add1` int(11) DEFAULT NULL,
