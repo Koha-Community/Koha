@@ -519,7 +519,7 @@
                                     r += $format_address(row, { no_line_break: true, include_li: true });
 
                                     if ( row.email ) {
-                                        r += "<li>" + _("Email: ") + "<a href='mailto:" + encodeURIComponent(row.email) + "'>" + escape_str(row.email) + "</a></li>";
+                                        r += "<li class=\"patron_email\">" + _("Email: ") + "<a href='mailto:" + encodeURIComponent(row.email) + "'>" + escape_str(row.email) + "</a></li>";
                                     }
                                     r += '</ul></div>'
 
