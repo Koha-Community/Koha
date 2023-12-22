@@ -284,19 +284,21 @@ sub InstallPlugins {
     my $verbose = $params->{verbose} // $self->_verbose;
 
     my @plugin_classes = $self->plugins();
-    my (@plugins, @classes_filters);
+    my ( @plugins, @classes_filters );
 
-    my $has_filters = defined($params->{include}) || defined($params->{exclude});
+    my $has_filters = defined( $params->{include} ) || defined( $params->{exclude} );
 
     # Warn user if the specified classes doesn't exist and return nothing
     if ($has_filters) {
-        @classes_filters = defined($params->{include}) ? @{$params->{include}} : @{$params->{exclude}};
+        @classes_filters = defined( $params->{include} ) ? @{ $params->{include} } : @{ $params->{exclude} };
 
         foreach my $classes_filter (@classes_filters) {
             my $is_found = 0;
 
             foreach my $plugin_class (@plugin_classes) {
-                $is_found = 1 if $plugin_class =~ ":$classes_filter\$|^$classes_filter\$" || ($classes_filter =~ "^::" && $plugin_class =~ "$classes_filter\$");
+                $is_found = 1
+                    if $plugin_class =~ ":$classes_filter\$|^$classes_filter\$"
+                    || ( $classes_filter =~ "^::" && $plugin_class =~ "$classes_filter\$" );
             }
             unless ($is_found) {
                 warn "$classes_filter have not been found, try a different name";
@@ -313,9 +315,13 @@ sub InstallPlugins {
             if ($has_filters) {
                 my $is_found = 0;
                 foreach my $classes_filter (@classes_filters) {
-                    $is_found = 1 if $plugin_class =~ ":$classes_filter\$|^$classes_filter\$" || ($classes_filter =~ "^::" && $plugin_class =~ "$classes_filter\$");
+                    $is_found = 1
+                        if $plugin_class =~ ":$classes_filter\$|^$classes_filter\$"
+                        || ( $classes_filter =~ "^::" && $plugin_class =~ "$classes_filter\$" );
                 }
-                next if (defined($params->{include}) && !$is_found) || (defined($params->{exclude}) && $is_found);
+                next
+                    if ( defined( $params->{include} ) && !$is_found )
+                    || ( defined( $params->{exclude} ) && $is_found );
             }
 
             my $plugin;
