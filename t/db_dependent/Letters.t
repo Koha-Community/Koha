@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use File::Basename qw(dirname);
-use Test::More tests => 100;
+use Test::More tests => 102;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -158,6 +158,22 @@ is( $messages->[0]->{failure_code}, '', 'Failure code for successful message cor
 my $yesterday = dt_from_string->subtract( days => 1 );
 Koha::Notice::Messages->find($messages->[0]->{message_id})->time_queued($yesterday)->store;
 
+
+# EnqueueLetter - Test characters limitation for SMS
+$my_message->{letter}->{content} = "a" x 2000;
+
+t::lib::Mocks::mock_preference( 'SMSSendMaxChar', '' );
+$message_id = C4::Letters::EnqueueLetter($my_message);
+my $message = $schema->resultset('MessageQueue')->search( { message_id => $message_id } )->next();
+is( length( $message->content() ), 2000, "EnqueueLetter doesn't resize the message when SMSSendMaxChar is empty" );
+$message->delete();
+
+t::lib::Mocks::mock_preference( 'SMSSendMaxChar', 100 );
+$message_id = C4::Letters::EnqueueLetter($my_message);
+$message    = $schema->resultset('MessageQueue')->search( { message_id => $message_id } )->next();
+is( length( $message->content() ), 100, "EnqueueLetter resizes the message according to the value of SMSSendMaxChar" );
+$message->delete();
+
 # SendQueuedMessages
 
 throws_ok {
@@ -195,7 +211,7 @@ is(dt_from_string($messages->[0]->{time_queued}), $yesterday, 'Time queued remai
 
 # ResendMessage
 my $resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
-my $message = C4::Letters::GetMessage( $messages->[0]->{message_id});
+$message = C4::Letters::GetMessage( $messages->[0]->{message_id});
 is( $resent, 1, 'The message should have been resent' );
 is($message->{status},'pending', 'ResendMessage sets status to pending correctly (bug 12426)');
 $resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
@@ -1027,10 +1043,12 @@ subtest 'Test SMS handling in SendQueuedMessages' => sub {
         qr|Fake send_or_die|,
         "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
-    my $message = $schema->resultset('MessageQueue')->search({
-        borrowernumber => $borrowernumber,
-        status => 'sent'
-    })->next();
+    $message = $schema->resultset('MessageQueue')->search(
+        {
+            borrowernumber => $borrowernumber,
+            status         => 'sent'
+        }
+    )->next();
 
     is( $message->letter_id, $messages->[0]->{id}, "Message letter_id is set correctly" );
     is( $message->to_address(), '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address not set' );

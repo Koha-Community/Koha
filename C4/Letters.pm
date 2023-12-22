@@ -952,6 +952,12 @@ sub EnqueueLetter {
         );
     }
 
+    if ( $params->{message_transport_type} eq 'sms' ) {
+        my $limit = C4::Context->preference('SMSSendMaxChar');
+        $params->{letter}->{content} = substr( $params->{letter}->{content}, 0, $limit - 3 ) . '...'
+            if ( $limit && length( $params->{letter}->{content} ) > $limit );
+    }
+
     my $message = Koha::Notice::Message->new(
         {
             letter_id              => $params->{letter}->{id} || undef,

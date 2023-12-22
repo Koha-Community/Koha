@@ -723,6 +723,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SlipCSS','',NULL,'Slips CSS url.','free'),
 ('SMSSendAdditionalOptions', '', '', 'Additional SMS::Send parameters used to send SMS messages', 'free'),
 ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free'),
+('SMSSendMaxChar', '', NULL, 'Add a limit for the number of characters in SMS messages', 'Integer'),
 ('SMSSendPassword', '', '', 'Password used to send SMS messages', 'free'),
 ('SMSSendUsername', '', '', 'Username/Login used to send SMS messages', 'free'),
 ('SocialNetworks','','facebook|linkedin|email','Enable/Disable social networks links in opac detail pages','Choice'),
