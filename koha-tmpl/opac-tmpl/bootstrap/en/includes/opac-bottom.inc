@@ -137,7 +137,7 @@
 [% Asset.js("lib/jquery/jquery-3.6.0.min.js") | $raw %]
 [% Asset.js("lib/jquery/jquery-migrate-3.3.2.min.js") | $raw %]
 [% Asset.js("lib/bootstrap/js/bootstrap.bundle.min.js") | $raw %]
-[% Asset.js("lib/fontfaceobserver.min.js") | $raw %]
+[% Asset.js("lib/fontfaceobserver/fontfaceobserver.min.js") | $raw %]
 [% Asset.js("lib/enquire.min.js") | $raw %]
 <script>
     let logged_in_user_id = "[% logged_in_user.borrowernumber | html %]";
