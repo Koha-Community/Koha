@@ -28,6 +28,6 @@ $("#cancelBookingForm").on('submit', function(e) {
     });
 
     deleting.fail(function(data) {
-        $('#cancel_booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">'+_("Failure")+'</div>');
+        $('#cancel_booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">'+__("Failure")+'</div>');
     });
 });
