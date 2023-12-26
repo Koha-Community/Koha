@@ -53,13 +53,13 @@
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'success_on_saving' %]
-                        <span>Batch status saved successfully</span>
+                        <span>Batch status saved successfully.</span>
                     [% CASE 'success_on_delete' %]
-                        <span>Batch status deleted successfully</span>
+                        <span>Batch status deleted successfully.</span>
                     [% CASE 'error_on_saving' %]
-                        <span>An error occurred when saving this batch status</span>
+                        <span>An error occurred when saving this batch status. Check the logs for details.</span>
                     [% CASE 'error_on_delete' %]
-                        <span>An error occurred when deleting this batch status</span>
+                        <span>An error occurred when deleting this batch status.</span>
                     [% CASE %]
                         <span>[% m.code | html %]</span>
                     [% END %]

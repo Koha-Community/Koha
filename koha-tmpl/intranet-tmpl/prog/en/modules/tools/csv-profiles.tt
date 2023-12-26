@@ -66,19 +66,19 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            <span>An error occurred when updating this CSV profile. Perhaps it already exists</span>
+            <span>An error occurred when updating this CSV profile. Perhaps it already exists.</span>
         [% CASE 'error_on_insert' %]
-            <span>An error occurred when adding this CSV profile</span>
+            <span>An error occurred when adding this CSV profile.</span>
         [% CASE 'error_on_delete' %]
             <span>An error occurred when deleting this CSV profile. Check the logs for details.</span>
         [% CASE 'success_on_update' %]
-            <span>CSV profile updated successfully</span>
+            <span>CSV profile updated successfully.</span>
         [% CASE 'success_on_insert' %]
-            <span>CSV profile added successfully</span>
+            <span>CSV profile added successfully.</span>
         [% CASE 'success_on_delete' %]
-            <span>CSV profile deleted successfully</span>
+            <span>CSV profile deleted successfully.</span>
         [% CASE 'already_exists' %]
-            <span>This CSV profile already exists</span>
+            <span>This CSV profile already exists.</span>
         [% CASE %]
             <span>[% m.code | html %]</span>
         [% END %]

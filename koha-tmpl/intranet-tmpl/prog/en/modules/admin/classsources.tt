@@ -99,7 +99,7 @@
     <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update_source' %]
-            <span>An error occurred when updating this classification source.</span>
+            <span>An error occurred when updating this classification source. Check the logs for details.</span>
         [% CASE 'success_on_update_source' %]
             <span>Classification source updated successfully.</span>
         [% CASE 'error_on_insert_source' %]
@@ -111,7 +111,7 @@
         [% CASE 'success_on_delete_source' %]
             <span>Classification source deleted successfully.</span>
         [% CASE 'error_on_update_sort_rule' %]
-            <span>An error occurred when updating this filing rule.</span>
+            <span>An error occurred when updating this filing rule. Check the logs for details.</span>
         [% CASE 'success_on_update_sort_rule' %]
             <span>Filing rule updated successfully.</span>
         [% CASE 'error_on_insert_sort_rule' %]
@@ -123,7 +123,7 @@
         [% CASE 'success_on_delete_sort_rule' %]
             <span>Filing rule deleted successfully.</span>
         [% CASE 'error_on_update_split_rule' %]
-            <span>An error occurred when updating this splitting rule.</span>
+            <span>An error occurred when updating this splitting rule. Check the logs for details.</span>
         [% CASE 'success_on_update_split_rule' %]
             <span>Splitting rule updated successfully.</span>
         [% CASE 'error_on_insert_split_rule' %]

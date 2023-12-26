@@ -433,7 +433,7 @@ $(document).ready(function() {
             holdsTable.api().ajax.reload();
         }).error(function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.status === 404) {
-                alert(__("Unable to suspend, hold not found"));
+                alert(__("Unable to suspend, hold not found."));
             }
             else {
                 alert(__("Your request could not be processed. Check the logs for details."));

@@ -72,19 +72,19 @@
     <div class="dialog message [% m.code | html %]">
         [% SWITCH m.code %]
         [% CASE 'add_success' %]
-            Restriction type added
+            Restriction type added.
         [% CASE 'update_success' %]
-            Restriction type updated
+            Restriction type updated.
         [% CASE 'duplicate_display_text' %]
-            Another restriction type already has this label
+            Another restriction type already has this label.
         [% CASE 'duplicate_code' %]
-            Another restriction type already has this code
+            Another restriction type already has this code.
         [% CASE 'delete_success' %]
-            Restriction type deleted
+            Restriction type deleted.
         [% CASE 'delete_default' %]
-            Cannot delete the default restriction type
+            Cannot delete the default restriction type.
         [% CASE 'delete_system' %]
-            Cannot delete a system restriction type
+            Cannot delete a system restriction type.
         [% CASE %]
             [% m.code | html %]
         [% END %]
