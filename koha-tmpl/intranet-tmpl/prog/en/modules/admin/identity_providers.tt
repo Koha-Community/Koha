@@ -482,7 +482,7 @@
                         $("#identity_provider_delete_success").html(_("Server '%s' deleted successfully.").format(identity_provider_code)).show();
                     });
                 }).fail(function () {
-                    $("#identity_provider_delete_error").html(_("Error deleting server '%s'. Check the logs.").format(identity_provider_code)).show();
+                    $("#identity_provider_delete_error").html(_("Error deleting server '%s'. Check the logs for details.").format(identity_provider_code)).show();
                 }).done(function () {
                     $("#delete_confirm_modal").modal('hide');
                 });

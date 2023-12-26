@@ -72,9 +72,9 @@ legend:hover {
                 [% FOR message IN borrower_data.messages %]
                     [% SWITCH message.error %]
                         [% CASE 'error_on_insert_patron' %]
-                            <div class="dialog alert">Something went wrong when creating the patron. Check the logs.</div>
+                            <div class="dialog alert">Something went wrong when creating the patron. Check the logs for details.</div>
                         [% CASE 'error_on_update_patron' %]
-                            <div class="dialog alert">Something went wrong when updating the patron. Check the logs.</div>
+                            <div class="dialog alert">Something went wrong when updating the patron. Check the logs for details.</div>
                         [% CASE %]<div class="dialog alert">Unhandled error: [% message.error | html %]</div>
                     [% END %]
                 [% END %]
