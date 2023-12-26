@@ -350,7 +350,7 @@ $(document).ready(function() {
                             alert(__("Unable to resume, hold not found"));
                         }
                         else {
-                            alert(__("Your request could not be processed. Check the logs"));
+                            alert(__("Your request could not be processed. Check the logs for details."));
                         }
                         holdsTable.api().ajax.reload();
                     });
@@ -436,7 +436,7 @@ $(document).ready(function() {
                 alert(__("Unable to suspend, hold not found"));
             }
             else {
-                alert(__("Your request could not be processed. Check the logs"));
+                alert(__("Your request could not be processed. Check the logs for details."));
             }
             holdsTable.api().ajax.reload();
         }).done(function() {

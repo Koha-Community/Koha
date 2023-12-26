@@ -762,7 +762,7 @@
                             }
                         },
                         error: function() {
-                            alert( _("An error occurred. Check the logs") );
+                            alert( _("An error occurred. Check the logs for details.") );
                         }
                     });
                 }

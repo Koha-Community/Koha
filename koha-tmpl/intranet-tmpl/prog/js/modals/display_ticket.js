@@ -86,7 +86,7 @@ $(document).ready(function() {
                 $("#concern_delete_success").html(__("Concern #%s updated successfully.").format(ticket_id)).show();
             });
         }).error(function() {
-            $("#concern_update_error").html(__("Error resolving concern #%s. Check the logs.").format(ticket_id)).show();
+            $("#concern_update_error").html(__("Error resolving concern #%s. Check the logs for details.").format(ticket_id)).show();
         });
     });
 
@@ -114,7 +114,7 @@ $(document).ready(function() {
                 $("#concern_delete_success").html(__("Concern #%s updated successfully.").format(ticket_id)).show();
             });
         }).error(function() {
-            $("#concern_update_error").html(__("Error resolving concern #%s. Check the logs.").format(ticket_id)).show();
+            $("#concern_update_error").html(__("Error resolving concern #%s. Check the logs for details.").format(ticket_id)).show();
         });
     });
 });

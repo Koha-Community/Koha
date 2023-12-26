@@ -477,7 +477,7 @@
                         $("#smtp_delete_success").html(_("Server '%s' deleted successfully.").format(identity_provider_domain)).show();
                     });
                 }).fail(function () {
-                    $("#smtp_delete_error").html(_("Error deleting server '%s'. Check the logs.").format(identity_provider_domain)).show();
+                    $("#smtp_delete_error").html(_("Error deleting server '%s'. Check the logs for details.").format(identity_provider_domain)).show();
                 }).done(function () {
                     $("#delete_confirm_modal").modal('hide');
                 });
