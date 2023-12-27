@@ -40,9 +40,8 @@
                     <h1>Concerns</h1>
 
                     <div class="page-section">
-                        <fieldset class="action" style="cursor:pointer;">
-                            <a id="hideResolved"><i class="fa fa-minus-square"></i> Hide resolved</a>
-                            | <a id="showAll"><i class="fa fa-bars"></i> Show all</a>
+                        <fieldset class="action filters" style="cursor:pointer;">
+                            <a id="resolved_filter" class="filtered"><i class="fa fa-bars"></i> Include resolved</a>
                         </fieldset>
 
                         <table id="table_concerns">
@@ -82,10 +81,10 @@
 
             var table_settings = [% TablesSettings.GetTableSettings('cataloguing', 'concerns', 'table_concerns', 'json') | $raw %];
 
-            var filtered = false;
+            var filter_resolved = true;
             let additional_filters = {
                 resolved_date: function(){
-                    if ( filtered ) {
+                    if ( filter_resolved ) {
                         return { "=": null };
                     } else {
                         return;
@@ -186,14 +185,18 @@
                 ]
             }, table_settings, 1, additional_filters);
 
-            $('#hideResolved').on("click", function() {
-                filtered = true;
+            var txtActivefilter = _("Filter resolved");
+            var txtInactivefilter = _("Include resolved");
+            $('#resolved_filter').on("click", function() {
+                if ($(this).hasClass('filtered')){
+                    filter_resolved = false;
+                    $(this).html('<i class="fa fa-bars"></i> '+txtActivefilter);
+                } else {
+                    filter_resolved = true;
+                    $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
+                }
                 tickets.DataTable().draw();
-            });
-
-            $('#showAll').on("click", function() {
-                filtered = false;
-                tickets.DataTable().draw();
+                $(this).toggleClass('filtered');
             });
         });
     </script>
