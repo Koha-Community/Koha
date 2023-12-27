@@ -187,7 +187,12 @@
                         "searchable": false,
                         "orderable": false
                     },
-                ]
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if ( data.status ) {
+                        $(row).addClass(data.status.toLowerCase());
+                    }
+                },
             }, table_settings, 1, additional_filters);
 
             var txtActivefilter = _("Filter resolved");
