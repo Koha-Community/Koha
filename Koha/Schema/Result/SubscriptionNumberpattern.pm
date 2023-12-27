@@ -43,7 +43,7 @@ __PACKAGE__->table("subscription_numberpatterns");
 =head2 description
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 numberingmethod
 
@@ -157,7 +157,7 @@ __PACKAGE__->add_columns(
   "displayorder",
   { data_type => "integer", is_nullable => 1 },
   "description",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "numberingmethod",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "label1",
@@ -228,8 +228,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UxpUui+IbCUkKDIJOpYyUA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-12-27 17:02:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CUmBGK1rIiVf1BFuR3Kkrg
 
 sub koha_object_class {
     'Koha::Subscription::Numberpattern';
