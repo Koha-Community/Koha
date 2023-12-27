@@ -59,7 +59,7 @@
             [% END %]
           [% END %]
 
-          <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post">
+          <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post" class="validated">
             [% IF (new) %]
               <input type="hidden" name="op" value="savenew" />
             [% ELSE %]
@@ -84,8 +84,7 @@
                 </li>
                 <li>
                   <label for="displayorder">Display order:</label>
-                  <input type="text" inputmode="numeric" pattern="\d*" id="displayorder" name="displayorder" value="[% displayorder | html %]" />
-                  <div class="hint">Only numeric characters are allowed</div>
+                  <input type="text" inputmode="numeric" class="digits" id="displayorder" name="displayorder" value="[% displayorder | html %]" />
                 </li>
               </ol>
               <table>
