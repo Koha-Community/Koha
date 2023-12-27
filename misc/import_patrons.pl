@@ -24,6 +24,7 @@ use Pod::Usage qw( pod2usage );
 
 use Koha::Script;
 use Koha::Patrons::Import;
+use C4::Log qw( cronlogaction );
 my $Import = Koha::Patrons::Import->new();
 
 my $csv_file;
@@ -39,6 +40,9 @@ my $help;
 my @preserve_fields;
 my $update_dateexpiry;
 my $update_dateexpiry_from_today;
+
+
+my $command_line_options = join(" ",@ARGV);
 
 GetOptions(
     'c|confirm'                      => \$confirm,
@@ -60,7 +64,11 @@ pod2usage(1) if $help;
 pod2usage(q|--file is required|) unless $csv_file;
 pod2usage(q|--matchpoint is required|) unless $matchpoint;
 
-warn "Running in dry-run mode, provide --confirm to apply the changes\n" unless $confirm;
+if ( $confirm ) {
+    cronlogaction({ action => 'Run', info => $command_line_options })
+} else {
+    warn "Running in dry-run mode, provide --confirm to apply the changes\n";
+}
 
 my $handle;
 open( $handle, "<", $csv_file ) or die $!;
@@ -87,9 +95,9 @@ my $imported    = $return->{imported};
 my $overwritten = $return->{overwritten};
 my $alreadyindb = $return->{already_in_db};
 my $invalid     = $return->{invalid};
+my $total = $imported + $alreadyindb + $invalid + $overwritten;
 
 if ($verbose) {
-    my $total = $imported + $alreadyindb + $invalid + $overwritten;
     say q{};
     say "Import complete:";
     say "Imported:    $imported";
@@ -108,6 +116,12 @@ if ($verbose > 1 ) {
 if ($verbose > 2 ) {
     say "Feedback:";
     say Data::Dumper::Dumper( $feedback );
+}
+
+my $info = "Import complete. " . "Imported: " . $imported . " Overwritten: " . $overwritten . " Skipped: " . $alreadyindb . " Invalid: " . $invalid . " Total: " . $total;
+
+if ( $confirm ) {
+    cronlogaction({ action => 'End', info => $info });
 }
 
 =head1 NAME
