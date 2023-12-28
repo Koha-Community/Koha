@@ -1,6 +1,8 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 [% PROCESS 'i18n.inc' %]
+[% SET status = AuthorisedValues.GetAuthValueDropbox('TICKET_STATUS') %]
 [% SET footerjs = 1 %]
 [% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -42,6 +44,9 @@
                     <div class="page-section">
                         <fieldset class="action filters" style="cursor:pointer;">
                             <a id="resolved_filter" class="filtered"><i class="fa fa-bars"></i> Include resolved</a>
+                            [% FOR st IN status %]
+                            | <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Filter [% st.lib | html %]</a>
+                            [% END %]
                         </fieldset>
 
                         <table id="table_concerns">
@@ -195,19 +200,44 @@
                 },
             }, table_settings, 1, additional_filters);
 
-            var txtActivefilter = _("Filter resolved");
-            var txtInactivefilter = _("Include resolved");
+            var txtActivefilter = _("Include resolved");
+            var txtInactivefilter = _("Filter resolved");
             $('#resolved_filter').on("click", function() {
                 if ($(this).hasClass('filtered')){
                     filter_resolved = false;
-                    $(this).html('<i class="fa fa-bars"></i> '+txtActivefilter);
+                    $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
                 } else {
                     filter_resolved = true;
-                    $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
+                    $(this).html('<i class="fa fa-bars"></i> '+txtInactivefilter);
                 }
                 tickets.DataTable().draw();
                 $(this).toggleClass('filtered');
             });
+
+            [% FOR st IN status %]
+            $('#[% st.authorised_value | html %]_filter').on("click", function() {
+                if ($(this).hasClass('filtered')){
+                    additional_filters.status.find((o, i) => {
+                        if (o["!="] === '[% st.authorised_value | html %]') {
+                            additional_filters.status.splice(i, 1);
+                            return true; // stop searching
+                        }
+                    });
+                    if ( additional_filters.status.length === 1 ){
+                        delete additional_filters.status;
+                    }
+                    $(this).html('<i class="fa fa-filter"></i> '+_("Filter ")+"[% st.lib | html %]");
+                } else {
+                    if (!additional_filters.hasOwnProperty("status")) {
+                        additional_filters.status = [ '-and' ];
+                    }
+                    additional_filters.status.push({ '!=': "[% st.authorised_value | html %]" });
+                    $(this).html('<i class="fa fa-bars"></i> '+_("Include ")+"[% st.lib | html %]");
+                }
+                tickets.DataTable().draw();
+                $(this).toggleClass('filtered');
+            });
+            [% END %]
         });
     </script>
     [% Asset.js("js/modals/display_ticket.js") | $raw %]
