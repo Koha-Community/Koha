@@ -55,6 +55,19 @@ sub user {
     return Koha::Patron->_new_from_dbic($rs);
 }
 
+=head3 assignee
+
+Return the patron who is assigned at this update
+
+=cut
+
+sub assignee {
+    my ($self) = @_;
+    my $rs = $self->_result->assignee;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic($rs);
+}
+
 =head2 Internal methods
 
 =head3 to_api_mapping

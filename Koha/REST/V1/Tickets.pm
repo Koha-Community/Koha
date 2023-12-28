@@ -108,12 +108,25 @@ sub update {
     return $c->render_resource_not_found("Ticket")
         unless $ticket;
 
+    my $assignee_before = $ticket->assignee_id;
     return try {
         $ticket->set_from_api( $c->req->json );
         $ticket->store();
-        return $c->render( status => 200, openapi => $c->objects->to_api($ticket), );
-    }
-    catch {
+
+        # Create update if assignee changed
+        if ( $assignee_before ne $ticket->assignee_id ) {
+            my $patron = $c->stash('koha.user');
+            my $update = {
+                user_id     => $patron->id,
+                ticket_id   => $ticket->id,
+                public      => 0,
+                assignee_id => $ticket->assignee_id,
+                message     => ''
+            };
+            Koha::Ticket::Update->new($update)->store();
+        }
+        return $c->render( status => 200, openapi => $c->objects->to_api($ticket) );
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -179,7 +192,7 @@ sub add_update {
         );
     }
 
-     # Set reporter from session
+     # Set user from session
      $ticket_update->{user_id} = $patron->id;
      # FIXME: We should allow impersonation at a later date to
      # allow an API user to submit on behalf of a user
@@ -206,6 +219,12 @@ sub add_update {
         if ( $ticket_update->{status} ) {
             my $ticket = $update->ticket;
             $ticket->set( { status => $ticket_update->{status} } )->store;
+        }
+
+        # Update ticket assignee if needed
+        if ( $ticket_update->{assignee_id} ) {
+            my $ticket = $update->ticket;
+            $ticket->set( { assignee_id => $ticket_update->{assignee_id} } )->store;
         }
 
         # Optionally add to message_queue here to notify reporter

@@ -47,6 +47,19 @@ sub reporter {
     return Koha::Patron->_new_from_dbic($rs);
 }
 
+=head3 assignee
+
+Return the patron who submitted this ticket
+
+=cut
+
+sub assignee {
+    my ($self) = @_;
+    my $rs = $self->_result->assignee;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic($rs);
+}
+
 =head3 resolver
 
 Return the user who resolved this ticket
