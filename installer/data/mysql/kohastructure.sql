@@ -6306,6 +6306,7 @@ CREATE TABLE `ticket_updates` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `ticket_id` int(11) NOT NULL COMMENT 'id of catalog ticket the update relates to',
   `user_id` int(11) NOT NULL DEFAULT 0 COMMENT 'id of the user who logged the update',
+  `assignee_id` int(11) DEFAULT NULL COMMENT 'id of the user who this ticket was assigned to at this update',
   `public` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean flag to denote whether this update is public',
   `date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'date and time this update was logged',
   `message` text NOT NULL COMMENT 'update message content',
@@ -6313,8 +6314,10 @@ CREATE TABLE `ticket_updates` (
   PRIMARY KEY (`id`),
   KEY `ticket_updates_ibfk_1` (`ticket_id`),
   KEY `ticket_updates_ibfk_2` (`user_id`),
+  KEY `ticket_updates_ibfk_3` (`assignee_id`),
   CONSTRAINT `ticket_updates_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `ticket_updates_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `ticket_updates_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ticket_updates_ibfk_3` FOREIGN KEY (`assignee_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -6333,6 +6336,7 @@ CREATE TABLE `tickets` (
   `title` text NOT NULL COMMENT 'ticket title',
   `body` text NOT NULL COMMENT 'ticket details',
   `status` varchar(80) DEFAULT NULL COMMENT 'current status of the ticket',
+  `assignee_id` int(11) DEFAULT NULL COMMENT 'id of the user who this ticket is assigned to',
   `resolver_id` int(11) DEFAULT NULL COMMENT 'id of the user who resolved the ticket',
   `resolved_date` datetime DEFAULT NULL COMMENT 'date and time this ticket was resolved',
   `biblio_id` int(11) DEFAULT NULL COMMENT 'id of biblio linked',
@@ -6340,9 +6344,11 @@ CREATE TABLE `tickets` (
   KEY `tickets_ibfk_1` (`reporter_id`),
   KEY `tickets_ibfk_2` (`resolver_id`),
   KEY `tickets_ibfk_3` (`biblio_id`),
+  KEY `tickets_ibfk_4` (`assignee_id`),
   CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`reporter_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tickets_ibfk_2` FOREIGN KEY (`resolver_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tickets_ibfk_3` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `tickets_ibfk_3` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tickets_ibfk_4` FOREIGN KEY (`assignee_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
