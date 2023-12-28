@@ -44,7 +44,7 @@ t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 subtest 'token-based tests' => sub {
 
     if ( can_load( modules => { 'Net::OAuth2::AuthorizationServer' => undef } ) ) {
-        plan tests => 14;
+        plan tests => 15;
     }
     else {
         plan skip_all => 'Net::OAuth2::AuthorizationServer not available';
@@ -77,16 +77,23 @@ subtest 'token-based tests' => sub {
     my $stash;
     my $interface;
     my $userenv;
+    my $language_env;
 
-    my $tx = $t->ua->build_tx(GET => '/api/v1/acquisitions/orders');
+    my $accept_language = 'es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7';
+
+    my $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/orders' );
     $tx->req->headers->authorization("Bearer $access_token");
     $tx->req->headers->header( 'x-koha-embed' => 'fund' );
+    $tx->req->headers->accept_language($accept_language);
 
-    $t->app->hook(after_dispatch => sub {
-        $stash     = shift->stash;
-        $interface = C4::Context->interface;
-        $userenv   = C4::Context->userenv;
-    });
+    $t->app->hook(
+        after_dispatch => sub {
+            $stash        = shift->stash;
+            $interface    = C4::Context->interface;
+            $userenv      = C4::Context->userenv;
+            $language_env = $ENV{HTTP_ACCEPT_LANGUAGE};
+        }
+    );
 
     # With access token and permissions, it returns 200
     #$patron->flags(2**4)->store;
@@ -98,6 +105,7 @@ subtest 'token-based tests' => sub {
     is( $user->borrowernumber, $patron->borrowernumber, 'The stashed user is the right one' );
     is( $userenv->{number}, $patron->borrowernumber, 'userenv set correctly' );
     is( $interface, 'api', "Interface correctly set to \'api\'" );
+    is( $language_env, $accept_language, 'HTTP_ACCEPT_LANGUAGE correctly set in %ENV' );
 
     my $embed = $stash->{'koha.embed'};
     ok( defined $embed, 'The embed hashref is generated and stashed' );
@@ -108,25 +116,33 @@ subtest 'token-based tests' => sub {
 
 subtest 'cookie-based tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
     my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 1 });
 
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-
     my $stash;
     my $interface;
     my $userenv;
+    my $language_env;
 
-    $t->app->hook(after_dispatch => sub {
-        $stash     = shift->stash;
-        $interface = C4::Context->interface;
-        $userenv   = C4::Context->userenv;
-    });
+    my $accept_language = 'es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7';
+
+    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx->req->headers->accept_language($accept_language);
+
+    $t->app->hook(
+        after_dispatch => sub {
+            $stash        = shift->stash;
+            $interface    = C4::Context->interface;
+            $userenv      = C4::Context->userenv;
+            $language_env = $ENV{HTTP_ACCEPT_LANGUAGE};
+
+        }
+    );
 
     $t->request_ok($tx)->status_is(200);
 
@@ -136,6 +152,7 @@ subtest 'cookie-based tests' => sub {
     is( $user->borrowernumber, $borrowernumber, 'The stashed user is the right one' );
     is( $userenv->{number}, $borrowernumber, 'userenv set correctly' );
     is( $interface, 'api', "Interface correctly set to \'api\'" );
+    is( $language_env, $accept_language, 'HTTP_ACCEPT_LANGUAGE correctly set in %ENV' );
 
     subtest 'logged-out tests' => sub {
         plan tests => 3;
