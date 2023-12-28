@@ -160,6 +160,11 @@ sub authenticate_api_request {
     $c->stash_embed( { spec => $spec } );
     $c->stash_overrides();
 
+    # FIXME: Remove once CGI is not used
+    my $accept_language = $c->req->headers->accept_language;
+    $ENV{HTTP_ACCEPT_LANGUAGE} = $accept_language
+        if $accept_language;
+
     my $cookie_auth = 0;
 
     my $authorization = $spec->{'x-koha-authorization'};
