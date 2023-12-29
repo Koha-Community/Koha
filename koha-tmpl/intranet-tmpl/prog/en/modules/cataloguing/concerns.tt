@@ -182,6 +182,12 @@
                                 } else {
                                     result += _("Open");
                                 }
+                                if (row.assignee) {
+                                    result += '<span class="clearfix">' + _("Assigned to: ") + $patron_to_html(row.assignee, {
+                                        display_cardnumber: false,
+                                        url: true
+                                    }) + '</span>';
+                                }
                             }
                             return result;
                         },
@@ -191,7 +197,7 @@
                     {
                         "data": function(row, type, val, meta) {
                             let resolved = ( row.resolved_date ) ? true : false;
-                            let result = '<a class="btn btn-default btn-xs" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
+                            let result = '<a class="btn btn-default btn-xs" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'" data-assignee="'+$patron_to_html(row.assignee, { display_cardnumber: false, url: false })+'"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
                             return result;
                         },
                         "searchable": false,
@@ -245,6 +251,7 @@
             [% END %]
         });
     </script>
+    [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/modals/display_ticket.js") | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -20,6 +20,8 @@
                         <li class="rows">
                             <label for="public">Notify: </label>
                             <input type="checkbox" name="public" id="public">
+                            <label for="assignee_id">Change assignee: </label>
+                            <select name="assignee_id" id="assignee_id"></select>
                         </li>
                     </ol>
                 </fieldset>
