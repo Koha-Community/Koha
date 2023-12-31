@@ -1,5 +1,5 @@
 # RELEASE NOTES FOR KOHA 22.11.13
-30 déc. 2023
+31 déc. 2023
 
 Koha is the first free and open source software library automation
 package (ILS). Development is sponsored by libraries of varying types
@@ -17,7 +17,7 @@ Installation instructions can be found at:
 - [Koha Wiki](http://wiki.koha-community.org/wiki/Installation_Documentation)
 - OR in the INSTALL files that come in the tarball
 
-Koha 22.11.13 is a critical bugfix release.
+Koha 22.11.13 is a critical only bugfix release.
 
 It includes 2 bugfixes.
 
