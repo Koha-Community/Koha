@@ -830,19 +830,17 @@ sub quote_item {
                 );
                 ++$created;
 
-                my $lrp =
-                  $item->girfield( 'library_rotation_plan' );
+                my $lrp = $item->girfield('library_rotation_plan');
                 if ($lrp) {
-                    my $rota =
-                      Koha::StockRotationRotas->find( { title => $lrp },
-                        { key => 'stockrotationrotas_title' } );
+                    my $rota = Koha::StockRotationRotas->find(
+                        { title => $lrp },
+                        { key   => 'stockrotationrotas_title' }
+                    );
                     if ($rota) {
                         $rota->add_item($itemnumber);
                         $logger->trace("Item added to rota $rota->id");
-                    }
-                    else {
-                        $logger->error(
-                            "No rota found matching $lrp in orderline");
+                    } else {
+                        $logger->error("No rota found matching $lrp in orderline");
                     }
                 }
             }
