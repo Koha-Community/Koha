@@ -287,7 +287,6 @@ sub to_api_mapping {
         password_expiry_days                   => 'password_expiry_days',
         upperagelimit                          => 'upper_age_limit',
         dateofbirthrequired                    => 'lower_age_limit',
-        finetype                               => undef,                                          # Unused
         enrolmentfee                           => 'enrolment_fee',
         overduenoticerequired                  => 'overdue_notice_required',
         issuelimit                             => undef,                                          # Unused
