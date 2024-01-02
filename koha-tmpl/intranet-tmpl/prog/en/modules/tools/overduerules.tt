@@ -84,13 +84,13 @@
                         [% WRAPPER tab_panels %]
                             [% FOR tab IN tabs %]
                                 [% WRAPPER tab_panel tabname=tab.id %]
-                                    <table>
+                                    <table class="overduerulest" id="overduerulest-[% tab.id | html %]">
                                         <thead>
                                             <tr>
-                                            <th>&nbsp;</th>
-                                            <th scope="col">Delay</th>
-                                            <th scope="col">Letter</th>
-                                            <th scope="col">Restrict</th>
+                                            <th>Patron category</th>
+                                            <th class="NoSort" scope="col">Delay</th>
+                                            <th class="NoSort" scope="col">Letter</th>
+                                            <th class="NoSort" scope="col">Restrict</th>
                                                 [% FOREACH mtt IN message_transport_types %]
                                                     [% NEXT IF mtt == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
                                                     [% NEXT IF mtt == 'phone' AND !Koha.Preference('PhoneNotification') %]
@@ -177,6 +177,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
     <script>
         var tab_map = { "0" : _("First"), "1" : _("Second"), "2" : _("Third")};
         $(document).ready(function() {
@@ -190,6 +191,13 @@
             if( $("#rulestabs .tab-pane.active").length < 1 ){
                 $("#rulestabs a:first").tab("show");
             }
+            $(".overduerulest").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "targets": [ "NoSort" ], "orderable": false, "searchable": false },
+                ],
+                "dom": '<"top pager"f>rt<"clear">',
+                "paginate": false,
+            }));
         });
     </script>
 [% END %]
