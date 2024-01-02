@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -93,6 +93,15 @@ subtest 'Test renew desensitize' => sub {
     plan tests => 6;
     $C4::SIP::Sip::protocol_version = 2;
     test_renew_desensitize();
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Test renew desensitize' => sub {
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+    plan tests => 3;
+    $C4::SIP::Sip::protocol_version = 2;
+    test_renew_all();
     $schema->storage->txn_rollback;
 };
 
@@ -1293,6 +1302,101 @@ sub test_checkout_desensitize {
     $msg->handle_checkout( $server );
     $respcode = substr( $response, 5, 1 );
     is( $respcode, 'Y', "Desensitize flag was set for empty inhouse_item_types" );
+}
+
+sub test_renew_all {
+    my $builder    = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', 'damaged: [1]' );
+
+    # create some data
+    my $patron1 = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                password => hash_password(PATRON_PW),
+            },
+        }
+    );
+    my $card1           = $patron1->{cardnumber};
+    my $sip_patron1     = C4::SIP::ILS::Patron->new($card1);
+    my $patron_category = $sip_patron1->ptype();
+    $findpatron = $sip_patron1;
+    my $item_object_1 = $builder->build_sample_item(
+        {
+            damaged       => 0,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode,
+        }
+    );
+    my $item_object_2 = $builder->build_sample_item(
+        {
+            damaged       => 1,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode,
+        }
+    );
+
+    my $mockILS = $mocks->{ils};
+    my $server  = { ils => $mockILS, account => {} };
+    $mockILS->mock( 'institution', sub { $branchcode; } );
+    $mockILS->mock( 'supports',    sub { return; } );
+    $mockILS->mock(
+        'renew_all',
+        sub {
+            shift;
+            return C4::SIP::ILS->renew_all(@_);
+        }
+    );
+    my $today = dt_from_string;
+    t::lib::Mocks::mock_userenv( { branchcode => $branchcode, flags => 1 } );
+
+    my $issue_1 = Koha::Checkout->new(
+        {
+            branchcode     => $branchcode,
+            borrowernumber => $patron1->{borrowernumber},
+            itemnumber     => $item_object_1->itemnumber
+        }
+    )->store;
+    my $issue_2 = Koha::Checkout->new(
+        {
+            branchcode     => $branchcode,
+            borrowernumber => $patron1->{borrowernumber},
+            itemnumber     => $item_object_2->itemnumber
+        }
+    )->store;
+
+    my $siprequest =
+          RENEW_ALL
+        . siprequestdate($today)
+        . FID_INST_ID
+        . $branchcode . '|'
+        . FID_PATRON_ID
+        . $sip_patron1->id . '|'
+        . FID_TERMINAL_PWD
+        . 'ignored' . '|';
+
+    undef $response;
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_renew_all($server);
+    isnt(
+        index( $response, "BM" . $item_object_1->barcode ),
+        -1, "Found correct BM for item renewed successfully"
+    );
+    isnt(
+        index( $response, "BN" . $item_object_2->barcode ),
+        -1, "Found correct BN for item not renewed"
+    );
+    is( index( $response, "HASH(", ), -1, "String 'HASH(' not found in response (Bug 35461)" );
 }
 
 sub test_renew_desensitize {
