@@ -83,10 +83,12 @@ subtest 'process_quote' => sub {
             value => { title => 'ROT1' }
         }
     );
-    $builder->build({
-        source => 'Stockrotationstage',
-        value  => { rota_id => $rota->rota_id },
-    });
+    $builder->build(
+        {
+            source => 'Stockrotationstage',
+            value  => { rota_id => $rota->rota_id },
+        }
+    );
 
     # Process the test quote file
     process_quote($quote);
@@ -113,11 +115,11 @@ subtest 'process_quote' => sub {
     my $item = $items->next;
 
     # Test that item is added to rota appropriately
-    my $on_rota = Koha::StockRotationItems->search({ itemnumber_id => $item->itemnumber });
-    is($on_rota->count, 1, "Item added to stockrotation rota");
+    my $on_rota = Koha::StockRotationItems->search( { itemnumber_id => $item->itemnumber } );
+    is( $on_rota->count, 1, "Item added to stockrotation rota" );
 
     my $rota_item = $on_rota->next;
-    is($rota_item->stage->rota->id, $rota->id, "Item is on correct rota");
+    is( $rota_item->stage->rota->id, $rota->id, "Item is on correct rota" );
 
     $schema->storage->txn_rollback;
 };
