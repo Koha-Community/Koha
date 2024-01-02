@@ -381,7 +381,7 @@
                         <ul>
                             [% FOR s IN success %]
                                 [% FOR o IN s.output %]
-                                    <li>[% o | html %]</li>
+                                    <li>[% o | $raw %]</li>
                                     [% IF s.output.size > 1 %]
                                         [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
                                     [% END %]
@@ -395,7 +395,7 @@
                         <ul>
                             [% FOR s IN atomic_updates.success %]
                                 [% FOR o IN s.output %]
-                                    <li>[% o | html %]</li>
+                                    <li>[% o | $raw %]</li>
                                     [% IF s.output.size > 1 %]
                                         [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
                                     [% END %]
@@ -423,7 +423,7 @@
                                         <li class="update_error">
                                             [% o | html %]
                                             <br/>
-                                            ERROR: [% e.error | html %]
+                                            ERROR: [% e.error | $raw %]
 
                                             [% IF e.output.size > 1 %]
                                                 [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
@@ -443,7 +443,7 @@
                                     <li class="update_error">
                                         [% o | html %]
                                         <br/>
-                                        ERROR: [% e.error | html %]
+                                        ERROR: [% e.error | $raw %]
 
                                         [% IF e.output.size > 1 %]
                                             [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]

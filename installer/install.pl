@@ -23,6 +23,7 @@ use diagnostics;
 use C4::InstallAuth qw( get_template_and_user );
 use CGI qw ( -utf8 );
 use POSIX;
+use HTML::FromANSI::Tiny;
 
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
@@ -420,6 +421,7 @@ elsif ( $step && $step == 3 ) {
         my $fh;
         open( $fh, "<:encoding(utf-8)", $logfilepath )
           or die "Cannot open log file $logfilepath: $!";
+
         my @report = <$fh>;
         close $fh;
         if (@report) {
@@ -456,6 +458,8 @@ elsif ( $step && $step == 3 ) {
             my $atomic_update_files = get_atomic_updates;
             my $atomic_update_report = run_atomic_updates( $atomic_update_files );
 
+            colorize($report);
+            colorize($atomic_update_report);
             $template->param(
                 success        => $report->{success},
                 error          => $report->{error},
@@ -560,4 +564,22 @@ sub chk_log {    #returns a logfile in $dir or - if that failed - in temp dir
         #if this should not work, let croak take over
     }
     return $fn;
+}
+
+sub colorize {
+    my ($report) = @_;
+    my $h = HTML::FromANSI::Tiny->new(
+        auto_reverse => 0, background    => 'white', foreground => 'black',
+        inline_style => 1, no_plain_tags => 1
+    );
+
+    my @states = ( 'success', 'error' );
+    for my $state (@states) {
+        for my $result ( @{ $report->{$state} } ) {
+            #@{ $result->{output} } = map { s/^\t+//; $h->html($_) } @{ $result->{output} };
+            for my $output ( @{ $result->{output} } ) {
+                $output = $h->html($output);
+            }
+        }
+    }
 }
