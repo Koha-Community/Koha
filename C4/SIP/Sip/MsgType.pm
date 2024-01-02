@@ -1598,8 +1598,8 @@ sub handle_renew_all {
     $resp .= timestamp;
     $resp .= add_field( FID_INST_ID, $ils->institution, $server );
 
-    $resp .= join( '', map( add_field( FID_RENEWED_ITEMS,   $_ ), @renewed ), $server );
-    $resp .= join( '', map( add_field( FID_UNRENEWED_ITEMS, $_ ), @unrenewed ), $server );
+    $resp .= join( '', map( add_field( FID_RENEWED_ITEMS,   $_, $server ), @renewed ) );
+    $resp .= join( '', map( add_field( FID_UNRENEWED_ITEMS, $_, $server ), @unrenewed ) );
 
     $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
