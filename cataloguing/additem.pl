@@ -62,8 +62,8 @@ sub add_item_to_item_group {
     if ( $item_group eq 'create' ) {
         my $item_group = Koha::Biblio::ItemGroup->new(
             {
-                biblionumber => $biblionumber,
-                description  => $item_group_description,
+                biblio_id   => $biblionumber,
+                description => $item_group_description,
             }
         )->store();
 
@@ -75,8 +75,8 @@ sub add_item_to_item_group {
 
     my $item_group_item = Koha::Biblio::ItemGroup::Item->new(
         {
-            itemnumber => $itemnumber,
-            item_group_id  => $item_group_id,
+            item_id       => $itemnumber,
+            item_group_id => $item_group_id,
         }
     )->store();
 }
@@ -129,13 +129,13 @@ my $hostitemnumber = $input->param('hostitemnumber');
 my $marcflavour  = C4::Context->preference("marcflavour");
 my $searchid     = $input->param('searchid');
 # fast cataloguing datas
-my $fa_circborrowernumber = $input->param('circborrowernumber');
-my $fa_barcode            = $input->param('barcode');
-my $fa_branch             = $input->param('branch');
-my $fa_stickyduedate      = $input->param('stickyduedate');
-my $fa_duedatespec        = $input->param('duedatespec');
-my $volume                = $input->param('volume');
-my $volume_description    = $input->param('volume_description');
+my $fa_circborrowernumber  = $input->param('circborrowernumber');
+my $fa_barcode             = $input->param('barcode');
+my $fa_branch              = $input->param('branch');
+my $fa_stickyduedate       = $input->param('stickyduedate');
+my $fa_duedatespec         = $input->param('duedatespec');
+my $item_group             = $input->param('item_group');
+my $item_group_description = $input->param('item_group_description');
 
 our $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -330,9 +330,9 @@ if ($op eq "additem") {
 
             $current_item = $item->unblessed; # Restore edit form for the same item
         }
-        else {
+        unless ( @errors ) {
             $item->store->discard_changes;
-            add_item_to_item_group( $item->biblionumber, $item->biblioitemnumber, $volume, $volume_description );
+            add_item_to_item_group( $item->biblionumber, $item->itemnumber, $item_group, $item_group_description );
 
             # This is a bit tricky : if there is a cookie for the last created item and
             # we just added an item, the cookie value is not correct yet (it will be updated
@@ -443,7 +443,10 @@ if ($op eq "additem") {
                         { skip_record_index => 1 } );
                     $current_item->discard_changes; # Cannot chain discard_changes
                     $current_item = $current_item->unblessed;
-                    add_item_to_item_group( $item->biblionumber, $item->biblioitemnumber, $volume, $volume_description );
+                    add_item_to_item_group(
+                        $item->biblionumber, $item->biblioitemnumber, $item_group,
+                        $item_group_description
+                    );
 
 # We count the item only if it was really added
 # That way, all items are added, even if there was some already existing barcodes
