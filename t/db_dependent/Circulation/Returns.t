@@ -298,7 +298,7 @@ subtest 'BlockReturnOfLostItems' => sub {
     my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
     is( $doreturn, 0, "With BlockReturnOfLostItems, a checkin of a lost item should be blocked");
     is( $messages->{WasLost}, 1, "... and the WasLost flag should be set");
-    is( $messages->{NeedsTransfer}, undef, "... and no transfer should be triggered");
+    is( $messages->{NeedsTransfer}, undef, "... and no transfer should be triggered" );
 
     $item->discard_changes;
     is( $item->itemlost, 1, "Item remains lost" );
