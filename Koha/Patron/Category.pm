@@ -288,7 +288,6 @@ sub to_api_mapping {
         upperagelimit                          => 'upper_age_limit',
         dateofbirthrequired                    => 'lower_age_limit',
         finetype                               => undef,                                          # Unused
-        bulk                                   => undef,                                          # Unused
         enrolmentfee                           => 'enrolment_fee',
         overduenoticerequired                  => 'overdue_notice_required',
         issuelimit                             => undef,                                          # Unused

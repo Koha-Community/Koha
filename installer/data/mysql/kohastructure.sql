@@ -1789,7 +1789,6 @@ CREATE TABLE `categories` (
   `upperagelimit` smallint(6) DEFAULT NULL COMMENT 'age limit for the patron',
   `dateofbirthrequired` tinyint(1) DEFAULT NULL COMMENT 'the minimum age required for the patron category',
   `finetype` varchar(30) DEFAULT NULL COMMENT 'unused in Koha',
-  `bulk` tinyint(1) DEFAULT NULL,
   `enrolmentfee` decimal(28,6) DEFAULT NULL COMMENT 'enrollment fee for the patron',
   `overduenoticerequired` tinyint(1) DEFAULT NULL COMMENT 'are overdue notices sent to this patron category (1 for yes, 0 for no)',
   `issuelimit` smallint(6) DEFAULT NULL COMMENT 'unused in Koha',
