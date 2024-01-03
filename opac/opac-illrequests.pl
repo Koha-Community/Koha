@@ -151,13 +151,6 @@ if ( $op eq 'list' ) {
         $params->{opac} = 1;
         my $backend_result = $request->backend_create($params);
 
-        # After creation actions
-        if ( $params->{type_disclaimer_submitted} ) {
-            $type_disclaimer->after_request_created( $params, $request );
-            print $query->redirect('/cgi-bin/koha/opac-illrequests.pl?message=2');
-            exit;
-        }
-
         if ($backend_result->{stage} eq 'copyrightclearance') {
             $template->param(
                 stage       => $backend_result->{stage},
@@ -171,6 +164,10 @@ if ( $op eq 'list' ) {
                 request     => $request
             );
             if ($backend_result->{stage} eq 'commit') {
+                # After creation actions
+                if ( $params->{type_disclaimer_submitted} ) {
+                    $type_disclaimer->after_request_created( $params, $request );
+                }
                 print $query->redirect('/cgi-bin/koha/opac-illrequests.pl?message=2');
                 exit;
             }
