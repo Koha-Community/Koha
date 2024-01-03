@@ -55,6 +55,7 @@ use JSON qw( decode_json );
 use Try::Tiny;
 use Pod::Usage;
 use Getopt::Long;
+use List::MoreUtils qw( natatime );
 
 use C4::Context;
 use Koha::Logger;
@@ -95,8 +96,11 @@ if ( $conn ) {
         }
     );
 }
-my $biblio_indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
-my $auth_indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
+my $biblio_indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+my $auth_indexer   = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+my $config         = $biblio_indexer->get_elasticsearch_params;
+my $at_a_time      = $config->{chunk_size} // 5000;
+
 my @jobs = ();
 
 while (1) {
@@ -177,18 +181,24 @@ sub commit {
     }
 
     if (@auth_records) {
-        try {
-            $auth_indexer->update_index( \@auth_records );
-        } catch {
-            $logger->warn( sprintf "Update of elastic index failed with: %s", $_ );
-        };
+        my $auth_chunks = natatime $at_a_time, @auth_records;
+        while ( ( my @auth_chunk = $auth_chunks->() ) ) {
+            try {
+                $auth_indexer->update_index( \@auth_chunk );
+            } catch {
+                $logger->warn( sprintf "Update of elastic index failed with: %s", $_ );
+            };
+        }
     }
     if (@bib_records) {
-        try {
-            $biblio_indexer->update_index( \@bib_records );
-        } catch {
-            $logger->warn( sprintf "Update of elastic index failed with: %s", $_ );
-        };
+        my $biblio_chunks = natatime $at_a_time, @bib_records;
+        while ( ( my @bib_chunk = $biblio_chunks->() ) ) {
+            try {
+                $biblio_indexer->update_index( \@bib_chunk );
+            } catch {
+                $logger->warn( sprintf "Update of elastic index failed with: %s", $_ );
+            };
+        }
     }
 
     # Finish
