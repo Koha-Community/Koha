@@ -8,8 +8,14 @@ return {
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         unless ( primary_key_exists( 'tmp_holdsqueue', 'itemnumber' ) ) {
+            $dbh->do(q{ALTER TABLE tmp_holdsqueue DROP CONSTRAINT `tmp_holdsqueue_ibfk_1`});
+            $dbh->do(q{ALTER TABLE tmp_holdsqueue ADD PRIMARY KEY (itemnumber)});
             $dbh->do(
-                q{ALTER TABLE tmp_holdsqueue ADD PRIMARY KEY (itemnumber)}
+                q{
+                    ALTER TABLE tmp_holdsqueue ADD CONSTRAINT `tmp_holdsqueue_ibfk_1`
+                    FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`)
+                    ON DELETE CASCADE ON UPDATE CASCADE
+                }
             );
         }
 
