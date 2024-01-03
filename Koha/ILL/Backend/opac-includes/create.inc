@@ -1,6 +1,8 @@
 [% IF whole.error %]
 [% IF whole.status == 'missing_identifier' %]
 <p><em>Please Note:</em> Mandatory field Identifier is missing.</p>
+[% ELSIF whole.status == 'missing_type' %]
+<p><em>Please Note:</em> Type is a mandatory field.</p>
 [% ELSIF whole.status == 'missing_branch' %]
 <p><em>Please Note:</em> Branch is a mandatory field.</p>
 [% ELSIF whole.status == 'invalid_borrower' %]
