@@ -211,8 +211,8 @@ sub AddBiblio {
 
     $options //= {};
     my $skip_record_index = $options->{'skip_record_index'} // 0;
-    my $defer_marc_save = $options->{defer_marc_save} // 0;
-    my $disable_autolink = $options->{disable_autolink} // 0;
+    my $defer_marc_save   = $options->{defer_marc_save}     // 0;
+    my $disable_autolink  = $options->{disable_autolink}    // 0;
 
     if (!$record) {
         carp('AddBiblio called with undefined record');
@@ -374,9 +374,7 @@ sub ModBiblio {
     my ( $record, $biblionumber, $frameworkcode, $options ) = @_;
 
     $options //= {};
-    my $mod_biblio_marc_options = {
-        skip_record_index => $options->{'skip_record_index'} // 0
-    };
+    my $mod_biblio_marc_options = { skip_record_index => $options->{'skip_record_index'} // 0 };
 
     if (!$record) {
         carp 'No record passed to ModBiblio';
