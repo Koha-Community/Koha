@@ -194,16 +194,19 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
-            <main>
-                [% INCLUDE 'messages.inc' %]
 
     [% IF ( enter ) %]
-        [% IF ( booksellerid ) %]
-        <h1>[% tx("Modify vendor '{vendor}'", { vendor = name }) | html %]</h1>
+        <div class="col-md-10 order-sm-1 order-md-2">
+            <main>
+                [% INCLUDE 'messages.inc' %]
+                [% IF ( booksellerid ) %]
+                    <h1>Modify vendor '[% name | html %]'</h1>
+                [% ELSE %]
+                    <h1>Add vendor</h1>
+                [% END %]
     [% ELSE %]
-        <h1>Add vendor</h1>
-    [% END %]
+        <div class="col-md-10 order-sm-1 order-md-2">
+            <main>
     [% END %]
 [% UNLESS ( enter ) %][% INCLUDE 'acquisitions-toolbar.inc' %][% END %]
 [% IF ( enter ) %]
@@ -372,9 +375,10 @@
 [% ELSE %]
     <h1>[% name | html %]</h1>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col">
                 <div id="supplier-company-details" class="page-section rows">
                     <h2>Vendor details</h2>
+                    <ol>
                     <li>
                         <span class="label">Type: </span>
                         [% IF (type) %][% AuthorisedValues.GetByCode( 'VENDOR_TYPE', type ) | html %][% END %]
@@ -400,6 +404,7 @@
                             </ul>
                         </li>
                     [% END %]
+                    </ol>
                 </div> <!-- /#supplier-company-details -->
 
                 <div id="supplier-ordering-information" class="page-section rows">
@@ -452,9 +457,9 @@
                 </div>
                 [% END %]
 
-            </div> <!-- /.col-sm-6 -->
+            </div> <!-- /.col -->
 
-            <div class="col-sm-6">
+            <div class="col">
                 <div id="supplier-contact-details" class="page-section rows">
                     <h2>Contact</h2>
                     [% FOREACH contact IN contacts %]
@@ -472,7 +477,7 @@
                         [% END %]
                     </p>
                 </div> <!-- /#subscription-details -->
-            </div> <!-- /.col-sm-6 -->
+            </div> <!-- /.col -->
 
         </div> <!-- /.row -->
 
@@ -516,13 +521,13 @@
 [% END %]
 
 </main>
-</div> <!-- /.col-sm-10.col-sm-push-2 -->
+</div> <!-- /.col-md-10.order-md-2 -->
 
-<div class="col-sm-2 col-sm-pull-10">
+<div class="col-md-2 order-sm-2 order-md-1">
     <aside>
         [% INCLUDE 'vendor-menu.inc' %]
     </aside>
-</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.col-md-2.order-md-1 -->
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

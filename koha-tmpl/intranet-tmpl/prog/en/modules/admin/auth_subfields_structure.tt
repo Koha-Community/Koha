@@ -87,7 +87,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -120,9 +120,9 @@
                 [% FOREACH loo IN loop %]
                     <li role="presentation" id="tab_subfield_[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]">
                         [% IF ( loo.new_subfield ) %]
-                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field"  aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-toggle="tab" title="[% loo.liblibrarian | html %]">New</a>
+                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field"  aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html %]">New</a>
                         [% ELSE %]
-                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field"  aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-toggle="tab" title="[% loo.liblibrarian | html %]">[% loo.tagsubfield | html %]</a>
+                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field"  aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html %]">[% loo.tagsubfield | html %]</a>
                         [% END %]
                     </li>
                 [% END %]
@@ -298,7 +298,7 @@
 
 [% IF ( delete_confirm ) %]
 
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h1>Confirm deletion of subfield <span class="ex">'[% ass.tagsubfield | html %]'?</span></h1>
         <form action="[% delete_link | html %]" method="post">
             [% INCLUDE 'csrf-token.inc' %]
@@ -310,14 +310,14 @@
             <input type="hidden" name="tagfield" value="[% ass.tagfield | html %]" />
             <input type="hidden" name="tagsubfield" value="[% ass.tagsubfield | html %]" />
             <input type="hidden" name="authtypecode" value="[% ass.authtypecode | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this subfield</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this subfield</button>
         </form>
 
         <form action="[% delete_link | html %]" method="get">
             <input type="hidden" name="tagfield" value="[% ass.tagfield | html %]" />
             <input type="hidden" name="tagsubfield" value="[% ass.tagsubfield | html %]" />
             <input type="hidden" name="authtypecode" value="[% ass.authtypecode | html %]" />
-            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </form></div>
 [% END %]
@@ -392,13 +392,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

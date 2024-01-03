@@ -30,7 +30,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-1 order-md-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -40,17 +40,13 @@
     [% INCLUDE 'budgets-active-currency.inc' hide = 'yes' %]
     [% UNLESS ( loop_budget ) %]
         [% IF ( CAN_user_acquisition_period_manage ) %]
-        <div class="dialog alert"><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">You must define a budget in Administration</a></div>
+        <div class="alert alert-warning"><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">You must define a budget in Administration</a></div>
         [% ELSE %]
-        <div class="dialog alert">Your administrator must define a budget in Administration</div>
+        <div class="alert alert-warning">Your administrator must define a budget in Administration</div>
         [% END %]
     [% END %]
 <div class="row">
-    [% IF ( suggestions_count || all_pendingsuggestions ) %]
-        <div class="col-sm-6">
-    [% ELSE %]
-        <div class="col-sm-12">
-    [% END %]
+    <div class="col">
 <div id="acqui_acqui_home_order">
     <fieldset>
         <legend>Manage orders</legend>
@@ -64,7 +60,7 @@
 </div>
 
 [% IF ( CAN_user_suggestions_suggestions_manage && ( suggestions_count || all_pendingsuggestions ) ) %]
-<div class="col-sm-6">
+<div class="col">
     <div id="acqui_acqui_home_suggestions">
         <fieldset>
         <legend>Pending suggestions</legend>
@@ -211,9 +207,9 @@
     [%- END -%]
 
 </main>
-</div> <!-- /.col-sm-10.col-sm-push-2 -->
+</div> <!-- /.col-md-10.order-md-2 -->
 
-<div class="col-sm-2 col-sm-pull-10">
+<div class="col-md-2 order-sm-2 order-md-1">
     <aside>
         [% INCLUDE 'acquisitions-menu.inc' %]
     </aside>

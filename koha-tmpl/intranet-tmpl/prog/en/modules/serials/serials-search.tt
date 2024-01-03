@@ -133,8 +133,8 @@
                                 <td>
                                     <div class="btn-group dropup">
                                         [% IF closed %]
-                                            <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid | html %]" role="button" data-toggle="dropdown" href="#">
-                                            Actions <b class="caret"></b>
+                                            <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                                                Actions
                                             </a>
                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid | html %]">
 
@@ -152,16 +152,16 @@
 
                                             </ul>
                                         [% ELSE %]
-                                            <div class="btn-group">
+                                            <div class="btn-group dropup">
                                                 [% IF ( CAN_user_serials_receive_serials ) %]
                                                     [%# There should be no space between these two buttons, it would render badly %]
                                                     <a class="btn btn-default btn-xs" role="button"
                                                     href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;serstatus=1,3,7"><i
                                                     class="fa fa-inbox"></i> Serial receive</a><a
                                                     class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button"
-                                                    data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                                    data-bs-toggle="dropdown" href="#"></a>
                                                 [% ELSE %]
-                                                    <a class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button" data-toggle="dropdown" href="#">Actions <b class="caret"></b></a>
+                                                    <a class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button" data-bs-toggle="dropdown" href="#">Actions </a>
                                                 [% END %]
                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="subactions[% subscription.subscriptionid | html %]">
 
@@ -170,18 +170,18 @@
                                                     [% ELSE %]
                                                         [% IF ( subscription.routingedit ) %]
                                                             <li>
-                                                                <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit routing list ([% subscription.routingedit | html %])</a>
+                                                                <a class="dropdown-item" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit routing list ([% subscription.routingedit | html %])</a>
                                                             </li>
                                                         [% ELSE %]
                                                             <li>
-                                                                <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]&amp;op=new"> <i class="fa fa-plus"></i> New routing list</a>
+                                                                <a class="dropdown-item" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | uri %]&amp;op=new"> <i class="fa fa-plus"></i> New routing list</a>
                                                             </li>
                                                         [% END %]
                                                     [% END %]
                                                 [% END # IF ( routing && CAN_user_serials_routing ) %]
 
                                                 <li>
-                                                    <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa-solid fa-rectangle-list"></i> Issue history</a>
+                                                    <a class="dropdown-item" href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa-solid fa-rectangle-list"></i> Issue history</a>
                                                 </li>
                                             </ul>
                                             </div>
@@ -219,7 +219,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
                 <main>
                     [% INCLUDE 'messages.inc' %]
 
@@ -234,7 +234,7 @@
                     [% ELSE %]
                         [% IF ( done_searched ) %]
                             [% IF orig_total > total %]
-                                <div class="dialog alert">
+                                <div class="alert alert-warning">
                                     <p>The search originally produced [% orig_total | html %] results and was limited to [% total | html %].</p>
                                 </div>
                             [% END %]
@@ -270,7 +270,7 @@
                                             [% IF openedsubscriptions %]
                                                 [% INCLUDE subscriptions_table subscriptions = openedsubscriptions %]
                                             [% ELSE %]
-                                                <div class="dialog message">
+                                                <div class="alert alert-info">
                                                     <p>Your search returned no open subscriptions.</p>
                                                 </div>
                                             [% END %]
@@ -279,7 +279,7 @@
                                             [% IF closedsubscriptions %]
                                                 [% INCLUDE subscriptions_table subscriptions = closedsubscriptions closed = 1 %]
                                             [% ELSE %]
-                                                <div class="dialog message">
+                                                <div class="alert alert-info">
                                                     <p>Your search returned no closed subscriptions.</p>
                                                 </div>
                                             [% END %]
@@ -289,16 +289,16 @@
                             [% END # /WRAPPER tabs#serialstabs %]
 
                         [% ELSE %]
-                            <div class="dialog message">
+                            <div class="alert alert-info">
                                 <p>Your search returned no results.</p>
                             </div>
                         [% END # IF ( total ) %]
                     [% END # /IF done_searched %]
 
                 </main>
-            </div> <!-- /.col-sm-10.col-sm-push-2 -->
+            </div> <!-- /.col-md-10.order-md-2 -->
 
-            <div class="col-sm-2 col-sm-pull-10">
+            <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
 
                     [% IF ( done_searched ) %]
@@ -308,7 +308,7 @@
                     [% END # / IF ( done_searched ) %]
                     [% INCLUDE 'serials-menu.inc' %]
                 </aside>
-            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+            </div> <!-- /.col-md-2.order-md-1 -->
         </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

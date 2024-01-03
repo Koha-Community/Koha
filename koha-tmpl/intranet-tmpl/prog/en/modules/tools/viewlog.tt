@@ -197,7 +197,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -420,7 +420,7 @@
                             </table>
                         </div> <!-- /.page-section -->
                     [% ELSE %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             [% IF ( CATALOGUING ) %]
                                 No log found for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object | url %]">Bibliographic record [% object | html %]</a>.
                             [% ELSIF ( MEMBERS ) %]
@@ -434,9 +434,9 @@
 
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% IF ( circulation ) %]
                     [% INCLUDE 'circ-menu.inc' %]
@@ -448,15 +448,15 @@
                     [% END %]
                 [% END %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 <div class="modal" id="compareInfo" tabindex="-1" role="dialog" aria-labelledby="compareInfoLabel">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="compareInfoLabel">Compare preference values</h4>
+                <h1 class="modal-title" id="compareInfoLabel">Compare preference values</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -471,7 +471,7 @@
                 </div>
             </div> <!-- /.modal-body -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-default deny" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default deny" data-bs-dismiss="modal">Close</button>
             </div>
         </div> <!-- /.modal-content -->
     </div> <!-- /.modal-dialog -->

@@ -41,7 +41,7 @@ describe("Package CRUD operations", () => {
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Packages").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -114,7 +114,7 @@ describe("Package CRUD operations", () => {
             statusCode: 500,
         });
         cy.get("#packages_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -124,7 +124,9 @@ describe("Package CRUD operations", () => {
             body: erm_package,
         });
         cy.get("#packages_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("Package created");
+        cy.get("main div[class='alert alert-info']").contains(
+            "Package created"
+        );
 
         // Add new related agreement
         let related_agreement = erm_package.package_agreements[0];
@@ -187,7 +189,7 @@ describe("Package CRUD operations", () => {
             statusCode: 500,
         });
         cy.get("#packages_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -197,7 +199,9 @@ describe("Package CRUD operations", () => {
             body: erm_package,
         });
         cy.get("#packages_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("Package updated");
+        cy.get("main div[class='alert alert-info']").contains(
+            "Package updated"
+        );
     });
 
     it("Show package", () => {
@@ -303,7 +307,7 @@ describe("Package CRUD operations", () => {
             statusCode: 500,
         });
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -317,7 +321,7 @@ describe("Package CRUD operations", () => {
             .click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this package");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']")
+        cy.get("main div[class='alert alert-info']")
             .contains("Local package")
             .contains("deleted");
 

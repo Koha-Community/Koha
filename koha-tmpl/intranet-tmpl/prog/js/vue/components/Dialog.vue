@@ -1,15 +1,19 @@
 <template>
-    <div class="dialog message" v-if="message" v-html="message"></div>
-    <div class="dialog alert" v-if="error" v-html="error"></div>
-    <div class="dialog alert modal" v-if="warning">
+    <div class="alert alert-info" v-if="message" v-html="message"></div>
+    <div class="alert alert-warning" v-if="error" v-html="error"></div>
+    <div class="alert alert-warning modal" v-if="warning">
         <h1 v-html="warning"></h1>
-        <button id="close_modal" class="approve" @click="removeMessages">
+        <button
+            id="close_modal"
+            class="btn btn-default approve"
+            @click="removeMessages"
+        >
             <i class="fa fa-fw fa-check"></i>
             {{ $__("Close") }}
         </button>
     </div>
     <div class="modal_centered" v-if="confirmation">
-        <div class="dialog alert confirmation">
+        <div class="alert alert-warning confirmation">
             <h1 v-html="confirmation.title"></h1>
             <p v-html="confirmation.message"></p>
             <div class="inputs" v-if="confirmation.inputs">
@@ -47,7 +51,7 @@
             <button
                 v-if="accept_callback"
                 id="accept_modal"
-                class="approve"
+                class="btn btn-default approve"
                 @click="submit"
             >
                 <i class="fa fa-fw fa-check"></i>
@@ -55,7 +59,7 @@
             </button>
             <button
                 id="close_modal"
-                class="deny"
+                class="btn btn-default deny"
                 @click="removeConfirmationMessages"
             >
                 <i class="fa fa-fw fa-remove"></i>
@@ -66,10 +70,12 @@
     <!-- Must be styled differently -->
 
     <div class="modal_centered" v-if="is_submitting">
-        <div class="spinner dialog alert">{{ $__("Submitting...") }}</div>
+        <div class="spinner alert alert-warning">
+            {{ $__("Submitting...") }}
+        </div>
     </div>
     <div class="modal_centered" v-if="is_loading">
-        <div class="spinner dialog message">{{ $__("Loading...") }}</div>
+        <div class="spinner alert alert-info">{{ $__("Loading...") }}</div>
     </div>
 </template>
 

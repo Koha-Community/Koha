@@ -33,7 +33,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -61,14 +61,14 @@
 [% END %]
 
 [% IF NOT Koha.Preference('UsageStats') %]
-    <div class="dialog message">You are not sharing any data with the Koha community</div>
+    <div class="alert alert-info">You are not sharing any data with the Koha community</div>
 [% END %]
 
     <form id="category_form" action="/cgi-bin/koha/admin/usage_statistics.pl" method="post">
         [% INCLUDE 'csrf-token.inc' %]
         <h1>Modify the statistics you share with the Koha community</h1>
         <div class="row">
-            <div class="col-xs-12 col-sm-6">
+            <div class="col col-md-6">
                 <fieldset class="rows">
                     <ol>
                         <li>
@@ -238,7 +238,7 @@
                     </ol>
                 </fieldset>
             </div>
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-md-6">
                 <div>
                     <div id="mapid" style="width:100%;height: 400px;"></div>
                 </div>
@@ -254,13 +254,13 @@
     </form>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

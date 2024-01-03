@@ -67,11 +67,11 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
 <h1>Item circulation alerts</h1>
 <h2>Select a library:</h2>
 <form id="branch_selector" method="get" action="/cgi-bin/koha/admin/item_circulation_alerts.pl">
@@ -82,7 +82,7 @@
 <input type="submit" name="pick" class="btn btn-primary" value="Pick" />
 </form>
 </div>
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
 <table class="grid">
 <caption>Legend</caption>
 <thead>
@@ -106,7 +106,7 @@
   </tr>
 </tbody>
 </table>
-                    </div> <!-- /.col-sm-6 -->
+                    </div> <!-- /.col-md-6 -->
                 </div> <!-- /.row -->
 
                 <h2>Circulation alerts for [% Branches.GetName( branch ) || 'Default' | html %]</h2>
@@ -171,13 +171,13 @@
                 [% END # //#alerttabs %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

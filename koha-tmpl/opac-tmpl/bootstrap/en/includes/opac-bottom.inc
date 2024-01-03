@@ -22,109 +22,42 @@
         [% END #/ opaccredits %]
     </div> <!-- / #wrapper in masthead.inc -->
 
-    [% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || Koha.Preference( 'CookieConsent' ) || OpacKohaUrl %]
-        <footer>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col">
-                    <div id="report-koha-url">
-                        <div class="row justify-content-between">
-                            [% IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') || Koha.Preference( 'CookieConsent' ) %]
-                                <div class="col">
-                                    <ul class="nav" id="footernav">
-                                    [% IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
-                                    <li id="report_a_problem" class="nav-item noprint">
-                                        <a href="/cgi-bin/koha/opac-reportproblem.pl">Report a problem</a>
-                                    </li>
-                                    [% END %]
-                                    [% IF Koha.Preference( 'CookieConsent' ) %]
-                                    <li id="cookieConsentFooter" class="nav-item noprint">
-                                        <a href="#">Cookies</a>
-                                    </li>
-                                    [% END %]
-                                    </ul>
-                                </div>
-                            [% END # / IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
-                            [% IF OpacKohaUrl %]
-                                <div class="col">
-                                    <div id="koha_url" class="clearfix noprint">
-                                        <p>Powered by
-                                        [% IF template.name.match('opac-main.tt') %]
-                                            <a class="koha_url" href="http://koha-community.org">Koha</a>
-                                        [% ELSE %]
-                                            <a class="koha_url" rel="nofollow" href="http://koha-community.org">Koha</a>
-                                        [% END %]</p>
-                                    </div> <!-- /#koha_url -->
-                                </div> <!-- /.col -->
-                            [% END # /IF OpacKohaUrl %]
-                        </div> <!-- /.row.justify-content-between -->
-                    </div> <!-- /#report-koha-url -->
-                </div> <!-- /.col -->
-            </div> <!-- /.row -->
-        </div> <!-- /.container-fluid -->
-        </footer>
-    [% END # / OPACReportProblem || OpacKohaUrl %]
-
     [% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
         [% IF ( Koha.Preference('opaclanguagesdisplay') ) %]
             [% IF ( languages_loop ) %]
                 [% UNLESS ( one_language_enabled ) %]
-                    <footer id="changelanguage"  class="noprint">
-                        <ul class="nav">
-                            <li class="nav-item">
-                                <span class="navbar-text">Languages:</span>
-                            </li>
-                            [% FOREACH languages_loo IN languages_loop %]
-                                [% IF ( languages_loo.group_enabled ) %]
-                                    [% IF ( languages_loo.plural ) %]
-                                        <li class="nav-item dropup">
-                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="show[% languages_loo.rfc4646_subtag | html %]">
-                                                [% IF ( languages_loo.native_description ) %]
-                                                    [% languages_loo.native_description | html %]
-                                                [% ELSE %]
-                                                    [% languages_loo.rfc4646_subtag | html %]
-                                                [% END %]
-                                            </a><!-- /.nav-link.dropdown-toggle -->
-                                            <div id="sub[% languages_loo.rfc4646_subtag | html %]" class="dropdown-menu" aria-labelledby="show[% languages_loo.rfc4646_subtag | html %]">
-                                                [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
-                                                    [% IF ( sublanguages_loo.enabled ) %]
-                                                        [% IF ( sublanguages_loo.sublanguage_current ) %]
-                                                            <a class="dropdown-item" href="#">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</a>
-                                                        [% ELSE %]
-                                                            <a class="dropdown-item" href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | uri %]"> [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</a>
-                                                        [% END %]
-                                                    [% END # / IF sublanguages_loo.enabled %]
-                                                [% END # / FOREACH sublanguages_loo %]
-                                            </div> <!-- /#sub[% languages_loo.rfc4646_subtag | html %] -->
-                                        </li> <!-- /.nav-item.dropup -->
-                                    [% ELSE %]
-                                        [% IF ( languages_loo.group_enabled ) %]
-                                            [% IF ( languages_loo.current ) %]
-                                                <li class="nav-item">
-                                                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
-                                                        [% IF ( languages_loo.native_description ) %]
-                                                            [% languages_loo.native_description | html %]
-                                                        [% ELSE %]
-                                                            [% languages_loo.rfc4646_subtag | html %]
-                                                        [% END %]
-                                                    </a> <!-- /.nav-link -->
-                                                </li> <!-- /.nav-item -->
-                                            [% ELSE %]
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag | uri %]">
-                                                        [% IF ( languages_loo.native_description ) %]
-                                                            [% languages_loo.native_description | html %]
-                                                        [% ELSE %]
-                                                            [% languages_loo.rfc4646_subtag | html %]
-                                                        [% END %]
-                                                    </a> <!-- /.nav-link -->
-                                                </li> <!-- /.nav-item -->
-                                            [% END # /IF ( languages_loo.current ) %]
-                                        [% END # / IF languages_loo.current %]
-                                    [% END # / IF ( languages_loo.plural ) %]
-                                [% END # / IF ( languages_loo.group_enabled ) %]
-                            [% END # / FOREACH languages_loo IN languages_loop %]
-                        </ul> <!-- /.nav -->
+                    <footer id="changelanguage" class="navbar navbar-expand navbar-light bg-light noprint">
+                        <div class="container-fluid">
+                            <div class="collapse navbar-collapse">
+                                [% context = "footer" %]
+                                [% INCLUDE 'langmenu.inc' %]
+
+                                <div class="navbar-nav flex-grow-1">
+                                    [% IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
+                                        <a id="report_a_problem" class="nav-link" href="/cgi-bin/koha/opac-reportproblem.pl">
+                                            <i class="fa fa-warning fa-fw fa-icon-footer" aria-hidden="true"></i>
+                                            <span class="report_a_problem_text">Report a problem</span>
+                                        </a>
+                                    [% END %]
+
+                                    [% IF Koha.Preference( 'CookieConsent' ) %]
+                                        <a id="cookieConsentFooter" class="nav-link" href="#">
+                                            <i class="fa fa-cookie fa-fw fa-icon-footer" aria-hidden="true"></i>
+                                            <span class="cookieConsentFooter_text">Cookies</span>
+                                        </a>
+                                    [% END %]
+                                </div>
+                                    [% IF OpacKohaUrl %]
+                                        <div class="navbar-nav">
+                                            <a id="koha_url" class="nav-link koha_url" href="http://koha-community.org">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="currentColor" d="M7.394.75c.82-.45 1.75-.72 2.69-.75.5.015.99.1 1.45.27.92.35 1.68 1.05 2.15 1.9.53.865.76 1.875.87 2.875.25 3.315-.98 6.635-3.07 9.18-.825.82-1.835 1.52-3 1.735-.96.135-2-.07-2.775-.675-.48-.365-.67-1-.63-1.575.425.6 1.12 1.015 1.86 1.035.675.03 1.35-.275 1.8-.765.75-.825.835-2.21.12-3.08-.325-.375-.7-.715-1.15-.95-.44-.265-.95-.38-1.46-.45-.93-.06-1.9.11-2.72.57a3.22 3.22 0 0 0-1.565 2.15c-.2.7-.125 1.43-.05 2.14-.31-.81-.43-1.67-.5-2.53v-.64c.12-3.13 1.43-6.2 3.53-8.515.725-.75 1.53-1.43 2.45-1.92Zm0 0" style="stroke-width:.500008"/></svg>
+                                                <span class="koha_url_text">Powered by Koha</span>
+                                            </a>
+                                        </div>
+                                    [% END # /IF OpacKohaUrl %]
+                                </ul> <!-- /.navbar-nav -->
+                            </div> <!-- /.collapse.navbar-collapse -->
+                        </div> <!-- /.container-fluid -->
                     </footer> <!-- / #changelanguage -->
                 [% END # / UNLESS ( one_language_enabled ) %]
             [% END # / IF ( languages_loop && opaclanguagesdisplay ) %]

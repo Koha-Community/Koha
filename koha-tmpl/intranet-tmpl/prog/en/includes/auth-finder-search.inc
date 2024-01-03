@@ -181,7 +181,7 @@
         </fieldset>
         [% END %]
 
-        <nav class="navbar navbar-default navbar-fixed-bottom">
+        <nav class="navbar navbar-default fixed-bottom">
             <div class="container-fluid">
                 <fieldset class="action">
                     <input type="submit" class="btn btn-primary" id="search" value="Search" />

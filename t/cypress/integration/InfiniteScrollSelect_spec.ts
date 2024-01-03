@@ -161,7 +161,7 @@ describe("Infinite scroll", () => {
         // Submit the form, no error should be thrown as the select has correctly set the license id
         cy.get("#agreements_add").contains("Submit").click();
         cy.wait("@submitForm");
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Agreement created"
         );
     });

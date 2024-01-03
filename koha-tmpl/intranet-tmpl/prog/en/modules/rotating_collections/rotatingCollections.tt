@@ -30,7 +30,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -57,13 +57,12 @@
                                         <td>[% Branches.GetName( collectionsLoo.colBranchcode ) | html %]</td>
                                         <td>
                                         <div class="btn-group dropup">
-                                            <a class="btn btn-default btn-xs dropdown-toggle" id="collectionsactions[% collectionsLoo.colId | html %]" role="button" data-toggle="dropdown" href="#">
-                                            Actions <b class="caret"></b></a>
+                                            <a class="btn btn-default btn-xs dropdown-toggle" id="collectionsactions[% collectionsLoo.colId | html %]" role="button" data-bs-toggle="dropdown" href="#">Actions</a>
                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="collectionsactions[% collectionsLoo.colId | html %]">
-                                                <li><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa fa-plus"></i> Manage items</a></li>
-                                                <li><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-right-left"></i> Transfer</a></li>
-                                                <li><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?op=edit&amp;colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                                                <li><a class="confirmdelete submit-form-link" data-action="/cgi-bin/koha/rotating_collections/editCollections.pl" data-method="post" data-op="cud-delete" data-col-id="[% collectionsLoo.colId | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                <li><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa fa-plus"></i> Manage items</a></li>
+                                                <li><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-right-left"></i> Transfer</a></li>
+                                                <li><a class="dropdown-item" href="/cgi-bin/koha/rotating_collections/editCollections.pl?op=edit&amp;colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+                                                <li><a class="dropdown-item submit-form-link" data-action="/cgi-bin/koha/rotating_collections/editCollections.pl" data-confirmation-msg="[% t('Are you sure you want to delete this rotating collection?') | html %]" data-method="post" data-op="cud-delete" data-col-id="[% collectionsLoo.colId | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -74,18 +73,18 @@
                             </table>
                         </div> <!-- /.page-section -->
                     [% ELSE %]
-                        <div class="dialog message">There are no collections currently defined.</div>
+                        <div class="alert alert-info">There are no collections currently defined.</div>
                     [% END %]
                 </div>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

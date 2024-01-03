@@ -65,12 +65,12 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
 [% FOR m IN messages %]
-    <div class="dialog message [% m.code | html %]">
+    <div class="alert alert-info [% m.code | html %]">
         [% SWITCH m.code %]
         [% CASE 'add_success' %]
             <span>Restriction type added.</span>
@@ -165,17 +165,17 @@
 [% END %]
 
 [% IF op == 'delete_confirm' %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h1>Confirm restriction type deletion</h1>
         <p>Are you sure you want to delete '[% PROCESS restriction_type_description restriction_type=restriction %]'?</p>
         <form action="/cgi-bin/koha/admin/restrictions.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="code" value="[% restriction.code | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="/cgi-bin/koha/admin/restrictions.pl" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -239,18 +239,18 @@
             </table>
         </div><!-- /.page-section -->
     [% ELSE %]
-        <div class="dialog alert">No restriction types have been defined. <a href="/cgi-bin/koha/admin/restrictions.pl?op=add_form">Create a new restriction type</a>.</div>
+        <div class="alert alert-warning">No restriction types have been defined. <a href="/cgi-bin/koha/admin/restrictions.pl?op=add_form">Create a new restriction type</a>.</div>
     [% END %]
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

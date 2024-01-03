@@ -77,7 +77,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -91,21 +91,21 @@
         [% FOR message IN messages %]
             [% IF message.code == 'insert' %]
                 [% IF message.number > 0 %]
-                    <div class="dialog message">The field has been added.</div>
+                    <div class="alert alert-info">The field has been added.</div>
                 [% ELSE %]
-                    <div class="dialog alert">The field could not be added. Perhaps the name already exists?</div>
+                    <div class="alert alert-warning">The field could not be added. Perhaps the name already exists?</div>
                 [% END %]
             [% ELSIF message.code == 'update' %]
                 [% IF message.number > 0 %]
-                    <div class="dialog message">The field has been updated.</div>
+                    <div class="alert alert-info">The field has been updated.</div>
                 [% ELSE %]
-                    <div class="dialog alert">The field could not be updated. Perhaps the name already exists?</div>
+                    <div class="alert alert-warning">The field could not be updated. Perhaps the name already exists?</div>
                 [% END %]
             [% ELSIF message.code == 'delete' %]
                 [% IF message.number > 0 %]
-                    <div class="dialog message">The field has been deleted.</div>
+                    <div class="alert alert-info">The field has been deleted.</div>
                 [% ELSE %]
-                    <div class="dialog alert">The field could not be deleted. Check the logs for details.</div>
+                    <div class="alert alert-warning">The field could not be deleted. Check the log for details.</div>
                 [% END %]
             [% END %]
         [% END %]
@@ -260,13 +260,13 @@
     [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
     </div> <!-- /.row -->
 
 

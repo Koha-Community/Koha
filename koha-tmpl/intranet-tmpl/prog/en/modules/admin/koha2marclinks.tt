@@ -29,18 +29,18 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
 <h1>Koha to MARC mapping</h1>
 
-<div class="dialog message">If you make any change to the mappings, you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</div>
+<div class="alert alert-info">If you make any change to the mappings, you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</div>
 <form action="/cgi-bin/koha/admin/koha2marclinks.pl" method="post" id="koha2marc">
     [% INCLUDE 'csrf-token.inc' %]
 
 [% IF error_add %]
-    <div class="dialog alert">Failed to add mapping for [% error_info | html %]</div>
+    <div class="alert alert-warning">Failed to add mapping for [% error_info | html %]</div>
 [% END %]
 
 <div class="page-section">
@@ -80,13 +80,13 @@
 </form>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

@@ -48,7 +48,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             [% INCLUDE 'messages.inc' %]
 
 [% IF ( transactions_loaded ) %]
@@ -56,7 +56,7 @@
   <p>Your data was processed. Here are the results:</p>
   [% FOREACH message IN messages %]
     [% IF ( message.message ) %]
-	<div class="dialog alert">
+    <div class="alert alert-warning">
 		[% IF ( message.ERROR_file_version ) %]<p>Warning: This file is version [% message.upload_version | html %], but I only know how to import version [% message.current_version | html %]. I'll try my best.</p>[% END %]
 	</div>
 	[% END %]

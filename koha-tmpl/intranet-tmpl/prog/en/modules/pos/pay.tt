@@ -32,13 +32,13 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-10 col-md-push-2">
+        <div class="col-md-10 order-sm-1 order-md-2">
             [% INCLUDE 'messages.inc' %]
 
             <h1>Point of sale</h1>
 
         [% IF ( registers.size == 0 ) %]
-            <div id="error_message" class="dialog message">
+            <div id="error_message" class="alert alert-info">
                 <p>
                     You must have at least one cash register associated with the library before you can record payments.
                 </p>
@@ -52,21 +52,20 @@
         [% ELSE %]
 
         [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
-        <div class="dialog message audio-alert-action">
+        <div class="alert alert-info audio-alert-action">
             <p>Payment received</p>
             <p>
                 <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default"><i class="fa fa-print"></i> Print receipt</a>
-                <a href="#" data-toggle="modal" data-target="#emailReceiptModal" class="btn btn-default"><i class="fa-solid fa-envelope"></i> Email receipt</a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#emailReceiptModal" class="btn btn-default"><i class="fa-solid fa-envelope"></i> Email receipt</a>
 
             </p>
         </div>
         [% END %]
 
-        <div class="row">
         <form name="payForm" id="payForm" method="post" action="/cgi-bin/koha/pos/pay.pl">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-pay">
-
+            <div class="row">
                 <div class="col-md-6">
                     <fieldset class="rows">
                         <legend>Items for purchase</legend>
@@ -165,8 +164,8 @@
                         <a class="cancel" href="/cgi-bin/koha/pos/pay.pl">Cancel</a>
                     </fieldset>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
         [% END %]
 
         [%- SET StaffPOSHome = AdditionalContents.get( location => "StaffPOSHome", lang => lang, library => logged_in_user.branchcode ) -%]
@@ -178,7 +177,7 @@
 
     </div>
 
-    <div class="col-md-2 col-md-pull-10">
+    <div class="col-md-2 order-sm-2 order-md-1">
         <aside>
             [% INCLUDE 'pos-menu.inc' %]
         </aside>
@@ -192,11 +191,11 @@
         <input type="hidden" name="payment_id" value="[% payment_id | uri %]">
         <input type="hidden" name="collected" value="[% collected | uri %]">
         <input type="hidden" name="change" value="[% change | uri %]">"
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="emailReceiptLabel">Email receipt</h4>
+                    <h1 class="modal-title" id="emailReceiptLabel">Email receipt</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <fieldset class="rows">
@@ -211,8 +210,8 @@
                 </div> <!-- /.modal-body -->
                 <div class="modal-footer">
                     <input type="hidden" name="op" value="cud-send">
-                    <button type="submit" class="btn btn-default">Confirm</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div> <!-- /.modal-footer -->
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
@@ -224,7 +223,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>The amount collected is more than the outstanding charge</h3>
+                <h1 class="modal-title">The amount collected is more than the outstanding charge</h1>
             </div>
             <div class="modal-body">
                 <p>The amount collected from the patron is higher than the amount to be paid.</p>
@@ -233,7 +232,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default approve" id="modal_submit" type="button"><i class="fa fa-check"></i> Yes</button>
-                <button class="btn btn-default deny cancel" data-dismiss="modal" aria-hidden="true" type="button"><i class="fa fa-times"></i> No</button>
+                <button class="btn btn-default deny cancel" data-bs-dismiss="modal" type="button"><i class="fa fa-times"></i> No</button>
             </div>
         </div>
     </div>

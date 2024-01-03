@@ -1,10 +1,10 @@
 <!-- Cashup summary modal -->
 <div class="modal printable" id="cashupSummaryModal" tabindex="-1" role="dialog" aria-labelledby="cashupSummaryLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="cashupSummaryLabel">Cashup summary</h4>
+                <h1 class="modal-title" id="cashupSummaryLabel">Cashup summary</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <ul>
@@ -25,8 +25,8 @@
                 </table>
             </div> <!-- /.modal-body -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="printModal btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div> <!-- /.modal-footer -->
         </div> <!-- /.modal-content -->
     </div> <!-- /.modal-dialog -->

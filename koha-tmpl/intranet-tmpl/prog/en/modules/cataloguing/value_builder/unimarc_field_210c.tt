@@ -13,7 +13,7 @@
 
 <body id="cat_unimarc_field_210c" class="cat value_builder">
 <h1>UNIMARC field 210c builder</h1>
-    <h4>Search for authority type: EDITORS</h4>
+    <h4>Search for authority type: PERSO_NAME</h4>
         <form name="f" method="post" action="plugin_launcher.pl">
             [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
@@ -22,7 +22,7 @@
             <input type="hidden" name="type" value="intranet" />
             <input type="hidden" name="nbstatements" value="[% nbstatements | html %]" />
             <input type="hidden" name="index" value="[% index | html %]" />
-            <input type="hidden" name="authtypecode" value="EDITORS" />
+            <input type="hidden" name="authtypecode" value="PERSO_NAME" />
             <input type="hidden" name="q" value="[% index | html %]" />
             <input type="hidden" name="marclist" value="all" />
             <input type="hidden" name="and_or" value="and" />
@@ -92,17 +92,17 @@
 
 <!-- Authority details modal -->
 <div class="modal" id="authorityDetail" tabindex="-1" role="dialog" aria-labelledby="authorityDetailLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="authorityDetailLabel"></h4>
+                <h1 class="modal-title" id="authorityDetailLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

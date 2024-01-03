@@ -66,12 +66,12 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
 [% IF ( WARNING_extended_attributes_off ) %]
-<div class="dialog message">Because the 'ExtendedPatronAttributes` system preference is currently not enabled, extended patron attributes cannot be given to patron records.  <br/>Go to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=ExtendedPatronAttributes">ExtendedPatronAttributes</a> system preference if you wish to enable this feature.</div>
+<div class="alert alert-info">Because the 'ExtendedPatronAttributes` system preference is currently not enabled, extended patron attributes cannot be given to patron records.  <br/>Go to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=ExtendedPatronAttributes">ExtendedPatronAttributes</a> system preference if you wish to enable this feature.</div>
 [% END %]
 
 [% IF ( attribute_type_form ) %]
@@ -81,7 +81,7 @@
 <h1>New patron attribute type</h1>
   [% END %]
 [% IF ( duplicate_code_error ) %]
-<div class="dialog message">Could not add patron attribute type &quot;[% duplicate_code_error | html %]&quot; 
+<div class="alert alert-info">Could not add patron attribute type &quot;[% duplicate_code_error | html %]&quot;
     &mdash; one with that code already exists.
 </div>
 [% END %]
@@ -269,7 +269,7 @@
 [% END %]
 
 [% IF ( delete_attribute_type_form ) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h1>
             [% tx("Confirm deletion of patron attribute type '{code}' ({description})?", { code = code, description = description }) | html %]
         </h1>
@@ -277,10 +277,10 @@
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="[% confirm_op | html %]" />
             <input type="hidden" name="code" value="[% code | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete patron attribute type</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete patron attribute type</button>
         </form>
         <form action="[% script_name | html %]" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -293,20 +293,20 @@
 
 <h1>Patron attribute types</h1>
 [% IF ( added_attribute_type ) %]
-<div class="dialog message">Added patron attribute type &quot;[% added_attribute_type | html %]&quot;</div>
+<div class="alert alert-info">Added patron attribute type &quot;[% added_attribute_type | html %]&quot;</div>
 [% END %]
 [% IF ( edited_attribute_type ) %]
-<div class="dialog message">Modified patron attribute type &quot;[% edited_attribute_type | html %]&quot;</div>
+<div class="alert alert-info">Modified patron attribute type &quot;[% edited_attribute_type | html %]&quot;</div>
 [% END %]
 [% IF ( deleted_attribute_type ) %]
-<div class="dialog message">Deleted patron attribute type &quot;[% deleted_attribute_type | html %]&quot;</div>
+<div class="alert alert-info">Deleted patron attribute type &quot;[% deleted_attribute_type | html %]&quot;</div>
 [% END %]
 [% IF ( ERROR_delete_in_use ) %]
-<div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_in_use | html %]&quot; 
+<div class="alert alert-info">Could not delete patron attribute type &quot;[% ERROR_delete_in_use | html %]&quot;
     &mdash; it is in use by [% ERROR_num_patrons | html %] patron records</div>
 [% END %]
 [% IF ( ERROR_delete_not_found ) %]
-<div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_not_found | html %]&quot; 
+<div class="alert alert-info">Could not delete patron attribute type &quot;[% ERROR_delete_not_found | html %]&quot;
     &mdash; it was already absent from the database.</div>
 [% END %]
 [% IF ( available_attribute_types ) %]
@@ -395,13 +395,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

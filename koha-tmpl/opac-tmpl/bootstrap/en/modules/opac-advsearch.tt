@@ -35,7 +35,7 @@
                                     <div class="search-term-row">
                                         <div class="search-term-input">
                                             [% IF ( expanded_options ) %]
-                                                    <select name="op" class="form-control">
+                                                    <select name="op" class="form-select">
                                                         <option value="AND" selected="selected">and</option>
                                                         <option value="OR">or</option>
                                                         <option value="NOT">not</option>
@@ -52,7 +52,7 @@
                                         </div> <!-- .search-term-input -->
 
                                         <div class="search-term-input">
-                                            <select class="form-control" name="idx" aria-label="Choose search type for field [% loop.index + 1 | html %]" id="search-field_[% loop.index | html %]">
+                                            <select class="form-select" name="idx" aria-label="Choose search type for field [% loop.index + 1 | html %]" id="search-field_[% loop.index | html %]">
                                                 <option value="kw">Keyword</option>
                                                 [% IF ( expanded_options ) %]
                                                     <option value="kw,phr">&nbsp;&nbsp;&nbsp;&nbsp; Keyword phrase</option>
@@ -228,7 +228,7 @@
                             <div id="location" class="advsearch_limit">
                                 <fieldset>
                                     <label for="branchloop">Location and availability:</label>
-                                    <select name="limit" id="branchloop">
+                                    <select class="form-select" name="limit" id="branchloop">
                                     <option value="">All libraries</option>
                                     [% FOREACH BranchesLoo IN Branches.all( selected => opac_name ) %]
                                         [% NEXT UNLESS BranchesLoo.public %]
@@ -242,7 +242,7 @@
                                     [% IF search_groups %]
                                         <p>OR</p>
                                         <label for="categoryloop">Groups of libraries</label>
-                                        <select name="limit" id="categoryloop">
+                                        <select class="form-select" name="limit" id="categoryloop">
                                             <option value=""> -- none -- </option>
                                             [% FOREACH sg IN search_groups %]
                                                 <option value="multibranchlimit:[% sg.id | html %]">[% sg.title | html %]</option>
@@ -266,7 +266,7 @@
                         <div id="sortby" class="advsearch_limit">
                             <fieldset>
                                 <label for="sort_by">Sort by:</label>
-                                <select id="sort_by" name="sort_by">
+                                <select class="form-select" id="sort_by" name="sort_by">
                                     [% INCLUDE 'resort_form.inc' %]
                                 </select>
                             </fieldset>
@@ -297,7 +297,7 @@
                             <fieldset>
                                 <!-- LANGUAGE LIMIT -->
                                 <label for="language-limit">Language</label>
-                                <select id="language-limit" name="limit">
+                                <select class="form-select" id="language-limit" name="limit">
                                     <option value="">No limit</option>
                                     [% FOREACH search_languages_loo IN search_languages_loop %]
                                         [% IF ( search_languages_loo.selected ) %]
@@ -323,7 +323,7 @@
                             <div class="advsearch_limit">
                                 <fieldset>
                                     <label for="subtype_audience">Audience</label>
-                                    <select id="subtype_audience" name="limit" class="subtype">
+                                    <select id="subtype_audience" name="limit" class="subtype form-select">
                                         <option value="" selected="selected" class="menuheader">Any audience</option>
                                         <option value="aud:a">Preschool</option>
                                         <option value="aud:b">Primary</option>
@@ -342,7 +342,7 @@
                             <div class="advsearch_limit">
                                 <fieldset>
                                     <label for="subtype_content">Content</label>
-                                    <select id="subtype_content"  name="limit" class="subtype">
+                                    <select id="subtype_content"  name="limit" class="subtype form-select">
                                         <option value="" selected="selected" class="menuheader">Any content</option>
                                         <option value="fic:1">Fiction</option>
                                         <option value="fic:0">Non-fiction</option>
@@ -358,7 +358,7 @@
                             <div class="advsearch_limit">
                                 <fieldset>
                                     <label for="subtype_format">Format</label>
-                                    <select id="subtype_format" name="limit" class="subtype">
+                                    <select id="subtype_format" name="limit" class="subtype form-select">
                                         <option value="" selected="selected" class="menuheader">Any format</option>
                                         <option value="l-format:ta">Regular print</option>
                                         <option value="l-format:tb">Large print</option>
@@ -379,7 +379,7 @@
                             <div class="advsearch_limit">
                                 <fieldset>
                                     <label for="subtype_additional">Additional content types for books/printed materials</label>
-                                    <select id="subtype_additional" name="limit" class="subtype">
+                                    <select id="subtype_additional" name="limit" class="subtype form-select">
                                         <option value="">Any</option>
                                         <option value="ctype:a">Abstracts/summaries</option>
                                         <option value="ctype:b">Bibliographies</option>

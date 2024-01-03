@@ -2,10 +2,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="overdrive-checkoutLabel">Select a download format</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title" id="overdrive-checkoutLabel">Select a download format</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="#" method="get" id="overdrive-checkout-form">
                 <div class="modal-body">
@@ -15,7 +13,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary overdrive-checkout-submit">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form> <!-- /#overdrive-checkout-form -->
         </div> <!-- /.modal-content -->

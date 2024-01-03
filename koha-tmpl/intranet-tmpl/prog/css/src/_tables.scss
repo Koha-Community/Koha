@@ -132,11 +132,6 @@ table {
                         }
                     }
 
-                    &.sorting::before,
-                    &.sorting::after {
-                        content: unset;
-                    }
-
                     &.sorting_asc {
                         &::after,
                         &::before {
@@ -420,13 +415,23 @@ tbody {
                 }
             }
         }
+
+        &.onissue {
+            &:nth-child( odd ):not( .dtrg-group, .active, .ok ) {
+                td {
+                    &:not( .bg-danger, .bg-warning, .bg-info, .bg-success, .bg-primary ) {
+                        background-color: #F9FAE0;
+                    }
+                }
+            }
+        }
     }
 }
 
 .dataTables_wrapper {
     .dataTables_processing {
         background-color: #F4F8F9;
-        border: 2px solid #538200;
+        border: 2px solid $background-color-primary;
         border-radius: 3px;
         box-shadow: 2px 2px 3px 1px rgba( 0, 0, 0, .2 );
         color: #333;
@@ -437,6 +442,14 @@ tbody {
         text-align: center;
         top: 50%;
         width: auto;
+
+        & > div {
+            &:last-child {
+                & > div {
+                    background: $background-color-secondary;
+                }
+            }
+        }
     }
 
     .dataTables_info {
@@ -574,7 +587,6 @@ tbody {
     font-size: 90%;
 
     &.top {
-        // border-top: 1px solid $table-border-color;
         padding-top: 1em;
     }
 
@@ -805,7 +817,7 @@ div {
                 }
 
                 &.buttons-html5:not( .disabled )::before {
-                    color: #222BAC;
+                    color: $background-color-primary;
                     display: inline-block;
                     font-family: "Font Awesome 6 Free";
                     margin-right: .5em;
@@ -825,7 +837,7 @@ div {
                 }
 
                 &.buttons-print:not( .disabled )::before {
-                    color: #222BAC;
+                    color: $background-color-primary;
                     content: "\f02f";
                     display: inline-block;
                     font-family: "Font Awesome 6 Free";

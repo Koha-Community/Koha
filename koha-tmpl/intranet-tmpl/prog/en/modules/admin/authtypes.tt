@@ -77,7 +77,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -162,7 +162,7 @@
 [% END %]
 
 [% IF op == 'delete_confirm' %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         [% IF authorities_using_it %]
             <h1>This authority type cannot be deleted</h1>
             <p><strong><span class="ex">[% authority_type.authtypecode | html %]</span></strong></p>
@@ -176,10 +176,10 @@
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="cud-delete_confirmed" />
                 <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />
-                <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+                <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="get">
-                <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
             </form>
         [% END %]
     </div>
@@ -213,16 +213,18 @@
                     <td>[% authority_type.auth_tag_to_report | html %]</td>
                     <td>
                     <div class="btn-group dropup">
-                        <a class="btn btn-default btn-xs dropdown-toggle" id="authtypeactions[% authority_type.authtypecode | html %]" role="button" data-toggle="dropdown" href="#">
-                        Actions <b class="caret"></b></a>
-                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtypeactions[% authority_type.authtypecode | html %]">
-                        <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode | uri %]" class="button parameters"><i class="fa-solid fa-eye"></i> MARC structure</a></li>
-                        <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                        [% IF authority_type.authtypecode %]<li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>[% END %]
-                        <!-- Button to trigger modal -->
-                        <li><a href="#" data-toggle="modal" data-target="#exportModal_[% authority_type.authtypecode | html %][% loop.count | html %]" title="Export authority type (fields, subfields) to a spreadsheet file (.csv, .ods)"><i class="fa fa-upload"></i> Export</a></li>
-                        <!-- Button to trigger modal -->
-                        <li><a href="#" data-toggle="modal" data-target="#importModal_[% authority_type.authtypecode | html %][% loop.count | html %]" title="Import authority type (fields, subfields) from a spreadsheet file (.csv, .ods)"><i class="fa fa-download"></i> Import</a></li>
+                        <a class="btn btn-default btn-xs dropdown-toggle" id="authtypeactions[% authority_type.authtypecode | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                        Actions </a>
+                        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="authtypeactions[% authority_type.authtypecode | html %]">
+                            <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode | uri %]" class="button parameters dropdown-item"><i class="fa-solid fa-eye"></i> MARC structure</a></li>
+                            <li><a class="dropdown-item" href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+                            [% IF authority_type.authtypecode %]
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
+                            [% END %]
+                            <!-- Button to trigger modal -->
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exportModal_[% authority_type.authtypecode | html %][% loop.count | html %]" title="Export authority type (fields, subfields) to a spreadsheet file (.csv, .ods)"><i class="fa fa-upload"></i> Export</a></li>
+                            <!-- Button to trigger modal -->
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#importModal_[% authority_type.authtypecode | html %][% loop.count | html %]" title="Import authority type (fields, subfields) from a spreadsheet file (.csv, .ods)"><i class="fa fa-download"></i> Import</a></li>
                         </ul>
                     </div>
 
@@ -231,8 +233,8 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3 id="exportLabelexportModal_[% authority_type.authtypecode | html %][% loop.count | html %]">Export [% authority_type.authtypetext | html %] authority type</h3>
+                                    <h1 class="modal-title" id="exportLabelexportModal_[% authority_type.authtypecode | html %][% loop.count | html %]">Export [% authority_type.authtypetext | html %] authority type</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <form action="/cgi-bin/koha/admin/import_export_authtype.pl" name="form_[% authority_type.authtypecode | html %]" method="get" target="_blank" class="form_export">
                                     <div class="modal-body">
@@ -244,8 +246,8 @@
                                         </fieldset>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-default">Export</button>
-                                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Export</button>
+                                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                             </div>
@@ -257,8 +259,8 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3 id="importLabelexportModal_[% authority_type.authtypecode | html %][% loop.count | html %]">Import [% authority_type.authtypecode | html %] authority type (fields and subfields) from a spreadsheet file (.csv, .ods)</h3>
+                                    <h1 class="modal-title" id="importLabelexportModal_[% authority_type.authtypecode | html %][% loop.count | html %]">Import [% authority_type.authtypecode | html %] authority type (fields and subfields) from a spreadsheet file (.csv, .ods)</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <form action="/cgi-bin/koha/admin/import_export_authtype.pl" name="form_i_[% authority_type.authtypecode | html %]" id="form_i_[% authority_type.authtypecode | html %]" method="post" enctype="multipart/form-data" class="form_import">
                                     [% INCLUDE 'csrf-token.inc' %]
@@ -269,8 +271,8 @@
                                         <div id="importing_[% authority_type.authtypecode | html %]" style="display:none" class="importing"><img src="[% interface | html %]/[% theme | html %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-default">Import</button>
-                                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Close</button>
+                                        <button type="submit" class="btn btn-primary">Import</button>
+                                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                             </div>
@@ -286,13 +288,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

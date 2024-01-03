@@ -14,6 +14,16 @@
     if (!consentBar) {
         return;
     }
+
+    // Initialize the consent modal and prevent the modal
+    // from being closed with anything but the buttons
+    const cookieConsentModal = new bootstrap.Modal( document.getElementById("cookieConsentModal"), {
+        backdrop: 'static',
+        keyboard: false,
+        focus: true,
+        show: true
+    });
+
     if (hasStoredConsent === null) {
         showConsentBar();
     }
@@ -21,7 +31,8 @@
 
     // When the modal is opened, populate our state based on currently
     // selected values
-    $('#cookieConsentModal').on('shown.bs.modal', function () {
+    const cookieConsentModalEl = document.getElementById("cookieConsentModal");
+    cookieConsentModalEl.addEventListener("shown.bs.modal", () => {
         initialiseSelected();
     });
 
@@ -52,8 +63,8 @@
     // Hides the appropriate consent container, depending on what
     // is currently visible
     function hideContainer() {
-        if ($('#cookieConsentModal').hasClass('in')) {
-            $('#cookieConsentModal').modal('hide');
+        if ( $(cookieConsentModalEl).is(":visible") ){
+            cookieConsentModal.hide();
         } else {
             hideConsentBar();
         }
@@ -119,10 +130,9 @@
                     allCookies.forEach(function (cookie) {
                         const name = cookie.split('=')[0];
                         if (regex.test(name)) {
-                            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00: 00: 01 GMT; domain=' + cookieDomain + '; path=' + cookiePath;
+                            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=' + cookieDomain +'; path=' + cookiePath;
                         }
                     });
-
                 }
             }
         });
@@ -174,15 +184,7 @@
                 hideConsentBar();
                 // Ensure we're up to date with the existing consent
                 getExistingConsent();
-                // Prevent the modal from being closed with anything
-                // but the buttons
-                $('#cookieConsentModal')
-                    .modal({
-                        backdrop: 'static',
-                        keyboard: false,
-                        focus: true,
-                        show: true
-                    });
+                cookieConsentModal.show();
             }
         );
         $('.consentCheckbox').on('click', function () {

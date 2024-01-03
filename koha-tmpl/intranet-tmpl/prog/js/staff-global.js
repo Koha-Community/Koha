@@ -65,7 +65,7 @@ $(document).ready(function () {
     if (!hash) {
         $(".tab-pane.active input:text:first").focus();
     }
-    $("#header_search a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+    $("#header_search a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
         $(e.target.hash).find("input:text:first").focus();
     });
 
@@ -151,7 +151,7 @@ $(document).ready(function () {
         return checkEnter(e);
     });
 
-    $("#header_search .nav-tabs a").on("click", function () {
+    $("#header_search .nav-tabs a").on("click",function(){
         var field_index = $(this).parent().index();
         keep_text(field_index);
     });
@@ -233,7 +233,7 @@ $(document).ready(function () {
             previous_patrons.reverse();
             for (i in previous_patrons) {
                 p = previous_patrons[i];
-                const el = `<li><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}">${p["name"]} (${p["card"]})</a></li>`;
+                const el = `<li><a class="dropdown-item" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=${p["borrowernumber"]}">${p["name"]} (${p["card"]})</a></li>`;
                 $("#lastBorrowerList").prepend(el);
             }
         }

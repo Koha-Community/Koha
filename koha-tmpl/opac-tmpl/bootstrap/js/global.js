@@ -115,15 +115,13 @@ function confirmModal(message, title, yes_label, no_label, callback) {
             <div class="modal-dialog">\
                 <div class="modal-content">\
                     <div class="modal-header" style="min-height:40px;">\
-                        <h4 class="modal-title"></h4>\
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">\
-                        <span aria-hidden="true">&times;</span>\
-                    </button>\
+                        <h1 class="modal-title"></h1>\
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\
                     </div>\
                     <div class="modal-body"><p></p></div>\
                     <div class="modal-footer">\
                         <a href="#" id="bootstrap-confirm-box-modal-submit" class="btn btn-danger"><i class="fa fa-check" aria-hidden="true"></i></a>\
-                        <a href="#" id="bootstrap-confirm-box-modal-cancel" data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-times" aria-hidden="true"></i></a>\
+                        <a href="#" id="bootstrap-confirm-box-modal-cancel" data-bs-dismiss="modal" class="btn btn-secondary"><i class="fa fa-times" aria-hidden="true"></i></a>\
                     </div>\
                 </div>\
             </div>\
@@ -140,7 +138,7 @@ function confirmModal(message, title, yes_label, no_label, callback) {
         });
     }
 
-    $("#bootstrap-confirm-box-modal .modal-header h4").text(title || "");
+    $("#bootstrap-confirm-box-modal .modal-header h1").text(title || "");
     if (message && message != "") {
         $("#bootstrap-confirm-box-modal .modal-body").html(message || "");
     } else {
@@ -319,7 +317,7 @@ $(document).ready(function(){
     });
 
     if (typeof bootstrap == "object") {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip();
     }
 
     /* Scroll back to top button */

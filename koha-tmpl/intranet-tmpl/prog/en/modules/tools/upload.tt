@@ -218,7 +218,7 @@
                         [% IF !plugin %]
                             <td>
                                 [% IF record.public %]
-                                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-toggle="tooltip"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
+                                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-bs-toggle="tooltip"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
                                 [% ELSE %]
                                     No
                                 [% END %]
@@ -286,25 +286,25 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
                 <main>
                     [% INCLUDE 'messages.inc' %]
 [% END %]
 
 <h1>Uploads</h1>
-<div class="dialog alert" id="myalerts" style="display:none;"></div>
+<div class="alert alert-warning" id="myalerts" style="display:none;"></div>
 
 [% PROCESS submitter %]
 [% IF op == 'new' %]
     [% PROCESS form_new %]
     <div class="row">
         [% IF uploadcategories %]
-            <div class="col-xs-6">
+            <div class="col-6">
                 [% PROCESS form_browse %]
             </div>
-            <div class="col-xs-6">
+            <div class="col-6">
         [% ELSE %]
-            <div class="col-xs-12">
+            <div class="col">
         [% END %]
             [% PROCESS form_search %]
         </div>
@@ -328,9 +328,9 @@
 
 [% IF !plugin %]
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% IF op == 'report' %]
                     [% PROCESS form_browse %]
@@ -340,7 +340,7 @@
 
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 [% ELSE %]
             </main>

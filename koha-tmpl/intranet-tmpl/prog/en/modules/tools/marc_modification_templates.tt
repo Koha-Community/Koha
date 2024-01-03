@@ -62,12 +62,12 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
             <div id="toolbar" class="btn-toolbar">
-                <a href="#" data-toggle="modal" data-template_id="" data-target="#createTemplate" id="new_template" class="btn btn-default duplicate_template"><i class="fa fa-plus"></i> New template</a>
+                <a href="#" data-bs-toggle="modal" data-template_id="" data-bs-target="#createTemplate" id="new_template" class="btn btn-default duplicate_template"><i class="fa fa-plus"></i> New template</a>
                 [% IF ( template_id != '' ) %]
                     <a href="#" class="btn btn-default new_action"><i class="fa fa-plus"></i> New action</a>
                     <form action="/cgi-bin/koha/tools/marc_modification_templates.pl" method="post">
@@ -81,7 +81,7 @@
 
             [% IF error %]
                 [% IF error == 'no_from_field' %]
-                    <div class="dialog message">Error: no field value specified.</div>
+                    <div class="alert alert-info">Error: no field value specified.</div>
                 [% END %]
             [% END %]
 
@@ -107,7 +107,7 @@
                                         <td>[% TemplatesLoo.name | html %]</td>
                                         <td class="actions">
                                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id | html %]&amp;op=select_template" ><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit actions</a>
-                                            <a class="btn btn-default btn-xs duplicate_template" href="#" data-toggle="modal" data-template_id="[% TemplatesLoo.template_id | html %]" data-target="#createTemplate"><i class="fa fa-fw fa-copy"></i> Duplicate</a>
+                                            <a class="btn btn-default btn-xs duplicate_template" href="#" data-bs-toggle="modal" data-template_id="[% TemplatesLoo.template_id | html %]" data-bs-target="#createTemplate"><i class="fa fa-fw fa-copy"></i> Duplicate</a>
 
                                             <form action="/cgi-bin/koha/tools/marc_modification_templates.pl" method="post">
                                                 [% INCLUDE 'csrf-token.inc' %]
@@ -224,7 +224,7 @@
                             </table>
                         </div> <!-- /.page-section -->
                     [% ELSE %]
-                        <div class="dialog message" id="no_defined_actions">
+                        <div class="alert alert-info" id="no_defined_actions">
                             <p>There are no defined actions for this template.</p>
                             <p><a href="#" class="btn btn-default approve new_action"><i class="fa fa-plus" aria-hidden="true"></i> New action</a></p>
                         </div>
@@ -326,9 +326,9 @@
 
             [% ELSE %]
                 <h1>MARC modification templates</h1>
-                <div class="dialog message">
+                <div class="alert alert-info">
                     <p>There are no defined templates. Please create a template first.</p>
-                    <a href="#" data-toggle="modal" data-target="#createTemplate" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Create a new template</a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#createTemplate" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Create a new template</a>
                 </div>
             [% END # /IF TemplatesLoop %]
 
@@ -337,8 +337,8 @@
                 <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h2 id="LabelcreateTemplate">Create a new template</h2>
+                    <h1 class="modal-title" id="LabelcreateTemplate">Create a new template</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_template" class="validated">
                     [% INCLUDE 'csrf-token.inc' %]
@@ -365,8 +365,8 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-default">Submit</button>
-                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
                 </div>
@@ -374,13 +374,13 @@
             </div>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'cat-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

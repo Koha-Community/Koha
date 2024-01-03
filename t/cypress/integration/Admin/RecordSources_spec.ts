@@ -42,7 +42,7 @@ describe("Record sources CRUD tests", () => {
         });
         cy.get("#record_source_edit").contains("Submit").click();
 
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Record source created!"
         );
     });
@@ -172,7 +172,7 @@ describe("Record sources CRUD tests", () => {
             .click();
         cy.contains("Source 2");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Record source 'Source 2' deleted"
         );
     });

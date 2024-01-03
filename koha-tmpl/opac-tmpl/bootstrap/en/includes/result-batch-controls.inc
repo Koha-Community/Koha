@@ -31,7 +31,7 @@
 
         [% IF ( ListsEnabled ) %]
             <div class="btn-group">
-                <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-list" aria-hidden="true"></i> Add to list <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu">

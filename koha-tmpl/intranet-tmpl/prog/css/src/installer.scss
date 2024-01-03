@@ -1,3 +1,31 @@
+// scss-docs-start import-stack
+// Configuration
+@import "../../../../../node_modules/bootstrap5/scss/functions";
+
+// Include any default variable overrides here
+@import "variables";
+
+// Include remainder of required Bootstrap stylesheets
+@import "../../../../../node_modules/bootstrap5/scss/variables";
+@import "../../../../../node_modules/bootstrap5/scss/mixins";
+
+$enable-dark-mode: false;
+
+@import "../../../../../node_modules/bootstrap5/scss/maps";
+@import "../../../../../node_modules/bootstrap5/scss/utilities";
+@import "../../../../../node_modules/bootstrap5/scss/root";
+@import "../../../../../node_modules/bootstrap5/scss/reboot";
+@import "../../../../../node_modules/bootstrap5/scss/type";
+@import "../../../../../node_modules/bootstrap5/scss/containers";
+@import "../../../../../node_modules/bootstrap5/scss/grid";
+@import "../../../../../node_modules/bootstrap5/scss/forms";
+@import "../../../../../node_modules/bootstrap5/scss/buttons";
+@import "../../../../../node_modules/bootstrap5/scss/transitions";
+@import "../../../../../node_modules/bootstrap5/scss/breadcrumb";
+@import "../../../../../node_modules/bootstrap5/scss/badge";
+@import "../../../../../node_modules/bootstrap5/scss/alert";
+@import "../../../../../node_modules/bootstrap5/scss/helpers";
+@import "../../../../../node_modules/bootstrap5/scss/utilities/api";
 @import "flatpickr";
 
 body {
@@ -12,7 +40,7 @@ h1 {
 }
 
 h2 {
-    background-color: #eee;
+    background-color: #EEE;
     border-radius: 4px;
     font-size: 146.5%;
     font-weight: bold;
@@ -46,7 +74,7 @@ ol {
 }
 
 #logo {
-    background: url(../img/koha-logo.gif) no-repeat top center;
+    background: url("../img/koha-logo.gif") no-repeat top center;
     margin-bottom: .5em;
     margin-top: 0;
 
@@ -58,6 +86,11 @@ ol {
     }
 }
 
+.alert {
+    p {
+        margin-bottom: 0;
+    }
+}
 
 .bg-danger {
     padding: .2em .4em;
@@ -87,7 +120,7 @@ th {
 }
 
 .update_error {
-    color: red;
+    color: #FF0000;
     font-weight: bold;
 }
 
@@ -166,7 +199,7 @@ fieldset {
 
         .hint {
             color: #666;
-            font-size: 96%;
+            font-size: .95rem;
             margin-left: 10.5em;
             margin-right: 4em;
             margin-top: .5em;
@@ -174,15 +207,14 @@ fieldset {
     }
 }
 
-
 label.required,
 span.required {
-    color : #C00;
+    color: #C00;
 }
 
 span.required {
-    font-style : italic;
-    margin-left : .5em;
+    font-style: italic;
+    margin-left: .5em;
 }
 
 .breadcrumbs {
@@ -198,8 +230,8 @@ span.required {
     background-repeat: no-repeat;
     content: "";
     display: inline-block;
-    width: 16px;
     height: 16px;
+    width: 16px;
 }
 
 span.breadcrumbs {
@@ -219,8 +251,8 @@ span.breadcrumbs {
 #steps {
     border: 1px solid #EEE;
     border-radius: 5px;
-    padding: 1em;
     margin: 1em 0;
+    padding: 1em;
 
     ol {
         font-size: 1.2rem;
@@ -228,7 +260,6 @@ span.breadcrumbs {
         margin: 0;
     }
 }
-
 
 .open {
     color: #888;
@@ -240,7 +271,7 @@ span.breadcrumbs {
 }
 
 .complete {
-    color: green;
+    color: #008000;
 }
 
 .hint {

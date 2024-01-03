@@ -252,7 +252,7 @@
             ],
         }, columns_settings);
 
-        $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+        $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
             var id = e.target.id;
             if ( id == "checkout-tab" ) {
                 table.fnFilter("standard_checkout", 0);

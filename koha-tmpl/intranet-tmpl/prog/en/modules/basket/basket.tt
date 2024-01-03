@@ -56,13 +56,13 @@
 
                         <a class="btn btn-default" href="basket.pl" id="send_cart"><i class="fa-solid fa-envelope"></i> Send</a>
                         <div class="btn-group">
-                            <a class="btn btn-default dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download basket" data-toggle="dropdown" href="#" id="downloadcart"><i class="fa fa-download"></i> Download <span class="caret"></span> </a>
+                            <a class="btn btn-default dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download basket" data-bs-toggle="dropdown" href="#" id="downloadcart"><i class="fa fa-download"></i> Download </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&amp;bib_list=[% bib_list | uri %]">iso2709</a></li>
-                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=ris&amp;bib_list=[% bib_list | uri %]">RIS</a></li>
-                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&amp;bib_list=[% bib_list | uri %]">BibTex</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&amp;bib_list=[% bib_list | uri %]">iso2709</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=ris&amp;bib_list=[% bib_list | uri %]">RIS</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&amp;bib_list=[% bib_list | uri %]">BibTex</a></li>
                             [% FOREACH csv_profile IN csv_profiles %]
-                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=[% csv_profile.export_format_id | uri %]&amp;bib_list=[% bib_list | uri %]">CSV - [% csv_profile.profile | html %]</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/basket/downloadcart.pl?format=[% csv_profile.export_format_id | uri %]&amp;bib_list=[% bib_list | uri %]">CSV - [% csv_profile.profile | html %]</a></li>
                             [% END %]
                             </ul>
                         </div>
@@ -277,7 +277,7 @@
                                             <th class="anti-the">Title</th>
                                             <th>Item type</th>
                                             <th>
-                                                <a id="items-popover" href="#" data-trigger="hover" data-toggle="popover" data-placement="top" title="Item sorting" data-content="Items are sorted by the highest or lowest callnumber in a group of items respectively.">Items</a>
+                                                <a id="items-popover" href="#" data-trigger="hover" data-bs-toggle="popover" data-bs-placement="top" title="Item sorting" data-content="Items are sorted by the highest or lowest callnumber in a group of items respectively.">Items</a>
                                             </th>
                                         </tr>
                                     </thead>

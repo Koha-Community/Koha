@@ -147,7 +147,7 @@ function searchfield_date_tooltip(filter) {
         }
         $(field).attr("title", MSG_DATE_FORMAT).tooltip('show');
     } else {
-        $(field).tooltip('destroy');
+        $(field).tooltip('dispose');
     }
 }
 

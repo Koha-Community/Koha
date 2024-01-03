@@ -37,7 +37,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -48,13 +48,13 @@
 [% UNLESS old_checkouts %][% old_checkouts = [] %][% END %]
 [% SET all_checkouts = checkouts.merge(old_checkouts) %]
 [% UNLESS Koha.Preference('intranetreadinghistory') %]
-    <div class="dialog alert">Staff members are not allowed to access patron's checkout history</div>
+    <div class="alert alert-warning">Staff members are not allowed to access patron's checkout history</div>
 [% ELSIF is_anonymous %]
-    <div class="dialog alert">This is the anonymous patron, so no circulation history is displayed. To get a list of anonymized loans, please run a report.</div>
+    <div class="alert alert-warning">This is the anonymous patron, so no circulation history is displayed. To get a list of anonymized loans, please run a report.</div>
 [% ELSIF ( patron.privacy == 2)  %]
-    <div class="dialog message">This patron has set the privacy rules to never keeping a circulation history.</div>
+    <div class="alert alert-info">This patron has set the privacy rules to never keeping a circulation history.</div>
 [% ELSIF ( !all_checkouts.size ) %]
-    <div class="dialog message">This patron has no circulation history.</div>
+    <div class="alert alert-info">This patron has no circulation history.</div>
 [% ELSE %]
     <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
 
@@ -162,13 +162,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'circ-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -193,7 +193,7 @@
                 "order": [[column_sort, 'desc']]
             }, table_settings);
 
-            $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+            $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                 active_tab = $(this).attr("href");
                 if( active_tab == "#tab_checkout_panel" ){
                     table.fnFilter("standard_checkout", 0);

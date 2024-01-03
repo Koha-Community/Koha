@@ -27,7 +27,7 @@
                 <div class="form-group">
                     <label for="category" class="col-sm-3 control-label">Category of instrument or voice</label>
                     <div class="col-sm-9">
-                        <select class="form-control" id="category">
+                        <select class="form-select" id="category">
                             <option value=""></option>
                             [% FOREACH optgroup IN category_optgroups %]
                                 <optgroup label="[% optgroup.label | html %]">
@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <label for="tessitura" class="col-sm-3 control-label">Tessitura</label>
                     <div class="col-sm-9">
-                        <select class="form-control" id="tessitura">
+                        <select class="form-select" id="tessitura">
                             <option value=""></option>
                             [% FOREACH option IN tessitura_options %]
                                 [% IF option.value == tessitura %]
@@ -63,7 +63,7 @@
                 <div class="form-group">
                     <label for="number_of_hands_or_keys" class="col-sm-3 control-label">Number of hands / players; keys of pitched instruments</label>
                     <div class="col-sm-9">
-                        <select class="form-control" id="number_of_hands_or_keys">
+                        <select class="form-select" id="number_of_hands_or_keys">
                             <option value=""></option>
                             [% FOREACH option IN number_of_hands_or_keys_options %]
                                 [% IF option.value == number_of_hands_or_keys %]
@@ -79,7 +79,7 @@
                 <div class="form-group">
                     <label for="other" class="col-sm-3 control-label">Other (position 7)</label>
                     <div class="col-sm-9">
-                        <select class="form-control" id="other">
+                        <select class="form-select" id="other">
                             <option value=""></option>
                             [% FOREACH option IN other_options %]
                                 [% IF option.value == other %]
@@ -94,7 +94,7 @@
                 <div class="form-group">
                     <label for="other2" class="col-sm-3 control-label">Other (position 8)</label>
                     <div class="col-sm-9">
-                        <select class="form-control" id="other2">
+                        <select class="form-select" id="other2">
                             <option value=""></option>
                             [% FOREACH option IN other2_options %]
                                 [% IF option.value == other2 %]
@@ -108,7 +108,7 @@
                 </div>
             </div>
 
-            <nav class="navbar navbar-default navbar-fixed-bottom">
+            <nav class="navbar navbar-default fixed-bottom">
                 <div class="container-fluid">
                     <fieldset class="action">
                         <input type="submit" class="btn btn-primary" value="Save" />

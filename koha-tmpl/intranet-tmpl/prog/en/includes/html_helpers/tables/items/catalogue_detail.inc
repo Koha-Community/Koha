@@ -755,7 +755,7 @@
                     if ( can_edit_items_from.includes(row.home_library_id) || !can_edit_items_from.length ){
                         [% IF Koha.Preference('LocalCoverImages') OR Koha.Preference('OPACLocalCoverImages') %]
                             nodes += '<div class="btn-group">';
-                            nodes += ' <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>'.format(row.biblio_id, row.item_id, _("Edit"));
+                            nodes += ' <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a><a class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown"><span class="caret"></span></a>'.format(row.biblio_id, row.item_id, _("Edit"));
                             nodes += ' <ul class="dropdown-menu pull-right">';
                             nodes += '  <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=%s&amp;filetype=image"><i class="fa fa-upload"></i> %s</a></li>'.format(row.item_id, _("Upload image"));
                             nodes += ' </ul>';

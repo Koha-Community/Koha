@@ -1,11 +1,11 @@
 [% PROCESS 'html_helpers.inc' %]
 <div id="ill-batch-details" style="display:none"></div>
-<div id="ill-batch-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ill-batch-modal-label" aria-hidden="true">
+<div id="ill-batch-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="ill-batch-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="ill-batch-modal-label"></h3>
+                <h1 class="modal-title" id="ill-batch-modal-label"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="batch-form">
@@ -89,7 +89,7 @@
             </div>
             <div class="modal-footer">
                 <div id="lhs">
-                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="false">Cancel</button>
+                    <button class="btn btn-default" data-bs-dismiss="modal" aria-hidden="false">Cancel</button>
                 </div>
                 <div id="rhs">
                     <button id="button_create_batch" class="btn btn-default" aria-hidden="true" disabled>Continue</button>

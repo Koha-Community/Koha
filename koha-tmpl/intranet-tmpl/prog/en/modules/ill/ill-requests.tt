@@ -126,7 +126,7 @@
         [% END %]
             <div id="interlibraryloans">
         [% IF !backends_available || !has_branch %]
-            <div class="dialog message">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl?tab=sysinfo">about page</a></div>
+            <div class="alert alert-info">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl?tab=sysinfo">about page</a></div>
         [% ELSE %]
                 [% INCLUDE 'ill-toolbar.inc' %]
                 [% INCLUDE 'ill-batch-modal.inc' %]
@@ -377,12 +377,12 @@
                             </fieldset>
                         </form>
                         [% IF Koha.Preference('ILLCheckAvailability') %]
-                            <div id="partnerSearch" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="partnerSearchLabel" aria-hidden="true">
+                            <div id="partnerSearch" class="modal" tabindex="-1" role="dialog" aria-labelledby="partnerSearchLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h3 id="partnerSearchLabel"> Search partners</h3>
+                                            <h1 class="modal-title" id="partnerSearchLabel"> Search partners</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             [% FOR service IN services %]
@@ -392,7 +392,7 @@
                                             <span id="service_id_restrict" data-service_id_restrict_plugin="ILL availability - z39.50" data-service_id_restrict_ids=""></span>
                                         </div>
                                         <div class="modal-footer">
-                                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                            <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
@@ -511,7 +511,7 @@
 
                 [% ELSIF op == 'delete_confirm' %]
 
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <h3>Are you sure you wish to delete this request?</h3>
                         <form action="/cgi-bin/koha/ill/ill-requests.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
@@ -595,8 +595,8 @@
                             [% IF action.method == 'migrate' %]
                                 [% IF backends.size > 2 %]
                                     <div class="dropdown btn-group">
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="ill-migrate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            <i class="fa [% action.ui_method_icon | html %]"></i> [% action.ui_method_name | html %] <span class="caret"></span>
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="ill-migrate-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            <i class="fa [% action.ui_method_icon | html %]"></i> [% action.ui_method_name | html %]
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="ill-migrate-dropdown">
                                             [% FOREACH backend IN backends %]
@@ -624,12 +624,12 @@
                             [% END %]
                         [% END %]
                         <div class="dropdown btn-group">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="ill-notice-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <i class="fa-solid fa-envelope"></i> Send notice to patron <span class="caret"></span>
+                            <button class="btn btn-default dropdown-toggle" type="button" id="ill-notice-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa-solid fa-envelope"></i> Send notice to patron
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="ill-notice-dropdown">
                                 [% FOREACH notice IN notices %]
-                                    <li><a href="/cgi-bin/koha/ill/ill-requests.pl?op=send_notice&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;notice_code=[% notice.code | uri %]">[% notice.name | html %]</a></li>
+                                    <li><a class="dropdown-item" href="/cgi-bin/koha/ill/ill-requests.pl?op=send_notice&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;notice_code=[% notice.code | uri %]">[% notice.name | html %]</a></li>
                                 [% END %]
                             </ul>
                         </div>
@@ -755,12 +755,12 @@
                         </div>
                     </div>
 
-                    <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+                    <div id="dataPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3 id="dataPreviewLabel"> Supplier metadata</h3>
+                                    <h1 class="modal-title" id="dataPreviewLabel"> Supplier metadata</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div id="requestattributes">
@@ -773,18 +773,18 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div id="requestLog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+                    <div id="requestLog" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3 id="requestLogLabel"> Request log</h3>
+                                    <h1 class="modal-title" id="requestLogLabel"> Request log</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                 [% IF request.logs.size > 0 %]
@@ -797,7 +797,7 @@
                                 [% END %]
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>

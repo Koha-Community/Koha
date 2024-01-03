@@ -28,11 +28,12 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
+            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                 [% INCLUDE 'messages.inc' %]
+
                 <h1>Upload plugin</h1>
                 [% IF ( ERRORS ) %]
-                <div class="dialog alert">
+                <div class="alert alert-warning">
                     [% FOREACH ERROR IN ERRORS %]
                         [% IF ( ERROR.NOTKPZ ) %]<li><strong>The upload file does not appear to be a kpz file.  The extension is not '.kpz'.</strong></li>
                         [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><strong>This script is not able to create/write to the necessary temporary directory.</strong></li>
@@ -45,7 +46,7 @@
                 </div>
                 [% END %]
                 [% IF ( !plugins_restart ) %]
-                <div class="dialog alert">
+                <div class="alert alert-warning">
                     <strong>Your system is not configured to automatically refresh on plugin upload, you may need to ask your administrator to complete the plugin installation.</strong>
                 </div>
                 [% END %]

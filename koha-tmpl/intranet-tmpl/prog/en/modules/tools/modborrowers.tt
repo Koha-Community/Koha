@@ -56,7 +56,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -162,10 +162,10 @@
                 [% IF ( op == 'show') && (!borrowers) && (!notfoundcardnumbers) # Alert if no patrons given%]
                     [% op = 'noshow' # Change op to prevent display in code below %]
                     <h1>Batch patrons modification</h1>
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <p>No patron card numbers or borrowernumbers given.</p>
                         <form action="/cgi-bin/koha/tools/modborrowers.pl" method="get">
-                         <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
+                         <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
                         </form>
                     </div>
                 [% END #Alert if no patrons %]
@@ -177,9 +177,9 @@
                     [% END %]
                     [% IF ( notfoundcardnumbers ) %]
                         [% IF ( useborrowernumbers ) -%]
-                            <div class="dialog alert"><p>Warning, the following borrowernumbers were not found:</p></div>
+                            <div class="alert alert-warning"><p>Warning, the following borrowernumbers were not found:</p></div>
                         [% ELSE -%]
-                            <div class="dialog alert"><p>Warning, the following card numbers were not found:</p></div>
+                            <div class="alert alert-warning"><p>Warning, the following card numbers were not found:</p></div>
                         [% END %]
 
                         <div class="page-section">
@@ -202,7 +202,7 @@
 
                     [% IF ( op == 'show_results' ) %]
                         [% IF ( errors ) %]
-                            <div class="dialog alert">
+                            <div class="alert alert-warning">
                             <h4>Errors occurred:</h4>
                             <ul class="warnings">
                             [% FOREACH error IN errors %]
@@ -429,13 +429,13 @@
                 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

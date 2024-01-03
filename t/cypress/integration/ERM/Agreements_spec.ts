@@ -27,7 +27,7 @@ describe("Agreement CRUD operations", () => {
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Agreements").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -299,7 +299,7 @@ describe("Agreement CRUD operations", () => {
             statusCode: 500,
         });
         cy.get("#agreements_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -309,7 +309,7 @@ describe("Agreement CRUD operations", () => {
             body: agreement,
         });
         cy.get("#agreements_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Agreement created"
         );
 
@@ -503,7 +503,7 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_add").contains("Submit").click();
         cy.get("main div[class='modal_centered']").contains("Submitting...");
         cy.wait(1000);
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -513,7 +513,7 @@ describe("Agreement CRUD operations", () => {
             body: agreement,
         });
         cy.get("#agreements_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Agreement updated"
         );
     });
@@ -585,7 +585,7 @@ describe("Agreement CRUD operations", () => {
             statusCode: 500,
         });
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -601,7 +601,7 @@ describe("Agreement CRUD operations", () => {
             "remove this agreement"
         );
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']")
+        cy.get("main div[class='alert alert-info']")
             .contains("Agreement")
             .contains("deleted");
 

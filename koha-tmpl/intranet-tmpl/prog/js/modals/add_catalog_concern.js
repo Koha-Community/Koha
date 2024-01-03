@@ -37,7 +37,7 @@ $(document).ready(function () {
                 $("#concern_body").val("");
                 $("#concern_title").val("");
                 $("#toolbar").before(
-                    '<div class="dialog message">' +
+                    '<div class="alert alert-info">' +
                         __("Your concern was successfully submitted.") +
                         "</div>"
                 );
@@ -49,7 +49,7 @@ $(document).ready(function () {
                 $("#concern-submit-spinner").hide();
                 $("#addConcernModal").modal("hide");
                 $("#toolbar").before(
-                    '<div class="dialog alert">' +
+                    '<div class="alert alert-warning">' +
                         __(
                             "There was an error when submitting your concern, please contact a librarian."
                         ) +

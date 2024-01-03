@@ -206,7 +206,7 @@ SKIP: {
         $s->submit_form;
 
         # Make sure the category is updated
-        $s->driver->find_element('//div[@class="dialog message"]');
+        $s->driver->find_element('//div[@class="alert alert-info"]');
 
         # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our category is not hidden
         $s->show_all_entries('//div[@id="patron_categories_wrapper"]');

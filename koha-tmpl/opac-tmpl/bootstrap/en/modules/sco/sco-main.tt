@@ -310,10 +310,10 @@
                 <div class="col order-first order-md-first order-lg-2">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" href="#checkouts-tab" id="checkouts" aria-controls="home" aria-selected="true" data-toggle="tab">Checkouts ([% issues_count | html %])</a>
+                            <a class="nav-link active" href="#checkouts-tab" id="checkouts" aria-controls="home" aria-selected="true" data-bs-toggle="tab">Checkouts ([% issues_count | html %])</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="#holds-tab" id="holds" aria-controls="home" aria-selected="false" data-toggle="tab">
+                            <a class="nav-link" href="#holds-tab" id="holds" aria-controls="home" aria-selected="false" data-bs-toggle="tab">
                                 [% IF waiting_holds_count %]
                                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                                 [% END %]
@@ -321,7 +321,7 @@
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="#account-tab" id="account" aria-controls="home" aria-selected="false" data-toggle="tab">Charges ([% total | $Price %])</a>
+                            <a class="nav-link" href="#account-tab" id="account" aria-controls="home" aria-selected="false" data-bs-toggle="tab">Charges ([% total | $Price %])</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -371,7 +371,7 @@
                                                             <strong>[% ISSUE.title | html %]</strong>
                                                         [% END %]
                                                         [% IF ( newissues.match(ISSUE.barcode)) %]
-                                                            <span class="label label-info">NEW</span>
+                                                            <span class="badge text-bg-info">NEW</span>
                                                         [% END %]
                                                         <span class="item-details">[% ISSUE.author | html %]</span>
                                                         ([% ISSUE.barcode | html %])
@@ -597,7 +597,7 @@
                 }));
             });
 
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (event) {
                 dTables.DataTable().responsive.recalc();
             } );
 

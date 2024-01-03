@@ -2,7 +2,7 @@
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF report.deleted_itemnumbers.size %]
                 <p>[% report.deleted_itemnumbers.size | html %] item(s) deleted.</p>
                 [% IF report.deleted_biblionumbers.size %]
@@ -14,13 +14,13 @@
         </div>
 
         [% IF report.not_deleted_itemnumbers.size %]
-            <div class="dialog error">
+            <div class="alert alert-warning">
                 [% report.not_deleted_itemnumbers.size | html %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN report.not_deleted_itemnumbers %][% not_deleted_itemnumber | html %] [% END %]
             </div>
         [% END %]
 
         [% IF job.status == 'cancelled' %]
-            <div class="dialog error">
+            <div class="alert alert-warning">
                 <span>The job has been cancelled before it finished.</span>
                 <a href="/cgi-bin/koha/tools/batchMod.pl" title="New batch item modification">New batch item modification</a>
             </div>
@@ -30,7 +30,7 @@
 
 [% BLOCK detail %]
     [% FOR m IN job.messages %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF m.type == 'success' %]
                 <i class="fa fa-check success"></i>
             [% ELSIF m.type == 'warning' %]

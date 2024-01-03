@@ -73,8 +73,8 @@
         [% IF summary.equalterm.size %]
             [% FOREACH term IN summary.equalterm %]
                 <div class="equivalentheading">
-                        <span class="label">=</span>
-                        <span class="authorizedheading">[% term.heading | html %]</span>
+                    <span class="label">=</span>
+                    <span class="authorizedheading">[% term.heading | html %]</span>
                 </div>
             [% END %]
         [% END %]
@@ -114,9 +114,9 @@
         [% ELSE %]
             [% IF summary.notes.size %]
                 <div class="authres_notes">
-                    [% PROCESS notesmodal notes=summary.notes authid=authid %]
-                    <span><a href="#" data-toggle="modal" data-target="#notesModal_[% authid | html %]">Notes</a></span>
+                    <span><a href="#" data-bs-toggle="modal" data-bs-target="#notesModal_[% authid | html %]">Notes</a></span>
                 </div>
+                [% PROCESS notesmodal notes=summary.notes authid=authid %]
             [% END %]
             [% IF ( summary.seefrom.size >= 1 ) %]
             <div class="seefrom">
@@ -161,12 +161,12 @@
 
 [% BLOCK notesmodal %]
 <!-- notes modal -->
-<div style='font-style:normal;' class="modal fade notesModal" id="notesModal_[% authid | html %]" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel">
-    <div class="modal-dialog" role="document">
+<div class="modal notesModal" id="notesModal_[% authid | html %]" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel_[% authid | html %]">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="notesModalLabel">Notes</h4>
+                <h1 class="modal-title" id="notesModalLabel_[% authid | html %]">Notes</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <ul>
@@ -176,7 +176,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

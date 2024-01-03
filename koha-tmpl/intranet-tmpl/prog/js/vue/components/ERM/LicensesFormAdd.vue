@@ -116,7 +116,11 @@
                 />
                 <Documents :documents="license.documents" />
                 <fieldset class="action">
-                    <input type="submit" :value="$__('Submit')" />
+                    <input
+                        type="submit"
+                        class="btn btn-primary"
+                        :value="$__('Submit')"
+                    />
                     <router-link
                         :to="{ name: 'LicensesList' }"
                         role="button"

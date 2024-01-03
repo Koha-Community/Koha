@@ -52,7 +52,7 @@ $(document).ready(function () {
 
     tableInit( "", "search_fields");
 
-    $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+    $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
         var oldtabid = $(e.relatedTarget).data("tabname");
         var newtabid = $(e.target).data("tabname");
         tableInit( oldtabid, newtabid );

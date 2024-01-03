@@ -12,11 +12,7 @@
     [% END %]
 
     <div class="patroninfo [% patron_type_class | html %]">
-        [% IF ( patronimages ) %]
-            <h5 class="text-center">
-        [% ELSE %]
-            <h5>
-        [% END %]
+        <h5>
             [% IF ( patron_is_staff ) %]
                 <i class="fa-solid fa-shield fa-fw" title="Staff patron"></i>
             [% END %]
@@ -35,8 +31,8 @@
             <input type="hidden" id="hiddenborrowercard" value="[% patron.cardnumber | html %]">
         [% END %]
 
-        [% IF ( patronimages ) %]
-            <div>
+        <div class="patroninfo-container">
+            [% IF ( patronimages ) %]
                 <div class="patronimage-container">
                     [% IF ( patron.image ) %]
                         <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" class="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
@@ -58,106 +54,107 @@
                         [% END %]
                     [% END # /IF patron.image %]
                 </div> <!-- /.patronimage-container -->
-            </div>
-        [% END # /IF patronimages %]
-
-        <ul class="patronbriefinfo">
-            [% IF patron.pronouns %]
-                <li class="patronpronouns">([% patron.pronouns | html %])</li>
-            [% END %]
-
-            [% IF !(Koha.Preference('HidePersonalPatronDetailOnCirculation')) %]
-
-                [% PROCESS 'display-address-style' %]
-
-                [% IF ( patron.phone || patron.mobile || patron.phonepro ) %]
-                    <li class="patronphone">
-                        [% IF ( patron.phone ) %]
-                            <a href="tel:[% patron.phone | url %]">[% patron.phone | html %]</a>
-                        [% ELSE %]
-                            [% IF ( patron.mobile ) %]
-                                <a href="tel:[% patron.mobile | url %]">[% patron.mobile | html %]</a>
-                            [% ELSE %]
-                                [% IF ( patron.phonepro ) %]
-                                    <a href="tel:[% patron.phonepro | url %]">[% patron.phonepro | html %]</a>
-                                [% END %]
-                            [% END %]
-                        [% END %]
-                    </li>
-                [% END # /IF phones %]
-                [% IF ( patron.email ) %]
-                    <li class="email">
-                        <a href="mailto:[% patron.email | url %]" title="[% patron.email | html %]">[% patron.email | html %]</a>
-                    </li>
-                [% ELSE %]
-                    [% IF ( patron.emailpro ) %]
-                        <li class="email">
-                            <a href="mailto:[% patron.emailpro | url %]" title="[% patron.emailpro | html %]">[% patron.emailpro | html %]</a>
-                        </li>
+            [% END # /IF patronimages %]
+            <div>
+                <ul class="patronbriefinfo">
+                    [% IF patron.pronouns %]
+                        <li class="patronpronouns">([% patron.pronouns | html %])</li>
                     [% END %]
-                [% END # /IF emails %]
-                [% IF ( patron.dateofbirth ) %]
-                    <li class="patrondateofbirth">
-                        <span>Born:</span>
-                        [% INCLUDE 'patron-age.inc' %]
-                    </li>
-                [% END %]
 
-                [% UNLESS ( patron.address or patron.address2 ) %]
-                    <li><span class="empty" id="noaddressstored">No address stored.</span></li>
-                [% END %]
-                [% UNLESS ( patron.city ) %]
-                    <li><span class="empty" id="nocitystored">No city stored.</span></li>
-                [% END %]
-                [% UNLESS ( patron.phone or patron.mobile or patron.phonepro) %]
-                    <li> <span class="empty">No phone stored.</span></li>
-                [% END %]
-                [% UNLESS ( patron.email or patron.emailpro) %]
-                    <li> <span class="empty">No email stored.</span></li>
-                [% END %]
-                [% UNLESS ( patron.dateofbirth ) %]
-                    <li> <span class="empty">No date of birth stored.</span></li>
-                [% END %]
+                    [% IF !(Koha.Preference('HidePersonalPatronDetailOnCirculation')) %]
 
-            [% END # /IF HidePersonalPatronDetailOnCirculation %]
+                        [% PROCESS 'display-address-style' %]
 
-            [% IF Koha.Preference('ExtendedPatronAttributes') %]
-                [% FOREACH extendedattribute IN patron.extended_attributes %]
-                    [% IF ( extendedattribute.type.display_checkout ) %] [%# FIXME We should filter in the line above %]
-                        [% IF ( extendedattribute.attribute.defined  ) %]
-                            <li class="patronattribute">
-                                <span class="patronattributelabel">[% extendedattribute.type.description | html %]</span>:
-                                [% IF extendedattribute.type.is_date %]
-                                    [% extendedattribute.description | $KohaDates %]
+                        [% IF ( patron.phone || patron.mobile || patron.phonepro ) %]
+                            <li class="patronphone">
+                                [% IF ( patron.phone ) %]
+                                    <a href="tel:[% patron.phone | url %]">[% patron.phone | html %]</a>
                                 [% ELSE %]
-                                    [% extendedattribute.description | html %]
+                                    [% IF ( patron.mobile ) %]
+                                        <a href="tel:[% patron.mobile | url %]">[% patron.mobile | html %]</a>
+                                    [% ELSE %]
+                                        [% IF ( patron.phonepro ) %]
+                                            <a href="tel:[% patron.phonepro | url %]">[% patron.phonepro | html %]</a>
+                                        [% END %]
+                                    [% END %]
                                 [% END %]
-                            </li> <!-- /.patronattribute -->
+                            </li>
+                [% END # /IF phones %]
+                        [% IF ( patron.email ) %]
+                            <li class="email">
+                                <a href="mailto:[% patron.email | url %]" title="[% patron.email | html %]">[% patron.email | html %]</a>
+                            </li>
+                        [% ELSE %]
+                            [% IF ( patron.emailpro ) %]
+                                <li class="email">
+                                    <a href="mailto:[% patron.emailpro | url %]" title="[% patron.emailpro | html %]">[% patron.emailpro | html %]</a>
+                                </li>
+                            [% END %]
+                        [% END # /IF emails %]
+                        [% IF ( patron.dateofbirth ) %]
+                            <li class="patrondateofbirth">
+                                <span>Born:</span>
+                                [% INCLUDE 'patron-age.inc' %]
+                            </li>
                         [% END %]
-                    [% END # /IF display_checkout %]
-                [% END # /FOREACH extendedattribute %]
-            [% END # /IF ExtendedPatronAttributes %]
 
-            <li class="patroncategory">
-                Category: <span class="patroncategory_description">[% patron.category.description | html %]</span> <span class="patroncategory_code">([% patron.categorycode | html %])</span>
-            </li>
-            <li class="patronlibrary">
-                Home library: [% Branches.GetName( patron.branchcode ) | html %]
-            </li>
-            <li class="patronborrowernumber">
-                Borrowernumber: [% patron.borrowernumber | html %]
-            </li>
-            <li>
-                <span class="patronupdatedon">Updated on [% patron.updated_on | $KohaDates with_hours => 1 %]</span>
-            </li>
-            [% IF patron.account_locked %]
-                [% IF patron.login_attempts < 0 %]
-                    <li class="blocker account_admin_locked">Account has been administratively locked</li>
-                [% ELSE %]
-                    <li class="blocker account_locked">Account has been locked</li>
-                [% END %]
-            [% END %]
-        </ul> <!-- /.patronbriefinfo -->
+                        [% UNLESS ( patron.address or patron.address2 ) %]
+                            <li><span class="empty" id="noaddressstored">No address stored.</span></li>
+                        [% END %]
+                        [% UNLESS ( patron.city ) %]
+                            <li><span class="empty" id="nocitystored">No city stored.</span></li>
+                        [% END %]
+                        [% UNLESS ( patron.phone or patron.mobile or patron.phonepro) %]
+                            <li> <span class="empty">No phone stored.</span></li>
+                        [% END %]
+                        [% UNLESS ( patron.email or patron.emailpro) %]
+                            <li> <span class="empty">No email stored.</span></li>
+                        [% END %]
+                        [% UNLESS ( patron.dateofbirth ) %]
+                            <li> <span class="empty">No date of birth stored.</span></li>
+                        [% END %]
+
+                    [% END # /IF HidePersonalPatronDetailOnCirculation %]
+
+                    [% IF Koha.Preference('ExtendedPatronAttributes') %]
+                        [% FOREACH extendedattribute IN patron.extended_attributes %]
+                            [% IF ( extendedattribute.type.display_checkout ) %] [%# FIXME We should filter in the line above %]
+                                [% IF ( extendedattribute.attribute.defined  ) %]
+                                    <li class="patronattribute">
+                                        <span class="patronattributelabel">[% extendedattribute.type.description | html %]</span>:
+                                        [% IF extendedattribute.type.is_date %]
+                                            [% extendedattribute.description | $KohaDates %]
+                                        [% ELSE %]
+                                            [% extendedattribute.description | html %]
+                                        [% END %]
+                                    </li> <!-- /.patronattribute -->
+                                [% END %]
+                            [% END # /IF display_checkout %]
+                        [% END # /FOREACH extendedattribute %]
+                    [% END # /IF ExtendedPatronAttributes %]
+
+                    <li class="patroncategory">
+                        Category: <span class="patroncategory_description">[% patron.category.description | html %]</span> <span class="patroncategory_code">([% patron.categorycode | html %])</span>
+                    </li>
+                    <li class="patronlibrary">
+                        Home library: [% Branches.GetName( patron.branchcode ) | html %]
+                    </li>
+                    <li class="patronborrowernumber">
+                        Borrowernumber: [% patron.borrowernumber | html %]
+                    </li>
+                    <li>
+                        <span class="patronupdatedon">Updated on [% patron.updated_on | $KohaDates with_hours => 1 %]</span>
+                    </li>
+                    [% IF patron.account_locked %]
+                        [% IF patron.login_attempts < 0 %]
+                            <li class="blocker account_admin_locked">Account has been administratively locked</li>
+                        [% ELSE %]
+                            <li class="blocker account_locked">Account has been locked</li>
+                        [% END %]
+                    [% END %]
+                </ul> <!-- /.patronbriefinfo -->
+            </div>
+        </div>
     </div> <!-- /.patronifo -->
 
     <div id="menu">
@@ -262,11 +259,11 @@
     [% IF patronimages && CAN_user_tools_batch_upload_patron_images %]
         <!-- Modal -->
         <div class="modal" id="patronImageEdit" tabindex="-1" role="dialog" aria-labelledby="patronImageEditLabel">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="patronImageEditLabel">Patron photo</h4>
+                        <h1 class="modal-title" id="patronImageEditLabel">Patron photo</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div> <!-- /.modal-header -->
                     <div class="modal-body">
                         [% IF ( patron.cardnumber ) %]
@@ -340,7 +337,7 @@
                                     <input name="op" type="hidden" value="cud-Upload" />
                                 </form> <!-- /#camera-upload -->
                             </div> <!-- /#capture-patron-image -->
-                            <div class="dialog message" style="display:none" id="camera-error">
+                            <div class="alert alert-info" style="display:none" id="camera-error">
                                 <div>
                                     <span class="fa-stack fa-lg">
                                         <i class="fa fa-camera fa-stack-1x"></i>
@@ -359,7 +356,7 @@
                         [% END # /IF patron.cardnumber %]
                     </div> <!-- /.modal-body -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div> <!-- /.modal-content -->
             </div> <!-- /.modal-dialog -->

@@ -169,7 +169,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             [% INCLUDE 'messages.inc' %]
 
     <div id="item-search-block">
@@ -404,23 +404,23 @@
                 + '        <a href="#" id="clear_all" class="btn btn-link"><i class="fa fa-times"></i> '
                 +              _("Clear selection")
                 + '        </a>'
-                + '        <div class="btn-group"><button class="btn btn-default btn-sm dropdown-toggle" id="export-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + _("Export all results to") + ' <span class="caret"></span></button>'
+                + '        <div class="btn-group"><button class="btn btn-default btn-sm dropdown-toggle" id="export-button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + _("Export all results to") + '</button>'
                 + '            <ul class="dropdown-menu">'
-                + '                <li><a href="#" id="csvExportLink">' + _("CSV") + '</a></li>'
-                + '                <li><a href="#" id="barcodesExportLink">' + _("Barcode file") + '</a></li>'
+                + '                <li><a class="dropdown-item" href="#" id="csvExportLink">' + _("CSV") + '</a></li>'
+                + '                <li><a class="dropdown-item" href="#" id="barcodesExportLink">' + _("Barcode file") + '</a></li>'
                 + '            </ul>'
                 + '        </div>';
             [% IF ( CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) %]
                 table += ''
-                    + '        <div class="btn-group"><button class="btn btn-default btn-sm dropdown-toggle disabled" disabled="disabled" type="button" id="batch_mod_menu"data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> ' + _("Batch operations") + ' <span class="caret"></span> </button>'
+                    + '        <div class="btn-group"><button class="btn btn-default btn-sm dropdown-toggle disabled" disabled="disabled" type="button" id="batch_mod_menu"data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> ' + _("Batch operations") + ' </button>'
                     + '            <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">';
                 [% IF ( CAN_user_tools_items_batchmod ) %]
                     table += ''
-                        + '                <li> <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="' + _("Send selected items to batch item modification") + '" class="batch_op send_to_item_mod">' + _("Batch item modification") + '</a> </li>';
+                        + '                <li> <a class="dropdown-item" href="#" data-submit="batch_item_modification" data-bs-toggle="tooltip" data-bs-placement="right" title="' + _("Send selected items to batch item modification") + '" class="batch_op send_to_item_mod">' + _("Batch item modification") + '</a> </li>';
                 [% END %]
                 [% IF ( CAN_user_tools_items_batchdel ) %]
                     table += ''
-                        + '                <li> <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="' + _("Send selected items to batch item deletion") + '" class="batch_op send_to_item_del">' + _("Batch item deletion") + '</a> </li>';
+                        + '                <li> <a class="dropdown-item" href="#" data-submit="batch_item_deletion" data-bs-toggle="tooltip" data-bs-placement="right" title="' + _("Send selected items to batch item deletion") + '" class="batch_op send_to_item_del">' + _("Batch item deletion") + '</a> </li>';
                 [% END %]
                 table += ''
                     + '            </ul>'

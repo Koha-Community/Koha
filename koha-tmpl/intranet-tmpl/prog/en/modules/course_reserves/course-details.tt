@@ -49,7 +49,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-10 offset-md-1">
                 [% INCLUDE 'messages.inc' %]
 
             <h1>Reserves</h1>
@@ -83,8 +83,7 @@
             [% END %]
 
             <div class="page-section clearfix">
-
-                <fieldset class="rows">
+                <fieldset class="rows clearfix">
                 <ol>
                     <li><span class="label">Course name</span> [% course.course_name | html %]</li>
                     <li><span class="label">[% tp('Semester', 'Term') | html %]</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) | html %]</li>

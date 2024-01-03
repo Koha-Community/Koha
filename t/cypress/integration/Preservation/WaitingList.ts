@@ -77,7 +77,7 @@ describe("WaitingList", () => {
         cy.get("#waiting-list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
         cy.contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -97,7 +97,7 @@ describe("WaitingList", () => {
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
         cy.contains("Submit").click();
         cy.wait("@get-items");
-        cy.get("main div[class='dialog alert modal']").contains(
+        cy.get("main div[class='alert alert-warning modal']").contains(
             "2 new items added. 1 items not found."
         );
     });
@@ -119,7 +119,7 @@ describe("WaitingList", () => {
         });
         cy.get("#waiting-list table tbody tr:first").contains("Remove").click();
         cy.contains("Yes, remove").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -130,7 +130,7 @@ describe("WaitingList", () => {
         });
         cy.get("#waiting-list table tbody tr:first").contains("Remove").click();
         cy.contains("Yes, remove").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             `Item removed from the waiting list`
         );
     });

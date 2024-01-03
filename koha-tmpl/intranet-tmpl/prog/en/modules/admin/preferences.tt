@@ -36,17 +36,17 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
     [% IF ( jump_not_found ) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         Could not find a system preference named <code>[% jumpfield | html %]</code>.
     </div>
     [% END %]
     [% IF ( search_not_found ) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         No system preferences matched your search for: <strong>[% searchfield | html %]</strong>
     </div>
     <h1>System preferences</h1>
@@ -68,16 +68,13 @@
             [% IF ( LINE.is_group_title ) %]
             [% UNLESS ( loop.first ) %]</tbody></table></div>[% END %]
             <div class="page-section">
-            <div class="row">
-                <div class="col-sm-6">
+                <div class="category-heading">
                     <h3 id="[% TAB.tab_id | $HtmlId %]_[% LINE.title | $HtmlId %]"><i class="fa fa-caret-down"></i> [% LINE.title | html %]</h3>
-                </div>
-                <div class="col-sm-6">
+
                     [% IF ( searchfield ) %]
-                        <div class="pull-right"><a class="btn btn-link" href="/cgi-bin/koha/admin/preferences.pl?tab=[% TAB.tab_id | html %]#[% TAB.tab_id | $HtmlId %]_[% LINE.title | $HtmlId %]"><i class="fa fa-list-ul"></i> View all [% LINE.title | html %] preferences</a></div>
+                        <div><a class="btn btn-link" href="/cgi-bin/koha/admin/preferences.pl?tab=[% TAB.tab_id | html %]#[% TAB.tab_id | $HtmlId %]_[% LINE.title | $HtmlId %]"><i class="fa fa-list-ul"></i> View all [% LINE.title | html %] preferences</a></div>
                     [% END %]
                 </div>
-            </div>
 
             <table class="preferences" id="collapse_[% TAB.tab_id | $HtmlId %]_[% LINE.title | $HtmlId %]">
             <thead><tr><th>Preference</th><th>Value</th></tr></thead>
@@ -226,7 +223,7 @@
                     [% END %]
                     [% IF LINE.WARNINGS.size %]
                         [% FOR w IN LINE.WARNINGS %]
-                            <div class="dialog alert">
+                            <div class="alert alert-warning">
                                 [% SWITCH w %]
                                 [% CASE "bcrypt_config_not_set" %]<span>Pseudonymization must only be turned on if the 'bcrypt_settings' configuration entry exists and is correctly filled in the Koha configuration file.</span>
                                 [% CASE %]<span>Unknown warning "[% w | html %]"</span>
@@ -245,22 +242,22 @@
     [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'prefs-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 <!-- Modal -->
 <div class="modal" id="prefModal" tabindex="-1" role="dialog" aria-labelledby="prefModalLabel">
-    <div class="modal-dialog modal-wide" role="document">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="prefModalLabel">Modal title</h4>
+                <h1 class="modal-title" id="prefModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>
@@ -271,8 +268,8 @@
                 <div id="prefModalBody"></div>
             </div>
             <div class="modal-footer">
-                <button id="saveModalPrefs" data-target="" type="button" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-link cancel" data-dismiss="modal">Cancel</button>
+                <button id="saveModalPrefs" type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

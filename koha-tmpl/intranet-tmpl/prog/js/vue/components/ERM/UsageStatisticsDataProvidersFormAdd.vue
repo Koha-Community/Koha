@@ -64,6 +64,7 @@
                                     !usage_data_provider.erm_usage_data_provider_id
                                 "
                                 type="button"
+                                class="btn btn-default"
                                 style="margin-left: 1em"
                                 @click="createManualProvider()"
                             >

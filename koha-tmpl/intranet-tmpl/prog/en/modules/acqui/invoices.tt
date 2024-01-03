@@ -33,7 +33,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -95,23 +95,23 @@
                                             <td>
 
                                                 <div class="btn-group dropup">
-                                                    <a class="btn btn-default btn-xs dropdown-toggle" id="invoiceactions[% invoice.invoiceid | html %]" role="button" data-toggle="dropdown" href="#">
-                                                        Actions <b class="caret"></b>
+                                                    <a class="btn btn-default btn-xs dropdown-toggle" id="invoiceactions[% invoice.invoiceid | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                                                        Actions
                                                     </a>
-                                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="invoiceactions[% invoice.invoiceid | html %]">
-                                                        <li><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid | uri %]"><i class="fa fa-search"></i> Details</a></li>
+                                                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="invoiceactions[% invoice.invoiceid | html %]">
+                                                        <li><a class="dropdown-item" href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid | uri %]"><i class="fa fa-search"></i> Details</a></li>
                                                         [% IF invoice.closedate %]
                                                             [% IF CAN_user_acquisition_reopen_closed_invoices %]
-                                                            <li><a class="submit-form-link" data-action="invoice.pl" data-op="cud-reopen" data-invoiceid="[% invoice.invoiceid | uri %]" data-referer="/cgi-bin/koha/acqui/invoices.pl?op=do_search&invoicenumber=[% invoicenumber | html %]&supplier=[% booksellerid | html %]&shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]&shipmentdateto=[% shipmentdateto | $KohaDates %]&billingdatefrom=[% billingdatefrom | $KohaDates %]&billingdateto=[% billingdateto | $KohaDates %]&isbneanissn=[% isbneanissn | html %]&title=[% title | html %]&author=[% author | html %]&publisher=[% publisher | html %]&publicationyear=[% publicationyear | html %]&branch=[% branch | html %]" data-method="post"><i class="fa-solid fa-rotate"></i> Reopen</a></li>
+                                                            <li><a class="dropdown-item submit-form-link" data-action="invoice.pl" data-op="cud-reopen" data-invoiceid="[% invoice.invoiceid | uri %]" data-referer="/cgi-bin/koha/acqui/invoices.pl?op=do_search&invoicenumber=[% invoicenumber | html %]&supplier=[% booksellerid | html %]&shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]&shipmentdateto=[% shipmentdateto | $KohaDates %]&billingdatefrom=[% billingdatefrom | $KohaDates %]&billingdateto=[% billingdateto | $KohaDates %]&isbneanissn=[% isbneanissn | html %]&title=[% title | html %]&author=[% author | html %]&publisher=[% publisher | html %]&publicationyear=[% publicationyear | html %]&branch=[% branch | html %]" data-method="post"><i class="fa-solid fa-rotate"></i> Reopen</a></li>
                                                             [% END %]
                                                         [% ELSE %]
                                                             [% IF CAN_user_acquisition_edit_invoices %]
-                                                            <li><a class="submit-form-link" data-action="invoice.pl" data-op="cud-close" data-invoiceid="[% invoice.invoiceid | html %]" data-referer="/cgi-bin/koha/acqui/invoices.pl?op=do_search&invoicenumber=[% invoicenumber | html %]&supplier=[% booksellerid | html %]&shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]&shipmentdateto=[% shipmentdateto | $KohaDates %]&billingdatefrom=[% billingdatefrom | $KohaDates %]&billingdateto=[% billingdateto | $KohaDates %]&isbneanissn=[% isbneanissn | html %]&title=[% title | html %]&author=[% author | html %]&publisher=[% publisher | html %]&publicationyear=[% publicationyear | html %]&branch=[% branch | html %]" data-method="post"><i class="fa fa-times-circle"></i> Close</a></li>
+                                                            <li><a class="dropdown-item submit-form-link" data-action="invoice.pl" data-op="cud-close" data-invoiceid="[% invoice.invoiceid | html %]" data-referer="/cgi-bin/koha/acqui/invoices.pl?op=do_search&invoicenumber=[% invoicenumber | html %]&supplier=[% booksellerid | html %]&shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]&shipmentdateto=[% shipmentdateto | $KohaDates %]&billingdatefrom=[% billingdatefrom | $KohaDates %]&billingdateto=[% billingdateto | $KohaDates %]&isbneanissn=[% isbneanissn | html %]&title=[% title | html %]&author=[% author | html %]&publisher=[% publisher | html %]&publicationyear=[% publicationyear | html %]&branch=[% branch | html %]" data-method="post"><i class="fa fa-times-circle"></i> Close</a></li>
                                                             [% END %]
                                                         [% END # /IF invoice.closedate %]
                                                         [% UNLESS invoice.receivedbiblios || invoice.receiveditems %]
                                                             [% IF CAN_user_acquisition_delete_invoices %]
-                                                            <li><a class="submit-form-link" data-action="invoice.pl" data-op="cud-delete" data-invoiceid="[% invoice.invoiceid | html %]" data-referer="/cgi-bin/koha/acqui/invoices.pl?op=do_search&invoicenumber=[% invoicenumber | html %]&supplier=[% booksellerid | html %]&shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]&shipmentdateto=[% shipmentdateto | $KohaDates %]&billingdatefrom=[% billingdatefrom | $KohaDates %]&billingdateto=[% billingdateto | $KohaDates %]&isbneanissn=[% isbneanissn | uri %]&title=[% title | html %]%26author=[% author | html %]&publisher=[% publisher | html %]&publicationyear=[% publicationyear | html %]&branch=[% branch | html %]" data-method="post"><i class="fa fa-trash-can"></i> Delete</a></li>
+                                                            <li><a class="dropdown-item submit-form-link" data-action="invoice.pl" data-op="cud-delete" data-invoiceid="[% invoice.invoiceid | html %]" data-referer="/cgi-bin/koha/acqui/invoices.pl?op=do_search&invoicenumber=[% invoicenumber | html %]&supplier=[% booksellerid | html %]&shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]&shipmentdateto=[% shipmentdateto | $KohaDates %]&billingdatefrom=[% billingdatefrom | $KohaDates %]&billingdateto=[% billingdateto | $KohaDates %]&isbneanissn=[% isbneanissn | uri %]&title=[% title | html %]%26author=[% author | html %]&publisher=[% publisher | html %]&publicationyear=[% publicationyear | html %]&branch=[% branch | html %]" data-method="post"><i class="fa fa-trash-can"></i> Delete</a></li>
                                                             [% END %]
                                                         [% END %]
                                                     </ul>
@@ -147,7 +147,7 @@
                                     [% IF openedinvoices %]
                                         [% INCLUDE invoices_table invoices = openedinvoices %]
                                     [% ELSE %]
-                                        <div class="dialog message">
+                                        <div class="alert alert-info">
                                             <p>Your search returned no open invoices.</p>
                                         </div>
                                     [% END %]
@@ -157,7 +157,7 @@
                                     [% IF closedinvoices %]
                                         [% INCLUDE invoices_table invoices = closedinvoices closed = 1 %]
                                     [% ELSE %]
-                                        <div class="dialog message">
+                                        <div class="alert alert-info">
                                             <p>Your search returned no closed invoices.</p>
                                         </div>
                                     [% END %]
@@ -302,9 +302,9 @@
                     <p>Use the search form on the left to find invoices.</p>
                 [% END %]<!-- do_search -->
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 <form action="" method="get">
                     <fieldset class="sidebar brief">
@@ -413,7 +413,7 @@
                 </form>
                 [% INCLUDE 'acquisitions-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

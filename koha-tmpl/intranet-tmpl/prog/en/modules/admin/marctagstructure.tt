@@ -87,7 +87,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -178,7 +178,7 @@
 
 
 [% IF ( delete_confirm ) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h3>[% tx("Confirm deletion of tag {searchfield}?", { searchfield = searchfield }) | html %]</h3>
         <p>Tag: [% searchfield | html %]</p>
         <p>Description: [% liblibrarian | html %]</p>
@@ -187,10 +187,10 @@
             <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
             <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this tag</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this tag</button>
         </form>
         <form action="[% script_name | html %]" method="get"><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
-            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -279,13 +279,13 @@
             <td>[% loo.ind2_defaultvalue | html %]</td>
             <td>
                 <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield | html %]" role="button" data-toggle="dropdown" href="#">
-                        Actions <b class="caret"></b></a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="marctagactions[% loo.tagfield | html %]">
-                        <li><a href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit tag</a></li>
-                        <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-eye"></i> View subfields</a></li>
-                        <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit subfields</a></li>
-                        <li><a href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                        Actions </a>
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="marctagactions[% loo.tagfield | html %]">
+                        <li><a class="dropdown-item" href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit tag</a></li>
+                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-eye"></i> View subfields</a></li>
+                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit subfields</a></li>
+                        <li><a class="dropdown-item" href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>
@@ -297,13 +297,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

@@ -26,37 +26,41 @@
 
 [% BLOCK cancel_modal %]
     <div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3>Confirm deletion</h3>
+                    <h1 class="modal-title">Confirm deletion</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
                     <p>Are you sure you want to cancel this article request?</p>
 
-                    <fieldset class="action">
+                    <fieldset class="brief">
                         [% SET ar_cancellation = AuthorisedValues.GetAuthValueDropbox('AR_CANCELLATION') %]
                         [% IF ar_cancellation.count %]
-                            <label for="cancellation-reason" class="col-sm-4">Cancellation reason: </label>
-                            <select class="cancellation-reason col-sm-8" name="cancellation-reason" id="modal-cancellation-reason">
-                                <option value="" selected>Other reasons</option>
-                                [% FOREACH reason IN ar_cancellation %]
-                                    <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
-                                [% END %]
-                            </select>
+                            <ol>
+                                <li>
+                                    <label for="cancellation-reason" class="col-sm-4">Cancellation reason: </label>
+                                    <select class="cancellation-reason col-sm-8" name="cancellation-reason" id="modal-cancellation-reason">
+                                        <option value="" selected>Other reasons</option>
+                                        [% FOREACH reason IN ar_cancellation %]
+                                            <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <div class="hint col-sm-offset-4">Enter reason</div>
+                                    <input type="text" class="notes col-sm-offset-4 col-sm-8" name="notes" id="modal-notes"/>
+                                </li>
+                            </ol>
                         [% END %]
-                    </fieldset>
-                    <fieldset class="action">
-                        <div class="hint col-sm-offset-4">Enter reason</div>
-                        <input type="text" class="notes col-sm-offset-4 col-sm-8" name="notes" id="modal-notes"/>
                     </fieldset>
                 </div>
 
                 <div class="modal-footer">
-                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger" data-dismiss="modal">Confirm cancellation</button>
-                    <a href="#" data-dismiss="modal">Cancel</a>
+                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger" data-bs-dismiss="modal">Confirm cancellation</button>
+                    <a class="btn btn-default" href="#" data-bs-dismiss="modal">Cancel</a>
                 </div>
             </div>
         </div>
@@ -90,13 +94,13 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
                     <h1>Request article from [% INCLUDE 'biblio-title.inc' link = 1 %]</h1>
                     [% IF error_message %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                         [% SWITCH error_message %]
                             [% CASE 'article_request_limit_reached'       %]<p>Patron reached daily limit.</p>
                             [% CASE 'article_request_unhandled_exception' %]<p>An error has occurred. Check the logs for details.</p>
@@ -112,7 +116,7 @@
                     [% ELSE %]
                         [% IF biblio.can_article_request( patron ) %]
                             [% IF article_request_fee > 0 %]
-                                <div class="dialog alert">
+                                <div class="alert alert-warning">
                                     Patron will be charged with <strong>[% article_request_fee | $Price %]</strong> for every request
                                 </div>
                             [% END %]
@@ -323,7 +327,7 @@
                                             [% END %]
                                         </td>
                                         <td>
-                                            <i id="update-processing-[% ar.id | html %]" class="fa fa-cog fa-spin hidden"></i>
+                                            <i id="update-processing-[% ar.id | html %]" class="fa fa-cog fa-spin" style="visibility: hidden"></i>
                                             <select name="branchcode" id="branchcode-[% ar.id | html %]" class="ar-update-branchcode">
                                                 [% FOREACH b IN Branches.all %]
                                                     [% IF b.branchcode == ar.branchcode %]
@@ -348,13 +352,13 @@
                     [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'biblio-view-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -399,7 +403,7 @@
 
             $(".ar-cancel-request").on("click", function(){
                 cancel_a = $(this);
-                $('#cancelModal').modal();
+                $('#cancelModal').modal('show');
             });
 
             // Initialize format(s)

@@ -3,18 +3,16 @@
 <div id="toolbar" class="btn-toolbar">
     [% IF ( booksellerid ) %]
         <div class="btn-group">
-        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-plus"></i> New
-        <span class="caret"></span>
-        </a>
+        <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" href="#"><i class="fa fa-plus"></i> New</a>
         <ul class="dropdown-menu">
             [% IF CAN_user_acquisition_order_manage && active %]
-                <li><a href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;op=add_form">Basket</a></li>
+                <li><a class="dropdown-item" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;op=add_form">Basket</a></li>
             [% END %]
             [% IF CAN_user_acquisition_contracts_manage && active %]
-                <li><a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid | uri %]">Contract</a></li>
+                <li><a class="dropdown-item" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid | uri %]">Contract</a></li>
             [% END %]
             [% IF ( CAN_user_acquisition_vendors_manage ) %]
-                <li><a href="/cgi-bin/koha/acqui/supplier.pl?op=enter">Vendor</a></li>
+                <li><a class="dropdown-item" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">Vendor</a></li>
             [% END %]
         </ul>
         </div>

@@ -3,8 +3,8 @@
 
 [% BLOCK 'modal-claims-display' %]
     <!-- Claims Returned Modal -->
-    <div class="modal fade" id="claims-returned-modal" tabindex="-1" role="dialog" aria-labelledby="claims-returned-modal-label">
-        <div class="modal-dialog" role="document">
+    <div class="modal" id="claims-returned-modal" tabindex="-1" role="dialog" aria-labelledby="claims-returned-modal-label">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="claims-returned-modal-label">Claim returned</h4>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="modal-footer">
                     <button id="claims-returned-modal-btn-submit" type="button" class="btn btn-primary"><i class="fa fa-exclamation-circle"></i> Make claim</button>
-                    <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+                    <button class="btn btn-default deny cancel" type="button" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
         $('#claims-returned-itemnumber').val(itemnumber);
         $('#claims-returned-notes').val("");
         $('#claims-returned-charge-lost-fee').attr('checked', false);
-        $('#claims-returned-modal').modal();
+        $('#claims-returned-modal').modal("show");
     });
     $(document).on("click", '#claims-returned-modal-btn-submit', function(e){
         let itemnumber = $('#claims-returned-itemnumber').val();

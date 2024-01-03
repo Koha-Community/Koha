@@ -4,11 +4,11 @@
 [% BLOCK report %]
     [% IF job.status == 'finished' %]
         [% IF report %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 [% report.record_ids.size | html %] records have successfully been reindexed.
             </div>
         [% ELSE %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                Job data could not be read, see the logs for details
             </div>
         [% END %]
@@ -19,7 +19,7 @@
 
 [% BLOCK detail %]
     [% FOR m IN job.messages %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF m.type == 'success' %]
                 <i class="fa fa-check success"></i>
             [% ELSIF m.type == 'warning' %]

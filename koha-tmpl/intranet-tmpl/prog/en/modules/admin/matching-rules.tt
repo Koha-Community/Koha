@@ -103,7 +103,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -426,16 +426,16 @@
                 [% END # /IF ( matching_rule_form ) %]
 
                 [% IF ( delete_matching_rule_form ) %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <h1>Confirm deletion of record matching rule <span class="ex">'[% code | html %]' ([% description | html %])</span>?</h1>
                         <form action="[% script_name | html %]" name="Aform" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="[% confirm_op | html %]" />
                             <input type="hidden" name="matcher_id" value="[% matcher_id | html %]" />
-                            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete record matching rule</button>
+                            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete record matching rule</button>
                         </form>
                         <form action="[% script_name | html %]" method="get">
-                            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+                            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                         </form>
                     </div>
                 [% END # /IF ( delete_matching_rule_form ) %]
@@ -449,13 +449,13 @@
                     <h1>Record matching rules</h1>
 
                     [% IF ( added_matching_rule ) %]
-                        <div class="dialog message">Added record matching rule &quot;[% added_matching_rule | html %]&quot;</div>
+                        <div class="alert alert-info">Added record matching rule &quot;[% added_matching_rule | html %]&quot;</div>
                     [% END %]
                     [% IF ( edited_matching_rule ) %]
-                        <div class="dialog message">Modified record matching rule &quot;[% edited_matching_rule | html %]&quot;</div>
+                        <div class="alert alert-info">Modified record matching rule &quot;[% edited_matching_rule | html %]&quot;</div>
                     [% END %]
                     [% IF ( deleted_matching_rule ) %]
-                        <div class="dialog message">Deleted record matching rule &quot;[% deleted_matching_rule | html %]&quot;</div>
+                        <div class="alert alert-info">Deleted record matching rule &quot;[% deleted_matching_rule | html %]&quot;</div>
                     [% END %]
                     [% IF ( available_matching_rules ) %]
                         <div class="page-section">
@@ -591,13 +591,13 @@
                 [% END # /IF ( matching_rule_form ) %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

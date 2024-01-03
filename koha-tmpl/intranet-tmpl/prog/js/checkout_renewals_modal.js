@@ -4,7 +4,7 @@ $(document).ready(function(){
         e.preventDefault();
         $('#checkoutRenewals #incomplete').html('').hide();
         $('#checkoutRenewals #results').html('').hide();
-        $('#checkoutRenewals').modal({show:true});
+        $('#checkoutRenewals').modal("show");
         var renewals = $(this).data('renewals');
         var checkoutID = $(this).data('issueid');
         $('#checkoutRenewals #retrieving').show();

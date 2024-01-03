@@ -79,5 +79,5 @@ $(document).ready(function(){
         toggle_digest(Number($(this).attr("id").replace("phone", "")));
     });
 
-//    $('#memberentry_messaging_prefs [data-toggle="tooltip"][disabled]').tooltip();
+//    $('#memberentry_messaging_prefs [data-bs-toggle="tooltip"][disabled]').tooltip();
 });

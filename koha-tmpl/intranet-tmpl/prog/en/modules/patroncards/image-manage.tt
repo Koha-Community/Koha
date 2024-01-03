@@ -33,7 +33,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -41,7 +41,7 @@
                 <h1>Image manager</h1>
                 [% INCLUDE 'patroncards-errors.inc' %]
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
                         <h2>Upload additional images for patron cards</h2>
                         <p>Manage additional images to use as logo, decoration or background on a patron card layout.</p>
                         <form name="upload_images" method="post" action="/cgi-bin/koha/patroncards/image-manage.pl" enctype="multipart/form-data">
@@ -67,7 +67,7 @@
                                 </li>
                                 </ol>
                                 [% IF ( IMPORT_SUCCESSFUL ) %]
-                                    <div class="dialog message">
+                                    <div class="alert alert-info">
                                     <h3>Image successfully uploaded</h3>
                                     <ul><li>File: [% SOURCE_FILE | html %]</li>
                                     <li>Image name: [% IMAGE_NAME | html %]</li></ul>
@@ -80,7 +80,7 @@
                             </fieldset>
                         </form>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
                     <h2>Delete images</h2>
                         [% IF ( TABLE ) %]
                         <form name="delete_images" method="post" action="/cgi-bin/koha/patroncards/image-manage.pl" enctype="multipart/form-data">
@@ -127,7 +127,7 @@
                                     [% END %]
                                 </table>
                                 [% IF ( DELETE_SUCCESSFULL ) %]
-                                <div id="dialog" class="dialog message">
+                                <div id="dialog" class="alert alert-info">
                                     <h3>Image(s) successfully deleted</h3>
                                 </div>
                                 [% END %]
@@ -143,7 +143,7 @@
                                 No images are currently available.
                             </div>
                             [% IF ( DELETE_SUCCESSFULL ) %]
-                                <div id="dialog" class="dialog message">
+                                <div id="dialog" class="alert alert-info">
                                     <h3>Image(s) successfully deleted</h3>
                                 </div>
                             [% END %]
@@ -153,13 +153,13 @@
                 </div>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

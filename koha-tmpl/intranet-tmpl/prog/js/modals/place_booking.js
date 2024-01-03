@@ -846,7 +846,7 @@ $("#placeBookingForm").on("submit", function (e) {
 
             // Set feedback
             $("#transient_result").replaceWith(
-                '<div id="transient_result" class="dialog message">' +
+                '<div id="transient_result" class="alert alert-info">' +
                     __("Booking successfully placed") +
                     "</div>"
             );
@@ -914,7 +914,7 @@ $("#placeBookingForm").on("submit", function (e) {
 
             // Set feedback
             $("#transient_result").replaceWith(
-                '<div id="transient_result" class="dialog message">' +
+                '<div id="transient_result" class="alert alert-info">' +
                     __("Booking successfully updated") +
                     "</div>"
             );

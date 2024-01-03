@@ -33,7 +33,7 @@
     var Sticky;
     $(document).ready(function() {
 
-        $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+        $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
             $( e.target.hash + " .input_marceditor:visible:eq(0)").focus();
         });
 
@@ -168,7 +168,7 @@
                 }
             });
             $("#auloadpreview").html( content );
-            $("#auEditPreview").modal();
+            $("#auEditPreview").modal("show");
         });
     });
 
@@ -236,7 +236,7 @@
         var label = new Array();
         var flag = false;
         var tabflag= new Array();
-        var StrAlert = "<div id='form-errors' class='dialog alert list'>";
+        var StrAlert = "<div id='form-errors' class='alert alert-warning list'>";
         var notFilledClass = "subfield_not_filled";
 
         [% FOREACH BIG_LOO IN BIG_LOOP %]
@@ -448,7 +448,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-10 offset-md-1">
                 [% INCLUDE 'messages.inc' %]
 
                 [% IF ( authid ) %]
@@ -460,7 +460,7 @@
                 <div id="check_errors"></div>
 
                 [% IF ( duplicateauthid ) %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <h3>Duplicate record suspected</h3>
                         <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | uri %]" class="popup" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | html %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue | html %]</a> ?</p>
 
@@ -495,11 +495,11 @@
                             [% END %]
                         </div>
                         <div class="btn-group">
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
+                            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> Settings</button>
                             <ul id="settings-menu" class="dropdown-menu">
-                                <li class="dropdown-header">Change authority type</li>
+                                <li><h6 class="dropdown-header">Change authority type</h6></li>
                                 <li>
-                                    <a href="#" class="change-authtype" data-authtypecode="">
+                                    <a href="#" class="change-authtype dropdown-item" data-authtypecode="">
                                         [% IF ( authtypecode ) %]
                                            <i class="fa fa-fw">&nbsp;</i>
                                         [% ELSE %]
@@ -510,7 +510,7 @@
                                 </li>
                                 [% FOREACH authority_type IN authority_types %]
                                     <li>
-                                        <a href="#" class="change-authtype" data-authtypecode="[% authority_type.authtypecode | html %]">
+                                        <a href="#" class="change-authtype dropdown-item" data-authtypecode="[% authority_type.authtypecode | html %]">
                                             [% IF authority_type.authtypecode == authtypecode %]
                                                 <i class="fa fa-fw fa-check"></i>
                                             [% ELSE %]
@@ -562,7 +562,7 @@
                             </ul>
                         </div>
                     </div> <!-- /#toolbar -->
-                    <div id="action">
+                    <div class="alert alert-info" id="action">
                         [% IF count %]
                                 Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an:[% authid | uri %]">[% count | html %] record(s)</a>
                         [% ELSE %]

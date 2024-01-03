@@ -4,7 +4,7 @@
     [% SET report = job.report %]
     [% IF report %]
         [% IF job.status == 'finished' %]
-            <div class="dialog message">Success: Import reverted</div>
+            <div class="alert alert-info">Success: Import reverted</div>
         [% END %]
         <table>
             <tr>

@@ -21,9 +21,9 @@
 
 	[% IF ( BarcodeNotFound ) %]
 		<body id="labels_spinelabel-print" class="tools labels">
-            <div class="dialog message">The barcode [% Barcode | html %] was not found.</div>
+            <div class="alert alert-info">The barcode [% Barcode | html %] was not found.</div>
 
-            <nav class="navbar navbar-default navbar-fixed-bottom noprint">
+            <nav class="navbar navbar-default fixed-bottom noprint">
                 <div class="container-fluid">
                     <fieldset class="action">
                         <button class="btn btn-default close-window">Close</button>
@@ -36,7 +36,7 @@
                 [% content | $raw %]
             </div>
 
-            <nav class="navbar navbar-default navbar-fixed-bottom noprint">
+            <nav class="navbar navbar-default fixed-bottom noprint">
                 <div class="container-fluid">
                     <fieldset class="action">
                         <button class="btn btn-primary print-label"><i class="fa fa-print"></i> Print this label</button>

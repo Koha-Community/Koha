@@ -260,7 +260,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -272,7 +272,7 @@
     [% END %]
 </h1>
 
-<div class="dialog alert order_error" style="display:none"></div>
+<div class="alert alert-warning order_error" style="display:none"></div>
 
 [% IF ( basketno ) %]
     <div id="acqui_basket_summary">
@@ -332,7 +332,7 @@
                       [% END %]
                     </ul>
                     <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
-                    <a href="#patron_search_modal" id="add_user" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Add user</a>
+                    <a href="#patron_search_modal" id="add_user" class="btn btn-default" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add user</a>
                 </div>
             </li>
         </ol>
@@ -538,11 +538,11 @@
       <fieldset class="rows" id="itemfieldset">
           <legend>Item</legend>
           [% IF ( NoACQframework ) %]
-              <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
+              <div class="alert alert-info">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
           [% END %]
 
           [% UNLESS Koha.Preference('autoBarcode') == 'OFF' %]
-              <div class="dialog message">The autoBarcode system preference is set to [% Koha.Preference('autoBarcode') | html %] and items with blank barcodes will have barcodes generated upon save to database</div>
+              <div class="alert alert-info">The autoBarcode system preference is set to [% Koha.Preference('autoBarcode') | html %] and items with blank barcodes will have barcodes generated upon save to database</div>
           [% END %]
 
           <div id="outeritemblock"></div>
@@ -752,33 +752,51 @@
     </fieldset>
 </form>
 
-<div id="procModal" data-backdrop="static" class="modal fade" aria-labelledby="procModal" aria-hidden="true">
+<div id="procModal" data-backdrop="static" class="modal" aria-labelledby="procModal" aria-hidden="true">
     <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-body">
-    <h3>Processing multiple items</h3>
-    </div>
-    </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Add multiple items</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Processing multiple items</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
-<div id="multiCountModal" class="modal fade" aria-labelledby="multiCountModal" aria-hidden="true">
+<div id="multiCountModal" class="modal" aria-labelledby="multiCountModal" aria-hidden="true">
     <div class="modal-dialog">
-    <div class="modal-content">
-    <h3>Invalid number of copies</h3>
-    <p>Please enter a <strong>number</strong>, greater than or equal to 1</p>
-    </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Add multiple items</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <h3>Invalid number of copies</h3>
+                    <p>Please enter a <strong>number</strong>, greater than or equal to 1</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
 </main>
-</div> <!-- /.col-sm-10.col-sm-push-2 -->
+</div> <!-- /.col-md-10.order-md-2 -->
 
-<div class="col-sm-2 col-sm-pull-10">
+<div class="col-md-2 order-sm-2 order-md-1">
     <aside>
         [% INCLUDE 'acquisitions-menu.inc' %]
     </aside>
-</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.col-md-2.order-md-1 -->
 </div> <!-- /.row -->
 
 [% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]

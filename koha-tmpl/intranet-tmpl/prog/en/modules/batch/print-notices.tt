@@ -22,7 +22,7 @@
 </head>
 <body id="batch_print-notices" class="batch">
     [% FOREACH message IN messages %]
-    <div class="dialog message">
+    <div class="alert alert-info">
         [% IF ( message.is_html ) %]
             [% message.content | $raw %]
         [% ELSE %]

@@ -1,5 +1,9 @@
 @import "common";
 
+.test {
+    background-color: lighten( desaturate( $info, 5% ), 55% );
+}
+
 .no-js {
     .dateformat {
         display: inline;
@@ -23,16 +27,6 @@
 
     .dropdown-toggle::after {
         border: 0;
-    }
-
-    #listsmenu,
-    #user-menu,
-    .nav-item .login-link {
-        color: $links;
-
-        &:hover {
-            color: $links-hover;
-        }
     }
 }
 
@@ -74,7 +68,7 @@ a {
     &:link,
     &:visited {
         &.cartRemove {
-            @include cartRemove();
+            @include cartRemove;
         }
     }
 
@@ -92,19 +86,6 @@ a {
         font-size: 108%;
         font-weight: bold;
         margin-bottom: .3rem;
-    }
-
-    &.login-link {
-        color: #005580;
-        font-weight: bold;
-    }
-
-    .idreambooksrating {
-        color: #29ADE4;
-        font-size: 30px;
-        line-height: 30px;
-        padding-left: 85px;
-        text-decoration: none;
     }
 
     &.reviewlink,
@@ -168,11 +149,6 @@ table {
     font-size: 90%;
 }
 
-table,
-td {
-    background-color: #FFF;
-}
-
 tr {
     &.outstanding {
         font-style: italic;
@@ -225,8 +201,6 @@ td {
 }
 
 th {
-    background-color: #E2E8E8;
-
     &.sum {
         text-align: right;
     }
@@ -344,7 +318,7 @@ th {
 }
 
 #members {
-    flex-grow: 1;
+    flex-shrink: 1;
     justify-content: flex-end;
 
     p {
@@ -360,23 +334,18 @@ th {
         }
 
         &.logout {
-            color: #E8583C;
             font-weight: bold;
-
-            &:hover {
-                color: #E8583C;
-            }
         }
 
         &.clearsh {
-            color: #D43C00;
             font-size: 80%;
             font-weight: normal;
             padding-bottom: .6rem;
             padding-top: .6rem;
 
-            &:hover {
-                color: #E8583C;
+            &:hover,
+            &:active {
+                color: darken( $danger, 20 );
             }
         }
     }
@@ -386,20 +355,21 @@ th {
             &:hover {
                 color: #005580;
                 text-decoration: underline;
+            }
 
-                &.logout {
-                    &:hover {
-                        color: #E8583C;
-                    }
+            &.clearsh,
+            &.logout {
+                &:link,
+                &:visited {
+                    color: darken( $danger, 16 );
+                }
+
+                &:hover,
+                &:active {
+                    color: darken( $danger, 20 );
                 }
             }
         }
-    }
-
-    .divider-vertical {
-        border: 1px solid #EEE;
-        border-right-color: #FCF9FC;
-        margin: 5px 0;
     }
 }
 
@@ -453,6 +423,10 @@ th {
             }
         }
     }
+}
+
+#navigation {
+    margin-top: .5rem;
 }
 
 #news {
@@ -534,13 +508,12 @@ th {
 
 .view,
 .actions,
-.toolbar,
-#action {
+.toolbar {
     a,
     button {
-        color: darken( $links, 5% );
-
         &:hover {
+            color: darken( $links, 15% );
+
             i {
                 &.fa,
                 &.fa-solid {
@@ -592,17 +565,24 @@ th {
     }
 }
 
-/* Override Bootstrap alert */
-.alert {
-    /* Redefine a new style for Bootstrap's class "close" since we use that already */
+#action {
+    a,
+    button {
+        &:hover {
+            i {
+                &.fa,
+                &.fa-solid {
+                    color: #338468;
+                }
+            }
+        }
 
-    /* Use <a class="closebtn" href="#">&times;</a> */
-
-    .closebtn {
-        line-height: 20px;
-        position: relative;
-        right: -21px;
-        top: -2px;
+        i {
+            &.fa,
+            &.fa-solid {
+                color: #4466AE;
+            }
+        }
     }
 }
 
@@ -633,12 +613,7 @@ th {
 }
 
 .breadcrumb {
-    background-color: #F0F3F3;
-    border-radius: 0;
-    font-size: 85%;
-    list-style: none outside none;
     margin: 15px;
-    padding: 5px 10px;
 
     a {
         color: darken( $links, 5% );
@@ -691,33 +666,24 @@ th {
 
 #cart-list-nav {
     flex-grow: 2;
+
+    .divider-vertical {
+        border: 0;
+    }
 }
 
 .table-striped tbody > tr:nth-child( odd ) > td,
 .table-striped tbody > tr:nth-child( odd ) > th {
-    background-color: #F0F3F3;
-
     a {
-        color: darken( $links, 5% );
-
         &.btn {
-            color: #FFF;
-
             &.btn-link {
-                color: $links;
-
                 &.cartRemove {
-                    @include cartRemove();
+                    @include cartRemove;
                 }
             }
         }
     }
 
-    button {
-        &.btn-link {
-            color: darken( $links, 5% );
-        }
-    }
 }
 
 #availability_facet {
@@ -1053,10 +1019,10 @@ fieldset {
 
     div {
         &.help-block {
-            display: block;
-            margin-top: 5px;
-            margin-bottom: 10px;
             color: #737373;
+            display: block;
+            margin-bottom: 10px;
+            margin-top: 5px;
         }
     }
 
@@ -1501,8 +1467,8 @@ nav {
     }
 
     .pagination {
-        margin: 0;
         flex-wrap: wrap;
+        margin: .5em 0;
     }
 }
 
@@ -1529,6 +1495,14 @@ nav {
     }
 }
 
+.navbar {
+    .divider-vertical {
+        border: 1px solid #EEE;
+        border-right-color: #FCF9FC;
+        margin: 5px 0;
+    }
+}
+
 /* action buttons */
 #action {
     background-color: #F5F5F5;
@@ -1541,41 +1515,8 @@ nav {
     }
 
     a {
-        color: darken( $links, 5% );
         font-weight: bold;
         text-align: left;
-        text-decoration: none;
-    }
-}
-
-#export,
-#moresearches_menu {
-    li {
-        margin: 0;
-        padding: 0;
-
-        a {
-            font-weight: normal;
-
-            &.menu-inactive {
-                font-weight: bold;
-            }
-        }
-    }
-
-    .dropdown-header {
-        border-bottom: 1px solid #EEE;
-        border-top: 0;
-    }
-
-    .dropdown-menu a {
-        border: 0;
-        clear: both;
-        display: block;
-        padding: .25rem 1.5rem;
-        text-align: inherit;
-        white-space: nowrap;
-        width: 100%;
     }
 }
 
@@ -1932,23 +1873,25 @@ nav {
             }
         }
 
-        &.active {
-            a {
-                background-color: #FFF;
-                border-top: 1px solid #999;
-            }
-        }
-
         a {
             background-color: #F0F3F3;
             border: 1px solid #D8D8D8;
             border-bottom-width: 0;
-            color: darken( $links, 5% );
+            color: darken( $links, 7% );
             display: block;
             margin: 0;
             padding: .4em .6em;
             text-decoration: none;
         }
+
+        &.active {
+            a {
+                background-color: #FFF;
+                border-top: 1px solid #999;
+                color: $links;
+            }
+        }
+
     }
 }
 
@@ -2122,15 +2065,6 @@ nav {
         margin: .5rem 0;
     }
 
-    .closebtn {
-        color: #C00;
-        opacity: 1;
-
-        &:hover {
-            opacity: .4;
-        }
-    }
-
     .modal-header,
     .modal-body,
     .modal-footer {
@@ -2259,30 +2193,6 @@ nav {
 
 .thumbnail-shelfbrowser span {
     margin: 0 auto;
-}
-
-.table-bordered {
-    border-radius: 0;
-
-    thead:first-child tr:first-child > th {
-        &:last-child {
-            border-radius: 0;
-        }
-
-        &:first-child {
-            border-radius: 0;
-        }
-    }
-
-    tbody:last-child tr:last-child > td {
-        &:last-child {
-            border-radius: 0;
-        }
-
-        &:first-child {
-            border-radius: 0;
-        }
-    }
 }
 
 .tags,
@@ -2634,13 +2544,6 @@ nav {
     text-align: center;
 }
 
-#dc_fieldset {
-    border: 1px solid #DDDDDD;
-    border-radius: 10px;
-    border-width: 1px;
-    padding: 5px;
-}
-
 .label_dc {
     cursor: pointer;
     display: inline;
@@ -2653,52 +2556,50 @@ nav {
 }
 
 .count_label {
-    $base: #369;
-
-    background-color: $base;
+    background-color: $primary;
     border-radius: 5px;
     color: #FFF;
     display: inline-block;
     font-weight: bold;
     min-width: 1.5em;
-    padding: .2em;
+    padding: .1rem .4rem;
     text-align: center;
     text-shadow: 0 -1px 0 rgba( 0, 0, 0, .25 );
 
     &:hover {
-        background-color: lighten( $base, 20% );
+        background-color: lighten( $primary, 10% );
     }
 }
 
 .user_overdues_count,
 .user_fines_count {
-    background-color: #990000;
+    background-color: $danger;
 
     &:hover {
-        background-color: lighten( #990000, 10% );
+        background-color: lighten( $danger, 10% );
     }
 }
 
 .user_holds_waiting_count {
-    background-color: #538200;
+    background-color: $success;
 
     &:hover {
-        background-color: lighten( #538200, 10% );
+        background-color: lighten( $success, 10% );
     }
 }
 
 #user_summary {
-    border: 1px solid #EAEAE6;
-    margin-bottom: 1em;
+    border: 1px solid #DDD;
+    margin: .5rem 0 1rem 0;
     padding-bottom: .5em;
 
     h2 {
-        background-color: #E2E8E8;
-        color: $high-contrast-grey;
         font-size: 1.1rem;
-        margin-top: 0;
-        padding: 5px;
-        text-align: center;
+        margin: .5rem;
+    }
+
+    p {
+        margin: .5rem;
     }
 
     ul {
@@ -2710,6 +2611,7 @@ nav {
             display: block;
             font-weight: bold;
             padding: .2em 15px;
+            text-decoration: none;
         }
     }
 }
@@ -3004,6 +2906,24 @@ $star-selected: #EDB867;
     .chocolat-bottom {
         background: rgba( 0, 0, 0, .7 );
     }
+}
+
+#patronconsents h2 {
+    font-size: 1.1rem;
+    margin-top: 30px;
+}
+
+.cartlabel,
+.checkout-label,
+.listslabel,
+.langlabel,
+.userlabel,
+.cookieconsentlabel,
+.cookieConsentFooter_text,
+.report_a_problem_text,
+.koha_url_text,
+.search_history_label {
+    display: none;
 }
 
 @import "responsive";

@@ -72,20 +72,20 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
                 [% IF item_doesnt_exist %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblio.biblionumber | uri %]">Add a new item</a> or <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]#holdings">go to the records holdings</a>.
                     </div>
                 [% END %]
 <h1>Items for [% biblio.title | html %] [% IF ( biblio.author ) %] by [% biblio.author | html %][% END %] (Record #[% biblio.biblionumber | html %])</h1>
 
-[% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
-[% IF ( no_next_barcode ) %]<div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
-[% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item is checked out.</div>[% END %]
+[% IF ( barcode_not_unique ) %]<div class="alert alert-warning"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
+[% IF ( no_next_barcode ) %]<div class="alert alert-warning"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
+[% IF ( book_on_loan ) %]<div class="alert alert-warning"><strong>Cannot delete</strong>: item is checked out.</div>[% END %]
 [% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot delete</strong>: item has a waiting hold.</div>[% END %]
-[% IF ( not_same_branch ) %]<div class="dialog alert"><strong>Cannot delete</strong>: The items do not belong to your library.</div>[% END %]
-[% IF ( linked_analytics ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;analyze=1">analytics.</a>.</div>[% END %]
-[% IF last_item_for_hold %]<div class="dialog alert"><strong>Cannot delete</strong>: Last item for bibliographic record with biblio-level hold on it.</div>[% END %]
-[% IF item_not_found %]<div class="dialog alert"><strong>Cannot delete</strong>: Item not found.</div>[% END %]
+[% IF ( not_same_branch ) %]<div class="alert alert-warning"><strong>Cannot delete</strong>: The items do not belong to your library.</div>[% END %]
+[% IF ( linked_analytics ) %]<div class="alert alert-warning"><strong>Cannot delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;analyze=1">analytics.</a>.</div>[% END %]
+[% IF last_item_for_hold %]<div class="alert alert-warning"><strong>Cannot delete</strong>: Last item for bibliographic record with biblio-level hold on it.</div>[% END %]
+[% IF item_not_found %]<div class="alert alert-warning"><strong>Cannot delete</strong>: Item not found.</div>[% END %]
 
 <div id="cataloguing_additem_itemlist">
     [% IF items %]
@@ -123,8 +123,8 @@
                         [% ELSE %]
                         <td>
                             <div class="btn-group dropup">
-                            <a class="btn btn-default btn-xs dropdown-toggle" id="itemactions[% item.itemnumber | html %]" role="button" data-toggle="dropdown" href="#">
-                                Actions <b class="caret"></b>
+                            <a class="btn btn-default btn-xs dropdown-toggle" id="itemactions[% item.itemnumber | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                                Actions
                             </a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="itemactions[% item.itemnumber | html %]">
 
@@ -132,11 +132,11 @@
                                 <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblio.biblionumber | html %]&amp;hostitemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
                             [% ELSE %]
                                 [% UNLESS item.nomod %]
-                                    <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
+                                    <li><a class="dropdown-item" href="additem.pl?op=edititem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
                                 [% END %]
-                                <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
+                                <li><a class="dropdown-item" href="additem.pl?op=dupeitem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
                                 <li class="print_label">
-                                     <a class="submit-form-link" target="_blank" href="#" data-op="cud-add" data-number_list="[% item.itemnumber | html %]" data-number_type="itemnumber" data-method="post" data-action="/cgi-bin/koha/labels/label-edit-batch.pl" data-new_tab="true">Print label</a>
+                                     <a class="dropdown-item submit-form-link" target="_blank" href="#" data-op="cud-add" data-number_list="[% item.itemnumber | html %]" data-number_type="itemnumber" data-method="post" data-action="/cgi-bin/koha/labels/label-edit-batch.pl" data-new_tab="true">Print label</a>
                                 </li>
                                 [% UNLESS item.nomod %]
                                     <li>
@@ -147,12 +147,12 @@
                                             <input type="hidden" name="itemnumber" value="[% item.itemnumber | html %]" />
                                             <input type="hidden" name="searchid" value="[% searchid | html %]" />
                                         </form>
-                                        <a class="delete" data-item="[% item.itemnumber | html %]" href="#">Delete</a>
+                                        <a class="dropdown-item delete" data-item="[% item.itemnumber | html %]" href="#">Delete</a>
                                     </li>
                                 [% END %]
                             [% END %]
                                 [% IF ( OPACBaseURL ) %]
-                                    <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]">OPAC view</a></li>
+                                    <li class="view-in-opac"><a class="dropdown-item" target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]">OPAC view</a></li>
                                 [% END %]
                             </ul>
                             </div>
@@ -183,10 +183,10 @@
     [% END %]
 
 <div class="row">
-    <div class="col-sm-2">
+    <div class="col-md-2 order-sm-2 order-md-1">
         [% INCLUDE 'biblio-view-menu.inc' %]
     </div>
-    <div class="col-sm-10">
+    <div class="col-md-10 order-md-2 order-sm-1">
 
 <div id="cataloguing_additem_newitem" class="item_edit_form page-section">
     <form id="f" method="post" action="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblio.biblionumber | html %]" name="f">

@@ -35,7 +35,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -43,10 +43,10 @@
         Transport cost matrix
     </h1>
 [% IF ( WARNING_transport_cost_matrix_off ) %]
-<div class="dialog message">Because the "UseTransportCostMatrix" system preference is currently not enabled, the transport cost matrix is not being used.  <br/>Go to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=UseTransportCostMatrix">UseTransportCostMatrix</a> system preference if you wish to enable this feature.</div>
+<div class="alert alert-info">Because the "UseTransportCostMatrix" system preference is currently not enabled, the transport cost matrix is not being used.  <br/>Go to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=UseTransportCostMatrix">UseTransportCostMatrix</a> system preference if you wish to enable this feature.</div>
 [% END %]
 
-    [% IF ( errors ) %]<div class="dialog alert">
+    [% IF ( errors ) %]<div class="alert alert-warning">
         <h4>There were problems with your submission</h4>
         <ul>
             [% FOR e IN errors %]
@@ -104,13 +104,13 @@
         </form>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

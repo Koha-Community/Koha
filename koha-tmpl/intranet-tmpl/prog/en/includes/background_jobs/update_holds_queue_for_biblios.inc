@@ -3,11 +3,11 @@
     [% SET report = job.report %]
     [% IF report %]
         [% IF report.total_biblios == report.total_success %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 Holds queue successfully updated.
             </div>
         [% ELSE %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 <span>Holds queue for [% report.total_success | html %] / [% report.total_biblios | html %] has been successfully updated. Some errors occurred.</span>
                 [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
             </div>
@@ -18,7 +18,7 @@
 
 [% BLOCK detail %]
     [% FOR m IN report_messages %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF m.type == 'success' %]
                 <i class="fa fa-check success"></i>
             [% ELSIF m.type == 'warning' %]

@@ -90,9 +90,11 @@ $(document).ready(function() {
         var page = $(this).attr("href");
         $("#dataPreviewLabel").text(ltitle);
         $("#dataPreview .modal-body").load(page + " div");
-        $('#dataPreview').modal({show:true});
+        $('#dataPreview').modal("show");
     });
-    $("#dataPreview").on("hidden.bs.modal", function(){
+
+    $("#dataPreview").on("hidden.bs.modal", function(e){
+        e.preventDefault();
         $("#dataPreviewLabel").html("");
         $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"" + template_path + "/img/spinner-small.gif\" alt=\"\" /> " + __("Loading") + "</div>");
     });

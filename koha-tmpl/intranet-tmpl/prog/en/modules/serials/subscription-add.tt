@@ -48,7 +48,7 @@ fieldset.rows table { clear: none; margin: 0; }
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             [% INCLUDE 'messages.inc' %]
             <h1>[% IF ( modify ) %] Modify subscription for <em>[% bibliotitle | html %]</em>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
         </div>
@@ -56,7 +56,7 @@ fieldset.rows table { clear: none; margin: 0; }
     <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
                 <div class="row" id="page_1">
-                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                         [% IF ( modify ) %]
                             <input type="hidden" name="op" value="cud-modsubscription" />
                             <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
@@ -268,17 +268,17 @@ fieldset.rows table { clear: none; margin: 0; }
                         <fieldset class="action">
                             <button type="button" class="btn btn-primary" id="subscription_add_next" style="float:right;">Next <i class="fa-solid fa-right-long"></i></button>
                         </fieldset>
-                    </div> <!-- /.col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 -->
+                    </div> <!-- /.col-md-10 offset-md-1 col-lg-8 offset-lg-2 -->
                 </div> <!-- /.row#page_1 -->
                 <div class="row" id="page_2">
-                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                 [% IF ( Koha.Preference('Mana') == 1) && !mana_url %]
                     <fieldset>
                         <p><center>The Mana Knowledge Base can be used to import subscription patterns submitted by other libraries and save you extra work. Ask your system administrator to configure this service and complete the configuration, or remove this message by disabling the system preference
                         <a href=/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=request+to+mana+webservice>here</a></center></p>
                     </fieldset>
                 [% END %]
-                        <div hidden id="mana_search" class="dialog message">
+                        <div style="display:none" id="mana_search" class="alert alert-info">
                         </div>
                         <div id="subscription_form_planning">
                             <fieldset class="rows">
@@ -556,16 +556,16 @@ fieldset.rows table { clear: none; margin: 0; }
 
         <!-- Mana Search Result Modal -->
         <div class="modal" id="mana_search_result" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="mana_search_result_label">Modal title</h4>
+                        <h1 class="modal-title" id="mana_search_result_label">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
              </div>

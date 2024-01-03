@@ -2,15 +2,15 @@
     [% SET report = job.report %]
     [% IF report && job.status != 'started' && job.status != 'new' %]
         [% IF report.total_records == report.total_success %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 All eHolding titles have been created successfully!
             </div>
         [% ELSIF report.total_success == 0 %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 No eHolding titles have been created. An error occurred.
             </div>
         [% ELSE %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 [% report.total_success | html %] / [% report.total_records | html %] eHolding titles have been created successfully but some errors occurred.
             </div>
         [% END %]
@@ -19,7 +19,7 @@
 
 [% BLOCK detail %]
     [% FOR m IN job.messages %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF m.type == 'success' %]
                 <i class="fa fa-check success"></i>
             [% ELSIF m.type == 'warning' %]

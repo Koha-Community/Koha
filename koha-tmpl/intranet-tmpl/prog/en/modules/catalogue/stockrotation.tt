@@ -35,7 +35,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -184,7 +184,7 @@
             <h1>There are no rotas with stages assigned</h1>
         [% END %]
     [% ELSIF op == 'confirm_remove_from_rota' %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             <h3>Are you sure you want to remove this item from it's rota?</h3>
             <p>
                 <form id="remove_item_from_stage_[% item.bib_item.id | html %]" method="post" action="/cgi-bin/koha/catalogue/stockrotation.pl">
@@ -203,13 +203,13 @@
 </div>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'biblio-view-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

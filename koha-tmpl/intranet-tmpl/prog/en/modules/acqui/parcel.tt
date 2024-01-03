@@ -53,12 +53,12 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
     [% IF ( receive_error ) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
     <h3>Error adding items:</h3>
     <ul>
     [% FOREACH error_loo IN error_loop %]
@@ -76,18 +76,18 @@
     </h1>
 
     [% IF ( success_delorder ) %]
-    <div class="dialog message">The order has been successfully canceled.</div>
+    <div class="alert alert-info">The order has been successfully canceled.</div>
     [% ELSE %]
     [% IF ( error_delitem ) %]
-        <div class="dialog alert">The order has been canceled, although one or more items could not have been deleted.</div>
+        <div class="alert alert-warning">The order has been canceled, although one or more items could not have been deleted.</div>
     [% END %]
     [% IF ( error_delbiblio ) %]
-        <div class="dialog alert">The order has been canceled, although the record has not been deleted.</div>
+        <div class="alert alert-warning">The order has been canceled, although the record has not been deleted.</div>
     [% END %]
     [% END %]
 
     [% IF (error_cancelling_receipt) %]
-      <div class="dialog alert">
+      <div class="alert alert-warning">
       <span>Cannot cancel receipt. Possible reasons:</span>
       <ul>
         <li>
@@ -105,7 +105,7 @@
     [% END %]
 
     [% IF error_invoice_not_known %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             The invoice referenced by this invoiceid does not exist.
         </div>
     [% END %]
@@ -313,17 +313,17 @@
 </div>
 
 <div class="modal" id="dataPreview" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel">
-    <div class="modal-dialog modal-wide" role="document">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 id="dataPreviewLabel">MARC previews</h3>
+                <h1 class="modal-title" id="dataPreviewLabel">MARC previews</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div> <!-- /.modal-content -->
     </div> <!-- /.modal-dialog -->
@@ -343,14 +343,14 @@
 [% END %]
 
 </main>
-</div> <!-- /.col-sm-10.col-sm-push-2 -->
+</div> <!-- /.col-md-10.order-md-2 -->
 
-<div class="col-sm-2 col-sm-pull-10">
+<div class="col-md-2 order-sm-2 order-md-1">
 <aside>
 
 [% INCLUDE 'acquisitions-menu.inc' %]
     </aside>
-</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.col-md-2.order-md-1 -->
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -413,16 +413,6 @@
                     "items"
                 ],
                 "stateSave": true, // remember state on page reload
-                "drawCallback": function (settings) {
-                    $(".previewData").on("click", function(e){
-                        e.preventDefault();
-                        var ltitle = $(this).text();
-                        var page = $(this).attr("href");
-                        $("#dataPreviewLabel").text(ltitle);
-                        $("#dataPreview .modal-body").load(page + " div");
-                        $('#dataPreview').modal({show:true});
-                    });
-                },
                 "columns": [
                     { "data": "basket.name",
                       "searchable": true,
@@ -540,14 +530,14 @@
                         "data": "",
                         "render": function(data, type, row, meta) {
                             var result = '<div class="btn-group dropup">';
-                            result += '<button id="view' + row.order_id + '" type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                                result += ' <i class="fa-solid fa-eye aria-hidden="true"></i> ' + _("View");
-                                result += ' <span class="caret"></span> ';
-                            result += '</button>';
+
+                            result += '<button id="view' + row.order_id + '" type="button" class="btn btn-default btn-xs">' + _("View") + '</button>';
+                            result += '<button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false"><span class="visually-hidden">Toggle dropdown</span></button>';
+
                             result += '<ul class="dropdown-menu" aria-labelledby="view' + row.order_id + '">';
-                                result += '<li><a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '" class="previewData">[% tp("noun", "Order") | html %]</a></li>';
-                                result += '<li><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("MARC") + '</a></li>';
-                                result += '<li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("Card") + '</a></li>';
+                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '" class="previewData">[% tp("noun", "Order") | html %]</a></li>';
+                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("MARC") + '</a></li>';
+                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("Card") + '</a></li>';
                             result += '</ul>';
                             result += '</div>';
                             return result;
@@ -700,8 +690,12 @@
                 });
             });
 
+            $("#dataPreview").on("hidden.bs.modal", function(){
+                $("#dataPreviewLabel").html("");
+                $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            });
 
-            $(".previewData").on("click", function(e){
+            $("body").on("click", ".previewData", function(e){
                 e.preventDefault();
                 var ltitle = $(this).text();
                 var page = $(this).attr("href");
@@ -710,10 +704,6 @@
                 $('#dataPreview').modal("show");
             });
 
-            $("#dataPreview").on("hidden.bs.modal", function(){
-                $("#dataPreviewLabel").html("");
-                $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-            });
         });
 
         // Case-insensitive version of jquery's contains function

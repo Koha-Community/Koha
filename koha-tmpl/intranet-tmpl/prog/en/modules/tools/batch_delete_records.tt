@@ -51,18 +51,18 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
   <h1>Batch record deletion</h1>
   [% FOREACH message IN messages %]
     [% IF message.type == 'success' %]
-      <div class="dialog message">
+      <div class="alert alert-info">
     [% ELSIF message.type == 'warning' %]
-      <div class="dialog alert">
+      <div class="alert alert-warning">
     [% ELSIF message.type == 'error' %]
-      <div class="dialog alert" style="margin:auto;">
+      <div class="alert alert-warning" style="margin:auto;">
     [% END %]
     [% IF message.code == 'biblio_not_exists' %]
       <span>The biblionumber [% message.biblionumber | html %] does not exist in the database.</span>
@@ -237,7 +237,7 @@
       There are no record IDs defined.
     [% END %]
   [% ELSIF op == 'enqueued' %]
-    <div class="dialog message">
+    <div class="alert alert-info">
         <h1>The job has been enqueued!</h1>
         <p>It will be processed as soon as possible.</p>
       <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>
@@ -248,13 +248,13 @@
   [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'cat-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

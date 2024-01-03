@@ -9,7 +9,7 @@
                 @download="download_counter_file"
             ></KohaTable>
         </div>
-        <div v-else-if="initialized" class="dialog message">
+        <div v-else-if="initialized" class="alert alert-info">
             {{ $__("There are no import logs defined") }}
         </div>
     </div>

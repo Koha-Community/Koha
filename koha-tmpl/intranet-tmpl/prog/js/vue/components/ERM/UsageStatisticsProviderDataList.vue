@@ -4,7 +4,7 @@
         <div v-if="data_count > 0" class="page-section">
             <KohaTable ref="table" v-bind="tableOptions"></KohaTable>
         </div>
-        <div v-else-if="initialized" class="dialog message">
+        <div v-else-if="initialized" class="alert alert-info">
             {{
                 $__(`No ${data_type} data has been harvested for this provider`)
             }}

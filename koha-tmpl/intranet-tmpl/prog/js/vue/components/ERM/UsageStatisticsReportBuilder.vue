@@ -328,7 +328,7 @@
             </fieldset>
             <fieldset class="action">
                 <ButtonSubmit />
-                <button @click="clearForm($event)" class="button_format">
+                <button @click="clearForm($event)" class="btn btn-default">
                     {{ $__("Clear") }}
                 </button>
             </fieldset>
@@ -341,7 +341,7 @@
                 />
                 <button
                     @click="saveToDefaultReports($event)"
-                    class="button_format"
+                    class="btn btn-default"
                 >
                     {{ $__("Save report") }}
                 </button>

@@ -27,7 +27,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                 [% INCLUDE 'messages.inc' %]
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                 <div id="toolbar" class="btn-toolbar">
@@ -36,22 +36,22 @@
                     [% END %]
                     <div class="btn-group">
                         <button class="btn btn-default" id="newRecord"><i class="fa fa-plus"></i> New record</button>
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a id="newRecordDefault" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Default framework</a></li>
+                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" id="newRecordDefault" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Default framework</a></li>
                             [% FOREACH framework IN frameworks %]
-                            <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% framework.frameworktext | html %]</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% framework.frameworktext | html %]</a></li>
                             [% END %]
                         </ul>
                     </div>
                     [% IF servers.count > 0 %]
                     <div class="btn-group">
                         <button class="btn btn-default" id="z3950search"><i class="fa fa-search"></i> New from Z39.50/SRU</button>
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li id="Default" class="z3950searchFw"><a href="#">Default framework</a></li>
+                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li id="Default" class="z3950searchFw"><a class="dropdown-item" href="#">Default framework</a></li>
                             [% FOREACH framework IN frameworks %]
-                            <li id="[% framework.frameworkcode | html %]" class="z3950searchFw"><a href="#">[% framework.frameworktext | html %]</a></li>
+                                <li id="[% framework.frameworkcode | html %]" class="z3950searchFw"><a class="dropdown-item" href="#">[% framework.frameworktext | html %]</a></li>
                             [% END %]
                         </ul>
                     </div>

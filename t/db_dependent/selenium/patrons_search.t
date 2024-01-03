@@ -692,7 +692,8 @@ subtest 'Search patrons in modal' => sub {
 
         # Info has been added about the patron
         is(
-            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="info dialog message"]')->get_text,
+            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="info alert alert-info"]')
+                ->get_text,
             sprintf( "Patron '%s %s' added.", $patron->firstname, $patron->surname )
         );
 
@@ -704,7 +705,8 @@ subtest 'Search patrons in modal' => sub {
 
         # Warning has been added about the patron
         is(
-            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="error dialog alert"]')->get_text,
+            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="error alert alert-warning"]')
+                ->get_text,
             sprintf( "Patron '%s %s' is already in the list.", $patron->firstname, $patron->surname )
         );
 

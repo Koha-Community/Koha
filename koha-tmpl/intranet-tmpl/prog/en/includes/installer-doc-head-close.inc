@@ -2,7 +2,6 @@
 [% USE Asset %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | html %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />
-[% Asset.css("lib/bootstrap/bootstrap.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/fontawesome.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]

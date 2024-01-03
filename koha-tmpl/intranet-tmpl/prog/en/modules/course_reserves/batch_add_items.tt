@@ -36,11 +36,11 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 offset-md-2">
             [% INCLUDE 'messages.inc' %]
             <h1>Add reserves for <em>[% course.course_name | html %]</em></h1>
         [% IF action == 'invalid_course' %]
-            <div id="invalid-course-error" class="dialog alert">Invalid course!</div>
+            <div id="invalid-course-error" class="alert alert-warning">Invalid course!</div>
         [% END %]
 
         [% IF action == 'display_form' %]

@@ -610,22 +610,22 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         var max_page = Math.ceil( data.total_fetched / data.page_size ) - 1;
 
         if ( cur_page != 0 ) {
-            pages.push( '<li><a class="search-nav" href="#" data-offset="' + (data.offset - data.page_size) + '"><span aria-hidden="true">&laquo;</span> ' + _("Previous") + '</a></li>' );
+            pages.push( '<li class="page-item"><a class="page-link search-nav" href="#" data-offset="' + (data.offset - data.page_size) + '"><span aria-hidden="true">&laquo;</span> ' + _("Previous") + '</a></li>' );
         }
 
         for ( var page = Math.max( 0, cur_page - 9 ); page <= Math.min( max_page, cur_page + 9 ); page++ ) {
             if ( page == cur_page ) {
-                pages.push( ' <li class="active"><a href="#">' + ( page + 1 ) + '</a></li>' );
+                pages.push( ' <li class="page-item active" aria-current="page"><span class="page-link">' + ( page + 1 ) + '</span></li>' );
             } else {
-                pages.push( ' <li><a class="search-nav" href="#" data-offset="' + ( page * data.page_size ) + '">' + ( page + 1 ) + '</a></li>' );
+                pages.push( ' <li class="page-item"><a class="page-link search-nav" href="#" data-offset="' + ( page * data.page_size ) + '">' + ( page + 1 ) + '</a></li>' );
             }
         }
 
         if ( cur_page < max_page ) {
-            pages.push( ' <li><a class="search-nav" href="#" data-offset="' + (data.offset + data.page_size) + '">' + _("Next") + ' <span aria-hidden="true">&raquo;</span></a></li>' );
+            pages.push( ' <li class="page-item"><a class="page-link search-nav" href="#" data-offset="' + (data.offset + data.page_size) + '">' + _("Next") + ' <span aria-hidden="true">&raquo;</span></a></li>' );
         }
 
-        $( '#search-top-pages, #search-bottom-pages' ).find( 'nav' ).html( pages.length > 1 ? ( '<ul class="pagination pagination-sm">' + pages.join( '' ) + '</ul>' ) : '' );
+        $( '#search-top-pages, #search-bottom-pages' ).find( 'nav' ).html( pages.length > 1 ? ( '<ul class="pagination">' + pages.join( '' ) + '</ul>' ) : '' );
 
         var $overlay = $('#search-overlay');
         $overlay.find('span').text(_("Loading"));
@@ -1096,7 +1096,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         } );
         saveableBackends.sort();
         $.each( saveableBackends, function( undef, backend ) {
-            $( '#save-dropdown' ).append( '<li><a href="#" data-backend="' + backend[1] + '">' + backend[0] + '</a></li>' );
+            $( '#save-dropdown' ).append( '<li><a class="dropdown-item" href="#" data-backend="' + backend[1] + '">' + backend[0] + '</a></li>' );
         } );
 
         // Click bindings
@@ -1326,13 +1326,16 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             },
         });
 
+        var popDefaults = $.fn.popover.Constructor.Default;
+
         // Whitelist table elements to ensure popover displays all the info
-        $.fn.popover.Constructor.DEFAULTS.whiteList.table = [];
-        $.fn.popover.Constructor.DEFAULTS.whiteList.tr = [];
-        $.fn.popover.Constructor.DEFAULTS.whiteList.td = [];
-        $.fn.popover.Constructor.DEFAULTS.whiteList.div = [];
-        $.fn.popover.Constructor.DEFAULTS.whiteList.tbody = [];
-        $.fn.popover.Constructor.DEFAULTS.whiteList.thead = [];
+        $.fn.popover.Constructor.Default.allowList.tr = [];
+        $.fn.popover.Constructor.Default.allowList.table = [];
+        $.fn.popover.Constructor.Default.allowList.td = [];
+        $.fn.popover.Constructor.Default.allowList.th = [];
+        $.fn.popover.Constructor.Default.allowList.div = [];
+        $.fn.popover.Constructor.Default.allowList.tbody = [];
+        $.fn.popover.Constructor.Default.allowList.thead = [];
         // https://getbootstrap.com/docs/3.4/javascript/#popovers
 
         $('#show-shortcuts').popover({

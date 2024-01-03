@@ -290,7 +290,7 @@
                       <div class="alert alert-warning">Record Status: <xsl:value-of select="oai:header/@status"/></div>
                     </xsl:if>
                     <div class="panel panel-success">
-                        <a data-toggle="collapse">
+                        <a data-bs-toggle="collapse">
                             <xsl:attribute name="href">#sets<xsl:value-of select="translate(oai:header/oai:identifier/text(), ':/.', '')"></xsl:value-of></xsl:attribute>
                             <div class="panel-heading">
                                 <h5 class="panel-title">
@@ -316,7 +316,7 @@
                         </div>
                     </div>
                     <div class="panel panel-info">
-                        <a data-toggle="collapse">
+                        <a data-bs-toggle="collapse">
                             <xsl:attribute name="href">#<xsl:value-of select="translate(oai:header/oai:identifier/text(), ':/.', '')"></xsl:value-of></xsl:attribute>
                             <div class="panel-heading">
                                 <h5 class="panel-title">
@@ -333,7 +333,7 @@
                     </div>
                     <xsl:if test="oai:about">
                         <div class="panel panel-success">
-                            <a data-toggle="collapse">
+                            <a data-bs-toggle="collapse">
                                 <xsl:attribute name="href">#about<xsl:value-of select="translate(oai:header/oai:identifier/text(), ':/.', '')"></xsl:value-of></xsl:attribute>
                                 <div class="panel-heading">
                                     <h5 class="panel-title">
@@ -487,7 +487,7 @@
                       <div class="alert alert-warning">Record Status: <xsl:value-of select="@status"/></div>
                     </xsl:if>
                     <div class="panel panel-success">
-                        <a data-toggle="collapse">
+                        <a data-bs-toggle="collapse">
                             <xsl:attribute name="href">#sets<xsl:value-of select="translate(oai:identifier/text(), ':/.', '')"></xsl:value-of></xsl:attribute>
                             <div class="panel-heading">
                                 <h5 class="panel-title">

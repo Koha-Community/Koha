@@ -20,8 +20,6 @@
 [% ELSE %]
     [% Asset.css("lib/jquery/jquery-ui-1.13.2.min.css") | $raw %]
 [% END %]
-[% Asset.css("lib/bootstrap/bootstrap.min.css") | $raw %]
-[% Asset.css("lib/bootstrap/bootstrap-theme.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/fontawesome.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]

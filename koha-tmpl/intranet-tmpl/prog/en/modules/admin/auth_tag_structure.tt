@@ -98,7 +98,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -182,7 +182,7 @@
 
 
 [% IF ( delete_confirm ) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h3>[% tx("Confirm deletion of tag '{searchfield}'", { searchfield = searchfield }) | html %]</h3>
         <form action="[% script_name | html %]" method="post">
             [% INCLUDE 'csrf-token.inc' %]
@@ -192,17 +192,17 @@
             <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
             <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="[% script_name | html %]" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
 
 [% IF ( delete_confirmed ) %]
 
-  <div class="dialog message">  <h3>Data deleted</h3>
+  <div class="alert alert-info">  <h3>Data deleted</h3>
     <form action="[% script_name | html %]" method="post">
         [% INCLUDE 'csrf-token.inc' %]
     <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
@@ -277,12 +277,12 @@
             <td>[% loo.authorised_value | html %]</td>
             <td>
                 <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="authtagactions[% loo.tagfield | html %]" role="button" data-toggle="dropdown" href="#">
-                        Actions <b class="caret"></b></a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtagactions[% loo.tagfield | html %]">
-                        <li><a href="auth_subfields_structure.pl?tagfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa-solid fa-eye"></i> Subfields</a></li>
-                        <li><a href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                        <li><a href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="authtagactions[% loo.tagfield | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                        Actions </a>
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="authtagactions[% loo.tagfield | html %]">
+                        <li><a class="dropdown-item" href="auth_subfields_structure.pl?tagfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa-solid fa-eye"></i> Subfields</a></li>
+                        <li><a class="dropdown-item" href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+                        <li><a class="dropdown-item" href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>
@@ -294,13 +294,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

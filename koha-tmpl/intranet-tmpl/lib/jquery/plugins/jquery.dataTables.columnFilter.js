@@ -444,7 +444,7 @@
 
 		function fnCreateDropdown(aData) {
 			var index = i;
-			var r = '<div class="dropdown select_filter form-control"><a class="dropdown-toggle" data-toggle="dropdown" href="#">' + label + '<b class="caret"></b></a><ul class="dropdown-menu" role="menu"><li data-value=""><a>Show All</a></li>', j, iLen = aData.length;
+			var r = '<div class="dropdown select_filter form-control"><a class="dropdown-toggle" data-bs-toggle="dropdown" href="#">' + label + '<b class="caret"></b></a><ul class="dropdown-menu" role="menu"><li data-value=""><a>Show All</a></li>', j, iLen = aData.length;
 
 			for (j = 0; j < iLen; j++) {
 				r += '<li data-value="' + aData[j] + '"><a>' + aData[j] + '</a></li>';

@@ -1,6 +1,9 @@
 <div id="skip_issues" class="modal" tabindex="-1" role="dialog" aria-labelledby="skip_issues_label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <form action="/cgi-bin/koha/serials/serials-collection.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-body">
@@ -20,8 +23,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
-                    <input type="submit" class="btn btn-default approve" value="OK" />
+                    <button type="submit" class="btn btn-default approve">Submit</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>

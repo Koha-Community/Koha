@@ -391,13 +391,13 @@ $(document).ready(function() {
     }
 
     $("body").append("\
-        <div id='suspend-modal' class='modal fade' role='dialog' aria-hidden='true'>\
+        <div id='suspend-modal' class='modal' role='dialog' aria-hidden='true'>\
             <div class='modal-dialog'>\
             <div class='modal-content'>\
             <form id='suspend-modal-form' class='form-inline'>\
                 <div class='modal-header'>\
-                    <button type='button' class='closebtn' data-dismiss='modal' aria-hidden='true'>×</button>\
-                    <h3 id='suspend-modal-label'>" + __("Suspend hold on") + " <i><span id='suspend-modal-title'></span></i></h3>\
+                    <h1 class='modal-title' id='suspend-modal-label'>" + __("Suspend hold on") + " <i><span id='suspend-modal-title'></span></i></h1>\
+                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>\
                 </div>\
 \
                 <div class='modal-body'>\
@@ -412,7 +412,7 @@ $(document).ready(function() {
 \
                 <div class='modal-footer'>\
                     <button id='suspend-modal-submit' class='btn btn-primary' type='submit' name='submit'>" + __("Suspend") + "</button>\
-                    <a href='#' data-dismiss='modal' aria-hidden='true' class='cancel'>" + __("Cancel") + "</a>\
+                    <button type='button' class='btn btn-default' data-bs-dismiss='modal'>" + __("Cancel") + "</button>\
                 </div>\
             </form>\
             </div>\

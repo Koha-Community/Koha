@@ -99,7 +99,7 @@
         margin-bottom: .5em;
     }
 
-    .table:not(.collapsed) .tdlabel {
+    .table:not( .collapsed ) .tdlabel {
         display: inline;
     }
 
@@ -349,19 +349,26 @@
     }
 }
 
-@media only screen and ( max-width: 800px ) {
+@media only screen and ( min-width: 969px ) {
+    .cookieconsentlabel,
+    #header-region .langlabel,
+    .userlabel,
+    .search_history_label {
+        display: inline;
+    }
+}
+
+@media only screen and ( min-width: 851px ) {
     /* Screens below 800 pixels wide */
     .cartlabel,
-    .cookieconsentlabel,
-    .listslabel,
-    .langlabel,
-    .userlabel {
-        display: none;
+    .checkout-label,
+    .listslabel {
+        display: inline;
     }
 
     .navbar {
         .divider-vertical {
-            margin: 0 2px;
+            margin: 5px 2px;
         }
     }
 }
@@ -536,12 +543,12 @@
     }
 }
 
-@media only screen and ( max-width: 1100px ) {
-    .cartlabel,
-    .cookieconsentlabel,
-    .listslabel,
-    .langlabel,
-    .userlabel {
-        display: none;
+@media only screen and ( min-width: 769px ) {
+    footer .cookieconsentlabel,
+    .cookieConsentFooter_text,
+    footer .langlabel,
+    .report_a_problem_text,
+    .koha_url_text {
+        display: inline;
     }
 }

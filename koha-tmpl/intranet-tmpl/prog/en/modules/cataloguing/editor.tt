@@ -39,7 +39,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -62,8 +62,8 @@
         <button class="btn btn-default" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
         <div class="btn-group">
             <button class="btn btn-default" id="save-record" title="Save current record (Ctrl-S)"><i class="fa-solid fa-hard-drive"></i> <span>Save</span></button>
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
+            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+
             </button>
             <ul class="dropdown-menu" id="save-dropdown">
             </ul>
@@ -71,13 +71,13 @@
         <button class="btn btn-default" id="import-records" title="Import an MARC (ISO 2709) or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
         <button class="btn btn-default" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
         <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> Settings</button>
             <ul id="prefs-menu" class="dropdown-menu">
-                <li><a id="switch-editor" href="#">Switch to basic editor</a></li>
-                <li><a id="set-field-widgets" href="#"></a></li>
-                <li class="dropdown-header">Change framework</li>
+                <li><a class="dropdown-item" id="switch-editor" href="#">Switch to basic editor</a></li>
+                <li><a class="dropdown-item" id="set-field-widgets" href="#"></a></li>
+                <li><h6 class="dropdown-header">Change framework</li>
                 <li>
-                    <a class="change-framework" data-frameworkcode="">
+                    <a class="change-framework dropdown-item" data-frameworkcode="">
                         <i class="fa fa-fw unselected">&nbsp;</i>
                         <i class="fa fa-fw fa-check selected">&nbsp;</i>
                         Default
@@ -85,30 +85,30 @@
                 </li>
                 [% FOREACH framework IN frameworks %]
                     <li>
-                        <a class="change-framework" data-frameworkcode="[% framework.frameworkcode | html %]">
+                        <a class="change-framework dropdown-item" data-frameworkcode="[% framework.frameworkcode | html %]">
                             <i class="fa fa-fw fa-check selected"></i>
                             <i class="fa fa-fw unselected">&nbsp;</i>
                             [% framework.frameworktext | html %]
                         </a>
                     </li>
                 [% END %]
-                <li class="divider"></li>
-                <li><a class="set-fontSize" style="font-size: .92em" href="#">Small text</a></li>
-                <li><a class="set-fontSize" style="font-size: 1em" href="#">Normal text</a></li>
-                <li><a class="set-fontSize" style="font-size: 1.08em" href="#">Large text</a></li>
-                <li><a class="set-fontSize" style="font-size: 1.18em" href="#">Huge text</a></li>
-                <li class="divider"></li>
-                <li><a class="set-font" style="font-family: monospace" href="#">Default font</a></li>
-                <li><a class="set-font" style="font-family: Consolas" href="#">Consolas</a></li>
-                <li><a class="set-font" style="font-family: 'Courier New'" href="#">Courier New</a></li>
-                <li><a class="set-font" style="font-family: 'DejaVu Sans Mono'" href="#">DejaVu Sans Mono</a></li>
-                <li><a class="set-font" style="font-family: 'Lucida Console'" href="#">Lucida Console</a></li>
-                <li><a class="set-font" style="font-family: Monaco" href="#">Monaco</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="set-fontSize dropdown-item" style="font-size: .92em" href="#">Small text</a></li>
+                <li><a class="set-fontSize dropdown-item" style="font-size: 1em" href="#">Normal text</a></li>
+                <li><a class="set-fontSize dropdown-item" style="font-size: 1.08em" href="#">Large text</a></li>
+                <li><a class="set-fontSize dropdown-item" style="font-size: 1.18em" href="#">Huge text</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="set-font dropdown-item" style="font-family: monospace" href="#">Default font</a></li>
+                <li><a class="set-font dropdown-item" style="font-family: Consolas" href="#">Consolas</a></li>
+                <li><a class="set-font dropdown-item" style="font-family: 'Courier New'" href="#">Courier New</a></li>
+                <li><a class="set-font dropdown-item" style="font-family: 'DejaVu Sans Mono'" href="#">DejaVu Sans Mono</a></li>
+                <li><a class="set-font dropdown-item" style="font-family: 'Lucida Console'" href="#">Lucida Console</a></li>
+                <li><a class="set-font dropdown-item" style="font-family: Monaco" href="#">Monaco</a></li>
             </ul>
         </div>
-        <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts <span class="caret"></span></button>
-        <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa-solid fa-keyboard"></i> Keyboard shortcuts <span class="caret"></span></button>
-        <button class="btn btn-default hide" id="set-keyboard-layout" data-target="#keyboard-layout" data-toggle="modal" title="Set virtual keyboard layout"><i class="fa-solid fa-keyboard"></i> Keyboard layout </button>
+        <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts</button>
+        <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa-solid fa-keyboard"></i> Keyboard shortcuts</button>
+        <button class="btn btn-default hide" id="set-keyboard-layout" data-bs-target="#keyboard-layout" data-bs-toggle="modal" title="Set virtual keyboard layout"><i class="fa-solid fa-keyboard"></i> Keyboard layout </button>
     </div>
     [%# CodeMirror instance will be inserted here %]
     <div id="statusbar">
@@ -119,9 +119,9 @@
     </div>
 </div>
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 <h3>Search</h3>
                 <form method="get" id="quicksearch">
@@ -144,176 +144,177 @@
                     </select>
                 </fieldset>
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 </div>
 
-<div id="advanced-search-ui" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-
-<div class="modal-header">
-    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="advanced-search-title">Advanced search</h3>
-</div>
-<div class="modal-body">
-  <form method="get" id="advanced-search">
-    <div class="row">
-    <div class="col-md-3">
-        <div id="search-facets">
-            <ul>
-                <li>Servers:<ul id="advanced-search-servers"></ul></li>
-            </ul>
+<div id="advanced-search-ui" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form method="get" id="advanced-search">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="advanced-search-title">Advanced search</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div id="search-facets">
+                                <ul>
+                                    <li>Servers:<ul id="advanced-search-servers"></ul></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <ul id="advanced-search-fields">
+                                <li>
+                                    <label for="advanced-search-by-isbn">ISBN:</label>
+                                    <input class="search-box" data-qualifier="isbn" id="advanced-search-by-isbn" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-issn">ISSN:</label>
+                                    <input class="search-box" data-qualifier="issn" id="advanced-search-by-issn" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-title">Title:</label>
+                                    <input class="search-box" data-qualifier="title" id="advanced-search-by-title" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-author">Author:</label>
+                                    <input class="search-box" data-qualifier="author" id="advanced-search-by-author" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-subject">Subject:</label>
+                                    <input class="search-box" data-qualifier="subject" id="advanced-search-by-subject" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-lc-number">LC call number:</label>
+                                    <input class="search-box" data-qualifier="cn_lc" id="advanced-search-by-lc-number" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-lccn">LCCN:</label>
+                                    <input class="search-box" data-qualifier="lccn" id="advanced-search-by-lccn" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-control-number">Control number:</label>
+                                    <input class="search-box" data-qualifier="local_number" id="advanced-search-by-control-number" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-dewey">Dewey number:</label>
+                                    <input class="search-box" data-qualifier="cn_dewey" id="advanced-search-by-dewey" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-standard-number">Standard number:</label>
+                                    <input class="search-box" data-qualifier="standard_identifier" id="advanced-search-by-standard-number" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-publisher-number">Publisher number:</label>
+                                    <input class="search-box" data-qualifier="music_identifier" id="advanced-search-by-publisher-number" />
+                                </li>
+                                <li>
+                                    <label for="advanced-search-by-publication-date">Publication date:</label>
+                                    <input class="search-box" data-qualifier="date" id="advanced-search-by-publication-date" />
+                                </li>
+                            </ul>
+                        </div> <!-- /.col-md-9 -->
+                    </div> <!-- /.row -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> <span>Search</span></button>
+                    <button class="btn btn-default" type="reset"><i class="fa fa-trash-can"></i> <span>Clear</span></button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="col-md-9">
-        <div id="toolbar" class="btn-toolbar">
-            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> <span>Search</span></button>
-            <button class="btn btn-default" type="reset"><i class="fa fa-trash-can"></i> <span>Clear</span></button>
-        </div>
-        <ul id="advanced-search-fields">
-            <li>
-                <label for="advanced-search-by-isbn">ISBN:</label>
-                <input class="search-box" data-qualifier="isbn" id="advanced-search-by-isbn" />
-            </li>
-            <li>
-                <label for="advanced-search-by-issn">ISSN:</label>
-                <input class="search-box" data-qualifier="issn" id="advanced-search-by-issn" />
-            </li>
-            <li>
-                <label for="advanced-search-by-title">Title:</label>
-                <input class="search-box" data-qualifier="title" id="advanced-search-by-title" />
-            </li>
-            <li>
-                <label for="advanced-search-by-author">Author:</label>
-                <input class="search-box" data-qualifier="author" id="advanced-search-by-author" />
-            </li>
-            <li>
-                <label for="advanced-search-by-subject">Subject:</label>
-                <input class="search-box" data-qualifier="subject" id="advanced-search-by-subject" />
-            </li>
-            <li>
-                <label for="advanced-search-by-lc-number">LC call number:</label>
-                <input class="search-box" data-qualifier="cn_lc" id="advanced-search-by-lc-number" />
-            </li>
-            <li>
-                <label for="advanced-search-by-lccn">LCCN:</label>
-                <input class="search-box" data-qualifier="lccn" id="advanced-search-by-lccn" />
-            </li>
-            <li>
-                <label for="advanced-search-by-control-number">Control number:</label>
-                <input class="search-box" data-qualifier="local_number" id="advanced-search-by-control-number" />
-            </li>
-            <li>
-                <label for="advanced-search-by-dewey">Dewey number:</label>
-                <input class="search-box" data-qualifier="cn_dewey" id="advanced-search-by-dewey" />
-            </li>
-            <li>
-                <label for="advanced-search-by-standard-number">Standard number:</label>
-                <input class="search-box" data-qualifier="standard_identifier" id="advanced-search-by-standard-number" />
-            </li>
-            <li>
-                <label for="advanced-search-by-publisher-number">Publisher number:</label>
-                <input class="search-box" data-qualifier="music_identifier" id="advanced-search-by-publisher-number" />
-            </li>
-            <li>
-                <label for="advanced-search-by-publication-date">Publication date:</label>
-                <input class="search-box" data-qualifier="date" id="advanced-search-by-publication-date" />
-            </li>
-        </ul>
-    </div>
-    </div>
-  </form>
-</div>
-</div>
-</div>
 </div>
 
-<div id="search-results-ui" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="search-results-title" aria-hidden="true">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-
-<div class="modal-header">
-    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="search-results-title">Results</h3>
-</div>
-
-<div class="modal-body">
-    <div class="row">
-    <div class="col-md-3">
-        <div id="search-facets">
-            <ul>
-                <li>Servers:<ul id="search-serversinfo"></ul></li>
-            </ul>
-        </div>
-    </div>
-    <div class="col-md-9">
-        <!-- tabindex attribute allows JS-controlled focus -->
-        <div id="searchresults" tabindex="-1">
-            <div id="search-top-pages">
-                <nav aria-label="Search results navigation">
-                </nav>
-            </div>
-
-            <table class="dataTable"> <!-- This is not a real dataTable but we want to inherit the CSS rules -->
-                <thead>
-                    <tr></tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-
-            <div id="search-bottom-pages">
-                <nav aria-label="Search results navigation">
-                </nav>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div id="search-overlay"><span>Loading...</span><div class="progress"><div class="progress-bar progress-bar-striped active" style="width: 100%"></div></div></div>
-</div>
-</div>
-</div>
-
-</div>
-
-<div id="macro-ui" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="macro-title" aria-hidden="true">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-
-<div class="modal-header">
-    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="macro-title">Macros</h3>
-</div>
-
-<div class="modal-body">
-    <div class="row">
-    <div class="col-md-3"><ul id="macro-list"></ul></div>
-    <div class="col-md-9" id="macro-editor">
-        <div id="macro-toolbar" class="btn-toolbar">
-            <button class="btn btn-default" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
-            <button class="btn btn-default" id="delete-macro" title="Delete macro"><i class="fa fa-trash-can"></i> Delete macro</button>
-            <label class="macro_shared" for="public" style="display:none;">Public macro:</label>
-            [% IF CAN_user_editcatalogue_create_shared_macros %]
-                <input class="macro_shared" type="checkbox" name="public" style="display:none;"/>
-            [% ELSE %]
-                <input class="macro_shared" type="checkbox" name="public" style="display:none;" disabled/>
-            [% END %]
-            <div id="macro-save-message"></div>
-        </div>
-    </div>
-    </div>
-</div>
-</div>
-</div>
-</div>
-
-<div id="keyboard-layout" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+<div id="search-results-ui" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="search-results-title" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Set virtual keyboard layout</h4>
+                <h1 class="modal-title" id="search-results-title">Results</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                <div class="col-md-3">
+                    <div id="search-facets">
+                        <ul>
+                            <li>Servers:<ul id="search-serversinfo"></ul></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <!-- tabindex attribute allows JS-controlled focus -->
+                    <div id="searchresults" tabindex="-1">
+                        <div id="search-top-pages">
+                            <nav aria-label="Search results navigation">
+                            </nav>
+                        </div>
+
+                        <table class="dataTable"> <!-- This is not a real dataTable but we want to inherit the CSS rules -->
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                        <div id="search-bottom-pages">
+                            <nav aria-label="Search results navigation">
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div id="search-overlay"><span>Loading...</span><div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div></div></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="macro-ui" class="modal" tabindex="-1" role="dialog" aria-labelledby="macro-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="macro-title">Macros</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                <div class="col-md-3"><ul id="macro-list"></ul></div>
+                <div class="col-md-9" id="macro-editor">
+                    <div id="macro-toolbar" class="btn-toolbar">
+                        <button class="btn btn-default" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
+                        <button class="btn btn-default" id="delete-macro" title="Delete macro"><i class="fa fa-trash-can"></i> Delete macro</button>
+                        <label class="macro_shared" for="public" style="display:none;">Public macro:</label>
+                        [% IF CAN_user_editcatalogue_create_shared_macros %]
+                            <input class="macro_shared" type="checkbox" name="public" style="display:none;"/>
+                        [% ELSE %]
+                            <input class="macro_shared" type="checkbox" name="public" style="display:none;" disabled/>
+                        [% END %]
+                        <div id="macro-save-message"></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="keyboard-layout" class="modal" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Set virtual keyboard layout</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -322,6 +323,9 @@
                 </div>
                 <hr/>
                 <div class="layouts"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

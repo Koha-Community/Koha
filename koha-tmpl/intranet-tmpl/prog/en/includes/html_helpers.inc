@@ -388,20 +388,25 @@
 [% END %]
 
 [% BLOCK tab_item %]
+    <li class="nav-item" role="presentation">
     [% IF ( bt_active ) %]
-        <li role="presentation" class="active">
-    [% ELSE %]
-        <li role="presentation">
-    [% END %]
         [% IF (linktab) %]
-            <a href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab">
+            <a class="nav-link active" href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab">
         [% ELSE %]
-            <a href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-toggle="tab">
+            <a class="nav-link active" href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-bs-toggle="tab" data-bs-target="#[% tabname | uri %]_panel">
         [% END %]
+    [% ELSE %]
+        [% IF (linktab) %]
+            <a class="nav-link" href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab">
+        [% ELSE %]
+            <a class="nav-link" href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-bs-toggle="tab" data-bs-target="#[% tabname | uri %]_panel">
+        [% END %]
+    [% END %]
             [% content | $raw %]
         </a>
     </li>
 [% END %]
+
 
 [% BLOCK tab_panels %]
     <div class="tab-content">
@@ -411,9 +416,9 @@
 
 [% BLOCK tab_panel %]
     [% IF ( bt_active ) %]
-        <div role="tabpanel" class="tab-pane active" id="[% tabname | html %]_panel">
+        <div class="tab-pane show active" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]" tabindex="0">
     [% ELSE %]
-        <div role="tabpanel" class="tab-pane" id="[% tabname | html %]_panel">
+        <div class="tab-pane" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]" tabindex="0">
     [% END %]
         [% content| $raw %]
     </div>
@@ -452,8 +457,8 @@
 
 [% # Used to build breadcrumb navigation nav %]
 [% BLOCK breadcrumbs %]
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
+    <nav id="breadcrumbs" aria-label="Breadcrumb">
+        <ol class="breadcrumb">
             [%# Include the Home link every time %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/mainpage.pl" title="Home">Home</a>
@@ -466,13 +471,13 @@
 [%# Used to build individual breadcrumb items in the breadcrumb nav %]
 [% BLOCK breadcrumb_item %]
     [% IF ( bc_active ) %]
-        <li>
-            <a href="#" aria-current="page">
+        <li class="breadcrumb-item active" aria-current="page">
+            <a href="#">
                 [% content | $raw %]
             </a>
         </li>
     [% ELSE %]
-        <li>
+        <li class="breadcrumb-item">
             [% content | $raw %]
         </li>
     [% END %]
@@ -504,7 +509,7 @@
 [% BLOCK accordion_heading %]
     <div class="panel-heading" role="tab" id="[% panel_id | $raw %]_heading">
         <h2 class="panel-title">
-            <a id="[% panel_id | $raw %]Toggle" href="#[% panel_id | $raw %]_panel" class="collapsed" role="button" data-toggle="collapse" data-parent="#[% panelgroup_id | $raw %]_group" aria-expanded="false" aria-controls="[% panel_id | $raw %]_panel">
+            <a id="[% panel_id | $raw %]Toggle" href="#[% panel_id | $raw %]_panel" class="collapsed" role="button" data-bs-toggle="collapse" data-parent="#[% panelgroup_id | $raw %]_group" aria-expanded="false" aria-controls="[% panel_id | $raw %]_panel">
                 [% content | $raw %]
             </a>
         </h2>

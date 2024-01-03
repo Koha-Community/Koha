@@ -39,12 +39,12 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
           [% IF CAN_user_tools_manage_patron_lists %]
-            <div id="patron_list_dialog" class="dialog message">
+            <div id="patron_list_dialog" class="alert alert-info">
               Added <span class="patrons-length"></span> patrons to <a></a>.
             </div>
           [% END %]
@@ -55,7 +55,7 @@
           [% IF CAN_user_borrowers_edit_borrowers && pending_borrower_modifications %]
             <div class="pending-info" id="patron_updates_pending">
               <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
-              <span class="number_box"><a href="/cgi-bin/koha/members/members-update.pl">[% pending_borrower_modifications | html %]</a></span>
+              <span class="badge text-bg-info"><a href="/cgi-bin/koha/members/members-update.pl">[% pending_borrower_modifications | html %]</a></span>
             </div>
           [% END %]
 
@@ -72,30 +72,30 @@
 
                     [% IF CAN_user_tools_manage_patron_lists %]
                         <div id="patronlist-dropdown" class="btn-group">
-                            <button id="patronlist-menu" type="button" class="btn btn-sm btn-default dropdown-toggle patron-edits disabled" disabled="disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Add to patron list <span class="caret"></span>
+                            <button id="patronlist-menu" type="button" class="btn btn-default btn-sm dropdown-toggle patron-edits disabled" disabled="disabled" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Add to patron list
                             </button>
                             <ul class="dropdown-menu">
                                 [% IF patron_lists %]
                                     [% FOREACH pl IN patron_lists %]
-                                        <li><a href="#" class="patron-list-add" data-listid="[% pl.patron_list_id | html %]">[% pl.name | html %]</a></li>
+                                        <li><a href="#" class="patron-list-add dropdown-item" data-listid="[% pl.patron_list_id | html %]">[% pl.name | html %]</a></li>
                                     [% END %]
                                 [% END %]
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#" class="patron-list-add" data-listid="new">New list</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a href="#" class="dropdown-item patron-list-add" data-listid="new">New list</a></li>
                             </ul>
                         </div>
                     [% END %]
 
                     [% IF CAN_user_borrowers_edit_borrowers %]
                         <div class="btn-group">
-                            <button id="merge-patrons" class="btn btn-sm btn-default disabled" disabled="disabled" type="submit"><i class="fa fa-compress" aria-hidden="true"></i> Merge selected patrons</button>
+                            <button id="merge-patrons" class="btn btn-default btn-sm disabled" disabled="disabled" type="submit"><i class="fa fa-compress" aria-hidden="true"></i> Merge selected patrons</button>
                         </div>
                     [% END %]
 
                     [% IF CAN_user_tools_edit_patrons %]
                         <div class="btn-group">
-                            <button id="batch-mod-patrons" class="btn btn-default btn-sm" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Batch patron modification</button>
+                            <button id="batch-mod-patrons" class="btn btn-default btn-sm disabled" disabled="disabled" type="button"><i class="fa fa-pencil" aria-hidden="true"></i> Batch patron modification</button>
                         </div>
                     [% END %]
 
@@ -128,20 +128,20 @@
                 [%- END -%]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             [% PROCESS patron_search_filters categories => categories, libraries => libraries, filters => ['search_field', 'search_type', 'category', 'branch'], search_filter => searchmember %]
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2 order-sm-2 order-md-1 -->
     </div> <!-- /.row -->
 
     <!-- New Patron List Modal -->
     <div class="modal" id="new-patron-list" tabindex="-1" role="dialog" aria-labelledby="new-patron-listLabel">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="new-patron-listLabel">Add patrons to a new patron list</h4>
+                    <h1 class="modal-title" id="new-patron-listLabel">Add patrons to a new patron list</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="get" id="new-patron-list_form">
                     <div class="modal-body">
@@ -154,7 +154,7 @@
                     </div> <!-- /.modal-body -->
                     <div class="modal-footer">
                         <button type="submit" id="add_to_patron_list_submit" class="btn btn-default approve">Submit</button>
-                        <button type="button" class="btn btn-default deny" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default deny" data-bs-dismiss="modal">Cancel</button>
                         [% PROCESS 'members-patron-selections.inc' id="new-patron-list_form" %]
                     </div> <!-- /.modal-footer -->
                 </form> <!-- /#new-patron-list_form -->

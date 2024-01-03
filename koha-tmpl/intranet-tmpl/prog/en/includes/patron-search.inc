@@ -151,8 +151,8 @@
 
     <div id="[% table_id | html %]_search_results" style="display:none;">
 
-        <div class="info dialog message" style="display: none; margin: 1em 0;"></div>
-        <div class="error dialog alert" style="display: none; margin: 1em 0"></div>
+        <div class="info alert alert-info" style="display: none; margin: 1em 0;"></div>
+        <div class="error alert alert-warning" style="display: none; margin: 1em 0"></div>
 
         <input type="hidden" class="firstletter_filter" value="" />
         [% IF open_on_row_click %]
@@ -189,7 +189,7 @@
 
 <!-- Patron preview modal -->
 <div class="modal" id="patronPreview" tabindex="-1" role="dialog" aria-labelledby="patronPreviewLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
                 <div id="loading">
@@ -919,11 +919,11 @@
     [% search_results_block_id = patron_search_modal_id _ '_searchresults' %]
 
     <div id="[% patron_search_modal_id | html %]" class="modal modal-full patron_search_modal" tabindex="-1" role="dialog" aria-labelledby="patronSearchLabel" aria-hidden="true" data-backdrop="">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="patronSearchLabel">[% modal_title | html %]</h4>
+                    <h1 class="modal-title" id="patronSearchLabel">[% modal_title | html %]</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     [% PROCESS patron_search_filters filters => ['branch','category','sort1','sort2'] %]
@@ -943,7 +943,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-default cancel" data-dismiss="modal" aria-hidden="true">Close</a>
+                    <button type="button" class="btn btn-default cancel" data-bs-dismiss="modal">Close</a>
                 </div>
             </div>
         </div>

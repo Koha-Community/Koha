@@ -9,8 +9,9 @@
 [% BLOCK fund_dropdown %]
     <select id="[% form_id | html %]" name="[% form_name | html %]" class="fund_dropdown" data-selected="[% selected | html %]">
     </select>
-    <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-    <input type="checkbox" class="showallfunds" />
+    <label style="float:none;width:auto;">&nbsp;Show inactive:
+        <input type="checkbox" data-select-id="[% form_id | html %]" class="showallfunds" />
+    </label>
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -46,14 +47,14 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
                 <h1>Invoice: [% invoicenumber | html %]</h1>
 
                 [% IF ( modified ) %]
-                    <div class="dialog message">
+                    <div class="alert alert-info">
                         <p>Invoice has been modified</p>
                     </div>
                 [% END %]
@@ -445,7 +446,7 @@
                             </tfoot>
                         </table> <!-- /#orderst -->
                     [% ELSE %]
-                        <div class="dialog message">
+                        <div class="alert alert-info">
                             <p>No orders yet</p>
                             [% IF adjustments && adjustments.count > 0 || shipmentcost && shipmentcost > 0 %]
                                 <p>Adjustments plus shipping: [% total_adj + shipmentcost | $Price %]</p>
@@ -484,27 +485,28 @@
                     </div>
                 [% END # /IF AcqEnableFiles %]
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <aside>
-            <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
+            <aside>
                 [% INCLUDE 'acquisitions-menu.inc' %]
-            </div>
-        </aside>
+            </aside>
+        </div>
     </div> <!-- /.row -->
 
-<div id="updateFund" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateReceivedFund" aria-hidden="true">
-    <div class="modal-dialog">
+<div id="updateFund" class="modal" tabindex="-1" role="dialog" aria-labelledby="updateReceivedFund" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="updateReceivedFund">Update received fund</h3>
+                <h1 class="modal-title" id="updateReceivedFund">Update received fund</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>Updating the fund may change available statistics for the order, please check values before submitting.</p>
                 <fieldset class="rows">
                     <ol>
                         <li>
+                            <label for="modify_budget_id">Fund:</label>
                             [% PROCESS fund_dropdown form_id => 'modify_budget_id' form_name => 'modify_budget_id' selected => "" %]
                         </li>
                         <li>
@@ -517,10 +519,10 @@
                         </li>
                     </ol>
                 </fieldset>
-                <a id="update_fund" class="btn btn-default">Update fund</a>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                <a id="update_fund" class="btn btn-primary">Update fund</a>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div> <!-- /.modal-footer -->
         </div> <!-- /.modal-content -->
     </div> <!-- /.modal-dialog -->
@@ -600,15 +602,14 @@
 
             $('.b_inactive').remove();
 
-            $('.showallfunds').click(function() {
-                var the_dropdown = $(this).siblings('.fund_dropdown');
+            $('.showallfunds').on("change", function() {
+                var the_dropdown = $("#" + $(this).data("select-id") );
                 var selected = the_dropdown.val();
                 if ($(this).is(":checked")) {
-                    the_dropdown.html(disabledBudgetsCopy).val(selected);
-                }
-                else {
-                    the_dropdown.find('option[value="'+selected+'"]').removeClass('b_inactive');
-                    $(this).siblings().find('.b_inactive').remove();
+                    the_dropdown.html( disabledBudgetsCopy ).val(selected);
+                } else {
+                    the_dropdown.find( 'option[value="' + selected + '"]' ).removeClass('b_inactive');
+                    the_dropdown.find('.b_inactive').remove();
                 }
             });
 

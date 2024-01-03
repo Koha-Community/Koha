@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <label for="type" class="col-sm-2 control-label">Type of Performance Medium</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="type">
+                        <select class="form-select" id="type">
                             [% FOREACH option IN options %]
                                 [% IF option.value == value %]
                                     <option value="[% option.value | html %]" selected>[% option.label | html %]</option>
@@ -33,7 +33,7 @@
                 </div>
             </div> <!-- /.page-section -->
 
-            <nav class="navbar navbar-default navbar-fixed-bottom">
+            <nav class="navbar navbar-default fixed-bottom">
                 <div class="container-fluid">
                     <fieldset class="action">
                         <input type="submit" class="btn btn-primary" value="Save" />

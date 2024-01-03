@@ -38,7 +38,7 @@
                 <div class="row">
 
                 [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-sm-10 col-sm-push-2">
+                    <div class="col-md-10 order-md-2 order-sm-1">
                 [% ELSE %]
                     <div class="col-md-12 col-lg-10 col-lg-offset-1">
                 [% END %]
@@ -46,10 +46,10 @@
 
             <h1>Checkout notes</h1>
 
-            <div class="dialog alert" id="error" style="display:none;"></div>
+            <div class="alert alert-warning" id="error" style="display:none;"></div>
 
             [% IF ( selected_count ) %]
-                <div class="dialog message">
+                <div class="alert alert-info">
                     [% IF ( op == 'cud-seen' ) %]
                         <span>[% selected_count | html %] note(s) marked as seen.</span>
                     [% ELSIF ( op == 'cud-notseen' ) %]
@@ -118,16 +118,16 @@
                 </form>
 
             [% ELSE %]
-                <div class="dialog message">There are currently no checkout notes.</div>
+                <div class="alert alert-info">There are currently no checkout notes.</div>
             [% END %] <!-- notes -->
 
                     [% IF Koha.Preference('CircSidebar') %]
-                        </div> <!-- /.col-sm-10.col-sm-push-2 -->
-                        <div class="col-sm-2 col-sm-pull-10">
+                        </div> <!-- /.col-md-10.order-md-2 -->
+                        <div class="col-md-2 order-sm-2 order-md-1">
                             <aside>
                                 [% INCLUDE 'circ-nav.inc' %]
                             </aside>
-                        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                        </div> <!-- /.col-md-2.order-md-1 -->
                     [% ELSE %]
                         </div> <!-- .col-md-12.col-lg-10.col-lg-offset-1 -->
                     [% END %]

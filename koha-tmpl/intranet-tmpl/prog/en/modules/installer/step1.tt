@@ -24,7 +24,7 @@
 <body id="installer" class="installer">
     <div class="container-fluid">
         <div class="row">
-            <div id="installer-step1" class="installer-main col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+            <div id="installer-step1" class="installer-main col-sm-8 col-sm-offset-2 col-md-8 offset-md-2">
 
                 <div id="logo"><a href="#">Koha</a></div>
 
@@ -33,12 +33,12 @@
 
                     <div id="steps">
                         <ol>
-                            <li class="current open"><i class="fa fa-square" aria-hidden="true"></i> Choose your language</li>
-                            <li class="open"><i class="fa fa-square" aria-hidden="true"></i> Check Perl dependencies</li>
-                            <li class="open"><i class="fa fa-square" aria-hidden="true"></i> Database settings</li>
-                            <li class="open"><i class="fa fa-square" aria-hidden="true"></i> Set up database</li>
-                            <li class="open"><i class="fa fa-square" aria-hidden="true"></i> Install basic configuration settings</li>
-                            <li class="open"><i class="fa fa-square" aria-hidden="true"></i> Onboarding</li>
+                            <li class="current open"><i class="fa-regular fa-square" aria-hidden="true"></i> Choose your language</li>
+                            <li class="open"><i class="fa-regular fa-square" aria-hidden="true"></i> Check Perl dependencies</li>
+                            <li class="open"><i class="fa-regular fa-square" aria-hidden="true"></i> Database settings</li>
+                            <li class="open"><i class="fa-regular fa-square" aria-hidden="true"></i> Set up database</li>
+                            <li class="open"><i class="fa-regular fa-square" aria-hidden="true"></i> Install basic configuration settings</li>
+                            <li class="open"><i class="fa-regular fa-square" aria-hidden="true"></i> Onboarding</li>
                         </ol>
                     </div>
 
@@ -63,7 +63,9 @@
                                 [% END %]
                             </select>
                         </div>
-                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
+                        <div class="form-group mt-2">
+                            <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
+                        </div>
                     </form>
                 [% END %]
 
@@ -83,10 +85,10 @@
                                 </ol>
                             </div>
 
-                            <p>Some Perl modules are missing. <span class="label label-danger">Important: </span>Required modules must be installed before you may continue.<br />
+                            <p>Some Perl modules are missing. <span class="badge text-bg-danger">Important: </span>Required modules must be installed before you may continue.<br />
                             <ul>
                                 [% FOREACH missing_module IN missing_modules %]
-                                    <li><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="label label-danger">Required</span>[% END %]
+                                    <li><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="badge text-bg-danger">Required</span>[% END %]
                                         <br /> Version: [% missing_module.min_version | html %]
                                     </li>
                                 [% END %]
@@ -107,10 +109,10 @@
                                 </ol>
                             </div>
 
-                            <p>Some Perl modules require upgrade. <span class="label label-danger">Important: </span>Required modules must be installed at the correct version before you may continue.<br />
+                            <p>Some Perl modules require upgrade. <span class="badge text-bg-danger">Important: </span>Required modules must be installed at the correct version before you may continue.<br />
                             <ul>
                                 [% FOREACH upgrade_module IN upgrade_modules %]
-                                    <li><strong>[% upgrade_module.name | html %]</strong> [% IF ( upgrade_module.require ) %]<span class="label label-danger">Required</span>[% END %]
+                                    <li><strong>[% upgrade_module.name | html %]</strong> [% IF ( upgrade_module.require ) %]<span class="badge text-bg-danger">Required</span>[% END %]
                                         <br /> Installed version: [% upgrade_module.version | html %]
                                         <br /> Minimum version: [% upgrade_module.min_version | html %]
                                         <br /> Maximum version: [% upgrade_module.max_version | html %]
@@ -142,8 +144,10 @@
                         [% END %]
 
                         <form method="get" name="checkmodules" action="install.pl">
-                            <input type="hidden" name="step" value="1" />
-                            <p> <input value="Recheck dependencies" class="btn btn-primary" type="submit" /></p>
+                            <div class="form-group mt-2">
+                                <input type="hidden" name="step" value="1" />
+                                <p> <input value="Recheck dependencies" class="btn btn-primary" type="submit" /></p>
+                            </div>
                         </form>
 
                     [% ELSE # IF checkmodule %]
@@ -164,8 +168,10 @@
                         <p> All dependencies installed.</p>
 
                         <form method="get" name="checkmodules" role="form" action="install.pl">
-                            <input type="hidden" name="step" value="2" />
-                            <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                            <div class="form-group mt-2">
+                                <input type="hidden" name="step" value="2" />
+                                <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                            </div>
                         </form>
                     [% END # IF checkmodule%]
                 [% END # IF language %]

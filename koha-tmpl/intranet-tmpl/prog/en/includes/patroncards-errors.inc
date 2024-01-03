@@ -6,7 +6,7 @@
 [% BLOCK b_template %]<span>Template: </span>[% END %]
 
 [% IF ( error || error_pdferr )  %]
-<div class="dialog alert">
+<div class="alert alert-warning">
   <p>
     <strong>WARNING:</strong>
         [% IF error_pdferr %]<span>Error while creating PDF file. </span>

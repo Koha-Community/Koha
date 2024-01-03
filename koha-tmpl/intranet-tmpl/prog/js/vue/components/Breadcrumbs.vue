@@ -1,6 +1,6 @@
 <template>
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
+    <nav id="breadcrumbs" aria-label="Breadcrumb">
+        <ol class="breadcrumb">
             <template v-for="(item, idx) in breadcrumbs" v-bind:key="idx">
                 <NavigationItem
                     v-if="idx < breadcrumbs.length - 1"
@@ -21,7 +21,6 @@
         </ol>
     </nav>
 </template>
-
 <script>
 import { inject } from "vue"
 import { storeToRefs } from "pinia"

@@ -33,14 +33,14 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
                 <h1>Patron clubs</h1>
 
                 [% IF club_template %]
-                    <div class="dialog message">
+                    <div class="alert alert-info">
                         [% IF stored == 'updated' %]
                             <p>Club template <em>[% club_template.name | html %]</em> was updated.</p>
                         [% ELSE %]
@@ -48,7 +48,7 @@
                         [% END %]
                     </div>
                 [% ELSIF club %]
-                    <div class="dialog message">
+                    <div class="alert alert-info">
                         [% IF stored == 'updated' %]
                             <p>Club <em>[% club.name | html %]</em> was updated.</p>
                         [% ELSE %]
@@ -116,7 +116,7 @@
                         </table>
                     </div> <!-- /.page-section -->
                 [% ELSE %]
-                    <div class="dialog message">No club templates defined.</div>
+                    <div class="alert alert-info">No club templates defined.</div>
                 [% END %]
 
                 <h3>Clubs</h3>
@@ -125,13 +125,13 @@
                     <div class="btn-toolbar">
                         <div class="btn-group">
                             [% IF club_templates.count %]
-                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
+                                <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New club</button>
                             [% ELSE %]
-                                <button disabled="disabled" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
+                                <button disabled="disabled" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New club</button>
                             [% END %]
                             <ul class="dropdown-menu">
                                 [% FOREACH t IN club_templates %]
-                                    <li><a href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id | uri %]">[% t.name | html %]</a></li>
+                                    <li><a class="dropdown-item" href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id | uri %]">[% t.name | html %]</a></li>
                                 [% END %]
                             </ul>
                         </div>
@@ -144,20 +144,20 @@
                     </div> <!-- /.page-section -->
                 [% ELSE %]
                     [% IF club_templates.count %]
-                        <div class="dialog message">No clubs defined.</div>
+                        <div class="alert alert-info">No clubs defined.</div>
                     [% ELSE %]
-                        <div class="dialog message">No clubs defined. A club template must be defined before a club can be defined.</div>
+                        <div class="alert alert-info">No clubs defined. A club template must be defined before a club can be defined.</div>
                     [% END %]
                 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

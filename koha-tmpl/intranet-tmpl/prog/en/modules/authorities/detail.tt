@@ -44,9 +44,8 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 offset-md-2">
             [% INCLUDE 'messages.inc' %]
-
             [% INCLUDE 'authorities-toolbar.inc' %]
             <form action="/cgi-bin/koha/authorities/authorities-home.pl" class="form_delete" method="post">
                   [% INCLUDE 'csrf-token.inc' %]
@@ -63,7 +62,7 @@
 
             [% IF ( unknownauthid ) %]
                 <h1>Authority does not exist</h1>
-                <div class="dialog message">The authority record you requested does not exist ([% errauthid | html %]).</div>
+                <div class="alert alert-info">The authority record you requested does not exist ([% errauthid | html %]).</div>
             [% ELSE %]
 
                 <h1>Authority #[% authid | html %] ([% authtypetext | html %])</h1>
@@ -131,7 +130,7 @@
                 [% END # /WRAPPER tabs %]
 
             [% END # /IF ( unknownauthid ) %]
-        </div> <!-- /.col-md-8 col-md-offset-2 -->
+        </div> <!-- /.col-md-8 offset-md-2 -->
     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -159,7 +158,7 @@
             var editAuth = $("#editAuth");
             var editAuthLink = editAuth.attr("href");
 
-            $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+            $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                 var newTabId = $(this).attr("href");
                 editAuth.attr("href", editAuthLink + newTabId );
             });

@@ -1,5 +1,5 @@
 <template>
-    <input type="submit" variant="primary" :value="text" />
+    <input type="submit" class="btn btn-primary" :value="text" />
 </template>
 
 <script>

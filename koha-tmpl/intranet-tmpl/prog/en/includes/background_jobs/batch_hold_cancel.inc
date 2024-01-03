@@ -3,11 +3,11 @@
     [% SET report = job.report %]
     [% IF report %]
         [% IF report.total_holds == report.total_success %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 All holds have successfully been cancelled!
             </div>
         [% ELSE %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 <span>[% report.total_success | html %] / [% report.total_holds | html %] holds have successfully been modified. Some errors occurred.</span>
                 [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
             </div>
@@ -18,7 +18,7 @@
 
 [% BLOCK detail %]
     [% FOR m IN report_messages %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF m.type == 'success' %]
                 <i class="fa fa-check success"></i>
             [% ELSIF m.type == 'warning' %]

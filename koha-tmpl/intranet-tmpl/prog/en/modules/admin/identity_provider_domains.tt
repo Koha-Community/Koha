@@ -59,7 +59,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -80,8 +80,8 @@
     </div>
 [% END %]
 
-    <div class="dialog message" id="identity_provider_domain_delete_success" style="display: none;"></div>
-    <div class="dialog alert"   id="identity_provider_domain_delete_error"   style="display: none;"></div>
+    <div class="alert alert-info" id="identity_provider_domain_delete_success" style="display: none;"></div>
+    <div class="alert alert-warning"   id="identity_provider_domain_delete_error"   style="display: none;"></div>
 
 [% IF op == 'add_form' %]
     <h1>[% tx("New identity provider domain for '{identity_provider_code}'", {identity_provider_code = identity_provider_code}) | html %]</h1>
@@ -96,7 +96,7 @@
                     <li>
                         <label for="domain">Domain: </label>
                         <input type="text" name="domain" id="domain" size="60" />
-                        <div class="hint">Email domain to match this rule. <button class="more btn btn-ligth" data-target="domain"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint">Email domain to match this rule. <button class="more btn btn-ligth" data-bs-target="domain"><i class="fa fa-caret-down"></i> More</button></div>
                         <div class="hint more-domain" style="display: none">
                             <p>If this field is empty, or '*' any email domain will match this rule.</p>
                             <p>You may enter a wildcard at the beginning of the domain. For example, the domain '*library.com' will match 'students.library.com' but will also match 'otherlibrary.com'</p>
@@ -179,7 +179,7 @@
                     <li>
                         <label for="domain">Domain: </label>
                         <input type="text" name="domain" id="domain" size="60" value="[%- identity_provider_domain.domain | html -%]"/>
-                        <div class="hint">Email domain to match this rule. <button class="more btn btn-ligth" data-target="domain"><i class="fa fa-caret-down"></i> More</button></div>
+                        <div class="hint">Email domain to match this rule. <button class="more btn btn-ligth" data-bs-target="domain"><i class="fa fa-caret-down"></i> More</button></div>
                         <div class="hint more-domain" style="display: none">
                             <p>If this field is empty, or '*' any email domain will match this rule.</p>
                             <p>You may enter a wildcard at the beginning of the domain. For example, the domain '*library.com' will match 'students.library.com' but will also match 'otherlibrary.com'</p>
@@ -301,28 +301,28 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3 id="delete_confirm_modal_label">Confirm deletion of identity provider domain</h3>
+                            <h1 class="modal-title" id="delete_confirm_modal_label">Confirm deletion of identity provider domain</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div id="delete_confirm_dialog"></div>
                         </div>
                         <div class="modal-footer">
-                            <a href="#" class="btn btn-default" id="delete_confirm_modal_button" role="button" data-toggle="modal">Delete</a>
-                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                            <a href="#" class="btn btn-danger" id="delete_confirm_modal_button" role="button" data-bs-toggle="modal">Delete</a>
+                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div> <!-- /.modal-content -->
                 </div> <!-- /.modal-dialog -->
             </div> <!-- #delete_confirm_modal -->
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 
@@ -350,7 +350,7 @@
                     "url": identity_provider_domains_url
                 },
                 'language': {
-                    'emptyTable': '<div class="dialog message">'+_("There are no identity provider domains defined.")+'</div>'
+                    'emptyTable': '<div class="alert alert-info">'+_("There are no identity provider domains defined.")+'</div>'
                 },
                 "columnDefs": [ {
                     "targets": [1],
@@ -441,7 +441,7 @@
                     {
                         "data": function( row, type, val, meta ) {
                             var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/identity_providers.pl?domain_ops=1&amp;identity_provider_id=[%- identity_provider_id | html -%]&amp;op=edit_form&amp;identity_provider_domain_id='+ encodeURIComponent(row.identity_provider_domain_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
-                            result += '<a class="btn btn-default btn-xs delete_identity_provider_domain" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-auth-provider-domain-id="'+ encodeURIComponent(row.identity_provider_domain_id) +'" data-auth-provider-domain="'+ encodeURIComponent((row.domain || '').escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
+                            result += '<a class="btn btn-default btn-xs delete_identity_provider_domain" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-auth-provider-domain-id="'+ encodeURIComponent(row.identity_provider_domain_id) +'" data-auth-provider-domain="'+ encodeURIComponent((row.domain || '').escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
                             return result;
                         },
                         "searchable": false,

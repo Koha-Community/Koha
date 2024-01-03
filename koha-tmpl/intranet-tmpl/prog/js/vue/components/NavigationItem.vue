@@ -1,5 +1,5 @@
 <template>
-    <li>
+    <li class="breadcrumb-item">
         <span>
             <router-link
                 v-if="item.name"
@@ -62,5 +62,8 @@ export default {
 <style>
 span.item-last {
     padding: 7px 3px;
+}
+#navmenulist .breadcrumb-item::before {
+    display: none;
 }
 </style>

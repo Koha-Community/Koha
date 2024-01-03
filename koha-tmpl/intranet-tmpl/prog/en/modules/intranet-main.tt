@@ -27,7 +27,7 @@
     <div id="container-main" class="container-fluid">
         <div class="row">
             <h1 class="sr-only">Koha home</h1>
-            <div class="col-sm-3">
+            <div class="col-md-3 order-sm-2">
                 [% IF ( koha_news.count ) %]
                     <div id="area-news" class="page-section">
                         <h3><span class="news_title">News</span></h3>
@@ -54,7 +54,7 @@
                     </div>
                 [% END %]
             </div> <!-- /.col-sm-2 -->
-            <div class="col-sm-9 col-lg-6">
+            <div class="col-md-9 order-md-2">
                 <div class="row">
                     <div class="col-sm-6">
                         <ul class="biglinks-list">
@@ -301,7 +301,6 @@
             </div> <!-- /.col-sm-9 -->
 
         </div> <!-- /.row -->
-    </div> <!-- /.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

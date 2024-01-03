@@ -93,7 +93,7 @@
     [% IF ( op == 'show' ) %]
         <div class="main container-fluid">
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-8 offset-md-2">
                     [% INCLUDE 'messages.inc' %]
 
                     <div id="toolbar" class="btn-toolbar">
@@ -318,19 +318,19 @@
                         <a href="suggestion.pl">&lt;&lt; Back to suggestions</a>
                     </fieldset>
 
-                </div> <!-- /.col-md-8 col-md-offset-2 -->
+                </div> <!-- /.col-md-8 offset-md-2 -->
             </div> <!-- /.row -->
     [% ELSE # IF op == "show" %]
 
         [% IF op == 'save' %]
             <div class="main container-fluid">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-8 offset-md-2">
                         [% INCLUDE 'messages.inc' %]
         [% ELSE %]
             <div class="main container-fluid">
                 <div class="row">
-                    <div class="col-sm-10 col-sm-push-2">
+                    <div class="col-md-10 order-md-2 order-sm-1">
                         [% INCLUDE 'messages.inc' %]
         [% END %]
 
@@ -524,7 +524,7 @@
                                             [% END %]
                                         </td>
                                         <td>
-                                            <a href="#patron_search_modal_suggester" id="edit_suggester" class="btn btn-default" data-toggle="modal">Set to patron</a>
+                                            <a href="#patron_search_modal_suggester" id="edit_suggester" class="btn btn-default" data-bs-toggle="modal">Set to patron</a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -578,7 +578,7 @@
                                     | Previously was [% INCLUDE 'patron-title.inc' patron=managedby_patron hide_patron_infos_if_needed=1 %] [% Branches.GetName( managedby_patron.branchcode ) | html %] ([% managedby_patron.category.description | html %])
                                 [% END %]
                                 <br />
-                                <a href="#patron_search_modal_manager" id="edit_manager" data-toggle="modal"><i class="fa fa-search"></i> Select manager</a>
+                                <a href="#patron_search_modal_manager" id="edit_manager" data-bs-toggle="modal"><i class="fa fa-search"></i> Select manager</a>
                                 [% IF managedby_patron.borrowernumber && logged_in_user.borrowernumber != managedby_patron.borrowernumber %]
                                     <a id="restore_previous_manager" href="#"><i class="fa fa-trash-can"></i> Keep existing manager</a>
                                 [% END %]
@@ -863,20 +863,20 @@
                                                     <td class="actions">
                                                         [% IF CAN_user_suggestions_suggestions_manage %]
                                                             <div class="btn-group dropup">
-                                                                <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                                                <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-bs-toggle="dropdown" href="#"><b class="caret"></b></a>
                                                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
                                                                     [% IF CAN_user_suggestions_suggestions_delete %]
                                                                         <li>
-                                                                            <button data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-default trigger_action">Delete</button>
+                                                                            <a href="#" data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="dropdown-item trigger_action">Delete</a>
                                                                         </li>
                                                                     [% END %]
                                                                     [% UNLESS s.archived %]
                                                                         <li>
-                                                                            <button class="btn btn-default trigger_action" data-op="cud-archive" data-suggestionid="[% s.suggestionid | html %]">Archive</button>
+                                                                            <a href="#" class="dropdown-item trigger_action" data-op="cud-archive" data-suggestionid="[% s.suggestionid | html %]">Archive</a>
                                                                         </li>
                                                                     [% ELSE %]
                                                                         <li>
-                                                                            <button class="btn btn-default trigger_action" data-op="cud-unarchive" data-suggestionid="[% s.suggestionid | html %]">Unarchive</button>
+                                                                            <a href="#" class="dropdown-item trigger_action" data-op="cud-unarchive" data-suggestionid="[% s.suggestionid | html %]">Unarchive</a>
                                                                         </li>
                                                                     [% END %]
                                                                 </ul>
@@ -979,7 +979,7 @@
                                         <div class="col-sm-2">
                                             <fieldset class="brief">
                                                 <span class="label">Update manager</span>
-                                                <a href="#patron_search_modal_manager_[% loop.count | uri %]" id="set_manager_[% loop.count | uri %]" data-tab="[% loop.count | uri %]" class="set_manager" data-toggle="modal"><i class="fa fa-search"></i> Select manager</a>
+                                                <a href="#patron_search_modal_manager_[% loop.count | uri %]" id="set_manager_[% loop.count | uri %]" data-tab="[% loop.count | uri %]" class="set_manager" data-bs-toggle="modal"><i class="fa fa-search"></i> Select manager</a>
                                                 <span id="managedby_name[% loop.count | html %]"></span>
                                             </fieldset>
                                             <fieldset class="action">
@@ -1030,9 +1030,9 @@
 
         [% UNLESS op == 'save' %]
             [% UNLESS ( op == 'show' ) %]
-                </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                </div> <!-- /.col-md-10.order-md-2 -->
 
-                <div class="col-sm-2 col-sm-pull-10">
+                <div class="col-md-2 order-sm-2 order-md-1">
                     <aside>
                         <form name="suggestionfilter" action="suggestion.pl" method="get">
                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
@@ -1079,7 +1079,7 @@
                                 <h4>Filter by: <a style="font-size:80%;font-weight:normal;" href="/cgi-bin/koha/suggestion/suggestion.pl">[clear]</a></h4>
 
                                 <div id="limits">
-                                    <h4 class="local_collapse"><a href="#" data-target="biblio_information">Bibliographic information</a></h4>
+                                    <h4 class="local_collapse"><a href="#" data-bs-target="biblio_information">Bibliographic information</a></h4>
                                     <fieldset class="brief biblio_information">
                                         <ol>
                                             <li>
@@ -1112,7 +1112,7 @@
                                         <input type="submit" value="Go" />
                                     </fieldset>
 
-                                    <h4 class="local_collapse"><a href="#" data-target="suggestion_information">Suggestion information</a></h4>
+                                    <h4 class="local_collapse"><a href="#" data-bs-target="suggestion_information">Suggestion information</a></h4>
                                     <fieldset class="brief suggestion_information">
                                         <ol>
                                             <li>
@@ -1229,7 +1229,7 @@
                                     </fieldset>
 
                                     <h4 class="local_collapse">
-                                        <a href="#" data-target="acquisition_information">Acquisition information</a>
+                                        <a href="#" data-bs-target="acquisition_information">Acquisition information</a>
                                     </h4>
                                     <fieldset class="brief acquisition_information">
                                         <ol>
@@ -1261,7 +1261,7 @@
                         [% INCLUDE 'acquisitions-menu.inc' %]
 
                     </aside>
-                </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                </div> <!-- /.col-md-2.order-md-1 -->
             [% END # /UNLESS ( op == 'show' ) %]
         [% END # /UNLESS op == 'save' %]
         </div> <!-- /.row -->

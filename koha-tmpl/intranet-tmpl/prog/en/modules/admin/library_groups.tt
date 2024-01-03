@@ -29,52 +29,51 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-[% FOR m IN messages %]
-    <div class="dialog [% m.type | html %]">
-        [% SWITCH m.code %]
-        [% CASE 'error_on_insert' %]
-            <span>An error occurred when adding this library. The library ID might already exist in this group.</span>
-        [% CASE %]
-            <span>[% m.code | html %]</span>
-        [% END %]
-    </div>
-[% END %]
-
-[% IF added %]
-    <div class="dialog message group-added">
-        [% IF added.branchcode %]
-            <span>[% added.library.branchname | html | $KohaSpan class = 'name' %] added to group.</span>
-        [% ELSE %]
-            <span>Group [% added.title | html | $KohaSpan class = 'name' %] created.</span>
-        [% END %]
-    </div>
-[% ELSIF deleted %]
-    <div class="dialog message group-deleted">
-        [% IF deleted.title %]
-            <span>Group [% deleted.title | html | $KohaSpan class = 'name' %] has been deleted.</span>
-        [% ELSE %]
-            <span>[% deleted.library | html | $KohaSpan class = 'name' %] has been removed from group.</span>
-        [% END %]
-    </div>
-[% ELSIF error_duplicate_title %]
-    <div class="dialog alert error-duplicate-group-title">
-            A group with the title [% error_duplicate_title | html | $KohaSpan class = 'name' %] already exists.
-    </div>
-[% END %]
-
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
-
-                    <div id="toolbar" class="btn-toolbar">
-                        <div class="btn-group">
-                            <a id="add-group-root" class="btn btn-default add-group" href="#">
-                                <i class="fa fa-plus"></i> New group
-                            </a>
-                        </div>
+                [% FOR m IN messages %]
+                    <div class="alert alert-[% m.type | html %]">
+                        [% SWITCH m.code %]
+                        [% CASE 'error_on_insert' %]
+                            <span>An error occurred when adding this library. The library ID might already exist in this group.</span>
+                        [% CASE %]
+                            <span>[% m.code | html %]</span>
+                        [% END %]
                     </div>
+                [% END %]
+
+                [% IF added %]
+                    <div class="alert alert-info group-added">
+                        [% IF added.branchcode %]
+                            <span>[% added.library.branchname | html | $KohaSpan class = 'name' %] added to group.</span>
+                        [% ELSE %]
+                            <span>Group [% added.title | html | $KohaSpan class = 'name' %] created.</span>
+                        [% END %]
+                    </div>
+                [% ELSIF deleted %]
+                    <div class="alert alert-info group-deleted">
+                        [% IF deleted.title %]
+                            <span>Group [% deleted.title | html | $KohaSpan class = 'name' %] has been deleted.</span>
+                        [% ELSE %]
+                            <span>[% deleted.library | html | $KohaSpan class = 'name' %] has been removed from group.</span>
+                        [% END %]
+                    </div>
+                [% ELSIF error_duplicate_title %]
+                    <div class="alert alert-warning error-duplicate-group-title">
+                        A group with the title [% error_duplicate_title | html | $KohaSpan class = 'name' %] already exists.
+                    </div>
+                [% END %]
+
+                <div id="toolbar" class="btn-toolbar">
+                    <div class="btn-group">
+                        <a id="add-group-root" class="btn btn-default add-group" href="#">
+                            <i class="fa fa-plus"></i> New group
+                        </a>
+                    </div>
+                </div>
 
                 <h1>Library groups</h1>
 
@@ -93,13 +92,13 @@
                 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
     </div> <!-- /.row -->
 
     <div id="add-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
@@ -108,10 +107,11 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 id="add-group-modal-label">Add group</h3>
+                        <h1 class="modal-title" id="add-group-modal-label">Add group</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <fieldset class="rows">
+                        <fieldset class="brief">
                             <input type="hidden" id="add-group-modal-parent-id" name="parent_id" value="" />
                             <input type="hidden" id="add-group-modal-action" name="op" value="cud-add">
                             <ol>
@@ -171,12 +171,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Save</button>
-                        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    </div> <!-- /.modal-footer -->
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </form> <!-- /#add-group-form -->
+    </div> <!-- /#add-group-modal.modal -->
 
     <div id="edit-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="edit-group-modal-label" aria-hidden="true">
         <form method="post" id="edit-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
@@ -184,12 +184,13 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 id="edit-group-modal-label">Edit group</h3>
+                        <h1 class="modal-title" id="edit-group-modal-label">Edit group</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" id="edit-group-modal-id" name="id" value="" />
                         <input type="hidden" id="edit-group-modal-action" name="op" value="cud-edit" />
-                        <fieldset class="rows">
+                        <fieldset class="brief">
                             <ol>
                                 <li>
                                     <label for="edit-group-modal-title">Title: </label>
@@ -248,12 +249,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Update</button>
-                        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    </div> <!-- /.modal-footer -->
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </form> <!-- /#edit-group-form -->
+    </div> <!-- /#edit-group-modal.modal -->
 
     <div id="delete-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete-group-modal-label" aria-hidden="true">
         <form method="post" action="/cgi-bin/koha/admin/library_groups.pl">
@@ -263,19 +264,20 @@
                     <input id="delete-group-modal-action" type="hidden" name="op" value="cud-delete" />
                     <input id="delete-group-modal-id" type="hidden" name="id" value="" />
                     <div class="modal-header">
-                        <h3 id="delete-group-modal-label">Delete group</h3>
+                        <h1 class="modal-title" id="delete-group-modal-label">Delete group</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         Are you sure you want to delete <span id="delete-group-modal-title" class="name"></span>?
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-danger"><i class="fa fa-trash-can"></i> Delete</button>
-                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    </div> <!-- /.modal-footer -->
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </form> <!-- /#delete-group-form -->
+    </div> <!-- /#delete-group-modal.modal -->
 
     <div id="remove-library-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="remove-library-modal-label" aria-hidden="true">
         <form method="post" action="/cgi-bin/koha/admin/library_groups.pl">
@@ -285,19 +287,20 @@
                     <input id="remove-library-modal-action" type="hidden" name="op" value="cud-delete" />
                     <input id="remove-library-modal-id" type="hidden" name="id" value="" />
                     <div class="modal-header">
-                        <h3 id="remove-library-modal-label">Remove library from group</h3>
+                        <h1 class="modal-title" id="remove-library-modal-label">Remove library from group</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         Are you sure you want to remove <span id="remove-library-modal-library" class="name"></span> from <span id="remove-library-modal-group" class="name"></span>?
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-danger"><i class="fa fa-trash-can"></i> Remove</button>
-                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    </div>
-                </div>
-            </div>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                    </div> <!-- /.modal-footer -->
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
         </form>
-    </div>
+    </div> <!-- /#remove-library-modal.modal -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
@@ -462,22 +465,22 @@
                 <button class="btn btn-default btn-xs remove-library" data-group-id="[% group.id | html %]" data-group-library="[% group.library.branchname | html %]" data-group-parent-title="[% group.parent.title | html %]" ><i class="fa fa-trash-can"></i> Remove from group</button>
             [% ELSE %]
                 <div class="btn-group">
-                    <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
+                    <button class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-wrench"></i> Actions</button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a id="add-group-[% group.id | html %]" href="#" class="add-group" data-group-id="[% group.id | html %]">
+                            <a id="add-group-[% group.id | html %]" href="#" class="add-group dropdown-item" data-group-id="[% group.id | html %]">
                                 <i class="fa fa-plus"></i> Add sub-group
                             </a>
                        </li>
 
                         <li>
-                            <a class="edit-group" id="edit-group-[% group.id | html %]" href="#" data-group-id="[% group.id | html %]" data-group-parent-id="[% group.parent_id | html %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]" data-group-ft_search_groups_opac="[% group.ft_search_groups_opac | html %]" data-group-ft_search_groups_staff="[% group.ft_search_groups_staff | html %]" data-group-ft_local_hold_group="[% group.ft_local_hold_group | html %]" data-group-ft_limit_item_editing="[% group.ft_limit_item_editing | html %]" data-group-ft_local_float_group="[% group.ft_local_float_group | html %]" >
+                            <a class="edit-group dropdown-item" id="edit-group-[% group.id | html %]" href="#" data-group-id="[% group.id | html %]" data-group-parent-id="[% group.parent_id | html %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]" data-group-ft_search_groups_opac="[% group.ft_search_groups_opac | html %]" data-group-ft_search_groups_staff="[% group.ft_search_groups_staff | html %]" data-group-ft_local_hold_group="[% group.ft_local_hold_group | html %]" data-group-ft_limit_item_editing="[% group.ft_limit_item_editing | html %]" data-group-ft_local_float_group="[% group.ft_local_float_group | html %]" >
                                 <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
                             </a>
                        </li>
 
                         <li>
-                            <a class="delete-group" id="delete-group-[% group.id | html %]" href="#" data-group-id="[% group.id | html %]" data-group-title="[% group.title | html %]">
+                            <a class="delete-group dropdown-item" id="delete-group-[% group.id | html %]" href="#" data-group-id="[% group.id | html %]" data-group-title="[% group.title | html %]">
                                 <i class="fa fa-trash-can"></i> Delete
                             </a>
                        </li>
@@ -485,7 +488,7 @@
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
+                    <button class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
                     [% FOREACH library IN group.libraries_not_direct_children %]
                         [% SET form_id = "add-library-" _ library.id _ "-" _ group.id %]
                         <form id="[% form_id | uri %]" class="add-library" method="post" action="/cgi-bin/koha/admin/library_groups.pl">
@@ -500,7 +503,7 @@
                         [% FOREACH library IN group.libraries_not_direct_children %]
                             [% SET form_id = "add-library-" _ library.id _ "-" _ group.id %]
                             <li>
-                                <a href="#" class="add-library" onclick="$('#[% form_id | uri %]').submit(); return false;">
+                                <a href="#" class="add-library dropdown-item" onclick="$('#[% form_id | uri %]').submit(); return false;">
                                     [% library.branchname | html %]
                                 </a>
                            </li>

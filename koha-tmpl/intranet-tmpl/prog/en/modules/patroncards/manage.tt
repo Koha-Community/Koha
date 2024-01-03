@@ -55,7 +55,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
                 <main>
                     [% INCLUDE 'messages.inc' %]
 
@@ -148,20 +148,20 @@
                             </form>
 
                             [% ELSE %]
-                        <div class="dialog message">
+                        <div class="alert alert-info">
                             <h4>There are no [% PROCESS translate_card_element element=card_element_title %] currently available.</h4>
                             <p>Use the toolbar above to create a new [% PROCESS translate_card_element element=card_element %].</p></div>
                             [% END %]
                         </div>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

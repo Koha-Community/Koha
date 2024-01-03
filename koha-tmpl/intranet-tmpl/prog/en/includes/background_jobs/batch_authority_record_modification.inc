@@ -3,11 +3,11 @@
     [% SET report = job.report %]
     [% IF report %]
         [% IF report.total_records == report.total_success %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 All records have successfully been modified! <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
             </div>
         [% ELSE %]
-            <div class="dialog message">
+            <div class="alert alert-info">
                 <span>[% report.total_success | html %] / [% report.total_records | html %] records have successfully been modified. Some errors occurred.</span>
                 [% IF job.status == 'cancelled' %]<span>The job has been cancelled before it finished.</span>[% END %]
                 <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
@@ -18,7 +18,7 @@
 
 [% BLOCK detail %]
     [% FOR m IN job.messages %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF m.type == 'success' %]
                 <i class="fa fa-check success"></i>
             [% ELSIF m.type == 'warning' %]

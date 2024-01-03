@@ -216,11 +216,14 @@ tr.selected td {
             [% END %]
             <td class="actions">
                 <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a><button data-toggle="dropdown" class="btn-xs dropdown-toggle"><span class="caret"></span></button>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="z3950preview[% breeding_loo.breedingid | html %]">
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC</a></li>
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData" data-action="show_card"><i class="fa-solid fa-eye"></i> Card</a></li>
-                        <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]" class="chosen" title="[% tp('verb', 'Order') | html %]" data-action="order"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a></li>
+                    <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a>
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="z3950preview[% breeding_loo.breedingid | html %]">
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData dropdown-item" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC</a></li>
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData dropdown-item" data-action="show_card"><i class="fa-solid fa-eye"></i> Card</a></li>
+                        <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]" class="chosen dropdown-item" title="[% tp('verb', 'Order') | html %]" data-action="order"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a></li>
                     </ul>
                 </div>
             </td>
@@ -231,19 +234,19 @@ tr.selected td {
 
 
     <div id="dataPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="dataPreviewLabel">MARC preview</h3>
-        </div>
-        <div class="modal-body">
-            <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-        </div>
-        </div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="dataPreviewLabel">MARC preview</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -280,10 +283,10 @@ tr.selected td {
 
     [% ELSE %]
         [% IF ( emptyserverlist ) %]
-            <div class="dialog alert">You didn't select any external target.</div>
+            <div class="alert alert-warning">You didn't select any external target.</div>
         [% ELSE %]
             [% IF ( errconn ) %]
-                <div class="dialog alert">
+                <div class="alert alert-warning">
                     <ul>
                     [% FOREACH errcon IN errconn %]
                         <li>Connection failed to [% errcon.server | html %]</li>
@@ -292,7 +295,7 @@ tr.selected td {
                 </div>
             [% END %]
         [% END %]
-        <div class="dialog message">Nothing found. <a href="javascript: history.back()">Try another search</a>.</div>
+        <div class="alert alert-info">Nothing found. <a href="javascript: history.back()">Try another search</a>.</div>
     [% END %]
     </div> <!-- /.col-md-12 -->
     </div> <!-- /.row -->

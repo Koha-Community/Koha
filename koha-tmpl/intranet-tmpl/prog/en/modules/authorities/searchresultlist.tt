@@ -41,7 +41,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 offset-md-2">
             [% INCLUDE 'messages.inc' %]
 
     [% INCLUDE 'authorities-toolbar.inc' %]
@@ -50,7 +50,7 @@
 <div id="merge_in_progress" class="page-section bg-info" style="display:none;"></div>
 <div class="page-section">
     [% IF ( query_error ) %]
-        <div class="dialog alert"><p><strong>Error:</strong> [% query_error | html %]</p></div>
+        <div class="alert alert-warning"><p><strong>Error:</strong> [% query_error | html %]</p></div>
     [% END %]
 
     [% IF ( total ) %]
@@ -104,11 +104,11 @@
         [% IF ( CAN_user_editauthorities ) %]
           <td>
           <div class="btn-group dropup">
-            <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% resul.authid | html %]" role="button" data-toggle="dropdown" href="#">
-            Actions <b class="caret"></b></a>
-            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authactions[% resul.authid | html %]">
-              <li><a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-              <li><a class="merge_auth" href="#merge"><i class="fa fa-compress"></i> Merge</a></li>
+            <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% resul.authid | html %]" role="button" data-bs-toggle="dropdown" href="#">
+            Actions</a>
+            <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="authactions[% resul.authid | html %]">
+              <li><a class="dropdown-item" href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+              <li><a class="merge_auth dropdown-item" href="#merge"><i class="fa fa-compress"></i> Merge</a></li>
               [% UNLESS ( resul.used ) %]
                   <li><form class="form_delete" method="post" action="/cgi-bin/koha/authorities/authorities-home.pl">
                       [% INCLUDE 'csrf-token.inc' %]
@@ -124,11 +124,11 @@
                       <input type="hidden" name="value" value="[% value | uri %]" />
                       <input type="hidden" name="startfrom" value="[% startfrom | html %]" />
                       <input type="hidden" name="resultsperpage" value="[% resultsperpage | html %]" />
-                      <button type="submit" class="btn btn-default"><i class="fa fa-trash"></i> Delete</button>
+                      <button type="submit" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
                   </form></li>
               [% END %]
               <li class="authority_preview">
-                <a data-authid="[% resul.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% resul.authid | uri %]"><i class="fa-solid fa-eye"></i> MARC preview</a>
+                <a class="dropdown-item" data-authid="[% resul.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% resul.authid | uri %]"><i class="fa-solid fa-eye"></i> MARC preview</a>
               </li>
             </ul>
           </div>

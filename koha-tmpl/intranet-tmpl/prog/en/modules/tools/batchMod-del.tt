@@ -61,11 +61,11 @@
 
     [% FOREACH message IN messages %]
       [% IF message.type == 'success' %]
-        <div class="dialog message">
+        <div class="alert alert-info">
       [% ELSIF message.type == 'warning' %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
       [% ELSIF message.type == 'error' %]
-        <div class="dialog alert" style="margin:auto;">
+        <div class="alert alert-warning" style="margin:auto;">
       [% END %]
       [% IF message.code == 'cannot_enqueue_job' %]
           <span>Cannot enqueue this job.</span>
@@ -80,7 +80,7 @@
     [% UNLESS ( action ) %]
 
     [% IF ( notfoundbarcodes.size ) %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             [% IF ( itemresults ) %]<p>Warning, the following barcodes were not found:</p>[% ELSE %]<p>Warning: no barcodes were found</p>[% END %]
         </div>
         <table style="margin:auto;">
@@ -95,7 +95,7 @@
         </table>
     [% END %] <!-- /notfoundbarcodes -->
     [% IF ( notfounditemnumbers.size ) %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             [% IF ( itemresults ) %]<p>Warning, the following itemnumbers were not found:</p>[% ELSE %]<p>Warning: no itemnumbers were found</p>[% END %]
         </div>
         <table style="margin:auto;">
@@ -111,7 +111,7 @@
     [% END %] <!-- /notfounditemnumbers -->
 
     [% IF cannot_be_deleted.size %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             <p>Warning, the following items cannot be deleted: </p>
         </div>
         <table style="margin:auto;">
@@ -191,7 +191,7 @@
 
 
     [% IF op == 'enqueued' %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             <h1>The job has been enqueued!</h1>
             <p>It will be processed as soon as possible.</p>
           <p><a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>

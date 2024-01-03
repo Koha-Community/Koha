@@ -113,14 +113,14 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
 [% UNLESS op == 'delete_confirm' %][% INCLUDE 'budgets-admin-toolbar.inc' %][% END %]
 
 [% IF (error_not_authorised_to_modify) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <p>You are not authorized to modify this fund</p>
     </div>
 [% END %]
@@ -248,17 +248,17 @@
     [% ELSE %]
         <td>
             <div class="btn-group dropup">
-                <a class="btn btn-default btn-xs dropdown-toggle" id="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]" role="button" data-toggle="dropdown" href="#">
-                   Actions <b class="caret"></b>
+                <a class="btn btn-default btn-xs dropdown-toggle" id="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                   Actions
                 </a>
-                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]">
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+                <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]">
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
                     [% IF budget.budget_has_children %]
-                        <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has sub funds."><i class="fa fa-trash-can"></i> Delete</a></li>
+                        <li class="disabled dropdown-item"><a href="#" class="deletefund-disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="This fund has sub funds."><i class="fa fa-trash-can"></i> Delete</a></li>
                     [% ELSE %]
-                        <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
+                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a></li>
                     [% END %]
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add sub fund</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add sub fund</a></li>
                 </ul>
             </div>
         </td>
@@ -270,7 +270,7 @@
 </div> <!-- /.page-section -->
 
 [% ELSE %]
-    <div class="dialog message">No fund found</div>
+    <div class="alert alert-info">No fund found</div>
 [% END %]
 
 [% END %] <!-- list -->
@@ -347,7 +347,7 @@
         [% ELSE %]
             <span  id="budget_owner_name"></span>
         [% END %]
-        <a id="edit_owner" href="#patron_search_modal_owner" data-toggle="modal"><i class="fa fa-search"></i> Select owner</a>
+        <a id="edit_owner" href="#patron_search_modal_owner" data-bs-toggle="modal"><i class="fa fa-search"></i> Select owner</a>
         <a id="remove_owner" href="#"><i class="fa fa-trash-can"></i> Remove owner</a>
         <input type="hidden" name="budget_owner_id" id="budget_owner_id"
             value="[% budget_owner.borrowernumber | html %]" />
@@ -375,7 +375,7 @@
                     &bull; <a href="#" class="del_user" data-borrowernumber="[% user.borrowernumber | html %]"><i class="fa fa-trash-can"></i> Remove</a>
                 </li>
             [% END %]
-            <li><a href="#patron_search_modal_users" id="add_user_button" data-toggle="modal"><i class="fa fa-plus"></i> Add users</a></li>
+            <li><a href="#patron_search_modal_users" id="add_user_button" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add users</a></li>
         </ul>
         <input type="hidden" name="budget_users_ids" id="budget_users_id" value="[% budget_users_ids | html %]" />
     </li>
@@ -459,7 +459,7 @@
 [% END %] <!-- add_form -->
 
 [% IF op == 'delete_confirm' %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h1>[% tx("Confirm deletion of fund '{fund}'?", {fund = budget_name}) %]</h1>
         <p>If you delete this fund, all orders linked to this fund will be deleted!</p>
         <table>
@@ -474,18 +474,18 @@
             <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="budget_id" value="[% budget_id | html %]" />
             <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this fund</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this fund</button>
         </form>
         <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
 
 [% IF op == 'list' %]
@@ -535,7 +535,7 @@
 
                 [% INCLUDE 'acquisitions-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -761,7 +761,7 @@
                     alert(_("This fund has sub funds. It cannot be deleted."));
                 });
 
-                $('[data-toggle="tooltip"]').tooltip();
+                $('[data-bs-toggle="tooltip"]').tooltip();
             });
         </script>
     [% END %]

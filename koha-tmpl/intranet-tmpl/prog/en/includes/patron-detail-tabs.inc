@@ -4,24 +4,24 @@
 [% WRAPPER tabs id= "finesholdsissues" %]
     [% WRAPPER tabs_nav %]
         [% WRAPPER tab_item tabname= "checkouts" bt_active= 1 %]
-            <span>Checkouts (<span class="checkout_count">[% issuecount || 0 | html %]</span>)</span>
+            <span>Checkouts</span> (<span class="checkout_count">[% issuecount || 0 | html %]</span>)
         [% END %]
 
         [% IF relatives_issues_count %]
             [% WRAPPER tab_item tabname= "relatives-issues" %]
-                <span>Relatives' checkouts ([% relatives_issues_count | html %])</span>
+                <span>Relatives' checkouts</span> ([% relatives_issues_count | html %])
             [% END %]
         [% END %]
 
         [% IF ( guarantees_fines ) %]
             [% WRAPPER tab_item tabname= "guarantees_finesandcharges" %]
-                <span>Guarantees' charges ([% guarantees_fines | $Price %])</span>
+                <span>Guarantees' charges</span> ([% guarantees_fines | $Price %])
             [% END %]
         [% END %]
 
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% WRAPPER tab_item tabname= "holds" %]
-                <span>Holds ([% holds_count || 0 | html %])</span>
+                <span>Holds</span> ([% holds_count || 0 | html %])
             [% END %]
             [% WRAPPER tab_item tabname="bookings" %]
                 [% SET bookings_count = patron.bookings.filter_by_active.count %]
@@ -31,14 +31,14 @@
 
         [% IF Koha.Preference('UseRecalls') %]
             [% WRAPPER tab_item tabname= "recalls" %]
-                <span>Recalls ([% recalls.count || 0 | html %])</span>
+                <span>Recalls</span> ([% recalls.count || 0 | html %])
             [% END %]
         [% END %]
 
         [% IF Koha.Preference('ArticleRequests') %]
             [% SET article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current') %]
             [% WRAPPER tab_item tabname= "article-requests" %]
-                <span>Article requests ([% article_requests.count || 0 | html %])</span>
+                <span>Article requests</span> ([% article_requests.count || 0 | html %])
             [% END %]
         [% END %]
 
@@ -47,19 +47,19 @@
                 <span>Claims</span>
                 [% IF ( patron.return_claims.count ) %]
                     ([% IF patron.return_claims.resolved.count == 0 %]
-                        <span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
+                        <span title="Resolved claims" class="badge text-bg-info" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
                     [% ELSE %]
-                        <span title="Resolved claims" class="label label-success" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
+                        <span title="Resolved claims" class="badge text-bg-success" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
                     [% END %]
                     [% IF patron.return_claims.unresolved.count == 0 %]
-                        <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
+                        <span title="Unresolved claims" class="badge text-bg-info" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
                     [% ELSE %]
-                        <span title="Unresolved claims" class="label label-warning" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
+                        <span title="Unresolved claims" class="badge text-bg-warning" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
                     [% END %])
                 [% ELSE %]
                     [% no_claims = 0 %]
-                    (<span title="Resolved claims" class="label label-default" id="return-claims-count-resolved">[% no_claims | html %]</span>
-                    <span title="Unresolved claims" class="label label-default" id="return-claims-count-unresolved">[% no_claims | html %]</span>)
+                    (<span title="Resolved claims" class="badge text-bg-info" id="return-claims-count-resolved">[% no_claims | html %]</span>
+                    <span title="Unresolved claims" class="badge text-bg-info" id="return-claims-count-unresolved">[% no_claims | html %]</span>)
                 [% END # /IF patron.return_claims.count %]
             [% END # /WRAPPER tab_item return-claims %]
         [% END %]

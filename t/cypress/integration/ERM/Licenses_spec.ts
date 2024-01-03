@@ -52,7 +52,7 @@ describe("License CRUD operations", () => {
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Licenses").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -158,7 +158,7 @@ describe("License CRUD operations", () => {
             statusCode: 500,
         });
         cy.get("#licenses_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -168,7 +168,9 @@ describe("License CRUD operations", () => {
             body: license,
         });
         cy.get("#licenses_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("License created");
+        cy.get("main div[class='alert alert-info']").contains(
+            "License created"
+        );
     });
 
     it("Edit license", () => {
@@ -238,7 +240,7 @@ describe("License CRUD operations", () => {
             statusCode: 500,
         });
         cy.get("#licenses_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -248,7 +250,9 @@ describe("License CRUD operations", () => {
             body: license,
         });
         cy.get("#licenses_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("License updated");
+        cy.get("main div[class='alert alert-info']").contains(
+            "License updated"
+        );
     });
 
     it("Show license", () => {
@@ -308,7 +312,7 @@ describe("License CRUD operations", () => {
             statusCode: 500,
         });
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -322,7 +326,7 @@ describe("License CRUD operations", () => {
             .click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this license");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']")
+        cy.get("main div[class='alert alert-info']")
             .contains("License")
             .contains("deleted");
 

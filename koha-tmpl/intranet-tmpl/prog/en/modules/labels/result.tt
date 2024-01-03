@@ -5,17 +5,25 @@
         [% IF ( displayprev || displaynext ) %]
             <ul class="pagination">
                 [% IF ( displayprev ) %]
-                    <li><a class="nav" href="label-item-search.pl?startfrom=[% startfromprev | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]"><i class="fa fa-arrow-left"></i> Previous</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="label-item-search.pl?startfrom=[% startfromprev | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]"><i class="fa fa-arrow-left"></i> Previous</a>
+                    </li>
                 [% END %]
                 [% FOREACH number IN numbers %]
                     [% IF ( startfrom == number.startfrom ) %]
-                        <li class="active"><span>[% number.number | html %]</span></a></li>
+                        <li class="page-item active" aria-current="page">
+                            <a href="#" class="page-link">[% number.number | html %]</a>
+                        </li>
                     [% ELSE %]
-                        <li><a class="nav" href="label-item-search.pl?startfrom=[% number.startfrom | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]">[% number.number | html %]</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="label-item-search.pl?startfrom=[% number.startfrom | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]">[% number.number | html %]</a>
+                        </li>
                     [% END %]
                 [% END %]
                 [% IF ( displaynext ) %]
-                    <li><a class="nav" href="label-item-search.pl?startfrom=[% startfromnext | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]">Next <i class="fa fa-arrow-right"></i></a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="label-item-search.pl?startfrom=[% startfromnext | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]">Next <i class="fa fa-arrow-right"></i></a>
+                    </li>
                 [% END %]
             </ul>
         [% END %]
@@ -105,7 +113,7 @@
             </form>
         </div>
         [% PROCESS pagination %]
-        <nav class="navbar navbar-default navbar-fixed-bottom">
+        <nav class="navbar navbar-default fixed-bottom">
             <div class="container-fluid">
                 <fieldset class="action">
                     <button type="button" class="btn btn-primary" id="add_items"><i class="fa fa-plus"></i> Add checked</button>

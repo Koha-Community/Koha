@@ -66,7 +66,7 @@ describe("Title CRUD operations", () => {
             body: { job_id: 1 },
         }).as("get-job-response");
         cy.get("#list_list tbody tr:first td a").contains("Import").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Import in progress, see job #1"
         );
     });
@@ -79,7 +79,7 @@ describe("Title CRUD operations", () => {
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Titles").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );
 
@@ -194,7 +194,7 @@ describe("Title CRUD operations", () => {
             error: "Something went wrong",
         });
         cy.get("#titles_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -204,7 +204,7 @@ describe("Title CRUD operations", () => {
             body: erm_title,
         });
         cy.get("#titles_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("Title created");
+        cy.get("main div[class='alert alert-info']").contains("Title created");
 
         // Add new related package (resource)
         let related_package = erm_title.resources[0];
@@ -352,7 +352,7 @@ describe("Title CRUD operations", () => {
             statusCode: 500,
         });
         cy.get("#titles_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -362,7 +362,7 @@ describe("Title CRUD operations", () => {
             body: erm_title,
         });
         cy.get("#titles_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("Title updated");
+        cy.get("main div[class='alert alert-info']").contains("Title updated");
     });
 
     it("Show title", () => {
@@ -460,7 +460,7 @@ describe("Title CRUD operations", () => {
             statusCode: 500,
         });
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -472,7 +472,7 @@ describe("Title CRUD operations", () => {
         cy.get("#titles_list table tbody tr:first").contains("Delete").click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this title");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']")
+        cy.get("main div[class='alert alert-info']")
             .contains("Local title")
             .contains("deleted");
 

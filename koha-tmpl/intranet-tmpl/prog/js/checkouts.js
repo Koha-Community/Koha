@@ -381,7 +381,7 @@ function LoadIssuesTable() {
                     let content = "";
 
                     if ( oObj.return_claim_id ) {
-                      content = '<span class="badge">' + oObj.return_claim_created_on_formatted + '</span>';
+                      content = '<span class="badge text-bg-info">' + oObj.return_claim_created_on_formatted + '</span>';
                     } else if ( ClaimReturnedLostValue ) {
                       content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
                     } else {
@@ -1107,18 +1107,18 @@ $(document).ready(function() {
                     {
                         "data": function ( oObj ) {
                             let delete_html = oObj.resolved_on
-                                ? '<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash-can"></i> ' + __("Delete") + '</a></li>'
+                                ? '<li><a href="#" class="return-claim-tools-delete dropdown-item" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash-can"></i> ' + __("Delete") + '</a></li>'
                                 : "";
                             let resolve_html = ! oObj.resolution
-                                ? '<li><a href="#" class="return-claim-tools-resolve" data-return-claim-id="' + oObj.id + '" data-current-lost-status="' + escape_str(oObj.itemlost) + '"><i class="fa fa-check-square"></i> ' + __("Resolve") + '</a></li>'
+                                ? '<li><a href="#" class="return-claim-tools-resolve dropdown-item" data-return-claim-id="' + oObj.id + '" data-current-lost-status="' + escape_str(oObj.itemlost) + '"><i class="fa fa-check-square"></i> ' + __("Resolve") + '</a></li>'
                                 : "";
 
                             return  '<div class="btn-group">'
-                                  + ' <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+                                  + ' <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
                                   + __("Actions") + ' <span class="caret"></span>'
                                   + ' </button>'
                                   + ' <ul class="dropdown-menu">'
-                                  + '  <li><a href="#" class="return-claim-tools-editnotes" data-return-claim-id="' + oObj.id + '"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + __("Edit notes") + '</a></li>'
+                                  + '  <li><a href="#" class="return-claim-tools-editnotes dropdown-item" data-return-claim-id="' + oObj.id + '"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + __("Edit notes") + '</a></li>'
                                   + resolve_html
                                   + delete_html
                                   + ' </ul>'
@@ -1139,21 +1139,21 @@ $(document).ready(function() {
 
                         if ( resolved > 0 ) {
                             $('#return-claims-count-resolved').text(resolved)
-                                                              .removeClass('label-default')
-                                                              .addClass('label-success');
+                                                              .removeClass('text-bg-info')
+                                                              .addClass('text-bg-success');
                         } else {
                             $('#return-claims-count-resolved').text(resolved)
-                                                              .removeClass('label-success')
-                                                              .addClass('label-default');
+                                                              .removeClass('text-bg-success')
+                                                              .addClass('text-bg-info');
                         }
                         if ( unresolved > 0 ) {
                             $('#return-claims-count-unresolved').text(unresolved)
-                                                                .removeClass('label-default')
-                                                                .addClass('label-warning');
+                                                                .removeClass('text-bg-info')
+                                                                .addClass('text-bg-warning');
                         } else {
                             $('#return-claims-count-unresolved').text(unresolved)
-                                                                .removeClass('label-warning')
-                                                                .addClass('label-default');
+                                                                .removeClass('text-bg-warning')
+                                                                .addClass('text-bg-info');
                         }
 
                         fnCallback(json)
@@ -1194,10 +1194,13 @@ $(document).ready(function() {
         $("#show_unresolved_claims").html( showUnresolved );
     }
 
-    $('body').on('click', '.return-claim-tools-editnotes', function() {
+    $('body').on('click', '.return-claim-tools-editnotes', function(e) {
+        e.preventDefault();
         let id = $(this).data('return-claim-id');
         $('#return-claim-notes-static-' + id).parent().dblclick();
+        $("#return-claim-notes-editor-textarea-" + id).focus();
     });
+
     $('body').on('dblclick', '.return-claim-notes-td', function() {
         let elt = $(this).children('.return-claim-notes');
         let id = elt.data('return-claim-id');
@@ -1239,14 +1242,16 @@ $(document).ready(function() {
         });
     });
 
-    $('body').on('click', '.claim-returned-notes-editor-cancel', function(){
+    $('body').on('click', '.claim-returned-notes-editor-cancel', function(e){
+        e.preventDefault();
         let id = $(this).data('return-claim-id');
         $(this).parent().remove();
         $('#return-claim-notes-static-' + id).show();
     });
 
     // Hanld return claim deletion
-    $('body').on('click', '.return-claim-tools-delete', function() {
+    $('body').on('click', '.return-claim-tools-delete', function(e) {
+        e.preventDefault();
         let confirmed = confirm(__("Are you sure you want to delete this return claim?"));
         if ( confirmed ) {
             let id = $(this).data('return-claim-id');

@@ -78,7 +78,7 @@
         [% ELSE %]
             [% SET our_tab_id = tabname %]
         [% END %]
-        <a href="#[% tabname | uri %]_panel" class="[% link_class | html %]" id="[% our_tab_id | html %]-tab" data-toggle="tab" data-target="#[% tabname | html %]_panel" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" aria-selected="[% aria_selected | html %]">
+        <a href="#[% tabname | uri %]_panel" class="[% link_class | html %]" id="[% our_tab_id | html %]-tab" data-bs-toggle="tab" data-bs-target="#[% tabname | html %]_panel" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" aria-selected="[% aria_selected | html %]">
             [% content | $raw %]
         </a>
     </li>

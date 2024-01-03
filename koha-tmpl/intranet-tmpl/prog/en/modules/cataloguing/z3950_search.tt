@@ -10,31 +10,6 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-    #dataPreview {
-        width : 90%;
-        top: 5%;
-    }
-
-    #dataPreview pre {
-        overflow: unset;
-    }
-
-    .modal-body {
-        max-height: 380px;
-    }
-
-    .modal-header {
-        padding: 0 14px;
-    }
-
-    @media (max-width: 767px) {
-        #dataPreview {
-            margin: 0;
-            width : auto;
-        }
-    }
-</style>
 </head>
 
 <body id="cat_z3950_search" class="cat">
@@ -44,7 +19,7 @@
             <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-6">
                         <input type="hidden" name="op" id="op" value="cud-do_search" />
                         <fieldset class="rows">
                             <ol>
@@ -88,9 +63,9 @@
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
                         </fieldset> <!-- /.rows -->
-                    </div> <!-- /.col-xs-6 -->
+                    </div> <!-- /.col-6 -->
 
-                    <div class="col-xs-6">
+                    <div class="col-6">
                         <h2>Search targets</h2>
                         <div id="z3950_search_targets">
                             <span class="z3950checks">
@@ -108,10 +83,10 @@
                                 </p>
                             [% END %]
                         </div> <!-- /#z3950_search_targets -->
-                    </div> <!-- /.col-xs-6 -->
+                    </div> <!-- /.col-6 -->
                 </div> <!-- /.row -->
 
-                <nav class="navbar navbar-default navbar-fixed-bottom">
+                <nav class="navbar navbar-default fixed-bottom">
                     <div class="container-fluid">
                         <fieldset class="action">
                             <input type="submit" id="submit_z3950_search" class="btn btn-primary" value="Search" />
@@ -124,7 +99,7 @@
         [% ELSE # IF opsearch %]
 
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col">
                     <h1>Results</h1>
                     <div class="page-section">
                         <p>
@@ -142,7 +117,7 @@
                             [% IF ( stdid ) %]<em>Standard ID: </em><span class="term">[% stdid | html %]</span> [% END %]
                         </p>
                         [% IF ( errconn ) %]
-                            <div class="dialog alert">
+                            <div class="alert alert-warning">
                                 <ul>
                                 [% FOREACH errcon IN errconn %]
                                     [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server | html %]</li>
@@ -196,12 +171,16 @@
                                                     </td>
                                                 [% END %]
                                                 <td class="actions">
+
                                                     <div class="btn-group dropup">
-                                                        <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a><button class="btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                                                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
-                                                            <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
-                                                            <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData" data-action="show_card"><i class="fa-solid fa-eye"></i> Card preview</a></li>
-                                                            <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% breeding_loo.biblionumber | uri %]&z3950=1&frameworkcode=[% frameworkcode | uri %]&breedingid=[% breeding_loo.breedingid | uri %]" class="chosen" title="Import" data-action="import"><i class="fa fa-download"></i> Import</a></li>
+                                                        <a class="btn btn-default btn-xs z3950actions" href="#">MARC</a>
+                                                        <button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <span class="visually-hidden">Toggle dropdown</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
+                                                            <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData dropdown-item" data-action="show_marc"><i class="fa-solid fa-eye"></i> MARC preview</a></li>
+                                                            <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData dropdown-item" data-action="show_card"><i class="fa-solid fa-eye"></i> Card preview</a></li>
+                                                            <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% breeding_loo.biblionumber | uri %]&z3950=1&frameworkcode=[% frameworkcode | uri %]&breedingid=[% breeding_loo.breedingid | uri %]" class="chosen dropdown-item" title="Import" data-action="import"><i class="fa fa-download"></i> Import</a></li>
                                                         </ul>
                                                     </div>
                                                 </td>
@@ -211,15 +190,18 @@
                                 </tbody>
                             </table> <!-- /#resultst -->
 
-                            <div id="dataPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+                            <div id="dataPreview" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h3 id="dataPreviewLabel">Preview</h3>
+                                            <h1 class="modal-title" id="dataPreviewLabel">Preview</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
@@ -257,7 +239,7 @@
                             </form> <!-- /#page_form -->
 
                         [% ELSE %]
-                            <div class="dialog message">Nothing found.</div>
+                            <div class="alert alert-info">Nothing found.</div>
                         [% END  # /IF breeding_loop %]
                     </div> <!-- /.page-section -->
 
@@ -268,7 +250,7 @@
                             <input type="submit" class="btn btn-primary" value="Try another search" />
                         </p>
                     </form>
-                </div> <!-- /.col-xs-12 -->
+                </div> <!-- /.col -->
             </div> <!-- /.row -->
         [% END # /IF opsearch %]
 

@@ -94,30 +94,30 @@ legend.collapsed i.fa.fa-caret-down::before {
                 [% FOR message IN borrower_data.messages %]
                     [% SWITCH message.error %]
                         [% CASE 'error_on_insert_patron' %]
-                            <div class="dialog alert">Something went wrong when creating the patron. Check the logs for details.</div>
+                            <div class="alert alert-warning">Something went wrong when creating the patron. Check the logs for details.</div>
                         [% CASE 'error_on_update_patron' %]
-                            <div class="dialog alert">Something went wrong when updating the patron. Check the logs for details.</div>
-                        [% CASE %]<div class="dialog alert">Unhandled error: [% message.error | html %]</div>
+                            <div class="alert alert-warning">Something went wrong when updating the patron. Check the logs for details.</div>
+                        [% CASE %]<div class="alert alert-warning">Unhandled error: [% message.error | html %]</div>
                     [% END %]
                 [% END %]
             [% END %]
             [% IF ( op == 'add_form' ) %]
-                <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             [% ELSE %]
-                <div class="col-sm-10 col-sm-push-2">
+                <div class="col-md-10 order-md-2 order-sm-1">
             [% END %]
                 <main class="clearfix">
                     [% INCLUDE 'messages.inc' %]
 
                     [% IF error_alert %]
                         [% IF ( error_alert == "no_email" ) %]
-                            <div class="dialog alert">This member has no email</div>
+                            <div class="alert alert-warning">This member has no email</div>
                         [% ELSE %]
-                            <div class="dialog alert">[% error_alert | html %]</div>
+                            <div class="alert alert-warning">[% error_alert | html %]</div>
                         [% END %]
                     [% END %]
                     [% IF info_alert %]
-                        <div class="dialog message">Email has been sent.</div>
+                        <div class="alert alert-info">Email has been sent.</div>
                     [% END %]
 
                     [% INCLUDE 'noadd-warnings.inc' %]
@@ -141,7 +141,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                         [% END %]
 
                         [% IF ( check_member ) %]
-                            <div class="dialog alert">
+                            <div class="alert alert-warning">
                                 <h3>Duplicate patron record?</h3>
                                 <p>[%- INCLUDE 'patron-title.inc' patron => check_patron hide_patron_infos_if_needed => 1 -%]</p>
                                 [% IF logged_in_user.can_see_patron_infos( check_patron ) %]
@@ -153,7 +153,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                         [% END %]
 
                         [% IF ( nok ) %]
-                            <div class="dialog alert">
+                            <div class="alert alert-warning">
                                 <p>The following fields are wrong. Please fix them.</p>
                                 <ul>
                                     [% IF ( ERROR_login_exist ) %]
@@ -621,7 +621,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                 <input name="guarantor_firstname" id="guarantor_firstname" type="hidden" />
 
                                                 <li>
-                                                    <a href="#patron_search_modal" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Add guarantor</a>
+                                                    <a href="#patron_search_modal" class="btn btn-default" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add guarantor</a>
                                                 </li>
 
                                                 [% IF Koha.Preference('AllowStaffToSetCheckoutsVisibilityForGuarantor') %]
@@ -1747,14 +1747,14 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                     [% END # /UNLESS ( no_add ) %]
                 </main>
-            </div> <!-- /.col-sm-10.col-sm-push-2 -->
+            </div> <!-- /.col-md-10.order-md-2 -->
 
             [% UNLESS ( op == 'add_form' ) %]
-                <div class="col-sm-2 col-sm-pull-10">
+                <div class="col-md-2 order-sm-2 order-md-1">
                     <aside>
                         [% INCLUDE 'circ-menu.inc' %]
                     </aside>
-                </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                </div> <!-- /.col-md-2.order-md-1 -->
             [% END %]
         </div> <!-- /.row -->
 [% MACRO jsinclude BLOCK %]

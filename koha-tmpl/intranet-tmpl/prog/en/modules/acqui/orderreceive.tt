@@ -99,7 +99,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -131,15 +131,15 @@
         </div>
     </div>
 
-    <div class="modal fade" id="order_edit" tabindex="-1" role="dialog" aria-labelledby="Order edit">
-        <div id="receive-modal" class="modal-dialog modal-lg" role="document">
+    <div class="modal" id="order_edit" tabindex="-1" role="dialog" aria-labelledby="Order edit">
+        <div id="receive-modal" class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="col-md-10 modal-title"></h4>
-                    <button type="button" class="close col-md-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h1 class="col-md-10 modal-title"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="hide" id="loading">Loading ...</div>
+                    <div style="display:none" id="loading">Loading ...</div>
                     <div id="modal-order-main" class="row">
                         <!--ul>
                             <li><a href="#info-panel">Info</a></li>
@@ -409,21 +409,22 @@
                     <button type="button" class="btn btn-primary modal-save" disabled>Confirm</button>
                     <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
                 [% ELSE %]
-                    <button type="button" class="btn btn-default modal-prev">Previous order</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default modal-prev"><i class="fa fa-arrow-left"></i> Previous order</button>
+                    <button type="button" class="btn btn-default modal-next">Next order <i class="fa fa-arrow-right"></i> </button>
                     <button type="button" class="btn btn-primary modal-save">Save changes</button>
-                    <button type="button" class="btn btn-default modal-next">Next order</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                 [% END %]
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modal_messages" tabindex="-1" role="dialog" aria-labelledby="Order edit">
-        <div class="modal-dialog" role="document">
+
+    <div class="modal" id="modal_messages" tabindex="-1" role="dialog" aria-labelledby="Order edit">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="col-md-11 modal-title"></h4>
-                    <button type="button" class="close col-md-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h1 class="col-md-11 modal-title"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <ul></ul>
@@ -440,13 +441,13 @@
 [% END %]
 
 </main>
-</div> <!-- /.col-sm-10.col-sm-push-2 -->
+</div> <!-- /.col-md-10.order-md-2 -->
 
-<div class="col-sm-2 col-sm-pull-10">
+<div class="col-md-2 order-sm-2 order-md-1">
     <aside>
         [% INCLUDE 'acquisitions-menu.inc' %]
     </aside>
-</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.col-md-2.order-md-1 -->
 </div> <!-- /.row -->
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
@@ -641,7 +642,7 @@
                         "searchable": false,
                         "orderable": false,
                         "render": function(data, type, row, meta) {
-                            return '<a class="btn btn-default btn-xs order_edit_toggle" data-toggle="modal" href="#order_edit" data-row="'+meta.row+'" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+EDIT+'</a>';
+                            return '<a class="btn btn-default btn-xs order_edit_toggle" data-bs-toggle="modal" href="#order_edit" data-row="'+meta.row+'" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+EDIT+'</a>';
                         }
                     }
                 ],
@@ -748,7 +749,7 @@
                             if(!errors.length) {
                                 location.href = "/cgi-bin/koha/acqui/parcel.pl?invoiceid="+invoice_id
                             } else {
-                                $('#modal_messages .modal-header h4').html(SAVE_ERROR_TITLE);
+                                $('#modal_messages .modal-header h1').html(SAVE_ERROR_TITLE);
                                 $('#modal_messages .modal-body ul').html('');
                                 errors.forEach(function(error) {
                                     $('#modal_messages .modal-body ul').append('<li>'+error+'</li>');
@@ -815,7 +816,7 @@
                 var redirect = true;
                 var warnings = get_warnings(rows);
                 if(warnings.length) {
-                    $('#modal_messages .modal-header h4').html(SAVE_WARNING_TITLE);
+                    $('#modal_messages .modal-header h1').html(SAVE_WARNING_TITLE);
                     $('#modal_messages .modal-body ul').html('');
                     warnings.forEach(function(warning) {
                         $('#modal_messages .modal-body ul').append('<li>'+warning+'</li>');

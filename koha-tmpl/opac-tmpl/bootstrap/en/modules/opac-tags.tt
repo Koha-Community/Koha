@@ -90,33 +90,35 @@
                             [% END %]
                         [% END # /IF ERRORS %]
 
-                        <form method="get" action="opac-tags.pl" class="form-inline">
-                            <fieldset>
-                                <div class="form-inline">
-                                    <label>
-                                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                            <span>Tags to show from other users:</span>
-                                        [% ELSE %]
-                                            <span>Tags to show:</span>
-                                        [% END %]
-                                    </label>
-                                    <input type="text" name="limit" class="form-control form-control-sm mr-2" maxlength="4" size="4" value="[% limit or '100' | html %]" />
-                                    <input type="submit" value="OK" class="btn btn-sm btn-primary" />
-                                </div>
-                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    [% UNLESS ( loggedinusername ) %]
-                                        <p>
-                                            [% IF Koha.Preference('casAuthentication') %]
-                                                [%# CAS authentication is too complicated for modal window %]
-                                                <a href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
-                                            [% ELSE %]
-                                                <a class="loginModal-trigger" href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
-                                            [% END %]
-                                        </p>
+                        <form method="get" action="opac-tags.pl" class="row">
+                            <div class="col-auto gx-2 ms-2 my-1">
+                                <label>
+                                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                        <span>Tags to show from other users:</span>
+                                    [% ELSE %]
+                                        <span>Tags to show:</span>
                                     [% END %]
-                                [% END %]
-                            </fieldset>
+                                </label>
+                            </div>
+                            <div class="col-auto gx-2 my-1">
+                                <input type="text" name="limit" class="form-control form-control-sm" maxlength="4" size="4" value="[% limit or '100' | html %]" />
+                            </div>
+                            <div class="col-auto gx-2 my-1">
+                                <input type="submit" value="OK" class="btn btn-sm btn-primary" />
+                            </div>
                         </form>
+                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                            [% UNLESS ( loggedinusername ) %]
+                                <p>
+                                    [% IF Koha.Preference('casAuthentication') %]
+                                        [%# CAS authentication is too complicated for modal window %]
+                                        <a href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
+                                    [% ELSE %]
+                                        <a class="loginModal-trigger" href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
+                                    [% END %]
+                                </p>
+                            [% END %]
+                        [% END %]
 
                         [% IF ( TAGLOOP ) %]
                             <div id="tagcloud">

@@ -4,13 +4,11 @@
 [% SET CatalogConcernTemplate = AdditionalContents.get( location => "CatalogConcernTemplate", lang => lang, library => logged_in_user.branchcode ) %]
 <!-- Add concern modal -->
 <div class="modal" id="addConcernModal" tabindex="-1" role="dialog" aria-labelledby="addConcernModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content modal-lg">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="addConcernModalLabel">Add concern</h4>
+                <h1 class="modal-title" id="addConcernModalLabel">Add concern</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <fieldset id="concern_fieldset">
@@ -31,12 +29,12 @@
                             [%- END -%]
                             </div>
                             [%- END -%]
-                            <div class="hidden" id="concern_template">
-                            [%- IF CatalogConcernTemplate && CatalogConcernTemplate.content && CatalogConcernTemplate.content.count > 0 -%]
-                            [%- FOREACH template IN CatalogConcernTemplate.content -%]
-                            [%- template.content | $raw -%]
-                            [%- END -%]
-                            [%- END -%]
+                            <div style="display:none" id="concern_template">
+                                [%- IF CatalogConcernTemplate && CatalogConcernTemplate.content && CatalogConcernTemplate.content.count > 0 -%]
+                                    [%- FOREACH template IN CatalogConcernTemplate.content -%]
+                                        [%- template.content | $raw -%]
+                                    [%- END -%]
+                                [%- END -%]
                             </div>
                         </li>
                     </ol>
@@ -45,7 +43,7 @@
             <div class="modal-footer">
                 <input type="hidden" id="concern_biblio" name="biblio_id" value="[% biblionumber | html %]">
                 <button type="submit" class="btn btn-primary" id="addConfirm">Submit <i id="concern-submit-spinner" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i></button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
             </div> <!-- /.modal-footer -->
         </div> <!-- /.modal-content -->
     </div> <!-- /.modal-dialog -->

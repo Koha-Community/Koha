@@ -234,7 +234,7 @@
                                         <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a> <span class="sep">|</span>
 
                                         <div id="download-list" class="btn-group dropdown">
-                                            <a id="format" class="btn btn-link dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download list" data-toggle="dropdown" href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
+                                            <a id="format" class="btn btn-link dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download list" data-bs-toggle="dropdown" href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
                                             <div class="dropdown-menu pull-left" role="menu" aria-labelledby="format">
                                                 <a role="menuitem" class="dropdown-item download-list" data-format="bibtex" href="#">BibTeX</a>
                                                 [% IF Koha.Preference('OPACISBD') %]<a role="menuitem" class="dropdown-item download-list" data-format="isbd" href="#">ISBD</a>[% END %]
@@ -1052,7 +1052,7 @@ $(function() {
 function sortMenu( sorting_form ){
     var shelfnumber = sorting_form.find("input[name='shelfnumber']").val();
     var sort_link = "/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=" + shelfnumber + "&sortfield=";
-    var menu = "<div class=\"btn-group dropdown\"><button type=\"button\" class=\"btn btn-link dropdown-toggle\" data-toggle=\"dropdown\" id=\"sortmenu\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-sort\" aria-hidden=\"true\"></i> " + _("Sort") + "</span></button><div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"sortmenu\">";
+    var menu = "<div class=\"btn-group dropdown\"><button type=\"button\" class=\"btn btn-link dropdown-toggle\" data-bs-toggle=\"dropdown\" id=\"sortmenu\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-sort\" aria-hidden=\"true\"></i> " + _("Sort") + "</span></button><div class=\"dropdown-menu dropdown-menu-end\" aria-labelledby=\"sortmenu\">";
     $("#sortfield").children().each(function(){
         if( $(this)[0].tagName.toUpperCase() == "OPTION" ){
             menu += "<a class=\"dropdown-item\" href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a>";

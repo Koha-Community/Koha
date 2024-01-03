@@ -39,27 +39,33 @@ var sassOptions = {
 // CSS processing for development
 function css(css_base) {
     css_base = css_base || CSS_BASE
-    var stream = src(css_base + "/src/**/*.scss")
-        .pipe(sourcemaps.init())
-        .pipe(sass(sassOptions).on('error', sass.logError))
-        .pipe(autoprefixer())
-        .pipe(dest(css_base));
+    var stream = src(css_base + "/src/**/*.scss", { sourcemaps: true } );
 
     if (args.view == "opac") {
         stream = stream
-            .pipe(rtlcss())
-            .pipe(rename({
-                suffix: '-rtl'
-            })) // Append "-rtl" to the filename.
-            .pipe(dest(css_base));
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(autoprefixer())
+        .pipe(dest(css_base))
+        .pipe(rtlcss())
+        .pipe(rename({
+            suffix: '-rtl'
+        })) // Append "-rtl" to the filename.
+        .pipe(dest(css_base, { sourcemaps: "./maps" } ));
+    } else {
+        stream = stream
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(autoprefixer())
+        .pipe(dest(css_base))
+        .pipe(rtlcss())
+        .pipe(rename({
+            suffix: '-rtl'
+        })) // Append "-rtl" to the filename.
+        .pipe(dest(css_base, { sourcemaps: "/maps" } ));
     }
 
-    stream = stream.pipe(sourcemaps.write('./maps'))
-        .pipe(dest(css_base));
-
     return stream;
-
 }
+
 // CSS processing for production
 function build(css_base) {
     css_base = css_base || CSS_BASE;
@@ -67,16 +73,12 @@ function build(css_base) {
     var stream = src(css_base + "/src/**/*.scss")
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(dest(css_base));
-
-    if( args.view == "opac" ){
-        stream = stream.pipe(rtlcss())
+        .pipe(dest(css_base))
+        .pipe(rtlcss())
         .pipe(rename({
             suffix: '-rtl'
         })) // Append "-rtl" to the filename.
         .pipe(dest(css_base));
-    }
-
     return stream;
 }
 

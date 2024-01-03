@@ -35,7 +35,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -44,7 +44,7 @@
                 <h1>Files</h1>
 
                 [% IF errors %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         [% IF errors.empty_upload %]The file you are attempting to upload has no contents.[% END %]
                         [% IF errors.no_file %]You did not select a file to upload.[% END %]
                     </div>
@@ -87,7 +87,7 @@
                         </table>
                     </div>
                 [% ELSE %]
-                <div class="dialog message">
+                <div class="alert alert-info">
                     <p>This patron has no files attached.</p>
                 </div>
                 [% END %]
@@ -114,13 +114,13 @@
                 </form>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'circ-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

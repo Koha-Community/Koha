@@ -21,9 +21,13 @@ fieldset {
     &.rows {
         clear: left;
         float: left;
-        margin: .9em 0 0;
+        margin: 0;
         padding: 1rem;
         width: 100%;
+
+        & + fieldset.rows {
+            margin-top: .9em;
+        }
 
         fieldset {
             background-color: transparent;
@@ -71,7 +75,6 @@ fieldset {
 
         div {
             &.hint {
-                font-size: 1.25rem;
                 margin: .5rem 0;
                 margin-left: 11rem;
             }
@@ -161,7 +164,7 @@ fieldset {
                 }
 
                 legend {
-                    font-size: 1.55rem;
+                    font-size: 1.2rem;
                     margin: 0 0 0 1em;
                 }
 
@@ -235,15 +238,10 @@ fieldset {
                 text-align: right;
                 width: 10rem;
             }
-
-            &.hint {
-                font-size: 1.25rem;
-            }
         }
 
         table {
             clear: both;
-            font-size: 1.25rem;
             margin: 1em 0 1em 1em;
 
             &.dataTable {

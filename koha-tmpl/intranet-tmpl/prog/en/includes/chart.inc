@@ -1,9 +1,9 @@
 <div class="modal" id="chartModal" tabindex="-1" role="dialog" aria-labelledby="chartModalLabel">
-    <div class="modal-dialog modal-wide" role="document">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="chartModalLabel">Chart settings</h4>
+                <h1 class="modal-title" id="chartModalLabel">Chart settings</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="makechart">
                 [% supposed_x = header_row.shift.cell %]
@@ -103,7 +103,7 @@
             </div>
             <div class="modal-footer">
                 <button id="draw-chart" class="btn btn-default">Draw</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

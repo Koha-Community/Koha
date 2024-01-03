@@ -74,7 +74,7 @@ if ( $op eq 'cud-add' ) {
             )->store();
         };
         if ($@) {
-            push @messages, { type => 'alert', code => 'error_on_insert' };
+            push @messages, { type => 'warning', code => 'error_on_insert' };
         }
         else {
             $template->param( added => $group );

@@ -142,18 +142,18 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item" role="presentation" id="tab-user-pickups">
                             [% IF patron_curbside_pickups.count %]
-                                <a href="#user-pickups" class="nav-link active" aria-controls="user-pickups" aria-selected="true" role="tab" data-toggle="tab">Your pickups</a>
+                                <a href="#user-pickups" class="nav-link active" aria-controls="user-pickups" aria-selected="true" role="tab" data-bs-toggle="tab">Your pickups</a>
                             [% ELSE %]
-                                <a href="#user-pickups" class="nav-link" aria-controls="user-pickups" role="tab" data-toggle="tab">Your pickups</a>
+                                <a href="#user-pickups" class="nav-link" aria-controls="user-pickups" role="tab" data-bs-toggle="tab">Your pickups</a>
                             [% END %]
                             </li>
 
                             [% IF policies.count %]
                                 <li class="nav-item" role="presentation" id="tab-user-schedule-pickup">
                                 [% IF patron_curbside_pickups.count %]
-                                    <a href="#user-schedule-pickup" class="nav-link" aria-controls="user-schedule-pickup" role="tab" data-toggle="tab">Schedule a pickup</a>
+                                    <a href="#user-schedule-pickup" class="nav-link" aria-controls="user-schedule-pickup" role="tab" data-bs-toggle="tab">Schedule a pickup</a>
                                 [% ELSE %]
-                                    <a href="#user-schedule-pickup" class="nav-link active" aria-controls="user-schedule-pickup" aria-selected="true" role="tab" data-toggle="tab">Schedule a pickup</a>
+                                    <a href="#user-schedule-pickup" class="nav-link active" aria-controls="user-schedule-pickup" aria-selected="true" role="tab" data-bs-toggle="tab">Schedule a pickup</a>
                                 [% END %]
                                 </li>
                             [% END %]
@@ -468,7 +468,7 @@
                     let pickups_scheduled = pickupSlot.pickups_scheduled;
                     let pickups_available = policy.patrons_per_interval - pickups_scheduled;
                     let disabled = pickupSlot.available ? "" : "disabled";
-                    $("#pickup-time-slots").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label class="pickup_select" for="slot_${i}" data-toggle="tooltip" title="` + _("Appointments available: ") + `${pickups_available}">${optText} <span class="pickups_available">${pickups_available}</span></label></span>`);
+                    $("#pickup-time-slots").append(`<span class="pickup_time"><input type="radio" id="slot_${i}" name="pickup_time" value="${optValue}" ${disabled} /> <label class="pickup_select" for="slot_${i}" data-bs-toggle="tooltip" title="` + _("Appointments available: ") + `${pickups_available}">${optText} <span class="pickups_available">${pickups_available}</span></label></span>`);
                 }
 
                 $("#pickup_notes_item,#pickup-times").show();

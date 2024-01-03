@@ -9,7 +9,7 @@ $(document).ready(function() {
         return false;
     });
 
-    $("#finesholdsissues a[data-toggle='tab']").on("shown.bs.tab", function(e){
+    $("#finesholdsissues a[data-bs-toggle='tab']").on("shown.bs.tab", function(e){
         $(this).click();
     });
 

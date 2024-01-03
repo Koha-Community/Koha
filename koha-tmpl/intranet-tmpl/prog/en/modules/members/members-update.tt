@@ -109,7 +109,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 offset-md-2">
             [% INCLUDE 'messages.inc' %]
 
             <h1>Update patron records</h1>
@@ -138,7 +138,7 @@
                                     </div>
 
                                     [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
-                                        <div class="dialog message" style="margin-top:.8em">
+                                        <div class="alert alert-info" style="margin-top:.8em">
                                             <h4>Patron's address in doubt</h4>
                                             <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
                                             <input type="checkbox" id="unset_gna_[% pm.borrowernumber | html %]" name="unset_gna_[% pm.borrowernumber | html %]" value="unset_gna_[% pm.borrowernumber | html %]"/>
@@ -208,7 +208,7 @@
                     </fieldset>
                 </form>
             [% ELSE %]
-                <div class="dialog message">
+                <div class="alert alert-info">
                     <p>There are no pending patron modifications.</p>
                 </div>
             [% END %]

@@ -26,7 +26,7 @@ $(document).ready(function() {
             attr('data-service_id_restrict_ids', selected.join('|'));
     });
     $('#generic_confirm_search').click(function(e) {
-        $('#partnerSearch').modal({show:true});
+        $('#partnerSearch').modal("show");
     });
     $('#partnerSearch').on('show.bs.modal', function() {
         doSearch();

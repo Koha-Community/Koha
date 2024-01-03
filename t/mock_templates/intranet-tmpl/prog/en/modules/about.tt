@@ -855,7 +855,7 @@
                 </div>
             </div>
         [% ELSE %]
-            <div class="dialog alert">
+            <div class="alert alert-warning">
                 Could not read the teams.yaml file. Please make sure &lt;docdir&gt; is correctly defined in koha-conf.xml.
             </div>
         [% END # /maintenance_team %]
@@ -868,7 +868,7 @@
                 [% END %]
             </ul>
         [% ELSE %]
-            <div class="dialog alert">
+            <div class="alert alert-warning">
                 Could not read the contributors.yaml file. Please make sure &lt;docdir&gt; is correctly defined in koha-conf.xml.
             </div>
         [% END # /IF contributors.size %]
@@ -1315,7 +1315,7 @@
                 [% END %]
             </table>
         [% ELSE %]
-            <div class="dialog alert">
+            <div class="alert alert-warning">
                 Could not read the history.txt file. Please make sure &lt;docdir&gt; is correctly defined in koha-conf.xml.
             </div>
         [% END %]

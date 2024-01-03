@@ -20,22 +20,22 @@
 
     [% IF CAN_user_circulate_circulate_remaining_permissions %]
     <div class="btn-group">
-        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
+        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-print"></i> Print</button>
             <ul class="dropdown-menu">
-                <li><a class="printslip" data-code="printsummary" href="#">Print summary</a></li>
-                <li><a class="printslip" data-code="issueslip" href="#">Print slip</a></li>
-                <li><a class="printslip" data-code="issueqslip" href="#">Print quick slip</a></li>
+                <li><a class="dropdown-item printslip" data-code="printsummary" href="#">Print summary</a></li>
+                <li><a class="dropdown-item printslip" data-code="issueslip" href="#">Print slip</a></li>
+                <li><a class="dropdown-item printslip" data-code="issueqslip" href="#">Print quick slip</a></li>
                 [% IF patron.account_balance != 0 %]
-                <li><a id="printfineslip" target="_blank" href="/cgi-bin/koha/members/printnotice.pl?notice=ACCOUNTS_SUMMARY&borrowernumber=[% patron.borrowernumber | uri %]">Print account balance</a></li>
+                <li><a class="dropdown-item" id="printfineslip" target="_blank" href="/cgi-bin/koha/members/printnotice.pl?notice=ACCOUNTS_SUMMARY&borrowernumber=[% patron.borrowernumber | uri %]">Print account balance</a></li>
                 [% END %]
                 [% IF patron.has_overdues %]
-                    <li><a id="print_overdues" href="#">Print overdues</a></li>
+                    <li><a class="dropdown-item" id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
                 [% IF patron.privacy < 2 %] [%# 2 is the privacy rule "Never" (Delete my history immediately) %]
-                    <li><a class="printslip" data-code="checkinslip" href="#">Print checkin slip</a></li>
+                    <li><a class="dropdown-item printslip" data-code="checkinslip" href="#">Print checkin slip</a></li>
                 [% END %]
                 [% FOREACH notice IN Notices.GetTemplates( 'patron_slip' ) %]
-                    <li><a class="printslip" data-code="[% notice.code | html %]" href="#">Print [% notice.name | html %]</a></li>
+                    <li><a class="dropdown-item printslip" data-code="[% notice.code | html %]" href="#">Print [% notice.name | html %]</a></li>
                 [% END %]
             </ul>
     </div>
@@ -46,7 +46,7 @@
     [% END %]
 
     [% IF CAN_user_borrowers_edit_borrowers %]
-        <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default"><i class="fa-solid fa-comment"></i> Add message</a>
+        <a id="addnewmessageLabel" href="#add_message_form" data-bs-toggle="modal" class="btn btn-default"><i class="fa-solid fa-comment"></i> Add message</a>
     [% END %]
 
     [% IF Koha.Preference('CurbsidePickup') %]
@@ -55,65 +55,65 @@
 
     [% IF CAN_user_borrowers_edit_borrowers %]
         <div class="btn-group">
-        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
-            <ul class="dropdown-menu dropdown-menu-right">
+        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">More <span class="caret"></span></button>
+            <ul class="dropdown-menu dropdown-menu-end">
                 [% IF CAN_user_borrowers_edit_borrowers %]
-                    <li><a id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;destination=[% destination | html %]&amp;reregistration=y">Renew patron</a></li>
+                    <li><a class="dropdown-item" id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;destination=[% destination | html %]&amp;reregistration=y">Renew patron</a></li>
                 [% ELSE %]
-                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to renew patrons" id="renewpatron" href="#">Renew patron</a></li>
+                    <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to renew patrons" id="renewpatron" href="#">Renew patron</a></li>
                 [% END %]
                 [% IF ( CAN_user_permissions ) %]
-                    <li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% patron.borrowernumber | html %]">Set permissions</a></li>
+                    <li><a class="dropdown-item" id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% patron.borrowernumber | html %]">Set permissions</a></li>
                 [% ELSE %]
-                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
+                    <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
                 [% END %]
 
                 [% IF ( Koha.Preference('TwoFactorAuthentication') == 'enforced' || Koha.Preference('TwoFactorAuthentication') == 'enabled' ) && logged_in_user.borrowernumber == patron.borrowernumber %]
-                    <li><a id="twofa" href="/cgi-bin/koha/members/two_factor_auth.pl">Manage two-factor authentication</a></li>
+                    <li><a class="dropdown-item" id="twofa" href="/cgi-bin/koha/members/two_factor_auth.pl">Manage two-factor authentication</a></li>
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
-                    <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber | uri %]">Discharge</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber | uri %]">Discharge</a></li>
                 [% END %]
 
                 [% IF Koha.Preference('RESTOAuth2ClientCredentials') %]
                     [% IF CAN_user_superlibrarian OR loggedinusernumber == patron.borrowernumber %]
-                        <li><a id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% patron.borrowernumber | html %]">Manage API keys</a></li>
+                        <li><a class="dropdown-item" id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% patron.borrowernumber | html %]">Manage API keys</a></li>
                     [% ELSE %]
-                        <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
+                        <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
                     [% END %]
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers %]
-                    <li><a id="sendwelcome" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_welcome">Send welcome notice</a></li>
+                    <li><a class="dropdown-item" id="sendwelcome" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_welcome">Send welcome notice</a></li>
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers && patron.category.effective_reset_password %]
-                    <li><a id="resetpassword" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_password_reset">Send password reset</a></li>
+                    <li><a class="dropdown-item" id="resetpassword" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_password_reset">Send password reset</a></li>
                 [% END %]
 
                 [% IF CAN_user_borrowers_delete_borrowers %]
                     [% IF ( patron.protected == 1 ) %]
-                        <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is protected" id="deletepatron" href="#">Delete</a></li>
+                        <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="Patron is protected" id="deletepatron" href="#">Delete</a></li>
                     [% ELSE %]
-                        <li><a id="deletepatron" href="#">Delete</a></li>
+                        <li><a class="dropdown-item" id="deletepatron" href="#">Delete</a></li>
                     [% END %]
                 [% ELSE %]
-                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
+                    <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
                 [% END %]
                 [% SET adult_categories = Categories.scalar.all(category_type => 'A') %]
                 [% IF adult_categories.count > 0 %]
                     [% IF patron.is_child %]
-                        <li><a id="updatechild" href="#">Update child to adult patron</a></li>
+                        <li><a class="dropdown-item" id="updatechild" href="#">Update child to adult patron</a></li>
                     [% ELSE %]
-                        <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li>
+                        <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li>
                     [% END %]
                 [% END %]
                 [% IF Koha.Preference('intranetreadinghistory') %]
                     [%IF ( privacy == 2 ) %]
-                        <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Not allowed by patron's privacy settings" id="exportbarcodes" href="#">Export today's checked in barcodes</a></li>
+                        <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="Not allowed by patron's privacy settings" id="exportbarcodes" href="#">Export today's checked in barcodes</a></li>
                     [% ELSE %]
-                        <li><a id="exportcheckins" href="#">Export today's checked in barcodes</a></li>
+                        <li><a class="dropdown-item" id="exportcheckins" href="#">Export today's checked in barcodes</a></li>
                     [% END %]
                 [% END %]
             </ul>
@@ -123,23 +123,21 @@
 
 <!-- Modal -->
 <div id="add_message_form" class="modal" tabindex="-1" role="dialog" aria-labelledby="addnewmessageLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content modal-lg">
             <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="cud-add_message">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4>Leave a message</h4>
+                    <h1 class="modal-title">Leave a message</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <fieldset id="message_fieldset">
                         <ol>
                             <li class="form-group form-row">
                                 <label for="message_type" class="col-form-label">Add a message for:</label>
-                                <select name="message_type" id="message_type" class="form-control">
+                                <select name="message_type" id="message_type" class="form-select">
                                     <option value="L">Staff - Internal note</option>
                                     <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
                                     [% IF CAN_user_borrowers_send_messages_to_borrowers %]
@@ -152,7 +150,7 @@
                             [% IF bor_notes %]
                                 <li class="form-group form-row">
                                     <label for="select_patron_messages" class="col-form-label">Predefined notes: </label>
-                                    <select name="type" id="select_patron_messages" class="form-control">
+                                    <select name="type" id="select_patron_messages" class="form-select">
                                         <option value="">Select note</option>
                                         [% FOREACH bor_note IN bor_notes %]
                                             <option value="[% bor_note.lib | html %]">[% bor_note.lib | html %]</option>
@@ -165,7 +163,7 @@
                             [% IF patron_letters %]
                                 <li class="form-group form-row">
                                     <label for="select_patron_notice" class="col-form-lable" style="display:none;">Patron notice: </label>
-                                    <select name="select_patron_notice" id="select_patron_notice" class="form-control" style="display:none;">
+                                    <select name="select_patron_notice" id="select_patron_notice" class="form-select" style="display:none;">
                                         <option value="">Select notice</option>
                                         [% FOREACH letter IN patron_letters %]
                                             <option value="[% letter.code | html %]">[% letter.name | html %]</option>
@@ -190,7 +188,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
-                    <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+                    <button class="btn btn-default deny cancel" type="button" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
                 </div>
             </form>
         </div>

@@ -8,9 +8,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Courses &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %]
-    [% Asset.css("css/datatables.css") | $raw %]
-[% END %]
+[% BLOCK cssinclude %][% END %]
 
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-course-reserves' %]
@@ -75,7 +73,7 @@
         $(document).ready(function() {
             columns_settings = [% TablesSettings.GetColumns( 'opac', 'course_list', 'course_reserves_table', 'json' ) | $raw %]
             KohaTable("#course_reserves_table", {
-                "dom": '<"top"f>rt<"clear">',
+                "dom": '<"top"<"table_controls"f>>rt<"clear">',
                 "sorting": [[ 1, "asc" ]],
                 "autoWidth": false,
                 "asColumnDefs": [

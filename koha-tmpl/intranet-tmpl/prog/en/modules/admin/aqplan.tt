@@ -40,7 +40,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -92,7 +92,7 @@
                     <tr id="[% budget_line.budget_id | html %]">
                         [% IF ( budget_line.budget_lock ) %]
                             <td class="locked">
-                                <a data-toggle="tooltip" title="Budget locked" href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id | uri %]&amp;budget_period_id=[% budget_period_id | uri %]">[% budget_line.budget_name | html %]</a>
+                                <a data-bs-toggle="tooltip" title="Budget locked" href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id | uri %]&amp;budget_period_id=[% budget_period_id | uri %]">[% budget_line.budget_name | html %]</a>
                             </td>
                         [% ELSE %]
                             <td>
@@ -193,17 +193,17 @@
 </form>
 
         [% ELSIF not budget_period_id %]
-<div class="dialog alert">That budget does not exist! Please select a budget to continue.</div>
+<div class="alert alert-warning">That budget does not exist! Please select a budget to continue.</div>
         [% ELSE %]
-<div class="dialog message">No funds to display for this search criteria</div>
+<div class="alert alert-info">No funds to display for this search criteria</div>
         [% END %]
 
 
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
 
 <form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
@@ -298,7 +298,7 @@
 
                 [% INCLUDE 'acquisitions-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -346,7 +346,7 @@
                 $("#budget_est_"+budget_id).css("color","green");
             });
 
-            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-bs-toggle="tooltip"]').tooltip();
         });
     </script>
 [% END %]

@@ -49,7 +49,7 @@
         <div id="col1" class="col-sm-6">
             <h2>Original</h2>
             [% IF ( ERROR_FORMATTED1 ) %]
-                <div class="dialog alert">
+                <div class="alert alert-warning">
                     <p>The record ID <em>[% RECORDID | html %]</em> doesn't match any existing record.</p>
                 </div>
             [% ELSE %]
@@ -60,7 +60,7 @@
         <div id="col2" class="col-sm-6">
             <h2>Imported</h2>
             [% IF ( ERROR_FORMATTED2 ) %]
-                <div class="dialog alert">
+                <div class="alert alert-warning">
                     <p>The import ID number <em>[% IMPORTID | html %]</em> doesn't match any existing record.</p>
                 </div>
             [% ELSE %]

@@ -112,7 +112,7 @@ $( document ).ready( function() {
         }
     });
 
-    $( "#dataPreview" ).on( "hidden", function() {
+    $( "#dataPreview" ).on( "hidden.bs.modal", function() {
         $( "#dataPreviewLabel" ).html( "" );
         $( "#dataPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' /> " + __("Loading") + "</div>" );
     });
@@ -124,7 +124,7 @@ $( document ).ready( function() {
         var page = $( this ).attr( "href" );
         $( "#dataPreviewLabel" ).text( long_title );
         $( "#dataPreview .modal-body" ).load( page + " div" );
-        $( '#dataPreview' ).modal( {show:true} );
+        $( '#dataPreview' ).modal("show");
     });
 
     $( "#resultst" ).on("click", ".chosen", function(e) {

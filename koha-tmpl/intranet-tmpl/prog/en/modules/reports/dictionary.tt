@@ -71,7 +71,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -132,7 +132,7 @@
                 </table>
             </div> <!-- /.page-section -->
         [% ELSE %]
-            <div class="dialog message">There are no saved definitions. <a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?op=add_form">Add a definition to the dictionary.</a></div>
+            <div class="alert alert-info">There are no saved definitions. <a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?op=add_form">Add a definition to the dictionary.</a></div>
 		[% END %]
 [% END %]
 
@@ -316,13 +316,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'guided-reports-view.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

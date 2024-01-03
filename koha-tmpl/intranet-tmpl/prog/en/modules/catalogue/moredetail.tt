@@ -39,7 +39,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
                 [% INCLUDE 'cat-toolbar.inc' %]
@@ -94,11 +94,11 @@
                     </div> <!-- /.page-section -->
 
                     [% IF ( ONLY_ONE ) %]
-                        <div class="dialog message">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;bi=[% biblioitemnumber | uri %]#item[% itemnumber | uri %]">View all</a></div>
+                        <div class="alert alert-info">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;bi=[% biblioitemnumber | uri %]#item[% itemnumber | uri %]">View all</a></div>
                     [% END %]
 
                     [% IF updated_exclude_from_local_holds_priority.defined %]
-                        <div class="dialog message">
+                        <div class="alert alert-info">
                             [% IF updated_exclude_from_local_holds_priority %]
                                 Exclude from local holds priority updated to 'Yes'
                             [% ELSE %]
@@ -501,13 +501,13 @@
                     [% END # /FOREACH ITEM_DAT %]
                 </div> <!-- /#catalogue_detail_biblio -->
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'biblio-view-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% IF ( Koha.Preference('CatalogConcerns') ) %]

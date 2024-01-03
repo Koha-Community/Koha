@@ -79,7 +79,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -270,7 +270,7 @@
     [% END %]
 
     [% IF ( delete_confirm ) %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             <h1>[% tx("Confirm deletion of system preference '{system_preference}'?", { system_preference = searchfield }) | html %]</h1>
             <table>
                 <tr>
@@ -287,17 +287,17 @@
                 <input type="hidden" name="op" value="cud-delete_confirmed" />
                 <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
                 <input type="hidden" name="Tvalue" value="[% Tvalue | html %]" />
-                <button type="submit" class="approve"><i class="fa fa-check" aria-hidden="true"></i> Yes, delete</button>
+                <button type="submit" class="btn btn-default approve"><i class="fa fa-check" aria-hidden="true"></i> Yes, delete</button>
             </form>
             <form class="inline" action="[% script_name | html %]" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
-                <button type="submit" class="deny"><i class="fa fa-remove" aria-hidden="true"></i> No, do not delete</button>
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-remove" aria-hidden="true"></i> No, do not delete</button>
             </form>
         </div>
     [% END %]
 
     [% IF ( delete_confirmed ) %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             <h1>Data deleted</h1>
             <form action="[% script_name | html %]" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
@@ -448,13 +448,13 @@
     [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'prefs-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

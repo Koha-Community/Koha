@@ -40,7 +40,7 @@
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Return to [% biblio.title | html %]</a>
                     [% ELSE %]
                         [% IF error %]
-                            <div class="dialog alert">
+                            <div class="alert alert-warning">
                                 [% IF error == 'duplicate' %]
                                     <span>You have reached the maximum number of recalls on this record.</span>
                                 [% ELSIF error == 'unavailable' %]
@@ -167,7 +167,7 @@
 
                                 </div>
                             [% ELSE %]
-                                <div class="dialog alert">You must be logged in to place a recall.</div>
+                                <div class="alert alert-warning">You must be logged in to place a recall.</div>
                             [% END %]
                         [% END %]
                     [% END %] <!-- norecalls -->

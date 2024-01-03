@@ -143,7 +143,7 @@
                         [% END %]
                     [% END %]
                     [% IF ( query_error ) %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             <h2>Error:</h2>
                             [% query_error | html %]
                         </div>
@@ -172,13 +172,13 @@
                                         [% UNLESS tag %]
                                             <div class="sort_by col-sm-auto">
                                                 <label for="sort_by" class="sr-only">Sort by:</label>
-                                                <select id="sort_by" class="resort form-control form-control-sm" name="sort_by">
+                                                <select id="sort_by" class="resort form-select form-select-sm" name="sort_by">
                                                     [% INCLUDE 'resort_form.inc' %]
                                                 </select>
 
                                                 [% IF Koha.Preference('OPACnumSearchResultsDropdown') %]
                                                     <label for="results_per_page">Results per page: </label>
-                                                    <select id="results_per_page" name="count">
+                                                    <select id="results_per_page" class="form-select" name="count">
                                                         [% IF Koha.Preference('OPACnumSearchResults') %]
                                                             [% IF results_per_page == Koha.Preference('OPACnumSearchResults') %]
                                                                 <option value="[% Koha.Preference('OPACnumSearchResults') | html %]" selected="selected">[% Koha.Preference('OPACnumSearchResults') | html %] (default)</option>

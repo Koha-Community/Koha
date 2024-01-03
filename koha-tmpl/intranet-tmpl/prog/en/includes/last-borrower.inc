@@ -4,13 +4,12 @@
 <div id="lastborrower-window">
     <div class="btn-group">
         <a class="btn btn-link navbar-btn lastborrower" id="lastborrowerlink" href="#" title=""><i class="fa fa-arrow-right"></i> Last patron</a>
-        <button type="button" data-toggle="dropdown" class="btn btn-link navbar-btn dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-            <span class="caret"></span>
-            <span class="sr-only">Toggle dropdown</span>
+        <button type="button" class="btn btn-link navbar-btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden">Toggle dropdown</span>
         </button>
-        <ul id="lastBorrowerList" class="dropdown-menu dropdown-menu-right">
-            <li role="separator" class="divider"></li>
-            <li><a id="lastborrower-remove" class="lastborrower" href="#">Clear list</a></li>
+        <ul id="lastBorrowerList" class="dropdown-menu dropdown-menu-end">
+            <li><hr class="dropdown-divider"></li>
+            <li><a id="lastborrower-remove" class="lastborrower dropdown-item" href="#">Clear list</a></li>
         </ul>
     </div>
 </div>

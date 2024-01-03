@@ -154,15 +154,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="update_sql_label">Update SQL</h3>
+                <h1 class="modal-title" id="update_sql_label">Update SQL</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn btn-default" id="update_sql_button" role="button" data-toggle="modal">Update</a>
-                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                <a href="#" class="btn btn-default" id="update_sql_button" role="button" data-bs-toggle="modal">Update</a>
+                <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div> <!-- /.modal-content -->
     </div> <!-- /.modal-dialog -->
@@ -170,7 +170,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -200,13 +200,13 @@
                 [% END # /IF (start) %]
 
                 [% IF report_converted %]
-                    <div class="dialog message">
+                    <div class="alert alert-info">
                         The report "[% report_converted | html %]" has been converted.
                     </div>
                 [% END %]
 
                 [% IF report_converted %]
-                    <div class="dialog message">
+                    <div class="alert alert-info">
                         The report "[% report_converted | html %]" has been converted.
                     </div>
                 [% END %]
@@ -227,7 +227,7 @@
                                     [% IF ( filters.keyword ) %]
                                         <span class="filter_keyword"><strong>Keyword:</strong> [% filters.keyword | html %]</span>
                                     [% END %]
-                                    <a class="clear_filter" href="/cgi-bin/koha/reports/guided_reports.pl?op=list&clear_filters=1"><i class="fa fa-times"></i> Clear</a>
+                                    <a class="clear_filter" href="/cgi-bin/koha/reports/guided_reports.pl?op=list&clear_filters=1"><i class="fa fa-times" aria-hidden="true"></i> Clear</a>
                                 </span>
                             </p>
                         [% END %]
@@ -252,7 +252,7 @@
 
                                     [% IF (Koha.Preference('Mana') == 1) %]
                                         [% IF manamsg %]
-                                            <div id="mana_search_message" class="dialog message">
+                                            <div id="mana_search_message" class="alert alert-info">
                                                 <p> [% manamsg | html %] </p>
                                             </div>
                                         [% END %]
@@ -361,7 +361,7 @@
                                                         <td>
                                                             [% IF savedreport.seems_obsolete %]
                                                                 This report seems obsolete, it uses biblioitems.marcxml field.
-                                                                <a href="/cgi-bin/koha/svc/convert_report?id=[% savedreport.id | uri %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa-solid fa-eye"></i> Update SQL</a>
+                                                                <a href="/cgi-bin/koha/svc/convert_report?id=[% savedreport.id | uri %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa-solid fa-eye" aria-hidden="true"></i> Update SQL</a>
                                                             [% END %]
                                                         </td>
                                                         <td>
@@ -370,26 +370,27 @@
                                                                 <a class="btn btn-default btn-xs" role="button"
                                                                 href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | html %]&amp;op=run"><i
                                                                 class="fa fa-play"></i> Run</a><a
-                                                                class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
-                                                                href="#"><b class="caret"></b></a>
+                                                                class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown"
+                                                                href="#"></a>
                                                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                                                                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=show"><i class="fa fa-search"></i> View</a></li>
+                                                                    <li><a class="dropdown-item" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=show"><i class="fa fa-search" aria-hidden="true"></i> View</a></li>
                                                                     <li>
-                                                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&op=show" class="preview_sql" data-reportid="[% savedreport.id | html %]">
-                                                                            <i class="fa-solid fa-eye"></i> Preview SQL
+                                                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&op=show" class="dropdown-item preview_sql" data-reportid="[% savedreport.id | html %]">
+                                                                            <i class="fa-solid fa-eye" aria-hidden="true"></i> Preview SQL
                                                                         </a>
                                                                     </li>
                                                                     [% IF ( CAN_user_reports_create_reports ) %]
-                                                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                                                                        <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&amp;id=[% savedreport.id | uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
+                                                                        <li><a class="dropdown-item" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+                                                                        <li><a class="dropdown-item" title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&amp;id=[% savedreport.id | uri %]"><i class="fa fa-copy" aria-hidden="true"></i> Duplicate</a></li>
                                                                     [% END %]
                                                                     [% IF (Koha.Preference('Mana') == 1) %]
-                                                                        <li><a class="ShareButton" data-toggle="modal" href="#mana_share_report" title="Share your report with Mana Knowledge Base"><i class="fa fa-share-alt"></i> Share</a></li>
+                                                                        <li><a class="dropdown-item ShareButton" data-bs-toggle="modal" href="#mana_share_report" title="Share your report with Mana Knowledge Base"><i class="fa fa-share-alt" aria-hidden="true"></i> Share</a></li>
                                                                     [% END %]
-                                                                    <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa-solid fa-clock"></i> Schedule</a></li>
+                                                                    <li><a class="dropdown-item" href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa-solid fa-clock" aria-hidden="true"></i> Schedule</a></li>
                                                                     [% IF ( CAN_user_reports_delete_reports ) %]
                                                                         <li>
-                                                                            <a class="submit-form-link" href="#" data-id="[% savedreport.id | html %]" data-action="guided_reports.pl" data-method="post" data-op="cud-delete" data-confirmation-msg="[% t('Are you sure you want to delete this report?') | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                                            <a class="dropdown-item submit-form-link" href="#" data-id="[% savedreport.id | html %]" data-action="guided_reports.pl" data-method="post" data-op="cud-delete" data-confirmation-msg="[% t('Are you sure you want to delete this report?') | html %]"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</a>
+
                                                                         </li>
                                                                     [% END %]
                                                                 </ul>
@@ -415,15 +416,15 @@
 
 
                     [% ELSE # IF ( savedreports ) %]
-                        <div class="dialog message">
+                        <div class="alert alert-info">
                             [% IF (filter_set || filters.date || filters.author || filters.keyword) %]
                                 <h4>No saved reports match your criteria. </h4>
                                 [% IF ( CAN_user_reports_create_reports ) %]
-                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form" class="new btn btn-default"><i class="fa fa-plus"></i> New guided report</a>
+                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form" class="new btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> New guided report</a>
 
-                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql" class="new btn btn-default"><i class="fa fa-plus"></i> New SQL report</a>
+                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql" class="new btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> New SQL report</a>
 
-                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list&filter_set=1&filter_keywork=" class="deny btn btn-default"><i class="fa fa-fw fa-times"></i> Cancel filter</a>
+                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list&filter_set=1&filter_keywork=" class="deny btn btn-default"><i class="fa fa-fw fa-times" aria-hidden="true"></i> Cancel filter</a>
                                 [% END %]
                             [% ELSE %]
                                 <h4>There are no saved reports. </h4>
@@ -439,7 +440,7 @@
 
                 [% IF ( build1 ) %]
                     [% IF ( cache_error) %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             <strong> Please choose a cache_expiry less than 30 days </strong>
                         </div>
                     [% END %]
@@ -798,7 +799,7 @@
                 [% END # /IF( save ) %]
 
                 [% IF ( warn_authval_problem ) %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <h3>Errors found when processing parameters for report: [% name | html %]</h3>
                         [% FOREACH problematic_authval IN problematic_authvals %]
                             <p>
@@ -821,11 +822,11 @@
                             <input type='hidden' name='public' value='[% public | html %]' />
                         [% IF ( op == 'update') %]
                             <input type='hidden' name='op' value='cud-update' />
-                            <button type="submit" name="save_anyway" value="Save anyway" class="approve"><i class="fa fa-fw fa-check"></i> Save anyway</button>
+                            <button type="submit" name="save_anyway" value="Save anyway" class="approve"><i class="fa fa-fw fa-check" aria-hidden="true"></i> Save anyway</button>
                         [% ELSIF ( op == 'save') %]
                             <input type='hidden' name='area' value='[% area | html %]' />
                             <input type='hidden' name='op' value='cud-save' />
-                            <button type="submit" name="save_anyway" value="Save anyway" class="approve"><i class="fa fa-fw fa-check"></i> Save anyway</button>
+                            <button type="submit" name="save_anyway" value="Save anyway" class="approve"><i class="fa fa-fw fa-check" aria-hidden="true"></i> Save anyway</button>
                         [% END %]
                         </form>
                         <!-- Go back to editing -->
@@ -835,7 +836,7 @@
 
                 [% IF ( enter_params ) %]
                     [% IF ( auth_val_error ) %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             <h3>Errors found when processing parameters for report: [% name | html %]</h3>
                             [% FOREACH auth_val_error IN auth_val_errors %]
                                 <p>
@@ -925,8 +926,8 @@
                         </div>
 
                         <div>
-                            <a href="#" id="toggle_chart_settings_hid" class="toggle_chart_settings" style="display:none"><i class="fa-solid fa-eye-slash"></i> Hide chart</a>
-                            <a href="#" id="toggle_chart_settings_vis" class="toggle_chart_settings" style="display:none"><i class="fa-solid fa-eye"></i> Show chart</a>
+                            <a href="#" id="toggle_chart_settings_hid" class="toggle_chart_settings" style="display:none"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i> Hide chart</a>
+                            <a href="#" id="toggle_chart_settings_vis" class="toggle_chart_settings" style="display:none"><i class="fa-solid fa-eye" aria-hidden="true"></i> Show chart</a>
                         </div>
                         <div id="chart" class="clearfix"></div>
 
@@ -1057,7 +1058,7 @@
                                     <div id="toolbar" class="btn-toolbar">
                                         [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers || batch_borrowernumbers ) %]
                                             <div class="btn-group">
-                                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                     Batch operations with [% IF unlimited_total >= limit %][% results.size | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
                                                     <span class="caret"></span>
                                                 </button>
@@ -1073,38 +1074,38 @@
                                                         [% END %]
                                                     [% END %]
                                                     [% IF show_cardnumber_ops || show_borrowernumber_ops %]
-                                                        <li class="dropdown-header">Patron records</li>
+                                                        <li><h6 class="dropdown-header">Patron records</h6></li>
                                                         [% IF show_cardnumber_ops || show_borrowernumber_ops %]
                                                             <li>
-                                                                <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
+                                                                <a href="#" data-submit="batch_patron_modification" data-bs-toggle="tooltip" data-bs-placement="right" title="Send visible results to batch patron modification" class="dropdown-item batch_op send_to_patron_mod">Batch patron modification</a>
                                                             </li>
                                                         [% END %]
                                                         [% IF show_borrowernumber_ops %]
                                                             <li>
-                                                                <a href="#" data-submit="patron_card_creator" data-toggle="tooltip" data-placement="right" title="Send visible results to a new patron card batch" class="batch_op send_to_patron_card_batch">Patron card creator</a>
+                                                                <a href="#" data-submit="patron_card_creator" data-bs-toggle="tooltip" data-bs-placement="right" title="Send visible results to a new patron card batch" class="dropdown-item batch_op send_to_patron_card_batch">Patron card creator</a>
                                                             </li>
                                                         [% END %]
                                                     [% END %]
                                                     [% FOREACH header_ro IN header_row %]
                                                         [% IF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
-                                                            <li class="dropdown-header">Bibliographic records</li>
+                                                            <li><h6 class="dropdown-header">Bibliographic records</h6></li>
                                                             <li>
-                                                                <a href="#" data-submit="batch_record_modification" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record modification" class="batch_op send_to_record_mod">Batch record modification</a>
+                                                                <a href="#" data-submit="batch_record_modification" data-bs-toggle="tooltip" data-bs-placement="right" title="Send visible records to batch record modification" class="dropdown-item batch_op send_to_record_mod">Batch record modification</a>
                                                             </li>
                                                             <li>
-                                                                <a href="#" data-submit="batch_record_deletion" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record deletion" class="batch_op send_to_record_del">Batch record deletion</a>
+                                                                <a href="#" data-submit="batch_record_deletion" data-bs-toggle="tooltip" data-bs-placement="right" title="Send visible records to batch record deletion" class="dropdown-item batch_op send_to_record_del">Batch record deletion</a>
                                                             </li>
                                                             <li>
-                                                                <a href="#" data-submit="batch_add_to_list" data-toggle="tooltip" data-placement="right" title="Send visible records to a list" class="batch_op send_to_list">Add to list</a>
+                                                                <a href="#" data-submit="batch_add_to_list" data-bs-toggle="tooltip" data-bs-placement="right" title="Send visible records to a list" class="dropdown-item batch_op send_to_list">Add to list</a>
                                                             </li>
                                                         [% END %]
                                                         [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
-                                                            <li class="dropdown-header">Item records</li>
+                                                            <li><h6 class="dropdown-header">Item records</h6></li>
                                                             <li>
-                                                                <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item modification" class="batch_op send_to_item_mod">Batch item modification</a>
+                                                                <a href="#" data-submit="batch_item_modification" data-bs-toggle="tooltip" data-bs-placement="right" title="Send visible items to batch item modification" class="dropdown-item batch_op send_to_item_mod">Batch item modification</a>
                                                             </li>
                                                             <li>
-                                                                <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item deletion" class="batch_op send_to_item_del">Batch item deletion</a>
+                                                                <a href="#" data-submit="batch_item_deletion" data-bs-toggle="tooltip" data-bs-placement="right" title="Send visible items to batch item deletion" class="dropdown-item batch_op send_to_item_del">Batch item deletion</a>
                                                             </li>
                                                         [% END %]
                                                     [% END # /FOREACH header_ro %]
@@ -1114,24 +1115,24 @@
 
                                         [% IF ( unlimited_total > 10 && limit <= 1000 ) %]
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     [% IF ( limit ) %]
                                                         Rows per page: <strong>[% limit | html %]</strong>
                                                     [% ELSE %]
                                                         Rows per page
                                                     [% END %]
-                                                    <span class="caret"></span>
+
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
                                                     [% FOREACH l IN limits %]
                                                         [% IF l == limit %]
                                                             <li>
-                                                                <a class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw fa-check"></i> [% l | html %]</a>
+                                                                <a class="dropdown-item" class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw fa-check" aria-hidden="true"></i> [% l | html %]</a>
                                                             </li>
                                                         [% ELSE %]
                                                             <li>
-                                                                <a class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw"></i> [% l | html %]</a>
+                                                                <a class="dropdown-item" class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw" aria-hidden="true"></i> [% l | html %]</a>
                                                             </li>
                                                         [% END %]
                                                     [% END %]
@@ -1141,8 +1142,8 @@
 
                                         [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
                                             <a href="#" class="btn btn-link" id="toggle_auto_links">
-                                                <i class="fa-solid fa-eye autolink" style="display:none"></i>
-                                                <i class="fa-solid fa-eye-slash autolink"></i>
+                                                <i class="fa-solid fa-eye autolink" aria-hidden="true" style="display:none"></i>
+                                                <i class="fa-solid fa-eye-slash autolink" aria-hidden="true"></i>
                                                 <span class="autolink" style="display:none">Show data menus</span>
                                                 <span class="autolink">Hide data menus</span>
                                             </a>
@@ -1184,44 +1185,40 @@
                                                 [%- IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber' %]
                                                     <td class="batch-op itemnumber" data-number="itemnumber">
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
-                                                        <div id="itemnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                        <div id="itemnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
                                                             <ul class="dropdown-menu pull-right" role="menu">
-                                                                <li><a target="_blank" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&itemnumber=[% cells.cell | $raw %]"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit record</a></li>
-                                                                <li role="separator" class="divider"></li>
-                                                                <li><a target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-eye"></i> View record</a></li>
+                                                                <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&itemnumber=[% cells.cell | $raw %]"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit record</a></li>
+                                                                <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-eye" aria-hidden="true"></i> View record</a></li>
                                                             </ul>
                                                         </div>
                                                     </td>
                                                 [% ELSIF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
                                                     <td class="batch-op biblionumber" data-number="biblionumber">
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
-                                                        <div id="biblionumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                        <div id="biblionumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
                                                             <ul class="dropdown-menu pull-right" role="menu">
-                                                                <li><a target="_blank" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit record</a></li>
-                                                                <li role="separator" class="divider"></li>
-                                                                <li><a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa-solid fa-eye"></i> View record</a></li>
+                                                                <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit record</a></li>
+                                                                <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa-solid fa-eye" aria-hidden="true"></i> View record</a></li>
                                                             </ul>
                                                         </div>
                                                     </td>
                                                 [% ELSIF header_row.$place.cell == 'borrowernumber' || header_types.item(header_row.$place.cell) == 'borrowernumber' %]
                                                     <td class="batch-op borrowernumber" data-number="borrowernumber">
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
-                                                        <div id="borrowernumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                        <div id="borrowernumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
                                                             <ul class="dropdown-menu pull-right" role="menu">
-                                                                <li><a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa-solid fa-eye"></i> View patron</a></li>
-                                                                <li role="separator" class="divider"></li>
-                                                                <li><a target="_blank" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% cells.cell | $raw %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit patron</a></li>
-                                                                <li role="separator" class="divider"></li>
-                                                                <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
+                                                                <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa-solid fa-eye" aria-hidden="true"></i> View patron</a></li>
+                                                                <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% cells.cell | $raw %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit patron</a></li>
+                                                                <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-barcode" aria-hidden="true"></i> Check out</a></li>
                                                             </ul>
                                                         </div>
                                                     </td>
                                                 [% ELSIF header_row.$place.cell == 'cardnumber' || header_types.item(header_row.$place.cell) == 'cardnumber' %]
                                                     <td class="batch-op cardnumber" data-number="cardnumber">
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
-                                                        <div id="cardnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-toggle="dropdown" href="#">[% cells.cell | $raw %] <b class="caret"></b></a>
+                                                        <div id="cardnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
                                                             <ul class="dropdown-menu pull-right" role="menu">
-                                                                <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cells.cell | $raw %]"><i class="fa fa-barcode"></i> Check out</a></li>
+                                                                <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cells.cell | $raw %]"><i class="fa fa-barcode" aria-hidden="true"></i> Check out</a></li>
                                                             </ul>
                                                         </div>
                                                     </td>
@@ -1355,7 +1352,7 @@
                     [% UNLESS ( errors ) %]
                         </br>
                         <div id="report_updated">
-                            <div class="dialog message">
+                            <div class="alert alert-info">
                                 <p>Your report "[% reportname | html %]" has been saved</p>
                             </div>
                         </div>
@@ -1431,7 +1428,7 @@
 
                 [% IF ( errors ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             <strong>The following error was encountered:</strong><br />
                             [% FOREACH error IN errors %]
                                 [% IF ( error.sqlerr ) %]
@@ -1462,9 +1459,9 @@
                 [% END # /IF ( errors ) %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% IF ( saved1 ) %]
                     <div id="saved-reports-filter">
@@ -1498,16 +1495,16 @@
                 [% END %]
                 [% INCLUDE 'guided-reports-view.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
     </div> <!-- /.row -->
 
     <!-- Runtime Parameters Modal -->
     <div class="modal" id="runtime_parameters" tabindex="-1" role="dialog" aria-labelledby="runtime_parametersLabel">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="runtime_parametersLabel">Runtime parameter options</h4>
+                    <h1 class="modal-title" id="runtime_parametersLabel">Runtime parameter options</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="get" id="send_runtime_parameter">
                     <input type="hidden" name="param_category" id="param_category" />
@@ -1519,7 +1516,7 @@
                         </div>
                         <div id="authorised_value_category" class="form-group" style="display:none">
                             <label for="authorised_value">Authorized value category:</label>
-                            <select class="form-control" name="authorised_value" id="authorised_value">
+                            <select class="form-select" name="authorised_value" id="authorised_value">
                                 <option value=""></option>
                                 [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories() %]
                             </select>
@@ -1548,7 +1545,7 @@
                     </div> <!-- /.modal-body -->
                     <div class="modal-footer">
                         <button type="submit" id="sendParam" class="btn btn-default approve">Insert parameter</button>
-                        <button type="button" class="btn btn-default deny" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default deny" data-bs-dismiss="modal">Cancel</button>
                     </div> <!-- /.modal-footer -->
                 </form> <!-- /#send_runtime_parameter -->
             </div> <!-- /.modal-content -->
@@ -1968,7 +1965,7 @@
                 load_group_subgroups();
             [% END %]
 
-            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-bs-toggle="tooltip"]').tooltip();
 
             $('#limit').change(function() {
                 $('#limitselect').submit();
@@ -2005,7 +2002,7 @@
                 }
             });
 
-            $("#ManaCloseButton").on("click", function() {
+            $("#mana_share_report").on("hidden.bs.modal", function(){
                 $(".shared_infos").show();
             });
 
@@ -2029,7 +2026,7 @@
 
                 }, table_settings);
 
-                $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                     tabsInit( $(e.target).parent(), rtable );
                 });
 
@@ -2460,36 +2457,37 @@
             if( $("#preview-sql-modal").length > 0) {
                 $("#preview-sql-modal").remove();
             }
-            $("body").append("<div id=\"preview-sql-modal\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\" class=\"modal\">\
-                <div class=\"modal-dialog\">\
-                    <div class=\"modal-content\">\
-                        <div class=\"modal-header\" style=\"min-height:40px;\">\
-                            <button type=\"button\" class=\"closebtn\" data-dismiss=\"modal\" aria-label=\"Close\">\
-                                <span aria-hidden=\"true\">×</span>\
-                            </button>\
-                            <h4 class=\"modal-title\">" + title + "</h4>\
+            $("body").append('<div id="preview-sql-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal">\
+                <div class="modal-dialog modal-xl">\
+                    <div class="modal-content">\
+                        <div class="modal-header" style="min-height:40px;">\
+                            <h1 class="modal-title">' + title + '</h1>\
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="' + _("Close") + '"></button>\
                         </div>\
-                        <div class=\"modal-body\"><textarea id=\"code" + reportid + "\">" + message + "</textarea>\
+                        <div class="modal-body"><textarea id="code' + reportid + '">' + message + '</textarea>\
                         </div>\
-                        <div class=\"modal-footer\">\
-                            <a id=\"preview-modal-editreport\" class=\"btn btn-default\" href=\"/cgi-bin/koha/reports/guided_reports.pl?id=" + reportid + "&amp;op=edit_form\"><i class=\"fa-solid fa-pencil\" aria-hidden=\"true\"></i> " + _("Edit") + "</a>\
-                            <a id=\"preview-modal-duplicate\" class=\"btn btn-default\" href=\"/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&amp;id=" + reportid + "\"><i class=\"fa fa-copy\"></i> " + _("Duplicate") + "</a>\
-                            <a id=\"preview-modal-duplicate\" class=\"btn btn-default\" href=\"/cgi-bin/koha/tools/scheduler.pl?id=" + reportid + "\"><i class=\"fa-solid fa-clock\"></i> " + _("Schedule") + "</a>\
-                            <a class=\"btn btn-default submit-form-link\" href=\"#\" data-id=\"" + reportid + "\" data-action=\"guided_reports.pl\" data-method=\"post\" data-op=\"cud-delete\" data-confirmation-msg=\"" + _("Are you sure you want to delete this report?") + "\"><i class=\"fa fa-trash-can\"></i> Delete</a>\
-                            <a id=\"preview-modal-runreport\" class=\"btn btn-default\" href=\"/cgi-bin/koha/reports/guided_reports.pl?id=" + reportid + "&amp;op=run\"><i class=\"fa fa-play\"></i> " + _("Run report") + "</a>\
-                            <a href=\"#\" id=\"preview-sql-modal-cancel\" data-dismiss=\"modal\" class=\"btn btn-default\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> " + _("Close") + "</a>\
+                        <div class="modal-footer">\
+                            <a id="preview-modal-editreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?id=' + reportid + '&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit") + '</a>\
+                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&amp;id=' + reportid + '"><i class="fa fa-copy" aria-hidden="true"></i> ' + _("Duplicate") + '</a>\
+                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=' + reportid + '"><i class="fa-solid fa-clock" aria-hidden="true"></i> ' + _("Schedule") + '</a>\
+                            <a class="btn btn-default submit-form-link" href="#" data-id="' + reportid + '" data-action="guided_reports.pl" data-method="post" data-op="cud-delete" data-confirmation-msg="' + _("Are you sure you want to delete this report?") + '"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</a>\
+                            <a id="preview-modal-delete"href="#" class="btn btn-default" title="Delete this saved report"><i class="fa fa-trash-can aria-hidden="true""></i> ' + _("Delete") + '</a>\
+                            <a id="preview-modal-runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?id=' + reportid + '&amp;op=run"><i class="fa fa-play" aria-hidden="true"></i> ' + _("Run report") + '</a>\
+                            <a href="#" id="preview-sql-modal-cancel" data-bs-dismiss="modal" class="btn btn-default"><i class="fa fa-times" aria-hidden="true"></i> ' + _("Close") + '</a>\
                         </div>\
                     </div>\
                 </div>\
-            </div>");
+            </div>');
 
-            $("#preview-sql-modal").modal('show');
-            CodeMirror.fromTextArea( document.getElementById("code" + reportid ), {
-                lineNumbers: false,
-                mode: "text/x-sql",
-                lineWrapping: true,
-                readOnly: true
-            });
+            $("#preview-sql-modal").on("shown.bs.modal", function(){
+                CodeMirror.fromTextArea( document.getElementById("code" + reportid ), {
+                    lineNumbers: false,
+                    mode: "text/x-sql",
+                    lineWrapping: true,
+                    readOnly: true
+                });
+            })
+            .modal('show');
         }
     </script>
 [% END %]
@@ -2550,22 +2548,22 @@
 
 [% BLOCK insert_runtime_parameter %]
     <div class="btn-group"  style="margin-left:30px;">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Insert runtime parameter <span class="caret"></span>
+        <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Insert runtime parameter
         </button>
         <ul class="dropdown-menu">
-            <li><a href="#" class="insertParam" id="insertAuthVal">Authorized values</a></li>
-            <li><a href="#" class="insertParam" id="insertFramework">Bibliographic framework</a></li>
-            <li><a href="#" class="insertParam" id="insertCnSource">Classification sources</a></li>
-            <li><a href="#" class="insertParam" id="insertDate">Date</a></li>
-            <li><a href="#" class="insertParam" id="insertItemtypes">Item types</a></li>
-            <li><a href="#" class="insertParam" id="insertBranches">Libraries</a></li>
-            <li><a href="#" class="insertParam" id="insertList">List</a></li>
-            <li><a href="#" class="insertParam" id="insertCategorycode">Patron categories</a></li>
-            <li><a href="#" class="insertParam" id="insertCashregister">Cash registers</a></li>
-            <li><a href="#" class="insertParam" id="insertDebittypes">Debit types</a></li>
-            <li><a href="#" class="insertParam" id="insertCredittypes">Credit types</a></li>
-            <li><a href="#" class="insertParam" id="insertText">Text field</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertAuthVal">Authorized values</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertFramework">Bibliographic framework</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertCnSource">Classification sources</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertDate">Date</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertItemtypes">Item types</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertBranches">Libraries</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertList">List</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertCategorycode">Patron categories</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertCashregister">Cash registers</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertDebittypes">Debit types</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertCredittypes">Credit types</a></li>
+            <li><a class="dropdown-item" href="#" class="insertParam" id="insertText">Text field</a></li>
         </ul>
     </div>
 [% END %]

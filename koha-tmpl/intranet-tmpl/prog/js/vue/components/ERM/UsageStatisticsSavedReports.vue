@@ -46,7 +46,7 @@
                 <button
                     v-if="default_usage_report"
                     @click="deleteSavedReport($event)"
-                    class="button_format"
+                    class="btn btn-default"
                 >
                     {{ $__("Delete report") }}
                 </button>
@@ -127,10 +127,3 @@ export default {
     name: "UsageStatisticsSaveReports",
 }
 </script>
-
-<style scoped>
-.button_format {
-    padding: 0.5em 1em;
-    margin-left: 0.5em;
-}
-</style>

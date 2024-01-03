@@ -340,19 +340,18 @@
 
                             [% IF (Koha.Preference( 'OPACViewOthersSuggestions' ) || loggedinusername) && (suggestions.size > 0 OR title_filter) %]
                                 [% SET can_delete_suggestion = 0 %]
-                                <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline d-print-none" id="search_suggestions_form" method="get">
-                                    <div class="form-row">
-                                        <div class="col-auto my-1">
+                                <form action="/cgi-bin/koha/opac-suggestions.pl" class="row" id="search_suggestions_form" method="get">
+                                        <div class="col-auto gx-2 ms-2 my-1">
                                             <label for="title_filter">Search for:</label>
                                         </div>
-                                        <div class="col-auto my-1">
+                                        <div class="col-auto gx-2 my-1">
                                             <input type="text" name="title_filter" id="title_filter" value="[% title_filter | html %]" size="30" class="form-control form-control-sm" />
                                         </div>
                                         [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) %]
                                             [% IF loggedinusername %]
-                                                <div class="col-auto my-1">
+                                                <div class="col-auto gx-2 my-1">
                                                     <label class="sr-only" for="suggested_by_anyone">Suggested by:</label>
-                                                    <select class="form-control form-control-sm" name="suggested_by_anyone" id="suggested_by_anyone">
+                                                    <select class="form-select form-select-sm" name="suggested_by_anyone" id="suggested_by_anyone">
                                                         [% IF suggested_by_anyone %]
                                                             <option value="0">Suggested by me</option>
                                                             <option value="1" selected="selected">Suggested by anyone</option>
@@ -364,10 +363,9 @@
                                                 </div>
                                             [% END %]
                                         [% END %]
-                                        <div class="col-auto my-1">
+                                        <div class="col-auto gx-2 my-1">
                                             <button type="submit" class="btn btn-sm btn-primary">Go</button>
                                         </div>
-                                    </div>
                                 </form>
                             [% END %]
                             [% IF suggestions.size > 0 %]

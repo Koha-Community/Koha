@@ -32,7 +32,7 @@
                     @delete="doDelete"
                 ></KohaTable>
             </div>
-            <div v-else class="dialog message">
+            <div v-else class="alert alert-info">
                 {{ $__("There are no titles defined") }}
             </div>
         </div>

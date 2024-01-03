@@ -170,7 +170,7 @@ function ParseFile(file) {
         $("#zipfile").prop("checked", true );
     } else {
         Output(
-            '<div class="dialog alert"><strong>' + __("Error:") + ' </strong> ' + __("This tool only accepts ZIP files or GIF, JPEG, PNG, or XPM images.") + '</div>'
+            '<div class="alert alert-warning"><strong>' + __("Error:") + ' </strong> ' + __("This tool only accepts ZIP files or GIF, JPEG, PNG, or XPM images.") + '</div>'
         );
         valid = false;
         resetForm();

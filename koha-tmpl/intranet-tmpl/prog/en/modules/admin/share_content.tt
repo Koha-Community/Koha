@@ -30,27 +30,26 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             [% INCLUDE 'messages.inc' %]
-            <div class="col-sm-6">
                 [% IF result.code != 201 && result.msg %]
-                    <div class="dialog alert" role="alert">
+                    <div class="alert alert-warning" role="alert">
                         [% result.msg | html %]
                     </div>
                 [% END %]
 
                 [% IF result.code == 201  %]
-                    <div class="dialog message" role="alert">
+                    <div class="alert alert-info" role="alert">
                         You successfully created your Mana KB account. Check your mailbox and follow instructions.
                     </div>
                 [% END %]
 
                 [% UNLESS (mana_url) %]
-                    <div class="dialog alert" role="alert">
+                    <div class="alert alert-warning" role="alert">
                         Mana configuration is currently empty. This feature will not work. Please contact your site administrator.
                     </div>
                 [% ELSIF (bad_url) %]
-                    <div class="dialog alert" role="alert">
+                    <div class="alert alert-warning" role="alert">
                         Cannot detect mana server at <strong>[% mana_url | url %]</strong>, please ask an administrator to check your configuration.
                     </div>
                 [% END %]
@@ -157,14 +156,13 @@
                         </form>
                     [% END %]
                 [% END # /IF mana_url && !bad_url %]
-            </div>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+            </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

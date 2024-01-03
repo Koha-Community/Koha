@@ -263,7 +263,7 @@ describe("Trains", () => {
         });
         cy.visit("/cgi-bin/koha/preservation/home.pl");
         cy.get("#navmenulist").contains("Trains").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );
 
@@ -319,7 +319,7 @@ describe("Trains", () => {
             error: "Something went wrong",
         });
         cy.get("#trains_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -329,7 +329,7 @@ describe("Trains", () => {
             body: train,
         });
         cy.get("#trains_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("Train created");
+        cy.get("main div[class='alert alert-info']").contains("Train created");
     });
 
     it("Edit train", () => {
@@ -362,7 +362,7 @@ describe("Trains", () => {
             statusCode: 500,
         });
         cy.get("#trains_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -376,7 +376,7 @@ describe("Trains", () => {
             body: [train],
         });
         cy.get("#trains_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("Train updated");
+        cy.get("main div[class='alert alert-info']").contains("Train updated");
     });
 
     it("Simple show train", () => {
@@ -493,7 +493,7 @@ describe("Trains", () => {
         );
         cy.get("#trains_list table tbody tr:first").contains("Delete").click();
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -508,7 +508,7 @@ describe("Trains", () => {
         );
         cy.get("#trains_list table tbody tr:first").contains("Delete").click();
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             `Train ${train.name} deleted`
         );
     });
@@ -532,7 +532,7 @@ describe("Trains", () => {
         cy.get("#barcode").type("bc_1");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
         cy.contains("Submit").click();
-        cy.get("div[class='dialog alert modal']").contains(
+        cy.get("div[class='alert alert-warning modal']").contains(
             "Cannot find item with this barcode. It must be in the waiting list."
         );
         cy.get("#close_modal").click();
@@ -634,7 +634,7 @@ describe("Trains", () => {
         cy.get("#barcode_list").type("bc_1\nbc_2");
         cy.contains("Submit").click();
         cy.wait("@get-items");
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "2 new items added."
         );
 
@@ -642,7 +642,7 @@ describe("Trains", () => {
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
         cy.contains("Submit").click();
         cy.wait("@get-items");
-        cy.get("main div[class='dialog alert modal']").contains(
+        cy.get("main div[class='alert alert-warning modal']").contains(
             "2 new items added. 1 items not found."
         );
         cy.get("#close_modal").click();
@@ -674,7 +674,7 @@ describe("Trains", () => {
         );
         cy.intercept("GET", "/api/v1/preservation/trains/1", train);
         cy.contains("Submit").click(); // Submit add items form
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             `2 items have been added to train ${train.train_id}.`
         );
     });

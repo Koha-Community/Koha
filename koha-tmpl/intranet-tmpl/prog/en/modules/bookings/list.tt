@@ -35,7 +35,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 <div class="row">
                     [% INCLUDE 'messages.inc' %]
@@ -51,13 +51,13 @@
                     </div>
                 </div>
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'biblio-view-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
     </div> <!-- /.row -->
 
     [% INCLUDE modals/cancel_booking.inc %]
@@ -291,8 +291,8 @@
                 "render": function(data, type, row, meta) {
                     let result = "";
                     [% IF CAN_user_circulate_manage_bookings %]
-                    result += '<button type="button" class="btn btn-default btn-xs edit-action" data-toggle="modal" data-target="#placeBookingModal" data-booking="'+row.booking_id+'" data-biblionumber="[% biblionumber | uri %]" data-itemnumber="'+row.item_id+'" data-patron="'+row.patron_id+'" data-pickup_library="'+row.pickup_library_id+'" data-start_date="'+row.start_date+'" data-end_date="'+row.end_date+'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</button>';
-                    result += '<button type="button" class="btn btn-default btn-xs cancel-action" data-toggle="modal" data-target="#cancelBookingModal" data-booking="'+row.booking_id+'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</button>';
+                    result += '<button type="button" class="btn btn-default btn-xs edit-action" data-bs-toggle="modal" data-bs-target="#placeBookingModal" data-booking="'+row.booking_id+'" data-biblionumber="[% biblionumber | uri %]" data-itemnumber="'+row.item_id+'" data-patron="'+row.patron_id+'" data-pickup_library="'+row.pickup_library_id+'" data-start_date="'+row.start_date+'" data-end_date="'+row.end_date+'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</button>';
+                    result += '<button type="button" class="btn btn-default btn-xs cancel-action" data-bs-toggle="modal" data-bs-target="#cancelBookingModal" data-booking="'+row.booking_id+'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</button>';
                     [% END %]
                     return result;
                 }

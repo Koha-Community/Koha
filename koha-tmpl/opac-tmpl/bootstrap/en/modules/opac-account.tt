@@ -12,9 +12,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Your charges &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %]
-    [% Asset.css("css/datatables.css") | $raw %]
-[% END %]
+[% BLOCK cssinclude %][% END %]
 </head>
 
 [% INCLUDE 'bodytag.inc' bodyid='opac-account' bodyclass='scrollto' %]

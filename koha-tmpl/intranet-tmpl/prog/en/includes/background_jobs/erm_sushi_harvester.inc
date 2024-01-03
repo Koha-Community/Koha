@@ -4,7 +4,7 @@
 [% BLOCK report %]
     [% SET report = job.report %]
     [% IF report %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF job.status == 'finished' %]
                 <table id="finishedtable">
                     <tr>
@@ -76,7 +76,7 @@
 
 [% BLOCK detail %]
     [% FOR m IN job.messages %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             [% IF m.type == 'success' %]
                 <i class="fa fa-check success"></i>
             [% ELSIF m.type == 'warning' %]

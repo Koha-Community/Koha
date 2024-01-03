@@ -32,16 +32,16 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
             <h1>OPAC problem reports</h1>
 
-            <div class="dialog alert" id="error" style="display:none;"></div>
+            <div class="alert alert-warning" id="error" style="display:none;"></div>
 
             [% IF ( selected_count ) %]
-                <div class="dialog message">
+                <div class="alert alert-info">
                     [% IF ( action == 'cud-mark_selected-viewed' ) %]
                         <span>[% selected_count | html %] problem report(s) marked as viewed.</span>
                     [% ELSIF ( action == 'cud-mark_selected-closed' ) %]
@@ -129,17 +129,17 @@
                 </form>
 
             [% ELSE %]
-                <div class="dialog message">There are currently no problem reports.</div>
+                <div class="alert alert-info">There are currently no problem reports.</div>
             [% END %] <!-- problem reports -->
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
 
     </div> <!-- /.row -->
 

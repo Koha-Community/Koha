@@ -1,4 +1,5 @@
-$('body').on('click', '.return-claim-tools-resolve', function() {
+$('body').on('click', '.return-claim-tools-resolve', function(e) {
+    e.preventDefault();
     let id = $(this).data('return-claim-id');
     let current_lost_status = $(this).data('current-lost-status');
 
@@ -6,7 +7,7 @@ $('body').on('click', '.return-claim-tools-resolve', function() {
     $("#new_lost_status").val(current_lost_status);
     let selected_option = $("#new_lost_status option:selected");
     $(selected_option).text(__("%s (current status)").format($(selected_option).text()));
-    $('#claims-returned-resolved-modal').modal()
+    $('#claims-returned-resolved-modal').modal('show')
 });
 
 $(document).on('click', '#claims-returned-resolved-modal-btn-submit', function(e) {

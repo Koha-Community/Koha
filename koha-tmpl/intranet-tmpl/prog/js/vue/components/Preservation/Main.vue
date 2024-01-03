@@ -6,14 +6,14 @@
         </div>
         <div class="main container-fluid">
             <div class="row">
-                <div class="col-sm-10 col-sm-push-2">
+                <div class="col-md-10 order-md-2 order-sm-1">
                     <main>
                         <Dialog />
                         <router-view />
                     </main>
                 </div>
 
-                <div class="col-sm-2 col-sm-pull-10">
+                <div class="col-md-2 order-sm-2 order-md-1">
                     <LeftMenu :title="$__('Preservation')"></LeftMenu>
                 </div>
             </div>

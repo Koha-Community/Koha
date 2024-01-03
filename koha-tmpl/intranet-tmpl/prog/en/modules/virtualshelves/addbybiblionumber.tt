@@ -13,7 +13,7 @@
     <div class="container-fluid">
 
 [% UNLESS (authorized) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h1>Error adding to list</h1>
         [% IF (errcode==1) %]<p>Could not create a new list. Please check the name.</p>[% END %]
         [% IF (errcode==2) %]<p>Sorry, you do not have permission to add items to this list.</p>[% END %]
@@ -113,7 +113,7 @@
 [% END %]
 
         <input type="hidden" name="sortfield" value="title" />
-        <nav class="navbar navbar-default navbar-fixed-bottom">
+        <nav class="navbar navbar-default fixed-bottom">
             <div class="container-fluid">
                 <fieldset class="action">
                     <input type="hidden" name="op" value="cud-add" />

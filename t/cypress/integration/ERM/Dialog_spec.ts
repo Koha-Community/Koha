@@ -56,7 +56,7 @@ describe("Dialog operations", () => {
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Packages").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: This is a specific error message"
         );
 
@@ -65,17 +65,17 @@ describe("Dialog operations", () => {
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Packages").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
         cy.intercept("GET", "/api/v1/erm/agreements*", []);
         cy.get("#navmenulist").contains("Agreements").click();
         // Info messages should be cleared when view is changed
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "There are no agreements defined"
         );
-        cy.get("main div[class='dialog message']").should("have.length", 1);
+        cy.get("main div[class='alert alert-info']").should("have.length", 1);
     });
 
     it("...created!", () => {
@@ -102,9 +102,11 @@ describe("Dialog operations", () => {
             },
         });
         cy.get("#packages_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("Package created");
+        cy.get("main div[class='alert alert-info']").contains(
+            "Package created"
+        );
         cy.get("#package_list_result").should("exist");
-        cy.get("main div[class='dialog message']").should("have.length", 1);
+        cy.get("main div[class='alert alert-info']").should("have.length", 1);
 
         cy.intercept("GET", "/api/v1/erm/eholdings/local/titles*", {
             statusCode: 200,
@@ -116,7 +118,7 @@ describe("Dialog operations", () => {
         });
         cy.get("#navmenulist").contains("Titles").click();
         // Info messages should be cleared when view is changed
-        cy.get("main div[class='dialog message']").should("not.exist");
+        cy.get("main div[class='alert alert-info']").should("not.exist");
     });
 
     it("Confirmation messages", () => {
@@ -145,16 +147,20 @@ describe("Dialog operations", () => {
 
         cy.get("#packages_list table tbody tr:first").contains("Edit").click();
         cy.get("#packages_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains("Package updated");
-        cy.get("main div[class='dialog message']").should("have.length", 1);
+        cy.get("main div[class='alert alert-info']").contains(
+            "Package updated"
+        );
+        cy.get("main div[class='alert alert-info']").should("have.length", 1);
 
         cy.get("#packages_list table tbody tr:first")
             .contains("Delete")
             .click();
         cy.contains("No, do not delete").click();
         cy.get(".dialog.alert.confirmation h1").should("not.exist");
-        cy.get("main div[class='dialog message']").contains("Package updated");
-        cy.get("main div[class='dialog message']").should("have.length", 1);
+        cy.get("main div[class='alert alert-info']").contains(
+            "Package updated"
+        );
+        cy.get("main div[class='alert alert-info']").should("have.length", 1);
 
         cy.intercept("DELETE", "/api/v1/erm/eholdings/local/packages/*", {
             statusCode: 204,
@@ -165,9 +171,9 @@ describe("Dialog operations", () => {
             .click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this package");
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']")
+        cy.get("main div[class='alert alert-info']")
             .contains("Local package")
             .contains("deleted");
-        cy.get("main div[class='dialog message']").should("have.length", 1);
+        cy.get("main div[class='alert alert-info']").should("have.length", 1);
     });
 });

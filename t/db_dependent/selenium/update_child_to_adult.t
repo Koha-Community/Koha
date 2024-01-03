@@ -113,7 +113,7 @@ subtest 'Update child to patron' => sub {
         $driver->find_element('//div[@id="toolbar"]/div[@class="btn-group"][last()]')->click; # More button group
         my $update_link = $driver->find_element('//a[@id="updatechild"]');
 
-        is($update_link->get_attribute('data-toggle'), undef, 'The update link should not have a data-toggle attribute => not a tooltip and can be clickable');
+        is($update_link->get_attribute('data-bs-toggle'), undef, 'The update link should not have a data-bs-toggle attribute => not a tooltip and can be clickable');
         $update_link->click;
         like( $driver->get_current_url, qr{/members/moremember\.pl\?borrowernumber=$child_borrowernumber\#$}, 'Current window has a "#" in the URL, event has been triggered');
 
@@ -139,7 +139,7 @@ subtest 'Update child to patron' => sub {
         $driver->find_element('//div[@id="toolbar"]/div[@class="btn-group"][last()]')->click; # More button group
 
         my $update_link = $driver->find_element('//a[@id="updatechild"]');
-        is($update_link->get_attribute('data-toggle', 1), 'tooltip', q|The update link should have a data-toggle attribute => it's a tooltip, not clickable|);
+        is($update_link->get_attribute('data-bs-toggle', 1), 'tooltip', q|The update link should have a data-bs-toggle attribute => it's a tooltip, not clickable|);
         $update_link->click;
         like( $driver->get_current_url, qr{/members/moremember\.pl\?borrowernumber=$adult_borrowernumber$}, 'After clicking the link, nothing happens, no # in the URL');
     };

@@ -20,18 +20,18 @@
 [% BLOCK actions %]
     <div id="[% menuid | html %]" class="btn-group dropup">
     <span>
-        <a class="btn btn-default btn-xs dropdown-toggle ar-actions" role="button" data-toggle="dropdown" href="#">
-            Actions <b class="caret"></b>
+        <a class="btn btn-default btn-xs dropdown-toggle ar-actions" role="button" data-bs-toggle="dropdown" href="#">
+            Actions
         </a>
 
         <ul class="dropdown-menu [% pull_right | html %]" role="menu" aria-labelledby="[% aria_menu | html %]">
             <li>
-                <a class="ar-set-pending-request" data-ar-id="[% id_arg | uri %]" href="#">
+                <a class="ar-set-pending-request dropdown-item" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-bars"></i>
                     Set request as pending
                 </a>
 
-                <a class="ar-process-request" data-ar-id="[% id_arg | uri %]" href="#">
+                <a class="ar-process-request dropdown-item" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-cog"></i>
                     Process request
                 </a>
@@ -43,23 +43,23 @@
                 </a>
                 [% END %]
 
-                <a class="ar-complete-request" href="#" data-ar-id="[% id_arg | uri %]" href="#">
+                <a class="ar-complete-request dropdown-item" href="#" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-check-circle"></i>
                     Complete request
                 </a>
 
-                <a class="ar-cancel-request" href="#" data-ar-id="[% id_arg | uri %]" href="#">
+                <a class="ar-cancel-request dropdown-item" href="#" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-minus-circle"></i>
                     Cancel request
                 </a>
 
                 [% IF id_arg %]
-                <a class="ar-print-request" href="#" data-ar-id="[% id_arg | uri %]" href="#">
+                <a class="ar-print-request dropdown-item" href="#" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-print"></i>
                     Print slip
                 </a>
                 [% ELSE %]
-                <a class="ar-print-multiple-requests" href="#">
+                <a class="ar-print-multiple-requests dropdown-item" href="#">
                     <i class="fa fa-print"></i>
                     Print slip
                 </a>
@@ -78,29 +78,29 @@
     [% END %]
 [% END %]
 [% BLOCK urls_modal %]
-    <div id="myModal" class="modal fade modal-lg" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-             <h4 class="modal-title">Edit URL(s)</h4>
-          </div>
-          <div class="modal-body">
-            <textarea id="urls" style="width:100%;"></textarea>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
-          </div>
+    <div id="myModal" class="modal modal-lg" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title">Edit URL(s)</h1>
+                </div>
+                <div class="modal-body">
+                    <textarea id="urls" style="width:100%;"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Save</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 [% END %]
 [% BLOCK cancel_modal %]
     <div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3>Confirm deletion</h3>
+                    <h1 class="modal-title">Confirm deletion</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
@@ -125,8 +125,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger" data-dismiss="modal">Confirm cancellation</button>
-                    <a href="#" data-dismiss="modal">Cancel</a>
+                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger" data-bs-dismiss="modal">Confirm cancellation</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -154,7 +154,7 @@
 
                 [% INCLUDE 'messages.inc' %]
             [% IF Koha.Preference('CircSidebar') %]
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
             [% ELSE %]
             <div class="col-md-12 col-lg-10 col-lg-offset-1">
             [% END %]
@@ -514,7 +514,7 @@
             </div>
 
             [% IF Koha.Preference('CircSidebar') %]
-            <div class="col-sm-2 col-sm-pull-10">
+            <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
                     [% INCLUDE 'circ-nav.inc' %]
                 </aside>
@@ -531,7 +531,7 @@
         var last_cancel_reason, requested_datatable, pending_datatable, processing_datatable, active_datatable;
         $(document).ready(function() {
 
-            $("#article-request-tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+            $("#article-request-tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                 active_tab = e.target.hash;
                 if( active_tab == "#article-requests-requested_panel" ){
                     active_datatable = requested_datatable;
@@ -682,7 +682,7 @@
             cancel_id = id;
             cancel_a = a;
 
-            $('#cancelModal').modal();
+            $('#cancelModal').modal('show');
         }
         $(".ar-cancel-request").on("click", function (e){
             e.preventDefault();

@@ -28,7 +28,7 @@
                 @test_connection="test_harvester_connection"
             ></KohaTable>
         </div>
-        <div v-else-if="initialized" class="dialog message">
+        <div v-else-if="initialized" class="alert alert-info">
             {{ $__("There are no usage data providers defined") }}
         </div>
     </div>

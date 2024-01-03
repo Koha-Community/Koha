@@ -38,15 +38,15 @@
                     [% IF ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
                         <li class="nav-item js-show">
                             <a href="#" class="nav-link" title="Collect items you are interested in" id="cartmenulink" role="button" aria-label="Cart">
-                                <i id="carticon" class="fa fa-shopping-cart fa-icon-black" aria-hidden="true"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span>
+                                <i id="carticon" class="fa fa-shopping-cart fa-fw fa-icon-black" aria-hidden="true"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span>
                             </a>
                         </li>
                     [% END %]
                     <li class="divider-vertical"></li>
                     [% IF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
                         <li class="nav-item dropdown">
-                            <a href="/cgi-bin/koha/opac-shelves.pl" title="Show lists" class="nav-link dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button" aria-label="Lists" aria-haspopup="true" aria-expanded="false"
-                                ><i class="fa fa-list fa-icon-black" aria-hidden="true"></i> <span class="listslabel">Lists</span>
+                            <a href="/cgi-bin/koha/opac-shelves.pl" title="Show lists" class="nav-link dropdown-toggle" id="listsmenu" data-bs-toggle="dropdown" role="button" aria-label="Lists" aria-haspopup="true" aria-expanded="false"
+                                ><i class="fa fa-list fa-fw fa-icon-black" aria-hidden="true"></i> <span class="listslabel">Lists</span>
                             </a>
                             <div aria-labelledby="listsmenu" role="menu" class="dropdown-menu">
                                 [% IF some_public_shelves.count %]
@@ -90,7 +90,7 @@
                     [% END # / IF virtualshelves %]
                     [% IF Koha.Preference( 'OpacTrustedCheckout' ) %]
                         <li class="nav-item">
-                            <a href="#" class="nav-link" title="Self check out" id="comenulink" role="button" data-toggle="modal" data-target="#checkoutModal">
+                            <a href="#" class="nav-link" title="Self check out" id="comenulink" role="button" data-bs-toggle="modal" data-bs-target="#checkoutModal">
                                 <i id="checkout-icon" class="fa fa-barcode fa-icon-black" aria-hidden="true"></i> <span class="checkout-label">Self checkout</span>
                             </a>
                         </li>
@@ -100,13 +100,14 @@
             [% END # /IF OpacPublic %]
             [% IF Koha.Preference( 'opacuserlogin' ) == 1 ||  Koha.Preference( 'EnableOpacSearchHistory') || Koha.Preference( 'opaclanguagesdisplay' ) %]
                 [% IF ( Koha.Preference( 'opaclanguagesdisplay' ) ) %]
-                    [% INCLUDE 'masthead-langmenu.inc' %]
+                    [% context = "header" %]
+                    [% INCLUDE 'langmenu.inc' %]
                 [% END %]
                 <ul id="members" class="navbar-nav">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown dropdown-menu-end">
                         [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                             [% IF ( loggedinusername ) %]
-                                <a href="/cgi-bin/koha/opac-user.pl" class="dropdown-toggle" id="user-menu" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <a href="/cgi-bin/koha/opac-user.pl" class="nav-link dropdown-toggle" id="user-menu" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i>
                                     <span class="userlabel">Welcome, [% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span>
                                 </a>
@@ -118,13 +119,13 @@
                                 [% ELSIF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
                                     <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="nav-link login-link loginModal-trigger" aria-label="Log in to your account"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                 [% ELSE %]
-                                    <a href="/cgi-bin/koha/opac-user.pl" class="nav-link login-link loginModal-trigger" aria-label="Log in to your account"><i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
+                                    <a href="/cgi-bin/koha/opac-user.pl" class="nav-link login-link loginModal-trigger" aria-label="Log in to your account"><i class="fa fa-user fa-fw fa-icon-black fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                 [% END %]
                             [% END %]
                         [% END %]
 
                         [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 && loggedinusername ) %]
-                            <div aria-labelledby="user-menu" role="menu" class="dropdown-menu dropdown-menu-right">
+                            <div aria-labelledby="user-menu" role="menu" class="dropdown-menu dropdown-menu-end">
                                 <div id="loggedinuser-menu">
                                     <p>
                                         <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername" data-borrowernumber="[% logged_in_user.borrowernumber | html %]" data-branchcode="[% logged_in_user.branchcode | html %]" data-categorycode="[% logged_in_user.categorycode | html %]">Your account</span></a>
@@ -146,7 +147,7 @@
                         <li style="display:none" id="cookieConsentDivider" class="divider-vertical" aria-hidden="true"></li>
                         <li style="display:none" id="cookieConsentLi" class="nav-item" aria-hidden="true">
                             <a id="cookieConsentButton" href="#" name="Your cookies" class="nav-link" title="View and amend cookies you have consented to" role="button">
-                                <i class="fa fa-cookie-bite" aria-hidden="true"></i>
+                                <i class="fa fa-cookie-bite fa-fw fa-icon-black" aria-hidden="true"></i>
                                 <span class="cookieconsentlabel">Your cookies</span>
                             </a>
                         </li>
@@ -155,11 +156,10 @@
                         [% IF Koha.Preference( 'EnableOpacSearchHistory' ) %]
                             <li class="divider-vertical"></li>
                             <li class="nav-item search_history">
-                                <a class="nav-link login-link" href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a>
-                            </li>
-                            <li class="divider-vertical"></li>
-                            <li class="nav-item">
-                                <a class="nav-link logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash-can" aria-hidden="true"></i> Clear</a>
+                                <a class="nav-link" href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">
+                                    <i class="fa fa-calendar-days fa-fw fa-icon-black" aria-hidden="true"></i>
+                                    <span class="search_history_label">Search history</span>
+                                </a>
                             </li>
                         [% END %]
                     [% END %]
@@ -189,9 +189,9 @@
                                     [% PROCESS koha_news_block news => OpacCustomSearch %]
                                 [% ELSE %]
                                     <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
-                                        <div class="form-row align-items-center">
+                                        <div class="row gx-2">
                                             <div class="col-sm-auto order-2 order-sm-2">
-                                                <select name="idx" id="masthead_search" class="form-control">
+                                                <select name="idx" id="masthead_search" class="form-select">
                                                     [% IF ( ms_kw ) %]
                                                         <option selected="selected" value="" data-placeholder="[% t("Search the catalog by keyword") | html %]">Library catalog</option>
                                                     [% ELSE %]
@@ -245,7 +245,7 @@
 
                                             <div class="col order-4 order-sm-3">
                                                 [% IF ( !Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 && mylibraryfirst ) %]
-                                                    <input type="text" class="transl1 form-control form-control-filtered" id="translControl1" name="q" value="[% ms_value | html %]" data-toggle="tooltip" data-placement="top" title="Searching in [% Branches.GetName( mylibraryfirst ) | html %] only" placeholder="Search the catalog by keyword" /><span id="translControl"></span>
+                                                    <input type="text" class="transl1 form-control form-control-filtered" id="translControl1" name="q" value="[% ms_value | html %]" data-bs-toggle="tooltip" data-bs-placement="top" title="Searching in [% Branches.GetName( mylibraryfirst ) | html %] only" placeholder="Search the catalog by keyword" /><span id="translControl"></span>
                                                 [% ELSE %]
                                                     <input type="text" class="transl1 form-control" id="translControl1" name="q" value="[% ms_value | html %]" placeholder="Search the catalog by keyword" /><span id="translControl"></span>
                                                 [% END # /ms_value %]
@@ -253,7 +253,7 @@
 
                                             [% IF ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
                                                 <div class="col-sm col-md-3 col-lg-2 order-3 order-sm-4">
-                                                    <select name="limit" id="select_library" class="form-control">
+                                                    <select name="limit" id="select_library" class="form-select">
                                                         <option value="">All libraries</option>
 
                                                         [% IF LibrarySearchGroups %]<optgroup label="Libraries">[% END %]
@@ -386,10 +386,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title" id="modalLoginLabel">Log in to your account</h2>
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h1 class="modal-title" id="modalLoginLabel">Log in to your account</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
                     [% INCLUDE 'csrf-token.inc' %]
@@ -484,7 +482,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title" id="cookieConsentModalLabel">Cookies policy</h2>
+                        <h1 class="modal-title" id="cookieConsentModalLabel">Cookies policy</h1>
                     </div>
                     <div class="modal-body">
                         [% IF ( CookieConsentPopup ) %]

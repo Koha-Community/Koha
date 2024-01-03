@@ -32,7 +32,7 @@
 
                 <div>
                     <label for="searchtype" class="control-label">Search type</label>
-                    <select name="searchtype" id="searchtype" class="form-control">
+                    <select name="searchtype" id="searchtype" class="form-select">
                         [% IF searchtype == 'starts_with' %]
                             <option value='starts_with' selected='selected'>Starts with</option>
                             <option value='contains'>Contains</option>
@@ -46,7 +46,7 @@
                 <div>
                     [% SET branches = Branches.all( selected => branchcode_filter, only_from_group => 1 ) %]
                     <label for="branchcode" class="control-label">Library</label>
-                    <select name="branchcode_filter" id="branchcode" class="form-control">
+                    <select name="branchcode_filter" id="branchcode" class="form-select">
                         [% IF branches.size != 1 %]
                             <option value="">Any</option>
                         [% END %]
@@ -57,7 +57,7 @@
                 <div>
                     [% SET categories = Categories.all() %]
                     <label for="categorycode" class="control-label">Category</label>
-                    <select name="categorycode_filter" id="categorycode" class="form-control">
+                    <select name="categorycode_filter" id="categorycode" class="form-select">
                         <option value="">Any</option>
                         [% FOREACH category IN categories %]
                             [% IF category.categorycode == categorycode_filter %]

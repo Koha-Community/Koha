@@ -135,7 +135,7 @@ var Select2Utils = {
                                 $("#avCreate input[name='description']").val(e.params.data.text);
 
                                 $(this).val($(this).find("option:first").val()).trigger('change');
-                                $('#avCreate').modal({show:true});
+                                $('#avCreate').modal("show");
                             }
                         }).on("select2:clear", function () {
                             $(this).on("select2:opening.cancelOpen", function (evt) {

@@ -6,35 +6,35 @@
 [% SET footerjs = 1 %]
 [%- BLOCK action_menu %]
     <div class="btn-group dropup">
-        <a class="btn btn-default btn-xs dropdown-toggle" id="budgetmenu_[% block_budget.budget_period_id | html %]" role="button" data-toggle="dropdown" href="#">
-           Actions <b class="caret"></b>
+        <a class="btn btn-default btn-xs dropdown-toggle" id="budgetmenu_[% block_budget.budget_period_id | html %]" role="button" data-bs-toggle="dropdown" href="#">
+           Actions
         </a>
-        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetmenu_[% block_budget.budget_period_id | html %]">
+        <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="budgetmenu_[% block_budget.budget_period_id | html %]">
               <li>
-                  <a href="[% script_name | url %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                  <a class="dropdown-item" href="[% script_name | url %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
               </li>
               [% IF block_budget.count %]
                   <li class="disabled">
-                      <a data-toggle="tooltip" data-placement="left" title="[% block_budget.count | html %] fund(s) are attached to this budget. You must delete all attached funds before deleting this budget." href="#"><i class="fa fa-trash-can"></i> Delete</a>
+                      <a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="[% block_budget.count | html %] fund(s) are attached to this budget. You must delete all attached funds before deleting this budget." href="#"><i class="fa fa-trash-can"></i> Delete</a>
                   </li>
               [% ELSE %]
                   <li>
-                      <a href="[% script_name | url %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
+                      <a class="dropdown-item" href="[% script_name | url %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
                   </li>
               [% END %]
               <li>
-                  <a href="[% script_name | url %]?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
+                  <a class="dropdown-item" href="[% script_name | url %]?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
               </li>
               <li>
-                  <a href="[% script_name | url %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
+                  <a class="dropdown-item" href="[% script_name | url %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
               </li>
             [% IF ( block_budget.budget_period_locked ) %]
                 <li class="disabled">
-                    <a data-toggle="tooltip" data-placement="left" title="Budget is locked" href="#"><i class="fa fa-plus"></i> Add fund</a>
+                    <a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="Budget is locked" href="#"><i class="fa fa-plus"></i> Add fund</a>
                 </li>
             [% ELSE %]
                 <li>
-                    <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add fund</a>
+                    <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add fund</a>
                 </li>
             [% END %]
         </ul>
@@ -145,7 +145,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -302,16 +302,16 @@
 
 [% IF ( delete_confirm ) %]
     [% IF ( total ) %]
-        <div class="dialog message">
+        <div class="alert alert-info">
         <h1>Cannot delete budget</h1>
         <p><strong>This record is used [% total | html %] times</strong>.
         Deletion is not possible.</p>
     [% ELSIF ( funds_exist ) %]
-        <div class="dialog message">
+        <div class="alert alert-info">
         <h1>Cannot delete budget</h1>
         <p>This budget has funds attached. You must delete all attached funds before you can delete this budget.</p>
     [% ELSE %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
         <h1>[% tx("Confirm deletion of budget '{budget_period_description}'?", { budget_period_description = budget_period_description }) | html %]</h1>
 
     <!-- ############################################################# -->
@@ -322,11 +322,11 @@
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="cud-delete_confirmed" />
         <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
-        <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+        <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
     </form>
     <form action="[% script_name | html %]" method="post">
         [% INCLUDE 'csrf-token.inc' %]
-        <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+        <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
     </form>
     [% END %]
 
@@ -336,13 +336,13 @@
 [% IF close_form %]
 <h1>[% tx("Close budget '{budget_period_description}'", { budget_period_description = budget_period_description }) | html %]</h1>
     [% IF budget_periods.size == 0 %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             <p>You cannot move funds of this budget, there is no active budget.</p>
             <p>Please create a new active budget and retry.</p>
             <a class="btn btn-default" href="/cgi-bin/koha/admin/aqbudgetperiods.pl"><i class="fa fa-fw fa-arrow-left"></i> Return to budgets</a>
         </div>
     [% ELSIF number_of_unreceived_orders == 0 %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             <h2>Cannot close budget</h2>
             <p>There are no unreceived orders for this budget.</p>
             <a class="btn btn-default"  href="/cgi-bin/koha/admin/aqbudgetperiods.pl"><i class="fa fa-fw fa-arrow-left"></i> Return to budgets</a>
@@ -457,7 +457,7 @@
   <h1>Budgets</h1>
 
     [% IF ( failed_delete_funds_exist ) %]
-        <div class="dialog message">Failed to delete budget because funds exist.</div>
+        <div class="alert alert-info">Failed to delete budget because funds exist.</div>
     [% END %]
 
     [% INCLUDE 'budgets-active-currency.inc' %]
@@ -545,13 +545,13 @@
 [% END # /IF else %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'acquisitions-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -567,7 +567,7 @@
                 $("#budgetsTabs li:eq([% tab | html %]) a").tab("show");
             [% END %]
 
-            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-bs-toggle="tooltip"]').tooltip();
 
             $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "columnDefs": [

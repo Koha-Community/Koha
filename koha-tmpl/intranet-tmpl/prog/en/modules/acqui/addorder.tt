@@ -24,7 +24,7 @@
           [% END %]
           <input type="hidden" name="op" value="cud-addorder">
           <input type="hidden" name="confirm_budget_exceeding" value="1" />
-          <div class="dialog alert">
+          <div class="alert alert-warning">
             [% IF (budget_exceeded) %]
               <p>Warning! Order total amount exceeds allowed budget.</p>
             [% END %]
@@ -35,8 +35,8 @@
               <p>Warning! You will exceed maximum limit ([% expenditure | html %][% IF (currency) %] [% currency | html %][% END %]) for your fund.</p>
             [% END %]
             <p>Do you want to confirm this order?</p>
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, I confirm</button>
-            <button type="button" class="deny" onclick="window.location.href = '[% referer | html %]'"><i class="fa fa-fw fa-times"></i> No, I don't confirm</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, I confirm</button>
+            <button type="button" class="btn btn-default deny" onclick="window.location.href = '[% referer | html %]'"><i class="fa fa-fw fa-times"></i> No, I don't confirm</button>
           </div>
         </form>
       [% END %]

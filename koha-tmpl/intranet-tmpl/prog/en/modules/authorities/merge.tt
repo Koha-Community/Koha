@@ -35,7 +35,7 @@ div#result { margin-top: 1em; }
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-lg-8 offset-lg-2 col-xl-12 offset-xl-0">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -44,7 +44,7 @@ div#result { margin-top: 1em; }
 [% IF ( errors ) %]
 
     [% FOREACH error IN errors %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             [% IF error.code == 'WRONG_COUNT' %]
                 <span>Number of records provided for merging: [% error.value | html %]. Currently only 2 records can be merged at a time.</span>
             [% ELSIF error.code == 'DESTRUCTIVE_MERGE' %]
@@ -119,7 +119,7 @@ div#result { margin-top: 1em; }
 <input type="hidden" name="frameworkcode" value="[% framework | html %]" />
 
 [% IF multipleauthtypes %]
-    <div class="dialog alert multiple-auth-types">Multiple authority types are used. There may be data loss when merging.</div>
+    <div class="alert alert-warning multiple-auth-types">Multiple authority types are used. There may be data loss when merging.</div>
 [% END %]
 
 <fieldset class="action">
@@ -131,7 +131,7 @@ div#result { margin-top: 1em; }
 [% END %]
 
         </main>
-    </div> <!-- /.col-md-8 col-md-offset-2 -->
+    </div> <!-- /.col-md-8 offset-md-2 -->
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

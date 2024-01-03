@@ -24,7 +24,7 @@
                 <div class="form-extra-content">
                     <label for="filter_budgetbranch">Library</label>
 
-                    <select name="filter_budgetbranch" id="filter_budgetbranch" class="form-control">
+                    <select name="filter_budgetbranch" id="filter_budgetbranch" class="form-select">
                         <option value="">All libraries</option>
                         [% FOREACH branchloo IN Branches.all( selected => selected_branchcode ) %]
                             [% IF branchloo.selected %]

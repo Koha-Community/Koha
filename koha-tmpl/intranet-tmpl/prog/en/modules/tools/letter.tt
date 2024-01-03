@@ -45,6 +45,8 @@
         .panel-body fieldset.rows {
             border: 0;
             background: transparent none;
+            clear: none;
+            float: none;
             margin: 0 0 .5em 0;
         }
         #tabs,
@@ -116,8 +118,8 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="preview_template_label">Preview notice template</h3>
+                    <h1 class="modal-title" id="preview_template_label">Preview notice template</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="loading">
@@ -125,8 +127,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!-- TODO <a href="#" class="btn btn-default" id="preview_template_button" role="button" data-toggle="modal">Convert using the Template Toolkit syntax</a>-->
-                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <!-- TODO <a href="#" class="btn btn-default" id="preview_template_button" role="button" data-bs-toggle="modal">Convert using the Template Toolkit syntax</a>-->
+                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                 </div>
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
@@ -137,17 +139,15 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h3 class="modal-title" id="noticeSampleModalLabel">Default template</h3>
+                    <h1 class="modal-title" id="noticeSampleModalLabel">Default template</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <pre class="template-body"></pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary copy">Copy to template</button>
-                    <button type="button" class="btn btn-default deny cancel" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                    <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                 </div>
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
@@ -156,11 +156,11 @@
     [% IF add_form or copy_form %]
         <div class="main container-fluid">
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-8 offset-md-2">
     [% ELSE %]
         <div class="main container-fluid">
             <div class="row">
-                <div class="col-sm-10 col-sm-push-2">
+                <div class="col-md-10 order-md-2 order-sm-1">
                     <main>
                         [% INCLUDE 'messages.inc' %]
     [% END %]
@@ -185,24 +185,24 @@
 
                     <div id="toolbar" class="btn-toolbar">
                         <div class="btn-group">
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New notice <span class="caret"></span></button>
+                            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> New notice</button>
                             <ul class="dropdown-menu">
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=acquisition">Acquisition</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=catalogue">Catalog</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=circulation">Circulation</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=claimacquisition">Claim acquisition</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=claimissues">Claim serial issue</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=reserves">Holds</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=ill">Interlibrary loans</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=orderacquisition">Order acquisition</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=members">Patrons</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=patron_slip">Patrons (custom slip)</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=add_message">Patrons (custom message)</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=preservation">Preservation</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=serial">Serials (new issue)</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=suggestions">Suggestions</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=pos">Point of sale</a></li>
-                                <li><a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=report">Reports</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=acquisition">Acquisition</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=catalogue">Catalog</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=circulation">Circulation</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=claimacquisition">Claim acquisition</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=claimissues">Claim serial issue</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=reserves">Holds</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=ill">Interlibrary loans</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=orderacquisition">Order acquisition</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=members">Patrons</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=patron_slip">Patrons (custom slip)</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=add_message">Patrons (custom message)</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=preservation">Preservation</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=serial">Serials (new issue)</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=suggestions">Suggestions</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=pos">Point of sale</a></li>
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=report">Reports</a></li>
                             </ul>
                         </div>
                     </div> <!-- /#toolbar -->
@@ -301,7 +301,7 @@
                             </table> <!-- /#lettert -->
                         </div><!-- /.page-section -->
                     [% ELSE # IF lette %]
-                        <div class="dialog message">
+                        <div class="alert alert-info">
                             [% IF ( branchcode ) %]
                                 <p>There are no notices for this library.</p>
                             [% ELSE %]
@@ -323,11 +323,9 @@
                     <div id="toolbar" class="btn-toolbar">
                         <div class="btn-group">
                             <button class="btn btn-primary" id="submit_form"><i class="fa fa-save"></i> Save</button>
-                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a id="saveandcontinue" href="#">Save and continue editing</a></li>
+                            <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" id="saveandcontinue" href="#">Save and continue editing</a></li>
                             </ul>
                         </div>
                         <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/letter.pl"><i class="fa fa-times"></i> Cancel</a>
@@ -553,7 +551,7 @@
                 [% END %]
 
                 [% IF ( delete_confirm ) %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <h1>Delete notice?</h1>
                         <table>
                             <thead>
@@ -577,11 +575,11 @@
                             <input type="hidden" name="branchcode" value="[% letter.branchcode | html %]" />
                             <input type="hidden" name="code" value="[% letter.code | html %]" />
                             <input type="hidden" name="module" value="[% letter.module | html %]" />
-                            <button type="submit" class="approve"><i class="fa fa-check"></i> Yes, delete</button>
+                            <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Yes, delete</button>
                         </form>
 
                         <form action="[% action | html %]" method="get">
-                            <button type="submit" class="deny"><i class="fa fa-times"></i> No, do not delete</button>
+                            <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> No, do not delete</button>
                         </form>
                     </div>
                 [% END # /IF delete_confirm %]
@@ -599,13 +597,13 @@
         </div> <!-- /.row -->
     [% ELSE %]
                 </main>
-            </div> <!-- /.col-sm-10.col-sm-push-2 -->
+            </div> <!-- /.col-md-10.order-md-2 -->
 
-            <div class="col-sm-2 col-sm-pull-10">
+            <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
                     [% INCLUDE 'tools-menu.inc' %]
                 </aside>
-            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+            </div> <!-- /.col-md-2.order-md-1 -->
         </div> <!-- /.row -->
     [% END %]
 
@@ -630,7 +628,7 @@
                 [% WRAPPER accordion_panel panel_id="${letter.message_transport_type}_${lang}" %]
                     [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
                         <fieldset class="rows mtt" disabled="disabled">
-                            <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
+                            <div class="alert alert-info">You should enable the SMSSendDriver preference to use the SMS templates.</div>
                     [% ELSE %]
                         <fieldset class="rows mtt">
                     [% END %]
@@ -697,7 +695,7 @@
                             [% IF letter.sample %]
                             <li>
                                 <button data-noticeid="[% letter.id | html %]" data-replace="content_[% letter.message_transport_type | html %]_[% lang | html %]" class="notice-sample btn btn-default btn-sm"><i class="fa-solid fa-eye"></i> View default</button>
-                                <textarea class="hidden" id="notice[% letter.id | html %]">[% letter.sample | html %]</textarea>
+                                <textarea style="display:none" id="notice[% letter.id | html %]">[% letter.sample | html %]</textarea>
                             </li>
                             [% END %]
                         </ol>
@@ -709,7 +707,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="format_[% lang | html %]Heading">
                 <h3 class="panel-title">
-                    <a role="button" class="collapsed" data-toggle="collapse" data-parent="#group_[% lang | html %]" href="#format_[% lang | html %]" aria-expanded="false" aria-controls="format_[% lang | html %]">
+                    <a role="button" class="collapsed" data-bs-toggle="collapse" data-parent="#group_[% lang | html %]" href="#format_[% lang | html %]" aria-expanded="false" aria-controls="format_[% lang | html %]">
                         <span>Format</span>
                     </a>
                 </h3>
@@ -717,7 +715,7 @@
             <div id="format_[% lang | html %]" class="panel-collapse collapse" role="tabpanel" aria-labelledby="format_[% lang | html %]Heading">
                 <div class="panel-body">
                     <fieldset class="rows">
-                    <div class="dialog message">These format settings apply when a notice is printed.</div>
+                    <div class="alert alert-info">These format settings apply when a notice is printed.</div>
                     <div class="col-md-12">
                         <ol>
                             <li id="css-helpers">

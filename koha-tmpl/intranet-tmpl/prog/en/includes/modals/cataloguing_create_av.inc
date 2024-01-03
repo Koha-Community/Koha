@@ -1,9 +1,9 @@
-<div id="avCreate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="avCreateLabel" aria-hidden="true">
+<div id="avCreate" class="modal" tabindex="-1" role="dialog" aria-labelledby="avCreateLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="avCreateLabel">Create a new authorized value</h3>
+                <h1 class="modal-title" id="avCreateLabel">Create a new authorized value</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="add_new_av" method="get">
                 <div class="modal-body">
@@ -30,12 +30,12 @@
                             </li>
                         </ol>
                     </fieldset>
-                    <div class="avCreate_error dialog alert" style="display:none;"></div>
+                    <div class="avCreate_error alert alert-warning" style="display:none;"></div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="select2" value="" />
                     <button type="submit" class="btn btn-default">Save</button>
-                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div> <!-- /.modal-content -->

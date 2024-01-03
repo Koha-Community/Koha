@@ -1,19 +1,19 @@
 <div id="mana_share_report" class="modal" tabindex="-1" role="dialog" aria-labelledby="mana_share_modal_label">
-    <div class="modal-dialog modal-wide" role="document">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <form method="post" id="mana_share_form" action="/cgi-bin/koha/reports/guided_reports.pl">
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h3 id="mana_share_modal_label">Share with Mana</h3>
+                    <h1 class="modal-title" id="mana_share_modal_label">Share with Mana</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     [% IF (mana_id) %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             <p>Your report is already linked with a Mana report. Share it if you have made modifications, otherwise it will do nothing.</p>
                         </div>
                     [% END %]
-                    <div id="note-error" class="dialog alert" role="alert">
+                    <div id="note-error" class="alert alert-warning" role="alert">
                         Please enter a report name and descriptive note before sharing (minimum 20 characters)
                     </div>
                     <div class="shared_infos rows">
@@ -87,8 +87,8 @@
                 </div> <!-- /.modal-body -->
                 <div class="modal-footer">
                     <input type="hidden" id="reportid" name="reportid"/>
-                    <button id="ManaShareButton" type="submit" class="btn btn-default shared_infos">Share</button>
-                    <button class="btn btn-default" id="ManaCloseButton" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button id="ManaShareButton" type="submit" class="btn btn-primary shared_infos">Share</button>
+                    <button type="button" class="btn btn-default" id="ManaCloseButton" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form> <!-- /#mana_share_form -->
         </div> <!-- /.modal-content -->

@@ -33,13 +33,13 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
     [% INCLUDE 'members-toolbar.inc' %]
     [% IF ItemsOnIssues || debits || is_guarantor %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
         <h1>Cannot delete patron</h1>
             <ul>
             [% IF ( ItemsOnIssues ) %]
@@ -55,7 +55,7 @@
     </div>
     [% ELSIF op == 'delete_confirm' and patron %]
         [%# TODO add "patron does not exist" unless patron %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             [% IF ItemsOnHold or credits or pending_suggestions > 0 %]
                 <ul>
                     [% IF ItemsOnHold %]
@@ -75,23 +75,23 @@
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="member" value="[% patron.borrowernumber | html %]"/>
                 <input type="hidden" name="op" value="cud-delete_confirmed" />
-                <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+                <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>
             <form method="get" action="/cgi-bin/koha/members/moremember.pl">
                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
-                <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+                <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
             </form>
         </div>
     [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'circ-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

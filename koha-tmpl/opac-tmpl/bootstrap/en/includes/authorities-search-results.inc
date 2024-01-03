@@ -101,7 +101,7 @@
             [% IF summary.notes.size %]
                 <div class="authres_notes">
                     [% PROCESS notesmodal notes=summary.notes authid=authid %]
-                    <span><a href="#" data-toggle="modal" data-target="#notesModal_[% authid | html %]">Notes</a></span>
+                    <span><a href="#" data-bs-toggle="modal" data-bs-target="#notesModal_[% authid | html %]">Notes</a></span>
                 </div>
             [% END %]
             [% IF ( summary.seefrom.size >= 1 ) %]
@@ -128,12 +128,12 @@
 
 [% BLOCK notesmodal %]
 <!-- notes modal -->
-<div style='font-style:normal;' class="modal fade notesModal" id="notesModal_[% authid | html %]" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel">
-    <div class="modal-dialog" role="document">
+<div style='font-style:normal;' class="modal notesModal" id="notesModal_[% authid | html %]" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="notesModalLabel">Notes</h4>
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title" id="notesModalLabel">Notes</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <ul>
@@ -143,7 +143,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -7,10 +7,8 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="addConcernModalLabel">Report a concern</h3>
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title" id="addConcernModalLabel">Report a concern</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <fieldset id="concern_fieldset">
@@ -42,7 +40,7 @@
                 <input type="hidden" name="biblio_id" id="concern_biblio" value="[% biblio.biblionumber | html %]">
                 <input type="hidden" name="reporter_id" id="concern_reporter" value="[% borrowernumber | html %]">
                 <button type="submit" id="addConfirm" class="btn btn-primary">Submit <i id="concern-submit-spinner" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i></button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

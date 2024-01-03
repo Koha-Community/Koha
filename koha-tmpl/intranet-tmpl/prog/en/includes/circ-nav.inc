@@ -1,7 +1,10 @@
+<!-- circ-nav.inc -->
 [% USE Koha %]
 [% USE Branches %]
 <div id="navmenu">
     <div id="navmenulist">
+        <div class="row">
+        <div class="col-sm-6 col-md-12">
         <h5>Circulation</h5>
         <ul>
             <li>
@@ -63,7 +66,10 @@
                 <a href="/cgi-bin/koha/circ/reserveratios.pl">Hold ratios</a>
             </li>
         </ul>
+        </div>
 
+
+        <div class="col-sm-6 col-md-12">
         [% IF Koha.Preference('UseRecalls') and CAN_user_recalls %]
         <h5>Recalls</h5>
         <ul>
@@ -122,5 +128,8 @@
              </li>
         </ul>
         [% END %]
+        </div>
+    </div>
     </div>
 </div>
+<!-- /circ-nav.inc -->

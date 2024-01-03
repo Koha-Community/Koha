@@ -29,7 +29,7 @@ describe("Data provider CRUD operations", () => {
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
         cy.get("#navmenulist").contains("Data providers").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );
 
@@ -137,7 +137,7 @@ describe("Data provider CRUD operations", () => {
         //     error: "Something went wrong",
         // });
         // cy.get("#data_providers_add").contains("Submit").click();
-        // cy.get("main div[class='dialog alert']").contains(
+        // cy.get("main div[class='alert alert-warning']").contains(
         //     "Something went wrong: Error: Internal Server Error"
         // );
 
@@ -147,7 +147,7 @@ describe("Data provider CRUD operations", () => {
             body: dataProvider,
         });
         cy.get("#data_providers_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Data provider created"
         );
 
@@ -245,7 +245,7 @@ describe("Data provider CRUD operations", () => {
         //     error: "Something went wrong",
         // });
         // cy.get("#data_providers_add").contains("Submit").click();
-        // cy.get("main div[class='dialog alert']").contains(
+        // cy.get("main div[class='alert alert-warning']").contains(
         //     "Something went wrong: Error: Internal Server Error"
         // );
         // Submit the form, success!
@@ -254,7 +254,7 @@ describe("Data provider CRUD operations", () => {
             body: dataProvider,
         });
         cy.get("#data_providers_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Data provider updated"
         );
     });
@@ -330,7 +330,7 @@ describe("Data provider CRUD operations", () => {
         //     error: "Something went wrong",
         // });
         // cy.contains("Yes, delete").click();
-        // cy.get("main div[class='dialog alert']").contains(
+        // cy.get("main div[class='alert alert-warning']").contains(
         //     "Something went wrong: Error: Internal Server Error"
         // );
 
@@ -346,7 +346,7 @@ describe("Data provider CRUD operations", () => {
         //     "remove this data provider"
         // );
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']")
+        cy.get("main div[class='alert alert-info']")
             .contains("Data provider")
             .contains("deleted");
 
@@ -591,7 +591,7 @@ describe("Data provider tab options", () => {
 
         // We'll test using titles but the component is the same for all four data types
         cy.get("#usage_data_providerstabs").contains("Titles").click();
-        cy.get("main div[class='dialog message']").should(
+        cy.get("main div[class='alert alert-info']").should(
             "have.text",
             "No title data has been harvested for this provider"
         );
@@ -638,7 +638,7 @@ describe("Data provider tab options", () => {
 
         cy.get("#files > form > fieldset > input[type=submit]").click();
 
-        cy.get("main div[class='dialog message']").should(
+        cy.get("main div[class='alert alert-info']").should(
             "have.text",
             "Job for uploaded file has been queued. Check job progress."
         );
@@ -654,7 +654,7 @@ describe("Data provider tab options", () => {
             },
         });
         cy.get("#usage_data_providerstabs").contains("Import logs").click();
-        cy.get("main div[class='dialog message']").should(
+        cy.get("main div[class='alert alert-info']").should(
             "have.text",
             "There are no import logs defined"
         );
@@ -743,7 +743,7 @@ describe("Data providers action buttons", () => {
                 cy.get(".dayContainer").contains(new RegExp("^1$")).click();
             });
         cy.get("#accept_modal").click();
-        cy.get("main div[class='dialog message']").should(
+        cy.get("main div[class='alert alert-info']").should(
             "have.text",
             "Job for report type TR_J1 has been queued. Check job progress."
         );
@@ -780,7 +780,7 @@ describe("Data providers action buttons", () => {
             .contains("Test")
             .click();
         cy.wait("@test-connection");
-        cy.get("main div[class='dialog message']").should(
+        cy.get("main div[class='alert alert-info']").should(
             "have.text",
             "Harvester connection was successful for usage data provider " +
                 dataProvider.name

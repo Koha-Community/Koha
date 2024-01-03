@@ -3,10 +3,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="checkoutModalLabel">Self checkout</h3>
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title" id="checkoutModalLabel">Self checkout</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="checkoutResults"></div>
@@ -35,7 +33,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" id="checkoutSubmit" class="btn btn-primary">Submit</button>
-                <button type="button" id="checkoutClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

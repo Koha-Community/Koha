@@ -223,7 +223,7 @@
                                             [%# CAS authentication is too complicated for modal window %]
                                             <a href="/cgi-bin/koha/opac-user.pl">Log in to add tags.</a>
                                         [% ELSE %]
-                                            <a class="loginModal-trigger" data-toggle="modal" role="button" href="/cgi-bin/koha/opac-user.pl">Log in to add tags.</a>
+                                            <a class="loginModal-trigger" data-bs-toggle="modal" role="button" href="/cgi-bin/koha/opac-user.pl">Log in to add tags.</a>
                             [% END %]
                                     </span>
                                 [% END # / IF ( loggedinusername ) %]
@@ -866,7 +866,7 @@
                                         [% END %]
                                     [% ELSE %]
                                         <div id="addcomment">
-                                            <a class="login-link loginModal-trigger" role="button" data-toggle="modal" data-return="true" data-tab="comment" href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.
+                                            <a class="login-link loginModal-trigger" role="button" data-bs-toggle="modal" data-return="true" data-tab="comment" href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.
                                         </div>
                                     [% END # / IF loggedinusername %]
                             [% END # /tab_panel#newcomment %]
@@ -1121,11 +1121,11 @@
 [% IF ( OPACPopupAuthorsSearch  ) %]
     <!-- Modal -->
     <div class="modal" id="multiSearch" tabindex="-1" role="dialog" aria-labelledby="multiSearchLabel">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 id="multiSearchLabel">Select the item(s) to search</h1>
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <a href="#" class="check_all btn btn-link btn-sm"><i class="fa fa-check" aria-hidden="true"></i> Select all</a> <span class="sep">|</span>
@@ -1135,7 +1135,7 @@
                 </div>
                 <div class="modal-footer">
                     <button id="validMultiSearch" class="btn btn-primary">Search</button>
-                    <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
@@ -1147,17 +1147,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="libraryInfoModalLabel"></h5>
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title" id="libraryInfoModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="libraryInfo"></div>
             </div>
             <div class="modal-footer">
                 <a id="libraryInfoLink" href="" class="btn btn-primary">Visit web site</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div> <!-- /.modal-content -->
     </div> <!-- /.modal-dialog -->
@@ -1773,7 +1771,7 @@
             }, serial_column_settings);
 
             var dTables = $("#holdingst,#subscriptionst,#otherholdingst");
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (event) {
                 dTables.DataTable().responsive.recalc();
             } );
 

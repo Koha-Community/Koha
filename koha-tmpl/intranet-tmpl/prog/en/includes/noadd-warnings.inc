@@ -1,5 +1,5 @@
 [% IF ( no_add ) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h3>Cannot add patron</h3>
         [% IF ( no_branches ) %]
             <p><strong>There are no libraries defined. </strong>[% IF ( CAN_user_parameters ) %]<a href="/cgi-bin/koha/admin/branches.pl">Please add a library</a>.[% ELSE %]An administrator must define at least one library.[% END %]</p>

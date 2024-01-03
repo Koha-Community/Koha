@@ -1,6 +1,9 @@
 /* Bootstrap variable customizations */
-$headings-color: #727272;
-$headings-font-weight: 600;
+
+:root {
+    --bs-heading-color: #727272;
+}
+
 $enable-gradients: false;
 $info: #2679CC;
 $danger: rgb( 185, 32, 32 );
@@ -33,53 +36,66 @@ $high-contrast-grey: #666666;
     box-shadow: inset 0 1px 1px rgba( 0, 0, 0, .075 ), 0 0 8px rgba( 194, 228, 136, .6 );
 }
 
-/* Bootstrap imports */
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
-@import "bootstrap/scss/alert";
+@import "../../../../../node_modules/bootstrap5/scss/mixins/banner";
+@include bsBanner("");
 
-// @import "bootstrap/scss/badge";
-@import "bootstrap/scss/breadcrumb";
-@import "bootstrap/scss/button-group";
-@import "bootstrap/scss/buttons";
-@import "bootstrap/scss/card";
+// scss-docs-start import-stack
+// Configuration
+@import "../../../../../node_modules/bootstrap5/scss/functions";
 
-// @import "bootstrap/scss/carousel";
-@import "bootstrap/scss/close";
+// Include any default variable overrides here
+@import "variables";
 
-// @import "bootstrap/scss/code";
-@import "bootstrap/scss/custom-forms";
-@import "bootstrap/scss/dropdown";
-@import "bootstrap/scss/forms";
-@import "bootstrap/scss/grid";
+// Include remainder of required Bootstrap stylesheets
+@import "../../../../../node_modules/bootstrap5/scss/variables";
+@import "../../../../../node_modules/bootstrap5/scss/mixins";
 
-// @import "bootstrap/scss/images";
-@import "bootstrap/scss/input-group";
+$enable-dark-mode: false;
 
-// @import "bootstrap/scss/jumbotron";
-// @import "bootstrap/scss/list-group";
-// @import "bootstrap/scss/media";
-@import "bootstrap/scss/modal";
-@import "bootstrap/scss/navbar";
-@import "bootstrap/scss/nav";
-@import "bootstrap/scss/pagination";
+@import "../../../../../node_modules/bootstrap5/scss/maps";
+@import "../../../../../node_modules/bootstrap5/scss/utilities";
 
-// @import "bootstrap/scss/popover";
-@import "bootstrap/scss/print";
+// Layout & components
+@import "../../../../../node_modules/bootstrap5/scss/root";
+@import "../../../../../node_modules/bootstrap5/scss/reboot";
+@import "../../../../../node_modules/bootstrap5/scss/type";
+@import "../../../../../node_modules/bootstrap5/scss/images";
+@import "../../../../../node_modules/bootstrap5/scss/containers";
+@import "../../../../../node_modules/bootstrap5/scss/grid";
+@import "../../../../../node_modules/bootstrap5/scss/tables";
+@import "../../../../../node_modules/bootstrap5/scss/forms";
+@import "../../../../../node_modules/bootstrap5/scss/buttons";
+@import "../../../../../node_modules/bootstrap5/scss/transitions";
+@import "../../../../../node_modules/bootstrap5/scss/dropdown";
+@import "../../../../../node_modules/bootstrap5/scss/button-group";
+@import "../../../../../node_modules/bootstrap5/scss/nav";
+@import "../../../../../node_modules/bootstrap5/scss/navbar";
+@import "../../../../../node_modules/bootstrap5/scss/card";
+@import "../../../../../node_modules/bootstrap5/scss/accordion";
+@import "../../../../../node_modules/bootstrap5/scss/breadcrumb";
+@import "../../../../../node_modules/bootstrap5/scss/pagination";
+@import "../../../../../node_modules/bootstrap5/scss/badge";
+@import "../../../../../node_modules/bootstrap5/scss/alert";
+@import "../../../../../node_modules/bootstrap5/scss/progress";
+@import "../../../../../node_modules/bootstrap5/scss/list-group";
+@import "../../../../../node_modules/bootstrap5/scss/close";
+@import "../../../../../node_modules/bootstrap5/scss/toasts";
+@import "../../../../../node_modules/bootstrap5/scss/modal";
+@import "../../../../../node_modules/bootstrap5/scss/tooltip";
+@import "../../../../../node_modules/bootstrap5/scss/popover";
+@import "../../../../../node_modules/bootstrap5/scss/carousel";
+@import "../../../../../node_modules/bootstrap5/scss/spinners";
+@import "../../../../../node_modules/bootstrap5/scss/offcanvas";
+@import "../../../../../node_modules/bootstrap5/scss/placeholders";
 
-// @import "bootstrap/scss/progress";
-@import "bootstrap/scss/reboot";
-@import "bootstrap/scss/root";
+// Helpers
+@import "../../../../../node_modules/bootstrap5/scss/helpers";
 
-// @import "bootstrap/scss/spinners";
-@import "bootstrap/scss/tables";
+// Utilities
+@import "../../../../../node_modules/bootstrap5/scss/utilities/api";
 
-// @import "bootstrap/scss/toasts";
-@import "bootstrap/scss/tooltip";
-@import "bootstrap/scss/transitions";
-@import "bootstrap/scss/type";
-@import "bootstrap/scss/utilities";
+// scss-docs-end import-stack
+
 @import "flatpickr";
 
 /* Koha imports */
@@ -94,16 +110,17 @@ body {
 }
 
 body {
-    background: #FCF9FC none;
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
 a {
-    &:link,
-    &:visited {
-        color: $links;
+    text-decoration: none;
+
+    &:hover,
+    &:active {
+        text-decoration: underline;
     }
 }
 
@@ -124,44 +141,20 @@ caption {
     text-align: left;
 }
 
-.dropdown-menu-right {
-    left: auto;
-    right: 0;
-}
-
-.fa {
+.fa,
+.fa-solid {
     &.fa-icon-black,
-    &.fa-icon-white {
-        color: #000;
+    &.fa-icon-white,
+    &.fa-icon-header {
+        color: #666;
+    }
+
+    &.fa-icon-footer {
+        color: #6D6D6D;
     }
 
     &.danger {
         color: #C00;
-    }
-}
-
-.navbar-nav {
-    margin-right: 0;
-
-    & > li {
-        & > a {
-            color: $high-contrast-grey;
-            font-weight: bold;
-        }
-
-        & > .dropdown-menu {
-            &.dropdown-menu-right {
-                &::after {
-                    left: unset;
-                    right: 10px;
-                }
-
-                &::before {
-                    left: unset;
-                    right: 9px;
-                }
-            }
-        }
     }
 }
 
@@ -312,10 +305,20 @@ input[type="text"],
 input[type="password"],
 select,
 textarea,
-.form-control {
+.form-control,
+.form-select {
     &:focus {
         border-color: $base-theme-color;
         box-shadow: inset 0 1px 1px rgba( 0, 0, 0, .075 ), 0 0 8px rgba( 194, 228, 136, .6 );
+    }
+}
+
+.form-group {
+    margin-bottom: 1rem;
+
+    label {
+        display: inline-block;
+        margin-bottom: .5rem;
     }
 }
 
@@ -554,7 +557,7 @@ table {
 
                             &::before {
                                 background-color: #E1E1E1;
-                                background-image: linear-gradient(180deg, #EBEBEB, #E1E1E1);
+                                background-image: linear-gradient( 180deg, #EBEBEB, #E1E1E1 );
                                 border: 1px solid #B3B3B3;
                                 border-radius: .25rem;
                                 box-shadow: none;
@@ -577,7 +580,7 @@ table {
                             &.dtr-control {
                                 &::before {
                                     background-color: #E1E1E1;
-                                    background-image: linear-gradient(180deg, #EBEBEB, #E1E1E1);
+                                    background-image: linear-gradient( 180deg, #EBEBEB, #E1E1E1 );
                                     border: 1px solid #B3B3B3;
                                     border-radius: .25rem;
                                     box-shadow: none;
@@ -649,7 +652,7 @@ table {
     .dataTables_filter {
         label {
             input {
-                margin-left: 5px;
+                margin-bottom: 5px;
             }
         }
 
@@ -683,8 +686,8 @@ table {
 }
 
 .table {
-    &.dataTable{
-        thead{
+    &.dataTable {
+        thead {
             .sorting_asc {
                 background: url( "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2bW0iIGhlaWdodD0iMi4zODRtbSIgdmlld0JveD0iMCAwIDYuMDAwMDAwMiAyLjM4NDAzODkiPjxnPjxwYXRoIGZpbGw9IiMwMDZhY2MiIGQ9Ik00LjA1IDEuNzRoLTIuMUwzIC42NHoiLz48L2c+PC9zdmc+" ) no-repeat scroll 100% 80% #E2E8E8;
                 padding-right: 19px;
@@ -730,13 +733,14 @@ table {
 .nav-tabs {
     .nav-link {
         background-color: #F0F3F3;
-        border: 1px solid #D8D8D8;
-        border-radius: 0;
+        border: 1px solid $nav-tabs-border-color;
+        color: var( --bs-link-color );
+        font-weight: normal;
         margin-right: .4em;
 
         &:hover,
-        &:focus {
-            border-color: #D8D8D8;
+        &:active {
+            color: var( --bs-link-hover-color );
         }
 
         &.active {
@@ -771,32 +775,6 @@ table {
     opacity: inherit;
 }
 
-/* Redefine a new style for Bootstrap's class "close" since we use that already */
-
-/* Use <a class="closebtn" href="#">&times;</a> */
-
-.closebtn {
-    background: transparent;
-    border: 0;
-    color: #000000;
-    cursor: pointer;
-    float: right;
-    font-size: 1.5rem;
-    font-weight: bold;
-    line-height: 1;
-    opacity: .5;
-    padding: 1rem 1rem;
-    margin: -1rem -1rem -1rem auto;
-    text-shadow: 0 1px 0 #FFFFFF;
-
-    &:hover {
-        color: #000000;
-        cursor: pointer;
-        opacity: .7;
-        text-decoration: none;
-    }
-}
-
 button {
     &.remove {
         &:hover {
@@ -813,11 +791,6 @@ button {
 
 .btn-link {
     color: $links;
-
-    &:focus,
-    &:hover {
-        text-decoration: none;
-    }
 
     &:focus {
         box-shadow: 0 0 0 1px lighten( $links, 20% );
@@ -846,6 +819,15 @@ button {
     form {
         margin: 0;
     }
+}
+
+// Apparently missing from _variables.scss
+.modal-header {
+    background-color: #FCF9FC;
+}
+
+.modal-title {
+    margin: 0;
 }
 
 #backtotop {
@@ -888,6 +870,7 @@ button {
     border-top: 1px solid #EEE;
     clear: both;
     flex-shrink: 0;
+    font-size: .9rem;
 
     // Set the fixed height of the footer here
     min-height: $footer-height;
@@ -918,124 +901,6 @@ button {
     }
 }
 
-.navbar {
-    .divider-vertical {
-        border-left-color: #FCF9FC;
-        border-right-color: #FCF9FC;
-    }
-
-    .nav {
-        li {
-            &.dropdown {
-                > a {
-                    &:focus {
-                        .caret {
-                            border-bottom-color: $base-theme-color;
-                            border-top-color: $base-theme-color;
-                        }
-                    }
-
-                    &:hover {
-                        .caret {
-                            border-bottom-color: $base-theme-color;
-                            border-top-color: $base-theme-color;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-.navbar-inverse {
-    .brand {
-        color: #9FE1FF;
-        font-weight: bold;
-    }
-
-    .navbar-inner {
-        background: #FCF9FC none;
-        border-color: #FCF9FC;
-        box-shadow: none;
-
-        ul {
-            &.dropdown-menu {
-                a {
-                    &:hover {
-                        color: #FFF;
-                    }
-                }
-            }
-        }
-
-        li {
-            > a {
-                color: #727272;
-                font-weight: bold;
-                text-shadow: none;
-
-                &:hover {
-                    color: $base-theme-color;
-                }
-
-                &:focus {
-                    color: $base-theme-color;
-                }
-            }
-
-            &.dropdown {
-                > a {
-                    &:hover {
-                        .caret {
-                            border-bottom-color: $base-theme-color;
-                            border-top-color: $base-theme-color;
-                        }
-                    }
-
-                    &:focus {
-                        .caret {
-                            border-bottom-color: $base-theme-color;
-                            border-top-color: $base-theme-color;
-                        }
-                    }
-                }
-
-                &.open {
-                    > .dropdown-toggle {
-                        background-color: transparent;
-                        color: $base-theme-color;
-
-                        .caret {
-                            border-bottom-color: $base-theme-color;
-                            border-top-color: $base-theme-color;
-
-                            &:hover {
-                                border-bottom-color: $base-theme-color;
-                                border-top-color: $base-theme-color;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-.navbar-inner {
-    background: #FCF9FC none;
-}
-
-.navbar-fixed-bottom {
-    &.navbar-static-bottom {
-        position: static;
-    }
-
-    .navbar-inner {
-        box-shadow: none;
-        min-height: $footer-height;
-    }
-}
-
 // Wrapper for page content to push down footer
 #wrap {
     height: auto !important;
@@ -1049,44 +914,8 @@ button {
 }
 
 #i18nMenu {
+    border-right: 1px solid #AAA;
     margin-left: 1em;
-
-    li {
-        font-size: 85%;
-
-        a {
-            color: $links;
-
-            &:hover {
-                color: $base-theme-color;
-            }
-        }
-
-        li {
-            font-size: 100%;
-
-            > a {
-                font-size: 100%;
-
-                &:hover {
-                    color: #FFF;
-                }
-            }
-        }
-    }
-
-    .dropdown-menu {
-        li {
-            p {
-                clear: both;
-                display: block;
-                font-weight: normal;
-                line-height: 20px;
-                padding: 3px 20px;
-                white-space: nowrap;
-            }
-        }
-    }
 }
 
 .dropdown-menu {
@@ -1112,10 +941,15 @@ button {
 }
 
 #koha_url {
-    p {
-        color: $high-contrast-grey;
-        float: right;
-        margin: 0;
+    align-self: flex-end;
+
+    svg {
+        color: #6D6D6D;
+        display: inline-block;
+        height: 1em;
+        margin: 0 .1em;
+        vertical-align: -.125em;
+        width: 1em;
     }
 }
 

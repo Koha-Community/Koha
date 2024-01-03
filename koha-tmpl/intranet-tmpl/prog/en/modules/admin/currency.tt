@@ -66,7 +66,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -170,7 +170,7 @@
 
 [% IF op =='delete_confirm' %]
     [% IF nb_of_orders or nb_of_vendors %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h1>Cannot delete currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h1>
         <p>
             [% IF nb_of_orders %]
@@ -182,11 +182,11 @@
         </p>
         <form action="/cgi-bin/koha/admin/currency.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
         </form>
     </div>
     [% ELSE %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h1>[% tx("Confirm deletion of currency '{currency_name}'", { currency_name = currency.currency }) | html %]</h1>
         <table>
             <tr><th>Currency</th>
@@ -200,11 +200,11 @@
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="currency_code" value="[% currency.currency | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this currency</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this currency</button>
         </form>
         <form action="/cgi-bin/koha/admin/currency.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
-            <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
+            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
     [% END %]
@@ -215,7 +215,7 @@
 <h1>Currencies and exchange rates</h1>
 
     [% IF currencies and no_active_currency %]
-        <div class="dialog alert"><h3>No active currency is defined</h3><p>Please edit one currency and mark it as active.</p></div>
+        <div class="alert alert-warning"><h3>No active currency is defined</h3><p>Please edit one currency and mark it as active.</p></div>
     [% END %]
 
     [% IF searchfield %]
@@ -269,13 +269,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

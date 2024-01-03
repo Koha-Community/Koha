@@ -3,7 +3,7 @@
 
     [% IF ( can_add_biblios ) %]
         <div class="btn-group">
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addToList">
+            <button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#addToList">
                 <i class="fa fa-plus"></i> Add items
             </button>
         </div>
@@ -12,9 +12,9 @@
     [% IF shelf AND op == 'view' %]
         [% IF can_manage_shelf %]
         <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</button>
             <ul class="dropdown-menu">
-                <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=edit_form&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;referer=[% op | uri %]">Edit list</a></li>
+                <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=edit_form&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;referer=[% op | uri %]">Edit list</a></li>
                 <li>
                     <form id="deleteshelf_toolbar_form" action="shelves.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
@@ -28,13 +28,13 @@
         [% END %]
 
         <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Download list <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-download"></i> Download list</button>
                 <ul class="dropdown-menu">
-                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=iso2709&amp;shelfid=[% shelf.shelfnumber | uri %]">iso2709</a></li>
-                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=ris&amp;shelfid=[% shelf.shelfnumber | uri %]">RIS</a></li>
-                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=bibtex&amp;shelfid=[% shelf.shelfnumber | uri %]">BibTex</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=iso2709&amp;shelfid=[% shelf.shelfnumber | uri %]">iso2709</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=ris&amp;shelfid=[% shelf.shelfnumber | uri %]">RIS</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=bibtex&amp;shelfid=[% shelf.shelfnumber | uri %]">BibTex</a></li>
                     [% FOREACH csv_profile IN csv_profiles %]
-                        <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=[% csv_profile.export_format_id | uri %]&amp;shelfid=[% shelf.shelfnumber | uri %]">CSV - [% csv_profile.profile | html %]</a></li>
+                        <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=[% csv_profile.export_format_id | uri %]&amp;shelfid=[% shelf.shelfnumber | uri %]">CSV - [% csv_profile.profile | html %]</a></li>
                     [% END %]
                 </ul>
         </div>

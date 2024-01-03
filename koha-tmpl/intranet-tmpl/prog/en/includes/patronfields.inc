@@ -81,7 +81,7 @@
 [%- BLOCK patron_fields_dropdown -%]
     [% IF search_box %]
         <label for="searchfieldstype" class="control-label">Search field:</label>
-        <select name="searchfieldstype" id="searchfieldstype" class="form-control">
+        <select name="searchfieldstype" id="searchfieldstype" class="form-select">
     [% ELSE %]
         <label for="searchfieldstype_filter">Search field:</label>
         <select name="searchfieldstype" class="searchfieldstype_filter">

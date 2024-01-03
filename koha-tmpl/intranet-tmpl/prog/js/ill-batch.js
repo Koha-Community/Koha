@@ -8,7 +8,7 @@
         if (id) {
             idEl.dataset.batchId = id;
         }
-        $('#ill-batch-modal').modal({ show: true });
+        $('#ill-batch-modal').modal("show");
     };
 
     // Make a batch API call, returning the resulting promise

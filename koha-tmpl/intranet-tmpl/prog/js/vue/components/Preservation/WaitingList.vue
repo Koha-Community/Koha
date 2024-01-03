@@ -22,7 +22,11 @@
                         </ol>
                     </fieldset>
                     <fieldset class="action">
-                        <input type="submit" :value="$__('Submit')" />
+                        <input
+                            type="submit"
+                            class="btn btn-primary"
+                            :value="$__('Submit')"
+                        />
                         <input
                             type="button"
                             @click="show_modal_add_to_waiting_list = false"
@@ -69,7 +73,11 @@
                         </ol>
                     </fieldset>
                     <fieldset class="action">
-                        <input type="submit" :value="$__('Submit')" />
+                        <input
+                            type="submit"
+                            class="btn btn-primary"
+                            :value="$__('Submit')"
+                        />
                         <input
                             type="button"
                             @click="show_modal_add_to_train = false"
@@ -114,7 +122,7 @@
                 @remove="doRemoveItem"
             ></KohaTable>
         </div>
-        <div v-else class="dialog message">
+        <div v-else class="alert alert-info">
             {{ $__("There are no items in the waiting list") }}
         </div>
     </div>

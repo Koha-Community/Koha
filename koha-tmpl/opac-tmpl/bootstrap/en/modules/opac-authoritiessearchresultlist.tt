@@ -18,8 +18,8 @@
             [% END %]
             [% FOREACH number IN numbers %]
                 [% IF ( number.highlight ) %]
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" aria-disabled="true" aria-label="Current page: Page [% number.number | html %]">[% number.number | html %]</a>
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="#" aria-label="Current page: Page [% number.number | html %]">[% number.number | html %]</a>
                     </li>
                 [% ELSE %]
                     <li class="page-item">

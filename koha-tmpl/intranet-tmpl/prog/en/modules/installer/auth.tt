@@ -25,8 +25,8 @@
 
 <body id="installer" class="installer">
     <div class="container-fluid">
-        <div class="row">
-            <div id="installer-login" class="installer-main col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
+        <div class="row justify-content-md-center">
+            <div id="installer-login" class="installer-main col-sm-6 col-md-6">
 
                 <div id="logo"><a href="#">Koha</a></div>
 
@@ -73,7 +73,9 @@
                                 <label>Password:</label>
                                 <input type="password" class="form-control" name="login_password" id="password" value="" size="20" tabindex="2" />
                             </div>
-                            <input id="submit" type="submit" class="btn btn-primary" value="Log in" tabindex="3" />
+                            <div class="form-group mt-2">
+                                <input id="submit" type="submit" class="btn btn-primary" value="Log in" tabindex="3" />
+                            </div>
                         </fieldset>
                     </form>
                 [% END %]

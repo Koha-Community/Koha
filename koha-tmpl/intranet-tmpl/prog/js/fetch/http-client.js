@@ -4,13 +4,13 @@ class Dialog {
 
     setMessage(message) {
         $("#messages").append(
-            '<div class="dialog message">%s</div>'.format(message)
+            '<div class="alert alert-info">%s</div>'.format(message)
         );
     }
 
     setError(error) {
         $("#messages").append(
-            '<div class="dialog alert">%s</div>'.format(error)
+            '<div class="alert alert-warning">%s</div>'.format(error)
         );
     }
 }

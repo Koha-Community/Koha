@@ -79,14 +79,14 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
                 <main>
                     <div class="row">
                         <div class="col">
                             [% INCLUDE 'messages.inc' %]
 
                             [% IF ( unknownbiblionumber ) %]
-                                <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
+                                <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
                                     </div> <!-- /.col -->
                             [% ELSE %]
                                     [% IntranetCoce    = Koha.Preference('IntranetCoce') %]
@@ -100,12 +100,9 @@
                                         <span class="Z3988" title="[% ocoins | html %]"></span>
                                     [% END %]
                                 </div> <!-- /.col -->
-
-                        [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-                            <div id="catalogue_detail_biblio" class="col-xs-9">
-                        [% ELSE %]
-                            <div id="catalogue_detail_biblio" class="col-xs-12">
-                        [% END %]
+                    </div> <!-- /.row -->
+                    <div class="row">
+                        <div id="catalogue_detail_biblio" class="col">
 
                         [% IF decoding_error || analytics_error %]
                             <div class="page-section bg-danger">
@@ -192,7 +189,7 @@
                             [% IF ( holdcount ) %]
                                 <span class="results_summary">
                                     <span class="label">Holds:</span>
-                                    <span class="number_box">
+                                    <span class="badge text-bg-info">
                                         [% IF CAN_user_reserveforothers_place_holds %]
                                             <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a>
                                         [% ELSE %]
@@ -220,7 +217,7 @@
                             [% IF ( article_requests_count = biblio.article_requests.filter_by_current.count ) %]
                                 <span class="results_summary">
                                     <span class="label">Article requests:</span>
-                                    <span class="number_box">
+                                    <span class="badge text-bg-info">
                                         <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | uri %]">[% article_requests_count | html %]</a>
                                     </span>
                                 </span>
@@ -238,7 +235,7 @@
 
                         [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
                             </div> <!-- #catalogue_detail_biblio.col-xs-... -->
-                            <div class="col-xs-3 bookcoverimg">
+                            <div class="col-sm-3 bookcoverimg">
                                 <div id="biblio-cover-slider" class="cover-slider" data-isbn="[% normalized_isbn | html %]">
                                     [% IF ( LocalCoverImages ) %]
                                         [% IF localimages.count %]
@@ -865,7 +862,7 @@
                                         Select download format:
                                         <select name="format">
                                             <option value="mods">MODS (XML)</option>
-                                            <option data-toggle="modal" data-target="#exportModal_">Dublin Core</option>
+                                            <option data-bs-toggle="modal" data-bs-target="#exportModal_">Dublin Core</option>
                                             <option value="marcxml">MARCXML</option>
                                             <option value="marc8">MARC (non-Unicode/MARC-8)</option>
                                             <option value="utf8">MARC (Unicode/UTF-8)</option>
@@ -886,14 +883,14 @@
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3 id="marcPreviewLabel">MARC preview</h3>
+                                    <h1 class="modal-title" id="marcPreviewLabel">MARC preview</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -903,14 +900,14 @@
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3 id="elasticPreviewLabel">Elasticsearch record</h3>
+                                    <h1 class="modal-title" id="elasticPreviewLabel">Elasticsearch record</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                    <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -918,7 +915,7 @@
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-            <div class="col-sm-2 col-sm-pull-10">
+            <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
                     [% INCLUDE 'biblio-view-menu.inc' %]
                 </aside>
@@ -926,12 +923,12 @@
         </div> <!-- /.row -->
     [% END %]
 
-    <div class="modal fade" id="modal-item-group-create" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-create-label">
+    <div class="modal" id="modal-item-group-create" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-create-label">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="modal-item-group-create-label"><i class="fa fa-plus"></i> Create a new item group</h3>
+                    <h1 class="modal-title" id="modal-item-group-create-label">Create a new item group</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="get" id="modal-item-group-create-form" class="validated">
                     <div class="modal-body">
@@ -951,20 +948,20 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer">
-                        <button id="modal-item-group-create-submit" class="btn btn-default"><i class="fa fa-plus"></i> Submit</button>
-                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button id="modal-item-group-create-submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form> <!-- /#modal-item-group-create-form -->
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
     </div> <!-- /#modal-item-group-create.modal -->
 
-    <div class="modal fade" id="modal-item-group-edit" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-edit-label">
+    <div class="modal" id="modal-item-group-edit" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-edit-label">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="modal-item-group-edit-label"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit item group</h3>
+                    <h1 class="modal-title" id="modal-item-group-edit-label">Edit item group</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="get" id="modal-item-group-edit-form" class="validated">
                     <div class="modal-body">
@@ -982,38 +979,38 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer">
-                        <button id="modal-item-group-edit-submit" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Submit</button>
-                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button id="modal-item-group-edit-submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
     </div> <!-- /#modal-item-group-edit.modal -->
 
-    <div class="modal fade" id="modal-item-group-delete" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-delete-label">
+    <div class="modal" id="modal-item-group-delete" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-delete-label">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="modal-item-group-delete-label"><i class='fa fa-trash-can'></i> Delete item group</h3>
+                    <h1 class="modal-title" id="modal-item-group-delete-label">Delete item group</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     Are you sure you want to delete this item group?
                 </div>
                 <div class="modal-footer">
-                    <button id="modal-item-group-delete-submit" class="btn btn-danger"><i class='fa fa-trash-can'></i> Delete</button>
-                    <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button id="modal-item-group-delete-submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
     </div> <!-- /#modal-item-group-delete.modal -->
 
-    <div class="modal fade" id="modal-item-group-set" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-set-label">
+    <div class="modal" id="modal-item-group-set" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-set-label">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="modal-item-group-set-label"><i class='fa fa-book'></i> Set item group for items</h3>
+                    <h1 class="modal-title" id="modal-item-group-set-label">Set item group for items</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="get" id="modal-item-group-set-form" class="validated">
                     <div class="modal-body">
@@ -1030,27 +1027,27 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer">
-                        <button id="modal-item-group-set-submit" class="btn btn-default"><i class='fa fa-book'></i> Set item group</button>
-                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button id="modal-item-group-set-submit" class="btn btn-primary">Set item group</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
     </div> <!-- /#modal-item-group-set.modal -->
 
-    <div class="modal fade" id="modal-item-group-unset" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-unset-label">
+    <div class="modal" id="modal-item-group-unset" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-unset-label">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="modal-item-group-unset-label"><i class='fa fa-unlink'></i> Remove item from item group</h3>
+                    <h1 class="modal-title" id="modal-item-group-unset-label">Remove item from item group</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     Are you sure you want to remove these item(s) from their item group(s)?
                 </div>
                 <div class="modal-footer">
-                    <button id="modal-item-group-unset-submit" class="btn btn-danger"><i class='fa fa-unlink'></i> Remove</button>
-                    <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button id="modal-item-group-unset-submit" class="btn btn-danger">Remove</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
@@ -1058,12 +1055,12 @@
 
     [% IF bundlesEnabled %]
         <div class="modal" id="addToBundleModal" tabindex="-1" role="dialog" aria-labelledby="addToBundleLabel">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <form method="get" id="addToBundleForm" action="">
                         <div class="modal-header">
-                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3 id="addToBundleLabel">Add to bundle</h3>
+                            <h1 class="modal-title" id="addToBundleLabel">Add to bundle</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div id="addResult"></div>
@@ -1082,8 +1079,8 @@
                             </fieldset>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-default">Submit</button>
-                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button class="btn btn-default" type="button" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div> <!-- /.modal-content -->
@@ -1091,12 +1088,12 @@
         </div> <!-- /#addToBundleModal.modal -->
 
         <div class="modal" id="removeFromBundleModal" tabindex="-1" role="dialog" aria-labelledby="removeFromBundleLabel">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <form method="get" id="removeFromBundleForm" action="">
                         <div class="modal-header">
-                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3 id="removeFromBundleLabel">Remove from bundle</h3>
+                            <h1 class="modal-title" id="removeFromBundleLabel">Remove from bundle</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div id="removeResult"></div>
@@ -1111,8 +1108,8 @@
                             </fieldset>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-default">Submit</button>
-                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
             </div> <!-- /.modal-content -->
@@ -1176,7 +1173,7 @@
                         "updates+count",
                         "+strings"
                     ],
-                    'emptyTable': '<div class="dialog message">' + _("Congratulations, there are no catalog concerns.") + '</div>',
+                    'emptyTable': '<div class="alert alert-info">' + _("Congratulations, there are no catalog concerns.") + '</div>',
                     "columnDefs": [ {
                         "targets": [0,1,2,3],
                         "render": function (data, type, row, meta) {
@@ -1209,11 +1206,12 @@
                             "data": "title:body",
                             "render": function(data, type, row, meta) {
                                 let resolved = ( row.resolved_date ) ? true : false;
-                                let result = '<a role="button" href="#" class="detail-trigger">' + row.title + '</a>';
+                                let result = '<a class="btn btn-link" role="button" href="#" data-bs-toggle="modal" data-bs-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="' + resolved + '" data-assignee="'+$patron_to_html(row.assignee, { display_cardnumber: false, url: false })+'">' + row.title;
                                 if (row.updates_count) {
-                                    result += '<span class="pull-right"><a class="detail-trigger"><i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count + '</a></span>';
+                                    result += ' <i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count;
                                 }
-                                result += '<div id="detail_' + row.ticket_id + '" class="hidden">' + row.body + '</div>';
+                                result += '</a>';
+                                result += '<div id="detail_' + row.ticket_id + '" style="display:none">' + row.body + '</div>';
                                 return result;
                             },
                             "searchable": true,
@@ -1264,7 +1262,7 @@
                         {
                             "data": function(row, type, val, meta) {
                                 let resolved = ( row.resolved_date ) ? true : false;
-                                let result = '<a class="btn btn-default btn-xs main-trigger" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="' + resolved + '" data-assignee="'+$patron_to_html(row.assignee, { display_cardnumber: false, url: false })+'"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
+                                let result = '<a class="btn btn-default btn-xs main-trigger" role="button" href="#" data-bs-toggle="modal" data-bs-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="' + resolved + '" data-assignee="'+$patron_to_html(row.assignee, { display_cardnumber: false, url: false })+'"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
                                 return result;
                             },
                             "searchable": false,
@@ -1477,7 +1475,7 @@
                 e.preventDefault();
                 var page = $(this).attr("href");
                 $("#marcPreview .modal-body").load(page + " table");
-                $('#marcPreview').modal({show:true});
+                $('#marcPreview').modal("show");
 
             });
 
@@ -1490,7 +1488,7 @@
                             $("#elasticPreview .modal-body").html("<h1>"+_("An error has occurred!")+"</h1><h2><em>"+_("Error 404")+"</em></h2><ul><li>"+_("An internal link in the staff interface is broken and the page does not exist")+"</li></ul><h3>"+_("What's next?")+"</h3><ul style='margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;'><li>"+_("Use top menu bar to navigate to another part of Koha.")+"</li><li>"+_("To report a broken link or any other issue, please contact the Koha administrator.")+" <a href='mailto:[% Koha.Preference("KohaAdminEmailAddress") | uri %]'>"+_("Send email")+"</a></li></ul>");
                         }
                     });
-                    $('#elasticPreview').modal({show:true});
+                    $('#elasticPreview').modal("show");
                 });
             [% END %]
 
@@ -1578,14 +1576,13 @@
                 function createChild ( row, itemnumber, duedate ) {
                     // Toolbar
                     var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"></div>');
-                    bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> ' + _("Add to bundle") + '</a>');
-                    bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> ' + _("Remove from bundle") + '</a>');
+                    bundle_toolbar.append('<a class="btn btn-default" data-bs-toggle="modal" data-bs-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> ' + _("Add to bundle") + '</a>');
+                    bundle_toolbar.append('<a class="btn btn-default" data-bs-toggle="modal" data-bs-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> ' + _("Remove from bundle") + '</a>');
 
-                    // Disable management if there's a duedate
-                    if(duedate) {
-                        bundle_toolbar.children('.btn').addClass("disabled");
-                        bundle_toolbar.attr("title", _("This bundle is checked out, it cannot be modified"));
-                    }
+                // Toolbar
+                var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"></div>');
+                bundle_toolbar.append('<a class="btn btn-default" data-bs-toggle="modal" data-bs-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> ' + _("Add to bundle") + '</a>');
+                bundle_toolbar.append('<a class="btn btn-default" data-bs-toggle="modal" data-bs-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> ' + _("Remove from bundle") + '</a>');
 
                     // This is the table we'll convert into a DataTable
                     var bundles_table = $('<table class="display tbundle" data-itemnumber="'+itemnumber+'" id="bundle_table_'+itemnumber+'" width="100%"/>');

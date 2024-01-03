@@ -53,18 +53,18 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
               [% IF ( previousActionCreate ) %]
                 [% IF ( createSuccess ) %]
-                    <div class="dialog message">
+                    <div class="alert alert-info">
                         <p>Collection <em>[% createdTitle | html %]</em> added successfully</p>
                         <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
                     </div>
                 [% ELSE %]
-                  <div class="dialog alert">
+                  <div class="alert alert-warning">
                     <p>Collection <em>[% createdTitle | html %]</em> failed to be added</p>
                     <p>
                         [% IF failureMessage == "NO_TITLE" %]
@@ -83,23 +83,23 @@
 
               [% IF ( previousActionDelete ) %]
                 [% IF ( deleteSuccess ) %]
-                  <div class="dialog message">
+                  <div class="alert alert-info">
                     <p>Collection deleted successfully</p>
                     <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
                   </div>
                 [% ELSE %]
-                  <div class="dialog alert">Collection failed to be deleted</div>
+                  <div class="alert alert-warning">Collection failed to be deleted</div>
                 [% END %]
               [% END %]
 
               [% IF ( previousActionUpdate ) %]
                 [% IF ( updateSuccess ) %]
-                  <div class="dialog message">
+                  <div class="alert alert-info">
                       <p>Collection <em>[% updatedTitle | html %]</em> updated successfully</p>
                       <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
                   </div>
                 [% ELSE %]
-                  <div class="dialog alert">
+                  <div class="alert alert-warning">
                     <p>Collection <em>[% updatedTitle | html %]</em> failed to be updated</p>
                     <p>
                         [% IF failureMessage == "NO_ID" %]
@@ -162,13 +162,13 @@
               </div>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

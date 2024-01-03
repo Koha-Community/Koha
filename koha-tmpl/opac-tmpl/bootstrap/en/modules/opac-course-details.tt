@@ -10,9 +10,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Course reserves for [% course.course_name | html %][%- IF course.section -%] - [% course.section | html %][%- END -%] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %]
-    [% Asset.css("css/datatables.css") | $raw %]
-[% END %]
+[% BLOCK cssinclude %][% END %]
 
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-course-details' %]

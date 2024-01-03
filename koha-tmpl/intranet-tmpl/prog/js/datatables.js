@@ -979,7 +979,7 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
 
         settings["buttons"] = _dt_buttons({included_ids, settings, table_settings});
 
-        $(".dt_button_clear_filter, .columns_controls, .export_controls, .dt_button_configure_table").tooltip();
+        // $(".dt_button_clear_filter, .columns_controls, .export_controls, .dt_button_configure_table").tooltip();
 
         if ( add_filters ) {
             settings['orderCellsTop'] = true;

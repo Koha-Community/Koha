@@ -48,181 +48,184 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
     <div class="row">
      <div class="col-sm-6">
-<h1>Import patrons</h1>
-[% IF ( uploadborrowers ) %]
-    <h2>Import results</h2>
-    <ul>
-        <li>
-            [% tpx("Patron import", "{count_of_imported_records} imported records", {count_of_imported_records = imported}) | html %]
-            [% IF ( lastimported ) %]
-                [% tpx("Patron import", "(last was {last_imported_record})", {last_imported_record = lastimported}) | html %]
-            [% END %]
-        </li>
-        [% IF imported and patronlistname %]
-            <li>Patron list with imported patrons: [% patronlistname | html %]</li>
-        [% END %]
-        <li>
-            [% tpx("Patron import", "{count_of_overwritten_records} overwritten records", {count_of_overwritten_records = overwritten}) | html %]
-            [% IF ( lastoverwritten ) %]
-                [% tpx("Patron import", "(last was {last_overwritten_record})", {last_overwritten_record = lastoverwritten}) | html %]
-            [% END %]
-        </li>
-        <li>
-            [% tpx("Patron import", "{count_of_existing_records} not imported because they are already in borrowers table and overwrite is disabled ", {count_of_existing_records = alreadyindb}) | html %]
-            [% IF ( lastalreadyindb ) %]
-                [% tpx("Patron import", "(last was {last_existing_record})", {last_existing_record = lastalreadyindb}) | html %]
-            [% END %]
-        </li>
-        <li>
-            [% tpx("Patron import", "{count_of_invalid_records} not imported because they are not in the expected format", {count_of_invalid_records = invalid}) | html %]
-            [% IF ( lastinvalid ) %]
-                [% tpx("Patron import", "(last was {last_invalid_record})", {last_invalid_record = lastinvalid}) | html %]
-            [% END %]
-        <li>
-            [% tpx("Patron import", "{total} records parsed", {total = total}) | html %]
-        </li>
-        <li><a href="/cgi-bin/koha/tools/tools-home.pl">Back to Tools</a></li>
-    </ul>
-
-    [% IF ( feedback ) %]
-        <br /><br />
-
-        <div>
-            <h2>Feedback</h2>
-                <ul class="feedback">
-                    [% FOREACH f IN feedback %]
-                        <li>
-                            [% IF ( f.filename ) %]
-                                <span>Parsing upload file</span> <span class="filename">[% f.filename | html %]</span>
-                            [% ELSIF ( f.backend ) %]
-                                <span>Upload parsed using [% f.backend | html %]</span>
-                            [% ELSIF ( f.headerrow ) %]
-                                <span>These fields found: [% f.value | html %]</span>
-                            [% ELSIF ( f.already_in_db ) %]
-                                <span>Patron already in database: [% f.value | html %]</span>
-                            [% ELSE %]
-                                [% f.name | html %] : [% f.value | html %]
-                            [% END %]
-                        </li>
-                    [% END %]
-                </ul>
-        </div>
-    [% END %]
-
-    [% IF ( errors ) %]
-        <br /><br />
-
-        <div>
-            <h2>Error analysis</h2>
+        <h1>Import patrons</h1>
+        [% IF ( uploadborrowers ) %]
+            <h2>Import results</h2>
             <ul>
-                [% FOREACH e IN errors %]
-                    [% IF ( e.badheader ) %]<li>Header row could not be parsed</li>[% END %]
-
-                    [% FOREACH missing_critical IN e.missing_criticals %]
-                        <li class="line_error">
-                            Line <span class="linenumber">[% missing_critical.line | html %]</span>
-
-                            [% IF ( missing_critical.badparse ) %]
-                                <span>could not be parsed!</span>
-                            [% ELSIF ( missing_critical.bad_date ) %]
-                                <span>has &quot;[% missing_critical.key | html %]&quot; in unrecognized format:</span> &quot;[% missing_critical.value | html %]&quot;
-                            [% ELSE %]
-                                <span>Critical field &quot;[% missing_critical.key | html %]&quot;</span>
-
-                                [% IF ( missing_critical.branch_map ) %]
-                                    <span>has unrecognized value &quot;[% missing_critical.value | html %]&quot;</span>
-                                [% ELSIF ( missing_critical.category_map ) %]
-                                    <span>has unrecognized value &quot;[% missing_critical.value | html %]&quot;</span>
-                                [% ELSE %]
-                                    <span>missing</span>
-                                [% END %]
-
-                                (<span>borrowernumber: [% missing_critical.borrowernumber | html %]</span>; <span>surname: [% missing_critical.surname | html %]</span>).
-                            [% END %]
-
-                            <br/>
-                            <code>[% missing_critical.lineraw | html %]</code>
-                        </li>
+                <li>
+                    [% tpx("Patron import", "{count_of_imported_records} imported records", {count_of_imported_records = imported}) | html %]
+                    [% IF ( lastimported ) %]
+                        [% tpx("Patron import", "(last was {last_imported_record})", {last_imported_record = lastimported}) | html %]
                     [% END %]
-
-                    [% IF e.invalid_cardnumber %]
-                        <li class="line_error">
-                            Card number [% e.cardnumber | html %] is not a valid card number
-                            [% IF e.borrowernumber %] (for patron with borrowernumber [% e.borrowernumber | html %])[% END %]
-                        </li>
-                    [% END %]
-                    [% IF e.duplicate_userid %]
-                        <li class="line_error">
-                            Userid [% e.userid | html %] is already used by another patron.
-                        </li>
-                    [% END %]
-                    [% IF e.passwd_too_short %]
-                        <li class="line_error">
-                            Password is too short for patron with borrowernumber [% e.borrowernumber | html %]. Minimum length is [% e.min_length | html %], length is [% e.length | html %]
-                        </li>
-                    [% END %]
-                    [% IF e.passwd_whitespace %]
-                        <li class="line_error">
-                            Password contains whitespace for patron with borrowernumber [% e.borrowernumber | html %].
-                        </li>
-                    [% END %]
-                    [% IF e.passwd_too_weak %]
-                        <li class="line_error">
-                            Password is too weak for patron with borrowernumber [% e.borrowernumber | html %].
-                        </li>
-                    [% END %]
-                    [% IF e.passwd_plugin_err %]
-                        <li class="line_error">
-                            Password plugin error for patron with borrowernumber [% e.borrowernumber | html %].
-                        </li>
-                    [% END %]
-                    [% IF e.passwd_unknown_err %]
-                        <li class="line_error">
-                            Password error for patron with borrowernumber [% e.borrowernumber | html %].
-                        </li>
-                    [% END %]
-                    [% IF e.patron_attribute_unique_id_constraint %]
-                        <li class="line_error">
-                            [% IF e.borrowernumber %]
-                                <span>Patron attribute [% e.attribute.code | html %] must be unique for patron with borrowernumber [% e.borrowernumber | html %].</span>
-                            [% ELSE %]
-                                <span>Patron attribute [% e.attribute.code | html %] must be unique for patron [% e.patron_id | html %].</span>
-                            [% END %]
-                        </li>
-                    [% END %]
-                    [% IF e.patron_attribute_invalid_type %]
-                        <li class="line_error">
-                            [% IF e.borrowernumber %]
-                                <span>Patron attribute [% e.attribute_type_code | html %] is invalid for patron with borrowernumber [% e.borrowernumber | html %].</span>
-                            [% ELSE %]
-                                <span>Patron attribute [% e.attribute_type_code | html %] is invalid for patron [% e.patron_id | html %].</span>
-                            [% END %]
-                        </li>
-                    [% END %]
-                    [% IF e.patron_attribute_non_repeatable %]
-                        <li class="line_error">
-                            [% IF e.borrowernumber %]
-                                <span>Patron attribute [% e.attribute.code | html %] is non-repeatable for patron with borrowernumber [% e.borrowernumber | html %].</span>
-                            [% ELSE %]
-                                <span>Patron attribute [% e.attribute.code | html %] is non-repeatable for patron [% e.patron_id | html %].</span>
-                            [% END %]
-                        </li>
-                    [% END %]
+                </li>
+                [% IF imported and patronlistname %]
+                    <li>Patron list with imported patrons: [% patronlistname | html %]</li>
                 [% END %]
+                <li>
+                    [% tpx("Patron import", "{count_of_overwritten_records} overwritten records", {count_of_overwritten_records = overwritten}) | html %]
+                    [% IF ( lastoverwritten ) %]
+                        [% tpx("Patron import", "(last was {last_overwritten_record})", {last_overwritten_record = lastoverwritten}) | html %]
+                    [% END %]
+                </li>
+                <li>
+                    [% tpx("Patron import", "{count_of_existing_records} not imported because they are already in borrowers table and overwrite is disabled ", {count_of_existing_records = alreadyindb}) | html %]
+                    [% IF ( lastalreadyindb ) %]
+                        [% tpx("Patron import", "(last was {last_existing_record})", {last_existing_record = lastalreadyindb}) | html %]
+                    [% END %]
+                </li>
+                <li>
+                    [% tpx("Patron import", "{count_of_invalid_records} not imported because they are not in the expected format", {count_of_invalid_records = invalid}) | html %]
+                    [% IF ( lastinvalid ) %]
+                        [% tpx("Patron import", "(last was {last_invalid_record})", {last_invalid_record = lastinvalid}) | html %]
+                    [% END %]
+                <li>
+                    [% tpx("Patron import", "{total} records parsed", {total = total}) | html %]
+                </li>
+                <li><a href="/cgi-bin/koha/tools/tools-home.pl">Back to Tools</a></li>
             </ul>
-        </div>
-    [% END %]
-[% ELSE %]
-    <ul>
-        <li>Select a file to import into the borrowers table</li>
-        <li>If a card number exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li>
-    </ul>
+
+            [% IF ( feedback ) %]
+                <br /><br />
+
+                <div>
+                    <h2>Feedback</h2>
+                        <ul class="feedback">
+                            [% FOREACH f IN feedback %]
+                                <li>
+                                    [% IF ( f.filename ) %]
+                                        <span>Parsing upload file</span> <span class="filename">[% f.filename | html %]</span>
+                                    [% ELSIF ( f.backend ) %]
+                                        <span>Upload parsed using [% f.backend | html %]</span>
+                                    [% ELSIF ( f.headerrow ) %]
+                                        <span>These fields found: [% f.value | html %]</span>
+                                    [% ELSIF ( f.already_in_db ) %]
+                                        <span>Patron already in database: [% f.value | html %]</span>
+                                    [% ELSE %]
+                                        [% f.name | html %] : [% f.value | html %]
+                                    [% END %]
+                                </li>
+                            [% END %]
+                        </ul>
+                </div>
+            [% END %]
+
+            [% IF ( errors ) %]
+                <br /><br />
+
+                <div>
+                    <h2>Error analysis</h2>
+                    <ul>
+                        [% FOREACH e IN errors %]
+                            [% IF ( e.badheader ) %]<li>Header row could not be parsed</li>[% END %]
+
+                            [% FOREACH missing_critical IN e.missing_criticals %]
+                                <li class="line_error">
+                                    Line <span class="linenumber">[% missing_critical.line | html %]</span>
+
+                                    [% IF ( missing_critical.badparse ) %]
+                                        <span>could not be parsed!</span>
+                                    [% ELSIF ( missing_critical.bad_date ) %]
+                                        <span>has &quot;[% missing_critical.key | html %]&quot; in unrecognized format:</span> &quot;[% missing_critical.value | html %]&quot;
+                                    [% ELSE %]
+                                        <span>Critical field &quot;[% missing_critical.key | html %]&quot;</span>
+
+                                        [% IF ( missing_critical.branch_map ) %]
+                                            <span>has unrecognized value &quot;[% missing_critical.value | html %]&quot;</span>
+                                        [% ELSIF ( missing_critical.category_map ) %]
+                                            <span>has unrecognized value &quot;[% missing_critical.value | html %]&quot;</span>
+                                        [% ELSE %]
+                                            <span>missing</span>
+                                        [% END %]
+
+                                        (<span>borrowernumber: [% missing_critical.borrowernumber | html %]</span>; <span>surname: [% missing_critical.surname | html %]</span>).
+                                    [% END %]
+
+                                    <br/>
+                                    <code>[% missing_critical.lineraw | html %]</code>
+                                </li>
+                            [% END %]
+
+                            [% IF e.invalid_cardnumber %]
+                                <li class="line_error">
+                                    Card number [% e.cardnumber | html %] is not a valid card number
+                                    [% IF e.borrowernumber %] (for patron with borrowernumber [% e.borrowernumber | html %])[% END %]
+                                </li>
+                            [% END %]
+                            [% IF e.duplicate_userid %]
+                                <li class="line_error">
+                                    Userid [% e.userid | html %] is already used by another patron.
+                                </li>
+                            [% END %]
+                            [% IF e.passwd_too_short %]
+                                <li class="line_error">
+                                    Password is too short for patron with borrowernumber [% e.borrowernumber | html %]. Minimum length is [% e.min_length | html %], length is [% e.length | html %]
+                                </li>
+                            [% END %]
+                            [% IF e.passwd_whitespace %]
+                                <li class="line_error">
+                                    Password contains whitespace for patron with borrowernumber [% e.borrowernumber | html %].
+                                </li>
+                            [% END %]
+                            [% IF e.passwd_too_weak %]
+                                <li class="line_error">
+                                    Password is too weak for patron with borrowernumber [% e.borrowernumber | html %].
+                                </li>
+                            [% END %]
+                            [% IF e.passwd_plugin_err %]
+                                <li class="line_error">
+                                    Password plugin error for patron with borrowernumber [% e.borrowernumber | html %].
+                                </li>
+                            [% END %]
+                            [% IF e.passwd_unknown_err %]
+                                <li class="line_error">
+                                    Password error for patron with borrowernumber [% e.borrowernumber | html %].
+                                </li>
+                            [% END %]
+                            [% IF e.patron_attribute_unique_id_constraint %]
+                                <li class="line_error">
+                                    [% IF e.borrowernumber %]
+                                        <span>Patron attribute [% e.attribute.code | html %] must be unique for patron with borrowernumber [% e.borrowernumber | html %].</span>
+                                    [% ELSE %]
+                                        <span>Patron attribute [% e.attribute.code | html %] must be unique for patron [% e.patron_id | html %].</span>
+                                    [% END %]
+                                </li>
+                            [% END %]
+                            [% IF e.patron_attribute_invalid_type %]
+                                <li class="line_error">
+                                    [% IF e.borrowernumber %]
+                                        <span>Patron attribute [% e.attribute_type_code | html %] is invalid for patron with borrowernumber [% e.borrowernumber | html %].</span>
+                                    [% ELSE %]
+                                        <span>Patron attribute [% e.attribute_type_code | html %] is invalid for patron [% e.patron_id | html %].</span>
+                                    [% END %]
+                                </li>
+                            [% END %]
+                            [% IF e.patron_attribute_non_repeatable %]
+                                <li class="line_error">
+                                    [% IF e.borrowernumber %]
+                                        <span>Patron attribute [% e.attribute.code | html %] is non-repeatable for patron with borrowernumber [% e.borrowernumber | html %].</span>
+                                    [% ELSE %]
+                                        <span>Patron attribute [% e.attribute.code | html %] is non-repeatable for patron [% e.patron_id | html %].</span>
+                                    [% END %]
+                                </li>
+                            [% END %]
+                        [% END %]
+                    </ul>
+                </div>
+            [% END %]
+        [% ELSE %]
+            <ul>
+                <li>Select a file to import into the borrowers table</li>
+                <li>If a card number exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li>
+            </ul>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
 
     <form method="post" action="[% SCRIPT_NAME | html %]" enctype="multipart/form-data">
         [% INCLUDE 'csrf-token.inc' %]
@@ -237,7 +240,7 @@
                 </li>
 
                 <li>
-                    <label for "createpatronlist">Create patron list: </label>
+                    <label for="createpatronlist">Create patron list: </label>
                     <input name="createpatronlist" id="createpatronlist" value="1" type="checkbox">
                     <span class="hint">List name will be file name with timestamp</span>
                 </li>
@@ -270,8 +273,8 @@
                     [% SWITCH borrower_db_column %]
                     [% CASE 'branchcode' %]
                         <li>
-                            <label class="description" for="branchcode">[% borrower_fields.$borrower_db_column | html %]: </label>
-                            <select id="branchcode" name="branchcode">
+                            <label class="description" for="branchcode_default">[% borrower_fields.$borrower_db_column | html %]: </label>
+                            <select id="branchcode_default" name="branchcode">
                                 <option value="" selected="selected"></option>
                                 [% FOREACH library IN Branches.all() %]
                                     <option value="[% library.branchcode | html %]">[% library.branchname | html %]</option>
@@ -281,8 +284,8 @@
                         </li>
                     [% CASE 'categorycode' %]
                         <li>
-                            <label class="description" for="categorycode">[% borrower_fields.$borrower_db_column | html %]: </label>
-                            <select id="categorycode" name="categorycode">
+                            <label class="description" for="categorycode_default">[% borrower_fields.$borrower_db_column | html %]: </label>
+                            <select id="categorycode_default" name="categorycode">
                                 <option value="" selected="selected"></option>
                                 [% FOREACH category IN categories %]
                                     <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
@@ -316,13 +319,15 @@
             </legend>
 
             <ol class="preserve_values" style="display:none;">
-                <div class="hint">Selected fields will be preserved from original patron record when overwriting existing patron.</div>
+                <li>
+                    <div class="hint">Selected fields will be preserved from original patron record when overwriting existing patron.</div>
+                </li>
                 [% FOREACH borrower_db_column IN borrower_fields.keys.sort %]
-                        <li>
-                            <label class="description" for="preserve_existing_[% borrower_db_column | html %]">[% borrower_fields.$borrower_db_column | html %]: </label>
-                            <input name="preserve_existing" id="preserve_existing_[%  borrower_db_column | html %]" value="[%  borrower_db_column | html %]" type="checkbox">
-                            <span class="field_hint">[% borrower_db_column | html %]</span>
-                        </li>
+                    <li>
+                        <label class="description" for="preserve_existing_[% borrower_db_column | html %]">[% borrower_fields.$borrower_db_column | html %]: </label>
+                        <input name="preserve_existing" id="preserve_existing_[%  borrower_db_column | html %]" value="[%  borrower_db_column | html %]" type="checkbox">
+                        <span class="field_hint">[% borrower_db_column | html %]</span>
+                    </li>
                 [% END %]
             </ol>
         </fieldset>
@@ -340,14 +345,14 @@
                     <ol>
                         <li>
                             <label class="update_dateexpiry" for="update_dateexpiry">Renew existing patrons</label>
-                            <select class="update_dateexpiry" type="select" id="update_dateexpiry" name="update_dateexpiry" disabled/>
+                            <select class="update_dateexpiry" id="update_dateexpiry" name="update_dateexpiry" disabled="disabled">
                                 <option value="">using the dateexpiry value in the file, if present</option>
                                 <option value="dateexpiry">from the current membership expiry date</option>
                                 <option value="now">from the current date</option>
                             </select>
                         </li>
                         <li>
-                            <input class="overwrite_passwords" type="checkbox" id="overwrite_passwords" name="overwrite_passwords" disabled/>
+                            <input class="overwrite_passwords" type="checkbox" id="overwrite_passwords" name="overwrite_passwords" disabled="disabled" />
                             <label class="overwrite_passwords" for="overwrite_passwords">Replace patron passwords with those in the file (blank passwords will be ignored)</label>
                         </li>
                     </ol>
@@ -390,57 +395,59 @@
 
 </div>
 
-<div class="col-sm-6 page-section bg-info">
-    <h2>Notes:</h2>
-    <ul>
-        <li>The first line in the file must be a header row defining which columns you are supplying in the import file.</li>
+<div class="col-sm-6">
+    <div class="page-section bg-info">
+        <h2>Notes:</h2>
+        <ul>
+            <li>The first line in the file must be a header row defining which columns you are supplying in the import file.</li>
 
-        <li>
-            <strong>
-                <a href="?sample=1">Download a Starter CSV file with all the columns.</a>
-            </strong>
-            [% tp("CSV file", "Values are comma-separated.") | html %]
-        </li>
-
-        <li>
-            OR choose which fields you want to supply from the following list:
-            <ul>
-                <li>
-                    [% FOREACH columnkey IN borrower_fields.keys.sort %]'[% columnkey | html %]', [% END %]
-                </li>
-            </ul>
-        </li>
-
-        [% IF ( Koha.Preference('ExtendedPatronAttributes') ) %]
             <li>
-                If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values. The attribute type code and a colon should precede each value. For example: <strong>INSTID:12345,LANG:fr</strong> or <strong>STARTDATE:January 1 2010,TRACK:Day</strong>. If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma: <strong>&quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;</strong>.  The second syntax would be required if the data might have a comma in it, like a date string.
+                <strong>
+                    <a href="?sample=1">Download a Starter CSV file with all the columns.</a>
+                </strong>
+                [% tp("CSV file", "Values are comma-separated.") | html %]
             </li>
-        [% END %]
 
-        <li>
-            <strong>Required fields:</strong> The fields 'surname', 'branchcode', and 'categorycode' are <em>required</em> and 'branchcode' and 'categorycode' <strong>must match</strong> valid entries in your database.
-        </li>
+            <li>
+                OR choose which fields you want to supply from the following list:
+                <ul>
+                    <li>
+                        [% FOREACH columnkey IN borrower_fields.keys.sort %]'[% columnkey | html %]', [% END %]
+                    </li>
+                </ul>
+            </li>
 
-        <li>
-            'password' should be stored in plaintext, and will be converted to a Bcrypt hash (if your passwords are already encrypted, talk to your system administrator about options). Passwords will not be updated on overwrite unless replace passwords option is checked.
-        </li>
+            [% IF ( Koha.Preference('ExtendedPatronAttributes') ) %]
+                <li>
+                    If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values. The attribute type code and a colon should precede each value. For example: <strong>INSTID:12345,LANG:fr</strong> or <strong>STARTDATE:January 1 2010,TRACK:Day</strong>. If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma: <strong>&quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;</strong>.  The second syntax would be required if the data might have a comma in it, like a date string.
+                </li>
+            [% END %]
 
-        <li>
-            Date formats should match your system preference, and <strong>must</strong> be zero-padded, e.g. '01/02/2008'.  Alternatively,
-you can supply dates in ISO format (e.g., '2010-10-28').
-        </li>
-    </ul>
+            <li>
+                <strong>Required fields:</strong> The fields 'surname', 'branchcode', and 'categorycode' are <em>required</em> and 'branchcode' and 'categorycode' <strong>must match</strong> valid entries in your database.
+            </li>
+
+            <li>
+                'password' should be stored in plaintext, and will be converted to a Bcrypt hash (if your passwords are already encrypted, talk to your system administrator about options). Passwords will not be updated on overwrite unless replace passwords option is checked.
+            </li>
+
+            <li>
+                Date formats should match your system preference, and <strong>must</strong> be zero-padded, e.g. '01/02/2008'.  Alternatively,
+    you can supply dates in ISO format (e.g., '2010-10-28').
+            </li>
+        </ul>
+    </div>
 </div>
 </div>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- .col-sm-2.col-sm-pull-10 -->
+        </div> <!-- .col-sm-2.order-sm-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

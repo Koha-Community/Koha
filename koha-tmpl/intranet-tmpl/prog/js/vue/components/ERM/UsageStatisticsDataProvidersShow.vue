@@ -34,56 +34,50 @@
             }}
         </h2>
         <div id="usage_data_providerstabs" class="toptabs numbered">
-            <ul class="nav nav-tabs" role="tablist">
-                <li
-                    role="presentation"
-                    v-bind:class="tab_content === 'detail' ? 'active' : ''"
-                >
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
                     <a
                         href="#"
-                        role="tab"
+                        class="nav-link"
                         data-content="detail"
                         @click="change_tab_content"
+                        v-bind:class="tab_content === 'detail' ? 'active' : ''"
                         >{{ $__("Detail") }}</a
                     >
                 </li>
                 <li
                     v-for="(item, i) in available_data_types"
-                    role="presentation"
-                    v-bind:class="
-                        tab_content === item.data_type ? 'active' : ''
-                    "
+                    class="nav-item"
                     :key="i"
                 >
                     <a
                         href="#"
-                        role="tab"
+                        class="nav-link"
                         :data-content="item.data_type"
                         @click="change_tab_content"
+                        v-bind:class="
+                            tab_content === item.data_type ? 'active' : ''
+                        "
                         >{{ $__(item.tab_name) }}</a
                     >
                 </li>
-                <li
-                    role="presentation"
-                    v-bind:class="tab_content === 'upload' ? 'active' : ''"
-                >
+                <li class="nav-item">
                     <a
                         href="#"
-                        role="tab"
+                        class="nav-link"
                         data-content="upload"
                         @click="change_tab_content"
+                        v-bind:class="tab_content === 'upload' ? 'active' : ''"
                         >{{ $__("Manual upload") }}</a
                     >
                 </li>
-                <li
-                    role="presentation"
-                    v-bind:class="tab_content === 'imports' ? 'active' : ''"
-                >
+                <li class="nav-item">
                     <a
                         href="#"
-                        role="tab"
+                        class="nav-link"
                         data-content="imports"
                         @click="change_tab_content"
+                        v-bind:class="tab_content === 'imports' ? 'active' : ''"
                         >{{ $__("Import logs") }}</a
                     >
                 </li>

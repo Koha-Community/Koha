@@ -49,7 +49,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
                 <main>
                     [% INCLUDE 'messages.inc' %]
 
@@ -57,11 +57,11 @@
                     [% INCLUDE 'members-toolbar.inc' %]
 
                     [% IF is_anonymous %]
-                        <div class="dialog alert">This is the anonymous patron.</div>
+                        <div class="alert alert-warning">This is the anonymous patron.</div>
                     [% END %]
 
                     [% IF ( error ) %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             [% IF ( error == 'CANT_DELETE_STAFF' ) %]
                                 <h3>Unable to delete staff user</h3>
                                 <p>Insufficient privileges.</p>
@@ -88,7 +88,7 @@
                     <div class="row">
 
                         [% IF ( was_renewed ) %]
-                            <div class="dialog message">
+                            <div class="alert alert-info">
                                 Patron's account has been renewed until [% patron.dateexpiry | $KohaDates %]
                             </div>
                         [% END %]
@@ -717,13 +717,13 @@
 
                     [% INCLUDE 'patron-detail-tabs.inc' patronpage = "borrower" %]
                 </main>
-            </div> <!-- /.col-sm-10.col-sm-push-2 -->
+            </div> <!-- /.col-sm-10 order-sm-1 order-md-2 -->
 
-            <div class="col-sm-2 col-sm-pull-10">
+            <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
                     [% INCLUDE 'circ-menu.inc' %]
                 </aside>
-            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+            </div> <!-- /.col-sm-2 order-sm-2 order-md-1 -->
         </div> <!-- /.row -->
 
         [% IF Koha.Preference('ClaimReturnedLostValue') %]
@@ -808,7 +808,7 @@
         $(document).ready(function () {
             $("#info_digests").tooltip();
 
-            $("#finesholdsissues a[data-toggle='tab']").on(
+            $("#finesholdsissues a[data-bs-toggle='tab']").on(
                 "shown.bs.tab",
                 function (e) {
                     var oTable = $(

@@ -140,7 +140,7 @@ describe("Processings", () => {
             error: "Something went wrong",
         });
         cy.get("#processings_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -154,7 +154,7 @@ describe("Processings", () => {
             body: [processing],
         });
         cy.get("#processings_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Processing created"
         );
         cy.get("#processing_0").contains(processing.name);
@@ -197,7 +197,7 @@ describe("Processings", () => {
             error: "Something went wrong",
         });
         cy.get("#processings_add").contains("Submit").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -207,7 +207,7 @@ describe("Processings", () => {
             body: processing,
         });
         cy.get("#processings_add").contains("Submit").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             "Processing updated"
         );
     });
@@ -227,7 +227,7 @@ describe("Processings", () => {
         cy.visit("/cgi-bin/koha/preservation/settings");
         cy.get("#processing_0").contains("Remove this processing").click();
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog alert']").contains(
+        cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
@@ -238,7 +238,7 @@ describe("Processings", () => {
         });
         cy.get("#processing_0").contains("Remove this processing").click();
         cy.contains("Yes, delete").click();
-        cy.get("main div[class='dialog message']").contains(
+        cy.get("main div[class='alert alert-info']").contains(
             `Processing ${processing.name} deleted`
         );
     });

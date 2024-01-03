@@ -2,10 +2,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="overdrive-login-label" class="modal-title">Login</h3>
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title" id="overdrive-login-label">Login</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="#" id="overdrive-login-form">
                 [% INCLUDE 'csrf-token.inc' %]
@@ -17,7 +15,7 @@
                 </div>
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-primary overdrive-checkout-submit" value="Login" />
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="cancel">Cancel</a>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-default">Cancel</button>
                 </div>
             </form> <!-- /#overdrive-login-form -->
         </div> <!-- /.modal-content -->

@@ -7,7 +7,7 @@
         <label class="control-label">
             Order by
 
-            <select name="orderby" class="form-control">
+            <select name="orderby" class="form-select">
                 [% IF ( orderby == 'HeadingAsc' ) %]
                     <option value="HeadingAsc" selected="selected">Heading A-Z</option>
                 [% ELSE %]
@@ -33,7 +33,7 @@
         <label class="control-label">
             Operator
 
-            <select name="operator" class="form-control">
+            <select name="operator" class="form-select">
                 [% IF ( operator == 'contains' ) %]
                     <option value="contains" selected="selected">contains</option>
                 [% ELSE %]
@@ -58,7 +58,7 @@
     <div>
         <label>
             Authority type
-            <select name="authtypecode" class="form-control">
+            <select name="authtypecode" class="form-select">
                 [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
                 [% FOREACH authority_type IN authority_types %]
                     [% IF authority_type.authtypecode == authtypecode %]

@@ -1,6 +1,6 @@
 <template>
     <h2>{{ $__("Import from a list") }}</h2>
-    <div v-if="job_id" class="dialog message">
+    <div v-if="job_id" class="alert alert-info">
         {{ $__("Import in progress,") }}
         <a
             :href="`/cgi-bin/koha/admin/background_jobs.pl?op=view&id=${job_id}`"

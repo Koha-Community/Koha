@@ -30,7 +30,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -77,30 +77,30 @@
                             </td>
                             <td>
                                 <div class="btn-group dropup">
-                                    <a class="btn btn-default btn-xs dropdown-toggle" id="listactions[% l.patron_list_id | html %]" role="button" data-toggle="dropdown" href="#">
-                                    Actions <b class="caret"></b>
+                                    <a class="btn btn-default btn-xs dropdown-toggle" id="listactions[% l.patron_list_id | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                                    Actions
                                     </a>
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="listactions[% l.patron_list_id | html %]">
-                                        <li><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-user"></i> Add patrons</a></li>
+                                        <li><a class="dropdown-item" href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-user"></i> Add patrons</a></li>
                                         [% UNLESS shared_by_other %]
-                                            <li><a href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit list</a></li>
-                                            <li><a class="delete_patron" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id | html %]" data-list-name="[% l.name | html %]"><i class="fa fa-trash-can"></i> Delete list</a></li>
+                                            <li><a class="dropdown-item" href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit list</a></li>
+                                            <li><a class="delete_patron dropdown-item" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id | html %]" data-list-name="[% l.name | html %]"><i class="fa fa-trash-can"></i> Delete list</a></li>
                                         [% END %]
                                         [% IF ( l.patron_list_patrons_rs.count ) %]
-                                            <li class="divider"></li>
+                                            <li><hr class="dropdown-divider" /></li>
                                             <li>
-                                                <a class="print_cards" href="/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id | html %]" data-patron_list_id="[% l.patron_list_id | html %]"><i class="fa fa-print"></i> Print patron cards</a>
+                                                <a class="print_cards dropdown-item" href="/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id | html %]" data-patron_list_id="[% l.patron_list_id | html %]"><i class="fa fa-print"></i> Print patron cards</a>
                                             </li>
                                             [% IF CAN_user_tools_edit_patrons %]
                                                 <li>
-                                                    <a href="/cgi-bin/koha/tools/modborrowers.pl?patron_list_id=[% l.patron_list_id | uri %]&op=show">
+                                                    <a class="dropdown-item dropdown-item" href="/cgi-bin/koha/tools/modborrowers.pl?patron_list_id=[% l.patron_list_id | uri %]&op=show">
                                                         <i class="fa-solid fa-pencil" aria-hidden="true"></i> Batch edit patrons
                                                     </a>
                                                 </li>
                                             [% END %]
                                             [% IF CAN_user_tools_delete_anonymize_patrons %]
                                                 <li>
-                                                    <a href="/cgi-bin/koha/tools/cleanborrowers.pl?step=2&patron_list_id=[% l.patron_list_id | uri %]&checkbox=borrower">
+                                                    <a class="dropdown-item" href="/cgi-bin/koha/tools/cleanborrowers.pl?step=2&patron_list_id=[% l.patron_list_id | uri %]&checkbox=borrower">
                                                         <i class="fa fa-trash-can"></i> Batch delete patrons
                                                     </a>
                                                 </li>
@@ -120,8 +120,8 @@
                 <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 id="patronExportModal_label">Print patron cards</h3>
+                    <h1 class="modal-title" id="patronExportModal_label">Print patron cards</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
@@ -131,17 +131,17 @@
             </div>
 
         [% ELSE %]
-           <div class="dialog message">There are no patron lists.</div>
+           <div class="alert alert-info">There are no patron lists.</div>
         [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -210,7 +210,7 @@
                 $("#patronExportModal .modal-body").load( target_url + "?" + params + " #export_patron_list");
             });
 
-            patronExportModal.on("click",".closebtn,.gb-close",function(e){
+            patronExportModal.on("click",".btn-close,.gb-close",function(e){
                 e.preventDefault();
                 patronExportModal.modal("hide");
             });

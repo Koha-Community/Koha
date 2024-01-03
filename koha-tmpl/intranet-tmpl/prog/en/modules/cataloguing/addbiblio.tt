@@ -63,7 +63,7 @@
             $("#toolbar").hide();
         [% END %]
 
-        $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+        $("a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
             $( e.target.hash + " .input_marceditor:visible:eq(0)").focus();
         });
 
@@ -317,7 +317,7 @@ function updateHeadingLinks(links) {
 
     // Delete the old message dialog and create a new one
     $('#autolinker_dialog').remove();
-    var message_dialog = $('<div id="autolinker_dialog" class="dialog message"><strong>' + _("Automatic authority link results:") + '</strong><ul></ul></div>');
+    var message_dialog = $('<div id="autolinker_dialog" class="alert alert-info"><strong>' + _("Automatic authority link results:") + '</strong><ul></ul></div>');
     var message_dialog_ul = message_dialog.find('ul');
 
     $.each(links, function(index, heading) {
@@ -568,7 +568,7 @@ $(document).ready(function(){
         var label = new Array();
         var flag = false;
         var tabflag= new Array();
-        var StrAlert = "<div id='form-errors' class='dialog alert list'>";
+        var StrAlert = "<div id='form-errors' class='alert alert-warning list'>";
         var notFilledClass = "subfield_not_filled";
 
         if (mandatory) {
@@ -843,10 +843,8 @@ $(document).ready(function(){
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
-
+            <div class="col-md-10 offset-md-1">
                 [% INCLUDE 'messages.inc' %]
-
                 [% IF ( INVALID_METADATA ) %]
                     <div class="page-section bg-danger">
                         <h1>Errors found</h1>
@@ -882,7 +880,7 @@ $(document).ready(function(){
                 [% UNLESS ( number ) %]
                     <!-- show duplicate warning on tab 0 only -->
                     [% IF ( duplicatebiblionumber ) %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             <h3>Duplicate record suspected</h3>
                             <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | uri %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | uri %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicatetitle | html %] <i class="fa-solid fa-window-restore"></i></a> ?</p>
                             [% IF ( CAN_user_editcatalogue_edit_items ) %]
@@ -931,13 +929,13 @@ $(document).ready(function(){
                             <!-- Not using fast cataloging - Display split menu -->
                             <div class="btn-group">
                                 <button class="btn btn-primary" id="saverecord"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
+                                <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+
                                 </button>
-                                <ul class="dropdown-menu">
-                                    <li><a id="saveandview" href="#">Save and view record</a></li>
-                                    <li><a id="saveanditems" href="#">Save and edit items</a></li>
-                                    <li><a id="saveandcontinue" href="#">Save and continue editing</a></li>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" id="saveandview" href="#">Save and view record</a></li>
+                                    <li><a class="dropdown-item" id="saveanditems" href="#">Save and edit items</a></li>
+                                    <li><a class="dropdown-item" id="saveandcontinue" href="#">Save and continue editing</a></li>
                                 </ul>
                             </div>
                         [% END %]
@@ -958,21 +956,21 @@ $(document).ready(function(){
                     [% END %]
 
                     <div class="btn-group">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
+                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> Settings</button>
                         <ul id="settings-menu" class="dropdown-menu">
                             [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
-                                <li><a href="#" id="switcheditor">Switch to advanced editor</a></li>
+                                <li><a class="dropdown-item" href="#" id="switcheditor">Switch to advanced editor</a></li>
                             [% END %]
                             [% UNLESS advancedMARCEditor %]
                                 <li>
-                                    <a href="#" id="marcDocsSelect"><i class="fa fa-check-square"></i> Show MARC tag documentation links</a>
+                                    <a class="dropdown-item" href="#" id="marcDocsSelect"><i class="fa fa-check-square"></i> Show MARC tag documentation links</a>
                                 <li>
-                                    <a href="#" id="marcTagsSelect"><i class="fa fa-check-square"></i> Show tags</a>
+                                    <a class="dropdown-item" href="#" id="marcTagsSelect"><i class="fa fa-check-square"></i> Show tags</a>
                                 </li>
                             [% END %]
-                            <li class="dropdown-header">Change framework</li>
+                            <li><h6 class="dropdown-header">Change framework</h6></li>
                             <li>
-                                <a href="#" class="change-framework" data-frameworkcode="">
+                                <a class="dropdown-item" href="#" class="change-framework" data-frameworkcode="">
                                     [% IF ( frameworkcode ) %]
                                        <i class="fa fa-fw">&nbsp;</i>
                                     [% ELSE %]
@@ -983,7 +981,7 @@ $(document).ready(function(){
                             </li>
                             [% FOREACH framework IN frameworks%]
                                 <li>
-                                    <a href="#" class="change-framework" data-frameworkcode="[% framework.frameworkcode | html %]">
+                                    <a class="dropdown-item" href="#" class="change-framework" data-frameworkcode="[% framework.frameworkcode | html %]">
                                         [% IF framework.frameworkcode == frameworkcode %]
                                             <i class="fa fa-fw fa-check"></i>
                                         [% ELSE %]
@@ -1038,7 +1036,7 @@ $(document).ready(function(){
                 </div> <!-- /#toolbar.btn-toolbar -->
 
                 [% IF bib_doesnt_exist %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         The record you are trying to edit doesn't exist.<br>
                         <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Add a new record</a> or <a href="/cgi-bin/koha/catalogue/search.pl">do a catalog search</a>.
                     </div>
@@ -1154,7 +1152,7 @@ $(document).ready(function(){
                                                         <span class="handle">&#xf58e;</span>
                                                         <input type="text"
                                                                 title="[% subfield_loo.marc_lib | $raw %]"
-                                                                style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
+                                                                style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]"
                                                                 name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
                                                                 value="[% subfield_loo.subfield | html %]"
                                                                 size="1"
@@ -1282,7 +1280,7 @@ $(document).ready(function(){
 
             [% INCLUDE 'modals/cataloguing_create_av.inc' %]
 
-        </div> <!-- /.col-md-10.col-md-offset-1 -->
+        </div> <!-- /.col-md-10.offset-md-1 -->
     </div> <!-- /.row -->
 
 [% INCLUDE 'intranet-bottom.inc' %]

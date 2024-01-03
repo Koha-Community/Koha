@@ -80,9 +80,9 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-10 offset-md-1">
                 [% IF ( allmatch ) %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <h4>No records imported</h4>
                         No records have been imported because they all match existing records in your catalog.<br />You'll have to treat them individually.
                     </div>
@@ -400,18 +400,17 @@
                                     </table> <!-- .biblio.unselected.rows -->
 
                                     <div class="modal" id="dataPreview" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel">
-                                        <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span
-                                                            aria-hidden="true">&times;</span></button>
-                                                    <h4 id="dataPreviewLabel">MARC preview</h4>
+                                                    <h1 class="modal-title" id="dataPreviewLabel">MARC preview</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </div> <!-- /.modal-content -->
                                         </div> <!-- /.modal-dialog -->
@@ -426,7 +425,7 @@
                                         <fieldset class="rows" style="float:none;">
                                             <legend>Item</legend>
                                             [% IF ( NoACQframework ) %]
-                                                <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
+                                                <div class="alert alert-info">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
                                             [% END %]
                                             <div class="item_edit_form">
                                                 [% FOREACH item IN items %]
@@ -547,8 +546,9 @@
                         </fieldset>
                     </form> <!-- /#Aform -->
                 [% ELSE # IF ( batch_details ) %]
-                    <div>
-                        <h1>Choose the file to add to the basket</h1>
+                    <h1>Choose the file to add to the basket</h1>
+
+                    <div class="page-section">
                         <table id="files">
                             <thead>
                                 <tr>
@@ -593,7 +593,7 @@
                                 [% END # /FOREACH batch_lis %]
                             </tbody>
                         </table> <!-- /#files -->
-                    </div>
+                    </div> <!-- /.page-section -->
                 [% END # /IF ( batch_details ) %]
             </div> [% # /div.col-sm-6 %]
         </div> [% # /div.row %]

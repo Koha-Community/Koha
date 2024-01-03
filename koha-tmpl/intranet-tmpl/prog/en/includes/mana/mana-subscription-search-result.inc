@@ -52,17 +52,17 @@
                                 <td class="actions">
                                     <button class="btn btn-default btn-xs mana-use" data-subscription_id="[% subscription.id | html %]" id="mana-use-[% subscription.id | html %]"><i class="fa fa-download"></i> Import</button>
                                     <div class="dropup">
-                                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Report <span class="caret"></span>
+                                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Report
                                         </button>
-                                        <ul class="dropdown-menu pull-right mana-actions" id="mana-actions-[% subscription.id | html %]">
+                                        <ul class="dropdown-menu dropdown-menu-end mana-actions" id="mana-actions-[% subscription.id | html %]">
                                             [% IF ( subscription.comments.size ) %]
                                                 [% FOREACH comment IN subscription.comments %]
-                                                    <li><a data-commentid="[% comment.id | html %]" data-resourceid="[% subscription.id | html %]" href="#">[% comment.message | html %] ([% comment.nb | html %])</a></li>
+                                                    <li><a class="dropdown-item" data-commentid="[% comment.id | html %]" data-resourceid="[% subscription.id | html %]" href="#">[% comment.message | html %] ([% comment.nb | html %])</a></li>
                                                 [% END %]
-                                                <li role="separator" class="divider"></li>
+                                                <li><hr class="dropdown-divider"></li>
                                             [% END %]
-                                            <li><a data-commentid="other" data-resourceid="[% subscription.id | html %]" href="#">New comment</a></li>
+                                            <li><a class="dropdown-item" data-commentid="other" data-resourceid="[% subscription.id | html %]" href="#">New comment</a></li>
                                         </ul>
                                     </div>
                                 </td>

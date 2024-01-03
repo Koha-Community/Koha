@@ -64,7 +64,7 @@
                     $('#importing_' + frameworkcode).css('display', 'block');
                     if (navigator.userAgent.toLowerCase().indexOf('firefox') == -1) $("body").css("cursor", "progress");
                     importing = true;
-                    $(".modal-footer,.closebtn").hide();
+                    $(".modal-footer,.btn-close").hide();
                     return true;
                 } else
                     return false;

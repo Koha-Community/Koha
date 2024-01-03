@@ -88,7 +88,7 @@
                 [% INCLUDE 'messages.inc' %]
                 <div class="row">
                 [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-sm-10 col-sm-push-2">
+                    <div class="col-md-10 order-md-2 order-sm-1">
                 [% ELSE %]
                     <div class="col-sm-12">
                 [% END %]
@@ -96,7 +96,7 @@
                 <h1>Curbside pickups</h1>
 
                 [% UNLESS policy.enabled %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         Curbside pickups are not enabled for your library.
                     </div>
                     [% INCLUDE 'intranet-bottom.inc' %]
@@ -155,35 +155,35 @@
                         [% ELSE %]
                         <li role="presentation">
                         [% END %]
-                            <a id="to-be-staged-tab"      href="#to-be-staged" role="tab" data-toggle="tab">To be staged ([% to_be_staged.count | html %])</a>
+                            <a id="to-be-staged-tab"      href="#to-be-staged" role="tab" data-bs-toggle="tab">To be staged ([% to_be_staged.count | html %])</a>
                         </li>
                         [% IF tab == 'staged-and-ready' %]
                         <li role="presentation" class="active">
                         [% ELSE %]
                         <li role="presentation">
                         [% END %]
-                            <a id="staged-and-ready-tab"  href="#staged-and-ready" role="tab" data-toggle="tab">Staged & ready ([% staged_and_ready.count | html %])</a>
+                            <a id="staged-and-ready-tab"  href="#staged-and-ready" role="tab" data-bs-toggle="tab">Staged & ready ([% staged_and_ready.count | html %])</a>
                         </li>
                         [% IF tab == 'patron-is-outside' %]
                         <li role="presentation" class="active">
                         [% ELSE %]
                         <li role="presentation">
                         [% END %]
-                            <a id="patron-is-outside-tab" href="#patron-is-outside" role="tab" data-toggle="tab">Patron is outside ([% patron_outside.count | html %])</a>
+                            <a id="patron-is-outside-tab" href="#patron-is-outside" role="tab" data-bs-toggle="tab">Patron is outside ([% patron_outside.count | html %])</a>
                         </li>
                         [% IF tab == 'delivered-today' %]
                         <li role="presentation" class="active">
                         [% ELSE %]
                         <li role="presentation">
                         [% END %]
-                            <a id="delivered-today-tab"   href="#delivered-today" role="tab" data-toggle="tab">Delivered today ([% delivered_today.count | html %])</a>
+                            <a id="delivered-today-tab"   href="#delivered-today" role="tab" data-bs-toggle="tab">Delivered today ([% delivered_today.count | html %])</a>
                         </li>
                         [% IF tab == 'schedule-pickup' %]
                         <li role="presentation" class="active">
                         [% ELSE %]
                         <li role="presentation">
                         [% END %]
-                            <a id="schedule-pickup-tab"   href="#schedule-pickup" role="tab" data-toggle="tab">Schedule pickup</a>
+                            <a id="schedule-pickup-tab"   href="#schedule-pickup" role="tab" data-bs-toggle="tab">Schedule pickup</a>
                         </li>
                     </ul>
 
@@ -433,7 +433,7 @@
                     [% END %]
                         [% IF !patron || ( patron && existing_curbside_pickups.count >= 1 ) %]
                             [% IF existing_curbside_pickups.count >= 1 %]
-                                <div class="dialog alert">
+                                <div class="alert alert-warning">
                                     [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %]) already has a scheduled pickup for this library.
                                 </div>
                             [% END %]
@@ -496,19 +496,19 @@
                                     </fieldset>
                                 </form>
                             [% ELSE %]
-                                <div class="dialog alert">The patron does not have waitings holds.</div>
+                                <div class="alert alert-warning">The patron does not have waitings holds.</div>
                             [% END %]
                         [% END %]
                     </div>
                 </div>
                 </div>
                 [% IF Koha.Preference('CircSidebar') %]
-                    </div> <!-- /.col-sm-10.col-sm-push-2 -->
-                        <div class="col-sm-2 col-sm-pull-10">
+                    </div> <!-- /.col-md-10.order-md-2 -->
+                        <div class="col-md-2 order-sm-2 order-md-1">
                             <aside>
                                 [% INCLUDE 'circ-nav.inc' %]
                             </aside>
-                        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                        </div> <!-- /.col-md-2.order-md-1 -->
                     </div> <!-- /.row -->
                 [% END %]
             </main>
@@ -670,7 +670,7 @@
                 });
             }
 
-            $("#pickup-tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+            $("#pickup-tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                 $("#current-tab").val($(this).attr('href').substring(1)); // Remove #
             });
             $("#auto_refresh,#refresh_delay").on("change", function(){

@@ -110,7 +110,7 @@
     [% IF ( ! identity_providers.empty ) %]
         [% FOREACH provider IN identity_providers %]
             <p class="clearfix">
-                <a href="[% provider.url | url %]" class="btn btn-light col-xs-12" id="provider_[% provider.code | html %]">
+                <a href="[% provider.url | url %]" class="btn btn-light col" id="provider_[% provider.code | html %]">
                     [% IF provider.icon_url %]
                     <img src="[% provider.icon_url | url %]"  style="max-height: 20px; max-width: 20px;"/>
                     [% ELSE %]
@@ -230,8 +230,8 @@
             <div id="login_error">Invalid two-factor code</div>
         [% END %]
 
-        <div id="email_error" class="dialog alert" style="display: none;"></div>
-        <div id="email_success" class="dialog message" style="display: none;"></div>
+        <div id="email_error" class="alert alert-warning" style="display: none;"></div>
+        <div id="email_success" class="alert alert-info" style="display: none;"></div>
         <p>
             <label for="otp_token">Two-factor authentication code:</label>
             <input type="text" name="otp_token" id="otp_token" class="input focus" value="" size="20" tabindex="1" />

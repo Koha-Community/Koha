@@ -56,7 +56,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
                 <main>
                     [% INCLUDE 'messages.inc' %]
                     <h1>Manage staged MARC records</h1>
@@ -65,11 +65,11 @@
                     [% END %]
                     [% FOREACH message IN messages %]
                       [% IF message.type == 'success' %]
-                        <div class="dialog message">
+                        <div class="alert alert-info">
                       [% ELSIF message.type == 'warning' %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                       [% ELSIF message.type == 'error' %]
-                        <div class="dialog alert" style="margin:auto;">
+                        <div class="alert alert-warning" style="margin:auto;">
                       [% END %]
                       [% IF message.code == 'cannot_enqueue_job' %]
                           <span>Cannot enqueue this job.</span>
@@ -81,7 +81,7 @@
                     [% END %]
 
                     [% IF job_enqueued %]
-                        <div class="dialog message">
+                        <div class="alert alert-info">
                           <h1>The job has been enqueued!</h1>
                           <p>It will be processed as soon as possible.</p>
                           <p><a class="job_details" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]">View detail of the enqueued job</a>
@@ -91,7 +91,7 @@
                         [% IF ( alert ) %]
                             <div class="alert">
                         [% ELSE %]
-                            <div class="dialog message">
+                            <div class="alert alert-info">
                         [% END %]
                             <p><strong>
                                 [% IF ( label_batch_msg == "error" ) %]
@@ -104,15 +104,15 @@
                     [% END %]
 
                     [% IF ( did_clean ) %]
-                        <div class="dialog message">Cleaned import batch #[% import_batch_id | html %]</div>
+                        <div class="alert alert-info">Cleaned import batch #[% import_batch_id | html %]</div>
                     [% END %]
 
                     [% IF ( did_delete ) %]
-                        <div class="dialog message">Import batch deleted successfully</div>
+                        <div class="alert alert-info">Import batch deleted successfully</div>
                     [% END %]
 
                     [% UNLESS batch_list || batch_info || job_enqueued %]
-                        <div class="dialog message">
+                        <div class="alert alert-info">
                             <p>No records have been staged.</p>
                             <p><a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC records for import</a>.</p>
                         </div>
@@ -129,24 +129,24 @@
 
                         [% IF ( rematch_attempted ) %]
                             [% IF ( rematch_failed ) %]
-                                <div class="dialog alert">Failed to apply different matching rule</div>
+                                <div class="alert alert-warning">Failed to apply different matching rule</div>
                             [% ELSE %]
-                                <div class="dialog message">Applied different matching rule. Number of records matched now
+                                <div class="alert alert-info">Applied different matching rule. Number of records matched now
                                     [% num_with_matches | html %]
                                 </div>
                             [% END %]
                         [% END %]
 
                         [% IF ( changed_overlay_action ) %]
-                            <div class="dialog message">Changed action if matching record found</div>
+                            <div class="alert alert-info">Changed action if matching record found</div>
                         [% END %]
 
                         [% IF ( changed_nomatch_action ) %]
-                            <div class="dialog message">Changed action if no match found</div>
+                            <div class="alert alert-info">Changed action if no match found</div>
                         [% END %]
 
                         [% IF ( changed_item_action ) %]
-                            <div class="dialog message">Changed item processing option</div>
+                            <div class="alert alert-info">Changed item processing option</div>
                         [% END %]
 
                         [% UNLESS job_enqueued %]
@@ -417,18 +417,18 @@
                         </table>
                     </div>
 
-                        <div id="marcPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-wide">
+                        <div id="marcPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h3 id="marcPreviewLabel">MARC preview</h3>
+                                        <h1 class="modal-title" id="marcPreviewLabel">MARC preview</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                        <button class="btn btn-default" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -436,12 +436,12 @@
                     [% END # /IF import_batch_id %]
                 </main>
 
-            </div> <!-- /.col-sm-10.col-sm-push-2 -->
-            <div class="col-sm-2 col-sm-pull-10">
+            </div> <!-- /.col-md-10.order-md-2 -->
+            <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
                     [% INCLUDE 'cat-menu.inc' %]
                 </aside>
-            </div> <!-- .col-sm-2.col-sm-pull-10 -->
+            </div> <!-- .col-sm-2.order-sm-1 -->
         </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -614,7 +614,7 @@
                 var page = $(this).attr("href");
                 $("#marcPreviewLabel").text(ltitle);
                 $("#marcPreview .modal-body").load(page + " table");
-                $('#marcPreview').modal({ show: true });
+                $('#marcPreview').modal("show");
             });
             $("#marcPreview").on("hidden.bs.modal", function() {
                 $("#marcPreviewLabel").html("");
@@ -639,28 +639,28 @@
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
 [% BLOCK pagination %]
-    <nav>
+    <nav aria-label="Page navigation">
         <ul class="pagination">
             [% FOREACH page IN pages %]
                 [% IF ( page.current_page && page.page_number > 1 ) %]
-                    <li><a href="?offset=0" class="nav"><i class="fa fa-fw fa-angle-double-left"></i> First</a></li>
-                    <li><a href="?offset=[% offset - results_per_page | uri %]"><i class="fa fa-fw fa-angle-left"></i> Previous</a></li>
+                    <li class="page-item"><a href="?offset=0" class="page-link"><i class="fa fa-fw fa-angle-double-left"></i> First</a></li>
+                    <li class="page-item"><a href="?offset=[% offset - results_per_page | uri %]" class="page-link"><i class="fa fa-fw fa-angle-left"></i> Previous</a></li>
                 [% END %]
             [% END %]
             [% FOREACH page IN pages %]
                 [% IF ( page.current_page ) %]
                     [% SET current_page = page.page_number %]
-                    <li class="active"><span class="current">[% page.page_number | html %]</span></li>
+                    <li class="page-item active" aria-current="page"><span class="page-link">[% page.page_number | html %]</span></li>
                 [% ELSE %]
-                    <li><a class="nav" href="?offset=[% page.offset | uri %]">[% page.page_number | html %]</a></li>
+                    <li class="page-item"><a class="page-link" href="?offset=[% page.offset | uri %]">[% page.page_number | html %]</a></li>
                 [% END %]
             [% END %]
             [% IF ( current_page < pages.size() ) %]
-                <li>
-                    <a href="?offset=[% offset + results_per_page | uri %]" class="nav">Next <i class="fa fa-fw fa-angle-right"></i></a>
+                <li class="page-item">
+                    <a href="?offset=[% offset + results_per_page | uri %]" class="page-link">Next <i class="fa fa-fw fa-angle-right"></i></a>
                 </li>
-                <li>
-                    <a href="?offset=[% ( results_per_page * ( pages.size - 1 ) ) | uri %]" class="nav">Last <i class="fa fa-fw fa-angle-double-right"></i></a>
+                <li class="page-item">
+                    <a href="?offset=[% ( results_per_page * ( pages.size - 1 ) ) | uri %]" class="page-link">Last <i class="fa fa-fw fa-angle-double-right"></i></a>
                 </li>
             [% END %]
         </ul>

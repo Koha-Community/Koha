@@ -195,7 +195,7 @@
                         loaded = 1;
                     })
                     .fail(function() {
-                        $('#switchview').parent().html("<div class=\"dialog alert\">"+_("Sorry, plain view is temporarily unavailable")+".</div>");
+                        $('#switchview').parent().html("<div class=\"alert alert-warning\">"+_("Sorry, plain view is temporarily unavailable")+".</div>");
                         $("#plainmarc").hide();
                         $("#labeledmarc").show();
                     });

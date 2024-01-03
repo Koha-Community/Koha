@@ -11,16 +11,16 @@
 <div class="container">[% IF ( email_add ) %]
 
 	[% IF ( SENT ) %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             <h1>Message sent</h1>
             <p>The cart was sent to: [% email_add | html %]</p>
         </div>
 	[% END %]
 	[% IF ( error ) %]
-        <div class="dialog alert">Problem sending the cart...</div>
+        <div class="alert alert-warning">Problem sending the cart...</div>
 	[% END %]
 
-    <nav class="navbar navbar-default navbar-fixed-bottom">
+    <nav class="navbar navbar-default fixed-bottom">
         <div class="container-fluid">
             <fieldset class="action">
                 <button type="button" class="btn btn-default close_window focus">Close window</button>
@@ -48,7 +48,7 @@
     <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
     [% INCLUDE 'csrf-token.inc' %]
 
-    <nav class="navbar navbar-default navbar-fixed-bottom">
+    <nav class="navbar navbar-default fixed-bottom">
         <div class="container-fluid">
             <fieldset class="action">
                 <input type="hidden" name="op" value="cud-send" />

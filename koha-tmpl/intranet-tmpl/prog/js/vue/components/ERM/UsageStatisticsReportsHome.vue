@@ -4,31 +4,27 @@
         <h2>{{ $__("Usage statistics reports") }}</h2>
         <div id="usage_data_providerstabs" class="toptabs numbered">
             <ul class="nav nav-tabs" role="tablist">
-                <li
-                    role="presentation"
-                    v-bind:class="
-                        custom_or_default === 'default' ? 'active' : ''
-                    "
-                >
+                <li class="nav-item" role="presentation">
                     <a
                         href="#"
-                        role="tab"
+                        class="nav-link"
                         data-content="default"
                         @click="changeCustomOrDefault"
+                        v-bind:class="
+                            custom_or_default === 'default' ? 'active' : ''
+                        "
                         >{{ $__("Saved reports") }}</a
                     >
                 </li>
-                <li
-                    role="presentation"
-                    v-bind:class="
-                        custom_or_default === 'custom' ? 'active' : ''
-                    "
-                >
+                <li class="nav-item" role="presentation">
                     <a
                         href="#"
-                        role="tab"
+                        class="nav-link"
                         data-content="custom"
                         @click="changeCustomOrDefault"
+                        v-bind:class="
+                            custom_or_default === 'custom' ? 'active' : ''
+                        "
                         >{{ $__("Create report") }}</a
                     >
                 </li>

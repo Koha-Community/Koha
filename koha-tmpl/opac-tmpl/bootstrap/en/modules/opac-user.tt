@@ -450,19 +450,19 @@
                                                         [% ELSE %]
                                                             <td class="renew" data-order="0">
                                                         [% END %]
-                                                        [% IF ISSUE.renewed %]<span class="blabel label-success">Renewed!</span><br />[% END %]
+                                                        [% IF ISSUE.renewed %]<span class="bbadge text-bg-success">Renewed!</span><br />[% END %]
                                                         [% IF ( ISSUE.status ) %]
                                                             [% IF ( canrenew ) %]
                                                                 <input type="checkbox" name="issue" value="[% ISSUE.issue_id | uri %]"/> <a class="submit-form-link" href="#" data-method="post" data-action="/cgi-bin/koha/opac-renew.pl?from=opac_user" data-issue="[% ISSUE.issue_id | html %]" data-borrowernumber="[% ISSUE.borrowernumber | html%]" data-op="cud-renew">Renew</a>
                                                             [% END %]
                                                             [% IF ISSUE.renewalfee > 0 %]
-                                                                <span class="renewalfee label label-warning">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
+                                                                <span class="renewalfee badge text-bg-warning">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
                                                             [% END %]
                                                             [% IF ISSUE.itemtype_object.rentalcharge_daily > 0 %]
-                                                                <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_daily | $Price %] per day</span>
+                                                                <span class="renewalfee badge text-bg-warning">[% ISSUE.itemtype_object.rentalcharge_daily | $Price %] per day</span>
                                                             [% END %]
                                                             [% IF ISSUE.itemtype_object.rentalcharge_hourly > 0 %]
-                                                                <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_hourly | $Price %] per hour</span>
+                                                                <span class="renewalfee badge text-bg-warning">[% ISSUE.itemtype_object.rentalcharge_hourly | $Price %] per hour</span>
                                                             [% END %]
                                                             <span class="renewals">(
                                                                 [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
@@ -585,10 +585,8 @@
                                         <form method="get" action="#" id="addNoteForm">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="addNoteLabel">Report a problem</h5>
-                                                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
+                                                    <h1 class="modal-title" id="addNoteLabel">Report a problem</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body" id="addNoteBody">
                                                     <h6 id="addNoteTitle"></h6>
@@ -598,7 +596,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-primary">Submit note</button>
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -913,8 +911,8 @@
                                                         </form>
                                                     [% END %]
                                                 </td>
+                                                <td></td>
                                             [% END %]
-                                            <td></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -942,7 +940,7 @@
                                                     <th class="article-request-format">Format</th>
                                                     <th class="article-request-status">Status</th>
                                                     <th class="article-request-branchcode">Pickup library</th>
-                                                    <th class="nosort article-request-cancel">&nbsp;</th>
+                                                    <th class="article-request-cancel">Actions</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -997,7 +995,13 @@
                                                                 [% ar.patron_notes | html %]
                                                             </td>
 
-                                                            <td class="article-request-format">[% IF ar.format == 'PHOTOCOPY' %]<span>Copy</span>[% ELSIF ar.format == 'SCAN' %]<span>Scan</span>[% END %]</td>
+                                                            <td class="article-request-format">
+                                                                [% IF ar.format == 'PHOTOCOPY' %]
+                                                                    <span>Copy</span>
+                                                                [% ELSIF ar.format == 'SCAN' %]
+                                                                    <span>Scan</span>
+                                                                [% END %]
+                                                            </td>
 
                                                             <td class="article-request-status">
                                                                 [% IF ar.status == 'PENDING' %]
@@ -1049,15 +1053,13 @@
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-header">
                     [% IF HOLD.suspend %]
-                        <h5 class="modal-title" id="suspendModalLabel">Resume hold</h5>
+                        <h1 class="modal-title" id="suspendModalLabel">Resume hold</h1>
                         <input type="hidden" name="op" value="cud-unsuspend" />
                     [% ELSE %]
-                        <h5 class="modal-title" id="suspendModalLabel">Suspend hold</h5>
+                        <h1 class="modal-title" id="suspendModalLabel">Suspend hold</h1>
                         <input type="hidden" name="op" value="cud-suspend" />
                     [% END %]
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">x</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <h6 id="suspendHoldTitle"></h6>
@@ -1068,8 +1070,8 @@
                     <p><a href="#" class="clear-flatpickr" data-fp="suspend_untilDate">Clear date to suspend indefinitely</a></p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Suspend</button>
-                    <button data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-times" aria-hidden="true"></i> Do not suspend</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Suspend</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-secondary"><i class="fa fa-times" aria-hidden="true"></i> Do not suspend</button>
                 </div>
             </form>
         </div> <!-- /.modal-content -->
@@ -1277,7 +1279,7 @@
                     ],
                 }));
             });
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (event) {
                 dTables.DataTable().responsive.recalc();
                 dataTables.DataTable().responsive.recalc();
             } );

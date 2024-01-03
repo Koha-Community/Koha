@@ -38,13 +38,13 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             [% INCLUDE 'messages.inc' %]
 
         <h1>Attach an item [% IF ( biblio.title ) %] to [% INCLUDE 'biblio-title.inc' %][% END %]</h1>
 
 [% IF ( error ) %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
 
         [% IF errornonewitem %]
             <span>ERROR: Unable to create the new item.</span>
@@ -62,7 +62,7 @@
 	[% ELSE %]
 	    [% IF ( success ) %]
             [% IF from_biblio.items.count == 0 && CAN_user_editcatalogue_edit_catalogue %]
-                <div class="dialog alert" id="del-bib-alert">
+                <div class="alert alert-warning" id="del-bib-alert">
                     <div id="del-bib-action">
                         The record <em><a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% from_biblio.id | html %]">[% from_biblio.title | html %]</a></em> has [% from_biblio.items.count | html %] attached items.
                         <p><button id="delete-biblio-btn" data-biblionumber="[% from_biblio.id | html %]"><i id="del-bib-spn" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i><i class="fa fa-fw fa-trash-can"></i> Delete record
@@ -75,7 +75,7 @@
                 </div>
             [% END %]
 
-            <div class="dialog message">
+            <div class="alert alert-info">
                 The item has successfully been attached to [% INCLUDE 'biblio-title.inc' link = 1 %].
                 <p>
                     <a href="[% action_link | $raw %]" class="btn btn-primary approve"><i class="fa fa-fw fa-check"></i> OK</a>
@@ -132,7 +132,7 @@
                     success: function(result) {
                         $("#del-bib-action").hide();
                         $('#del-bib-success').show();
-                        $("#del-bib-alert").attr("class","dialog message")
+                        $("#del-bib-alert").attr("class","alert alert-info")
                     },
                     error: function(result) {
                         $("#delete-biblio-btn").hide();

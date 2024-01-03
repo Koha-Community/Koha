@@ -48,7 +48,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
                 <main>
                     [% INCLUDE 'messages.inc' %]
 
@@ -60,7 +60,7 @@
                     </h1>
 
                 [% IF ( duplicate_message ) %]
-                    <div class="dialog message">
+                    <div class="alert alert-info">
                         <strong>Duplicate patrons removed from batch number [% batch_id | html %]: [% duplicate_count | html %]</strong>
                     </div>
                 [% END %]
@@ -86,7 +86,7 @@
                                 </div>
                             </form>
                             <div id="batch-manage" class="action">
-                                <a class="btn btn-default" id="additems" href="#patron_search_modal" data-toggle="modal"><i class="fa fa-plus"></i> Add patron(s)</a>
+                                <a class="btn btn-default" id="additems" href="#patron_search_modal" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add patron(s)</a>
                                 [% IF ( table_loop ) %]
                                 <a class="btn btn-default" id="savedesc" href="#" data-batch_id="[% batch_id | html %]"><i class="fa fa-save"></i> Save description</a>
                                 <a class="btn btn-default" id="removeitems" href="#"><i class="fa fa-trash-can"></i> Remove selected patrons</a>
@@ -155,7 +155,7 @@
                             [% ELSE %]
                                 <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                 <ol><li>
-                                    <div class="dialog message">
+                                    <div class="alert alert-info">
                                         <h4>There are no patrons in this batch yet</h4>
                                         <p>Add patrons by borrowernumber using the text area above or leave empty to add via patron search.</p>
                                     </div>
@@ -165,13 +165,13 @@
                         </div>
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'greybox.inc' %]

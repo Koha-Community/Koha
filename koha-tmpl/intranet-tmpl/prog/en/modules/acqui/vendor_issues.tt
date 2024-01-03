@@ -60,7 +60,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -132,17 +132,17 @@
 [% END %]
 
 [% IF op == 'delete_confirm' %]
-    <div class="dialog alert">
+    <div class="alert alert-warning">
         <h1>Delete issue [% issue.issue_id | html %]?</h1>
         <form action="/cgi-bin/koha/acqui/vendor_issues.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="issue_id" value="[% issue.issue_id | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="/cgi-bin/koha/acqui/vendor_issues.pl" method="get">
             <input type="hidden" name="booksellerid" value="[% vendor.id | html %]" />
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
@@ -203,20 +203,20 @@
             </table>
         </div><!-- /.page-section -->
     [% ELSE %]
-        <div class="dialog message">
+        <div class="alert alert-info">
             There are no issues defined. <a href="/cgi-bin/koha/acqui/vendor_issues.pl?booksellerid=[% vendor.id | uri %]&op=add_form">Create a new issue</a>.
         </div>
     [% END %]
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'vendor-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

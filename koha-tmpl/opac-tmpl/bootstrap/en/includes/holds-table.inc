@@ -84,7 +84,7 @@
                     <td class="branch">
                         [% HOLD.branch.branchname | html %]
                         [% IF ( HOLD.can_update_pickup_location_opac ) %]
-                            <button type="button" class="btn btn-sm btn-link" data-toggle="modal" data-target="#changePickup[% HOLD.reserve_id | html %]">
+                            <button type="button" class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#changePickup[% HOLD.reserve_id | html %]">
                                 <i class="fa fa-pencil-alt" aria-hidden="true"></i> Change
                             </button>
                             <!-- Change pickup location modal -->
@@ -95,15 +95,13 @@
                                         <input type="hidden" name="op" value="cud-change_branch">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="changePickup[% HOLD.reserve_id | html %]Label">Change pickup location for <em>[% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]</em></h5>
-                                                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
+                                                <h1 class="modal-title" id="changePickup[% HOLD.reserve_id | html %]Label">Change pickup location for <em>[% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]</em></h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-group">
                                                 <label for="new_branch[% HOLD.reserve_id | html %]">New pickup location:</label>
-                                                <select name="new_pickup_location" id="new_branch[% HOLD.reserve_id | html %]" class="form-control">
+                                                <select name="new_pickup_location" id="new_branch[% HOLD.reserve_id | html %]" class="form-select">
                                                     [% PROCESS options_for_libraries libraries = Branches.pickup_locations({ search_params => { biblio => HOLD.biblionumber, patron => HOLD.borrower }, selected => HOLD.branchcode }) %]
                                                 </select>
                                                 </div>
@@ -111,7 +109,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" name="change_branch" value="1" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Save</button>
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
                                             </div>
                                         </div> <!-- /.modal-content -->
                                     </form>

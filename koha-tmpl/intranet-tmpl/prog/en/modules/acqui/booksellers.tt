@@ -36,7 +36,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-2">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -184,42 +184,41 @@
                                         <td class="actions">
                                         [% IF not basket.closedate and supplier.active %]
                                             [% IF basket.uncertainprices OR ( basket.total_items && !basket.is_standing ) %]
-                                            <div class="dropup">
-                                                <div class="btn-group">
+                                            <div class="btn-group dropup">
                                                 [%# There should be no space between these two buttons, it would render badly %]
-                                                    <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a><a class="btn btn-default btn-xs dropdown-toggle" id="basketactions[% basket.basknetno | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="basketactions[% basketn.basketno | html %]">
-                                                        [% IF basket.uncertainprices %]
-                                                        <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% basket.booksellerid | uri %]&owner=1"><i class="fa-solid fa-dollar-sign"></i> Uncertain prices</a></li>
-                                                        [% ELSIF basket.total_items && !basket.is_standing %]
-                                                            <form method="post" action="/cgi-bin/koha/acqui/basket.pl">
-                                                                [% INCLUDE 'csrf-token.inc' %]
-                                                                <input type="hidden" id="basketno" value="[% basket.basketno | html %]" name="basketno" />
-                                                                <input type="hidden" value="cud-close" name="op" />
-                                                                <input type="hidden" name="booksellerid" value="[% basket.booksellerid | html %]" />
-                                                                <input type="hidden" name="confirm" value="1" />
-                                                                <li><button type="submit" class="btn btn-default"><i class="fa fa-times-circle"></i> Close this basket</button></li>
-                                                            </form>
-                                                        [% END %]
-                                                    </ul>
-                                                </div>
+                                                <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
+                                                <a class="btn btn-default btn-xs dropdown-toggle" id="basketactions[% basket.basknetno | html %]" role="button" data-bs-toggle="dropdown" href="#"></a>
+                                                <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="basketactions[% basketn.basketno | html %]">
+                                                    [% IF basket.uncertainprices %]
+                                                        <li><a class="dropdown-item" href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% basket.booksellerid | uri %]&owner=1"><i class="fa-solid fa-dollar-sign"></i> Uncertain prices</a></li>
+                                                    [% ELSIF basket.total_items && !basket.is_standing %]
+                                                        <form method="post" action="/cgi-bin/koha/acqui/basket.pl">
+                                                            [% INCLUDE 'csrf-token.inc' %]
+                                                            <input type="hidden" id="basketno" value="[% basket.basketno | html %]" name="basketno" />
+                                                            <input type="hidden" value="cud-close" name="op" />
+                                                            <input type="hidden" name="booksellerid" value="[% basket.booksellerid | html %]" />
+                                                            <input type="hidden" name="confirm" value="1" />
+                                                            <li><button type="submit" class="dropdown-item"><i class="fa fa-times-circle"></i> Close this basket</button></li>
+                                                        </form>
+                                                    [% END %]
+                                                </ul>
                                             </div>
                                             [% ELSE %]
-                                                <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
+                                                <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
                                             [% END %]
                                             <!-- Modal -->
                                             <div id="addtoBasket[% basket.basketno | html %]" class="modal add_to_basket" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno | html %]" aria-hidden="true" data-basketno="[% basket.basketname | html %]">
-                                                <div class="modal-dialog" role="document">
+                                                <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                            <h4 class="modal-title" id="addtoBasketLabel[% basket.basketno | html %]">Add order to basket</h4>
+                                                            <h1 class="modal-title" id="addtoBasketLabel[% basket.basketno | html %]">Add order to basket</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             [% INCLUDE 'acquisitions-add-to-basket.inc' booksellerid=supplier.booksellerid basketno=basket.basketno %]
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
+                                                            <button class="btn btn-default" type="button" data-bs-dismiss="modal">Cancel</button>
                                                         </div>
                                                     </div><!-- /.modal-content -->
                                                 </div><!-- /.modal-dialog -->
@@ -246,8 +245,8 @@
     </div>
 [% END %][%# IF ( loop_suppliers.size ) %]
 </main>
-</div> <!-- /.col-sm-10.col-sm-push-2 -->
-    <div class="col-sm-2 col-sm-pull-10">
+</div> <!-- /.col-md-10.order-md-2 -->
+    <div class="col-md-2 order-sm-2 order-md-1">
         <aside>
             [% IF ( booksellerid ) %]
                 [% INCLUDE 'vendor-menu.inc' %]

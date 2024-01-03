@@ -20,7 +20,7 @@
         [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/reserveratios.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">From titles with highest hold ratios</a></li>[% END %]
       </ul>
     [% ELSE %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
           <p>You can't create any orders unless you first <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget and a fund</a>.</p>
         </div>
     [% END %]

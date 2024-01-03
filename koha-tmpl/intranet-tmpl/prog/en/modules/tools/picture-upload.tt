@@ -42,23 +42,23 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
 [% IF ( TOTAL ) %]
             [% IF ( ERRORS ) %]
 				[% IF ( TCOUNTS ) %]
-					<div class="dialog alert">
+                    <div class="alert alert-warning">
                     <h1>Patron image(s) uploaded with some errors</h1>
                     </div>
 				[% ELSE %]
-					<div class="dialog alert">
+                    <div class="alert alert-warning">
                     <h1>Patron image failed to upload</h1>
                     </div>
 				[% END %]
             [% ELSE %]
-                <div class="dialog message">
+                <div class="alert alert-info">
                 <h1>Patron image(s) successfully uploaded</h1>
                 </div>
             [% END %]
@@ -116,7 +116,7 @@
             [% ELSE %]
                 <h1>Upload patron images</h1>
                 [% IF ( ERRORS ) %]
-                <div class="dialog alert">
+                <div class="alert alert-warning">
                     [% FOREACH ERROR IN ERRORS %]
                         [% IF ( ERROR.NOTZIP ) %]<li><strong>The upload file does not appear to be a zip file.  The extension is not '.zip'.</strong></li>
                         [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><strong>This script is not able to create/write to the necessary temporary directory.</strong></li>
@@ -165,13 +165,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

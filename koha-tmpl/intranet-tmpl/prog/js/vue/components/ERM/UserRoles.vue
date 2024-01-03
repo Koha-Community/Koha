@@ -26,7 +26,7 @@
                         href="#patron_search_modal"
                         @click="selectUser(counter)"
                         class="btn btn-default"
-                        data-toggle="modal"
+                        data-bs-toggle="modal"
                         ><i class="fa fa-plus"></i> {{ $__("Select user") }}</a
                     >
                     <span class="required">{{ $__("Required") }}</span>

@@ -21,7 +21,7 @@
             <ul class="navbar-nav ml-auto">
                 [% IF ( Koha.Preference( 'opaclanguagesdisplay' ) ) %]
                     <li class="nav-item">
-                        [% INCLUDE 'masthead-langmenu.inc' %]
+                        [% INCLUDE 'langmenu.inc' %]
                     </li>
                 [% END # / IF opaclanguagedisplay %]
 

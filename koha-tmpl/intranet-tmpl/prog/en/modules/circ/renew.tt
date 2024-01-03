@@ -38,14 +38,14 @@
                 <div class="row">
 
                 [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-sm-10 col-sm-push-2">
+                    <div class="col-md-10 order-md-2 order-sm-1">
                 [% ELSE %]
-                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                 [% END %]
                 [% INCLUDE 'messages.inc' %]
 
                 [% IF error %]
-                    <div class="dialog alert">
+                    <div class="alert alert-warning">
                         <h1>Cannot renew:</h1>
 
                             [% IF error == "no_item" %]
@@ -67,7 +67,7 @@
                                         <input type="hidden" name="override_limit" value="1" />
                                         <input type="hidden" name="op" value="cud-renew" />
                                         <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
-                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
+                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
                                     </form>
                                 [% END %]
 
@@ -81,7 +81,7 @@
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
                                         <input type="hidden" name="op" value="cud-renew" />
-                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
+                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
                                     </form>
                                 [% END %]
 
@@ -95,7 +95,7 @@
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
                                         <input type="hidden" name="op" value="cud-renew" />
-                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
+                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
                                     </form>
                                 [% END %]
 
@@ -109,7 +109,7 @@
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
                                         <input type="hidden" name="op" value="cud-renew" />
-                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
+                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
                                     </form>
                                 [% END %]
 
@@ -123,7 +123,7 @@
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
                                         <input type="hidden" name="op" value="cud-renew" />
-                                        <input type="submit" class="approve" value="Override and renew" />
+                                        <input type="submit" class="btn btn-default approve" value="Override and renew" />
                                     </form>
                                 [% END %]
 
@@ -137,7 +137,7 @@
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
                                         <input type="hidden" name="op" value="cud-renew" />
-                                        <input type="submit" class="approve" value="Override and renew" />
+                                        <input type="submit" class="btn btn-default approve" value="Override and renew" />
                                     </form>
                                 [% END %]
 
@@ -151,7 +151,7 @@
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
                                         <input type="hidden" name="op" value="cud-renew" />
-                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
+                                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override limit and renew</button>
                                     </form>
                                 [% END %]
 
@@ -169,7 +169,7 @@
                                         <input type="text" size="20" id="renewonholdduedate" name="renewonholdduedate" value="" class="flatpickr" data-flatpickr-enable-time="true" />
                                     </div>
                                     <input type="hidden" name="op" value="cud-renew" />
-                                    <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
+                                    <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Override and renew</button>
                                 </form>
 
                             [% ELSIF error == "patron_restricted" %]
@@ -194,13 +194,13 @@
 
                                 <form method="get" action="/cgi-bin/koha/circ/renew.pl">
                                     <input type="hidden" name="hard_due_date" value="[% hard_due_date | html %]" />
-                                    <button type="submit" class="deny"><i class="fa fa-times"></i> Continue without renewing</button>
+                                    <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> Continue without renewing</button>
                                 </form>
                     </div>
                 [% END %]
 
                 [% IF date_due %]
-                    <div class="dialog message">
+                    <div class="alert alert-info">
                         <h1>Item renewed:</h1>
                         <p>
                             [% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %]
@@ -246,12 +246,12 @@
             [% END %]
 
                     [% IF Koha.Preference('CircSidebar') %]
-                            </div> <!-- /.col-sm-10.col-sm-push-2 -->
-                            <div class="col-sm-2 col-sm-pull-10">
+                            </div> <!-- /.col-md-10.order-md-2 -->
+                            <div class="col-md-2 order-sm-2 order-md-1">
                                 <aside>
                                     [% INCLUDE 'circ-nav.inc' %]
                                 </aside>
-                            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                            </div> <!-- /.col-md-2.order-md-1 -->
                         </div> <!-- /.row -->
                     [% END %]
 

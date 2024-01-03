@@ -52,7 +52,7 @@
                                             [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
                                             [% IF Koha.Preference('PhoneNotification') %]<th>Phone</th>[% END %]
                                             <th>Email</th>
-                                            <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
+                                            <th>Digests only <i id="info_digests" data-bs-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-bs-placement="right" class="fa fa-info-circle"></i></th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -168,9 +168,9 @@
                                             [% IF ( messaging_preference.has_digest ) %]
                                                 <td class="selectcol">
                                                     [% IF ( messaging_preference.digest ) %]
-                                                        <input type="checkbox" aria-label="Unselect digests" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
+                                                        <input type="checkbox" aria-label="Unselect digests" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" data-bs-toggle="tooltip" title="You must select a digestible transport to select digests" />
                                                     [% ELSE %]
-                                                        <input type="checkbox" aria-label="Select digests"id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" data-toggle="tooltip" title="You must select a digestible transport to select digests" />
+                                                        <input type="checkbox" aria-label="Select digests"id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" data-bs-toggle="tooltip" title="You must select a digestible transport to select digests" />
                                                     [% END %]
                                                 </td>
                                             [% ELSE %]

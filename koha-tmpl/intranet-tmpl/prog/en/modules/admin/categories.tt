@@ -87,7 +87,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
                 [% INCLUDE 'messages.inc' %]
 
@@ -486,7 +486,7 @@
     </h1>
 
     [% IF patrons_in_category > 0  %]
-        <div class="dialog alert">
+        <div class="alert alert-warning">
             <strong>This category is used [% patrons_in_category | html %] times</strong>. Deletion not possible
         </div>
     [% END %]
@@ -769,19 +769,19 @@
             </tbody>
         </table>
     [% ELSE %]
-        <div class="dialog alert">No categories have been defined. <a href="/cgi-bin/koha/admin/categories.pl?op=add_form">Create a new category</a>.</div>
+        <div class="alert alert-warning">No categories have been defined. <a href="/cgi-bin/koha/admin/categories.pl?op=add_form">Create a new category</a>.</div>
     [% END %]
     </div>
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]

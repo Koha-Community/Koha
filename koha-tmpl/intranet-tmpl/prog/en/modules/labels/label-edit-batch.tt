@@ -48,7 +48,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm-1">
                 <main>
                     [% INCLUDE 'messages.inc' %]
 
@@ -79,11 +79,11 @@
                             <span>Unknown error type [% errtype | html %].</span>
                             [%    END %]
                             [% END %]
-                            <div class="dialog alert">
+                            <div class="alert alert-warning">
                                 <strong>WARNING:</strong> An error was encountered: [% PROCESS xlate_errtype %] Please have your system administrator check the error log for details.
                             </div>
                         [% ELSIF ( duplicate_message ) %]
-                            <div class="dialog message">
+                            <div class="alert alert-info">
                                 <strong>Duplicate item(s) removed from batch number [% batch_id | html %]: [% duplicate_count | html %]</strong>
                             </div>
                         [% END %]
@@ -190,20 +190,20 @@
                                     </div> <!-- /.page-section -->
                                 </form>
                                 [% ELSE %]
-                                    <div class="dialog message">
+                                    <div class="alert alert-info">
                                         <h4>There are no items in this batch yet</h4>
                                         <p>Add items by using the text area above or leave empty to add via item search.</p>
                                     </div>
                                 [% END %]
                             </div>
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'cat-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
     <form action="/cgi-bin/koha/labels/label-edit-batch.pl" id="batch_remove_form" method="post">

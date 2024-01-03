@@ -72,38 +72,38 @@
                 [% UNLESS destination == 'holds' %]
                     <td class="actions">
                         <div class="btn-group dropup">
-                            <a class="btn btn-default btn-xs dropdown-toggle" id="clubactions[% c.id | html %]" role="button" data-toggle="dropdown" href="#">
-                                Actions <b class="caret"></b>
+                            <a class="btn btn-default btn-xs dropdown-toggle" id="clubactions[% c.id | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                                Actions
                             </a>
-                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="clubactions[% c.id | html %]">
+                            <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="clubactions[% c.id | html %]">
                                 [% IF ( c.club_enrollments.count ) %]
                                     <li>
-                                        <a href="club-enrollments.pl?id=[% c.id | uri %]">
+                                        <a class="dropdown-item" href="club-enrollments.pl?id=[% c.id | uri %]">
                                             <i class="fa fa-list-ul"></i> Enrollments
                                         </a>
                                     </li>
                                 [% ELSE %]
                                     <li class="disabled">
-                                        <a href="#" data-toggle="tooltip" data-placement="left" title="There are no enrollments for this club yet">
+                                        <a class="dropdown-item" href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="There are no enrollments for this club yet">
                                             <i class="fa fa-list-ul"></i> Enrollments
                                         </a>
                                     </li>
                                 [% END %]
                                 [% IF CAN_user_clubs_edit_clubs %]
                                     <li>
-                                        <a href="clubs-add-modify.pl?id=[% c.id | uri %]">
+                                        <a class="dropdown-item" href="clubs-add-modify.pl?id=[% c.id | uri %]">
                                             <i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="delete_club" data-id="[% c.id | html %]" data-name="[% c.name | html %]">
+                                        <a class="dropdown-item" href="#" class="delete_club" data-id="[% c.id | html %]" data-name="[% c.name | html %]">
                                             <i class="fa fa-trash-can"></i> Delete
                                         </a>
                                     </li>
                                 [% END %]
                                 [% IF ( c.club_enrollments.count ) %]
                                     <li>
-                                        <a href="#" class="club_hold_search" data-id="[% c.id | html %]">
+                                        <a class="dropdown-item" href="#" class="club_hold_search" data-id="[% c.id | html %]">
                                             <i class="fa fa-search"></i> Search to hold
                                         </a>
                                     </li>

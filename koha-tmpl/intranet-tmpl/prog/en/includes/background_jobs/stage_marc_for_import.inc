@@ -4,7 +4,7 @@
     [% SET report = job.report %]
     [% IF report %]
         [% IF job.status == 'finished' %]
-            <div class="dialog message">Completed staging records</div>
+            <div class="alert alert-info">Completed staging records</div>
         [% END %]
 
         <h2>MARC staging results</h2>

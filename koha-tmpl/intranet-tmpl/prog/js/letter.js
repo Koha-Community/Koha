@@ -184,7 +184,7 @@ $(document).ready(function() {
 
     if( $("#tabs").length > 0 ){
         let langtab = $("#langtab").val();
-        $("#tabs a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+        $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
             var link = e.target.hash.replace("#","");
             $("#langtab").val( link );
         });
