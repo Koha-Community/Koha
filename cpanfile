@@ -51,6 +51,7 @@ requires 'Getopt::Long', '2.35';
 requires 'Getopt::Std', '1.05';
 requires 'HTML::Entities', '3.69';
 requires 'HTML::FormatText', '1.23';
+requires 'HTML::FromANSI::Tiny', '0.105';
 requires 'HTML::Scrubber', '0.08';
 requires 'HTTP::Cookies', '1.39';
 requires 'HTTP::OAI', '3.2';
