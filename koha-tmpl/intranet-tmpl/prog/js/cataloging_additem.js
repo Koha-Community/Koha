@@ -134,13 +134,6 @@ $(document).ready(function(){
         });
     }
 
-    $('#item-group-add-or-create-form-select').on('change', function() {
-        if ( ! $('input.items-enumchron').val() ) {
-            let item_group_selector = '#item-group-' + $(this).val();
-            let enumchron = $(item_group_selector).val();
-            $('input.items-enumchron').val( enumchron );
-        }
-    });
 });
 
 function CheckTemplateForm(f) {
