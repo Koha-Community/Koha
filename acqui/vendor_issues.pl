@@ -37,7 +37,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => "acqui/vendor_issues.tt",
         query         => $input,
         type          => "intranet",
-        flagsrequired => { acquisition => 'issues_manage' },
+        flagsrequired => { acquisition => 'issue_manage' },
     }
 );
 
