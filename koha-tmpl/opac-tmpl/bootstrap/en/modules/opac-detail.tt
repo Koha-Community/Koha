@@ -601,12 +601,12 @@
                                     [% IF ( MARCNOTES ) %]
                                         <div id="marcnotes">
                                             [% FOREACH MARCNOTE IN MARCNOTES %]
-                                                <p>
-                                                [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                    <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
-                                                [% ELSE %]
-                                                    [% MARCNOTE.marcnote | html | html_line_break %]
-                                                [% END %]
+                                                <p class="marcnote marcnote-[% MARCNOTE.tag | html %]" id="marcnote-[% MARCNOTE.tag | html %]-[% loop.count | html %]">
+                                                    [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                                                        <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
+                                                    [% ELSE %]
+                                                        [% MARCNOTE.marcnote | html | html_line_break %]
+                                                    [% END %]
                                                 </p>
                                             [% END %]
                                         </div>
