@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 66;
+use Test::More tests => 67;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -462,11 +462,31 @@ AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber );
 ok( $item->notforloan eq 0, q{UpdateNotForLoanStatusOnCheckin _ALL_ rules are applied if there are no specific item type rule matching the returned item} );
 
-t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', '1: ONLYMESSAGE' );
+t::lib::Mocks::mock_preference(
+    'UpdateNotForLoanStatusOnCheckin', q{_ALL_:
+        1: ONLYMESSAGE
+}
+);
 $item->notforloan(1)->store;
 AddReturn( 'barcode_3', $branchcode_1 );
-$item = Koha::Items->find( $itemnumber );
-ok( $item->notforloan eq 1, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 1 with setting "1: ONLYMESSAGE"} );
+$item->discard_changes;
+is(
+    $item->notforloan, 1,
+    q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 1 for _ALL_ with setting "1: ONLYMESSAGE"}
+);
+
+
+t::lib::Mocks::mock_preference(
+    'UpdateNotForLoanStatusOnCheckin',  "$itemtype:\n
+        1: ONLYMESSAGE
+"
+);
+AddReturn( 'barcode_3', $branchcode_1 );
+$item->discard_changes;
+is(
+    $item->notforloan, 1,
+    q{UpdateNotForLoanStatusOnCheckin does not update notforloan value for specific itemtype from 1 with setting "1: ONLYMESSAGE"}
+);
 
 my $itemnumber2 = Koha::Item->new(
     {
