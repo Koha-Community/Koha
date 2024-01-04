@@ -7,6 +7,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% PROCESS 'i18n.inc' %]
+[% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF ( ordernumber ) %]
@@ -198,14 +199,6 @@
             $("#budget_id").change();
         });
 
-        function UserSearchPopup(f) {
-            window.open(
-                "/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=add",
-                'UserSearchPopup',
-                'width=1024, height=768, scrollbars=yes, toolbar=no,'
-             );
-        }
-
         function add_user(borrowernumber, borrowername) {
             var ids = $("#users_ids").val();
             if(ids.length > 0) {
@@ -232,6 +225,10 @@
             $("#users_ids").val(ids.join(':'));
         }
     </script>
+
+    [% SET columns = ['cardnumber','name','category','branch','action'] %]
+    [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
+
 [% Asset.css("css/addbiblio.css") | $raw %]
 </head>
 
@@ -338,8 +335,7 @@
                       [% END %]
                     </ul>
                     <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
-                    <input type="hidden" id="op" name="op" value="cud-order" />
-                    <input type="button" id="add_user" class="btn btn-default" onclick="UserSearchPopup();" value="Add user" />
+                    <a href="#patron_search_modal" id="add_user" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Add user</a>
                 </div>
             </li>
         </ol>
@@ -738,6 +734,7 @@
 [% END %]
 
     <fieldset class="action">
+        <input type="hidden" id="op" name="op" value="cud-order" />
         <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
         <input type="submit" class="btn btn-primary" value="Save" />
         [% IF (suggestionid) %]
@@ -780,6 +777,8 @@
     </aside>
 </div> <!-- /.col-sm-2.col-sm-pull-10 -->
 </div> <!-- /.row -->
+
+[% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]
 
 [% MACRO jsinclude BLOCK %]
 [% END %]
