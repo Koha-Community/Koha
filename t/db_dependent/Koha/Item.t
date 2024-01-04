@@ -846,7 +846,7 @@ subtest 'pickup_locations() tests' => sub {
 };
 
 subtest 'request_transfer' => sub {
-    plan tests => 13;
+    plan tests => 17;
     $schema->storage->txn_begin;
 
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -905,6 +905,24 @@ subtest 'request_transfer' => sub {
     $transfers = $item->get_transfers;
     is($transfers->count, 1, "There is only 1 live transfer in the queue");
     $replaced_transfer->datearrived(dt_from_string)->store();
+
+    # Replace StockrotationAdvance transfer
+    my $stock_transfer = $item->request_transfer( { to => $library1, reason => 'StockrotationAdvance' } );
+    is(
+        ref($stock_transfer), 'Koha::Item::Transfer',
+        'Koha::Item->request_transfer added StockrotationAdvance transfer'
+    );
+    $replaced_transfer = $item->request_transfer( { to => $library2, reason => 'Manual', replace => 1 } );
+    is(
+        ref($replaced_transfer), 'Koha::Item::Transfer',
+        'Koha::Item->request_transfer allowed when replace is set'
+    );
+    $stock_transfer->discard_changes;
+    is( $stock_transfer->datecancelled, undef, "StockrotationAdvance transfer left intact" );
+    $transfers = $item->get_transfers;
+    is( $transfers->count, 2, "There are now 2 live transfers in the queue" );
+    $replaced_transfer->datearrived(dt_from_string)->store();
+    $stock_transfer->datearrived(dt_from_string)->store();
 
     # BranchTransferLimits
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
