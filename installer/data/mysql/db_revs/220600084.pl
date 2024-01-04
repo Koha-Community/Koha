@@ -1,7 +1,7 @@
 use Modern::Perl;
 
 return {
-    bug_number => "31162",
+    bug_number => "32162",
     description => "Add primary key to erm_eholdings_packages_agreements",
     up => sub {
         my ($args) = @_;
