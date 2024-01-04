@@ -273,11 +273,11 @@ legend:hover {
                                                             Salutation: </label>
                                                             <select id="btitle" name="title">
                                                                 <option value=""></option>
-                                                                [% FOREACH t IN Koha.Preference('BorrowersTitles').split('\|') %]
-                                                                    [% IF btitle == t %]
-                                                                        <option value="[% t | html %]" selected="selected">[% t | html %]</option>
+                                                                [% FOREACH patron_title IN Koha.Preference('BorrowersTitles').split('\|') %]
+                                                                    [% IF btitle == patron_title %]
+                                                                        <option value="[% patron_title | html %]" selected="selected">[% patron_title | html %]</option>
                                                                     [% ELSE %]
-                                                                        <option value="[% t | html %]">[% t | html %]</option>
+                                                                        <option value="[% patron_title | html %]">[% t | html %]</option>
                                                                     [% END %]
                                                                 [% END %]
                                                             </select>
