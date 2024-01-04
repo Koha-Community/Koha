@@ -245,9 +245,16 @@ export default {
                                 success => {
                                     let message = ""
                                     success.jobs.forEach((job, i) => {
-                                        message += this.$__(
-                                            '<li>Job for report type <strong>%s</strong> has been queued, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">click here</a> to check its progress.</li>'
-                                        ).format(job.report_type, job.job_id)
+                                        message +=
+                                            "<li>" +
+                                            this.$__(
+                                                "Job for report type <strong>%s</strong> has been queued"
+                                            ).format(job.report_type) +
+                                            '. <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=' +
+                                            job.job_id +
+                                            '" target="_blank">' +
+                                            this.$__("Check job progress") +
+                                            ".</a></li>"
                                     })
                                     this.setMessage(message, true)
                                 },
