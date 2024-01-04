@@ -489,8 +489,7 @@
                             [% IF (transfer.datesent) %]
                                 <span class="intransit">In transit from [% Branches.GetName( transfer.frombranch ) | html %] to [% Branches.GetName( transfer.tobranch ) | html %] since [% transfer.datesent | $KohaDates %]</span>
                             [% ELSE %]
-                                <span class="transitrequested">Transit pending from [% Branches.GetName( transfer.frombranch ) | html %] to [% Branches.GetName( transfer.tobranch ) | html %] since [% item.transfer.daterequested | $KohaDates %]</span>
-
+                                <span class="transitrequested">Transit pending from [% Branches.GetName( transfer.frombranch ) | html %] to [% Branches.GetName( transfer.tobranch ) | html %] since [% transfer.daterequested | $KohaDates %]</span>
                             [% END %]
                         [% END %]
 
