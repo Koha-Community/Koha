@@ -2,6 +2,7 @@
 [% USE I18N %]
 [% USE Branches %]
 [% USE ExtendedAttributeTypes %]
+[% USE Categories %]
 [% USE raw %]
 [% USE Asset %]
 [% USE To %]
@@ -55,7 +56,7 @@
                             <label for="categorycode_filter">Category:</label>
                             <select id="categorycode_filter">
                                 <option value="">Any</option>
-                                [% FOREACH category IN categories %]
+                                [% FOREACH category IN Categories.limited.unblessed %]
                                     <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
                                 [% END %]
                             </select>
@@ -109,6 +110,10 @@
 [%# columns: See patron_search_js %]
 [% BLOCK patron_search_table %]
 
+    [% UNLESS table_id %]
+        [% SET table_id = "memberresultst" %]
+    [% END %]
+
     [% IF filter == 'suggestions_managers' %]
         <div class="hint">Only staff with superlibrarian or suggestions_manage permissions are returned in the search results</div>
     [% ELSIF filter == 'orders_managers' OR filter == 'baskets_managers' %]
@@ -129,7 +134,6 @@
             <a href="#" class="filterByLetter">[% letter | html %]</a>
         [% END %]
     </div>
-
 
     <h3 style="display: none;">Patrons found for: <span id="searchpattern"></span></h3>
 
@@ -175,17 +179,10 @@
 <div class="modal" id="patronPreview" tabindex="-1" role="dialog" aria-labelledby="patronPreviewLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="patronPreviewLabel"></h4>
-            </div>
             <div class="modal-body">
                 <div id="loading">
                     <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -213,6 +210,8 @@
     [% END %]
 
     <script>
+        [% SET libraries = Branches.all %]
+        [% SET categories = Categories.limited.unblessed %]
         let categories = [% To.json(categories) | $raw %].map(e => {
             e['_id'] = e.categorycode.toLowerCase();
             e['_str'] = e.description;
@@ -650,22 +649,26 @@
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
                 var borrower_data = JSON.parse($("#borrower_data"+borrowernumber).val());
-                add_user( borrowernumber, $patron_to_html( borrower_data, { display_cardnumber: false, url: false } ) );
+                modal_add_user( borrowernumber, $patron_to_html( borrower_data, { display_cardnumber: false, url: false } ) );
             });
-
             $("body").on("click",".select_user",function(e){
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
                 var borrower_data = JSON.parse($("#borrower_data"+borrowernumber).val());
-                select_user( borrowernumber, borrower_data );
+                modal_select_user( borrowernumber, borrower_data );
+                $(this).closest(".modal").modal('hide');
             });
 
             $("body").on("click",".patron_preview", function( e ){
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
                 var page = "/cgi-bin/koha/members/moremember.pl?print=brief&borrowernumber=" + borrowernumber;
-                $("#patronPreview .modal-body").load( page + " div.container-fluid" );
-                $('#patronPreview').modal({show:true});
+                $("#patron_preview_modal").load( page + " div.container-fluid", function(){
+                    $("#patron_preview_modal").find(".close").on("click", function(){
+                        $('#patron_preview_modal').html(_("Loading...")).removeClass("show");
+                    });
+                });
+                $("#patron_preview_modal").addClass("show");
             });
 
             $("#patronPreview").on('hidden.bs.modal', function (e) {
@@ -827,40 +830,68 @@
         }
 
         // modify parent window owner element
-        function add_user(borrowernumber, borrowername) {
-            var p = window.opener;
-            // In one place (serials/routing.tt), the page is reload on every add
-            // We have to wait for the page to be there
-            function wait_for_opener () {
-                if ( ! $(opener.document).find('body').size() ) {
-                    setTimeout(wait_for_opener, 500);
-                } else {
-                    [%# Note that add_user could sent data instead of borrowername too %]
-                    $("#info").hide();
-                    $("#error").hide();
-                    if ( p.add_user(borrowernumber, borrowername) < 0 ) {
-                        $("#error").html(_("Patron '%s' is already in the list.").format(borrowername));
-                        $("#error").show();
-                    } else {
-                        $("#info").html(_("Patron '%s' added.").format(borrowername));
-                        $("#info").show();
-                    }
-                }
-            }
-            wait_for_opener();
-        }
-        function select_user(borrowernumber, data) {
-            var p = window.opener;
-            if ( p.document.getElementById("selected_patron_id") ) {
-                p.document.getElementById("selected_patron_id").value = borrowernumber;
+        function modal_add_user(borrowernumber, borrowername) {
+            [%# Note that add_user could sent data instead of borrowername too %]
+            $("#info").hide();
+            $("#error").hide();
+            if ( add_user(borrowernumber, borrowername) < 0 ) {
+                $("#error").html(_("Patron '%s' is already in the list.").format(borrowername));
+                $("#error").show();
             } else {
-                [%  IF callback %]
-                    p.[% callback | html %](borrowernumber, data);
-                [%  ELSE %]
-                    p.select_user(borrowernumber, data);
+                $("#info").html(_("Patron '%s' added.").format(borrowername));
+                $("#info").show();
+            }
+        }
+        function modal_select_user(borrowernumber, data) {
+            if ( document.getElementById("selected_patron_id") ) {
+                document.getElementById("selected_patron_id").value = borrowernumber;
+            } else {
+                [% IF callback %]
+                    [% callback | html %](borrowernumber, data);
+                [% ELSE %]
+                    select_user(borrowernumber, data);
                 [% END %]
             }
-            window.close();
         }
     </script>
+[% END %]
+
+
+[% BLOCK patron_search_modal %]
+    [% UNLESS patron_search_modal_id %]
+        [% patron_search_modal_id = "patron_search_modal" %]
+    [% END %]
+    <div id="[% patron_search_modal_id | html %]" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="patronSearchLabel" aria-hidden="true" data-backdrop="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="patronSearchLabel">[% modal_title | html %]</h4>
+                </div>
+                <div class="modal-body">
+                    [% PROCESS patron_search_filters filters => ['branch','category','sort1','sort2'] %]
+
+                    <div id="searchresults">
+                        [% IF columns.grep('checkbox').size %]
+                            <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
+                                <div>
+                                    <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
+                                    |
+                                    <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
+                                    [% IF selection_type == 'add' %]
+                                    <button id="add-selected" class="btn btn-sm btn-default" type="submit">Add selected patrons</button>
+                                    [% END %]
+                                </div>
+                            </div>
+                        [% END %]
+                        [% PROCESS patron_search_table table_id => 'memberresultst' columns => columns %]
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default cancel" data-dismiss="modal" aria-hidden="true">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="patron_preview_modal" class="basicModal"></div>
 [% END %]

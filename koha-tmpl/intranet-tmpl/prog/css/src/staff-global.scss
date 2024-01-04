@@ -2367,6 +2367,38 @@ td.bundle {
     &.modal-wide {
         width: 80%;
     }
+
+}
+
+.modal-full {
+    top: -5px;
+
+    .modal-dialog {
+        width: 95%;
+    }
+}
+
+.basicModal {
+    background: #FFF;
+    left: 50%;
+    margin-left: -300px;
+    max-height: 100%;
+    max-width: 600px;
+    min-height: 350px;
+    min-width: 575px;
+    opacity: 0;
+    padding: 1em;
+    pointer-events: none;
+    position: fixed;
+    top: 25%;
+    transition: all .1s ease-out;
+    z-index: 1100;
+}
+
+.basicModal.show {
+    box-shadow: 0 5px 15px rgba( 0, 0, 0, .5 );
+    opacity: 1;
+    pointer-events: auto;
 }
 
 #cartDetails {

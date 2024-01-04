@@ -199,11 +199,6 @@ $(document).ready(function(){
 
     $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
 
-    $('body').on('click', '#guarantor_search', function(e) {
-        e.preventDefault();
-        var newin = window.open('/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,dateofbirth,address-library,action','popup','width=1024,height=768,resizable=no,toolbar=false,scrollbars=yes,top');
-    });
-
     $('#guarantor_relationships').on('click', '.guarantor_cancel', function(e) {
         e.preventDefault();
         $(this).parents('fieldset').first().remove();

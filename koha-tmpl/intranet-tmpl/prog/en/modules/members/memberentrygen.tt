@@ -10,6 +10,7 @@
 [% PROCESS 'restriction-types.inc' %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
+[% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
         [% UNLESS blocking_error %]
@@ -588,7 +589,7 @@ legend:hover {
                                                 <input name="guarantor_firstname" id="guarantor_firstname" type="hidden" />
 
                                                 <li>
-                                                    <a href="#" id="guarantor_search" class="btn btn-default"><i class="fa fa-plus"></i> Add guarantor</a>
+                                                    <a href="#patron_search_modal" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Add guarantor</a>
                                                 </li>
 
                                                 [% IF Koha.Preference('AllowStaffToSetCheckoutsVisibilityForGuarantor') %]
@@ -1675,7 +1676,6 @@ legend:hover {
                 </div> <!-- /.col-sm-2.col-sm-pull-10 -->
             [% END %]
         </div> <!-- /.row -->
-
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
@@ -1976,6 +1976,11 @@ legend:hover {
     [% Asset.js("js/members.js") | $raw %]
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
     [% PROCESS 'password_check.inc' new_password => 'password', category_selector => '#categorycode_entry', minPasswordLength => patron.category.effective_min_password_length, RequireStrongPassword => patron.category.effective_require_strong_password %]
+
+    [% INCLUDE 'select2.inc' %]
+    [% SET columns = ['cardnumber','name','category','branch','dateofbirth','address-library','action'] %]
+    [% PROCESS patron_search_modal columns => columns, modal_title => t("Add guarantor") %]
+    [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1 %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
