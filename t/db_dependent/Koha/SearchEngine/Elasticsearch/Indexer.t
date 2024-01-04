@@ -38,123 +38,139 @@ SKIP: {
 
     eval { Koha::SearchEngine::Elasticsearch->get_elasticsearch_params; };
 
-    skip 'Elasticsearch configuration not available', 2
+    skip 'Elasticsearch configuration not available', 3
         if $@;
 
-my $builder = t::lib::TestBuilder->new;
-my $biblio = $builder->build_sample_biblio; # create biblio before we start mocking to avoid trouble indexing on creation
+    my $builder = t::lib::TestBuilder->new;
+    my $biblio =
+        $builder->build_sample_biblio;    # create biblio before we start mocking to avoid trouble indexing on creation
 
-subtest 'create_index() tests' => sub {
-    plan tests => 6;
-    my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
-    $se->mock( '_read_configuration', sub {
-            my ($self, $sub ) = @_;
-            my $method = $se->original( '_read_configuration' );
-            my $conf = $method->( $self );
-            $conf->{index_name} .= '__test';
-            return $conf;
-        });
+    subtest 'create_index() tests' => sub {
+        plan tests => 6;
+        my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
+        $se->mock(
+            '_read_configuration',
+            sub {
+                my ( $self, $sub ) = @_;
+                my $method = $se->original('_read_configuration');
+                my $conf   = $method->($self);
+                $conf->{index_name} .= '__test';
+                return $conf;
+            }
+        );
 
-    my $indexer;
-    ok(
-        $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' }),
-        'Creating a new indexer object'
-    );
+        my $indexer;
+        ok(
+            $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { 'index' => 'biblios' } ),
+            'Creating a new indexer object'
+        );
 
-    is(
-        $indexer->create_index(),
-        Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_OK(),
-        'Creating an index'
-    );
+        is(
+            $indexer->create_index(),
+            Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_OK(),
+            'Creating an index'
+        );
 
-    my $marc_record = MARC::Record->new();
-    $marc_record->append_fields(
-        MARC::Field->new('001', '1234567'),
-        MARC::Field->new('020', '', '', 'a' => '1234567890123'),
-        MARC::Field->new('245', '', '', 'a' => 'Title')
-    );
-    my $records = [$marc_record];
+        my $marc_record = MARC::Record->new();
+        $marc_record->append_fields(
+            MARC::Field->new( '001', '1234567' ),
+            MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
+            MARC::Field->new( '245', '', '', 'a' => 'Title' )
+        );
+        my $records = [$marc_record];
 
-    my $response = $indexer->update_index([1], $records);
-    is( $response->{errors}, 0, "no error on update_index" );
-    is( scalar(@{$response->{items}}), 1, "1 item indexed" );
-    is( $response->{items}[0]->{index}->{_id},"1", "We should get a string matching the bibnumber passed in");
+        my $response = $indexer->update_index( [1], $records );
+        is( $response->{errors},                   0,   "no error on update_index" );
+        is( scalar( @{ $response->{items} } ),     1,   "1 item indexed" );
+        is( $response->{items}[0]->{index}->{_id}, "1", "We should get a string matching the bibnumber passed in" );
 
-    is(
-        $indexer->drop_index(),
-        Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_RECREATE_REQUIRED(),
-        'Dropping the index'
-    );
-};
+        is(
+            $indexer->drop_index(),
+            Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_RECREATE_REQUIRED(),
+            'Dropping the index'
+        );
+    };
 
-subtest 'index_records() tests' => sub {
-    plan tests => 4;
-    my $mock_index = Test::MockModule->new("Koha::SearchEngine::Elasticsearch::Indexer");
-    $mock_index->mock( update_index => sub {
-        my ($self, $record_ids, $records) = @_;
-        warn "Update " . $record_ids->[0] . $records->[0]->as_usmarc;
-    });
-    $mock_index->mock( update_index_background => sub {
-        my ($self, $record_ids) = @_;
-        warn "Update background " . $record_ids->[0];
-    });
+    subtest 'index_records() tests' => sub {
+        plan tests => 4;
+        my $mock_index = Test::MockModule->new("Koha::SearchEngine::Elasticsearch::Indexer");
+        $mock_index->mock(
+            update_index => sub {
+                my ( $self, $record_ids, $records ) = @_;
+                warn "Update " . $record_ids->[0] . $records->[0]->as_usmarc;
+            }
+        );
+        $mock_index->mock(
+            update_index_background => sub {
+                my ( $self, $record_ids ) = @_;
+                warn "Update background " . $record_ids->[0];
+            }
+        );
 
-    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'authorities' });
+        my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { 'index' => 'authorities' } );
 
-    my $marc_record = MARC::Record->new();
-    $marc_record->append_fields(
-        MARC::Field->new('001', '1234567'),
-        MARC::Field->new('100', '', '', 'a' => 'Rosenstock, Jeff'),
-    );
-    warning_is {
-        $indexer->index_records( [42], 'specialUpdate', 'authorityserver',
-            [$marc_record] );
-    }
-    "Update 42" . $marc_record->as_usmarc,
-    "When passing record and ids to index_records they are correctly passed through to update_index";
-
-    $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' });
-    $marc_record = $biblio->metadata->record({ embed_items => 1 });
-    warning_is {
-        $indexer->index_records( [ $biblio->biblionumber ],
-            'specialUpdate', 'biblioserver' );
-    }
-    "Update background " . $biblio->biblionumber,
-    "When passing id only to index_records the marc record is fetched and passed through to update_index";
-
-    my $chunks = 0;
-    $mock_index->mock(
-        update_index => sub {
-            my ( $self, $record_ids, $records ) = @_;
-            $chunks++;
+        my $marc_record = MARC::Record->new();
+        $marc_record->append_fields(
+            MARC::Field->new( '001', '1234567' ),
+            MARC::Field->new( '100', '', '', 'a' => 'Rosenstock, Jeff' ),
+        );
+        warning_is {
+            $indexer->index_records(
+                [42], 'specialUpdate', 'authorityserver',
+                [$marc_record]
+            );
         }
-    );
+        "Update 42" . $marc_record->as_usmarc,
+            "When passing record and ids to index_records they are correctly passed through to update_index";
 
-    t::lib::Mocks::mock_config( 'elasticsearch', { server => 'false', index_name => 'pseudo' } );
-    my @big_array = 1 .. 10000;
-    $indexer->index_records( \@big_array, 'specialUpdate', 'biblioserver', \@big_array );
-    is( $chunks, 2, "We split 10000 records into two chunks when chunk size not set" );
+        $indexer     = Koha::SearchEngine::Elasticsearch::Indexer->new( { 'index' => 'biblios' } );
+        $marc_record = $biblio->metadata->record( { embed_items => 1 } );
+        warning_is {
+            $indexer->index_records(
+                [ $biblio->biblionumber ],
+                'specialUpdate', 'biblioserver'
+            );
+        }
+        "Update background " . $biblio->biblionumber,
+            "When passing id only to index_records the marc record is fetched and passed through to update_index";
 
-    $chunks = 0;
-    t::lib::Mocks::mock_config( 'elasticsearch', { server => 'false', index_name => 'pseudo', chunk_size => 10 } );
-    $indexer->index_records( \@big_array, 'specialUpdate', 'biblioserver', \@big_array );
-    is( $chunks, 1000, "We split 10000 records into 1000 chunks when chunk size is 10" );
+        my $chunks = 0;
+        $mock_index->mock(
+            update_index => sub {
+                my ( $self, $record_ids, $records ) = @_;
+                $chunks++;
+            }
+        );
 
-};
+        t::lib::Mocks::mock_config( 'elasticsearch', { server => 'false', index_name => 'pseudo' } );
+        my @big_array = 1 .. 10000;
+        $indexer->index_records( \@big_array, 'specialUpdate', 'biblioserver', \@big_array );
+        is( $chunks, 2, "We split 10000 records into two chunks when chunk size not set" );
 
-subtest 'update_index' => sub {
-    plan tests => 1;
+        $chunks = 0;
+        t::lib::Mocks::mock_config(
+            'elasticsearch',
+            { server => 'false', index_name => 'pseudo', chunk_size => 10 }
+        );
+        $indexer->index_records( \@big_array, 'specialUpdate', 'biblioserver', \@big_array );
+        is( $chunks, 1000, "We split 10000 records into 1000 chunks when chunk size is 10" );
 
-    my $biblio = $builder->build_sample_biblio;
-    my $biblionumber = $biblio->biblionumber;
-    $biblio->delete;
+    };
 
-    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' });
-    warning_is {
-        $indexer->update_index([$biblionumber]);
+    subtest 'update_index' => sub {
+        plan tests => 1;
 
-    } "", "update_index called with deleted biblionumber should not crash";
+        my $biblio       = $builder->build_sample_biblio;
+        my $biblionumber = $biblio->biblionumber;
+        $biblio->delete;
 
-};
+        my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { 'index' => 'biblios' } );
+        warning_is {
+            $indexer->update_index( [$biblionumber] );
+
+        }
+        "", "update_index called with deleted biblionumber should not crash";
+
+    };
 
 }
