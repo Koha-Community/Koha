@@ -23,7 +23,7 @@ use warnings;
 use MARC::Field;
 
 use C4::Context;
-use C4::Biblio qw( GetFrameworkCode ModBiblio );
+use C4::Biblio qw( ModBiblio );
 use C4::Search qw( FindDuplicate new_record_from_zebra );
 use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
@@ -1570,7 +1570,7 @@ sub merge {
             }
         }
         next if !$update;
-        ModBiblio($marcrecord, $biblionumber, GetFrameworkCode($biblionumber));
+        ModBiblio($marcrecord, $biblionumber, $biblio->frameworkcode);
         $counteditedbiblio++;
     }
     return $counteditedbiblio;
