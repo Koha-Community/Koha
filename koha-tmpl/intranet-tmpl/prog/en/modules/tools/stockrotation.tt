@@ -518,7 +518,16 @@
                                             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% sritem.item.biblio.id | uri %]">[% sritem.item.biblio.title | html %]</a></td>
                                             <td>[% sritem.item.biblio.author | html %]</td>
                                             <td>[% sritem.item.itemcallnumber | html %]</td>
-                                            <td>[% sritem.item.get_transfer ? 'Yes' : 'No' | html %]</td>
+                                            <td>[% IF ( transfer = sritem.item.get_transfer) %]
+                                                    [% IF (transfer.reason.match('Stockrotation.*')) %]
+                                                    [% IF (transfer.datesent) %]
+                                                        <span class="intransit">In transit from [% Branches.GetName( transfer.frombranch ) | html %] to [% Branches.GetName( transfer.tobranch ) | html %] since [% transfer.datesent | $KohaDates %]</span>
+                                                    [% ELSE %]
+                                                        <span class="transitrequested">Transit pending from [% Branches.GetName( transfer.frombranch ) | html %] to [% Branches.GetName( transfer.tobranch ) | html %] since [% transfer.daterequested | $KohaDates %]</span>
+                                                    [% END %]
+                                                    [% END %]
+                                                [% END %]
+                                            </td>
                                             <td>
                                                 [% FOREACH this_stage IN stages %]
                                                     [% IF this_stage.stage_id == sritem.stage.stage_id %]
