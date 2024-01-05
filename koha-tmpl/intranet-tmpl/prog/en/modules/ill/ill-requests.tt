@@ -46,6 +46,13 @@
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Request type disclaimer</span>
             [% END %]
+        [% ELSIF op == 'confirmautoill' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Confirm automatic request</span>
+            [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>ILL requests</span>
@@ -846,6 +853,39 @@
                         </fieldset>
                     </form>
                 </div>
+            [% ELSIF op == 'confirmautoill' %]
+                <!-- confirmautoill -->
+                <h1>Confirm automatic request</h1>
+                <div id="results" class="page-section">
+                    <form method="post" id="confirmautoill-form">
+                        <fieldset class="rows">
+                            <h3>Confirm backend:</h3>
+                            <p id="autoillbackends"></p>
+                            <p id="autoillbackend-message" class="text-info"></p>
+                        </fieldset>
+                        <fieldset class="action">
+                            [% FOREACH key IN whole.keys %]
+                                [% value = whole.$key %]
+                                [% IF key != 'method' && key != 'custom_key' && key != 'custom_value' %]
+                                    <input type="hidden" name="[% key | html %]" value="[% value | html %]" />
+                                [% END %]
+                            [% END %]
+                            [% custom_keys = whole.custom_key.split('\0') %]
+                            [% custom_values = whole.custom_value.split('\0') %]
+                            [% i = 0 %]
+                            [% FOREACH custom_key IN custom_keys %]
+                                <input type="hidden" name="custom_key" value="[% custom_key | html %]" />
+                                <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]" />
+                                [% i = i + 1 %]
+                            [% END %]
+                            <input type="hidden" name="method" value="create" />
+                            <input type="hidden" name="stage" value="form" />
+                            <input type="hidden" name="confirm_auto_submitted" value="1" />
+                            <input type="submit" value="Confirm" />
+                            <a class="cancel" href="ill-requests.pl">Cancel</a>
+                        </fieldset>
+                    </form>
+                </div>
             [% ELSIF op == 'batch_list' || op == 'batch_create' %]
                 [% INCLUDE 'ill-batch.inc' %]
             [% ELSE %]
@@ -886,6 +926,11 @@
         [% ELSE %]
         var services = [];
         [% END %]
+        [% IF auto_backends_json.length > 0 %]
+        var auto_backends = [% auto_backends_json | $raw %];
+        [% ELSE %]
+        var auto_backends = [];
+        [% END %]
         [% IF metadata.length > 0 %]
         var metadata = "[% metadata | $raw %]";
         [% END %]
@@ -917,6 +962,9 @@
     [% Asset.js("js/ill-batch-modal.js") | $raw %]
     [% IF (op == 'availability' || op == 'generic_confirm') && Koha.Preference('ILLCheckAvailability') %]
         [% Asset.js("js/ill-availability.js") | $raw %]
+    [% END %]
+    [% IF (op == 'confirmautoill' && Koha.Preference('AutoILLBackendPriority')) %]
+        [% Asset.js("js/ill-autobackend.js") | $raw %]
     [% END %]
     [% IF op == 'availability' && Koha.Preference('ILLCheckAvailability') %]
         <script>

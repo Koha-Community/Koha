@@ -46,6 +46,10 @@
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     <span>Ill request disclaimer</span>
                 [% END %]
+            [% ELSIF op == 'confirmautoill' %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Confirm automatic request</span>
+                [% END %]
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -114,7 +118,7 @@
                             [% IF can_patron_place_ill_in_opac %]
                                 <div id="illrequests-create-button" class="dropdown btn-group">
                                     [% IF Koha.Preference('AutoILLBackendPriority') %]
-                                        <a id="ill-new" class="btn btn-primary" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=Standard"> <i class="fa fa-plus" aria-hidden="true"></i> Create a new request </a>
+                                        <a id="ill-new" class="btn btn-primary" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=Standard"> <i class="fa fa-plus" aria-hidden="true"></i> Create a new auto request </a>
                                     [% ELSIF backends.size > 1 %]
                                         <button class="btn btn-primary dropdown-toggle" type="button" id="ill-backend-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             <i class="fa fa-plus" aria-hidden="true"></i> Create a new request <span class="caret"></span>
@@ -318,6 +322,34 @@
                                     </fieldset>
                                 </form>
                             </div>
+                        [% ELSIF op == 'confirmautoill' %]
+                            <h1>Confirming automatic request</h1>
+                            <div id="results" class="page-section">
+                                <form method="post" id="confirmautoill-form">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <fieldset class="rows">
+                                        <p id="autoillbackends"></p>
+                                        <p id="autoillbackend-message" class="text-info"></p>
+                                    </fieldset>
+                                    <fieldset class="action">
+                                        [% FOREACH key IN whole.keys %]
+                                            [% value = whole.$key %]
+                                            [% IF key != 'custom_key' && key != 'custom_value' && key != 'csrf_token' %]
+                                                <input type="hidden" name="[% key | html %]" value="[% value | html %]" />
+                                            [% END %]
+                                        [% END %]
+                                        [% custom_keys = whole.custom_key.split('\0') %]
+                                        [% custom_values = whole.custom_value.split('\0') %]
+                                        [% i = 0 %]
+                                        [% FOREACH custom_key IN custom_keys %]
+                                            <input type="hidden" name="custom_key" value="[% custom_key | html %]" />
+                                            <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]" />
+                                            [% i = i + 1 %]
+                                        [% END %]
+                                        <input type="hidden" name="confirm_auto_submitted" value="1" />
+                                    </fieldset>
+                                </form>
+                            </div>
                         [% END # / IF op == 'cud-create' %]
                     </div>
                     <!-- / #illrequests -->
@@ -346,6 +378,11 @@
         [% ELSE %]
             var services = [];
         [% END %]
+        [% IF auto_backends_json.length > 0 %]
+        var auto_backends = [% auto_backends_json | $raw %];
+        [% ELSE %]
+        var auto_backends = [];
+        [% END %]
         [% IF metadata.length > 0 %]
             var metadata = "[% metadata | $raw %]";
         [% END %]
@@ -357,6 +394,9 @@
                 window.doSearch();
             });
         </script>
+    [% END %]
+    [% IF op == 'confirmautoill' %]
+        [% Asset.js("js/ill-autobackend.js") | $raw %]
     [% END %]
     <!-- prettier-ignore-start -->
     [% TRY %]

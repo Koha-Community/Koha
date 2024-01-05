@@ -33,6 +33,7 @@ use Koha::ILL::Request;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::ILL::Request::Workflow::Availability;
+use Koha::ILL::Request::Workflow::ConfirmAuto;
 use Koha::ILL::Request::Workflow::TypeDisclaimer;
 
 my $query = CGI->new;
@@ -117,6 +118,7 @@ if ( $op eq 'list' ) {
         # Before request creation operations - Preparation
         my $availability    = Koha::ILL::Request::Workflow::Availability->new( $params, 'opac' );
         my $type_disclaimer = Koha::ILL::Request::Workflow::TypeDisclaimer->new( $params, 'opac' );
+        my $confirm_auto    = Koha::ILL::Request::Workflow::ConfirmAuto->new( $params, 'opac' );
 
         # ILLCheckAvailability operation
         if ( $availability->show_availability($request) ) {
@@ -131,6 +133,15 @@ if ( $op eq 'list' ) {
         } elsif ( $type_disclaimer->show_type_disclaimer($request) ) {
             $op = 'typedisclaimer';
             $template->param( $type_disclaimer->type_disclaimer_template_params($params) );
+            output_html_with_http_headers $query, $cookie,
+                $template->output, undef,
+                { force_no_caching => 1 };
+            exit;
+
+            # ConfirmAuto operation
+        } elsif ( $confirm_auto->show_confirm_auto($request) ) {
+            $op = 'confirmautoill';
+            $template->param( $confirm_auto->confirm_auto_template_params($params) );
             output_html_with_http_headers $query, $cookie,
                 $template->output, undef,
                 { force_no_caching => 1 };
