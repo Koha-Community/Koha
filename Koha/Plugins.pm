@@ -117,9 +117,16 @@ sub get_enabled_plugins {
     unless ($enabled_plugins) {
         my $verbose = $params->{verbose} // $class->_verbose;
         $enabled_plugins = [];
-        my $rs = Koha::Database->schema->resultset('PluginData');
-        $rs = $rs->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
-        my @plugin_classes = $rs->get_column('plugin_class')->all();
+
+        my @plugin_classes;
+        try {
+            my $rs = Koha::Database->schema->resultset('PluginData');
+            $rs = $rs->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
+            @plugin_classes = $rs->get_column('plugin_class')->all();
+        } catch {
+            warn "$_";
+        };
+
         foreach my $plugin_class (@plugin_classes) {
             next unless can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 );
 
