@@ -2,6 +2,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
+[% PROCESS 'patron-search.inc' %]
 [% BLOCK csv_export %]
     <div class="btn-group">
         <a id="exportbutton" class="btn btn-default" href="[% script_name | url %]?op=export&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]"><i class="fa fa-download"></i> Export as CSV</a>
@@ -344,7 +345,7 @@
                                                                             </li>
                                                                         [% END %]
                                                                         <li>
-                                                                            <a href="#" id="add_user"><i class="fa fa-plus"></i> Add user</a>
+                                                                            <a href="#patron_search_modal" id="add_user" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Add user</a>
                                                                         </li>
                                                                         <li id="add_user_submit" style="display:none;">
                                                                             <button type="submit" class="btn btn-default btn-xs">Save changes</button>
@@ -1030,11 +1031,6 @@
                 del_user( $(this).data("borrowernumber") );
             });
 
-            $("#add_user").on("click",function(e){
-                e.preventDefault();
-                UserSearchPopup();
-            });
-
             $(".transfer_order").on("click",function(e){
                 e.preventDefault();
                 transfer_order_popup( $(this).data("ordernumber"));
@@ -1183,14 +1179,6 @@
             });
         });
 
-        function UserSearchPopup(f) {
-            window.open(
-                "/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=add&filter=baskets_managers",
-                'UserSearchPopup',
-                'width=1024, height=768, scrollbars=yes, toolbar=no,'
-             );
-        }
-
         function add_user(borrowernumber, borrowername) {
             var ids = $("#users_ids").val();
             if(ids.length > 0) {
@@ -1219,6 +1207,11 @@
             $("#add_user_submit").show();
         }
     </script>
+
+    [% INCLUDE 'select2.inc' %]
+    [% SET columns = ['cardnumber','name','category','branch','action'] %]
+    [% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]
+    [% PROCESS patron_search_js columns => columns, filter => 'baskets_managers', actions => ["add"], preview_on_name_click => 1 %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
