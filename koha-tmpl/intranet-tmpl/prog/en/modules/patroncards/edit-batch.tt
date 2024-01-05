@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
+[% PROCESS 'patron-search.inc' %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>[% FILTER collapse %]
         [% IF ( batch_id ) %]
@@ -85,7 +86,7 @@
                                 </div>
                             </form>
                             <div id="batch-manage" class="action">
-                                <a class="btn btn-default" id="additems" href="#"><i class="fa fa-plus"></i> Add patron(s)</a>
+                                <a class="btn btn-default" id="additems" href="#patron_search_modal" data-toggle="modal"><i class="fa fa-plus"></i> Add patron(s)</a>
                                 [% IF ( table_loop ) %]
                                 <a class="btn btn-default" id="savedesc" href="#" data-batch_id="[% batch_id | html %]"><i class="fa fa-save"></i> Save description</a>
                                 <a class="btn btn-default" id="removeitems" href="#"><i class="fa fa-trash-can"></i> Remove selected patrons</a>
@@ -222,13 +223,11 @@
         function Add() {
             var bor_nums = document.getElementById("bor_num_list");
             if (bor_nums.value == '') {
-                window.open("/cgi-bin/koha/members/search.pl?columns=checkbox,cardnumber,name,category,branch,dateexpiry,borrowernotes,action&selection_type=add",
-               'PatronPopup',
-               'width=1024,height=768,location=yes,toolbar=no,'
-               + 'scrollbars=yes,resize=yes');
-            } else {
-                document.forms["add_by_bor_num"].submit();
+                return true;
             }
+
+            document.forms["add_by_bor_num"].submit();
+            return false
         };
 
         function add_user(borrowernumber) {
@@ -316,8 +315,7 @@
                 "autoWidth": false
             }));
             $("#additems").click(function(){
-                Add();
-                return false;
+                return Add();
             });
             $("#removeitems").click(function(){
                 Remove();
@@ -385,6 +383,11 @@
             });
         });
     </script>
+
+    [% INCLUDE 'select2.inc' %]
+    [% SET columns = ['checkbox','cardnumber','name','category','branch','dateexpiry','borrowernotes','action'] %]
+    [% PROCESS patron_search_modal columns => columns, modal_title => t("Add patrons") %]
+    [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -426,7 +426,7 @@
                                 "searchable": false,
                                 "orderable": false,
                                 "render": function( data, type, row, meta ) {
-                                    return "<label for='check" + data + "' class='content_hidden'>" + _("Select patron") + "</label><input type='checkbox' class='check" + data + "' class='selection' name='borrowernumber' value='" + data + "' />";
+                                    return "<label for='check" + data + "' class='content_hidden'>" + _("Select patron") + "</label><input type='checkbox' class='check" + data + " selection' name='borrowernumber' value='" + data + "' />";
                                 }
                             }
                             [% CASE 'cardnumber' %]
@@ -657,6 +657,10 @@
 
             patron_search_form.on('submit', filter);
             patron_search_form.on('submit', update_search_type);
+            patron_search_form.on('submit', function(){
+                parent_block.find(".searchheader").show();
+            });
+
 
             $(".filterByLetter").on("click",function(e){
                 e.preventDefault();
@@ -913,14 +917,12 @@
 
                     <div id="[% search_results_block_id | html %]"> <!-- FIXME removed style from #searchresults, is that bad? -->
                         [% IF columns.grep('checkbox').size %]
-                            <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
+                            <div class="searchheader fh-fixedHeader" style="display:none;">
                                 <div>
-                                    <a href="#" class="btn btn-link" id="select_all"><i class="fa fa-check"></i> Select all</a>
+                                    <a href="#" class="btn btn-link select_all"><i class="fa fa-check"></i> Select all</a>
                                     |
-                                    <a href="#" class="btn btn-link" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
-                                    [% IF selection_type == 'add' %]
-                                    <button id="add-selected" class="btn btn-sm btn-default" type="submit">Add selected patrons</button>
-                                    [% END %]
+                                    <a href="#" class="btn btn-link clear_all"><i class="fa fa-remove"></i> Clear all</a>
+                                    <button class="add-selected" class="btn btn-sm btn-default" type="submit">Add selected patrons</button>
                                 </div>
                             </div>
                         [% END %]
@@ -934,4 +936,33 @@
         </div>
     </div>
     <div id="patron_preview_modal" class="basicModal"></div>
+
+    <script>
+        $(document).ready(function() {
+            let parent_block = $("#[% search_results_block_id | html %]");
+            parent_block.find(".select_all").on("click",function(e){
+                e.preventDefault();
+                parent_block.find(".selection").prop("checked", true).change();
+            });
+            parent_block.find(".clear_all").on("click",function(e){
+                e.preventDefault();
+                parent_block.find(".selection").prop("checked", false).change();
+            });
+            parent_block.find(".searchheader").hide();
+            parent_block.find(".clear_search").on("click",function(e){$("#searchheader").hide();});
+
+            parent_block.find('.add-selected').on('click', function(e) {
+                e.preventDefault();
+                var counter = 0;
+                parent_block.find('tr:has(.selection:checked) .add_user').each(function(){
+                    var borrowernumber = $(this).data('borrowernumber');
+                    var firstname = $(this).data('firstname');
+                    var surname = $(this).data('surname');
+                    add_user( borrowernumber, firstname + ' ' + surname );
+                    counter++;
+                });
+                parent_block.find('.info').html(_("%s Patrons added.").format(counter)).show();
+            });
+        });
+    </script>
 [% END %]
