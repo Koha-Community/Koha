@@ -116,9 +116,16 @@ sub get_enabled_plugins {
     my $enabled_plugins = Koha::Cache::Memory::Lite->get_from_cache(ENABLED_PLUGINS_CACHE_KEY);
     unless ($enabled_plugins) {
         $enabled_plugins = [];
-        my $rs = Koha::Database->schema->resultset('PluginData');
-        $rs = $rs->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
-        my @plugin_classes = $rs->get_column('plugin_class')->all();
+
+        my @plugin_classes;
+        try {
+            my $rs = Koha::Database->schema->resultset('PluginData');
+            $rs = $rs->search({ plugin_key => '__ENABLED__', plugin_value => 1 });
+            @plugin_classes = $rs->get_column('plugin_class')->all();
+        } catch {
+            warn "$_";
+        };
+
         foreach my $plugin_class (@plugin_classes) {
             unless (can_load(modules => { $plugin_class => undef }, nocache => 1)) {
                 warn "Failed to load $plugin_class: $Module::Load::Conditional::ERROR";
