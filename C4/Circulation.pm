@@ -2374,10 +2374,9 @@ sub AddReturn {
             else {
                 $messages->{'TransferTrigger'} = $transfer->reason;
                 if ( $transfer->frombranch eq $branch ) {
-                    $transfer->transit;
-                    $messages->{'WasTransfered'}   = $transfer->tobranch;
-                }
-                else {
+                    $messages->{'TransferTo'}    = $transfer->tobranch;
+                    $messages->{'WasTransfered'} = $transfer->id;
+                } else {
                     $messages->{'WrongTransfer'}     = $transfer->tobranch;
                     $messages->{'WrongTransferItem'} = $item->itemnumber;
                 }
@@ -2531,8 +2530,9 @@ sub AddReturn {
             (C4::Context->preference("UseBranchTransferLimits") and
              ! IsBranchTransferAllowed($branch, $returnbranch, $item->$BranchTransferLimitsType )
            )) {
-            ModItemTransfer($item->itemnumber, $branch, $returnbranch, $transfer_trigger, { skip_record_index => 1 });
-            $messages->{'WasTransfered'} = $returnbranch;
+            my $transfer = ModItemTransfer($item->itemnumber, $branch, $returnbranch, $transfer_trigger, { skip_record_index => 1 });
+            $messages->{'TransferTo'} = $returnbranch;
+            $messages->{'WasTransfered'} = $transfer->id;
             $messages->{'TransferTrigger'} = $transfer_trigger;
         } else {
             $messages->{'NeedsTransfer'} = $returnbranch;

@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 36;
+use Test::More tests => 35;
 use Test::Exception;
 use Test::MockModule;
 
@@ -1309,8 +1309,157 @@ subtest 'Tests for itemtype|item_type' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'get_transfer' => sub {
+    plan tests => 8;
+    $schema->storage->txn_begin;
+
+    my $item = $builder->build_sample_item();
+
+    my $transfer = $item->get_transfer();
+    is( $transfer, undef, 'Koha::Item->get_transfer should return undef if the item has no queued transfers' );
+
+    my $library_to = $builder->build( { source => 'Branch' } );
+
+    my $transfer_1 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $item->itemnumber,
+                frombranch    => $item->holdingbranch,
+                tobranch      => $library_to->{branchcode},
+                reason        => 'Manual',
+                datesent      => undef,
+                datearrived   => undef,
+                datecancelled => undef,
+                daterequested => \'NOW()'
+            }
+        }
+    );
+
+    $transfer = $item->get_transfer();
+    is(
+        ref($transfer), 'Koha::Item::Transfer',
+        'Koha::Item->get_transfer should return a Koha::Item::Transfer object'
+    );
+
+    my $transfer_2 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $item->itemnumber,
+                frombranch    => $item->holdingbranch,
+                tobranch      => $library_to->{branchcode},
+                reason        => 'Manual',
+                datesent      => undef,
+                datearrived   => undef,
+                datecancelled => undef,
+                daterequested => \'NOW()'
+            }
+        }
+    );
+
+    $transfer = $item->get_transfer();
+    is(
+        $transfer->branchtransfer_id, $transfer_1->branchtransfer_id,
+        'Koha::Item->get_transfer returns the oldest transfer request'
+    );
+
+    $transfer_2->datesent( \'NOW()' )->store;
+    $transfer = $item->get_transfer();
+    is(
+        $transfer->branchtransfer_id, $transfer_2->branchtransfer_id,
+        'Koha::Item->get_transfer returns the in_transit transfer'
+    );
+
+    my $transfer_3 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $item->itemnumber,
+                frombranch    => $item->holdingbranch,
+                tobranch      => $library_to->{branchcode},
+                reason        => 'Manual',
+                datesent      => undef,
+                datearrived   => undef,
+                datecancelled => undef,
+                daterequested => \'NOW()'
+            }
+        }
+    );
+
+    $transfer_2->datearrived( \'NOW()' )->store;
+    $transfer = $item->get_transfer();
+    is(
+        $transfer->branchtransfer_id, $transfer_1->branchtransfer_id,
+        'Koha::Item->get_transfer returns the next queued transfer'
+    );
+    is( $transfer->itemnumber, $item->itemnumber, 'Koha::Item->get_transfer returns the right items transfer' );
+
+    $transfer_1->datecancelled( \'NOW()' )->store;
+    $transfer = $item->get_transfer();
+    is(
+        $transfer->branchtransfer_id, $transfer_3->branchtransfer_id,
+        'Koha::Item->get_transfer ignores cancelled transfers'
+    );
+
+    subtest "Ensure prefetches don't affect which transfer if returned" => sub {
+        plan tests => 5;
+
+        # Reset test data
+        $transfer_1->datecancelled(undef)->store;
+        $transfer_2->set( { datesent => undef, datearrived => undef } )->store;
+
+        my $prefetched_item = Koha::Items->search(
+            { 'me.itemnumber' => $item->itemnumber },
+            { prefetch        => ['current_branchtransfers'] }
+        )->next;
+
+        $transfer = $prefetched_item->get_transfer();
+        is(
+            $transfer->branchtransfer_id, $transfer_1->branchtransfer_id,
+            'Koha::Item->get_transfer returns the oldest transfer request'
+        );
+
+        $transfer_2->datesent( \'NOW()' )->store;
+        $prefetched_item = Koha::Items->search(
+            { 'me.itemnumber' => $item->itemnumber },
+            { prefetch        => ['current_branchtransfers'] }
+        )->next;
+
+        $transfer = $prefetched_item->get_transfer();
+        is(
+            $transfer->branchtransfer_id, $transfer_2->branchtransfer_id,
+            'Koha::Item->get_transfer returns the in_transit transfer'
+        );
+
+        $transfer_2->datearrived( \'NOW()' )->store;
+        $prefetched_item = Koha::Items->search(
+            { 'me.itemnumber' => $item->itemnumber },
+            { prefetch        => ['current_branchtransfers'] }
+        )->next;
+        $transfer = $prefetched_item->get_transfer();
+        is(
+            $transfer->branchtransfer_id, $transfer_1->branchtransfer_id,
+            'Koha::Item->get_transfer returns the next queued transfer'
+        );
+        is( $transfer->itemnumber, $item->itemnumber, 'Koha::Item->get_transfer returns the right items transfer' );
+
+        $transfer_1->datecancelled( \'NOW()' )->store;
+        $prefetched_item = Koha::Items->search(
+            { 'me.itemnumber' => $item->itemnumber },
+            { prefetch        => ['current_branchtransfers'] }
+        )->next;
+        $transfer = $prefetched_item->get_transfer();
+        is(
+            $transfer->branchtransfer_id, $transfer_3->branchtransfer_id,
+            'Koha::Item->get_transfer ignores cancelled transfers'
+        );
+    };
+    $schema->storage->txn_rollback;
+};
+
 subtest 'get_transfers' => sub {
-    plan tests => 16;
+    plan tests => 17;
     $schema->storage->txn_begin;
 
     my $item = $builder->build_sample_item();
@@ -1404,6 +1553,104 @@ subtest 'get_transfers' => sub {
     is($transfers->count, 1, 'Once a transfer is cancelled, it no longer appears in the list from ->get_transfers()');
     $result_1 = $transfers->next;
     is( $result_1->branchtransfer_id, $transfer_3->branchtransfer_id, 'Koha::Item->get_transfers returns the only transfer that remains');
+
+    subtest "Ensure prefetches don't affect the return order" => sub {
+        plan tests => 13;
+
+        # Reset test data
+        $transfer_2->datesent(undef)->store;
+        $transfer_2->datearrived(undef)->store;
+        $transfer_1->datecancelled(undef)->store;
+
+        my $prefetched_item = Koha::Items->search(
+            { 'me.itemnumber' => $item->itemnumber },
+            { prefetch        => ['current_branchtransfers'] }
+        )->next;
+
+        $transfers = $prefetched_item->get_transfers();
+        is(
+            $transfers->count, 3,
+            'When there are multiple open transfer requests, the Koha::Item::Transfers object contains them all'
+        );
+        $result_1 = $transfers->next;
+        $result_2 = $transfers->next;
+        $result_3 = $transfers->next;
+        is(
+            $result_1->branchtransfer_id, $transfer_1->branchtransfer_id,
+            'Koha::Item->get_transfers returns the oldest transfer request first'
+        );
+        is(
+            $result_2->branchtransfer_id, $transfer_2->branchtransfer_id,
+            'Koha::Item->get_transfers returns the newer transfer request second'
+        );
+        is(
+            $result_3->branchtransfer_id, $transfer_3->branchtransfer_id,
+            'Koha::Item->get_transfers returns the newest transfer request last'
+        );
+
+        $transfer_2->datesent( \'NOW()' )->store;
+        $prefetched_item = Koha::Items->search(
+            { 'me.itemnumber' => $item->itemnumber },
+            { prefetch        => ['current_branchtransfers'] }
+        )->next;
+        $transfers = $prefetched_item->get_transfers();
+        is(
+            $transfers->count, 3,
+            'When one transfer is set to in_transit, the Koha::Item::Transfers object still contains them all'
+        );
+        $result_1 = $transfers->next;
+        $result_2 = $transfers->next;
+        $result_3 = $transfers->next;
+        is(
+            $result_1->branchtransfer_id, $transfer_2->branchtransfer_id,
+            'Koha::Item->get_transfers returns the active transfer request first'
+        );
+        is(
+            $result_2->branchtransfer_id, $transfer_1->branchtransfer_id,
+            'Koha::Item->get_transfers returns the other transfers oldest to newest'
+        );
+        is(
+            $result_3->branchtransfer_id, $transfer_3->branchtransfer_id,
+            'Koha::Item->get_transfers returns the other transfers oldest to newest'
+        );
+
+        $transfer_2->datearrived( \'NOW()' )->store;
+        $prefetched_item = Koha::Items->search(
+            { 'me.itemnumber' => $item->itemnumber },
+            { prefetch        => ['current_branchtransfers'] }
+        )->next;
+        $transfers = $prefetched_item->get_transfers();
+        is(
+            $transfers->count, 2,
+            'Once a transfer is received, it no longer appears in the list from ->get_transfers()'
+        );
+        $result_1 = $transfers->next;
+        $result_2 = $transfers->next;
+        is(
+            $result_1->branchtransfer_id, $transfer_1->branchtransfer_id,
+            'Koha::Item->get_transfers returns the other transfers oldest to newest'
+        );
+        is(
+            $result_2->branchtransfer_id, $transfer_3->branchtransfer_id,
+            'Koha::Item->get_transfers returns the other transfers oldest to newest'
+        );
+
+        $transfer_1->datecancelled( \'NOW()' )->store;
+        $prefetched_item = Koha::Items->search(
+            { 'me.itemnumber' => $item->itemnumber },
+            { prefetch        => ['current_branchtransfers'] }
+        )->next;
+        $transfers = $prefetched_item->get_transfers();
+        is(
+            $transfers->count, 1,
+            'Once a transfer is cancelled, it no longer appears in the list from ->get_transfers()'
+        );
+        $result_1 = $transfers->next;
+        is(
+            $result_1->branchtransfer_id, $transfer_3->branchtransfer_id,
+            'Koha::Item->get_transfers returns the only transfer that remains'
+        );
+    };
 
     $schema->storage->txn_rollback;
 };

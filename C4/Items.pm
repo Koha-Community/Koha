@@ -386,7 +386,7 @@ sub ModItemTransfer {
         $transfer->transit({ skip_record_index => $params->{skip_record_index} });
     }
 
-    return;
+    return $transfer;
 }
 
 =head2 ModDateLastSeen

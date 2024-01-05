@@ -540,10 +540,11 @@ my $recalled = 0;
 
 if ( $messages->{'WasTransfered'} ) {
     $template->param(
-        found          => 1,
-        transfer       => $messages->{'WasTransfered'},
-        trigger        => $messages->{'TransferTrigger'},
-        itemnumber     => $itemnumber,
+        found      => 1,
+        transfer   => $messages->{'WasTransfered'},
+        transferto => $messages->{'TransferTo'},
+        trigger    => $messages->{'TransferTrigger'},
+        itemnumber => $itemnumber,
     );
 }
 
@@ -719,6 +720,9 @@ foreach my $code ( keys %$messages ) {
     }
     elsif ( $code eq 'WasTransfered' ) {
         ;    # FIXME... anything to do here?
+    }
+    elsif ( $code eq 'TransferTo' ) {
+        ;    # Handled above, along with WasTransfered
     }
     elsif ( $code eq 'withdrawn' ) {
         $err{withdrawn} = 1;
