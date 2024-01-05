@@ -82,6 +82,7 @@ function addExpandHandler() {
             $(this).hide();
             var target = $(this).data("target");
             var syntax = $(this).data("syntax");
+            var lint_type = syntax === 'javascript'? { 'esversion': 6 } : true;
             $("#collapse_" + target).show();
             if (syntax) {
                 var editor = CodeMirror.fromTextArea(document.getElementById("pref_" + target), {
@@ -90,7 +91,7 @@ function addExpandHandler() {
                     lineWrapping: true,
                     viewportMargin: Infinity,
                     gutters: ["CodeMirror-lint-markers"],
-                    lint: true
+                    lint: lint_type,
                 });
                 editor.on("change", function () {
                     mark_modified.call($("#pref_" + target)[0]);
