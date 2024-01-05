@@ -780,7 +780,7 @@
                     table_dt.column([% loop.count - 1 %]).search(library_id ? '^'+library_id+'$' : '');
                 [% CASE 'category' %]
                     let category_id = $("#categorycode_filter").val() || "";
-                    patrons_table.find('thead tr:eq(1) th[data-filter="categories"] select').val(category_id);
+                    patrons_table.find('thead tr:eq(1) th[data-filter="categories"] select').val(category_id.toLowerCase());
                     table_dt.column([% loop.count - 1 %]).search(category_id ? '^'+category_id+'$' : '');
                 [% END %]
             [% END %]
