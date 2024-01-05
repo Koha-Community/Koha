@@ -41,7 +41,7 @@ my $query = CGI->new;
 my $subscriptionid = $query->param('subscriptionid');
 my $serialseq = $query->param('serialseq');
 my $routingid = $query->param('routingid');
-my $borrowernumber = $query->param('borrowernumber');
+my $borrowernumbers = $query->param('borrowernumbers');
 my $notes = $query->param('notes');
 my $op = $query->param('op') || q{};
 my $date_selected = $query->param('date_selected');
@@ -66,8 +66,10 @@ if($op eq 'cud-delete'){
     delroutingmember($routingid,$subscriptionid);
 }
 
-if($op eq 'cud-add'){
-    addroutingmember($borrowernumber,$subscriptionid);
+if ( $op eq 'cud-add_new_recipients' ) {
+    for my $borrowernumber ( split ':', $borrowernumbers ) {
+        addroutingmember( $borrowernumber, $subscriptionid );
+    }
 }
 if($op eq 'cud-save'){
     my $sth = $dbh->prepare('UPDATE serial SET routingnotes = ? WHERE subscriptionid = ?');

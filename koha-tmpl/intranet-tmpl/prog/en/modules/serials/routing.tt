@@ -1,6 +1,8 @@
 [% USE raw %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
+[% PROCESS 'i18n.inc' %]
+[% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %] &rsaquo; [% title | html %] &rsaquo; Serials &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -88,9 +90,10 @@
             [% END %]
         </table>
     [% END %]
+    <input type="hidden" id="new_recipients" name="new_recipients" value="">
 
     <p style="margin-left:10em;">
-        <a href="#" id="add_recipients"><i class="fa fa-plus"></i> Add recipients</a>
+        <a href="#patron_search_modal" id="add_recipients" data-toggle="modal"><i class="fa fa-plus"></i> Add recipients</a>
         [% IF memberloop %]
             <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | uri %]&amp;op=delete"><i class="fa fa-trash-can"></i> Delete all</a>
         [% END %]
@@ -116,10 +119,6 @@
 [% MACRO jsinclude BLOCK %]
     <script>
         $(document).ready(function(){
-            $("#add_recipients").on("click",function(e){
-                e.preventDefault();
-                userPopup();
-            });
             $(".itemrank").on("change",function(){
                 var subscriptionid = $(this).data("subscriptionid");
                 var routingid = $(this).data("routingid");
@@ -131,17 +130,50 @@
             window.location.href=mylocation;
         }
 
-        function userPopup() {
-            window.open("/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=add",
-                'PatronPopup',
-                'width=1024,height=768,scrollbars=yes,toolbar=no,'
-                + 'scrollbars=yes,resize=yes'
-            );
+        function add_user(borrowernumber) {
+            let users = $("#new_recipients").val().split(':');
+            if ( !users.includes(borrowernumber) ) {
+                users.push(borrowernumber);
+            }
+            users = [...new Set(users)]; // unique
+            $("#new_recipients").val(users.filter(Number).join(':')); // remove empty and join
         }
 
-        function add_user(borrowernumber) {
-            var myurl = "/cgi-bin/koha/serials/routing.pl?subscriptionid="+[% subscriptionid | html %]+"&borrowernumber="+borrowernumber+"&op=add";
-            window.location.href = myurl;
+    </script>
+
+    [% INCLUDE 'select2.inc' %]
+    [% SET columns = ['cardnumber','name','category','branch','action'] %]
+    [% PROCESS patron_search_modal columns => columns, modal_title => t("Add recipients") %]
+    [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
+
+    <script>
+        $(document).on(
+            "hidden.bs.modal",
+            "#patron_search_modal",
+            add_new_recipients);
+
+        function add_new_recipients(e){
+            e.preventDefault();
+            let borrowernumbers = $("#new_recipients").val();
+            if(!borrowernumbers.length > 0) {
+                return;
+            }
+            $.ajax({
+                data: {
+                    subscriptionid: [% subscriptionid | html %],
+                    borrowernumbers,
+                    op: 'add_new_recipients'
+                },
+                type: 'POST',
+                url: '/cgi-bin/koha/serials/routing.pl',
+                success: function (data) {
+                    document.location.href = '/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | uri %]';
+                    return false;
+                },
+                error: function (data) {
+                    alert(data);
+                },
+            });
         }
     </script>
 [% END %]
