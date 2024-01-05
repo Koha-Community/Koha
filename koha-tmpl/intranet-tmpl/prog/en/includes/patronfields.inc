@@ -84,7 +84,7 @@
         <select name="searchfieldstype" id="searchfieldstype" class="form-control">
     [% ELSE %]
         <label for="searchfieldstype_filter">Search field:</label>
-        <select name="searchfieldstype" id="searchfieldstype_filter">
+        <select name="searchfieldstype" class="searchfieldstype_filter">
     [% END %]
         [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname|middle_name|surname|othernames|cardnumber|userid' %]
         [%# Above is needed for adding fields from the DefaultPatronSearchFields preference to the dropdowns %]

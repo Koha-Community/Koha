@@ -12,7 +12,11 @@
 [% DEFAULT class = '' size = 20 %]
 
 [% IF avs.count %]
-  <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]" >
+  [% IF no_id %]
+    <select name="[% name | html %]" class="[% class | html %]" >
+  [% ELSE %]
+    <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]" >
+  [% END %]
   [% IF all %]<option value="">All</option>[% END %]
   [% IF empty %]<option value=""></option>[% END %]
   [% FOR av IN avs %]
@@ -24,5 +28,9 @@
   [% END %]
   </select>
 [% ELSE %]
-  <input type="text" id="[% name | html %]" name="[% name | html %]" size="[% size | html %]" value="[% default | html_entity %]" class="[% class | html %]" />
+  [% IF no_id %]
+    <input type="text" name="[% name | html %]" size="[% size | html %]" value="[% default | html_entity %]" class="[% class | html %]" />
+  [% ELSE %]
+    <input type="text" id="[% name | html %]" name="[% name | html %]" size="[% size | html %]" value="[% default | html_entity %]" class="[% class | html %]" />
+  [% END %]
 [% END %]

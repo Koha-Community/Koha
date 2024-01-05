@@ -7,11 +7,13 @@
 [% USE Asset %]
 [% USE To %]
 
+[% SET search_results_block_id = 'searchresults' %]
+
 [%# Display a simple form %]
 [% BLOCK patron_search_filters_simple  %]
-    <form method="get" id="patron_search_form">
+    <form method="get" class="patron_search_form">
         <div class="hint">Enter patron card number or partial name:</div>
-        <input type="text" size="40" id="search_patron_filter" class="focus" autocomplete="off" />
+        <input type="text" size="40" class="search_patron_filter" class="focus" autocomplete="off" />
         <input type="submit" class="btn btn-primary" value="Search" />
     </form>
 [% END %]
@@ -27,13 +29,13 @@
 [%# - search_type: select 'contains' or 'starts with' %]
 [%- searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
 [% BLOCK patron_search_filters %]
-    <form method="get" id="patron_search_form">
+    <form method="get" class="patron_search_form">
         <fieldset class="brief">
             <h3>Search for patron</h3>
             <ol>
                 <li>
                     <label for="search_patron_filter">Search:</label>
-                    <input type="text" id="search_patron_filter" value="[% search_filter | html %]" class="focus" />
+                    <input type="text" class="search_patron_filter" value="[% search_filter | html %]" class="focus" />
                 </li>
 
                 [% FOR f IN filters %]
@@ -41,7 +43,7 @@
                     [% CASE 'branch' %]
                         <li>
                             <label for="branchcode_filter">Library:</label>
-                            <select id="branchcode_filter">
+                            <select class="branchcode_filter">
                                 [% SET libraries = Branches.all( only_from_group => 1 ) %]
                                 [% IF libraries.size != 1 %]
                                     <option value="">Any</option>
@@ -54,7 +56,7 @@
                     [% CASE 'category' %]
                         <li>
                             <label for="categorycode_filter">Category:</label>
-                            <select id="categorycode_filter">
+                            <select class="categorycode_filter">
                                 <option value="">Any</option>
                                 [% FOREACH category IN Categories.limited.unblessed %]
                                     <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
@@ -64,12 +66,12 @@
                     [% CASE 'sort1' %]
                         <li>
                             <label for="sort1_filter">Sort 1:</label>
-                            [% PROCESS 'av-build-dropbox.inc' name="sort1_filter", category="Bsort1", empty=1, size = 20 %]
+                            [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort1_filter", category="Bsort1", empty=1, size = 20 %]
                         </li>
                     [% CASE 'sort2' %]
                         <li>
                             <label for="sort2_filter">Sort 2:</label>
-                            [% PROCESS 'av-build-dropbox.inc' name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
+                            [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
                         </li>
                     [% CASE 'search_field' %]
                         <li>
@@ -78,7 +80,7 @@
                     [% CASE 'search_type' %]
                         <li>
                             <label for="searchtype_filter">Search type:</label>
-                            <select name="searchtype" id="searchtype_filter">
+                            <select name="searchtype" class="searchtype_filter">
                               [% IF searchtype == "starts_with" %]
                                 <option value='starts_with' selected="selected">Starts with</option>
                                 <option value="contains">Contains</option>
@@ -93,7 +95,7 @@
             </ol>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Search" />
-                <input type="button" value="Clear" id="clear_search" />
+                <input type="button" value="Clear" class="clear_search" />
             </fieldset>
         </fieldset>
     </form>
@@ -135,14 +137,14 @@
         [% END %]
     </div>
 
-    <h3 style="display: none;">Patrons found for: <span id="searchpattern"></span></h3>
+    <h3 style="display: none;">Patrons found for: <span class="searchpattern"></span></h3>
 
     <div id="[% table_id | html %]_search_results" style="display:none;">
 
-        <div id="info" class="dialog message" style="display: none;"></div>
-        <div id="error" class="dialog alert" style="display: none;"></div>
+        <div class="info" class="dialog message" style="display: none;"></div>
+        <div class="error" class="dialog alert" style="display: none;"></div>
 
-        <input type="hidden" id="firstletter_filter" value="" />
+        <input type="hidden" class="firstletter_filter" value="" />
         [% IF open_on_row_click %]
         <table id="[% table_id | html %]" class="selections-table">
         [% ELSE %]
@@ -203,6 +205,7 @@
 [%# sticky_header and sticky_to: If we need a sticky header %]
 [%# callback: name of the JS function that will be called when a patron is selected. Only work with action=select %]
 [%# display_search_description: boolean, default off. Display the description of the search %]
+[%# adjust_history: boolean, default off. Change the current url when a first letter is selected %]
 [% BLOCK patron_search_js %]
 
     [% IF redirect_if_one_result && !redirect_url %]
@@ -212,33 +215,33 @@
     <script>
         [% SET libraries = Branches.all %]
         [% SET categories = Categories.limited.unblessed %]
-        let categories = [% To.json(categories) | $raw %].map(e => {
+        var categories = [% To.json(categories) | $raw %].map(e => {
             e['_id'] = e.categorycode.toLowerCase();
             e['_str'] = e.description;
             return e;
         });
-        let categories_map = categories.reduce((map, e) => {
+        var categories_map = categories.reduce((map, e) => {
             map[e._id] = e;
             return map;
         }, {});
-        let libraries  = [% To.json(libraries) | $raw %].map(e => {
+        var libraries  = [% To.json(libraries) | $raw %].map(e => {
             e['_id'] = e.branchcode;
             e['_str'] = e.branchname;
             return e;
         });
-        let libraries_map = libraries.reduce((map, e) => {
+        var libraries_map = libraries.reduce((map, e) => {
             map[e._id] = e;
             return map;
         }, {});
 
         [% IF Koha.Preference('ExtendedPatronAttributes') %]
             [% SET extended_attribute_types = [ ExtendedAttributeTypes.codes( staff_searchable => 1, searched_by_default => 1 ) ] %]
-            let extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
+            var extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
         [% END %]
 
         $(document).ready(function() {
-            $('select#sort1_filter').select2({allowClear:true});
-            $('select#sort2_filter').select2({allowClear:true});
+            $('select[name="sort1_filter"]').select2({allowClear:true});
+            $('select[name="sort2_filter"]').select2({allowClear:true});
         });
     </script>
 
@@ -251,10 +254,18 @@
     [% END %]
 
     <script>
-        var first_draw = 0;
+    {
+
+        function get_patron_search_form(){
+            let parent_block = $("#[% search_results_block_id | html %]");
+            let patron_search_form = parent_block.siblings(".patron_search_form");
+            if ( !patron_search_form.length ) patron_search_form = $(".patron_search_form");
+            return patron_search_form;
+        }
+        let first_draw = 0;
         let patrons_table;
-        var Sticky;
-        var singleBranchMode = '[% singleBranchMode | html %]';
+        let Sticky;
+        let singleBranchMode = '[% singleBranchMode | html %]';
         let logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
         [% IF do_not_defer_loading %]
             let defer_loading = 0;
@@ -262,10 +273,12 @@
             let defer_loading = 1;
         [% END %]
 
-        /* popstate event triggered by forward and back button. Need to refresh search */
-        window.addEventListener('popstate', (event) => {
-            getSearchByLocation( false );
-        });
+        [% IF adjust_history %]
+            /* popstate event triggered by forward and back button. Need to refresh search */
+            window.addEventListener('popstate', (event) => {
+                getSearchByLocation( false );
+            });
+        [% END %]
 
         [% SWITCH filter %]
         [% CASE 'suggestions_managers' %]
@@ -283,11 +296,14 @@
         [% END %]
         $(document).ready(function(){
 
-            $("#info").hide();
-            $("#error").hide();
+            let parent_block = $("#[% search_results_block_id | html %]");
+            let patron_search_form = get_patron_search_form();
+
+            parent_block.find(".info").hide();
+            parent_block.find(".error").hide();
 
             // Build the aLengthMenu
-            var aLengthMenu = [
+            let aLengthMenu = [
                 [% Koha.Preference('PatronsPerPage') | html %], 10, 20, 50, 100, -1
             ];
             jQuery.unique(aLengthMenu);
@@ -300,7 +316,7 @@
                 }
                 return parseInt(a) < parseInt(b) ? -1 : 1;}
             );
-            var aLengthMenuLabel = [];
+            let aLengthMenuLabel = [];
             $(aLengthMenu).each(function(){
                 if ( this == -1 ) {
                     // Label for -1 is "All"
@@ -312,16 +328,16 @@
 
             let additional_filters = {
                 surname: function(){
-                    let start_with = $("#firstletter_filter").val()
+                    let start_with = parent_block.find(".firstletter_filter").val()
                     if (!start_with) return "";
                     return { "like": start_with + "%" }
                 },
                 "-and": function(){
                     let filters = [];
 
-                    let search_type = $("#searchtype_filter").val();
-                    let search_fields = $("#searchfieldstype_filter").val() || "standard";
-                    let pattern = $("#search_patron_filter").val();
+                    let search_type = patron_search_form.find(".searchtype_filter").val();
+                    let search_fields = patron_search_form.find(".searchfieldstype_filter").val() || "standard";
+                    let pattern = patron_search_form.find(".search_patron_filter").val();
 
                     filters = buildPatronSearchQuery(
                         pattern,
@@ -332,13 +348,13 @@
                         }
                     );
 
-                    let f_sort1 = $("#sort1_filter").val();
+                    let f_sort1 = patron_search_form.find("select[name='sort1_filter']").val();
                     if ( f_sort1 ) {
                         filters.push({
                             "me.sort1": f_sort1
                         });
                     }
-                    let f_sort2 = $("#sort2_filter").val();
+                    let f_sort2 = patron_search_form.find("select[name='sort2_filter']").val();
                     if ( f_sort2 ) {
                         filters.push({
                             "me.sort2": f_sort2
@@ -410,7 +426,7 @@
                                 "searchable": false,
                                 "orderable": false,
                                 "render": function( data, type, row, meta ) {
-                                    return "<label for='check" + data + "' class='content_hidden'>" + _("Select patron") + "</label><input type='checkbox' id='check" + data + "' class='selection' name='borrowernumber' value='" + data + "' />";
+                                    return "<label for='check" + data + "' class='content_hidden'>" + _("Select patron") + "</label><input type='checkbox' class='check" + data + "' class='selection' name='borrowernumber' value='" + data + "' />";
                                 }
                             }
                             [% CASE 'cardnumber' %]
@@ -608,7 +624,7 @@
                                     [% END %]
 
                                     let patron_str = JSON.stringify(row);
-                                    let input_node = $('<input type="hidden" id="borrower_data' + patron_id + '" name="borrower_data'+ patron_id + '"/>');
+                                    let input_node = $('<input type="hidden" name="borrower_data'+ patron_id + '"/>');
                                     $(input_node).val(patron_str);
                                     action_node += $(input_node).prop('outerHTML');
 
@@ -639,27 +655,28 @@
                 [% END %]
             }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters);
 
-            $("#patron_search_form").on('submit', filter);
-            $("#patron_search_form").on('submit', update_search_type);
+            patron_search_form.on('submit', filter);
+            patron_search_form.on('submit', update_search_type);
+
             $(".filterByLetter").on("click",function(e){
                 e.preventDefault();
                 filterByFirstLetterSurname($(this).text(), true);
             });
-            $("body").on("click",".add_user",function(e){
+            patrons_table.on("click",".add_user",function(e){
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
-                var borrower_data = JSON.parse($("#borrower_data"+borrowernumber).val());
+                var borrower_data = JSON.parse(patrons_table.find("input[name='borrower_data"+borrowernumber+"']").val());
                 modal_add_user( borrowernumber, $patron_to_html( borrower_data, { display_cardnumber: false, url: false } ) );
             });
-            $("body").on("click",".select_user",function(e){
+            patrons_table.on("click",".select_user",function(e){
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
-                var borrower_data = JSON.parse($("#borrower_data"+borrowernumber).val());
+                var borrower_data = JSON.parse(patrons_table.find("input[name='borrower_data"+borrowernumber+"']").val());
                 modal_select_user( borrowernumber, borrower_data );
                 $(this).closest(".modal").modal('hide');
             });
 
-            $("body").on("click",".patron_preview", function( e ){
+            patrons_table.on("click",".patron_preview", function( e ){
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
                 var page = "/cgi-bin/koha/members/moremember.pl?print=brief&borrowernumber=" + borrowernumber;
@@ -675,82 +692,92 @@
                 $("#patronPreview .modal-body").html("<img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> Loading");
             });
 
-            $("#clear_search").on("click",function(e){
+            patron_search_form.find(".clear_search").on("click",function(e){
                 e.preventDefault();
                 clearFilters();
-                $("#searchpattern").parent().hide();
+                patron_search_form.find(".searchpattern").parent().hide();
             });
 
             if ( !defer_loading ) {
-                $("#patron_search_form").submit();
+                patron_search_form.submit();
             }
 
-            /* Initial page load does not trigger the popstate event, so we explicitly call this */
-            getSearchByLocation( false );
-
+            [% IF adjust_history %]
+                /* Initial page load does not trigger the popstate event, so we explicitly call this */
+                getSearchByLocation( false );
+            [% END %]
         });
 
-        function getSearchByLocation( setstate ){
-            /* Check to see if the URL contains a search parameter */
-            if( location.search != ""){
-                var params = new URLSearchParams( location.search );
-                var firstletter = params.get("firstletter");
-                /* Check to see if search is a first letter param */
-                if( firstletter ){
-                    /* Trigger function to return search results by letter */
-                    filterByFirstLetterSurname( firstletter, setstate );
+        [% IF adjust_history %]
+            function getSearchByLocation( setstate ){
+                /* Check to see if the URL contains a search parameter */
+                if( location.search != ""){
+                    var params = new URLSearchParams( location.search );
+                    var firstletter = params.get("firstletter");
+                    /* Check to see if search is a first letter param */
+                    if( firstletter ){
+                        /* Trigger function to return search results by letter */
+                        filterByFirstLetterSurname( firstletter, setstate );
+                    }
                 }
             }
-        }
+        [% END %]
 
         function update_search_type(){
             $("#searchtype").val($("#searchtype_filter").val());
         }
 
         function update_search_description(){
-            var searched = $("#searchfieldstype_filter").find("option:selected").text();
-            if ( $("#search_patron_filter").val() ) {
-                if ( $("#searchtype_filter").val() == 'starts_with' ) {
+            let parent_block = $("#[% search_results_block_id | html %]");
+            let patron_search_form = get_patron_search_form();
+            var searched = patron_search_form.find(".searchfieldstype_filter").find("option:selected").text();
+            let pattern = patron_search_form.find(".search_patron_filter").val();
+            if ( pattern ) {
+                if ( patron_search_form.find(".searchtype_filter").val() == 'starts_with' ) {
                     searched += _(" starting with ");
                 } else {
                     searched += _(" containing ");
                 }
-                searched += "'" + $("#search_patron_filter").val() + "'";
+                searched += "'" + pattern + "'";
             }
-            if ( $("#firstletter_filter").val() ) {
-                searched += _(" begins with ") + "'" + $("#firstletter_filter").val() +"'";
+            let firstletter_filter = parent_block.find(".firstletter_filter").val();
+            if ( firstletter_filter ) {
+                searched += _(" begins with ") + "'" + firstletter_filter +"'";
             }
-            if ( $("#categorycode_filter").val() ) {
-                searched += _(" with category ") + "'" + $("#categorycode_filter").find("option:selected").text() + "'";
+
+            if ( patron_search_form.find(".categorycode_filter").val() ) {
+                searched += _(" with category ") + "'" + patron_search_form.find(".categorycode_filter option:selected").text() + "'";
             }
-            if ( $("#branchcode_filter").val() ) {
-                searched += _(" in library ") + $("#branchcode_filter").find("option:selected").text();
+            if ( patron_search_form.find(".branchcode_filter").val() ) {
+                searched += _(" in library ") + patron_search_form.find(".branchcode_filter option:selected").text();
             }
-            if ( $("#sort1_filter").val() ) {
+            if ( patron_search_form.find("select[name='sort1_filter']").val() ) {
                 searched += _(" with sort1 ")
-                if ( $("select#sort1_filter") ) {
-                    searched += $("select#sort1_filter").find("option:selected").text();
+                if ( patron_search_form.find("select[name='sort1_filter']") ) {
+                    searched += patron_search_form.find("select[name='sort1_filter'] option:selected").text();
                 }
                 else {
-                    searched += $("#sort1_filter").val();
+                    searched += paron_search_form.find("select[name='sort1_filter']").val();
                 }
             }
-            if ( $("#sort2_filter").val() ) {
-                searched += _(" with sort2 ");
-                if ( $("select#sort2_filter") ) {
-                    searched += $("select#sort2_filter").find("option:selected").text();
+            if ( patron_search_form.find("select[name='sort2_filter']").val() ) {
+                searched += _(" with sort2 ")
+                if ( patron_search_form.find("select[name='sort2_filter']") ) {
+                    searched += patron_search_form.find("select[name='sort2_filter'] option:selected").text();
                 }
                 else {
-                    searched += $("#sort2_filter").val();
+                    searched += paron_search_form.find("select[name='sort2_filter']").val();
                 }
             }
-            $("#searchpattern").text(searched);
-            $("#searchpattern").parent().show();
+            patron_search_form.find(".searchpattern").text(searched);
+            patron_search_form.find(".searchpattern").parent().show();
         }
 
         function filter() {
+            let parent_block = $("#[% search_results_block_id | html %]");
+            let patron_search_form = get_patron_search_form();
             [% IF redirect_if_attribute_equal %]
-                let filter = $("#search_patron_filter").val();
+                let filter = patron_search_form.find(".search_patron_filter").val();
                 if ( filter ) {
                     $.ajax({
                         data: { cardnumber: filter, _match: 'exact' },
@@ -771,18 +798,18 @@
                     });
                 }
             [% END %]
-            $("#firstletter_filter").val('');
+            parent_block.find(".firstletter_filter").val('');
             $("#[% table_id | html %]_search_results").show();
 
             let table_dt = patrons_table.DataTable();
             [% FOR c IN columns %]
                 [% SWITCH c %]
                 [% CASE 'branch' %]
-                    library_id = $("#branchcode_filter").val() || "";
+                    let library_id = patron_search_form.find(".branchcode_filter").val() || "";
                     patrons_table.find('thead tr:eq(1) th[data-filter="libraries"] select').val(library_id);
                     table_dt.column([% loop.count - 1 %]).search(library_id ? '^'+library_id+'$' : '');
                 [% CASE 'category' %]
-                    let category_id = $("#categorycode_filter").val() || "";
+                    let category_id = patron_search_form.find(".categorycode_filter").val() || "";
                     patrons_table.find('thead tr:eq(1) th[data-filter="categories"] select').val(category_id.toLowerCase());
                     table_dt.column([% loop.count - 1 %]).search(category_id ? '^'+category_id+'$' : '');
                 [% END %]
@@ -797,16 +824,20 @@
         }
 
         function clearFilters() {
-            $("#searchfieldstype_filter option:first").prop("selected", true);
-            $("#searchtype_filter option[value='[% searchtype | html %]']").prop("selected", true);
-            $("#categorycode_filter option:first").prop("selected", true);
-            $("#branchcode_filter option:first").prop("selected", true);
-            $("#sort1_filter").val('').trigger("change");
-            $("#sort2_filter").val('').trigger("change");
-            $("#firstletter_filter").val('');
-            $("#search_patron_filter").val('');
-            /* remove any search string added by firstletter search */
-            history.pushState( {}, null, window.location.href.split("?" )[0]);
+            let parent_block = $("#[% search_results_block_id | html %]");
+            let patron_search_form = get_patron_search_form();
+            patron_search_form.find(".searchfieldstype_filter option:first").prop("selected", true);
+            patron_search_form.find(".searchtype_filter option[value='[% searchtype | html %]']").prop("selected", true);
+            patron_search_form.find(".categorycode_filter option:first").prop("selected", true);
+            patron_search_form.find(".branchcode_filter option:first").prop("selected", true);
+            patron_search_form.find("select[name='sort1_filter']").val('').trigger("change");
+            patron_search_form.find("select[name='sort2_filter']").val('').trigger("change");
+            parent_block.find(".firstletter_filter").val('');
+            patron_search_form.find(".search_patron_filter").val('');
+            [% IF adjust_history %]
+                /* remove any search string added by firstletter search */
+                history.pushState( {}, null, window.location.href.split("?" )[0]);
+            [% END %]
             $("#[% table_id | html %]_search_results").hide();
             [% IF display_search_description %]
                 update_search_description();
@@ -815,13 +846,16 @@
 
         // User has clicked on a letter
         function filterByFirstLetterSurname(letter, setstate ) {
-            $("#firstletter_filter").val(letter);
+            let parent_block = $("#[% search_results_block_id | html %]");
+            parent_block.find(".firstletter_filter").val(letter);
 
             $("#[% table_id | html %]_search_results").show();
 
-            if ( setstate ) {
-                history.pushState( null, null, "?firstletter=" + letter );
-            }
+            [% IF adjust_history %]
+                if ( setstate ) {
+                    history.pushState( null, null, "?firstletter=" + letter );
+                }
+            [% END %]
 
             patrons_table.DataTable().draw();
             [% IF display_search_description %]
@@ -832,14 +866,13 @@
         // modify parent window owner element
         function modal_add_user(borrowernumber, borrowername) {
             [%# Note that add_user could sent data instead of borrowername too %]
-            $("#info").hide();
-            $("#error").hide();
+            let parent_block = $("#[% search_results_block_id | html %]");
+            parent_block.find(".info").hide();
+            parent_block.find(".error").hide();
             if ( add_user(borrowernumber, borrowername) < 0 ) {
-                $("#error").html(_("Patron '%s' is already in the list.").format(borrowername));
-                $("#error").show();
+                parent_block.find(".error").html(_("Patron '%s' is already in the list.").format(borrowername)).show();
             } else {
-                $("#info").html(_("Patron '%s' added.").format(borrowername));
-                $("#info").show();
+                parent_block.find(".info").html(_("Patron '%s' added.").format(borrowername)).show();
             }
         }
         function modal_select_user(borrowernumber, data) {
@@ -853,6 +886,7 @@
                 [% END %]
             }
         }
+    }
     </script>
 [% END %]
 
@@ -861,6 +895,12 @@
     [% UNLESS patron_search_modal_id %]
         [% patron_search_modal_id = "patron_search_modal" %]
     [% END %]
+    [% UNLESS table_id %]
+        [% table_id = "memberresultst" %]
+    [% END %]
+
+    [% search_results_block_id = patron_search_modal_id _ '_searchresults' %]
+
     <div id="[% patron_search_modal_id | html %]" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="patronSearchLabel" aria-hidden="true" data-backdrop="">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -871,7 +911,7 @@
                 <div class="modal-body">
                     [% PROCESS patron_search_filters filters => ['branch','category','sort1','sort2'] %]
 
-                    <div id="searchresults">
+                    <div id="[% search_results_block_id | html %]"> <!-- FIXME removed style from #searchresults, is that bad? -->
                         [% IF columns.grep('checkbox').size %]
                             <div class="searchheader fh-fixedHeader" id="searchheader" style="display:none;">
                                 <div>
@@ -884,7 +924,7 @@
                                 </div>
                             </div>
                         [% END %]
-                        [% PROCESS patron_search_table table_id => 'memberresultst' columns => columns %]
+                        [% PROCESS patron_search_table table_id => table_id, columns => columns %]
                     </div>
                 </div>
                 <div class="modal-footer">

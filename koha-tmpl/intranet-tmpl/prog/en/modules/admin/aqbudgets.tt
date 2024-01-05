@@ -4,6 +4,7 @@
 [% USE Branches %]
 [% USE Price %]
 [% PROCESS 'i18n.inc' %]
+[% PROCESS 'patron-search.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 
@@ -346,7 +347,7 @@
         [% ELSE %]
             <span  id="budget_owner_name"></span>
         [% END %]
-        <a id="edit_owner" class="new_window" href="#"><i class="fa fa-search"></i> Select owner</a>
+        <a id="edit_owner" href="#patron_search_modal_owner" data-toggle="modal"><i class="fa fa-search"></i> Select owner</a>
         <a id="remove_owner" href="#"><i class="fa fa-trash-can"></i> Remove owner</a>
         <input type="hidden" name="budget_owner_id" id="budget_owner_id"
             value="[% budget_owner.borrowernumber | html %]" />
@@ -374,7 +375,7 @@
                     &bull; <a href="#" class="del_user" data-borrowernumber="[% user.borrowernumber | html %]"><i class="fa fa-trash-can"></i> Remove</a>
                 </li>
             [% END %]
-            <li><a href="#" id="add_user_button"><i class="fa fa-plus"></i> Add users</a></li>
+            <li><a href="#patron_search_modal_users" id="add_user_button" data-toggle="modal"><i class="fa fa-plus"></i> Add users</a></li>
         </ul>
         <input type="hidden" name="budget_users_ids" id="budget_users_id" value="[% budget_users_ids | html %]" />
     </li>
@@ -544,22 +545,6 @@
         <script>
         //<![CDATA[
 
-            function userPopup() {
-                window.open("/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=add&filter=funds_users",
-                    'PatronPopup',
-                    'width=1024,height=768,location=yes,toolbar=no,'
-                    + 'scrollbars=yes,resize=yes'
-                );
-            }
-
-            function ownerPopup() {
-                window.open("/cgi-bin/koha/members/search.pl?columns=cardnumber,name,category,branch,action&selection_type=select&filter=funds_owners",
-                    'PatronPopup',
-                    'width=1024,height=768,location=yes,toolbar=no,'
-                    + 'scrollbars=yes,resize=yes'
-                );
-            }
-
             function select_user(borrowernumber, borrower) {
                 ownerRemove();
                 if (borrowernumber) {
@@ -673,18 +658,10 @@
                     e.preventDefault();
                     ownerRemove();
                 });
-                $("#edit_owner").on("click",function(e){
-                    e.preventDefault();
-                    ownerPopup();
-                });
                 $("body").on("click",".del_user",function(e){
                     e.preventDefault();
                     var borrowernumber = $(this).data("borrowernumber");
                     del_user(borrowernumber);
-                });
-                $("#add_user_button").on("click",function(e){
-                    e.preventDefault();
-                    userPopup();
                 });
                 $("#edit_fund").on("submit",function(e){
                     e.preventDefault();
@@ -693,6 +670,14 @@
             });
         //]]>
         </script>
+
+        [% INCLUDE 'select2.inc' %]
+        [% SET columns = ['cardnumber','name','category','branch','action'] %]
+        [% PROCESS patron_search_modal columns => columns, modal_title => t("Add users"), patron_search_modal_id => 'patron_search_modal_users', table_id => 'patron_search_modal_users_table' %]
+        [% PROCESS patron_search_js columns => columns, filter => 'funds_users', actions => ["add"], preview_on_name_click => 1, table_id => 'patron_search_modal_users_table' %]
+        [% PROCESS patron_search_modal columns => columns, modal_title => t("Select owner"), patron_search_modal_id => 'patron_search_modal_owner', table_id => 'patron_search_modal_owner_table' %]
+        [% PROCESS patron_search_js columns => columns, filter => 'funds_owners', actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_owner_table' %]
+
     [% ELSIF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'columns_settings.inc' %]
