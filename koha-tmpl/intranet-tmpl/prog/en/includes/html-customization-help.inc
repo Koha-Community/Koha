@@ -47,7 +47,7 @@
 </div>
 
 <div id="OpacMoreSearches_notes" class="hint customization_note">
-    Add additional elements to the "More Searches" bar on the OPAC, with this content (leave blank to disable).
+    Add additional elements to the navigation bar below the simple search form.
 </div>
 
 <div id="OpacMySummaryNote_notes" class="hint customization_note">
