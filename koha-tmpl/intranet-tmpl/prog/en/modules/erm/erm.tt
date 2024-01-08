@@ -5,6 +5,7 @@
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
+[% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% t("E-resource management") | html %] &rsaquo;
@@ -48,6 +49,10 @@
     </script>
 
     [% Asset.js("js/vue/dist/erm.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
+    [% SET columns = ['cardnumber','name','category','branch','action'] %]
+    [% PROCESS patron_search_modal columns => columns, modal_title => t("Select user") %]
+    [% PROCESS patron_search_js columns => columns, filter => erm_users, actions => ["select"], preview_on_name_click => 1 %]
 
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
