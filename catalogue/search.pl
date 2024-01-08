@@ -610,19 +610,20 @@ for (my $i=0;$i<@servers;$i++) {
         }
 
         ## If there's just one result, redirect to the detail page unless doing an index scan
-        if ($total == 1 && !$scan) {
+        if ( $total == 1 && !$scan && C4::Context->preference('RedirectToSoleResult') ) {
             my $biblionumber = $newresults[0]->{biblionumber};
-            my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
-            my $views = { C4::Search::enabled_staff_search_views };
-            if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
+            my $defaultview  = C4::Context->preference('IntranetBiblioDefaultView');
+            my $views        = {C4::Search::enabled_staff_search_views};
+            if ( $defaultview eq 'isbd' && $views->{can_view_ISBD} ) {
                 print $cgi->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber&found1=1");
-            } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
+            } elsif ( $defaultview eq 'marc' && $views->{can_view_MARC} ) {
                 print $cgi->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&found1=1");
-            } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
-                print $cgi->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber&found1=1");
+            } elsif ( $defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC} ) {
+                print $cgi->redirect(
+                    "/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber&found1=1");
             } else {
                 print $cgi->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber&found1=1");
-            } 
+            }
             exit;
         }
 
