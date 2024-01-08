@@ -315,6 +315,8 @@
        <th>Remote host</th>
        <th>Username</th>
        <th>Password</th>
+       <th>Upload port</th>
+       <th>Download port</th>
        <th>Download directory</th>
        <th>Upload directory</th>
        <th>Qualifier</th>
@@ -336,6 +338,8 @@
       <td>[% account.host | html %]</td>
       <td>[% account.username | html %]</td>
       <td>[% IF account.password %]*****[% END %]</td>
+      <td>[% account.upload_port | html %]</td>
+      <td>[% account.download_port | html %]</td>
       <td>[% account.download_directory | html %]</td>
       <td>[% account.upload_directory | html %]</td>
       <td>

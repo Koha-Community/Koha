@@ -79,6 +79,8 @@ else {
             host               => scalar $input->param('host'),
             username           => scalar $input->param('username'),
             password           => $password,
+            upload_port        => scalar $input->param('upload_port'),
+            download_port      => scalar $input->param('download_port'),
             vendor_id          => scalar $input->param('vendor_id'),
             upload_directory   => scalar $input->param('upload_directory'),
             download_directory => scalar $input->param('download_directory'),

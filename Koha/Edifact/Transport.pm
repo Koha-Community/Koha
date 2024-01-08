@@ -136,10 +136,12 @@ sub sftp_download {
     # C = ready to retrieve E = Edifact
     my $msg_hash = $self->message_hash();
     my @downloaded_files;
+    my $port = $self->{account}->download_port ? $self->{account}->download_port : '22';
     my $sftp = Net::SFTP::Foreign->new(
         host     => $self->{account}->host,
         user     => $self->{account}->username,
         password => Koha::Encryption->new->decrypt_hex($self->{account}->password),
+        port     => $port,
         timeout  => 10,
     );
     if ( $sftp->error ) {
@@ -293,10 +295,12 @@ sub ftp_upload {
 
 sub sftp_upload {
     my ( $self, @messages ) = @_;
+    my $port = $self->{account}->upload_port ? $self->{account}->upload_port : '22';
     my $sftp = Net::SFTP::Foreign->new(
         host     => $self->{account}->host,
         user     => $self->{account}->username,
         password => Koha::Encryption->new->decrypt_hex($self->{account}->password),
+        port     => $port,
         timeout  => 10,
     );
     $sftp->die_on_error("Cannot ssh to $self->{account}->host");
