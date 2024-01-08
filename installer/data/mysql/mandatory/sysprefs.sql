@@ -635,6 +635,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RecordLocalUseOnReturn','0',NULL,'If ON, statistically record returns of unissued items as local use, instead of return','YesNo'),
 ('RecordStaffUserOnCheckout', '0', '', 'If enabled, when an item is checked out, the user who checked out the item is recorded', 'YesNo'),
 ('RedirectGuaranteeEmail', '0', NULL, 'Enable the ability to redirect guarantee email messages to guarantor.', 'YesNo'),
+('RedirectToSoleResult', '1', NULL, 'When a catalog search via the staff interface or the OPAC returns only one record, redirect to the result.', 'YesNo'),
 ('Reference_NFL_Statuses','1|2',NULL,'Contains not for loan statuses considered as available for reference','Free'),
 ('RefundLostOnReturnControl','CheckinLibrary','CheckinLibrary|ItemHomeBranch|ItemHoldingBranch','If a lost item is returned, choose which branch to pick rules for refunding.','Choice'),
 ('RenewAccruingItemInOpac','0','','If enabled, when the fines on an item accruing is paid off in the OPAC via a payment plugin, attempt to renew that item. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue','YesNo'),
