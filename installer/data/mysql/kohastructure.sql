@@ -6444,6 +6444,8 @@ CREATE TABLE `vendor_edi_accounts` (
   `host` varchar(40) DEFAULT NULL,
   `username` varchar(40) DEFAULT NULL,
   `password` mediumtext DEFAULT NULL,
+  `upload_port` varchar(40) DEFAULT NULL,
+  `download_port` varchar(40) DEFAULT NULL,
   `last_activity` date DEFAULT NULL,
   `vendor_id` int(11) DEFAULT NULL,
   `download_directory` mediumtext DEFAULT NULL,
