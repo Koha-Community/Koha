@@ -120,12 +120,18 @@
     [% INCLUDE "${cwd}/shared-includes/shared.js" %]
     // Require a username and branch selection
     document.addEventListener('DOMContentLoaded', function(){
-        $('#create_form #cardnumber, #create_form #branchcode').change(function() {
-            var comp = ['#cardnumber','#branchcode'].filter(function(id) {
-                return $(id).val().length > 0;
-            });
-            $('#ill-submit').attr('disabled', comp.length < 2);
+      let cardnumber_input = '#create_form #cardnumber';
+      let branchcode_input = '#create_form #branchcode';
+      updateCreateButtonStatus();
+      $(cardnumber_input + ',' + branchcode_input).change(function() {
+          updateCreateButtonStatus();
+      });
+      function updateCreateButtonStatus(){
+        var comp = [cardnumber_input,branchcode_input].filter(function(id) {
+            return $(id).val().length > 0;
         });
+        $('#ill-submit').attr('disabled', comp.length < 2);
+      }
       /* Maintain patron autocomplete compatibility across versions */
       [% IF koha_version.major <= 22 && koha_version.minor < 11 %]
       $('#create_form #cardnumber').autocomplete({
