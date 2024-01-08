@@ -675,11 +675,6 @@ sub MapItemsToHoldRequests {
     return unless scalar(@$hold_requests) > 0;
     return unless scalar(@$available_items) > 0;
 
-    # identify item-level requests
-    my %specific_items_requested = map { $_->{itemnumber} => 1 }
-                                   grep { defined($_->{itemnumber}) }
-                                   @$hold_requests;
-
     map { $_->{_object} = Koha::Items->find( $_->{itemnumber} ) } @$available_items;
     my $libraries = {};
     map { $libraries->{$_->id} = $_ } Koha::Libraries->search->as_list;
