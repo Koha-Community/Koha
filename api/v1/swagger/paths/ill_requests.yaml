@@ -1,7 +1,7 @@
 ---
 /ill/requests:
   get:
-    x-mojo-to: Illrequests#list
+    x-mojo-to: ILL::Requests#list
     operationId: listIllrequests
     tags:
       - ill_requests
@@ -64,7 +64,7 @@
       permissions:
         ill: "1"
   post:
-    x-mojo-to: Illrequests#add
+    x-mojo-to: ILL::Requests#add
     operationId: addIllrequest
     tags:
       - ill_request

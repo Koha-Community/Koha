@@ -1,4 +1,4 @@
-package Koha::REST::V1::Illrequests;
+package Koha::REST::V1::ILL::Requests;
 
 # This file is part of Koha.
 #
@@ -32,7 +32,7 @@ use Try::Tiny qw( catch try );
 
 =head1 NAME
 
-Koha::REST::V1::Illrequests
+Koha::REST::V1::ILL::Requests
 
 =head2 Operations
 
