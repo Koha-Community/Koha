@@ -37,7 +37,6 @@ use DateTime;
 use C4::Auth qw( get_template_and_user get_session haspermission );
 use C4::Circulation qw( barcodedecode GetBranchItemRule AddReturn updateWrongTransfer LostItem );
 use C4::Context;
-use C4::Items qw( ModItemTransfer );
 use C4::Members::Messaging;
 use C4::Members;
 use C4::Output qw( output_html_with_http_headers );
@@ -250,12 +249,15 @@ if ($return_date_override) {
     }
 }
 
+# If 'needstransfer' was set and the librarian has chosen to initiate the transfer
 if ( $op eq 'cud-dotransfer'){
-# An item has been returned to a branch other than the homebranch, and the librarian has chosen to initiate a transfer
     my $transferitem = $query->param('transferitem');
-    my $tobranch     = $query->param('tobranch');
+    my $item = Koha::Items->find( $transferitem );
+    my $tobranchcode = $query->param('tobranch');
+    my $tobranch     = Koha::Libraries->find($tobranchcode);
     my $trigger      = $query->param('trigger');
-    ModItemTransfer($transferitem, $userenv_branch, $tobranch, $trigger);
+    my $transfer = $item->request_transfer({ to => $tobranch, reason => $trigger });
+    $transfer->transit;
 }
 
 if ($transit && $op eq 'cud-transfer') {
