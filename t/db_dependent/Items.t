@@ -130,7 +130,7 @@ subtest 'General Add, Get and Del tests' => sub {
 };
 
 subtest 'ModItemTransfer tests' => sub {
-    plan tests => 8;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -188,6 +188,34 @@ subtest 'ModItemTransfer tests' => sub {
 
     my $transfer3 = $transfers->next;
     is($transfer3->reason, 'Manual', "Reason set via ModItemTransfer");
+
+    # Ensure StockrotationAdvance transfers are not cancelled
+    my $stock_transfer = $transfer3->reason('StockrotationAdvance')->store();
+    is(
+        $stock_transfer->reason, 'StockrotationAdvance',
+        'StockrotationAdvance transfer set'
+    );
+    ok(
+        $stock_transfer->datesent,
+        'StockrotationAdvance transfer is in transit'
+    );
+
+    ModItemTransfer( $item->itemnumber, $library1->{branchcode}, $library2->{branchcode}, 'Manual' );
+    $transfers = Koha::Item::Transfers->search(
+        { itemnumber => $item->itemnumber, },
+        { order_by   => { '-desc' => 'branchtransfer_id' } }
+    );
+
+    my $replaced_transfer = $transfers->next;
+    is(
+        $replaced_transfer->reason, 'Manual',
+        'StockrotationAdvance transfer "replaced" by manual transfer at top of queue'
+    );
+    $stock_transfer->discard_changes;
+    is( $stock_transfer->datecancelled, undef, "StockrotationAdvance transfer not cancelled" );
+    is( $stock_transfer->datesent,      undef, "StockrotationAdvance transfer no longer in transit" );
+    $transfers = $item->get_transfers;
+    is( $transfers->count, 2, "There are now 2 live transfers in the queue" );
 
     $schema->storage->txn_rollback;
 };

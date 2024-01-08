@@ -776,7 +776,7 @@ sub request_transfer {
       if ( $request && !$params->{enqueue} && !$params->{replace} );
 
     $request->cancel( { reason => $params->{reason}, force => 1 } )
-        if ( defined($request) && $params->{replace} && ( $request->reason ne 'StockrotationAdvance' ) );
+        if ( defined($request) && $params->{replace} );
 
     my $transfer = Koha::Item::Transfer->new(
         {

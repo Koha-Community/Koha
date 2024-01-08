@@ -54,6 +54,7 @@ use C4::Log qw( logaction );
 use List::MoreUtils qw( any );
 use DateTime::Format::MySQL;
                   # debugging; so please don't remove this
+use Try::Tiny qw( catch try );
 
 use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string );
@@ -359,31 +360,64 @@ The last optional parameter allows for passing skip_record_index through to the 
 sub ModItemTransfer {
     my ( $itemnumber, $frombranch, $tobranch, $trigger, $params ) = @_;
 
-    my $dbh = C4::Context->dbh;
-    my $item = Koha::Items->find( $itemnumber );
+    my $dbh  = C4::Context->dbh;
+    my $item = Koha::Items->find($itemnumber);
 
     # NOTE: This retains the existing hard coded behaviour by ignoring transfer limits
     # and always replacing any existing transfers. (In theory, calls to ModItemTransfer
     # will have been preceded by a check of branch transfer limits)
     my $to_library = Koha::Libraries->find($tobranch);
-    my $transfer = $item->request_transfer(
-        {
-            to            => $to_library,
-            reason        => $trigger,
-            ignore_limits => 1,
-            replace       => 1
+    my $transfer;
+    try {
+        $transfer = $item->request_transfer(
+            {
+                to            => $to_library,
+                reason        => $trigger,
+                ignore_limits => 1,
+            }
+        );
+    } catch {
+        if ( $_->isa('Koha::Exceptions::Item::Transfer::InQueue') ) {
+            my $exception      = $_;
+            my $found_transfer = $_->transfer;
+
+            # If StockRotationAdvance, leave in place but ensure transit state is reset
+            if ( $found_transfer->reason eq 'StockrotationAdvance' ) {
+                $transfer = $item->request_transfer(
+                    {
+                        to            => $to_library,
+                        reason        => $trigger,
+                        ignore_limits => 1,
+                        enqueue       => 1
+                    }
+                );
+
+                # Ensure transit is reset
+                $found_transfer->datesent(undef)->store;
+            } else {
+                $transfer = $item->request_transfer(
+                    {
+                        to            => $to_library,
+                        reason        => $trigger,
+                        ignore_limits => 1,
+                        replace       => 1
+                    }
+                );
+            }
+        } else {
+            $_->rethrow();
         }
-    );
+    };
 
     # Immediately set the item to in transit if it is checked in
     if ( !$item->checkout ) {
         $item->holdingbranch($frombranch)->store(
             {
                 log_action        => 0,
-                skip_record_index => 1, # avoid indexing duplication, let ->transit handle it
+                skip_record_index => 1,    # avoid indexing duplication, let ->transit handle it
             }
         );
-        $transfer->transit({ skip_record_index => $params->{skip_record_index} });
+        $transfer->transit( { skip_record_index => $params->{skip_record_index} } );
     }
 
     return $transfer;
