@@ -87,14 +87,18 @@
           Card number, username or surname:
         </label>
         <input type="text" name="cardnumber" id="cardnumber" autocomplete="off"
-               type="text" value="" />
+               type="text" value="[% whole.value.other.cardnumber | html %]" />
       </li>
       <li>
         <label class="required" for="branchcode">Destination library:</label>
         <select id="branchcode" name="branchcode">
           <option value="" />
           [% FOREACH branch IN branches %]
-            <option value="[% branch.branchcode | html %]">
+            [% IF branch.branchcode == whole.value.other.branchcode %]
+              <option value="[% branch.branchcode | html %]" selected="selected">
+            [% ELSE %]
+              <option value="[% branch.branchcode | html %]">
+            [% END %]
               [% branch.branchname | html %]
             </option>
           [% END %]
