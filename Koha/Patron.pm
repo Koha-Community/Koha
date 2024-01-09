@@ -2467,6 +2467,27 @@ sub to_api_mapping {
     };
 }
 
+=head3 strings_map
+
+Returns a map of column name to string representations including the string.
+
+=cut
+
+sub strings_map {
+    my ( $self, $params ) = @_;
+
+    return {
+        library_id => {
+            str  => $self->library->branchname,
+            type => 'library',
+        },
+        category_id => {
+            str  => $self->category->description,
+            type => 'patron_category',
+        }
+    };
+}
+
 =head3 queue_notice
 
     Koha::Patrons->queue_notice({ letter_params => $letter_params, message_name => 'DUE'});
