@@ -6,6 +6,7 @@
 [% USE Price %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
+[% PROCESS 'patron-search.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
@@ -515,7 +516,7 @@
                                             [% END %]
                                         </td>
                                         <td>
-                                            <a href="#" id="edit_suggester" class="btn btn-default">Set to patron</a>
+                                            <a href="#patron_search_modal_suggester" id="edit_suggester" class="btn btn-default" data-toggle="modal">Set to patron</a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -565,7 +566,7 @@
                                     | Previously was [% INCLUDE 'patron-title.inc' patron=managedby_patron hide_patron_infos_if_needed=1 %] [% Branches.GetName( managedby_patron.branchcode ) | html %] ([% managedby_patron.category.description | html %])
                                 [% END %]
                                 <br />
-                                <a id="edit_manager" class="new_window" href="#"><i class="fa fa-search"></i> Select manager</a>
+                                <a href="#patron_search_modal_manager" id="edit_manager" data-toggle="modal"><i class="fa fa-search"></i> Select manager</a>
                                 [% IF managedby_patron.borrowernumber && logged_in_user.borrowernumber != managedby_patron.borrowernumber %]
                                     <a id="restore_previous_manager" href="#"><i class="fa fa-trash-can"></i> Keep existing manager</a>
                                 [% END %]
@@ -969,7 +970,7 @@
                                         <div class="col-sm-2">
                                             <fieldset class="brief">
                                                 <span class="label">Update manager</span>
-                                                <a id="set_manager_[% loop.count | html %]" data-tab="[% loop.count | html %]" class="set_manager" href="#"><i class="fa fa-search"></i> Select manager</a>
+                                                <a href="#patron_search_modal_manager_[% loop.count | uri %]" id="set_manager_[% loop.count | uri %]" data-tab="[% loop.count | uri %]" class="set_manager" data-toggle="modal"><i class="fa fa-search"></i> Select manager</a>
                                                 <span id="managedby_name[% loop.count | html %]"></span>
                                             </fieldset>
                                             <fieldset class="action">
@@ -1272,14 +1273,6 @@
 
     <script>
         var tab = '';
-        function editManagerPopup(selected_tab) {
-            tab = selected_tab;
-            window.open("/cgi-bin/koha/members/search.pl?columns=cardnumber,name,branch,category,action&selection_type=select&callback=select_manager&filter=suggestions_managers",
-                'PatronPopup',
-                'width=1024,height=768,scrollbars=yes,toolbar=no,'
-                + 'scrollbars=yes,resize=yes'
-            );
-        }
         function select_manager(borrowernumber, borrower) {
             var managedby_name = $("#managedby_name"+tab);
             var managedby = $("#managedby"+tab);
@@ -1310,14 +1303,6 @@
             [% END %]
         }
 
-        function editSuggesterPopup() {
-            window.open("/cgi-bin/koha/members/search.pl?columns=cardnumber,name,branch,category,action&selection_type=select&callback=select_suggester",
-                'PatronPopup',
-                'width=1024,height=768,scrollbars=yes,toolbar=no,'
-                + 'scrollbars=yes,resize=yes'
-            );
-        }
-
         function select_suggester(borrowernumber, borrower) {
             $.ajax({
                 type: 'GET',
@@ -1340,22 +1325,6 @@
             });
             return 0;
         }
-        $(document).ready(function(){
-            $("#edit_manager").on("click",function(e){
-                e.preventDefault();
-                editManagerPopup('');
-            });
-            $(".set_manager").on("click",function(e){
-                e.preventDefault();
-                var selected_tab = $(this).data('tab');
-                editManagerPopup(selected_tab);
-            });
-
-            $("#edit_suggester").on("click", function(e){
-                e.preventDefault();
-                editSuggesterPopup();
-            });
-        });
     </script>
 
     [% IF ( op == 'show' || op == 'else' ) %]
@@ -1376,7 +1345,7 @@
                     $("#suggestiontabs a:first").tab("show");
                 }
 
-                table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
+                var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
                 var saved_table = localStorage.getItem("DataTables_suggestions_/cgi-bin/koha/suggestion/suggestion.pl");
                 var updated_settings = get_columns_saved_state(saved_table, table_settings);
 
@@ -1533,5 +1502,22 @@
     [% END %]
     [% Asset.js("js/acq.js") | $raw %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
+
+    [% INCLUDE 'select2.inc' %]
+    [% SET columns = ['cardnumber','name','category','branch','action'] %]
+    [% IF op == 'save' %]
+        [% PROCESS patron_search_modal columns => columns, modal_title => t("Select suggester"), patron_search_modal_id => 'patron_search_modal_suggester', table_id => 'patron_search_modal_suggester_table' %]
+        [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_suggester_table', callback => 'select_suggester' %]
+        [% PROCESS patron_search_modal columns => columns, modal_title => t("Select manager"), patron_search_modal_id => 'patron_search_modal_manager', table_id => 'patron_search_modal_manager_table' %]
+        [% PROCESS patron_search_js columns => columns, filter => 'suggestions_managers', actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table', callback => 'select_manager' %]
+    [% ELSIF op == 'else' %]
+        [% FOREACH suggestion IN suggestions %]
+            <script>tab = [% loop.count | html %];</script>
+            [% PROCESS patron_search_modal columns => columns, modal_title => t("Select manager"), patron_search_modal_id => 'patron_search_modal_manager_' _ loop.count, table_id => 'patron_search_modal_manager_table_' _ loop.count %]
+            [% PROCESS patron_search_js columns => columns, filter => 'suggestions_managers', actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table_' _ loop.count, callback => 'select_manager' %]
+        [% END %]
+    [% END %]
+
+
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
