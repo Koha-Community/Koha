@@ -1299,12 +1299,25 @@
         }
 
         function select_suggester(borrowernumber, borrower) {
-            var suggested = '<input type="hidden" id="suggestedby" name="suggestedby" value="' + borrowernumber + '" />';
-            suggested += '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + borrowernumber + '">';
-            suggested += borrower.surname + ', ' + borrower.firstname + ' (' + borrower.cardnumber + ')';
-            suggested += '</a> ';
-            suggested += borrower.branchname + ' (' + borrower.category_description + ')';
-            $("#tdsuggestedby").html(suggested);
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/patrons/' + borrowernumber,
+                headers: {
+                    "x-koha-embed": "+strings"
+                },
+                success: function (data) {
+                    var suggested = '<input type="hidden" id="suggestedby" name="suggestedby" value="' + data.borrowernumber + '" />';
+                    suggested += '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + data.borrowernumber + '">';
+                    suggested += data.surname + ', ' + data.firstname + ' (' + data.cardnumber + ')';
+                    suggested += '</a> ';
+                    suggested += data._strings.library_id.str + ' (' + data._strings.category_id.str + ')';
+                    $("#tdsuggestedby").html(suggested);
+
+                },
+                error: function (data) {
+                    alert(_("Cannot retrieve info for this patron."));
+                },
+            });
             return 0;
         }
         $(document).ready(function(){
