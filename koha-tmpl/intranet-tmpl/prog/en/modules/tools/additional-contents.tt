@@ -377,6 +377,7 @@
     [% IF additional_contents.count %]
         <div class="page-section">
             <form id="del_form" method="post" action="/cgi-bin/koha/tools/additional-contents.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <table id="table_additional_contents">
                     <thead>
                         <tr>
