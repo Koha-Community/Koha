@@ -230,7 +230,7 @@ subtest 'list() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
     unauthorized_access_tests('GET', -1, undef);
@@ -312,6 +312,33 @@ subtest 'get() tests' => sub {
         $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron_2->id )
           ->status_is(404)
           ->json_is({ error => "Patron not found." });
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest '+strings' => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+        my $librarian = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 2**4 }    # borrowers flag = 4
+            }
+        );
+        my $password = 'thePassword123';
+        $librarian->set_password( { password => $password, skip_validation => 1 } );
+        my $userid = $librarian->userid;
+
+        $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id => { "x-koha-embed" => "+strings" } )
+            ->status_is(200)
+            ->json_has( '/_strings/library_id' => { str => $patron->library->branchname, type => 'library' } )
+            ->json_has(
+            '/_strings/category_id' => { str => $patron->category->description, type => 'patron_category' } );
 
         $schema->storage->txn_rollback;
     };
