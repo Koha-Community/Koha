@@ -567,17 +567,6 @@
                 modalNumber = $(this).attr('data-number');
                 $('.modal[data-number="'+modalNumber+'"]').modal('show');
             })
-            function Checkbox(){
-                var form = document.getElementById('del_form');
-                var inputs = form.getElementsByTagName('input');
-                var checked = false;
-                for (var i=0; i<inputs.length; i++) {
-                    if (inputs[i].type == 'checkbox' && inputs[i].name == 'ids') {
-                        checked = inputs[i].checked;
-                        if (checked) return true;
-                    }
-                }
-            }
 
             function filterDataTable( table, column, term ){
                 if( column ){
@@ -630,7 +619,7 @@
                 });
 
                 $("#del_form").on("submit",function(){
-                    if ( Checkbox() ) {
+                    if ( $('#del_form input[type="checkbox"][name="ids"]:checked').length ) {
                         return confirmDelete( _("Are you sure you want to delete the selected content?") );
                     } else {
                         alert(_("Please select content to delete."));
