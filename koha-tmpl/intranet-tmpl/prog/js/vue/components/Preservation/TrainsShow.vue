@@ -183,10 +183,18 @@
                         v-bind:key="counter"
                     >
                         <input
+                            :disabled="!item.processing.letter_code"
                             v-model="selected_items"
                             type="checkbox"
                             name="user_train_item_id"
                             :value="item.train_item_id"
+                            :title="
+                                !item.processing.letter_code
+                                    ? $__(
+                                          'Cannot print slip, this item does not have a processing with a letter template defined.'
+                                      )
+                                    : ''
+                            "
                         />
                         <label
                             >{{ item.user_train_item_id }}
@@ -527,15 +535,17 @@ export default {
         selectAll() {
             if (this.item_table.display) {
                 $("#" + this.table_id)
-                    .find("input[name='user_train_item_id'][type='checkbox']")
+                    .find(
+                        "input[name='user_train_item_id'][type='checkbox']:not(:disabled)"
+                    )
                     .each((i, input) => {
                         this.selected_items.push($(input).val())
                         $(input).prop("checked", true)
                     })
             } else {
-                this.selected_items = this.train.items.map(
-                    item => item.train_item_id
-                )
+                this.selected_items = this.train.items
+                    .filter(i => i.processing.letter_code)
+                    .map(item => item.train_item_id)
             }
         },
         printSelected() {
@@ -579,6 +589,12 @@ export default {
                         let train_item_id = train_item.train_item_id
 
                         let checkbox = createVNode("input", {
+                            ...(!train_item.processing.letter_code && {
+                                disabled: "disabled",
+                                title: __(
+                                    "Cannot print slip, this item does not have a processing with a letter template defined."
+                                ),
+                            }),
                             type: "checkbox",
                             name: "user_train_item_id",
                             value: train_item_id,
@@ -660,7 +676,7 @@ export default {
                             )
                         }
 
-                        if (train_item.processing.letter_code !== null) {
+                        if (train_item.processing.letter_code) {
                             let printButton = createVNode(
                                 "a",
                                 {
