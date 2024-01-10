@@ -34,44 +34,54 @@
             <h3>Search for patron</h3>
             <ol>
                 <li>
-                    <label for="search_patron_filter">Search:</label>
-                    <input type="text" class="search_patron_filter" value="[% search_filter | html %]" class="focus" />
+                    <label>
+                        Search:
+                        <input type="text" class="search_patron_filter" value="[% search_filter | html %]" class="focus" />
+                    </label>
                 </li>
 
                 [% FOR f IN filters %]
                     [% SWITCH f %]
                     [% CASE 'branch' %]
                         <li>
-                            <label for="branchcode_filter">Library:</label>
-                            <select class="branchcode_filter">
-                                [% SET libraries = Branches.all( only_from_group => 1 ) %]
-                                [% IF libraries.size != 1 %]
-                                    <option value="">Any</option>
-                                [% END %]
-                                [% FOREACH l IN libraries %]
-                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
-                                [% END %]
-                            </select>
+                            <label>
+                                Library:
+                                <select class="branchcode_filter">
+                                    [% SET libraries = Branches.all( only_from_group => 1 ) %]
+                                    [% IF libraries.size != 1 %]
+                                        <option value="">Any</option>
+                                    [% END %]
+                                    [% FOREACH l IN libraries %]
+                                        <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                                    [% END %]
+                                </select>
+                            </label>
                         </li>
                     [% CASE 'category' %]
                         <li>
-                            <label for="categorycode_filter">Category:</label>
-                            <select class="categorycode_filter">
-                                <option value="">Any</option>
-                                [% FOREACH category IN Categories.limited.unblessed %]
-                                    <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
-                                [% END %]
-                            </select>
+                            <label>
+                                Category:
+                                <select class="categorycode_filter">
+                                    <option value="">Any</option>
+                                    [% FOREACH category IN Categories.limited.unblessed %]
+                                        <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                                    [% END %]
+                                </select>
+                            </label>
                         </li>
                     [% CASE 'sort1' %]
                         <li>
-                            <label for="sort1_filter">Sort 1:</label>
-                            [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort1_filter", category="Bsort1", empty=1, size = 20 %]
+                            <label>
+                                Sort 1:
+                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort1_filter", category="Bsort1", empty=1, size = 20 %]
+                            </label>
                         </li>
                     [% CASE 'sort2' %]
                         <li>
-                            <label for="sort2_filter">Sort 2:</label>
-                            [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
+                            <label>
+                                Sort 2:
+                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
+                            </label>
                         </li>
                     [% CASE 'search_field' %]
                         <li>
@@ -79,23 +89,25 @@
                         </li>
                     [% CASE 'search_type' %]
                         <li>
-                            <label for="searchtype_filter">Search type:</label>
-                            <select name="searchtype" class="searchtype_filter">
-                              [% IF searchtype == "starts_with" %]
-                                <option value='starts_with' selected="selected">Starts with</option>
-                                <option value="contains">Contains</option>
-                              [% ELSE %]
-                                <option value='starts_with'>Starts with</option>
-                                <option value="contains" selected="selected">Contains</option>
-                              [% END %]
-                            </select>
+                            <label>
+                                Search type:
+                                <select name="searchtype" class="searchtype_filter">
+                                    [% IF searchtype == "starts_with" %]
+                                        <option value='starts_with' selected="selected">Starts with</option>
+                                        <option value="contains">Contains</option>
+                                    [% ELSE %]
+                                        <option value='starts_with'>Starts with</option>
+                                        <option value="contains" selected="selected">Contains</option>
+                                    [% END %]
+                                </select>
+                            </label>
                         </li>
                     [% END %]
                 [% END %]
             </ol>
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Search" />
-                <input type="button" value="Clear" class="clear_search" />
+                <input type="button" value="Clear" class="btn btn-default clear_search" />
             </fieldset>
         </fieldset>
     </form>
@@ -117,13 +129,13 @@
     [% END %]
 
     [% IF filter == 'suggestions_managers' %]
-        <div class="hint">Only staff with superlibrarian or suggestions_manage permissions are returned in the search results</div>
+        <div class="note">Only staff with superlibrarian or suggestions_manage permissions are returned in the search results</div>
     [% ELSIF filter == 'orders_managers' OR filter == 'baskets_managers' %]
-        <div class="hint">Only staff with superlibrarian or acquisitions permissions (or order_manage permission if granular permissions are enabled) are returned in the search results</div>
+        <div class="note">Only staff with superlibrarian or acquisitions permissions (or order_manage permission if granular permissions are enabled) are returned in the search results</div>
     [% ELSIF filter == 'funds_owners' OR filter == 'funds_users' %]
-        <div class="hint">Only staff with superlibrarian or acquisitions permissions (or budget_modify permission if granular permissions are enabled) are returned in the search results</div>
+        <div class="note">Only staff with superlibrarian or acquisitions permissions (or budget_modify permission if granular permissions are enabled) are returned in the search results</div>
     [% ELSIF filter == 'erm_users' %]
-        <div class="hint">Only staff with superlibrarian or ERM permissions are returned in the search results</div>
+        <div class="note">Only staff with superlibrarian or ERM permissions are returned in the search results</div>
     [% END %]
 
     <div class="browse">
