@@ -767,13 +767,23 @@ my $contributors =
 delete $contributors->{_others_};
 for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
     for my $role ( keys %{ $teams->{team}->{$version} } ) {
+        my $detail = $teams->{team}->{$version}->{$role};
         my $normalized_role = "$role";
         $normalized_role =~ s/s$//;
-        if ( ref( $teams->{team}->{$version}->{$role} ) eq 'ARRAY' ) {
-            for my $contributor ( @{ $teams->{team}->{$version}->{$role} } ) {
+        if ( ref( $detail ) eq 'ARRAY' ) {
+            for my $contributor ( @{ $detail } ) {
+
+                my $localized_role = $normalized_role;
+                if ( my $subversion = $contributor->{version} ) {
+                    $localized_role .= ':' . $subversion;
+                }
+                if ( my $area = $contributor->{area} ) {
+                    $localized_role .= ':' . $area;
+                }
+
                 my $name = $contributor->{name};
                 # Add role to contributors
-                push @{ $contributors->{$name}->{roles}->{$normalized_role} },
+                push @{ $contributors->{$name}->{roles}->{$localized_role} },
                   $version;
                 # Add openhub to teams
                 if ( exists( $contributors->{$name}->{openhub} ) ) {
@@ -782,22 +792,29 @@ for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
             }
         }
         elsif ( $role eq 'release_date' ) {
-            $teams->{team}->{$version}->{$role} = DateTime->from_epoch( epoch => $teams->{team}->{$version}->{$role});
+            $teams->{team}->{$version}->{$role} = DateTime->from_epoch( epoch => $teams->{team}->{$version}->{$role} );
         }
         elsif ( $role eq 'codename' ) {
             if ( $version == $short_version ) {
-                $codename = $teams->{team}->{$version}->{$role};
+                $codename = $detail;
             }
             next;
         }
         else {
-            my $name = $teams->{team}->{$version}->{$role}->{name};
+            if ( my $subversion = $detail->{version} ) {
+                $normalized_role .= ':' . $subversion;
+            }
+            if ( my $area = $detail->{area} ) {
+                $normalized_role .= ':' . $area;
+            }
+
+            my $name = $detail->{name};
             # Add role to contributors
             push @{ $contributors->{$name}->{roles}->{$normalized_role} },
               $version;
             # Add openhub to teams
             if ( exists( $contributors->{$name}->{openhub} ) ) {
-                $teams->{team}->{$version}->{$role}->{openhub} =
+                $detail->{openhub} =
                   $contributors->{$name}->{openhub};
             }
         }
