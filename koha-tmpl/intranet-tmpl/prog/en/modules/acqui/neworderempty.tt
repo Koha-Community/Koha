@@ -226,9 +226,6 @@
         }
     </script>
 
-    [% SET columns = ['cardnumber','name','category','branch','action'] %]
-    [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
-
 [% Asset.css("css/addbiblio.css") | $raw %]
 </head>
 
@@ -779,6 +776,8 @@
 </div> <!-- /.row -->
 
 [% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]
+[% SET columns = ['cardnumber','name','category','branch','action'] %]
+[% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
 
 [% MACRO jsinclude BLOCK %]
 [% END %]
