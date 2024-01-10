@@ -803,6 +803,30 @@
                                 <div class="col-md-6">
                                     <h3>Current maintenance team</h3>
                                     [% INCLUDE team t=maintenance_team v=short_version %]
+                                    [% IF development_version %]
+                                         <li><strong>Release maintainers:</strong>
+                                            <ul>
+                                                [% FOREACH m IN maintenance_team.maintainer %]
+                                                <li>[% m.version | html %] - [% INCLUDE person p=m %]</li>
+                                                  [% IF maintenance_team.maintainer_assistants %]
+                                                    [% FOREACH ma IN maintenance_team.maintainer_assistants %]
+                                                      [% IF ma.version == ( m.version ) %]
+                                                      <ul><li><strong>Assistant:</strong> [% INCLUDE person p=ma %]</li></ul>
+                                                      [% END %]
+                                                    [% END %]
+                                                  [% END %]
+
+                                                  [% IF maintenance_team.maintainer_mentors %]
+                                                    [% FOREACH mm IN maintenance_team.maintainer_mentors %]
+                                                      [% IF m.version == ( mm.version ) %]
+                                                      <ul><li><strong>Mentor:</strong> [% INCLUDE person p=mm %]</li></ul>
+                                                      [% END %]
+                                                    [% END %]
+                                                  [% END %]
+                                                [% END %]
+                                            </ul>
+                                        </li>
+                                    [% END %]
                                 </div>
                             </div>
                         [% ELSE %]
