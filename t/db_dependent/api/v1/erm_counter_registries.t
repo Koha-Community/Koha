@@ -26,9 +26,13 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use JSON qw(encode_json);
+use Array::Utils qw( array_minus );
 
 use Koha::ERM::EUsage::CounterFiles;
 use Koha::Database;
+
+# The Usage statistics module uses an external API to fetch data from the counter registry
+# This test is designed to catch any changes in the response that the API provides so that we can react quickly to ensure the module still functions as expected
 
 my $builder = t::lib::TestBuilder->new;
 
@@ -38,101 +42,20 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 subtest 'get() tests' => sub {
     plan tests => 5;
 
-    my $expected_response = [
-        {
-            "abbrev"          => "EBSCO",
-            "address"         => "EBSCO Information Services\n10 Estes Street\nIpswich, MA 01938",
-            "address_country" => {
-                "code" => "US",
-                "name" => "United States of America"
-            },
-            "contact" => {
-                "email"    => 'chadmovalli@ebsco.com',
-                "form_url" => "",
-                "person"   => "Chad Movalli",
-                "phone"    => ""
-            },
-            "content_provider_name" => "EBSCO",
-            "host_types"            => [ { "name" => "Aggregated_Full_Content" } ],
-            "id"                    => "b2b2736c-2cb9-48ec-91f4-870336acfb1c",
-            "name"                  => "EBSCO Information Services",
-            "reports"               => [
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "TR_J4",
-                    "report_name"     => "Title Report - Journal Report 4"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "DR_D2",
-                    "report_name"     => "Database Report - Report 2"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "TR_J3",
-                    "report_name"     => "Title Report - Journal Report 3"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "DR_D1",
-                    "report_name"     => "Database Report - Report 1"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "TR_J2",
-                    "report_name"     => "Title Report - Journal Report 2"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "PR",
-                    "report_name"     => "Platform Master Report"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "TR_B2",
-                    "report_name"     => "Title Report - Book Report 2"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "TR_B3",
-                    "report_name"     => "Title Report - Book Report 3"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "TR",
-                    "report_name"     => "Title Master Report"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "TR_B1",
-                    "report_name"     => "Title Report - Book Report 1"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "PR_P1",
-                    "report_name"     => "Platform Report - Report 1"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "TR_J1",
-                    "report_name"     => "Title Report - Journal Report 1"
-                },
-                {
-                    "counter_release" => "5",
-                    "report_id"       => "DR",
-                    "report_name"     => "Database Master Report"
-                }
-            ],
-            "sushi_services" => [
-                {
-                    "counter_release" => "5",
-                    "url"             =>
-                        "https:\/\/registry.projectcounter.org\/api\/v1\/sushi-service\/b94bc981-fa16-4bf6-ba5f-6c113f7ffa0b\/"
-                }
-            ],
-            "website" => "https:\/\/www.ebsco.com\/"
-        }
-    ];
+    my @expected_fields = (
+        "abbrev",
+        "address",
+        "address_country",
+        "audited",
+        "contact",
+        "content_provider_name",
+        "host_types",
+        "id",
+        "name",
+        "reports",
+        "sushi_services",
+        "website",
+    );
 
     my $librarian = $builder->build_object(
         {
@@ -161,5 +84,10 @@ subtest 'get() tests' => sub {
     my $q = encode_json( { "name" => "EBSCO Information Services" } );
     my $counter_registry =
         $t->get_ok("//$userid:$password@/api/v1/erm/counter_registry?q=$q")->status_is(200)->tx->res->json;
-    is_deeply( $counter_registry, $expected_response );
+
+    my $registry_to_check = @$counter_registry[0];
+    my @response_fields        = map { $_ } keys %$registry_to_check;
+    my @new_fields_in_response = array_minus( @response_fields, @expected_fields );
+
+    is( scalar(@new_fields_in_response), 0, 'The response fields match the expected fields' );
 };

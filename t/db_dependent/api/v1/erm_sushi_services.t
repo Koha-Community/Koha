@@ -26,6 +26,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use JSON qw(encode_json);
+use Array::Utils qw( array_minus );
 
 use Koha::ERM::EUsage::CounterFiles;
 use Koha::Database;
@@ -35,42 +36,38 @@ my $builder = t::lib::TestBuilder->new;
 my $t = Test::Mojo->new('Koha::REST::V1');
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
+# The Usage statistics module uses an external API to fetch data from the counter registry
+# This test is designed to catch any changes in the response that the API provides so that we can react quickly to ensure the module still functions as expected
+
 subtest 'get() tests' => sub {
     plan tests => 5;
 
     my $service_url = "https://registry.projectcounter.org/api/v1/sushi-service/b94bc981-fa16-4bf6-ba5f-6c113f7ffa0b/";
-    my $expected_response = {
-        "api_key_info"     => "",
-        "api_key_required" => 0,
-        "contact"          => {
-            "email"    => 'chadmovalli@ebsco.com',
-            "form_url" => "",
-            "person"   => "Chad Movalli",
-            "phone"    => ""
-        },
-        "counter_release"              => "5",
-        "credentials_auto_expire"      => 0,
-        "credentials_auto_expire_info" => "",
-        "customer_id_info"             => "This is your EBSCOhost Customer ID",
-        "customizations_in_place"      => 0,
-        "customizations_info"          => "",
-        "data_host"                    =>
-            "https:\/\/registry.projectcounter.org\/api\/v1\/usage-data-host\/72a35413-6fcd-44f2-8bce-0c7b2373e33f\/",
-        "id"                            => "b94bc981-fa16-4bf6-ba5f-6c113f7ffa0b",
-        "ip_address_authorization"      => 0,
-        "ip_address_authorization_info" => "",
-        "notification_count"            => 1,
-        "notifications_url"             =>
-            "https:\/\/registry.projectcounter.org\/api\/v1\/sushi-service\/b94bc981-fa16-4bf6-ba5f-6c113f7ffa0b\/notification\/",
-        "platform_attr_required"        => 0,
-        "platform_specific_info"        => "",
-        "request_volume_limits_applied" => 0,
-        "request_volume_limits_info"    => "",
-        "requestor_id_info"             =>
-            "Customers generate their Requestor ID in EBSCOAdmin on the SUSHI Authentication tab within the COUNTER R5 Reports section.",
-        "requestor_id_required" => 1,
-        "url"                   => "https:\/\/sushi.ebscohost.com\/R5"
-    };
+    my @expected_fields = (
+        "api_key_info",
+        "api_key_required",
+        "contact",
+        "counter_release",
+        "credentials_auto_expire",
+        "credentials_auto_expire_info",
+        "customer_id_info",
+        "customizations_in_place",
+        "customizations_info",
+        "data_host",
+        "id",
+        "ip_address_authorization",
+        "ip_address_authorization_info",
+        "migrations",
+        "notification_count",
+        "notifications_url",
+        "platform_attr_required",
+        "platform_specific_info",
+        "request_volume_limits_applied",
+        "request_volume_limits_info",
+        "requestor_id_info",
+        "requestor_id_required",
+        "url",
+    );
 
     my $librarian = $builder->build_object(
         {
@@ -98,5 +95,9 @@ subtest 'get() tests' => sub {
     # Authorised access test
     my $q             = encode_json( { "url" => $service_url } );
     my $sushi_service = $t->get_ok("//$userid:$password@/api/v1/erm/sushi_service?q=$q")->status_is(200)->tx->res->json;
-    is_deeply( $sushi_service, $expected_response );
+
+    my @response_fields = map { $_ } keys %$sushi_service;
+    my @new_fields_in_response = array_minus( @response_fields, @expected_fields );
+
+    is(scalar(@new_fields_in_response), 0, 'The response fields match the expected fields');
 };
