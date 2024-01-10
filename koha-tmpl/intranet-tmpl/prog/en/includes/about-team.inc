@@ -188,11 +188,11 @@
 
         [% IF t.ci %]
             [% IF t.ci.size == 1 %]
-            <li><strong>Jenkins maintainer:</strong>
+            <li><strong>Continuous integration maintainer:</strong>
                 [% INCLUDE person p=t.ci.0 %]
             </li>
             [% ELSE %]
-            <li><strong>Jenkins maintainers:</strong>
+            <li><strong>Continuous integration maintainers:</strong>
                 <ul>
                     [% FOREACH j IN t.ci %]
                     <li>[% INCLUDE person p=j %]
