@@ -25,7 +25,7 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use JSON qw(encode_json);
+use JSON         qw(encode_json);
 use Array::Utils qw( array_minus );
 
 use Koha::ERM::EUsage::CounterFiles;
@@ -96,8 +96,8 @@ subtest 'get() tests' => sub {
     my $q             = encode_json( { "url" => $service_url } );
     my $sushi_service = $t->get_ok("//$userid:$password@/api/v1/erm/sushi_service?q=$q")->status_is(200)->tx->res->json;
 
-    my @response_fields = map { $_ } keys %$sushi_service;
+    my @response_fields        = map { $_ } keys %$sushi_service;
     my @new_fields_in_response = array_minus( @response_fields, @expected_fields );
 
-    is(scalar(@new_fields_in_response), 0, 'The response fields match the expected fields');
+    is( scalar(@new_fields_in_response), 0, 'The response fields match the expected fields' );
 };

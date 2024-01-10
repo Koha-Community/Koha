@@ -25,7 +25,7 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use JSON qw(encode_json);
+use JSON         qw(encode_json);
 use Array::Utils qw( array_minus );
 
 use Koha::ERM::EUsage::CounterFiles;
@@ -85,7 +85,7 @@ subtest 'get() tests' => sub {
     my $counter_registry =
         $t->get_ok("//$userid:$password@/api/v1/erm/counter_registry?q=$q")->status_is(200)->tx->res->json;
 
-    my $registry_to_check = @$counter_registry[0];
+    my $registry_to_check      = @$counter_registry[0];
     my @response_fields        = map { $_ } keys %$registry_to_check;
     my @new_fields_in_response = array_minus( @response_fields, @expected_fields );
 
