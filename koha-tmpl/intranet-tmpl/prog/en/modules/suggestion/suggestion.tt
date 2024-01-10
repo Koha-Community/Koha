@@ -1282,7 +1282,7 @@
             if (borrowernumber) {
                 var managerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
                     + '?borrowernumber=' + borrowernumber + '">'
-                    + borrowername + '</a>';
+                    + borrowername.escapeHtml() + '</a>';
                 managedby_name.html(managerlink);
                 managedby.val(borrowernumber);
             }
@@ -1313,9 +1313,9 @@
                 success: function (data) {
                     var suggested = '<input type="hidden" id="suggestedby" name="suggestedby" value="' + data.borrowernumber + '" />';
                     suggested += '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + data.borrowernumber + '">';
-                    suggested += data.surname + ', ' + data.firstname + ' (' + data.cardnumber + ')';
+                    suggested += data.surname.escapeHtml() + ', ' + data.firstname.escapeHtml() + ' (' + data.cardnumber.escapeHtml() + ')';
                     suggested += '</a> ';
-                    suggested += data._strings.library_id.str + ' (' + data._strings.category_id.str + ')';
+                    suggested += data._strings.library_id.str.escapeHtml() + ' (' + data._strings.category_id.str.escapeHtml() + ')';
                     $("#tdsuggestedby").html(suggested);
 
                 },

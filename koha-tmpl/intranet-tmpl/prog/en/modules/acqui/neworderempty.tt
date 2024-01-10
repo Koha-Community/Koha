@@ -209,7 +209,7 @@
         if (ids.indexOf(borrowernumber.toString()) < 0) {
                 ids.push(borrowernumber);
                 $("#users_ids").val(ids.join(':'));
-                var li = '<li id="user_'+borrowernumber+'">'+borrowername
+                var li = '<li id="user_'+borrowernumber+'">'+borrowername.escapeHtml()
                     + ' [<a style="cursor:pointer" onclick="del_user('+borrowernumber+');">'
                     + _("Delete user") + '</a>]</li>';
                 $("#users_names").append(li);

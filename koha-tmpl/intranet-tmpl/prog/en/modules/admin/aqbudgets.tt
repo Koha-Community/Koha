@@ -564,7 +564,7 @@
                 if(borrowernumber && ids.indexOf(borrowernumber.toString()) == -1) {
                     var li = '<li id="user_' + borrowernumber + '">'
                         + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
-                        + borrowernumber + '">' + borrowername + '</a> '
+                        + borrowernumber + '">' + borrowername.escapeHtml() + '</a> '
                         + ' &bull; <a data-borrowernumber="' + borrowernumber + '" class="del_user" href="#"><i class="fa fa-trash-can"></i> '+_("Remove")+'</a> '
                         + '</li>';
                     $("#budget_users").prepend(li);
