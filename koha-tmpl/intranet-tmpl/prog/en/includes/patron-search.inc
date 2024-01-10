@@ -596,13 +596,9 @@
                                     [% FOR action IN actions %]
                                     [% SWITCH action %]
                                     [% CASE 'select' %]
-                                        let patron_str = JSON.stringify(row);
                                         action_node += '<a href="#" class="btn btn-default btn-xs select_user" data-borrowernumber="' + patron_id + '">' + _("Select") + '</a>';
-                                        let input_node = $('<input type="hidden" id="borrower_data' + patron_id + '" name="borrower_data'+ patron_id + '"/>');
-                                        $(input_node).val(patron_str);
-                                        action_node += $(input_node).prop('outerHTML');
                                     [% CASE 'add' %]
-                                        action_node += '<a href="#" class="btn btn-default btn-xs add_user" data-borrowernumber="' + patron_id + '" data-firstname="' + encodeURIComponent(row.firstname) + '" data-surname="' + encodeURIComponent(row.surname) + '">' + _("Add") + '</a><input type="hidden" id="borrower_data' + patron_id + '" name="borrower_data'+ patron_id + '" />';
+                                        action_node += '<a href="#" class="btn btn-default btn-xs add_user" data-borrowernumber="' + patron_id + '">' + _("Add") + '</a>';
                                     [% CASE 'edit' %]
                                         action_node += '<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=' + patron_id + '" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit") + '</a>';
                                     [% CASE 'checkout' %]
@@ -611,6 +607,12 @@
                                         [% END %]
                                     [% END %]
                                     [% END %]
+
+                                    let patron_str = JSON.stringify(row);
+                                    let input_node = $('<input type="hidden" id="borrower_data' + patron_id + '" name="borrower_data'+ patron_id + '"/>');
+                                    $(input_node).val(patron_str);
+                                    action_node += $(input_node).prop('outerHTML');
+
                                     return action_node;
                                 },
                                 "searchable": false,
@@ -647,16 +649,15 @@
             $("body").on("click",".add_user",function(e){
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
-                var firstname = $(this).data("firstname");
-                var surname = $(this).data("surname");
-                add_user( borrowernumber, firstname + " " + surname );
+                var borrower_data = JSON.parse($("#borrower_data"+borrowernumber).val());
+                add_user( borrowernumber, borrower_data.firstname + " " + borrower_data.surname );
             });
 
             $("body").on("click",".select_user",function(e){
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
-                var borrower_data = $("#borrower_data"+borrowernumber).val();
-                select_user( borrowernumber, JSON.parse(borrower_data) );
+                var borrower_data = JSON.parse($("#borrower_data"+borrowernumber).val());
+                select_user( borrowernumber, borrower_data );
             });
 
             $("body").on("click",".patron_preview", function( e ){
