@@ -239,9 +239,15 @@
             var extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
         [% END %]
 
-        $(document).ready(function() {
+        $(document).on("shown.bs.modal", function(){
             $('select[name="sort1_filter"]').select2({allowClear:true});
             $('select[name="sort2_filter"]').select2({allowClear:true});
+        }).on("hidden.bs.modal", function(){
+            ["sort1_filter", "sort2_filter"].forEach(function(item){
+                if( $('select[name=' +  item + ']').data("select2") ){
+                    $('select[name=' +  item + ']').select2("destroy");
+                }
+            });
         });
     </script>
 
