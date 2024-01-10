@@ -653,6 +653,7 @@
                     });
                 },
                 [% END %]
+                fixedHeader: false,
             }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters);
 
             patron_search_form.on('submit', filter);
