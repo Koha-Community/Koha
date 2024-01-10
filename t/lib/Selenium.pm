@@ -114,12 +114,17 @@ sub opac_auth {
 sub fill_form {
     my ( $self, $values ) = @_;
     while ( my ( $id, $value ) = each %$values ) {
-        my $element = $self->driver->find_element('//*[@id="'.$id.'"]');
+        my $attr = 'id';
+        my $attr_value = $id;
+        if ( $id =~ m{=} ) {
+            ($attr, $attr_value) = split '=', $id;
+        }
+        my $element = $self->driver->find_element(sprintf '//*[@%s="%s"]', $attr, $attr_value);
         my $tag = $element->get_tag_name();
         if ( $tag eq 'input' ) {
-            $self->driver->find_element('//input[@id="'.$id.'"]')->send_keys($value);
+            $self->driver->find_element(sprintf '//input[@%s="%s"]', $attr, $attr_value)->send_keys($value);
         } elsif ( $tag eq 'select' ) {
-            $self->driver->find_element('//select[@id="'.$id.'"]//option[@value="'.$value.'"]')->click;
+            $self->driver->find_element(sprintf '//select[@%s="%s"]//option[@value="%s"]', $attr, $attr_value, $value)->click;
         }
     }
 }
@@ -187,7 +192,29 @@ sub wait_for_element_visible {
         $self->driver->pause(1000) unless $visible;
 
         die "Cannot wait more for element '$xpath_selector' to be visible"
-            if $max_retries <= ++$i
+            if $max_retries <= ++$i;
+    }
+    $self->add_error_handler;
+    return $elt;
+}
+
+sub wait_for_element_hidden {
+    my ( $self, $xpath_selector ) = @_;
+
+    my ($hidden, $elt);
+    $self->remove_error_handler;
+    my $max_retries = $self->max_retries;
+    my $i;
+    while ( not $hidden ) {
+        $elt = eval {$self->driver->find_element($xpath_selector) };
+        $hidden = $elt || !$elt->is_displayed;
+        $self->driver->pause(1000) unless $hidden;
+
+        $i++;
+        $self->driver->capture_screenshot('selenium_hidden.png')
+            if $max_retries <= $i;
+        die "Cannot wait more for element '$xpath_selector' to be hidden"
+            if $max_retries <= $i;
     }
     $self->add_error_handler;
     return $elt;

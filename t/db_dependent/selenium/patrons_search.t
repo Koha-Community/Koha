@@ -24,15 +24,6 @@ my $original_PatronsPerPage            = C4::Context->preference('PatronsPerPage
 our @cleanup;
 our $DT_delay = 1;
 
-END {
-    unless ( @cleanup ) { say "WARNING: Cleanup failed!" }
-    C4::Context->set_preference( 'dateformat',                $original_dateformat );
-    C4::Context->set_preference( 'DefaultPatronSearchFields', $original_DefaultPatronSearchFields );
-    C4::Context->set_preference( 'DefaultPatronSearchMethod', $original_DefaultPatronSearchMethod );
-    C4::Context->set_preference( 'PatronsPerPage',            $original_PatronsPerPage );
-    $_->delete for @cleanup;
-};
-
 use C4::Context;
 
 use utf8;
@@ -50,7 +41,7 @@ eval { require Selenium::Remote::Driver; };
 if ( $@ ) {
     plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
 } else {
-    plan tests => 1;
+    plan tests => 2;
 }
 
 my $s             = t::lib::Selenium->new;
@@ -60,19 +51,20 @@ my $base_url      = $s->base_url;
 my $builder       = t::lib::TestBuilder->new;
 my $schema        = Koha::Database->schema;
 
-subtest 'Search patrons' => sub {
-    plan tests => 27;
 
-    if ( Koha::Patrons->search({surname => {-like => "test_patron_%"}})->count ) {
-        BAIL_OUT("Cannot run this test, data we need to create already exist in the DB");
-    }
-    my @patrons;
-    my $borrowernotes           = q|<strong>just 'a" note</strong> \123 ❤|;
-    my $borrowernotes_displayed = q|just 'a" note \123 ❤|;
-    my $branchname = q|<strong>just 'another" library</strong> \123 ❤|;
-    my $firstname  = q|<strong>fir's"tname</strong> \123 ❤|;
-    my $address    = q|<strong>add'res"s</strong> \123 ❤|;
-    my $email      = q|a<strong>bad_email</strong>@example\123 ❤.com|;
+if ( Koha::Patrons->search({surname => {-like => "test_patron_%"}})->count ) {
+    BAIL_OUT("Cannot run this test, data we need to create already exist in the DB");
+}
+
+my $PatronsPerPage          = 15;
+my $borrowernotes           = q|<strong>just 'a" note</strong> \123 ❤|;
+my $borrowernotes_displayed = q|just 'a" note \123 ❤|;
+my $branchname              = q|<strong>just 'another" library</strong> \123 ❤|;
+my $firstname               = q|<strong>fir's"tname</strong> \123 ❤|;
+my $address                 = q|<strong>add'res"s</strong> \123 ❤|;
+my $email                   = q|a<strong>bad_email</strong>@example\123 ❤.com|;
+my ($attribute_type, $attribute_type_searchable, $attribute_type_searchable_not_default);
+sub setup {
     my $patron_category = $builder->build_object(
         {
             class => 'Koha::Patron::Categories',
@@ -86,6 +78,7 @@ subtest 'Search patrons' => sub {
     );
     push @cleanup, $library;
 
+    my @patrons;
     for my $i ( 1 .. 25 ) {
         push @patrons,
           $builder->build_object(
@@ -144,7 +137,7 @@ subtest 'Search patrons' => sub {
       );
     unshift @cleanup, $patron_27;
 
-    my $attribute_type = Koha::Patron::Attribute::Type->new(
+    $attribute_type = Koha::Patron::Attribute::Type->new(
         {
             code        => 'my code1',
             description => 'my description1',
@@ -152,7 +145,7 @@ subtest 'Search patrons' => sub {
             searched_by_default => 0
         }
     )->store;
-    my $attribute_type_searchable = Koha::Patron::Attribute::Type->new(
+    $attribute_type_searchable = Koha::Patron::Attribute::Type->new(
         {
             code             => 'my code2',
             description      => 'my description2',
@@ -161,7 +154,7 @@ subtest 'Search patrons' => sub {
             searched_by_default => 1
         }
     )->store;
-    my $attribute_type_searchable_not_default = Koha::Patron::Attribute::Type->new(
+    $attribute_type_searchable_not_default = Koha::Patron::Attribute::Type->new(
         {
             code             => 'mycode3',
             description      => 'my description3',
@@ -182,7 +175,22 @@ subtest 'Search patrons' => sub {
         { code => $attribute_type_searchable->code, attribute => 'test_attr_2'},
         { code => $attribute_type_searchable_not_default->code, attribute => 'test_attr_3'},
     ]);
+    C4::Context->set_preference('PatronsPerPage', $PatronsPerPage);
+}
 
+sub teardown {
+    C4::Context->set_preference( 'dateformat',                $original_dateformat );
+    C4::Context->set_preference( 'DefaultPatronSearchFields', $original_DefaultPatronSearchFields );
+    C4::Context->set_preference( 'DefaultPatronSearchMethod', $original_DefaultPatronSearchMethod );
+    C4::Context->set_preference( 'PatronsPerPage',            $original_PatronsPerPage );
+    $_->delete for @cleanup;
+    @cleanup = ();
+}
+
+subtest 'Search patrons' => sub {
+    plan tests => 27;
+
+    setup();
     my $total_number_of_patrons = Koha::Patrons->search->count;
     my $table_id = "memberresultst";
 
@@ -190,14 +198,12 @@ subtest 'Search patrons' => sub {
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     C4::Context->set_preference('DefaultPatronSearchMethod',"contains");
     my $searchable_attributes = Koha::Patron::Attribute::Types->search({ staff_searchable => 1 })->count();
-    my $PatronsPerPage = 15;
     my $nb_standard_fields = 13 + $searchable_attributes; # Standard fields, plus one searchable attribute
-    C4::Context->set_preference('PatronsPerPage', $PatronsPerPage);
     $driver->get( $base_url . "/members/members-home.pl" );
     my @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
     is( scalar @adv_options, $nb_standard_fields + 1, 'All standard fields are searchable if DefaultPatronSearchFields not set. middle_name is there.');
     is( $adv_options[0]->get_value(), 'standard', 'Standard search uses value "standard"');
-    my @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
+    my @filter_options = $driver->find_elements('//select[@class="searchfieldstype_filter"]/option');
     is( scalar @filter_options, $nb_standard_fields + 1, 'All standard fields + middle_name are searchable by filter if DefaultPatronSearchFields not set');
     is( $filter_options[0]->get_value(), 'standard', 'Standard filter uses hard coded value "standard" DefaultPatronSearchFields not set');
     C4::Context->set_preference('DefaultPatronSearchFields',"firstname|initials");
@@ -205,21 +211,21 @@ subtest 'Search patrons' => sub {
     @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
     is( scalar @adv_options, $nb_standard_fields, 'New option added when DefaultPatronSearchFields is populated with a field. Note that middle_name disappears, we do not want it if not part of DefaultPatronSearchFields');
     is( $adv_options[0]->get_value(), 'standard', 'Standard search uses value "standard"');
-    @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
+    @filter_options = $driver->find_elements('//select[@class="searchfieldstype_filter"]/option');
     is( scalar @filter_options, $nb_standard_fields, 'New filter option added when DefaultPatronSearchFields is populated with a field');
     is( $filter_options[0]->get_value(), 'standard', 'Standard filter uses value "standard"');
     $driver->get( $base_url . "/members/members-home.pl" );
     @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
-    @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
+    @filter_options = $driver->find_elements('//select[@class="searchfieldstype_filter"]/option');
     is( scalar @adv_options, $nb_standard_fields, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
     is( scalar @filter_options, $nb_standard_fields, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
 
     # NOTE: We should probably ensure the bad field is removed from 'standard' search here, else searches are broken
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     $driver->get( $base_url . "/members/members-home.pl" );
-    $s->fill_form( { search_patron_filter => 'test_patron' } );
+    $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
     $s->submit_form;
-    my $first_patron = $patrons[0];
+    my $first_patron = Koha::Patrons->search( { surname => { like => 'test_patron_%' } } )->next;
 
     sleep $DT_delay && $s->wait_for_ajax;
     my @td = $driver->find_elements('//table[@id="'.$table_id.'"]/tbody/tr/td');
@@ -254,7 +260,7 @@ subtest 'Search patrons' => sub {
     );
 
     $driver->get( $base_url . "/members/members-home.pl" );
-    $s->fill_form( { search_patron_filter => 'test_patron' } );
+    $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
@@ -262,12 +268,12 @@ subtest 'Search patrons' => sub {
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons), 'Searching in standard brings back correct results' );
 
-    $s->driver->find_element('//table[@id="'.$table_id.'"]//th[@data-filter="libraries"]/select/option[@value="'.$library->branchcode.'"]')->click;
+    $s->driver->find_element('//table[@id="'.$table_id.'"]//th[@data-filter="libraries"]/select/option[@value="'.$first_patron->library->branchcode.'"]')->click;
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 25, $total_number_of_patrons), 'Filtering on library works in combination with main search' );
 
     # Reset the filters
-    $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
+    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
@@ -275,38 +281,38 @@ subtest 'Search patrons' => sub {
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries', $PatronsPerPage, $total_number_of_patrons), 'Resetting filters works as expected' );
 
     # Pattern terms must be split
-    $s->fill_form( { search_patron_filter => 'test patron' } );
+    $s->fill_form( { 'class=search_patron_filter' => 'test patron' } );
     $s->submit_form;
 
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons) );
-    $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
+    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
     # Search on non-searchable attribute, we expect no result!
-    $s->fill_form( { search_patron_filter => 'test_attr_1' } );
+    $s->fill_form( { 'class=search_patron_filter' => 'test_attr_1' } );
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('No entries to show (filtered from %s total entries)', $total_number_of_patrons), 'Searching on a non-searchable attribute returns no results' );
 
     # clear form
-    $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
+    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
 
     # Search on searchable attribute, we expect 2 patrons
-    $s->fill_form( { search_patron_filter => 'test_attr_2' } );
+    $s->fill_form( { 'class=search_patron_filter' => 'test_attr_2' } );
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
 
     # clear form
-    $driver->find_element('//form[@id="patron_search_form"]//*[@id="clear_search"]')->click();
+    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
 
     # Search on searchable attribute as specific field, we expect 2 patrons
-    $s->fill_form( { search_patron_filter => 'test_attr_3' } );
-    $driver->find_element('//form[@id="patron_search_form"]//*[@id="searchfieldstype_filter"]//option[@value="_ATTR_'.$attribute_type_searchable_not_default->code.'"]')->click();
+    $s->fill_form( { 'class=search_patron_filter' => 'test_attr_3' } );
+    $driver->find_element('//form[@class="patron_search_form"]//*[@class="searchfieldstype_filter"]//option[@value="_ATTR_'.$attribute_type_searchable_not_default->code.'"]')->click();
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
@@ -320,7 +326,7 @@ subtest 'Search patrons' => sub {
 
     # Adding the surname of the first patron in the "Name" column
     # We expect only 1 result
-    $s->driver->find_element('//table[@id="'.$table_id.'"]//input[@placeholder="Name search"]')->send_keys($patrons[0]->surname);
+    $s->driver->find_element('//table[@id="'.$table_id.'"]//input[@placeholder="Name search"]')->send_keys($first_patron->surname);
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 1, 1, $total_number_of_patrons), 'Refining with header filters works to further filter the original query' );
 
@@ -330,7 +336,7 @@ subtest 'Search patrons' => sub {
 
         C4::Context->set_preference( 'PatronsPerPage', 5 );
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { search_patron_filter => 'test_patron' } );
+        $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
         my $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
@@ -356,7 +362,7 @@ subtest 'Search patrons' => sub {
 
         # Perform another search
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { search_patron_filter => 'test_patron' } );
+        $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
         $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
@@ -383,7 +389,7 @@ subtest 'Search patrons' => sub {
         # We have a patron with date of birth=1980-06-17 => formatted as 17/06/1980
 
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { search_patron_filter => 'test_patron' } );
+        $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
 
@@ -393,6 +399,7 @@ subtest 'Search patrons' => sub {
 
         $dob_search_filter->send_keys('1980');
         sleep $DT_delay && $s->wait_for_ajax;
+        my $patron_27 = Koha::Patrons->search( { surname => 'test_patron_27' } )->next;
         is( is_patron_shown($patron_27), 1, 'search by correct year shows the patron' );
         $dob_search_filter->clear;
 
@@ -427,7 +434,273 @@ subtest 'Search patrons' => sub {
         $dob_search_filter->clear;
     };
 
-    $driver->quit();
+    teardown();
+
+};
+
+subtest 'Search patrons in modal' => sub {
+    plan tests => 2;
+
+    setup();
+
+    my $total_number_of_patrons = Koha::Patrons->search->count;
+
+    $driver->set_window_size( 3840, 10800 );
+
+    subtest 'Add guarantor - simple' => sub {
+        plan tests => 4;
+
+        my $table_id = "memberresultst";
+
+        my $mainpage = $s->base_url . q|mainpage.pl|;
+        $driver->get($mainpage . q|?logout.x=1|);
+        $s->auth;
+
+        # Go to the add patron form
+        $driver->get( $base_url . "/members/memberentry.pl" );
+
+        # Click "Add guarantor"
+        $driver->find_element('//a[@href="#patron_search_modal"]')->click();
+
+        # Wait for the modal to be visible
+        $s->wait_for_element_visible('//div[@id="patron_search_modal"]//div[@class="modal-header"]');
+
+        # Search for our test patrons
+        $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
+        $s->submit_form;
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        # => the table is correctly displayed
+        is(
+            $driver->find_element( '//div[@id="' . $table_id . '_info"]' )->get_text,
+            sprintf(
+                'Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26,
+                $total_number_of_patrons
+            ),
+            'Searching in standard brings back correct results'
+        );
+
+        # Search for patron 2 and display the patron preview modal
+        my $patron = Koha::Patrons->search( { surname => 'test_patron_2' } )->next;
+        $driver->find_element(
+            sprintf '//a[@data-borrowernumber="%s"][@class="patron_name patron_preview"]',
+            $patron->borrowernumber
+        )->click;
+        $s->wait_for_element_visible('//div[@id="patron_preview_modal"]');
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        # => The modal has patron's detail in it
+        is(
+            $driver->find_element('//div[@id="patron_preview_modal"]//h1')->get_text(),
+            sprintf(
+                "%s %s %s (%s) %s (%s)", $patron->title, $patron->firstname, $patron->middle_name, $patron->othernames,
+                $patron->surname,        $patron->cardnumber
+            )
+        );
+
+        # Close the patron preview modal
+        $driver->find_element('//div[@id="patron_preview_modal"]//input[@class="close"]')->click;
+        $s->wait_for_element_hidden('//div[@id="patron_preview_modal"]');
+
+        # Select patron 2
+        $driver->find_element(
+            sprintf '//a[@data-borrowernumber="%s"][@class="btn btn-default btn-xs select_user"]',
+            $patron->borrowernumber
+        )->click;
+
+        # Wait for the modal to be hidden
+        $s->wait_for_element_hidden('//div[@id="patron_search_modal"]//div[@class="modal-header"]');
+
+        # => The guarantor block has the info of the selected patron
+        is(
+            $driver->find_element('//a[@class="new_guarantor_link"]')->get_text(),
+            sprintf( "%s %s (%s)", $patron->firstname, $patron->surname, $patron->cardnumber )
+        );
+        is(
+            $driver->find_element('//input[@class="new_guarantor_id noEnterSubmit"]')->get_value(),
+            $patron->borrowernumber
+        );
+
+    };
+
+    subtest 'Add funds - double' => sub {
+        plan tests => 11;
+
+        my $table_id = "patron_search_modal_owner_table";
+
+        my $mainpage = $s->base_url . q|mainpage.pl|;
+        $driver->get($mainpage . q|?logout.x=1|);
+        $s->auth;
+
+        # Go to the add patron form
+        $driver->get( $base_url . "/admin/aqbudgets.pl?op=add_form&budget_id=1&budget_period_id=1" );
+
+        # Click "Select owner"
+        $driver->find_element('//a[@href="#patron_search_modal_owner"]')->click();
+
+        # Add { acquisition => budget_modify } subpermission to some patrons
+        my $dbh     = C4::Context->dbh;
+        my $patrons = Koha::Patrons->search( { surname => { like => 'test_patron_2%' } } );
+        while ( my $patron = $patrons->next ) {
+            $dbh->do(
+                q{INSERT INTO user_permissions (borrowernumber, module_bit, code) VALUES (?, ?, ?)}, {},
+                $patron->borrowernumber, 11, "budget_modify"
+            );
+        }
+
+        # Wait for the modal to be visible
+        $s->wait_for_element_visible('//div[@id="patron_search_modal_owner"]//div[@class="modal-header"]');
+
+        # Search for our test patrons
+        $driver->find_element('//div[@id="patron_search_modal_owner"]//input[@class="search_patron_filter"]')
+            ->send_keys('test_patron');
+        $driver->find_element('//div[@id="patron_search_modal_owner"]//input[@type="submit"]')->click;
+
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        # => the table is correctly displayed
+        is(
+            $driver->find_element( '//div[@id="' . $table_id . '_info"]' )->is_displayed,
+            1,
+        );
+
+        # Search for patron 2 and display the patron preview modal
+        my $patron = Koha::Patrons->search( { surname => 'test_patron_2' } )->next;
+        $driver->find_element(
+            sprintf '//a[@data-borrowernumber="%s"][@class="patron_name patron_preview"]',
+            $patron->borrowernumber
+        )->click;
+        $s->wait_for_element_visible('//div[@id="patron_preview_modal"]');
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        # => The modal has patron's detail in it
+        is(
+            $driver->find_element('//div[@id="patron_preview_modal"]//h1')->get_text(),
+            sprintf(
+                "%s %s %s (%s) %s (%s)", $patron->title, $patron->firstname, $patron->middle_name, $patron->othernames,
+                $patron->surname,        $patron->cardnumber
+            )
+        );
+
+        # Close the patron preview modal
+        $driver->find_element('//div[@id="patron_preview_modal"]//input[@class="close"]')->click;
+        $s->wait_for_element_hidden('//div[@id="patron_preview_modal"]');
+
+        # Select patron 2
+        $driver->find_element(
+            sprintf '//a[@data-borrowernumber="%s"][@class="btn btn-default btn-xs select_user"]',
+            $patron->borrowernumber
+        )->click;
+
+        # Wait for the modal to be hidden
+        $s->wait_for_element_hidden('//div[@id="patron_search_modal"]//div[@class="modal-header"]');
+
+        # => The block has the info of the selected patron
+        is(
+            $driver->find_element('//span[@id="budget_owner_name"]')->get_text(),
+            sprintf( "%s %s", $patron->firstname, $patron->surname )
+        );
+        is(
+            $driver->find_element('//input[@id="budget_owner_id"]')->get_value(),
+            $patron->borrowernumber
+        );
+
+        $table_id = "patron_search_modal_users_table";
+
+        # Click "Add users"
+        $driver->find_element('//a[@href="#patron_search_modal_users"]')->click();
+
+        # Wait for the modal to be visible
+        $s->wait_for_element_visible('//div[@id="patron_search_modal_users"]//div[@class="modal-header"]');
+
+        # Search for our test patrons
+        $driver->find_element('//div[@id="patron_search_modal_users"]//input[@class="search_patron_filter"]')
+            ->send_keys('test_patron');
+        $driver->find_element('//div[@id="patron_search_modal_users"]//input[@type="submit"]')->click;
+
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        # => the table is correctly displayed
+        is(
+            $driver->find_element( '//div[@id="' . $table_id . '_info"]' )->is_displayed,
+            1,
+        );
+
+        # Search for patron 2 and display the patron preview modal
+        $patron = Koha::Patrons->search( { surname => 'test_patron_2' } )->next;
+        $driver->find_element(
+            sprintf '//a[@data-borrowernumber="%s"][@class="patron_name patron_preview"]',
+            $patron->borrowernumber
+        )->click;
+        $s->wait_for_element_visible('//div[@id="patron_preview_modal"]');
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        # => The modal has patron's detail in it
+        is(
+            $driver->find_element('//div[@id="patron_preview_modal"]//h1')->get_text(),
+            sprintf(
+                "%s %s %s (%s) %s (%s)", $patron->title, $patron->firstname, $patron->middle_name, $patron->othernames,
+                $patron->surname,        $patron->cardnumber
+            )
+        );
+
+        # Close the patron preview modal
+        $driver->find_element('//div[@id="patron_preview_modal"]//input[@class="close"]')->click;
+        $s->wait_for_element_hidden('//div[@id="patron_preview_modal"]');
+
+        # Select patron 2
+        $driver->find_element(
+            sprintf '//a[@data-borrowernumber="%s"][@class="btn btn-default btn-xs add_user"]',
+            $patron->borrowernumber
+        )->click;
+
+        # The modal is still displayed
+        is(
+            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="modal-header"]')->is_displayed,
+            1,
+        );
+
+        # Info has been added about the patron
+        is(
+            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="info"]')->get_text,
+            sprintf( "Patron '%s %s' added.", $patron->firstname, $patron->surname )
+        );
+
+        # Select patron 2 again
+        $driver->find_element(
+            sprintf '//a[@data-borrowernumber="%s"][@class="btn btn-default btn-xs add_user"]',
+            $patron->borrowernumber
+        )->click;
+
+        # Warning has been added about the patron
+        is(
+            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="error"]')->get_text,
+            sprintf( "Patron '%s %s' is already in the list.", $patron->firstname, $patron->surname )
+        );
+
+        # Click "Close"
+        $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="modal-footer"]//a')->click,
+
+            # The modal is closed
+            if (
+            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="modal-header"]')->is_displayed,
+            0,
+            );
+
+        # => The block has the info of the selected patron
+        is(
+            $driver->find_element( sprintf '//*[@id="budget_users"]/*[@id="user_%s"]/a', $patron->borrowernumber )
+                ->get_text(),
+            sprintf( "%s %s", $patron->firstname, $patron->surname )
+        );
+        is(
+            $driver->find_element('//input[@id="budget_users_id"]')->get_value(),
+            sprintf( ":%s", $patron->borrowernumber ),    # FIXME There is an extra ':' here
+        );
+    };
+
+    teardown();
+
 };
 
 sub is_patron_shown {
