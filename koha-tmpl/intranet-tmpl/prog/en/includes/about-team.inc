@@ -1,5 +1,8 @@
 [%- BLOCK role -%]
-  [%- SWITCH role.key -%]
+  [% matches = role.key.match('(\w+):?(.*)?') %]
+  [% ro = matches.0 %]
+  [% ex = matches.1 %]
+  [%- SWITCH ro -%]
     [%- CASE 'manager'               -%]<span>Release manager</span>
     [%- CASE 'manager_assistant'     -%]<span>Release manager assistant</span>
     [%- CASE 'manager_mentor'        -%]<span>Release manager mentor</span>
@@ -27,7 +30,11 @@
     [%- CASE 'live_cd'               -%]<span>Live CD maintainer</span>
     [%- CASE 'accessibility_advocate'-%]<span>Accessibility advocate</span>
     [%- CASE 'meeting_facilitator'   -%]<span>Meeting facilitator</span>
+    [%- CASE 'ktd'                   -%]<span>Developer tooling</span>
+    [%- CASE 'website'               -%]<span>Website administrator</span>
+    [%- CASE -%]<span>MISSING MAP FOR ROLE: [% role.key | html %]</span>
   [%- END -%]
+  [%- IF ex %] - [% ex | html %][% END -%]
 [%- END -%]
 
 [%- BLOCK person -%]
