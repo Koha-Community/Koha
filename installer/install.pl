@@ -23,7 +23,7 @@ use diagnostics;
 use C4::InstallAuth qw( get_template_and_user );
 use CGI qw ( -utf8 );
 use POSIX;
-use HTML::FromANSI::Tiny;
+use HTML::FromANSI::Tiny::Bootstrap;
 
 use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
@@ -568,14 +568,17 @@ sub chk_log {    #returns a logfile in $dir or - if that failed - in temp dir
 
 sub colorize {
     my ($report) = @_;
-    my $h = HTML::FromANSI::Tiny->new(
-        auto_reverse => 0, background    => 'white', foreground => 'black',
-        inline_style => 1, no_plain_tags => 1
+    my $h = HTML::FromANSI::Tiny::Bootstrap->new(
+        auto_reverse  => 0,
+        background    => 'white',
+        foreground    => 'black',
+        no_plain_tags => 1
     );
 
     my @states = ( 'success', 'error' );
     for my $state (@states) {
         for my $result ( @{ $report->{$state} } ) {
+
             #@{ $result->{output} } = map { s/^\t+//; $h->html($_) } @{ $result->{output} };
             for my $output ( @{ $result->{output} } ) {
                 $output = $h->html($output);
