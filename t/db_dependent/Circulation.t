@@ -5891,8 +5891,10 @@ subtest 'Test CanBookBeIssued param ignore_reserves (Bug 35322)' => sub {
 
     my $homebranch    = $builder->build( { source => 'Branch' } );
     my $holdingbranch = $builder->build( { source => 'Branch' } );
-    my $patron_1      = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
-    my $patron_2      = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron_1      = $builder->build_object(
+        { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron_2 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $item = $builder->build_sample_item(
         {
@@ -5935,11 +5937,17 @@ subtest 'Test CanBookBeIssued param ignore_reserves (Bug 35322)' => sub {
     set_userenv($holdingbranch);
 
     my ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->barcode, undef, undef, 0 );
-    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is(
+        keys(%$error) + keys(%$alerts), 0,
+        'There should not be any errors or alerts (impossible)' . str( $error, $question, $alerts )
+    );
     is( exists $question->{RESERVE_WAITING}, 1, 'RESERVE_WAITING is set' );
 
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->barcode, undef, undef, 1 );
-    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is(
+        keys(%$error) + keys(%$alerts), 0,
+        'There should not be any errors or alerts (impossible)' . str( $error, $question, $alerts )
+    );
     isnt( exists $question->{RESERVE_WAITING}, 1, 'RESERVE_WAITING is not set' );
 
 };
