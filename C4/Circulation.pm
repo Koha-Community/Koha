@@ -487,7 +487,7 @@ sub TooMany {
         my $rule_itemtype = $maxissueqty_rule->itemtype;
 
         my @types;
-        unless ( $rule_itemtype ) {
+        unless ( $rule_itemtype || $parent_maxissueqty_rule ) {
             # matching rule has the default item type, so count only
             # those existing loans that don't fall under a more
             # specific rule
@@ -519,7 +519,7 @@ sub TooMany {
         while ( my $c = $checkouts->next ) {
             my $itemtype = $c->item->effective_itemtype;
 
-            unless ( $rule_itemtype ) {
+            unless ( $rule_itemtype || $parent_maxissueqty_rule ) {
                 next if grep {$_ eq $itemtype} @types;
             } else {
                 next unless grep {$_ eq $itemtype} @types;
