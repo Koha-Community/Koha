@@ -6,6 +6,55 @@ return {
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
+        # Handle cases of roombookings plugin existing
+        if ( TableExists('bookings') ) {
+            if ( column_exists( 'bookings', 'bookingid' ) ) {
+                my $old_rooms_table         = 'booking_rooms';
+                my $old_rooms_index         = 'bookingrooms_idx';
+                my $old_bookings_table      = 'bookings';
+                my $old_bookings_index      = 'bookingbookings_idx';
+                my $old_equipment_table     = 'booking_equipment';
+                my $old_equipment_index     = 'bookingequipment_idx';
+                my $old_roomequipment_table = 'booking_room_equipment';
+                my $old_roomequipment_index = 'bookingroomequipment_idx';
+
+                my $prefix = 'bws_rr_';
+                our $rooms_table         = $prefix . $old_rooms_table;
+                our $rooms_index         = $prefix . $old_rooms_index;
+                our $bookings_table      = $prefix . $old_bookings_table;
+                our $bookings_index      = $prefix . $old_bookings_index;
+                our $equipment_table     = $prefix . $old_equipment_table;
+                our $equipment_index     = $prefix . $old_equipment_index;
+                our $roomequipment_table = $prefix . $old_roomequipment_table;
+                our $roomequipment_index = $prefix . $old_roomequipment_index;
+
+                $dbh->do(
+                    qq{
+                RENAME TABLE
+                $old_rooms_table TO $rooms_table,
+                $old_bookings_table TO $bookings_table,
+                $old_equipment_table TO $equipment_table,
+                $old_roomequipment_table TO $roomequipment_table,
+            }
+                );
+                $dbh->do(
+"ALTER TABLE $rooms_table RENAME INDEX $old_rooms_index TO $rooms_index"
+                );
+                $dbh->do(
+"ALTER TABLE $bookings_table RENAME INDEX $old_bookings_index TO $bookings_index"
+                );
+                $dbh->do(
+"ALTER TABLE $equipment_table RENAME INDEX $old_equipment_index TO $equipment_index"
+                );
+                $dbh->do(
+"ALTER TABLE $roomequipment_table RENAME INDEX $old_roomequipment_index TO $roomequipment_index"
+                );
+
+                say "Migrated room reservations plugin to it's own namespace";
+                say "You MUST upgrade to the latest room reservation plugin to continue using it";
+            }
+        }
+
         if ( !TableExists('bookings') ) {
             $dbh->do(
                 q{
