@@ -42,6 +42,7 @@ $dbh->do(q|DELETE FROM borrowers|);
 #$dbh->do(q|DELETE FROM branches|);
 $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM accountlines|);
+$dbh->do(q|DELETE FROM itemtypes WHERE parent_type IS NOT NULL|);
 $dbh->do(q|DELETE FROM itemtypes|);
 Koha::CirculationRules->search()->delete();
 
@@ -812,7 +813,7 @@ subtest 'empty string means unlimited' => sub {
 };
 
 subtest 'itemtype group tests' => sub {
-    plan tests => 17;
+    plan tests => 20;
 
     t::lib::Mocks::mock_preference( 'CircControl', 'ItemHomeLibrary' );
     Koha::CirculationRules->set_rules(
@@ -821,7 +822,7 @@ subtest 'itemtype group tests' => sub {
             categorycode => '*',
             itemtype     => '*',
             rules        => {
-                maxissueqty       => '',
+                maxissueqty       => '5',
                 maxonsiteissueqty => '',
                 issuelength       => 1,
                 firstremind       => 1,      # 1 day of grace
@@ -886,10 +887,17 @@ subtest 'itemtype group tests' => sub {
             itype         => $child_itype_1->{itemtype}
         }
     );
-
-    my $all_iq_rule = $builder->build(
+    my $checkout_item = $builder->build_sample_item(
         {
-            source => 'CirculationRule',
+            homebranch    => $branch->{branchcode},
+            holdingbranch => $branch->{branchcode},
+            itype         => $parent_itype->{itemtype}
+        }
+    );
+
+    my $all_iq_rule = $builder->build_object(
+        {
+            class => 'Koha::CirculationRules',
             value  => {
                 branchcode   => $branch->{branchcode},
                 categorycode => $category->{categorycode},
@@ -903,16 +911,15 @@ subtest 'itemtype group tests' => sub {
         undef, 'Checkout allowed, using all rule of 1' );
 
     #Checkout an item
-    my $issue =
-      C4::Circulation::AddIssue( $patron, $item->barcode, dt_from_string() );
+    my $issue = C4::Circulation::AddIssue( $patron, $checkout_item->barcode, dt_from_string() );
     like( $issue->issue_id, qr|^\d+$|, 'The issue should have been inserted' );
 
-    #Patron has 1 checkout of child itype1
+    #Patron has 1 checkout of parent itemtype {{{{ child itype1
 
-    my $parent_iq_rule = $builder->build(
+    my $parent_iq_rule = $builder->build_object(
         {
-            source => 'CirculationRule',
-            value  => {
+            class => 'Koha::CirculationRules',
+            value => {
                 branchcode   => $branch->{branchcode},
                 categorycode => $category->{categorycode},
                 itemtype     => $parent_itype->{itemtype},
@@ -922,8 +929,35 @@ subtest 'itemtype group tests' => sub {
         }
     );
 
-    is( C4::Circulation::TooMany( $patron, $item ),
-        undef, 'Checkout allowed, using parent type rule of 2' );
+    is(
+        C4::Circulation::TooMany( $patron, $item ),
+        undef, 'Checkout allowed, using parent type rule of 2'
+    );
+
+    $all_iq_rule->rule_value(5)->store;
+    $parent_iq_rule->rule_value(1)->store;
+
+    my $data = C4::Circulation::TooMany( $patron, $item );
+    my $rule = delete $data->{circulation_rule};
+    is( ref $rule, 'Koha::CirculationRule', 'Circulation rule was returned' );
+    is_deeply(
+        $data,
+        {
+            reason      => 'TOO_MANY_CHECKOUTS',
+            count       => 1,
+            max_allowed => 1,
+        },
+        'Checkout not allowed, using parent type rule of 1'
+    );
+
+    $parent_iq_rule->rule_value(2)->store;
+
+    is(
+        C4::Circulation::TooMany( $patron, $item ),
+        undef, 'Checkout allowed, using specific type of 1 and only parent type checked out'
+    );
+
+    $checkout_item->itype( $child_itype_1->{itemtype} )->store;
 
     my $child1_iq_rule = $builder->build_object(
         {
@@ -938,8 +972,8 @@ subtest 'itemtype group tests' => sub {
         }
     );
 
-    my $data = C4::Circulation::TooMany( $patron, $item );
-    my $rule = delete $data->{circulation_rule};
+    $data = C4::Circulation::TooMany( $patron, $item );
+    $rule = delete $data->{circulation_rule};
     is( ref $rule, 'Koha::CirculationRule', 'Circulation rule was returned' );
     is_deeply(
         $data,
@@ -1017,9 +1051,11 @@ subtest 'itemtype group tests' => sub {
     );
 
     #increase parent type to greater than specific
-    my $circ_rule_object =
-      Koha::CirculationRules->find( $parent_iq_rule->{id} );
-    $circ_rule_object->rule_value(4)->store();
+#    my $circ_rule_object =
+#      Koha::CirculationRules->find( $parent_iq_rule->{id} );
+#    $circ_rule_object->rule_value(4)->store();
+    $parent_iq_rule->rule_value(4)->store();
+
 
     is( C4::Circulation::TooMany( $patron, $item_1 ),
         undef, 'Checkout allowed, using specific type rule of 3' );
