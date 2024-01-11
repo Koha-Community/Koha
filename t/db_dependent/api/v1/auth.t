@@ -40,7 +40,7 @@ my $tx;
 
 subtest 'under() tests' => sub {
 
-    plan tests => 20;
+    plan tests => 23;
 
     $schema->storage->txn_begin;
 
@@ -103,6 +103,15 @@ subtest 'under() tests' => sub {
     $t->request_ok($tx)
       ->status_is(503)
       ->json_is('/error', 'System is under maintenance.');
+
+    # 503 (public while maintenance syspref activated)
+    t::lib::Mocks::mock_preference( 'OPACMaintenance', 1 );
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI',   1 );
+    $tx = $t->ua->build_tx( GET => "/api/v1/public/libraries" );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(503)->json_is( '/error', 'Under maintenance' );
+    t::lib::Mocks::mock_preference( 'OPACMaintenance', 0 );
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI',   0 );
 
     $schema->storage->txn_rollback;
 };
