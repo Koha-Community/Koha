@@ -450,7 +450,7 @@ sub search_ordered {
 
     $self = $self->search($params, $attributes);
 
-    my @biblionumbers = uniq $self->get_column('biblionumber');
+    my @biblionumbers = uniq $self->search(undef,{distinct=>1})->get_column('biblionumber');
 
     if ( scalar ( @biblionumbers ) == 1
         && Koha::Biblios->find( $biblionumbers[0] )->serial )
