@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 61;
+use Test::More tests => 62;
 use Data::Dumper;
 
 use C4::Calendar qw( new insert_single_holiday );
@@ -2090,4 +2090,52 @@ subtest "GetItemsAvailableToFillHoldsRequestsForBib" => sub {
     is( scalar @$items, 2, "Two items without active transfers correctly retrieved");
     is_deeply( [$items->[0]->{itemnumber},$items->[1]->{itemnumber}],[$item_2->itemnumber,$item_3->itemnumber],"Correct two items retrieved");
 
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Remove item from holds queue on checkout' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $lib = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $patron1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $lib->branchcode }
+        }
+    );
+    my $patron2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $lib->branchcode }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        { homebranch => $lib->branchcode, holdingbranch => $lib->branchcode } );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $lib->branchcode } );
+
+    my $hold_id = AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $patron2->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => undef,
+            priority       => 1
+        }
+    );
+
+    C4::HoldsQueue::CreateQueue();
+
+    is( Koha::Hold::HoldsQueueItems->search({ itemnumber => $item->id })->count(), 1, "Item is found in the holds queue" );
+
+    AddIssue( $patron1, $item->barcode, dt_from_string );
+
+    is( Koha::Hold::HoldsQueueItems->search({ itemnumber => $item->id })->count(), 0, "Item is no longer found in the holds queue" );
+
+    $schema->storage->txn_rollback;
 };
