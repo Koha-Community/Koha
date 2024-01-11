@@ -38,6 +38,8 @@ use C4::ImportBatch qw(
     GetImportBatchNoMatchAction
     GetImportBatchItemAction
     GetImportBatch
+    GetImportBatchRangeDesc
+    GetNumberOfNonZ3950ImportBatches
 );
 use C4::Search      qw( FindDuplicate );
 use C4::Acquisition qw( NewBasket );
@@ -168,19 +170,13 @@ sub _get_MarcFieldsToOrder_syspref_data {
 
 sub _get_MarcItemFieldsToOrder_syspref_data {
     my ($record) = @_;
-    my $syspref = C4::Context->preference('MarcItemFieldsToOrder');
-    $syspref = "$syspref\n\n";
-    my $yaml = eval { YAML::XS::Load( Encode::encode_utf8($syspref) ); };
-    if ($@) {
-        warn "Unable to parse $syspref syspref : $@";
-        return ();
-    }
+    my $syspref = C4::Context->yaml_preference('MarcItemFieldsToOrder');
     my @result;
     my @tags_list;
 
     # Check tags in syspref definition
-    for my $field_name ( keys %$yaml ) {
-        my @fields = split /\|/, $yaml->{$field_name};
+    for my $field_name ( keys %$syspref ) {
+        my @fields = split /\|/, $syspref->{$field_name};
         for my $field (@fields) {
             my ( $f, $sf ) = split /\$/, $field;
             next unless $f and $sf;
@@ -207,21 +203,21 @@ sub _get_MarcItemFieldsToOrder_syspref_data {
     if ( $tags_count->{count} ) {
         for ( my $i = 0 ; $i < $tags_count->{count} ; $i++ ) {
             my $r;
-            for my $field_name ( keys %$yaml ) {
-                my @fields = split /\|/, $yaml->{$field_name};
+            for my $field_name ( keys %$syspref ) {
+                my @fields = split /\|/, $syspref->{$field_name};
                 for my $field (@fields) {
                     my ( $f, $sf ) = split /\$/, $field;
                     next unless $f and $sf;
                     my $v = $fields_hash->{$f}[$i] ? $fields_hash->{$f}[$i]->subfield($sf) : undef;
                     $r->{$field_name} = $v if ( defined $v );
-                    last if $yaml->{$field};
+                    last if $syspref->{$field};
                 }
             }
             push @result, $r;
         }
     }
 
-    return $result[0];
+    return \@result;
 }
 
 =head3 _verify_number_of_fields
@@ -526,7 +522,7 @@ sub import_batches_list {
     };
 }
 
-=head3
+=head3 import_biblios_list
 
 For an import batch, this function reads the files and creates all the relevant data pertaining to that file
 It then returns this to the template to be shown in the UI
@@ -626,32 +622,33 @@ sub import_biblios_list {
         my @itemlist           = ();
         my $all_items_quantity = 0;
         my $alliteminfos       = _get_MarcItemFieldsToOrder_syspref_data($marcrecord);
-        if ( !$alliteminfos || %$alliteminfos != -1 ) {
+        if ( $alliteminfos != -1 ) {
+            foreach my $iteminfos (@$alliteminfos) {
+                # Quantity is required, default to one if not supplied
+                my $quantity = delete $iteminfos->{quantity} || 1;
 
-            # Quantity is required, default to one if not supplied
-            my $quantity = delete $alliteminfos->{quantity} || 1;
+                # Handle incorrectly named original parameters for MarcItemFieldsToOrder
+                $iteminfos->{location}   = delete $iteminfos->{loc}    if $iteminfos->{loc};
+                $iteminfos->{copynumber} = delete $iteminfos->{copyno} if $iteminfos->{copyno};
 
-            # Handle incorrectly named original parameters for MarcItemFieldsToOrder
-            $alliteminfos->{location}   = delete $alliteminfos->{loc}    if $alliteminfos->{loc};
-            $alliteminfos->{copynumber} = delete $alliteminfos->{copyno} if $alliteminfos->{copyno};
+                # Convert budget code to a budget id
+                my $item_budget_code = delete $iteminfos->{budget_code};
+                if ($item_budget_code) {
+                    my $item_budget = GetBudgetByCode($item_budget_code);
+                    $iteminfos->{budget_id} = $item_budget->{budget_id} || $budget_id;
+                }
 
-            # Convert budget code to a budget id
-            my $item_budget_code = delete $alliteminfos->{budget_code};
-            if ($item_budget_code) {
-                my $item_budget = GetBudgetByCode($item_budget_code);
-                $alliteminfos->{budget_id} = $item_budget->{budget_id} || $budget_id;
-            }
+                # Clone the item data for the needed quantity
+                # Add the incremented item id for each item in that quantity
+                for ( my $i = 0 ; $i < $quantity ; $i++ ) {
+                    my $itemrecord = {%$iteminfos};
+                    $itemrecord->{item_id} = $item_id++;
 
-            # Clone the item data for the needed quantity
-            # Add the incremented item id for each item in that quantity
-            for ( my $i = 0 ; $i < $quantity ; $i++ ) {
-                my $itemrecord = {%$alliteminfos};
-                $itemrecord->{item_id} = $item_id++;
-
-                # Rename price field to match UI
-                $itemrecord->{itemprice} = delete $itemrecord->{price} if $itemrecord->{price};
-                $all_items_quantity++;
-                push @itemlist, $itemrecord;
+                    # Rename price field to match UI
+                    $itemrecord->{itemprice} = delete $itemrecord->{price} if $itemrecord->{price};
+                    $all_items_quantity++;
+                    push @itemlist, $itemrecord;
+                }
             }
 
             $cellrecord{'iteminfos'} = \@itemlist;
