@@ -2114,8 +2114,7 @@ subtest 'Remove item from holds queue on checkout' => sub {
         }
     );
 
-    my $item = $builder->build_sample_item(
-        { homebranch => $lib->branchcode, holdingbranch => $lib->branchcode } );
+    my $item = $builder->build_sample_item( { homebranch => $lib->branchcode, holdingbranch => $lib->branchcode } );
 
     t::lib::Mocks::mock_userenv( { branchcode => $lib->branchcode } );
 
@@ -2131,11 +2130,17 @@ subtest 'Remove item from holds queue on checkout' => sub {
 
     C4::HoldsQueue::CreateQueue();
 
-    is( Koha::Hold::HoldsQueueItems->search({ itemnumber => $item->id })->count(), 1, "Item is found in the holds queue" );
+    is(
+        Koha::Hold::HoldsQueueItems->search( { itemnumber => $item->id } )->count(), 1,
+        "Item is found in the holds queue"
+    );
 
     AddIssue( $patron1, $item->barcode, dt_from_string );
 
-    is( Koha::Hold::HoldsQueueItems->search({ itemnumber => $item->id })->count(), 0, "Item is no longer found in the holds queue" );
+    is(
+        Koha::Hold::HoldsQueueItems->search( { itemnumber => $item->id } )->count(), 0,
+        "Item is no longer found in the holds queue"
+    );
 
     $schema->storage->txn_rollback;
 };
