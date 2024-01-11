@@ -1729,6 +1729,12 @@ sub AddIssue {
                         %$issue_attributes,
                     }
                 )->store;
+
+                # Ensure item is no longer listed in the holds queue
+                $dbh->do(
+                    q{DELETE tmp_holdsqueue, hold_fill_targets FROM tmp_holdsqueue LEFT JOIN hold_fill_targets USING ( itemnumber ) WHERE itemnumber = ?},
+                    undef, $item_object->id
+                );
             }
             $issue->discard_changes;
             $patron->update_lastseen('check_out');
