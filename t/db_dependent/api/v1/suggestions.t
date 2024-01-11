@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -417,6 +417,89 @@ subtest 'delete() tests' => sub {
     $t->delete_ok(
         "//$userid:$password@/api/v1/suggestions/$suggestion_id")
       ->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Permissions tests' => sub {
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**4 }    # 4 = catalogue
+        }
+    );
+
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $patron_id = $patron->id;
+
+    my $suggestion = $builder->build_object(
+        {
+            class => 'Koha::Suggestions',
+            value => { suggestedby => $patron_id, STATUS => 'ASKED' }
+        }
+    );
+    my $suggestion_data = $suggestion->to_api;
+    delete $suggestion_data->{suggestion_id};
+    $suggestion->delete;
+
+    # Unauthorized attempt to write
+    $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+        ->status_is( 403, 'SWAGGER3.2.1' );
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->id,
+                module_bit     => 12,                     # 12 = suggestions
+                code           => 'suggestions_create',
+            },
+        }
+    );
+
+    # Authorized attempt to write
+    my $generated_suggestion =
+        $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
+        ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        Location => qr|^\/api\/v1\/suggestions\/\d*|,
+        'SWAGGER3.4.1'
+    )->tx->res->json;
+
+    my $suggestion_id = $generated_suggestion->{suggestion_id};
+    is_deeply(
+        $generated_suggestion,
+        Koha::Suggestions->find($suggestion_id)->to_api,
+        'The object is returned'
+    );
+
+    $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")->status_is(403);
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->id,
+                module_bit     => 12,                     # 12 = suggestions
+                code           => 'suggestions_delete',
+            },
+        }
+    );
+
+    $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")->status_is( 204, 'SWAGGER3.2.4' )
+        ->content_is( q{}, 'SWAGGER3.3.4' );
 
     $schema->storage->txn_rollback;
 };
