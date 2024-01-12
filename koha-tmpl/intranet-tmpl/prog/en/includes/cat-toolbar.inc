@@ -235,7 +235,7 @@
     [% END %]
 [% END %]
 
-[% IF ( CAN_user_circulate_manage_bookings && Biblio.CanBook(biblionumber) ) %]
+[% IF ( CAN_user_circulate_manage_bookings && biblio.items.filter_by_bookable.count ) %]
 <div class="btn-group"><button id="placbooking" class="btn btn-default" data-toggle="modal" data-target="#placeBookingModal" data-biblionumber="[% biblionumber | html %]"><i class="fa fa-calendar"></i> Place booking</button></div>
 [% END %]
 

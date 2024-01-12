@@ -50,7 +50,7 @@
             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio_object_id | url  %]">Items</a>
         </li>
 
-        [% IF ( Biblio.CanBook(biblio_object_id) && CAN_user_circulate_manage_bookings ) %]
+        [% IF ( CAN_user_circulate_manage_bookings && biblio.items.filter_by_bookable.count ) %]
         [%- IF ( bookingsview ) -%]
         <li class="active">
         [%- ELSE -%]
