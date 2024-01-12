@@ -1238,7 +1238,7 @@
                         <p>
                             <label for="item_group" class="required">Item group: </label>
                             <select name="item_group" id="item-group-add-form-select">
-                                [% FOREACH ig IN biblio.item_groups %]
+                                [% FOREACH ig IN biblio.item_groups.search({}, {order_by => 'display_order'}) %]
                                     <option value="[% ig.id | html %]">[% ig.description | html %]</option>
                                 [% END %]
                             </select>
