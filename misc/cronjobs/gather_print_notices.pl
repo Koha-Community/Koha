@@ -128,7 +128,7 @@ if ( @emails ) {
             {
                 directory => $output_directory,
                 files     => $files,
-                from      => C4::Context->preference('KohaAdminEmailAddress'),    # Should be replaced if bug 8000 is pushed
+                from      => C4::Context->preference('KohaAdminEmailAddress'),
                 to        => $email,
                 transport => $transport,
             }
