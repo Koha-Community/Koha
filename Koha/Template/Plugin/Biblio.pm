@@ -26,7 +26,6 @@ use Koha::Holds;
 use Koha::Biblios;
 use Koha::Database;
 use Koha::Patrons;
-use Koha::ArticleRequests;
 use Koha::Recalls;
 
 # Do not use HoldsCount, it is deprecated and will be removed in a future release.
@@ -38,18 +37,6 @@ sub HoldsCount {
     my $holds = Koha::Holds->search( { biblionumber => $biblionumber } );
 
     return $holds->count();
-}
-
-sub ArticleRequestsActiveCount {
-    my ( $self, $biblionumber ) = @_;
-
-    my $ar = Koha::ArticleRequests->search(
-        {
-            biblionumber => $biblionumber
-        }
-    )->filter_by_current;
-
-    return $ar->count();
 }
 
 sub CanArticleRequest {

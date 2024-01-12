@@ -192,7 +192,7 @@
             </span>
         [% END %]
 
-        [% IF ( article_requests_count = Biblio.ArticleRequestsActiveCount( biblionumber ) ) %]
+        [% IF ( article_requests_count = biblio.article_requests.filter_by_current.count ) %]
             <span class="results_summary">
                 <span class="label">Article requests:</span>
                 <span class="number_box">
