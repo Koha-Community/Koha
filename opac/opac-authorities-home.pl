@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use URI::Escape qw( uri_escape_utf8 );
+use Array::Utils qw(intersect);
+
 use C4::Auth qw( get_template_and_user );
 
 use C4::Context;
@@ -55,20 +57,10 @@ if ( $op eq "do_search" ) {
     my @value = $query->multi_param('value');
     $value[0] ||= q||;
 
-    my $valid_marc_list = {
-        "all"       => 1,
-        "match"     => 1,
-        "mainentry" => 1,
-    };
-    my @marclist = ();
-    foreach my $entry (@input_marclist) {
-        if ( $valid_marc_list->{$entry} ) {
-            push( @marclist, $entry );
-        }
-    }
-    if ( !@marclist ) {
-        push( @marclist, 'all' );
-    }
+    # validation of "Where"
+    my @valid_marc_list = qw( all match mainentry );
+    my @marclist        = intersect( @input_marclist, @valid_marc_list );
+    @marclist = ('all') unless @marclist;
 
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
