@@ -31,8 +31,11 @@ use Koha::Recalls;
 
 use Koha::DateUtils qw(dt_from_string);
 
+# Do not use HoldsCount, it is deprecated and will be removed in a future release.
 sub HoldsCount {
     my ( $self, $biblionumber ) = @_;
+
+    warn "HoldsCount is deprecated, you should use biblio.holds.count instead";
 
     my $holds = Koha::Holds->search( { biblionumber => $biblionumber } );
 

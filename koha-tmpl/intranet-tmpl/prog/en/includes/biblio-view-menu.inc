@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% USE Biblio %]
-[% SET biblio_object_id = object || biblionumber || biblio.biblionumber %]
+[% SET biblio_object_id = biblio.biblionumber %]
 
 <div id="menu">
     <ul>
@@ -66,7 +66,7 @@
         [%- ELSE -%]
         <li>
         [%- END -%]
-            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio_object_id | url  %]">Holds ([% Biblio.HoldsCount( biblio_object_id ) | html %])</a>
+            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio_object_id | url  %]">Holds ([% biblio.holds.count | html %])</a>
         </li>
         [%- END -%]
 

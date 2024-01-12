@@ -570,11 +570,11 @@
                                                         <span class="noholdstext">No holds allowed</span>
                                                     [% ELSE %]
                                                         [% IF CAN_user_reserveforothers_place_holds %]
-                                                            <a id="reserve_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])</a>
+                                                            <a id="reserve_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Holds ([% SEARCH_RESULT.biblio_object.holds.count | html %])</a>
                                                             [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;findborrower=[% holdfor_patron.cardnumber | uri %]">Place hold for [% INCLUDE 'patron-title.inc' patron => holdfor_patron no_title => 1 no_cardnumber => 1 %]</a></span>[% END %]
                                                             [% IF ( holdforclub ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;club=[% holdforclub | uri %]">Place hold for [% holdforclub_name | html %]</a></span>[% END %]
                                                         [% ELSE %]
-                                                            <span>Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])</span>
+                                                            <span>Holds ([% SEARCH_RESULT.biblio_object.holds.count | html %])</span>
                                                         [% END %]
                                                     [% END # /IF SEARCH_RESULT.norequests %]
                                                     [% IF Koha.Preference('UseRecalls') and CAN_user_recalls %]

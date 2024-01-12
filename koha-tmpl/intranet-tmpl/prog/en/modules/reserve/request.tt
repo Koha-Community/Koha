@@ -1032,7 +1032,7 @@
 
             [% UNLESS ( patron ) %]
                 [% UNLESS borrowers %]
-                    [% SET hold_count = Biblio.HoldsCount( biblio.biblionumber ) | html %]
+                    [% SET hold_count = biblio.holds.count | html %]
                     [% IF hold_count %]
                         <label for ="always_show_holds">Always show holds</label>
                         [% IF always_show_holds == 'DONT' %]
