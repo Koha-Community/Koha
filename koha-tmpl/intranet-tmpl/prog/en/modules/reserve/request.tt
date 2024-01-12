@@ -1515,7 +1515,7 @@
                                 .closest('tr')
                                 .find(".pickup_locations").val() === null) {
 
-                        msg = _("- Please select a pickup location for the item" + "\n")
+                        msg = (_("- Please select a pickup location for the item") + "\n");
                     }
                 }
                 else {
@@ -1523,7 +1523,7 @@
                 }
             } else {
                 if( $("#pickup").length < 1 || $("#pickup").val() == "" || $('#pickup').val() === null ){
-                    msg = _("- Please select a pickup location for this hold" + "\n");
+                    msg = (_("- Please select a pickup location for this hold") + "\n");
                 }
             }
 
