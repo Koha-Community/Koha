@@ -130,7 +130,7 @@
         [%- ELSE -%]
         <li>
         [%- END -%]
-            <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% biblio_object_id | url %]">Recalls ([% Biblio.RecallsCount( biblio_object_id ) | html %])</a>
+            <a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% biblio_object_id | url %]">Recalls ([% biblio.recalls.search( completed => 0 ).count | html %])</a>
         </li>
         [%- END -%]
     </ul>

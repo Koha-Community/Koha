@@ -61,6 +61,7 @@ sub CanArticleRequest {
     return $biblio ? $biblio->can_article_request( $borrower ) : 0;
 }
 
+# Do not use RecallsCount, it is deprecated and will be removed in a future release.
 sub RecallsCount {
     my ( $self, $biblionumber ) = @_;
 

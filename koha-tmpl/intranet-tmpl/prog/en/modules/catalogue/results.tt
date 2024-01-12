@@ -566,7 +566,7 @@
                                                         [% END %]
                                                     [% END # /IF SEARCH_RESULT.norequests %]
                                                     [% IF Koha.Preference('UseRecalls') and CAN_user_recalls %]
-                                                        | <a id="recall_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Recalls ([% Biblio.RecallsCount( SEARCH_RESULT.biblionumber ) | html %])</a>
+                                                        | <a id="recall_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Recalls ([% SEARCH_RESULT.biblio_object.recalls.search( completed => 0 ).count | html %])</a>
                                                     [% END %]
 
                                                     [% IF Koha.Preference('intranetbookbag') == 1 %]
