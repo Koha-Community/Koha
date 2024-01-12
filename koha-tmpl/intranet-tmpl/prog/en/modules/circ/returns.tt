@@ -420,6 +420,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
+                                                [% INCLUDE 'csrf-token.inc' %]
                                                 <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
                                                 <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                 <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
@@ -444,6 +445,7 @@
                             <div class="modal-dialog modal-wide">
                                 <div class="modal-content">
                                     <form method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <div class="modal-header">
                                             <h3>Please confirm bundle contents for [% item.barcode | html %]</h3>
                                         </div>
@@ -530,6 +532,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <form method="post" action="returns.pl" name="mainform" id="mainform">
+                                            [% INCLUDE 'csrf-token.inc' %]
                                             <div class="modal-header">
                                                 <h3>
                                                     Cannot check in
@@ -574,6 +577,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" name="wrongtransferform" id="wrongtransferform">
+                                                [% INCLUDE 'csrf-token.inc' %]
                                                 <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                 <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                                                 <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
@@ -619,6 +623,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" class="confirm">
+                                                [% INCLUDE 'csrf-token.inc' %]
                                                 <div class="modal-header">
                                                     <h3>
                                                         Hold found (item is already waiting):
@@ -733,6 +738,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" name="mainform" id="mainform">
+                                                [% INCLUDE 'csrf-token.inc' %]
 
                                                 <input type="hidden" name="print_slip" value="0" />
 
@@ -791,6 +797,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" class="confirm">
+                                                [% INCLUDE 'csrf-token.inc' %]
 
                                                 <input type="hidden" name="print_slip" value="0" />
 
@@ -907,6 +914,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="/cgi-bin/koha/circ/returns.pl" class="confirm">
+                                                [% INCLUDE 'csrf-token.inc' %]
 
                                                 <div class="modal-header">
                                                     <h3>
@@ -1008,6 +1016,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="/cgi-bin/koha/circ/returns.pl" class="confirm">
+                                                [% INCLUDE 'csrf-token.inc' %]
 
                                                 <div class="modal-header">
                                                     <h3>
@@ -1100,6 +1109,7 @@
                         </div>
 
                         <form id="checkin-form" method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off" >
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset id="circ_returns_checkin">
                                 <div class="show_checkin_dialog" style="float:right;display:none"><button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="Show the last checkin message"><i class="fa fa-info"></i></button></div>
                                 <h1>Check in</h1>

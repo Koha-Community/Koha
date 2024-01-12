@@ -6,6 +6,7 @@
 <h1>Search</h1>
 
 <form name="f" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
 	<input type="hidden" name="op" value="do_search" />
 	<input type="hidden" name="type" value="intranet" />
 	<div class="details">

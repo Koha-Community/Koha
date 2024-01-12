@@ -197,6 +197,7 @@
             <h1>[% tx("New field for table '{table_name}'", { table_name = tablename } ) | html %]</h1>
         [% END %]
         <form action="" name="add_form" id="add_field" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <fieldset class="rows">
                 <ol>
                     <li>

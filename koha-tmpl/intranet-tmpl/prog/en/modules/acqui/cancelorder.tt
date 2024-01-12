@@ -36,6 +36,7 @@
 
       [% UNLESS ( confirmcancel ) %]
       <form method="post" action="">
+          [% INCLUDE 'csrf-token.inc' %]
         <div class="dialog alert">
           <h1>Are you sure you want to cancel this order ([% ordernumber | html %])</h1>
           <p>

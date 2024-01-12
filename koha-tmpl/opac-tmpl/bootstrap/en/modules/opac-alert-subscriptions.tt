@@ -71,6 +71,7 @@
                                         </td>
                                         <td class="actions">
                                             <form action="/cgi-bin/koha/opac-alert-subscribe.pl" method="post" class="unsubscribe" data-title="[% sub.biblio.title | html %] [% sub.biblio.subtitle | html %]" data-patron="[% INCLUDE 'patron-title.inc' no_html=1 patron=logged_in_user%]">
+                                                [% INCLUDE 'csrf-token.inc' %]
                                                 <input type="hidden" name="subscriptionid" value="[% sub.subscriptionid | html %]">
                                                 <input type="hidden" name="referer" value="[% referer | html %]">
                                                 <input type="hidden" name="biblionumber" value="[% sub.biblionumber | html %]">

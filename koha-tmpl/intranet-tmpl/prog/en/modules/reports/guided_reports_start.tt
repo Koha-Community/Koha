@@ -267,6 +267,7 @@
                                     [% END %]
 
                                     <form action="/cgi-bin/koha/reports/guided_reports.pl" id="reports_form" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="phase" value="Delete Multiple" />
                                         <table id="table_reports">
                                             <thead>
@@ -515,6 +516,7 @@
                 [% IF ( build2 ) %]
                     <h1>Build a report</h1>
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="area" value="[% area | html %]" />
                         <input type="hidden" name="public" value="[% public | html %]" />
                         <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
@@ -546,6 +548,7 @@
                     <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
 
                     <form id="column_submit" action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="area" value="[% area | html %]" />
                         <input type="hidden" name="type" value="[% type | html %]" />
                         <input type="hidden" name="public" value="[% public | html %]" />
@@ -598,6 +601,7 @@
                 [% IF ( build4 ) %]
                     <h1>Build a report</h1>
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" >
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="area" value="[% area | html %]" />
                         <input type="hidden" name="type" value="[% type | html %]" />
                         <input type="hidden" name="column" value="[% column | html %]" />
@@ -686,6 +690,7 @@
                     <h1>Build a report</h1>
                     <h3>Step 5 of 6: Pick which columns to total</h3>
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="area" value="[% area | html %]" />
                         <input type="hidden" name="type" value="[% type | html %]" />
                         <input type="hidden" name="column" value="[% column | html %]" />
@@ -724,6 +729,7 @@
                     <h1>Build a report</h1>
                     <h3>Step 6 of 6: Choose how you want the report ordered</h3>
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="area" value="[% area | html %]" />
                         <input type="hidden" name="type" value="[% type | html %]" />
                         <input type="hidden" name="column" value="[% column | html %]" />
@@ -766,6 +772,7 @@
                     </p>
 
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="sql" value="[% sql | html %]" />
                         <input type="hidden" name="type" value="[% type | html %]" />
                         <input type="hidden" name="public" value="[% public | html %]" />
@@ -779,6 +786,7 @@
 
                 [% IF ( save ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="sql" value="[% sql | html %]" />
                         <input type="hidden" name="type" value="[% type | html %]" />
                         <input type="hidden" name="area" value="[% area | html %]" />
@@ -936,6 +944,7 @@
                         [% IF ( execute ) %]
                             [% UNLESS ( errors ) %]
                                 <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="batch_record_modification" target="_blank">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="recordtype" value="biblio" />
                                     <input type="hidden" name="op" value="list" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
@@ -945,6 +954,7 @@
                                 </form>
 
                                 <form method="POST" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="batch_record_deletion" target="_blank">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="recordtype" value="biblio" />
                                     <input type="hidden" name="op" value="list" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
@@ -954,6 +964,7 @@
                                 </form>
 
                                 <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_modification" target="_blank">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="show" />
                                     [% FOREACH result IN results %]
                                         [% FOREACH cells IN result.cells %]
@@ -969,6 +980,7 @@
                                 </form>
 
                                 <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_deletion" target="_blank">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="show" />
                                     <input type="hidden" name="del" value="1" />
                                     [% FOREACH result IN results %]
@@ -999,6 +1011,7 @@
                                 </form>
 
                                 <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification" target="_blank">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="show" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">
@@ -1007,6 +1020,7 @@
                                 </form>
 
                                 <form action="/cgi-bin/koha/patroncards/edit-batch.pl" id="patron_card_creator" method="post" target="_blank">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="add" />
                                     <input type="hidden" name="batch_id" value="0" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
@@ -1230,6 +1244,7 @@
                 [% IF ( create ) %]
                     <h1>Create from SQL</h1>
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <legend>Create report from SQL</legend>
                             <ol>
@@ -1348,6 +1363,7 @@
 
                 [% IF ( editsql ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="id" value="[% id | html %]"/>
                         <fieldset class="rows">
                             <legend><h1>Edit SQL report</h1></legend>
@@ -1414,6 +1430,7 @@
 
                 [% IF ( errors ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <div class="dialog alert">
                             <strong>The following error was encountered:</strong><br />
                             [% FOREACH error IN errors %]

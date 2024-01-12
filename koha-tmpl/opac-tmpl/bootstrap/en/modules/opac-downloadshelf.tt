@@ -57,6 +57,7 @@
                                 </div>
                             [% ELSE %]
                                 <form method="post" action="/cgi-bin/koha/opac-downloadshelf.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset>
                                         <select name="format" id="dlformat" required="required">
                                             <legend>Choose format</legend>

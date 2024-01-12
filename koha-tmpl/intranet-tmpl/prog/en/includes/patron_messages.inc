@@ -338,6 +338,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="message_id" value="[% pm.message_id | html %]"/>
                         <div class="modal-header">
                             <h3>Edit message</h3>

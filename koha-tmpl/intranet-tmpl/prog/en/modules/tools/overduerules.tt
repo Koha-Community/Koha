@@ -42,6 +42,7 @@
             <p>Columns must be filled left to right: if the first column is blank, other columns will be ignored. </p>
         </div>
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl" id="selectlibrary">
+                [% INCLUDE 'csrf-token.inc' %]
             <label for="branch">Select a library:</label>
                 <select id="branch" name="branch">
                     <option value="">Default</option>
@@ -68,6 +69,7 @@
             [% END %]
             [% IF ( table ) %]
                 <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="save" />
                     <input type="hidden" name="branch" value="[% branch | html %]" />
                     <h3>Rules for overdue actions: [% IF ( branch ) %][% Branches.GetName( branch ) | html %][% ELSE %] default library [% END %]</h3>

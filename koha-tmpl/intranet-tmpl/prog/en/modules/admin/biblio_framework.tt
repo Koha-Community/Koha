@@ -115,6 +115,7 @@
         [% END %]
     </h1>
     <form action="/cgi-bin/koha/admin/biblio_framework.pl" name="Aform" method="post" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="add_validate" />
         <fieldset class="rows">
             <ol>
@@ -156,6 +157,7 @@
         [% ELSE %]
             <h1>[% tx("Confirm deletion of framework '{framework}' ({frameworkcode})?", { framework = framework.frameworktext, frameworkcode = framework.frameworkcode }) | html %]</h1>
             <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="delete_confirmed" />
                 <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this framework</button>
@@ -229,6 +231,7 @@
                         <h1 id="importLabelexportModal_[% framework.frameworkcode | html %][% frameworks.count | html %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv or .ods)</h1>
                     </div> <!-- /.modal-header -->
                     <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_default" id="form_i_default" method="post" enctype="multipart/form-data" class="form_import">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <div class="modal-body">
                             <input type="hidden" name="frameworkcode" value="default" />
                             <input type="hidden" name="action" value="import" />
@@ -299,6 +302,7 @@
                             <h1 id="importLabelexportModal_[% loo.frameworkcode | html %][% loop.count | html %]">Import [% loo.frameworkcode | html %] framework structure (fields and subfields) from a spreadsheet file (.csv or .ods)</h1>
                         </div> <!-- /.modal-header -->
                         <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% loo.frameworkcode | html %]" id="form_i_[% loo.frameworkcode | html %]" method="post" enctype="multipart/form-data" class="form_import">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <div class="modal-body">
                                 <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode | html %]" />
                                 <input type="hidden" name="action" value="import" />

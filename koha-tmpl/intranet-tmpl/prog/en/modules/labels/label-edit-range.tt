@@ -38,6 +38,7 @@
                     [% INCLUDE 'labels-toolbar.inc' %]
                     <h1>Print barcode range</h1>
                     <form name="add_by_number" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="add" />
                         <fieldset class="rows">
                             <ol>

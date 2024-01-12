@@ -4,6 +4,7 @@
     <div class="tab-content">
         <div id="currency_search" role="tabpanel" class="tab-pane active">
             <form action="[% script_name | html %]" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="form-title">
                     <label class="control-label" for="description"><span class="control-text">Search currencies</span> <i class="fa-solid fa-fw fa-dollar-sign" aria-hidden="true"></i></label>
                 </div>

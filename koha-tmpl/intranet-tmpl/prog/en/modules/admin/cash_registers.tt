@@ -103,6 +103,7 @@
                     [% END %]
                 </h1>
                 <form action="/cgi-bin/koha/admin/cash_registers.pl" id="Aform" name="Aform" class="validated" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
 
                     <fieldset class="rows">
                         <input type="hidden" name="op" value="add_validate" />

@@ -124,6 +124,7 @@
                     [% END %]
 
                     <form action="/cgi-bin/koha/admin/authorised_values.pl" name="Aform" method="post" class="validated">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             [% IF action_add_category %]
                                 <ol>
@@ -312,6 +313,7 @@
                                 </form>
                                 [% UNLESS category.is_system %]
                                     <form id="delete_category" action="/cgi-bin/koha/admin/authorised_values.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="op" value="delete_category" />
                                         <input type="hidden" name="category_name" value="[% category.category_name | html %]" />
                                         <button type="submit"><i class="fa fa-plus"></i> Delete category '[% category.category_name | html %]' </button>

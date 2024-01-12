@@ -4,6 +4,7 @@
     <div class="tab-content">
         <div id="patron_category_search" role="tabpanel" class="tab-pane active">
             <form action="[% script_name | html %]" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="form-title">
                     <label class="control-label" for="category_search"><span class="control-text">Search patron categories</span> <i class="fa fa-fw fa-id-card" aria-hidden="true"></i></label>
                 </div>

@@ -72,6 +72,7 @@ Updated:<ul>
     [% END %]
     </ul>
 <form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]">
+    [% INCLUDE 'csrf-token.inc' %]
     <div class="noshow">
         [% FOREACH recycle_loo IN recycle_loop %]
         <input type="text" name="[% recycle_loo.param | html %]" value="[% recycle_loo.value | html %]" />
@@ -83,6 +84,7 @@ Updated:<ul>
 [% ELSE %]
 
 <form method="post" action="set-library.pl">
+    [% INCLUDE 'csrf-token.inc' %]
 [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
 <fieldset class="rows">
     <legend>Set library</legend>

@@ -132,6 +132,7 @@
 
 
 <form name="f" action="batchMod.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
      <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
      <input type="hidden" name="op" value="[% op | html %]" />
      <input type="hidden" name="searchid" value="[% searchid | html %]" />

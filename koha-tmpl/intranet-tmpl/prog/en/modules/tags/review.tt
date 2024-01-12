@@ -71,6 +71,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                 [% INCLUDE 'messages.inc' %]
 <h1>Tags</h1>
 <form method="post" action="/cgi-bin/koha/tags/review.pl">
+    [% INCLUDE 'csrf-token.inc' %]
     <h4>
     [% IF ( filter_approved_all ) %]<span>Displaying all terms</span>[% END %]
     [% IF ( filter_approved_ok ) %]<span>Displaying approved terms</span>[% END %]
@@ -212,6 +213,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
    <h4>Check lists</h4>
    <div class="description">Enter a word or phrase to check against approved/rejected lists: </div>
    <form method="post" action="/cgi-bin/koha/tags/review.pl">
+       [% INCLUDE 'csrf-token.inc' %]
    <input type="text" size="14" name="test" id="test" />
    <fieldset class="action"><button type="submit" value="Test" class="approval_btn btn btn-default btn-sm" id="test_button" name="op-test"><i class="fas fa-check-square" aria-hidden="true"></i> Test</button></fieldset>
    <div id="verdict">
@@ -232,6 +234,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 <div class="col-sm-2 col-sm-pull-10">
     <aside>
 <form method="post" action="/cgi-bin/koha/tags/review.pl">
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset class="brief">
   <h4>Filters</h4>
 	<ol>

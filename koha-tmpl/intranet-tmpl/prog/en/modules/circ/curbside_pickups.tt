@@ -127,6 +127,7 @@
                 [% END %]
 
                 <form method="post" class="refresh-form">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <p>
                         <input type="hidden" name="tab" id="current-tab" value="[% tab | html %]" />
                         <button type="submit" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>
@@ -216,6 +217,7 @@
                                                     </td>
                                                     <td>
                                                         <form method="post" class="form">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="mark-as-staged"/>
                                                             <input type="hidden" name="tab" value="to-be-staged"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
@@ -225,6 +227,7 @@
                                                         </form>
 
                                                         <form method="post" class="form">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cancel"/>
                                                             <input type="hidden" name="tab" value="to-be-staged"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
@@ -275,6 +278,7 @@
                                                     </td>
                                                     <td>
                                                         <form method="post" class="form">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="mark-patron-has-arrived"/>
                                                             <input type="hidden" name="tab" value="staged-and-ready"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
@@ -284,6 +288,7 @@
                                                         </form>
 
                                                         <form method="post" class="form">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="mark-as-delivered"/>
                                                             <input type="hidden" name="tab" value="staged-and-ready"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
@@ -293,6 +298,7 @@
                                                         </form>
 
                                                         <form method="post" class="form">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="mark-as-unstaged"/>
                                                             <input type="hidden" name="tab" value="staged-and-ready"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
@@ -343,6 +349,7 @@
                                                     </td>
                                                     <td>
                                                         <form method="post" class="form">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="mark-as-delivered"/>
                                                             <input type="hidden" name="tab" value="patron-is-outside"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
@@ -352,6 +359,7 @@
                                                         </form>
 
                                                         <form method="post" class="form">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="mark-as-staged"/>
                                                             <input type="hidden" name="tab" value="patron-is-outside"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
@@ -361,6 +369,7 @@
                                                         </form>
 
                                                         <form method="post" class="form">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="mark-as-unstaged"/>
                                                             <input type="hidden" name="tab" value="patron-is-outside"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
@@ -440,6 +449,7 @@
                             [% SET waiting_holds = patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
                             [% IF !policy.enable_waiting_holds_only || waiting_holds.count > 0 %]
                                 <form id="create-pickup" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset class="rows" style="float: none;">
                                         <input type="hidden" name="borrowernumber" value="[% patron.id | html %]"/>
                                         <input type="hidden" name="op" value="create-pickup"/>

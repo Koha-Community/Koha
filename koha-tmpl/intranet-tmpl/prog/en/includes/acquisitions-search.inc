@@ -3,6 +3,7 @@
     <div class="tab-content">
         <div id="supplier_search" role="tabpanel" class="tab-pane active">
             <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="form-title">
                     <label class="control-label" for="supplier"><span class="control-text">Vendor search</span> <i class="fa fa-fw fa-upload" aria-hidden="true"></i></label>
                 </div>
@@ -16,6 +17,7 @@
 
         <div id="orders_search" role="tabpanel" class="tab-pane">
             <form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="form-title">
                     <label class="control-label" for="order_title"><span class="control-text">Orders search</span> <i class="fa fa-fw fa-download" aria-hidden="true"></i></label>
                 </div>

@@ -59,6 +59,7 @@
                 </h1>
 
             <form method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl" class="validated">
+                [% INCLUDE 'csrf-token.inc' %]
                 [% IF course_id %]<input type="hidden" name="course_id" value="[% course_id | html %]" />[% END %]
                 <fieldset class="rows">
                     <legend>[% IF course_id %]Edit course[% ELSE %]Create course[% END %]</legend>

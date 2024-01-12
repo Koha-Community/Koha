@@ -46,6 +46,7 @@
 
     [% BLOCK subscriptions_table %]
         <form method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             [% IF closed %]
                 [% SET tab = 'closed' %]
             [% ELSE %]

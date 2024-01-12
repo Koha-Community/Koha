@@ -74,6 +74,7 @@
                     [% END %]
 
                     <form action="/cgi-bin/koha/admin/ill_batch_statuses.pl" name="Aform" method="post" class="validated">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="add_validate" />
                         <fieldset class="rows">
                             <ol>

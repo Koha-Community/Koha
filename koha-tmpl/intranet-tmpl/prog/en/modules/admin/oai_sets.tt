@@ -59,6 +59,7 @@
 
         [% IF ( op_new || op_mod ) %]
             <form method="post" action="/cgi-bin/koha/admin/oai_sets.pl" class="validated">
+                [% INCLUDE 'csrf-token.inc' %]
             [% IF ( op_new ) %]
                 <h1>New OAI set</h1>
                 <input type="hidden" name="op" value="savenew" />

@@ -35,6 +35,7 @@
                 </ul>
 
         <form name="f1" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
                         [% FOREACH biblio IN biblios %] <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
             <input type="hidden" name="confirmed" value="1" />
             [% IF ( shelfnumber ) %]<input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />[% END %]

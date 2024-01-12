@@ -2,6 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="/cgi-bin/koha/serials/serials-collection.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-body">
                     <fieldset class="rows">
                         <legend>Multi receiving</legend>

@@ -128,6 +128,7 @@
 
                         [% IF ( MY_TAGS ) %]
                         <form id="deletetags" method="post" action="opac-tags.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <table id="mytagst" class="table table-bordered table-striped">
                             <caption>Your tags</caption>
                                 <thead>

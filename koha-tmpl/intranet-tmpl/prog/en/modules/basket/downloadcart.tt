@@ -12,6 +12,7 @@
     <p>Your download should begin automatically.</p>
 [% ELSE %]
 <form method="post" action="/cgi-bin/koha/basket/downloadcart.pl">
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset class="rows">
 	<legend>Download cart</legend>
 	<ol><li>

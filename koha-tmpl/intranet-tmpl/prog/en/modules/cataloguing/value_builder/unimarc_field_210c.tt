@@ -15,6 +15,7 @@
 <h1>UNIMARC field 210c builder</h1>
     <h4>Search for authority type: EDITORS</h4>
         <form name="f" method="post" action="plugin_launcher.pl">
+            [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
             <input type="hidden" name="plugin_name" value="unimarc_field_210c.pl" />
             <input type="hidden" name="op" value="do_search" />

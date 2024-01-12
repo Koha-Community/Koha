@@ -40,6 +40,7 @@
                     <p> Important: Item types are what you apply circulation rules to. Circulation rules govern how your institution will lend its items: Checkout length, renewal policy, hold policy, etc. For example a circulation rule applied to the DVD item type may enforce a payment of $1.00 for checking out any DVD.</p>
 
                     <form id="createitemform" method="post" action="onboarding.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
                         <input type="hidden" name="step" value="4" />
                         <input type="hidden" name="op" value="add_validate_itemtype" />

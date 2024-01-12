@@ -124,6 +124,7 @@
                     [% END %]
 
                     <form action="editCollections.pl" method="post" class="validated">
+                        [% INCLUDE 'csrf-token.inc' %]
                         [% IF ( previousActionEdit ) %]
                             <input type="hidden" name="action" value="update" />
                             <input type="hidden" name="colId" value="[% editColId | html %]" />

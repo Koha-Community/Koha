@@ -20,6 +20,7 @@
 
     [% IF patron_categories %]
         <form method="post" action="update-child.pl">
+            [% INCLUDE 'csrf-token.inc' %]
             <fieldset>
                 <table id="catst">
                     <thead>

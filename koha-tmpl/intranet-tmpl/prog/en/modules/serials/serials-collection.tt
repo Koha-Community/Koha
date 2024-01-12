@@ -144,6 +144,7 @@
 
                 [% IF ( years ) %]
                     <form name="edition" action="/cgi-bin/koha/serials/serials-edit.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         [% WRAPPER tabs id= "subscription_years" %]
                             [% WRAPPER tabs_nav %]
                                 [% FOREACH year IN years %]

@@ -70,6 +70,7 @@
                         <p id="note1">Please note that information on any book still checked-out must be kept by the library no matter which privacy option you choose.</p>
                         <p id="note2">Please also note that the library staff can't update these values for you: it's your privacy!</p>
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-update-form">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <legend class="sr-only">Privacy rule</legend>
                             <input type="hidden" name="op" value="update_privacy" />
                             <fieldset>
@@ -153,16 +154,19 @@
                         <p>You can delete all your checkout and hold history immediately by clicking here. <strong>BE CAREFUL</strong>. Once you've confirmed the deletion, no one can retrieve the list!</p>
 
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-checkouts">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="delete_record" />
                             <input type="hidden" name="checkouts" value="1" />
                         </form>
 
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-holds">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="delete_record" />
                             <input type="hidden" name="holds" value="1" />
                         </form>
 
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-all">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="delete_record" />
                             <input type="hidden" name="all" value="1" />
                         </form>

@@ -31,6 +31,7 @@
                                 <p><a class="button close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid | html %]">Back to lists</a></p>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/opac-sendshelf.pl" method="post" id="sendshelfform">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset class="brief">
                                         <legend><h1>Sending your list</h1></legend>
                                         <label for="email">Email address:</label>

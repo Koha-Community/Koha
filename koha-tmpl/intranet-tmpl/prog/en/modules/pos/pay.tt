@@ -44,6 +44,7 @@
                 </p>
                 [% IF ( CAN_user_parameters_manage_cash_registers ) %]
                     <form action="/cgi-bin/koha/admin/cash_registers.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="add_form" />
                         <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
                     </form>
@@ -63,6 +64,7 @@
         [% END %]
 
         <form name="payForm" id="payForm" method="post" action="/cgi-bin/koha/pos/pay.pl">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="row">
 
                 <div class="col-md-6">

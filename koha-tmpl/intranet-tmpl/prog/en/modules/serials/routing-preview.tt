@@ -33,6 +33,7 @@
 <h1>Preview routing list for <em>[% title | html %]</em></h1>
 
 <form method="post" action="routing-preview.pl">
+    [% INCLUDE 'csrf-token.inc' %]
 <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
     <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
 <fieldset class="rows">

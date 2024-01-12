@@ -4,6 +4,7 @@
     <div class="tab-content">
         <div id="z3950_search" role="tabpanel" class="tab-pane active">
             <form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="form-title">
                     <label class="control-label" for="searchfield"><span class="control-text">Search Z39.50/SRU servers</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
                 </div>

@@ -63,6 +63,7 @@
                 [% IF ( op == 'show_form' ) %]
                     <h1>Batch patron modification</h1>
                     <form id="patron_batchmod_form" method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="show" />
 
                         [% WRAPPER tabs id= "batch_patron_options" %]
@@ -221,6 +222,7 @@
 
                     [% IF ( op == 'show' ) %]
                     <form name="f" action="modborrowers.pl" method="post" id="batchmod-borrowers-form">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="do" />
                         [% IF ( borrowers ) %]
                             <div class="btn-toolbar selections-toolbar"><a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-times"></i> Clear all</a></div>

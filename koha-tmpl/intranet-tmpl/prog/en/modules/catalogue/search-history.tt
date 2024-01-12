@@ -48,6 +48,7 @@
                         [% IF ( current_biblio_searches ) %]
                             <h2>Current session</h2>
                             <form id="current_cat" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <p class="selections-toolbar">
                                     <a class="CheckAll" data-form="current_cat" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                                     <span class="sep">|</span>
@@ -89,6 +90,7 @@
                         [% IF ( previous_biblio_searches ) %]
                             <h2>Previous sessions</h2>
                             <form id="previous_cat" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <p class="selections-toolbar">
                                     <a class="CheckAll" data-form="previous_cat" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                                     <span class="sep">|</span>
@@ -132,6 +134,7 @@
                         [% IF ( current_authority_searches ) %]
                             <h2>Current session</h2>
                             <form id="current_auth" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <p class="selections-toolbar">
                                     <a class="CheckAll" data-form="current_auth" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                                     <span class="sep">|</span>
@@ -173,6 +176,7 @@
                         [% IF ( previous_authority_searches ) %]
                             <h2>Previous sessions</h2>
                             <form id="previous_auth" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <p class="selections-toolbar">
                                     <a class="CheckAll" data-form="previous_auth" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                                     <span class="sep">|</span>

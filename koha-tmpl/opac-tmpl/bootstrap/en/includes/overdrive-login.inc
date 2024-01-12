@@ -8,6 +8,7 @@
                 </button>
             </div>
             <form action="#" method="post" id="overdrive-login-form">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-body">
                         <fieldset class="brief">
                             <label for="ODpassword">Password:</label>

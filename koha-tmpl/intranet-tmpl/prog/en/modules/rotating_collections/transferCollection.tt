@@ -72,6 +72,7 @@
                 [% ELSE %]
                     <div>
                         <form action="transferCollection.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="colId" value="[% colId | html %]" />
                             <fieldset class="rows">
                                 <ol>

@@ -83,6 +83,7 @@
                 [% END %]
 
                 <form method="post" action="/cgi-bin/koha/members/files.pl" enctype="multipart/form-data">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
                         <legend>Upload new file</legend>
                         <ol>

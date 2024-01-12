@@ -83,6 +83,7 @@
   [% END %]
   [% IF op == 'form' %]
     <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="record_ids_selection">
+        [% INCLUDE 'csrf-token.inc' %]
       <fieldset class="rows">
         <legend>Record type</legend>
         <ol>
@@ -194,6 +195,7 @@
           | <a id="clearlinkedtobiblio" href="#">Clear used authorities</a>
         </div>
         <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post" id="selectauths">
+            [% INCLUDE 'csrf-token.inc' %]
           <table id="authorities" class="records">
             <thead>
               <tr>

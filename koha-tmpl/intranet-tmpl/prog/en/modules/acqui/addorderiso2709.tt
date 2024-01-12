@@ -94,6 +94,7 @@
                         ([% file_name | html %] staged on [% upload_timestamp | $KohaDates  with_hours => 1 %])
                     </h1>
                     <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform" class="validated">
+                        [% INCLUDE 'csrf-token.inc' %]
                         [% WRAPPER tabs id= "tabs" %]
                             [% WRAPPER tabs_nav %]
                                 [% WRAPPER tab_item tabname= "records_to_import" bt_active= 1 %] <span>Select to import</span> [% END %]

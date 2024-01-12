@@ -72,6 +72,7 @@
                 [% END %]
             </h3>
             <form name="exporting" method="post" action="/cgi-bin/koha/labels/label-print.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="export" />
                 <input type="hidden" name="referer" value="[% referer | html %]" />
                 [% FOREACH batch_id IN batch_ids %]

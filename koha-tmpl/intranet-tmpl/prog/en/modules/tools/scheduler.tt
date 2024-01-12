@@ -40,6 +40,7 @@
 [% END %]
 
 <form name="form1" action="scheduler.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
 <input type="hidden" name="mode" value="job_add" />
 
 <fieldset class="rows">
@@ -89,6 +90,7 @@
 </tr>
 [% FOREACH JOB IN JOBS %]
 <form action="scheduler.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
 <input type="hidden" name="mode" value="job_change" />
 
 <tr>

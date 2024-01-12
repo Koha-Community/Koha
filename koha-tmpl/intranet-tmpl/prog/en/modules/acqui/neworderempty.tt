@@ -295,6 +295,7 @@
         [% IF ( creationdate ) %]<li><span class="label">Open on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
         [% IF ( closedate ) %]
         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
         <li><span class="label">Closed on:</span>  [% closedate | $KohaDates %]</li>
         [% IF ( basketgroups ) %]
             <li>Basketgroup: <select id="basketgroupid" name="basketgroupid">
@@ -320,6 +321,7 @@
 [% END %]
 
 <form action="/cgi-bin/koha/acqui/addorder.pl" method="post" class="validated noEnterSubmit" id="Aform" onsubmit="return Check(this);" >
+    [% INCLUDE 'csrf-token.inc' %]
 
     <fieldset class="rows">
         <legend>Patrons</legend>

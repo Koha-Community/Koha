@@ -79,6 +79,7 @@
                             [% END %]
 
                             <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="add_suggestion_form">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <fieldset class="rows">
                                     <ol>
                                         [% IF Koha.Preference( 'OPACSuggestionAutoFill' ) %]
@@ -372,6 +373,7 @@
                             [% IF suggestions.size > 0 %]
                                 [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="delete_suggestions">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="delete_confirm" />
                                     [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                         <div id="toolbar" class="toolbar clearfix">

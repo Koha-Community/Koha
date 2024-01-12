@@ -70,6 +70,7 @@
                                         </td>
                                         <td class="actions">
                                             <form action="/cgi-bin/koha/members/alert-subscriptions.pl" method="post" class="unsubscribe" data-title="[% sub.biblio.title | html %] [% sub.biblio.subtitle | html %]"data-patron="[% INCLUDE 'patron-title.inc' no_html = 1 %]">
+                                                [% INCLUDE 'csrf-token.inc' %]
                                                 <input type="hidden" name="subscription_id" value="[% sub.subscriptionid | html %]">
                                                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]">
                                                 <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-times"></i> Unsubscribe from email alerts</button>

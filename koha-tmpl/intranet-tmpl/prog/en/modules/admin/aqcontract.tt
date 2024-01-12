@@ -103,6 +103,7 @@
             [% IF ( add_form ) %]
                 <div class="page-section">
                     <form name="Aform" action="/cgi-bin/koha/admin/aqcontract.pl" id="add_modify_contract" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="add_validate" />
                         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                         <input type="hidden" name="checked" value="0" />
@@ -147,6 +148,7 @@
             [% IF ( add_validate ) %]
                 <h1>Data recorded</h1>
                 <form action="[% script_name | html %]" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <input type="submit" class="btn btn-primary" value="OK" />
                 </form>
             [% END %]
@@ -162,6 +164,7 @@
                             <tr><th scope="row">Vendor:</th><td>[% booksellername | html %]</td></tr>
                         </table>
                         <form action="[% script_name | html %]" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="delete_confirmed" />
                             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                             <input type="hidden" name="contractnumber" value="[% contractnumber | html %]" />
@@ -177,6 +180,7 @@
             [% IF ( delete_confirmed ) %]
                 <h1>Contract deleted</h1>
                 <form action="[% script_name | html %]" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                     <input type="submit" class="btn btn-primary" value="OK" />
                 </form>

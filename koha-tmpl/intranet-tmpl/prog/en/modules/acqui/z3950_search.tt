@@ -83,6 +83,7 @@ tr.selected td {
     [% INCLUDE 'messages.inc' %]
       [% IF ( opsearch ) %]
     <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
+        [% INCLUDE 'csrf-token.inc' %]
     <div class="row">
     <div class="col-sm-6">
     <h1>Order from external source</h1>
@@ -247,6 +248,7 @@ tr.selected td {
     </div>
 
     <form method="post" action="z3950_search.pl" id="page_form" name="page_form" class="checkboxed">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" id="op" value="do_search" />
         <input type="hidden" name="current_page" id="current_page" value="[% current_page | html %]" />
         <input type="hidden" id="searchtitle"  name="title" value="[% title | html %]" />

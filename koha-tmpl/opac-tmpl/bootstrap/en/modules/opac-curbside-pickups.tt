@@ -184,6 +184,7 @@
                                                     <td>[% p.notes | html %]</td>
                                                     <td>
                                                         <form method="post">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="arrival-alert" />
                                                             <input type="hidden" name="pickup_id" value="[% p.id | html %]" />
                                                             [% IF ! p.staged_datetime || p.arrival_datetime %]
@@ -196,6 +197,7 @@
                                                         </form>
                                                         <p>
                                                         <form method="post">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cancel-pickup" />
                                                             <input type="hidden" name="pickup_id" value="[% p.id | html %]" />
                                                             [% IF p.delivered_datetime %]
@@ -223,6 +225,7 @@
                                 <div role="tabpanel" class="tab-pane active" id="user-schedule-pickup" aria-labelledby="tab-user-schedule-pickup">
                                 [% END %]
                                     <form id="create-pickup" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <fieldset class="rows">
                                             <ol>
                                                 <li>

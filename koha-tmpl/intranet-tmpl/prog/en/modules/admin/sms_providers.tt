@@ -80,6 +80,7 @@
 
                 <div id="sms_add_form">
                     <form id="sms_form" action="sms_providers.pl" method="post" class="validated">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <legend>Add an SMS cellular provider</legend>
                             <input type="hidden" id="id" name="id" value="" />

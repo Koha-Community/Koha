@@ -48,6 +48,7 @@
 
         [% IF ( op == 'edit_form' ) %]
           <form method="post" id="rules_form" action="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl">
+              [% INCLUDE 'csrf-token.inc' %]
             <h1>Rules for automatic item modifications by age</h1>
             <div id="toolbar" class="btn-toolbar">
                 <div class="btn-group">

@@ -38,6 +38,7 @@
 
       <h1>Change estimated delivery date</h1>
       <form action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
+          [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="brief">
           <label for="estimated_delivery_date">Estimated delivery date:</label>
           <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="flatpickr" value="[% estimated_delivery_date | html %]"/>

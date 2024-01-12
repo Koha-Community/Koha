@@ -69,6 +69,7 @@
        [% UNLESS op %]
 
     <form method="post" id="inventory_form" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
           <legend>Use a barcode file</legend>
           <ol>
@@ -245,6 +246,7 @@
     [% END %]
     [% IF (op) %]
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
+        [% INCLUDE 'csrf-token.inc' %]
     <input type="hidden" name="minlocation" value="[% minlocation | html %]" />
     <input type="hidden" name="maxlocation" value="[% maxlocation | html %]" />
     <input type="hidden" name="location" value="[% location | html %]" />

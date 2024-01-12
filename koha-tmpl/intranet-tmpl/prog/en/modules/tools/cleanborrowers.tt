@@ -101,6 +101,7 @@
 </div>
 <div id="step1">
     <form name="f1" id="delete_patrons_form" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
     <fieldset>
     <legend>Delete patrons</legend>
         <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /><label for="checkborrower"> Verify you want to delete patrons</label></h3>
@@ -178,6 +179,7 @@
 <!-- STEP 2 START -->
 <div id="step2">
         <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
 
         <div class="dialog alert">
             <h3>Warning</h3>

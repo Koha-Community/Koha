@@ -6,6 +6,7 @@
         <div id="checkin_search" role="tabpanel" class="tab-pane">
     [% END %]
         <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="form-title">
                 <label class="control-label" for="ret_barcode"><span class="control-text">Check in</span> <i class="fa fa-fw fa-download" aria-hidden="true"></i></label>
             </div>

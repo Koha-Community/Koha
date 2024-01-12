@@ -102,6 +102,7 @@
         [% END %]
 
         <form action="list.pl" id="add_patrons" method="post" class="clearfix">
+            [% INCLUDE 'csrf-token.inc' %]
             <fieldset class="rows">
                 <legend>Add patrons</legend>
                 <ol>
@@ -153,6 +154,7 @@
         </form>
 
         <form action="list.pl" id="remove_patrons" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
 
             <div class="searchheader" id="searchheader">
                 <span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> |

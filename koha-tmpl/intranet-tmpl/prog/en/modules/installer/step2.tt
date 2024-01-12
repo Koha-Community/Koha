@@ -41,6 +41,7 @@
 
                 [% IF ( dbconnection ) %]
                     <form name="checkdbparameters" method="post" action="install.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         [% IF ( checkdatabaseaccess ) %]
                             <div class="alert alert-success" role="alert"><p>Connection established.</p></div>
                             [% IF ( checkdatabasecreated ) %]
@@ -87,6 +88,7 @@
                     </form>
                 [% ELSE %]
                     <form name="checkinformation" method="post" action="install.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="step" value="2" />
                         <input type="hidden" name="checkdb" value="1" />
                         <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>

@@ -144,6 +144,7 @@
                 [% END %]
 
             <form action="/cgi-bin/koha/opac-reserve.pl" method="post" id="hold-request-form">
+                [% INCLUDE 'csrf-token.inc' %]
                 <legend class="sr-only">Hold requests</legend>
                 <input type="hidden" name="place_reserve" value="1"/>
                 <!-- These values are set dynamically by js -->

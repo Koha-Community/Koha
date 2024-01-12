@@ -59,6 +59,7 @@
     [% END %]
     <div class="btn-toolbar">
         <form method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="submit" name="discharge" class="btn btn-primary" value="Generate discharge" />
             <input type="hidden" value="[% patron.borrowernumber | html %]" name="borrowernumber" />
         </form>

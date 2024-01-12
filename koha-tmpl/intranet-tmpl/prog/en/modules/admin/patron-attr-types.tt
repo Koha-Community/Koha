@@ -86,6 +86,7 @@
 </div>
 [% END %]
 <form action="[% script_name | html %]" class="validated" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
   <input type="hidden" name="op" value="[% confirm_op | html %]" />
   <fieldset class="rows">
     <ol>
@@ -266,6 +267,7 @@
             [% tx("Confirm deletion of patron attribute type '{code}' ({description})?", { code = code, description = description }) | html %]
         </h1>
         <form action="[% script_name | html %]" name="Aform" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="[% confirm_op | html %]" />
             <input type="hidden" name="code" value="[% code | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete patron attribute type</button>

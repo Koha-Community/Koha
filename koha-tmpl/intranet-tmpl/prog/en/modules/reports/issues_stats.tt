@@ -114,6 +114,7 @@
 [% ELSE %]
 
     <form method="post" action="/cgi-bin/koha/reports/issues_stats.pl">
+        [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
 	<legend>Circulation statistics</legend><table>
         <thead>

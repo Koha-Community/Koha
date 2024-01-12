@@ -150,6 +150,7 @@
             [% WRAPPER tab_panel tabname="holds" %]
                 [% IF ( holds_count ) %]
                     <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="from" value="circ" />
                         <table id="holds-table" style="width: 100% !Important;">
                             <thead>
@@ -188,6 +189,7 @@
 
                     [% IF Koha.Preference('SuspendHoldsIntranet') %]
                         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="action">
                                 <input type="hidden" name="from" value="[% patronpage | html %]" />
                                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
@@ -202,6 +204,7 @@
                         </form>
 
                         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="action">
                                 <input type="hidden" name="from" value="borrower" />
                                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />

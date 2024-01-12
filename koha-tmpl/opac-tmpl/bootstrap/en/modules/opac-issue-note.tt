@@ -42,6 +42,7 @@
                             Checkout notes have not been enabled. Please contact the library.
                         [% ELSE %]
                             <form id="issue-note" action="/cgi-bin/koha/opac-issue-note.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Edit checkout note</legend>
                                 <fieldset>
                                     <label for="note" class="required">Note:</label>

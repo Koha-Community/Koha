@@ -90,6 +90,7 @@
       [% IF invoiceid %]
           <br />
           <form method="post" action="/cgi-bin/koha/acqui/invoice-files.pl" enctype="multipart/form-data">
+              [% INCLUDE 'csrf-token.inc' %]
               <fieldset class="rows">
                   <legend>Upload new file</legend>
                   <ol>

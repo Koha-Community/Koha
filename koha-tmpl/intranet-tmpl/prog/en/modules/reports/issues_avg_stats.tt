@@ -88,6 +88,7 @@
 [% ELSE %]
 
 	<form method="post" action="/cgi-bin/koha/reports/issues_avg_stats.pl">
+	    [% INCLUDE 'csrf-token.inc' %]
 	<fieldset class="rows">
 	<legend>Average checkout period statistics</legend>
 	<table>

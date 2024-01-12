@@ -31,6 +31,7 @@
 [% ELSE %]
 
 <form action="/cgi-bin/koha/virtualshelves/sendshelf.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
 
 <h1>Sending your list</h1>
 <fieldset class="rows">

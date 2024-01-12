@@ -83,6 +83,7 @@
 [% IF op == 'add_form' %]
     <h1>[% IF quote %]Modify quote[% ELSE %]New quote[% END %]</h1>
     <form action="/cgi-bin/koha/tools/quotes.pl" id="Aform" name="Aform" class="validated" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
             <input type="hidden" name="op" value="add_validate" />
             <ol>
@@ -109,6 +110,7 @@
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
         <form action="/cgi-bin/koha/tools/quotes.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <h1>Are you sure you want to delete the following quote?</h1>
             [% quote.source | html %] - [% quote.text | html %]
             <input type="hidden" name="op" value="delete_confirmed" />

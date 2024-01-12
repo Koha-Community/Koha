@@ -49,6 +49,7 @@
       [% END %]
 
         <form action="/cgi-bin/koha/admin/oai_set_mappings.pl" method="post" id="mappingform">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="page-section">
                 <table id="mappings">
                     <thead>

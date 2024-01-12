@@ -61,6 +61,7 @@
                     [% END %]
 
                         <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <legend class="sr-only">Place article request</legend>
                             <input type="hidden" name="action" value="create" />
                             <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />

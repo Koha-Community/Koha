@@ -4,6 +4,7 @@
     <div class="tab-content">
         <div id="notices_search" role="tabpanel" class="tab-pane active">
             <form action="/cgi-bin/koha/tools/letter.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="form-title">
                     <label class="control-label" for="searchfield"><span class="control-text">Search notices</span> <i class="fa-solid fa-fw fa-comment-dots" aria-hidden="true"></i></label>
                 </div>

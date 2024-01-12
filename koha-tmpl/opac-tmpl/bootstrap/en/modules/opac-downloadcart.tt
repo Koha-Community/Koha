@@ -11,6 +11,7 @@
                     <div id="userdownloadcart" class="maincontent">
                         <h1>Download cart</h1>
                         <form method="post" action="/cgi-bin/koha/opac-downloadcart.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <select name="format" id="format">
                                 <option value="">-- Choose format --</option>
                                 <option value="ris">RIS (Zotero, EndNote, others)</option>

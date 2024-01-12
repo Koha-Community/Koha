@@ -224,6 +224,7 @@
                             [% IF clubcount %]
                                 [% WRAPPER tab_panel tabname="holds_clubsearch_pane" %]
                                     <form id="holds_clubsearch" action="request.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <div class="hint">Enter club ID or partial name:</div>
                                         <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
                                         <input type="submit" class="btn btn-primary" value="Search" />
@@ -246,6 +247,7 @@
                 <fieldset class="rows">
                     <legend>Hold details</legend>
                     <form action="/api/v1/clubs/[% club.id | html %]/holds" method="post" name="form" id="club-request-form">
+                        [% INCLUDE 'csrf-token.inc' %]
 
                         [% IF ( multi_hold ) %]
                             <input type="hidden" name="request" value="any"/>
@@ -491,6 +493,7 @@
                 <fieldset class="rows">
                     <legend>Hold details</legend>
                     <form action="placerequest.pl" method="post" name="form" id="hold-request-form">
+                        [% INCLUDE 'csrf-token.inc' %]
 
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                         [% FOREACH biblionumber IN biblionumbers %]
@@ -1046,6 +1049,7 @@
                 [% END %]
                 [% IF ( reserveloop ) %]
                     <form id="existing_holds" name="T[% time | html %]" action="modrequest.pl" method="post" style="display:block">
+                        [% INCLUDE 'csrf-token.inc' %]
                         [% IF ( multi_hold ) %]
                             [% FOREACH biblionumber IN biblionumbers %]
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>

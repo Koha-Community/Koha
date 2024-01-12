@@ -110,6 +110,7 @@ $(document).ready(function() {
 
 [% IF internalnotes %]<p>Nonpublic note: [% internalnotes | html | html_line_break %]</p>[% END %]
 <form method="post" name="f" class="noEnterSubmit" action="serials-edit.pl" id="serials_edit">
+    [% INCLUDE 'csrf-token.inc' %]
 
 [% IF ( Errors ) %]
 <div class="dialog alert">

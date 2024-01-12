@@ -52,6 +52,7 @@
                     <p>Before we begin, please verify you have the correct credentials to continue. Please log in with the username and password given to you by your systems administrator and located in your <code>koha-conf.xml</code> configuration file.</p>
 
                     <form action="[% url | html %]" method="post" id="mainform">
+                        [% INCLUDE 'csrf-token.inc' %]
                         [% FOREACH INPUT IN INPUTS %]
                             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
                         [% END %]

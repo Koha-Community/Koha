@@ -203,6 +203,7 @@
 
 [% BLOCK filter_form %]
     <form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         [% IF ( context == "sidebar" ) %]
             <fieldset class="brief">
                 <h4>Search orders</h4>

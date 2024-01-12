@@ -125,6 +125,7 @@
 [% IF ( add_form ) %]
 
     <form action="[% script_name | html %]" name="Aform" method="post" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
 
       <fieldset class="rows">
             <legend>
@@ -199,6 +200,7 @@
         <p>Tag: [% searchfield | html %]</p>
         <p>Description: [% liblibrarian | html %]</p>
         <form action="[% script_name | html %]" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
             <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
@@ -214,12 +216,14 @@
 
     <div class="dialog message"><h3>Tag deleted</h3>
     <form action="[% script_name | html %]" method="post"><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
+        [% INCLUDE 'csrf-token.inc' %]
         <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
     </form></div>
 [% END %]
 [% IF ( framework_create ) %]
 
     <form action="[% script_name | html %]" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="framework_create_confirm" />
         <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
         Create framework for [% framework.frameworkcode | html %] ([% framework.frameworktext | html %]) using
@@ -236,6 +240,7 @@
 
 [% IF ( else ) %]
 <form name="f" action="[% script_name | html %]" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset style="padding:.5em;">
         <label for="tag_search"><strong>Search for tag:</strong> </label>
         <input type="text" name="searchfield" id="tag_search" size="4" value="[% searchfield | html %]" />

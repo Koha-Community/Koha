@@ -156,6 +156,7 @@
 [% IF ( duplicate_form ) %]
 <h1>Duplicate budget</h1>
 <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
     <input type="hidden" name="op" value="duplicate_budget" />
     <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
@@ -225,6 +226,7 @@
         <h1>New budget</h1>
 	[% END %]
 <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
     <!-- ################################################################################# -->
     <!-- display information about the budget period that must be added or modified -->
@@ -317,11 +319,13 @@
     <!-- ############################################################# -->
 
     <form action="[% script_name | html %]" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
         <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
     </form>
     <form action="[% script_name | html %]" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
     </form>
     [% END %]
@@ -368,6 +372,7 @@
           </tbody>
         </table>
         <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post" id="move_form">
+            [% INCLUDE 'csrf-token.inc' %]
           <fieldset class="rows">
             <ol>
               <li>

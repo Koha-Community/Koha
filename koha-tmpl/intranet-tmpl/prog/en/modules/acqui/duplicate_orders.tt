@@ -55,6 +55,7 @@
 
 [% IF op == 'search' || op == 'select' %]
 <form action="/cgi-bin/koha/acqui/duplicate_orders.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
         <legend>
             [% IF op == 'search' %]
@@ -137,6 +138,7 @@
 
 [% IF op == 'select' && ( result_order_loop || selected_order_loop ) %]
 <form method="post" action="/cgi-bin/koha/acqui/duplicate_orders.pl">
+    [% INCLUDE 'csrf-token.inc' %]
     <div id="orders_to_copy" class="page-section">
         <table id="table_orders">
             <caption>
@@ -184,6 +186,7 @@
 [% ELSIF op == "batch_edit" %]
 
 <form method="post" action="/cgi-bin/koha/acqui/duplicate_orders.pl" id="batch_edit_form">
+    [% INCLUDE 'csrf-token.inc' %]
     <div id="accounting_details">
       <p>Duplicate all the orders with the following accounting details:</p>
       <fieldset class="rows" style="float:none;">

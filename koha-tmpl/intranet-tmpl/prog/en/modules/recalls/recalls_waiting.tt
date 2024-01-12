@@ -79,6 +79,7 @@
                                                 <td class="recall-library">[% recall.library.branchname | html %]</td>
                                                 <td class="recall-action actions">
                                                     <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
+                                                        [% INCLUDE 'csrf-token.inc' %]
                                                         <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                         <input type="hidden" name="op" value="modify">
                                                         <fieldset class="action">
@@ -123,6 +124,7 @@
                                                     <td class="recall-library">[% recall.library.branchname | html %]</td>
                                                     <td class="recall-action actions">
                                                         <form action="/cgi-bin/koha/recalls/recalls_waiting.pl" method="post">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                             <input type="hidden" name="op" value="modify">
                                                             <fieldset class="action">

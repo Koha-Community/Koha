@@ -233,6 +233,7 @@
                     [% IF ( TagsInputEnabled ) %]
                         [% IF ( loggedinusername ) %]
                             <form id="tagform[% biblio.biblionumber | html %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Tags</legend>
                                 <div class="form-row">
                                     <div class="col-3">
@@ -295,6 +296,7 @@
 
                     [% IF ( OpacStarRatings != 'disable' ) %]
                         <form method="post" action="/cgi-bin/koha/opac-ratings.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <legend class="sr-only">Star ratings</legend>
                             <div class="results_summary ratings" id="rating-[% biblio.biblionumber | html %]">
 

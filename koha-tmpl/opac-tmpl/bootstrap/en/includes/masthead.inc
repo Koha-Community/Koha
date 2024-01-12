@@ -389,6 +389,7 @@
                     </button>
                 </div>
                 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="has-search-query" id="has-search-query" value="" />
                     <div class="modal-body">
                         [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]

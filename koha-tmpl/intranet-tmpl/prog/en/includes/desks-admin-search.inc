@@ -4,6 +4,7 @@
     <div class="tab-content">
         <div id="desk_search" role="tabpanel" class="tab-pane active">
             <form action="[% script_name|html %]" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="form-title">
                     <label class="control-label" for="search_desk_name"><span class="control-text">Search desks</span> <i class="fa fa-fw fa-desktop" aria-hidden="true"></i></label>
                 </div>

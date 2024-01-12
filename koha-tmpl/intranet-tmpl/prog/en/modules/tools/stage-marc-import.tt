@@ -89,6 +89,7 @@
     <li>You can enter a name for this import. It may be useful, when creating a record, to remember where the suggested MARC data comes from!</li>
 </ul>
 <form method="post" id="uploadfile" enctype="multipart/form-data">
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset class="rows" id="uploadform">
 <legend>Upload a file to stage</legend>
 <ol>
@@ -129,6 +130,7 @@
 </fieldset>
 
     <form method="post" id="processfile" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
 [% IF basketno && booksellerid %]
     <input type="hidden" name="basketno" id="basketno" value="[% basketno | html %]" />
     <input type="hidden" name="booksellerid" id="booksellerid" value="[% booksellerid | html %]" />

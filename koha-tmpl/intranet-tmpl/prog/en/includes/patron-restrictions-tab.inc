@@ -54,6 +54,7 @@
 [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
     <p><a href="#" id="add_manual_restriction"><i class="fa fa-plus"></i> Add manual restriction</a></p>
     <form method="post" action="/cgi-bin/koha/members/mod_debarment.pl" class="clearfix">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
         <input type="hidden" name="action" value="add" />
         <fieldset class="rows" id="manual_restriction_form">

@@ -84,6 +84,7 @@
   </div>
 [% ELSIF patron and not checkout_infos %]
   <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
+      [% INCLUDE 'csrf-token.inc' %]
     <div id="circ_circulation_issue">
         <fieldset>
             <legend>Checking out to [% INCLUDE 'patron-title.inc' %]</legend>
@@ -135,6 +136,7 @@
   [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
     <h3>Batch checkout confirmation</h3>
     <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
+        [% INCLUDE 'csrf-token.inc' %]
   [% ELSE %]
     <h3>Batch checkout results</h3>
   [% END %]

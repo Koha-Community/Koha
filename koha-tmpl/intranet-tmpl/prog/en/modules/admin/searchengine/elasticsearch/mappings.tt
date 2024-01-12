@@ -91,11 +91,13 @@ a.add, a.delete {
         <div class="dialog alert">
             <h3>The current mappings you see on the screen will be erased and replaced by the mappings in the mappings.yaml file.</h3>
             <form method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="reset_confirmed" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, reset mappings</button>
             </form>
 
             <form method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not reset mappings</button>
             </form>
         </div>
@@ -114,6 +116,7 @@ a.add, a.delete {
     </div>
 
     <form id="es_mappings" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
 
         [% WRAPPER tabs id= "tabs" %]
 

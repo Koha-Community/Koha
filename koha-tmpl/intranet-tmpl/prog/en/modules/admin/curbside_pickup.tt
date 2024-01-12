@@ -64,6 +64,7 @@
         <div class="dialog message">The [% pref_CurbsidePickup_link | $raw | $KohaSpan %] preference is not enabled, do not forget to enable it to turn the feature on.</div>
     [% END %]
     <form method="post" class="form">
+        [% INCLUDE 'csrf-token.inc' %]
         <div id="curbside_pickup_tabs" class="toptabs">
             <ul class="nav nav-tabs" role="tablist">
                 [% FOREACH l IN libraries %]

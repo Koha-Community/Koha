@@ -31,6 +31,7 @@
 
 [% BLOCK form_new %]
     <form method="post" action="/cgi-bin/koha/tools/upload.pl" id="uploadfile" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
         [% PROCESS plugin_pars %]
         <fieldset class="rows" id="uploadform">
         <legend>Upload new files</legend>
@@ -99,6 +100,7 @@
 [% BLOCK form_browse %]
     [% IF uploadcategories %]
     <form method="post" id="browsefile" action="/cgi-bin/koha/tools/upload.pl">
+        [% INCLUDE 'csrf-token.inc' %]
         [% PROCESS plugin_pars %]
         <input type="hidden" name="op" value="browse"/>
         <fieldset class="brief">
@@ -128,6 +130,7 @@
 
 [% BLOCK form_search %]
     <form method="post" id="searchfile" action="/cgi-bin/koha/tools/upload.pl">
+        [% INCLUDE 'csrf-token.inc' %]
         [% PROCESS plugin_pars %]
         <input type="hidden" name="op" value="search"/>
         <fieldset class="brief">
@@ -147,6 +150,7 @@
 
 [% BLOCK submitter %]
     <form id="submitter" style="display:none;" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         [% PROCESS plugin_pars %]
         <input type="hidden" name="op" id="op" value=""/>
         <input type="hidden" name="id" id="id" value="" />

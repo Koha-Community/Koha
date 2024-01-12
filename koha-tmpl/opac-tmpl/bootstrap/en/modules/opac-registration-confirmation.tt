@@ -51,6 +51,7 @@
                         <h1>Registration pending</h1>
                         <p id="confirm-instruction" class="registration-line">Click the button below to confirm registration.</p>
                         <form action="/cgi-bin/koha/opac-registration-verify.pl" method="post" name="confirm_registration" id="confirm_registration">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="token" value="[% token | html %]">
                             <input type="hidden" name="op" value="confirmed">
                             <input type="submit" value="Confirm" class="btn btn-primary">
@@ -103,6 +104,7 @@
                         [% UNLESS ( casAuthentication ) %]
                             <div id="login">
                                 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="koha_login_context" value="opac" />
                                     <fieldset class="brief">
                                         <legend>Log in to your account:</legend>

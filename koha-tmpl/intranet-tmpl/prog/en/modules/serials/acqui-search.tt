@@ -9,6 +9,7 @@
 
 <h1>Serial subscription: search for vendor </h1>
     <form action="/cgi-bin/koha/serials/acqui-search-result.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <label for="text">Vendor name: </label>
         <input id="text" type="text"  size="25" name="supplier" autofocus="autofocus" />
         <input type="submit" class="btn btn-primary" value="OK" />

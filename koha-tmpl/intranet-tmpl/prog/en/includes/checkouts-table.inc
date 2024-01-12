@@ -16,6 +16,7 @@
         </p>
     </div>
     <form name="issues" action="/cgi-bin/koha/tools/export.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <table id="issues-table" style="width: 100% !Important; display: none;">
             <thead>
                 <tr>

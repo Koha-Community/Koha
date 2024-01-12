@@ -119,6 +119,7 @@
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <form method="post" action="/cgi-bin/koha/opac-export.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-body">
                     <fieldset id="dc_fieldset">
                         <input id="input-simple" type="radio" name="format" value="rdfdc">

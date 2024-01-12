@@ -69,6 +69,7 @@ div#result { margin-top: 1em; }
 
 <p>Please choose which record will be the reference for the merge. The record chosen as reference will be kept, and the other will be deleted.</p>
 <form id="mergeform" action="/cgi-bin/koha/authorities/merge.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
     <legend>Merge reference</legend>
     <ol>
@@ -102,6 +103,7 @@ div#result { margin-top: 1em; }
 [% ELSE %]
 
 <form id="mergeform" action="/cgi-bin/koha/authorities/merge.pl" method="post" onsubmit="return mergeformsubmit()">
+    [% INCLUDE 'csrf-token.inc' %]
 
     <div class="row">
         <div class="col-sm-6">

@@ -22,6 +22,7 @@
         <div id="MARC21_Linking_section_search" class="page-section">
             <h2>Search for</h2>
             <form name="f" method="post" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl">
+                [% INCLUDE 'csrf-token.inc' %]
 
                 <p>
                     <input type="hidden" name="plugin_name" value="marc21_linking_section.pl" />

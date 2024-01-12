@@ -65,6 +65,7 @@
 [% END %]
 
     <form id="category_form" action="/cgi-bin/koha/admin/usage_statistics.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <h1>Modify the statistics you share with the Koha community</h1>
         <div class="row">
             <div class="col-xs-12 col-sm-6">

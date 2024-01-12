@@ -106,6 +106,7 @@
 
 [% IF op == 'add_form' %]
     <form action="/cgi-bin/koha/admin/authtypes.pl" name="Aform" method="post" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
         <h1>
             [% IF authority_type.authtypecode.defined %]
                 [% IF authority_type.authtypecode %]
@@ -172,6 +173,7 @@
         [% ELSE %]
             <h1>Confirm deletion of authority structure definition for <span class="ex">'[% authority_type.authtypetext | html %]' ([% authority_type.authtypecode | html %])</span></h1>
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="delete_confirmed" />
                 <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
@@ -258,6 +260,7 @@
                                     <h3 id="importLabelexportModal_[% authority_type.authtypecode | html %][% loop.count | html %]">Import [% authority_type.authtypecode | html %] authority type (fields and subfields) from a spreadsheet file (.csv, .ods)</h3>
                                 </div>
                                 <form action="/cgi-bin/koha/admin/import_export_authtype.pl" name="form_i_[% authority_type.authtypecode | html %]" id="form_i_[% authority_type.authtypecode | html %]" method="post" enctype="multipart/form-data" class="form_import">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <div class="modal-body">
                                         <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />
                                         <input type="hidden" name="action" value="import" />

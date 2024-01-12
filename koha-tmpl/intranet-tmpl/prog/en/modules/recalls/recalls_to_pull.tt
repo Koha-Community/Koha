@@ -125,6 +125,7 @@
                                 </td>
                                 <td class="recall-action">
                                     <form action="/cgi-bin/koha/recalls/recalls_to_pull.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="recall_id" value="[% recall.first_recall.id | html %]">
                                         <input type="hidden" name="op" value="cancel">
                                         [% IF recall.first_recall.in_transit %]

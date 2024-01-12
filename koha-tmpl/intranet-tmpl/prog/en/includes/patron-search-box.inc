@@ -6,6 +6,7 @@
         <div id="circ_search" role="tabpanel" class="tab-pane">
     [% END %]
         <form action="/cgi-bin/koha/circ/circulation.pl" id="patronsearch" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="form-title">
                 <label class="control-label" for="findborrower"><span class="control-text">Check out</span> <i class="fa fa-fw fa-upload" aria-hidden="true"></i></label>
             </div>

@@ -43,6 +43,7 @@
           <h1>Edit frequency: [% description | html %]</h1>
         [% END %]
         <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" id="add_frequency_form" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
           [% IF (modify) %]
             <input type="hidden" name="id" value="[% id | html %]" />
             <input type="hidden" name="op" value="savemod" />

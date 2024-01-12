@@ -290,6 +290,7 @@
                 <button type="submit" class="approve"><i class="fa fa-check" aria-hidden="true"></i> Yes, delete</button>
             </form>
             <form class="inline" action="[% script_name | html %]" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <button type="submit" class="deny"><i class="fa fa-remove" aria-hidden="true"></i> No, do not delete</button>
             </form>
         </div>
@@ -299,6 +300,7 @@
         <div class="dialog message">
             <h1>Data deleted</h1>
             <form action="[% script_name | html %]" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <button type="submit">Back to system preferences</button>
             </form>
         </div>

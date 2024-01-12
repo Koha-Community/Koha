@@ -6,6 +6,7 @@
         <div id="renew_search" role="tabpanel" class="tab-pane">
     [% END %]
         <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="form-title">
                 <label class="control-label" for="ren_barcode"><span class="control-text">Renew</span> <i class="fa fa-fw fa-retweet" aria-hidden="true"></i></label>
             </div>

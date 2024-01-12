@@ -208,6 +208,7 @@
                                 <form action="/cgi-bin/koha/sci/sci-main.pl" name="auth" id="auth" method="post" autocomplete="off">
                             [% ELSE %]
                                 <form action="[% script_name | html %]" name="auth" id="auth" method="post" autocomplete="off">
+                                    [% INCLUDE 'csrf-token.inc' %]
                             [% END %]
                                 <input type="hidden" name="koha_login_context" value="opac" />
 

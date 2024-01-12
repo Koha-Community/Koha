@@ -110,6 +110,7 @@
                                     </table>
                                     <div>
                                         <form method="post" action="#" id="finish_form">
+                                            [% INCLUDE 'csrf-token.inc' %]
                                             <legend class="sr-only">Finish</legend>
                                             <button id="sci_finish_button" type="submit" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Finish</button>
                                         </form>
@@ -124,6 +125,7 @@
                         [%# Prompt for barcodes %]
                         <div id="new_checkins" class="sci_entry">
                             <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sci/sci-main.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Scan</legend>
                                 <div class="row">
                                     <div class="col-auto">

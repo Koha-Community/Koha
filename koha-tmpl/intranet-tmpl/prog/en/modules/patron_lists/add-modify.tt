@@ -52,6 +52,7 @@
         </h1>
 
         <form method="post" action="/cgi-bin/koha/patron_lists/add-modify.pl" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
             <fieldset class="rows">
 
                 <legend class="sr-only">Patron list details</legend>

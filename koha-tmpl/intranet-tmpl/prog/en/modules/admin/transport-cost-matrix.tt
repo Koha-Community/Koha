@@ -56,6 +56,7 @@
     </div>[% END %]
 
         <form method="post" action="/cgi-bin/koha/admin/transport-cost-matrix.pl" id="cost_matrix_form">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="set-cost-matrix" />
             <fieldset id="transport-cost-matrix">
                 <div class="help">

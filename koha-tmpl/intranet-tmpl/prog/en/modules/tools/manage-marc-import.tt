@@ -121,6 +121,7 @@
                     [% IF ( batch_info ) %]
                         [% IF ( can_commit ) %]
                             <form method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="redo-matching" />
                                 <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
                                 <input type="hidden" name="current_matcher_id" value="[% current_matcher_id | html %]" />
@@ -269,6 +270,7 @@
                         <div>
                             [% IF ( can_commit ) %]
                                 <form method="post" id="import_batch_form">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="commit-batch" />
                                     <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
                                     [% IF ( record_type != 'auth' ) %]
@@ -305,6 +307,7 @@
                             [% END # /IF can_commit %]
                             [% IF ( can_revert ) %]
                                 <form method="post" id="revert_batch_form">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="revert-batch" />
                                     <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
                                     <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Undo import into catalog" /></fieldset>
@@ -372,12 +375,14 @@
                                             <td class="actions">
                                                 [% IF ( batch_lis.can_clean ) %]
                                                     <form method="post" name="clean_batch_[% batch_lis.import_batch_id | html %]" id="clean_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_clean">
+                                                        [% INCLUDE 'csrf-token.inc' %]
                                                         <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
                                                         <input type="hidden" name="op" value="clean-batch" />
                                                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-eraser"></i> Clean</button>
                                                     </form>
                                                 [% ELSIF ( batch_lis.import_status == 'cleaned' ) %]
                                                     <form method="post" action="/cgi-bin/koha/tools/manage-marc-import.pl" name="delete_batch_[% batch_lis.import_batch_id | html %]" id="delete_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_delete">
+                                                        [% INCLUDE 'csrf-token.inc' %]
                                                         <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id | html %]" />
                                                         <input type="hidden" name="op" value="delete-batch" />
                                                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</button>

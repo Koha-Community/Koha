@@ -214,6 +214,7 @@
                     [% END # /IF ActionsLoop %]
 
                     <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_action" >
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset>
                             <legend id="modaction_legend">Add a new action</legend>
                             <div id="warning_multivalued" style="color:red; display:none;">You have chosen a condition on the same field as the original field. If your records contain multivalued fields it is highly recommended not to do that.</div>
@@ -323,6 +324,7 @@
                     <h2 id="LabelcreateTemplate">Create a new template</h2>
                 </div>
                 <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_template" class="validated">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <div class="modal-body">
                         <fieldset>
                             <p>

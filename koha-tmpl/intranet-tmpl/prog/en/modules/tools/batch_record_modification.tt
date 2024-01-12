@@ -86,6 +86,7 @@
 
                     [% IF view == 'form' %]
                         <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="record_ids_selection">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="rows">
                                 <legend>Record type</legend>
                                 <ol class="radio">
@@ -168,6 +169,7 @@
                     [% ELSIF view == 'list' %]
                         [% IF records %]
                             <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <label for="marc_modification_template_id" class="required">Modify record using the following template: </label>
                                 <select name="marc_modification_template_id" id="marc_modification_template_id" required="required">
                                     <option value="">Select a template</option>

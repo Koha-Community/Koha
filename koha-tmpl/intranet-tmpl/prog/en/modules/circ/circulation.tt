@@ -274,6 +274,7 @@
 
                             [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset>
                                     <input type="hidden" name="restoreduedatespec" />
 
@@ -381,6 +382,7 @@
 
                             [% IF ADDITIONAL_MATERIALS && !CAN_user_circulate_force_checkout %]
                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="restoreduedatespec" />
 
                                     [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
@@ -405,6 +407,7 @@
 
                             [% IF ( RESERVED or RESERVE_WAITING or TRANSFERRED or PROCESSING ) %]
                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="restoreduedatespec" />
                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                     <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
@@ -660,6 +663,7 @@
                                                             [% END %]
                                                             <td>
                                                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                                                                    [% INCLUDE 'csrf-token.inc' %]
                                                                     [% IF (forceallow) %]
                                                                         <input type="hidden" name="forceallow" value="1">
                                                                     [% END %]
@@ -719,6 +723,7 @@
                             [% IF ( !noissues ) || ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') )%]
                                 <div class="col-sm-6">
                                     <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="restoreduedatespec" />
                                         [% IF ( issue ) %]
                                             <fieldset id="circ_circulation_issue" class="lastchecked">

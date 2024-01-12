@@ -39,6 +39,7 @@
                                     <fieldset>
                                         <legend>Show</legend>
                                         <form class="form-inline" action="/cgi-bin/koha/opac-tags_subject.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
                                             <p>up to <input type="text" name="number" value="[% number | html %]" size="4" maxlength="4" /> subjects <input type="submit" class="btn btn-primary" value="OK" /></p>
                                         </form>
                                     </fieldset>

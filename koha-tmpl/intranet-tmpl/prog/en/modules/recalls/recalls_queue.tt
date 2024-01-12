@@ -43,6 +43,7 @@
             [% IF recalls.count %]
                 <div class="page-section">
                     <form method="post" action="/cgi-bin/koha/recalls/recalls_queue.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="cancel_multiple_recalls">
                         <input type="checkbox" id="select_all"> <span id="select_all_text">Select all</span>
                         [% INCLUDE 'recalls.inc' %]

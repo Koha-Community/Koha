@@ -87,6 +87,7 @@
     <h1>[% tx("New identity provider domain for '{identity_provider_code}'", {identity_provider_code = identity_provider_code}) | html %]</h1>
 
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="add" />
             <input type="hidden" name="domain_ops" value="1" />
             <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />
@@ -168,6 +169,7 @@
     <h1>[% tx("Modify identity provider domain '{domain}'", {domain = identity_provider_domain.domain}) | html %]</h1>
 
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="edit_save" />
             <input type="hidden" name="domain_ops" value="1" />
             <input type="hidden" name="identity_provider_id" value="[%- identity_provider_id | html -%]" />

@@ -48,6 +48,7 @@
           <h1>Change order internal note (order no. [% ordernumber | html %])</h1>
       [% END %]
       <form action="/cgi-bin/koha/acqui/modordernotes.pl" method="post">
+          [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="brief">
           <label for="ordernotes">Note:</label>
           <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes | html %]</textarea>

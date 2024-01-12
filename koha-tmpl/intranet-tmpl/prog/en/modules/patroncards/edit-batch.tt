@@ -67,6 +67,7 @@
                     [% INCLUDE 'patroncards-errors.inc' %]
                     <div id="manage-patroncard-batches">
                             <form name="add_by_bor_num" action="/cgi-bin/koha/patroncards/edit-batch.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                     <ol><li id="description">

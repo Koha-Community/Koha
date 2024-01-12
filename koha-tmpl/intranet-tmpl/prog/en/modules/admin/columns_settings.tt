@@ -13,6 +13,7 @@
     [% END %]
     <div class="pagelist">
         <form method="post" action="/cgi-bin/koha/admin/columns_settings.pl">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="action" value="save" />
             <input type="hidden" name="module" value="[% modulename | html %]" />
             [% IF module.keys and module.keys.size > 0 %]

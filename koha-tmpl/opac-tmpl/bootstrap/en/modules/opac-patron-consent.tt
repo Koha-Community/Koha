@@ -33,6 +33,7 @@
             <div class="col-lg-10 order-first order-md-first order-lg-2">
                 <div id="patronconsents" class="maincontent">
                     <form action="/cgi-bin/koha/opac-patron-consent.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="save"/>
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
                         <h1>Your consents</h1>

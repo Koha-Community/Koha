@@ -90,6 +90,7 @@
                                 [% INCLUDE messages %]
                                 [% IF backends %]
                                     <form method="post" id="illrequestcreate-form" novalidate="novalidate">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <legend class="sr-only">Backends</legend>
                                         <fieldset class="rows">
                                             <label for="backend">Provider:</label>
@@ -177,6 +178,7 @@
                             [% INCLUDE messages %]
                             [% status = request.status %]
                             <form method="post" action="?method=update" id="illrequestupdate-form" novalidate="novalidate">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <fieldset class="rows">
                                     <legend id="library_legend">Details from library</legend>
                                     <ol>
@@ -252,6 +254,7 @@
                             <h1>Interlibrary loan item availability</h1>
                             <div id="results">
                                 <form method="POST" action="/cgi-bin/koha/opac-illrequests.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <legend><h2>Displaying availability results</h2></legend>
                                     [% FOREACH key IN whole.keys %]
                                         [% value = whole.$key %]
@@ -284,6 +287,7 @@
                             <div id="results" class="page-section">
                                 [% INCLUDE messages %]
                                 <form method="post" id="typedisclaimer-form">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset class="rows">
                                         [% disclaimer.text | $raw %]
                                         [% SET disc_av_category_code = AuthorisedValues.GetAuthValueDropbox(disclaimer.av_cat) %]

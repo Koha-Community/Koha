@@ -104,6 +104,7 @@
 
                             [% IF ( returnitem && Koha.Preference('SCOAllowCheckin') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Return</legend>
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -115,6 +116,7 @@
                             [% END %]
 
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Error</legend>
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -135,6 +137,7 @@
 
                             [% IF ( renew && Koha.Preference('SCOAllowCheckin') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Return</legend>
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -148,6 +151,7 @@
 
                             [% UNLESS ( renew ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Renew</legend>
                                     <input type="hidden" name="op" value="renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -159,6 +163,7 @@
                                   </form>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Renew</legend>
                                     <input type="hidden" name="op" value="renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -171,6 +176,7 @@
                             [% END %]
 
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Cancel</legend>
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -258,6 +264,7 @@
                         [% IF ( validuser ) %]
                             <div id="newcheckout" class="sco_entry">
                                 <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <legend><h2>
                                         [% IF ( Koha.Preference('SCOAllowCheckin') ) %]
                                             <span>Check out, return, or renew an item:</span>
@@ -377,6 +384,7 @@
                                                     [% END %]
                                                     <td>
                                                         <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <legend class="sr-only">Issue renews</legend>
                                                             <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                                             <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
@@ -445,6 +453,7 @@
                         [% ELSE # IF validuser %]
                             <div class="sco_entry" >
                                 <form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset>
                                         [% IF ( Koha.Preference('SelfCheckoutByLogin') ) %]
                                             <legend>Log in to your account</legend>

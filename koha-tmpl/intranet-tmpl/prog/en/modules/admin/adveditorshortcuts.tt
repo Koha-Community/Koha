@@ -45,6 +45,7 @@
                     </ul>
 
                     <form id="adveditor_shortcuts" method="post" action="/cgi-bin/koha/admin/adveditorshortcuts.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset>
                         <input type=hidden name="op" value="save" />
 

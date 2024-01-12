@@ -61,6 +61,7 @@
           [% END %]
 
           <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post" class="validated">
+              [% INCLUDE 'csrf-token.inc' %]
             [% IF (new) %]
               <input type="hidden" name="op" value="savenew" />
             [% ELSE %]

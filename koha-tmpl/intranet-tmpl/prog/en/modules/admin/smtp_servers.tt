@@ -80,6 +80,7 @@
 [% IF op == 'add_form' %]
     <h1>New SMTP server</h1>
     <form action="/cgi-bin/koha/admin/smtp_servers.pl" id="add" name="add" class="validated" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="add" />
         <fieldset class="rows">
             <ol>
@@ -153,6 +154,7 @@
     [% END %]
 
     <form action="/cgi-bin/koha/admin/smtp_servers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="edit_save" />
         <input type="hidden" name="smtp_server_id" value="[%- smtp_server.id | html -%]" />
         <fieldset class="rows">

@@ -47,6 +47,7 @@
 [% INCLUDE 'budgets-admin-toolbar.inc' %]
 
 <form method="post" id="Aform" name="Aform"  action="/cgi-bin/koha/admin/aqplan.pl">
+    [% INCLUDE 'csrf-token.inc' %]
 <h1>[% PROCESS planning plan=authcat %]</h1>
 <input type="hidden" name="authcat" value="[% authcat | html %]" />
 <!-- Budget Lines -->
@@ -203,6 +204,7 @@
             <aside>
 
 <form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
+    [% INCLUDE 'csrf-token.inc' %]
     <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
 <fieldset class="brief">
 <h4>Filter</h4>
@@ -263,6 +265,7 @@
 </form>
 [% IF ( budget_lines ) %]
 <form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset class="brief">
 <h4>Export</h4>
     <ol>

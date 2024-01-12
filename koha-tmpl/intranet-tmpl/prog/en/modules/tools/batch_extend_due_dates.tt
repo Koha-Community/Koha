@@ -83,6 +83,7 @@
 
                     [% IF view == 'form' %]
                         <form method="post" action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" id="extend_due_dates_form">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="rows">
                                 <legend>Checkout criteria:</legend>
                                 <ol>
@@ -157,6 +158,7 @@
                     [% ELSIF view == 'list' %]
                         [% IF checkouts.count %]
                             <form action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" method="post" id="process">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <div class="page-section">
                                     <div class="btn-toolbar selections-toolbar">
                                         <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>

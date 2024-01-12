@@ -199,6 +199,7 @@
 
                 <h1>Log viewer</h1>
 				<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
+				    [% INCLUDE 'csrf-token.inc' %]
 					[% IF ( do_it ) %]
 						<input type="hidden" name="do_it" value="[% do_it | html %]" />
 					[% END %]

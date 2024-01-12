@@ -82,6 +82,7 @@
         [% IF ( current_biblio_searches ) %]
             <h2>Current session</h2>
             <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <legend class="sr-only">Toolbar control</legend>
 
                 [% INCLUDE 'toolbar_controls' %]
@@ -129,6 +130,7 @@
         [% IF ( previous_biblio_searches ) %]
             <h2>Previous sessions</h2>
             <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <legend class="sr-only">Toolbar control</legend>
                 [% INCLUDE 'toolbar_controls' %]
 
@@ -184,6 +186,7 @@
         [% IF ( current_authority_searches ) %]
             <h2>Current session</h2>
             <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <legend class="sr-only">Toolbar control</legend>
                 [% INCLUDE 'toolbar_controls' %]
                 <input type="hidden" name="action" value="delete" />
@@ -225,6 +228,7 @@
         [% IF ( previous_authority_searches ) %]
             <h2>Previous sessions</h2>
             <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <legend class="sr-only">Toolbar control</legend>
                 [% INCLUDE 'toolbar_controls' %]
                 <input type="hidden" name="action" value="delete" />

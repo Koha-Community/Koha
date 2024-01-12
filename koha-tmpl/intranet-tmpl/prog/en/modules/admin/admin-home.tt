@@ -57,6 +57,7 @@
             <div class="col-md-6 sysprefs">
             [% IF ( CAN_user_parameters_manage_sysprefs ) %]
                 <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
                 <fieldset>
                     <h4><a href="/cgi-bin/koha/admin/preferences.pl">System preferences</a></h4>
                     <p>Manage system preferences like MARC flavor, date format, administrator email, and templates.</p>

@@ -69,6 +69,7 @@
                     [% IF logged_in_user.category.effective_change_password %]
                         [% IF ( Ask_data ) %]
                             <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Change your password</legend>
                                 <fieldset>
                                     [% IF ( logged_in_user.category.effective_require_strong_password ) %]
@@ -106,6 +107,7 @@
                             Your password has been changed
                         </div>
                         <form action="/cgi-bin/koha/opac-user.pl" method="post" autocomplete="off">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                             <p><input type="submit" class="btn btn-primary" value="Return to my account" /></p>
                         </form>

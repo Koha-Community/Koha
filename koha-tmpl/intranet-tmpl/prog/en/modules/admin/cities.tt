@@ -102,6 +102,7 @@
     [% END %]
 
     <form action="/cgi-bin/koha/admin/cities.pl" name="Aform" method="post" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="cityid" value="[% city.cityid | html %]" />
 
@@ -159,6 +160,7 @@
             </tr>
         </table>
         <form action="/cgi-bin/koha/admin/cities.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="cityid" value="[% city.cityid | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>

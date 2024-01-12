@@ -41,6 +41,7 @@
                     </p>
                     [% IF ( CAN_user_parameters_manage_cash_registers ) %]
                         <form action="/cgi-bin/koha/admin/cash_registers.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="add_form" />
                             <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
                         </form>
@@ -309,6 +310,7 @@
     <!-- Issue refund modal -->
     <div class="modal" id="issueRefundModal" tabindex="-1" role="dialog" aria-labelledby="issueRefundLabel">
         <form id="refund_form" method="post" enctype="multipart/form-data" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountline" value="" id="refundline">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

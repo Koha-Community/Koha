@@ -115,6 +115,7 @@
 
 [% IF op == 'add_form' %]
     <form id="category_form" action="/cgi-bin/koha/admin/categories.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="checked" value="0" />
         [% IF category %]
@@ -529,6 +530,7 @@
     </div> <!-- /.page-section -->
 
     <form action="/cgi-bin/koha/admin/categories.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="action">
             [% IF patrons_in_category > 0 %]
                 <input type="submit" class="btn btn-primary" value="OK" />

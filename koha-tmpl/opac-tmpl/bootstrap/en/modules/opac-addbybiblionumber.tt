@@ -25,6 +25,7 @@
                                 </ul>
                                 [% IF private_shelves.count or public_shelves.count or private_shelves_shared_with_me.count %]
                                     <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <fieldset>
                                             <legend>Select a list</legend>
                                             <label for="shelfnumber">Add to list:</label> <select name="shelfnumber" id="shelfnumber">
@@ -58,6 +59,7 @@
                                 [% ELSE %]
                                     [% IF ( singleshelf ) %]
                                         <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
                                             [% FOREACH biblio IN biblios %]
                                                 <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]">
                                             [% END %]
@@ -74,6 +76,7 @@
 
                             [% UNLESS ( singleshelf ) %]
                                 <form name="f2" method="post" action="/cgi-bin/koha/opac-addbybiblionumber.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset>
                                         <legend>Add to a new list:</legend>
                                             <label for="newvirtualshelf">List name:</label>

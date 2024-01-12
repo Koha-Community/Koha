@@ -68,6 +68,7 @@
                     [% END %]
 
                     <form id="mana_preference" method="post" class="clearfix">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -117,6 +118,7 @@
 
                     [% IF Koha.Preference('ManaToken') %]
                         <form id="mana_token" method="post" class="clearfix">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="rows">
                             <legend>Mana KB token</legend>
                                 <ol>
@@ -134,6 +136,7 @@
                         </form>
                     [% ELSE %]
                         <form id="mana_request" method="post" class="clearfix">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="rows" id="mana_subscription">
                                 <ol>
                                     <li>

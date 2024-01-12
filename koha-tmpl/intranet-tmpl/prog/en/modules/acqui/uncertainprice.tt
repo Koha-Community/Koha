@@ -89,6 +89,7 @@
         <div class="page-section">
             <h2>Order lines with uncertain prices</h2>
             <form action="[% scriptname | html %]" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                 <label for="owner">Orders from:</label>
                 <select id="owner" name="owner">
@@ -104,6 +105,7 @@
             </form>
         </div> <!-- /.page-section -->
         <form action="[% scriptname | html %]" method="post" id="uncertainprices">
+            [% INCLUDE 'csrf-token.inc' %]
             <fieldset class="rows">
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                 <input type="hidden" name="op" value="validate" />

@@ -47,6 +47,7 @@
 
                             <div class="panel" id="showHoliday">
                                 <form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" id="showHolidayType" name="showHolidayType" value="" />
                                     <fieldset class="brief">
                                         <h3>Edit this holiday</h3>
@@ -143,6 +144,7 @@
                             <!-- Panel to deal with new holidays -->
                             <div class="panel" id="newHoliday">
                                 <form action="/cgi-bin/koha/tools/newHolidays.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset class="brief">
                                         <h3>Add new holiday</h3>
                                         <ol>
@@ -234,6 +236,7 @@
                             </div>
                             <div style="margin-top: 2em;">
                                 <form action="copy-holidays.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="from_branchcode" value="[% branch | html %]" />
                                     <label for="branchcode">Copy holidays to:</label>
                                     <select id="branchcode" name="branchcode">

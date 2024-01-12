@@ -59,6 +59,7 @@
                     </h1>
 
                     <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" id="search_fields">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             [% INCLUDE 'admin-items-search-field-form.inc' field=field %]
                             [% IF (field) %]

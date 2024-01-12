@@ -115,6 +115,7 @@
             <h1>Update patron records</h1>
             [% IF PendingModifications %]
                 <form method="post" action="members-update-do.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <div id="pending_updates" class="panel-group" role="tablist" aria-multiselectable="true">
                         [% FOREACH pm IN PendingModifications %]
                             [% SET borrowernumber = pm.borrowernumber %]

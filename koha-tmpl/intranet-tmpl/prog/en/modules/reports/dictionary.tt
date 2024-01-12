@@ -88,6 +88,7 @@
             <div class="page-section">
                 <h2>Current terms</h2>
                 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="phase" value="View Dictionary" />
                     [% IF ( areas ) %]
                         Filter by area
@@ -136,6 +137,7 @@
 [% IF ( new_dictionary ) %]
 <h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset class="rows"><legend>Step 1 of 5: Name the new definition</legend><ol>
 <li>
 <label for="definition_name">Definition name:</label>
@@ -155,6 +157,7 @@
 [%- IF ( step_2 ) -%]
 <h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
   <fieldset class="rows">
     <legend>Step 2 of 5: Choose the area</legend>
     <ol>
@@ -177,6 +180,7 @@
 [% IF ( step_3 ) %]
 <h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset class="rows">
 <legend>Step 3 of 5: Choose a column</legend>
 <input type="hidden" name="area" value="[% area | html %]" />
@@ -213,6 +217,7 @@
 [% IF ( step_4 ) %]
 <h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset class="rows">
 <legend>Step 4 of 5: Specify a value</legend>
 <input type="hidden" name="area" value="[% area | html %]" />
@@ -262,6 +267,7 @@
 
 [% IF ( step_5 ) %]
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
 <input type="hidden" name="area" value="[% area | html %]" />
 <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
 <input type="hidden" name="definition_description" value="[% definition_description | html %]" />

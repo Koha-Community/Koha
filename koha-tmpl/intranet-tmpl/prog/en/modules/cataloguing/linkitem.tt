@@ -37,6 +37,7 @@
 	[% IF ( errornohostitemnumber ) %]ERROR: Unable to get the item number from this barcode.[% END %]
     </div>
     <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
     <input type="submit" class="btn btn-primary" value="OK" />
 	<input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
     </form>
@@ -44,12 +45,14 @@
     [% IF ( success ) %]
     <div class="dialog message">The item has successfully been linked to <em>[% bibliotitle | html %]</em>.</div>
 	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
+	    [% INCLUDE 'csrf-token.inc' %]
         <input type="submit" class="btn btn-primary" value="OK" />
 	    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
 	</form>
     [% ELSE %]
 	[% IF ( missingparameter ) %]
 	<form method="post" action="/cgi-bin/koha/cataloguing/linkitem.pl">
+	    [% INCLUDE 'csrf-token.inc' %]
 	    [% IF ( missingbiblionumber ) %]
 	    <fieldset id="biblionumber_fieldset">
 		<label for="biblionumber_fieldset">Select the biblionumber to link the item to</label>

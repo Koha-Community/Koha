@@ -11,6 +11,7 @@
         <div id="patron_search" role="tabpanel" class="tab-pane">
     [% END %]
         <form method="post" action="/cgi-bin/koha/members/member.pl">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="quicksearch" value="1" />
 
             <div class="form-title">

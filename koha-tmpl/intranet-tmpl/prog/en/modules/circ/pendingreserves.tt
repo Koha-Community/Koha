@@ -206,6 +206,7 @@
         </td>
         <td>
             <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="cancel_reserve" />
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
 
@@ -232,6 +233,7 @@
         [% IF Koha.Preference('CanMarkHoldsToPullAsLost') != 'do_not_allow' %]
             [% IF hold.itemnumber %]
                 <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                     [% IF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow' %]
                         <input type="hidden" name="op" value="mark_as_lost" />
@@ -286,6 +288,7 @@
 <div id="filters">
 
 <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="post" >
+    [% INCLUDE 'csrf-token.inc' %]
 <fieldset class="brief">
 <h4>Refine results</h4>
 <ol>

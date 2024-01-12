@@ -47,6 +47,7 @@
                 <p> The patron category you create will be used by the <span class="bg-info">administrator account</span>.</p>
 
                 <form id="category_form" method="post" action="onboarding.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
                         <input type="hidden" name="step" value="2" />
                         <input type="hidden" name="op" value="add_validate_category" />

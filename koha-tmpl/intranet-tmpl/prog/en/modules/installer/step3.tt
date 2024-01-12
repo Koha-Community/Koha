@@ -84,6 +84,7 @@
                     </div>
 
                     <form name="frameworkselection" method="post" action="install.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="step" value="3" />
                         <input type="hidden" name="op" value="selectframeworks" />
 
@@ -123,6 +124,7 @@
                     </div>
 
                     <form name="frameworkselection" method="post" action="install.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="step" value="3" />
                         <input type="hidden" name="op" value="addframeworks" />
                         [% IF ( frameworksloop ) %]
@@ -252,6 +254,7 @@
                     <p>In the next steps you will be guided through some basic requirements like defining Koha user with all administrative privileges (superlibrarian).</p>
 
                     <form action="/cgi-bin/koha/installer/install.pl" method="post" name="finish">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <h4>
                             You can help the Koha community by sharing your statistics with us.
                         </h4>
@@ -289,6 +292,7 @@
                         </div>
 
                         <form action="install.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="step" value="3" />
                             <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                         </form>
@@ -311,6 +315,7 @@
 
                     <p>Now we're ready to create the database tables and fill them with some default data.</p>
                     <form action="install.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="step" value="3" />
                         <input type="hidden" name="op" value="importdatastructure" />
                         <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
@@ -338,6 +343,7 @@
 
                         <p>We are ready to do some basic configuration.</p>
                         <form action="install.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="step" value="3" />
                             <input type="hidden" name="op" value="choosemarc" />
                             <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>

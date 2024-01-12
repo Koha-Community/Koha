@@ -54,6 +54,7 @@
 [% END %]
 [% IF lateorders.size %]
 <form action="lateorders.pl" name="claim" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
   <input type="hidden" name="op" value="send_alert" />
   <input type="hidden" name="delay" value="[% delay | html %]" />
   <input type="hidden" name="booksellerid" value="[% bookseller_filter.id | html %]" />
@@ -280,6 +281,7 @@
 <div class="modal" id="noteEditor" tabindex="-1" role="dialog" aria-labelledby="noteEditorLabel">
     <div class="modal-dialog" role="document">
         <form id="modify_order_notes" action="/cgi-bin/koha/acqui/modordernotes.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -304,6 +306,7 @@
 <div class="modal" id="dateEditor" tabindex="-1" role="dialog" aria-labelledby="dateEditorLabel">
     <div class="modal-dialog" role="document">
         <form id="modify_estimated_delivery_date" action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

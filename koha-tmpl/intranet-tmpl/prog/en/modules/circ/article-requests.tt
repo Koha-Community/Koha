@@ -163,6 +163,7 @@
                 [% PROCESS urls_modal %]
 
                 <form id="ar-branchcode-form" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <select name="branchcode" id="branchcode">
                         <option value="">All libraries</option>
                         [% FOREACH b IN Branches.all( only_from_group => 1 ) %]

@@ -53,6 +53,7 @@
             [% INCLUDE 'messages.inc' %]
 
             <form method="post" class="validated">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="id" value="[% club_template.id | html %]" />
 
                 <h1>

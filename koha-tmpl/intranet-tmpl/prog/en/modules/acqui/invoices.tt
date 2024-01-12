@@ -167,6 +167,7 @@
 
                         <div id="merge_invoices">
                             <form id="merge_invoice_form" class="validated" action="/cgi-bin/koha/acqui/invoice.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <fieldset class="rows">
                                     <ol>
                                         <li><h2>Merge invoices</h2></li>

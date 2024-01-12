@@ -83,6 +83,7 @@
 
 [% IF ( add_form ) %]
     <form action="[% script_name | html %]" name="Aform" method="post" id="serverentry">
+        [% INCLUDE 'csrf-token.inc' %]
         [% IF op == 'edit' %]
             <h1>[% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]</h1>
             <input type="hidden" name="id" value="[% server.id | html %]" />

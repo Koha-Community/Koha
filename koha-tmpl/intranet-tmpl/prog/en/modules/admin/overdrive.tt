@@ -39,6 +39,7 @@
                 <h1>OverDrive library authnames</h1>
 
                 <form action="/cgi-bin/koha/admin/overdrive.pl" name="overdrive_form" method="post" class="validated">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="update" />
                     <fieldset>
                         <table id="od_info">

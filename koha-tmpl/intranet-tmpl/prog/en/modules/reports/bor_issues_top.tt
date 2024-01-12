@@ -117,6 +117,7 @@
 [% ELSE %]
     <h1>Patrons with the most checkouts</h1>
 	<form method="post" action="/cgi-bin/koha/reports/bor_issues_top.pl">
+	    [% INCLUDE 'csrf-token.inc' %]
 	<fieldset class="rows">
         <ol>
             <li>

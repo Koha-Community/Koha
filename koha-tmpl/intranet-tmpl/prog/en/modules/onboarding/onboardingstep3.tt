@@ -39,6 +39,7 @@
                 Now we will create a patron with superlibrarian permissions. Log in with this to access Koha as a staff member with all permissions.
                 </p>
                 <form name="createpatron" id="createpatron" method="post" action="onboarding.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
                         <input type="hidden" name="step" value="3" />
                         <input type="hidden" name="op" value="add_validate_patron" />

@@ -45,6 +45,7 @@
 
         [% IF action == 'display_form' %]
             <form method="post" action="/cgi-bin/koha/course_reserves/batch_add_items.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
                 <input type="hidden" name="action" value="add" />
 

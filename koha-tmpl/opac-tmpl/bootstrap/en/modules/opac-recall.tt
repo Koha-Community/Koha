@@ -62,6 +62,7 @@
                                 <div class="dialog">
 
                                     <form id="recallform" action="/cgi-bin/koha/opac-recall.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <fieldset class="rows" id="options">
                                             <legend>Place a recall on <b>[% biblio.title | html %]</b> ([% biblio.author | html %])?</legend>
                                             <ul>

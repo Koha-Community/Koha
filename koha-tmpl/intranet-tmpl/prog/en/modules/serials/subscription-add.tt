@@ -54,6 +54,7 @@ fieldset.rows table { clear: none; margin: 0; }
         </div>
     </div>
     <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
                 <div class="row" id="page_1">
                     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                         [% IF ( modify ) %]

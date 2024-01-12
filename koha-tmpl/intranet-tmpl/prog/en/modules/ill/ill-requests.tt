@@ -181,6 +181,7 @@
                         [% END %]
                         [% IF request.biblio_id && request.biblio_id.length > 0  && !whole.value.check_out_errors.error.STATS %]
                             <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <fieldset class="rows">
                                     <legend>Check out details</legend>
                                     [% items = whole.value.biblio.items.unblessed %]
@@ -321,6 +322,7 @@
                     [% IF whole.value.partners %]
                        [% ill_url = "/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=" _ request.illrequest_id %]
                         <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="rows">
                                 <legend>Interlibrary loan request details</legend>
                                 <ol>
@@ -399,6 +401,7 @@
 
                 [% ELSIF query_type == 'edit_action' %]
                     <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <legend>Request details</legend>
                             <ol>
@@ -501,6 +504,7 @@
                     <div class="dialog alert">
                         <h3>Are you sure you wish to delete this request?</h3>
                         <form action="/cgi-bin/koha/ill/ill-requests.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="method" value="delete" />
                             <input type="hidden" name="confirmed" value="1" />
                             <input type="hidden" name="illrequest_id" value="[% request.id | html %]" />
@@ -824,6 +828,7 @@
                     <div id="results" class="page-section">
                         <h3>Displaying availability results</h3>
                         <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             [% FOREACH key IN whole.keys %]
                                 [% value = whole.$key %]
                                 [% IF key != 'method' && key != 'custom_key' && key != 'custom_value' %]
@@ -857,6 +862,7 @@
                     <h1>Request type disclaimer</h1>
                     <div id="results" class="page-section">
                         <form method="post" id="typedisclaimer-form">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="rows">
                                 [% disclaimer.text | $raw %]
                                 [% SET disc_av_category_code = AuthorisedValues.GetAuthValueDropbox(disclaimer.av_cat) %]

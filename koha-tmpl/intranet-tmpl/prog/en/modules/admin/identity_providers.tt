@@ -83,6 +83,7 @@
     <h1>New identity provider</h1>
 
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="add" name="add" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="add" />
             <fieldset class="rows">
                 <legend id="identity_provider_basic">Basic configuration</legend>
@@ -237,6 +238,7 @@
     <h1>[% tx("Modify identity provider '{id_provider}'", {id_provider = identity_provider.code}) | html %]</h1>
 
         <form action="/cgi-bin/koha/admin/identity_providers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="edit_save" />
             <input type="hidden" name="identity_provider_id" value="[%- identity_provider.identity_provider_id | html -%]" />
             <fieldset class="rows">

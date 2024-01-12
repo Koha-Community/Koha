@@ -85,6 +85,7 @@
 
 [% IF acct_form %]
 <form action="/cgi-bin/koha/admin/edi_accounts.pl" name="Actform" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
   <input type="hidden" name="op" value="save" />
   [% IF account %]
   <input type="hidden" name="id" value="[% account.id | html %]" />
@@ -281,6 +282,7 @@
     </tr>
 </table>
 <form action="/cgi-bin/koha/admin/edi_accounts.pl" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
     <table>
     </table>
     <input type="hidden" name="op" value="delete_confirmed" />

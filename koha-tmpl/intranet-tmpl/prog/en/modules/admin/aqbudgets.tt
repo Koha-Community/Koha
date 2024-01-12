@@ -278,6 +278,7 @@
 <!-- create add/mod entry form -->
 [% IF op == 'add_form' && !error_not_authorised_to_modify %]
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" id="edit_fund" name="Aform" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
     <h1>
         [% IF ( budget_id ) %]
             [% IF ( budget_period_description ) %]
@@ -468,6 +469,7 @@
         </table>
 
         <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="budget_id" value="[% budget_id | html %]" />
             <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />

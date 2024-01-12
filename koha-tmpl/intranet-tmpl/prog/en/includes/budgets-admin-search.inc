@@ -6,6 +6,7 @@
     <div class="tab-content">
         <div id="budgets_search" role="tabpanel" class="tab-pane active">
             <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
 
                 <div class="form-title">

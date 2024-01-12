@@ -2,6 +2,7 @@
     <div class="modal-dialog modal-wide" role="document">
         <div class="modal-content">
             <form method="post" id="mana_share_form" action="/cgi-bin/koha/reports/guided_reports.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h3 id="mana_share_modal_label">Share with Mana</h3>

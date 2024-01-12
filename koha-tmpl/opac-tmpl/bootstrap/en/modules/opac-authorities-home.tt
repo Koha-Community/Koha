@@ -32,6 +32,7 @@
                 [% END %]
                     <div id="userauthhome" class="maincontent">
                         <form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="do_search" />
                             <input type="hidden" name="type" value="opac" />
                             <fieldset class="rows">

@@ -114,6 +114,7 @@
           </div>
         [% IF CAN_user_tools_edit_patrons %]
             <form id="patron_batchmod_form" method="post" action="/cgi-bin/koha/tools/modborrowers.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="show" />
                 <textarea style="display:none" id="borrowernumberlist" name="borrowernumberlist"></textarea>
             </form>

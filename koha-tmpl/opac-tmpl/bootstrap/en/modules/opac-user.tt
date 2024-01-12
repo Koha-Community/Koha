@@ -315,6 +315,7 @@
                             [% WRAPPER tab_panel tabname="opac-user-checkouts" %]
                                 [% IF ( issues_count ) %]
                                     <form id="renewselected" action="/cgi-bin/koha/opac-renew.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                         <legend class="sr-only">Renew selected</legend>
                                         <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]">
                                         <input type="hidden" name="from" value="opac_user" />
@@ -549,6 +550,7 @@
 
                                     [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                                         <form id="renewall" class="js-hide" action="/cgi-bin/koha/opac-renew.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
                                             <legend class="sr-only">Renew</legend>
                                             <input type="hidden" name="from" value="opac_user" />
                                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
@@ -893,6 +895,7 @@
                                                 <td class="cancelrecall">
                                                     [% IF ( RECALL.requested or RECALL.overdue ) %]
                                                         <form action="/cgi-bin/koha/opac-recall.pl" method="post">
+                                                            [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cancel">
                                                             <input type="hidden" name="recall_id" value="[% RECALL.id | html %]">
                                                             <input type="hidden" name="biblionumber" value="[% RECALL.biblio_id | html %]">
@@ -1033,6 +1036,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-header">
                     [% IF HOLD.suspend %]
                         <h5 class="modal-title" id="suspendModalLabel">Resume hold</h5>

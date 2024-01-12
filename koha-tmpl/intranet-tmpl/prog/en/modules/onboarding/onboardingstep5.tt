@@ -56,6 +56,7 @@
                     </div>
 
                     <form name="createcirculationrule" method="post" action="onboarding.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <input type="hidden" name="step" value="5"/>
                             <input type="hidden" name="op" value="add_validate_circ_rule" />

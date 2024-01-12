@@ -63,6 +63,7 @@
                         </ul>
 
                         <form method="post" action="/cgi-bin/koha/serials/subscription-detail.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
                             <input type="hidden" name="issueconfirmed" value="1" />
                             <input type="hidden" name="op" value="del" />

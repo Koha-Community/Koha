@@ -59,6 +59,7 @@
                         [% IF (template_id) %] ([% template_id | html %])[% END %]
                     </h1>
                     <form name="input" action="/cgi-bin/koha/patroncards/edit-template.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <div class="row">
                         <div class="col-sm-6">
                             <fieldset class="rows">

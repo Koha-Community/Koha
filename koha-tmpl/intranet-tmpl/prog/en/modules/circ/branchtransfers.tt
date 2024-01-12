@@ -65,6 +65,7 @@
                 </th>
                 <td>
                     <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         [% FOREACH trsfitemloo IN trsfitemloop %]
                             <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
                             <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
@@ -91,6 +92,7 @@
                         <th>Cancel hold and then attempt transfer:</th>
                         <td>
                             <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 [% FOREACH trsfitemloo IN trsfitemloop %]
                                     <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
                                     <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
@@ -111,6 +113,7 @@
                         <th>Ignore and return to transfers: </th>
                             <td>
                                 <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
                                     <input type="hidden" name="barcode" />
                                     [% FOREACH trsfitemloo IN trsfitemloop %]
@@ -176,6 +179,7 @@
 
 <div id="branchtransfers">
     <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
+        [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="brief">
             <legend>Transfer</legend>
             <ol>

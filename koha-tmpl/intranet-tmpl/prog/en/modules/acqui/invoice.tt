@@ -61,6 +61,7 @@
                 <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
 
                 <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
                         <ol>
                             <li>
@@ -147,6 +148,7 @@
                 </form>
 
                 <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
                         <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
                         <h3>Adjustments</h3>

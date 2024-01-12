@@ -40,6 +40,7 @@
                         <h2>Comments on <em>[% INCLUDE 'biblio-title.inc' %]</em></h2>
                         [% IF ( biblio.author ) %]<h3>[% biblio.author | html %]</h3>[% END %]
                         <form id="reviewf" action="/cgi-bin/koha/opac-review.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <legend class="sr-only">Comments</legend>
                             <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
                             [% IF ( reviewid ) %]<input type="hidden" name="reviewid" value="[% reviewid | html %]" />[% END %]

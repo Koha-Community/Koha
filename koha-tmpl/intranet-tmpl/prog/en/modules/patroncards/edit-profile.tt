@@ -58,6 +58,7 @@
                                 [% END%]
                             </h1>
                                     <form name="input" action="/cgi-bin/koha/patroncards/edit-profile.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset class="rows"><legend>Profile settings</legend>
                                         <ol>
                                             <li>

@@ -113,6 +113,7 @@
             <!-- Create or edit housebound_profile -->
             [% IF ( method == 'update_or_create' ) %]
               <form id="editform" method="post" name="editform"
+                  [% INCLUDE 'csrf-token.inc' %]
                     action="/cgi-bin/koha/members/housebound.pl">
                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                 [% IF ( housebound_profile ) %]
@@ -250,6 +251,7 @@
             [% ELSIF ( method == 'visit_update_or_create' ) %]
               <h4>Manage housebound deliveries</h4>
               <form name="form" id="instance_form" method="post"
+                  [% INCLUDE 'csrf-token.inc' %]
                     action="/cgi-bin/koha/members/housebound.pl">
                 [% IF ( visit ) %]
                   <input type="hidden" name="method" value="editvisitconfirm" />

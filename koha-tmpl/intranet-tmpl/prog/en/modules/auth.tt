@@ -123,6 +123,7 @@
     [% END # /IF  identity_providers.size %]
 
     <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="koha_login_context" value="intranet" />
     [% FOREACH INPUT IN INPUTS %]
         [% NEXT IF INPUT.name == "koha_login_context" %]
@@ -207,6 +208,7 @@
     [% END %]
 [% ELSIF TwoFA_prompt %]
     <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" autocomplete="off">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="koha_login_context" value="intranet" />
         [% FOREACH INPUT IN INPUTS %]
             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />

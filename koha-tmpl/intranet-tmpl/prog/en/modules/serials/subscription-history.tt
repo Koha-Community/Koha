@@ -35,6 +35,7 @@
 
         <div id="subscription_form_history">
           <form method="post" action="/cgi-bin/koha/serials/subscription-history.pl">
+              [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="mod" />
             <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
             <p>Hint : you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify those fields with care, as future serial receive will continue to update them automatically.</p>

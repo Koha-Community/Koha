@@ -19,6 +19,7 @@
             <div id="UNIMARC_Field_4XX_search" class="page-section">
                 <h2> Search on  </h2>
                 <form name="f" method="post" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
 
                     <p>
                         <input type="hidden" name="plugin_name" value="unimarc_field_4XX.pl" />

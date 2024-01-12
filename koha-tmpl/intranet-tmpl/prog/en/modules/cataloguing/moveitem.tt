@@ -43,6 +43,7 @@
                              <form action="/cgi-bin/koha/catalogue/ISBDdetail.pl" method="post">
                         [% ELSE %]
                              <form action="/cgi-bin/koha/catalogue/detail.pl" method="post">
+                                 [% INCLUDE 'csrf-token.inc' %]
                         [% END %]
 [% END %]
 
@@ -104,6 +105,7 @@
     [% ELSE %]
 	[% IF ( missingparameter ) %]
 	<form method="post" action="/cgi-bin/koha/cataloguing/moveitem.pl">
+	    [% INCLUDE 'csrf-token.inc' %]
 	    [% IF ( missingbiblionumber ) %]
 	    <fieldset id="biblionumber_fieldset">
 		<label for="biblionumber">Select the biblionumber to attach the item to</label>

@@ -150,6 +150,7 @@
         <h1>New item type</h1>
     [% END %]
     <form action="/cgi-bin/koha/admin/itemtypes.pl" name="Aform" method="post" id="itemtypeentry">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="add_validate" />
         <fieldset class="rows">
             <ol>
@@ -374,10 +375,12 @@
             <tr><th scope="row">Rental charge</th><td>[% itemtype.rentalcharge | $Price %]</td></tr>
         </table>
         <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this item type</button>
         </form>
         <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
+            [% INCLUDE 'csrf-token.inc' %]
             <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>

@@ -94,6 +94,7 @@
                         <div class="hint">You can drag and drop the subfield tabs to change the order.</div>
 
                         <form action="[% script_name | html %]" name="Aform" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="add_validate" />
                             <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
                             <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
@@ -321,6 +322,7 @@
                             <p>Description: [% mss.liblibrarian | html_entity %]</p>
 
                             <form action="[% delete_link | html %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="tagfield" value="[% mss.tagfield | html %]" />
                                 <input type="hidden" name="tagsubfield" value="[% mss.tagsubfield | html %]" />
                                 <input type="hidden" name="frameworkcode" value="[% mss.frameworkcode | html %]" />
@@ -329,6 +331,7 @@
 
 
                             <form action="[% script_name | html %]" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="tagfield" value="[% mss.tagfield | html %]" />
                                 <input type="hidden" name="tagsubfield" value="[% mss.tagsubfield | html %]" />
                                 <input type="hidden" name="frameworkcode" value="[% mss.frameworkcode | html %]" />

@@ -149,6 +149,7 @@
 <h1>New classification source</h1>
   [% END %]
 <form action="[% script_name | html %]" name="Aform" class="validated" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
   <input type="hidden" name="op" value="add_source_validate" />
   <fieldset class="rows">
     <ol>
@@ -213,6 +214,7 @@
 <h1>New filing rule</h1>
   [% END %]
 <form action="[% script_name | html %]" name="Aform" class="validated" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
   <input type="hidden" name="op" value="add_sort_rule_validate" />
   <fieldset class="rows">
     <ol>
@@ -259,6 +261,7 @@
 <h1>New splitting rule</h1>
   [% END %]
 <form action="[% script_name | html %]" name="Aform" class="validated" method="post">
+    [% INCLUDE 'csrf-token.inc' %]
   <input type="hidden" name="op" value="add_split_rule_validate" />
   <fieldset class="rows">
     <ol>

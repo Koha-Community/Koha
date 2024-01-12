@@ -40,6 +40,7 @@
 
 
                 <form id="new-alert-form" action="audio_alerts.pl" method="post" class="validated">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <h1><span class="create-alert">New alert</span><span class="edit-alert">Edit alert</span></h1>
                     <fieldset class="rows">
                         <legend class="sr-only">Audio alert details</legend>
@@ -89,6 +90,7 @@
                 </form>
 
                 <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <h1>Audio alerts</h1>
                     [%IF !( Koha.Preference('AudioAlerts') ) %]
                         <div class="dialog alert">

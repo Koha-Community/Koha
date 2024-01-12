@@ -244,6 +244,7 @@
                                             <td class="actions">
                                                 [% IF !independant_branch || !lette.branchcode %]
                                                     <form method="post" action="/cgi-bin/koha/tools/letter.pl">
+                                                        [% INCLUDE 'csrf-token.inc' %]
                                                         <input type="hidden" name="op" value="copy_form" />
                                                         <input type="hidden" name="oldbranchcode" value="[% lette.branchcode | html %]" />
                                                         <input type="hidden" name="module" value="[% lette.module | html %]" />
@@ -304,6 +305,7 @@
                     </div> <!-- /#toolbar -->
 
                     <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" class="validate">
+                        [% INCLUDE 'csrf-token.inc' %]
                         [% IF add_form %]
                             <input type="hidden" name="op" id="op" value="add_validate" />
                         [% ELSE %]
@@ -503,6 +505,7 @@
                 [% IF ( add_validate or copy_validate) %]
                     Data recorded
                     <form action="[% action | html %]" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="submit" class="btn btn-primary" value="OK" />
                     </form>
                 [% END %]
@@ -527,6 +530,7 @@
                             </tr>
                         </table>
                         <form action="[% action | html %]" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="delete_confirmed">
                             <input type="hidden" name="branchcode" value="[% letter.branchcode | html %]" />
                             <input type="hidden" name="code" value="[% letter.code | html %]" />
@@ -543,6 +547,7 @@
                 [% IF ( delete_confirmed ) %]
                     <span>Data deleted</span>
                     <form action="[% action | html %]" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
                     <input type="submit" class="btn btn-primary" value="OK" />
                     </form>
                 [% END %]

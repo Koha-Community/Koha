@@ -8,6 +8,7 @@
                 </button>
             </div>
             <form action="#" method="post" id="overdrive-checkout-form">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-body">
                     <input type="hidden" name="id" value="" />
                     <div id="overdrive-format-list">

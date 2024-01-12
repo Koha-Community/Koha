@@ -141,6 +141,7 @@
                                         </a>
                                     [% ELSE %]
                                         <form class="rota_select_form" method="post" enctype="multipart/form-data">
+                                            [% INCLUDE 'csrf-token.inc' %]
                                             <select class="item_select_rota" name="rota_id">
                                                 [% FOREACH rota IN rotas %]
                                                     <option value="[% rota.rota_id | uri %]">[% rota.title | html %]</option>

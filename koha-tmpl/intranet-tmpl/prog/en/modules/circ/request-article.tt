@@ -117,6 +117,7 @@
                                 </div>
                             [% END %]
                             <form id="place-article-request" method="post" action="/cgi-bin/koha/circ/request-article.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="action" value="create" />
                                 <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />
                                 <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.id | html %]" />

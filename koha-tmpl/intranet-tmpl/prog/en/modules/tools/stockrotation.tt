@@ -182,6 +182,7 @@
                     [% END %]
 
                     <form id="rota_form" method="post" enctype="multipart/form-data" class="validated">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -243,6 +244,7 @@
                     <!-- Add stage modal -->
                     <div class="modal" id="addStageModal" tabindex="-1" role="dialog" aria-labelledby="addStageLabel">
                         <form id="stage_form" method="post" enctype="multipart/form-data" class="validated">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -342,6 +344,7 @@
                     [% END %]
 
                     <form id="stage_form" method="post" enctype="multipart/form-data" class="validated">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -433,6 +436,7 @@
                     <!-- Add items modal -->
                     <div class="modal" id="addItemsModal" tabindex="-1" role="dialog" aria-labelledby="addItemsLabel">
                         <form id="add_rota_item_form" method="post" enctype="multipart/form-data" class="validated">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -599,6 +603,7 @@
 
                     [% IF barcode_status.on_other.size > 0 %]
                         <form id="add_rota_item_form" method="post" enctype="multipart/form-data">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset>
                                 <legend>Select items to move to this rota:</legend>
                                 [% FOREACH item_on_other IN barcode_status.on_other %]

@@ -107,6 +107,7 @@
                                         [% IF ( active && books_loop ) %]
                                             <div class="btn-group">
                                                 <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
+                                                    [% INCLUDE 'csrf-token.inc' %]
                                                     <input type="hidden" name="op" value="email" />
                                                     <input type="hidden" name="basketno" value="[% basketno | html %]" />
                                                     <button type="submit" class="btn btn-default" id="emailvendorbutton"><i class="fa-solid fa-envelope"></i> E-mail order</button>
@@ -310,6 +311,7 @@
                                                     <ol>
                                                         <li id="managedby">
                                                             <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
+                                                                [% INCLUDE 'csrf-token.inc' %]
                                                                 <span class="label">[% tp('Acquisitions basket managed by user', 'Managed by:') | html %]</span>
                                                                 <div style="display:inline-block">
                                                                     <ul id="users_names" style="padding-left:0">
@@ -348,6 +350,7 @@
                                                                 <span class="label">&nbsp;</span>
                                                                 <div>
                                                                     <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
+                                                                        [% INCLUDE 'csrf-token.inc' %]
                                                                         <select id="select_managing_library" name="branch">
                                                                             <option value="">(no library)</option>
                                                                             [% FOREACH branch IN branches_loop %]
@@ -407,6 +410,7 @@
                                                                     <span class="label">&nbsp;</span>
                                                                     <div style="float:left">
                                                                         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
+                                                                            [% INCLUDE 'csrf-token.inc' %]
                                                                             <select id="basketgroupid" name="basketgroupid">
                                                                                 <option value="">No group</option>
                                                                                 [% FOREACH bg IN basketgroups %]
@@ -914,6 +918,7 @@
     <div class="modal" id="noteEditor" tabindex="-1" role="dialog" aria-labelledby="noteEditorLabel">
         <div class="modal-dialog" role="document">
             <form id="modify_order_notes" action="/cgi-bin/koha/acqui/modordernotes.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -938,6 +943,7 @@
     <div class="modal" id="dateEditor" tabindex="-1" role="dialog" aria-labelledby="dateEditorLabel">
         <div class="modal-dialog" role="document">
             <form id="modify_estimated_delivery_date" action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -92,6 +92,7 @@
                         </form>
                         [% IF ( definedbranch ) %]
                             <form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <label for="tobranch"><strong>Clone these rules to:</strong></label>
                                 <input type="hidden" name="frombranch" value="[% current_branch | html %]" />
                                 <select name="tobranch" id="tobranch">
@@ -105,6 +106,7 @@
 
                 <div class="page-section">
                     <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="add" />
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <table id="default-circulation-rules">
@@ -621,6 +623,7 @@
                     <h2>Default checkout, hold and return policy[% IF humanbranch %] for [% Branches.GetName( humanbranch ) | html %][% END %]</h2>
                     <p>You can set a default maximum number of checkouts, hold policy and return policy that will be used if none is defined below for a particular item type or category.</p>
                     <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="set-branch-defaults" />
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <table>
@@ -815,6 +818,7 @@
                        no limit applies, except possibly for a limit you define for a specific item type.
                     </p>
                     <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="add-branch-cat" />
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <table>
@@ -894,6 +898,7 @@
                 [% END %]
                     <p>Specify if waiting holds can be cancelled for a given patron category.</p>
                     <form id="set-waiting-hold-cancellation" method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="set-waiting-hold-cancellation" />
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <table>
@@ -978,6 +983,7 @@
                 [% END %]
                     <p>Specify the maximum number simultaneous current article requests a patron of a given category can have.</p>
                     <form id="set-article-requests-daily-limit" method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="add-open-article-requests-limit" />
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <table>
@@ -1032,6 +1038,7 @@
                 [% END %]
                     <p>Specify the article request fee for a given patron category.</p>
                     <form id="set-article-request-fee" method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="set-article-request-fee" />
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <table>
@@ -1092,6 +1099,7 @@
                 [% END %]
                     <p>Specify the default policy for lost item fees on return.</p>
                     <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="mod-refund-lost-item-fee-rule" />
                         <input type="hidden" name="branch" value="[% current_branch | html %]" />
                         <table>
@@ -1294,6 +1302,7 @@
                     </ul>
 
                     <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="add-branch-item" />
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <table>

@@ -45,6 +45,7 @@
 
                 <h1>Batch item [% IF ( del ) %]deletion[% ELSE %]modification[% END %]</h1>
                         <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batchMod.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="rows">
                                 <legend>Use a file</legend>
                                   <ol>

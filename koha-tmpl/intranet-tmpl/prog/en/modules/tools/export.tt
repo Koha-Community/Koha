@@ -69,6 +69,7 @@
             </p>
 
             <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <fieldset class="rows">
                     <legend> Select records to export </legend>
                     <ol>
@@ -199,6 +200,7 @@
 
         [% WRAPPER tab_panel tabname="auths" %]
             <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <fieldset class="rows">
                     <legend> Select records to export </legend>
                     <ol>
@@ -274,6 +276,7 @@
         [% IF ( allow_db_export ) %]
             [% WRAPPER tab_panel tabname="db" %]
                 <form method="post" class="clearfix" action="/cgi-bin/koha/tools/export.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <p><strong>Note : This export file will be very large, and is generated nightly.</strong></p>
                     <fieldset class="rows">
                         <legend> Choose a file </legend>
@@ -300,6 +303,7 @@
         [% IF ( allow_conf_export ) %]
             [% WRAPPER tab_panel tabname="conf" %]
                 <form method="post" class="clearfix" action="/cgi-bin/koha/tools/export.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
                     <p><strong>Note : This export file will be very large, and is generated nightly.</strong></p>
                     <fieldset class="rows">
                         <legend> Choose a file </legend>

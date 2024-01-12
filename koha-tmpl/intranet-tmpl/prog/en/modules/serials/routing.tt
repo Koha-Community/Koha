@@ -43,6 +43,7 @@
 [% END %]
 
 <form method="post" action="routing.pl">
+    [% INCLUDE 'csrf-token.inc' %]
 <input type="hidden" name="op" value="save" />
 <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
 <fieldset class="rows">
