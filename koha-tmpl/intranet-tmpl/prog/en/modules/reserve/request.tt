@@ -1724,7 +1724,7 @@
 
                     if ( selected_items.closest('tr').find(".pickup_locations").val() == '' ) {
 
-                        msg = _("- Please select a pickup location for the item" + "\n")
+                        msg = (_("- Please select a pickup location for the item") + "\n");
                     }
                 }
                 else {
@@ -1742,7 +1742,7 @@
             } else {
                 // Requesting next available
                 if( $("#pickup-next-avail").length < 1 || $("#pickup-next-avail").val() == "" || $('#pickup-next-avail').val() === null ){
-                    msg = _("- Please select a pickup location for this hold" + "\n");
+                    msg = (_("- Please select a pickup location for this hold") + "\n");
                 }
             }
 
