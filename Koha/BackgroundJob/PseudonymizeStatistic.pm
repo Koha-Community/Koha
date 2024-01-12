@@ -23,7 +23,7 @@ use base 'Koha::BackgroundJob';
 
 =head1 NAME
 
-Koha::BackgroundJob::PseudonymizedTransactions - Pseudonymize transactions background job
+Koha::BackgroundJob::PseudonymizeStatistic - Pseudonymize statistics background job
 
 This is a subclass of Koha::BackgroundJob.
 
@@ -33,7 +33,7 @@ This is a subclass of Koha::BackgroundJob.
 
 =head3 job_type
 
-Define the job type of this job: batch_hold_cancel
+Define the job type of this job: pseudonymize_statistic
 
 =cut
 
