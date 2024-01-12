@@ -270,7 +270,7 @@
             <label for="select_item_group">Options: </label>
             <select name="item_group" id="item-group-add-or-create-form-select">
                 <optgroup label="Use existing item group">
-                    [% FOREACH ig IN item_groups %]
+                    [% FOREACH ig IN biblio.item_groups.search({}, {order_by => 'display_order'}) %]
                         <option value="[% ig.id | html %]">[% ig.description | html %]</option>
                     [% END %]
                 </optgroup>
