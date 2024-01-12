@@ -623,26 +623,26 @@
                                 [% END %]
                             </fieldset>
 
-                            [% biblio = biblioloop.0 %]
+                            [% biblio_info = biblioloop.0 %]
 
                             <ol>
                                 [% UNLESS Koha.Preference('item-level_itypes') %]
                                     <li>
                                         <span class="label">Item type:</span>
-                                        [% biblio.itemtype.translated_description | html %]
+                                        [% biblio_info.itemtype.translated_description | html %]
                                     </li>
                                 [% END %]
 
-                                [% IF ( biblio.biblioitem.publicationyear ) %]
+                                [% IF ( biblio_info.biblioitem.publicationyear ) %]
                                     <li>
                                         <span class="label">Publication year:</span>
-                                        [% biblio.biblioitem.publicationyear | html %]
+                                        [% biblio_info.biblioitem.publicationyear | html %]
                                     </li>
                                 [% END %]
                             </ol>
 
                             <!-- ItemGroup level holds -->
-                            [% IF Koha.Preference('EnableItemGroupHolds') && biblio.object.item_groups.count %]
+                            [% IF Koha.Preference('EnableItemGroupHolds') && biblio_info.object.item_groups.count %]
                                 <h2 style="padding: 0 1em;">
                                     Hold next available item from an item group
                                     [% IF force_hold_level == 'item_group' %]
@@ -669,7 +669,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            [% FOREACH g IN biblio.object.item_groups.search({}, { order_by => ['display_order'] }) %]
+                                            [% FOREACH g IN biblio_info.object.item_groups.search({}, { order_by => ['display_order'] }) %]
                                                 [% IF g.items %]
                                                     <tr>
                                                         <td>
@@ -703,7 +703,7 @@
                                             <th>Item type</th>
                                         [% END %]
                                         <th>Barcode</th>
-                                        [% IF Koha.Preference('EnableItemGroupHolds') && biblio.object.item_groups.count %]
+                                        [% IF Koha.Preference('EnableItemGroupHolds') && biblio_info.object.item_groups.count %]
                                             <th>Item group</th>
                                         [% END %]
                                         <th>Home library</th>
@@ -721,7 +721,7 @@
                                 </thead>
                                 <tbody>
                                     [% SET selected = 0 %]
-                                    [% FOREACH itemloo IN biblio.itemloop %]
+                                    [% FOREACH itemloo IN biblio_info.itemloop %]
                                         [% UNLESS ( itemloo.hide ) %]
                                             <tr class="[% itemloo.backgroundcolor | html %]">
                                                 <td>
@@ -804,7 +804,7 @@
                                                 <td>
                                                     [% itemloo.barcode | html %]
                                                 </td>
-                                                [% IF Koha.Preference('EnableItemGroupHolds') && biblio.object.item_groups.count %]
+                                                [% IF Koha.Preference('EnableItemGroupHolds') && biblio_info.object.item_groups.count %]
                                                     <td>
                                                         [% itemloo.object.item_group.description | html %]
                                                     </td>
@@ -903,7 +903,7 @@
                             [% IF hiddencount %]
                                 <form method="get">
                                     <p class="hiddencount">
-                                        <a href="request.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;borrowernumber=[% borrowernumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
+                                        <a href="request.pl?biblionumber=[% biblio_info.biblionumber | uri %]&amp;borrowernumber=[% borrowernumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
                                     </p>
                                 </form>
                             [% END # /IF hiddencount %]
@@ -1318,7 +1318,7 @@
         var biblionumbers = [[% biblionumbers.join(', ') | $raw %]];
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
-        var override_items = {[% FOREACH biblio IN biblioloop %][% FOREACH itemloo IN biblio.itemloop %][% IF ( itemloo.override ) %]
+        var override_items = {[% FOREACH biblio_info IN biblioloop %][% FOREACH itemloo IN biblio_info.itemloop %][% IF ( itemloo.override ) %]
         [% itemloo.itemnumber | html %]: {
             homebranch: "[% To.json( Branches.GetName( itemloo.homebranch ) ) | $raw %]",
             holdallowed: "[% itemloo.holdallowed | html %]"

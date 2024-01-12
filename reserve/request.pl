@@ -698,7 +698,8 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
     $template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
     # FIXME: getting just the first bib's result doesn't seem right
     $template->param( subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumbers[0]));
-} elsif ( ! $multi_hold ) {
+}
+unless ($multi_hold) {
     my $biblio = Koha::Biblios->find( $biblionumbers[0] );
     $template->param( biblio => $biblio );
 }
