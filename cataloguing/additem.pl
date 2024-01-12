@@ -444,7 +444,7 @@ if ($op eq "additem") {
                     $current_item->discard_changes; # Cannot chain discard_changes
                     $current_item = $current_item->unblessed;
                     add_item_to_item_group(
-                        $item->biblionumber, $item->biblioitemnumber, $item_group,
+                        $item->biblionumber, $item->itemnumber, $item_group,
                         $item_group_description
                     );
 
