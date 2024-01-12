@@ -122,9 +122,9 @@
                 [% END # / IF searchdesc %]
 
                 <div id="userresults">
-                    [% #IF ( DidYouMean ) %]
+                    [% IF ( DidYouMean ) %]
                         <div id="didyoumean">Not what you expected? Check for <a href="/cgi-bin/koha/svc/suggestion?render=standalone&amp;q=[% querystring | uri %]">suggestions</a></div>
-                    [% #END %]
+                    [% END %]
 
                     [% IF ( koha_spsuggest ) %]
                         Did you mean:
