@@ -23,9 +23,7 @@ use Template::Plugin;
 use base qw( Template::Plugin );
 
 use Koha::Holds;
-use Koha::Biblios;
 use Koha::Database;
-use Koha::Patrons;
 use Koha::Recalls;
 
 # Do not use HoldsCount, it is deprecated and will be removed in a future release.
@@ -37,15 +35,6 @@ sub HoldsCount {
     my $holds = Koha::Holds->search( { biblionumber => $biblionumber } );
 
     return $holds->count();
-}
-
-sub CanArticleRequest {
-    my ( $self, $biblionumber, $borrowernumber ) = @_;
-
-    my $biblio = Koha::Biblios->find( $biblionumber );
-    my $borrower = Koha::Patrons->find( $borrowernumber );
-
-    return $biblio ? $biblio->can_article_request( $borrower ) : 0;
 }
 
 # Do not use RecallsCount, it is deprecated and will be removed in a future release.
