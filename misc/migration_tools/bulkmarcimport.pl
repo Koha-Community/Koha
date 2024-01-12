@@ -902,7 +902,7 @@ debugging.
 The I<CHARACTERISTIC> MARC flavour. At the moment, only I<MARC21> and
 I<UNIMARC> are supported. MARC21 by default.
 
-=item B<-d>
+=item B<-d, --delete>
 
 Delete EVERYTHING related to biblio in koha-DB before import. Tables: biblio,
 biblioitems, items
