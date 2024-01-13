@@ -49,56 +49,58 @@
 [% END %]
 
 [% IF ( get_orders ) %]
-
-    [% IF ( ordersloop ) %]<table id="funds">
-        <thead>
-        <tr>
-        <th>Fund</th>
-        <th>Basket</th>
-        <th>Basket name</th>
-        <th>Basket by</th>
-        <th>Title</th>
-        <th>Currency</th>
-        <th>List price</th>
-        <th>RRP</th>
-        <th>Budgeted cost</th>
-        <th>Quantity</th>
-        <th>Total RRP</th>
-        <th>Total cost</th>
-        <th>Entry date</th>
-        <th>Date received</th>
-        <th>Internal note</th>
-        <th>Vendor note</th>
-        </tr>
-        </thead>
-        <tbody>
-        [% FOREACH ordersloo IN ordersloop %]
-            [% UNLESS ( loop.odd ) %]<tr class="highlight">
-            [% ELSE %] <tr>
-            [% END %]
-            <td>[% ordersloo.budget_name | html %]</td>
-            <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno | uri %]"> [% ordersloo.basketno | html %]</a></td>
-            <td>[% ordersloo.basketname | html %]</td>
-            <td>[% ordersloo.authorisedbyname | html %]</td>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | uri %]"> [% ordersloo.title | html %]</a></td>
-            <td>[% ordersloo.currency | html %]</td>
-            <td>[% ordersloo.listprice | $Price %]</td>
-            <td>[% ordersloo.rrp | $Price %]</td>
-            <td>[% ordersloo.ecost | $Price %]</td>
-            <td>[% ordersloo.quantity | html %]</td>
-            <td>[% ordersloo.total_rrp | $Price %]</td>
-            <td>[% ordersloo.total_ecost | $Price %]</td>
-            <td data-order="[% ordersloo.entrydate | html %]">[% ordersloo.entrydate | $KohaDates %]</td>
-            <td data-order="[% ordersloo.datereceived | html %]">[% ordersloo.datereceived | $KohaDates %]</td>
-            <td>[% ordersloo.order_internalnote | html %]</td>
-            <td>[% ordersloo.order_vendornote | html %]</td>
-            </tr>
-        [% END %]
-        </tbody>
-        <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity | html %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th><th></th><th></th></tr></tfoot>
-        </table>
+    [% IF ( ordersloop ) %]
+        <div class="page-section">
+            <table id="funds">
+                <thead>
+                <tr>
+                <th>Fund</th>
+                <th>Basket</th>
+                <th>Basket name</th>
+                <th>Basket by</th>
+                <th>Title</th>
+                <th>Currency</th>
+                <th>List price</th>
+                <th>RRP</th>
+                <th>Budgeted cost</th>
+                <th>Quantity</th>
+                <th>Total RRP</th>
+                <th>Total cost</th>
+                <th>Entry date</th>
+                <th>Date received</th>
+                <th>Internal note</th>
+                <th>Vendor note</th>
+                </tr>
+                </thead>
+                <tbody>
+                [% FOREACH ordersloo IN ordersloop %]
+                    [% UNLESS ( loop.odd ) %]<tr class="highlight">
+                    [% ELSE %] <tr>
+                    [% END %]
+                    <td>[% ordersloo.budget_name | html %]</td>
+                    <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno | uri %]"> [% ordersloo.basketno | html %]</a></td>
+                    <td>[% ordersloo.basketname | html %]</td>
+                    <td>[% ordersloo.authorisedbyname | html %]</td>
+                    <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | uri %]"> [% ordersloo.title | html %]</a></td>
+                    <td>[% ordersloo.currency | html %]</td>
+                    <td>[% ordersloo.listprice | $Price %]</td>
+                    <td>[% ordersloo.rrp | $Price %]</td>
+                    <td>[% ordersloo.ecost | $Price %]</td>
+                    <td>[% ordersloo.quantity | html %]</td>
+                    <td>[% ordersloo.total_rrp | $Price %]</td>
+                    <td>[% ordersloo.total_ecost | $Price %]</td>
+                    <td data-order="[% ordersloo.entrydate | html %]">[% ordersloo.entrydate | $KohaDates %]</td>
+                    <td data-order="[% ordersloo.datereceived | html %]">[% ordersloo.datereceived | $KohaDates %]</td>
+                    <td>[% ordersloo.order_internalnote | html %]</td>
+                    <td>[% ordersloo.order_vendornote | html %]</td>
+                    </tr>
+                [% END %]
+                </tbody>
+                <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity | html %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th><th></th><th></th></tr></tfoot>
+                </table>
+            </div>
     [% END %]
-    [% ELSE %]
+[% ELSE %]
         <form name="f" action="/cgi-bin/koha/reports/orders_by_fund.pl" method="post">
         <fieldset class="rows">
         <legend>Filters</legend>
@@ -155,7 +157,7 @@
         <input type="hidden" name="get_orders" value="1" /></fieldset>
         </form>
 
-    [% END %]
+[% END %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
