@@ -7,7 +7,7 @@
 [% BLOCK controls %]
     <p class="cart-controls">
         <a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a> <a id="CheckNone" href="#"><i class="fa fa-times"></i> Clear all</a>
-        | <strong>Selected items :</strong>
+        | <strong>Selected items:</strong>
         <a href="#" id="remove_from_cart">Remove</a>
 
         [% IF ( loggedinusername ) %]
@@ -83,181 +83,183 @@
                                 <!-- COinS / Openurl -->
                                 <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
 
-                                <table>
-                                    [% IF ( BIBLIO_RESULT.isbn ) %]
-                                        <tr>
-                                            <th scope="row">ISBN</th>
-                                            <td>[% BIBLIO_RESULT.isbn | html %]</td>
-                                        </tr>
-                                    [% END %]
+                                <div class="page-section">
+                                    <table>
+                                        [% IF ( BIBLIO_RESULT.isbn ) %]
+                                            <tr>
+                                                <th scope="row">ISBN</th>
+                                                <td>[% BIBLIO_RESULT.isbn | html %]</td>
+                                            </tr>
+                                        [% END %]
 
-                                    [% IF ( BIBLIO_RESULT.HASAUTHORS ) %]
-                                        <tr>
-                                            <th scope="row">Author(s)</th>
-                                            <td>
-                                                [% IF ( BIBLIO_RESULT.author ) %]
-                                                    <p>[% BIBLIO_RESULT.author | html %]</p>
-                                                [% END %]
-                                                [% IF ( BIBLIO_RESULT.MARCAUTHORS ) %]
-                                                    [% FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS %]
+                                        [% IF ( BIBLIO_RESULT.HASAUTHORS ) %]
+                                            <tr>
+                                                <th scope="row">Author(s)</th>
+                                                <td>
+                                                    [% IF ( BIBLIO_RESULT.author ) %]
+                                                        <p>[% BIBLIO_RESULT.author | html %]</p>
+                                                    [% END %]
+                                                    [% IF ( BIBLIO_RESULT.MARCAUTHORS ) %]
+                                                        [% FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS %]
+                                                            <p>
+                                                                [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
+                                                                    [% MARCAUTHOR_SUBFIELDS_LOO.separator | html %]
+                                                                    [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]
+                                                                [% END %]
+                                                            </p>
+                                                        [% END %]
+                                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
+
+                                        [% IF ( BIBLIO_RESULT.publishercode ) %]
+                                            <tr>
+                                                <th scope="row">Publisher</th>
+                                                <td>[% BIBLIO_RESULT.place | html %] [% BIBLIO_RESULT.publishercode | html %] [% BIBLIO_RESULT.publicationyear | html %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
+
+                                        [% IF ( BIBLIO_RESULT.pages ) %]
+                                            <tr>
+                                                <th scope="row">Details</th>
+                                                <td>[% BIBLIO_RESULT.pages | html %] [% BIBLIO_RESULT.illus | html %] [% BIBLIO_RESULT.item('size') | html %]</td>
+                                            </tr>
+                                        [% END %]
+
+                                        [% IF ( BIBLIO_RESULT.seriestitle ) %]
+                                            <tr>
+                                                <th scope="row">Collection</th>
+                                                <td> [% BIBLIO_RESULT.seriestitle | html %]</td>
+                                            </tr>
+                                        [% END %]
+
+                                        [% IF ( BIBLIO_RESULT.MARCSUBJCTS ) %]
+                                            <tr>
+                                                <th scope="row">Subject(s)</th>
+                                                <td>
+                                                    [% FOREACH MARCSUBJCT IN BIBLIO_RESULT.MARCSUBJCTS %]
                                                         <p>
-                                                            [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
-                                                                [% MARCAUTHOR_SUBFIELDS_LOO.separator | html %]
-                                                                [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]
+                                                            [% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
+                                                                [% MARCSUBJECT_SUBFIELDS_LOO.separator | html %][% MARCSUBJECT_SUBFIELDS_LOO.value | html %]
                                                             [% END %]
                                                         </p>
                                                     [% END %]
-                                                [% END %]
-                                            </td>
-                                        </tr>
-                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
 
-                                    [% IF ( BIBLIO_RESULT.publishercode ) %]
-                                        <tr>
-                                            <th scope="row">Publisher</th>
-                                            <td>[% BIBLIO_RESULT.place | html %] [% BIBLIO_RESULT.publishercode | html %] [% BIBLIO_RESULT.publicationyear | html %]
-                                            </td>
-                                        </tr>
-                                    [% END %]
+                                        [% IF ( BIBLIO_RESULT.copyrightdate ) %]
+                                            <tr><th scope="row">Copyright</th>
+                                                <td> [% BIBLIO_RESULT.copyrightdate | html %]</td>
+                                            </tr>
+                                        [% END %]
 
-                                    [% IF ( BIBLIO_RESULT.pages ) %]
-                                        <tr>
-                                            <th scope="row">Details</th>
-                                            <td>[% BIBLIO_RESULT.pages | html %] [% BIBLIO_RESULT.illus | html %] [% BIBLIO_RESULT.item('size') | html %]</td>
-                                        </tr>
-                                    [% END %]
-
-                                    [% IF ( BIBLIO_RESULT.seriestitle ) %]
-                                        <tr>
-                                            <th scope="row">Collection</th>
-                                            <td> [% BIBLIO_RESULT.seriestitle | html %]</td>
-                                        </tr>
-                                    [% END %]
-
-                                    [% IF ( BIBLIO_RESULT.MARCSUBJCTS ) %]
-                                        <tr>
-                                            <th scope="row">Subject(s)</th>
-                                            <td>
-                                                [% FOREACH MARCSUBJCT IN BIBLIO_RESULT.MARCSUBJCTS %]
-                                                    <p>
-                                                        [% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
-                                                            [% MARCSUBJECT_SUBFIELDS_LOO.separator | html %][% MARCSUBJECT_SUBFIELDS_LOO.value | html %]
+                                        [% IF ( BIBLIO_RESULT.MARCNOTES ) %]
+                                            <tr>
+                                                <th scope="row">Notes</th>
+                                                <td>
+                                                    [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
+                                                        <p>
+                                                        [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                                                            - <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
+                                                        [% ELSE %]
+                                                            - [% MARCNOTE.marcnote | html %]
                                                         [% END %]
-                                                    </p>
-                                                [% END %]
-                                            </td>
-                                        </tr>
-                                    [% END %]
+                                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
 
-                                    [% IF ( BIBLIO_RESULT.copyrightdate ) %]
-                                        <tr><th scope="row">Copyright</th>
-                                            <td> [% BIBLIO_RESULT.copyrightdate | html %]</td>
-                                        </tr>
-                                    [% END %]
+                                        [% IF ( BIBLIO_RESULT.unititle ) %]
+                                            <tr>
+                                                <th scope="row">Unified title</th>
+                                                <td> [% BIBLIO_RESULT.unititle | html %]</td>
+                                            </tr>
+                                        [% END %]
 
-                                    [% IF ( BIBLIO_RESULT.MARCNOTES ) %]
-                                        <tr>
-                                            <th scope="row">Notes</th>
-                                            <td>
-                                                [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
-                                                    <p>
-                                                    [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                        - <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
+                                        [% IF ( BIBLIO_RESULT.serial ) %]
+                                            <tr>
+                                                <th scope="row">Serial</th>
+                                                <td>[% BIBLIO_RESULT.serial | html %]</td>
+                                            </tr>
+                                        [% END %]
+
+                                        [% IF ( BIBLIO_RESULT.dewey ) %]
+                                            <tr>
+                                                <th scope="row">Dewey</th>
+                                                <td>[% BIBLIO_RESULT.dewey | html %]</td>
+                                            </tr>
+                                        [% END %]
+
+                                        [% IF ( BIBLIO_RESULT.classification ) %]
+                                            <tr>
+                                                <th scope="row">Classification</th>
+                                                <td> [% BIBLIO_RESULT.classification | html %]</td>
+                                            </tr>
+                                        [% END %]
+
+                                        [% IF ( BIBLIO_RESULT.lccn ) %]
+                                            <tr>
+                                                <th scope="row">LCCN</th>
+                                                <td> [% BIBLIO_RESULT.lccn | html %]</td>
+                                            </tr>
+                                        [% END %]
+
+
+                                        [% IF BIBLIO_RESULT.MARCURLS.size %]
+                                            <tr>
+                                                <th scope="row">URL(s)</th>
+                                                <td>
+                                                   [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
+                                                        [% IF MARCurl.part %]<p>[% MARCurl.part | html %]</p>[% END %]
+                                                        <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
+                                                        [% IF MARCurl.notes %]
+                                                            [% FOREACH note IN MARCurl.notes %]
+                                                                <p>[% note.note | html %]</p>
+                                                            [% END %]
+                                                        [% END %]
+                                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
+
+                                        [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
+                                            <tr>
+                                                <th scope="row">In</th>
+                                                <td>
+                                                    [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                        <p>[% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | html %]</p>
                                                     [% ELSE %]
-                                                        - [% MARCNOTE.marcnote | html %]
+                                                        <p>[% BIBLIO_RESULT.HOSTINFO | html %]</p>
                                                     [% END %]
-                                                [% END %]
-                                            </td>
-                                        </tr>
-                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
 
-                                    [% IF ( BIBLIO_RESULT.unititle ) %]
                                         <tr>
-                                            <th scope="row">Unified title</th>
-                                            <td> [% BIBLIO_RESULT.unititle | html %]</td>
-                                        </tr>
-                                    [% END %]
-
-                                    [% IF ( BIBLIO_RESULT.serial ) %]
-                                        <tr>
-                                            <th scope="row">Serial</th>
-                                            <td>[% BIBLIO_RESULT.serial | html %]</td>
-                                        </tr>
-                                    [% END %]
-
-                                    [% IF ( BIBLIO_RESULT.dewey ) %]
-                                        <tr>
-                                            <th scope="row">Dewey</th>
-                                            <td>[% BIBLIO_RESULT.dewey | html %]</td>
-                                        </tr>
-                                    [% END %]
-
-                                    [% IF ( BIBLIO_RESULT.classification ) %]
-                                        <tr>
-                                            <th scope="row">Classification</th>
-                                            <td> [% BIBLIO_RESULT.classification | html %]</td>
-                                        </tr>
-                                    [% END %]
-
-                                    [% IF ( BIBLIO_RESULT.lccn ) %]
-                                        <tr>
-                                            <th scope="row">LCCN</th>
-                                            <td> [% BIBLIO_RESULT.lccn | html %]</td>
-                                        </tr>
-                                    [% END %]
-
-
-                                    [% IF BIBLIO_RESULT.MARCURLS.size %]
-                                        <tr>
-                                            <th scope="row">URL(s)</th>
+                                            <th scope="row">Location(s)</th>
                                             <td>
-                                               [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
-                                                    [% IF MARCurl.part %]<p>[% MARCurl.part | html %]</p>[% END %]
-                                                    <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
-                                                    [% IF MARCurl.notes %]
-                                                        [% FOREACH note IN MARCurl.notes %]
-                                                            <p>[% note.note | html %]</p>
-                                                        [% END %]
+                                                [% IF BIBLIO_RESULT.ITEM_RESULTS.count %]
+                                                    [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
+                                                        <p>
+                                                            [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
+                                                            <span class="shelvingloc">
+                                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]
+                                                            </span>
+                                                            [% IF ( ITEM_RESULT.itemcallnumber ) %]
+                                                                ([% ITEM_RESULT.itemcallnumber | html %])
+                                                            [% END %]
+                                                        </p>
                                                     [% END %]
-                                                [% END %]
-                                            </td>
-                                        </tr>
-                                    [% END %]
-
-                                    [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
-                                        <tr>
-                                            <th scope="row">In</th>
-                                            <td>
-                                                [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                    <p>[% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | html %]</p>
                                                 [% ELSE %]
-                                                    <p>[% BIBLIO_RESULT.HOSTINFO | html %]</p>
+                                                    This record has no items.
                                                 [% END %]
                                             </td>
                                         </tr>
-                                    [% END %]
-
-                                    <tr>
-                                        <th scope="row">Location(s)</th>
-                                        <td>
-                                            [% IF BIBLIO_RESULT.ITEM_RESULTS.count %]
-                                                [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
-                                                    <p>
-                                                        [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
-                                                        <span class="shelvingloc">
-                                                            [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]
-                                                        </span>
-                                                        [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                                                            ([% ITEM_RESULT.itemcallnumber | html %])
-                                                        [% END %]
-                                                    </p>
-                                                [% END %]
-                                            [% ELSE %]
-                                                This record has no items.
-                                            [% END %]
-                                        </td>
-                                    </tr>
-                                </table>
+                                    </table>
+                                </div>
                             [% END # /FOREACH BIBLIO_RESULT %]
                         </form> [% # /bookbag_form %]
 
@@ -266,78 +268,80 @@
                         <form action="/cgi-bin/koha/basket/basket.pl" method="get" name="bookbag_form" id="bookbag_form">
                             [% PROCESS controls %]
 
-                            <table id="itemst">
-                                <thead>
-                                    <tr>
-                                        <th class="NoSort noprint">&nbsp;</th>
-                                        <th class="anti-the">Title</th>
-                                        <th>Item type</th>
-                                        <th>
-                                            <a id="items-popover" href="#" data-trigger="hover" data-toggle="popover" data-placement="top" title="Item sorting" data-content="Items are sorted by the highest or lowest callnumber in a group of items respectively.">Items</a>
-                                        </th>
-                                    </tr>
-                                </thead>
+                            <div class="page-section">
+                                <table id="itemst">
+                                    <thead>
+                                        <tr>
+                                            <th class="NoSort noprint">&nbsp;</th>
+                                            <th class="anti-the">Title</th>
+                                            <th>Item type</th>
+                                            <th>
+                                                <a id="items-popover" href="#" data-trigger="hover" data-toggle="popover" data-placement="top" title="Item sorting" data-content="Items are sorted by the highest or lowest callnumber in a group of items respectively.">Items</a>
+                                            </th>
+                                        </tr>
+                                    </thead>
 
-                                [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
-                                    <tr>
-                                        <td class="noprint">
-                                            <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
-                                        </td>
-                                        <td>
-                                            [% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT link = 1 %]</a>
-                                            [% BIBLIO_RESULT.author | html %]
-                                            <p>
-                                                [% IF ( BIBLIO_RESULT.publishercode ) %]
-                                                    - [% BIBLIO_RESULT.publishercode | html %]
-                                                    [% IF ( BIBLIO_RESULT.place ) %]
-                                                        [% BIBLIO_RESULT.place | html %]
+                                    [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
+                                        <tr>
+                                            <td class="noprint">
+                                                <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
+                                            </td>
+                                            <td>
+                                                [% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT link = 1 %]</a>
+                                                [% BIBLIO_RESULT.author | html %]
+                                                <p>
+                                                    [% IF ( BIBLIO_RESULT.publishercode ) %]
+                                                        - [% BIBLIO_RESULT.publishercode | html %]
+                                                        [% IF ( BIBLIO_RESULT.place ) %]
+                                                            [% BIBLIO_RESULT.place | html %]
+                                                        [% END %]
                                                     [% END %]
-                                                [% END %]
-                                                [% IF ( BIBLIO_RESULT.pages ) %]
-                                                    - [% BIBLIO_RESULT.pages | html %]
-                                                    [% IF ( BIBLIO_RESULT.item('size') ) %]
-                                                        [% BIBLIO_RESULT.item('size') | html %]
+                                                    [% IF ( BIBLIO_RESULT.pages ) %]
+                                                        - [% BIBLIO_RESULT.pages | html %]
+                                                        [% IF ( BIBLIO_RESULT.item('size') ) %]
+                                                            [% BIBLIO_RESULT.item('size') | html %]
+                                                        [% END %]
                                                     [% END %]
-                                                [% END %]
-                                            </p>
-                                            [% IF ( BIBLIO_RESULT.notes ) %]
-                                                <p>[% BIBLIO_RESULT.notes | html %]</p>
-                                            [% END %]
-                                            [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
-                                                <p>In:
-                                                [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
-                                                    [% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | html %]
-                                                [% ELSE %]
-                                                    [% BIBLIO_RESULT.HOSTINFO | html %]
-                                                [% END %]
                                                 </p>
-                                            [% END %]
-                                            <!-- COinS / Openurl -->
-                                            <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
-                                        </td>
-                                        <td>[% BIBLIO_RESULT.description | html %]</td>
-                                        <td class="callnumbers">
-                                            [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
-                                                [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
-                                                    <div>
-                                                        <span class="nowrap">
-                                                            <strong>
-                                                                <span class="callnumber">[% ITEM_RESULT.itemcallnumber | html %]</span>
-                                                            </strong>
-                                                            [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
-                                                            <span class="shelvingloc">
-                                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]
-                                                            </span>
-                                                        </span>
-                                                    </div>
+                                                [% IF ( BIBLIO_RESULT.notes ) %]
+                                                    <p>[% BIBLIO_RESULT.notes | html %]</p>
                                                 [% END %]
-                                            [% ELSE %]
-                                                This record has no items.
-                                            [% END %]
-                                        </td>
-                                    </tr>
-                                [% END # /FOREACH BIBLIO_RESULT %]
-                            </table>
+                                                [% IF BIBLIO_RESULT.HOSTITEMENTRIES || BIBLIO_RESULT.HOSTINFO %]
+                                                    <p>In:
+                                                    [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                        [% INCLUDE 'biblio-title.inc' link = 1 biblio=BIBLIO_RESULT.HOSTITEMENTRIES %] [% BIBLIO_RESULT.RELATEDPARTS | html %]
+                                                    [% ELSE %]
+                                                        [% BIBLIO_RESULT.HOSTINFO | html %]
+                                                    [% END %]
+                                                    </p>
+                                                [% END %]
+                                                <!-- COinS / Openurl -->
+                                                <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
+                                            </td>
+                                            <td>[% BIBLIO_RESULT.description | html %]</td>
+                                            <td class="callnumbers">
+                                                [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
+                                                    [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
+                                                        <div>
+                                                            <span class="nowrap">
+                                                                <strong>
+                                                                    <span class="callnumber">[% ITEM_RESULT.itemcallnumber | html %]</span>
+                                                                </strong>
+                                                                [% Branches.GetName(ITEM_RESULT.holdingbranch) | html %]
+                                                                <span class="shelvingloc">
+                                                                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location ) | html %]
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    [% END %]
+                                                [% ELSE %]
+                                                    This record has no items.
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END # /FOREACH BIBLIO_RESULT %]
+                                </table>
+                            </div>
                         </form>
                     [% END # /IF verbose %]
 
