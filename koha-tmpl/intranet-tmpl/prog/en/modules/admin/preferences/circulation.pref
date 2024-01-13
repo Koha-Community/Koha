@@ -859,7 +859,8 @@ Circulation:
               choices:
                   1: Enable
                   0:  "Don't enable"
-            - "sending an email to the Koha administrator email address whenever a hold request is placed."
+            - "sending an email to the patron's library whenever a hold request is placed."
+            - "The first email address set from this list will be used: library reply-to, library email, <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplytoDefault'>ReplytoDefault</a>, <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress'>KohaAdminEmailAddress</a>."
         -
             - pref: DisplayMultiPlaceHold
               choices:
