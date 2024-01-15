@@ -788,6 +788,9 @@ $("#placeBookingForm").on("submit", function (e) {
                 parseInt($(".bookings_count").html(), 10) + 1
             );
 
+            // Set feedback
+            $('#transient_result').replaceWith('<div id="transient_result" class="dialog success">'+_("Booking successfully placed")+'</div>');
+
             // Close modal
             $("#placeBookingModal").modal("hide");
         });
@@ -849,6 +852,12 @@ $("#placeBookingForm").on("submit", function (e) {
                 timeline.focus(data.booking_id);
             }
 
+<<<<<<< HEAD
+=======
+            // Set feedback
+            $('#transient_result').replaceWith('<div id="transient_result" class="dialog success">'+_("Booking successfully updated")+'</div>');
+
+>>>>>>> 9195757e2f1 (Bug 35813: Add success feedback after placing/editing bookings)
             // Close modal
             $("#placeBookingModal").modal("hide");
         });
