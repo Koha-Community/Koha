@@ -6,6 +6,7 @@ return {
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
+
         # Handle cases of roombookings plugin existing
         if ( TableExists('bookings') ) {
             if ( column_exists( 'bookings', 'bookingid' ) ) {
@@ -37,21 +38,19 @@ return {
                 $old_roomequipment_table TO $roomequipment_table,
             }
                 );
+                $dbh->do("ALTER TABLE $rooms_table RENAME INDEX $old_rooms_index TO $rooms_index");
+                $dbh->do("ALTER TABLE $bookings_table RENAME INDEX $old_bookings_index TO $bookings_index");
+                $dbh->do("ALTER TABLE $equipment_table RENAME INDEX $old_equipment_index TO $equipment_index");
                 $dbh->do(
-"ALTER TABLE $rooms_table RENAME INDEX $old_rooms_index TO $rooms_index"
-                );
-                $dbh->do(
-"ALTER TABLE $bookings_table RENAME INDEX $old_bookings_index TO $bookings_index"
-                );
-                $dbh->do(
-"ALTER TABLE $equipment_table RENAME INDEX $old_equipment_index TO $equipment_index"
-                );
-                $dbh->do(
-"ALTER TABLE $roomequipment_table RENAME INDEX $old_roomequipment_index TO $roomequipment_index"
-                );
+                    "ALTER TABLE $roomequipment_table RENAME INDEX $old_roomequipment_index TO $roomequipment_index");
 
                 say "Migrated room reservations plugin to it's own namespace";
                 say "You MUST upgrade to the latest room reservation plugin to continue using it";
+                $dbh->do(
+                    "UPDATE plugin_data SET plugin_value = 0 WHERE plugin_class = 'Koha::Plugin::Com::MarywoodUniversity::RoomReservations' AND plugin_key = '__ENABLED__'"
+                );
+
+                say "Plugin disabled, please re-enable once you have upgraded it";
             }
         }
 
