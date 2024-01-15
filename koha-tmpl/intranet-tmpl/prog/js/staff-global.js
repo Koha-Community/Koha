@@ -243,7 +243,20 @@ $(document).ready(function() {
     $("#bookbag_form a[href*='detail.pl?']").click(function(){
         resetSearchContext();
     });
-
+    // add back to top button on each staff page
+    $("body").append('<button id="backtotop" class="btn btn-default"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>');
+    $("#backtotop").hide();
+    $(window).scroll(function(){
+        if ( $(window).scrollTop() < 300 ) {
+            $("#backtotop").fadeOut();
+        } else {
+            $("#backtotop").fadeIn();
+        }
+    });
+    $("#backtotop").click(function(e) {
+        e.preventDefault();
+        $("html,body").animate({scrollTop: 0}, "slow");
+    });
 });
 
 function removeLastBorrower(){
