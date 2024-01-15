@@ -33,7 +33,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'filter_by_future' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -74,6 +74,19 @@ subtest 'filter_by_future' => sub {
     );
 
     is( $biblio->bookings->filter_by_future->count, 2, 'There should have 2 bookings starting after now' );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                start_date => dt_from_string->truncate( to => 'day' ),
+                end_date   => undef
+            }
+        }
+    );
+
+    is( $biblio->bookings->filter_by_future->count, 2, 'Current day is not considered future' );
 
     $schema->storage->txn_rollback;
 };
