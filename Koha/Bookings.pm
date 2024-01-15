@@ -20,7 +20,6 @@ package Koha::Bookings;
 use Modern::Perl;
 
 use Koha::Database;
-use Koha::DateUtils qw( dt_from_string );
 use Koha::Booking;
 
 use base qw(Koha::Objects);
@@ -39,22 +38,20 @@ Koha::Bookings - Koha Booking object set class
 
     $bookings->filter_by_future;
 
-    Will return the bookings starting from now.
+Will return the bookings starting from now.
 
 =cut
 
 sub filter_by_future {
     my ($self) = @_;
-    my $now    = dt_from_string;
-    my $dtf    = Koha::Database->new->schema->storage->datetime_parser;
-    return $self->search( { start_date => { '>' => $dtf->format_datetime($now) } } );
+    return $self->search( { start_date => { '>' => \'NOW()' } } );
 }
 
 =head2 Internal Methods
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
