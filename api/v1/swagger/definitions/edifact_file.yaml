@@ -3,23 +3,23 @@ type: object
 properties:
   id:
     type: integer
-    description: internally assigned edifect file identifier
+    description: internally assigned EDIFACT file identifier
     readOnly: true
   type:
     type:
       - string
-    description: Edifact file type
+    description: EDIFACT file type
   transfer_date:
     type:
       - string
       - "null"
     format: date
-    description: Edifact file transfer date
+    description: EDIFACT file transfer date
   vendor_id:
     type:
       - string
       - "null"
-    description: Koha vendor id
+    description: Koha vendor ID
   vendor:
     type:
       - object
@@ -29,17 +29,17 @@ properties:
     type:
       - string
       - "null"
-    description: Edifact account
+    description: EDIFACT account
   status:
     type:
       - string
       - "null"
-    description: Edifact file status
+    description: EDIFACT file status
   basket_id:
     type:
       - string
       - "null"
-    description: Koha basket id
+    description: Koha basket ID
   basket:
     type:
       - object
@@ -49,10 +49,10 @@ properties:
     type:
       - string
       - "null"
-    description: Edifact message
+    description: EDIFACT message
   filename:
     type:
       - string
       - "null"
-    description: Edifact file name
+    description: EDIFACT file name
 additionalProperties: false

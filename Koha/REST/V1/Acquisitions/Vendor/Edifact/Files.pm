@@ -33,13 +33,13 @@ Koha::REST::V1::Acquisitions::Edifact::Files
 
 =head3 list
 
-Controller function that handles edifact files
+Controller function that handles EDIFACT files
 
 =cut
 
 =head3 list
 
-Return the list of edifact files
+Return the list of EDIFACT files
 
 =cut
 

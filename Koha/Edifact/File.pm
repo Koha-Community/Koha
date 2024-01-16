@@ -23,7 +23,7 @@ use base qw(Koha::Object);
 
 =head1 Name
 
-Koha::Edifact::File - Koha::Object class for single edifact file
+Koha::Edifact::File - Koha::Object class for single EDIFACT file
 
 =head2 Class methods
 
@@ -31,7 +31,7 @@ Koha::Edifact::File - Koha::Object class for single edifact file
 
   my $vendor = $edifile->vendor;
 
-Returns the I<Koha::Acquisition::Bookseller> associated with this edifact file
+Returns the I<Koha::Acquisition::Bookseller> associated with this EDIFACT file
 
 =cut
 
@@ -46,7 +46,7 @@ sub vendor {
 
   my $basket = $edifile->basket;
 
-Returns the I<Koha::Acquisition::Basket> associated with this edifact file.
+Returns the I<Koha::Acquisition::Basket> associated with this EDIFACT file.
 
 =cut
 
