@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 32;
+use Test::More tests => 33;
 use Test::Exception;
 use Test::MockModule;
 
@@ -2404,6 +2404,117 @@ subtest 'bookings' => sub {
     is(
         $item->bookings( { start_date => { '<=' => $dtf->format_datetime( dt_from_string() ) } } )->count, 2,
         "Two bookings starts on or before today"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'find_booking' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $biblio        = $builder->build_sample_biblio();
+    my $item          = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
+    my $found_booking = $item->find_booking(
+        {
+            checkout_date => dt_from_string(),
+            due_date      => dt_from_string()->add( days => 7 ),
+        }
+    );
+
+    is(
+        $found_booking, undef,
+        "Nothing returned from Koha::Item->find_booking if there are no bookings"
+    );
+
+    my $start_1 = dt_from_string()->subtract( days => 7 );
+    my $end_1   = dt_from_string()->subtract( days => 1 );
+    my $start_2 = dt_from_string();
+    my $end_2   = dt_from_string()->add( days => 7 );
+    my $start_3 = dt_from_string()->add( days => 8 );
+    my $end_3   = dt_from_string()->add( days => 16 );
+
+    # Past booking
+    my $booking1 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $start_1,
+                end_date   => $end_1
+            }
+        }
+    );
+
+    $found_booking = $item->find_booking(
+        {
+            checkout_date => dt_from_string(),
+            due_date      => dt_from_string()->add( days => 7 ),
+        }
+    );
+
+    is(
+        $found_booking,
+        undef,
+        "Koha::Item->find_booking returns undefined if the passed dates do not conflict with any item bookings"
+    );
+
+    # Current booking
+    my $booking2 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $start_2,
+                end_date   => $end_2
+            }
+        }
+    );
+
+    $found_booking = $item->find_booking(
+        {
+            checkout_date => dt_from_string(),
+            due_date      => dt_from_string()->add( days => 7 ),
+        }
+    );
+    is(
+        ref($found_booking),
+        'Koha::Booking',
+        "Koha::Item->find_booking returns a Koha::Booking if one exists that would clash with the passed dates"
+    );
+    is( $found_booking->booking_id, $booking2->booking_id, "Koha::Item->find_booking returns the current booking" );
+
+    # Future booking
+    my $booking3 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $start_3,
+                end_date   => $end_3
+            }
+        }
+    );
+
+    $found_booking = $item->find_booking(
+        {
+            checkout_date => dt_from_string(),
+            due_date      => dt_from_string()->add( days => 7 ),
+        }
+    );
+
+    is(
+        ref($found_booking),
+        'Koha::Booking',
+        "Koha::Item->find_booking returns a Koha::Booking if one exists that would clash with the passed dates"
+    );
+    is(
+        $found_booking->booking_id, $booking2->booking_id,
+        "Koha::Item->find_booking returns the current booking not a future one"
     );
 
     $schema->storage->txn_rollback;

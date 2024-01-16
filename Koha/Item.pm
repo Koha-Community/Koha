@@ -528,7 +528,14 @@ sub bookings {
 
 =head3 find_booking
 
-Find the first booking that would conflict with the passed checkout dates
+  my $booking = $item->find_booking( { checkout_date => $now, due_date => $future_date } );
+
+Find the first booking that would conflict with the passed checkout dates for this item.
+
+FIXME: This can be simplified, it was originally intended to iterate all biblio level bookings
+to catch cases where this item may be the last available to satisfy a biblio level only booking.
+However, we dropped the biblio level functionality prior to push as bugs were found in it's
+implimentation.
 
 =cut
 
@@ -542,7 +549,7 @@ sub find_booking {
     my $dtf      = Koha::Database->new->schema->storage->datetime_parser;
     my $bookings = $biblio->bookings(
         [
-            # Checkout starts during booked period
+            # Proposed checkout starts during booked period
             start_date => {
                 '-between' => [
                     $dtf->format_datetime($checkout_date),
@@ -550,7 +557,7 @@ sub find_booking {
                 ]
             },
 
-            # Checkout is due during booked period
+            # Proposed checkout is due during booked period
             end_date => {
                 '-between' => [
                     $dtf->format_datetime($checkout_date),
@@ -558,7 +565,7 @@ sub find_booking {
                 ]
             },
 
-            # Checkout contains booked period
+            # Proposed checkout would contain the booked period
             {
                 start_date => { '<' => $dtf->format_datetime($checkout_date) },
                 end_date   => { '>' => $dtf->format_datetime($due_date) }
