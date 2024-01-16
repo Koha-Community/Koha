@@ -4,7 +4,7 @@
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% circ_active_tab = 1 %]
             [% circ_active = "active" %]
-        [% ELSIF ( CAN_user_borrowers_edit_borrowers ) %]
+        [% ELSIF ( CAN_user_borrowers_edit_borrowers ) || ( CAN_user_borrowers_list_borrowers ) %]
             [% patrons_active_tab = 1 %]
             [% patrons_active = "active" %]
         [% ELSIF ( CAN_user_catalogue ) %]
