@@ -147,9 +147,9 @@ if ( $op eq 'show' ) {
             };
 
         my $category_code = $attr_type->category_code;
-        my ( $category_lib ) = map {
-            ( defined $category_code and $attr_type->category_code eq $category_code ) ? $attr_type->description : ()
-        } @patron_categories;
+        my ($category_lib) =
+            map { ( defined $category_code and $attr_type->category_code eq $_->categorycode ) ? $_->description : () }
+            @patron_categories;
         push @patron_attributes_codes,
             {
                 attribute_code => $attr_type->code,
