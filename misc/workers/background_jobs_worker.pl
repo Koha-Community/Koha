@@ -122,19 +122,22 @@ while (1) {
         } catch {
             Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Frame not processed - %s", $_);
             return;
-        } finally {
-            $conn->ack( { frame => $frame } );
         };
 
-        next unless $args;
+        my $job;
 
-        # FIXME This means we need to have create the DB entry before
-        # It could work in a first step, but then we will want to handle job that will be created from the message received
-        my $job = Koha::BackgroundJobs->search( { id => $args->{job_id}, status => 'new' } )->next;
+        if ($args) {
+            $job = Koha::BackgroundJobs->search( { id => $args->{job_id}, status => 'new' } )->next;
+            unless ($job) {
+                Koha::Logger->get( { interface => 'worker' } )
+                    ->warn( sprintf "Job %s not found, or has wrong status", $args->{job_id} );
 
-        unless( $job ) {
-            Koha::Logger->get( { interface => 'worker' } )
-                ->warn( sprintf "Job %s not found, or has wrong status", $args->{job_id} );
+                # nack to force requeue
+                $conn->nack( { frame => $frame, requeue => 1 } );
+                next;
+            }
+            $conn->ack( { frame => $frame } );
+        } else {
             next;
         }
 
