@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Test::Exception;
 use Test::MockModule;
 
@@ -2359,6 +2359,52 @@ subtest 'location_update_trigger() tests' => sub {
             q{_PERM_ does the job"}
         );
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'bookings' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
+    is( ref( $item->bookings() ), 'Koha::Bookings', "Koha::Item->bookings() returns a Koha::Bookings object" );
+    is( $item->bookings->count,   0,                "Nothing returned if there are no bookings" );
+
+    my $start_1 = dt_from_string()->subtract( days => 7 );
+    my $end_1   = dt_from_string()->subtract( days => 1 );
+    my $start_2 = dt_from_string();
+    my $end_2   = dt_from_string()->add( days => 7 );
+    my $start_3 = dt_from_string()->add( days => 8 );
+    my $end_3   = dt_from_string()->add( days => 16 );
+
+    my $booking1 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => { item_id => $item->itemnumber, start_date => $start_1, end_date => $end_1 }
+        }
+    );
+    my $booking2 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => { item_id => $item->itemnumber, start_date => $start_2, end_date => $end_2 }
+        }
+    );
+    my $booking3 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => { item_id => $item->itemnumber, start_date => $start_3, end_date => $end_3 }
+        }
+    );
+
+    is( $item->bookings()->count, 3, "Three bookings found" );
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    is(
+        $item->bookings( { start_date => { '<=' => $dtf->format_datetime( dt_from_string() ) } } )->count, 2,
+        "Two bookings starts on or before today"
+    );
 
     $schema->storage->txn_rollback;
 };
