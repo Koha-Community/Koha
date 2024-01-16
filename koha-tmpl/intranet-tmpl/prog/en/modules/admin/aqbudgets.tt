@@ -505,7 +505,7 @@
 
             function select_user(borrowernumber, borrower) {
                 ownerRemove();
-                var borrowername = borrower.firstname + ' ' + borrower.surname;
+                var borrowername = ( borrower.firstname ? borrower.firstname : "" ) + ' ' + ( borrower.surname ? borrower.surname : "" );
                 if (borrowernumber) {
                     var ownerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
                         + '?borrowernumber=' + borrowernumber + '">'
