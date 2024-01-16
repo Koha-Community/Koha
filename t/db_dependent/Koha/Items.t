@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use Test::MockModule;
 use Test::Exception;
@@ -1997,6 +1997,29 @@ subtest 'filter_by_for_hold' => sub {
     is( $biblio->items->filter_by_for_hold->count, 0, '0 item-level_itypes=0' );
 
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_bookable' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    # bookable items
+    my $bookable_item1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
+
+    # not bookable items
+    my $non_bookable_item1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 0 } );
+    my $non_bookable_item2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 0 } );
+
+    is( $biblio->items->filter_by_bookable->count, 1, "filter_by_bookable returns the correct number of items" );
+    is(
+        $biblio->items->filter_by_bookable->next->itemnumber, $bookable_item1->itemnumber,
+        "the correct item is returned from filter_by_bookable"
+    );
 
     $schema->storage->txn_rollback;
 };
