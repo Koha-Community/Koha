@@ -51,6 +51,7 @@ my $auth_by_bind   = 1;
 my $anonymous_bind = 1;
 my $user           = 'cn=Manager,dc=metavore,dc=com';
 my $pass           = 'metavore';
+my $attrs          = {};
 
 # Variables controlling LDAP behaviour
 my $desired_authentication_result = 'success';
@@ -137,7 +138,7 @@ can_ok(
 
 subtest 'checkpw_ldap tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     ## Connection fail tests
     $desired_connection_result = 'error';
@@ -372,6 +373,66 @@ qr/LDAP Auth rejected : invalid password for user 'hola'./,
         is( $ret, -1, 'checkpw_ldap returns -1 if bind fails (Bug 8148)' );
 
     };
+
+    subtest "'update' config tets" => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        my $cardnumber = '123456789';
+        my $userid     = '987654321';
+
+        # test safety cleanup
+        Koha::Patrons->search( [ { cardnumber => $cardnumber }, { userid => $userid } ] )->delete;
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { cardnumber => $cardnumber, userid => $userid },
+            }
+        );
+
+        # avoid noise
+        t::lib::Mocks::mock_preference( 'ExtendedPatronAttributes', 0 );
+        $welcome   = 0;
+        $replicate = 0;
+
+        # the scenario
+        $update = 1;
+
+        $anonymous_bind                = 0;
+        $desired_count_result          = 1;
+        $desired_authentication_result = 'success';
+        $desired_admin_bind_result     = 'success';
+        $desired_search_result         = 'success';
+        $desired_bind_result           = 'success';
+
+        $attrs = {
+            branch        => [ $patron->branchcode ],
+            employeetype  => [ $patron->categorycode ],
+            givenname     => [ $patron->firstname ],
+            mail          => [ $patron->email ],
+            postaladdress => [ $patron->address ],
+            sn            => [ $patron->surname ],
+            uid           => [ $patron->userid ],
+            userpassword  => ['some password'],
+        };
+
+        reload_ldap_module();
+
+        my ( $ret_val, $ret_cardnumber, $ret_userid ) =
+            C4::Auth_with_ldap::checkpw_ldap( $patron->userid, password => 'hey' );
+
+        ok( $ret_val, 'Authentication success returns 1' );
+        is( $ret_cardnumber, $cardnumber, "The correct 'cardnumber' is returned" );
+        is( $ret_userid,     $userid,     "The correct 'userid' is returned" );
+
+        $patron->discard_changes;
+        is( $patron->cardnumber, $cardnumber, 'The cardnumber is not mistakenly changed to userid when not mapped' );
+
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'search_method tests' => sub {
@@ -542,7 +603,7 @@ sub mock_net_ldap_message {
 sub mock_net_ldap_entry {
     my ( $dn, $exists ) = @_;
 
-    my $mocked_entry = Test::MockObject->new();
+    my $mocked_entry = Test::MockObject->new( { attrs => $attrs } );
     $mocked_entry->mock( 'dn',     sub { return $dn; } );
     $mocked_entry->mock( 'exists', sub { return $exists } );
 
