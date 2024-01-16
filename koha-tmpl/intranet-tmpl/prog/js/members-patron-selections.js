@@ -18,7 +18,7 @@ function showPatronSelections(number) {
     if (number === 0) {
         $("#table_search_selections").hide()
     } else {
-        $("#table_search_selections").show().find("span").text(__("Patrons selected: %s".format(number)));
+        $("#table_search_selections").show().find("span").text(__("Patrons selected: %s").format(number));
     }
 }
 
