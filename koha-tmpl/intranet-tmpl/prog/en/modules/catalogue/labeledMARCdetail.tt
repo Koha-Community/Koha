@@ -47,7 +47,7 @@
     [% IF ( unknownbiblionumber ) %]
         <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
     [% ELSE %]
-
+                <div id="transient_result"></div>
                 [% INCLUDE 'cat-toolbar.inc' %]
 
                 <h1>

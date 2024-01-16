@@ -789,7 +789,11 @@ $("#placeBookingForm").on("submit", function (e) {
             );
 
             // Set feedback
-            $('#transient_result').replaceWith('<div id="transient_result" class="dialog success">'+_("Booking successfully placed")+'</div>');
+            $("#transient_result").replaceWith(
+                '<div id="transient_result" class="dialog message">' +
+                    __("Booking successfully placed") +
+                    "</div>"
+            );
 
             // Close modal
             $("#placeBookingModal").modal("hide");
@@ -798,7 +802,7 @@ $("#placeBookingForm").on("submit", function (e) {
         posting.fail(function (data) {
             $("#booking_result").replaceWith(
                 '<div id="booking_result" class="alert alert-danger">' +
-                    _("Failure") +
+                    __("Failure") +
                     "</div>"
             );
         });
@@ -852,12 +856,13 @@ $("#placeBookingForm").on("submit", function (e) {
                 timeline.focus(data.booking_id);
             }
 
-<<<<<<< HEAD
-=======
             // Set feedback
-            $('#transient_result').replaceWith('<div id="transient_result" class="dialog success">'+_("Booking successfully updated")+'</div>');
+            $("#transient_result").replaceWith(
+                '<div id="transient_result" class="dialog message">' +
+                    __("Booking successfully updated") +
+                    "</div>"
+            );
 
->>>>>>> 9195757e2f1 (Bug 35813: Add success feedback after placing/editing bookings)
             // Close modal
             $("#placeBookingModal").modal("hide");
         });
