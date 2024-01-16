@@ -855,15 +855,15 @@
             <td>
             [% IF order.invoiceid %]
                 [% IF CAN_user_acquisition %]
-                    <span class="clearfix"><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]"
+                    <div><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]"
                        title="Invoice detail page">
-                       [% order.invoice.invoicenumber | html %]</a></span>
+                       [% order.invoice.invoicenumber | html %]</a></div>
                 [% ELSE %]
-                    <span class="clearfix">[% order.invoice.invoicenumber | html %]</span>
+                    <div>[% order.invoice.invoicenumber | html %]</div>
                 [% END %]
 
                 [% IF ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage && order.invoice.message_id ) %]
-                    <span class="clearfix"><a href="/cgi-bin/koha/acqui/edimsg.pl?id=[% order.invoice.message_id | uri %]" title="EDI INVOICE message">EDI message</a></span>
+                    <div><a href="/cgi-bin/koha/acqui/edimsg.pl?id=[% order.invoice.message_id | uri %]" title="EDI INVOICE message">EDI message</a></div>
                 [% END %]
             [% END %]
             </td>
