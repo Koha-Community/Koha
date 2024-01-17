@@ -705,7 +705,7 @@
                                                         [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                                                         [% IF hold_cancellation.count %]
                                                             <select name="cancellation-reason" id="cancellation-reason">
-                                                                <option value="NULL">No reason given</option>
+                                                                <option value="">No reason given</option>
                                                                 [% FOREACH reason IN hold_cancellation %]
                                                                     <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
                                                                 [% END %]
@@ -1562,7 +1562,11 @@
                 this.form.submit();
             });
             $('.cancel-hold').on("click",function(e){
-                let cancel_reason = document.getElementById('cancellation-reason').value;
+                let cancel_form = document.getElementById('cancellation-reason');
+                let cancel_reason = '';
+                if ( cancel_form ) {
+                    cancel_reason = cancel_form.value;
+                }
                 this.form.cancel_reserve.value = 1;
                 this.form.cancel_reason.value = cancel_reason;
                 this.form.submit();
