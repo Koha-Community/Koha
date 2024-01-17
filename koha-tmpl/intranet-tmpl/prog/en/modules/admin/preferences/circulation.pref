@@ -547,6 +547,23 @@ Circulation:
             - "<br /><strong>NOTE:</strong> The word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
             - "<br /><strong>Configuration:</strong> <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=CCODE'>Collections (CCODE)</a> | <a href='/cgi-bin/koha/admin/itemtypes.pl'>Item types</a>"
         -
+            - pref: UpdateItemLocationOnCheckout
+              type: textarea
+              syntax: text/x-yaml
+              class: code
+            - "This is a list of value pairs. The first value is followed immediately by colon space then the second value.<br/><br/>"
+            - "Examples:<br/>"
+            - "PROC: FIC - causes an item in the Processing Center location to be updated into the Fiction location on check out.<br/>"
+            - "FIC: GEN - causes an item in the Fiction location to be updated into the General stacks location on check out.<br/>"
+            - "_BLANK_: FIC - causes an item that has no location to be updated into the Fiction location on check out.<br/>"
+            - "FIC: _BLANK_ - causes an item in location FIC to be updated to a blank location on check out.<br/>"
+            - "_ALL_: FIC - causes all items to be updated into the Fiction location on check out.<br/>"
+            - "PROC: _PERM_ - causes an item that is in the Processing Center to be updated to it's permanent location.<br/><br/>"
+            - "General rule: if the location value on the left of the colon (:) matches the item's current location, it will be updated to match the location value on the right of the colon (:).<br/>"
+            - "Note: PROC and CART are special values, for these locations the location and permanent_location can differ, in all other cases an update will affect both. Items in the CART location will be returned to their permanent location on checkout.<br/>"
+            - "The special term _BLANK_ may be used on either side of a value pair to update or remove the location from items with no location assigned.<br/>"
+            - "The special term _ALL_ is used on the left side of the colon (:) to affect all items, <strong>and overrides all other rules.</strong>"
+        -
             - pref: UpdateNotForLoanStatusOnCheckout
               type: textarea
               syntax: text/x-yaml
@@ -625,23 +642,6 @@ Circulation:
             - "FIC: _BLANK_ - causes an item in location FIC to be updated to a blank location on check in.<br/>"
             - "_ALL_: FIC - causes all items to be updated into the Fiction location on check in.<br/>"
             - "PROC: _PERM_ - causes an item that is in the Processing center to be updated to it's permanent location.<br/><br/>"
-            - "General rule: if the location value on the left of the colon (:) matches the item's current location, it will be updated to match the location value on the right of the colon (:).<br/>"
-            - "Note: PROC and CART are special values, for these locations the location and permanent_location can differ, in all other cases an update will affect both. Items in the CART location will be returned to their permanent location on checkout.<br/>"
-            - "The special term _BLANK_ may be used on either side of a value pair to update or remove the location from items with no location assigned.<br/>"
-            - "The special term _ALL_ is used on the left side of the colon (:) to affect all items, <strong>and overrides all other rules.</strong>"
-        -
-            - pref: UpdateItemLocationOnCheckout
-              type: textarea
-              syntax: text/x-yaml
-              class: code
-            - "This is a list of value pairs. The first value is followed immediately by colon space then the second value.<br/><br/>"
-            - "Examples:<br/>"
-            - "PROC: FIC - causes an item in the Processing Center location to be updated into the Fiction location on check out.<br/>"
-            - "FIC: GEN - causes an item in the Fiction location to be updated into the General stacks location on check out.<br/>"
-            - "_BLANK_: FIC - causes an item that has no location to be updated into the Fiction location on check out.<br/>"
-            - "FIC: _BLANK_ - causes an item in location FIC to be updated to a blank location on check out.<br/>"
-            - "_ALL_: FIC - causes all items to be updated into the Fiction location on check out.<br/>"
-            - "PROC: _PERM_ - causes an item that is in the Processing Center to be updated to it's permanent location.<br/><br/>"
             - "General rule: if the location value on the left of the colon (:) matches the item's current location, it will be updated to match the location value on the right of the colon (:).<br/>"
             - "Note: PROC and CART are special values, for these locations the location and permanent_location can differ, in all other cases an update will affect both. Items in the CART location will be returned to their permanent location on checkout.<br/>"
             - "The special term _BLANK_ may be used on either side of a value pair to update or remove the location from items with no location assigned.<br/>"
