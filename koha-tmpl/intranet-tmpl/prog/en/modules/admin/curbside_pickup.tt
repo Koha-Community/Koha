@@ -65,27 +65,27 @@
     [% END %]
     <form method="post" class="form">
         [% INCLUDE 'csrf-token.inc' %]
-        <div id="curbside_pickup_tabs" class="toptabs">
-            <ul class="nav nav-tabs" role="tablist">
+        [% WRAPPER tabs id= "curbside_pickup_tabs" %]
+            [% WRAPPER tabs_nav %]
                 [% FOREACH l IN libraries %]
                     [% IF loop.first %]
-                    <li role="presentation" class="active">
+                        [% SET bt_active = 1 %]
                     [% ELSE %]
-                    <li role="presentation">
+                        [% SET bt_active = 0 %]
                     [% END %]
-                        <a href="#conf-[% l.branchcode | uri %]" aria-controls="conf-[% l.branchcode | html %]" role="tab" data-bs-toggle="tab">[% l.branchname | html %]</a>
-                    </li>
+                    [% WRAPPER tab_item tabname= "conf-${l.branchcode}" bt_active= bt_active %] <span>[% l.branchname | html %]</span> [% END %]
                 [% END %]
-            </ul>
+            [% END # /WRAPPER tabs_nav %]
 
-            <div class="tab-content">
+            [% WRAPPER tab_panels %]
                 [% FOREACH l IN libraries %]
                     [% SET branchcode = l.branchcode %]
                     [% IF loop.first %]
-                    <div id="conf-[% l.branchcode | html %]" role="tabpanel" class="tab-pane active">
+                        [% SET bt_active = 1 %]
                     [% ELSE %]
-                    <div id="conf-[% l.branchcode | html %]" role="tabpanel" class="tab-pane">
+                        [% SET bt_active = 0 %]
                     [% END %]
+                    [% WRAPPER tab_panel tabname= "conf-${l.branchcode}" bt_active= bt_active %]
                         <fieldset class="rows" style="float: none;">
                             <ol>
                                 <li>
@@ -162,10 +162,10 @@
 
                             </ol>
                         </fieldset>
-                    </div>
-                [% END %]
-            </div>
-        </div>
+                    [% END # /tab_panel %]
+                [% END #FOREACH l %]
+            [% END # /WRAPPER tab_panels %]
+        [% END # /WRAPPER tabs %]
 
         <input type="hidden" name="op" value="cud-save" />
 
