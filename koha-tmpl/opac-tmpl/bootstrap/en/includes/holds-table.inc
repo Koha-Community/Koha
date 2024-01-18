@@ -195,7 +195,7 @@
                                 <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                 <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
                                 <input type="hidden" name="cancellation_request" value="1" />
-                                <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-req-delete-hold"><i class="fa fa-times" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
+                                <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-req-delete-hold"><i class="fa fa-times" aria-hidden="true"></i> [% tp('Request to cancel hold button', 'Request to cancel') | html %]</button>
                             </form>
                         [% END %]
                     </td>
