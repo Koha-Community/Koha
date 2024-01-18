@@ -1,4 +1,4 @@
-    #!/usr/bin/perl
+#!/usr/bin/perl
 
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
