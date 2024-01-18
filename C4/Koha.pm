@@ -599,7 +599,7 @@ sub GetNormalizedUPC {
         foreach my $field (@fields) {
             my $indicator = $field->indicator(1);
             my $upc = _normalize_match_point($field->subfield('a'));
-            if ($upc && $indicator == 1 ) {
+            if ($upc && $indicator eq '1' ) {
                 return $upc;
             }
         }
@@ -658,7 +658,7 @@ sub GetNormalizedEAN {
         foreach my $field (@fields) {
             my $indicator = $field->indicator(1);
             my $ean = _normalize_match_point($field->subfield('a'));
-            if ( $ean && $indicator == 3  ) {
+            if ( $ean && $indicator eq '3'  ) {
                 return $ean;
             }
         }
