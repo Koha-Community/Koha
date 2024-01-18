@@ -119,6 +119,10 @@ $(document).ready(function() {
         number: true
     });
 
+    jQuery.validator.addClassRules("rate", {
+        decimal_rate: true
+    });
+
     $("#logout").on("click",function(){
         logOut();
     });
