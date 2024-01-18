@@ -1694,7 +1694,7 @@ sub searchResults {
         $times = $offset + $results_per_page;
     }
     else {
-        $times = $hits; # If less hits than results_per_page+offset we go to the end
+        $times = $hits // 0; # If less hits than results_per_page+offset we go to the end
     }
 
     my $marcflavour = C4::Context->preference("marcflavour");

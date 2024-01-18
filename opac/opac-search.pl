@@ -608,7 +608,7 @@ for my $plugin_variables ( @plugin_responses ) {
 for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
     if ($server && $server =~/biblioserver/) { # this is the local bibliographic server
-        $hits = $results_hashref->{$server}->{"hits"};
+        $hits = $results_hashref->{$server}->{"hits"} // 0;
         if ( $hits == 0 && $basic_search ){
             $operands[0] = '"'.$operands[0].'"'; #quote it
             ## I. BUILD THE QUERY
