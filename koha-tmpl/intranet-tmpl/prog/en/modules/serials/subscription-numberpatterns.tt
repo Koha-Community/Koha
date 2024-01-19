@@ -264,8 +264,9 @@
                     [% END %]
                 </ul>
 
-                <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="get">
-                    <input type="hidden" name="op" value="del" />
+                <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-del" />
                     <input type="hidden" name="confirm" value="1" />
                     <input type="hidden" name="id" value="[% id | html %]" />
                     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
