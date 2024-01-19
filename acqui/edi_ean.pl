@@ -41,7 +41,7 @@ my $basketno = $query->param('basketno');
 if ( @eans == 1 ) {
     my $ean = $eans[0]->ean;
     print $query->redirect(
-        "/cgi-bin/koha/acqui/basket.pl?basketno=$basketno&op=ediorder&ean=$ean"
+        "/cgi-bin/koha/acqui/basket.pl?basketno=$basketno&op=cud-ediorder&ean=$ean"
     );
 }
 else {

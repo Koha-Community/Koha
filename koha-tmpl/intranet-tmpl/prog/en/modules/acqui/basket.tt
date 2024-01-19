@@ -101,7 +101,12 @@
                                         [% PROCESS csv_export %]
 
                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
-                                            <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
+                                            <div class="btn-group"><form action="/cgi-bin/koha/acqui/edi_ean.pl" method="post">
+                                                <input type="hidden" name="op" value="cud-ediorder" />
+                                                <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                                                <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+                                                <button type="submit" class="btn btn-default" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</button>
+                                            </form></div>
                                         [% END %]
 
                                         [% IF ( active && books_loop ) %]
@@ -882,7 +887,7 @@
 
                     [% IF edi_confirm %]
                         <div id="closebasket_needsconfirmation" class="dialog alert">
-                            <form action="/cgi-bin/koha/acqui/basket.pl">
+                            <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                 <h1>Are you sure you want to generate an EDIFACT order and close basket [% basketname | html %]?</h1>
                                 [% IF CAN_user_acquisition_group_manage %]
                                     <p>
@@ -891,7 +896,7 @@
                                     </p>
                                 [% END %]
                                 <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
-                                <input type="hidden" value="ediorder" name="op" />
+                                <input type="hidden" value="cud-ediorder" name="op" />
                                 <input type="hidden" name="ean" value="[% ean | html %]" />
                                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                 <input type="hidden" name="confirm" value="1" />

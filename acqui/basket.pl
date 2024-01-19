@@ -225,7 +225,7 @@ if ( $op eq 'cud-delete_confirm' ) {
     ReopenBasket(scalar $query->param('basketno'));
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 }
-elsif ( $op eq 'ediorder' ) {
+elsif ( $op eq 'cud-ediorder' ) {
     edi_close_and_order()
 } elsif ( $op eq 'cud-mod_users' ) {
     my $basketusers_ids = $query->param('users_ids');
