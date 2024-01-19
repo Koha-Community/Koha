@@ -201,7 +201,7 @@ my $auth_heading_fields = {
         main_entry => 1
     },
     '151' => {
-        auth_type  => 'GEOG_NAME',
+        auth_type  => 'GEOGR_NAME',
         subfields  => 'avxyz68',
         main_entry => 1
     },
@@ -344,7 +344,6 @@ sub parse_heading {
       _get_search_heading( $field, $field_info->{'subfields'} );
     my $display_heading =
       _get_display_heading( $field, $field_info->{'subfields'} );
-
     return ( $auth_type, $thesaurus, $search_heading, $display_heading,
         'exact' );
 }

@@ -674,7 +674,13 @@ sub AddAuthority {
         $action = 'create';
 
         # Save a blank record, get authid
-        $authority = Koha::Authority->new( { datecreated => \'NOW()', marcxml => '' } )->store();
+        $authority = Koha::Authority->new(
+            {
+                datecreated  => \'NOW()',
+                marcxml      => '',
+                authtypecode => $authtypecode
+            }
+        )->store();
         $authority->discard_changes();
         $authid = $authority->authid;
         logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
@@ -687,9 +693,17 @@ sub AddAuthority {
     $record->delete_field( $record->field('001') );
     $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
 
+    my $heading = $authority->heading_object( { record => $record } );
+
     # Update
     $authority->update(
-        { authtypecode => $authtypecode, marc => $record->as_usmarc, marcxml => $record->as_xml_record($format) } );
+        {
+            authtypecode => $authtypecode,
+            marc         => $record->as_usmarc,
+            marcxml      => $record->as_xml_record($format),
+            heading      => $heading->display_form,
+        }
+    );
 
     unless ($skip_record_index) {
         my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );

@@ -24,6 +24,8 @@ use base qw(Koha::Object);
 use Koha::Authority::ControlledIndicators;
 use Koha::SearchEngine::Search;
 
+use C4::Heading qw( new_from_field );
+
 =head1 NAME
 
 Koha::Authority - Koha Authority Object class
@@ -59,6 +61,32 @@ sub linked_biblionumbers {
     my ( $self, $params ) = @_;
     $params->{authid} = $self->authid;
     return Koha::Authorities->linked_biblionumbers( $params );
+}
+
+=head3 heading_object
+
+    Routine to return the C4::Heading object for this authority
+
+=cut
+
+sub heading_object {
+
+    my ( $self, $params ) = @_;
+    my $record = $params->{record};
+
+    if ( !$self->{_report_tag} ) {
+        my $authtype = Koha::Authority::Types->find( $self->authtypecode );
+        return {} if !$authtype;    # very exceptional
+        $self->{_report_tag} = $authtype->auth_tag_to_report;
+    }
+
+    if ( !$record ) {
+        $record = $self->record;
+    }
+    my $field   = $record->field( $self->{_report_tag} );
+    my $heading = C4::Heading->new_from_field( $field, undef, 1 );    #new auth heading
+    return $heading;
+
 }
 
 =head3 controlled_indicators
