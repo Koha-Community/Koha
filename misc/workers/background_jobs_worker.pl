@@ -59,6 +59,7 @@ use Try::Tiny;
 use Pod::Usage;
 use Getopt::Long;
 use Parallel::ForkManager;
+use Time::HiRes;
 
 use C4::Context;
 use Koha::Logger;
@@ -134,6 +135,7 @@ while (1) {
 
                 # nack to force requeue
                 $conn->nack( { frame => $frame, requeue => 1 } );
+                Time::HiRes::sleep(0.5);
                 next;
             }
             $conn->ack( { frame => $frame } );
