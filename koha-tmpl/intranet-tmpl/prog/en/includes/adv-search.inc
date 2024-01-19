@@ -1,7 +1,8 @@
+[% USE raw %]
+[% PROCESS 'html_helpers.inc' %]
 <!-- adv-search.inc -->
-<div id="header_search" role="tablist">
-    <div class="tab-content">
-
+[% WRAPPER tabs id= "header_search" %]
+    [% WRAPPER tab_panels %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% INCLUDE 'patron-search-box.inc' bs_tab_active= 1 %]
             [% INCLUDE 'checkin-search-box.inc' %]
@@ -10,25 +11,25 @@
         [% IF ( CAN_user_borrowers_edit_borrowers ) %]
             [% INCLUDE 'member-search-box.inc' %]
         [% END %]
+    [% END %]
 
-    </div><!-- /.tab-content -->
-    <ul class="nav nav-tabs" role="tablist">
+    [% WRAPPER tabs_nav %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-            <li role="presentation" class="active">
-                <a title="Check out" href="#circ_search" aria-controls="circ_search" aria-expanded="true" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span></a>
-            </li>
-            <li role="presentation">
-                <a title="Check in" href="#checkin_search" aria-controls="checkin_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-download" aria-hidden="true"></i> <span class="tab-title">Check in</span></a>
-            </li>
-            <li role="presentation">
-                <a title="Renew" href="#renew_search" aria-controls="renew_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-retweet" aria-hidden="true"></i> <span class="tab-title">Renew</span></a>
-            </li>
+            [% WRAPPER tab_item tabname= "circ_search" bt_active= 1 %]
+                <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span></a>
+            [% END %]
+            [% WRAPPER tab_item tabname= "checkin_search" %]
+                <i class="fa fa-fw fa-download" aria-hidden="true"></i> <span class="tab-title">Check in</span></a>
+            [% END %]
+            [% WRAPPER tab_item tabname= "renew_search" %]
+                <i class="fa fa-fw fa-retweet" aria-hidden="true"></i> <span class="tab-title">Renew</span></a>
+            [% END %]
         [% END %]
         [% IF ( CAN_user_borrowers_edit_borrowers ) %]
-            <li role="presentation">
-                <a title="Search patrons" href="#patron_search" aria-controls="patron_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-id-card" aria-hidden="true"></i> <span class="tab-title">Search patrons</span></a>
-            </li>
+            [% WRAPPER tab_item tabname= "patron_search" %]
+                <i class="fa fa-fw fa-id-card" aria-hidden="true"></i> <span class="tab-title">Search patrons</span></a>
+            [% END %]
         [% END %]
-    </ul>
-</div><!-- /#header_search -->
+    [% END # /WRAPPER tabs_nav %]
+[% END # /WRAPPER tabs %]
 <!-- adv-search.inc -->

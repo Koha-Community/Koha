@@ -131,7 +131,7 @@ $(document).ready(function() {
         return checkEnter(e);
     });
 
-    $(".keep_text").on("click",function(){
+    $("#header_search .nav-tabs a").on("click",function(){
         var field_index = $(this).parent().index();
         keep_text( field_index );
     });

@@ -1,8 +1,10 @@
+[% USE raw %]
 [% USE Koha %]
+[% PROCESS 'html_helpers.inc' %]
 <!-- contracts-admin-search.inc -->
-<div id="header_search" role="tablist">
-    <div class="tab-content">
-        <div id="contract_description_search" role="tabpanel" class="tab-pane active">
+[% WRAPPER tabs id="header_search" %]
+    [% WRAPPER tab_panels %]
+        [% WRAPPER tab_panel tabname="contract_description_search" bt_active= 1 %]
             <form action="[% script_name | html %]" method="get">
                 <div class="form-title">
                     <label class="control-label" for="searchfield"><span class="control-text">Search contracts</span> <i class="fa-solid fa-fw fa-pen-to-square" aria-hidden="true"></i></label>
@@ -14,7 +16,7 @@
 
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% INCLUDE 'patron-search-box.inc' %]
@@ -22,22 +24,22 @@
         [% IF ( CAN_user_catalogue ) %]
             [% INCLUDE 'catalogue-search-box.inc' %]
         [% END %]
+    [% END # /tab_panels %]
 
-    </div><!-- /.tab-content -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-            <a title="Search contracts" href="#contract_description_search" aria-controls="contract_description_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa-solid fa-fw fa-pen-to-square" aria-hidden="true"></i> <span class="tab-title">Search contracts</span></a>
-        </li>
+    [% WRAPPER tabs_nav %]
+        [% WRAPPER tab_item tabname= "contract_description_search" bt_active= 1 %]
+            <i class="fa-solid fa-fw fa-pen-to-square" aria-hidden="true"></i> <span class="tab-title">Search contracts</span>
+        [% END %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-            <li role="presentation">
-                <a title="Check out" href="#circ_search" aria-controls="circ_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span></a>
-            </li>
+            [% WRAPPER tab_item tabname= "circ_search" %]
+                <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span>
+            [% END %]
         [% END %]
         [% IF ( CAN_user_catalogue ) %]
-            <li role="presentation">
-                <a title="Search catalog" href="#catalog_search" aria-controls="catalog_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-search" aria-hidden="true"></i> <span class="tab-title">Search catalog</span></a>
-            </li>
+            [% WRAPPER tab_item tabname= "catalog_search" %]
+                <i class="fa fa-fw fa-search" aria-hidden="true"></i> <span class="tab-title">Search catalog</span>
+            [% END %]
         [% END %]
-    </ul>
-</div><!-- /#header_search -->
+    [% END # /tabs_nav %]
+[% END # /WRAPPER tabs %]
 <!-- contracts-admin-search.inc -->

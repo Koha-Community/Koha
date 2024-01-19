@@ -1,10 +1,6 @@
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
     <!-- patron-search-box.inc -->
-    [% IF( bs_tab_active ) %]
-        <div id="circ_search" role="tabpanel" class="tab-pane active">
-    [% ELSE %]
-        <div id="circ_search" role="tabpanel" class="tab-pane">
-    [% END %]
+    [% WRAPPER tab_panel tabname="circ_search" bt_active= bs_tab_active %]
         <form action="/cgi-bin/koha/circ/circulation.pl" id="patronsearch" method="get">
             <div class="form-title">
                 <label class="control-label" for="findborrower"><span class="control-text">Check out</span> <i class="fa fa-fw fa-upload" aria-hidden="true"></i></label>
@@ -21,6 +17,6 @@
 
             <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
         </form>
-    </div>
+    [% END # /tab_panel %]
     <!-- /patron-search-box.inc -->
 [% END %]

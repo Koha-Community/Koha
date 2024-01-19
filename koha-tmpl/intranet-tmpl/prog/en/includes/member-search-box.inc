@@ -5,12 +5,8 @@
 [% PROCESS 'patronfields.inc' %]
 [% IF CAN_user_borrowers_edit_borrowers || CAN_user_borrowers_list_borrowers %]
     [%- SET searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
-    [% IF( bs_tab_active ) %]
-        <div id="patron_search" role="tabpanel" class="tab-pane active">
-    [% ELSE %]
-        <div id="patron_search" role="tabpanel" class="tab-pane">
-    [% END %]
-        <form action="/cgi-bin/koha/members/member.pl" method="get">
+    [% WRAPPER tab_panel tabname="patron_search" bt_active= bs_tab_active %]
+        <form method="get" action="/cgi-bin/koha/members/member.pl">
             <input type="hidden" name="quicksearch" value="1" />
 
             <div class="form-title">
@@ -74,6 +70,6 @@
                 </div>
             </div>
         </form>
-    </div>
+    [% END # /tab_panel %]
 [% END %]
 <!-- /member-search-box.inc -->

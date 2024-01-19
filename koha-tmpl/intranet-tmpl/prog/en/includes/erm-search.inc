@@ -1,8 +1,10 @@
+[% USE raw %]
 [% USE Koha %]
+[% PROCESS 'html_helpers.inc' %]
 <!-- erm-search.inc -->
-<div id="header_search" role="tablist">
-    <div class="tab-content">
-        <div id="agreement_search" role="tabpanel" class="tab-pane active">
+[% WRAPPER tabs id="header_search" %]
+    [% WRAPPER tab_panels %]
+        [% WRAPPER tab_panel tabname="agreement_search" bt_active= 1 %]
             <form action="/cgi-bin/koha/erm/agreements" method="get">
                 <div class="form-title">
                     <label class="control-label" for="agreement_filter"><span class="control-text">Agreement search</span> <i class="fa fa-fw fa-check-circle" aria-hidden="true"></i></label>
@@ -12,9 +14,9 @@
                 </div>
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
-        <div id="license_search" role="tabpanel" class="tab-pane">
+        [% WRAPPER tab_panel tabname="license_search" %]
             <form action="/cgi-bin/koha/erm/licenses" method="get">
                 <div class="form-title">
                     <label class="control-label" for="license_filter"><span class="control-text">License search</span> <i class="fa fa-fw fa-gavel" aria-hidden="true"></i></label>
@@ -24,9 +26,9 @@
                 </div>
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
-        <div id="package_search" role="tabpanel" class="tab-pane">
+        [% WRAPPER tab_panel tabname="package_search" %]
             <form action="/cgi-bin/koha/erm/eholdings/local/packages" method="get">
                 <div class="form-title">
                     <label class="control-label" for="package_name_filter"><span class="control-text">Package search</span> <i class="fa fa-fw fa-archive" aria-hidden="true"></i></label>
@@ -36,9 +38,9 @@
                 </div>
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
-        <div id="title_search" role="tabpanel" class="tab-pane">
+        [% WRAPPER tab_panel tabname="title_search" %]
             <form action="/cgi-bin/koha/erm/eholdings/local/titles" method="get">
                 <div class="form-title">
                     <label class="control-label" for="title_filter"><span class="control-text">Title search</span> <i class="fa-solid fa-fw fa-arrow-down-a-z" aria-hidden="true"></i></label>
@@ -48,22 +50,22 @@
                 </div>
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
-        </div>
-    </div><!-- /.tab-content -->
+        [% END # /tab_panel %]
+    [% END # /tab_panels %]
 
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-            <a id="agreement_search_tab" title="Search agreements" href="#agreement_search" aria-controls="agreement_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-check-circle" aria-hidden="true"></i> <span class="tab-title">Search agreements</span></a>
-        </li>
-        <li role="presentation">
-            <a id="license_search_tab" title="Search licenses" href="#license_search" aria-controls="license_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-gavel" aria-hidden="true"></i> <span class="tab-title">Search licenses</span></a>
-        </li>
-        <li role="presentation">
-            <a id="package_search_tab" title="Search packages" href="#package_search" aria-controls="package_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-archive" aria-hidden="true"></i> <span class="tab-title">Search packages</span></a>
-        </li>
-        <li role="presentation">
-            <a id="title_search_tab" title="Search titles" href="#title_search" aria-controls="title_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa-solid fa-fw fa-arrow-down-a-z" aria-hidden="true"></i> <span class="tab-title">Search titles</span></a>
-        </li>
-    </ul>
-</div><!-- /#header_search -->
+    [% WRAPPER tabs_nav %]
+        [% WRAPPER tab_item tabname= "agreement_search" bt_active= 1 %]
+            <i class="fa fa-fw fa-check-circle" aria-hidden="true"></i> <span class="tab-title">Search agreements</span>
+        [% END %]
+        [% WRAPPER tab_item tabname= "license_search" %]
+            <i class="fa fa-fw fa-gavel" aria-hidden="true"></i> <span class="tab-title">Search licenses</span>
+        [% END %]
+        [% WRAPPER tab_item tabname= "package_search" %]
+            <i class="fa fa-fw fa-archive" aria-hidden="true"></i> <span class="tab-title">Search packages</span>
+        [% END %]
+        [% WRAPPER tab_item tabname= "title_search" %]
+            <i class="fa-solid fa-fw fa-arrow-down-a-z" aria-hidden="true"></i> <span class="tab-title">Search titles</span>
+        [% END %]
+    [% END # /tabs_nav %]
+[% END # /WRAPPER tabs %]
 <!-- /erm-search.inc -->

@@ -1,8 +1,10 @@
+[% USE raw %]
 [% USE Koha %]
+[% PROCESS 'html_helpers.inc' %]
 <!-- letters-search.inc -->
-<div id="header_search" role="tablist">
-    <div class="tab-content">
-        <div id="notices_search" role="tabpanel" class="tab-pane active">
+[% WRAPPER tabs id="header_search" %]
+    [% WRAPPER tab_panels %]
+        [% WRAPPER tab_panel tabname="notices_search" bt_active= 1 %]
             <form action="/cgi-bin/koha/tools/letter.pl" method="get">
                 <div class="form-title">
                     <label class="control-label" for="searchfield"><span class="control-text">Search notices</span> <i class="fa-solid fa-fw fa-comment-dots" aria-hidden="true"></i></label>
@@ -14,7 +16,7 @@
 
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% INCLUDE 'patron-search-box.inc' %]
@@ -23,21 +25,21 @@
         [% IF ( CAN_user_catalogue ) %]
             [% INCLUDE 'catalogue-search-box.inc' %]
         [% END %]
-    </div><!-- /.tab-content -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-            <a title="Search notices" href="#notices_search" aria-controls="notices_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa-solid fa-fw fa-comment-dots" aria-hidden="true"></i> <span class="tab-title">Search notices</span></a>
-        </li>
+    [% END # /tab_panels %]
+    [% WRAPPER tabs_nav %]
+        [% WRAPPER tab_item tabname= "notices_search" bt_active= 1 %]
+            <i class="fa-solid fa-fw fa-comment-dots" aria-hidden="true"></i> <span class="tab-title">Search notices</span>
+        [% END %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-            <li role="presentation">
-                <a title="Check out" href="#circ_search" aria-controls="circ_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span></a>
-            </li>
+            [% WRAPPER tab_item tabname= "circ_search" %]
+                <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span>
+            [% END %]
         [% END %]
         [% IF ( CAN_user_catalogue ) %]
-            <li role="presentation">
-                <a title="Search catalog" href="#catalog_search" aria-controls="catalog_search" role="tab" aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-search" aria-hidden="true"></i> <span class="tab-title">Search catalog</span></a>
-            </li>
+            [% WRAPPER tab_item tabname= "catalog_search" %]
+                <i class="fa fa-fw fa-search" aria-hidden="true"></i> <span class="tab-title">Search catalog</span>
+            [% END %]
         [% END %]
-    </ul>
-</div><!-- /#header_search -->
+    [% END # /tabs_nav %]
+[% END # /WRAPPER tabs %]
 <!-- /letters-search.inc -->

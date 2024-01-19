@@ -1,10 +1,6 @@
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
     <!-- renew-search-box.inc -->
-    [% IF( bs_tab_active ) %]
-        <div id="renew_search" role="tabpanel" class="tab-pane active">
-    [% ELSE %]
-        <div id="renew_search" role="tabpanel" class="tab-pane">
-    [% END %]
+    [% WRAPPER tab_panel tabname="renew_search" bt_active= bs_tab_active %]
         <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
             [% INCLUDE 'csrf-token.inc' %]
 
@@ -18,6 +14,6 @@
             <input type="hidden" name="op" value="cud-renew" />
             <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
         </form>
-    </div>
+    [% END # /tab_panel %]
     <!-- /renew-search-box.inc -->
 [% END %]

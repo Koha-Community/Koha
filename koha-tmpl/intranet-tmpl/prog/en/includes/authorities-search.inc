@@ -1,3 +1,5 @@
+[% USE raw %]
+[% PROCESS 'html_helpers.inc' %]
 <!-- authorities-search.inc -->
 
 [% BLOCK orderby %]
@@ -70,9 +72,9 @@
     </div>
 [% END %]
 
-<div id="header_search" role="tablist">
-    <div class="tab-content">
-        <div id="mainmain_heading" role="tabpanel" class="tab-pane active">
+[% WRAPPER tabs id="header_search" %]
+    [% WRAPPER tab_panels %]
+        [% WRAPPER tab_panel tabname="mainmain_heading" bt_active= 1 %]
             <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
                 <input type="hidden" name="op" value="do_search" />
                 <input type="hidden" name="type" value="intranet" />
@@ -97,9 +99,9 @@
                     [% INCLUDE orderby %]
                 </div>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
-        <div id="main_heading" role="tabpanel" class="tab-pane">
+        [% WRAPPER tab_panel tabname="main_heading" %]
             <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
                 <input type="hidden" name="marclist" value="mainentry" />
                 <input type="hidden" name="and_or" value="and" />
@@ -124,9 +126,9 @@
                     [% INCLUDE orderby %]
                 </div>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
-        <div id="matchheading_search" role="tabpanel" class="tab-pane">
+        [% WRAPPER tab_panel tabname="matchheading_search" %]
             <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
                 <input type="hidden" name="op" value="do_search" />
                 <input type="hidden" name="type" value="intranet" />
@@ -149,9 +151,9 @@
                     [% INCLUDE orderby %]
                 </div>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
-        <div id="entire_record" role="tabpanel" class="tab-pane">
+        [% WRAPPER tab_panel tabname="entire_record" %]
             <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
                 <input type="hidden" name="op" value="do_search" />
                 <input type="hidden" name="type" value="intranet" />
@@ -176,23 +178,22 @@
                     [% INCLUDE orderby %]
                 </div>
             </form>
-        </div>
+        [% END # /tab_panel %]
 
-    </div><!-- /.tab-content -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-            <a title="Search main heading ($a only)" href="#mainmain_heading" aria-controls="mainmain_heading" role="tab"  aria-expanded="true" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-main-heading-a" aria-hidden="true"></i> <span class="tab-title">Main heading ($a only)</span></a>
-        </li>
-        <li role="presentation">
-            <a title="Search main heading" href="#main_heading" aria-controls="main_heading" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-header" aria-hidden="true"></i> <span class="tab-title">Main heading</span></a>
-        </li>
-        <li role="presentation">
-            <a title="Search all headings" href="#matchheading_search" aria-controls="matchheading_search" role="tab" data-toggle="tab" class="keep_text"><i class="fa fa-fw fa-align-center" aria-hidden="true"></i> <span class="tab-title">All headings</span></a>
-        </li>
-        <li role="presentation">
-            <a title="Search entire record" href="#entire_record" aria-controls="entire_record" role="tab" data-toggle="tab" class="keep_text"><i class="fa-solid fa-fw fa-folder-open" aria-hidden="true"></i> <span class="tab-title">Entire record</span></a>
-        </li>
-        <li role="presentation">
-    </ul>
-</div><!-- /#header_search -->
+    [% END # /tab_panels %]
+    [% WRAPPER tabs_nav %]
+        [% WRAPPER tab_item tabname= "mainmain_heading" bt_active= 1 %]
+            <i class="fa fa-fw fa-main-heading-a" aria-hidden="true"></i> <span class="tab-title">Main heading ($a only)</span>
+        [% END %]
+        [% WRAPPER tab_item tabname= "main_heading" %]
+            <i class="fa fa-fw fa-header" aria-hidden="true"></i> <span class="tab-title">Main heading</span>
+        [% END %]
+        [% WRAPPER tab_item tabname= "matchheading_search" %]
+            <i class="fa fa-fw fa-align-center" aria-hidden="true"></i> <span class="tab-title">All headings</span>
+        [% END %]
+        [% WRAPPER tab_item tabname= "entire_record" %]
+            <i class="fa-solid fa-fw fa-folder-open" aria-hidden="true"></i> <span class="tab-title">Entire record</span>
+        [% END %]
+    [% END # /tabs_nav %]
+[% END # /WRAPPER tabs %]
 <!-- /authorities-search.inc -->
