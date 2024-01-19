@@ -29,6 +29,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::SearchEngine::Indexer;
 use Koha::Items;
 use Koha::UI::Table::Builder::Items;
+use Koha::Exceptions::BackgroundJob;
 
 use base 'Koha::BackgroundJob';
 
@@ -137,8 +138,8 @@ Enqueue the new job
 sub enqueue {
     my ( $self, $args ) = @_;
 
-    # TODO Raise exception instead
-    return unless exists $args->{record_ids};
+    Koha::Exceptions::BackgroundJob->throw('Job has not been enqueued')
+        unless $args && exists $args->{record_ids};
 
     my @record_ids = @{ $args->{record_ids} };
 
