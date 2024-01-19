@@ -101,9 +101,11 @@
                 <a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a>
             </li>
         [% END %]
+        [% IF Koha.Preference('StockRotation') %]
              <li>
                 <a href="/cgi-bin/koha/circ/transfers_to_send.pl">Transfers to send</a>
             </li>
+        [% END %]
             <li>
                 <a href="/cgi-bin/koha/circ/transferstoreceive.pl">Transfers to receive</a>
             </li>
