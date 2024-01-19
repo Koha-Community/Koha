@@ -252,7 +252,7 @@ my $rs = $schema->resultset('VendorEdiAccount')->search(
     { vendor_id => $booksellerid, } );
 $template->param( ediaccount => ($rs->count > 0));
 
-if ( $op eq "cud-add" ) {
+if ( $op eq "add_form" ) {
 #
 # if no param('basketgroupid') is not defined, adds a new basketgroup
 # else, edit (if it is open) or display (if it is close) the basketgroup basketgroupid
@@ -343,7 +343,7 @@ if ( $op eq "cud-add" ) {
     my $basketgroupid = $input->param('basketgroupid');
     DelBasketgroup($basketgroupid);
     print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid.'&amp;listclosed=1');
-}elsif ( $op eq 'reopen'){
+}elsif ( $op eq 'cud-reopen'){
 #
 # reopen a closed basketgroup
 #
@@ -401,7 +401,7 @@ if ( $op eq "cud-add" ) {
     $redirectpath .=  "&amp;listclosed=1" if $closedbg ;
     print $input->redirect($redirectpath );
     
-} elsif ( $op eq 'ediprint') {
+} elsif ( $op eq 'cud-ediprint') {
     my $basketgroupid = $input->param('basketgroupid');
     if ($template->param( 'ediaccount' )) {
         generate_edifact_orders( $basketgroupid );
