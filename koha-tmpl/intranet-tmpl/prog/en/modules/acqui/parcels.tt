@@ -64,9 +64,10 @@
                 [% END %]
             </tbody>
         </table>
-        <form method="get" action="parcels.pl">
+        <form method="post" action="parcels.pl">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-            <input type="hidden" name="op" value="confirm" />
+            <input type="hidden" name="op" value="cud-confirm" />
             <input type="hidden" name="invoice" value="[% invoicenumber | html %]" />
             <input type="hidden" name="shipmentdate" value="[% shipmentdate | $KohaDates dateformat => 'iso' %]" />
             <input type="hidden" name="shipmentcost" value="[% shipmentcost | html %]" />
@@ -144,13 +145,14 @@
 [% END %]
 
     <div id="parcels_new_parcel">
-        <form method="get" action="parcels.pl" class="validated">
+        <form method="post" action="parcels.pl" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
     <legend>Receive a new shipment</legend>
        <ol> <li>
             <label for="invoice" class="required">Vendor invoice:</label>
             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-            <input type="hidden" name="op" value="new" />
+            <input type="hidden" name="op" value="cud-new" />
             <input type="text" size="20" id="invoice" name="invoice" class="focus required" required="required" />
         </li>
 		[% IF ( gst ) %]

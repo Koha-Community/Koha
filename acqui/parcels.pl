@@ -103,7 +103,7 @@ my $shipmentcost = $input->param('shipmentcost');
 my $shipmentcost_budgetid = $input->param('shipmentcost_budgetid');
 my $shipmentdate = $input->param('shipmentdate');
 
-if ( $op and $op eq 'new' ) {
+if ( $op and $op eq 'cud-new' ) {
     if ( C4::Context->preference('AcqWarnOnDuplicateInvoice') ) {
         my @invoices = GetInvoices(
             supplierid    => $booksellerid,
@@ -118,10 +118,10 @@ if ( $op and $op eq 'new' ) {
               $shipmentcost_budgetid;
         }
     }
-    $op = 'confirm' unless $template->{'VARS'}->{'duplicate_invoices'};
+    $op = 'cud-confirm' unless $template->{'VARS'}->{'duplicate_invoices'};
 }
 
-if ($op and $op eq 'confirm') {
+if ($op and $op eq 'cud-confirm') {
     my $invoiceid = AddInvoice(
         invoicenumber => $invoicenumber,
         booksellerid => $booksellerid,
