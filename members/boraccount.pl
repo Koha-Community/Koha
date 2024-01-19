@@ -82,7 +82,7 @@ if ( $action eq 'void' ) {
     );
 }
 
-if ( $action eq 'payout' ) {
+if ( $action eq 'cud-payout' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $payment_id  = scalar $input->param('accountlines_id');
     my $payment     = Koha::Account::Lines->find($payment_id);
