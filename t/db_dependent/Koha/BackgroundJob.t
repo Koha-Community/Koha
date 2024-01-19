@@ -26,6 +26,7 @@ use Test::Exception;
 use Koha::Database;
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::BatchUpdateItem;
+use Koha::BackgroundJob::MARCImportCommitBatch;
 
 use t::lib::Mocks;
 use t::lib::Mocks::Logger;
@@ -69,9 +70,21 @@ subtest '_derived_class() tests' => sub {
 
 subtest 'enqueue() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
+
+    # Enqueue without args
+    throws_ok { Koha::BackgroundJob::BatchUpdateItem->new->enqueue }
+    'Koha::Exceptions::BackgroundJob',
+        'Enqueue BatchUpdateItem without data throws exception';
+
+    # The following test needs a mock to trigger the exception
+    my $mock = Test::MockModule->new('Net::Stomp')->mock( 'send_with_receipt', 0 );
+    throws_ok { Koha::BackgroundJob::MARCImportCommitBatch->new->enqueue }
+    'Koha::Exceptions::BackgroundJob',
+        'Enqueue MARCImportCommitBatch with mock throws exception';
+    $mock->unmock('send_with_receipt');
 
     # FIXME: This all feels we need to do it better...
     my $job_id = Koha::BackgroundJob::BatchUpdateItem->new->enqueue( { record_ids => [ 1, 2 ] } );

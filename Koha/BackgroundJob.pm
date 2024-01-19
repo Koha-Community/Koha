@@ -140,10 +140,10 @@ sub enqueue {
         my $encoded_args = Encode::encode_utf8( $json_args ); # FIXME We should better leave this to Net::Stomp?
         my $destination = sprintf( "/queue/%s-%s", $namespace, $job_queue );
         $conn->send_with_receipt( { destination => $destination, body => $encoded_args, persistent => 'true' } )
-          or Koha::Exceptions::Exception->throw('Job has not been enqueued');
+          or Koha::Exceptions::BackgroundJob->throw('Job has not been enqueued');
     } catch {
         $self->status('failed')->store;
-        if ( ref($_) eq 'Koha::Exceptions::Exception' ) {
+        if ( ref($_) eq 'Koha::Exceptions::BackgroundJob' ) {
             $_->rethrow;
         } else {
             warn sprintf "The job has not been sent to the message broker: (%s)", $_;
