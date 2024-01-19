@@ -920,6 +920,7 @@ CREATE TABLE `auth_header` (
   `authtypecode` varchar(10) NOT NULL DEFAULT '',
   `datecreated` date DEFAULT NULL,
   `modification_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `heading` longtext DEFAULT NULL,
   `origincode` varchar(20) DEFAULT NULL,
   `authtrees` longtext DEFAULT NULL,
   `marc` blob DEFAULT NULL,
