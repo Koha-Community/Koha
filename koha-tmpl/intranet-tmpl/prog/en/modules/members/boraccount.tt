@@ -219,6 +219,7 @@
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountlines_id" value="" id="payoutline">
             <input type="hidden" name="action" value="cud-payout">
+            <input type="hidden" name="op" value="cud-payout">
             <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -274,6 +275,7 @@
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountlines_id" value="" id="refundline">
             <input type="hidden" name="action" value="cud-refund">
+            <input type="hidden" name="op" value="cud-refund">
             <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -332,6 +334,7 @@
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountlines_id" value="" id="discountline">
             <input type="hidden" name="action" value="cud-discount">
+            <input type="hidden" name="op" value="cud-discount">
             <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
