@@ -270,10 +270,10 @@
 
     <!-- Issue refund modal -->
     <div class="modal" id="issueRefundModal" tabindex="-1" role="dialog" aria-labelledby="issueRefundLabel">
-        <form  id="refund_form" action="/cgi-bin/koha/members/boraccount.pl" method="get" enctype="multipart/form-data" class="validated">
+        <form  id="refund_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountlines_id" value="" id="refundline">
-            <input type="hidden" name="action" value="refund">
+            <input type="hidden" name="action" value="cud-refund">
             <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
