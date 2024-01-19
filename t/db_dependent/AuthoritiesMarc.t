@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Field;
@@ -175,6 +175,12 @@ $dbh->do(q{
     INSERT INTO auth_types (authtypecode, authtypetext, auth_tag_to_report, summary)
     VALUES ('NP', 'Auteur', '200', '[200a][, 200b][ 200d][ ; 200c][ (200f)]')
 });
+$dbh->do(
+    q{
+    INSERT INTO marc_subfield_structure (frameworkcode,authtypecode,tagfield)
+    VALUES ('','NP','200')
+}
+);
 
 my $unimarc_name_auth = MARC::Record->new();
 $unimarc_name_auth->add_fields(
@@ -212,15 +218,48 @@ subtest 'AddAuthority should respect AUTO_INCREMENT (BZ 18104)' => sub {
     plan tests => 3;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
-    my $record = C4::AuthoritiesMarc::GetAuthority(1);
+    my $record = MARC::Record->new();
+    my $field  = MARC::Field->new( '151', ' ', ' ', a => 'Amsterdam (Netherlands)', 'x' => 'Economic conditions' );
+    $record->append_fields($field);
     my $id1 = AddAuthority( $record, undef, 'GEOGR_NAME' );
-    DelAuthority({ authid => $id1 });
+    DelAuthority( { authid => $id1 } );
+    $record = MARC::Record->new();
+    $record->append_fields($field);
     my $id2 = AddAuthority( $record, undef, 'GEOGR_NAME' );
     isnt( $id1, $id2, 'Do not return the same id again' );
     t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
-    my $id3 = AddAuthority( $record, undef, 'GEOGR_NAME' );
+    $record = MARC::Record->new();
+    $field  = MARC::Field->new( '200', ' ', ' ', a => 'Fossey', 'b' => 'Brigitte' );
+    $record->append_fields($field);
+    my $id3 = AddAuthority( $record, undef, 'NP' );
     ok( $id3 > 0, 'Tested AddAuthority with UNIMARC' );
     is( $record->field('001')->data, $id3, 'Check updated 001' );
+};
+
+subtest 'AddAuthority should create heading field with display form' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference( 'marcflavour',    'MARC21' );
+    t::lib::Mocks::mock_preference( 'AuthoritiesLog', 0 );
+    my $record = MARC::Record->new();
+    my $field  = MARC::Field->new( '151', ' ', ' ', a => 'White River Junction (Vt.)' );
+    $record->append_fields($field);
+    my $id        = AddAuthority( $record, undef, 'GEOGR_NAME' );
+    my $authority = Koha::Authorities->find($id);
+    is(
+        $authority->heading, 'White River Junction (Vt.)',
+        'Heading field is formed as expected when adding authority'
+    );
+    $record = MARC::Record->new();
+    $field  = MARC::Field->new( '151', ' ', ' ', a => 'Lyon (France)', 'x' => 'Antiquities' );
+    $record->append_fields($field);
+    $id        = ModAuthority( $id, $record, 'GEOGR_NAME' );
+    $authority = Koha::Authorities->find($id);
+    is(
+        $authority->heading, 'Lyon (France)--Antiquities',
+        'Heading field is formed as expected when modding authority'
+    );
+
 };
 
 subtest 'CompareFieldWithAuthority tests' => sub {
