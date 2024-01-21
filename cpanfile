@@ -1,4 +1,5 @@
 requires 'Algorithm::CheckDigits', '0.5';
+requires 'Algorithm::Munkres', '0.08';
 requires 'Array::Utils', '0.5';
 requires 'Auth::GoogleAuth', '1.02';
 requires 'Authen::CAS::Client', '0.05';
