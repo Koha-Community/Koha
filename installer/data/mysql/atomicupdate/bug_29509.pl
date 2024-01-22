@@ -1,0 +1,61 @@
+use Modern::Perl;
+use Array::Utils qw( array_minus );
+
+return {
+    bug_number  => "29509",
+    description => "Update users with list_borrowers permission where required",
+    up          => sub {
+        my ($args) = @_;
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
+
+        # Users to exclude from update, (superlibrarians or borrowers flags)
+        my $sth = $dbh->prepare("SELECT borrowernumber FROM borrowers WHERE flags = 1 OR flags & 16");
+        $sth->execute();
+        my @exclusions = map { $_->[0] } @{ $sth->fetchall_arrayref };
+
+        # Prepare insert
+        my $insert_sth =
+            $dbh->prepare("INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code) VALUES (?, ?, ?)");
+
+        # Check for 'borrowers' or 'borrowers > edit_borrowers' permission
+        my $sth2 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'edit_borrowers'");
+        $sth2->execute();
+        my @edit_borrowers = map { $_->[0] } @{ $sth2->fetchall_arrayref };
+        my @reduced        = array_minus( @edit_borrowers, @exclusions );
+        my @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @edit_borrowers, @exclusions ) );
+        foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
+        say $out "list_borrowers added to all users with edit_borrowers";
+
+        # Check for 'circulate' or 'circulate > manage_bookings' permission
+        my $sth3 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'manage_bookings'");
+        $sth3->execute();
+        my @manage_bookings = map { $_->[0] } @{ $sth3->fetchall_arrayref };
+        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @manage_bookings, @exclusions ) );
+        foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
+        say $out "list_borrowers added to all users with manage_bookings";
+
+        # Check for 'tools' or 'tools > label_creator' permission
+        my $sth4 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'label_creator'");
+        $sth4->execute();
+        my @label_creator = map { $_->[0] } @{ $sth4->fetchall_arrayref };
+        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @label_creator, @exclusions ) );
+        foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
+        say $out "list_borrowers added to all users with label_creator";
+
+        # Check for 'serials' or 'serials > routing' permission
+        my $sth5 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'routing'");
+        $sth5->execute();
+        my @routing = map { $_->[0] } @{ $sth5->fetchall_arrayref };
+        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @routing, @exclusions ) );
+        foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
+        say $out "list_borrowers added to all users with routing";
+
+        # Check for 'acquisitions' or 'acquisitions > order_manage' permission
+        my $sth6 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'order_manage'");
+        $sth6->execute();
+        my @order_manage = map { $_->[0] } @{ $sth6->fetchall_arrayref };
+        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @order_manage, @exclusions ) );
+        foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
+        say $out "list_borrowers added to all users with order_manage";
+    },
+};
