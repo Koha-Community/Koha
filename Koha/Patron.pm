@@ -2901,6 +2901,106 @@ sub consent {
         : Koha::Patron::Consent->new( { borrowernumber => $self->borrowernumber, type => $type } );
 }
 
+
+=head3 can_borrow
+
+my $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
+
+This method determines whether a borrower is able to borrow based on various parameters.
+- Debarrments
+- Expiry
+- Charges
+
+If any blockers are found, these are returned in a hash
+
+=cut
+
+sub can_borrow {
+    my ( $self, $args ) = @_;
+
+    my $patron = $args->{patron};
+    my $status = { can_borrow => 1 };
+
+    $status->{debarred}   = 1 if $patron->debarred;
+    $status->{expired}    = 1 if $patron->is_expired;
+    $status->{can_borrow} = 0 if $status->{debarred} || $status->{expired};
+
+    # Patron charges
+    my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    %$status = ( %$status, %$patron_charge_limits );
+    $status->{can_borrow} = 0
+        if $patron_charge_limits->{noissuescharge}->{overlimit}
+        || $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit}
+        || $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit};
+
+    return $status;
+}
+
+=head3 is_patron_inside_charge_limits
+
+my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+
+Checks the current account balance for a patron and any guarantors/guarantees and compares it with any charge limits in place
+Takes into account patron category level charge limits in the first instance and defaults to global sysprefs if not set
+
+=cut
+
+sub is_patron_inside_charge_limits {
+    my ( $self, $args ) = @_;
+
+    my $borrowernumber       = $args->{borrowernumber};
+    my $patron               = $args->{patron} || Koha::Patrons->find( { borrowernumber => $borrowernumber } );
+    my $patron_category      = $patron->category;
+    my $patron_charge_limits = {};
+
+    my $no_issues_charge = $patron_category->noissuescharge || C4::Context->preference('noissuescharge') || 0;
+    my $no_issues_charge_guarantees =
+        $patron_category->noissueschargeguarantees || C4::Context->preference('NoIssuesChargeGuarantees') || 0;
+    my $no_issues_charge_guarantors_with_guarantees =
+           $patron_category->noissueschargeguarantorswithguarantees
+        || C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees')
+        || 0;
+
+    my $non_issues_charges            = $patron->account->non_issues_charges;
+    my $guarantees_non_issues_charges = 0;
+    my $guarantors_non_issues_charges = 0;
+
+    # Check the debt of this patrons guarantees
+    if ( defined $no_issues_charge_guarantees ) {
+        my @guarantees = map { $_->guarantee } $patron->guarantee_relationships->as_list;
+        foreach my $g (@guarantees) {
+            $guarantees_non_issues_charges += $g->account->non_issues_charges;
+        }
+    }
+
+    # Check the debt of this patrons guarantors *and* the guarantees of those guarantors
+    if ( defined $no_issues_charge_guarantors_with_guarantees ) {
+        $guarantors_non_issues_charges = $patron->relationships_debt(
+            { include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 1 } );
+    }
+
+    # Return hash for each charge limit - limit, charge, overlimit
+    $patron_charge_limits->{noissuescharge} =
+        { limit => $no_issues_charge, charge => $non_issues_charges, overlimit => 0 };
+    $patron_charge_limits->{noissuescharge}->{overlimit} = 1
+        if $no_issues_charge && $non_issues_charges > $no_issues_charge;
+
+    $patron_charge_limits->{NoIssuesChargeGuarantees} =
+        { limit => $no_issues_charge_guarantees, charge => $guarantees_non_issues_charges, overlimit => 0 };
+    $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit} = 1
+        if $no_issues_charge_guarantees && $guarantees_non_issues_charges > $no_issues_charge_guarantees;
+
+    $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees} = {
+        limit     => $no_issues_charge_guarantors_with_guarantees, charge => $guarantors_non_issues_charges,
+        overlimit => 0
+    };
+    $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit} = 1
+        if $no_issues_charge_guarantors_with_guarantees
+        && $guarantors_non_issues_charges > $no_issues_charge_guarantors_with_guarantees;
+
+    return $patron_charge_limits;
+}
+
 =head2 Internal methods
 
 =head3 _type
