@@ -594,13 +594,13 @@ if ( $patron ) {
         $template->param( is_anonymous => 1 );
         $noissues = 1;
     }
-    my $account = $patron->account;
-    if( ( my $owing = $account->non_issues_charges ) > 0 ) {
-        my $noissuescharge = C4::Context->preference("noissuescharge") || 5; # FIXME If noissuescharge == 0 then 5, why??
-        $noissues ||= ( not C4::Context->preference("AllowFineOverride") and ( $owing > $noissuescharge ) );
+    my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    if( $patron_charge_limits->{noissuescharge}->{charge} > 0 ) {
+        my $noissuescharge = $patron_charge_limits->{noissuescharge}->{limit} || 5; # FIXME If noissuescharge == 0 then 5, why??
+        $noissues ||= ( not C4::Context->preference("AllowFineOverride") and $patron_charge_limits->{noissuescharge}->{overlimit} );
         $template->param(
             charges => 1,
-            chargesamount => $owing,
+            chargesamount => $patron_charge_limits->{noissuescharge}->{charge},
         )
     } elsif ( $balance < 0 ) {
         $template->param(
@@ -610,30 +610,24 @@ if ( $patron ) {
     }
 
     # Check the debt of this patrons guarantors *and* the guarantees of those guarantors
-    my $no_issues_charge_guarantors = C4::Context->preference("NoIssuesChargeGuarantorsWithGuarantees");
-    if ( $no_issues_charge_guarantors ) {
-        my $guarantors_non_issues_charges = $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 1 });
-
-        if ( $guarantors_non_issues_charges > $no_issues_charge_guarantors ) {
+    my $no_issues_charge_guarantors = $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{limit};
+    if ($no_issues_charge_guarantors) {
+        if ( $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit} ) {
             $template->param(
-                charges_guarantors_guarantees => $guarantors_non_issues_charges
+                noissues                      => 1,
+                charges_guarantors_guarantees => $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}
             );
             $noissues = 1 unless C4::Context->preference("allowfineoverride");
         }
     }
 
-    my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
+    my $no_issues_charge_guarantees = $patron_charge_limits->{NoIssuesChargeGuarantees}->{limit};
     $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
     if ( defined $no_issues_charge_guarantees ) {
-        my $guarantees_non_issues_charges = 0;
-        my $guarantees = $patron->guarantee_relationships->guarantees;
-        while ( my $g = $guarantees->next ) {
-            $guarantees_non_issues_charges += $g->account->non_issues_charges;
-        }
-        if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees ) {
+        if ( $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit} ) {
             $template->param(
                 charges_guarantees    => 1,
-                chargesamount_guarantees => $guarantees_non_issues_charges,
+                chargesamount_guarantees => $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge},
             );
             $noissues = 1 unless C4::Context->preference("allowfineoverride");
         }

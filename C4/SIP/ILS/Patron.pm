@@ -99,24 +99,25 @@ sub new {
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
 
     # Get fines and add fines for guarantees (depends on preference NoIssuesChargeGuarantees)
-    my $fines_amount = ($patron->account->balance > 0) ? $patron->account->non_issues_charges : 0;
+    my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    my $fines_amount = $patron_charge_limits->{noissuescharge}->{charge};
     my $personal_fines_amount = $fines_amount;
-    my $fee_limit = _fee_limit();
-    my $noissueschargeguarantorswithguarantees = C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees');
+    my $fee_limit = $patron_charge_limits->{noissuescharge}->{limit} || 5;
+    my $noissueschargeguarantorswithguarantees = $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{limit};
+    my $noissueschargeguarantees = $patron_charge_limits->{NoIssuesChargeGuarantees}->{limit};
     my $fines_msg = "";
     my $fine_blocked = 0;
-    my $noissueschargeguarantees = C4::Context->preference('NoIssuesChargeGuarantees');
-    if( $fines_amount > $fee_limit ){
+    if( $patron_charge_limits->{noissuescharge}->{overlimit} ){
         $fine_blocked = 1;
         $fines_msg .= " -- " . "Patron blocked by fines" if $fine_blocked;
     } elsif ( $noissueschargeguarantorswithguarantees ) {
-        $fines_amount += $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 0 });
-        $fine_blocked ||= $fines_amount > $noissueschargeguarantorswithguarantees;
+        $fines_amount = $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{charge};
+        $fine_blocked = $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit};
         $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on related accounts" if $fine_blocked;
     } elsif ( $noissueschargeguarantees ) {
         if( $patron->guarantee_relationships->count ){
-            $fines_amount += $patron->relationships_debt({ include_guarantors => 0, only_this_guarantor => 1, include_this_patron => 0 });
-            $fine_blocked ||= $fines_amount > $noissueschargeguarantees;
+            $fines_amount += $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge};
+            $fine_blocked = $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit};
             $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on guaranteed accounts" if $fine_blocked;
         }
     }
@@ -497,10 +498,6 @@ sub enable {
 sub inet_privileges {
     my $self = shift;
     return $self->{inet} ? 'Y' : 'N';
-}
-
-sub _fee_limit {
-    return C4::Context->preference('noissuescharge') || 5;
 }
 
 sub excessive_fees {

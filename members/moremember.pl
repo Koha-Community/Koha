@@ -242,29 +242,26 @@ my $issues = $patron->checkouts;
 my $balance = 0;
 $balance = $patron->account->balance;
 
-my $account = $patron->account;
-if( ( my $owing = $account->non_issues_charges ) > 0 ) {
-    my $noissuescharge = C4::Context->preference("noissuescharge") || 5; # FIXME If noissuescharge == 0 then 5, why??
+my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+if ( $patron_charge_limits->{noissuescharge}->{charge} > 0 ) {
     $template->param(
-        charges => 1,
-        chargesamount => $owing,
-    )
+        charges       => 1,
+        chargesamount => $patron_charge_limits->{noissuescharge}->{charge},
+    );
 } elsif ( $balance < 0 ) {
     $template->param(
-        credits => 1,
+        credits       => 1,
         creditsamount => -$balance,
     );
 }
 
 # Check the debt of this patrons guarantors *and* the guarantees of those guarantors
-my $no_issues_charge_guarantors = C4::Context->preference("NoIssuesChargeGuarantorsWithGuarantees");
+my $no_issues_charge_guarantors = $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{limit};
 if ( $no_issues_charge_guarantors ) {
-    my $guarantors_non_issues_charges = $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 1 });
-
-    if ( $guarantors_non_issues_charges > $no_issues_charge_guarantors ) {
+    if ( $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit} ) {
         $template->param(
             noissues                      => 1,
-            charges_guarantors_guarantees => $guarantors_non_issues_charges
+            charges_guarantors_guarantees => $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}
         );
     }
 }

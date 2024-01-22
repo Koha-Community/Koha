@@ -135,13 +135,13 @@ sub patronflags {
     my $dbh=C4::Context->dbh;
     my $patron = Koha::Patrons->find( $patroninformation->{borrowernumber} );
     my $account = $patron->account;
-    my $owing = $account->non_issues_charges;
-    if ( $owing > 0 ) {
+    my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    if ( $patron_charge_limits->{noissuescharge}->{charge} > 0 ) {
         my %flaginfo;
-        my $noissuescharge = C4::Context->preference("noissuescharge") || 5;
-        $flaginfo{'message'} = sprintf 'Patron owes %.02f', $owing;
-        $flaginfo{'amount'}  = sprintf "%.02f", $owing;
-        if ( $owing > $noissuescharge && !C4::Context->preference("AllowFineOverride") ) {
+        my $noissuescharge = $patron_charge_limits->{noissuescharge}->{limit} || 5;
+        $flaginfo{'message'} = sprintf 'Patron owes %.02f', $patron_charge_limits->{noissuescharge}->{charge};
+        $flaginfo{'amount'}  = sprintf "%.02f", $patron_charge_limits->{noissuescharge}->{charge};
+        if ( $patron_charge_limits->{noissuescharge}->{overlimit} && !C4::Context->preference("AllowFineOverride") ) {
             $flaginfo{'noissues'} = 1;
         }
         $flags{'CHARGES'} = \%flaginfo;
@@ -153,21 +153,14 @@ sub patronflags {
         $flags{'CREDITS'} = \%flaginfo;
     }
 
-    # Check the debt of the guarntees of this patron
-    my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
-    $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
+    # Check the debt of this patrons guarantees
+    my $no_issues_charge_guarantees = $patron_charge_limits->{NoIssuesChargeGuarantees}->{limit};
+    $no_issues_charge_guarantees = undef unless looks_like_number($no_issues_charge_guarantees);
     if ( defined $no_issues_charge_guarantees ) {
-        my $p = Koha::Patrons->find( $patroninformation->{borrowernumber} );
-        my @guarantees = map { $_->guarantee } $p->guarantee_relationships->as_list;
-        my $guarantees_non_issues_charges = 0;
-        foreach my $g ( @guarantees ) {
-            $guarantees_non_issues_charges += $g->account->non_issues_charges;
-        }
-
-        if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees ) {
+        if ( $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit} ) {
             my %flaginfo;
-            $flaginfo{'message'} = sprintf 'patron guarantees owe %.02f', $guarantees_non_issues_charges;
-            $flaginfo{'amount'}  = $guarantees_non_issues_charges;
+            $flaginfo{'message'} = sprintf 'patron guarantees owe %.02f', $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge};
+            $flaginfo{'amount'}  = $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge};
             $flaginfo{'noissues'} = 1 unless C4::Context->preference("allowfineoverride");
             $flags{'CHARGES_GUARANTEES'} = \%flaginfo;
         }

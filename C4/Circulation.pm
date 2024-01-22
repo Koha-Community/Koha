@@ -819,9 +819,9 @@ sub CanBookBeIssued {
     #
     # BORROWER STATUS
     #
-    if ( $patron->category->category_type eq 'X' && ( $item_object->barcode ) ) {
-
-        # stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
+    my $patron_borrowing_status = $patron->can_borrow({ patron => $patron });
+    if ( $patron->category->category_type eq 'X' && (  $item_object->barcode  )) {
+	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
         C4::Stats::UpdateStats(
             {
                 branch         => C4::Context->userenv->{'branch'},
@@ -865,62 +865,71 @@ sub CanBookBeIssued {
     my $non_issues_charges = $account->non_issues_charges;
     my $other_charges = $balance - $non_issues_charges;
 
-    my $amountlimit = C4::Context->preference("noissuescharge");
     my $allowfineoverride = C4::Context->preference("AllowFineOverride");
     my $allfinesneedoverride = C4::Context->preference("AllFinesNeedOverride");
 
     # Check the debt of this patrons guarantees
-    my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
-    $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
+    my $no_issues_charge_guarantees = $patron_borrowing_status->{NoIssuesChargeGuarantees}->{limit};
+    $no_issues_charge_guarantees = undef unless looks_like_number($no_issues_charge_guarantees);
     if ( defined $no_issues_charge_guarantees ) {
-        my @guarantees = map { $_->guarantee } $patron->guarantee_relationships->as_list;
-        my $guarantees_non_issues_charges = 0;
-        foreach my $g ( @guarantees ) {
-            $guarantees_non_issues_charges += $g->account->non_issues_charges;
-        }
-
-        if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees && !$inprocess && !$allowfineoverride) {
-            $issuingimpossible{DEBT_GUARANTEES} = $guarantees_non_issues_charges;
-        } elsif ( $guarantees_non_issues_charges > $no_issues_charge_guarantees && !$inprocess && $allowfineoverride) {
-            $needsconfirmation{DEBT_GUARANTEES} = $guarantees_non_issues_charges;
-        } elsif ( $allfinesneedoverride && $guarantees_non_issues_charges > 0 && $guarantees_non_issues_charges <= $no_issues_charge_guarantees && !$inprocess ) {
-            $needsconfirmation{DEBT_GUARANTEES} = $guarantees_non_issues_charges;
+        if ( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit} && !$inprocess && !$allowfineoverride ) {
+            $issuingimpossible{DEBT_GUARANTEES} = $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge};
+        } elsif ( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit}
+            && !$inprocess
+            && $allowfineoverride )
+        {
+            $needsconfirmation{DEBT_GUARANTEES} = $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge};
+        } elsif ( $allfinesneedoverride
+            && $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge} > 0
+            && !$inprocess )
+        {
+            $needsconfirmation{DEBT_GUARANTEES} = $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge};
         }
     }
 
     # Check the debt of this patrons guarantors *and* the guarantees of those guarantors
-    my $no_issues_charge_guarantors = C4::Context->preference("NoIssuesChargeGuarantorsWithGuarantees");
-    $no_issues_charge_guarantors = undef unless looks_like_number( $no_issues_charge_guarantors );
+    my $no_issues_charge_guarantors = $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit};
+    $no_issues_charge_guarantors = undef unless looks_like_number($no_issues_charge_guarantors);
     if ( defined $no_issues_charge_guarantors ) {
-        my $guarantors_non_issues_charges = $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 1 });
-
-        if ( $guarantors_non_issues_charges > $no_issues_charge_guarantors && !$inprocess && !$allowfineoverride) {
-            $issuingimpossible{DEBT_GUARANTORS} = $guarantors_non_issues_charges;
-        } elsif ( $guarantors_non_issues_charges > $no_issues_charge_guarantors && !$inprocess && $allowfineoverride) {
-            $needsconfirmation{DEBT_GUARANTORS} = $guarantors_non_issues_charges;
-        } elsif ( $allfinesneedoverride && $guarantors_non_issues_charges > 0 && $guarantors_non_issues_charges <= $no_issues_charge_guarantors && !$inprocess ) {
-            $needsconfirmation{DEBT_GUARANTORS} = $guarantors_non_issues_charges;
+        if (   $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}
+            && !$inprocess
+            && !$allowfineoverride )
+        {
+            $issuingimpossible{DEBT_GUARANTORS} =
+                $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge};
+        } elsif ( $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}
+            && !$inprocess
+            && $allowfineoverride )
+        {
+            $needsconfirmation{DEBT_GUARANTORS} =
+                $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge};
+        } elsif ( $allfinesneedoverride
+            && $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge} > 0
+            && !$inprocess )
+        {
+            $needsconfirmation{DEBT_GUARANTORS} =
+                $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge};
         }
     }
 
     if ( C4::Context->preference("IssuingInProcess") ) {
-        if ( $non_issues_charges > $amountlimit && !$inprocess && !$allowfineoverride) {
-            $issuingimpossible{DEBT} = $non_issues_charges;
-        } elsif ( $non_issues_charges > $amountlimit && !$inprocess && $allowfineoverride) {
-            $needsconfirmation{DEBT} = $non_issues_charges;
-        } elsif ( $allfinesneedoverride && $non_issues_charges > 0 && $non_issues_charges <= $amountlimit && !$inprocess ) {
-            $needsconfirmation{DEBT} = $non_issues_charges;
+        if ( $patron_borrowing_status->{noissuescharge}->{overlimit} && !$inprocess && !$allowfineoverride ) {
+            $issuingimpossible{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
+        } elsif ( $patron_borrowing_status->{noissuescharge}->{overlimit} && !$inprocess && $allowfineoverride ) {
+            $needsconfirmation{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
+        } elsif ( $allfinesneedoverride && $patron_borrowing_status->{noissuescharge}->{charge} > 0 && !$inprocess ) {
+            $needsconfirmation{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
+        }
+    } else {
+        if ( $patron_borrowing_status->{noissuescharge}->{overlimit} && $allowfineoverride ) {
+            $needsconfirmation{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
+        } elsif ( $patron_borrowing_status->{noissuescharge}->{overlimit} && !$allowfineoverride ) {
+            $issuingimpossible{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
+        } elsif ( $patron_borrowing_status->{noissuescharge}->{charge} > 0 && $allfinesneedoverride ) {
+            $needsconfirmation{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
         }
     }
-    else {
-        if ( $non_issues_charges > $amountlimit && $allowfineoverride ) {
-            $needsconfirmation{DEBT} = $non_issues_charges;
-        } elsif ( $non_issues_charges > $amountlimit && !$allowfineoverride) {
-            $issuingimpossible{DEBT} = $non_issues_charges;
-        } elsif ( $non_issues_charges > 0 && $allfinesneedoverride ) {
-            $needsconfirmation{DEBT} = $non_issues_charges;
-        }
-    }
+
 
     if ($balance > 0 && $other_charges > 0) {
         $alerts{OTHER_CHARGES} = sprintf( "%.2f", $other_charges );
