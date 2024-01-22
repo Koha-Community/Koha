@@ -213,6 +213,27 @@ set required password strength for patrons in this category
 
 Exclude patrons of this category from local holds priority
 
+=head2 noissuescharge
+
+  data_type: 'integer'
+  is_nullable: 1
+
+define maximum amount withstanding before checkouts are blocked
+
+=head2 noissueschargeguarantees
+
+  data_type: 'integer'
+  is_nullable: 1
+
+define maximum amount withstanding before checkouts are blocked
+
+=head2 noissueschargeguarantorswithguarantees
+
+  data_type: 'integer'
+  is_nullable: 1
+
+define maximum amount withstanding before checkouts are blocked
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -281,6 +302,12 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", is_nullable => 1 },
   "exclude_from_local_holds_priority",
   { data_type => "tinyint", is_nullable => 1 },
+  "noissuescharge",
+  { data_type => "integer", is_nullable => 1 },
+  "noissueschargeguarantees",
+  { data_type => "integer", is_nullable => 1 },
+  "noissueschargeguarantorswithguarantees",
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
