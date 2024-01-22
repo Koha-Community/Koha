@@ -119,7 +119,7 @@
         [% END %]
 
         [% IF ( charges ) %]
-            [% INCLUDE 'blocked-fines.inc' fines = chargesamount %]
+            [% INCLUDE 'blocked-fines.inc' borrowernumber = patron.borrowernumber %]
         [% END %]
 
         [% IF ( charges_guarantors_guarantees ) %]
