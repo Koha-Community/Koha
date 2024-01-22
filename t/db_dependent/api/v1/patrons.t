@@ -81,22 +81,49 @@ subtest 'list() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 19;
+        plan tests => 21;
 
         $schema->storage->txn_begin;
 
         my $librarian = $builder->build_object(
             {
                 class => 'Koha::Patrons',
-                value => { flags => 2**4 }    # borrowers flag = 4
+                value => { flags => 2 ** 2 }     # catalog only, no additional permissions
             }
         );
+
+        # Ensure our librarian can see users from all branches (once list_borrowers is added)
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $librarian->borrowernumber,
+                    module_bit     => 4,
+                    code           => 'view_borrower_infos_from_any_libraries',
+                },
+             }
+        );
+
         my $password = 'thePassword123';
         $librarian->set_password( { password => $password, skip_validation => 1 } );
         my $userid = $librarian->userid;
 
+        $t->get_ok("//$userid:$password@/api/v1/patrons/")
+          ->status_is(403, 'Basic librarian unable to see patrons');
+
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $librarian->borrowernumber,
+                    module_bit     => 4,
+                    code           => 'list_borrowers',
+                },
+             }
+        );
+
         $t->get_ok("//$userid:$password@/api/v1/patrons")
-          ->status_is(200);
+          ->status_is(200, 'list_borrowers makes /patrons accessible');
 
         $t->get_ok("//$userid:$password@/api/v1/patrons?cardnumber=" . $librarian->cardnumber)
           ->status_is(200)
@@ -110,8 +137,8 @@ subtest 'list() tests' => sub {
           ->status_is(200)
           ->json_is('/0/address2' => $librarian->address2);
 
-        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-        AddDebarment({ borrowernumber => $patron->borrowernumber });
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        AddDebarment( { borrowernumber => $patron->borrowernumber } );
 
         $t->get_ok("//$userid:$password@/api/v1/patrons?restricted=" . Mojo::JSON->true . "&cardnumber=" . $patron->cardnumber )
           ->status_is(200)
@@ -237,24 +264,51 @@ subtest 'get() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 6;
+        plan tests => 8;
 
         $schema->storage->txn_begin;
 
         my $librarian = $builder->build_object(
             {
                 class => 'Koha::Patrons',
-                value => { flags => 2**4 }    # borrowers flag = 4
+                value => { flags => 2 ** 2 }     # catalog only, no additional permissions
             }
         );
+
+        # Ensure our librarian can see users from all branches (once list_borrowers is added)
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $librarian->borrowernumber,
+                    module_bit     => 4,
+                    code           => 'view_borrower_infos_from_any_libraries',
+                },
+             }
+        );
+
         my $password = 'thePassword123';
         $librarian->set_password( { password => $password, skip_validation => 1 } );
         my $userid = $librarian->userid;
 
-        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
         $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id)
-          ->status_is(200)
+          ->status_is(403, 'Basic librarian unable to see patrons');
+
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $librarian->borrowernumber,
+                    module_bit     => 4,
+                    code           => 'list_borrowers',
+                },
+             }
+        );
+
+        $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id)
+          ->status_is(200, 'list_borrowers permission makes patron visible')
           ->json_is('/patron_id'        => $patron->id)
           ->json_is('/category_id'      => $patron->categorycode )
           ->json_is('/surname'          => $patron->surname)
