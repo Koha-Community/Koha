@@ -673,10 +673,12 @@
 
         [% INCLUDE 'select2.inc' %]
         [% SET columns = ['cardnumber','name','category','branch','action'] %]
+        [% SET filter = 'funds_users' %]
         [% PROCESS patron_search_modal columns => columns, modal_title => t("Add users"), patron_search_modal_id => 'patron_search_modal_users', table_id => 'patron_search_modal_users_table' %]
-        [% PROCESS patron_search_js columns => columns, filter => 'funds_users', actions => ["add"], preview_on_name_click => 1, table_id => 'patron_search_modal_users_table' %]
+        [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1, table_id => 'patron_search_modal_users_table' %]
+        [% SET filter = 'funds_owners' %]
         [% PROCESS patron_search_modal columns => columns, modal_title => t("Select owner"), patron_search_modal_id => 'patron_search_modal_owner', table_id => 'patron_search_modal_owner_table' %]
-        [% PROCESS patron_search_js columns => columns, filter => 'funds_owners', actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_owner_table' %]
+        [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_owner_table' %]
 
     [% ELSIF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
