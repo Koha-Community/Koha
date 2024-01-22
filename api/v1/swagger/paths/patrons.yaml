@@ -393,11 +393,11 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
+        - borrowers: "list_borrowers"
         - borrowers: "edit_borrowers"
         - tools: "label_creator"
         - serials: "routing"
         - acquisition: "order_manage"
-        - borrowers: "list_borrowers"
   post:
     x-mojo-to: Patrons#add
     operationId: addPatron
@@ -518,7 +518,8 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
-        borrowers: edit_borrowers
+        - borrowers: "list_borrowers"
+        - borrowers: "edit_borrowers"
   put:
     x-mojo-to: Patrons#update
     operationId: updatePatron
