@@ -86,7 +86,7 @@ sub _select_format_string {     # generate field table based on format_string
     return (\@fields, $field_count);
 }
 
-if ($op eq 'cud-edit') {
+if ($op eq 'edit') {
     warn sprintf("Error performing '%s': No 'layout_id' passed in.", $op) unless ($layout_id);
     $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
 

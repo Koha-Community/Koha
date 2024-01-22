@@ -72,7 +72,7 @@
                         <h1>New label layout</h1>
                     [% END %]
 
-                    <form name="input" action="/cgi-bin/koha/labels/label-edit-layout.pl" method="get">
+                    <form name="input" action="/cgi-bin/koha/labels/label-edit-layout.pl" method="post">
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -213,10 +213,11 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action">
+                            [% INCLUDE 'csrf-token.inc' %] 
+                            <input type="hidden" name="op" value="cud-save" />
+                            <input type="hidden" name="layout_id" value="[% layout_id | html %]" />
                             <input type="submit" class="btn btn-primary" value="Save" />
                             <a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Cancel</a>
-                            <input type="hidden" name="op" value="save" />
-                            <input type="hidden" name="layout_id" value="[% layout_id | html %]" />
                         </fieldset>
                     </form>
             </main>
