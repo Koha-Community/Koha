@@ -55,7 +55,7 @@
                         <h1>New label template</h1>
                     [% END %]
 
-                    <form name="input" action="/cgi-bin/koha/labels/label-edit-template.pl" method="get">
+                    <form name="input" action="/cgi-bin/koha/labels/label-edit-template.pl" method="post">
                     <div class="row">
                         <div class="col-sm-6">
                             <fieldset class="rows">
@@ -177,11 +177,12 @@
                         </div>
                     </div>
                         <fieldset class="action">
-                            <input type="submit" class="btn btn-primary" value="Save" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Cancel</a>
-                            <input type="hidden" name="op" value="save" />
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-save" />
                             [% IF ( template_id ) %]
                             <input type="hidden" name="template_id" value="[% template_id | html %]" />
                             [% END %]
+                            <input type="submit" class="btn btn-primary" value="Save" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Cancel</a>
                         </fieldset>
                 </form>
 

@@ -44,7 +44,7 @@ my $profile_list = undef;
 
 my $units = get_unit_values();
 
-if ($op eq 'cud-edit') {
+if ($op eq 'edit') {
     $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
     $profile_list = get_all_profiles({ fields => [ qw( profile_id printer_name paper_bin ) ], filters => { template_id => [ $template_id, '' ], creator => 'Labels'} } );
     push @$profile_list, {paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile'};
