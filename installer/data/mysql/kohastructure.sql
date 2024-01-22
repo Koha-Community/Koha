@@ -1806,6 +1806,9 @@ CREATE TABLE `categories` (
   `min_password_length` smallint(6) DEFAULT NULL COMMENT 'set minimum password length for patrons in this category',
   `require_strong_password` tinyint(1) DEFAULT NULL COMMENT 'set required password strength for patrons in this category',
   `exclude_from_local_holds_priority` tinyint(1) DEFAULT NULL COMMENT 'Exclude patrons of this category from local holds priority',
+  `noissuescharge` int(11) DEFAULT NULL COMMENT 'define maximum amount withstanding before checkouts are blocked',
+  `noissueschargeguarantees` int(11) DEFAULT NULL COMMENT 'define maximum amount withstanding before checkouts are blocked',
+  `noissueschargeguarantorswithguarantees` int(11) DEFAULT NULL COMMENT 'define maximum amount withstanding before checkouts are blocked',
   PRIMARY KEY (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
