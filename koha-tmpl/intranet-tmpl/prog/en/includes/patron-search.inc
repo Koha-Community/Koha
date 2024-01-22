@@ -153,8 +153,8 @@
 
     <div id="[% table_id | html %]_search_results" style="display:none;">
 
-        <div class="info" class="dialog message" style="display: none;"></div>
-        <div class="error" class="dialog alert" style="display: none;"></div>
+        <div class="info dialog message" style="display: none; margin: 1em 0;"></div>
+        <div class="error dialog alert" style="display: none; margin: 1em 0"></div>
 
         <input type="hidden" class="firstletter_filter" value="" />
         [% IF open_on_row_click %]
