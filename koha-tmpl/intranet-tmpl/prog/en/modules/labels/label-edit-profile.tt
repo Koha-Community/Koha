@@ -56,7 +56,7 @@
                         <h1>New printer profile</h1>
                     [% END%]
 
-                    <form name="input" action="/cgi-bin/koha/labels/label-edit-profile.pl" method="get">
+                    <form name="input" action="/cgi-bin/koha/labels/label-edit-profile.pl" method="post">
                                     <fieldset class="rows"><legend>Profile settings</legend>
                                         <ol>
                                             <li>
@@ -132,10 +132,11 @@
                                         </ol>
                                     </fieldset>
                                     <fieldset class="action">
+                                        [% INCLUDE 'csrf-token.inc' %] 
+                                        <input type="hidden" name="op" value="cud-save" />
+                                        <input type="hidden" name="profile_id" value="[% profile_id | html %]" />
                                         <input type="submit" class="btn btn-primary" value="Save" />
                                         <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile" class="cancel">Cancel</a>
-                                        <input type="hidden" name="op" value="save" />
-                                        <input type="hidden" name="profile_id" value="[% profile_id | html %]" />
                                     </fieldset>
                     </form>
 
