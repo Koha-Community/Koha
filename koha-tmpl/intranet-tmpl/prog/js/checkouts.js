@@ -1,9 +1,474 @@
 /* global __ */
 
-$(document).ready(function() {
-    var loadIssuesTableDelayTimeoutId;
 
-    var barcodefield = $("#barcode");
+function RefreshIssuesTable() {
+    var table = $('#issues-table').DataTable();
+    var renewchecked = $('input[name=renew]:checked').map(function(){
+        return this.value;
+    }).get();
+    var checkinchecked = $('input[name=checkin]:checked').map(function(){
+        return this.value;
+    }).get();
+    table.ajax.reload( function() {
+        $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
+        if ( renewchecked.length ) {
+            $('#RenewChecked').prop('disabled' , false );
+            renewchecked.forEach( function(checked) {
+                $('.renew[value="'+checked+'"]').prop('checked' , true );
+            });
+        }
+        if ( checkinchecked.length ) {
+            $('#CheckinChecked').prop('disabled' , false );
+            checkinchecked.forEach( function(checked) {
+                $('.checkin[value="'+checked+'"]').prop('checked' , true );
+            });
+        }
+    var checkout_count = table.page.info().recordsTotal;
+    $('.checkout_count').text(checkout_count);
+    });
+}
+
+function LoadIssuesTable() {
+    $('#issues-table-loading-message').hide();
+    $('#issues-table').show();
+    $('#issues-table-actions').show();
+    var msg_loading = __('Loading... you may continue scanning.');
+    issuesTable = KohaTable("issues-table", {
+        "language":  {
+            "emptyTable":  msg_loading,
+            "processing": msg_loading,
+        },
+        "autoWidth":  false,
+        "dom": '<"table_controls"B>rt',
+        "columns":  [
+            {
+                "data": function( oObj ) {
+                    return oObj.sort_order;
+                }
+            },
+            {
+                "data": function( oObj ) {
+                    if ( oObj.issued_today ) {
+                        return "<strong>" + __("Today's checkouts") + "</strong>";
+                    } else {
+                        return "<strong>" + __("Previous checkouts") + "</strong>";
+                    }
+                }
+            },
+            {
+                "data": "date_due",
+                "visible":  false,
+            },
+            {
+                "orderData":  2, // Sort on hidden unformatted date due column
+                "data": function( oObj ) {
+                    let date_due_formatted = $datetime(oObj.date_due, { as_due_date: true, no_tz_adjust: true });
+                    var due = oObj.date_due_overdue
+                        ? "<span class='overdue'>" + date_due_formatted + "</span>"
+                        : date_due_formatted;
+
+                    due = "<span id='date_due_" + oObj.itemnumber + "' class='date_due'>" + due + "</span>";
+
+                    if ( oObj.lost && oObj.claims_returned ) {
+                        due += "<span class='lost claims_returned'>" + oObj.lost.escapeHtml() + "</span>";
+                    } else if ( oObj.lost ) {
+                        due += "<span class='lost'>" + oObj.lost.escapeHtml() + "</span>";
+                    }
+
+                    if ( oObj.damaged ) {
+                        due += "<span class='dmg'>" + oObj.damaged.escapeHtml() + "</span>";
+                    }
+
+                    var patron_note = " <span class='patron_note_" + oObj.itemnumber + "'></span>";
+                    due +="<br>" + patron_note;
+
+                    return due;
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    let title = "<span id='title_" + oObj.itemnumber + "' class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                          + oObj.biblionumber
+                          + "'>"
+                          + (oObj.title ? oObj.title.escapeHtml() : '' );
+
+                    $.each(oObj.subtitle, function( index, value ) {
+                              title += " " + value.escapeHtml();
+                    });
+
+                    title += " " + oObj.part_number + " " + oObj.part_name;
+
+                    if ( oObj.enumchron ) {
+                        title += " <span class='item_enumeration'>(" + oObj.enumchron.escapeHtml() + ")</span>";
+                    }
+
+                    title += "</a></span>";
+
+                    if ( oObj.author ) {
+                        title += " " + __("by _AUTHOR_").replace( "_AUTHOR_",  " " + oObj.author.escapeHtml() );
+                    }
+
+                    if ( oObj.itemnotes ) {
+                        var span_class = "text-muted";
+                        if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
+                            span_class = "circ-hlt";
+                        }
+                        title += "<span class='divider-dash'> - </span><span class='" + span_class + " item-note-public'>" + oObj.itemnotes.escapeHtml() + "</span>";
+                    }
+
+                    if ( oObj.itemnotes_nonpublic ) {
+                        var span_class = "text-danger";
+                        if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
+                            span_class = "circ-hlt";
+                        }
+                        title += "<span class='divider-dash'> - </span><span class='" + span_class + " item-note-nonpublic'>" + oObj.itemnotes_nonpublic.escapeHtml() + "</span>";
+                    }
+
+                    var onsite_checkout = '';
+                    if ( oObj.onsite_checkout == 1 ) {
+                        onsite_checkout += " <span class='onsite_checkout'>(" + __("On-site checkout") + ")</span>";
+                    }
+
+                    if ( oObj.recalled == 1 ) {
+                         title += "<span class='divider-dash'> - </span><span class='circ-hlt item-recalled'>" +  __("This item has been recalled and the due date updated") + ".</span>";
+                    }
+
+                    title += " "
+                          + "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
+                          + oObj.biblionumber
+                          + "&itemnumber="
+                          + oObj.itemnumber
+                          + "#"
+                          + oObj.itemnumber
+                          + "'>"
+                          + (oObj.barcode ? oObj.barcode.escapeHtml() : "")
+                          + "</a>"
+                          + onsite_checkout
+
+                    return title;
+                },
+                "type":  "anti-the"
+            },
+            {
+                "data": function ( oObj ) {
+                    return oObj.recordtype_description.escapeHtml();
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    return oObj.itemtype_description.escapeHtml();
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    return ( oObj.collection ? oObj.collection.escapeHtml() : '' );
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    return ( oObj.location ? oObj.location.escapeHtml() : '' );
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    return (oObj.homebranch ? oObj.homebranch.escapeHtml() : '' );
+                }
+            },
+            {
+                "data": "issuedate",
+                "visible":  false,
+            },
+            {
+                "orderData":  10, // Sort on hidden unformatted issuedate column
+                "data": function( oObj ) {
+                    return $datetime(oObj.issuedate, { no_tz_adjust: true });
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    return (oObj.branchname ? oObj.branchname.escapeHtml() : '' );
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    return ( oObj.itemcallnumber ? oObj.itemcallnumber.escapeHtml() : '' );
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    return ( oObj.copynumber ? oObj.copynumber.escapeHtml() : '' );
+                }
+            },
+            {
+                "data": function ( oObj ) {
+                    if ( ! oObj.charge ) oObj.charge = 0;
+                    return '<span style="text-align: right; display: block;">' + parseFloat(oObj.charge).format_price() + '<span>';
+                },
+                "className": "nowrap"
+            },
+            {
+                "data": function ( oObj ) {
+                    if ( ! oObj.fine ) oObj.fine = 0;
+                    return '<span style="text-align: right; display: block;">' + parseFloat(oObj.fine).format_price()   + '<span>';
+                },
+                "className": "nowrap"
+            },
+            {
+                "data": function ( oObj ) {
+                    if ( ! oObj.price ) oObj.price = 0;
+                    return '<span style="text-align: right; display: block;">' + parseFloat(oObj.price).format_price()  + '<span>';
+                },
+                "className": "nowrap"
+            },
+            {
+                "orderable":  false,
+                "visible":  AllowCirculate ? true : false,
+                "data": function ( oObj ) {
+                    var content = "";
+                    var msg = "";
+                    var span_style = "";
+                    var span_class = "";
+
+                    if ( oObj.can_renew ) {
+                        // Do nothing
+                    } else if ( oObj.can_renew_error == "recalled" ) {
+                        msg += "<span>"
+                                + "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Recalled") + "</a>"
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed-recalled";
+                    } else if ( oObj.can_renew_error == "on_reserve" ) {
+                        msg += "<span>"
+                                +"<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>"
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed-on_reserve";
+                    } else if ( oObj.can_renew_error == "too_many" ) {
+                        msg += "<span class='renewals-disabled'>"
+                                + __("Not renewable")
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "too_unseen" ) {
+                        msg += "<span>"
+                                + __("Must be renewed at the library")
+                                + "</span>";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "restriction" ) {
+                        msg += "<span class='renewals-disabled'>"
+                                + __("Not allowed: patron restricted")
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "overdue" ) {
+                        msg += "<span class='renewals-disabled'>"
+                                + __("Not allowed: overdue")
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "too_soon" ) {
+                        msg += "<span class='renewals-disabled'>"
+                                + __("No renewal before %s").format(oObj.can_renew_date)
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "auto_too_late" ) {
+                        msg += "<span class='renewals-disabled'>"
+                                + __("Can no longer be auto-renewed - number of checkout days exceeded")
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "auto_too_much_oweing" ) {
+                        msg += "<span class='renewals-disabled'>"
+                                + __("Automatic renewal failed, patron has unpaid fines")
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "auto_account_expired" ) {
+                        msg += "<span class='renewals-disabled'>"
+                                + __("Automatic renewal failed, account expired")
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else if ( oObj.can_renew_error == "onsite_checkout" ) {
+                        // Don't display something if it's an onsite checkout
+                    } else if ( oObj.can_renew_error == "item_denied_renewal" ) {
+                        content += "<span class='renewals-disabled'>"
+                                + __("Renewal denied by syspref")
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    } else {
+                        msg += "<span class='renewals-disabled'>"
+                                + oObj.can_renew_error
+                                + "</span>";
+
+                        span_style = "display: none";
+                        span_class = "renewals-allowed";
+                    }
+
+                    var can_force_renew = ( oObj.onsite_checkout == 0 ) &&
+                        ( oObj.can_renew_error != "on_reserve" || (oObj.can_renew_error == "on_reserve" && AllowRenewalOnHoldOverride))
+                        ? true : false;
+                    var can_renew = ( oObj.renewals_remaining > 0 && ( !oObj.can_renew_error || oObj.can_renew_error == "too_unseen" ));
+                    content += "<span>";
+                    if ( can_renew || can_force_renew ) {
+                        content += "<span style='padding: 0 1em;'>" + oObj.renewals_count + "</span>";
+                        content += "<span class='" + span_class + "' style='" + span_style + "'>"
+                                +  "<input type='checkbox' ";
+                        if ( oObj.date_due_overdue && can_renew ) {
+                            content += "checked='checked' ";
+                        }
+                        if (oObj.can_renew_error == "on_reserve") {
+                            content += "data-on-reserve ";
+                        }
+                        content += "class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
+                                +  "</span>";
+                    }
+                    content += msg;
+                    if ( can_renew || can_force_renew ) {
+                        content += "<span class='renewals-info'>(";
+                        content += __("%s of %s renewals remaining").format(oObj.renewals_remaining, oObj.renewals_allowed);
+                        if (UnseenRenewals && oObj.unseen_allowed) {
+                            content += __(" and %s of %s unseen renewals remaining").format(oObj.unseen_remaining, oObj.unseen_allowed);
+                        }
+                        content += ")</span>";
+                    }
+                    if(oObj.auto_renew){
+                        content += "<span class='renewals-info'>(";
+                        content += __("Scheduled for automatic renewal");
+                        content += ")</span>";
+                    }
+
+                    return content;
+                }
+            },
+            {
+                "orderable":  false,
+                "visible":  AllowCirculate ? true : false,
+                "data": function ( oObj ) {
+                    if ( oObj.can_renew_error == "recalled" ) {
+                        return "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Recalled") + "</a>";
+                    } else if ( oObj.can_renew_error == "on_reserve" ) {
+                        return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>";
+                    } else if ( oObj.materials ) {
+                        return "<input type='checkbox' class='confirm' id='confirm_" + oObj.itemnumber + "' name='confirm' value='" + oObj.itemnumber + "' data-materials='" + oObj.materials.escapeHtml() + "'></input>";
+                    } else {
+                        return "<input type='checkbox' class='checkin' id='checkin_" + oObj.itemnumber + "' name='checkin' value='" + oObj.itemnumber +"'></input>";
+                    }
+                }
+            },
+            {
+                "visible":  ClaimReturnedLostValue ? true : false,
+                "orderable":  false,
+                "data": function ( oObj ) {
+                    let content = "";
+
+                    if ( oObj.return_claim_id ) {
+                      content = '<span class="badge">' + oObj.return_claim_created_on_formatted + '</span>';
+                    } else if ( ClaimReturnedLostValue ) {
+                      content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
+                    } else {
+                      content = '<a class="btn btn-default btn-xs" disabled="disabled" title="ClaimReturnedLostValue is not set, this feature is disabled"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
+                    }
+                    return content;
+                }
+            },
+            {
+                "visible":  exports_enabled == 1 ? true : false,
+                "orderable":  false,
+                "data": function ( oObj ) {
+                    var s = "<input type='checkbox' name='itemnumbers' value='" + oObj.itemnumber + "' style='visibility:hidden;' />";
+
+                    s += "<input type='checkbox' class='export' id='export_" + oObj.biblionumber + "' name='biblionumbers' value='" + oObj.biblionumber + "' />";
+                    return s;
+                }
+            }
+        ],
+        "footerCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
+            var total_charge = 0;
+            var total_fine  = 0;
+            var total_price = 0;
+            for ( var i=0; i < aaData.length; i++ ) {
+                total_charge += aaData[i]['charge'] * 1;
+                total_fine += aaData[i]['fine'] * 1;
+                total_price  += aaData[i]['price'] * 1;
+            }
+            $("#totaldue").html(total_charge.format_price() );
+            $("#totalfine").html(total_fine.format_price() );
+            $("#totalprice").html(total_price.format_price() );
+        },
+        "paging":  false,
+        "processing":  true,
+        "serverSide":  false,
+        "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
+        "fnServerData": function ( sSource, aoData, fnCallback ) {
+            aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
+
+            $.getJSON( sSource, aoData, function (json) {
+                fnCallback(json)
+            } );
+        },
+        "rowGroup":{
+            "dataSrc": "issued_today",
+            "startRender": function ( rows, group ) {
+                if ( group ) {
+                    return __("Today's checkouts");
+                } else {
+                    return __("Previous checkouts");
+                }
+            }
+        },
+        "initComplete": function(oSettings, json) {
+            // Build a summary of checkouts grouped by itemtype
+            var checkoutsByItype = json.aaData.reduce(function (obj, row) {
+                obj[row.type_for_stat] = (obj[row.type_for_stat] || 0) + 1;
+                return obj;
+            }, {});
+            var ul = $('<ul>');
+            Object.keys(checkoutsByItype).sort().forEach(function (itype) {
+                var li = $('<li>')
+                    .append($('<strong>').html(itype || __("No itemtype")))
+                    .append(': ' + checkoutsByItype[itype]);
+                ul.append(li);
+            })
+            $('<details>')
+                .addClass('checkouts-by-itemtype')
+                .append($('<summary>').html( __("Number of checkouts by item type") ))
+                .append(ul)
+                .insertBefore(oSettings.nTableWrapper)
+        },
+    }, table_settings_issues_table);
+
+    if ( $("#issues-table").length ) {
+        $("#issues-table_processing").position({
+            of: $( "#issues-table" ),
+            collision: "none"
+        });
+    }
+}
+
+var loadIssuesTableDelayTimeoutId;
+var barcodefield = $("#barcode");
+
+$('#issues-table-load-now-button').click(function(){
+    if ( loadIssuesTableDelayTimeoutId ) clearTimeout(loadIssuesTableDelayTimeoutId);
+    LoadIssuesTable();
+    barcodefield.focus();
+    return false;
+});
+
+$(document).ready(function() {
 
     var onHoldDueDateSet = false;
 
@@ -271,12 +736,6 @@ $(document).ready(function() {
         }
         barcodefield.focus();
     });
-    $('#issues-table-load-now-button').click(function(){
-        if ( loadIssuesTableDelayTimeoutId ) clearTimeout(loadIssuesTableDelayTimeoutId);
-        LoadIssuesTable();
-        barcodefield.focus();
-        return false;
-    });
 
     if ( Cookies.get("issues-table-load-immediately-" + script) == "true" ) {
         if ( LoadCheckoutsTableDelay ) {
@@ -291,463 +750,6 @@ $(document).ready(function() {
     $('#issues-table-load-immediately').on( "change", function(){
         Cookies.set("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365, sameSite: 'Lax'  });
     });
-
-    function RefreshIssuesTable() {
-        var table = $('#issues-table').DataTable();
-        var renewchecked = $('input[name=renew]:checked').map(function(){
-            return this.value;
-        }).get();
-        var checkinchecked = $('input[name=checkin]:checked').map(function(){
-            return this.value;
-        }).get();
-        table.ajax.reload( function() {
-            $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
-            if ( renewchecked.length ) {
-                $('#RenewChecked').prop('disabled' , false );
-                renewchecked.forEach( function(checked) {
-                    $('.renew[value="'+checked+'"]').prop('checked' , true );
-                });
-            }
-            if ( checkinchecked.length ) {
-                $('#CheckinChecked').prop('disabled' , false );
-                checkinchecked.forEach( function(checked) {
-                    $('.checkin[value="'+checked+'"]').prop('checked' , true );
-                });
-            }
-        var checkout_count = table.page.info().recordsTotal;
-        $('.checkout_count').text(checkout_count);
-        });
-    }
-
-    function LoadIssuesTable() {
-        $('#issues-table-loading-message').hide();
-        $('#issues-table').show();
-        $('#issues-table-actions').show();
-        var msg_loading = __('Loading... you may continue scanning.');
-        issuesTable = KohaTable("issues-table", {
-            "language":  {
-                "emptyTable":  msg_loading,
-                "processing": msg_loading,
-            },
-            "autoWidth":  false,
-            "dom": '<"table_controls"B>rt',
-            "columns":  [
-                {
-                    "data": function( oObj ) {
-                        return oObj.sort_order;
-                    }
-                },
-                {
-                    "data": function( oObj ) {
-                        if ( oObj.issued_today ) {
-                            return "<strong>" + __("Today's checkouts") + "</strong>";
-                        } else {
-                            return "<strong>" + __("Previous checkouts") + "</strong>";
-                        }
-                    }
-                },
-                {
-                    "data": "date_due",
-                    "visible":  false,
-                },
-                {
-                    "orderData":  2, // Sort on hidden unformatted date due column
-                    "data": function( oObj ) {
-                        let date_due_formatted = $datetime(oObj.date_due, { as_due_date: true, no_tz_adjust: true });
-                        var due = oObj.date_due_overdue
-                            ? "<span class='overdue'>" + date_due_formatted + "</span>"
-                            : date_due_formatted;
-
-                        due = "<span id='date_due_" + oObj.itemnumber + "' class='date_due'>" + due + "</span>";
-
-                        if ( oObj.lost && oObj.claims_returned ) {
-                            due += "<span class='lost claims_returned'>" + oObj.lost.escapeHtml() + "</span>";
-                        } else if ( oObj.lost ) {
-                            due += "<span class='lost'>" + oObj.lost.escapeHtml() + "</span>";
-                        }
-
-                        if ( oObj.damaged ) {
-                            due += "<span class='dmg'>" + oObj.damaged.escapeHtml() + "</span>";
-                        }
-
-                        var patron_note = " <span class='patron_note_" + oObj.itemnumber + "'></span>";
-                        due +="<br>" + patron_note;
-
-                        return due;
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        let title = "<span id='title_" + oObj.itemnumber + "' class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
-                              + oObj.biblionumber
-                              + "'>"
-                              + (oObj.title ? oObj.title.escapeHtml() : '' );
-
-                        $.each(oObj.subtitle, function( index, value ) {
-                                  title += " " + value.escapeHtml();
-                        });
-
-                        title += " " + oObj.part_number + " " + oObj.part_name;
-
-                        if ( oObj.enumchron ) {
-                            title += " <span class='item_enumeration'>(" + oObj.enumchron.escapeHtml() + ")</span>";
-                        }
-
-                        title += "</a></span>";
-
-                        if ( oObj.author ) {
-                            title += " " + __("by _AUTHOR_").replace( "_AUTHOR_",  " " + oObj.author.escapeHtml() );
-                        }
-
-                        if ( oObj.itemnotes ) {
-                            var span_class = "text-muted";
-                            if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
-                                span_class = "circ-hlt";
-                            }
-                            title += "<span class='divider-dash'> - </span><span class='" + span_class + " item-note-public'>" + oObj.itemnotes.escapeHtml() + "</span>";
-                        }
-
-                        if ( oObj.itemnotes_nonpublic ) {
-                            var span_class = "text-danger";
-                            if ( flatpickr.formatDate( new Date(oObj.issuedate), "Y-m-d" ) == ymd ){
-                                span_class = "circ-hlt";
-                            }
-                            title += "<span class='divider-dash'> - </span><span class='" + span_class + " item-note-nonpublic'>" + oObj.itemnotes_nonpublic.escapeHtml() + "</span>";
-                        }
-
-                        var onsite_checkout = '';
-                        if ( oObj.onsite_checkout == 1 ) {
-                            onsite_checkout += " <span class='onsite_checkout'>(" + __("On-site checkout") + ")</span>";
-                        }
-
-                        if ( oObj.recalled == 1 ) {
-                             title += "<span class='divider-dash'> - </span><span class='circ-hlt item-recalled'>" +  __("This item has been recalled and the due date updated") + ".</span>";
-                        }
-
-                        title += " "
-                              + "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
-                              + oObj.biblionumber
-                              + "&itemnumber="
-                              + oObj.itemnumber
-                              + "#"
-                              + oObj.itemnumber
-                              + "'>"
-                              + (oObj.barcode ? oObj.barcode.escapeHtml() : "")
-                              + "</a>"
-                              + onsite_checkout
-
-                        return title;
-                    },
-                    "type":  "anti-the"
-                },
-                {
-                    "data": function ( oObj ) {
-                        return oObj.recordtype_description.escapeHtml();
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        return oObj.itemtype_description.escapeHtml();
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        return ( oObj.collection ? oObj.collection.escapeHtml() : '' );
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        return ( oObj.location ? oObj.location.escapeHtml() : '' );
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        return (oObj.homebranch ? oObj.homebranch.escapeHtml() : '' );
-                    }
-                },
-                {
-                    "data": "issuedate",
-                    "visible":  false,
-                },
-                {
-                    "orderData":  10, // Sort on hidden unformatted issuedate column
-                    "data": function( oObj ) {
-                        return $datetime(oObj.issuedate, { no_tz_adjust: true });
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        return (oObj.branchname ? oObj.branchname.escapeHtml() : '' );
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        return ( oObj.itemcallnumber ? oObj.itemcallnumber.escapeHtml() : '' );
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        return ( oObj.copynumber ? oObj.copynumber.escapeHtml() : '' );
-                    }
-                },
-                {
-                    "data": function ( oObj ) {
-                        if ( ! oObj.charge ) oObj.charge = 0;
-                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.charge).format_price() + '<span>';
-                    },
-                    "className": "nowrap"
-                },
-                {
-                    "data": function ( oObj ) {
-                        if ( ! oObj.fine ) oObj.fine = 0;
-                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.fine).format_price()   + '<span>';
-                    },
-                    "className": "nowrap"
-                },
-                {
-                    "data": function ( oObj ) {
-                        if ( ! oObj.price ) oObj.price = 0;
-                        return '<span style="text-align: right; display: block;">' + parseFloat(oObj.price).format_price()  + '<span>';
-                    },
-                    "className": "nowrap"
-                },
-                {
-                    "orderable":  false,
-                    "visible":  AllowCirculate ? true : false,
-                    "data": function ( oObj ) {
-                        var content = "";
-                        var msg = "";
-                        var span_style = "";
-                        var span_class = "";
-
-                        if ( oObj.can_renew ) {
-                            // Do nothing
-                        } else if ( oObj.can_renew_error == "recalled" ) {
-                            msg += "<span>"
-                                    + "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Recalled") + "</a>"
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed-recalled";
-                        } else if ( oObj.can_renew_error == "on_reserve" ) {
-                            msg += "<span>"
-                                    +"<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>"
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed-on_reserve";
-                        } else if ( oObj.can_renew_error == "too_many" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("Not renewable")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "too_unseen" ) {
-                            msg += "<span>"
-                                    + __("Must be renewed at the library")
-                                    + "</span>";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "restriction" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("Not allowed: patron restricted")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "overdue" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("Not allowed: overdue")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "too_soon" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("No renewal before %s").format(oObj.can_renew_date)
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "auto_too_late" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("Can no longer be auto-renewed - number of checkout days exceeded")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "auto_too_much_oweing" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("Automatic renewal failed, patron has unpaid fines")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "auto_account_expired" ) {
-                            msg += "<span class='renewals-disabled'>"
-                                    + __("Automatic renewal failed, account expired")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else if ( oObj.can_renew_error == "onsite_checkout" ) {
-                            // Don't display something if it's an onsite checkout
-                        } else if ( oObj.can_renew_error == "item_denied_renewal" ) {
-                            content += "<span class='renewals-disabled'>"
-                                    + __("Renewal denied by syspref")
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        } else {
-                            msg += "<span class='renewals-disabled'>"
-                                    + oObj.can_renew_error
-                                    + "</span>";
-
-                            span_style = "display: none";
-                            span_class = "renewals-allowed";
-                        }
-
-                        var can_force_renew = ( oObj.onsite_checkout == 0 ) &&
-                            ( oObj.can_renew_error != "on_reserve" || (oObj.can_renew_error == "on_reserve" && AllowRenewalOnHoldOverride))
-                            ? true : false;
-                        var can_renew = ( oObj.renewals_remaining > 0 && ( !oObj.can_renew_error || oObj.can_renew_error == "too_unseen" ));
-                        content += "<span>";
-                        if ( can_renew || can_force_renew ) {
-                            content += "<span style='padding: 0 1em;'>" + oObj.renewals_count + "</span>";
-                            content += "<span class='" + span_class + "' style='" + span_style + "'>"
-                                    +  "<input type='checkbox' ";
-                            if ( oObj.date_due_overdue && can_renew ) {
-                                content += "checked='checked' ";
-                            }
-                            if (oObj.can_renew_error == "on_reserve") {
-                                content += "data-on-reserve ";
-                            }
-                            content += "class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
-                                    +  "</span>";
-                        }
-                        content += msg;
-                        if ( can_renew || can_force_renew ) {
-                            content += "<span class='renewals-info'>(";
-                            content += __("%s of %s renewals remaining").format(oObj.renewals_remaining, oObj.renewals_allowed);
-                            if (UnseenRenewals && oObj.unseen_allowed) {
-                                content += __(" and %s of %s unseen renewals remaining").format(oObj.unseen_remaining, oObj.unseen_allowed);
-                            }
-                            content += ")</span>";
-                        }
-                        if(oObj.auto_renew){
-                            content += "<span class='renewals-info'>(";
-                            content += __("Scheduled for automatic renewal");
-                            content += ")</span>";
-                        }
-
-                        return content;
-                    }
-                },
-                {
-                    "orderable":  false,
-                    "visible":  AllowCirculate ? true : false,
-                    "data": function ( oObj ) {
-                        if ( oObj.can_renew_error == "recalled" ) {
-                            return "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Recalled") + "</a>";
-                        } else if ( oObj.can_renew_error == "on_reserve" ) {
-                            return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>";
-                        } else if ( oObj.materials ) {
-                            return "<input type='checkbox' class='confirm' id='confirm_" + oObj.itemnumber + "' name='confirm' value='" + oObj.itemnumber + "' data-materials='" + oObj.materials.escapeHtml() + "'></input>";
-                        } else {
-                            return "<input type='checkbox' class='checkin' id='checkin_" + oObj.itemnumber + "' name='checkin' value='" + oObj.itemnumber +"'></input>";
-                        }
-                    }
-                },
-                {
-                    "visible":  ClaimReturnedLostValue ? true : false,
-                    "orderable":  false,
-                    "data": function ( oObj ) {
-                        let content = "";
-
-                        if ( oObj.return_claim_id ) {
-                          content = '<span class="badge">' + oObj.return_claim_created_on_formatted + '</span>';
-                        } else if ( ClaimReturnedLostValue ) {
-                          content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
-                        } else {
-                          content = '<a class="btn btn-default btn-xs" disabled="disabled" title="ClaimReturnedLostValue is not set, this feature is disabled"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
-                        }
-                        return content;
-                    }
-                },
-                {
-                    "visible":  exports_enabled == 1 ? true : false,
-                    "orderable":  false,
-                    "data": function ( oObj ) {
-                        var s = "<input type='checkbox' name='itemnumbers' value='" + oObj.itemnumber + "' style='visibility:hidden;' />";
-
-                        s += "<input type='checkbox' class='export' id='export_" + oObj.biblionumber + "' name='biblionumbers' value='" + oObj.biblionumber + "' />";
-                        return s;
-                    }
-                }
-            ],
-            "footerCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
-                var total_charge = 0;
-                var total_fine  = 0;
-                var total_price = 0;
-                for ( var i=0; i < aaData.length; i++ ) {
-                    total_charge += aaData[i]['charge'] * 1;
-                    total_fine += aaData[i]['fine'] * 1;
-                    total_price  += aaData[i]['price'] * 1;
-                }
-                $("#totaldue").html(total_charge.format_price() );
-                $("#totalfine").html(total_fine.format_price() );
-                $("#totalprice").html(total_price.format_price() );
-            },
-            "paging":  false,
-            "processing":  true,
-            "serverSide":  false,
-            "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
-            "fnServerData": function ( sSource, aoData, fnCallback ) {
-                aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
-
-                $.getJSON( sSource, aoData, function (json) {
-                    fnCallback(json)
-                } );
-            },
-            "rowGroup":{
-                "dataSrc": "issued_today",
-                "startRender": function ( rows, group ) {
-                    if ( group ) {
-                        return __("Today's checkouts");
-                    } else {
-                        return __("Previous checkouts");
-                    }
-                }
-            },
-            "initComplete": function(oSettings, json) {
-                // Build a summary of checkouts grouped by itemtype
-                var checkoutsByItype = json.aaData.reduce(function (obj, row) {
-                    obj[row.type_for_stat] = (obj[row.type_for_stat] || 0) + 1;
-                    return obj;
-                }, {});
-                var ul = $('<ul>');
-                Object.keys(checkoutsByItype).sort().forEach(function (itype) {
-                    var li = $('<li>')
-                        .append($('<strong>').html(itype || __("No itemtype")))
-                        .append(': ' + checkoutsByItype[itype]);
-                    ul.append(li);
-                })
-                $('<details>')
-                    .addClass('checkouts-by-itemtype')
-                    .append($('<summary>').html( __("Number of checkouts by item type") ))
-                    .append(ul)
-                    .insertBefore(oSettings.nTableWrapper)
-            },
-        }, table_settings_issues_table);
-
-        if ( $("#issues-table").length ) {
-            $("#issues-table_processing").position({
-                of: $( "#issues-table" ),
-                collision: "none"
-            });
-        }
-    }
 
     // Don't load relatives' issues table unless it is clicked on
     var relativesIssuesTable;
