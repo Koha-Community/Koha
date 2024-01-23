@@ -116,95 +116,92 @@
             [% IF PendingModifications %]
                 <form method="post" action="members-update-do.pl">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <div id="pending_updates" class="panel-group" role="tablist" aria-multiselectable="true">
+                    [% WRAPPER accordion panelgroup_id="pending_updates" %]
                         [% FOREACH pm IN PendingModifications %]
                             [% SET borrowernumber = pm.borrowernumber %]
-                            <div class="panel panel-default">
-                                <div class="panel-heading" role="tab" id="panel-header-[% pm.borrowernumber | html %]">
-                                    <h3 class="panel-title">
-                                        <a role="button" class="collapsed" data-toggle="collapse" data-parent="#pending_updates" aria-controls="panel_modify_[% pm.borrowernumber | html %]" href="#panel_modify_[% pm.borrowernumber | uri %]">[% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 %]</a>
-                                    </h3>
-                                </div> <!-- /.panel-heading -->
-                                <div id="panel_modify_[% pm.borrowernumber | html %]" class="panel-collapse collapse" role="tabpanel" aria-labelledby="panel-header-[% pm.borrowernumber | html %]">
-                                    <div class="panel-body">
-                                        <div class="btn-toolbar">
+                            [% WRAPPER accordion_item %]
+                                [% WRAPPER accordion_heading panel_id="panel-${pm.borrowernumber}" %]
+                                    [% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 %]
+                                [% END %]
+                                [% WRAPPER accordion_panel panel_id="panel-${pm.borrowernumber}" %]
 
-                                            <label for="approve_modify_[% pm.borrowernumber | html %]"><input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" /> Approve</label>
+                                    <div class="btn-toolbar">
+
+                                        <label for="approve_modify_[% pm.borrowernumber | html %]"><input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" /> Approve</label>
 
 
-                                            <label for="deny_modify_[% pm.borrowernumber | html %]"><input type="radio" id="deny_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="deny" /> Deny</label>
+                                        <label for="deny_modify_[% pm.borrowernumber | html %]"><input type="radio" id="deny_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="deny" /> Deny</label>
 
 
-                                            <label for="ignore_modify_[% pm.borrowernumber | html %]"><input type="radio" id="ignore_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="ignore" checked="checked"/> Ignore</label>
-                                            &nbsp;|&nbsp; <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]" >Patron details</a>
+                                        <label for="ignore_modify_[% pm.borrowernumber | html %]"><input type="radio" id="ignore_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="ignore" checked="checked"/> Ignore</label>
+                                        &nbsp;|&nbsp; <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]" >Patron details</a>
+                                    </div>
+
+                                    [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
+                                        <div class="dialog message" style="margin-top:.8em">
+                                            <h4>Patron's address in doubt</h4>
+                                            <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
+                                            <input type="checkbox" id="unset_gna_[% pm.borrowernumber | html %]" name="unset_gna_[% pm.borrowernumber | html %]" value="unset_gna_[% pm.borrowernumber | html %]"/>
+                                            <label for="unset_gna_[% pm.borrowernumber | html %]">Unset Gone no address for this patron</label>
                                         </div>
+                                    [% END %]
 
-                                        [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
-                                            <div class="dialog message" style="margin-top:.8em">
-                                                <h4>Patron's address in doubt</h4>
-                                                <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
-                                                <input type="checkbox" id="unset_gna_[% pm.borrowernumber | html %]" name="unset_gna_[% pm.borrowernumber | html %]" value="unset_gna_[% pm.borrowernumber | html %]"/>
-                                                <label for="unset_gna_[% pm.borrowernumber | html %]">Unset Gone no address for this patron</label>
-                                            </div>
-                                        [% END %]
-
-                                        [% IF !pm.extended_attributes and pm.size > 3 or pm.extended_attributes and pm.size > 4 %]
-                                            [%# timestamp+verification_token+borrowernumber=3 %]
-                                            <div class="members-update-table">
-                                                <table>
-                                                    <tr>
-                                                        <th>Field</th>
-                                                        <th>Old value</th>
-                                                        <th>New value</th>
-                                                    </tr>
+                                    [% IF !pm.extended_attributes and pm.size > 3 or pm.extended_attributes and pm.size > 4 %]
+                                        [%# timestamp+verification_token+borrowernumber=3 %]
+                                        <div class="members-update-table">
+                                            <table>
+                                                <tr>
+                                                    <th>Field</th>
+                                                    <th>Old value</th>
+                                                    <th>New value</th>
+                                                </tr>
 
 
-                                                    [% FOREACH key IN pm.keys %]
-                                                        [% IF ( key != "timestamp" and key != "extended_attributes" ) %]
-                                                            [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
-                                                                <tr>
-                                                                    <td>[% PROCESS display_names field = key %]</td>
-                                                                    [% IF ( key == "dateofbirth" ) %]
-                                                                        <td>[% borrowers.$borrowernumber.$key | $KohaDates %]</td>
-                                                                        <td>[% pm.$key | $KohaDates %]</td>
-                                                                    [% ELSIF key == 'branchcode' %]
-                                                                        <td>[% Branches.GetName( borrowers.$borrowernumber.$key ) | html %]</td>
-                                                                        <td>[% Branches.GetName( pm.$key ) | html %]</td>
-                                                                    [% ELSE %]
-                                                                        <td>[% borrowers.$borrowernumber.$key | html %]</td>
-                                                                        <td>[% pm.$key | html %]</td>
-                                                                    [% END %]
-                                                                </tr>
-                                                            [% END %]
+                                                [% FOREACH key IN pm.keys %]
+                                                    [% IF ( key != "timestamp" and key != "extended_attributes" ) %]
+                                                        [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
+                                                            <tr>
+                                                                <td>[% PROCESS display_names field = key %]</td>
+                                                                [% IF ( key == "dateofbirth" ) %]
+                                                                    <td>[% borrowers.$borrowernumber.$key | $KohaDates %]</td>
+                                                                    <td>[% pm.$key | $KohaDates %]</td>
+                                                                [% ELSIF key == 'branchcode' %]
+                                                                    <td>[% Branches.GetName( borrowers.$borrowernumber.$key ) | html %]</td>
+                                                                    <td>[% Branches.GetName( pm.$key ) | html %]</td>
+                                                                [% ELSE %]
+                                                                    <td>[% borrowers.$borrowernumber.$key | html %]</td>
+                                                                    <td>[% pm.$key | html %]</td>
+                                                                [% END %]
+                                                            </tr>
                                                         [% END %]
                                                     [% END %]
-                                                </table>
-                                            </div> <!-- /.members-update-table -->
-                                        [% END # /!pm.extended_attributes %]
-                                        [% IF borrowers.$borrowernumber.modified_attributes %]
-                                            <div class="members-update-table">
-                                                <h4>[% PROCESS display_names field='extended_attributes' %]</h4>
-                                                <table>
+                                                [% END %]
+                                            </table>
+                                        </div> <!-- /.members-update-table -->
+                                    [% END # /!pm.extended_attributes %]
+                                    [% IF borrowers.$borrowernumber.modified_attributes %]
+                                        <div class="members-update-table">
+                                            <h4>[% PROCESS display_names field='extended_attributes' %]</h4>
+                                            <table>
+                                                <tr>
+                                                    <th>Field</th>
+                                                    <th>Old value</th>
+                                                    <th>New value</th>
+                                                </tr>
+                                                [% FOREACH attribute_group IN borrowers.$borrowernumber.modified_attributes %]
                                                     <tr>
-                                                        <th>Field</th>
-                                                        <th>Old value</th>
-                                                        <th>New value</th>
+                                                        <td>[% attribute_group.type.description | html %]</td>
+                                                        <td>[% PROCESS display_extended_attributes attrs=attribute_group.before type=attribute_group.type %]</td>
+                                                        <td>[% PROCESS display_extended_attributes attrs=attribute_group.after type=attribute_group.type %]</td>
                                                     </tr>
-                                                    [% FOREACH attribute_group IN borrowers.$borrowernumber.modified_attributes %]
-                                                        <tr>
-                                                            <td>[% attribute_group.type.description | html %]</td>
-                                                            <td>[% PROCESS display_extended_attributes attrs=attribute_group.before type=attribute_group.type %]</td>
-                                                            <td>[% PROCESS display_extended_attributes attrs=attribute_group.after type=attribute_group.type %]</td>
-                                                        </tr>
-                                                    [% END %]
-                                                </table>
-                                            </div> <!-- /.members-update-table -->
-                                        [% END # / borrowers.$borrowernumber.modified_attributes %]
-                                    </div> <!-- /.panel-body -->
-                                </div> <!-- /.panel-collapse.collapse -->
-                            </div> <!-- /panel.panel-default -->
+                                                [% END %]
+                                            </table>
+                                        </div> <!-- /.members-update-table -->
+                                    [% END # / borrowers.$borrowernumber.modified_attributes %]
+                                [% END %]
+                            [% END %]
                         [% END # /FOREACH pm %]
-                    </div> <!-- /#pending-updates -->
+                    [% END # /collapse %]
                     <fieldset class="action">
                         <input type="hidden" name="op" value="cud-update" />
                         <input type="submit" class="btn btn-primary" value="Submit" />
@@ -225,9 +222,9 @@
     <script>
         $(document).ready(function(){
             [%- IF ( active ) -%]
-                $("#pending_updates a[href='#panel_modify_" + [% active | html %] + "']").click();
+                $("#pending_updates_group a[href='#panel-" + [% active | html %] + "_panel']").click();
             [%- ELSE -%]
-                $("#pending_updates a.collapsed:eq(0)").click();
+                $("#pending_updates_group a.collapsed:eq(0)").click();
             [%- END -%]
         });
     </script>
