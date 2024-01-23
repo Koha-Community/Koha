@@ -646,7 +646,7 @@
                 e.preventDefault();
                 var borrowernumber = $(this).data("borrowernumber");
                 var borrower_data = JSON.parse($("#borrower_data"+borrowernumber).val());
-                add_user( borrowernumber, ( borrower_data.firstname ? borrower_data.firstname : "" ) + ' ' + ( borrower_data.surname ? borrower_data.surname : "" ) );
+                add_user( borrowernumber, $patron_to_html( borrower_data, { display_cardnumber: false, url: false } ) );
             });
 
             $("body").on("click",".select_user",function(e){
