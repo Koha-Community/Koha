@@ -1210,8 +1210,9 @@
 
     [% INCLUDE 'select2.inc' %]
     [% SET columns = ['cardnumber','name','category','branch','action'] %]
+    [% SET filter = 'baskets_managers' %]
     [% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]
-    [% PROCESS patron_search_js columns => columns, filter => 'baskets_managers', actions => ["add"], preview_on_name_click => 1 %]
+    [% PROCESS patron_search_js columns => columns, actions => ["add"], preview_on_name_click => 1 %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
