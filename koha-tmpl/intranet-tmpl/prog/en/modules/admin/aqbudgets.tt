@@ -537,6 +537,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acq.js") | $raw %]
     [% IF op == 'add_form' %]
+        [% INCLUDE 'js-patron-format.inc' %]
         <script>
         //<![CDATA[
 
@@ -558,7 +559,7 @@
 
             function select_user(borrowernumber, borrower) {
                 ownerRemove();
-                var borrowername = ( borrower.firstname ? borrower.firstname : "" ) + ' ' + ( borrower.surname ? borrower.surname : "" );
+                var borrowername = $patron_to_html( borrower, { display_cardnumber: false, url: false } );
                 if (borrowernumber) {
                     var ownerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
                         + '?borrowernumber=' + borrowernumber + '">'
