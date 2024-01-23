@@ -243,7 +243,7 @@
     </div> <!-- /.row -->
 
 [% BLOCK filter_form %]
-    <form name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl">
+    <form method="get" name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl">
         [% IF ( total ) %]
             <fieldset class="brief">
         [% ELSE -%]

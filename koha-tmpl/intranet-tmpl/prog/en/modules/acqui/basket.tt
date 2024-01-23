@@ -863,7 +863,7 @@
                     [% IF ( confirm_close ) %]
                         <div id="closebasket_needsconfirmation" class="dialog alert">
 
-                            <form action="/cgi-bin/koha/acqui/basket.pl">
+                            <form method="get" action="/cgi-bin/koha/acqui/basket.pl">
                                 <h1>Are you sure you want to close basket [% basketname | html %]?</h1>
                                 [% IF ( CAN_user_acquisition_group_manage ) %]
                                     <p>

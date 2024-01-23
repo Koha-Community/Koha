@@ -8,7 +8,7 @@
 
 [%# Display a simple form %]
 [% BLOCK patron_search_filters_simple  %]
-    <form id="patron_search_form">
+    <form method="get" id="patron_search_form">
         <div class="hint">Enter patron card number or partial name:</div>
         <input type="text" size="40" id="search_patron_filter" class="focus" autocomplete="off" />
         <input type="submit" class="btn btn-primary" value="Search" />
@@ -26,7 +26,7 @@
 [%# - search_type: select 'contains' or 'starts with' %]
 [%- searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
 [% BLOCK patron_search_filters %]
-    <form id="patron_search_form">
+    <form method="get" id="patron_search_form">
         <fieldset class="brief">
             <h3>Search for patron</h3>
             <ol>

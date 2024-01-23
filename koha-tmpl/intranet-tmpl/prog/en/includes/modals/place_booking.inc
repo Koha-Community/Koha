@@ -1,6 +1,6 @@
 <!-- Place booking modal -->
 <div class="modal" id="placeBookingModal" tabindex="-1" role="dialog" aria-labelledby="placeBookingLabel">
-    <form id="placeBookingForm">
+    <form method="get" id="placeBookingForm">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

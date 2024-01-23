@@ -6,7 +6,7 @@
     <div class="tab-content">
 
         <div id="addbooks_search" role="tabpanel" class="tab-pane active">
-            <form name="search" action="addbooks.pl">
+            <form method="get" name="search" action="addbooks.pl">
                 <div class="form-title">
                     <label class="control-label" for="cat_search"><span class="control-text">Cataloging search</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
                 </div>

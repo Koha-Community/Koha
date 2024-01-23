@@ -43,7 +43,7 @@
 <div class="row">
 <div class="col-sm-4">
 <div style="border: 1px solid #DDD; padding:1em;">
-<form action="/cgi-bin/koha/acqui/neworderempty.pl">
+<form method="get" action="/cgi-bin/koha/acqui/neworderempty.pl">
 <h4>Use existing record</h4>
 <p>Do not create a duplicate record. Add an order from the existing record in your catalog.</p>
 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
@@ -56,7 +56,7 @@
 
 <div class="col-sm-4">
 <div style="border: 1px solid #DDD; padding:1em;">
-<form action="/cgi-bin/koha/acqui/basket.pl">
+<form method="get" action="/cgi-bin/koha/acqui/basket.pl">
 <h4>Cancel and return to order</h4>
 <p>Return to the basket without making a new order.</p>
 <input type="hidden" name="basketno" value="[% basketno | html %]" />
@@ -67,7 +67,7 @@
 
 <div class="col-sm-4">
 <div style="border: 1px solid #DDD; padding:1em;">
-<form action="/cgi-bin/koha/acqui/neworderempty.pl">
+<form method="get" action="/cgi-bin/koha/acqui/neworderempty.pl">
 <h4>Create new record</h4>
 <p>Create a new record by importing the external (duplicate) record.</p>
 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />

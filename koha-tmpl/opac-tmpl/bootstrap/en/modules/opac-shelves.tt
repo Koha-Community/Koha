@@ -273,7 +273,7 @@
                                         [% END # /IF can_manage_shelf %]
                                     </div> <!-- /.list-actions -->
 
-                                    <form action="/cgi-bin/koha/opac-shelves.pl" id="sorting-form" class="d-inline sort_by pull-right">
+                                    <form method="get" action="/cgi-bin/koha/opac-shelves.pl" id="sorting-form" class="d-inline sort_by pull-right">
                                         <input type="hidden" name="op" value="view" />
                                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
 

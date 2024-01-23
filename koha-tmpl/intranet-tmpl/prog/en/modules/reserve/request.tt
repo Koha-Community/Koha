@@ -903,7 +903,7 @@
                             </table> <!-- /#requestspecific -->
 
                             [% IF hiddencount %]
-                                <form>
+                                <form method="get">
                                     <p class="hiddencount">
                                         <a href="request.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;borrowernumber=[% borrowernumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
                                     </p>

@@ -179,21 +179,21 @@
                     <h3>Build and run reports</h3>
 
                     [% IF ( CAN_user_reports_create_reports ) %]
-                        <form action="/cgi-bin/koha/reports/guided_reports.pl">
+                        <form method="get" action="/cgi-bin/koha/reports/guided_reports.pl">
                             <input type="hidden" name="phase" value="Build new" />
                             <input type="submit" name="submit" class="btn btn-primary" value="Build new" />
                         </form>
                     [% END %]
 
                     [% IF ( CAN_user_reports_execute_reports ) %]
-                        <form action="/cgi-bin/koha/reports/guided_reports.pl">
+                        <form method="get" action="/cgi-bin/koha/reports/guided_reports.pl">
                             <input type="hidden" name="phase" value="Use saved"/>
                             <input type="submit" name="submit" class="btn btn-primary" value="Use saved" />
                         </form>
                     [% END %]
 
                     [% IF ( CAN_user_reports_create_reports ) %]
-                        <form action="/cgi-bin/koha/reports/guided_reports.pl">
+                        <form method="get" action="/cgi-bin/koha/reports/guided_reports.pl">
                             <input type="hidden" name="phase" value="Create report from SQL"/>
                             <input type="submit" name="submit" class="btn btn-primary" value="Create report from SQL" />
                         </form>
@@ -201,7 +201,7 @@
 
                     <h3>Reports Dictionary</h3>
                     <p>Use the reports dictionary to define custom criteria to use in your reports</p>
-                    <form action="/cgi-bin/koha/reports/dictionary.pl">
+                    <form method="get" action="/cgi-bin/koha/reports/dictionary.pl">
                         <input type="hidden" name="phase" value="View Dictionary"/>
                         <input type="submit" name="submit" class="btn btn-primary" value="View dictionary" />
                     </form>
@@ -462,7 +462,7 @@
                     [% END %]
 
                     <h1>Build a report</h1>
-                    <form action="/cgi-bin/koha/reports/guided_reports.pl">
+                    <form method="get" action="/cgi-bin/koha/reports/guided_reports.pl">
                         <fieldset class="rows">
                             <legend>Step 1 of 6: Choose a module to report on,[% IF (usecache) %] Set cache expiry, [% END %] and choose report visibility </legend>
                             <ol>
@@ -823,7 +823,7 @@
                             </p>
                         [% END %]
                         <!-- Save Anyway Form -->
-                        <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+                        <form method="get" action='/cgi-bin/koha/reports/guided_reports.pl'>
                         <!--Every parameter the user issued is provided as a hidden field for recovery-->
                             <input type='hidden' name='id' value='[% id | html %]' />
                             <input type='hidden' name='sql' value='[% sql | html %]' />
@@ -844,14 +844,14 @@
                         [% END %]
                         </form>
                         <!-- Go back to editing -->
-                        <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+                        <form method="get" action='/cgi-bin/koha/reports/guided_reports.pl'>
                             <button type="button" class="new goback"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit SQL</button>
                         </form>
                     </div>
                 [% END # /IF ( warn_authval_problem )%]
 
                 [% IF ( enter_params ) %]
-                    <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+                    <form method="get" action='/cgi-bin/koha/reports/guided_reports.pl'>
                         <input type='hidden' name='reports' value="[% reports | html %]" />
                         [% IF ( auth_val_error ) %]
                             <input type='hidden' name='phase' value='Edit SQL' />
@@ -1505,7 +1505,7 @@
                     <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="runtime_parametersLabel">Runtime parameter options</h4>
                 </div>
-                <form id="send_runtime_parameter">
+                <form method="get" id="send_runtime_parameter">
                     <input type="hidden" name="param_category" id="param_category" />
                     <div class="modal-body">
                         <div class="form-group">

@@ -66,7 +66,7 @@
                     [% INCLUDE 'patroncards-errors.inc' %]
                         <div id="manage-patroncards-layouts">
                             [% IF ( table_loop ) %]
-                            <form name="layouts" action="/cgi-bin/koha/manage.pl?card_element=[% card_element | html %]">
+                            <form method="get" name="layouts" action="/cgi-bin/koha/manage.pl?card_element=[% card_element | html %]">
                             <div class="page-section">
                                 <table>
                                     [% FOREACH table_loo IN table_loop %]

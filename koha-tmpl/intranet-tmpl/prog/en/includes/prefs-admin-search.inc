@@ -2,7 +2,7 @@
 <div id="header_search" role="tablist">
     <div class="tab-content">
         <div id="syspref_search" role="tabpanel" class="tab-pane active">
-            <form action="/cgi-bin/koha/admin/preferences.pl">
+            <form method="get" action="/cgi-bin/koha/admin/preferences.pl">
                 <input type="hidden" name="tab" value="[% last_tab | html %]" />
                 <input type="hidden" name="op" value="search" />
 

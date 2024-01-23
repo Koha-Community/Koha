@@ -142,7 +142,7 @@
                             </ul>
                         [% END %]
 
-                        <form name="checkmodules" action="install.pl">
+                        <form method="get" name="checkmodules" action="install.pl">
                             <input type="hidden" name="step" value="1" />
                             <p> <input value="Recheck dependencies" class="btn btn-primary" type="submit" /></p>
                         </form>
@@ -164,7 +164,7 @@
                         <p>All required Perl modules appear to be installed.</p>
                         <p> All dependencies installed.</p>
 
-                        <form name="checkmodules" role="form" action="install.pl">
+                        <form method="get" name="checkmodules" role="form" action="install.pl">
                             <input type="hidden" name="step" value="2" />
                             <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
                         </form>

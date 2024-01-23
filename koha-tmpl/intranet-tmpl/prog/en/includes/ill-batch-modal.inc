@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div id="batch-form">
-                    <form id="new-batch-form">
+                    <form method="get" id="new-batch-form">
                         <fieldset class="rows">
                             <legend id="legend">Batch details</legend>
                             <ol>

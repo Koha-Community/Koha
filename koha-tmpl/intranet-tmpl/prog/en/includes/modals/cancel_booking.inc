@@ -1,6 +1,6 @@
 <!-- Cancel booking modal -->
 <div class="modal" id="cancelBookingModal" tabindex="-1" role="dialog" aria-labelledby="cancelBookingLabel">
-    <form id="cancelBookingForm">
+    <form method="get" id="cancelBookingForm">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

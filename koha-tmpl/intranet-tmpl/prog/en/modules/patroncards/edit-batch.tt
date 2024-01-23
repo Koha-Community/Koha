@@ -94,7 +94,7 @@
                                 <a class="btn btn-default" id="exportbatch" href="#"><i class="fa-solid fa-share-from-square"></i> Export card batch</a>[% END %]
                             </div>
                             [% IF ( table_loop ) %]
-                            <form name="items">
+                            <form method="get" name="items">
                                 <h2>Patrons in batch number [% batch_id | html %]</h2>
                                 <div class="page-section">
                                     <table id="batcht">

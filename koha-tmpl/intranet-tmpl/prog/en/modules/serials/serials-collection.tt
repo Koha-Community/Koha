@@ -50,7 +50,7 @@
                 [% IF ( delete ) %]
                     <div class="dialog alert">
                         <h3>You are about to delete [% serialnumber | html %] serial(s). Do you want to continue?</h3>
-                        <form action="/cgi-bin/koha/serials/serials-collection.pl">
+                        <form method="get" action="/cgi-bin/koha/serials/serials-collection.pl">
                             [% IF countitems > 0 %]
                                 <h5>Number of items available: [% countitems | html %]</h5>
                                 <p>
@@ -65,7 +65,7 @@
                             [% END %]
                             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
                         </form>
-                        <form action="/cgi-bin/koha/serials/serials-collection.pl">
+                        <form method="get" action="/cgi-bin/koha/serials/serials-collection.pl">
                             <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
                             <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                         </form>

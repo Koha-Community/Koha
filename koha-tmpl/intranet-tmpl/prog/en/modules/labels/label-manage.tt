@@ -60,7 +60,7 @@
 
                         <div id="manage-label-layouts" class="page-section">
                             [% IF ( table_loop ) %]
-                            <form name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element | html %]">
+                            <form method="get" name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element | html %]">
 
                             <div class="page-section">
                                 <table id="labels-table">

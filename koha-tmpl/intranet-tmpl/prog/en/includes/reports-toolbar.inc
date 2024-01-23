@@ -163,7 +163,7 @@
 [% IF Koha.Preference('Mana')==1 %]
     <div id="mana_search_result" class="modal" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label">
         <div class="modal-dialog modal-lg">
-            <form id="mana_search_form">
+            <form method="get" id="mana_search_form">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

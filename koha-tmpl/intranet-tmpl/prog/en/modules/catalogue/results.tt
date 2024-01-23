@@ -104,7 +104,7 @@
                     [% END %]
 
                     <div id="search_within_results">
-                        <form id="refine_search">
+                        <form method="get" id="refine_search">
                             <label for="limit">Search within results</label>
                             [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
                                 [% INCLUDE 'search_indexes.inc' ms_kw = 1 refiner = 1 %]

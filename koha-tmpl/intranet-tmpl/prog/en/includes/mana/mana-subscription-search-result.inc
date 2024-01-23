@@ -98,7 +98,7 @@
                 <h3 id="mana_submit_comment"> Please enter a new comment (max 35 characters)</h3>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="get">
                     <input hidden id="selected_id" value="">
                     <input type="text" id="manamsg"> Comment:
                 </form>

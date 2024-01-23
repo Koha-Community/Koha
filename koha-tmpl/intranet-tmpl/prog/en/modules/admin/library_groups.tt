@@ -103,7 +103,7 @@
     </div> <!-- /.row -->
 
     <div id="add-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
-        <form id="add-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
+        <form method="get" id="add-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -178,7 +178,7 @@
     </div>
 
     <div id="edit-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="edit-group-modal-label" aria-hidden="true">
-        <form id="edit-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
+        <form method="get" id="edit-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -254,7 +254,7 @@
     </div>
 
     <div id="delete-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete-group-modal-label" aria-hidden="true">
-        <form action="/cgi-bin/koha/admin/library_groups.pl">
+        <form method="get" action="/cgi-bin/koha/admin/library_groups.pl">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <input id="delete-group-modal-action" type="hidden" name="action" value="delete" />
@@ -275,7 +275,7 @@
     </div>
 
     <div id="remove-library-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="remove-library-modal-label" aria-hidden="true">
-        <form action="/cgi-bin/koha/admin/library_groups.pl">
+        <form method="get" action="/cgi-bin/koha/admin/library_groups.pl">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <input id="remove-library-modal-action" type="hidden" name="action" value="delete" />
