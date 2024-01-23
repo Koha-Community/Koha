@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 35;
 use Test::Exception;
 use Test::Warn;
 use Time::Fake;
@@ -2246,6 +2246,246 @@ subtest 'guarantor requirements tests' => sub {
     throws_ok { $child2->store(); }
     'Koha::Exceptions::Patron::Relationship::NoGuarantor',
         'Exception thrown when guarantor is deleted.';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'can_borrow() tests' => sub {
+    plan tests => 11;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
+
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                categorycode   => 'NOT_X', category_type => 'P', enrolmentfee => 0, noissueschargeguarantees => 0,
+                noissuescharge => 10,      noissueschargeguarantorswithguarantees => 0
+            }
+        }
+    );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+            }
+        }
+    );
+    my $patron_borrowing_status;
+
+    $patron->debarred(1);
+    $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
+    is( $patron_borrowing_status->{can_borrow}, 0, 'Debarred patron blocked from borrowing' );
+    is( $patron_borrowing_status->{debarred},   1, 'Blocker correctly identified and returned' );
+    $patron->debarred(0);
+
+    $patron->dateexpiry( dt_from_string->subtract( days => 1 ) );
+    $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
+    is( $patron_borrowing_status->{can_borrow}, 0, 'Expired patron blocked from borrowing' );
+    is( $patron_borrowing_status->{expired},    1, 'Blocker correctly identified and returned' );
+    $patron->dateexpiry(undef);
+
+    my $child   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $sibling = $builder->build_object( { class => 'Koha::Patrons' } );
+    $child->add_guarantor( { guarantor_id => $patron->borrowernumber, relationship => 'parent' } );
+    $sibling->add_guarantor( { guarantor_id => $patron->borrowernumber, relationship => 'parent' } );
+
+    t::lib::Mocks::mock_preference( 'noissuescharge', 50 );
+
+    my $fee1 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $patron->borrowernumber,
+                amountoutstanding => 11,
+                debit_type_code   => 'OVERDUE',
+            }
+        }
+    )->store;
+
+    my $fee2 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $child->borrowernumber,
+                amountoutstanding => 0.11,
+                debit_type_code   => 'OVERDUE',
+            }
+        }
+    )->store;
+
+    my $fee3 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $sibling->borrowernumber,
+                amountoutstanding => 11.11,
+                debit_type_code   => 'OVERDUE',
+            }
+        }
+    )->store;
+
+    $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
+
+    is( $patron_borrowing_status->{noissuescharge}->{charge},    11, "Only patron's fines are reported in total" );
+    is( $patron_borrowing_status->{noissuescharge}->{limit},     10, "Limit correctly identified at category level" );
+    is( $patron_borrowing_status->{noissuescharge}->{overlimit}, 1,  "Patron is over the charge limit" );
+    is( $patron_borrowing_status->{can_borrow}, 0, "Patron is over the charge limit and is blocked from borrowing" );
+    $patron->category->noissuescharge(undef);
+
+    $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
+    is( $patron_borrowing_status->{noissuescharge}->{limit}, 50, "Limit correctly identified at global syspref level" );
+    is( $patron_borrowing_status->{noissuescharge}->{overlimit}, 0, "Patron is within the charge limit" );
+    is( $patron_borrowing_status->{can_borrow}, 1, "Patron is within the charge limit and can borrow" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'is_patron_inside_charge_limits() tests' => sub {
+    plan tests => 21;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
+
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                categorycode   => 'NOT_X', category_type => 'P', enrolmentfee => 0, noissueschargeguarantees => 0,
+                noissuescharge => 10,      noissueschargeguarantorswithguarantees => 0
+            }
+        }
+    );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+            }
+        }
+    );
+
+    my $child   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $sibling = $builder->build_object( { class => 'Koha::Patrons' } );
+    $child->add_guarantor( { guarantor_id => $patron->borrowernumber, relationship => 'parent' } );
+    $sibling->add_guarantor( { guarantor_id => $patron->borrowernumber, relationship => 'parent' } );
+
+    t::lib::Mocks::mock_preference( 'noissuescharge',                         50 );
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees',               11.01 );
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', undef );
+
+    my $fee1 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $patron->borrowernumber,
+                amountoutstanding => 11,
+                debit_type_code   => 'OVERDUE',
+            }
+        }
+    )->store;
+
+    my $fee2 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $child->borrowernumber,
+                amountoutstanding => 0.11,
+                debit_type_code   => 'OVERDUE',
+            }
+        }
+    )->store;
+
+    my $fee3 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $sibling->borrowernumber,
+                amountoutstanding => 11.11,
+                debit_type_code   => 'OVERDUE',
+            }
+        }
+    )->store;
+
+    my $patron_borrowing_status;
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+
+    is( $patron_borrowing_status->{noissuescharge}->{charge},    11, "Only patron's fines are reported in total" );
+    is( $patron_borrowing_status->{noissuescharge}->{limit},     10, "Limit correctly identified at category level" );
+    is( $patron_borrowing_status->{noissuescharge}->{overlimit}, 1,  "Patron is over the charge limit" );
+
+    $patron->category->noissuescharge(undef);
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    is( $patron_borrowing_status->{noissuescharge}->{limit}, 50, "Limit correctly identified at global syspref level" );
+    is( $patron_borrowing_status->{noissuescharge}->{charge},    11, "Charges correctly identified" );
+    is( $patron_borrowing_status->{noissuescharge}->{overlimit}, 0,  "Patron is within the charge limit" );
+
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{limit}, 11.01,
+        "Limit correctly identified at global syspref level"
+    );
+    is( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge},    11.22, "Charges correctly identified" );
+    is( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit}, 1,     "Patron is over the charge limit" );
+
+    $patron->category->noissueschargeguarantees(12);
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantees}->{limit}, 12,
+        "Limit correctly identified at patron category level"
+    );
+    is( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge},    11.22, "Charges correctly identified" );
+    is( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit}, 0,     "Patron is inside the charge limit" );
+
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, 0,
+        "Limit correctly identified as not set at either patron category or global syspref level"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}, 22.22,
+        "Charges correctly identified"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}, 0,
+        "Patron is inside the charge limit as no limit has been set"
+    );
+
+    $patron->category->noissueschargeguarantorswithguarantees(23);
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', 20 );
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, 23,
+        "Limit correctly identified at patron category level"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}, 22.22,
+        "Charges correctly identified"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}, 0,
+        "Patron is inside the charge limit"
+    );
+
+    $patron->category->noissueschargeguarantorswithguarantees(undef);
+    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', 20 );
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, 20,
+        "Limit correctly defaults to global syspref"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}, 22.22,
+        "Charges correctly identified"
+    );
+    is(
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}, 1,
+        "Patron is inside the charge limit"
+    );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Scrub the note fields' => sub {

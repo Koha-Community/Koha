@@ -316,7 +316,24 @@ subtest "NoIssuesChargeGuarantees tests" => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                categorycode   => 'NOT_X', category_type => 'P', enrolmentfee => 0, noissueschargeguarantees => 0,
+                noissuescharge => 0,       noissueschargeguarantorswithguarantees => 0
+            }
+        }
+    );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+            }
+        }
+    );
     my $child  = $builder->build_object({ class => 'Koha::Patrons' });
     my $sibling  = $builder->build_object({ class => 'Koha::Patrons' });
     $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
@@ -382,8 +399,32 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    my $child  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                categorycode   => 'NOT_X', category_type => 'P', enrolmentfee => 0, noissueschargeguarantees => 0,
+                noissuescharge => 0,       noissueschargeguarantorswithguarantees => 0
+            }
+        }
+    );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+            }
+        }
+    );
+    my $child = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+            }
+        }
+    );
     $child->add_guarantor({ guarantor_id => $patron->borrowernumber, relationship => 'parent' });
 
     t::lib::Mocks::mock_preference('noissuescharge', 50);

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -35,7 +35,15 @@ my $builder = t::lib::TestBuilder->new();
 
 my $item = $builder->build_sample_item;
 
-my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
+my $patron_category = $builder->build(
+    {
+        source => 'Category',
+        value  => {
+            categorycode   => 'NOT_X', category_type => 'P', enrolmentfee => 0, noissueschargeguarantees => 0,
+            noissuescharge => 0,  noissueschargeguarantorswithguarantees => 0
+        }
+    }
+);
 my $patron = $builder->build_object(
     {
         class => 'Koha::Patrons',
@@ -75,6 +83,10 @@ my $account = Koha::Account->new( { patron_id => $guarantee->id } );
 $account->add_debit({ amount => 10.00, type => 'LOST', interface => 'test' });
 ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode );
 is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check out item due to debt for guarantee" );
+
+$patron->category->noissueschargeguarantees(11);
+( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode );
+is( $issuingimpossible->{DEBT_GUARANTEES}, undef, "Patron can check out item as the patron category limit is now higher than 10" );
 
 my $accountline = Koha::Account::Lines->search({ borrowernumber => $guarantee->id })->next();
 is( $accountline->amountoutstanding+0, 10, "Found 10.00 amount outstanding" );

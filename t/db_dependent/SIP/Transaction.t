@@ -645,11 +645,22 @@ subtest do_checkout_with_sysprefs_override => sub {
         }
     );
 
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                categorycode   => 'NOT_X', category_type => 'P', enrolmentfee => 0, noissueschargeguarantees => 0,
+                noissuescharge => 0,       noissueschargeguarantorswithguarantees => 0
+            }
+        }
+    );
+
     my $patron_under_noissuescharge = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
                 branchcode => $library->branchcode,
+                categorycode => $patron_category->{categorycode},
             }
         }
     );
@@ -671,6 +682,7 @@ subtest do_checkout_with_sysprefs_override => sub {
             class => 'Koha::Patrons',
             value => {
                 branchcode => $library->branchcode,
+                categorycode => $patron_category->{categorycode},
             }
         }
     );
@@ -780,6 +792,16 @@ subtest do_checkout_with_patron_blocked => sub {
         }
     );
 
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                categorycode   => 'NOT_X2', category_type => 'P', enrolmentfee => 0, noissueschargeguarantees => 0,
+                noissuescharge => 0,       noissueschargeguarantorswithguarantees => 0
+            }
+        }
+    );
+
     my $expired_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -797,6 +819,7 @@ subtest do_checkout_with_patron_blocked => sub {
             class => 'Koha::Patrons',
             value => {
                 branchcode => $library->branchcode,
+                categorycode => $patron_category->{categorycode},
             }
         }
     );
