@@ -23,14 +23,14 @@
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 1 %]
                         Jump to table:
                         [% FOR tablename IN tables.$pagename.keys.sort %]
-                            [% SET table_id = pagename _ '#' _ tablename %]
+                            [% SET table_id = pagename _ '_' _ tablename %]
                             <a href="#[% table_id | uri %]">[% tablename | html %]</a>
                             [% UNLESS loop.last %]<span class="separator"> | </span>[% END %]
                         [% END %]
                     [% END %]
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
                         [% FOR tablename IN tables.$pagename.keys.sort %]
-                            [% SET table_id = pagename _ '#' _ tablename %]
+                            [% SET table_id = pagename _ '_' _ tablename %]
                             <div class="datatable_config" id="[% table_id | html %]">
                                 <input type="hidden" name="table_id" value="[% table_id| html %]" />
                                 [% IF pagename == 'additem' AND tablename == 'itemst' %]
@@ -210,248 +210,158 @@
                             [% INCLUDE 'messages.inc' %]
 
                             <h1>Table settings</h1>
-                            <div class="panel-group" id="modules" role="tablist" aria-multiselectable="true">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="acquiHeading">
-                                        <h2 class="panel-title">
-                                            <a id="acquiToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#acqui" aria-expanded="false" aria-controls="collapseOne">
-                                                Acquisition
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="acqui" class="panel-collapse collapse" role="tabpanel" aria-labelledby="acquiHeading">
-                                        <div class="panel-body">
-                                            <h3>Acquisition tables</h3>
-                                            [% PROCESS pagelist module=modules.acqui modulename="acqui" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                            [% WRAPPER accordion panelgroup_id="modules" %]
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="acqui" %]
+                                        <span>Acquisition</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="acqui" %]
+                                        <h3>Acquisition tables</h3>
+                                        [% PROCESS pagelist module=modules.acqui modulename="acqui" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="adminHeading">
-                                        <h2 class="panel-title">
-                                            <a id="adminToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#admin" aria-expanded="false" aria-controls="collapseOne">
-                                                Administration
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="admin" class="panel-collapse collapse" role="tabpanel" aria-labelledby="adminHeading">
-                                        <div class="panel-body">
-                                            <h3>Administration tables</h3>
-                                            [% PROCESS pagelist module=modules.admin modulename="admin" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="admin" %]
+                                        <span>Administration</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="admin" %]
+                                        <h3>Administration tables</h3>
+                                        [% PROCESS pagelist module=modules.admin modulename="admin" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="authoritiesHeading">
-                                        <h2 class="panel-title">
-                                            <a id="authoritiesToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#authorities" aria-expanded="false" aria-controls="collapseOne">
-                                                Authorities
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="authorities" class="panel-collapse collapse" role="tabpanel" aria-labelledby="authoritiesHeading">
-                                        <div class="panel-body">
-                                            <h3>Authorities tables</h3>
-                                            [% PROCESS pagelist module=modules.authorities modulename="authorities" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="authorities" %]
+                                        <span>Authorities</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="authorities" %]
+                                        <h3>Authorities tables</h3>
+                                        [% PROCESS pagelist module=modules.authorities modulename="authorities" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="catalogueHeading">
-                                        <h2 class="panel-title">
-                                            <a id="catalogueToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#catalogue" aria-expanded="false" aria-controls="collapseOne">
-                                                Catalog
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="catalogue" class="panel-collapse collapse" role="tabpanel" aria-labelledby="catalogueHeading">
-                                        <div class="panel-body">
-                                            <h3>Catalogue tables</h3>
-                                            [% PROCESS pagelist module=modules.catalogue modulename="catalogue" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="catalogue" %]
+                                        <span>Catalog</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="catalogue" %]
+                                        <h3>Catalogue tables</h3>
+                                        [% PROCESS pagelist module=modules.catalogue modulename="catalogue" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="cataloguingHeading">
-                                        <h2 class="panel-title">
-                                            <a id="cataloguingToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#cataloguing" aria-expanded="false" aria-controls="collapseOne">
-                                                Cataloging
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="cataloguing" class="panel-collapse collapse" role="tabpanel" aria-labelledby="cataloguingHeading">
-                                        <div class="panel-body">
-                                            <h3>Cataloguing tables</h3>
-                                            [% PROCESS pagelist module=modules.cataloguing modulename="cataloguing" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="cataloguing" %]
+                                        <span>Cataloging</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="cataloguing" %]
+                                        <h3>Cataloguing tables</h3>
+                                        [% PROCESS pagelist module=modules.cataloguing modulename="cataloguing" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="circHeading">
-                                        <h2 class="panel-title">
-                                            <a id="circToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#circ" aria-expanded="false" aria-controls="collapseOne">
-                                                Circulation
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="circ" class="panel-collapse collapse" role="tabpanel" aria-labelledby="circHeading">
-                                        <div class="panel-body">
-                                            <h3>Circulation tables</h3>
-                                            [% PROCESS pagelist module=modules.circ modulename="circ" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="circ" %]
+                                        <span>Circulation</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="circ" %]
+                                        <h3>Circulation tables</h3>
+                                        [% PROCESS pagelist module=modules.circ modulename="circ" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="coursereservesHeading">
-                                        <h2 class="panel-title">
-                                            <a id="coursereservesToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#coursereserves" aria-expanded="false" aria-controls="collapseOne">
-                                                Course reserves
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="coursereserves" class="panel-collapse collapse" role="tabpanel" aria-labelledby="coursereservesHeading">
-                                        <div class="panel-body">
-                                            <h3>Course reserves tables</h3>
-                                            [% PROCESS pagelist module=modules.coursereserves modulename="coursereserves" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="coursereserves" %]
+                                        Course <span>reserves</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="coursereserves" %]
+                                        <h3>Course reserves tables</h3>
+                                        [% PROCESS pagelist module=modules.coursereserves modulename="coursereserves" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="ermHeading">
-                                        <h2 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#erm" aria-expanded="false" aria-controls="collapseOne">
-                                                 E-resource management
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="erm" class="panel-collapse collapse" role="tabpanel" aria-labelledby="ermHeading">
-                                        <div class="panel-body">
-                                            <h3>E-resource management tables</h3>
-                                            [% PROCESS pagelist module=modules.erm modulename="erm" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="erm" %]
+                                            E-resource <span>management</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="erm" %]
+                                        <h3>E-resource management tables</h3>
+                                        [% PROCESS pagelist module=modules.erm modulename="erm" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="illrequestsHeading">
-                                        <h2 class="panel-title">
-                                            <a id="illrequestsToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#illrequests" aria-expanded="false" aria-controls="collapseOne">
-                                                Interlibrary loans
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="illrequests" class="panel-collapse collapse" role="tabpanel" aria-labelledby="illrequestsHeading">
-                                        <div class="panel-body">
-                                            <h3>Interlibrary loans tables</h3>
-                                            [% PROCESS pagelist module=modules.illrequests modulename="illrequests" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="illrequests" %]
+                                        Interlibrary <span>loans</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="illrequests" %]
+                                        <h3>Interlibrary loans tables</h3>
+                                        [% PROCESS pagelist module=modules.illrequests modulename="illrequests" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="membersHeading">
-                                        <h2 class="panel-title">
-                                            <a id="membersToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#members" aria-expanded="false" aria-controls="collapseOne">
-                                                Patrons
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="members" class="panel-collapse collapse" role="tabpanel" aria-labelledby="membersHeading">
-                                        <div class="panel-body">
-                                            <h3>Patrons tables</h3>
-                                            [% PROCESS pagelist module=modules.members modulename="members" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="members" %]
+                                        <span>Patrons</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="members" %]
+                                        <h3>Patrons tables</h3>
+                                        [% PROCESS pagelist module=modules.members modulename="members" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="posHeading">
-                                        <h2 class="panel-title">
-                                            <a id="posToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#pos" aria-expanded="false" aria-controls="collapseOne">
-                                                Point of sale
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="pos" class="panel-collapse collapse" role="tabpanel" aria-labelledby="posHeading">
-                                        <div class="panel-body">
-                                            <h3>Point of sale tables</h3>
-                                            [% PROCESS pagelist module=modules.pos modulename="pos" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="pos" %]
+                                        Point of <span>sale</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="pos" %]
+                                        <h3>Point of sale tables</h3>
+                                        [% PROCESS pagelist module=modules.pos modulename="pos" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="toolsHeading">
-                                        <h2 class="panel-title">
-                                            <a id="toolsToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#tools" aria-expanded="false" aria-controls="collapseOne">
-                                                Tools
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="tools" class="panel-collapse collapse" role="tabpanel" aria-labelledby="toolsHeading">
-                                        <div class="panel-body">
-                                            <h3>Tools tables</h3>
-                                            [% PROCESS pagelist module=modules.tools modulename="tools" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="tools" %]
+                                        <span>Tools</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="tools" %]
+                                        <h3>Tools tables</h3>
+                                        [% PROCESS pagelist module=modules.tools modulename="tools" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="opacHeading">
-                                        <h2 class="panel-title">
-                                            <a id="opacToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#opac" aria-expanded="false" aria-controls="collapseOne">
-                                                OPAC
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="opac" class="panel-collapse collapse" role="tabpanel" aria-labelledby="opacHeading">
-                                        <div class="panel-body">
-                                            <h3>OPAC tables</h3>
-                                            [% PROCESS pagelist module=modules.opac modulename="opac" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="opac" %]
+                                        <span>OPAC</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="opac" %]
+                                        <h3>OPAC tables</h3>
+                                        [% PROCESS pagelist module=modules.opac modulename="opac" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="reportsHeading">
-                                        <h2 class="panel-title">
-                                            <a id="reportsToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#reports" aria-expanded="false" aria-controls="collapseOne">
-                                                Reports
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="reports" class="panel-collapse collapse" role="tabpanel" aria-labelledby="reportsHeading">
-                                        <div class="panel-body">
-                                            <h3>Reports tables</h3>
-                                            [% PROCESS pagelist module=modules.reports modulename="reports" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="reports" %]
+                                        <span>Reports</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="reports" %]
+                                        <h3>Reports tables</h3>
+                                        [% PROCESS pagelist module=modules.reports modulename="reports" %]
+                                    [% END %]
+                                [% END %]
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="serialsHeading">
-                                        <h2 class="panel-title">
-                                            <a id="serialsToggle" class="collapsed" role="button" data-toggle="collapse" data-parent="#modules" href="#serials" aria-expanded="false" aria-controls="collapseOne">
-                                                Serials
-                                            </a>
-                                        </h2>
-                                    </div> <!-- /.panel-heading -->
-                                    <div id="serials" class="panel-collapse collapse" role="tabpanel" aria-labelledby="serialsHeading">
-                                        <div class="panel-body">
-                                            <h3>Serials tables</h3>
-                                            [% PROCESS pagelist module=modules.serials modulename="serials" %]
-                                        </div> <!-- /.panel-body -->
-                                    </div> <!-- /.panel-collapse -->
-                                </div>
+                                [% WRAPPER accordion_item %]
+                                    [% WRAPPER accordion_heading panel_id="serials" %]
+                                        <span>Serials</span>
+                                    [% END %]
+                                    [%  WRAPPER accordion_panel panel_id="serials" %]
+                                        <h3>Serials tables</h3>
+                                        [% PROCESS pagelist module=modules.serials modulename="serials" %]
+                                    [% END %]
+                                [% END %]
+                            [% END # /WRAPPER accordion %]
 
-                            </div>
                         </main>
                 </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -470,15 +380,15 @@
             $(document).ready( function() {
                 $("#[% panel | uri %]Toggle").click();
                 [%- IF page.defined -%]
-                $("#[% panel | uri %]").on('shown.bs.collapse', function () {
-                    $('html, body').animate({
-                        [%- IF table.defined -%]
-                        scrollTop: ($("#[% page | uri %]\\#[% table | uri %]").offset().top)
-                        [%- ELSE -%]
-                        scrollTop: ($("#[% page | uri %]").offset().top)
-                        [%- END -%]
-                    }, 500);
-                });
+                    $("#[% panel | uri %]_panel").on('shown.bs.collapse', function () {
+                        $('html, body').animate({
+                            [%- IF table.defined -%]
+                                scrollTop: ($("#[% page | uri %]_[% table | uri %]").offset().top)
+                            [%- ELSE -%]
+                                scrollTop: ($("#[% page | uri %]").offset().top)
+                            [%- END -%]
+                        }, 500);
+                    });
                 [%- END -%]
             });
         </script>
