@@ -52,6 +52,7 @@ requires 'Getopt::Std', '1.05';
 requires 'HTML::Entities', '3.69';
 requires 'HTML::FormatText', '1.23';
 requires 'HTML::Scrubber', '0.08';
+requires 'HTML::Restrict', '';
 requires 'HTTP::Cookies', '1.39';
 requires 'HTTP::OAI', '3.2';
 requires 'HTTP::Request::Common', '1.26';
