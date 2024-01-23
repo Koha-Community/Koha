@@ -475,15 +475,13 @@
                           [% ELSE %]
                             <div class="item_status datedue">Checked out
                           [% END %]
-                                [% IF item.can_be_edited %]
-                                  [% IF item.object.checkout.onsite_checkout %]
-                                    by
-                                  [% ELSE %]
-                                    to
-                                  [% END %]
-                                  [% INCLUDE 'patron-title.inc' patron=item.object.checkout.patron hide_patron_infos_if_needed=1 %]
-                                [% END %]
-                                : due [% date_due | $KohaDates as_due_date => 1 %]
+                              [% IF item.object.checkout.onsite_checkout %]
+                                by
+                              [% ELSE %]
+                                to
+                              [% END %]
+                              [% INCLUDE 'patron-title.inc' patron=item.object.checkout.patron hide_patron_infos_if_needed=1 %]
+                            : due [% date_due | $KohaDates as_due_date => 1 %]
                             </div>
                         [% ELSIF ( transfer = item.object.get_transfer ) %]
                             [% IF (transfer.datesent) %]
