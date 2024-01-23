@@ -125,23 +125,23 @@ while (1) {
             return;
         };
 
-        my $job;
-
-        if ($args) {
-            $job = Koha::BackgroundJobs->search( { id => $args->{job_id}, status => 'new' } )->next;
-            unless ($job) {
-                Koha::Logger->get( { interface => 'worker' } )
-                    ->warn( sprintf "Job %s not found, or has wrong status", $args->{job_id} );
-
-                # nack to force requeue
-                $conn->nack( { frame => $frame, requeue => 1 } );
-                Time::HiRes::sleep(0.5);
-                next;
-            }
-            $conn->ack( { frame => $frame } );
-        } else {
+        unless ( $args ) {
+            Koha::Logger->get({ interface => 'worker' })->warn(sprintf "Frame does not have correct args, ignoring it");
+            $conn->nack( { frame => $frame, requeue => 'false' } );
             next;
         }
+
+        my $job = Koha::BackgroundJobs->search( { id => $args->{job_id}, status => 'new' } )->next;
+        unless ($job) {
+            Koha::Logger->get( { interface => 'worker' } )
+                ->warn( sprintf "Job %s not found, or has wrong status", $args->{job_id} );
+
+            # nack to force requeue
+            $conn->nack( { frame => $frame, requeue => 'true' } );
+            Time::HiRes::sleep(0.5);
+            next;
+        }
+        $conn->ack( { frame => $frame } );
 
         $pm->start and next;
         srand();    # ensure each child process begins with a new seed
