@@ -75,7 +75,8 @@ chosen 'Digests only' on the advance messages.
 =cut
 
 use Modern::Perl;
-use Pod::Usage qw( pod2usage );
+use Parallel::ForkManager;
+use Pod::Usage   qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
@@ -134,7 +135,7 @@ $verbose = 1 unless $verbose or $confirm;
 print "Test run only\n" unless $confirm;
 
 print "getting auto renewals\n" if $verbose;
-my $auto_renews = Koha::Checkouts->search(
+my @auto_renews = Koha::Checkouts->search(
     {
         auto_renew                   => 1,
         'patron.autorenew_checkouts' => 1,
@@ -142,13 +143,58 @@ my $auto_renews = Koha::Checkouts->search(
     {
         join => ['patron','item']
     }
-);
-print "found " . $auto_renews->count . " auto renewals\n" if $verbose;
+)->as_list;
+print "found " . scalar @auto_renews . " auto renewals\n" if $verbose;
+
+my $cron_options = C4::Context->config('auto_renew_cronjob');
+my $loops = $cron_options ? $cron_options->{parallel_loops_count} // 1 : 1;
+
+# Split the list of issues into chunks to run in parallel
+my @chunks;
+if ( $loops > 1 ) {
+    my $i              = 0;
+    my $borrowernumber = 0;
+    while (@auto_renews) {
+        my $auto_renew = pop(@auto_renews);
+        if ( $borrowernumber != $auto_renew->borrowernumber ) {
+            $i++ if $borrowernumber;
+            $borrowernumber = $auto_renew->borrowernumber;
+        }
+        $i = 0 if $i >= $loops;
+        push( @{ $chunks[$i] }, $auto_renew );
+    }
+    my $pm = Parallel::ForkManager->new($loops);
+  DATA_LOOP:
+    foreach my $chunk (@chunks) {
+        my $pid = $pm->start and next DATA_LOOP;
+        _ProcessRenewals($chunk);
+        $pm->finish;
+    }
+    $pm->wait_all_children;
+}
+else {
+    _ProcessRenewals( \@auto_renews );
+}
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
+
+
+=head1 METHODS
+
+=head2 _ProcessRenewals
+
+    Internal method to process the queue in chunks
+
+=cut
+
+sub _ProcessRenewals {
+    my $auto_renew_issues = shift;
 
 my $renew_digest = {};
 my %report;
 my @item_renewal_ids;
-while ( my $auto_renew = $auto_renews->next ) {
+
+    foreach my $auto_renew (@$auto_renew_issues) {
     print "examining item '" . $auto_renew->itemnumber . "' to auto renew\n" if $verbose;
 
     my ( $borrower_preferences, $wants_messages, $wants_digest ) = ( undef, 0, 0 );
@@ -296,9 +342,7 @@ if ( $send_notices && $confirm ) {
     }
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
-
-=head1 METHODS
+}
 
 =head2 send_digests
 
