@@ -2311,6 +2311,20 @@ sub virtualshelves {
     return Koha::Virtualshelves->_new_from_dbic( scalar $self->_result->virtualshelves );
 }
 
+=head2 update_lastseen
+
+    $patron->update_lastseen();
+
+    Patron method to update lastseen field in borrower
+    to record that patron has been seen via sip connection
+
+=cut
+
+sub update_lastseen {
+    my ( $self ) = @_;
+    $self->track_login;
+}
+
 =head2 Internal methods
 
 =head3 _type
