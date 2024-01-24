@@ -218,6 +218,10 @@
                         <dt><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration (Elasticsearch)</a></dt>
                         <dd>Manage indexes, facets, and their mappings to MARC fields and subfields</dd>
                     [% END %]
+                    [% IF ( CAN_user_parameters_manage_record_sources ) %]
+                        <dt><a href="/cgi-bin/koha/admin/record_sources">Record sources</a></dt>
+                        <dd>Define record sources to import from</dd>
+                    [% END %]
                 </dl>
             [% END %]
 
