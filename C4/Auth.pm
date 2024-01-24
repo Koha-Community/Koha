@@ -1208,6 +1208,7 @@ sub checkauth {
                                 -sameSite => 'Lax',
                             ));
                             $info{'wrongip'} = 1;
+                            $auth_state = "failed";
                         }
                     }
 
