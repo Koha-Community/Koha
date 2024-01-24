@@ -414,9 +414,17 @@ if ($barcode && $op eq 'cud-checkin') {
         }
 
     } elsif ( C4::Context->preference('ShowAllCheckins') and !$messages->{'BadBarcode'} and !$needs_confirm and !$bundle_confirm ) {
-        $input{duedate}   = 0;
+        my $duedate = 0;
+        if( $issue ){
+            my $date_due_dt = dt_from_string( $issue->date_due, 'sql' );
+            $duedate = $date_due_dt->strftime('%Y-%m-%d %H:%M');
+            $input{borrowernumber} = $issue->borrowernumber;
+            $riborrowernumber{0}   = $borrower->{'borrowernumber'};
+        }
+        $input{duedate}   = $duedate;
+        $input{not_returned}   = 1;
         $returneditems{0} = $barcode;
-        $riduedate{0}     = 0;
+        $riduedate{0}     = $duedate;
         push( @inputloop, \%input );
     }
     $template->param( privacy => $borrower->{privacy} );
@@ -790,6 +798,8 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         next unless $item; # FIXME The item has been deleted in the meantime,
                            # we could handle that better displaying a message in the template
 
+
+        $ri{not_returned} = 1 unless $returned;
         my $biblio = $item->biblio;
         # FIXME pass $item to the template and we are done here...
         $ri{itembiblionumber}    = $biblio->biblionumber;
@@ -811,6 +821,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{homebranch}          = $item->homebranch;
         $ri{transferbranch}      = $item->get_transfer ? $item->get_transfer->tobranch : '';
         $ri{damaged}             = $item->damaged;
+        $ri{withdrawn}           = $item->withdrawn;
         $ri{transferreason}      = $item->get_transfer ? $item->get_transfer->reason : '';
 
         $ri{location} = $item->location;
