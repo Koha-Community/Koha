@@ -952,7 +952,7 @@
                                         <ol class="attributes_table">
                                             [% FOREACH pa IN pa_class.items %]
                                                 [% FOREACH pa_value IN pa.values %]
-                                                    [% IF loop.first %]<a name="patron-attr-start-[% pa.type.code | html %]"></a>[% END %]
+                                                    [% IF loop.first %]<a id="patron-attr-start-[% pa.type.code | html %]"></a>[% END %]
                                                     [% form_id = 'patron-attr-' _ Math.int( Math.rand(1000000) ) %]
                                                     <li data-category_code="[% pa.type.category_code | html %]">
                                                         [% IF pa.type.mandatory && pa.type.opac_editable %]

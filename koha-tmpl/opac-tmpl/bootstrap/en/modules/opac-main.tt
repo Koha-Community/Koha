@@ -89,6 +89,34 @@
         [% END %]
 
         [% IF koha_news.count %]
+            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, news_id => news_id ) %]
+        [% ELSE %]
+            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, library => branchcode ) %]
+        [% END %]
+        [% IF koha_news.content.count %]
+            <div id="news" class="newscontainer">
+                [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'opac' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
+                [% FOREACH koha_new IN koha_news.content %]
+                    <div class="newsitem">
+                        <h4 class="newsheader">
+                            [% IF ( news_item ) %]
+                                [% koha_new.title | html %]
+                            [% ELSE %]
+                                <a id="newsitem[% koha_new.id | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.id | uri %]">[% koha_new.title | html %]</a>
+                            [% END %]
+                        </h4>
+                        <div class="newsbody">[% koha_new.content | $raw %]</div>
+                        <div class="newsfooter">
+                            Published on [% koha_new.published_on | $KohaDates %]
+                            [% IF ( show_author && koha_new.author ) %]
+                                by <span class="newsauthor">[% INCLUDE 'patron-title.inc' patron=koha_new.author %]</span>
+                            [% END %]
+                            [% IF ( news_id ) %]
+                                &bull; <a href="/cgi-bin/koha/opac-main.pl">Show all news</a>
+                            [% END %]
+                        </div>
+                    </div>
+                [% END %]
 
             [% IF single_news_error %]
 

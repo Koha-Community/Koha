@@ -77,7 +77,7 @@
                 [% ELSE %]
                     <h2 class="suppliername inactive">
                 [% END %]
-                        <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]">
+                        <a id="vendor[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]">
                             [% IF (supplier.name) %]
                                 [% supplier.name | html %]
                             [% ELSE %]
