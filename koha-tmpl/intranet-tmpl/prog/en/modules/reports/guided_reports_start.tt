@@ -1514,6 +1514,20 @@
                             </select>
                             <div class="hint">Select which authorized value category the user will choose from.</div>
                         </div>
+                        <div id="runtime_param_options" style="display:none">
+                            <label>Parameter options:</label>
+                            <div class="form-check-inline">
+                                <input type="radio" class="form-check-input" id="single_param_check" name="param_option" value="" checked>
+                                <label class="form-check-label" for="single_param_check">Single parameter only</label>
+                                <i id="info_param_options" data-toggle="tooltip" title="" data-placement="top" class="fa fa-info-circle" data-original-title="Query expression should use ="></i>
+                                <input type="radio" class="form-check-input" id="include_all_check" name="param_option" value=":all">
+                                <label class="form-check-label" for="include_all_check">Include option for all</label>
+                                <i id="info_param_options" data-toggle="tooltip" title="" data-placement="top" class="fa fa-info-circle" data-original-title="Query expression must use LIKE"></i>
+                                <input type="radio" class="form-check-input" id="multi_select_check" name="param_option" value=":in">
+                                <label class="form-check-label" for="multi_select_check">Allow multiple selections</label>
+                                <i id="info_param_options" data-toggle="tooltip" title="" data-placement="top" class="fa fa-info-circle" data-original-title="Query expression must use IN"></i>
+                            </div>
+                        </div>
                     </div> <!-- /.modal-body -->
                     <div class="modal-footer">
                         <button type="submit" id="sendParam" class="btn btn-default approve">Insert parameter</button>
@@ -1718,16 +1732,19 @@
                     $("#authorised_value_category").show();
                     $("label[for='authorised_value']").addClass("required");
                     $("#authorised_value").prop("required", true ).attr("required", "required").addClass("required");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertCnSource":
                     modalTitle.text( _("Insert classification source parameter") );
                     $("#paramLabel").val( _("Source of classification or shelving scheme") );
                     $("#param_category").val("cn_source");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertFramework":
                     modalTitle.text( _("Insert bibliographic framework parameter") );
                     $("#paramLabel").val( _("Framework") );
                     $("#param_category").val("biblio_framework");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertDate":
                     modalTitle.text( _("Insert date parameter") );
@@ -1738,31 +1755,37 @@
                     modalTitle.text( _("Insert item types parameter") );
                     $("#paramLabel").val( _("Item type") );
                     $("#param_category").val("itemtypes");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertBranches":
                     modalTitle.text( _("Insert libraries parameter") );
                     $("#paramLabel").val( _("Library") );
                     $("#param_category").val("branches");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertCategorycode":
                     modalTitle.text( _("Insert patron category parameter") );
                     $("#paramLabel").val( _("Patron category") );
                     $("#param_category").val("categorycode");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertCashregister":
                     modalTitle.text( _("Insert cash register parameter") );
                     $("#paramLabel").val( _("Cash register") );
                     $("#param_category").val("cash_registers");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertDebittypes":
                     modalTitle.text( _("Insert debit type parameter") );
                     $("#paramLabel").val( _("Debit type") );
                     $("#param_category").val("debit_types");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertCredittypes":
                     modalTitle.text( _("Insert credit type parameter") );
                     $("#paramLabel").val( _("Credit type") );
                     $("#param_category").val("credit_types");
+                    $("#runtime_param_options").show();
                     break;
                 case "insertList":
                     modalTitle.text( _("Insert list parameter") );
@@ -2167,6 +2190,7 @@
                 $("#runtime_parameters").on("hide.bs.modal", function(){
                     $("#send_runtime_parameter")[0].reset();
                     $("#authorised_value_category").val("").hide();
+                    $("#runtime_param_options").val("").hide();
                     $("label[for='authorised_value']").removeClass("required");
                     $("#authorised_value").prop("required", false ).removeAttr("required").removeClass("required");
                 });
@@ -2177,6 +2201,7 @@
                     var paramLabel = $("#paramLabel").val();
                     var param_category = $("#param_category").val();
                     var categoryLabel = $("#authorised_value").val();
+                    var param_option = $('#runtime_param_options input[name="param_option"]:checked').val();
                     // Get CodeMirror environment variables
                     var selection = editor.getSelection();
                     var doc = editor.getDoc();
@@ -2193,6 +2218,9 @@
                         text += paramLabel;
                     } else if( param_category ){
                         text += param_category;
+                    }
+                    if( param_option ){
+                        text += param_option;
                     }
                     if( text != "" ){
                         text = " <<" + text + ">> ";
