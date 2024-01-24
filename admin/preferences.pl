@@ -75,8 +75,8 @@ sub _get_chunk {
 
     if ( $options{'class'} && $options{'class'} eq 'password' ) {
         $chunk->{'input_type'} = 'password';
-    } elsif ( $options{'class'} && $options{'class'} eq 'cud-email' ) {
-        $chunk->{'input_type'} = 'cud-email';
+    } elsif ( $options{'class'} && $options{'class'} eq 'email' ) {
+        $chunk->{'input_type'} = 'email';
     } elsif ( $options{'class'} && $options{'class'} eq 'date' ) {
         $chunk->{'dateinput'} = 1;
     } elsif ( $options{'type'} && ( $options{'type'} eq 'opac-languages' || $options{'type'} eq 'staff-languages' ) ) {
@@ -120,7 +120,7 @@ sub _get_chunk {
 
         $value ||= 0;
 
-        $chunk->{'type'} = ( $options{class} && $options{class} eq 'multiple' ) ? 'multiple' : 'cud-select';
+        $chunk->{'type'} = ( $options{class} && $options{class} eq 'multiple' ) ? 'multiple' : 'select';
 
         my @values;
         @values = split /,/, $value if defined($value);
@@ -143,7 +143,7 @@ sub _get_chunk {
         unshift @{ $chunk->{CHOICES} }, {
             text  => '',
             value => '',
-        } if $add_blank && $chunk->{type} eq 'cud-select';
+        } if $add_blank && $chunk->{type} eq 'select';
 
     } elsif ( $options{'multiple'} ) {
         my @values;
