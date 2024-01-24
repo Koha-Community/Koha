@@ -108,6 +108,8 @@ definitions:
     $ref: ./definitions/import_batch_profiles.yaml
   import_record_match:
     $ref: ./definitions/import_record_match.yaml
+  record_source:
+    $ref: ./definitions/record_source.yaml
   invoice:
     $ref: ./definitions/invoice.yaml
   item:
@@ -497,6 +499,10 @@ paths:
     $ref: ./paths/quotes.yaml#/~1quotes
   "/quotes/{quote_id}":
     $ref: "./paths/quotes.yaml#/~1quotes~1{quote_id}"
+  /record_sources:
+    $ref: ./paths/record_sources.yaml#/~1record_sources
+  "/record_sources/{record_source_id}":
+    $ref: ./paths/record_sources.yaml#/~1record_sources~1{record_source_id}
   /return_claims:
     $ref: ./paths/return_claims.yaml#/~1return_claims
   "/return_claims/{claim_id}":
@@ -725,6 +731,12 @@ parameters:
     description: Internal import record identifier
     in: path
     name: import_record_id
+    required: true
+    type: integer
+  record_source_id_pp:
+    description: Internal record source identifier
+    in: path
+    name: record_source_id
     required: true
     type: integer
   item_id_pp:
@@ -1130,6 +1142,9 @@ tags:
   - description: "Manage item groups\n"
     name: item_groups
     x-displayName: Item groups
+  - description: "Manage record sources\n"
+    name: record_sources
+    x-displayName: Record source
   - description: "Manage items\n"
     name: items
     x-displayName: Items

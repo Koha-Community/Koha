@@ -1,0 +1,246 @@
+/record_sources:
+  get:
+    x-mojo-to: RecordSources#list
+    operationId: listRecordSources
+    summary: List record sources
+    tags:
+      - record_sources
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of record sources
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/record_source"
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_record_sources
+  post:
+    x-mojo-to: RecordSources#add
+    operationId: addRecordSources
+    summary: Add a record source
+    tags:
+      - record_sources
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object containing informations about the new record source
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/record_source"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: A record source
+        schema:
+          $ref: "../swagger.yaml#/definitions/record_source"
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_record_sources
+"/record_sources/{record_source_id}":
+  get:
+    x-mojo-to: RecordSources#get
+    operationId: getRecordSources
+    summary: Get a record source
+    tags:
+      - record_sources
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/record_source_id_pp"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A record source
+        schema:
+          $ref: "../swagger.yaml#/definitions/record_source"
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_record_sources
+  put:
+    x-mojo-to: RecordSources#update
+    operationId: updateRecordSources
+    summary: Update a record source
+    tags:
+      - record_sources
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/record_source_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing informations about the new record source
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/record_source"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A record source
+        schema:
+          $ref: "../swagger.yaml#/definitions/record_source"
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_record_sources
+  delete:
+    x-mojo-to: RecordSources#delete
+    operationId: deleteRecordSources
+    summary: Delete a record source
+    tags:
+      - record_sources
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/record_source_id_pp"
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Deleted
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_record_sources

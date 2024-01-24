@@ -1,0 +1,16 @@
+---
+type: object
+properties:
+  record_source_id:
+    type: integer
+    description: Internally assigned record source identifier
+    readOnly: true
+  name:
+    description: Record source name
+    type: string
+  can_be_edited:
+    description: If records from this source can be edited
+    type: boolean
+additionalProperties: false
+required:
+  - name
