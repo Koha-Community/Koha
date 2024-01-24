@@ -43,6 +43,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_curbside_pickups', 'Manage curbside pickups'),
    ( 3, 'manage_search_filters', 'Manage custom search filters'),
    ( 3, 'manage_identity_providers', 'Manage identity providers'),
+   ( 3, 'manage_record_sources', 'Manage record sources'),
    ( 4, 'delete_borrowers', 'Delete patrons'),
    ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
    ( 4, 'list_borrowers', 'Search, list and view patrons'),

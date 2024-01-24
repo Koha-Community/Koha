@@ -1123,6 +1123,21 @@ CREATE TABLE `biblio_framework` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `record_sources`
+--
+
+DROP TABLE IF EXISTS `record_sources`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `record_sources` (
+  `record_source_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key for the `record_sources` table',
+  `name` text NOT NULL COMMENT 'User defined name for the record source',
+  `can_be_edited` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If records from this source can be edited',
+  PRIMARY KEY (`record_source_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `biblio_metadata`
 --
 
@@ -1136,10 +1151,12 @@ CREATE TABLE `biblio_metadata` (
   `schema` varchar(16) NOT NULL,
   `metadata` longtext NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `record_source_id` int(11) NULL DEFAULT NULL COMMENT 'The record source for the metadata',
   PRIMARY KEY (`id`),
   UNIQUE KEY `biblio_metadata_uniq_key` (`biblionumber`,`format`,`schema`),
   KEY `timestamp` (`timestamp`),
-  CONSTRAINT `record_metadata_fk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `record_metadata_fk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `record_metadata_fk_2` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2571,10 +2588,12 @@ CREATE TABLE `deletedbiblio_metadata` (
   `schema` varchar(16) NOT NULL,
   `metadata` longtext NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `record_source_id` int(11) NULL DEFAULT NULL COMMENT 'The record source for the metadata',
   PRIMARY KEY (`id`),
   UNIQUE KEY `deletedbiblio_metadata_uniq_key` (`biblionumber`,`format`,`schema`),
   KEY `timestamp` (`timestamp`),
-  CONSTRAINT `deletedrecord_metadata_fk_1` FOREIGN KEY (`biblionumber`) REFERENCES `deletedbiblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `deletedrecord_metadata_fk_1` FOREIGN KEY (`biblionumber`) REFERENCES `deletedbiblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `deletedrecord_metadata_fk_2` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
