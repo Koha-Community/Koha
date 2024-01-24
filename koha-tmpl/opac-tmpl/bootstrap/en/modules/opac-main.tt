@@ -94,7 +94,7 @@
                             [% IF ( news_item ) %]
                                 [% koha_new.title | html %]
                             [% ELSE %]
-                                <a name="newsitem[% koha_new.id | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.id | uri %]">[% koha_new.title | html %]</a>
+                                <a id="newsitem[% koha_new.id | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.id | uri %]">[% koha_new.title | html %]</a>
                             [% END %]
                         </h4>
                         <div class="newsbody">[% koha_new.content | $raw %]</div>
