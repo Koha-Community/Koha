@@ -84,7 +84,6 @@
                                 NO NAME
                             [% END %]
                         </a>
-                        <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]"></a>
                         [% IF (supplier.vendor_type) %]([% AuthorisedValues.GetByCode( 'VENDOR_TYPE', supplier.vendor_type ) | html %])[% END %]
                     [% IF ( !supplier.active ) %]<span class="vendor_inactive">(inactive)</span>[% END %]
                 </h2>
