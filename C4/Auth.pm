@@ -814,7 +814,6 @@ sub checkauth {
     _version_check( $type, $query );
 
     # state variables
-    my $loggedin = 0;
     my $auth_state = 'failed';
     my %info;
     my ( $userid, $cookie, $sessionID, $flags );
@@ -854,7 +853,6 @@ sub checkauth {
             -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             -sameSite => 'Lax',
         ));
-        $loggedin = 1;
     }
     elsif ( $emailaddress) {
         # the Google OpenID Connect passes an email address
@@ -1202,7 +1200,6 @@ sub checkauth {
                         my $domain = $branches->{$branchcode}->{'branchip'};
                         $domain =~ s|\.\*||g;
                         if ( $ip !~ /^$domain/ ) {
-                            $loggedin = 0;
                             $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
                                 -name     => 'CGISESSID',
                                 -value    => '',
