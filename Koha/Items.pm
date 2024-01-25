@@ -197,7 +197,10 @@ Returns a new resultset, containing only those items that are allowed to be book
 sub filter_by_bookable {
     my ($self) = @_;
 
-    my $params = { bookable => 1 };
+    my $params =
+        C4::Context->preference('item-level_booking') == 1
+        ? { bookable => 1 }
+        : { itype    => { -in => \'SELECT itemtype FROM itemtypes WHERE bookable = 1' } };
 
     return $self->search($params);
 }

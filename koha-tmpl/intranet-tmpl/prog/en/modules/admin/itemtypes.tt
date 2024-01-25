@@ -258,6 +258,17 @@
                         [% END %]
                         <span class="hint">If checked, items will be automatically checked in once they've reached their due date. This feature requires the <code>misc/cronjobs/automatic_checkin.pl</code> cronjob. Ask your system administrator to schedule it.</span>
                 </li>
+                [% IF Koha.Preference('item-level_booking') == 0 %]
+                    <li>
+                        <label for="bookable">Bookable: </label>
+                            [% IF itemtype.bookable %]
+                                <input type="checkbox" id="bookable" name="bookable" checked="checked" value="1" />
+                            [% ELSE %]
+                                <input type="checkbox" id="bookable" name="bookable" value="1" />
+                            [% END %]
+                            <span class="hint">If checked, all items of this type will be enabled for future bookings.</span>
+                    </li>
+                [% END %]
                 <li>
                     <label for="rentalcharge">Rental charge: </label>
                     <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | $Price on_editing => 1 %]" min="0" />

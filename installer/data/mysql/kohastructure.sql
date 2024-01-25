@@ -4143,6 +4143,7 @@ CREATE TABLE `itemtypes` (
   `hideinopac` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Hide the item type from the search options in OPAC',
   `searchcategory` varchar(80) DEFAULT NULL COMMENT 'Group this item type with others with the same value on OPAC search options',
   `automatic_checkin` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If automatic checkin is enabled for items of this type',
+  `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Activate bookable feature for items related to this item type',
   PRIMARY KEY (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`),
   KEY `itemtypes_ibfk_1` (`parent_type`),

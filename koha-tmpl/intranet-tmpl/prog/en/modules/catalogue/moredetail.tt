@@ -344,15 +344,17 @@
                                             </form>
                                         </li>
                                         <li>
-                                            <span class="label">Bookable:</span>
+                                            <span class="label">
+                                                Bookable:
+                                            </span>
                                             [% IF ( CAN_user_circulate ) %]
                                                 <form action="updateitem.pl" method="post">
                                                     [% INCLUDE 'csrf-token.inc' %]
                                                     <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                                                     <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
                                                     <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                                                    <select name="bookable">
-                                                        [% IF ITEM_DAT.bookable == 1 %]
+                                                    <select name="bookable" [% IF ITEM_DAT.effective_itemtype.bookable == 1 && Koha.Preference('item-level_booking') == 0 %]disabled[% END %]>
+                                                    [% IF ITEM_DAT.bookable == 1 || ITEM_DAT.effective_itemtype.bookable == 1 %]
                                                         <option value="1" selected="selected">Yes</option>
                                                         <option value="0">No</option>
                                                         [% ELSE %]

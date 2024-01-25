@@ -266,6 +266,9 @@ sub get_items {
     my $biblio        = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, { prefetch => ['items'] } );
     my $bookable_only = $c->param('bookable');
 
+    # Deletion of parameter to avoid filtering on the items table in the case of bookings on 'itemtype'
+    $c->req->params->remove('bookable');
+
     return $c->render_resource_not_found("Bibliographic record")
         unless $biblio;
 

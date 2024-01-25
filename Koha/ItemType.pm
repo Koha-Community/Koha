@@ -234,6 +234,7 @@ sub to_api_mapping {
         rentalcharge_daily_calendar  => 'daily_rental_charge_calendar',
         rentalcharge_hourly          => 'hourly_rental_charge',
         rentalcharge_hourly_calendar => 'hourly_rental_charge_calendar',
+        bookable_itemtype            => 'bookable_itemtype',
     };
 }
 
