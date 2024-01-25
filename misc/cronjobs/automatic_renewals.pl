@@ -254,6 +254,7 @@ if ( $send_notices && $confirm ) {
                 my $letter = C4::Letters::GetPreparedLetter (
                     module      => 'circulation',
                     letter_code => 'AUTO_RENEWALS',
+                    branchcode  => $patron->branchcode,
                     tables      => {
                         borrowers => $patron->borrowernumber,
                         issues    => $issue->itemnumber,
