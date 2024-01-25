@@ -537,6 +537,8 @@ sub import_biblios_list {
                     $iteminfos->{budget_id} = $item_budget->{budget_id} || $budget_id;
                 }
 
+                $iteminfos->{price} ||= $price;    # Fallback to order price if no item price was defined
+
                 # Clone the item data for the needed quantity
                 # Add the incremented item id for each item in that quantity
                 for (my $i = 0; $i < $quantity; $i++) {
