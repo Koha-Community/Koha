@@ -76,12 +76,16 @@ my $totordered_active   = 0;
 my $totavail_active     = 0;
 
 my @budget_loop;
+my %patrons        = ( $loggedinuser => Koha::Patrons->find($loggedinuser) );
+my $loggedinpatron = $patrons{$loggedinuser}->unblessed;
 foreach my $budget ( @{$budget_arr} ) {
-    next unless (CanUserUseBudget($loggedinuser, $budget, $userflags));
+    next unless (CanUserUseBudget($loggedinpatron, $budget, $userflags));
 
-    my $patron = Koha::Patrons->find( $budget->{budget_owner_id} );
-    if ( $patron ) {
-        $budget->{budget_owner} = $patron;
+    if ( my $borrowernumber = $budget->{budget_owner_id} ) {
+        unless ( exists $patrons{$borrowernumber} ) {
+            $patrons{$borrowernumber} = Koha::Patrons->find($borrowernumber);
+        }
+        $budget->{budget_owner} = $patrons{$borrowernumber};
     }
 
     if ( !defined $budget->{budget_amount} ) {
