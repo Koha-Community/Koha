@@ -7,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -1266,6 +1266,57 @@ subtest 'checkpw() return values tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'AutoLocation' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'AutoLocation', 0 );
+
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    my $password = 'password';
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    $patron->set_password( { password => $password } );
+
+    my $cgi_mock = Test::MockModule->new('CGI');
+    $cgi_mock->mock( 'request_method', sub { return 'POST' } );
+    my $cgi  = CGI->new;
+    my $auth = Test::MockModule->new('C4::Auth');
+
+    # Simulating the login form submission
+    $cgi->param( 'userid',   $patron->userid );
+    $cgi->param( 'password', $password );
+
+    $ENV{REMOTE_ADDR} = '127.0.0.1';
+    my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
+    is( $userid, $patron->userid );
+
+    my $template;
+    t::lib::Mocks::mock_preference( 'AutoLocation', 1 );
+
+    # AutoLocation: "Require staff to log in from a computer in the IP address range specified by their library (if any)"
+    $patron->library->branchip('')->store;    # There is none, allow access from anywhere
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
+    is( $userid,   $patron->userid );
+    is( $template, undef );
+
+    $patron->library->branchip('1.2.3.4')->store;
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+    is( $template->{VARS}->{wrongip}, 1 );
+
+    $patron->library->branchip('127.0.0.1')->store;
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
+    is( $userid,   $patron->userid );
+    is( $template, undef );
+
+    $schema->storage->txn_rollback;
+
 };
 
 sub set_weak_password {
