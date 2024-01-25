@@ -556,11 +556,10 @@ and that the number placeholders matches the number of parameters.
 =cut
 
 sub execute_query {
-
     my $params     = shift;
     my $sql        = $params->{sql};
     my $offset     = $params->{offset} || 0;
-    my $limit      = $params->{limit}  || C4::Context->config('report_results_limit') || 999999;
+    my $limit      = $params->{limit} || C4::Context->config('report_results_limit') || 999999;
     my $sql_params = defined $params->{sql_params} ? $params->{sql_params} : [];
     my $report_id  = $params->{report_id};
 
@@ -572,35 +571,36 @@ sub execute_query {
 
     Koha::Logger->get->debug("Report - execute_query($sql, $offset, $limit)");
 
-    my ( $is_sql_valid, $errors ) = Koha::Report->new({ savedsql => $sql })->is_sql_valid;
-    return (undef, @{$errors}[0]) unless $is_sql_valid;
+    my ( $is_sql_valid, $errors ) = Koha::Report->new( { savedsql => $sql } )->is_sql_valid;
+    return ( undef, @{$errors}[0] ) unless $is_sql_valid;
 
-    foreach my $sql_param ( @$sql_params ){
-        if ( $sql_param =~ m/\n/ ){
+    foreach my $sql_param (@$sql_params) {
+        if ( $sql_param =~ m/\n/ ) {
             my @list = split /\n/, $sql_param;
             my @quoted_list;
-            foreach my $item ( @list ){
+            foreach my $item (@list) {
                 $item =~ s/\r//;
-              push @quoted_list, C4::Context->dbh->quote($item);
+                push @quoted_list, C4::Context->dbh->quote($item);
             }
-            $sql_param = "(".join(",",@quoted_list).")";
+            $sql_param = "(" . join( ",", @quoted_list ) . ")";
         }
     }
 
-    my ($useroffset, $userlimit);
+    my ( $useroffset, $userlimit );
 
     # Grab offset/limit from user supplied LIMIT and drop the LIMIT so we can control pagination
-    ($sql, $useroffset, $userlimit) = strip_limit($sql);
+    ( $sql, $useroffset, $userlimit ) = strip_limit($sql);
 
     Koha::Logger->get->debug(
         sprintf "User has supplied (OFFSET,) LIMIT = %s, %s",
-        $useroffset, ( defined($userlimit) ? $userlimit : 'UNDEF' ) );
+        $useroffset, ( defined($userlimit) ? $userlimit : 'UNDEF' )
+    );
 
     $offset += $useroffset;
-    if (defined($userlimit)) {
-        if ($offset + $limit > $userlimit ) {
+    if ( defined($userlimit) ) {
+        if ( $offset + $limit > $userlimit ) {
             $limit = $userlimit - $offset;
-        } elsif ( ! $offset && $limit < $userlimit ) {
+        } elsif ( !$offset && $limit < $userlimit ) {
             $limit = $userlimit;
         }
     }
@@ -616,16 +616,14 @@ sub execute_query {
         ->info("Report starting: $report_id") if $report_id;
 
     my $sth = $dbh->prepare($sql);
-    eval {
-        $sth->execute(@$sql_params, $offset, $limit);
-    };
+    eval { $sth->execute( @$sql_params, $offset, $limit ); };
     warn $@ if $@;
 
     Koha::Logger->get( { prefix => 0, interface => 'reports', category => 'execute.time.end' } )
         ->info("Report finished: $report_id") if $report_id;
 
-    return ( $sth, { queryerr => $sth->errstr } ) if ($sth->err);
-    return ( $sth );
+    return ( $sth, { queryerr => $sth->errstr } ) if ( $sth->err );
+    return ($sth);
 }
 
 =head2 save_report($sql,$name,$type,$notes)
