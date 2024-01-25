@@ -26,6 +26,7 @@ use CGI qw ( -utf8 );
 use YAML::XS;
 use List::MoreUtils;
 use Encode;
+use Scalar::Util qw( looks_like_number );
 
 use C4::Context;
 use C4::Auth qw( get_template_and_user );
@@ -168,9 +169,7 @@ if ($op eq ""){
         my $c_sort1 = $input->param( 'sort1_' . $import_record->import_record_id ) || $input->param('all_sort1') || '';
         my $c_sort2 = $input->param( 'sort2_' . $import_record->import_record_id ) || $input->param('all_sort2') || '';
         my $c_replacement_price = $input->param( 'replacementprice_' . $import_record->import_record_id );
-        my $c_price             = $input->param( 'price_' . $import_record->import_record_id )
-            || GetMarcPrice( $marcrecord, C4::Context->preference('marcflavour') );
-
+        my $c_price             = $input->param( 'price_' . $import_record->import_record_id );
         # Insert the biblio, or find it through matcher
         if ( $biblionumber ) { # If matched during staging we can continue
             $import_record->status('imported')->store;
@@ -501,7 +500,7 @@ sub import_biblios_list {
         my $marcrecord = $import_record->get_marc_record || die "couldn't translate marc information";
 
         my $infos = get_infos_syspref('MarcFieldsToOrder', $marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2','replacementprice']);
-        my $price = $infos->{price};
+        my $price = looks_like_number($infos->{price}) ? $infos->{price} : GetMarcPrice( $marcrecord, C4::Context->preference('marcflavour') );
         my $replacementprice = $infos->{replacementprice};
         my $quantity = $infos->{quantity};
         my $budget_code = $infos->{budget_code};
