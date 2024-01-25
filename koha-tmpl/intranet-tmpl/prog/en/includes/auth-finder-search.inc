@@ -89,7 +89,8 @@
                         <option value="exact">is exactly</option>
                         [% END %]
                     </select>
-                    <input type="text" name="value_match" value="[% value_match | html %]" />
+                    <input id="value_match" style="width:400px;" type="text" name="value_match" value="[% value_match | html %]" />
+                    <div id="yvaluecontainermarclistheading"></div>
                 </li>
                 <li>
                     <label for="marclistanywhere">Search entire record: </label>
