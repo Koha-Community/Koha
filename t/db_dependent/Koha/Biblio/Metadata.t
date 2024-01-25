@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 use Test::Warn;
 
@@ -263,6 +263,31 @@ subtest '_embed_items' => sub {
     $record = $biblio->metadata->record({ embed_items => 1 });
     $field_list = join ',', map { $_->tag } $record->fields;
     ok( $field_list =~ /951,(952,)+953/, "951-952s-953 in $field_list" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'source_allows_editing() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $metadata = $biblio->metadata;
+    is( $metadata->record_source_id, undef, 'No record source defined for metatada object' );
+    ok( $metadata->source_allows_editing, 'No record source, can be edited' );
+
+    my $source = $builder->build_object( { class => 'Koha::RecordSources', value => { can_be_edited => 1 } } );
+    $metadata->record_source_id( $source->id )->store();
+
+    ok( $metadata->source_allows_editing, 'Record source allows, can be edited' );
+
+    $source->can_be_edited(0)->store();
+    $metadata->discard_changes;
+
+    ok( !$metadata->source_allows_editing, 'Record source does not allow, cannot be edited' );
 
     $schema->storage->txn_rollback;
 };

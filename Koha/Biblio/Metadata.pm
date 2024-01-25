@@ -170,6 +170,23 @@ sub record_strip_nonxml {
     return $self->record( { %$params, record => $record } );
 }
 
+=head3 source_allows_editing
+
+    if ( $metadata->source_allows_editing ) { ... }
+
+Returns a boolean denoting whether the metadata's record source allows
+it to be edited.
+
+=cut
+
+sub source_allows_editing {
+    my ($self) = @_;
+
+    my $rs = $self->_result->record_source;
+    return 1 unless $rs;
+    return $rs->can_be_edited;
+}
+
 =head2 Internal methods
 
 =head3 _embed_items
