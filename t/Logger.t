@@ -27,7 +27,7 @@ use Test::Warn;
 use Test::Exception;
 
 subtest 'Test01 -- Simple tests for Koha::Logger' => sub {
-    plan tests => 10;
+    plan tests => 13;
 
     my $ret;
     t::lib::Mocks::mock_config('log4perl_conf', undef);
@@ -76,6 +76,21 @@ HERE
 
     Koha::Logger->clear_mdc();
     is( Koha::Logger->get_mdc( 'foo' ), undef, "MDC value was cleared by clear_mdc" );
+
+    is(
+        Koha::Logger->get( { interface => 'cli', category => 'Test.Category' } )->category(), "cli.Test.Category",
+        "Category is cli.Test.Category"
+    );
+    $ENV{'PLACK_ENV'} = 1;
+    is(
+        Koha::Logger->get( { interface => 'cli', category => 'Test.Category' } )->category(),
+        "plack-cli.Test.Category", "Category under plack is is plack-cli.Test.Category"
+    );
+    is(
+        Koha::Logger->get( { interface => 'cli', category => 'Test.Category', prefix => 0 } )->category(),
+        "cli.Test.Category", "Category under plack with prefixing disabled is is cli.Test.Category"
+    );
+    delete $ENV{'PLACK_ENV'};
 };
 
 sub mytempfile {

@@ -51,13 +51,16 @@ BEGIN {
     Normally, the category should follow the current package and the interface
     should be set correctly via C4::Context.
 
+    If the category should not be prefixed if plack, set the param 'prefix' to 0.
 =cut
 
 sub get {
     my ( $class, $params ) = @_;
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
     my $category = $params ? ( $params->{category} || caller ) : caller;
-    my $l4pcat = ( C4::Context->psgi_env ? 'plack-' : q{} ) . $interface . '.' . $category;
+    my $prefix = $params->{prefix} // 1;
+
+    my $l4pcat = ( ( $prefix && C4::Context->psgi_env ) ? 'plack-' : q{} ) . $interface . '.' . $category;
 
     my $init = _init();
     my $self = {};

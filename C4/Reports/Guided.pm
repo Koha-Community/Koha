@@ -18,6 +18,7 @@ package C4::Reports::Guided;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use CGI qw ( -utf8 );
 use Carp qw( carp croak );
 use JSON qw( from_json );
@@ -609,11 +610,19 @@ sub execute_query {
 
     $dbh->do( 'UPDATE saved_sql SET last_run = NOW() WHERE id = ?', undef, $report_id ) if $report_id;
 
+    Koha::Logger->get( { prefix => 0, interface => 'reports', category => 'execute.query' } )
+        ->info("Report $report_id : $sql, $offset, $limit") if $report_id;
+    Koha::Logger->get( { prefix => 0, interface => 'reports', category => 'execute.time.start' } )
+        ->info("Report starting: $report_id") if $report_id;
+
     my $sth = $dbh->prepare($sql);
     eval {
         $sth->execute(@$sql_params, $offset, $limit);
     };
     warn $@ if $@;
+
+    Koha::Logger->get( { prefix => 0, interface => 'reports', category => 'execute.time.end' } )
+        ->info("Report finished: $report_id") if $report_id;
 
     return ( $sth, { queryerr => $sth->errstr } ) if ($sth->err);
     return ( $sth );
