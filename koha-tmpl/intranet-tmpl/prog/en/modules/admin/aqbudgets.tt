@@ -559,11 +559,8 @@
 
             function select_user(borrowernumber, borrower) {
                 ownerRemove();
-                var borrowername = $patron_to_html( borrower, { display_cardnumber: false, url: false } );
                 if (borrowernumber) {
-                    var ownerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
-                        + '?borrowernumber=' + borrowernumber + '">'
-                        + borrowername + '</a>';
+                    var ownerlink = $patron_to_html( borrower, { display_cardnumber: false, url: true } );
                     $('#budget_owner_name').html(ownerlink);
                     $('#budget_owner_id').val(borrowernumber);
                 }
