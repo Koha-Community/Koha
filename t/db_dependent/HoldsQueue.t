@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 63;
+use Test::More tests => 64;
 use Data::Dumper;
 
 use C4::Calendar qw( new insert_single_holiday );
@@ -2210,4 +2210,82 @@ subtest "Canceled holds should be removed from the holds queue" => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest "Test unallocated option" => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+        }
+    );
+    my $patron_2 = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+        }
+    );
+
+    my $item1 = $builder->build_sample_item( {} )->store();
+
+    my $item2 = $builder->build_sample_item( {} )->store();
+
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $patron->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item1->biblionumber,
+            priority       => 1,
+        }
+    );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
+    my $hold     = $queue_rs->next;
+    is(
+        $hold->itemnumber->itemnumber,
+        $item1->itemnumber,
+        "Picked the item"
+    );
+
+    my $timestamp = $hold->timestamp;
+
+    sleep 2;
+    C4::HoldsQueue::CreateQueue();
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
+    $hold     = $queue_rs->next;
+    isnt( $hold->timestamp, $timestamp, "Hold was reallocated when queue fully rebuilt" );
+    $timestamp = $hold->timestamp;
+
+    C4::HoldsQueue::CreateQueue( { unallocated => 1 } );
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
+    $hold     = $queue_rs->next;
+    is( $hold->timestamp, $timestamp, "Previously allocated hold not updated when unallocated passed" );
+
+    my $reserve_id_2 = AddReserve(
+        {
+            branchcode     => $patron_2->branchcode,
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item2->biblionumber,
+            priority       => 1,
+        }
+    );
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item2->biblionumber } );
+    $hold     = $queue_rs->next;
+    ok( !$hold, "New hold is not allocated to queue before run" );
+    C4::HoldsQueue::CreateQueue( { unallocated => 1 } );
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item2->biblionumber } );
+    $hold     = $queue_rs->next;
+    ok( $hold, "New hold is allocated to queue when run for unallocated holds" );
+
+    $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
+    $hold     = $queue_rs->next;
+    is(
+        $hold->timestamp, $timestamp,
+        "Previously allocated hold not updated when unallocated passed and others are allocated"
+    );
 };
