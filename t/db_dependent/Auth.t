@@ -14,7 +14,8 @@ use t::lib::TestBuilder;
 
 use C4::Auth;
 use C4::Members;
-use Koha::AuthUtils qw/hash_password/;
+use Koha::AuthUtils qw( hash_password );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
 use Koha::Patrons;
 use Koha::Auth::TwoFactorAuth;
@@ -87,9 +88,7 @@ subtest 'checkauth() tests' => sub {
 
         my $patron = $builder->build_object(
             { class => 'Koha::Patrons', value => { flags => 1 } } );
-        my $password = 'password';
-        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
-        $patron->set_password( { password => $password } );
+        my $password = set_weak_password($patron);
         $cgi = Test::MockObject->new();
         $cgi->mock( 'cookie', sub { return; } );
         $cgi->mock(
@@ -147,39 +146,20 @@ subtest 'checkauth() tests' => sub {
 
         my $password_expired;
 
-        my $patron_class = Test::MockModule->new('Koha::Patron');
-        $patron_class->mock( 'password_expired', sub { return $password_expired; } );
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-        my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 1 } });
-        my $password = 'password';
-        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
-        $patron->set_password( { password => $password } );
+        my $password = set_weak_password($patron);
+        $patron->password_expiration_date( dt_from_string->subtract(days => 1) )->store;
 
-        my $cgi_mock = Test::MockModule->new('CGI')->mock( 'request_method', 'POST' );
-        my $cgi = CGI->new;
-        $cgi->param( -name => 'userid',   -value => $patron->userid );
-        $cgi->param( -name => 'password', -value => $password );
+        my $cgi_mock = Test::MockModule->new('CGI');
+        $cgi_mock->mock( 'request_method', sub { return 'POST' } );
+        my $cgi  = CGI->new;
+        # Simulating the login form submission
+        $cgi->param( 'userid',   $patron->userid );
+        $cgi->param( 'password', $password );
 
-        my $auth = Test::MockModule->new( 'C4::Auth' );
-        # Tests will fail if we hit safe_exit
-        $auth->mock( 'safe_exit', sub { return } );
-
-        my ( $userid, $cookie, $sessionID, $flags );
-
-        {
-            t::lib::Mocks::mock_preference( 'DumpTemplateVarsOpac', 1 );
-            # checkauth will redirect and safe_exit if not authenticated and not authorized
-            local *STDOUT;
-            my $stdout;
-            open STDOUT, '>', \$stdout;
-
-            # Password has expired
-            $password_expired = 1;
-            C4::Auth::checkauth( $cgi, 0, { catalogue => 1 } );
-            like( $stdout, qr{'password_has_expired' => 1}, 'password_has_expired is set to 1' );
-
-            close STDOUT;
-        };
+        my ( $userid, $cookie, $sessionID, $flags, $template ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+        is( $template->{VARS}->{password_has_expired}, 1 );
     };
 
     subtest 'Reset auth state when changing users' => sub {
@@ -203,8 +183,6 @@ subtest 'checkauth() tests' => sub {
             C4::Auth::check_cookie_auth( $sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
         is( $return, 'ok', 'Patron authenticated' );
 
-        my $mock1 = Test::MockModule->new('C4::Auth');
-        $mock1->mock( 'safe_exit', sub { return 'safe_exit_redirect' } );
         my $mock2 = Test::MockModule->new('CGI');
         $mock2->mock( 'request_method', 'POST' );
         $mock2->mock( 'cookie',         sub { return $sessionID; } );    # oversimplified..
@@ -213,21 +191,14 @@ subtest 'checkauth() tests' => sub {
         $cgi->param( -name => 'userid',             -value => 'Bond' );
         $cgi->param( -name => 'password',           -value => 'James Bond' );
         $cgi->param( -name => 'koha_login_context', -value => 1 );
-        my ( @return, $stdout );
-        {
-            local *STDOUT;
-            local %ENV;
-            $ENV{REMOTE_ADDR} = '1.2.3.4';
-            open STDOUT, '>', \$stdout;
-            @return = C4::Auth::checkauth( $cgi, 0, {} );
-            close STDOUT;
-        }
-        is( $return[0], 'safe_exit_redirect', 'Changing to non-existent user causes a redirect to login' );
+        my ( $userid, $cookie, $flags, $template );
+        ( $userid, $cookie, $sessionID, $flags, $template ) =
+            C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+        is( $template->{VARS}->{loginprompt}, 1, 'Changing to non-existent user causes a redirect to login' );
     };
 
-
     subtest 'While still logged in, relogin with another user' => sub {
-        plan tests => 6;
+        plan tests => 5;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons', value => {} });
         my $patron2 = $builder->build_object({ class => 'Koha::Patrons', value => {} });
@@ -239,36 +210,28 @@ subtest 'checkauth() tests' => sub {
         $session->param( 'lasttime',     time() );
         $session->param( 'interface',    'opac' );
         $session->flush;
-        my $sessionID = $session->id;
-        C4::Context->_new_userenv($sessionID);
+        my $previous_sessionID = $session->id;
+        C4::Context->_new_userenv($previous_sessionID);
 
-        my ( $return ) = C4::Auth::check_cookie_auth( $sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
+        my ( $return ) = C4::Auth::check_cookie_auth( $previous_sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
         is( $return, 'ok', 'Former session in shape now' );
 
         my $mock1 = Test::MockModule->new('C4::Auth');
         $mock1->mock( 'safe_exit', sub {} );
         my $mock2 = Test::MockModule->new('CGI');
         $mock2->mock( 'request_method', 'POST' );
-        $mock2->mock( 'cookie', sub { return $sessionID; } ); # oversimplified..
+        $mock2->mock( 'cookie', sub { return $previous_sessionID; } ); # oversimplified..
         my $cgi = CGI->new;
         my $password = 'Incr3d1blyZtr@ng93$';
         $patron2->set_password({ password => $password });
         $cgi->param( -name => 'userid',             -value => $patron2->userid );
         $cgi->param( -name => 'password',           -value => $password );
         $cgi->param( -name => 'koha_login_context', -value => 1 );
-        my ( @return, $stdout );
-        {
-            local *STDOUT;
-            local %ENV;
-            $ENV{REMOTE_ADDR} = '1.2.3.4';
-            open STDOUT, '>', \$stdout;
-            @return = C4::Auth::checkauth( $cgi, 0, {} );
-            close STDOUT;
-        }
-        # Note: We can test return values from checkauth here since we mocked the safe_exit after the Redirect 303
-        is( $return[0], $patron2->userid, 'Login of patron2 approved' );
-        isnt( $return[2], $sessionID, 'Did not return previous session ID' );
-        ok( $return[2], 'New session ID not empty' );
+        my ( $userid, $cookie, $sessionID, $flags, $template ) =
+            C4::Auth::checkauth( $cgi, 0, {}, 'opac', undef, undef, { do_not_print => 1 } );
+        is( $userid, $patron2->userid, 'Login of patron2 approved' );
+        isnt( $sessionID, $previous_sessionID, 'Did not return previous session ID' );
+        ok( $sessionID, 'New session ID not empty' );
 
         # Similar situation: Relogin with former session of $patron, new user $patron2 has no permissions
         $patron2->flags(undef)->store;
@@ -276,22 +239,14 @@ subtest 'checkauth() tests' => sub {
         $session->param( 'id',           $patron->userid );
         $session->param( 'interface',    'intranet' );
         $session->flush;
-        $sessionID = $session->id;
-        C4::Context->_new_userenv($sessionID);
+        $previous_sessionID = $session->id;
+        C4::Context->_new_userenv($previous_sessionID);
         $cgi->param( -name => 'userid',             -value => $patron2->userid );
         $cgi->param( -name => 'password',           -value => $password );
         $cgi->param( -name => 'koha_login_context', -value => 1 );
-        {
-            local *STDOUT;
-            local %ENV;
-            $ENV{REMOTE_ADDR} = '1.2.3.4';
-            $stdout = q{};
-            open STDOUT, '>', \$stdout;
-            @return = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' ); # patron2 has no catalogue perm
-            close STDOUT;
-        }
-        like( $stdout, qr/You do not have permission to access this page/, 'No permission response' );
-        is( @return, 0, 'checkauth returned failure' );
+        ( $userid, $cookie, $sessionID, $flags, $template ) =
+            C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+        is( $template->{VARS}->{nopermission}, 1, 'No permission response' );
     };
 
     subtest 'Two-factor authentication' => sub {
@@ -410,9 +365,7 @@ subtest 'checkauth() tests' => sub {
 
         my $branch = $builder->build_object({ class => 'Koha::Libraries' });
 
-        my $password = 'password';
-        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
-        $staff_user->set_password( { password => $password } );
+        my $password = set_weak_password($staff_user);
         my $cgi = Test::MockObject->new();
         $cgi->mock( 'cookie', sub { return; } );
         $cgi->mock(
@@ -493,10 +446,8 @@ subtest 'no_set_userenv parameter tests' => sub {
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $password = 'password';
 
-    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
-    $patron->set_password({ password => $password });
+    my $password = set_weak_password($patron);
 
     ok( checkpw( $patron->userid, $password, undef, undef, 1 ), 'checkpw returns true' );
     is( C4::Context->userenv, undef, 'Userenv should be undef as required' );
@@ -515,10 +466,8 @@ subtest 'checkpw lockout tests' => sub {
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $password = 'password';
-    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    my $password = set_weak_password($patron);
     t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 1 );
-    $patron->set_password({ password => $password });
 
     my ( $checkpw, undef, undef ) = checkpw( $patron->cardnumber, $password, undef, undef, 1 );
     ok( $checkpw, 'checkpw returns true with right password when logging in via cardnumber' );
@@ -836,13 +785,11 @@ subtest 'check_cookie_auth' => sub {
 };
 
 subtest 'checkauth & check_cookie_auth' => sub {
-    plan tests => 35;
+    plan tests => 34;
 
     # flags = 4 => { catalogue => 1 }
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 4 } });
-    my $password = 'password';
-    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
-    $patron->set_password( { password => $password } );
+    my $password = set_weak_password($patron);
 
     my $cgi_mock = Test::MockModule->new('CGI');
     $cgi_mock->mock( 'request_method', sub { return 'POST' } );
@@ -869,16 +816,10 @@ subtest 'checkauth & check_cookie_auth' => sub {
     my $first_sessionID = $sessionID;
 
     $ENV{"HTTP_COOKIE"} = "CGISESSID=$sessionID";
-    # Not authenticated yet, checkauth didn't return the session
-    {
-        local *STDOUT;
-        my $stdout;
-        open STDOUT, '>', \$stdout;
-        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1} );
-        close STDOUT;
-    }
-    is( $sessionID, undef);
-    is( $userid, undef);
+    # Not authenticated yet, the login form is displayed
+    my $template;
+    ( $userid, $cookie, $sessionID, $flags, $template ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1}, 'intranet', undef, undef, { do_not_print => 1 } );
+    is( $template->{VARS}->{loginprompt}, 1, );
 
     # Sending undefined fails obviously
     my ( $auth_status, $session ) = C4::Auth::check_cookie_auth($sessionID, {catalogue => 1} );
@@ -918,13 +859,9 @@ subtest 'checkauth & check_cookie_auth' => sub {
     # Logging out!
     $cgi->param('logout.x', 1);
     $cgi->delete( 'userid', 'password' );
-    {
-        local *STDOUT;
-        my $stdout;
-        open STDOUT, '>', \$stdout;
-        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
-        close STDOUT;
-    }
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+
     is( $sessionID, undef );
     is( $ENV{"HTTP_COOKIE"}, "CGISESSID=$first_sessionID", 'HTTP_COOKIE not unset' );
     ( $auth_status, $session) = C4::Auth::check_cookie_auth( $first_sessionID, {catalogue => 1} );
@@ -1182,8 +1119,7 @@ subtest 'checkpw() return values tests' => sub {
         $C4::Auth::ldap = 0;
 
         my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
-        my $password = 'thePassword123';
-        $patron->set_password( { password => $password, skip_validation => 1 } );
+        my $password = set_weak_password($patron);
 
         my $patron_to_delete  = $builder->build_object( { class => 'Koha::Patrons' } );
         my $unused_userid     = $patron_to_delete->userid;
@@ -1375,3 +1311,11 @@ subtest 'checkpw() return values tests' => sub {
         $schema->storage->txn_rollback;
     };
 };
+
+sub set_weak_password {
+    my ($patron) = @_;
+    my $password = 'password';
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    $patron->set_password( { password => $password } );
+    return $password;
+}

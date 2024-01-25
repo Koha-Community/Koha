@@ -792,6 +792,7 @@ sub checkauth {
     my $type            = shift;
     my $emailaddress    = shift;
     my $template_name   = shift;
+    my $params          = shift || {}; # do_not_print
     $type = 'opac' unless $type;
 
     if ( $type eq 'opac' && !C4::Context->preference("OpacPublic") ) {
@@ -1332,8 +1333,10 @@ sub checkauth {
             $uri->query_param_delete('userid');
             $uri->query_param_delete('password');
             $uri->query_param_delete('koha_login_context');
-            print $query->redirect(-uri => $uri->as_string, -cookie => $cookie, -status=>'303 See other');
-            safe_exit;
+            unless ( $params->{do_not_print} ) {
+                print $query->redirect(-uri => $uri->as_string, -cookie => $cookie, -status=>'303 See other');
+                safe_exit;
+            }
         }
 
         return ( $userid, $cookie, $sessionID, $flags );
@@ -1477,8 +1480,11 @@ sub checkauth {
     );
     $template->param(%info);
 
-    #    $cookie = $query->cookie(CGISESSID => $session->id
-    #   );
+    if ( $params->{do_not_print} ) {
+        # This must be used for testing purpose only!
+        return ( undef, undef, undef, undef, $template );
+    }
+
     print $query->header(
         {   type              => 'text/html',
             charset           => 'utf-8',
