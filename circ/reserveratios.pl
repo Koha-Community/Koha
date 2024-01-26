@@ -69,7 +69,7 @@ $enddate = $todaysdate unless $enddate;
 $startdate = $todaysdate->clone->subtract( years => 1 ) unless $startdate;
 
 if (!defined($ratio)) {
-    $ratio = 3;
+    $ratio = C4::Context->preference('HoldRatioDefault');
 }
 # Force to be a number
 $ratio += 0;
