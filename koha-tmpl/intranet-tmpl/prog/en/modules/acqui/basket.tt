@@ -94,7 +94,13 @@
                                             </div>
                                         [% ELSE %]
                                             <div class="btn-group">
-                                                <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default" id="closebutton"><i class="fa fa-times-circle"></i> Close basket</a>
+                                                <form method="post" action="/cgi-bin/koha/acqui/basket.pl">
+                                                     [% INCLUDE 'csrf-token.inc' %]
+                                                     <input type="hidden" name="op" value="cud-close">
+                                                     <input type="hidden" name="bookseller" value="[% booksellerid | html %]">
+                                                     <button type="submit" class="btn btn-default" id="close button"><i class="fa fa-times-circle"></i> Close basket</button>
+                                                     <input type="hidden" name="basketno" value="[% basketno | html %]">
+                                                </form>
                                             </div>
                                         [% END %]
 
@@ -102,6 +108,7 @@
 
                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                             <div class="btn-group"><form action="/cgi-bin/koha/acqui/edi_ean.pl" method="post">
+                                                [% INCLUDE 'csrf-token.inc' %]
                                                 <input type="hidden" name="op" value="cud-ediorder" />
                                                 <input type="hidden" name="basketno" value="[% basketno | html %]" />
                                                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
@@ -863,7 +870,8 @@
                     [% IF ( confirm_close ) %]
                         <div id="closebasket_needsconfirmation" class="dialog alert">
 
-                            <form method="get" action="/cgi-bin/koha/acqui/basket.pl">
+                            <form method="post" action="/cgi-bin/koha/acqui/basket.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <h1>Are you sure you want to close basket [% basketname | html %]?</h1>
                                 [% IF ( CAN_user_acquisition_group_manage ) %]
                                     <p>
@@ -872,7 +880,7 @@
                                     </p>
                                 [% END %]
                                 <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
-                                <input type="hidden" value="close" name="op" />
+                                <input type="hidden" value="cud-close" name="op" />
                                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                 <input type="hidden" name="confirm" value="1" />
                                 <input type="hidden" name="basketgroupname" value="[% basketgroupname | html %]" />

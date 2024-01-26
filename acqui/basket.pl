@@ -183,7 +183,7 @@ if ( $op eq 'cud-delete_confirm' ) {
     }
 
     $op = 'list';
-} elsif ($op eq 'close') {
+} elsif ($op eq 'cud-close') {
     my $confirm = $query->param('confirm') || $confirm_pref eq '2';
     if ($confirm) {
 
