@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "35687",
-    description => "Upgrade to 23.06.00.013 may fail, drop fk and recreate after adding the pk to tmp_holdsqueue",
+    description => "Upgrade to 23.06.00.013 may fail, drop FK and recreate after adding the PK to tmp_holdsqueue",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
