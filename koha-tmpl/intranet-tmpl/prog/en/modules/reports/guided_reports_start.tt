@@ -823,8 +823,9 @@
                             </p>
                         [% END %]
                         <!-- Save Anyway Form -->
-                        <form method="get" action='/cgi-bin/koha/reports/guided_reports.pl'>
+                        <form method="post" action='/cgi-bin/koha/reports/guided_reports.pl'>
                         <!--Every parameter the user issued is provided as a hidden field for recovery-->
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type='hidden' name='id' value='[% id | html %]' />
                             <input type='hidden' name='sql' value='[% sql | html %]' />
                             <input type='hidden' name='reportname' value='[% reportname | html %]' />
