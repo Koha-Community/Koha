@@ -1270,7 +1270,7 @@ subtest 'checkpw() return values tests' => sub {
 
 subtest 'AutoLocation' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -1314,6 +1314,13 @@ subtest 'AutoLocation' => sub {
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
     is( $userid,   $patron->userid );
     is( $template, undef );
+
+    my $other_library = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => '127.0.0.1' } } );
+    $patron->library->branchip('127.0.0.1')->store;
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
+    my $session = C4::Auth::get_session($sessionID);
+    is( $session->param('branch'), $patron->branchcode );
 
     $schema->storage->txn_rollback;
 
