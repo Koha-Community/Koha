@@ -67,13 +67,14 @@
 
 <div class="col-sm-4">
 <div style="border: 1px solid #DDD; padding:1em;">
-<form method="get" action="/cgi-bin/koha/acqui/neworderempty.pl">
+<form method="post" action="/cgi-bin/koha/acqui/neworderempty.pl">
+    [% INCLUDE 'csrf-token.inc' %]
 <h4>Create new record</h4>
 <p>Create a new record by importing the external (duplicate) record.</p>
 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
 <input type="hidden" name="basketno" value="[% basketno | html %]" />
 <input type="hidden" name="breedingid" value="[% breedingid | html %]" />
-<input type="hidden" name="use_external_source" value="1" />
+<input type="hidden" name="op" value="cud-use_external_source" />
 <input type="submit" class="btn btn-primary" value="Create new" />
 </form>
 </div>

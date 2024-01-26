@@ -117,6 +117,7 @@ my $import_batch_id = $input->param('import_batch_id'); # if this is filled, we 
 my $from_subscriptionid  = $input->param('from_subscriptionid');
 my $data;
 my $new = 'no';
+my $op = $input->param('op') || q{};
 
 our ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
@@ -173,7 +174,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
     my $duplicatetitle;
 #look for duplicates
     ($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord);
-    if($biblionumber && !$input->param('use_external_source')) {
+    if($biblionumber && $op ne 'cud-use_external_source') {
         #if duplicate record found and user did not decide yet, first warn user
         #and let them choose between using a new record or an existing record
         Load_Duplicate($duplicatetitle);
