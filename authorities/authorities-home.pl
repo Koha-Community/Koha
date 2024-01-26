@@ -63,13 +63,13 @@ if ( $op eq "cud-delete" ) {
 
     if ( $query->param('operator') ) {
         # query contains search params so perform search
-        $op = "cud-do_search";
+        $op = "do_search";
     }
     else {
         $op = '';
     }
 }
-if ( $op eq "cud-do_search" ) {
+if ( $op eq "do_search" ) {
     my $marclist  = $query->param('marclist')  || '';
     my $and_or    = $query->param('and_or')    || '';
     my $excluding = $query->param('excluding') || '';
