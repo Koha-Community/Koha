@@ -74,6 +74,9 @@ my $max_processes = $ENV{MAX_PROCESSES};
 $max_processes ||= C4::Context->config('background_jobs_worker')->{max_processes} if C4::Context->config('background_jobs_worker');
 $max_processes ||= 1;
 
+my $not_found_retries = {};
+my $max_retries = $ENV{MAX_RETRIES} || 10;
+
 GetOptions(
     'm|max-processes=i' => \$max_processes,
     'h|help' => \$help,
@@ -131,10 +134,29 @@ while (1) {
             next;
         }
 
-        my $job = Koha::BackgroundJobs->search( { id => $args->{job_id}, status => 'new' } )->next;
-        unless ($job) {
+        my $job = Koha::BackgroundJobs->find( $args->{job_id} );
+
+        if ( $job && $job->status ne 'new' ) {
             Koha::Logger->get( { interface => 'worker' } )
-                ->warn( sprintf "Job %s not found, or has wrong status", $args->{job_id} );
+                ->warn( sprintf "Job %s has wrong status %s", $args->{job_id}, $job->status );
+
+            # nack without requeue, we do not want to process this frame again
+            $conn->nack( { frame => $frame, requeue => 'false' } );
+            next;
+        }
+
+        unless ($job) {
+            if ( ++$not_found_retries->{$args->{job_id}} >= $max_retries ) {
+                Koha::Logger->get( { interface => 'worker' } )
+                    ->warn( sprintf "Job %s not found, no more retry", $args->{job_id} );
+
+                # nack without requeue, we do not want to process this frame again
+                $conn->nack( { frame => $frame, requeue => 'false' } );
+                next;
+            }
+
+            Koha::Logger->get( { interface => 'worker' } )
+                ->debug( sprintf "Job %s not found, will retry later", $args->{job_id} );
 
             # nack to force requeue
             $conn->nack( { frame => $frame, requeue => 'true' } );
