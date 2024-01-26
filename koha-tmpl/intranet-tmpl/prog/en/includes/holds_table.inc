@@ -176,15 +176,15 @@
                         [%- IF ( hold.item_level_hold ) -%]
                             <em>
                                 [%- IF ! hold.change_hold_type_allowed -%]
-                                <span>Only item</span>
-                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
-                                    [%- IF ( hold.barcodenumber ) -%]
-                                        [%- hold.barcodenumber | html -%]
-                                    [%- ELSE -%]
-                                        <span>No barcode</span>
-                                    [%- END -%]
-                                    <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
-                                </a>
+                                    <span>Only item</span>
+                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
+                                        [%- IF ( hold.barcodenumber ) -%]
+                                            [%- hold.barcodenumber | html -%]
+                                        [%- ELSE -%]
+                                            <span>No barcode</span>
+                                        [%- END -%]
+                                        <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
+                                    </a>
                                 [%- ELSE -%]
                                         <select name="change_hold_type_[% hold.reserve_id | html %]">
                                         <option selected="selected" value="">Only item [%- IF ( hold.barcodenumber ) -%]
