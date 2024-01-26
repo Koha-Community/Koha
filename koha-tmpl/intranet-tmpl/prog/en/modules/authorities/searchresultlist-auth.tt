@@ -19,15 +19,6 @@
 .usefor li {
     list-style-type: none;
 }
-#clear-form {
-    border:0;
-    background:none;
-    color:#004d99;
-    padding-left:1em;
-}
-#clear-form:hover {
-    color:#538200;
-}
 </style>
 </head>
 
@@ -60,7 +51,11 @@
                 [% ELSE %]
                     
                 
-            </div><p>No results found</p>[% END %]
+            </div>
+            <div class="dialog message">
+                <p>No results found</p>
+            </div>
+            [% END %]
         </div>
         [% IF ( result ) %]<div id="resultlist">
             <table>
