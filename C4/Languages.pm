@@ -227,10 +227,11 @@ sub getLanguages {
 
             # fill in the ISO6329 code
             $language_subtag_registry->{iso639_2_code} = $language_descriptions->{iso639_2_code};
-            # fill in the native description of the language, as well as the current language's translation of that if it exists
+            # fill in the current selected ui language's translation, as well as the native description of the language
             if ($native_description) {
-                $language_subtag_registry->{language_description} = $native_description;
-                $language_subtag_registry->{language_description}.=" ($language_descriptions->{description})" if $language_descriptions->{description};
+                $language_subtag_registry->{language_description} = $language_descriptions->{description}
+                    if $language_descriptions->{description};
+                $language_subtag_registry->{language_description} .= " ($native_description)";
             }
             else {
                 $language_subtag_registry->{language_description} = $language_descriptions->{description};
