@@ -35,11 +35,11 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 });
 
 my $type = $cgi->param('type');
-my $action = $cgi->param('action') || q{list};
+my $op = $cgi->param('op') || q{list};
 my $previous = $cgi->param('previous');
 
 # Deleting search history
-if ( $action eq 'cud-delete' ) {
+if ( $op eq 'cud-delete' ) {
     my $sessionid = defined $previous
         ? $cgi->cookie("CGISESSID")
         : q{};
