@@ -49,21 +49,21 @@
                     [% END %]
                     [% INCLUDE 'messages.inc' %]
                     <h1>Set library</h1>
-                    <form method="post" action="set-library.pl">
+                    <form method="post" action="/cgi-bin/koha/circ/set-library.pl" id="set-library-form">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="cud-set-library" />
                         [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
                             <fieldset class="rows">
                                 <legend>Set library</legend>
                                 <ol>
-                                    <li><label for="branch">Choose library:</label>
-                                    <select name="branch" id="branch">
+                                    <li><label for="set-library-branch">Choose library:</label>
+                                    <select name="branch" id="set-library-branch">
                                         [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
                                     </select></li>
                                 </ol>
                             </fieldset>
                         [% ELSE %]
-                            <select name="branch" id="branch" style="visibility:hidden;">
+                            <select name="branch" id="set-library-branch" style="visibility:hidden;">
                                 [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
                             </select>
                         [% END %]
@@ -72,8 +72,8 @@
                         <fieldset class="rows">
                             <legend>Set desk</legend>
                             <ol>
-                                <li><label for="desk_id">Choose desk:</label>
-                                <select name="desk_id" id="desk_id">
+                                <li><label for="set-library-desk_id">Choose desk:</label>
+                                <select name="desk_id" id="set-library-desk_id">
                                     [% PROCESS options_for_desks desks => Desks.all(), selected => desk_id  %]
                                 </select></li>
                             </ol>
@@ -84,9 +84,9 @@
                             <legend>Set cash register</legend>
                             <ol>
                                 <li>
-                                    <label for="register_id">Choose cash register:</label>
-                                    <select name="register_id" id="register_id">
-                                        <option id="noregister" selected="selected" value="">-- None --</option>
+                                    <label for="set-library-register_id">Choose cash register:</label>
+                                    <select name="register_id" id="set-library-register_id">
+                                        <option id="set-library-noregister" selected="selected" value="">-- None --</option>
                                         [% PROCESS options_for_registers registers => Registers.all() %]
                                     </select>
                                 </li>
@@ -114,9 +114,5 @@
         </main>
     </div> <!-- /.col-sm-12 -->
 </div> <!-- /.row -->
-[% MACRO jsinclude BLOCK %]
-  [% Asset.js("js/desk_selection.js") | $raw %]
-  [% Asset.js("js/register_selection.js") | $raw %]
-[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

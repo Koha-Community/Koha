@@ -32,7 +32,7 @@
                 <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]">[% r.name | html %]</option>
             [% END%]
         [% ELSE %]
-            <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]" disabled style="display: none">[% r.name | html %]</option>
+            <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]" disabled="disabled" style="display: none">[% r.name | html %]</option>
         [% END %]
     [% END %]
 [% END %]

@@ -3,6 +3,7 @@
 [% USE Desks %]
 [% USE Registers %]
 [% USE Koha %]
+[% PROCESS 'i18n.inc' %]
 [% IF Koha.Preference( 'CookieConsent' ) %]
     [% USE JSConsents %]
 [% END %]
@@ -85,7 +86,7 @@
 
         <ul id="user-menu" class="nav navbar-nav navbar-right">
             [% IF ( loggedinusername ) %]
-            <li class="dropdown">
+            <li class="dropdown" id="logged-in-dropdown">
                 <a href="#" id="logged-in-menu" role="button" class="dropdown-toggle" data-toggle="dropdown">
                     <span id="logged-in-info-brief">
                         <i class="fa fa-user"></i>
@@ -163,39 +164,61 @@
                         </li>
                     [% END %]
 
-                    [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
-                    <li role="separator" class="loggedin-menu-label divider"></li>
-                    <li>
-                        [% IF Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') %]
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library, desk and register</a>
-                        [% ELSIF Koha.Preference('UseCirculationDesks') %]
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library and desk</a>
-                        [% ELSIF Koha.Preference('UseCashRegisters') %]
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library and cash register</a>
-                        [% ELSE %]
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
-                        [% END %]
-                    </li>
+                    [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary || Koha.Preference('UseCirculationDesks') || Koha.Preference('UseCashRegisters') ) %]
+                        <li role="separator" class="loggedin-menu-label divider"></li>
+                        <li>
+                            <div id="set_library_controls">
+                                <div>
+                                    <a class="btn btn-link" href="/cgi-bin/koha/circ/set-library.pl">
+                                        [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
+                                            [% IF ( Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') ) %]
+                                                [% t("Set library, desk, and register") | html %]
+                                            [% ELSIF ( Koha.Preference('UseCirculationDesks') ) %]
+                                                [% t("Set library and desk") | html %]
+                                            [% ELSIF ( Koha.Preference('UseCashRegisters') ) %]
+                                                [% t("Set library and cash register") | html %]
+                                            [% ELSE %]
+                                                [% t("Set library") | html %]
+                                            [% END %]
+                                        [% ELSIF ( Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') ) %]
+                                            [% t("Set desk and cash register") | html %]
+                                        [% ELSIF ( Koha.Preference('UseCashRegisters') ) %]
+                                            [% t("Set cash register") | html %]
+                                        [% ELSIF ( Koha.Preference('UseCirculationDesks') ) %]
+                                            [% t("Set desk") | html %]
+                                        [% END %]
+                                    </a>
+                                </div>
+                                [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary || Koha.Preference('UseCirculationDesks') || Koha.Preference('UseCashRegisters') ) %]
+                                    <div>
+                                        <a id="branch_select_cog" class="btn btn-link" href="#"><i class="fa fa-cog" aria-label="Toggle panel for login settings"></i></a>
+                                    </div>
+                                [% END %]
+                            </div>
+                        </li>
+
+                        <li id="setlibrary_panel" style="display:none"></li>
+                        <li>
                     [% ELSIF Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') %]
-                    <li role="separator" class="loggedin-menu-label divider"></li>
-                    <li>
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set desk and cash register</a>
-                    </li>
+                        <li role="separator" class="loggedin-menu-label divider"></li>
+                        <li>
+                            <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set desk and cash register</a>
+                        </li>
                     [% ELSIF Koha.Preference('UseCirculationDesks') %]
-                    <li role="separator" class="loggedin-menu-label divider"></li>
-                    <li>
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set desk</a>
-                    </li>
+                        <li role="separator" class="loggedin-menu-label divider"></li>
+                        <li>
+                            <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set desk</a>
+                        </li>
                     [% ELSIF Koha.Preference('UseCashRegisters') %]
-                    <li role="separator" class="loggedin-menu-label divider"></li>
-                    <li>
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set cash register</a>
-                    </li>
+                        <li role="separator" class="loggedin-menu-label divider"></li>
+                        <li>
+                            <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set cash register</a>
+                        </li>
                     [% END %]
                     [% IF EnableSearchHistory %]
-                    <li>
-                        <a class="toplinks" href="/cgi-bin/koha/catalogue/search-history.pl">Search history</a>
-                    </li>
+                        <li>
+                            <a class="toplinks" href="/cgi-bin/koha/catalogue/search-history.pl">Search history</a>
+                        </li>
                     [% END %]
 
                     [% IF loggedinusernumber %]

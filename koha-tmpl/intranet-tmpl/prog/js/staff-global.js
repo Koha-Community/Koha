@@ -284,6 +284,7 @@ $(document).ready(function () {
     $("#bookbag_form a[href*='detail.pl?']").click(function () {
         resetSearchContext();
     });
+
     // add back to top button on each staff page
     $("body").append('<button id="backtotop" class="btn btn-default" aria-label="' + __("Back to top") + '"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>');
     $("#backtotop").hide();
@@ -298,6 +299,79 @@ $(document).ready(function () {
         e.preventDefault();
         $("html,body").animate({scrollTop: 0}, "slow");
     });
+
+    $("body").on("change", "#set-library-branch", function () {
+        var selectedBranch = $("#set-library-branch").val();
+        $("#set-library-desk_id")
+            .children()
+            .each(function () {
+                console.log( $(this) );
+                if ($(this).attr("id") === "nodesk") {
+                    // set no desk by default, should be first element
+                    $(this).prop("selected", true);
+                    $(this).prop("disabled", false);
+                    $(this).show();
+                } else if ( $(this).hasClass(selectedBranch) ) {
+                    $("#nodesk").prop("disabled", true); // we have desk, no need for nodesk option
+                    $("#nodesk").hide();
+                    $(this).prop("disabled", false);
+                    $(this).show();
+                    if ( selectedBranch == $(".logged-in-branch-code").html() ) {
+                        $("#set-library-desk_id").val( $(".logged-in-desk-id").html() );
+                    } else {
+                        $("#nodesk").hide();
+                        $("#set-library-desk_id").val(
+                            $("#set-library-desk_id option:not([disabled]):first").val()
+                        );
+                    }
+                } else {
+                    $(this).prop("disabled", true);
+                    $(this).hide();
+                }
+            });
+
+        $("#set-library-register_id").children().each(function() {
+            // default to no-register
+            if ($(this).is("#noregister")) {
+                $(this).prop("selected", true)
+            } else if ($(this).hasClass(selectedBranch)) {
+                // display branch registers
+                $(this).prop("disabled", false);
+                $(this).show();
+                // default to branch default if there is one
+                if ($(this).hasClass("default")) {
+                    $(this).prop("selected", true)
+                }
+            } else {
+                // hide non-branch registers
+                $(this).hide();
+                $(this).prop("disabled", true);
+            }
+        });
+    });
+
+    $("body").on("click", "#setlibrary_panel #cancel_set_library", function(e){
+        e.preventDefault();
+        $("#setlibrary_panel").removeClass("setlibrary_panel_open").html("").hide();
+    });
+
+    $("#branch_select_cog").on("click", function(e){
+        e.stopPropagation();
+        let setlibrary_panel = $("#setlibrary_panel");
+        if( setlibrary_panel.hasClass("setlibrary_panel_open") ){
+            setlibrary_panel.removeClass("setlibrary_panel_open").html("").hide();
+        } else {
+            setlibrary_panel.addClass("setlibrary_panel_open").show();
+            $("#setlibrary_panel").load( "/cgi-bin/koha/circ/set-library.pl #set-library-form", function(){
+                // setLibraryDeskOptions();
+            });
+        }
+    });
+
+    $("#logged-in-dropdown").on('hidden.bs.dropdown', function () {
+        $("#setlibrary_panel").removeClass("setlibrary_panel_open").html("").hide();
+    });
+
 });
 
 function removeLastBorrower() {

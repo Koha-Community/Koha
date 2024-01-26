@@ -4367,7 +4367,7 @@ input.renew {
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
+        background-color: #CCC;
         -webkit-transition: .4s;
         transition: .4s;
         border-radius: 34px;
@@ -4743,6 +4743,61 @@ div .suggestion_note {
 
     .chocolat-bottom {
         background: rgba( 0, 0, 0, .7 );
+    }
+}
+
+#set_library_controls {
+    align-items: center;
+    display: flex;
+
+    div:first-child {
+        flex-grow: 1;
+    }
+
+    a.btn {
+        border-radius: 0;
+        font-size: 13px;
+    }
+}
+
+#setlibrary_panel {
+    .setlibrary_panel_open {
+        border-bottom:1px solid #CCC;
+        border-top:1px solid #CCC;
+    }
+
+    fieldset {
+        background-color: #554B4D;
+        margin: 0;
+
+        &.rows {
+            float: none;
+            padding: 0;
+            width: auto;
+        }
+
+        &.action {
+            padding: .5em 0 1em 1em;
+        }
+    }
+
+    legend {
+        display: none;
+    }
+
+    label {
+        color: #FFF;
+        display: block;
+        float: none;
+        font-weight: normal;
+        margin: 0;
+        padding-bottom: .2em;
+        text-align: left;
+        width: unset;
+    }
+
+    select {
+        width: 80%;
     }
 }
 
