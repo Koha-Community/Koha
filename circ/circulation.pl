@@ -63,6 +63,54 @@ use List::MoreUtils qw( uniq );
 #
 my $query = CGI->new;
 
+my $borrowernumber = $query->param('borrowernumber');
+my $barcodes = [];
+my $barcode =  $query->param('barcode');
+
+
+# Barcode given by user could be '0'
+if ( $barcode || ( defined($barcode) && $barcode eq '0' ) ) {
+    $barcodes = [ $barcode ];
+} else {
+    my $filefh = $query->upload('uploadfile');
+    if ( $filefh ) {
+        while ( my $content = <$filefh> ) {
+            $content =~ s/[\r\n]*$//g;
+            push @$barcodes, $content if $content;
+        }
+    } elsif ( my $list = $query->param('barcodelist') ) {
+        push @$barcodes, split( /\s\n/, $list );
+        $barcodes = [ map { $_ =~ /^\s*$/ ? () : $_ } @$barcodes ];
+    } else {
+        @$barcodes = $query->multi_param('barcodes');
+    }
+}
+$barcodes = [ uniq @$barcodes ];
+
+my $template_name = q|circ/circulation.tt|;
+my $patron = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : undef;
+my $batch = $query->param('batch');
+my $batch_allowed = 0;
+if ( $batch && C4::Context->preference('BatchCheckouts') ) {
+    $template_name = q|circ/circulation_batch_checkouts.tt|;
+    my @batch_category_codes = split ',', C4::Context->preference('BatchCheckoutsValidCategories');
+    my $categorycode = $patron->categorycode;
+    if ( $categorycode && grep { $_ eq $categorycode } @batch_category_codes ) {
+        $batch_allowed = 1;
+    } else {
+        $barcodes = [];
+    }
+}
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
+    {
+        template_name   => $template_name,
+        query           => $query,
+        type            => "intranet",
+        flagsrequired   => { circulate => 'circulate_remaining_permissions' },
+    }
+);
+
 my $override_high_holds     = $query->param('override_high_holds');
 my $override_high_holds_tmp = $query->param('override_high_holds_tmp');
 
@@ -73,11 +121,8 @@ my $userenv = C4::Context->userenv;
 my $branch  = $userenv->{'branch'} // '';
 my $desk_id = $userenv->{"desk_id"} || '';
 
-my $barcodes = [];
-my $barcode =  $query->param('barcode');
 my $findborrower;
 my $autoswitched;
-my $borrowernumber = $query->param('borrowernumber');
 
 if (C4::Context->preference("AutoSwitchPatron") && $barcode) {
     my $new_barcode = $barcode;
@@ -104,49 +149,7 @@ if ( $query->param('confirm_hold') ) {
     ModReserveAffect( $hold_itemnumber, $hold_borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
 }
 
-# Barcode given by user could be '0'
-if ( $barcode || ( defined($barcode) && $barcode eq '0' ) ) {
-    $barcodes = [ $barcode ];
-} else {
-    my $filefh = $query->upload('uploadfile');
-    if ( $filefh ) {
-        while ( my $content = <$filefh> ) {
-            $content =~ s/[\r\n]*$//g;
-            push @$barcodes, $content if $content;
-        }
-    } elsif ( my $list = $query->param('barcodelist') ) {
-        push @$barcodes, split( /\s\n/, $list );
-        $barcodes = [ map { $_ =~ /^\s*$/ ? () : $_ } @$barcodes ];
-    } else {
-        @$barcodes = $query->multi_param('barcodes');
-    }
-}
 
-$barcodes = [ uniq @$barcodes ];
-
-my $template_name = q|circ/circulation.tt|;
-my $patron = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : undef;
-my $batch = $query->param('batch');
-my $batch_allowed = 0;
-if ( $batch && C4::Context->preference('BatchCheckouts') ) {
-    $template_name = q|circ/circulation_batch_checkouts.tt|;
-    my @batch_category_codes = split ',', C4::Context->preference('BatchCheckoutsValidCategories');
-    my $categorycode = $patron->categorycode;
-    if ( $categorycode && grep { $_ eq $categorycode } @batch_category_codes ) {
-        $batch_allowed = 1;
-    } else {
-        $barcodes = [];
-    }
-}
-
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
-    {
-        template_name   => $template_name,
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { circulate => 'circulate_remaining_permissions' },
-    }
-);
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 
 my $force_allow_issue = $query->param('forceallow') || 0;
