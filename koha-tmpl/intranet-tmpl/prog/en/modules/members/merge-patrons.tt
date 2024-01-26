@@ -102,7 +102,7 @@
             [% INCLUDE 'messages.inc' %]
             <h1>Merge patron records</h1>
 
-            [% IF action == 'show' %]
+            [% IF op == 'show' %]
                 [% IF patrons.count > 1 %]
                     [% IF ( patrons.count == 2 ) %]
                         <div id="toolbar" class="btn-toolbar">
@@ -116,7 +116,8 @@
 
                     <p>Select patron to keep. Data from the other patrons will be transferred to this patron record and the remaining patron records will be deleted.</p>
 
-                    <form method="get" type="post" action="merge-patrons.pl" id="patron-merge-form">
+                    <form method="post" action="merge-patrons.pl" id="patron-merge-form">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <table id="patron-merge-table" class="datatable">
                             <thead>
                                 <tr>
@@ -157,7 +158,7 @@
                             [% FOREACH p IN patrons %]
                                 <input type="hidden" name="id" value="[% p.id | html %]" />
                             [% END %]
-                            <input type="hidden" name="action" value="merge" />
+                            <input type="hidden" name="op" value="cud-merge" />
                             <input type="submit" id="merge-patrons" class="btn btn-primary" value="Merge patrons" />
                             [% PROCESS 'members-patron-selections.inc' id="patron-merge-form" %]
                         </fieldset>
@@ -166,7 +167,7 @@
                         <div class="dialog alert">Error: Two or more patrons need to be selected for merging</div>
                     [% END %]
                 </form>
-            [% ELSIF action == 'merge' %]
+            [% ELSIF op == 'cud-merge' %]
                 <h4>Results</h4>
                 [% IF error %]
                     [% IF error == 'INVALID_KEEPER' %]
