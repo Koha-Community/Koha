@@ -179,6 +179,14 @@
             </ol>
         </fieldset>
         [% END %]
-        <fieldset class="action"> <input type="submit" value="Search" class="submit" id="search" /> <input type="reset" id="clear-form" value="Clear form"> <a id="cancel" class="cancel close" href="#">Cancel</a>
-        </fieldset>
+
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" id="search" value="Search" />
+                    <input type="reset" id="clear-form" class="btn btn-default" value="Clear form" />
+                    <button type="button" class="btn btn-default close_window">Close window</button>
+                </fieldset>
+            </div>
+        </nav>
 </form>
