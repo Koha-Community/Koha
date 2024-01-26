@@ -92,7 +92,7 @@ if ( my $anonymous_patron = C4::Context->preference("AnonymousPatron") ) {
     }
 }
 
-my $op = $input->param('op') || 'cud-delete_confirm';
+my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
 my $is_guarantor = $patron->guarantee_relationships->count;
 my $countholds = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE borrowernumber=?", undef, $member);
@@ -111,9 +111,9 @@ $template->param(
     ItemsOnHold   => $countholds,
 );
 
-if ( $op eq 'cud-delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
+if ( $op eq 'delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
     $template->param(
-        op         => 'cud-delete_confirm',
+        op         => 'delete_confirm',
     );
 
 } elsif ( $op eq 'cud-delete_confirmed' ) {

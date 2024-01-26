@@ -71,10 +71,10 @@
             [% END %]
             <h1>Are you sure you want to delete the patron [% patron.firstname | html %] [% patron.surname | html %]?</h1>
             <p>This cannot be undone.</p>
-            <form method="get" action="/cgi-bin/koha/members/deletemem.pl">
+            <form method="post" action="/cgi-bin/koha/members/deletemem.pl">
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="member" value="[% patron.borrowernumber | html %]"/>
-                <input type="hidden" name="op" value="delete_confirmed" />
+                <input type="hidden" name="op" value="cud-delete_confirmed" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>
             <form method="get" action="/cgi-bin/koha/members/moremember.pl">
