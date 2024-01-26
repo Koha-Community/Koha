@@ -110,7 +110,7 @@ my $countitems = 0;
 my @serialsid = $query->multi_param('serialid');
 my $subscriptionid = $subscriptionid[0];
 
-if($op eq 'cud-delete_confirm'){
+if($op eq 'delete_confirm'){
     foreach my $serialid (@serialsid){
         $countitems += Koha::Serial::Items->search({serialid => $serialid})->count();
     }
@@ -205,7 +205,7 @@ $template->param(
           callnumber	       => $callnumber,
           uc(C4::Context->preference("marcflavour")) => 1,
           serialsadditems   => $subscriptiondescs->[0]{'serialsadditems'},
-          delete => ($op eq 'cud-delete_confirm'),
+          delete => ($op eq 'delete_confirm'),
           subscriptionid => $subscriptionid,
           countitems => $countitems,
           serialnumber => scalar @serialsid,

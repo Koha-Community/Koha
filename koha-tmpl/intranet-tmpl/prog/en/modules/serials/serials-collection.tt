@@ -50,14 +50,15 @@
                 [% IF ( delete ) %]
                     <div class="dialog alert">
                         <h3>You are about to delete [% serialnumber | html %] serial(s). Do you want to continue?</h3>
-                        <form method="get" action="/cgi-bin/koha/serials/serials-collection.pl">
+                        <form method="post" action="/cgi-bin/koha/serials/serials-collection.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
                             [% IF countitems > 0 %]
                                 <h5>Number of items available: [% countitems | html %]</h5>
                                 <p>
                                 <label>Delete associated items? <input type="checkbox" name="delitems" value="Yes" />Yes</label>
                                 </p>
                             [% END %]
-                            <input type="hidden" name="op" value="delete_confirmed" />
+                            <input type="hidden" name="op" value="cud-delete_confirmed" />
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
                             [% FOREACH serialid IN serialsid %]
