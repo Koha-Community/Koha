@@ -50,9 +50,9 @@
 
             [% IF ( selected_count ) %]
                 <div class="dialog message">
-                    [% IF ( action == 'seen' ) %]
+                    [% IF ( op == 'cud-seen' ) %]
                         <span>[% selected_count | html %] note(s) marked as seen.</span>
-                    [% ELSIF ( action == 'notseen' ) %]
+                    [% ELSIF ( op == 'cud-notseen' ) %]
                         <span>[% selected_count | html %] note(s) marked as not seen.</span>
                     [% ELSE %]
                         <span>Failed to change the status of [% selected_count | html %] item(s).</span>
@@ -64,8 +64,8 @@
                 <form id="mark_selected" method="post" action="/cgi-bin/koha/circ/checkout-notes.pl">
                     [% INCLUDE 'csrf-token.inc' %]
                     <div id="toolbar" class="btn-toolbar">
-                        <button type="submit" class="btn btn-default markseen" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa-solid fa-eye"></i> Mark seen</button>
-                        <button type="submit" class="btn btn-default markseen" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa-solid fa-eye-slash"></i> Mark not seen</button>
+                        <button type="submit" class="btn btn-default markseen" name="op" value="cud-seen" disabled="disabled"><i class="fa-solid fa-eye"></i> Mark seen</button>
+                        <button type="submit" class="btn btn-default markseen" name="op" value="cud-notseen" disabled="disabled"><i class="fa-solid fa-eye-slash"></i> Mark not seen</button>
                     </div>
 
                     <div class="btn-toolbar selections-toolbar">
@@ -181,10 +181,10 @@
 
             $("#notestable").on("click", "button.seen, button.notseen", function(event){
                 event.preventDefault(); // prevent form submission
-                var $action = $(this).attr("name");
+                var $op = $(this).attr("name");
                 var $issue_id = $(this).data('issue_id');
                 var ajaxData = {
-                    'action': $action,
+                    'op': $op,
                     'issue_id': $issue_id,
                 };
 
@@ -197,7 +197,7 @@
 
                 .done(function(data){
                     if (data.status == 'success'){
-                        if ( $action == 'notseen' ){
+                        if ( $op == 'notseen' ){
                             $("#status_" + $issue_id).text(_("Not seen"));
                             $(event.target).parent().siblings(".seen1").removeClass("seen1").addClass("seen0");
                             $(event.target).siblings(".seen").prop("disabled", false);

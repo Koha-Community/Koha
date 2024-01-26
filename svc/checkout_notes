@@ -44,14 +44,14 @@ if ( $auth_status ne "ok" ) {
 if ($is_ajax) {
     my $issue_id = $query->param('issue_id');
     my $issue = Koha::Checkouts->find($issue_id);
-    my $action = $query->param('action');
+    my $op = $query->param('op');
     my $status = 'success';
-    if ($action eq 'seen'){
+    if ($op eq 'seen'){
         $issue->set({ noteseen => 1 })->store;
         if ( $issue->noteseen != 1 ) {
             $status = 'failure';
         }
-    } elsif ($action eq 'notseen'){
+    } elsif ($op eq 'notseen'){
         $issue->set({ noteseen => 0 })->store;
         if ( $issue->noteseen != 0 ) {
             $status = 'failure';

@@ -36,20 +36,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $action;
-foreach (qw( seen notseen )) {
-    $action = $_ if ( $query->param("mark_selected-$_") );
-}
-$action ||= 'none';
+my $op = $query->param("op") || 'none';
 
 my @issue_ids = $query->multi_param('issue_ids');
 
-if ( $action eq 'seen' ) {
+if ( $op eq 'cud-seen' ) {
     foreach my $issue_id ( @issue_ids ) {
         my $issue = Koha::Checkouts->find($issue_id);
         $issue->set({ noteseen => 1 })->store;
                                 }
-} elsif ( $action eq 'notseen' ) {
+} elsif ( $op eq 'cud-notseen' ) {
     foreach my $issue_id ( @issue_ids ) {
         my $issue = Koha::Checkouts->find($issue_id);
         $issue->set({ noteseen => 0 })->store;
@@ -59,7 +55,7 @@ if ( $action eq 'seen' ) {
 my $notes = Koha::Checkouts->search({ 'me.note' => { '!=', undef } }, { prefetch => [ 'patron', { item => 'biblionumber' } ] });
 $template->param(
     selected_count => scalar(@issue_ids),
-    action         => $action,
+    op             => $op,
     notes          => $notes,
 );
 
