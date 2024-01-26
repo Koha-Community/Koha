@@ -17,9 +17,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $action = $input->param('action') // 'list';
+my $op = $input->param('action') // 'list';
 
-if ( $action eq 'cud-save' ) {
+if ( $op eq 'cud-save' ) {
     my $module = $input->param('module');
     my @columnids = $input->multi_param("columnid");
     my @columns;
@@ -68,10 +68,10 @@ if ( $action eq 'cud-save' ) {
         }
     }
 
-    $action = 'list';
+    $op = 'list';
 }
 
-if ( $action eq 'list' ) {
+if ( $op eq 'list' ) {
     my $modules = C4::Utils::DataTables::TablesSettings::get_modules;
     $template->param(
         panel   => scalar $input->param('module'),
