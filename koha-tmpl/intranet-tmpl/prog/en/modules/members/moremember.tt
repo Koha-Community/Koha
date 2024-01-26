@@ -761,7 +761,6 @@
         var SuspendHoldsIntranet = [% ( Koha.Preference('SuspendHoldsIntranet') ) ? 1 : 0 | html %];
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
-    [% Asset.js("js/checkouts.js") | $raw %]
     [% IF Koha.Preference('ClaimReturnedLostValue') %]
         [% Asset.js("js/resolve_claim_modal.js") | $raw %]
     [% END %]
@@ -775,6 +774,7 @@
     [% Asset.js("js/recalls.js") | $raw %]
     <script>
         const LoadCheckoutsTableDelay = 0;
+        const AlwaysLoadCheckoutsTable = [% Koha.Preference('AlwaysLoadCheckoutsTable') | html %];
 
         table_settings_issues_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
         table_settings_relatives_issues_table = [% TablesSettings.GetTableSettings( 'members', 'moremember', 'relatives-issues-table', 'json' ) | $raw %]
@@ -834,6 +834,7 @@
             });
         });
     </script>
+    [% Asset.js("js/checkouts.js") | $raw %]
     [% Asset.js("js/tables/bookings.js") | $raw %]
 [% END %]
 

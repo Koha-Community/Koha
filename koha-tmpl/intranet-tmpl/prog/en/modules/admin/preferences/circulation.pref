@@ -177,10 +177,16 @@ Circulation:
             - circulation desks.
     Checkout policy:
         -
+            - pref: AlwaysLoadCheckoutsTable
+              choices:
+                  1: "Do"
+                  0: "Don't"
+            - always load the checksouts table.
+        -
             - Delay the automatic loading of the checkouts table on the checkouts page by
             - pref: LoadCheckoutsTableDelay
               class: integer
-            - seconds when "Always show checkouts automatically" is enabled.
+            - seconds when "Always show checkouts automatically" or <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AlwaysLoadCheckoutsTable">AlwaysLoadCheckoutsTable</a> are enabled.
         -
             - pref: OnSiteCheckoutAutoCheck
               choices:

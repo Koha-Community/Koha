@@ -485,12 +485,41 @@ function LoadIssuesTable() {
 var loadIssuesTableDelayTimeoutId;
 var barcodefield = $("#barcode");
 
-$('#issues-table-load-now-button').click(function(){
-    if ( loadIssuesTableDelayTimeoutId ) clearTimeout(loadIssuesTableDelayTimeoutId);
-    LoadIssuesTable();
-    barcodefield.focus();
-    return false;
-});
+if ( AlwaysLoadCheckoutsTable ) {
+    if ( LoadCheckoutsTableDelay ) {
+        setTimeout( function(){ LoadIssuesTable() }, LoadCheckoutsTableDelay * 1000);
+    } else {
+        LoadIssuesTable();
+    }
+
+} else {
+    $('#issues-table-load-immediately').change(function(){
+        if ( this.checked && typeof issuesTable === 'undefined') {
+            $('#issues-table-load-now-button').click();
+        }
+        barcodefield.focus();
+    });
+    $('#issues-table-load-now-button').click(function(){
+        if ( loadIssuesTableDelayTimeoutId ) clearTimeout(loadIssuesTableDelayTimeoutId);
+        LoadIssuesTable();
+        barcodefield.focus();
+        return false;
+    });
+
+    if ( Cookies.get("issues-table-load-immediately-" + script) == "true" ) {
+        if ( LoadCheckoutsTableDelay ) {
+            setTimeout( function(){ LoadIssuesTable() }, LoadCheckoutsTableDelay * 1000);
+        } else {
+            LoadIssuesTable();
+        }
+        $('#issues-table-load-immediately').prop('checked', true);
+    } else {
+        $('#issues-table-load-delay').hide();
+    }
+    $('#issues-table-load-immediately').on( "change", function(){
+        Cookies.set("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365, sameSite: 'Lax'  });
+    });
+}
 
 $(document).ready(function() {
 
@@ -784,27 +813,6 @@ $(document).ready(function() {
     });
 
     var ymd = flatpickr.formatDate(new Date(), "Y-m-d");
-
-    $('#issues-table-load-immediately').change(function(){
-        if ( this.checked && typeof issuesTable === 'undefined') {
-            $('#issues-table-load-now-button').click();
-        }
-        barcodefield.focus();
-    });
-
-    if ( Cookies.get("issues-table-load-immediately-" + script) == "true" ) {
-        if ( LoadCheckoutsTableDelay ) {
-            loadIssuesTableDelayTimeoutId = setTimeout( function(){ LoadIssuesTable() }, LoadCheckoutsTableDelay * 1000);
-        } else {
-            LoadIssuesTable();
-        }
-        $('#issues-table-load-immediately').prop('checked', true);
-    } else {
-        $('#issues-table-load-delay').hide();
-    }
-    $('#issues-table-load-immediately').on( "change", function(){
-        Cookies.set("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365, sameSite: 'Lax'  });
-    });
 
     // Don't load relatives' issues table unless it is clicked on
     var relativesIssuesTable;
