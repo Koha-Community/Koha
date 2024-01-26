@@ -103,7 +103,8 @@
     </div> <!-- /.row -->
 
     <div id="add-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
-        <form method="get" id="add-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
+        <form method="post" id="add-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -112,7 +113,7 @@
                     <div class="modal-body">
                         <fieldset class="rows">
                             <input type="hidden" id="add-group-modal-parent-id" name="parent_id" value="" />
-                            <input type="hidden" id="add-group-modal-action" name="action" value="add">
+                            <input type="hidden" id="add-group-modal-action" name="op" value="cud-add">
                             <ol>
                                 <li>
                                     <label for="add-group-modal-title">Title: </label>
@@ -178,7 +179,8 @@
     </div>
 
     <div id="edit-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="edit-group-modal-label" aria-hidden="true">
-        <form method="get" id="edit-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
+        <form method="post" id="edit-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -186,7 +188,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" id="edit-group-modal-id" name="id" value="" />
-                        <input type="hidden" id="edit-group-modal-action" name="action" value="edit" />
+                        <input type="hidden" id="edit-group-modal-action" name="op" value="cud-edit" />
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -254,10 +256,11 @@
     </div>
 
     <div id="delete-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete-group-modal-label" aria-hidden="true">
-        <form method="get" action="/cgi-bin/koha/admin/library_groups.pl">
+        <form method="post" action="/cgi-bin/koha/admin/library_groups.pl">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <input id="delete-group-modal-action" type="hidden" name="action" value="delete" />
+                    <input id="delete-group-modal-action" type="hidden" name="op" value="cud-delete" />
                     <input id="delete-group-modal-id" type="hidden" name="id" value="" />
                     <div class="modal-header">
                         <h3 id="delete-group-modal-label">Delete group</h3>
@@ -275,10 +278,11 @@
     </div>
 
     <div id="remove-library-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="remove-library-modal-label" aria-hidden="true">
-        <form method="get" action="/cgi-bin/koha/admin/library_groups.pl">
+        <form method="post" action="/cgi-bin/koha/admin/library_groups.pl">
+            [% INCLUDE 'csrf-token.inc' %]
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <input id="remove-library-modal-action" type="hidden" name="action" value="delete" />
+                    <input id="remove-library-modal-action" type="hidden" name="op" value="cud-delete" />
                     <input id="remove-library-modal-id" type="hidden" name="id" value="" />
                     <div class="modal-header">
                         <h3 id="remove-library-modal-label">Remove library from group</h3>
@@ -482,10 +486,21 @@
 
                 <div class="btn-group">
                     <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
+                    [% FOREACH library IN group.libraries_not_direct_children %]
+                        [% SET form_id = "add-library-" _ library.id _ "-" _ group.id %]
+                        <form id="[% form_id | uri %]" class="add-library" method="post" action="/cgi-bin/koha/admin/library_groups.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-add" />
+                            <input type="hidden" name="parent_id" value="[% group.id | uri %]" />
+                            <input type="hidden" name="branchcode" value="[% library.id | uri %]" />
+                        </form>
+                    [% END %]
+
                     <ul class="dropdown-menu">
                         [% FOREACH library IN group.libraries_not_direct_children %]
+                            [% SET form_id = "add-library-" _ library.id _ "-" _ group.id %]
                             <li>
-                                <a class="add-library" id="add-library[% library.id | html %]-[% group.id | html %]" href="/cgi-bin/koha/admin/library_groups.pl?action=add&parent_id=[% group.id | html %]&branchcode=[% library.id | html %]">
+                                <a href="#" class="add-library" onclick="$('#[% form_id | uri %]').submit(); return false;">
                                     [% library.branchname | html %]
                                 </a>
                            </li>
