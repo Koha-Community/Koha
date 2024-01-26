@@ -4,11 +4,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use Getopt::Long;
 use MARC::Record;
 use Test::MockModule;
+use Test::Warn;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -514,6 +515,43 @@ subtest 'Test how merge handles controlled indicators' => sub {
     merge({ mergefrom => $id, MARCfrom => $authmarc, mergeto => $id, MARCto => $authmarc, biblionumbers => [ $biblionumber ] });
     $biblio2 = Koha::Biblios->find($biblionumber)->metadata->record;
     is( $biblio2->subfield('609', '2'), undef, 'No subfield $2 left' );
+};
+
+subtest "Test bibs not auto linked when merging" => sub {
+    plan tests => 1;
+
+    my $authmarc = MARC::Record->new;
+    $authmarc->append_fields( MARC::Field->new( '109', '', '', 'a' => 'aa', b => 'bb' ) );
+    my $oldauthmarc = MARC::Record->new;
+    $oldauthmarc->append_fields( MARC::Field->new( '112', '', '', c => 'cc' ) );
+    my $new_id = AddAuthority( $authmarc,    undef, $authtype1 );
+    my $old_id = AddAuthority( $oldauthmarc, undef, $authtype1 );
+    my $biblio = MARC::Record->new;
+    $biblio->append_fields(
+        MARC::Field->new( '109', '', '', a => 'a1', 9 => $old_id ),
+        MARC::Field->new( '612', '', '', a => 'a2', c => 'cc', 9 => $old_id ),
+    );
+    my ($biblionumber) = C4::Biblio::AddBiblio( $biblio, '' );
+
+    my $biblio_module = Test::MockModule->new('C4::AuthoritiesMarc');
+    $biblio_module->mock(
+        'ModBiblio',
+        sub {
+            my ( undef, undef, undef, $params ) = @_;
+            warn "Auto link disabled" if $params->{disable_autolink};
+        }
+    );
+
+    warnings_are {
+        merge(
+            {
+                mergefrom     => $old_id, MARCfrom => $oldauthmarc, mergeto => $new_id, MARCto => $authmarc,
+                biblionumbers => [$biblionumber]
+            }
+        );
+    }
+    ["Auto link disabled"], "Auto link disabled when merging authorities";
+
 };
 
 sub set_mocks {
