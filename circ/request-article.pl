@@ -42,7 +42,7 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-my $action            = $cgi->param('action') || q{};
+my $op                = $cgi->param('op') || q{};
 my $biblionumber      = $cgi->param('biblionumber');
 my $patron_cardnumber = $cgi->param('patron_cardnumber');
 my $patron_id         = $cgi->param('borrowernumber');
@@ -56,7 +56,7 @@ my $patron =
   : $patron_cardnumber ? Koha::Patrons->find( { cardnumber => $patron_cardnumber } )
   : undef;
 
-if ( $action eq 'create' ) {
+if ( $op eq 'cud-create' ) {
     my $borrowernumber = $cgi->param('borrowernumber');
     my $branchcode     = $cgi->param('branchcode');
 
