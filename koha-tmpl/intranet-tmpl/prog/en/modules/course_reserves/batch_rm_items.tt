@@ -35,7 +35,7 @@
         [% IF action == 'display_form' %]
             <form method="post" action="/cgi-bin/koha/course_reserves/batch_rm_items.pl">
                 [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="action" value="batch_rm" />
+                <input type="hidden" name="op" value="cud-batch_rm" />
                 <fieldset class="rows">
                     <legend>Remove items: scan barcodes</legend>
                     <ol>

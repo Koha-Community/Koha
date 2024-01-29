@@ -31,8 +31,8 @@ use Koha::Items;
 
 my $cgi = CGI->new;
 
-my $action    = $cgi->param('action')    || q{};
-my $barcodes  = $cgi->param('barcodes')  || q{};
+my $op       = $cgi->param('op')       || q{};
+my $barcodes = $cgi->param('barcodes') || q{};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -43,11 +43,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( !$action ) {
+if ( !$op ) {
     $template->param( action => 'display_form' );
 }
 
-elsif ( $action eq 'batch_rm' ) {
+elsif ( $op eq 'cud-batch_rm' ) {
     my @barcodes = uniq( split (/\s\n/, $barcodes ) );
     my @invalid_barcodes;
     my @item_and_count;
