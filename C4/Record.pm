@@ -929,10 +929,12 @@ sub marc2cites {
     }
     $cites{$_} =~ s/([^\.])$/$1./ for keys %cites;
 
-    $cites{'Harvard'} .= ' (' . $publication{'date'} . '). ';
-    $cites{'Chicago'} .= ' ' . $publication{'date'}  . '. ';
-    $cites{'MLA'}     .= ' ' . $publication{'title'} . '. ';
-    $cites{'APA'}     .= ' (' . $publication{'date'} . '). ';
+    if ( $publication{date} ) {
+        $cites{'Harvard'} .= ' (' . $publication{'date'} . '). ';
+        $cites{'Chicago'} .= ' ' . $publication{'date'}  . '. ';
+        $cites{'MLA'}     .= ' ' . $publication{'title'} . '. ';
+        $cites{'APA'}     .= ' (' . $publication{'date'} . '). ';
+    }
     $cites{'Harvard'} .= $publication{'title'} . '. ';
     $cites{'Chicago'} .= $publication{'title'} . '. ';
     $cites{'MLA'}     .= $publication{'place'} . ': ';
