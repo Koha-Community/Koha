@@ -115,6 +115,8 @@ my $suggestionid    = $input->param('suggestionid');
 my $uncertainprice  = $input->param('uncertainprice');
 my $import_batch_id = $input->param('import_batch_id'); # if this is filled, we come from a staged file, and we will return here after saving the order !
 my $from_subscriptionid  = $input->param('from_subscriptionid');
+my $frameworkcode        = $input->param('frameworkcode') // q{};
+our $breedingid          = $input->param('breedingid');
 my $data;
 my $new = 'no';
 my $op = $input->param('op') || q{};
@@ -158,12 +160,10 @@ my $contract = GetContract({
     contractnumber => $basket->{contractnumber}
 });
 
-#simple parameters reading (all in one :-)
-our $params = $input->Vars;
 my $listprice=0; # the price, that can be in MARC record if we have one
-if ( $ordernumber eq '' and defined $params->{'breedingid'}){
+if ( $ordernumber eq '' and defined $breedingid ){
 #we want to import from the breeding reservoir (from a z3950 search)
-    my ($marcrecord, $encoding) = MARCfindbreeding($params->{'breedingid'});
+    my ($marcrecord, $encoding) = MARCfindbreeding($breedingid);
     die("Could not find the selected record in the reservoir, bailing") unless $marcrecord;
 
     # Remove all the items (952) from the imported record
@@ -183,13 +183,12 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
     #from this point: add a new record
     C4::Acquisition::FillWithDefaultValues($marcrecord, {only_mandatory => 1});
     my $bibitemnum;
-    $params->{'frameworkcode'} or $params->{'frameworkcode'} = "";
-    ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $params->{'frameworkcode'} );
+    ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $frameworkcode );
     # get the price if there is one.
     $listprice = GetMarcPrice($marcrecord, $marcflavour);
-    SetImportRecordStatus($params->{'breedingid'}, 'imported');
+    SetImportRecordStatus( $breedingid, 'imported' );
 
-    SetMatchedBiblionumber( $params->{breedingid}, $biblionumber );
+    SetMatchedBiblionumber( $breedingid, $biblionumber );
 }
 
 
@@ -625,7 +624,7 @@ sub Load_Duplicate {
     biblionumber        => $biblionumber,
     basketno            => $basketno,
     booksellerid        => $basket->{'booksellerid'},
-    breedingid          => $params->{'breedingid'},
+    breedingid          => $breedingid,
     duplicatetitle      => $duplicatetitle,
     (uc(C4::Context->preference("marcflavour"))) => 1
   );
