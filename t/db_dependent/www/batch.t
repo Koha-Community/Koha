@@ -87,11 +87,11 @@ $agent->click_ok( '', 'login to staff interface' );
 # Get datatable for the batch id
 $agent->get("$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id");
 my $jsonresponse = decode_json $agent->content;
-like( $jsonresponse->{ aaData }[0]->{ citation }, qr/$bookdescription/, 'found book' );
-is( $jsonresponse->{ aaData }[0]->{ status }, 'imported', 'record marked as staged' );
-is( $jsonresponse->{ aaData }[0]->{ overlay_status }, 'no_match', 'record has no matches' );
+like( $jsonresponse->{data}[0]->{citation}, qr/$bookdescription/, 'found book' );
+is( $jsonresponse->{data}[0]->{status},         'imported', 'record marked as staged' );
+is( $jsonresponse->{data}[0]->{overlay_status}, 'no_match', 'record has no matches' );
 
-my $biblionumber = $jsonresponse->{aaData}[0]->{matched};
+my $biblionumber = $jsonresponse->{data}[0]->{matched};
 
 $agent->get_ok(
     "$intranet/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber",
@@ -121,5 +121,5 @@ $agent->content_contains( 'The record you requested does not exist',
 
 $agent->get("$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id");
 $jsonresponse = decode_json $agent->content;
-is( $jsonresponse->{ aaData }[0]->{ status }, 'reverted', 'record marked as reverted' );
+is( $jsonresponse->{data}[0]->{status}, 'reverted', 'record marked as reverted' );
 
