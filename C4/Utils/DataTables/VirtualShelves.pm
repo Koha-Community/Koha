@@ -83,7 +83,6 @@ sub search {
 
 
     if ($order_by) {
-        my @order_by;
         $order_by =~ s|shelfnumber|vs.shelfnumber|;
         my @sanitized_orderbys;
         for my $order ( split ',', $order_by ) {
