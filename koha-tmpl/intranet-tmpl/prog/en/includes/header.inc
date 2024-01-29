@@ -17,7 +17,7 @@
     <div id="header" class="navbar-collapse collapse">
         <ul id="toplevelmenu" class="nav navbar-nav">
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li>[% END %]
-            [% IF CAN_user_borrowers_edit_borrowers %]<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>[% END %]
+            [% IF CAN_user_borrowers_edit_borrowers || CAN_user_borrowers_list_borrowers %]<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>[% END %]
             <li id="catalog-search-link">
                 <a href="/cgi-bin/koha/catalogue/search.pl">Search</a>
             </li>
