@@ -32,9 +32,9 @@ use Koha::Items;
 
 my $cgi = CGI->new;
 
-my $action    = $cgi->param('action')    || q{};
-my $course_id = $cgi->param('course_id') || q{};
-my $barcodes  = $cgi->param('barcodes')  || q{};
+my $op            = $cgi->param('op')            || q{};
+my $course_id     = $cgi->param('course_id')     || q{};
+my $barcodes      = $cgi->param('barcodes')      || q{};
 my $biblionumbers = $cgi->param('biblionumbers') || q{};
 
 my $itype         = $cgi->param('itype');
@@ -63,10 +63,10 @@ my $course = GetCourse($course_id);
 if ( $course_id && $course ) {
     $template->param( course => $course );
 
-    if ( !$action ) {
+    if ( !$op ) {
         $template->param( action => 'display_form' );
     }
-    elsif ( $action eq 'cud-add' ) {
+    elsif ( $op eq 'cud-add' ) {
         my @barcodes = uniq( split( /\s\n/, $barcodes ) );
         my @biblionumbers = uniq( split( /\s\n/, $biblionumbers ) );
 
