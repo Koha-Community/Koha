@@ -46,10 +46,10 @@
             [% END %]
         [% END %]
 
-        <form method="post" action="/cgi-bin/koha/course_reserves/add_items.pl">
+        <form method="get" action="/cgi-bin/koha/course_reserves/add_items.pl">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
-            <input type="hidden" name="action" value="lookup" />
+            <input type="hidden" name="op" value="lookup" />
 
             <fieldset class="rows">
                 <legend>Add items: scan barcode</legend>

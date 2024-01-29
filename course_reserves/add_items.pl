@@ -26,7 +26,6 @@ use C4::Auth qw( get_template_and_user );
 use C4::Circulation qw( barcodedecode );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Koha qw( GetAuthorisedValues );
-use Koha::Items;
 
 use C4::CourseReserves qw( GetCourse GetCourseReserve ModCourse ModCourseItem ModCourseReserve );
 
@@ -35,7 +34,7 @@ use Koha::ItemTypes;
 
 my $cgi = CGI->new;
 
-my $action       = $cgi->param('action')       || '';
+my $op           = $cgi->param('op')           || '';
 my $course_id    = $cgi->param('course_id')    || '';
 my $barcode      = $cgi->param('barcode')      || '';
 my $return       = $cgi->param('return')       || '';
@@ -60,7 +59,7 @@ if ( $barcode || $itemnumber ) {
     $biblio = Koha::Biblios->find( $biblionumber );
 }
 
-my $step = ( $action eq 'lookup' && ( $item or $biblio ) ) ? '2' : '1';
+my $step = ( $op eq 'lookup' && ( $item or $biblio ) ) ? '2' : '1';
 
 my $tmpl = ($course_id) ? "add_items-step$step.tt" : "invalid-course.tt";
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -71,7 +70,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( !$item && !$biblio && $action eq 'lookup' ){
+if ( !$item && !$biblio && $op eq 'lookup' ){
     $template->param( ERROR_ITEM_NOT_FOUND => 1 );
     $template->param( UNKNOWN_BARCODE => $barcode ) if $barcode;
     $template->param( UNKNOWN_BIBLIONUMBER => $biblionumber ) if $biblionumber;
@@ -79,7 +78,7 @@ if ( !$item && !$biblio && $action eq 'lookup' ){
 
 $template->param( course => GetCourse($course_id) );
 
-if ( $action eq 'lookup' and $item ) {
+if ( $op eq 'lookup' and $item ) {
     my $course_item = Koha::Course::Items->find({ itemnumber => $item->id });
     my $course_reserve =
       ($course_item)
@@ -103,7 +102,7 @@ if ( $action eq 'lookup' and $item ) {
         return    => $return,
     );
 
-} elsif ( $action eq 'lookup' and $biblio ) {
+} elsif ( $op eq 'lookup' and $biblio ) {
     my $course_item = Koha::Course::Items->find({ biblionumber => $biblio->biblionumber });
     my $course_reserve =
       ($course_item)
@@ -123,7 +122,7 @@ if ( $action eq 'lookup' and $item ) {
         return    => $return,
     );
 
-} elsif ( $action eq 'cud-add' ) {
+} elsif ( $op eq 'cud-add' ) {
     my $itype         = scalar $cgi->param('itype');
     my $ccode         = scalar $cgi->param('ccode');
     my $homebranch    = $cgi->param('homebranch');

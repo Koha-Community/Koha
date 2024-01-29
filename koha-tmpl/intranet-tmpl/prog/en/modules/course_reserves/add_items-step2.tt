@@ -63,7 +63,7 @@
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
             <input type="hidden" name="return" value="[% return | html %]" />
-            <input type="hidden" name="action" value="add" />
+            <input type="hidden" name="op" value="cud-add" />
 
             [% IF item # adding an item to course items %]
 
