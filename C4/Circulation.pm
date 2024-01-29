@@ -836,7 +836,7 @@ sub CanBookBeIssued {
         );
         my $block_lost_return = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
         my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
-            AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'} );
+            AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 ) if $item_object->onloan;
         ModDateLastSeen( $item_object->itemnumber, $block_lost_return );    # FIXME Move to Koha::Item
         return (
             {
@@ -2055,7 +2055,7 @@ sub GetBranchItemRule {
 =head2 AddReturn
 
   ($doreturn, $messages, $iteminformation, $borrower) =
-      &AddReturn( $barcode, $branch [,$exemptfine] [,$returndate] );
+      &AddReturn( $barcode, $branch [,$exemptfine] [,$returndate] [,$skip_localuse ] );
 
 Returns a book.
 
@@ -2070,6 +2070,8 @@ removed. Optional.
 
 =item C<$return_date> allows the default return date to be overridden
 by the given return date. Optional.
+
+=item C<$skip_localuse> indicated that localuse should not be recorded. Optional.
 
 =back
 
@@ -2136,7 +2138,7 @@ patron who last borrowed the book.
 =cut
 
 sub AddReturn {
-    my ( $barcode, $branch, $exemptfine, $return_date ) = @_;
+    my ( $barcode, $branch, $exemptfine, $return_date, $skip_localuse ) = @_;
 
     if ($branch and not Koha::Libraries->find($branch)) {
         warn "AddReturn error: branch '$branch' not found.  Reverting to " . C4::Context->userenv->{'branch'};
@@ -2479,7 +2481,7 @@ sub AddReturn {
         ccode          => $item->ccode,
         categorycode   => $categorycode,
         interface      => C4::Context->interface,
-    });
+    }) unless ( $skip_localuse && $stat_type eq 'localuse' );
 
     # Send a check-in slip. # NOTE: borrower may be undef. Do not try to send messages then.
     if ( $patron ) {
