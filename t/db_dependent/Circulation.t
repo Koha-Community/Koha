@@ -2477,7 +2477,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 };
 
 subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
-    plan tests => 11;
+    plan tests => 14;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category_x = $builder->build_object(
@@ -2528,6 +2528,19 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->barcode );
     $item_2->discard_changes;
     ok( !$item_2->onloan, "Checked out item is returned" );
+
+    my $item_3 = $builder->build_sample_item( { library => $library->branchcode } );
+    CanBookBeIssued( $patron, $item_3->barcode );
+    $item_3->discard_changes;
+    is( Koha::Statistics->search( { itemnumber => $item_3->itemnumber } )->count, 1, 'Single entry recorded in the stats table' );
+
+    my $item_4 = $builder->build_sample_item( { library => $library->branchcode } );
+    AddIssue( $patron_2, $item_4->barcode );
+    $item_4->discard_changes;
+    is( Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 1, 'Issue should be recorded in statistics table for item 4.' );
+    CanBookBeIssued( $patron, $item_4->barcode );
+    $item_4->discard_changes;
+    is( Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 3, 'Issue, return, and localuse should be recorded in statistics table for item 4.' );
 
     # TODO There are other tests to provide here
 };
