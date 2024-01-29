@@ -51,7 +51,7 @@ use C4::Biblio qw(
     GetMarcISSN
     TransformMarcToKoha
 );
-use C4::Record;
+use C4::Record qw( marc2cites );;
 use C4::Reserves qw( IsAvailableForItemLevelRequest );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
 use C4::Koha qw(
@@ -231,6 +231,6 @@ if( C4::Context->preference('ArticleRequests') ) {
 }
 
 # Cites
-$template->{VARS}->{'cites'} = marc2cites($record);
+$template->param( cites => C4::Record::marc2cites($record) );
 
 output_html_with_http_headers $query, $cookie, $template->output;

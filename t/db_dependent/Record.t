@@ -10,7 +10,7 @@ use C4::Context;
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::Record', qw( marc2marc marc2marcxml marcxml2marc marc2dcxml marc2modsxml marc2bibtex ));
+    use_ok('C4::Record', qw( marc2marc marc2marcxml marcxml2marc marc2dcxml marc2modsxml marc2bibtex marc2cites ));
 }
 
 my $schema = Koha::Database->new->schema;
@@ -155,12 +155,6 @@ my @entity=C4::Record::_entity_encode("Björn");
 is ($entity[0], "Bj&#xC3;&#xB6;rn", "Html umlauts");
 
 
-
-
-$marc->field('260')->add_subfields(a => 'Hogwarts');
+$marc->field('260')->add_subfields( a => 'Hogwarts' );
 my $cites = marc2cites($marc);
-is ($cites->{'Chicago'}, 'Rowling J.K, . 2011. Harry potter. Hogwarts: Reprints.', 'testing marc2cites');
-
-
-
-
+is( $cites->{'Chicago'}, 'Rowling J.K, . 2011. Harry potter. Hogwarts: Reprints.', 'testing marc2cites' );

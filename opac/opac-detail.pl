@@ -44,7 +44,7 @@ use C4::Biblio qw(
     GetMarcSubjects
     GetMarcUrls
 );
-use C4::Record;
+use C4::Record qw( marc2cites );
 use C4::Tags qw( get_tags );
 use C4::XISBN qw( get_xisbns );
 use C4::External::Amazon qw( get_amazon_tld );
@@ -1262,6 +1262,6 @@ if ( C4::Context->preference('OPACAuthorIdentifiersAndInformation') ) {
 }
 
 # Cites
-$template->{VARS}->{'cites'} = marc2cites($record);
+$template->param( cites => C4::Record::marc2cites($record) );
 
 output_html_with_http_headers $query, $cookie, $template->output;
