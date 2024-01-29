@@ -895,7 +895,7 @@ sub marc2cites {
     } else {
             %publication = (
                 title     => $record->subfield("245", "a") || "",
-                place     => $record->subfield("260", "a") || "",
+                place     => $record->subfield("264", "a") || $record->subfield("260", "a") || "",
                 publisher => $record->subfield("264", "b") || $record->subfield("260", "b") || "",
                 date      => $record->subfield("264", "c") || $record->subfield("260", "c") || $record->subfield("260", "g") || ""
             );
