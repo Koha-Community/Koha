@@ -2765,3 +2765,53 @@ subtest 'check_booking tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'not_for_loan() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $biblio       = $builder->build_sample_biblio;
+    my $biblio_itype = Koha::ItemTypes->find( $biblio->itemtype );
+    $biblio_itype->notforloan(3)->store();
+
+    my $item_itype = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    $item_itype->notforloan(2)->store();
+
+    my $item = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $item_itype->itemtype } );
+    $item->notforloan(1)->store();
+
+    isnt( $biblio->itemtype, $item_itype->itemtype, "Biblio level itemtype and item level itemtype does not match" );
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
+    note("item-level_itypes: 0");
+
+    is(
+        $item->not_for_loan, $item->notforloan,
+        '->not_for_loan returns item specific notforloan value when defined and non-zero'
+    );
+
+    $item->notforloan(0)->store();
+    is(
+        $item->not_for_loan, $biblio_itype->notforloan,
+        '->not_for_loan returns biblio level itype notforloan value when item notforloan is 0'
+    );
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
+    note("item-level_itypes: 1");
+
+    $item->notforloan(1)->store();
+    is(
+        $item->not_for_loan, $item->notforloan,
+        '->not_for_loan returns item specific notforloan value when defined and non-zero'
+    );
+
+    $item->notforloan(0)->store();
+    is(
+        $item->not_for_loan, $item_itype->notforloan,
+        '->not_for_loan returns biblio level itype notforloan value when item notforloan is 0'
+    );
+
+    $schema->storage->txn_rollback;
+};
