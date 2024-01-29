@@ -1334,7 +1334,9 @@
                                                             </span>
                                                         </span>
                                                     [% END %]
-                                                    <a class="btn btn-default btn-xs printcheckinslip" href="#" data-borrowernumber="[% riloo.patron.borrowernumber | html %]"><i class="fa fa-print"></i> Print checkin slip</a>
+                                                    [% IF riloo.patron.privacy < 2 %]
+                                                        <a class="btn btn-default btn-xs printcheckinslip" href="#" data-borrowernumber="[% riloo.patron.borrowernumber | html %]"><i class="fa fa-print"></i> Print checkin slip</a>
+                                                    [% END %]
                                                 [% ELSE %]
                                                     Not checked out
                                                 [% END %]
