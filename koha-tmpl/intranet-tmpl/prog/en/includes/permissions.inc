@@ -314,7 +314,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'list_borrowers' -%]
         <span class="sub_permission list_borrowers_subpermission">
-            Search and list patrons
+            Search, list and view patrons
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'view_borrower_infos_from_any_libraries' -%]
