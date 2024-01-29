@@ -21,8 +21,14 @@ use Modern::Perl;
 
 use Koha::Caches;
 use Koha::Database;
+use Koha::Exceptions;
+use Koha::Object;
+use Koha::Object::Limit::Library;
 
 use base qw(Koha::Object Koha::Object::Limit::Library);
+
+use constant NUM_PATTERN    => q{^(-[1-9][0-9]*|0|[1-9][0-9]*)$};
+use constant NUM_PATTERN_JS => q{(-[1-9][0-9]*|0|[1-9][0-9]*)};     # ^ and $ removed
 
 my $cache = Koha::Caches->get_instance();
 
@@ -59,6 +65,8 @@ sub store {
             $flush = 1;
         }
     }
+
+    $self->_check_is_integer_only;
 
     $self = $self->SUPER::store;
 
@@ -113,7 +121,36 @@ sub to_api_mapping {
     };
 }
 
+=head3 is_integer_only
+
+This helper method tells you if the category for this value allows numbers only.
+
+=cut
+
+sub is_integer_only {
+    my $self = shift;
+    return $self->_result->category->is_integer_only;
+}
+
 =head2 Internal methods
+
+=head3 _check_is_integer_only
+
+    Raise an exception if the category only allows integer values and the value is not.
+    Otherwise returns true.
+
+=cut
+
+sub _check_is_integer_only {
+    my ($self)  = @_;
+    my $pattern = NUM_PATTERN;
+    my $value   = $self->authorised_value // q{};
+    return 1 if $value =~ qr/${pattern}/;    # no need to check category here yet
+    if ( $self->is_integer_only ) {
+        Koha::Exceptions::NoInteger->throw("'$value' is no integer value");
+    }
+    return 1;
+}
 
 =head3 _type
 

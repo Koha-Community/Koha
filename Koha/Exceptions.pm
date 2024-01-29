@@ -79,6 +79,10 @@ use Exception::Class (
         isa => 'Koha::Exception',
         description => 'Koha is under maintenance.'
     },
+    'Koha::Exceptions::NoInteger' => {
+        isa         => 'Koha::Exception',
+        description => 'Should be an integer.'
+    },
 );
 
 1;

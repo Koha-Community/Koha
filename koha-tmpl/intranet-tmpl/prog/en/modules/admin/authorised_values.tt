@@ -49,6 +49,9 @@
             float: none;
             width: auto;
         }
+        #authorised_value:invalid {
+            color:red;
+        }
     </style>
 [% END %]
 </head>
@@ -110,11 +113,12 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
-                [% IF op == 'add_form' %]
+                [% IF op == 'add_form' OR op == 'edit_form' %]
                     <h1>
                         [% IF ( action_modify ) %]<span>Modify authorized value</span>[% END %]
                         [% IF ( action_add_value ) %]<span>New authorized value</span>[% END %]
                         [% IF ( action_add_category ) %]<span>New category</span>[% END %]
+                        [% IF ( op == 'edit_form' ) %]<span>Edit category</span>[% END %]
                     </h1>
 
                     [% IF ( action_modify ) %]
@@ -123,7 +127,7 @@
                         </div>
                     [% END %]
 
-                    <form action="/cgi-bin/koha/admin/authorised_values.pl" name="Aform" method="post" class="validated">
+                    <form action="/cgi-bin/koha/admin/authorised_values.pl" name="Aform" id="Aform" method="post" class="validated">
                         [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             [% IF action_add_category %]
@@ -134,7 +138,27 @@
                                         <span class="required">Required</span>
                                         <input type="hidden" name="op" value="cud-add_category" />
                                     </li>
+                                    <li>
+                                        <input type="checkbox" name="is_integer_only" id="is_integer_only"/><label for="is_integer_only">Restrict value to numbers only</label></input>
+                                    </li>
                                 </ol>
+                            [% ELSIF op == 'edit_form' %]
+                                <ol>
+                                    <li>
+                                        <label for="category" class="required">Category: </label>
+                                        <input type="text" disabled value="[% category_name | html %]"/>
+                                    </li>
+                                    <li>
+                                        [% IF category.is_integer_only %]
+                                            <input type="checkbox" checked name="is_integer_only" id="is_integer_only"/><label for="is_integer_only">Restrict value to numbers only</label></input>
+                                        [% ELSE %]
+                                            <input type="checkbox" name="is_integer_only" id="is_integer_only"/><label for="is_integer_only">Restrict value to numbers only</label></input>
+                                        [% END %]
+                                    </li>
+                                </ol>
+                                <input type="hidden" name="op" value="edit_category" />
+                                <input type="hidden" name="category" value="[% category_name | html %]" />
+                                <input type="hidden" name="searchfield" value="[% category_name | html %]" />
                             [% ELSE %]
                                 <ol>
                                     <li>
@@ -147,7 +171,11 @@
                                         [% IF ( action_modify ) %]
                                             <input type="hidden" id="id" name="id" value="[% av.id | html %]" />
                                         [% END %]
-                                        <input type="text" id="authorised_value" name="authorised_value" value="[% av.authorised_value | html %]" maxlength="80" class="focus" />
+                                        [% IF ( av && av.is_integer_only ) || category.is_integer_only %]
+                                            <input type="text" inputmode="numeric" pattern="[% num_pattern | $raw %]" id="authorised_value" name="authorised_value" value="[% av.authorised_value | html %]" class="focus" title="Should be numeric" required/>
+                                        [% ELSE %]
+                                            <input type="text" id="authorised_value" name="authorised_value" value="[% av.authorised_value | html %]" maxlength="80" class="focus"/>
+                                        [% END %]
                                     </li>
                                     <li>
                                         <label for="lib">Description: </label>
@@ -189,6 +217,7 @@
                     <div id="toolbar" class="btn-toolbar">
                         <a id="addcat" class="btn btn-default" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form"><i class="fa fa-plus"> </i> New category</a>
                         [% IF ( searchfield ) %]
+                            <a id="editcat" class="btn btn-default" href= "/cgi-bin/koha/admin/authorised_values.pl?op=edit_form&amp;category=[% category.category_name | url %]"><i class="fa fa-plus"> </i> Edit category</a>
                             <a id="addauth" class="btn btn-default" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category.category_name | url %]"><i class="fa fa-plus"> </i> New authorized value for [% category.category_name | html %]</a>
                         [% END %]
                     </div>
@@ -213,6 +242,8 @@
                                 <span>An error occurred when updating this authorized value. Perhaps the value already exists.</span>
                             [% CASE 'error_on_insert' %]
                                 <span>An error occurred when inserting this authorized value. Perhaps the value or the category already exists.</span>
+                            [% CASE 'error_on_edit_cat' %]
+                                <span>An error occurred when updating this authorized value category.</span>
                             [% CASE 'error_on_insert_cat' %]
                                 <span>An error occurred when inserting this authorized value category. Perhaps the category name already exists.</span>
                             [% CASE 'error_on_delete' %]
@@ -399,6 +430,17 @@
             if( $("#icons .tab-pane.active").length < 1 ){
                 $("#icons a:first").tab("show");
             }
+
+            $("#Aform").submit(function() {
+                if ( $('#authorised_value').length ) {
+                    if ( ! $('#authorised_value').get(0).checkValidity() ) {
+                        alert( _("Authorised value should be numeric.") );
+                        $('#authorised_value').focus();
+                        return false;
+                    }
+                }
+                return true;
+            });
         });
     </script>
 [% END %]
