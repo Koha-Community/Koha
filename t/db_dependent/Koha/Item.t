@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 use Test::Exception;
 use Test::MockModule;
 
@@ -2515,6 +2515,127 @@ subtest 'find_booking' => sub {
     is(
         $found_booking->booking_id, $booking2->booking_id,
         "Koha::Item->find_booking returns the current booking not a future one"
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'check_booking tests' => sub {
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $biblio   = $builder->build_sample_biblio();
+    my $item     = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
+    my $can_book = $item->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 )
+        }
+    );
+
+    is(
+        $can_book, 1,
+        "True returned from Koha::Item->check_booking if there are no bookings that would clash"
+    );
+
+    my $start_1 = dt_from_string()->subtract( days => 7 );
+    my $end_1   = dt_from_string()->subtract( days => 1 );
+    my $start_2 = dt_from_string();
+    my $end_2   = dt_from_string()->add( days => 7 );
+    my $start_3 = dt_from_string()->add( days => 8 );
+    my $end_3   = dt_from_string()->add( days => 16 );
+
+    # Past booking
+    my $booking1 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $start_1,
+                end_date   => $end_1
+            }
+        }
+    );
+
+    $can_book = $item->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+
+    is(
+        $can_book,
+        1,
+        "Koha::Item->check_booking returns true when we don't conflict with a past booking"
+    );
+
+    # Current booking
+    my $booking2 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $start_2,
+                end_date   => $end_2
+            }
+        }
+    );
+
+    $can_book = $item->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+    is(
+        $can_book,
+        0,
+        "Koha::Item->check_booking returns false if the booking would conflict"
+    );
+
+    $can_book = $item->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+            booking_id => $booking2->booking_id
+        }
+    );
+    is(
+        $can_book,
+        1,
+        "Koha::Item->check_booking returns true if we pass the booking_id that would conflict"
+    );
+
+    $booking2->delete();
+
+    # Future booking
+    my $booking3 = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                item_id    => $item->itemnumber,
+                start_date => $start_3,
+                end_date   => $end_3
+            }
+        }
+    );
+
+    $can_book = $item->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+
+    is(
+        $can_book,
+        1,
+        "Koha::Item->check_booking returns true when we don't conflict with a future booking"
     );
 
     $schema->storage->txn_rollback;
