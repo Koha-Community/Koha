@@ -168,17 +168,6 @@
                 </div>
             [% END %]
 
-            [% IF ( messagetransfert ) %]
-                <div class="dialog message">
-                    <h2>Hold found for ([% nextreservtitle | html %]), please transfer</h2>
-                    <p>Hold placed by : <strong> [% nextreservsurname | html %] [% nextreservfirstname | html %]</strong> at : <strong> [% branchname | html %] </strong>, Please transfer this item.
-                    </p>
-                    <form name="cancelReservewithtransfert" action="branchreserves.pl" method="post">
-                        <input type="submit" class="button" />
-                    </form>
-                </div>
-            [% END %]
-
             [% UNLESS ( multi_hold ) %]
                 <h2>Place a hold on [% INCLUDE 'biblio-title.inc' link = 1 %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</h2>
             [% ELSE %]
