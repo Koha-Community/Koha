@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 30;
+use Test::More tests => 31;
 use Test::Exception;
 use Test::Warn;
 
@@ -482,6 +482,40 @@ subtest 'to_api() tests' => sub {
 
     $biblio_api = $biblio->to_api({ embed => { items => {} } });
     is_deeply( $biblio_api->{items}, [ $item->to_api ], 'Item correctly embedded' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'bookings() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+
+    is( ref( $biblio->bookings ), 'Koha::Bookings', 'Return type is correct' );
+
+    is_deeply(
+        $biblio->bookings->unblessed,
+        [],
+        '->bookings returns an empty Koha::Bookings resultset'
+    );
+
+    my $booking = $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => { biblio_id => $biblio->biblionumber }
+        }
+    );
+
+    my $bookings = $biblio->bookings->unblessed;
+
+    is_deeply(
+        $biblio->bookings->unblessed,
+        [ $booking->unblessed ],
+        '->bookings returns the related Koha::Booking objects'
+    );
 
     $schema->storage->txn_rollback;
 };
