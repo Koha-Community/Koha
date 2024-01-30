@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockObject;
 use Test::Exception;
 
@@ -335,6 +335,21 @@ subtest 'Koha::Exceptions::Plugin tests' => sub {
 
     # stringify the exception
     is( "$@", "Calling 'upgrade' died for plugin $plugin_class", 'Exception stringified correctly' );
+};
+
+subtest 'Koha::Exceptions::Booking tests' => sub {
+
+    plan tests => 3;
+
+    use_ok('Koha::Exceptions::Booking');
+
+    throws_ok { Koha::Exceptions::Booking::Clash->throw() }
+    'Koha::Exceptions::Booking::Clash',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", '[Adding or updating the booking would result in a clash]', 'Exception stringified correctly' );
+    # FIXME: I don't understand why the stringified message here gets wrapped in square brackets...
 };
 
 subtest 'Koha::Exception tests' => sub {
