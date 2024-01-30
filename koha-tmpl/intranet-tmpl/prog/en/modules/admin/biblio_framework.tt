@@ -234,7 +234,7 @@
                         [% INCLUDE 'csrf-token.inc' %]
                         <div class="modal-body">
                             <input type="hidden" name="frameworkcode" value="default" />
-                            <input type="hidden" name="action" value="import" />
+                            <input type="hidden" name="op" value="cud-import" />
                             <p><label for="file_import_default">Upload file:</label> <input type="file" name="file_import_default" id="file_import_default" class="input_import" /></p>
                             <div id="importing_default" style="display:none" class="importing"><img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /><span class="importing_msg"></span></div>
                         </div> <!-- /.modal-body -->
@@ -305,7 +305,7 @@
                             [% INCLUDE 'csrf-token.inc' %]
                             <div class="modal-body">
                                 <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode | html %]" />
-                                <input type="hidden" name="action" value="import" />
+                                <input type="hidden" name="op" value="cud-import" />
                                 <p><label for="file_import_[% loo.frameworkcode | html %]">Upload file:</label> <input type="file" name="file_import_[% loo.frameworkcode | html %]" id="file_import_[% loo.frameworkcode | html %]" class="input_import" /></p>
                                 <div id="importing_[% loo.frameworkcode | html %]" style="display:none" class="importing"><img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /><span class="importing_msg"></span></div>
                             </div> <!-- /.modal-body -->
