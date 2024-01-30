@@ -125,6 +125,8 @@
     <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" class="validated">
         <input type="hidden" name="koha_login_context" value="intranet" />
     [% FOREACH INPUT IN INPUTS %]
+        [% NEXT IF INPUT.name == "koha_login_context" %]
+        [% NEXT IF INPUT.name == "branch" %]
         <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
     [% END %]
     <p><label for="userid">Username:</label>
