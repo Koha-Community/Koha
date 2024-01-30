@@ -53,7 +53,7 @@
                         <form action="/cgi-bin/koha/opac-registration-verify.pl" method="post" name="confirm_registration" id="confirm_registration">
                             [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="token" value="[% token | html %]">
-                            <input type="hidden" name="op" value="confirmed">
+                            <input type="hidden" name="op" value="cud-confirmed">
                             <input type="submit" value="Confirm" class="btn btn-primary">
                         </form>
                     </div>

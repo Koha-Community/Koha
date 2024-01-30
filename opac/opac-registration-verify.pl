@@ -43,7 +43,7 @@ unless ( C4::Context->preference('PatronSelfRegistration') ) {
 my $token = $cgi->param('token');
 my $op = $cgi->param('op');
 my $confirmed;
-if ( $op && $op eq 'confirmed' ) {
+if ( $op && $op eq 'cud-confirmed' ) {
     $confirmed = 1;
 }
 my $m = Koha::Patron::Modifications->find( { verification_token => $token } );
