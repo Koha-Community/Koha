@@ -72,10 +72,11 @@
 
                     [% ELSIF op=='invite' %]
                         <div id="invite">
-                            <form method="get" id="share_list">
+                            <form method="post" id="share_list">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Share list</legend>
                                 <fieldset class="rows">
-                                    <input type="hidden" name="op" value="conf_invite"/>
+                                    <input type="hidden" name="op" value="cud-conf_invite"/>
                                     <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]"/>
                                     <ol>
                                         <li>
@@ -94,7 +95,7 @@
                             </form> <!-- /#share_list -->
                         </div> <!-- /#invite -->
 
-                    [% ELSIF op=='conf_invite' %]
+                    [% ELSIF op=='cud-conf_invite' %]
                         <div id="conf_invite">
                             [% IF approvedaddress %]
                                 <p>An invitation to share list <em>[% shelfname | html %]</em> will be sent shortly to [% approvedaddress | html %].</p>

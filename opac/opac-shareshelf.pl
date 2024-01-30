@@ -49,7 +49,7 @@ if ( ! C4::Context->preference('virtualshelves') ) {
 my $pvar = _init( {} );
 if ( !$pvar->{errcode} ) {
     show_invite($pvar)    if $pvar->{op} eq 'invite';
-    confirm_invite($pvar) if $pvar->{op} eq 'conf_invite';
+    confirm_invite($pvar) if $pvar->{op} eq 'cud-conf_invite';
     show_accept($pvar)    if $pvar->{op} eq 'accept';
 }
 load_template_vars($pvar);
@@ -89,7 +89,7 @@ sub _init {
 
 sub check_common_errors {
     my ($param) = @_;
-    if ( $param->{op} !~ /^(invite|conf_invite|accept)$/ ) {
+    if ( $param->{op} !~ /^(invite|cud-conf_invite|accept)$/ ) {
         return 1;    #no operation specified
     }
     if ( $param->{shelfnumber} !~ /^\d+$/ ) {
@@ -180,7 +180,7 @@ sub notify_owner {
     C4::Letters::EnqueueLetter(
         {
             letter                 => $letter,
-            message_transport_type => 'cud-email',
+            message_transport_type => 'email',
             from_address => C4::Context->preference('KohaAdminEmailAddress'),
             to_address   => $toaddr,
         }
@@ -249,7 +249,7 @@ sub send_invitekey {
         C4::Letters::EnqueueLetter(
             {
                 letter                 => $letter,
-                message_transport_type => 'cud-email',
+                message_transport_type => 'email',
                 from_address           => $fromaddr,
                 to_address             => $a,
             }
