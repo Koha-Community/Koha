@@ -29,15 +29,15 @@ use C4::CourseReserves qw( DelCourse ModCourse ModCourseInstructors );
 
 my $cgi = CGI->new;
 
-checkauth($cgi, 0, { coursereserves => 'manage_courses' }, 'intranet');
+checkauth( $cgi, 0, { coursereserves => 'manage_courses' }, 'intranet' );
 
-my $action = $cgi->param('action') || '';
+my $op        = $cgi->param('op') || '';
 my $course_id = $cgi->param('course_id');
 
-if ( $action eq 'cud-del' ) {
-    DelCourse( $course_id );
+if ( $op eq 'cud-del' ) {
+    DelCourse($course_id);
     print $cgi->redirect("/cgi-bin/koha/course_reserves/course-reserves.pl");
-} else {
+} elsif ( $op eq 'cud-update' or $op eq 'cud-add' ) {
     my %params;
 
     $params{'course_id'}      = $course_id;
@@ -55,9 +55,10 @@ if ( $action eq 'cud-del' ) {
 
     my @instructors = $cgi->multi_param('instructors');
     ModCourseInstructors(
-        mode        => 'replace',
+        mode            => 'replace',
         borrowernumbers => \@instructors,
-        course_id   => $new_course_id
+        course_id       => $new_course_id
     );
+
     print $cgi->redirect("/cgi-bin/koha/course_reserves/course-details.pl?course_id=$new_course_id");
 }

@@ -61,13 +61,23 @@
                     <a class="btn btn-default" id="add_items" href="/cgi-bin/koha/course_reserves/batch_add_items.pl?course_id=[% course.course_id | html %]"><i class="fa fa-plus"></i> Batch add reserves</a>
                 [% END %]
                 [% IF CAN_user_coursereserves_delete_reserves && course_reserves %]
-                    <a class="btn btn-default" id="rm_items" href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]&amp;action=rm_all"><i class="fa fa-minus"></i> Remove all reserves</a>
+                    <form id="rm_items" method="post" action="/cgi-bin/koha/course_reserves/course-details.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-rm_all" />
+                        <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
+                    </form>
+                    <a href="#" id="rm_items_button" class="btn btn-default"><i class="fa fa-minus"></i> Remove all reserves</a>
                 [% END %]
                 [% IF ( CAN_user_coursereserves_manage_courses ) %]
                     <a class="btn btn-default" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit course</a>
                 [% END %]
                 [% IF ( CAN_user_coursereserves_manage_courses ) %]
-                    <a class="btn btn-default" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id | html %]&amp;action=del"><i class="fa fa-trash-can"></i> Delete course</a>
+                    <form id="delete_course" method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-del" />
+                        <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
+                    </form>
+                    <a href="#" id="delete_course_button" class="btn btn-default"><i class="fa fa-trash-can"></i> Delete course</a>
                 [% END %]
             </div><!-- /toolbar -->
             [% END %]
@@ -293,13 +303,18 @@
 
                                     [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                                         <td class="actions">
-                                            [% IF CAN_user_coursereserves_add_reserves && user.can_edit_items_from( cr.item.homebranch ) %]
+                                            [% IF CAN_user_coursereserves_add_reserves && logged_in_user.can_edit_items_from( cr.item.homebranch ) %]
                                                 <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id | html %]&amp;itemnumber=[% cr.item.itemnumber | html %]&amp;biblionumber=[% cr.biblio.biblionumber | html %]&amp;action=lookup&amp;return=[% course.course_id | html %]&amp;is_edit=1"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                             [% END %]
 
                                             [% IF CAN_user_coursereserves_delete_reserves %]
-                                                <a class="btn btn-default btn-xs delete_item" href="course-details.pl?course_id=[% course.course_id | html %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id | html %]">
-                                                <i class="fa fa-trash-can"></i> Remove</a>
+                                                <form id="del_reserve_[% cr.cr_id | html %]" method="post" action="/cgi-bin/koha/course_reserves/course-details.pl" class="validated">
+                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                    <input type="hidden" name="op" value="cud-del_reserve" />
+                                                    <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
+                                                    <input type="hidden" name="cr_id" value="[% cr.cr_id | html %]" />
+                                                </form>
+                                                <a href="#" class="btn btn-default btn-xs delete_item" data-cr-id="[% cr.cr_id | html %]"><i class="fa fa-trash-can"></i> Remove</a>
                                             [% END %]
                                         </td>
                                     [% END %]
@@ -318,13 +333,27 @@
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function(){
+
+            $("#delete_course_button").on( 'click', function(e){
+                e.preventDefault();
+                $('#delete_course').submit();
+            });
+            $("#rm_items_button").on( 'click', function(e){
+                e.preventDefault();
+                $('#rm_items').submit();
+            });
+
             var rtable = KohaTable("course_reserves_table", {
                 "pagingType": "full",
                 "autoWidth": false,
             }, table_settings );
 
-            $(".delete_item").click(function(){
-                return confirmDelete(_("Are you sure you want to remove this item from the course?"));
+            $(".delete_item").on( 'click', function(e){
+                e.preventDefault();
+                if (confirmDelete(_("Are you sure you want to remove this item from the course?") )) {
+                    cr_id = $(this).data('cr-id');
+                    $("#del_reserve_" + cr_id ).submit();
+                }
             });
 
             $("#rm_items").click(function(){
