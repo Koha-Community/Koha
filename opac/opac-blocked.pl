@@ -33,6 +33,4 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-$template->param ( OpacSuppressionMessage => C4::Context->preference('OpacSuppressionMessage'));
-
 output_with_http_headers $query, $cookie, $template->output, 'html';
