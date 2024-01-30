@@ -163,7 +163,7 @@ if ( $op eq 'add_form' ) {
         };
     }
     $op = 'list';
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $library       = Koha::Libraries->find($branchcode);
     my $items_count = Koha::Items->search(
         {   -or => {
