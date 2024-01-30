@@ -309,10 +309,10 @@
                                                         <td class="report_type">
                                                             [% savedreport.type | html %]
                                                         </td>
-                                                        <td class="report_group">
+                                                        <td data-search="[% savedreport.report_group | html %]" class="report_group">
                                                             [% savedreport.groupname | html %]
                                                         </td>
-                                                        <td>
+                                                        <td data-search="[% savedreport.report_subgroup | html %]">
                                                             [% savedreport.subgroupname | html %]
                                                         </td>
                                                         <td class="report_notes">
@@ -1973,9 +1973,9 @@
                 $("#subgroup_filter").change(function() {
                     var selected = $(this).find('option:selected');
                     var sg_id = $(selected).val();
-                    var sg_name = $(selected).text();
                     if (sg_id.length > 0) {
-                        rtable.fnFilter('^' + sg_name + '$', 5, true, true, true, false);
+                        const input = '^' + $.fn.dataTable.util.escapeRegex(sg_id) + '$';
+                        rtable.fnFilter(input, 5, true, false, true, false);
                         rtable.fnSetColumnVis(5, false);
                     } else {
                         rtable.fnFilter('', 5);
@@ -2278,15 +2278,13 @@
             rtable.fnSetColumnVis(5, true);
 
             var g_id = tab.find("a").data("tabname");
-            var g_name = tab.find("a").text().trim();
-
-            if ( g_name == _("All") ) {
-                g_id = "";
-                g_name = "";
+            if (g_id === 'reports') {
+                g_id = '';
             }
 
             if (g_id && g_id.length > 0) {
-                rtable.fnFilter('^' + g_name + '$', 4, true, true, true, false);
+                const input = '^' + $.fn.dataTable.util.escapeRegex(g_id) + '$';
+                rtable.fnFilter(input, 4, true, false, true, false);
                 rtable.fnSetColumnVis(4, false);
                 for(var i in group_subgroups[g_id]) {
                     $("#subgroup_filter").append(
