@@ -321,46 +321,6 @@ sub assign_item_for_booking {
     return $bookable_items->single->itemnumber;
 }
 
-=head3 place_booking
-
-  my $booking = $biblio->place_booking(
-    {
-        patron     => $patron,
-        start_date => $datetime,
-        end_date   => $datetime
-    }
-  );
-
-Add a booking for this item for the dates passed.
-
-Returns the Koha::Booking object or throws an exception if the item cannot be booked for the given dates.
-
-=cut
-
-sub place_booking {
-    my ( $self, $params ) = @_;
-
-    # check for mandatory params
-    my @mandatory = ( 'start_date', 'end_date', 'patron' );
-    for my $param (@mandatory) {
-        unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
-        }
-    }
-    my $patron = $params->{patron};
-
-    # New booking object
-    my $booking = Koha::Booking->new(
-        {
-            start_date => $params->{start_date},
-            end_date   => $params->{end_date},
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $self->biblionumber
-        }
-    )->store();
-    return $booking;
-}
-
 =head3 can_be_transferred
 
 $biblio->can_be_transferred({ to => $to_library, from => $from_library })

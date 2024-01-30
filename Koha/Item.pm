@@ -535,7 +535,7 @@ Find the first booking that would conflict with the passed checkout dates for th
 FIXME: This can be simplified, it was originally intended to iterate all biblio level bookings
 to catch cases where this item may be the last available to satisfy a biblio level only booking.
 However, we dropped the biblio level functionality prior to push as bugs were found in it's
-implimentation.
+implementation.
 
 =cut
 
@@ -660,47 +660,6 @@ sub check_booking {
         : $existing_bookings->count;
 
     return $bookings_count ? 0 : 1;
-}
-
-=head3 place_booking
-
-  my $booking = $item->place_booking(
-    {
-        patron     => $patron,
-        start_date => $datetime,
-        end_date   => $datetime
-    }
-  );
-
-Add a booking for this item for the dates passed.
-
-Returns the Koha::Booking object or throws an exception if the item cannot be booked for the given dates.
-
-=cut
-
-sub place_booking {
-    my ( $self, $params ) = @_;
-
-    # check for mandatory params
-    my @mandatory = ( 'start_date', 'end_date', 'patron' );
-    for my $param (@mandatory) {
-        unless ( defined( $params->{$param} ) ) {
-            Koha::Exceptions::MissingParameter->throw( error => "The $param parameter is mandatory" );
-        }
-    }
-    my $patron = $params->{patron};
-
-    # New booking object
-    my $booking = Koha::Booking->new(
-        {
-            start_date => $params->{start_date},
-            end_date   => $params->{end_date},
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $self->biblionumber,
-            item_id    => $self->itemnumber,
-        }
-    )->store();
-    return $booking;
 }
 
 =head3 request_transfer
