@@ -644,13 +644,18 @@ sub get_template_and_user {
 
     my $op = $in->{query}->param('op');
     if ( defined $op && $op =~ m{^cud-} ) {
-        C4::Output::output_and_exit( $in->{query}, $cookie, $template, 'wrong_csrf_token' )
-            unless Koha::Token->new->check_csrf(
-            {
-                session_id => scalar $in->{query}->cookie('CGISESSID'),
-                token      => scalar $in->{query}->param('csrf_token'),
-            }
-            );
+        unless (
+            Koha::Token->new->check_csrf(
+                {
+                    session_id => scalar $in->{query}->cookie('CGISESSID'),
+                    token      => scalar $in->{query}->param('csrf_token'),
+                }
+            )
+            )
+        {
+            Koha::Logger->get->debug("The form submission failed (Wrong CSRF token).");
+            C4::Output::output_and_exit( $in->{query}, $cookie, $template, 'wrong_csrf_token' );
+        }
     }
 
     return ( $template, $borrowernumber, $cookie, $flags );
