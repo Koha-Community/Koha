@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Test::Exception;
 use Test::Warn;
 
@@ -25,6 +25,7 @@ use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
 use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Cache::Memory::Lite;
 use Koha::Caches;
 use Koha::Acquisition::Orders;
@@ -1299,3 +1300,108 @@ sub host_record {
     );
     return $marc;
 }
+
+subtest 'check_booking tests' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my @items;
+    for ( 0 .. 2 ) {
+        my $item = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
+        push @items, $item;
+    }
+
+    my $can_book = $biblio->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 )
+        }
+    );
+
+    is(
+        $can_book, 1,
+        "True returned from Koha::Biblio->check_booking if there are no bookings"
+    );
+
+    my $start_1 = dt_from_string()->subtract( days => 7 );
+    my $end_1   = dt_from_string()->subtract( days => 1 );
+    my $start_2 = dt_from_string();
+    my $end_2   = dt_from_string()->add( days => 7 );
+
+    # Past bookings
+    my @bookings;
+    for my $item (@items) {
+
+        my $booking = $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    biblio_id  => $biblio->biblionumber,
+                    item_id    => $item->itemnumber,
+                    start_date => $start_1,
+                    end_date   => $end_1
+                }
+            }
+        );
+        push @bookings, $booking;
+    }
+
+    $can_book = $biblio->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+
+    is(
+        $can_book,
+        1,
+        "Koha::Biblio->check_booking returns true when we all existing bookings are in the past"
+    );
+
+    # Current bookings
+    my @current_bookings;
+    for my $item (@items) {
+        my $booking = $builder->build_object(
+            {
+                class => 'Koha::Bookings',
+                value => {
+                    biblio_id  => $biblio->biblionumber,
+                    item_id    => $item->itemnumber,
+                    start_date => $start_2,
+                    end_date   => $end_2
+                }
+            }
+        );
+        push @current_bookings, $booking;
+    }
+
+    $can_book = $biblio->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+    is(
+        $can_book,
+        0,
+        "Koha::Biblio->check_booking returns false if the booking would conflict with existing bookings"
+    );
+
+    $can_book = $biblio->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+            booking_id => $current_bookings[0]->booking_id
+        }
+    );
+    is(
+        $can_book,
+        1,
+        "Koha::Biblio->check_booking returns true if we pass the booking_id of one of the bookings that we would conflict with"
+    );
+
+    $schema->storage->txn_rollback;
+};
