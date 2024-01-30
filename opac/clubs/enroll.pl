@@ -35,14 +35,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $id             = $cgi->param('id');
-my $borrowernumber = $cgi->param('borrowernumber');
-
-my $club = Koha::Clubs->find($id);
+my $id = $cgi->param('id');
 
 $template->param(
-    club           => $club,
-    borrowernumber => $borrowernumber,
+    club => Koha::Clubs->find($id),
 );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output, undef, { force_no_caching => 1 } );
