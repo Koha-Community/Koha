@@ -9,7 +9,6 @@
     <form id="patron-enrollment-form">
         <legend class="sr-only">Enrollment</legend>
         <input type="hidden" name="id" value="[% club.id | html %]" />
-        <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
         <fieldset class="rows">
             <ol>
                 [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
@@ -45,7 +44,7 @@ function addEnrollment() {
         data: $( "#patron-enrollment-form" ).serialize(),
         success: function( data ) {
             if ( data.success ) {
-                $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
+                $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?id=[% club.id | html %]', function() {
                     $("body").css("cursor", "default");
                 });
             } else {
