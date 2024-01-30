@@ -96,7 +96,7 @@ my ( $shelf, $shelfnumber, @messages );
 if ( $op eq 'add_form' ) {
     # Only pass default
     $shelf = { allow_change_from_owner => 1 };
-} elsif ( $op eq 'cud-edit_form' ) {
+} elsif ( $op eq 'edit_form' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
@@ -161,7 +161,7 @@ if ( $op eq 'add_form' ) {
 
             if ($@) {
                 push @messages, { type => 'error', code => 'error_on_update' };
-                $op = 'cud-edit_form';
+                $op = 'edit_form';
             } else {
                 push @messages, { type => 'message', code => 'success_on_update' };
             }
