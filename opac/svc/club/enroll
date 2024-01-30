@@ -30,8 +30,8 @@ use Koha::Clubs;
 
 my $cgi = CGI->new;
 
-my ( $auth_status ) =
-  check_cookie_auth( $cgi->cookie('CGISESSID') );
+my ($auth_status) =
+    check_cookie_auth( $cgi->cookie('CGISESSID') );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -42,31 +42,42 @@ my $id = $cgi->param('id');
 
 my $enrollment;
 if ( $borrowernumber && $id ) {
+    my $already_enrolled = Koha::Club::Enrollments->search(
+        {
+            club_id        => $id,
+            borrowernumber => $borrowernumber,
+            date_canceled  => undef,
+        }
+    )->count();
+
     my $club = Koha::Clubs->find($id);
 
-    if ( $club->club_template()->is_enrollable_from_opac() ) {
-        $enrollment = Koha::Club::Enrollment->new()->set(
-            {
-                club_id        => $club->id(),
-                borrowernumber => $borrowernumber,
-                date_enrolled  => \'NOW()',
-                date_created   => \'NOW()',
-                branchcode     => C4::Context->userenv
-                ? C4::Context->userenv->{'branch'}
-                : undef,
-            }
-        )->store();
+    my $wrong_branch = $club->branchcode && C4::Context->userenv && C4::Context->userenv->{branch} ne $club->branchcode;
 
-        my @enrollment_fields = $club->club_template()->club_template_enrollment_fields->as_list;
+    unless ( $already_enrolled || $wrong_branch ) {
 
-        foreach my $e (@enrollment_fields) {
-            Koha::Club::Enrollment::Field->new()->set(
+        if ( $club->club_template()->is_enrollable_from_opac() ) {
+            $enrollment = Koha::Club::Enrollment->new(
                 {
-                    club_enrollment_id                => $enrollment->id(),
-                    club_template_enrollment_field_id => $e->id(),
-                    value                             => scalar $cgi->param( $e->id() ),
+                    club_id        => $club->id(),
+                    borrowernumber => $borrowernumber,
+                    date_enrolled  => \'NOW()',
+                    date_created   => \'NOW()',
+                    branchcode     => C4::Context->userenv ? C4::Context->userenv->{branch} : undef,
                 }
             )->store();
+
+            my @enrollment_fields = $club->club_template()->club_template_enrollment_fields->as_list;
+
+            foreach my $e (@enrollment_fields) {
+                Koha::Club::Enrollment::Field->new()->set(
+                    {
+                        club_enrollment_id                => $enrollment->id(),
+                        club_template_enrollment_field_id => $e->id(),
+                        value                             => scalar $cgi->param( $e->id() ),
+                    }
+                )->store();
+            }
         }
     }
 }
