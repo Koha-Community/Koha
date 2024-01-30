@@ -117,9 +117,9 @@
                                 <div class="patroninfo-heading">
                                     <h3>Contact information</h3>
                                     [% IF ( guarantor.borrowernumber ) %]
-                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=1&amp;guarantorid=[% guarantor.borrowernumber | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=1&amp;guarantorid=[% guarantor.borrowernumber | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                     [% ELSE %]
-                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=1"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=1"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                     [% END %]
                                 </div>
 
@@ -277,7 +277,7 @@
                                     [% IF ( housebound_role.housebound_chooser == 1 OR housebound_role.housebound_deliverer == 1 ) %]
                                         <div class="patroninfo-heading">
                                             <h3>Housebound roles</h3>
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=7"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=7"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                         </div>
                                         <div class="rows">
                                             <ol>
@@ -302,7 +302,7 @@
                                     [% ELSE %]
                                         <div class="patroninfo-heading">
                                             <h3>Housebound roles</h3>
-                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=7"><i class="fa fa-plus"></i> Add</a>
+                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=7"><i class="fa fa-plus"></i> Add</a>
                                         </div>
                                     [% END %]
                                 </div> [% #/ div#houseboundroles %]
@@ -314,7 +314,7 @@
                                         [% IF ( attributes_loop ) %]
                                             <div class="patroninfo-heading">
                                                 <h3>Additional attributes and identifiers</h3>
-                                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=4"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=4"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                             </div>
                                             [% FOREACH attribute IN attributes_loop %]
                                                 [% IF attribute.class %]
@@ -338,7 +338,7 @@
                                         [% ELSE %]
                                             <div class="patroninfo-heading">
                                                 <h3>Additional attributes and identifiers</h3>
-                                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=4"><i class="fa fa-plus"></i> Add</a>
+                                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=4"><i class="fa fa-plus"></i> Add</a>
                                             </div>
                                         [% END %]
                                     </div> [% # /div#patron-extended-attributes %]
@@ -349,7 +349,7 @@
                                 <div id="patron-messaging-prefs" class="patroninfo-section">
                                     <div class="patroninfo-heading">
                                         <h3>Patron messaging preferences</h3>
-                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=5"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=5"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                     </div>
                                     [% INCLUDE 'messaging-preference-form.inc' %]
                                     [% IF Koha.Preference('SMSSendDriver') %]
@@ -379,7 +379,7 @@
                             <div id="patron-library-details" class="patroninfo-section">
                                 <div class="patroninfo-heading">
                                     <h3>Library use</h3>
-                                    <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=3"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                    <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=3"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                 </div>
                                 <div class="rows">
                                     <ol>
@@ -415,12 +415,12 @@
                                                 <span class="blocker">
                                                     [% patron.dateexpiry | $KohaDates %]
                                                     <strong><em>Expired</em></strong>
-                                                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                                                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
                                                 </span>
                                             [% ELSIF ( patron.is_going_to_expire ) %]
                                                 [% patron.dateexpiry | $KohaDates %]
                                                 <strong><em>Patron expires soon</em></strong>
-                                                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                                                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
                                             [% ELSE %]
                                                 [% patron.dateexpiry | $KohaDates %]
                                             [% END %]
@@ -529,7 +529,7 @@
                                 [% IF ( patron.B_phone || patron.B_email || patron.contactnote || patron.B_address || patron.B_address2 || patron.B_city || patron.B_zipcode || patron.B_country ) %]
                                     <div class="patroninfo-heading">
                                         <h3>Alternate address</h3>
-                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=6"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=6"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                     </div>
                                     <div class="address">
                                         <ul>
@@ -563,7 +563,7 @@
                                 [% ELSE %]
                                     <div class="patroninfo-heading">
                                       <h3 class="inline">Alternate address</h3>
-                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=6"><i class="fa fa-plus"></i> Add</a>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=6"><i class="fa fa-plus"></i> Add</a>
                                     </div>
                                 [% END %]
                             </div> [% # /div#patron-alternate-address %]
@@ -572,7 +572,7 @@
                                 [% IF ( patron.altcontactsurname || patron.altcontactfirstname || patron.altcontactaddress1 || patron.altcontactaddress2 || patron.altcontactaddress3 || patron.altcontactstate || patron.altcontactzipcode || patron.altcontactcountry || patron.altcontactphone ) %]
                                     <div class="patroninfo-heading">
                                         <h3>Alternative contact</h3>
-                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=2"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=2"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                     </div>
                                     <div class="rows">
                                         <ol>
@@ -636,7 +636,7 @@
                                 [% ELSE %]
                                     <div class="patroninfo-heading">
                                         <h3>Alternative contact</h3>
-                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=2"><i class="fa fa-plus"></i> Add</a>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=2"><i class="fa fa-plus"></i> Add</a>
                                     </div>
                                 [% END %]
                             </div> [% # /div#patron-alternative-contact %]

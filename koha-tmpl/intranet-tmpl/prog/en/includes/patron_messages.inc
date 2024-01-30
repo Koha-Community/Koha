@@ -22,7 +22,7 @@
             <li class="warndeparture">
                 <span class="circ-hlt">Expiration:</span>
                 <span>Patron's card expires on [% patron.dateexpiry | $KohaDates %].</span>
-                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
             </li>
         [% END %]
 
@@ -39,7 +39,7 @@
                 [% IF ( expiry ) %]
                     <span>Patron's card expired on [% expiry | $KohaDates %]</span>
                 [% END %]
-                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
             </li>
         [% END %]
 
@@ -93,7 +93,7 @@
             <li class="invalid_age">
                 <span class="circ-hlt">Patron's age is incorrect for their category.</span>
                 Ages allowed are [% age_low | html %]-[% age_high | html %].
-                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3" class="btn btn-default btn-xs">Change category</a>
+                <a href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3" class="btn btn-default btn-xs">Change category</a>
             </li>
         [% END %]
 

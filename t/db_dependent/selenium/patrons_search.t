@@ -240,7 +240,7 @@ subtest 'Search patrons' => sub {
     );
 
     $driver->find_element(
-            '//a[@href="/cgi-bin/koha/members/memberentry.pl?op=modify&destination=circ&borrowernumber='
+            '//a[@href="/cgi-bin/koha/members/memberentry.pl?op=add_form&destination=circ&borrowernumber='
           . $first_patron->borrowernumber
           . '"]' )->click;
     is(
