@@ -142,39 +142,6 @@ sub store {
     return $self;
 }
 
-=head3 intersects
-
-  my $intersects = $booking1->intersects($booking2);
-
-Returns a boolean denoting whether booking1 interfers/overlaps/clashes with booking2.
-
-=cut
-
-sub intersects {
-    my ( $self, $comp ) = @_;
-
-    # Start date of comparison booking is after end date of this booking.
-    return 0
-        if (
-        DateTime->compare(
-            dt_from_string( $comp->start_date ),
-            dt_from_string( $self->end_date )
-        ) >= 0
-        );
-
-    # End date of comparison booking is before start date of this booking.
-    return 0
-        if (
-        DateTime->compare(
-            dt_from_string( $comp->end_date ),
-            dt_from_string( $self->start_date )
-        ) <= 0
-        );
-
-    # Bookings must overlap
-    return 1;
-}
-
 =head3 get_items_that_can_fill
 
     my $items = $bookings->get_items_that_can_fill();
