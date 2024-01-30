@@ -58,9 +58,9 @@
                 <form id="mark_selected" method="post" action="/cgi-bin/koha/tools/problem-reports.pl">
                     [% INCLUDE 'csrf-token.inc' %]
                     <div id="toolbar" class="btn-toolbar">
-                        <button type="submit" class="btn btn-default markviewed" name="mark_selected-viewed" value="viewed" disabled="disabled"><i class="fa-solid fa-eye"></i> Mark viewed</button>
-                        <button type="submit" class="btn btn-default markclosed" name="mark_selected-closed" value="closed" disabled="disabled"><i class="fa fa-times-circle"></i> Mark closed</button>
-                        <button type="submit" class="btn btn-default marknew" name="mark_selected-new" value="new" disabled="disabled"><i class="fa fa-star"></i> Mark new</button>
+                        <button type="submit" class="btn btn-default markviewed" name="op" value="cud-mark_selected-viewed" disabled="disabled"><i class="fa-solid fa-eye"></i> Mark viewed</button>
+                        <button type="submit" class="btn btn-default markclosed" name="op" value="cud-mark_selected-closed" disabled="disabled"><i class="fa fa-times-circle"></i> Mark closed</button>
+                        <button type="submit" class="btn btn-default marknew" name="op" value="cud-mark_selected-new" disabled="disabled"><i class="fa fa-star"></i> Mark new</button>
                     </div>
 
                     <div class="btn-toolbar selections-toolbar">

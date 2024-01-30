@@ -97,7 +97,7 @@ if ( $op eq 'cud-addreport' ) {
                     }
                 );
 
-                my $transport = 'cud-email';
+                my $transport = 'email';
                 my $reply_address = $patron->email || $patron->emailpro || $patron->B_email;
 
                 if ( $recipient eq 'library' and defined($library->inbound_email_address) and $library->inbound_email_address ne C4::Context->preference('KohaAdminEmailAddress') ) {

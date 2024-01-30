@@ -37,26 +37,22 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $action;
-foreach (qw( viewed closed new )) {
-    $action = $_ if ( $query->param("mark_selected-$_") );
-}
-$action ||= 'none';
+my $action = $query->param("op") || 'none';
 
 my @report_ids = $query->multi_param('report_ids');
 
-if ( $action eq 'viewed' ) {
+if ( $action eq 'cud-mark_selected-viewed' ) {
     foreach my $report_id ( @report_ids ) {
         my $report = Koha::ProblemReports->find($report_id);
         $report->set({ status => 'Viewed' })->store;
                                 }
-} elsif ( $action eq 'closed' ) {
+} elsif ( $action eq 'cud-mark_selected-closed' ) {
     foreach my $report_id ( @report_ids ) {
         my $report = Koha::ProblemReports->find($report_id);
         $report->set({ status => 'Closed' })->store;
     }
 
-} elsif ( $action eq 'new' ) {
+} elsif ( $action eq 'cud-mark_selected-new' ) {
     foreach my $report_id ( @report_ids ) {
         my $report = Koha::ProblemReports->find($report_id);
         $report->set({ status => 'New' })->store;
