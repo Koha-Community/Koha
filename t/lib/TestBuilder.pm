@@ -575,6 +575,9 @@ sub _gen_blob {
 sub _gen_default_values {
     my ($self) = @_;
     return {
+        AuthorisedValueCategory => {
+            is_integer_only => 0,
+        },
         BackgroundJob => {
             context => '{}'
         },

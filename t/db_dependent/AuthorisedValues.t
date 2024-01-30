@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 16;
+use Test::More tests => 17;
+use Test::Exception;
 use Try::Tiny;
 
 use t::lib::TestBuilder;
@@ -11,6 +12,7 @@ use C4::Context;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
 use Koha::AuthorisedValueCategories;
+use Koha::Exceptions;
 use Koha::MarcSubfieldStructures;
 
 my $schema  = Koha::Database->new->schema;
@@ -330,6 +332,52 @@ subtest 'search_by_*_field + find_by_koha_field + get_description + authorised_v
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'is_integer_only' => sub {
+    plan tests => 13;
+    $schema->storage->txn_begin;
+
+    my $avcat1 = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } );
+    my $avcat2 = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } );
+    $avcat2->is_integer_only(1)->store;
+    is( $avcat1->is_integer_only, 0, 'No numeric requirement expected' );
+    is( $avcat2->is_integer_only, 1, 'Numeric requirement expected' );
+
+    my $avval1 = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => { category => $avcat1->category_name, authorised_value => 'abc' }
+        }
+    );
+    my $avval2 = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => { category => $avcat2->category_name, authorised_value => '123' }
+        }
+    );
+
+    # Test helper method on child (authval)
+    is( $avval1->is_integer_only, 0, 'No numeric requirement expected' );
+    is( $avval2->is_integer_only, 1, 'Numeric requirement expected' );
+
+    lives_ok { $avval2->authorised_value(-1)->store } 'No exception expected';
+    lives_ok { $avval2->authorised_value(0)->store } 'No exception expected';
+    lives_ok { $avval2->authorised_value(22)->store } 'No exception expected';
+
+    # Test ->store with bad data
+    throws_ok { $avval2->authorised_value(undef)->store } 'Koha::Exceptions::NoInteger',
+        'Exception expected (undefined)';
+    throws_ok { $avval2->authorised_value('')->store } 'Koha::Exceptions::NoInteger',    'Exception expected (empty)';
+    throws_ok { $avval2->authorised_value('abc')->store } 'Koha::Exceptions::NoInteger', 'Exception expected for abc';
+    throws_ok { $avval2->authorised_value('+12')->store } 'Koha::Exceptions::NoInteger',
+        'Exception expected for + sign';
+    throws_ok { $avval2->authorised_value(' 12')->store } 'Koha::Exceptions::NoInteger',
+        'Exception expected for preceding space';
+    throws_ok { $avval2->authorised_value('12 ')->store } 'Koha::Exceptions::NoInteger',
+        'Exception expected for trailing space';
+
+    $schema->storage->txn_rollback;
 };
 
 $schema->storage->txn_rollback;
