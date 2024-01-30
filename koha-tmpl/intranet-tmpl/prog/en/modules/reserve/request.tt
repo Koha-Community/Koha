@@ -223,8 +223,7 @@
                             [% END # /tab_panel# %]
                             [% IF clubcount %]
                                 [% WRAPPER tab_panel tabname="holds_clubsearch_pane" %]
-                                    <form id="holds_clubsearch" action="request.pl" method="post">
-                                        [% INCLUDE 'csrf-token.inc' %]
+                                    <form id="holds_clubsearch" action="request.pl" method="get">
                                         <div class="hint">Enter club ID or partial name:</div>
                                         <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
                                         <input type="submit" class="btn btn-primary" value="Search" />
