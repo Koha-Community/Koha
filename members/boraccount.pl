@@ -54,7 +54,7 @@ my $schema         = Koha::Database->new->schema;
 my $borrowernumber = $input->param('borrowernumber');
 my $payment_id     = $input->param('payment_id');
 my $change_given   = $input->param('change_given');
-my $action         = $input->param('action') || '';
+my $op             = $input->param('op') || '';
 my @renew_results  = $input->multi_param('renew_result');
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
@@ -69,7 +69,7 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 my $registerid = $input->param('registerid');
 
-if ( $action eq 'void' ) {
+if ( $op eq 'cud-void' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $payment_id = scalar $input->param('accountlines_id');
     my $payment    = Koha::Account::Lines->find( $payment_id );
@@ -82,7 +82,7 @@ if ( $action eq 'void' ) {
     );
 }
 
-if ( $action eq 'cud-payout' ) {
+if ( $op eq 'cud-payout' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $payment_id  = scalar $input->param('accountlines_id');
     my $payment     = Koha::Account::Lines->find($payment_id);
@@ -122,7 +122,7 @@ if ( $action eq 'cud-payout' ) {
     }
 }
 
-if ( $action eq 'cud-refund' ) {
+if ( $op eq 'cud-refund' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $charge_id   = scalar $input->param('accountlines_id');
     my $charge      = Koha::Account::Lines->find($charge_id);
@@ -156,7 +156,7 @@ if ( $action eq 'cud-refund' ) {
     );
 }
 
-if ( $action eq 'discount' ) {
+if ( $op eq 'discount' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $charge_id        = scalar $input->param('accountlines_id');
     my $charge           = Koha::Account::Lines->find($charge_id);
@@ -178,7 +178,7 @@ if ( $action eq 'discount' ) {
 }
 
 my $receipt_sent = 0;
-if ( $action eq 'send_receipt' ) {
+if ( $op eq 'cud-send_receipt' ) {
     my $credit_id = scalar $input->param('accountlines_id');
     my $credit    = Koha::Account::Lines->find($credit_id);
     my @credit_offsets =
