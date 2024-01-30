@@ -30,8 +30,8 @@ use Koha::Clubs;
 
 my $cgi = CGI->new;
 
-my ( $auth_status ) =
-  check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'enroll' } );
+my ($auth_status) =
+    check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'enroll' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -43,15 +43,21 @@ my $club = Koha::Clubs->find($id);
 
 my $enrollment;
 if ($club) {
+    my $already_enrolled = Koha::Club::Enrollments->search(
+        {
+            club_id        => $id,
+            borrowernumber => $borrowernumber,
+            date_canceled  => undef,
+        }
+    )->count();
+
     $enrollment = Koha::Club::Enrollment->new(
         {
             club_id        => $club->id(),
             borrowernumber => $borrowernumber,
-            date_enrolled  => \'NOW()',
-            date_created   => \'NOW()',
-            branchcode     => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+            date_canceled  => undef,
         }
-    )->store();
+    )->store() unless $already_enrolled;
 
     if ($enrollment) {
         my @enrollment_fields = $club->club_template()->club_template_enrollment_fields->as_list;
