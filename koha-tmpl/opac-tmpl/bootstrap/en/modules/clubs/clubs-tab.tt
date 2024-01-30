@@ -58,7 +58,7 @@
                     <td>[% c.name | html %]</td>
                     <td>[% c.description | html %]</td>
                     <td>
-                        [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.first_valid_email_address ) %]
+                        [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && patron.notice_email_address ) %]
                             <button class="btn btn-sm btn-primary load_enrollment" data-id="[% c.id | html%]">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Enroll
                             </button>
@@ -76,7 +76,7 @@
 <script>
 function loadEnrollmentForm( id ) {
     $("body").css("cursor", "progress");
-    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber | html %]&id=' + id, function() {
+    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% patron.borrowernumber | html %]&id=' + id, function() {
         $("body").css("cursor", "default");
     });
 
@@ -91,7 +91,7 @@ function cancelEnrollment( id ) {
         data: { id: id },
         success: function( data ) {
             if ( data.success ) {
-                $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrower.borrowernumber | html %]', function() {
+                $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% patron.borrowernumber | html %]', function() {
                     $("body").css("cursor", "default");
                 });
             } else {

@@ -35,17 +35,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $borrowernumber = $cgi->param('borrowernumber');
+my $patron = Koha::Patrons->find( $loggedinuser );
 
-my $borrower = Koha::Patrons->find($borrowernumber);
-
-my @enrollments = $borrower->get_club_enrollments->as_list;
-my @clubs = $borrower->get_enrollable_clubs( my $opac = 1 )->as_list;
+my @enrollments = $patron->get_club_enrollments->as_list;
+my @clubs = $patron->get_enrollable_clubs( my $opac = 1 )->as_list;
 
 $template->param(
     enrollments => \@enrollments,
     clubs       => \@clubs,
-    borrower    => $borrower,
+    patron      => $patron,
 );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output, undef, { force_no_caching => 1 } );
