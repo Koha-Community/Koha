@@ -97,8 +97,8 @@ describe("WaitingList", () => {
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
         cy.contains("Submit").click();
         cy.wait("@get-items");
-        cy.get("main div[class='dialog message']").contains(
-            "2 new items added."
+        cy.get("main div[class='dialog alert modal']").contains(
+            "2 new items added. 1 items not found."
         );
     });
 
