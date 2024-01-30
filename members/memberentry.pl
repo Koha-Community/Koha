@@ -73,16 +73,16 @@ if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
     $template->param( sms_providers => \@providers );
 }
 
-my $actionType     = $input->param('actionType') || '';
-my $modify         = $input->param('modify');
-my $delete         = $input->param('cud-delete');
-my $op             = $input->param('op');
-my $destination    = $input->param('destination');
-my $cardnumber     = $input->param('cardnumber');
-my $check_member   = $input->param('check_member');
-my $nodouble       = $input->param('nodouble');
-my $duplicate      = $input->param('duplicate');
-my $quickadd       = $input->param('quickadd');
+my $modify       = $input->param('modify');
+my $delete       = $input->param('cud-delete');
+my $op           = $input->param('op');
+my $destination  = $input->param('destination');
+my $cardnumber   = $input->param('cardnumber');
+my $check_member = $input->param('check_member');
+my $nodouble     = $input->param('nodouble');
+my $duplicate    = $input->param('duplicate');
+my $quickadd     = $input->param('quickadd');
+
 $nodouble = 1 if ($op eq 'modify' or $op eq 'duplicate');    # FIXME hack to represent fact that if we're
                                      # modifying an existing patron, it ipso facto
                                      # isn't a duplicate.  Marking FIXME because this
