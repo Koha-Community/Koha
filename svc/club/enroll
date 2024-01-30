@@ -30,8 +30,8 @@ use Koha::Clubs;
 
 my $cgi = CGI->new;
 
-my ( $auth_status ) =
-  check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'enroll' } );
+my ($auth_status) =
+    check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'enroll' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -46,42 +46,54 @@ my $enrollment;
 
 my @club_enrollment_fields;
 
-if($enrollent_id){
+if ($enrollent_id) {
     my @enrollment_fields = $club->club_template()->club_template_enrollment_fields()->as_list;
-    @club_enrollment_fields = Koha::Club::Enrollment::Fields->search({'club_enrollment_id'=> $enrollent_id})->as_list;
+    @club_enrollment_fields =
+        Koha::Club::Enrollment::Fields->search( { 'club_enrollment_id' => $enrollent_id } )->as_list;
 
-    foreach my $club_enrollment_field (@club_enrollment_fields){
-        foreach my $e (@enrollment_fields){
-            if($e->id()==$club_enrollment_field->club_template_enrollment_field_id){
+    foreach my $club_enrollment_field (@club_enrollment_fields) {
+        foreach my $e (@enrollment_fields) {
+            if ( $e->id() == $club_enrollment_field->club_template_enrollment_field_id ) {
                 my $value = $cgi->param( $e->id() );
                 $club_enrollment_field->value($value);
                 $club_enrollment_field->update();
             }
         }
     }
-}
-elsif ($club) {
-    $enrollment = Koha::Club::Enrollment->new(
+} elsif ($club) {
+    my $already_enrolled = Koha::Club::Entrollments->search(
         {
             club_id        => $club->id(),
             borrowernumber => $borrowernumber,
-            date_enrolled  => \'NOW()',
-            date_created   => \'NOW()',
-            branchcode     => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+            date_canceled  => undef,
         }
-    )->store();
+    )->count();
 
-    if ($enrollment) {
-        my @enrollment_fields = $club->club_template()->club_template_enrollment_fields->as_list;
+    my $wrong_branch = $club->branchcode && C4::Context->userenv && C4::Context->userenv->{branch} ne $club->branchcode;
 
-        foreach my $e (@enrollment_fields) {
-            my $club_enrollment_field = Koha::Club::Enrollment::Field->new(
-                {
-                    club_enrollment_id                => $enrollment->id(),
-                    club_template_enrollment_field_id => $e->id(),
-                    value                             => scalar $cgi->param( $e->id() ),
-                }
-            )->store();
+    unless ( $already_enrolled || $wrong_branch ) {
+        $enrollment = Koha::Club::Enrollment->new(
+            {
+                club_id        => $club->id(),
+                borrowernumber => $borrowernumber,
+                date_enrolled  => \'NOW()',
+                date_created   => \'NOW()',
+                branchcode     => C4::Context->userenv ? C4::Context->userenv->{branch} : undef,
+            }
+        )->store();
+
+        if ($enrollment) {
+            my @enrollment_fields = $club->club_template()->club_template_enrollment_fields->as_list;
+
+            foreach my $e (@enrollment_fields) {
+                my $club_enrollment_field = Koha::Club::Enrollment::Field->new(
+                    {
+                        club_enrollment_id                => $enrollment->id(),
+                        club_template_enrollment_field_id => $e->id(),
+                        value                             => scalar $cgi->param( $e->id() ),
+                    }
+                )->store();
+            }
         }
     }
 }
@@ -89,9 +101,8 @@ elsif ($club) {
 binmode STDOUT, ':encoding(UTF-8)';
 print $cgi->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-if($enrollent_id){
+if ($enrollent_id) {
     print to_json( { success => @club_enrollment_fields ? 1 : 0 } );
-}
-else{
+} else {
     print to_json( { success => $enrollment ? 1 : 0 } );
 }
