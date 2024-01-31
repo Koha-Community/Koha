@@ -89,7 +89,7 @@ if ( $op eq 'cud-cancel_reserve' and $reserve_id ) {
                 C4::Letters::EnqueueLetter(
                     {   letter                 => $letter,
                         borrowernumber         => $patron->borrowernumber,
-                        message_transport_type => 'cud-email',
+                        message_transport_type => 'email',
                         from_address           => $from_address,
                     }
                 );

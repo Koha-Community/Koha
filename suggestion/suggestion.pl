@@ -220,7 +220,7 @@ if ( $op =~ /save/i ) {
                         {
                             letter                 => $letter,
                             borrowernumber         => $patron->borrowernumber,
-                            message_transport_type => 'cud-email'
+                            message_transport_type => 'email'
                         }
                     );
                 }

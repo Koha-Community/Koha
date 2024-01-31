@@ -187,7 +187,7 @@ if ( $op eq 'cud-send_receipt' ) {
         my $letter = C4::Letters::GetPreparedLetter(
             module      => 'circulation',
             letter_code => uc( "ACCOUNT_" . $credit->credit_type_code ),
-            message_transport_type => 'cud-email',
+            message_transport_type => 'email',
             lang                   => $patron->lang,
             tables                 => {
                 borrowers => $patron->borrowernumber,
@@ -204,7 +204,7 @@ if ( $op eq 'cud-send_receipt' ) {
             {
                 letter                 => $letter,
                 borrowernumber         => $patron->borrowernumber,
-                message_transport_type => 'cud-email',
+                message_transport_type => 'email',
             }
         );
         C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;

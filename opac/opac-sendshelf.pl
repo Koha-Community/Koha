@@ -53,7 +53,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $shelfid = $query->param('shelfid');
-my $email   = $query->param('cud-email');
+my $email   = $query->param('email');
 
 my $shelf = Koha::Virtualshelves->find($shelfid);
 if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
@@ -96,7 +96,7 @@ if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
                 tables      => {
                     borrowers => $borrowernumber,
                 },
-                message_transport_type => 'cud-email',
+                message_transport_type => 'email',
                 loops                  => \%loops,
                 substitute             => \%substitute,
             );
@@ -110,7 +110,7 @@ if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
             my $message_id = C4::Letters::EnqueueLetter(
                 {
                     letter                 => $letter,
-                    message_transport_type => 'cud-email',
+                    message_transport_type => 'email',
                     borrowernumber         => $patron->borrowernumber,
                     to_address             => $email,
                     reply_address          => $user_email,

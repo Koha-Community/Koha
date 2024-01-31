@@ -83,7 +83,7 @@ foreach my $num (@getoverdues) {
     $overdueforbranch{'borrowersurname'}   = $num->{'surname'};
     $overdueforbranch{'borrowerfirstname'} = $num->{'firstname'};
     $overdueforbranch{'borrowerphone'}     = $num->{'phone'};
-    $overdueforbranch{'borroweremail'}     = $num->{'cud-email'};
+    $overdueforbranch{'borroweremail'}     = $num->{'email'};
     $overdueforbranch{'homebranch'}        = $num->{'homebranch'};
     $overdueforbranch{'itemcallnumber'}    = $num->{'itemcallnumber'};
     $overdueforbranch{'borrowernumber'}    = $num->{'borrowernumber'};

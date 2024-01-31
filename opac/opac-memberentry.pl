@@ -189,7 +189,7 @@ if ( $action eq 'create' ) {
                     authnotrequired => 1,
                 }
             );
-            $template->param( 'cud-email' => $borrower{'cud-email'} );
+            $template->param( 'email' => $borrower{'email'} );
 
             my $verification_token = md5_hex( time().{}.rand().{}.$$ );
             while ( Koha::Patron::Modifications->search( { verification_token => $verification_token } )->count() ) {
@@ -215,8 +215,8 @@ if ( $action eq 'create' ) {
             my $message_id = C4::Letters::EnqueueLetter(
                 {
                     letter                 => $letter,
-                    message_transport_type => 'cud-email',
-                    to_address             => $borrower{'cud-email'},
+                    message_transport_type => 'email',
+                    to_address             => $borrower{'email'},
                     from_address =>
                       C4::Context->preference('KohaAdminEmailAddress'),
                 }
@@ -288,7 +288,7 @@ if ( $action eq 'create' ) {
                                     letter                 => $letter,
                                     borrowernumber         => $patron->id,
                                     to_address             => $emailaddr,
-                                    message_transport_type => 'cud-email'
+                                    message_transport_type => 'email'
                                 }
                             );
                             SendQueuedMessages( { message_id => $message_id } ) if $message_id;
@@ -448,7 +448,7 @@ sub GetMandatoryFields {
     }
 
     if ( $action eq 'create' || $action eq 'new' ) {
-        $mandatory_fields{'cud-email'} = 1
+        $mandatory_fields{'email'} = 1
           if C4::Context->preference(
             'PatronSelfRegistrationVerifyByEmail');
     }
@@ -489,9 +489,9 @@ sub CheckMandatoryAttributes{
 sub CheckForInvalidFields {
     my $borrower = shift;
     my @invalidFields;
-    if ($borrower->{'cud-email'}) {
+    if ($borrower->{'email'}) {
         unless ( Koha::Email->is_valid($borrower->{email}) ) {
-            push(@invalidFields, "cud-email");
+            push(@invalidFields, "email");
         } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
             my $patrons_with_same_email = Koha::Patrons->search( # FIXME Should be search_limited?
                 {
@@ -508,7 +508,7 @@ sub CheckForInvalidFields {
                 push @invalidFields, "duplicate_email";
             }
         } elsif ( C4::Context->preference("PatronSelfRegistrationConfirmEmail")
-            && $borrower->{'cud-email'} ne $borrower->{'repeat_email'}
+            && $borrower->{'email'} ne $borrower->{'repeat_email'}
             && !defined $borrower->{borrowernumber} ) {
             push @invalidFields, "email_match";
         }

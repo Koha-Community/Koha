@@ -28,7 +28,7 @@ my ( $template, $dummy, $cookie ) = get_template_and_user(
     }
 );
 
-my $email          = $query->param('cud-email') // q{};
+my $email          = $query->param('email') // q{};
 my $password       = $query->param('newPassword');
 my $repeatPassword = $query->param('repeatPassword');
 my $id             = $query->param('id');

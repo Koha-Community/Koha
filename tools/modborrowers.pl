@@ -261,7 +261,7 @@ if ( $op eq 'cud-show' ) {
         }
         ,
         {
-            name => "cud-email",
+            name => "email",
             type => "text",
             mandatory => ( grep /email/, @mandatoryFields ) ? 1 : 0,
         }

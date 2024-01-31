@@ -65,7 +65,7 @@ if ( $op eq 'cud-reset' ) {
 
 if ( $op eq 'cud-send' && not $bad_url ) {
     my $name = $query->param('name');
-    my $email = $query->param('cud-email');
+    my $email = $query->param('email');
 
     my $content = to_json({name => $name,
                            email => $email});

@@ -78,7 +78,7 @@ if ( $mode eq 'job_add' ) {
             $format = undef;
         }
     }
-    my $email = $input->param('cud-email');
+    my $email = $input->param('email');
     if ($email) {
         my $is_valid = Koha::Email->is_valid($email);
         if ( !$is_valid ) {

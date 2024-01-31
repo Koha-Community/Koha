@@ -73,7 +73,7 @@ else {
                             borrowers => $logged_in_user->id
                         },
                     },
-                    message_transports => ['cud-email'],
+                    message_transports => ['email'],
                 }
             );
         }

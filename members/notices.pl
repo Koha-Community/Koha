@@ -84,7 +84,7 @@ if ( $op eq 'send_welcome' ) {
                     letter                 => $letter,
                     borrowernumber         => $patron->id,
                     to_address             => $emailaddr,
-                    message_transport_type => 'cud-email'
+                    message_transport_type => 'email'
                 }
             );
         };

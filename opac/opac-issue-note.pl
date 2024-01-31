@@ -91,7 +91,7 @@ if ( $op eq 'cud-issuenote' && C4::Context->preference('AllowCheckoutNotes') && 
 
             C4::Letters::EnqueueLetter({
                 letter => $letter,
-                message_transport_type => 'cud-email',
+                message_transport_type => 'email',
                 borrowernumber => $patron->borrowernumber,
                 to_address => $to_address,
                 reply_address => $reply_address,

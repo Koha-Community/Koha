@@ -365,7 +365,7 @@ if ($op eq 'cud-save' || $op eq 'cud-insert'){
   }
 
   # Validate emails
-  my $emailprimary = $input->param('cud-email');
+  my $emailprimary = $input->param('email');
   my $emailsecondary = $input->param('emailpro');
   my $emailalt = $input->param('B_email');
 
@@ -468,7 +468,7 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
                             letter                 => $letter,
                             borrowernumber         => $patron->id,
                             to_address             => $emailaddr,
-                            message_transport_type => 'cud-email'
+                            message_transport_type => 'email'
                         }
                     );
                     SendQueuedMessages( { message_id => $message_id } ) if $message_id;
@@ -507,7 +507,7 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
         $patron = Koha::Patrons->find( $borrowernumber );
 
         if ($NoUpdateEmail) {
-            delete $newdata{'cud-email'};
+            delete $newdata{'email'};
             delete $newdata{'emailpro'};
             delete $newdata{'B_email'};
         }
