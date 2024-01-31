@@ -129,48 +129,52 @@ if ($add_op) {
 	}
 }
 
-my $scrubber;
-my @newtags_keys = (keys %newtags);
-if (scalar @newtags_keys) {
-	$scrubber = C4::Scrubber->new();
-	foreach my $biblionumber (@newtags_keys) {
-        my $bibResults = {adds=>0, errors=>[]};
-		my @values = split /[;,]/, $newtags{$biblionumber};
-		foreach (@values) {
-			s/^\s*(.+)\s*$/$1/;
-			my $clean_tag = $scrubber->scrub($_);
-			unless ($clean_tag eq $_) {
-				if ($clean_tag =~ /\S/) {
-					push @errors, {scrubbed=>$clean_tag};
-					push @{$bibResults->{errors}}, {scrubbed=>$clean_tag};
-				} else {
-					push @errors, {scrubbed_all_bad=>1};
-					push @{$bibResults->{errors}}, {scrubbed_all_bad=>1};
-					next;	# we don't add it if there's nothing left!
-				}
-			}
-			my $result = ($openadds) ?
-				add_tag($biblionumber,$clean_tag,$loggedinuser,$loggedinuser) : # pre-approved
-				add_tag($biblionumber,$clean_tag,$loggedinuser)   ;
-			if ($result) {
-				$counts{$biblionumber}++;
-                $bibResults->{adds}++;
-			} else {
-				push @errors, {failed_add_tag=>$clean_tag};
-				push @{$bibResults->{errors}}, {failed_add_tag=>$clean_tag};
-                Koha::Logger->get->warn("add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result (" . (defined $result ? $result : 'UNDEF') .")");
-			}
-		}
-        $perBibResults->{$biblionumber} = $bibResults;
-	}
-}
+my $op = $query->param('op') || q{};
 my $dels = 0;
-foreach (@deltags) {
-	if (remove_tag($_,$loggedinuser)) {
-		$dels++;
-	} else {
-		push @errors, {failed_delete=>$_};
-	}
+if ( $op eq 'cud-add' ) {
+    my $scrubber;
+    my @newtags_keys = (keys %newtags);
+    if (scalar @newtags_keys) {
+        $scrubber = C4::Scrubber->new();
+        foreach my $biblionumber (@newtags_keys) {
+            my $bibResults = {adds=>0, errors=>[]};
+            my @values = split /[;,]/, $newtags{$biblionumber};
+            foreach (@values) {
+                s/^\s*(.+)\s*$/$1/;
+                my $clean_tag = $scrubber->scrub($_);
+                unless ($clean_tag eq $_) {
+                    if ($clean_tag =~ /\S/) {
+                        push @errors, {scrubbed=>$clean_tag};
+                        push @{$bibResults->{errors}}, {scrubbed=>$clean_tag};
+                    } else {
+                        push @errors, {scrubbed_all_bad=>1};
+                        push @{$bibResults->{errors}}, {scrubbed_all_bad=>1};
+                        next;	# we don't add it if there's nothing left!
+                    }
+                }
+                my $result = ($openadds) ?
+                    add_tag($biblionumber,$clean_tag,$loggedinuser,$loggedinuser) : # pre-approved
+                    add_tag($biblionumber,$clean_tag,$loggedinuser)   ;
+                if ($result) {
+                    $counts{$biblionumber}++;
+                    $bibResults->{adds}++;
+                } else {
+                    push @errors, {failed_add_tag=>$clean_tag};
+                    push @{$bibResults->{errors}}, {failed_add_tag=>$clean_tag};
+                    Koha::Logger->get->warn("add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result (" . (defined $result ? $result : 'UNDEF') .")");
+                }
+            }
+            $perBibResults->{$biblionumber} = $bibResults;
+        }
+    }
+} elsif ( $op eq 'cud-del' ) {
+    foreach (@deltags) {
+        if (remove_tag($_,$loggedinuser)) {
+            $dels++;
+        } else {
+            push @errors, {failed_delete=>$_};
+        }
+    }
 }
 
 if ($is_ajax) {
