@@ -177,6 +177,7 @@
                             [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                             [% IF hold_cancellation.count %]
                                 <label for="cancellation-reason">Cancellation reason:</label>
+                                <input type="hidden" name="op" value="cud-cancelall" />
                                 <select name="cancellation-reason">
                                     <option value="">No reason given</option>
                                     [% FOREACH reason IN hold_cancellation %]
@@ -191,6 +192,7 @@
                         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="action">
+                                <input type="hidden" name="op" value="cud-suspendall" />
                                 <input type="hidden" name="from" value="[% patronpage | html %]" />
                                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                 <input type="submit" class="btn btn-primary" value="Suspend all holds" />
@@ -206,6 +208,7 @@
                         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="action">
+                                <input type="hidden" name="op" value="cud-unsuspendall" />
                                 <input type="hidden" name="from" value="borrower" />
                                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                 <input type="hidden" name="suspend" value="0" />

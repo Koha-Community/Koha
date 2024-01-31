@@ -32,11 +32,14 @@ my $query = CGI->new;
 
 checkauth($query, 0, { reserveforothers => '*' }, 'intranet');
 
+my $op = $query->param('op') || q{};
 my $borrowernumber = $query->param('borrowernumber');
 my $suspend        = $query->param('suspend');
 my $suspend_until  = $query->param('suspend_until');
 
-SuspendAll( borrowernumber => $borrowernumber, suspend_until => $suspend_until, suspend => $suspend );
+if( $op eq 'cud-suspendall' || $op eq 'cud-unsuspendall' ){
+    SuspendAll( borrowernumber => $borrowernumber, suspend_until => $suspend_until, suspend => $suspend );
+}
 
 my $from = $query->param('from');
 $from ||= q{};

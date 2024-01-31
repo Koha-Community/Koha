@@ -37,6 +37,7 @@ my $query = CGI->new;
 
 checkauth($query, 0, { reserveforothers => '*' }, 'intranet');
 
+my $op = $query->param('op') || 'cud-modifyall';
 my @reserve_id = $query->multi_param('reserve_id');
 my @rank = $query->multi_param('rank-request');
 my @borrower = $query->multi_param('borrowernumber');
@@ -62,7 +63,7 @@ if ($CancelBorrowerNumber) {
 }
 
 # 2) Cancel or modify the queue list of reserves (without item linked)
-else {
+elsif( $op eq 'cud-cancelall' || $op eq 'cud-modifyall' ) {
     for (my $i=0;$i<$count;$i++){
         undef $itemnumber[$i] if !$itemnumber[$i];
         my $suspend_until = $query->param( "suspend_until_" . $reserve_id[$i] );
