@@ -5,8 +5,7 @@
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="avCreateLabel">Create a new authorized value</h3>
             </div>
-            <form id="add_new_av" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form id="add_new_av" method="get">
                 <div class="modal-body">
                     <fieldset class="rows">
                         <ol>
