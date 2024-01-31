@@ -84,7 +84,7 @@
         },
         onChange: function( selectedDates, dateText, instance) {
             var thisInput = instance.input;
-            let = accepts_time = $(thisInput).data('flatpickr-enable-time');
+            let accepts_time = $(thisInput).data('flatpickr-enable-time');
             if ( accepts_time ) {
                 let parsedDate = flatpickr.parseDate(dateText, instance.config.dateFormat);
                 if ( !parsedDate.getHours() ) {
@@ -93,11 +93,21 @@
             }
         },
         onOpen: function( selectedDates, dateText, instance ) {
-            let element = instance.altInput;
-            let options = maskitoDateOptionsGenerator({
-                mode: altinput_dateformat,
-                separator: delimiter,
-            });
+            var thisInput = instance.input;
+            let accepts_time = $(thisInput).data('flatpickr-enable-time');
+            let options = {};
+            if ( accepts_time ) {
+                options = maskitoDateTimeOptionsGenerator({
+                    dateMode: altinput_dateformat,
+                    timeMode: 'HH:MM',
+                    dateSeparator: delimiter,
+                });
+            } else {
+                options = maskitoDateOptionsGenerator({
+                    mode: altinput_dateformat,
+                    separator: delimiter,
+                });
+            }
             new Maskito( instance.altInput, options );
         },
         onClose: function( selectedDates, dateText, instance) {
@@ -199,7 +209,7 @@
         if ( $(input).data('flatpickr-enable-time') === true ) {
             options['enableTime'] = true;
             options['dateFormat'] = "Y-m-d H:i";
-            options['altFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
+            options['altFormat'] = flatpickr_dateformat_string + ", " + flatpickr_timeformat_string;
         }
         if ( $(input).data('flatpickr-disable-shortcuts') === true ) {
             options['plugins'] = [];
