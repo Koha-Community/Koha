@@ -645,6 +645,7 @@ describe("Trains", () => {
         cy.get("main div[class='dialog alert modal']").contains(
             "2 new items added. 1 items not found."
         );
+        cy.get("#close_modal").click();
         cy.contains("Add last 2 items to a train").click();
         cy.get("#train_id .vs__search").type(train.name + "{enter}");
         cy.intercept("GET", "/api/v1/items*", {
