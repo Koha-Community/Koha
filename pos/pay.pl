@@ -50,7 +50,7 @@ my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 
 my $library_id = C4::Context->userenv->{'branch'};
 my $registerid = $input->param('registerid');
-my $action     = $input->param('action') || '';
+my $op     = $input->param('op') || '';
 
 my $invoice_types =
   Koha::Account::DebitTypes->search_with_library_limits(
@@ -84,7 +84,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     );
 }
 
-if ( $action eq 'cud-send' ) {
+if ( $op eq 'cud-send' ) {
     my $payment_id = $input->param('payment_id');
     my $change     = $input->param('change');
     my $collected  = $input->param('collected');
@@ -95,7 +95,7 @@ if ( $action eq 'cud-send' ) {
         module                 => 'pos',
         letter_code            => 'RECEIPT',
         branchcode             => C4::Context->userenv->{'branch'},
-        message_transport_type => 'cud-email',
+        message_transport_type => 'email',
         tables                 => {
             credits => $payment_id,
         },
@@ -109,7 +109,7 @@ if ( $action eq 'cud-send' ) {
     my $message_id = EnqueueLetter(
         {
             letter                 => $letter,
-            message_transport_type => 'cud-email',
+            message_transport_type => 'email',
             from_address => C4::Context->preference('KohaAdminEmailAddress'),
             to_address   => $toaddr,
         }

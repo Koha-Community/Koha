@@ -186,7 +186,8 @@
 
 <!-- Email receipt modal -->
 <div class="modal" id="emailReceiptModal" tabindex="-1" role="dialog" aria-labelledby="emailReceiptLabel">
-    <form id="email_form" action="/cgi-bin/koha/pos/pay.pl" method="get" enctype="multipart/form-data" class="validated">
+    <form id="email_form" action="/cgi-bin/koha/pos/pay.pl" method="post" enctype="multipart/form-data" class="validated">
+        [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="payment_id" value="[% payment_id | uri %]">
         <input type="hidden" name="collected" value="[% collected | uri %]">
         <input type="hidden" name="change" value="[% change | uri %]">"
@@ -208,7 +209,7 @@
                     </fieldset> <!-- /.rows -->
                 </div> <!-- /.modal-body -->
                 <div class="modal-footer">
-                    <input type="hidden" name="action" value="send">
+                    <input type="hidden" name="op" value="cud-send">
                     <button type="submit" class="btn btn-default">Confirm</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div> <!-- /.modal-footer -->
