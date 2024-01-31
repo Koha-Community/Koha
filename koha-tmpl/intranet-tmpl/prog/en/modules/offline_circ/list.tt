@@ -132,12 +132,12 @@
                 $("#operations input:checkbox").prop("checked", true );
             });
             $('#process,#delete').click(function() {
-                var action = $(this).attr("id");
+                var op = $(this).attr("id");
                 $(":checkbox[name=operationid]:checked").each(function() {
                     var cb = $(this);
                     $.ajax({
                         url: "process.pl",
-                        data: { 'action': action, 'operationid': this.value },
+                        data: { 'op': 'cud-' + op, 'operationid': this.value },
                         async: false,
                         dataType: "text",
                         success: function(data) {

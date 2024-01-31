@@ -34,13 +34,13 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 });
 
 my $operationid = $query->param('operationid');
-my $action = $query->param('action');
+my $op = $query->param('op') || q{};
 my $result;
 
-if ( $action eq 'process' ) {
+if ( $op eq 'cud-process' ) {
     my $operation = GetOfflineOperation( $operationid );
     $result = ProcessOfflineOperation( $operation );
-} elsif ( $action eq 'cud-delete' ) {
+} elsif ( $op eq 'cud-delete' ) {
     $result = DeleteOfflineOperation( $operationid );
 }
 
