@@ -89,21 +89,3 @@
 [% ELSE %]
     <h4>Mana search fails with the code: [% statuscode | html %] </h4>
 [% END %]
-
-<div id="comment_box" class="modal" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label" style="display: none;">
-    <div class="modal-dialog modal-lg" style="width: 30%">
-        <div class="modal-content" style="">
-            <div class="modal-header">
-                <button type="button" id="commentCloseButton" class="closebtn" aria-hidden="true">×</button>
-                <h3 id="mana_submit_comment"> Please enter a new comment (max 35 characters)</h3>
-            </div>
-            <div class="modal-body">
-                <form method="get">
-                    <input hidden id="selected_id" value="">
-                    <input type="text" id="manamsg"> Comment:
-                </form>
-                <button id="CommentButton"> Comment </button>
-            </div>
-        </div>
-    </div>
-</div>
