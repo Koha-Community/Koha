@@ -80,7 +80,7 @@ subtest 'enqueue() tests' => sub {
         'Enqueue BatchUpdateItem without data throws exception';
 
     # The following test needs a mock to trigger the exception
-    my $mock = Test::MockModule->new('Net::Stomp')->mock( 'send_with_receipt', 0 );
+    my $mock = Test::MockModule->new('Net::Stomp')->mock( 'send_with_receipt', sub { 0 } );
     throws_ok { Koha::BackgroundJob::MARCImportCommitBatch->new->enqueue }
     'Koha::Exceptions::BackgroundJob',
         'Enqueue MARCImportCommitBatch with mock throws exception';
