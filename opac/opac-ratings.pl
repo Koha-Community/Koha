@@ -39,6 +39,7 @@ my $query = CGI->new();
 my ($userid, $cookie, $sessionID) = checkauth( $query, 0, {}, 'opac' );
 my $loggedinuser = C4::Context->userenv->{'number'};
 
+my $op               = $query->param('op') || q{};
 my $biblionumber     = $query->param('biblionumber');
 my $rating_old_value = $query->param('rating_value');
 my $rating_value     = $query->param('rating');
@@ -50,13 +51,16 @@ unless ( $biblionumber and $rating_value ) {
     exit;
 }
 
-if ( !$rating_old_value ) {
-    my $rating = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, });
-    $rating->store if $rating;
+if ( $op eq 'cud-add' ) {
+    if ( !$rating_old_value ) {
+        my $rating = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, });
+        $rating->store if $rating;
+    }
+    else {
+        my $rating = Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser });
+        $rating->rating_value($rating_value)->store if $rating;
+    }
 }
-else {
-    my $rating = Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser });
-    $rating->rating_value($rating_value)->store if $rating;
-}
+
 print $query->redirect(
     "/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
