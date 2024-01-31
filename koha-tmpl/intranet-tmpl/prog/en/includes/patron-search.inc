@@ -600,7 +600,7 @@
                                     [% CASE 'add' %]
                                         action_node += '<a href="#" class="btn btn-default btn-xs add_user" data-borrowernumber="' + patron_id + '">' + _("Add") + '</a>';
                                     [% CASE 'edit' %]
-                                        action_node += '<a href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;destination=circ&amp;borrowernumber=' + patron_id + '" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit") + '</a>';
+                                        action_node += '<a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=' + patron_id + '" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> ' + _("Edit") + '</a>';
                                     [% CASE 'checkout' %]
                                         [% IF CAN_user_circulate_circulate_remaining_permissions %]
                                             action_node += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=' + patron_id + '"><i class="fa fa-barcode"></i> ' + _("Check out") + '</a>';

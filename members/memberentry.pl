@@ -83,7 +83,7 @@ my $nodouble     = $input->param('nodouble');
 my $duplicate    = $input->param('duplicate');
 my $quickadd     = $input->param('quickadd');
 
-$nodouble = 1 if ($op eq 'add_form' or $op eq 'duplicate');    # FIXME hack to represent fact that if we're
+$nodouble = 1 if ($op eq 'edit_form' or $op eq 'duplicate');    # FIXME hack to represent fact that if we're
                                      # modifying an existing patron, it ipso facto
                                      # isn't a duplicate.  Marking FIXME because this
                                      # script needs to be refactored.
@@ -163,11 +163,11 @@ foreach (@field_check) {
     next unless m/\w/o;
     $template->param( "no$_" => 1 );
 }
-$template->param( "cud-add" => 1 ) if ( $op eq 'cud-add' );
+$template->param( "op" => $op );
 $template->param( "quickadd" => 1 ) if ( $quickadd );
 $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
-if ( $op eq 'add_form' or $op eq 'cud-save' or $op eq 'duplicate' ) {
+if ( $op eq 'edit_form' or $op eq 'cud-save' or $op eq 'duplicate' ) {
     my $logged_in_user = Koha::Patrons->find( $loggedinuser );
     output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
@@ -191,7 +191,7 @@ $template->param( patron_category => $category );
 
 # initialize %newdata
 my %newdata;                                                                             # comes from $input->param()
-if ( $op eq 'cud-insert' || $op eq 'add_form' || $op eq 'cud-save' || $op eq 'duplicate' ) {
+if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'duplicate' ) {
     my @names = ( $borrower_data && $op ne 'cud-save' ) ? keys %$borrower_data : $input->param();
     foreach my $key (@names) {
         if (defined $input->param($key)) {
@@ -400,7 +400,7 @@ elsif ( $borrowernumber ) {
     $extended_patron_attributes = Koha::Patrons->find($borrowernumber)->extended_attributes->unblessed;
 }
 
-if ( ($op eq 'add_form' || $op eq 'cud-insert' || $op eq 'cud-save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
+if ( ($op eq 'edit_form' || $op eq 'cud-insert' || $op eq 'cud-save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
     unless ($newdata{'dateexpiry'}){
         $newdata{'dateexpiry'} = $category->get_expiry_date( $newdata{dateenrolled} ) if $category;
     }
@@ -433,7 +433,7 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
                 warn "Patron creation failed! - $@"; # Maybe we must die instead of just warn
                 push @messages, {error => 'error_on_insert_patron'};
             }
-            $op = "cud-add";
+            $op = "add_form";
             return;
         };
 
@@ -527,7 +527,7 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
                 warn "Patron modification failed! - $@"; # Maybe we must die instead of just warn
                 push @messages, {error => 'error_on_update_patron'};
             }
-            $op = 'add_form';
+            $op = 'edit_form';
         };
 
         if ( $success ) {
@@ -597,10 +597,10 @@ if ($delete){
 }
 
 if ($nok or !$nodouble){
-    $op = 'cud-add'  if ( $op eq 'cud-insert' );
-    $op = 'add_form' if ( $op eq 'cud-save' );
+    $op = 'add_form'  if ( $op eq 'cud-insert' );
+    $op = 'edit_form' if ( $op eq 'cud-save' );
     %data=%newdata; 
-    $template->param( updtype => ($op eq 'cud-add' ?'I':'M'));	# used to check for $op eq "cud-insert"... but we just changed $op!
+    $template->param( updtype => ($op eq 'add' ?'I':'M'));	# used to check for $op eq "cud-insert"... but we just changed $op!
     unless ($step){  
         $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1, step_7 => 1 );
     }  
@@ -619,7 +619,7 @@ if (C4::Context->preference("IndependentBranches")) {
 my $prefillguarantorfields=C4::Context->preference("PrefillGuaranteeField");
 my @prefill_fields=split(/\,/,$prefillguarantorfields);
 
-if ($op eq 'cud-add'){
+if ($op eq 'add_form'){
     if ($guarantor_id) {
         foreach (@prefill_fields) {
             $newdata{$_} = $guarantor->$_;
@@ -627,7 +627,7 @@ if ($op eq 'cud-add'){
     }
     $template->param( updtype => 'I', step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1, step_7 => 1);
 }
-if ($op eq 'add_form')  {
+if ($op eq 'edit_form')  {
     $template->param( updtype => 'M',modify => 1 );
     $template->param( step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1, step_7 => 1) unless $step;
     if ( $step == 4 ) {
@@ -708,7 +708,7 @@ if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
     $userbranch = C4::Context->userenv->{'branch'};
 }
 
-if (defined ($data{'branchcode'}) and ( $op eq 'add_form' || $op eq 'duplicate' || ( $op eq 'cud-add' && $category->category_type eq 'C' ) )) {
+if (defined ($data{'branchcode'}) and ( $op eq 'edit_form' || $op eq 'duplicate' || ( $op eq 'add_form' && $category->category_type eq 'C' ) )) {
     $userbranch = $data{'branchcode'};
 }
 $template->param( userbranch => $userbranch );
@@ -768,7 +768,7 @@ if ( C4::Context->preference('ExtendedPatronAttributes') ) {
 }
 
 if (C4::Context->preference('EnhancedMessagingPreferences')) {
-    if ($op eq 'cud-add') {
+    if ($op eq 'add_form') {
         C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode }, $template);
     } else {
         C4::Form::MessagingPreferences::set_form_values({ borrowernumber => $borrowernumber }, $template);
@@ -787,7 +787,7 @@ $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
   destination   => $destination,#to know where u come from and where u must go in redirect
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
-  "op$op"   => 1);
+);
 
 $template->param(
   patron => $patron ? $patron : \%newdata, # Used by address include templates now

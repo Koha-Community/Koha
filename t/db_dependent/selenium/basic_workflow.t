@@ -115,7 +115,7 @@ SKIP: {
     $driver->find_element('//fieldset[@class="action"]/input[@type="submit"]')->click;
 
     time_diff("add patron category");
-    $driver->get($base_url.'/members/memberentry.pl?op=add&amp;categorycode='.$sample_data->{category}{categorycode});
+    $driver->get($base_url.'/members/memberentry.pl?op=add_form&amp;categorycode='.$sample_data->{category}{categorycode});
     like( $driver->get_title(), qr(Add .*$sample_data->{category}{description}), );
     $s->fill_form( $sample_data->{patron} );
     $driver->find_element('//button[@id="saverecord"]')->click;

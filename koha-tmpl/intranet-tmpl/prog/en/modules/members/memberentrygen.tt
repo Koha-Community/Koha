@@ -13,7 +13,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
         [% UNLESS blocking_error %]
-            [% IF ( opadd ) %]
+            [% IF ( op == 'add_form' ) %]
                 [% t("Add patron") | html %]
             [% ELSE %]
                 [% t("Modify patron") | html %]
@@ -43,7 +43,7 @@ legend:hover {
                     <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
             [% END %]
             [% UNLESS blocking_error %]
-                [% UNLESS opadd %]
+                [% UNLESS op == 'add_form' %]
                     [% IF (borrower_data.firstname || borrower_data.surname ) %]
                         [% WRAPPER breadcrumb_item %]
                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">
@@ -54,7 +54,7 @@ legend:hover {
                 [% END %]
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                [% IF ( opadd ) %]
+                [% IF ( op == 'add_form' ) %]
                     <span>Add patron</span>
                 [% ELSE %]
                     <span>Modify patron</span>
@@ -79,7 +79,7 @@ legend:hover {
                     [% END %]
                 [% END %]
             [% END %]
-            [% IF ( opadd ) %]
+            [% IF ( op == 'add_form' ) %]
                 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
             [% ELSE %]
                 <div class="col-sm-10 col-sm-push-2">
@@ -102,9 +102,9 @@ legend:hover {
 
                     [% UNLESS ( no_add ) %]
                         <h1>
-                            [% IF ( opadd ) %]
+                            [% IF ( op == 'add_form' ) %]
                                 <span>Add patron</span>
-                            [% ELSIF ( opduplicate ) %]
+                            [% ELSIF ( op == 'duplicate' ) %]
                                 <span>Duplicate patron</span>
                             [% ELSE %]
                                 <span>Modify patron</span>
@@ -113,7 +113,7 @@ legend:hover {
                             [% IF patron_category %]([% patron_category.description | html %])[% END %]
                         </h1>
 
-                        [% IF quickadd && opadd && !check_member %]
+                        [% IF quickadd && op == 'add_form' && !check_member %]
                             <a href="#" class="toggle_quick_add"><i class="fa fa-plus-square"></i> Show full form</a>
                             <a href="#" class="toggle_quick_add" style="display:none"><i class="fa fa-minus-square"></i> Show brief form</a>
                         [% END %]
@@ -224,11 +224,11 @@ legend:hover {
 
                         [% UNLESS ( check_member ) %]
                             <div id="toolbar" class="btn-toolbar">
-                                [% IF quickadd && opadd %]
+                                [% IF quickadd && op == 'add_form' %]
                                     <button class="btn btn-primary toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
                                 [% END %]
                                 <button class="btn btn-primary toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
-                                [% IF opadd %]
+                                [% IF op == 'add_form' %]
                                     <a class="btn btn-link" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
                                 [% ELSE %]
                                     <a class="btn btn-link" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">
@@ -247,15 +247,15 @@ legend:hover {
                             <input type="hidden" name="updtype" value="[% updtype | html %]" />
                             <input type="hidden" name="destination" value="[% destination | html %]" />
                             <input type="hidden" name="check_member" value="[% check_member | html %]" />
-                            <input type="hidden" name="borrowernumber" value="[% borrowernumber | html UNLESS opduplicate %]" />
-                            <input type="hidden" name="nodouble"  value="[% nodouble | html UNLESS opduplicate %]" />
+                            <input type="hidden" name="borrowernumber" value="[% borrowernumber | html UNLESS op == 'duplicate' %]" />
+                            <input type="hidden" name="nodouble"  value="[% nodouble | html UNLESS op == 'duplicate' %]" />
                             [% INCLUDE 'csrf-token.inc' %]
                             [% IF ( step ) %]
                                 <input type="hidden" name="step"  value="[% step | html %]" />
                             [% END %]
-                            [% IF ( opadd ) %]
+                            [% IF ( op == 'add_form' ) %]
                                 <input type="hidden" name="op" value="cud-insert" />
-                            [% ELSIF ( opduplicate ) %]
+                            [% ELSIF ( op == 'duplicate' ) %]
                                 <input type="hidden" name="op" value="cud-insert" />
                             [% ELSE %]
                                 <input type="hidden" name="op" value="cud-save" />
@@ -336,7 +336,7 @@ legend:hover {
                                                         [% END %]
                                                             First name:
                                                         </label>
-                                                        <input type="text" id="firstname" name="firstname" size="20"  value="[% borrower_data.firstname | html UNLESS opduplicate %]" />
+                                                        <input type="text" id="firstname" name="firstname" size="20"  value="[% borrower_data.firstname | html UNLESS op == 'duplicate' %]" />
                                                         [% IF ( mandatoryfirstname ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
@@ -351,7 +351,7 @@ legend:hover {
                                                         [% END %]
                                                             Middle name:
                                                         </label>
-                                                        <input type="text" id="middle_name" name="middle_name" size="20"  value="[% borrower_data.middle_name | html UNLESS opduplicate %]" />
+                                                        <input type="text" id="middle_name" name="middle_name" size="20"  value="[% borrower_data.middle_name | html UNLESS op == 'duplicate' %]" />
                                                         [% IF ( mandatorymiddle_name ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
@@ -366,7 +366,7 @@ legend:hover {
                                                         [% END %]
                                                         Date of birth:
                                                         </label>
-                                                        <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% borrower_data.dateofbirth | html UNLESS opduplicate %]" class="flatpickr" data-flatpickr-pastinclusive="true" />
+                                                        <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% borrower_data.dateofbirth | html UNLESS op == 'duplicate' %]" class="flatpickr" data-flatpickr-pastinclusive="true" />
                                                          [% IF ( mandatorydateofbirth ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
@@ -385,7 +385,7 @@ legend:hover {
                                                         [% END %]
                                                             Initials:
                                                         </label>
-                                                        <input type="text" id="initials" name="initials" size="20"  value="[% borrower_data.initials | html UNLESS opduplicate %]" />
+                                                        <input type="text" id="initials" name="initials" size="20"  value="[% borrower_data.initials | html UNLESS op == 'duplicate' %]" />
                                                         [% IF ( mandatoryinitials ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
@@ -400,7 +400,7 @@ legend:hover {
                                                         [% END %]
                                                             Pronouns:
                                                         </label>
-                                                        <input type="text" id="pronouns" name="pronouns" size="20"  value="[% borrower_data.pronouns | html UNLESS opduplicate %]" />
+                                                        <input type="text" id="pronouns" name="pronouns" size="20"  value="[% borrower_data.pronouns | html UNLESS op == 'duplicate' %]" />
                                                         [% IF ( mandatorypronouns ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
@@ -416,7 +416,7 @@ legend:hover {
                                                     [% END %]
                                                         Other name:
                                                     </label>
-                                                    <input type="text" id="othernames" name="othernames" size="20"  value="[% borrower_data.othernames | html UNLESS opduplicate %]" />
+                                                    <input type="text" id="othernames" name="othernames" size="20"  value="[% borrower_data.othernames | html UNLESS op == 'duplicate' %]" />
                                                     [% IF ( mandatoryothernames ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -427,7 +427,7 @@ legend:hover {
                                             [% UNLESS ( patron_category.category_type == 'I' ) %]
                                                 [% UNLESS nosex %]
                                                     <li class="radio">
-                                                        [% UNLESS ( opduplicate ) %]
+                                                        [% UNLESS ( op == 'duplicate' ) %]
                                                             [% IF ( female ) %]
                                                                 <label for="sex-female"><input type="radio" name="sex" id="sex-female" value="F" checked="checked" /><span class="patronsex-female"> Female</span></label>
                                                             [% ELSE %]
@@ -453,7 +453,7 @@ legend:hover {
                                                             <label for="sex-male"><span class="patronsex-male">Male </span></label><input type="radio" name="sex" id="sex-male" value="M" />
                                                             <label for="sex-other"><span class="patronsex-other">Other </span></label><input type="radio" name="sex" id="sex-other" value="O" />
                                                             <label for="sex-none"><span class="patronsex-none">None specified </span></label><input type="radio" name="sex" id="sex-none" value="" checked="checked" />
-                                                        [% END # /UNLESS ( opduplicate )%]
+                                                        [% END # /UNLESS ( op == 'duplicate' )%]
                                                     </li>
                                                 [% END # /UNLESS nosex %]
                                             [% END # /UNLESS ( I ) %]
@@ -1015,7 +1015,7 @@ legend:hover {
                                                 <label for="yes-autorenew_checkouts">
                                                     Allow auto-renewal of items:
                                                 </label>
-                                                    [% IF ( borrower_data.autorenew_checkouts || opadd ) %]
+                                                    [% IF ( borrower_data.autorenew_checkouts || op == 'add_form' ) %]
                                                         <label for="yes-autorenew_checkouts">
                                                             Yes
                                                             <input type="radio" id="yes-autorenew_checkouts" name="autorenew_checkouts" value="1" checked="checked" />
@@ -1144,8 +1144,8 @@ legend:hover {
                                             [% END %]
                                                     Expiry date (leave blank for auto calc):
                                                 </label>
-                                                [% UNLESS ( opadd ) %]
-                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% borrower_data.dateexpiry | html UNLESS opduplicate %]" class="flatpickr" />
+                                                [% UNLESS ( op == 'add_form' ) %]
+                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% borrower_data.dateexpiry | html UNLESS op == 'duplicate' %]" class="flatpickr" />
                                                 [% ELSE %]
                                                     <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% borrower_data.dateexpiry | html %]" class="flatpickr" />
                                                 [% END %]
@@ -1167,7 +1167,7 @@ legend:hover {
                                                     [% END %]
                                                         OPAC note:
                                                     </label>
-                                                    <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% borrower_data.opacnote | html UNLESS opduplicate %]</textarea>
+                                                    <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% borrower_data.opacnote | html UNLESS op == 'duplicate' %]</textarea>
                                                     <div class="hint">This message appears on this patron's user page in the OPAC</div>
                                                     [% IF ( mandatoryopacnote ) %]
                                                         <span class="required">Required</span>
@@ -1184,7 +1184,7 @@ legend:hover {
                                                     [% END %]
                                                         Circulation note:
                                                     </label>
-                                                    <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% borrower_data.borrowernotes | $raw UNLESS opduplicate %]</textarea>
+                                                    <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% borrower_data.borrowernotes | $raw UNLESS op == 'duplicate' %]</textarea>
                                                     <div class="hint">This message displays when checking out to this patron</div>
                                                     [% IF ( mandatoryborrowernotes ) %]
                                                         <span class="required">Required</span>
@@ -1210,13 +1210,13 @@ legend:hover {
                                                     </label>
 
                                                     [% IF ( NoUpdateLogin ) %]
-                                                        [% IF ( opduplicate ) %]
+                                                        [% IF ( op == 'duplicate' ) %]
                                                             <input type="text" id="userid" name="userid" size="20" disabled="disabled" />
                                                         [% ELSE %]
                                                             <input type="text" id="userid" name="userid" size="20" disabled="disabled" value="[% borrower_data.userid | html %]" />
                                                         [% END %]
                                                     [% ELSE %]
-                                                        [% IF ( opduplicate ) %]
+                                                        [% IF ( op == 'duplicate' ) %]
                                                             <input type="text" id="userid" name="userid" size="20" value="" />
                                                         [% ELSE %]
                                                             <input type="text" id="userid" name="userid" size="20" value="[% borrower_data.userid | html %]" />
@@ -1241,27 +1241,27 @@ legend:hover {
                                                     [% END %]
                                                         Password:
                                                     </label>
-                                                    [% IF ( opadd ) %]
+                                                    [% IF ( op == 'add_form' ) %]
                                                         [% IF ( NoUpdateLogin ) %]
-                                                            [% IF ( opduplicate ) %]
+                                                            [% IF ( op == 'duplicate' ) %]
                                                                 <input type="password" id="password" name="password" size="20"  disabled="disabled" />
                                                             [% ELSE %]
                                                                 <input type="password" id="password" name="password" size="20"  disabled="disabled" value="[% borrower_data.password | html %]" />
                                                             [% END %]
                                                         [% ELSE %]
-                                                            [% IF ( opduplicate ) %]
+                                                            [% IF ( op == 'duplicate' ) %]
                                                                 <input type="password" id="password" name="password" size="20" autocomplete="new-password" />
                                                             [% ELSE %]
                                                                 <input type="password" id="password" name="password" size="20" autocomplete="new-password" value="[% borrower_data.password | html %]" />
                                                             [% END %]
                                                         [% END # /IF ( NoUpdateLogin ) %]
-                                                    [% ELSE # IF ( opadd ) %]
+                                                    [% ELSE # IF ( op == 'add_form' ) %]
 
                                                         [% IF ( borrower_data.password ) %]
                                                             [% IF ( NoUpdateLogin ) %]
                                                                 <input type="password" id="password" name="password" size="20"  disabled="disabled" value="****" />
                                                             [% ELSE %]
-                                                                [% IF ( opduplicate ) %]
+                                                                [% IF ( op == 'duplicate' ) %]
                                                                     <input type="password" id="password" name="password" autocomplete="new-password" size="20" />
                                                                 [% ELSE %]
                                                                     <input type="password" id="password" name="password" size="20" value="****" />
@@ -1274,7 +1274,7 @@ legend:hover {
                                                                 <input type="password" id="password" name="password" size="20" autocomplete="new-password" value="" />
                                                             [% END %]
                                                         [% END # /IF ( password ) %]
-                                                    [% END # /IF ( opadd )  %]
+                                                    [% END # /IF ( op == 'add_form' )  %]
                                                     [% IF ( mandatorypassword ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -1298,26 +1298,26 @@ legend:hover {
                                                     [% END %]
                                                         Confirm password:
                                                     </label>
-                                                    [% IF ( opadd ) %]
+                                                    [% IF ( op == 'add_form' ) %]
                                                         [% IF ( NoUpdateLogin ) %]
-                                                            [% IF ( opduplicate ) %]
+                                                            [% IF ( op == 'duplicate' ) %]
                                                                 <input type="password" id="password2" name="password2" size="20"  disabled="disabled" />
                                                             [% ELSE %]
                                                                 <input type="password" id="password2" name="password2" size="20"  disabled="disabled" value="[% borrower_data.password | html %]" />
                                                             [% END %]
                                                         [% ELSE %]
-                                                            [% IF ( opduplicate ) %]
+                                                            [% IF ( op == 'duplicate' ) %]
                                                                 <input type="password" id="password2" name="password2" size="20" />
                                                             [% ELSE %]
                                                                 <input type="password" id="password2" name="password2" size="20" value="[% borrower_data.password | html %]" />
                                                             [% END %]
                                                         [% END %]
-                                                    [% ELSE # IF ( opadd ) %]
+                                                    [% ELSE # IF ( op == 'add_form' ) %]
                                                         [% IF ( borrower_data.password ) %]
                                                             [% IF ( NoUpdateLogin ) %]
                                                                 <input type="password" id="password2" name="password2" size="20"  disabled="disabled" value="****" />
                                                             [% ELSE %]
-                                                                [% IF ( opduplicate ) %]
+                                                                [% IF ( op == 'duplicate' ) %]
                                                                     <input type="password" id="password2" name="password2" size="20" />
                                                                 [% ELSE %]
                                                                     <input type="password" id="password2" name="password2" size="20" value="****" />
@@ -1330,7 +1330,7 @@ legend:hover {
                                                                 <input type="password" id="password2" name="password2" size="20" value="" />
                                                             [% END %]
                                                         [% END %]
-                                                    [% END # /IF ( opadd ) %]
+                                                    [% END # /IF ( op == 'add_form' ) %]
 
                                                     [% IF ( mandatorypassword ) %]
                                                         <span class="required">Required</span>
@@ -1351,7 +1351,7 @@ legend:hover {
                                 [% END # UNLESS nouserid && nopassword && !CanUpdatePasswordExpiration %]
 
                                 <!--this zones are not necessary in modif mode -->
-                                [% UNLESS ( opadd || opduplicate || ( nogonenoaddress && nolost ) ) %]
+                                [% UNLESS ( op == 'add_form' || op == 'duplicate' || ( nogonenoaddress && nolost ) ) %]
                                     <fieldset class="rows" id="memberentry_account_flags">
                                         <legend id="account_flags_lgd">Patron account flags</legend>
                                         <p>Setting a value here will prevent patron from circulating materials and placing holds on the OPAC</p>
@@ -1654,7 +1654,7 @@ legend:hover {
                             [% END # /IF step_5 %]
                         </form> <!-- /#entryform -->
 
-                        [% IF quickadd && opadd  && !check_member %]
+                        [% IF quickadd && op == 'add_form'  && !check_member %]
                             <form method="get" id="quick_add_form" class="toggler">
                                 <fieldset class="rows quick_add"><legend>Quick add</legend>
                                     <ol id="quick_add_list">
@@ -1667,7 +1667,7 @@ legend:hover {
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-            [% UNLESS ( opadd ) %]
+            [% UNLESS ( op == 'add_form' ) %]
                 <div class="col-sm-2 col-sm-pull-10">
                     <aside>
                         [% INCLUDE 'circ-menu.inc' %]
@@ -1736,7 +1736,7 @@ legend:hover {
                         $("#memberentry_userid").find('legend').nextAll().toggle();
                     [% END %]
                 [% END %]
-                [% UNLESS ( opadd || opduplicate ) %]
+                [% UNLESS ( op == 'add_form' || op == 'duplicate' ) %]
                     [% IF fieldstohide.match('flags') %]
                         $("#memberentry_account_flags").find('legend').nextAll().toggle();
                     [% END %]
@@ -1863,7 +1863,7 @@ legend:hover {
             });
 
             $('#duplicate').on('click', function() {
-                $("input[name='op']").val('modify');
+                $("input[name='op']").val('edit_form');
                 $("input[name='borrowernumber']").val('[% check_member | html %]');
                 $("input[name='check_member']").val('');
                 $('#entryform').submit();
@@ -1918,7 +1918,7 @@ legend:hover {
 
         });
 
-        [% IF quickadd && opadd  && !check_member %]
+        [% IF quickadd && op == 'add_form' && !check_member %]
             $(document).ready(function () {
 
                 $("#entryform,#saverecord").hide();
