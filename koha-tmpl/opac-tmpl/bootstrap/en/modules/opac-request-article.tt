@@ -40,10 +40,10 @@
                     </div>
                 [% ELSIF biblio.can_article_request( patron ) %]
                     <h1>Place article request for [% biblio.title | html %]</h1>
-                    [% IF ( disclaimer && !action) %]
+                    [% IF ( disclaimer && !accepted ) %]
                         <div class="alert alert-warning">
                             [% PROCESS koha_news_block news => disclaimer %]
-                            <a href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;action=accept"
+                            <a href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;accepted=1"
                             class="btn btn-sm btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Accept</a>
                         </div>
                     [% ELSE %]
@@ -63,7 +63,7 @@
                         <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
                             [% INCLUDE 'csrf-token.inc' %]
                             <legend class="sr-only">Place article request</legend>
-                            <input type="hidden" name="action" value="create" />
+                            <input type="hidden" name="op" value="cud-create" />
                             <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />
 
                             <fieldset class="rows">
