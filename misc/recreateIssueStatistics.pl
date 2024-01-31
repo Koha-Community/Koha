@@ -96,7 +96,7 @@ if ($issues == 1) {
 		    # This is the not-so accurate part :
 		    # We assume that there are missing renewals, based on the last renewal date
 		    # Maybe should this be deactivated by default ?
-		    my $ctnquery = "SELECT count(*) as cnt FROM statistics WHERE borrowernumber = ? AND itemnumber = ? AND DATE(datetime) = ? AND type = 'cud-renew'";
+		    my $ctnquery = "SELECT count(*) as cnt FROM statistics WHERE borrowernumber = ? AND itemnumber = ? AND DATE(datetime) = ? AND type = 'renew'";
 		    my $substh = $dbh->prepare($ctnquery);
 		    $substh->execute($hashref->{'borrowernumber'}, $hashref->{'itemnumber'}, $hashref->{'lastreneweddate'});
 
@@ -115,7 +115,7 @@ if ($issues == 1) {
 			    $hashref->{'lastreneweddate'},
 			    $hashref->{'branchcode'},
 			    0,
-			    'cud-renew',
+			    'renew',
 			    '',
 			    $hashref->{'itemnumber'},
                 $itemtype,
