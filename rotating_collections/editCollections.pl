@@ -38,10 +38,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $action = $query->param('action');
-$template->param( action => $action );
+my $op = $query->param('op');
+$template->param( op => $op );
 
 # Create new Collection
-if ( $action eq 'create' ) {
+if ( $op eq 'cud-create' ) {
     my $title       = $query->param('title');
     my $description = $query->param('description');
 
@@ -63,7 +64,7 @@ if ( $action eq 'create' ) {
 }
 
 ## Delete a club or service
-elsif ( $action eq 'cud-delete' ) {
+elsif ( $op eq 'cud-delete' ) {
     my $colId = $query->param('colId');
     my ( $success, $errorCode, $errorMessage ) = DeleteCollection($colId);
 
@@ -78,7 +79,7 @@ elsif ( $action eq 'cud-delete' ) {
 }
 
 ## Edit a club or service: grab data, put in form.
-elsif ( $action eq 'cud-edit' ) {
+elsif ( $op eq 'edit' ) {
     my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection( $query->param('colId') );
 
     $template->param(
@@ -90,7 +91,7 @@ elsif ( $action eq 'cud-edit' ) {
 }
 
 # Update a Club or Service
-elsif ( $action eq 'cud-update' ) {
+elsif ( $op eq 'cud-update' ) {
     my $colId       = $query->param('colId');
     my $title       = $query->param('title');
     my $description = $query->param('description');
@@ -111,5 +112,7 @@ elsif ( $action eq 'cud-update' ) {
         $template->param( failureMessage => $errorMessage );
     }
 }
+
+# Else, this should be 'new' and a blank form
 
 output_html_with_http_headers $query, $cookie, $template->output;

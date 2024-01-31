@@ -4,9 +4,9 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% IF ( action == "new" ) %]
+    [% IF ( op == "new" ) %]
         [% t("Add a new collection") | html %]
-    [% ELSIF ( action == "delete" ) %]
+    [% ELSIF ( op == "cud-delete" ) %]
         [% t("Collection deleted") | html %]
     [% ELSE %]
         [% t("Edit collection") | html %] &rsaquo;
@@ -32,11 +32,11 @@
             <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a>
         [% END %]
 
-        [%- IF ( action == "new" ) %]
+        [%- IF ( op == "new" ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Add a new collection</span>
             [% END %]
-        [% ELSIF ( action == "delete" ) %]
+        [% ELSIF ( op == "cud-delete" ) %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Collection deleted</span>
             [% END %]
@@ -116,7 +116,7 @@
 
               <div>
 
-                [% IF action == "new" || action == "edit" %]
+                [% IF op == "new" || op == "edit" %]
                     [% IF ( previousActionEdit ) %]
                       <h1>Edit collection <em>[% editColTitle | html %]</em></h1>
                     [% ELSE %]
@@ -126,10 +126,10 @@
                     <form action="editCollections.pl" method="post" class="validated">
                         [% INCLUDE 'csrf-token.inc' %]
                         [% IF ( previousActionEdit ) %]
-                            <input type="hidden" name="action" value="update" />
+                            <input type="hidden" name="op" value="cud-update" />
                             <input type="hidden" name="colId" value="[% editColId | html %]" />
                         [% ELSE %]
-                            <input type="hidden" name="action" value="create" />
+                            <input type="hidden" name="op" value="cud-create" />
                         [% END %]
 
                         <fieldset class="rows">

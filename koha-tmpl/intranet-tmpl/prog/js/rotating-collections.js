@@ -6,6 +6,7 @@ $(document).ready(function(){
     $(".confirmdelete").click(function(){
         $(this).parents('tr').addClass("warn");
         if(confirm(__("Are you sure you want to delete this rotating collection?"))){
+            $(this).parents('form').submit();
             return true;
         } else {
             $(this).parents('tr').removeClass("warn");
