@@ -12,7 +12,6 @@
             digits: _("Please enter only digits."),
             equalTo: _("Please enter the same value again."),
             number: _("Please add amount in valid format: 0.00"),
-            decimal_rate: $.validator.addMethod("decimal_rate", $.validator.methods.number, "Please add rate in valid format: 0.00"),
             maxlength: $.validator.format(_("Please enter no more than {0} characters.")),
             minlength: $.validator.format(_("Please enter at least {0} characters.")),
             rangelength: $.validator.format(_("Please enter a value between {0} and {1} characters long.")),
