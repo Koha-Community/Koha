@@ -44,10 +44,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+my $op        = $query->param('op') || q{};
 my $bib_list  = $query->param('bib_list') || '';
 my $email_add = $query->param('email_add');
 
-if ( $email_add ) {
+if ( $op eq "cud-send" && $email_add ) {
 
     my $patron     = Koha::Patrons->find($borrowernumber);
     my $user_email = $patron->notice_email_address;

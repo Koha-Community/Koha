@@ -39,6 +39,7 @@
                                 </fieldset>
                                 [% IF Koha.Preference('OPACHoldRequests') || Koha.Preference('OpacRenewalAllowed') %]<p id="donotrequestbymail">Please do not use this mail to request or renew books.</p>[% END %]
                                 <fieldset class="action">
+                                    <input type="hidden" name="op" value="cud-send" />
                                     <input type="submit" class="btn btn-primary" value="Send" />
                                     <a class="cancel close" href="#">Cancel</a>
                                 </fieldset>
