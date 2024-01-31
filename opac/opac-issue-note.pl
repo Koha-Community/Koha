@@ -66,8 +66,8 @@ $template->param(
     itemnumber => $issue->itemnumber,
 );
 
-my $action = $query->param('action') || "";
-if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') && $issue ) {
+my $op = $query->param('op') || "";
+if ( $op eq 'cud-issuenote' && C4::Context->preference('AllowCheckoutNotes') && $issue ) {
     my $note = $query->param('note');
     my $scrubber = C4::Scrubber->new();
     my $clean_note = $scrubber->scrub($note);
