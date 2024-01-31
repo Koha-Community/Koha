@@ -30,7 +30,7 @@ my $cgi = CGI->new;
 my ( $loggedinuserid, $cookie, $sessionID ) = checkauth( $cgi, 0, { borrowers => 'edit_borrowers' }, 'intranet' );
 
 my $borrowernumber = $cgi->param('borrowernumber');
-my $action         = $cgi->param('action');
+my $op             = $cgi->param('op');
 
 my $logged_in_user = Koha::Patrons->find( { userid => $loggedinuserid } );
 my $patron         = Koha::Patrons->find($borrowernumber);
@@ -38,11 +38,11 @@ my $patron         = Koha::Patrons->find($borrowernumber);
 # Ideally we should display a warning on the interface if the patron is not allowed
 # to modify a debarment
 # But a librarian is not supposed to hack the system
-$action = '' unless $logged_in_user->can_see_patron_infos( $patron );
+$op = '' unless $logged_in_user->can_see_patron_infos( $patron );
 
-if ( $action eq 'cud-del' ) {
+if ( $op eq 'cud-del' ) {
     DelDebarment( scalar $cgi->param('borrower_debarment_id') );
-} elsif ( $action eq 'cud-add' ) {
+} elsif ( $op eq 'cud-add' ) {
     my $expiration = $cgi->param('expiration');
     my $type = $cgi->param('debarred_type') // 'MANUAL';
     if ($expiration) {

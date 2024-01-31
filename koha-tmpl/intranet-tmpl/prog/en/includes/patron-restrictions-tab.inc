@@ -41,9 +41,13 @@
                     <td>[% restriction.created | $KohaDates %]</td>
                     [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                         <td>
-                            <a class="remove_restriction btn btn-default btn-xs" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;borrower_debarment_id=[% restriction.borrower_debarment_id | html %]&amp;action=del">
-                                <i class="fa fa-trash-can"></i> Remove
-                            </a>
+                            <form method="post" action="/cgi-bin/koha/members/mod_debarment.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-del" />
+                                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | uri %]" />
+                                <input type="hidden" name="borrower_debarment_id" value="[% restriction.borrower_debarment_id | uri %]" />
+                                <button type="submit" class="remove_restriction btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Remove</button>
+                            </form>
                         </td>
                     [% END %]
                 </tr>
@@ -56,7 +60,7 @@
     <form method="post" action="/cgi-bin/koha/members/mod_debarment.pl" class="clearfix">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-        <input type="hidden" name="action" value="add" />
+        <input type="hidden" name="op" value="cud-add" />
         <fieldset class="rows" id="manual_restriction_form">
             <legend>Add manual restriction</legend>
             <ol>
