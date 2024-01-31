@@ -361,7 +361,7 @@
                 <input type="hidden" name="tax_rate" value="0" />
             [% END %]
             <li><label for="discount">Discount: </label>
-                <input class="rate" type="text" size="6" id="discount" name="discount" value="[% discount | format ('%.1f') %]" />%</li>
+                <input class="rate" type="text" size="6" id="discount" name="discount" value="[% discount | html %]" />%</li>
             <li>
                 <label for="deliverytime">Delivery time: </label>
                 <input type="text" size="2" id="deliverytime" name="deliverytime" value="[% deliverytime | html %]" /> days
