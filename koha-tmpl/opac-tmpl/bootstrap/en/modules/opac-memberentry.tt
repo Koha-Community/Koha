@@ -32,12 +32,12 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF action == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+    <title>[% IF op == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
 
-[% IF action == 'edit' %]
+[% IF op == 'edit' %]
 [% INCLUDE 'bodytag.inc' bodyid='opac-patron-update' %]
 [% ELSE %]
 <body id="opac-patron-registration" class="opac">
@@ -47,7 +47,7 @@
 <div class="main">
 
     [% WRAPPER breadcrumbs %]
-        [% IF action == 'edit' %]
+        [% IF op == 'edit' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
             [% END %]
@@ -72,13 +72,13 @@
 
                 <h1>Your personal details</h1>
 
-                [% IF action == 'edit' %]
+                [% IF op == 'edit' %]
                     <div id="update-account" class="maincontent">
                 [% ELSE %]
                     <div id="add-account" class="maincontent">
                 [% END %]
 
-                [% IF action == 'edit' %]
+                [% IF op == 'edit' %]
                     [% UNLESS OPACPatronDetails %]
                         <div class="alert alert-info">To make changes to your record please contact the library.</div>
                     [% END %]
@@ -209,6 +209,7 @@
                 [% END %]
 
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">
+                    [% INCLUDE 'csrf-token.inc' %]
 
                 [% FOREACH field = ['streetnumber' 'streettype'  'cardnumber' 'branchcode' 'categorycode' 'title' 'surname' 'firstname' 'middle_name' 'dateofbirth' 'initials' 'pronouns' 'othernames' 'address' 'address2' 'city' 'state' 'zipcode' 'country' 'phone' 'phonepro' 'mobile' 'email' 'emailpro' 'fax' 'B_streettype' 'B_streetnumber' 'B_address' 'B_address2' 'B_city' 'B_state' 'B_zipcode' 'B_country' 'B_phone' 'B_email' 'contactnote' 'altcontactsurname' 'altcontactfirstname' 'altcontactaddress1' 'altcontactaddress2' 'altcontactaddress3' 'altcontactstate' 'altcontactzipcode' 'altcontactcountry' 'altcontactphone' 'password' 'lang' ] %]
                     [% IF mandatory.defined( field ) %]
@@ -229,7 +230,7 @@
 
                                                 <label for="borrower_cardnumber" class="[% required.cardnumber | html %]">Library card number:</label>
 
-                                                [% IF borrower && !(cardnumber_wrong_length || cardnumber_already_exists) && action == 'edit' %]
+                                                [% IF borrower && !(cardnumber_wrong_length || cardnumber_already_exists) && op == 'edit' %]
                                                     [% borrower.cardnumber | html %]
                                                 [% ELSE %]
                                                     [% IF minlength_cardnumber == maxlength_cardnumber %]
@@ -253,7 +254,7 @@
                                             </li>
                                             [% END %]
 
-                                            [% IF action != 'new' %]
+                                            [% IF op != 'new' %]
                                                 [% UNLESS hidden.defined('userid') %]
                                                 <li>
                                                     <label>Username:</label>
@@ -596,7 +597,7 @@
                                                 <div class="required_label [% required.email | html %]">Required</div>
                                             </li>
 
-                                            [% IF action != 'edit' and Koha.Preference('PatronSelfRegistrationConfirmEmail') %]
+                                            [% IF op != 'edit' and Koha.Preference('PatronSelfRegistrationConfirmEmail') %]
                                                 <li>
                                                     <label for="borrower_repeat_email" class="[% required.email | html %]">Confirm primary email:</label>
 
@@ -929,7 +930,7 @@
                         </div> <!-- /.row -->
                     [% END %]
 
-                    [% UNLESS action == 'edit' || hidden.defined('password') %]
+                    [% UNLESS op == 'edit' || hidden.defined('password') %]
                         <div class="row">
                             <div class="col">
                                 <fieldset class="rows" id="memberentry_password">
@@ -1032,7 +1033,7 @@
                         </div> <!-- /.row -->
                     [% END %]
 
-                    [% IF Koha.Preference('PrivacyPolicyConsent') && action != 'edit' %]
+                    [% IF Koha.Preference('PrivacyPolicyConsent') && op != 'edit' %]
                         <div class="row">
                             <div class="col">
                                 <fieldset class="rows" id="memberentry_gdpr_consent">
@@ -1053,7 +1054,7 @@
                         </div> <!-- /.row -->
                    [% END %]
 
-                   [% UNLESS action == 'edit' %]
+                   [% UNLESS op == 'edit' %]
                         <div class="row">
                             <div class="col">
                                 <fieldset class="rows" id="memberentry_captcha">
@@ -1077,17 +1078,16 @@
 
                     <div class="row">
                         <div class="col">
-                            [% IF action == 'edit' %]
+                            [% IF op == 'edit' %]
                                 [% IF OPACPatronDetails %]
                                     <fieldset class="action">
-                                        <input type="hidden" name="action" value="update" />
-                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-update" />
                                         <input type="submit" class="btn btn-primary" value="Submit update request" />
                                     </fieldset>
                                 [% END %]
                             [% ELSE %]
                                 <fieldset class="action">
-                                    <input type="hidden" name="action" value="create" />
+                                    <input type="hidden" name="op" value="cud-create" />
                                     <input type="submit" class="btn btn-primary" value="Submit" />
                                 </fieldset>
                             [% END %]
@@ -1111,7 +1111,7 @@
     <script>
 
         $(document).ready(function() {
-            [% IF action == 'edit' && !OPACPatronDetails %]
+            [% IF op == 'edit' && !OPACPatronDetails %]
                 $("#memberentry-form :input").attr('readonly', true);
                 $("#borrower_branchcode").attr('disabled',true);
                 $("#borrower_title").attr('disabled',true);
@@ -1250,7 +1250,7 @@
             } );
         });
 
-    [% IF action != 'edit' and Koha.Preference('PatronSelfRegistrationConfirmEmail') %]
+    [% IF op != 'edit' and Koha.Preference('PatronSelfRegistrationConfirmEmail') %]
         $("#borrower_email").bind("cut copy paste", function(e){
             e.preventDefault();
             $("#borrower_email").bind("contextmenu", function(e){

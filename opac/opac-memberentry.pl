@@ -56,18 +56,18 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $action = $cgi->param('action') || q{};
-if ( $borrowernumber && ( $action eq 'create' || $action eq 'new' ) ) {
+my $op = $cgi->param('op') || q{};
+if ( $borrowernumber && ( $op eq 'cud-create' || $op eq 'new' ) ) {
     print $cgi->redirect("/cgi-bin/koha/opac-main.pl");
     exit;
 }
 
-if ( $action eq q{} ) {
+if ( $op eq q{} ) {
     if ($borrowernumber) {
-        $action = 'cud-edit';
+        $op = 'edit';
     }
     else {
-        $action = 'new';
+        $op = 'new';
     }
 }
 
@@ -75,16 +75,16 @@ my $PatronSelfRegistrationDefaultCategory = C4::Context->preference('PatronSelfR
 my $defaultCategory = Koha::Patron::Categories->find($PatronSelfRegistrationDefaultCategory);
 # Having a valid PatronSelfRegistrationDefaultCategory is mandatory
 if ( !C4::Context->preference('PatronSelfRegistration') && !$borrowernumber
-    || ( ( $action eq 'new' || $action eq 'create' ) && !$defaultCategory ) )
+    || ( ( $op eq 'new' || $op eq 'cud-create' ) && !$defaultCategory ) )
 {
     print $cgi->redirect("/cgi-bin/koha/opac-main.pl");
     exit;
 }
 
-my $mandatory = GetMandatoryFields($action);
+my $mandatory = GetMandatoryFields($op);
 
 my $params = {};
-if ( $action eq 'create' || $action eq 'new' ) {
+if ( $op eq 'cud-create' || $op eq 'new' ) {
     my @PatronSelfRegistrationLibraryList = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList');
     $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } }
       if @PatronSelfRegistrationLibraryList;
@@ -102,8 +102,8 @@ if ( defined $min ) {
 my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('template') );
 
 $template->param(
-    action            => $action,
-    hidden            => GetHiddenFields( $mandatory, $action ),
+    op                => $op,
+    hidden            => GetHiddenFields( $mandatory, $op ),
     mandatory         => $mandatory,
     libraries         => $libraries,
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
@@ -127,14 +127,14 @@ foreach my $attr (@$attributes) {
     }
 }
 
-if ( $action eq 'create' ) {
+if ( $op eq 'cud-create' ) {
 
     my %borrower = ParseCgiForBorrower($cgi);
 
     %borrower = DelEmptyFields(%borrower);
     $borrower{categorycode} ||= $PatronSelfRegistrationDefaultCategory;
 
-    my @empty_mandatory_fields = (CheckMandatoryFields( \%borrower, $action ), CheckMandatoryAttributes( \%borrower, $attributes ) );
+    my @empty_mandatory_fields = (CheckMandatoryFields( \%borrower, $op ), CheckMandatoryAttributes( \%borrower, $attributes ) );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
     delete $borrower{'password2'};
     my $is_cardnumber_valid;
@@ -311,7 +311,7 @@ if ( $action eq 'create' ) {
         }
     }
 }
-elsif ( $action eq 'cud-update' ) {
+elsif ( $op eq 'cud-update' ) {
 
     my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
@@ -319,7 +319,7 @@ elsif ( $action eq 'cud-update' ) {
     $borrower{borrowernumber} = $borrowernumber;
 
     my @empty_mandatory_fields = grep { $_ ne 'password' } # password is not required when editing personal details
-      ( CheckMandatoryFields( \%borrower, $action ), CheckMandatoryAttributes( \%borrower, $attributes ) );
+      ( CheckMandatoryFields( \%borrower, $op ), CheckMandatoryAttributes( \%borrower, $attributes ) );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
 
     # Send back the data to the template
@@ -333,7 +333,7 @@ elsif ( $action eq 'cud-update' ) {
         );
         $template->param( patron_attribute_classes => GeneratePatronAttributesForm( $borrowernumber, $attributes ) );
 
-        $template->param( action => 'cud-edit' );
+        $template->param( op => 'edit' );
     }
     else {
         my %borrower_changes = DelUnchangedFields( $borrowernumber, %borrower );
@@ -371,7 +371,7 @@ elsif ( $action eq 'cud-update' ) {
         else {
             my $patron = Koha::Patrons->find( $borrowernumber );
             $template->param(
-                action => 'cud-edit',
+                op => 'edit',
                 nochanges => 1,
                 borrower => $patron->unblessed,
                 patron_attribute_classes => GeneratePatronAttributesForm( $borrowernumber, $attributes ),
@@ -379,13 +379,13 @@ elsif ( $action eq 'cud-update' ) {
         }
     }
 }
-elsif ( $action eq 'cud-edit' ) {    #Display logged in borrower's data
+elsif ( $op eq 'edit' ) {    #Display logged in borrower's data
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $borrower = $patron->unblessed;
 
     $template->param(
         borrower  => $borrower,
-        hidden => GetHiddenFields( $mandatory, 'cud-edit' ),
+        hidden => GetHiddenFields( $mandatory, 'edit' ),
     );
 
     if (C4::Context->preference('OPACpatronimages')) {
@@ -413,10 +413,10 @@ $template->param(
 output_html_with_http_headers $cgi, $cookie, $template->output, undef, { force_no_caching => 1 };
 
 sub GetHiddenFields {
-    my ( $mandatory, $action ) = @_;
+    my ( $mandatory, $op ) = @_;
     my %hidden_fields;
 
-    my $BorrowerUnwantedField = $action eq 'cud-edit' || $action eq 'cud-update' ?
+    my $BorrowerUnwantedField = $op eq 'edit' || $op eq 'cud-update' ?
       C4::Context->preference( "PatronSelfModificationBorrowerUnwantedField" ) :
       C4::Context->preference( "PatronSelfRegistrationBorrowerUnwantedField" );
 
@@ -432,22 +432,22 @@ sub GetHiddenFields {
 }
 
 sub GetMandatoryFields {
-    my ($action) = @_;
+    my ($op) = @_;
 
     my %mandatory_fields;
 
-    my $BorrowerMandatoryField = $action eq 'cud-edit' || $action eq 'cud-update' ?
+    my $BorrowerMandatoryField = $op eq 'edit' || $op eq 'cud-update' ?
       C4::Context->preference("PatronSelfModificationMandatoryField") :
       C4::Context->preference("PatronSelfRegistrationBorrowerMandatoryField");
 
     my @fields = split( /\|/, $BorrowerMandatoryField );
-    push @fields, 'gdpr_proc_consent' if C4::Context->preference('PrivacyPolicyConsent') && $action eq 'create';
+    push @fields, 'gdpr_proc_consent' if C4::Context->preference('PrivacyPolicyConsent') && $op eq 'cud-create';
 
     foreach (@fields) {
         $mandatory_fields{$_} = 1;
     }
 
-    if ( $action eq 'create' || $action eq 'new' ) {
+    if ( $op eq 'cud-create' || $op eq 'new' ) {
         $mandatory_fields{'email'} = 1
           if C4::Context->preference(
             'PatronSelfRegistrationVerifyByEmail');
@@ -457,11 +457,11 @@ sub GetMandatoryFields {
 }
 
 sub CheckMandatoryFields {
-    my ( $borrower, $action ) = @_;
+    my ( $borrower, $op ) = @_;
 
     my @empty_mandatory_fields;
 
-    my $mandatory_fields = GetMandatoryFields($action);
+    my $mandatory_fields = GetMandatoryFields($op);
     delete $mandatory_fields->{'cardnumber'};
 
     foreach my $key ( keys %$mandatory_fields ) {
@@ -569,11 +569,11 @@ sub ParseCgiForBorrower {
 sub DelUnchangedFields {
     my ( $borrowernumber, %new_data ) = @_;
     # get the mandatory fields so we can get the hidden fields
-    my $mandatory = GetMandatoryFields('cud-edit');
+    my $mandatory = GetMandatoryFields('edit');
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $current_data = $patron->unblessed;
     # get the hidden fields so we don't obliterate them should they have data patrons aren't allowed to modify
-    my $hidden_fields = GetHiddenFields($mandatory, 'cud-edit');
+    my $hidden_fields = GetHiddenFields($mandatory, 'edit');
 
 
     foreach my $key ( keys %new_data ) {
