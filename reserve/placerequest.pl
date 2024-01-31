@@ -49,6 +49,7 @@ my $item_group_id  = $input->param('item_group_id');
 my $expirationdate = $input->param('expiration_date');
 my $itemtype       = $input->param('itemtype') || undef;
 my $non_priority   = $input->param('non_priority');
+my $op             = $input->param('op') || q{};
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 
@@ -65,7 +66,7 @@ foreach my $bibnum ( @holdable_bibs ) {
 
 my $found;
 
-if ( $patron ) {
+if ( $op eq 'cud-placerequest' && $patron ) {
 
     foreach my $biblionumber ( keys %bibinfos ) {
 
