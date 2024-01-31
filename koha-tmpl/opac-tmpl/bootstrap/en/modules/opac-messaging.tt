@@ -39,7 +39,7 @@
                         [% END %]
                         <form action="/cgi-bin/koha/opac-messaging.pl" method="post" name="opacmessaging">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="modify" value="yes" />
+                            <input type="hidden" name="op" value="cud-modify" />
 
                             [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' )  %]
                                 <table class="table table-bordered table-condensed table-striped">

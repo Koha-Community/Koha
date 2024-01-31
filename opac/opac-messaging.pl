@@ -51,8 +51,9 @@ my $patron = Koha::Patrons->find( $borrowernumber ); # FIXME and if borrowernumb
 my $messaging_options;
 $messaging_options = C4::Members::Messaging::GetMessagingOptions() if $opac_messaging;
 
-if ( defined $query->param('cud-modify') && $query->param('cud-modify') eq 'yes' ) {
+my $op = $query->param('op') || q{};
 
+if ( $op eq 'cud-modify' ) {
     if( $opac_messaging ) {
         my $sms = $query->param('SMSnumber');
         my $sms_provider_id = $query->param('sms_provider_id');
