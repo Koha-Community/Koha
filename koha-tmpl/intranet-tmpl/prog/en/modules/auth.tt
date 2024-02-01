@@ -260,7 +260,9 @@
     <script>
         $(document).ready( function() {
             if ( document.location.hash ) {
-                $( '#loginform' ).append( '<input name="auth_forwarded_hash" type="hidden" value="' + document.location.hash + '"/>' );
+                const input = $('<input name="auth_forwarded_hash" type="hidden">')
+                input.val(document.location.hash);
+                $( '#loginform' ).append( input );
             }
             // Clear last borrowers, rememberd sql reports, carts, etc.
             logOut();
