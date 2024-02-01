@@ -74,6 +74,7 @@
                         <form action="transferCollection.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="colId" value="[% colId | html %]" />
+                            <input type="hidden" name="op" value="cud-transfer">
                             <fieldset class="rows">
                                 <ol>
                                     <li>

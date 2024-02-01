@@ -27,6 +27,7 @@ use CGI qw ( -utf8 );
 
 my $query = CGI->new;
 
+my $op       = $query->param('op') || q{};
 my $colId    = $query->param('colId');
 my $toBranch = $query->param('toBranch');
 
@@ -41,7 +42,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 ## Transfer collection
 my ( $success, $messages );
-if ($toBranch) {
+if ( $op eq 'cud-transfer' && $toBranch) {
     ( $success, $messages ) =
       TransferCollection( $colId, $toBranch );
 
