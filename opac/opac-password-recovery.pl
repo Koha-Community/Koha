@@ -28,6 +28,7 @@ my ( $template, $dummy, $cookie ) = get_template_and_user(
     }
 );
 
+my $op             = $query->param('op') // q{};
 my $email          = $query->param('email') // q{};
 my $password       = $query->param('newPassword');
 my $repeatPassword = $query->param('repeatPassword');
@@ -49,7 +50,7 @@ my $errResetForbidden;
 #new password form error
 my $errLinkNotValid;
 
-if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
+if ( $op eq 'cud-sendEmail' || $op eq 'cud-resendEmail' ) {
 
     #try with the main email
     my $borrower;
@@ -97,7 +98,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 
             # Check if a password reset already issued for this
             # borrower AND we are not asking for a new email
-            elsif ( not $query->param('resendEmail') ) {
+            elsif ( $op ne 'cud-resendEmail' ) {
                 if ( ValidateBorrowernumber( $borrower->borrowernumber ) ) {
                     $hasError                = 1;
                     $errAlreadyStartRecovery = 1;
