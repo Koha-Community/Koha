@@ -32,6 +32,8 @@ my $query        = CGI->new;
 my $biblionumber = $query->param('biblionumber');
 my $review       = $query->param('review');
 my $reviewid     = $query->param('reviewid');
+my $op           = $query->param('op') // q{};
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-review.tt",
@@ -57,7 +59,7 @@ if( !$biblio ) {
     $review = $savedreview? $savedreview->review: $review;
 }
 
-if( !@errors && defined $review ) {
+if( $op =~ /^cud-/ && !@errors && defined $review ) {
 	if ($review !~ /\S/) {
 		push @errors, {empty=>1};
 	} else {

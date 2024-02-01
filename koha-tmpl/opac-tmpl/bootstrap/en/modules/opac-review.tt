@@ -43,7 +43,12 @@
                             [% INCLUDE 'csrf-token.inc' %]
                             <legend class="sr-only">Comments</legend>
                             <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
-                            [% IF ( reviewid ) %]<input type="hidden" name="reviewid" value="[% reviewid | html %]" />[% END %]
+                            [% IF ( reviewid ) %]
+                                <input type="hidden" name="reviewid" value="[% reviewid | html %]" />
+                                <input type="hidden" name="op" value="cud-edit" />
+                            [% ELSE %]
+                                <input type="hidden" name="op" value="cud-add" />
+                            [% END %]
                             <fieldset>
                                 <textarea id="review" name="review" cols="60" rows="8">[% review | html %]</textarea>
                             </fieldset>
