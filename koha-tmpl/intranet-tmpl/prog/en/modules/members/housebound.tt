@@ -111,15 +111,14 @@
             [% END %]
 
             <!-- Create or edit housebound_profile -->
-            [% IF ( method == 'update_or_create' ) %]
-              <form id="editform" method="post" name="editform"
-                  [% INCLUDE 'csrf-token.inc' %]
-                    action="/cgi-bin/koha/members/housebound.pl">
+            [% IF ( op == 'update_or_create' ) %]
+              <form id="editform" method="post" name="editform" action="/cgi-bin/koha/members/housebound.pl">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                 [% IF ( housebound_profile ) %]
-                  <input type="hidden" name="method" value="updateconfirm" />
+                  <input type="hidden" name="op" value="cud-updateconfirm" />
                 [% ELSE %]
-                  <input type="hidden" name="method" value="createconfirm" />
+                  <input type="hidden" name="op" value="cud-createconfirm" />
                 [% END %]
                 <fieldset id="houseboundentry" class="rows">
                   <legend>Manage housebound profile</legend>
@@ -248,16 +247,16 @@
               </form>
 
             <!-- Create or edit housebound_visit -->
-            [% ELSIF ( method == 'visit_update_or_create' ) %]
+            [% ELSIF ( op == 'visit_update_or_create' ) %]
               <h4>Manage housebound deliveries</h4>
               <form name="form" id="instance_form" method="post"
                   [% INCLUDE 'csrf-token.inc' %]
                     action="/cgi-bin/koha/members/housebound.pl">
                 [% IF ( visit ) %]
-                  <input type="hidden" name="method" value="editvisitconfirm" />
+                  <input type="hidden" name="op" value="cud-editvisitconfirm" />
                   <input type="hidden" name="visit_id" value="[% visit.id | html %]" />
                 [% ELSE %]
-                  <input type="hidden" name="method" value="addvisitconfirm" />
+                  <input type="hidden" name="op" value="cud-addvisitconfirm" />
                 [% END %]
                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                 <fieldset class="rows" id="instance">

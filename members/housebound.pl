@@ -49,7 +49,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my @messages;                   # For error messages.
-my $method = $input->param('method') // q{};
+my $op = $input->param('op') // q{};
 my $visit_id = $input->param('visit_id') // q{};
 
 # Get patron
@@ -74,7 +74,7 @@ if ( $visit_id ) {
 # Main processing
 my ( $deliverers, $choosers, $houseboundvisit );
 
-if ( $method eq 'updateconfirm' and $houseboundprofile ) {
+if ( $op eq 'cud-updateconfirm' and $houseboundprofile ) {
     # We have received the input from the profile edit form.  We must save the
     # changes, and return to simple display.
     $houseboundprofile->set({
@@ -89,8 +89,8 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     my $success = eval { return $houseboundprofile->store };
     push @messages, { type => 'error', code => 'error_on_profile_store' }
         if ( $@ or !$success );
-    $method = undef;
-} elsif ( $method eq 'createconfirm' ) {
+    $op = undef;
+} elsif ( $op eq 'cud-createconfirm' ) {
     # We have received the input necessary to create a new profile.  We must
     # save it, and return to simple display.
     $houseboundprofile = Koha::Patron::HouseboundProfile->new({
@@ -106,19 +106,19 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     my $success = eval { return $houseboundprofile->store };
     push @messages, { type => 'error', code => 'error_on_profile_create' }
         if ( $@ or !$success );
-    $method = undef;
-} elsif ( $method eq 'visit_update_or_create' ) {
+    $op = undef;
+} elsif ( $op eq 'visit_update_or_create' ) {
     # We want to edit, edit a visit, so we must pass its details.
     $deliverers = Koha::Patrons->search_housebound_deliverers;
     $choosers = Koha::Patrons->search_housebound_choosers;
     $houseboundvisit = $visit;
-} elsif ( $method eq 'visit_delete' and $visit ) {
+} elsif ( $op eq 'visit_delete' and $visit ) {
     # We want ot delete a specific visit.
     my $success = eval { return $visit->delete };
     push @messages, { type => 'error', code => 'error_on_visit_delete' }
         if ( $@ or !$success );
-    $method = undef;
-} elsif ( $method eq 'editvisitconfirm' and $visit ) {
+    $op = undef;
+} elsif ( $op eq 'cud-editvisitconfirm' and $visit ) {
     # We have received input for editing a visit.  We must store and return to
     # simple display.
     $visit->set({
@@ -131,8 +131,8 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     my $success = eval { return $visit->store };
     push @messages, { type => 'error', code => 'error_on_visit_store' }
         if ( $@ or !$success );
-    $method = undef;
-} elsif ( $method eq 'addvisitconfirm' and !$visit ) {
+    $op = undef;
+} elsif ( $op eq 'cud-addvisitconfirm' and !$visit ) {
     # We have received input for creating a visit.  We must store and return
     # to simple display.
     my $visit = Koha::Patron::HouseboundVisit->new({
@@ -145,11 +145,11 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     my $success = eval { return $visit->store };
     push @messages, { type => 'error', code => 'error_on_visit_create' }
         if ( $@ or !$success );
-    $method = undef;
+    $op = undef;
 }
 
 # We don't have any profile information, so we must display a creation form.
-$method = 'update_or_create' if ( !$houseboundprofile );
+$op = 'update_or_create' if ( !$houseboundprofile );
 
 # Ensure template has all patron details.
 $template->param( patron => $patron );
@@ -158,7 +158,7 @@ $template->param(
     housebound_profile => $houseboundprofile,
     visit              => $houseboundvisit,
     messages           => \@messages,
-    method             => $method,
+    op                 => $op,
     choosers           => $choosers,
     deliverers         => $deliverers,
     houseboundview     => 'on',
