@@ -142,6 +142,10 @@ definitions:
     $ref: ./definitions/preservation_processing.yaml
   quote:
     $ref: ./definitions/quote.yaml
+  recall:
+    $ref: ./definitions/recall.yaml
+  recalls:
+    $ref: ./definitions/recalls.yaml
   renewal:
     $ref: ./definitions/renewal.yaml
   renewals:
@@ -431,6 +435,8 @@ paths:
     $ref: "./paths/patrons_password.yaml#/~1patrons~1{patron_id}~1password"
   "/patrons/{patron_id}/password/expiration_date":
     $ref: "./paths/patrons_password.yaml#/~1patrons~1{patron_id}~1password~1expiration_date"
+  "/patrons/{patron_id}/recalls":
+    $ref: "./paths/patrons_recalls.yaml#/~1patrons~1{patron_id}~1recalls"
   /preservation/config:
     $ref: ./paths/preservation_config.yaml#/~1preservation~1config
   /preservation/trains:
@@ -1150,6 +1156,9 @@ tags:
   - description: "Manage quotes\n"
     name: quotes
     x-displayName: Quotes
+  - description: "Manage recalls\n"
+    name: recalls
+    x-displayName: Recalls
   - description: "Manage return claims\n"
     name: return_claims
     x-displayName: Return claims
