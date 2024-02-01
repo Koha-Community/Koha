@@ -75,11 +75,16 @@ output_and_exit_if_error(
 );
 
 my $library_id = C4::Context->userenv->{'branch'};
+
+my $op = $input->param('op') // q{};
+
+my $add        = $input->param('add');
 my $desc       = $input->param('desc');
 my $amount     = $input->param('amount');
 my $note       = $input->param('note');
 my $debit_type = $input->param('type');
 my $barcode    = $input->param('barcode');
+
 $template->param(
     desc    => $desc,
     amount  => $amount,
@@ -88,8 +93,7 @@ $template->param(
     barcode => $barcode
 );
 
-my $add = $input->param('cud-add');
-if ($add) {
+if ( $op eq 'cud-add' ) {
     # Note: If the logged in user is not allowed to see this patron an invoice can be forced
     # Here we are trusting librarians not to hack the system
     my $desc       = $input->param('desc');

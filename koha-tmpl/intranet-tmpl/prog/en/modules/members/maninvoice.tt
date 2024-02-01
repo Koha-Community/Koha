@@ -75,6 +75,7 @@
                     </div>
                 [% END %]
                 <form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice">
+                    <input type="hidden" name="op" value="cud-add" />
                     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
                     [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="rows">
