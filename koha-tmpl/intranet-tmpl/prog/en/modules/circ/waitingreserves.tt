@@ -69,8 +69,7 @@
                                         <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong> [% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
                                         Please retain this item and check it in to process the hold.
                                         </p>
-                                        <form name="cancelReservewithtransfert" action="waitingreserves.pl#[% tab | html %]" method="post">
-                                            [% INCLUDE 'csrf-token.inc' %]
+                                        <form name="cancelReservewithtransfert" action="waitingreserves.pl#[% tab | html %]" method="get">
                                             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
                                         </form>
                                     </div>
@@ -81,8 +80,7 @@
                                         <p><strong>[% nextreservtitle | html %]</strong> is on hold for <strong>[% nextreservsurname | html %], [% nextreservfirstname | html %]</strong>.
                                         Please retain this item and check it in to process the hold.
                                         </p>
-                                        <form name="cancelReservewithwaiting" action="waitingreserves.pl#[% tab | html %]" method="post">
-                                            [% INCLUDE 'csrf-token.inc' %]
+                                        <form name="cancelReservewithwaiting" action="waitingreserves.pl#[% tab | html %]" method="get">
                                             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
                                         </form>
                                     </div>
@@ -128,7 +126,7 @@
                                                 <div class="btn-group">
                                                     <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
                                                         [% INCLUDE 'csrf-token.inc' %]
-                                                        <input type="hidden" name="cancelall" value="1" />
+                                                        <input type="hidden" name="op" value="cud-cancelall" />
                                                         <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
                                                         <input type="hidden" name="tab" value="holdsover">
                                                         [% IF TransferWhenCancelAllWaitingHolds %]

@@ -68,6 +68,7 @@
                 <td>
                     <form name="cancelReserve" action="waitingreserves.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-cancel">
                         <input type="hidden" name="borrowernumber" value="[% reserveloo.borrower.borrowernumber | html %]" />
                         <input type="hidden" name="itemnumber" value="[% reserveloo.item.itemnumber | html %]" />
                         <input type="hidden" name="fbr" value="[% reserveloo.item.holdingbranch | html %]" />

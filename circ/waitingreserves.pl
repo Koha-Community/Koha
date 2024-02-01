@@ -35,12 +35,12 @@ use Koha::BackgroundJob::BatchCancelHold;
 
 my $input = CGI->new;
 
+my $op             = $input->param('op') || q{};
 my $item           = $input->param('itemnumber');
 my $borrowernumber = $input->param('borrowernumber');
 my $fbr            = $input->param('fbr') || '';
 my $tbr            = $input->param('tbr') || '';
 my $all_branches   = $input->param('allbranches') || '';
-my $cancelall      = $input->param('cancelall');
 my $tab            = $input->param('tab');
 my $cancelBulk     = $input->param('cancelBulk');
 
@@ -60,7 +60,7 @@ $template->param( TransferWhenCancelAllWaitingHolds => 1 ) if $transfer_when_can
 
 my @cancel_result;
 # if we have a return from the form we cancel the holds
-if ($item) {
+if ( $op eq 'cud-cancel' && $item) {
     my $res = cancel( $item, $borrowernumber, $fbr, $tbr );
     push @cancel_result, $res if $res;
 }
@@ -103,7 +103,7 @@ while ( my $hold = $holds->next ) {
     my $calcDate = Date_to_Days( $expire_year, $expire_month, $expire_day );
 
     if ($today > $calcDate) {
-        if ($cancelall) {
+        if ( $op eq 'cud-cancelall' ) {
             my $res = cancel( $hold->item->itemnumber, $hold->borrowernumber, $hold->item->holdingbranch, $hold->item->homebranch, !$transfer_when_cancel_all );
             push @cancel_result, $res if $res;
             next;
@@ -136,7 +136,7 @@ $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' )
 
 if ($item && $tab eq 'holdsover' && !@cancel_result) {
     print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl#holdsover");
-} elsif ($cancelall) {
+} elsif ( $op eq 'cud-cancelall' ) {
     print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl");
 } else {
     output_html_with_http_headers $input, $cookie, $template->output;
