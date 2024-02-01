@@ -349,8 +349,7 @@
                             <form name="myform" action="opac-basket.pl" method="get">
                                 <input type="hidden" name="records" id="records" />
                             </form>
-                            <form method="post" id="download_cart" action="/cgi-bin/koha/opac-downloadcart.pl">
-                                [% INCLUDE 'csrf-token.inc' %]
+                            <form method="get" id="download_cart" action="/cgi-bin/koha/opac-downloadcart.pl">
                                 <input type="hidden" name="format" id="download_format" value="" />
                                 <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
                             </form>
