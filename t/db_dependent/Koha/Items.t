@@ -1792,7 +1792,7 @@ subtest 'move_to_biblio() tests' => sub {
 
 subtest 'search_ordered' => sub {
 
-    plan tests => 9;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -1824,17 +1824,8 @@ subtest 'search_ordered' => sub {
             [ $item3->itemnumber, $item2->itemnumber, $item1->itemnumber ],
             "not a serial - order by enumchron" );
 
-        # order_by LPAD( me.copynumber, 8, '0' )
-        $biblio->items->update( { enumchron => undef } );
-        $item1->discard_changes->update( { copynumber => '12345678' } );
-        $item2->discard_changes->update( { copynumber => '34567890' } );
-        $item3->discard_changes->update( { copynumber => '23456789' } );
-        is_deeply( [ map { $_->itemnumber } $biblio->items->search_ordered->as_list ],
-            [ $item1->itemnumber, $item3->itemnumber, $item2->itemnumber ],
-            "not a serial - order by LPAD( me.copynumber, 8, '0' )" );
-
         # order_by -desc => 'me.dateaccessioned'
-        $biblio->items->update( { copynumber => undef } );
+        $biblio->items->update( { enumchron => undef } );
         $item1->discard_changes->update( { dateaccessioned => '2022-08-19' } );
         $item2->discard_changes->update( { dateaccessioned => '2022-07-19' } );
         $item3->discard_changes->update( { dateaccessioned => '2022-09-19' } );
