@@ -31,6 +31,7 @@ my ( $template, $loggedinuser, $cookie, $staffflags ) = get_template_and_user(
     }
 );
 
+my $op           = $query->param('op') // q{};
 my $patron_id    = $input->param('member');
 my $destination  = $input->param('destination');
 my $newpassword  = $input->param('newpassword');
@@ -54,7 +55,7 @@ if ( ( $patron_id ne $loggedinuser ) && ( $category_type eq 'S' ) ) {
 
 push( @errors, 'NOMATCH' ) if ( ( $newpassword && $newpassword2 ) && ( $newpassword ne $newpassword2 ) );
 
-if ( $newpassword and not @errors) {
+if ( $op eq 'cud-update' && $newpassword and not @errors ) {
 
     try {
         $patron->set_password({ password => $newpassword });
