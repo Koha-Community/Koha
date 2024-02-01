@@ -54,10 +54,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $shelfid = $query->param('shelfid');
 my $email   = $query->param('email');
+my $op      = $query->param('op') // q{};
 
 my $shelf = Koha::Virtualshelves->find($shelfid);
 if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
-    if ($email) {
+    if ( $email && $op eq 'cud-send' ) {
         my $comment = $query->param('comment');
 
         my $patron     = Koha::Patrons->find($borrowernumber);

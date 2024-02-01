@@ -41,6 +41,7 @@
                                         <textarea id="comment" name="comment" rows="4" cols="40" class="form-control"></textarea>
 
                                         <input type="hidden" name="shelfid" value="[% shelfid | html %]" />
+                                        <input type="hidden" name="op" value="cud-send" />
                                     </fieldset>
                                     [% IF Koha.Preference('OPACHoldRequests') || Koha.Preference('OpacRenewalAllowed') %]<p id="donotrequestbymail">Please do not use this mail to request or renew books.</p>[% END %]
                                     <fieldset class="action">
