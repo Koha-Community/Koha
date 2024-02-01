@@ -1042,8 +1042,10 @@
                 <div class="modal-header">
                     [% IF HOLD.suspend %]
                         <h5 class="modal-title" id="suspendModalLabel">Resume hold</h5>
+                        <input type="hidden" name="op" value="cud-unsuspend" />
                     [% ELSE %]
                         <h5 class="modal-title" id="suspendModalLabel">Suspend hold</h5>
+                        <input type="hidden" name="op" value="cud-suspend" />
                     [% END %]
                     <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">x</span>

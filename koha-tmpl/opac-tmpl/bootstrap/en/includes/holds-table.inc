@@ -92,6 +92,7 @@
                                 <div class="modal-dialog">
                                     <form id="change_branch_form[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-change_branch">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="changePickup[% HOLD.reserve_id | html %]Label">Change pickup location for <em>[% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio %]</em></h5>
@@ -168,6 +169,7 @@
                             [% IF HOLD.suspend %]
                                 <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-unsuspend" />
                                     <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
                                     <button class="btn btn-link" type="submit" name="submit"><i class="fa fa-play" aria-hidden="true"></i> Resume</button>
                                 </form>
@@ -177,6 +179,7 @@
                                 [% ELSE %]
                                     <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-suspend" />
                                         <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
                                         <button class="btn btn-link" type="submit" name="submit"><i class="fa fa-pause" aria-hidden="true"></i> Suspend</button>
                                     </form>
@@ -190,6 +193,7 @@
                         [% IF ( HOLD.is_cancelable_from_opac ) %]
                             <form id="delete_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-cancel" />
                                 <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                 <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
                                 <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-times" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
@@ -197,9 +201,9 @@
                         [% ELSIF HOLD.is_waiting && HOLD.cancellation_requestable_from_opac %]
                             <form id="req_cancel_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-request_cancellation" />
                                 <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                 <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                <input type="hidden" name="cancellation_request" value="1" />
                                 <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-req-delete-hold"><i class="fa fa-times" aria-hidden="true"></i> [% tp('Request to cancel hold button', 'Request to cancel') | html %]</button>
                             </form>
                         [% END %]
@@ -216,6 +220,7 @@
         <div>
             <form class="form-inline" id="suspend_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-suspend_all" />
                 <button type="submit" id="suspend_all_submit" class="btn btn-primary"><i class="fa fa-pause" aria-hidden="true"></i> Suspend all holds</button>
                 <input type="hidden" name="suspend" value="1" />
 
@@ -230,6 +235,7 @@
         <div>
             <form id="resume_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-unsuspend_all" />
                 <button type="submit" id="resume_all_submit" class="btn btn-primary"><i class="fa fa-play" aria-hidden="true"></i> Resume all suspended holds</button>
                 <input type="hidden" name="suspend" value="0" />
             </form>

@@ -30,14 +30,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+my $op            = $query->param('op') || q{};
 my $suspend       = $query->param('suspend');
 my $suspend_until = $query->param('suspend_until') || undef;
 my $reserve_id    = $query->param('reserve_id');
 
-if ($reserve_id) {
+if ( ( $op eq 'cud-suspend' || $op eq 'cud-unsuspend' ) && $reserve_id ) {
     ToggleSuspend( $reserve_id, $suspend_until ) if CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber);
 }
-else {
+elsif( $op eq 'cud-suspend_all' || $op eq 'cud-unsuspend_all' ) {
     SuspendAll(
         borrowernumber => $borrowernumber,
         suspend        => $suspend,

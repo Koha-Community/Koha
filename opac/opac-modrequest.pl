@@ -39,8 +39,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+my $op = $query->param('op');
 my $reserve_id = $query->param('reserve_id');
-my $cancellation_request = $query->param('cancellation_request');
 my $new_pickup_location  = $query->param('new_pickup_location');
 
 if ( $reserve_id && $borrowernumber ) {
@@ -54,11 +54,11 @@ if ( $reserve_id && $borrowernumber ) {
         exit;
     }
 
-    if ( $cancellation_request ) {
+    if ( $op eq 'cud-request_cancellation' ) {
         $hold->add_cancellation_request
           if $hold->cancellation_requestable_from_opac;
     }
-    elsif ( $new_pickup_location ) {
+    elsif ( $op eq 'cud-change_branch' && $new_pickup_location ) {
 
         if ($hold->can_update_pickup_location_opac) {
             $hold->set_pickup_location({ library_id => $new_pickup_location });
@@ -69,7 +69,7 @@ if ( $reserve_id && $borrowernumber ) {
             exit;
         }
     }
-    elsif ( $hold->is_cancelable_from_opac ) {
+    elsif ( $op eq 'cud-cancel' && $hold->is_cancelable_from_opac ) {
         $hold->cancel;
     }
 }
