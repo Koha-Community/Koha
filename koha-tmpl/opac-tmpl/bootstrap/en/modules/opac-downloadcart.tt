@@ -10,8 +10,7 @@
                 <div class="col order-first order-md-first order-lg-2">
                     <div id="userdownloadcart" class="maincontent">
                         <h1>Download cart</h1>
-                        <form method="post" action="/cgi-bin/koha/opac-downloadcart.pl">
-                            [% INCLUDE 'csrf-token.inc' %]
+                        <form method="get" action="/cgi-bin/koha/opac-downloadcart.pl">
                             <select name="format" id="format">
                                 <option value="">-- Choose format --</option>
                                 <option value="ris">RIS (Zotero, EndNote, others)</option>
