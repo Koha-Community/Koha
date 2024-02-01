@@ -1,0 +1,81 @@
+---
+type: object
+properties:
+  recall_id:
+    type: integer
+    description: Internal recall identifier
+  patron_id:
+    type: integer
+    description: Internal patron identifier
+  created_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: The date the recall was requested
+  biblio_id:
+    type: integer
+    description: Internal biblio identifier
+  pickup_library_id:
+    type:
+      - string
+      - "null"
+    description: Internal library identifier for the pickup library
+  completed_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: The date the recall was fulfilled
+  notes:
+    type:
+      - string
+      - "null"
+    description: Notes related to this recall
+  priority:
+    type:
+      - integer
+      - "null"
+    description: Where in the queue the patron sits (not yet implemented)
+  status:
+    type:
+      - string
+      - "null"
+    description: Status of the recall
+    enum:
+      - requested
+      - overdue
+      - waiting
+      - in_transit
+      - cancelled
+      - expired
+      - fulfilled
+  timestamp:
+    type: string
+    format: date-time
+    description: Timestamp for the latest recall update
+  item_id:
+    type:
+      - integer
+      - "null"
+    description: Internal item identifier
+  waiting_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: The date the item was marked as waiting for the patron at the library
+  expiration_date:
+    type:
+      - string
+      - "null"
+    format: date-time
+    description: The date the recall expires
+  completed:
+    type: boolean
+    description: Controls if the recall is fulfilled
+  item_level:
+    type: boolean
+    description: If the recall is requested at item level
+
+additionalProperties: false
