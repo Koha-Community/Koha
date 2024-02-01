@@ -66,6 +66,7 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active">
                         <form action="/cgi-bin/koha/members/mancredit.pl" method="post" id="mancredit">
+                            <input type="hidden" name="op" value="cud-add" />
                             <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
                             [% INCLUDE 'csrf-token.inc' %]
 
