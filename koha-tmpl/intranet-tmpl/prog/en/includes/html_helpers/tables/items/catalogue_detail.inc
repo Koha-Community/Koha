@@ -277,11 +277,15 @@
         }
         [% END %]
 
+        let offset = 2;
+        [% UNLESS Koha.Preference('LocalCoverImages') %]offset--;[% END %]
+        [% UNLESS Koha.Preference('StaffDetailItemSelection') %]offset--;[% END %]
         let filters_options = {
-            2: () => all_item_types,
-            3: () => all_libraries,
-            4: () => all_libraries,
+            [offset]   : () => all_item_types,
+            [offset+1] : () => all_libraries,
+            [offset+2] : () => all_libraries,
         };
+
         var items_table = $("#" + tab_id + '_table').kohaTable({
             ajax: { url: item_table_url },
             order: [],
