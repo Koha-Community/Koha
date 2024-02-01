@@ -466,10 +466,13 @@ sub search_ordered {
         return $self->search(
             {},
             {
+                '+select' => [{
+                    lpad => ['copynumber', \8, \"'0'"], '-as' => 'lpad_copynumber',
+                }],
                 order_by => [
                     'homebranch.branchname',
                     'me.enumchron',
-                    \"LPAD( me.copynumber, 8, '0' )",
+                    'lpad_copynumber',
                     {-desc => 'me.dateaccessioned'}
                 ],
                 join => ['homebranch']
