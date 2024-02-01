@@ -28,7 +28,7 @@ use Koha::Items;
 use CGI qw ( -utf8 );
 
 my $query = CGI->new;
-
+my $op = $query->param('op') || q{};
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "rotating_collections/addItems.tt",
@@ -38,8 +38,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( defined $query->param('action') and
-     $query->param('action') eq 'addItem' ) {
+if ( defined $op and
+    $op eq 'cud-add' ) {
     ## Add the given item to the collection
     my $colId      = $query->param('colId');
     my $barcode    = $query->param('barcode');
