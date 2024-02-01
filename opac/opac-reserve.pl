@@ -45,6 +45,7 @@ use List::MoreUtils qw( uniq );
 my $maxreserves = C4::Context->preference("maxreserves");
 
 my $query = CGI->new;
+my $op    = $query->param('op') // q{};
 
 # if OPACHoldRequests (for placing holds) is disabled, leave immediately
 if ( ! C4::Context->preference('OPACHoldRequests') ) {
@@ -86,8 +87,8 @@ if (! $biblionumbers) {
     $biblionumbers = $query->param('biblionumber');
 }
 
-if ((! $biblionumbers) && (! $query->param('place_reserve'))) {
-    $template->param(message=>1, no_biblionumber=>1);
+if ( !$biblionumbers && $op ne 'cud-place_reserve' ) {
+    $template->param( message => 1, no_biblionumber => 1 );
     output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
     exit;
 }
@@ -98,7 +99,7 @@ $template->param( biblionumbers => $biblionumbers );
 
 # Each biblio number is suffixed with '/', e.g. "1/2/3/"
 my @biblionumbers = split /\//, $biblionumbers;
-if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
+if ( $#biblionumbers < 0 && $op ne 'cud-place_reserve' ) {
     # TODO: New message?
     $template->param(message=>1, no_biblionumber=>1);
     output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
@@ -179,7 +180,7 @@ $template->param( branch => $branch );
 # with a specific item for each biblionumber.
 #
 #
-if ( $query->param('place_reserve') ) {
+if ( $op eq 'cud-place_reserve' ) {
     my $reserve_cnt = 0;
     if ($maxreserves) {
         $reserve_cnt = $patron->holds->count;
