@@ -35,6 +35,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $op               = $input->param('op');
 my $message_id       = $input->param('message_id');
 my $borrowernumber   = $input->param('borrowernumber');
 my $branchcode       = $input->param('branchcode');
@@ -42,11 +43,11 @@ my $message_type     = $input->param('message_type');
 my $borrower_message = $input->param('borrower_message');
 my $batch            = $input->param('batch');
 
-if ($message_id) {
+if ( $op eq 'cud-edit_message' && $message_id) {
     my $message = Koha::Patron::Messages->find($message_id);
     $message->update( { message => $borrower_message } ) if $message;
 }
-else {
+elsif( $op eq 'cud-add_message' ) {
     Koha::Patron::Message->new(
         {
             borrowernumber => $borrowernumber,

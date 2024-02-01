@@ -120,6 +120,7 @@
         <div class="modal-content">
             <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
                 [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-add_message">
                 <div class="modal-header">
                     <h3>Leave a message</h3>
                 </div>

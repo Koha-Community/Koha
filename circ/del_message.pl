@@ -35,6 +35,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $op             = $input->param('op');
 my $borrowernumber = $input->param('borrowernumber');
 my $message_id     = $input->param('message_id');
 
@@ -47,7 +48,7 @@ if ( $message
     exit;
 }
 
-$message->delete if $message;
+$message->delete if $message && $op eq 'cud-delete';
 
 if ( $input->param('from') eq  "moremember" ) {
     print $input->redirect(

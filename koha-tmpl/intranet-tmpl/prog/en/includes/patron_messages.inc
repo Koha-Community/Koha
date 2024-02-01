@@ -321,10 +321,23 @@
                     [% IF patron_message.branchcode == Branches.GetLoggedInBranchcode OR Koha.Preference('AllowAllMessageDeletion') %]
                         [% IF moremember %]
                             <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-target="#edit_message_form_[% patron_message.message_id | html %]" data-toggle="modal" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                            <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember"><i class="fa fa-trash-can"></i> Delete</a>
+                            <form action="/cgi-bin/koha/circ/del_message.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete">
+                                <input type="hidden" name="message_id" value="[% patron_message.message_id | html %]">
+                                <input type="hidden" name="borrowernumber" value="[% patron_message.borrowernumber | html %]">
+                                <input type="hidden" name="from" value="moremember">
+                                <button type="submit" class="btn btn-link delete_message"><i class="fa fa-trash-can"></i> Delete</button>
+                            </form>
                         [% ELSE %]
                             <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-target="#edit_message_form_[% patron_message.message_id | html %]" data-toggle="modal" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                            <a class="btn btn-link delete_message" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                            <form action="/cgi-bin/koha/circ/del_message.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete">
+                                <input type="hidden" name="message_id" value="[% patron_message.message_id | html %]">
+                                <input type="hidden" name="borrowernumber" value="[% patron_message.borrowernumber | html %]">
+                                <button type="submit" class="btn btn-link delete_message"><i class="fa fa-trash-can"></i> Delete</button>
+                            </form>
                         [% END %]
                     [% END %]
                 </li>
@@ -339,6 +352,7 @@
                 <div class="modal-content">
                     <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
                         [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-edit_message">
                         <input type="hidden" name="message_id" value="[% pm.message_id | html %]"/>
                         <div class="modal-header">
                             <h3>Edit message</h3>
