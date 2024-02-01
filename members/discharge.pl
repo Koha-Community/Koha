@@ -49,6 +49,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
     flagsrequired   => { 'borrowers' => 'edit_borrowers' },
 });
 
+my $op = $input->param('op') // q{};
 my $borrowernumber = $input->param('borrowernumber');
 
 unless ( C4::Context->preference('useDischarge') ) {
@@ -65,7 +66,7 @@ my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged({
 });
 
 # Generating discharge if needed
-if ( $input->param('discharge') and $can_be_discharged ) {
+if ( $op eq 'cud-discharge' && $input->param('discharge') and $can_be_discharged ) {
     my $is_discharged = Koha::Patron::Discharge::is_discharged({
         borrowernumber => $borrowernumber,
     });
