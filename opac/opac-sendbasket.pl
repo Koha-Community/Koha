@@ -21,13 +21,9 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Encode;
-use Carp qw( carp );
-use Try::Tiny qw( catch try );
 
-use C4::Biblio qw(
-  GetMarcSubjects
-);
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
+use C4::Biblio qw(GetMarcSubjects);
 use C4::Output qw( output_html_with_http_headers );
 use C4::Templates;
 use Koha::Biblios;
@@ -43,16 +39,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         type          => "opac",
     }
 );
+my $patron     = Koha::Patrons->find($borrowernumber);
+my $user_email = $patron ? $patron->notice_email_address : undef;
 
 my $op        = $query->param('op') || q{};
 my $bib_list  = $query->param('bib_list') || '';
 my $email_add = $query->param('email_add');
 
-if ( $op eq "cud-send" && $email_add ) {
-
-    my $patron     = Koha::Patrons->find($borrowernumber);
-    my $user_email = $patron->notice_email_address;
-
+if ( $op eq "cud-send" && $email_add && $user_email ) {
     my $comment = $query->param('comment');
 
     my @bibs = split( /\//, $bib_list );
@@ -63,12 +57,7 @@ if ( $op eq "cud-send" && $email_add ) {
     }
 
     if ( !defined $iso2709 ) {
-        carp "Error sending mail: empty basket";
-        $template->param( error => 1 );
-    }
-    elsif ( !defined $user_email or $user_email eq '' ) {
-        carp "Error sending mail: sender's email address is invalid";
-        $template->param( error => 1 );
+        $template->param( error => 'NO_BODY' );
     }
     else {
         my %loops = ( biblio => \@bibs, );
@@ -111,8 +100,12 @@ if ( $op eq "cud-send" && $email_add ) {
     $template->param( email_add => $email_add );
     output_html_with_http_headers $query, $cookie, $template->output, undef,
       { force_no_caching => 1 };
-}
-else {
+
+} elsif( !$user_email ) {
+    $template->param( email_add => 1, error => 'NO_REPLY_ADDRESS' );
+    output_html_with_http_headers $query, $cookie, $template->output;
+
+} else {
     my $new_session_id = $query->cookie('CGISESSID');
     $template->param(
         bib_list       => $bib_list,
