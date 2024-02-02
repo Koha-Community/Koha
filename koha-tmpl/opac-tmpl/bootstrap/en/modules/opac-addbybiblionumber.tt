@@ -48,7 +48,7 @@
                                             [% FOREACH biblio IN biblios %]
                                                 <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
                                             [% END %]
-                                            <input type="hidden" name="modifyshelfcontents" value="1" />
+                                            <input type="hidden" name="op" value="cud-modifyshelfcontents" />
                                         </fieldset>
                                         <fieldset class="action">
                                             <input type="submit" value="Save" class="btn btn-primary" />
@@ -64,7 +64,7 @@
                                                 <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]">
                                             [% END %]
                                             <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
-                                            <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
+                                            <input type="hidden" name="op" value="cud-modifyshelfcontents" /></fieldset>
                                             <fieldset class="action">
                                                 <input type="submit" value="Save" class="btn btn-primary" />
                                                 <a class="close cancel" href="#">Cancel</a>
@@ -93,6 +93,7 @@
                                         <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
                                     [% END %]
                                     <fieldset class="action">
+                                        <input type="hidden" name="op" value="cud-add" />
                                         <input type="hidden" name="sortfield" value="title" />
                                         <input type="submit" value="Save" class="btn btn-primary" />
                                         <a class="close cancel" href="#">Cancel</a>

@@ -28,6 +28,7 @@ use Koha::Biblios;
 use Koha::Virtualshelves;
 
 my $query           = CGI->new;
+my $op              = $query->param('op') // q{};
 my @biblionumbers   = $query->multi_param('biblionumber');
 my $selectedshelf   = $query->param('selectedshelf');
 my $newshelf        = $query->param('newshelf');
@@ -54,7 +55,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ($newvirtualshelf) {
+if( $op && $op !~ /^cud-/ ) {
+    $authorized = 0;
+} elsif ($newvirtualshelf) {
     if ($loggedinuser > 0
         and (  !$public
             or $public and $loggedinuser > 0 && C4::Context->preference('OpacAllowPublicListCreation') )
