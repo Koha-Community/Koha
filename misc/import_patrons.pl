@@ -41,8 +41,7 @@ my @preserve_fields;
 my $update_dateexpiry;
 my $update_dateexpiry_from_today;
 
-
-my $command_line_options = join(" ",@ARGV);
+my $command_line_options = join( " ", @ARGV );
 
 GetOptions(
     'c|confirm'                      => \$confirm,
@@ -64,8 +63,8 @@ pod2usage(1) if $help;
 pod2usage(q|--file is required|) unless $csv_file;
 pod2usage(q|--matchpoint is required|) unless $matchpoint;
 
-if ( $confirm ) {
-    cronlogaction({ action => 'Run', info => $command_line_options })
+if ($confirm) {
+    cronlogaction( { action => 'Run', info => $command_line_options } );
 } else {
     warn "Running in dry-run mode, provide --confirm to apply the changes\n";
 }
@@ -95,7 +94,7 @@ my $imported    = $return->{imported};
 my $overwritten = $return->{overwritten};
 my $alreadyindb = $return->{already_in_db};
 my $invalid     = $return->{invalid};
-my $total = $imported + $alreadyindb + $invalid + $overwritten;
+my $total       = $imported + $alreadyindb + $invalid + $overwritten;
 
 if ($verbose) {
     say q{};
@@ -118,10 +117,21 @@ if ($verbose > 2 ) {
     say Data::Dumper::Dumper( $feedback );
 }
 
-my $info = "Import complete. " . "Imported: " . $imported . " Overwritten: " . $overwritten . " Skipped: " . $alreadyindb . " Invalid: " . $invalid . " Total: " . $total;
+my $info =
+      "Import complete. "
+    . "Imported: "
+    . $imported
+    . " Overwritten: "
+    . $overwritten
+    . " Skipped: "
+    . $alreadyindb
+    . " Invalid: "
+    . $invalid
+    . " Total: "
+    . $total;
 
-if ( $confirm ) {
-    cronlogaction({ action => 'End', info => $info });
+if ($confirm) {
+    cronlogaction( { action => 'End', info => $info } );
 }
 
 =head1 NAME
