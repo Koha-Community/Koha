@@ -26,6 +26,7 @@ use C4::Output qw( output_html_with_http_headers );
 use Koha::List::Patron qw( AddPatronList GetPatronLists ModPatronList );
 
 my $cgi = CGI->new;
+my $op  = $cgi->param('op') // q{};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -45,7 +46,7 @@ if ($id) {
     $template->param( list => $list );
 }
 
-if ($name) {
+if ( $op eq 'cud-add_modify' && $name ) {
     if ($id) {
         ModPatronList( { patron_list_id => $id, name => $name, shared => $shared } );
         print $cgi->redirect('lists.pl');
