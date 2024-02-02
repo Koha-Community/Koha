@@ -54,8 +54,7 @@
 <div id="acqui_acqui_home_order">
     <fieldset>
         <legend>Manage orders</legend>
-        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="get">
             <p><label for="supplierpage">Vendor: </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" class="btn btn-primary" value="Search" />
             </p>
