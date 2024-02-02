@@ -28,7 +28,8 @@ use Koha::BiblioFrameworks;
 use Koha::Caches;
 use Koha::MarcSubfieldStructures;
 
-my $input       = CGI->new;
+my $input = CGI->new;
+my $op    = $input->param('op') // q{};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
@@ -45,7 +46,7 @@ my $cache = Koha::Caches->get_instance();
 # Update data before showing the form
 my $no_upd;
 
-if( $input->param('add_field') && $input->request_method eq 'POST' ) {
+if( $input->param('add_field') && $op eq 'cud-save' ) {
     # add a mapping to all frameworks
     my ($kohafield, $tag, $sub) = split /,/, $input->param('add_field'), 3;
     my $rs = Koha::MarcSubfieldStructures->search({ tagfield => $tag, tagsubfield => $sub });
@@ -55,7 +56,7 @@ if( $input->param('add_field') && $input->request_method eq 'POST' ) {
         $template->param( error_add => 1, error_info => "$tag, $sub" );
     }
 
-} elsif( $input->param('remove_field') && $input->request_method eq 'POST' ) {
+} elsif( $input->param('remove_field') && $op eq 'cud-save' ) {
     # remove a mapping from all frameworks
     my ($tag, $sub) = split /,/, $input->param('remove_field'), 2;
     Koha::MarcSubfieldStructures->search({ tagfield => $tag, tagsubfield => $sub })->update({ kohafield => undef });
