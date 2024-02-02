@@ -49,7 +49,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $op = $cgi->param('op') // '';
 
-if ( $op eq 'check_in' ) {
+if ( $op eq 'cud-check_in' ) {
     ## Get the barcodes, perform some basic validation
     # Remove empty ones
     my @barcodes = grep { $_ ne '' } $cgi->multi_param('barcode');
