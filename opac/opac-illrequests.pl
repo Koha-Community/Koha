@@ -68,7 +68,7 @@ my $op = $params->{'op'} // $params->{'method'} // 'list';
 
 show_param_deprecation_message('"create" op is DEPRECATED in favor of "cud-create".') if ( $op eq 'create' );
 
-$op = 'cud-create' if $op eq 'create';
+$op = 'cud-create' if $op eq 'create' || $op eq 'add_form';
 
 my ( $illrequest_id, $request );
 if ( $illrequest_id = $params->{illrequest_id} ) {

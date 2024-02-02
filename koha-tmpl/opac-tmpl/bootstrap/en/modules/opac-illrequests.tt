@@ -100,7 +100,7 @@
                                             </select>
                                         </fieldset>
                                         <fieldset class="action">
-                                            <input type="hidden" name="op" value="create" />
+                                            <input type="hidden" name="op" value="add_form" />
                                             <input type="submit" class="btn btn-sm btn-primary" value="Next" />
                                         </fieldset>
                                     </form>
@@ -120,11 +120,11 @@
                                         </button>
                                         <div id="backend-dropdown-options" class="dropdown-menu nojs" aria-labelledby="ill-backend-dropdown">
                                             [% FOREACH backend IN backends %]
-                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-illrequests.pl?op=create&amp;backend=[% backend | uri %]">[% backend | html %]</a>
+                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-illrequests.pl?op=add_form&amp;backend=[% backend | uri %]">[% backend | html %]</a>
                                             [% END %]
                                         </div>
                                     [% ELSE %]
-                                        <a id="ill-new" class="btn btn-primary" href="/cgi-bin/koha/opac-illrequests.pl?op=create&amp;backend=[% backends.0 | html %]">
+                                        <a id="ill-new" class="btn btn-primary" href="/cgi-bin/koha/opac-illrequests.pl?op=add_form&amp;backend=[% backends.0 | html %]">
                                             <i class="fa fa-plus" aria-hidden="true"></i> Create a new request
                                         </a>
                                     [% END %]
