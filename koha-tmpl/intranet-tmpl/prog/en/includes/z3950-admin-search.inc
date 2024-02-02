@@ -12,7 +12,7 @@
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Z39.50/SRU server search" />
                 </div>
-
+                <input type="hidden" name="op" value="cud-search" />
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
