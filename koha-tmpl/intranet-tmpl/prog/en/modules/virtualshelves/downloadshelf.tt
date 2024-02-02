@@ -29,8 +29,7 @@
     <p>Your download should begin automatically.</p>
 [% ELSE %]
 <div id="export" class="detailtagcell">
-<form method="post" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
-    [% INCLUDE 'csrf-token.inc' %]
+<form method="get" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
 	<fieldset class="rows">
         <legend><h1>Download list</h1></legend>
 	<ol><li>
