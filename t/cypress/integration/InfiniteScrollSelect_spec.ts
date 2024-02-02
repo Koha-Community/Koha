@@ -84,9 +84,10 @@ describe("Infinite scroll", () => {
                 "X-Base-Total-Count": "20",
                 "X-Total-Count": "20",
             },
-        });
+        }).as("getPageTwo");
         // Scroll the dropdown
         cy.get(".vs__dropdown-menu").scrollTo("bottom");
+        cy.wait("@getPageTwo");
         cy.get("@options").should("have.length", 40);
 
         cy.intercept("GET", "/api/v1/erm/licenses*", {
@@ -96,9 +97,10 @@ describe("Infinite scroll", () => {
                 "X-Base-Total-Count": "20",
                 "X-Total-Count": "20",
             },
-        });
+        }).as("getPageThree");
         // Scroll the dropdown again
         cy.get(".vs__dropdown-menu").scrollTo("bottom");
+        cy.wait("@getPageThree");
         cy.get("@options").should("have.length", 60);
     });
 
@@ -208,9 +210,10 @@ describe("Infinite scroll", () => {
                 "X-Base-Total-Count": "20",
                 "X-Total-Count": "20",
             },
-        });
+        }).as("getPageTwo");
         // Scroll the dropdown
         cy.get(".vs__dropdown-menu").scrollTo("bottom");
+        cy.wait("@getPageTwo");
 
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
