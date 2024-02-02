@@ -15,12 +15,14 @@
     <div class="container-fluid">
       [% IF (not_enough_budget) %]
         <form action="/cgi-bin/koha/acqui/addorder.pl" method="post">
+            <input type="hidden" name="op" value="cud-order"/>
             [% INCLUDE 'csrf-token.inc' %]
           [% FOREACH var IN vars_loop %]
             [% FOREACH val IN var.values %]
               <input type="hidden" name="[% var.name | html %]" value="[% val | html %]" />
             [% END %]
           [% END %]
+          <input type="hidden" name="op" value="cud-addorder">
           <input type="hidden" name="confirm_budget_exceeding" value="1" />
           <div class="dialog alert">
             [% IF (budget_exceeded) %]
