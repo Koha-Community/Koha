@@ -3,7 +3,6 @@
 #script to show suppliers and orders
 #written by chris@katipo.co.nz 23/2/2000
 
-
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2008-2009 BibLibre SARL
 #
@@ -57,99 +56,108 @@ use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Acquisition::Booksellers;
 use CGI qw ( -utf8 );
 
-my $input=CGI->new;
+my $input = CGI->new;
 
 checkauth( $input, 0, { acquisition => 'vendors_manage' }, 'intranet' );
 
-#print $input->header();
-my $booksellerid=$input->param('booksellerid');
-#print startpage;
+my $op = $input->param('op') // q{};
+
+my $booksellerid = $input->param('booksellerid');
+
+my $address   = $input->param('physical');
+my @addresses = split( '\n', $address );
+
 my %data;
-$data{'id'}=$booksellerid;
+$data{'id'} = $booksellerid;
 
-$data{'name'}=$input->param('company');
-$data{'postal'}=$input->param('company_postal');
-my $address=$input->param('physical');
-my @addresses=split('\n',$address);
-$data{'address1'}=$addresses[0];
-$data{'address2'}=$addresses[1];
-$data{'address3'}=$addresses[2];
-$data{'address4'}=$addresses[3];
-$data{'phone'}=$input->param('company_phone');
-$data{'accountnumber'}=$input->param('accountnumber');
-$data{'type'}=$input->param('vendor_type');
-$data{'fax'}=$input->param('company_fax');
-$data{'url'}=$input->param('website');
-# warn "".$data{'contnotes'};
-$data{'notes'}=$input->param('notes');
-$data{'active'}=$input->param('status');
-
-$data{'listprice'}=$input->param('list_currency');
-$data{'invoiceprice'}=$input->param('invoice_currency');
-$data{'gstreg'}=$input->param('gst');
-$data{'listincgst'}=$input->param('list_gst');
-$data{'invoiceincgst'}=$input->param('invoice_gst');
-#have to transform this into fraction so it's easier to use
-$data{'tax_rate'} = $input->param('tax_rate');
-$data{'discount'} = $input->param('discount');
-$data{deliverytime} = $input->param('deliverytime');
-$data{'active'}=$input->param('status');
+$data{'name'}          = $input->param('company');
+$data{'postal'}        = $input->param('company_postal');
+$data{'address1'}      = $addresses[0];
+$data{'address2'}      = $addresses[1];
+$data{'address3'}      = $addresses[2];
+$data{'address4'}      = $addresses[3];
+$data{'phone'}         = $input->param('company_phone');
+$data{'accountnumber'} = $input->param('accountnumber');
+$data{'type'}          = $input->param('vendor_type');
+$data{'fax'}           = $input->param('company_fax');
+$data{'url'}           = $input->param('website');
+$data{'notes'}         = $input->param('notes');
+$data{'active'}        = $input->param('status');
+$data{'listprice'}     = $input->param('list_currency');
+$data{'invoiceprice'}  = $input->param('invoice_currency');
+$data{'gstreg'}        = $input->param('gst');
+$data{'listincgst'}    = $input->param('list_gst');
+$data{'invoiceincgst'} = $input->param('invoice_gst');
+$data{'tax_rate'}      = $input->param('tax_rate');          #have to transform this into fraction so it's easier to use
+$data{'discount'}      = $input->param('discount');
+$data{deliverytime}    = $input->param('deliverytime');
+$data{'active'}        = $input->param('status');
 
 my @aliases = $input->multi_param('alias');
 my @contacts;
 my %contact_info;
 
-foreach (qw(id name position phone altphone fax email notes orderacquisition claimacquisition claimissues acqprimary serialsprimary)) {
-    $contact_info{$_} = [ $input->multi_param('contact_' . $_) ];
+foreach (
+    qw(id name position phone altphone fax email notes orderacquisition claimacquisition claimissues acqprimary serialsprimary)
+    )
+{
+    $contact_info{$_} = [ $input->multi_param( 'contact_' . $_ ) ];
 }
 
-for my $cnt (0..scalar(@{$contact_info{'id'}})) {
+for my $cnt ( 0 .. scalar( @{ $contact_info{'id'} } ) ) {
     my %contact;
     my $real_contact;
-    foreach (qw(id name position phone altphone fax email notes orderacquisition claimacquisition claimissues acqprimary serialsprimary)) {
+    foreach (
+        qw(id name position phone altphone fax email notes orderacquisition claimacquisition claimissues acqprimary serialsprimary)
+        )
+    {
         $contact{$_} = $contact_info{$_}->[$cnt];
         $real_contact = 1 if $contact{$_};
     }
     push @contacts, \%contact if $real_contact;
 }
 
-if($data{'name'}) {
+if ( $op eq 'cud-add' ) {
     my $bookseller;
     if ( $data{id} ) {
+
         # Update
-        $bookseller = Koha::Acquisition::Booksellers->find( $data{id} )->set(\%data)->store;
+        $bookseller = Koha::Acquisition::Booksellers->find( $data{id} )->set( \%data )->store;
+
         # Delete existing contacts
         $bookseller->contacts->delete;
     } else {
+
         # Insert
-        delete $data{id}; # Remove the key if exists
+        delete $data{id};    # Remove the key if exists
         $bookseller = Koha::Acquisition::Bookseller->new( \%data )->store;
         $data{id} = $bookseller->id;
     }
+
     # Insert contacts
-    for my $contact ( @contacts ) {
+    for my $contact (@contacts) {
         $contact->{booksellerid} = $data{id};
-        Koha::Acquisition::Bookseller::Contact->new( $contact )->store
+        Koha::Acquisition::Bookseller::Contact->new($contact)->store;
     }
 
     # Insert aliases
-    $bookseller->aliases([ map { { alias => $_ } } @aliases ]);
+    $bookseller->aliases( [ map { { alias => $_ } } @aliases ] );
 
     # Insert interfaces
     my @interface_counters = $input->multi_param('interface_counter');
     my @interfaces;
-    for my $counter ( @interface_counters ) {
+    for my $counter (@interface_counters) {
         my $interface = {};
-        for my $attr (qw(name type uri login password account_email notes)){
+        for my $attr (qw(name type uri login password account_email notes)) {
             my $v = $input->param("interface_${attr}_${counter}");
             $interface->{$attr} = $v;
         }
         push @interfaces, $interface if any { defined && length } values %$interface;
     }
-    $bookseller->interfaces(\@interfaces);
+    $bookseller->interfaces( \@interfaces );
 
     #redirect to booksellers.pl
-    print $input->redirect("booksellers.pl?booksellerid=".$data{id});
+    print $input->redirect( "booksellers.pl?booksellerid=" . $data{id} );
 } else {
-    print $input->redirect("supplier.pl?op=enter"); # fail silently.
+    print $input->redirect("supplier.pl?op=enter");    # fail silently.
 }

@@ -199,6 +199,7 @@
 [% UNLESS ( enter ) %][% INCLUDE 'acquisitions-toolbar.inc' %][% END %]
 [% IF ( enter ) %]
     <form action="updatesupplier.pl" name="updatesupplier" style="display:block" class="validated" method="post">
+        <input type="hidden" name="op" value="cud-add"/>
         [% INCLUDE 'csrf-token.inc' %]
         <div id="toolbar" class="btn-toolbar">
             <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
