@@ -61,6 +61,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 9, 'manage_item_groups', 'Create, update and delete item groups, add or remove items from a item groups'),
    ( 9, 'manage_item_editor_templates', 'Update and delete item editor template owned by others'),
    ( 9, 'edit_any_item', 'Edit any item regardless of home library'),
+   ( 9, 'edit_locked_records', 'Edit locked records'),
+   ( 9, 'set_record_sources', 'Set record source'),
    (10, 'payout', 'Perform account payout action'),
    (10, 'refund', 'Perform account refund action'),
    (10, 'discount', 'Perform account discount action'),
