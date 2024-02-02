@@ -146,6 +146,7 @@
                 <div id="patrons_to_add"></div>
 
                 <fieldset class="action">
+                    <input type="hidden" name="op" value="cud-add" />
                     <input type="hidden" name="patron_list_id" value="[% list.patron_list_id | html %]" />
                     <input type="submit" class="btn btn-primary" value="Add patrons" />
                     <a href="lists.pl" class="cancel">Cancel</a>
@@ -216,6 +217,7 @@
             </div> <!-- /.page-section -->
 
             <fieldset class="action">
+                <input type="hidden" name="op" value="cud-delete" />
                 <input type="hidden" name="patron_list_id" value="[% list.patron_list_id | html %]" />
                 <button type="submit" class="btn btn-default btn-sm list-remove"><i class="fa fa-trash-can" aria-hidden="true"></i> Remove selected patrons</button>
                 <button class="btn btn-default btn-sm merge-patrons" type="submit"><i class="fa fa-compress"></i> Merge selected patrons</button>

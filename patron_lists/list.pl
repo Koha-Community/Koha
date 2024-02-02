@@ -31,6 +31,7 @@ use Koha::List::Patron qw(
 use List::MoreUtils qw( uniq );
 
 my $cgi = CGI->new;
+my $op  = $cgi->param('op') // q{};
 
 my ( $template, $logged_in_user, $cookie ) = get_template_and_user(
     {
@@ -49,7 +50,7 @@ my @existing = $list->patron_list_patrons;
 my $patrons_by_id = $cgi->param('patrons_by_id');
 my $id_column = $cgi->param('id_column');
 
-if ( $patrons_by_id ){
+if ( $op eq 'cud-add' && $patrons_by_id ) {
     push my @patrons_list, uniq( split(/\s\n/, $patrons_by_id) );
     my %add_params;
     $add_params{list} = $list;
@@ -71,12 +72,12 @@ if ( $patrons_by_id ){
 }
 
 my @patrons_to_add = $cgi->multi_param('patrons_to_add');
-if (@patrons_to_add) {
+if ( $op eq 'cud-add' && @patrons_to_add) {
     AddPatronsToList( { list => $list, cardnumbers => \@patrons_to_add } );
 }
 
 my @patrons_to_remove = $cgi->multi_param('patrons_to_remove');
-if (@patrons_to_remove) {
+if ( $op eq 'cud-delete' && @patrons_to_remove) {
     DelPatronsFromList( { list => $list, patron_list_patrons => \@patrons_to_remove } );
 }
 
