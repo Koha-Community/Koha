@@ -11,6 +11,7 @@
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="message_id" value="[% message.message_id | html %]">
                     <input type="hidden" name="patron_id" value="[% message.borrowernumber | html %]">
+                    <input type="hidden" name="op" value="cud-update" />
                     <button type="submit" class="dismiss-message-button btn btn-primary"><i class="fa fa-trash" aria-hidden="true"></i> Dismiss</button>
                 </form>
             [% END %]

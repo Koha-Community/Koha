@@ -26,6 +26,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
 my $query = CGI->new;
+my $op    = $query->param('op') // q{};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -40,7 +41,7 @@ my $patron = Koha::Patrons->find( $patron_id );
 my $message_id = $query->param('message_id');
 my $message = $patron->messages->find( $message_id );
 
-unless ( $message ) {
+unless ( $op =~ /^cud-/ && $message ) {
     # exit early
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
     exit;
