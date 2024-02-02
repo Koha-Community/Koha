@@ -50,8 +50,7 @@
                             <span class="view"><span id="Briefhistory">Brief history</span></span>
                             <span class="view"><a id="Fullhistory" href="opac-serial-issues.pl?selectview=full&amp;biblionumber=[% biblionumber | html %]" class="button">Full history</a></span>
                         </div>
-                        <form method="post" name="f">
-                            [% INCLUDE 'csrf-token.inc' %]
+                        <form method="get" name="f">
                             [% FOREACH subscription_LOO IN subscription_LOOP %]
                                 <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" class="subscriptionline">
                                     <caption><h2>Subscription information for [% subscription_LOO.bibliotitle | html %]</h2><caption>
