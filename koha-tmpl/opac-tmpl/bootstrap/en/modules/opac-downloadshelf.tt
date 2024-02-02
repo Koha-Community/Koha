@@ -56,8 +56,7 @@
                                     <p>Your download should begin automatically.</p>
                                 </div>
                             [% ELSE %]
-                                <form method="post" action="/cgi-bin/koha/opac-downloadshelf.pl">
-                                    [% INCLUDE 'csrf-token.inc' %]
+                                <form method="get" action="/cgi-bin/koha/opac-downloadshelf.pl">
                                     <fieldset>
                                         <select name="format" id="dlformat" required="required">
                                             <legend>Choose format</legend>
