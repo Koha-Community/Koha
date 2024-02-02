@@ -32,7 +32,7 @@
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/opac-illrequests.pl">Interlibrary loan requests</a>
             [% END %]
-            [% IF op == 'create' %]
+            [% IF op == 'cud-create' %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     <span>New interlibrary loan request</span>
                 [% END %]
@@ -72,7 +72,7 @@
                     <div class="alert alert-warning">ILL module configuration problem. Contact your administrator.</div>
                 [% ELSE %]
                     <div id="illrequests" class="maincontent">
-                        [% IF op == 'create' %]
+                        [% IF op == 'cud-create' %]
                             <h1>New interlibrary loan request</h1>
                             [% IF stage == 'copyrightclearance' %]
                                 [% INCLUDE messages %]
@@ -321,7 +321,7 @@
                                     </fieldset>
                                 </form>
                             </div>
-                        [% END # / IF op == 'create' %]
+                        [% END # / IF op == 'cud-create' %]
                     </div> <!-- / #illrequests -->
                 [% END # /IF !backends_available %]
             </div> <!-- / .col-lg-10/12 -->

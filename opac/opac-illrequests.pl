@@ -66,6 +66,10 @@ show_param_deprecation_message('"method" form param is DEPRECATED in favor of "o
 
 my $op = $params->{'op'} // $params->{'method'} // 'list';
 
+show_param_deprecation_message('"create" op is DEPRECATED in favor of "cud-create".') if ( $op eq 'create' );
+
+$op = 'cud-create' if $op eq 'create';
+
 my ( $illrequest_id, $request );
 if ( $illrequest_id = $params->{illrequest_id} ) {
     $request = Koha::Illrequests->find($illrequest_id);
@@ -76,7 +80,7 @@ if ( $illrequest_id = $params->{illrequest_id} ) {
     }
 }
 
-if ( ( $op eq 'create' || $op eq 'cancreq' || $op eq 'cud-update' ) && !$patron->_result->categorycode->can_place_ill_in_opac ) {
+if ( ( $op eq 'cud-create' || $op eq 'cancreq' || $op eq 'cud-update' ) && !$patron->_result->categorycode->can_place_ill_in_opac ) {
     print $query->redirect('/cgi-bin/koha/errors/403.pl');
     exit;
 }
@@ -112,7 +116,7 @@ if ( $op eq 'list' ) {
           . $illrequest_id
           . '&message=1' );
     exit;
-} elsif ( $op eq 'create' ) {
+} elsif ( $op eq 'cud-create' ) {
     if (!$params->{backend}) {
         my $req = Koha::Illrequest->new;
         $template->param(
