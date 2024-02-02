@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use Test::More tests => 3;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 
@@ -57,7 +58,7 @@ subtest 'budget ()' => sub {
 };
 
 subtest 'budget' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
     my $f = $builder->build_object(
@@ -70,5 +71,13 @@ subtest 'budget' => sub {
     is( ref( $fund->budget ),
         'Koha::Acquisition::Budget',
         '->fund should return a Koha::Acquisition::Budget object' );
+
+    # Cannot set aqbudgets.budget_period_id as NULL
+    warning_like {
+        eval { $fund->budget_period_id(undef)->store }
+    }
+    qr{.*DBD::mysql::st execute failed: Column 'budget_period_id' cannot be null.*},
+      'DBD should have raised an error about budget_period_id that cannot be null';
+
     $schema->storage->txn_rollback;
 };

@@ -559,7 +559,7 @@ CREATE TABLE `aqbudgets` (
   `budget_expend` decimal(28,6) DEFAULT 0.000000 COMMENT 'budget warning at amount',
   `budget_notes` longtext DEFAULT NULL COMMENT 'notes related to this fund',
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'date and time this fund was last touched (created or modified)',
-  `budget_period_id` int(11) DEFAULT NULL COMMENT 'id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)',
+  `budget_period_id` int(11) NOT NULL COMMENT 'id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)',
   `sort1_authcat` varchar(80) DEFAULT NULL COMMENT 'statistical category for this fund',
   `sort2_authcat` varchar(80) DEFAULT NULL COMMENT 'second statistical category for this fund',
   `budget_owner_id` int(11) DEFAULT NULL COMMENT 'borrowernumber of the person who owns this fund (borrowers.borrowernumber)',
