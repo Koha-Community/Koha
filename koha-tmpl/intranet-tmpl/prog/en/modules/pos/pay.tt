@@ -64,6 +64,7 @@
 
         <form name="payForm" id="payForm" method="post" action="/cgi-bin/koha/pos/pay.pl">
             [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-pay">
             <div class="row">
 
                 <div class="col-md-6">
