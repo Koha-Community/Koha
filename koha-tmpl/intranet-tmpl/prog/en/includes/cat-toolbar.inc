@@ -1,5 +1,10 @@
 [% USE Context %]
 [% USE Biblio %]
+
+[%# Parameters: %]
+[%# biblio: the Koha::Biblio object %]
+[%# biblionumber: FIXME what about using biblio.id? %]
+
 <div id="toolbar" class="btn-toolbar">
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription || Koha.Preference('CatalogConcerns') ) %]
@@ -35,7 +40,11 @@
     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit <span class="caret"></span></button>
         <ul class="dropdown-menu">
             [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
-            <li><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">Edit record</a></li>
+                [% IF biblio.can_be_edited(logged_in_user) %]
+                    <li><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">Edit record</a></li>
+                [% ELSE %]
+                    <li class="disabled"><a id="editbiblio" href="#" data-toggle="tooltip" data-placement="left" title="This record is locked">Edit record</a></li>
+                [% END %]
             [% END %]
 
             [% IF CAN_user_tools_records_batchmod %]
