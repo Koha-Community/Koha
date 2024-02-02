@@ -224,7 +224,25 @@ sub can_article_request {
     return q{};
 }
 
+=head3 can_be_edited
 
+    if ( $biblio->can_be_edited( $patron ) ) { ... }
+
+Returns a boolean denoting whether the passed I<$patron> meets the required
+conditions to manually edit the record.
+
+=cut
+
+sub can_be_edited {
+    my ( $self, $patron ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw( error => "The patron parameter is missing or invalid" )
+        unless $patron && ref($patron) eq 'Koha::Patron';
+
+    return (
+        ( $self->metadata->source_allows_editing && $patron->has_permission( { editcatalogue => 'edit_catalogue' } ) )
+            || $patron->has_permission( { editcatalogue => 'edit_locked_records' } ) ) ? 1 : 0;
+}
 
 =head3 check_booking
 

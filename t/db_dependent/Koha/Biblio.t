@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 36;
+use Test::More tests => 37;
 use Test::Exception;
 use Test::Warn;
 
@@ -1547,6 +1547,66 @@ subtest 'opac_summary_html' => sub {
         sprintf( 'Replace %s, %s, %s AND %s please', $author, $title, $biblio->normalized_isbn, $biblio->biblionumber ),
         'opac_summary_html replaces the different patterns'
     );
+};
+
+subtest 'can_be_edited() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $biblio = $builder->build_sample_biblio;
+
+    my $source_allows_editing = 1;
+
+    my $mock_metadata = Test::MockModule->new('Koha::Biblio::Metadata');
+    $mock_metadata->mock( 'source_allows_editing', sub { return $source_allows_editing; } );
+
+    ok( !$biblio->can_be_edited($patron), "Patron needs 'edit_catalog' subpermission" );
+
+    # Add editcatalogue => edit_catalog subpermission
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->id,
+                module_bit     => 9,                  # editcatalogue
+                code           => 'edit_catalogue',
+            },
+        }
+    );
+
+    ok( $biblio->can_be_edited($patron), "Patron with 'edit_catalogue' can edit" );
+
+    # Mock the record source doesn't allow direct editing
+    $source_allows_editing = 0;
+    ok( !$biblio->can_be_edited($patron), "Patron needs 'edit_locked_record' subpermission for locked records" );
+
+    # Add editcatalogue => edit_catalog subpermission
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->id,
+                module_bit     => 9,                       # editcatalogue
+                code           => 'edit_locked_records',
+            },
+        }
+    );
+    ok( $biblio->can_be_edited($patron), "Patron needs 'edit_locked_record' subpermission for locked records" );
+
+    throws_ok { $biblio->can_be_edited() }
+    'Koha::Exceptions::MissingParameter',
+        'Exception thrown on missing parameter';
+
+    my $potato = 'Potato';
+
+    throws_ok { $biblio->can_be_edited($potato) }
+    'Koha::Exceptions::MissingParameter',
+        'Exception thrown if parameter not a Koha::Patron reference';
+
+    $schema->storage->txn_rollback;
 };
 
 sub component_record1 {
