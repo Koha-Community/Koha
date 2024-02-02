@@ -39,6 +39,7 @@ use Koha::Email;
 use Koha::Virtualshelves;
 
 my $query = CGI->new;
+my $op    = $query->param('op') // q{};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -57,7 +58,7 @@ my $shelf = Koha::Virtualshelves->find($shelfid);
 output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
   if $shelf && !$shelf->can_be_viewed($borrowernumber);
 
-if ($to_address) {
+if ( $to_address && $op eq 'cud-send' ) {
     my $comment = $query->param('comment');
 
     my $patron     = Koha::Patrons->find($borrowernumber);
