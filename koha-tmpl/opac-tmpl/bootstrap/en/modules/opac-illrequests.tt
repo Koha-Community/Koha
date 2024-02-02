@@ -89,8 +89,7 @@
                             [% ELSE %]
                                 [% INCLUDE messages %]
                                 [% IF backends %]
-                                    <form method="post" id="illrequestcreate-form" novalidate="novalidate">
-                                        [% INCLUDE 'csrf-token.inc' %]
+                                    <form method="get" id="illrequestcreate-form" novalidate="novalidate">
                                         <legend class="sr-only">Backends</legend>
                                         <fieldset class="rows">
                                             <label for="backend">Provider:</label>
@@ -102,7 +101,7 @@
                                         </fieldset>
                                         <fieldset class="action">
                                             <input type="hidden" name="op" value="create" />
-                                            <input type="submit" name="create_select_backend" value="Next" />
+                                            <input type="submit" class="btn btn-sm btn-primary" value="Next" />
                                         </fieldset>
                                     </form>
                                 [% ELSE %]
