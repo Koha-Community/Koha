@@ -66,6 +66,7 @@ use Koha::Biblios;
 use Koha::Virtualshelves;
 
 my $query           = CGI->new;
+my $op              = $query->param('op') // q{};
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $newshelf        = $query->param('newshelf');
@@ -90,7 +91,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ($newvirtualshelf) {
+if ( $op && $op !~ /^cud-/ ) {
+    $authorized = 0;
+} elsif ($newvirtualshelf) {
     my $shelf = eval {
         Koha::Virtualshelf->new(
             {
