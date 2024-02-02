@@ -105,7 +105,7 @@ sub type_disclaimer_template_params {
         ? (
             illrequestsview => 1,
             message         => $params->{message},
-            method          => 'typedisclaimer',
+            op              => 'typedisclaimer',
           )
         : ()
     );

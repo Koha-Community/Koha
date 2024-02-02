@@ -28,19 +28,19 @@
             [% END %]
         [% END %]
 
-        [% IF method != 'list' %]
+        [% IF op != 'list' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/opac-illrequests.pl">Interlibrary loan requests</a>
             [% END %]
-            [% IF method == 'create' %]
+            [% IF op == 'create' %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     <span>New interlibrary loan request</span>
                 [% END %]
-            [% ELSIF method == 'view' %]
+            [% ELSIF op == 'view' %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     <span>View interlibrary loan request</span>
                 [% END %]
-            [% ELSIF method == 'typedisclaimer' %]
+            [% ELSIF op == 'typedisclaimer' %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     <span>Ill request disclaimer</span>
                 [% END %]
@@ -72,7 +72,7 @@
                     <div class="alert alert-warning">ILL module configuration problem. Contact your administrator.</div>
                 [% ELSE %]
                     <div id="illrequests" class="maincontent">
-                        [% IF method == 'create' %]
+                        [% IF op == 'create' %]
                             <h1>New interlibrary loan request</h1>
                             [% IF stage == 'copyrightclearance' %]
                                 [% INCLUDE messages %]
@@ -101,7 +101,7 @@
                                             </select>
                                         </fieldset>
                                         <fieldset class="action">
-                                            <input type="hidden" name="method" value="create" />
+                                            <input type="hidden" name="op" value="create" />
                                             <input type="submit" name="create_select_backend" value="Next" />
                                         </fieldset>
                                     </form>
@@ -109,7 +109,7 @@
                                     [% PROCESS $whole.opac_template %]
                                 [% END %]
                             [% END # /IF stage == 'copyrightclearance' %]
-                        [% ELSIF method == 'list' %]
+                        [% ELSIF op == 'list' %]
                             <h1>Interlibrary loan requests</h1>
                             [% INCLUDE messages %]
 
@@ -121,11 +121,11 @@
                                         </button>
                                         <div id="backend-dropdown-options" class="dropdown-menu nojs" aria-labelledby="ill-backend-dropdown">
                                             [% FOREACH backend IN backends %]
-                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backend | uri %]">[% backend | html %]</a>
+                                                <a class="dropdown-item" href="/cgi-bin/koha/opac-illrequests.pl?op=create&amp;backend=[% backend | uri %]">[% backend | html %]</a>
                                             [% END %]
                                         </div>
                                     [% ELSE %]
-                                        <a id="ill-new" class="btn btn-primary" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backends.0 | html %]">
+                                        <a id="ill-new" class="btn btn-primary" href="/cgi-bin/koha/opac-illrequests.pl?op=create&amp;backend=[% backends.0 | html %]">
                                             <i class="fa fa-plus" aria-hidden="true"></i> Create a new request
                                         </a>
                                     [% END %]
@@ -167,17 +167,17 @@
                                             <td data-order="[% request.placed | html %]">[% request.placed | $KohaDates %]</td>
                                             <td data-order="[% request.updated | html %]">[% request.updated | $KohaDates %]</td>
                                             <td>
-                                                <a href="/cgi-bin/koha/opac-illrequests.pl?method=view&amp;illrequest_id=[% request.id | uri %]" class="btn btn-primary btn-sm pull-right">View</a>
+                                                <a href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=[% request.id | uri %]" class="btn btn-primary btn-sm pull-right">View</a>
                                             </td>
                                         </tr>
                                     [% END %]
                                 </tbody>
                             </table>
-                        [% ELSIF method == 'view' %]
+                        [% ELSIF op == 'view' %]
                             <h1>View interlibrary loan request</h1>
                             [% INCLUDE messages %]
                             [% status = request.status %]
-                            <form method="post" action="?method=update" id="illrequestupdate-form" novalidate="novalidate">
+                            <form method="post" action="?op=update" id="illrequestupdate-form" novalidate="novalidate">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <fieldset class="rows">
                                     <legend id="library_legend">Details from library</legend>
@@ -239,10 +239,10 @@
                             [% IF can_place_ill_in_opac %]
                                 <fieldset class="action illrequest-actions">
                                     <input type="hidden" name="illrequest_id" value="[% request.illrequest_id | html %]" />
-                                    <input type="hidden" name="method" value="update" />
+                                    <input type="hidden" name="op" value="update" />
                                     [% IF !request.completed %]
                                         [% IF request.status == "NEW" %]
-                                            <a class="cancel-illrequest btn btn-danger" href="/cgi-bin/koha/opac-illrequests.pl?method=cancreq&amp;illrequest_id=[% request.illrequest_id | html %]">Request cancellation</a>
+                                            <a class="cancel-illrequest btn btn-danger" href="/cgi-bin/koha/opac-illrequests.pl?op=cancreq&amp;illrequest_id=[% request.illrequest_id | html %]">Request cancellation</a>
                                         [% END %]
                                         <input type="submit" class="update-illrequest btn btn-primary" value="Submit modifications" />
                                     [% END %]
@@ -250,7 +250,7 @@
                                 </fieldset>
                             [% END %]
                             </form>
-                        [% ELSIF method == 'availability' %]
+                        [% ELSIF op == 'availability' %]
                             <h1>Interlibrary loan item availability</h1>
                             <div id="results">
                                 <form method="POST" action="/cgi-bin/koha/opac-illrequests.pl">
@@ -282,7 +282,7 @@
                                     [% INCLUDE 'ill-availability-table.inc' service=service %]
                                 [% END %]
                             </div> <!-- /#illrequestupdate-form -->
-                        [% ELSIF method == 'typedisclaimer' %]
+                        [% ELSIF op == 'typedisclaimer' %]
                             <h1>ILL request disclaimer</h1>
                             <div id="results" class="page-section">
                                 [% INCLUDE messages %]
@@ -321,7 +321,7 @@
                                     </fieldset>
                                 </form>
                             </div>
-                        [% END # / IF method == 'create' %]
+                        [% END # / IF op == 'create' %]
                     </div> <!-- / #illrequests -->
                 [% END # /IF !backends_available %]
             </div> <!-- / .col-lg-10/12 -->
@@ -351,7 +351,7 @@
             var metadata = "[% metadata | $raw %]";
         [% END %]
     </script>
-    [% IF method == 'availability' %]
+    [% IF op == 'availability' %]
         [% Asset.js("js/ill-availability.js") | $raw %]
         <script>
             $(document).ready(function() {

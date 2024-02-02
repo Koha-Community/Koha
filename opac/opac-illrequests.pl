@@ -27,6 +27,8 @@ use C4::Koha;
 use C4::Output qw( output_html_with_http_headers );
 use POSIX qw( strftime );
 
+use Mojo::Util qw(deprecated);
+
 use Koha::Illrequest::Config;
 use Koha::Illrequests;
 use Koha::Libraries;
@@ -60,7 +62,9 @@ my $backends_available = ( scalar @{$backends} > 0 );
 $template->param( backends_available => $backends_available );
 my $patron = Koha::Patrons->find($loggedinuser);
 
-my $op = $params->{'method'} || 'list';
+show_param_deprecation_message('"method" form param is DEPRECATED in favor of "op".') if ( $params->{'method'} );
+
+my $op = $params->{'op'} // $params->{'method'} // 'list';
 
 my ( $illrequest_id, $request );
 if ( $illrequest_id = $params->{illrequest_id} ) {
@@ -97,14 +101,14 @@ if ( $op eq 'list' ) {
     # Send a notice to staff alerting them of the update
     $request->send_staff_notice('ILL_REQUEST_MODIFIED');
     print $query->redirect(
-            '/cgi-bin/koha/opac-illrequests.pl?method=view&illrequest_id='
+            '/cgi-bin/koha/opac-illrequests.pl?op=view&illrequest_id='
           . $illrequest_id
           . '&message=1' );
     exit;
 } elsif ( $op eq 'cancreq') {
     $request->status('CANCREQ')->store;
     print $query->redirect(
-            '/cgi-bin/koha/opac-illrequests.pl?method=view&illrequest_id='
+            '/cgi-bin/koha/opac-illrequests.pl?op=view&illrequest_id='
           . $illrequest_id
           . '&message=1' );
     exit;
@@ -178,11 +182,22 @@ if ( $op eq 'list' ) {
     }
 }
 
+=head3 show_param_deprecation_message
+
+Generate deprecation message for the given parameter and append the backend information if available
+
+=cut
+sub show_param_deprecation_message {
+    my ($message) = @_;
+    $message .= ' Used by ' . $params->{'backend'} . ' backend' if $params->{'backend'};
+    deprecated $message;
+}
+
 $template->param(
     can_place_ill_in_opac => $patron->_result->categorycode->can_place_ill_in_opac,
-    message         => $params->{message},
-    illrequestsview => 1,
-    method          => $op
+    message               => $params->{message},
+    illrequestsview       => 1,
+    op                    => $op
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
