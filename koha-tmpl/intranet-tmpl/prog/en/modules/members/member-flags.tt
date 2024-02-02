@@ -43,7 +43,7 @@
 <form id="flag_form" method="post" action="/cgi-bin/koha/members/member-flags.pl">
     [% INCLUDE 'csrf-token.inc' %]
     <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-    <input type="hidden" name="newflags" value="1" />
+    <input type="hidden" name="op" value="cud-newflags" />
     <h1>Set permissions for [% INCLUDE 'patron-title.inc' no_html = 1 %]</h1>
 
     <div id="permissionstree">

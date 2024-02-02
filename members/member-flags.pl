@@ -44,7 +44,9 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 my %member2;
 $member2{'borrowernumber'}=$member;
 
-if ($input->param('newflags')) {
+my $op = $input->param('op') // q{};
+
+if ($op eq 'cud-newflags') {
 
     my $dbh=C4::Context->dbh();
 
