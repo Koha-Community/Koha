@@ -245,7 +245,14 @@
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
                         <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
                         <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
-                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=delete_confirmed&amp;id=[% loo.id | uri %]" class="delete" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a></li>
+                        <li>
+                            <a href="#" class="delete" data-formid="server_row_[% loo.id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                            <form id="server_row_[% loo.id | uri %]" action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete_confirmed">
+                                <input type="hidden" name="id" value="[% loo.id | uri %]">
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </td>
@@ -326,8 +333,10 @@
                 }));
                 $(".delete").on("click",function(e){
                     var servername = $(this).data("servername");
+                    let formid = $(this).data("formid");
                     if( confirm( _("Are you sure you want to delete server %s?").format(servername) ) ) {
-                        return true;
+                        $('#'+formid).submit();
+                        return false;
                     } else {
                         e.preventDefault();
                     }
