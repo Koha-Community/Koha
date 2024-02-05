@@ -27,6 +27,7 @@ use Koha::Notice::Templates;
 use Koha::AuthorisedValues;
 use Koha::Illcomment;
 use Koha::Illrequests;
+use Koha::Illrequest;
 use Koha::Illbatches;
 use Koha::Illrequest::Workflow::Availability;
 use Koha::Illrequest::Workflow::TypeDisclaimer;
@@ -50,6 +51,8 @@ unless ( C4::Context->preference('ILLModule') ) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
+
+Koha::Illrequest->check_url_param_deprecation($params);
 
 my $op = $params->{op} // $params->{method} // 'illlist';
 
