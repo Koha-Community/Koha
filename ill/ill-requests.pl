@@ -57,6 +57,7 @@ Koha::Illrequest->check_url_param_deprecation($params);
 my $op = $params->{op} // $params->{method} // 'illlist';
 $op = 'cud-create' if $op eq 'create';
 $op = 'cud-cancel' if $op eq 'cancel';
+$op = 'cud-delete' if $op eq 'delete';
 
 my ( $template, $patronnumber, $cookie ) = get_template_and_user( {
     template_name => 'ill/ill-requests.tt',
@@ -275,7 +276,7 @@ if ( $backends_available ) {
         # Currently still needs to be implemented.
         redirect_to_list();
 
-    } elsif ( $op eq 'cud-delete_confirm') {
+    } elsif ( $op eq 'delete_confirm') {
         my $request = Koha::Illrequests->find($params->{illrequest_id});
 
         $template->param(

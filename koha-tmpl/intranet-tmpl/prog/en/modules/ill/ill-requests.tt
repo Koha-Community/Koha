@@ -505,7 +505,7 @@
                         <h3>Are you sure you wish to delete this request?</h3>
                         <form action="/cgi-bin/koha/ill/ill-requests.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="delete" />
+                            <input type="hidden" name="op" value="cud-delete" />
                             <input type="hidden" name="confirmed" value="1" />
                             <input type="hidden" name="illrequest_id" value="[% request.id | html %]" />
                             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
