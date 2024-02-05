@@ -706,6 +706,21 @@ sub cancel {
             $self->cancellation_reason( $params->{cancellation_reason} );
             $self->store();
 
+            my $dbh = $self->_result->result_source->schema->storage->dbh;
+            $dbh->do(
+                q{
+                    DELETE  q, t
+                    FROM    tmp_holdsqueue q
+                    INNER JOIN hold_fill_targets t
+                    ON  q.borrowernumber = t.borrowernumber
+                        AND q.biblionumber = t.biblionumber
+                        AND q.itemnumber = t.itemnumber
+                        AND q.item_level_request = t.item_level_request
+                        AND q.holdingbranch = t.source_branchcode
+                    WHERE t.reserve_id = ?
+                }, undef, $self->id
+            );
+
             if ( $params->{cancellation_reason} ) {
                 my $letter = C4::Letters::GetPreparedLetter(
                     module                 => 'reserves',
