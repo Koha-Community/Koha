@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% PROCESS 'html_helpers.inc' %]
 <div id="advsearch" style="padding-bottom:3em;">
     <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
@@ -50,10 +51,12 @@
                     <label for="to">Expires before:</label>
                     <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | html %]" size="10" maxlength="10" class="flatpickr" />
                 </li>
-                <li class="local">
-                        <label for="routinglist">Search routing lists only:</label>
+                [% IF Koha.Preference( 'RoutingSerials' ) %]
+                    <li class="local">
+                        <label for="routinglist">Has routing list:</label>
                         <input type="checkbox" id="routinglist" name="routinglist" />
-                </li>
+                    </li>
+                [% END %]
 
                 [% INCLUDE 'additional-fields-entry.inc' available=additional_fields_for_subscription values=additional_field_filters wrap_fieldset=0 %]
             </ol>
