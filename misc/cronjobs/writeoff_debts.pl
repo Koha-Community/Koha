@@ -150,7 +150,9 @@ example, supplying both --added_before and --type specifies that the
 accountline must meet both conditions to be selected for writeoff.
 
 You must pass at least one of the filtering options for the script to run.
-This is to prevent an accidental 'writeoff all' operation.
+This is to prevent an accidental 'writeoff all' operation. Please note that
+--category-code must be accompanied by another filter - the script will not
+run if this is the only filter provided.
 
 =head1 OPTIONS
 
@@ -179,6 +181,8 @@ with `date -d '-3 month' --iso-8601`.
 Writeoff debts for patrons belonging to the passed categories.
 
 Can be used multiple times for additional category codes.
+
+This option cannot be used alone, it must be combined with another filter.
 
 =item B<--type>
 
