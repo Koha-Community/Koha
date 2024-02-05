@@ -43,7 +43,7 @@ $scriptname
 This script lets you manage the plack daemons for your Koha instances.
 
 Usage:
-$scriptname --start|--stop|--restart|--reload [--quiet|-q] instancename1 [instancename2...]
+$scriptname --start|--stop|--restart|--reload|--status [--quiet|-q] instancename1 [instancename2...]
 $scriptname --enable|--disable instancename1 [instancename2]
 $scriptname -h|--help
 
@@ -55,6 +55,7 @@ $scriptname -h|--help
                           requests before restarting them
     --enable              Enable plack for the specified instances
     --disable             Disable plack for the specified instances
+    --status              Show the status of Plack for the specified instances
     --debugger            Enable running Plack in debug mode
     --debugger-key        Specify the key the IDE is expecting
     --debugger-location   Specify the host:port for your debugger tool (defaults
@@ -189,6 +190,19 @@ reload_plack()
     else
         log_daemon_msg "Error: Plack not running for ${instancename}"
         log_end_msg 1
+    fi
+}
+
+plack_status()
+{
+    local name=$1
+
+    if is_plack_running ${name}; then
+        log_daemon_msg "Plack running for ${name}"
+        log_end_msg 0
+    else
+        log_daemon_msg "Plack not running for ${name}"
+        log_end_msg 3
     fi
 }
 
@@ -392,6 +406,9 @@ _do_instance() {
         "disable")
             disable_plack $name
             ;;
+        "status")
+            plack_status $name
+            ;;
         *)
             usage
             ;;
@@ -432,6 +449,9 @@ while [ $# -gt 0 ]; do
             shift ;;
         --disable)
             set_action "disable"
+            shift ;;
+        --status)
+            set_action "status"
             shift ;;
         --debugger)
             debug_mode="yes"
