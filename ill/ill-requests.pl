@@ -55,6 +55,7 @@ unless ( C4::Context->preference('ILLModule') ) {
 Koha::Illrequest->check_url_param_deprecation($params);
 
 my $op = $params->{op} // $params->{method} // 'illlist';
+$op = 'cud-create' if $op eq 'create';
 
 my ( $template, $patronnumber, $cookie ) = get_template_and_user( {
     template_name => 'ill/ill-requests.tt',
@@ -124,7 +125,7 @@ if ( $backends_available ) {
         ) if $backend_result;
 
 
-    } elsif ( $op eq 'create' ) {
+    } elsif ( $op eq 'cud-create' ) {
         # Load the ILL backend
         my $request = Koha::Illrequest->new->load_backend( $params->{backend} );
 

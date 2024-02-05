@@ -23,7 +23,7 @@
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
-        [% IF query_type == 'create' %]
+        [% IF query_type == 'cud-create' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
             [% END %]
@@ -141,7 +141,7 @@
                     <p>[% whole.success | html %]</p>
                 [% END %]
 
-                [% IF query_type == 'create' %]
+                [% IF query_type == 'cud-create' %]
                     <h1>New ILL request</h1>
                     [% PROCESS $whole.template %]
 
@@ -843,7 +843,7 @@
                                 <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]">
                             [% i = i + 1 %]
                             [% END %]
-                            <input type="hidden" name="op" value="create">
+                            <input type="hidden" name="op" value="cud-create">
                             <input type="hidden" name="stage" value="form">
                             <input type="hidden" name="checked_availability" value="1">
                             <div id="continue-request-row" class="alert">
@@ -890,7 +890,7 @@
                                     <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]">
                                     [% i = i + 1 %]
                                 [% END %]
-                                <input type="hidden" name="op" value="create" />
+                                <input type="hidden" name="op" value="cud-create" />
                                 <input type="hidden" name="stage" value="form">
                                 <input type="hidden" name="type_disclaimer_submitted" value="1">
                                 <input type="submit" value="Submit" />
