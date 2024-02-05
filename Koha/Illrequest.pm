@@ -2003,6 +2003,33 @@ sub strings_map {
     return $strings;
 }
 
+=head3 check_url_param_deprecation
+
+    Koha::Illrequest->check_url_param_deprecation($params);
+
+Check URL params and issue a deprecation message if any deprecated parameters are found
+
+=cut
+
+sub check_url_param_deprecation {
+    my ( $self, $params ) = @_;
+
+    my $deprecation_message;
+
+    $deprecation_message = '"method" form param is DEPRECATED in favor of "op". ' if ( exists( $params->{'method'} ) );
+
+    if (   exists( $params->{'op'} ) && $params->{'op'} eq 'create'
+        || exists( $params->{'method'} ) && $params->{'method'} eq 'create' )
+    {
+        $deprecation_message .= '"create" op is DEPRECATED in favor of "cud-create" or "add_form".';
+    }
+
+    $deprecation_message .= ' Used by ' . $params->{'backend'} . ' backend.'
+        if $params->{'backend'} && $deprecation_message;
+
+    deprecated $deprecation_message if $deprecation_message;
+}
+
 =head3 _type
 
 =cut

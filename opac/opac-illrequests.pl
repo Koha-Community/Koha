@@ -27,10 +27,9 @@ use C4::Koha;
 use C4::Output qw( output_html_with_http_headers );
 use POSIX qw( strftime );
 
-use Mojo::Util qw(deprecated);
-
 use Koha::Illrequest::Config;
 use Koha::Illrequests;
+use Koha::Illrequest;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Illrequest::Workflow::Availability;
@@ -62,12 +61,9 @@ my $backends_available = ( scalar @{$backends} > 0 );
 $template->param( backends_available => $backends_available );
 my $patron = Koha::Patrons->find($loggedinuser);
 
-show_param_deprecation_message('"method" form param is DEPRECATED in favor of "op".') if ( $params->{'method'} );
+Koha::Illrequest->check_url_param_deprecation($params);
 
 my $op = $params->{'op'} // $params->{'method'} // 'list';
-
-show_param_deprecation_message('"create" op is DEPRECATED in favor of "cud-create".') if ( $op eq 'create' );
-
 $op = 'cud-create' if $op eq 'create' || $op eq 'add_form';
 
 my ( $illrequest_id, $request );
@@ -184,17 +180,6 @@ if ( $op eq 'list' ) {
         }
 
     }
-}
-
-=head3 show_param_deprecation_message
-
-Generate deprecation message for the given parameter and append the backend information if available
-
-=cut
-sub show_param_deprecation_message {
-    my ($message) = @_;
-    $message .= ' Used by ' . $params->{'backend'} . ' backend' if $params->{'backend'};
-    deprecated $message;
 }
 
 $template->param(
