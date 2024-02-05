@@ -176,7 +176,7 @@
                             <h1>View interlibrary loan request</h1>
                             [% INCLUDE messages %]
                             [% status = request.status %]
-                            <form method="post" action="?op=update" id="illrequestupdate-form" novalidate="novalidate">
+                            <form method="post" id="illrequestupdate-form" novalidate="novalidate">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <fieldset class="rows">
                                     <legend id="library_legend">Details from library</legend>
@@ -238,7 +238,7 @@
                             [% IF can_place_ill_in_opac %]
                                 <fieldset class="action illrequest-actions">
                                     <input type="hidden" name="illrequest_id" value="[% request.illrequest_id | html %]" />
-                                    <input type="hidden" name="op" value="update" />
+                                    <input type="hidden" name="op" value="cud-update" />
                                     [% IF !request.completed %]
                                         [% IF request.status == "NEW" %]
                                             <a class="cancel-illrequest btn btn-danger" href="/cgi-bin/koha/opac-illrequests.pl?op=cancreq&amp;illrequest_id=[% request.illrequest_id | html %]">Request cancellation</a>
