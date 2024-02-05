@@ -149,7 +149,7 @@
                     <h1>Confirm ILL request</h1>
                     [% PROCESS $whole.template %]
 
-                [% ELSIF query_type == 'cancel' and !whole.error %]
+                [% ELSIF query_type == 'cud-cancel' and !whole.error %]
                     <h1>Cancel a confirmed request</h1>
                     [% PROCESS $whole.template %]
 
