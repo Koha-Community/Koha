@@ -210,7 +210,7 @@ $(document).ready(function() {
                 "orderable": true,
                 "render": function( data, type, row, meta ) {
                     return '<a href="/cgi-bin/koha/ill/ill-requests.pl?' +
-                            'method=illview&amp;illrequest_id=' +
+                            'op=illview&amp;illrequest_id=' +
                             encodeURIComponent(data) +
                             '">' + escape_str(row.id_prefix) + escape_str(data) + '</a>';
                 }
@@ -410,7 +410,7 @@ $(document).ready(function() {
                 "render": function( data, type, row, meta ) {
                     return '<a class="btn btn-default btn-sm" ' +
                             'href="/cgi-bin/koha/ill/ill-requests.pl?' +
-                            'method=illview&amp;illrequest_id=' +
+                            'op=illview&amp;illrequest_id=' +
                             encodeURIComponent(data) +
                             '">' + ill_manage + '</a>';
                 }

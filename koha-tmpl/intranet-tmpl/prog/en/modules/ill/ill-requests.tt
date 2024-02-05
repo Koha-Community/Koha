@@ -265,7 +265,7 @@
                                     </ol>
                                 </fieldset>
                                 <fieldset class="action">
-                                    <input type="hidden" value="check_out" name="method">
+                                    <input type="hidden" value="check_out" name="op">
                                     <input type="hidden" value="form" name="stage">
                                     [% IF items.size == 1 %]
                                         <input name="branchcode" type="hidden" value="[% branchcode | html %]">
@@ -273,12 +273,12 @@
                                     [% END %]
                                     <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                                     <input type="submit" class="btn btn-primary" value="Submit" />
-                                    <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
+                                    <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
                                 </fieldset>
                             </form>
                         [% END %]
                         [% IF whole.value.check_out_errors.error.STATS %]
-                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Return to request</a>
+                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% request.id | html %]">Return to request</a>
                         [% END %]
                     [% ELSIF whole.stage == 'done_check_out' %]
                         <h1>Item checked out</h1>
@@ -296,7 +296,7 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Return to request</a>
+                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% request.id | html %]">Return to request</a>
                         </fieldset>
                     [% END %]
 
@@ -320,7 +320,7 @@
                   [% END %]
                     <!-- Start of GENERIC_EMAIL case -->
                     [% IF whole.value.partners %]
-                       [% ill_url = "/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=" _ request.illrequest_id %]
+                       [% ill_url = "/cgi-bin/koha/ill/ill-requests.pl?op=illview&illrequest_id=" _ request.illrequest_id %]
                         <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
                             [% INCLUDE 'csrf-token.inc' %]
                             <fieldset class="rows">
@@ -357,7 +357,7 @@
                                         <textarea name="body" id="body" rows="20" cols="80" required="required">[% whole.value.draft.body | html %]</textarea>
                                     </li>
                                 </ol>
-                                <input type="hidden" value="generic_confirm" name="method">
+                                <input type="hidden" value="generic_confirm" name="op">
                                 <input type="hidden" value="draft" name="stage">
                                 <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                             </fieldset>
@@ -491,11 +491,11 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="hidden" value="edit_action" name="method">
+                            <input type="hidden" value="edit_action" name="op">
                             <input type="hidden" value="form" name="stage">
                             <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                             <input type="submit" class="btn btn-primary" value="Submit" />
-                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
+                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
                         </fieldset>
                     </form>
 
@@ -505,12 +505,12 @@
                         <h3>Are you sure you wish to delete this request?</h3>
                         <form action="/cgi-bin/koha/ill/ill-requests.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="method" value="delete" />
+                            <input type="hidden" name="op" value="delete" />
                             <input type="hidden" name="confirmed" value="1" />
                             <input type="hidden" name="illrequest_id" value="[% request.id | html %]" />
                             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
                         </form>
-                        <a class="btn btn-default deny" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]"><i class="fa fa-fw fa-times"></i>No, do not delete</a>
+                        <a class="btn btn-default deny" href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% request.id | html %]"><i class="fa fa-fw fa-times"></i>No, do not delete</a>
                     </div>
 
                 [% ELSIF query_type == 'illview' %]
@@ -554,7 +554,7 @@
 
                     <h1>Manage ILL request</h1>
                     <div id="request-toolbar" class="btn-toolbar">
-                        <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
+                        <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?op=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
                         <i class="fa-solid fa-pencil" aria-hidden="true"></i>
                         Edit request
                         </a>
@@ -591,7 +591,7 @@
                                         <ul class="dropdown-menu" aria-labelledby="ill-migrate-dropdown">
                                             [% FOREACH backend IN backends %]
                                                 [% IF backend != request.backend %]
-                                                    <li><a href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">[% backend | html %]</a></li>
+                                                    <li><a href="/cgi-bin/koha/ill/ill-requests.pl?op=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">[% backend | html %]</a></li>
                                                 [% END %]
                                             [% END %]
                                         </ul>
@@ -599,7 +599,7 @@
                                 [% ELSIF backends.size == 2 %]
                                     [% FOREACH backend IN backends %]
                                         [% IF backend != request.backend %]
-                                            <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">
+                                            <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?op=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">
                                             <span class="fa [% action.ui_method_icon | html %]"></span>
                                             [% action.ui_method_name | html %]
                                             </a>
@@ -607,7 +607,7 @@
                                     [% END %]
                                 [% END %]
                             [% ELSIF action.method != 0 %]
-                                <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]">
+                                <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?op=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]">
                                 <span class="fa [% action.ui_method_icon | html %]"></span>
                                 [% action.ui_method_name | html %]
                                 </a>
@@ -619,7 +619,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="ill-notice-dropdown">
                                 [% FOREACH notice IN notices %]
-                                    <li><a href="/cgi-bin/koha/ill/ill-requests.pl?method=send_notice&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;notice_code=[% notice.code | uri %]">[% notice.name | html %]</a></li>
+                                    <li><a href="/cgi-bin/koha/ill/ill-requests.pl?op=send_notice&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;notice_code=[% notice.code | uri %]">[% notice.name | html %]</a></li>
                                 [% END %]
                             </ul>
                         </div>
@@ -789,7 +789,7 @@
                                 <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
                                 <div id="addcomment" class="content_hidden">
                                     <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
-                                        <input type="hidden" value="save_comment" name="method">
+                                        <input type="hidden" value="save_comment" name="op">
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                                         <fieldset class="rows">
@@ -831,7 +831,7 @@
                             [% INCLUDE 'csrf-token.inc' %]
                             [% FOREACH key IN whole.keys %]
                                 [% value = whole.$key %]
-                                [% IF key != 'method' && key != 'custom_key' && key != 'custom_value' %]
+                                [% IF key != 'op' && key != 'method' && key != 'custom_key' && key != 'custom_value' %]
                                 <input type="hidden" name="[% key | html %]" value="[% value | html %]">
                                 [% END %]
                             [% END %]
@@ -843,7 +843,7 @@
                                 <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]">
                             [% i = i + 1 %]
                             [% END %]
-                            <input type="hidden" name="method" value="create">
+                            <input type="hidden" name="op" value="create">
                             <input type="hidden" name="stage" value="form">
                             <input type="hidden" name="checked_availability" value="1">
                             <div id="continue-request-row" class="alert">
@@ -878,7 +878,7 @@
                             <fieldset class="action">
                                 [% FOREACH key IN whole.keys %]
                                     [% value = whole.$key %]
-                                    [% IF key != 'method' && key != 'custom_key' && key != 'custom_value' %]
+                                    [% IF key != 'op' && key != 'method' && key != 'custom_key' && key != 'custom_value' %]
                                         <input type="hidden" name="[% key | html %]" value="[% value | html %]">
                                     [% END %]
                                 [% END %]
@@ -890,7 +890,7 @@
                                     <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]">
                                     [% i = i + 1 %]
                                 [% END %]
-                                <input type="hidden" name="method" value="create" />
+                                <input type="hidden" name="op" value="create" />
                                 <input type="hidden" name="stage" value="form">
                                 <input type="hidden" name="type_disclaimer_submitted" value="1">
                                 <input type="submit" value="Submit" />

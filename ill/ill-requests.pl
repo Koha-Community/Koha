@@ -51,7 +51,7 @@ unless ( C4::Context->preference('ILLModule') ) {
     exit;
 }
 
-my $op = $params->{method} || 'illlist';
+my $op = $params->{op} // $params->{method} // 'illlist';
 
 my ( $template, $patronnumber, $cookie ) = get_template_and_user( {
     template_name => 'ill/ill-requests.tt',
@@ -172,7 +172,7 @@ if ( $backends_available ) {
             } else {
                 # Backend failure, redirect back to illview
                 print $cgi->redirect( '/cgi-bin/koha/ill/ill-requests.pl'
-                      . '?method=illview'
+                      . '?op=illview'
                       . '&illrequest_id='
                       . $request->id
                       . '&error=migrate_target' );
@@ -202,7 +202,7 @@ if ( $backends_available ) {
         handle_commit_maybe($backend_result, $request);
 
     } elsif ( $op eq 'cud-cancel' ) {
-        # Backend 'cud-cancel' method
+        # Backend 'cancel' method
         # cancel requires a specific request, so first, find it.
         my $request = Koha::Illrequests->find($params->{illrequest_id});
         my $backend_result = $request->backend_cancel($params);
@@ -228,7 +228,7 @@ if ( $backends_available ) {
                 error   => 0,
                 status  => '',
                 message => '',
-                method  => 'edit_action',
+                op  => 'edit_action',
                 stage   => 'init',
                 next    => '',
                 value   => {}
@@ -257,7 +257,7 @@ if ( $backends_available ) {
                 error   => 0,
                 status  => '',
                 message => '',
-                method  => 'edit_action',
+                op  => 'edit_action',
                 stage   => 'commit',
                 next    => 'illlist',
                 value   => {}
@@ -289,7 +289,7 @@ if ( $backends_available ) {
         } else {
             print $cgi->redirect(
                 "/cgi-bin/koha/ill/ill-requests.pl?" .
-                "method=delete_confirm&illrequest_id=" .
+                "op=delete_confirm&illrequest_id=" .
                 $params->{illrequest_id});
             exit;
         }
@@ -357,7 +357,7 @@ if ( $backends_available ) {
             }
             print $cgi->redirect(
                 "/cgi-bin/koha/ill/ill-requests.pl?" .
-                "method=generic_confirm&illrequest_id=" .
+                "op=generic_confirm&illrequest_id=" .
                 $params->{illrequest_id} .
                 "&error=$error" );
             exit;
@@ -414,7 +414,7 @@ if ( $backends_available ) {
         });
         $comment->store();
         # Redirect to view the whole request
-        print $cgi->redirect("/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=".
+        print $cgi->redirect("/cgi-bin/koha/ill/ill-requests.pl?op=illview&illrequest_id=".
             scalar $params->{illrequest_id}
         );
         exit;
@@ -432,7 +432,7 @@ if ( $backends_available ) {
         }
         # Redirect to view the whole request
         print $cgi->redirect(
-            "/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=".
+            "/cgi-bin/koha/ill/ill-requests.pl?op=illview&illrequest_id=".
             scalar $params->{illrequest_id} . $append
         );
         exit;
@@ -471,7 +471,7 @@ sub handle_commit_maybe {
 
             # Redirect to a view of the newly created request
             print $cgi->redirect( '/cgi-bin/koha/ill/ill-requests.pl'
-                  . '?method=illview'
+                  . '?op=illview'
                   . '&illrequest_id='
                   . $request->id );
             exit;
@@ -480,7 +480,7 @@ sub handle_commit_maybe {
 
             # Redirect to a view of the newly created request
             print $cgi->redirect( '/cgi-bin/koha/ill/ill-requests.pl'
-                  . '?method=migrate'
+                  . '?op=migrate'
                   . '&stage=emigrate'
                   . '&illrequest_id='
                   . $request->id );
