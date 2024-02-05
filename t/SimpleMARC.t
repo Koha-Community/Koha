@@ -2,11 +2,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");
-use_ok("Koha::SimpleMARC", qw( field_exists read_field update_field copy_field copy_and_replace_field move_field delete_field field_equals ));
+use_ok(
+    "Koha::SimpleMARC",
+    qw( field_exists read_field update_field copy_field copy_and_replace_field move_field delete_field field_equals update_last_transaction_time )
+);
 
 sub new_record {
     my $record = MARC::Record->new;
@@ -1832,4 +1835,17 @@ subtest 'field_equals' => sub {
             });
         is_deeply( $match, [1], 'first 008 control field matches "eng"' );
     };
+};
+
+subtest 'update_last_transaction_time' => sub {
+    plan tests => 3;
+    my $record = MARC::Record->new;
+    update_last_transaction_time( { record => $record } );
+    my $value1 = $record->field('005')->data;
+    like( $value1, qr/^\d{14}\.0$/, 'Looks like a 005' );
+    sleep 1;
+    update_last_transaction_time( { record => $record } );
+    my $value2 = $record->field('005')->data;
+    like( $value2, qr/^\d{14}\.0$/, 'Still looks like a 005' );
+    isnt( $value1, $value2, 'Should not be the same a second later' );
 };

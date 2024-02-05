@@ -18,21 +18,24 @@ package Koha::SimpleMARC;
 
 use Modern::Perl;
 
+use constant LAST_TRANSACTION_FIELD => q/005/;    # MARC21/UNIMARC
+
 our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     our @ISA = qw(Exporter);
 
     @EXPORT_OK = qw(
-      read_field
-      add_field
-      update_field
-      copy_field
-      copy_and_replace_field
-      move_field
-      delete_field
-      field_exists
-      field_equals
+        read_field
+        add_field
+        update_field
+        copy_field
+        copy_and_replace_field
+        move_field
+        delete_field
+        field_exists
+        field_equals
+        update_last_transaction_time
     );
 }
 
@@ -525,6 +528,33 @@ sub delete_field {
     }
 }
 
+=head3 update_last_transaction_time
+
+  update_last_transaction_time( { record => $record } );
+
+  Inserts or updates field for last transaction (005)
+
+=cut
+
+sub update_last_transaction_time {
+    my ($params) = @_;
+    my $record = $params->{record};
+
+    my @localtime = (localtime)[ 5, 4, 3, 2, 1, 0 ];
+    $localtime[0] += 1900;    # add century
+    $localtime[1]++;          # month 1-based
+
+    my $value = sprintf( "%4d%02d%02d%02d%02d%04.1f", @localtime );
+    my $field;
+    if ( $field = $record->field(LAST_TRANSACTION_FIELD) ) {
+        $field->update($value);
+    } else {
+        $record->insert_fields_ordered(
+            MARC::Field->new( LAST_TRANSACTION_FIELD, $value ),
+        );
+    }
+}
+
 sub _delete_field {
     my ( $params ) = @_;
     my $record = $params->{record};
@@ -663,5 +693,6 @@ sub _modify_values {
     }
     return @$values;
 }
+
 1;
 __END__
