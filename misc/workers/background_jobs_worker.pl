@@ -146,7 +146,8 @@ while (1) {
         }
 
         unless ($job) {
-            if ( ++$not_found_retries->{$args->{job_id}} >= $max_retries ) {
+            $not_found_retries->{ $args->{job_id} } //= 0;
+            if ( ++$not_found_retries->{ $args->{job_id} } >= $max_retries ) {
                 Koha::Logger->get( { interface => 'worker' } )
                     ->warn( sprintf "Job %s not found, no more retry", $args->{job_id} );
 
