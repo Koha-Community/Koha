@@ -66,6 +66,7 @@
 
     <form method="post" action="branch_transfer_limits.pl">
         [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-update" />
         [% WRAPPER tab_panels %]
             [% FOREACH codes_loo IN codes_loop %]
                 [% WRAPPER tab_panel tabname=codes_loo.code %]

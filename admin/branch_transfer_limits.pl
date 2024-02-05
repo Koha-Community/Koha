@@ -27,6 +27,7 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Circulation qw( DeleteBranchTransferLimits CreateBranchTransferLimit IsBranchTransferAllowed );
 
 my $input = CGI->new;
+my $op = $input->param('op') || q{};
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/branch_transfer_limits.tt",
@@ -60,7 +61,7 @@ if ( $limitType eq 'ccode' ) {
 
 @branchcodes = Koha::Libraries->search->get_column('branchcode');
 ## If Form Data Passed, Update the Database
-if ( $input->param('updateLimits') ) {
+if ( $input->param('updateLimits') && $op eq 'cud-update' ) {
     DeleteBranchTransferLimits($branchcode);
 
 
