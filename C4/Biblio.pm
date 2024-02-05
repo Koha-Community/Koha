@@ -113,6 +113,7 @@ use Koha::Plugins;
 use Koha::RecordProcessor;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
+use Koha::SimpleMARC;
 use Koha::Libraries;
 use Koha::Util::MARC;
 
@@ -2878,12 +2879,9 @@ sub ModBiblioMarc {
         }
     }
 
-    #enhancement 5374: update transaction date (005) for marc21/unimarc
+    # Insert/update transaction time (005) for marc21/unimarc
     if($encoding =~ /MARC21|UNIMARC/) {
-      my @a= (localtime) [5,4,3,2,1,0]; $a[0]+=1900; $a[1]++;
-        # YY MM DD HH MM SS (update year and month)
-      my $f005= $record->field('005');
-      $f005->update(sprintf("%4d%02d%02d%02d%02d%04.1f",@a)) if $f005;
+        Koha::SimpleMARC::update_last_transaction_time( { record => $record } );
     }
 
     if ( C4::Context->preference('StripWhitespaceChars') ) {

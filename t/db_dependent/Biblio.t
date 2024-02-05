@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -1100,6 +1100,21 @@ subtest 'ModBiblio - record_source_id param tests' => sub {
     $metadata->discard_changes;
 
     is( $metadata->record_source_id, undef, 'Record source is not defined' );
+};
+
+subtest 'AddBiblio/ModBiblio calling ModBiblioMarc for field 005' => sub {
+    plan tests => 2;
+
+    my $marc_record    = MARC::Record->new;
+    my ($biblionumber) = C4::Biblio::AddBiblio( $marc_record, '' );
+    my $biblio         = Koha::Biblios->find($biblionumber);
+
+    my $field = $biblio->metadata->record->field('005');
+    ok( $field && $field->data, 'Record contains field 005 after AddBiblio' );
+    $marc_record = MARC::Record->new;
+    C4::Biblio::ModBiblio( $marc_record, $biblionumber, '' );
+    $field = $biblio->metadata->record->field('005');
+    ok( $field && $field->data, 'Record contains field 005 after ModBiblio' );
 };
 
 # Cleanup
