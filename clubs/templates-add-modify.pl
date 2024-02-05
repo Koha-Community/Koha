@@ -34,6 +34,7 @@ my $schema = Koha::Database->new()->schema();
 
 my $cgi = CGI->new;
 
+my $op = $cgi->param('op') || q{};
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => 'clubs/templates-add-modify.tt',
@@ -48,7 +49,7 @@ my $id = $cgi->param('id');
 my $club_template;
 my $stored;
 
-if ( $cgi->param('name') ) {    # Update or create club
+if ( $cgi->param('name') && $op eq 'cud-update' ) {    # Update or create club
     if ($id) {
         $club_template = Koha::Club::Templates->find($id);
         $stored        = 'updated';

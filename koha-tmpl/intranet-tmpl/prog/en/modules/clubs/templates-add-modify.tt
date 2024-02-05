@@ -55,7 +55,7 @@
             <form method="post" class="validated">
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="id" value="[% club_template.id | html %]" />
-
+                <input type="hidden" name="op" value="cud-update" />
                 <h1>
                     [% IF club_template %]
                         <span>Modify club template [% club_template.name | html | $HtmlTags tag="em" %]</span>
