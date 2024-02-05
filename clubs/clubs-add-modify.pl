@@ -30,6 +30,7 @@ use Koha::Club::Fields;
 
 my $cgi = CGI->new;
 
+my $op = $cgi->param('op') || q{};
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => 'clubs/clubs-add-modify.tt',
@@ -58,7 +59,7 @@ $club_template_id ||= $club_template->id();
 my $date_start = $cgi->param('date_start') || undef;
 my $date_end = $cgi->param('date_end') || undef;
 
-if ( $cgi->param('name') ) {    # Update or create club
+if ( $cgi->param('name') && $op eq 'cud-update' ) {    # Update or create club
     $club->set(
         {
             club_template_id => scalar $cgi->param('club_template_id') || undef,

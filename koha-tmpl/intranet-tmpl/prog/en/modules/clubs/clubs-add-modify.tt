@@ -49,6 +49,7 @@
 
             <form method="post" class="validated">
                 [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-update" />
                 <input type="hidden" name="id" value="[% club.id | html %]" />
                 <input type="hidden" name="club_template_id" value="[% club_template.id | html %]" />
 
