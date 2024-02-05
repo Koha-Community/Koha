@@ -172,7 +172,7 @@
                                             <input type="hidden" id="id" name="id" value="[% av.id | html %]" />
                                         [% END %]
                                         [% IF ( av && av.is_integer_only ) || category.is_integer_only %]
-                                            <input type="text" inputmode="numeric" pattern="[% num_pattern | $raw %]" id="authorised_value" name="authorised_value" value="[% av.authorised_value | html %]" class="focus" title="Should be numeric" required/>
+                                            <input type="text" inputmode="numeric" pattern="[% num_pattern | $raw %]" min="-128" max="127" id="authorised_value" name="authorised_value" value="[% av.authorised_value | html %]" class="focus" title="Should be numeric (-128..127)" required/>
                                         [% ELSE %]
                                             <input type="text" id="authorised_value" name="authorised_value" value="[% av.authorised_value | html %]" maxlength="80" class="focus"/>
                                         [% END %]
