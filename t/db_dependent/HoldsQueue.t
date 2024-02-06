@@ -2095,7 +2095,7 @@ subtest "GetItemsAvailableToFillHoldsRequestsForBib" => sub {
 
 subtest 'Remove item from holds queue on checkout' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -2114,7 +2114,9 @@ subtest 'Remove item from holds queue on checkout' => sub {
         }
     );
 
-    my $item = $builder->build_sample_item( { homebranch => $lib->branchcode, holdingbranch => $lib->branchcode } );
+    my $item  = $builder->build_sample_item( { homebranch => $lib->branchcode, holdingbranch => $lib->branchcode } );
+    my $item2 = $builder->build_sample_item(
+        { homebranch => $lib->branchcode, holdingbranch => $lib->branchcode, biblionumber => $item->biblionumber } );
 
     t::lib::Mocks::mock_userenv( { branchcode => $lib->branchcode } );
 
@@ -2132,15 +2134,27 @@ subtest 'Remove item from holds queue on checkout' => sub {
 
     is(
         Koha::Hold::HoldsQueueItems->search( { itemnumber => $item->id } )->count(), 1,
-        "Item is found in the holds queue"
+        "One item is found in the holds queue"
     );
 
-    AddIssue( $patron1, $item->barcode, dt_from_string );
+    my $hq_item = Koha::Hold::HoldsQueueItems->search( { itemnumber => $item->id } )->next->item;
+
+    AddIssue( $patron1, $hq_item->barcode, dt_from_string );
 
     is(
         Koha::Hold::HoldsQueueItems->search( { itemnumber => $item->id } )->count(), 0,
         "Item is no longer found in the holds queue"
     );
+
+    C4::HoldsQueue::CreateQueue();
+
+    is(
+        Koha::Hold::HoldsQueueItems->search( { itemnumber => $item2->id } )->count(), 1,
+        "One item is found in the holds queue"
+    );
+
+    my $hq_item2 = Koha::Hold::HoldsQueueItems->search( { itemnumber => $item2->id } )->next->item;
+    isnt( $hq_item->id, $hq_item2->id, "Item now targeted by the holds queue is not the same item." );
 
     $schema->storage->txn_rollback;
 };
