@@ -896,6 +896,7 @@
                     [% IF edi_confirm %]
                         <div id="closebasket_needsconfirmation" class="dialog alert">
                             <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
                                 <h1>Are you sure you want to generate an EDIFACT order and close basket [% basketname | html %]?</h1>
                                 [% IF CAN_user_acquisition_group_manage %]
                                     <p>
