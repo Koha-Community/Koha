@@ -242,6 +242,9 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
     $op = $referer;
+} elsif ( $op eq 'transfer' ) {
+    $shelfnumber = $query->param('shelfnumber');
+    $shelf = Koha::Virtualshelves->find($shelfnumber) if $shelfnumber;
 } elsif ( $op eq 'cud-transfer' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber) if $shelfnumber;

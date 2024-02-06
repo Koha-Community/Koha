@@ -58,7 +58,7 @@
         [%~ action_block = action_block _ '</form>' ~%]
     [%~ END ~%]
     [%~ IF public AND allow_transfer ~%]
-        [%~ action_block = action_block _ ' <form action="shelves.pl" method="post">' ~%]
+        [%~ action_block = action_block _ ' <form action="shelves.pl" method="get">' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelves" value="1" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="op" value="transfer" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelfnumber" value="' _ shelfnumber  _ '" />' ~%]
