@@ -72,8 +72,6 @@ BEGIN {
       TransferOrder
       ModItemOrder
 
-      GetParcels
-
       GetInvoices
       GetInvoice
       GetInvoiceDetails
@@ -1964,97 +1962,6 @@ sub get_rounded_price {
     }
     return $price;
 }
-
-
-=head2 FUNCTIONS ABOUT PARCELS
-
-=head3 GetParcels
-
-  $results = &GetParcels($bookseller, $order, $code, $datefrom, $dateto);
-
-get a lists of parcels.
-
-* Input arg :
-
-=over
-
-=item $bookseller
-is the bookseller this function has to get parcels.
-
-=item $order
-To know on what criteria the results list has to be ordered.
-
-=item $code
-is the booksellerinvoicenumber.
-
-=item $datefrom & $dateto
-to know on what date this function has to filter its search.
-
-=back
-
-* return:
-a pointer on a hash list containing parcel informations as such :
-
-=over
-
-=item Creation date
-
-=item Last operation
-
-=item Number of biblio
-
-=item Number of items
-
-=back
-
-=cut
-
-sub GetParcels {
-    my ($bookseller,$order, $code, $datefrom, $dateto) = @_;
-    my $dbh    = C4::Context->dbh;
-    my @query_params = ();
-    my $strsth ="
-        SELECT  aqinvoices.invoicenumber,
-                datereceived,purchaseordernumber,
-                count(DISTINCT biblionumber) AS biblio,
-                sum(quantity) AS itemsexpected,
-                sum(quantityreceived) AS itemsreceived
-        FROM   aqorders LEFT JOIN aqbasket ON aqbasket.basketno = aqorders.basketno
-        LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid
-        WHERE aqbasket.booksellerid = ? and datereceived IS NOT NULL
-    ";
-    push @query_params, $bookseller;
-
-    if ( defined $code ) {
-        $strsth .= ' and aqinvoices.invoicenumber like ? ';
-        # add a % to the end of the code to allow stemming.
-        push @query_params, "$code%";
-    }
-
-    if ( defined $datefrom ) {
-        $strsth .= ' and datereceived >= ? ';
-        push @query_params, $datefrom;
-    }
-
-    if ( defined $dateto ) {
-        $strsth .=  'and datereceived <= ? ';
-        push @query_params, $dateto;
-    }
-
-    $strsth .= "group by aqinvoices.invoicenumber,datereceived ";
-
-    # can't use a placeholder to place this column name.
-    # but, we could probably be checking to make sure it is a column that will be fetched.
-    $strsth .= "order by $order " if ($order);
-
-    my $sth = $dbh->prepare($strsth);
-
-    $sth->execute( @query_params );
-    my $results = $sth->fetchall_arrayref({});
-    return @{$results};
-}
-
-#------------------------------------------------------------#
 
 =head3 GetHistory
 
