@@ -6,6 +6,7 @@
 [% PROCESS 'html_helpers.inc' %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="csrf-token" content="[% Koha.GenerateCSRF | $raw %]">
 [% IF logged_in_user %]<meta name="generator" content="Koha [% Koha.Version.maintenance | html %]" />[% END %]
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
