@@ -53,10 +53,10 @@ find({ wanted => \&wanted, no_chdir => 1 }, @themes );
 my @errors;
 for my $file ( @files ) {
     my @e = check_csrf_in_forms($file);
-    push @errors, { file => $file, errors => \@e } if @e;
+    push @errors, sprintf "%s:%s", $file, join (",", @e) if @e;
 }
 
-is( @errors, 0, "Template variables should be correctly escaped" )
+is( @errors, 0, "The <form> in the following files are missing it's corresponding csrf_token include (see bug 22990)" )
     or diag(Dumper @errors);
 
 sub check_csrf_in_forms {
@@ -72,9 +72,7 @@ sub check_csrf_in_forms {
         $open = $line_number if $line =~ m{<form.*method=('|")post('|")}i;
         $found++ if $open && $line =~ m{csrf-token\.inc};
         if ( $open && $line =~ m{</form} ) {
-            push @errors,
-                "The <form> starting on line $open is missing it's corresponding csrf_token include (see bug 22990)"
-                if !$found;
+            push @errors, $open unless $found;
             $found = 0;
             undef $open;
         }
