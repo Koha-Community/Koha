@@ -52,7 +52,7 @@ $(document).ready(function() {
                 $('#addConcernModal').modal('hide');
                 $('#concern_body').val('');
                 $('#concern_title').val('');
-                $('h1:first').before('<div class="alert alert-success">' + __("Your concern was sucessfully submitted.") + '</div>');
+                $('h1:first').before('<div class="alert alert-success">' + __("Your concern was successfully submitted.") + '</div>');
             },
             error: function(data) {
                 $('#concern-submit-spinner').hide();
