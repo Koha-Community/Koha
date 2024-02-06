@@ -8,7 +8,7 @@
 </ul>
 <h5>Reports dictionary</h5>
 <ul>
-<li><a href="/cgi-bin/koha/reports/dictionary.pl?phase=View%20Dictionary">View dictionary</a></li>
+<li><a href="/cgi-bin/koha/reports/dictionary.pl">View dictionary</a></li>
 </ul>
 <h5>Useful resources</h5>
 <ul>

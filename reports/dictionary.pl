@@ -34,34 +34,26 @@ Script to control the guided report creation
 my $input = CGI->new;
 my $referer = $input->referer();
 
-my $phase = $input->param('phase') || 'View Dictionary';
+my $op = $input->param('op') || q{list};
 my $definition_name        = $input->param('definition_name');
 my $definition_description = $input->param('definition_description');
 my $area  = $input->param('area') || '';
-my $no_html = 0;    # this will be set if we dont want to print out an html::template
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "reports/dictionary.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { reports => '*' },
+    {
+        template_name => "reports/dictionary.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { reports => '*' },
     }
-	);
+);
 
-if ($phase eq 'View Dictionary'){
-    # view the dictionary we use to set up abstract variables such as all borrowers over fifty who live in a certain town
-    my $definitions = get_from_dictionary($area);
-    $template->param(
-        'areas'            => areas( $area ),
-        'start_dictionary' => 1,
-        'definitions'      => $definitions,
-    );
-} elsif ( $phase eq 'Add New Definition' ) {
+if ( $op eq 'add_form' ) {
 
     # display form allowing them to add a new definition
     $template->param( 'new_dictionary' => 1, );
 }
 
-elsif ( $phase eq 'New Term step 2' ) {
+elsif ( $op eq 'cud-add_form_2' ) {
 
     # Choosing the area
     $template->param(
@@ -72,7 +64,7 @@ elsif ( $phase eq 'New Term step 2' ) {
     );
 }
 
-elsif ( $phase eq 'New Term step 3' ) {
+elsif ( $op eq 'cud-add_form_3' ) {
 
     # Choosing the columns
     my $columns                = get_columns( $area, $input );
@@ -85,7 +77,7 @@ elsif ( $phase eq 'New Term step 3' ) {
     );
 }
 
-elsif ( $phase eq 'New Term step 4' ) {
+elsif ( $op eq 'cud-add_form_4' ) {
 
     # Choosing the values
     my @columns                = $input->multi_param('columns');
@@ -123,7 +115,7 @@ elsif ( $phase eq 'New Term step 4' ) {
 	);
 }
 
-elsif ( $phase eq 'New Term step 5' ) {
+elsif ( $op eq 'cud-add_form_5' ) {
     # Confirmation screen
     my $columnstring           = $input->param('columnstring');
     my @criteria               = $input->multi_param('criteria_column');
@@ -175,27 +167,33 @@ elsif ( $phase eq 'New Term step 5' ) {
     );
 }
 
-elsif ( $phase eq 'New Term step 6' ) {
+elsif ( $op eq 'cud-add_form_6' ) {
     # Saving
     my $area                   = $input->param('area');
     my $sql                    = $input->param('sql');
     save_dictionary( $definition_name, $definition_description, $sql, $area );
-    $no_html = 1;
-    print $input->redirect("/cgi-bin/koha/reports/dictionary.pl?phase=View%20Dictionary");
+    $op = "list";
 
-} elsif ( $phase eq 'Delete Definition' ) {
-    $no_html = 1;
+} elsif ( $op eq 'cud-delete' ) {
     my $id = $input->param('id');
     delete_definition($id);
-    print $input->redirect("/cgi-bin/koha/reports/dictionary.pl?phase=View%20Dictionary");
+    $op = "list";
+}
+
+if ($op eq 'list'){
+    # view the dictionary we use to set up abstract variables such as all borrowers over fifty who live in a certain town
+    my $definitions = get_from_dictionary($area);
+    $template->param(
+        'areas'            => areas( $area ),
+        'start_dictionary' => 1,
+        'definitions'      => $definitions,
+    );
 }
 
 $template->param( 'referer' => $referer );
 
 
-if (!$no_html){
-	output_html_with_http_headers $input, $cookie, $template->output;
-}
+output_html_with_http_headers $input, $cookie, $template->output;
 
 sub areas {
 

@@ -77,7 +77,7 @@
 
 [% IF ( start_dictionary ) %]
     <div id="toolbar">
-        <a id="newdictionary" class="btn btn-default" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition"><i class="fa fa-plus"></i> New definition</a>
+        <a id="newdictionary" class="btn btn-default" href="/cgi-bin/koha/reports/dictionary.pl?op=add_form"><i class="fa fa-plus"></i> New definition</a>
     </div>
 [% END %]
 <h1>Dictionary</h1>
@@ -89,7 +89,7 @@
                 <h2>Current terms</h2>
                 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="phase" value="View Dictionary" />
+                    <input type="hidden" name="op" value="list" />
                     [% IF ( areas ) %]
                         Filter by area
                         <select name="area">
@@ -120,17 +120,20 @@
                         <td>[% definition.description | html %]</td>
                         <td>[% definition.areaname | html %]</td>
                         <td>[% definition.saved_sql | html %]</td>
-                        <td class="actions"><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
-                            <input type="hidden" name="id" value="[% definition.id | html %]" />
-                            <input type="hidden" name="phase" value="Delete Definition" />
-                            <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash-can"></i> Delete</button>
-                        </form></td>
+                        <td class="actions">
+                            <form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete" />
+                                <input type="hidden" name="id" value="[% definition.id | html %]" />
+                                <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash-can"></i> Delete</button>
+                            </form>
+                        </td>
                     </tr>
                     [% END %]
                 </table>
             </div> <!-- /.page-section -->
         [% ELSE %]
-            <div class="dialog message">There are no saved definitions. <a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition">Add a definition to the dictionary.</a></div>
+            <div class="dialog message">There are no saved definitions. <a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?op=add_form">Add a definition to the dictionary.</a></div>
 		[% END %]
 [% END %]
 
@@ -149,7 +152,8 @@
 </li>
 </ol></fieldset>
 
-<fieldset class="action"><input type="hidden" name="phase" value="New Term step 2" />
+<fieldset class="action">
+<input type="hidden" name="op" value="cud-add_form_2" />
 <input type="submit" name="submit" class="btn btn-primary" value="Next" /></fieldset>
 </form>
 [% END %]
@@ -162,7 +166,7 @@
     <legend>Step 2 of 5: Choose the area</legend>
     <ol>
       <li>
-        <input type="hidden" name="phase" value="New Term step 3" />
+        <input type="hidden" name="op" value="cud-add_form_3" />
         <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
         <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
         <label for="area">Select table:</label><select name="area" id="area">
@@ -208,7 +212,7 @@
 </optgroup>
 </select>
 
-<input type="hidden" name="phase" value="New Term step 4" />
+<input type="hidden" name="op" value="cud-add_form_4" />
 </fieldset>
 <fieldset class="action"><input type="submit" name="submit" class="btn btn-primary" value="Next" /></fieldset>
 </form>
@@ -257,7 +261,7 @@
 
 [% END %]
 </ol>
-<input type="hidden" name="phase" value="New Term step 5" />
+<input type="hidden" name="op" value="cud-add_form_5" />
 </fieldset>
 <fieldset class="action">
 <input type="submit" name="submit" class="btn btn-primary" value="Next" />
@@ -306,7 +310,7 @@
 </fieldset>
 
 <fieldset class="action"><input type="hidden" name="sql" value="[% query | html %]" />
-<input type="hidden" name="phase" value="New Term step 6" />
+<input type="hidden" name="op" value="cud-add_form_6" />
 <input type="submit" name="submit" class="btn btn-primary" value="Save" />         </fieldset>
 
 </form>
