@@ -330,7 +330,7 @@ $( document ).ready( function () {
         $("<div/>", {
             "class": "columns-2",
             html: items.join("")
-        }).appendTo("#prefModalForm");
+        }).appendTo("#prefModalBody");
 
         $("#saveModalPrefs").data("target", this.id );
         $("#saveModalPrefs").data("type", "modalselect" );
@@ -587,7 +587,7 @@ $( document ).ready( function () {
     });
 
     $("#prefModal").on("hide.bs.modal", function(){
-        $("#prefModalLabel,#prefModalForm").html("");
+        $("#prefModalLabel,#prefModalBody").html("");
         $("#saveModalPrefs").data("target", "" );
     });
 
