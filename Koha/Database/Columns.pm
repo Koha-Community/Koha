@@ -85,7 +85,6 @@ sub columns {
             "ordernumber"                   => __("Order number"),
             "orderstatus"                   => __("Order status"),
             "parent_ordernumber"            => __("Parent order number (internal)"),
-            "purchaseordernumber"           => __("Not used (deprecated)"),
             "quantity"                      => __("Quantity"),
             "quantityreceived"              => __("Quantity received"),
             "replacementprice"              => __("Replacement price"),

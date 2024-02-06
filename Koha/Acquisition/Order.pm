@@ -455,7 +455,6 @@ sub duplicate_to {
                 invoiceid
                 datecancellationprinted
                 cancellationreason
-                purchaseordernumber
                 claims_count
                 claimed_date
                 parent_ordernumber
@@ -649,7 +648,6 @@ sub to_api_mapping {
         ordernumber                   => 'order_id',
         orderstatus                   => 'status',
         parent_ordernumber            => 'parent_order_id',
-        purchaseordernumber           => undef,                    # obsolete
         quantityreceived              => 'quantity_received',
         replacementprice              => 'replacement_price',
         sort1                         => 'statistics_1',
