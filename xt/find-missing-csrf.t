@@ -66,16 +66,17 @@ sub check_csrf_in_forms {
     my @errors;
     return @errors unless grep { $_ =~ m|<form| } @lines;
     my ( $open, $found ) = ( 0, 0 );
-    my $line = 0 ;
-    for my $l (@lines) {
-        $line++;
-        $open = $line if ( $l =~ m{<form} && !( $l =~ m{method=('|")get('|")} ) );
-        $found++  if ( $l =~ m|csrf\-token\.inc| && $open );
-        if ( $open && $l =~ m|</form| ) {
+    my $line_number = 0 ;
+    for my $line (@lines) {
+        $line_number++;
+        $open = $line_number if $line =~ m{<form.*method=('|")post('|")}i;
+        $found++ if $open && $line =~ m{csrf-token\.inc};
+        if ( $open && $line =~ m{</form} ) {
             push @errors,
                 "The <form> starting on line $open is missing it's corresponding csrf_token include (see bug 22990)"
                 if !$found;
             $found = 0;
+            undef $open;
         }
     }
     return @errors;
