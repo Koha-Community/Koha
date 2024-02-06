@@ -35,7 +35,7 @@ $(document).ready(function() {
                 $('#addConcernModal').modal('hide');
                 $('#concern_body').val('');
                 $('#concern_title').val('');
-                $('#toolbar').before('<div class="dialog message">' + __("Your concern was sucessfully submitted.") + '</div>');
+                $('#toolbar').before('<div class="dialog message">' + __("Your concern was successfully submitted.") + '</div>');
                 if ($.fn.dataTable.isDataTable("#table_concerns")) {
                     $("#table_concerns").DataTable().ajax.reload();
                 }
