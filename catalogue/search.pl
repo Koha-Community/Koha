@@ -273,7 +273,7 @@ if ( $template_type eq 'advsearch' ) {
         @operators = $cgi->multi_param('op');
         @indexes   = $cgi->multi_param('idx');
         $template->param(
-           sort      => $cgi->param('sort_by'),
+            sort => scalar $cgi->param('sort_by'),
         );
         # determine what to display next to the search boxes
     } elsif ( $cgi->param('edit_filter') ){
