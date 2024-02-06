@@ -17,6 +17,8 @@ KOHA.Tags = {
         var mytagid = "#" + mynewtag;
         var mydata = {};
         mydata[mynewtag] = tag;
+        mydata['csrf_token'] = $('meta[name="csrf-token"]').attr('content')
+        mydata['op'] = 'cud-add';
         var response;	// AJAX from server will assign value to response.
         $.post(
             "/cgi-bin/koha/opac-tags.pl",
@@ -74,6 +76,8 @@ KOHA.Tags = {
             var mynewtag = "newtag" + bibarray[i];
             mydata[mynewtag] = tag;
         }
+        mydata['csrf_token'] = $('meta[name="csrf-token"]').attr('content')
+        mydata['op'] = 'cud-add';
         var response;	// AJAX from server will assign value to response.
         $.post(
             "/cgi-bin/koha/opac-tags.pl",
