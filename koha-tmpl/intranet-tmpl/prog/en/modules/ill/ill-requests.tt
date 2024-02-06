@@ -23,21 +23,21 @@
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
-        [% IF query_type == 'cud-create' %]
+        [% IF op == 'cud-create' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>New request</span>
             [% END %]
-        [% ELSIF query_type == 'illview' %]
+        [% ELSIF op == 'illview' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Manage request [% request.id_prefix _ request.illrequest_id | html %]</span>
             [% END %]
-        [% ELSIF query_type == 'typedisclaimer' %]
+        [% ELSIF op == 'typedisclaimer' %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
             [% END %]
@@ -55,7 +55,7 @@
 <div class="main container-fluid">
     <div class="row">
 
-        [% IF query_type == 'illlist' %]
+        [% IF op == 'illlist' %]
             <div class="col-sm-2">
                 <aside>
                     <form method="get" id="illfilter_form">
@@ -141,19 +141,19 @@
                     <p>[% whole.success | html %]</p>
                 [% END %]
 
-                [% IF query_type == 'cud-create' %]
+                [% IF op == 'cud-create' %]
                     <h1>New ILL request</h1>
                     [% PROCESS $whole.template %]
 
-                [% ELSIF query_type == 'confirm' %]
+                [% ELSIF op == 'confirm' %]
                     <h1>Confirm ILL request</h1>
                     [% PROCESS $whole.template %]
 
-                [% ELSIF query_type == 'cud-cancel' and !whole.error %]
+                [% ELSIF op == 'cud-cancel' and !whole.error %]
                     <h1>Cancel a confirmed request</h1>
                     [% PROCESS $whole.template %]
 
-                [% ELSIF query_type == 'check_out' and !whole.error %]
+                [% ELSIF op == 'check_out' and !whole.error %]
                     [% IF !whole.stage || whole.stage == 'form' %]
                         <h1 id="ill-issue-title">Issue requested item to [% INCLUDE 'patron-title.inc' patron = request.patron %]</h1>
                         [% IF !request.biblio_id || request.biblio_id.length == 0 %]
@@ -300,7 +300,7 @@
                         </fieldset>
                     [% END %]
 
-                [% ELSIF query_type == 'generic_confirm' %]
+                [% ELSIF op == 'generic_confirm' %]
                     <h1>Place request with partner libraries</h1>
                   [% IF error %]
                     [% IF error == 'no_target_email' %]
@@ -399,7 +399,7 @@
                     [% END %]
                 <!-- generic_confirm ends here -->
 
-                [% ELSIF query_type == 'edit_action' %]
+                [% ELSIF op == 'edit_action' %]
                     <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
                         [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
@@ -499,7 +499,7 @@
                         </fieldset>
                     </form>
 
-                [% ELSIF query_type == 'delete_confirm' %]
+                [% ELSIF op == 'delete_confirm' %]
 
                     <div class="dialog alert">
                         <h3>Are you sure you wish to delete this request?</h3>
@@ -513,7 +513,7 @@
                         <a class="btn btn-default deny" href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% request.id | html %]"><i class="fa fa-fw fa-times"></i>No, do not delete</a>
                     </div>
 
-                [% ELSIF query_type == 'illview' %]
+                [% ELSIF op == 'illview' %]
                     [% IF whole.template.length > 0 %]
                     [% PROCESS $whole.template %]
                     [% END %]
@@ -809,7 +809,7 @@
                             </div>
                     </div>
 
-                [% ELSIF query_type == 'illlist' %]
+                [% ELSIF op == 'illlist' %]
                     <!-- illlist -->
                     <h1>
                         [% IF !batch %]
@@ -822,7 +822,7 @@
                         <h2>Details for all requests</h2>
                          [% INCLUDE 'ill-list-table.inc' %]
                     </div> <!-- /#results -->
-                [% ELSIF query_type == 'availability' %]
+                [% ELSIF op == 'availability' %]
                     <!-- availability -->
                     <h1>Availability</h1>
                     <div id="results" class="page-section">
@@ -857,7 +857,7 @@
                             [% INCLUDE 'ill-availability-table.inc' service=service %]
                         [% END %]
                     </div>
-                [% ELSIF query_type == 'typedisclaimer' %]
+                [% ELSIF op == 'typedisclaimer' %]
                     <!-- typedisclaimer -->
                     <h1>Request type disclaimer</h1>
                     <div id="results" class="page-section">
@@ -898,7 +898,7 @@
                             </fieldset>
                         </form>
                     </div>
-                [% ELSIF query_type == 'batch_list' || query_type == 'batch_create' %]
+                [% ELSIF op == 'batch_list' || op == 'batch_create' %]
                     [% INCLUDE 'ill-batch.inc' %]
                 [% ELSE %]
                 <!-- Custom Backend Action -->
@@ -962,17 +962,17 @@
     [% Asset.js("js/ill-batch.js") | $raw %]
     [% Asset.js("js/ill-batch-table.js") | $raw %]
     [% Asset.js("js/ill-batch-modal.js") | $raw %]
-    [% IF (query_type == 'availability' || query_type == 'generic_confirm') && Koha.Preference('ILLCheckAvailability') %]
+    [% IF (op == 'availability' || op == 'generic_confirm') && Koha.Preference('ILLCheckAvailability') %]
         [% Asset.js("js/ill-availability.js") | $raw %]
     [% END %]
-    [% IF query_type == 'availability' && Koha.Preference('ILLCheckAvailability') %]
+    [% IF op == 'availability' && Koha.Preference('ILLCheckAvailability') %]
         <script>
             $(document).ready(function() {
                 window.doSearch();
             });
         </script>
     [% END %]
-    [% IF query_type == 'generic_confirm' && Koha.Preference('ILLCheckAvailability') %]
+    [% IF op == 'generic_confirm' && Koha.Preference('ILLCheckAvailability') %]
         [% Asset.js("js/ill-availability-partner.js") | $raw %]
     [% END %]
 

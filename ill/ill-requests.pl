@@ -460,10 +460,10 @@ if ( $backends_available ) {
 }
 
 $template->param(
-    backends   => $backends,
-    types      => [ "Book", "Article", "Journal" ],
-    query_type => $op,
-    branches   => Koha::Libraries->search,
+    backends => $backends,
+    types    => [ "Book", "Article", "Journal" ],
+    op       => $op,
+    branches => Koha::Libraries->search,
 );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );
