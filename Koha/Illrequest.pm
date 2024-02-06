@@ -2003,16 +2003,34 @@ sub strings_map {
     return $strings;
 }
 
-=head3 check_url_param_deprecation
 
-    Koha::Illrequest->check_url_param_deprecation($params);
+=head3 get_op_param_deprecation
 
-Check URL params and issue a deprecation message if any deprecated parameters are found
+    my $op = Koha::Illrequest->check_url_param_deprecation($params);
+
+Issues a deprecation message for the given parameters, if needed.
+Returns the appropriate operation based on the interface type.
+
+=over
+
+=item interface
+
+The interface this is running on: 'opac' or 'intranet'
+
+=back
+
+=over
+
+=item params
+
+CGI parameters
+
+=back
 
 =cut
 
-sub check_url_param_deprecation {
-    my ( $self, $params ) = @_;
+sub get_op_param_deprecation {
+    my ( $self, $interface, $params ) = @_;
 
     my $deprecation_message;
 
@@ -2028,6 +2046,18 @@ sub check_url_param_deprecation {
         if $params->{'backend'} && $deprecation_message;
 
     deprecated $deprecation_message if $deprecation_message;
+
+    my $op;
+    if ( $interface eq 'opac' ) {
+        $op = $params->{'op'} // $params->{'method'} // 'list';
+        $op = 'cud-create' if $op eq 'create' || $op eq 'add_form';
+    } elsif ( $interface eq 'intranet' ) {
+        $op = $params->{op} // $params->{method} // 'illlist';
+        $op = 'cud-create' if $op eq 'create';
+        $op = 'cud-cancel' if $op eq 'cancel';
+        $op = 'cud-delete' if $op eq 'delete';
+    }
+    return $op;
 }
 
 =head3 _type

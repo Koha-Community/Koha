@@ -52,12 +52,7 @@ unless ( C4::Context->preference('ILLModule') ) {
     exit;
 }
 
-Koha::Illrequest->check_url_param_deprecation($params);
-
-my $op = $params->{op} // $params->{method} // 'illlist';
-$op = 'cud-create' if $op eq 'create';
-$op = 'cud-cancel' if $op eq 'cancel';
-$op = 'cud-delete' if $op eq 'delete';
+my $op = Koha::Illrequest->get_op_param_deprecation( 'intranet', $params );
 
 my ( $template, $patronnumber, $cookie ) = get_template_and_user( {
     template_name => 'ill/ill-requests.tt',

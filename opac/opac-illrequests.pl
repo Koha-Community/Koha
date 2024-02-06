@@ -61,10 +61,7 @@ my $backends_available = ( scalar @{$backends} > 0 );
 $template->param( backends_available => $backends_available );
 my $patron = Koha::Patrons->find($loggedinuser);
 
-Koha::Illrequest->check_url_param_deprecation($params);
-
-my $op = $params->{'op'} // $params->{'method'} // 'list';
-$op = 'cud-create' if $op eq 'create' || $op eq 'add_form';
+my $op = Koha::Illrequest->get_op_param_deprecation( 'opac', $params );
 
 my ( $illrequest_id, $request );
 if ( $illrequest_id = $params->{illrequest_id} ) {
