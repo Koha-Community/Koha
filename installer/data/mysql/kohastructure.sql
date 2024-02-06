@@ -739,7 +739,6 @@ CREATE TABLE `aqorders` (
   `cancellationreason` mediumtext DEFAULT NULL COMMENT 'reason of cancellation',
   `order_internalnote` longtext DEFAULT NULL COMMENT 'notes related to this order line, made for staff',
   `order_vendornote` longtext DEFAULT NULL COMMENT 'notes related to this order line, made for vendor',
-  `purchaseordernumber` longtext DEFAULT NULL COMMENT 'not used? always NULL',
   `basketno` int(11) DEFAULT NULL COMMENT 'links this order line to a specific basket (aqbasket.basketno)',
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'the date and time this order line was last modified',
   `rrp` decimal(13,2) DEFAULT NULL COMMENT 'the retail cost for this line item',
