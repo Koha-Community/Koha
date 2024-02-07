@@ -32,33 +32,39 @@ push @files, `git ls-files 'koha-tmpl/opac-tmpl/bootstrap/en/*.inc'`;
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.tt'`;
 push @files, `git ls-files 'koha-tmpl/intranet-tmpl/prog/en/*.inc'`;
 
-
 my @errors;
 for my $file ( @files ) {
     chomp $file;
-    my @e = check_csrf_in_forms($file);
+    my @e = catch_missing_op($file);
     push @errors, sprintf "%s:%s", $file, join (",", @e) if @e;
 }
 
-is( @errors, 0, "The <form> in the following files are missing it's corresponding csrf_token include (see bug 22990)" )
-    or diag(Dumper @errors);
+is( @errors, 0, "The <form> in the following files are missing it's corresponding op parameter (see bug 34478)" )
+    or diag( Dumper @errors );
 
-sub check_csrf_in_forms {
-    my ( $file ) = @_;
+sub catch_missing_op {
+    my ($file) = @_;
 
     my @lines = read_file($file);
     my @errors;
-    return @errors unless grep { $_ =~ m|<form| } @lines;
-    my ( $open, $found ) = ( 0, 0 );
-    my $line_number = 0 ;
+    return unless grep { $_ =~ m|<form| } @lines;
+    my ( $in_form, $closed_form, $line_open_form, $has_op );
+    my $line_number = 0;
     for my $line (@lines) {
         $line_number++;
-        $open = $line_number if $line =~ m{<form.*method=('|")post('|")}i;
-        $found++ if $open && $line =~ m{csrf-token\.inc};
-        if ( $open && $line =~ m{</form} ) {
-            push @errors, $open unless $found;
-            $found = 0;
-            undef $open;
+        if ( $line =~ m{^(\s*)<form.*method=('|")post('|")}i ) {
+            $in_form        = 1;
+            $line_open_form = $line_number;
+        }
+        if ( $in_form && $line =~ m{name="op"} ) {
+            $has_op = 1;
+        }
+        if ( $in_form && $line =~ m{</form} ) {
+            $closed_form = 0;
+            unless ($has_op) {
+                push @errors, $line_open_form;
+            }
+            $in_form = 0;
         }
     }
     return @errors;
