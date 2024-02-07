@@ -540,12 +540,21 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $logged_in_patron = Koha::Patrons->find($loggedinuser);
 my $biblio;
-if ($biblionumber){
+
+if ($biblionumber) {
+
     $biblio = Koha::Biblios->find($biblionumber);
-    unless ( $biblio ) {
+
+    unless ($biblio) {
         $biblionumber = undef;
         $template->param( bib_doesnt_exist => 1 );
+    }
+
+    unless ( $biblio->can_be_edited($logged_in_patron) ) {
+        print $input->redirect("/cgi-bin/koha/errors/403.pl");    # escape early
+        exit;
     }
 }
 
@@ -661,15 +670,14 @@ if ($biblionumber) {
     $sth->execute($biblionumber);
     ($biblioitemnumber) = $sth->fetchrow;
     if (C4::Context->preference('MARCOverlayRules')) {
-        my $member = Koha::Patrons->find($loggedinuser);
         $record = ApplyMarcOverlayRules(
             {
                 biblionumber    => $biblionumber,
                 record          => $record,
                 overlay_context =>  {
                         source       => $z3950 ? 'z3950' : 'intranet',
-                        categorycode => $member->categorycode,
-                        userid       => $member->userid
+                        categorycode => $logged_in_patron->categorycode,
+                        userid       => $logged_in_patron->userid,
                 }
             }
         );
@@ -695,7 +703,6 @@ if ( $op eq "cud-addbiblio" ) {
     if ( !$duplicatebiblionumber or $confirm_not_duplicate ) {
         my $oldbibitemnum;
         if ( $is_a_modif ) {
-            my $member = Koha::Patrons->find($loggedinuser);
             ModBiblio(
                 $record,
                 $biblionumber,
@@ -703,8 +710,8 @@ if ( $op eq "cud-addbiblio" ) {
                 {
                     overlay_context => {
                         source       => $z3950 ? 'z3950' : 'intranet',
-                        categorycode => $member->categorycode,
-                        userid       => $member->userid
+                        categorycode => $logged_in_patron->categorycode,
+                        userid       => $logged_in_patron->userid,
                     }
                 }
             );
