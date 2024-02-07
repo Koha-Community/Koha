@@ -40,8 +40,7 @@
 
 <h1>Circulation: Overdues at [% Branches.GetLoggedInBranchname | html %]</h1>
 
-<form name="selectlocation" action="branchoverdues.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
+<form name="selectlocation" action="branchoverdues.pl" method="get">
     <label for="location">Shelving location selected: </label><select id="location" name="location">
         <option value="">All shelving locations</option>
         [% FOREACH locationsloo IN locationsloop %]
