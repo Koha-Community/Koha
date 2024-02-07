@@ -142,8 +142,8 @@
                                         <option value="1">Delete</option>
                                     </select>
                                 </th>
-                                <th><button class="btn btn-default btn-xs" title="Add" id="add"><i class="fa fa-plus"></i> Add rule</button></th>
-                                <th><button id="btn_batchremove" disabled="disabled" class="btn btn-default btn-xs" title="Batch remove"><i class="fa fa-trash-can"></i> Delete selected</button></th>
+                                <th><button type="submit" class="btn btn-default btn-xs" title="Add" id="add" name="op" value="cud-add"><i class="fa fa-plus"></i> Add rule</button></th>
+                                <th><button type="submit" id="btn_batchremove" disabled="disabled" class="btn btn-default btn-xs" name="op" value="cud-remove" title="Batch remove"><i class="fa fa-trash-can"></i> Delete selected</button></th>
                             </tr>
                         </tfoot>
                         [% END %]
@@ -349,17 +349,17 @@
         }
 
         $('#doremove').on('click', function(){
-            doSubmit('doremove');
+            doSubmit('cud-remove');
         });
         $('#doedit').on('click', function(){
-            doSubmit('doedit', $("#doedit").attr('value'));
+            doSubmit('cud-edit', $("#doedit").attr('value'));
         });
         $('#add').on('click', function(){
-            doSubmit('add');
+            doSubmit('cud-add');
             return false;
         });
         $('#btn_batchremove').on('click', function(){
-            doSubmit('remove');
+            doSubmit('cud-remove');
         });
 
         /* Disable batch remove unless one or more checkboxes are checked */
