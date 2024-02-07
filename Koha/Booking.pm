@@ -74,7 +74,10 @@ sub item {
 
 =head3 store
 
-Booking specific store method to catch booking clashes
+Booking specific store method to catch booking clashes and ensure we have an item assigned
+
+We assume that if an item is passed, it's bookability has already been checked. This is to allow
+overrides in the future.
 
 =cut
 
@@ -121,6 +124,8 @@ sub store {
                 }
                 );
 
+            # FIXME: We should be able to combine the above two functions into one
+
             # Assign item at booking time
             if ( !$self->item_id ) {
                 $self->item_id(
@@ -132,8 +137,6 @@ sub store {
                     )
                 );
             }
-
-            # FIXME: We should be able to combine the above two functions into one
 
             $self = $self->SUPER::store;
         }
