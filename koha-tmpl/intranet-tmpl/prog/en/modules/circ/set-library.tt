@@ -57,7 +57,7 @@
 Updated:<ul>
     [% FOREACH update IN updated %]
     [% IF ( update.updated_branch || update.updated_desk ||  update.updated_register ) %]
-        [% IF ( updated.updated_branch ) %]
+        [% IF ( update.updated_branch ) %]
         <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.new_branch or "?" | html %]</li>
         [% END %]
         [% IF ( update.updated_desk ) %]
@@ -72,10 +72,16 @@ Updated:<ul>
     [% END %]
     </ul>
 <form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]">
-    [% INCLUDE 'csrf-token.inc' %]
     <div class="noshow">
         [% FOREACH recycle_loo IN recycle_loop %]
-        <input type="text" name="[% recycle_loo.param | html %]" value="[% recycle_loo.value | html %]" />
+            [% SET param = recycle_loo.param %]
+            [% NEXT IF param == 'op' %]
+            [% IF param == 'original_op' %][% param = 'op' %][% END %]
+            <input type="text" name="[% param | html %]" value="[% recycle_loo.value | html %]" />
+            [% IF param == 'op' %][% SET has_op = 1 %][% END %]
+        [% END %]
+        [% UNLESS has_op %]
+            <input type="hidden" name="op" value="cud-no-op" /> [%# Trick to pass anti-CSRF requirements %]
         [% END %]
     </div>
     <button type="submit">Continue</button>
@@ -85,6 +91,7 @@ Updated:<ul>
 
 <form method="post" action="set-library.pl">
     [% INCLUDE 'csrf-token.inc' %]
+    <input type="hidden" name="op" value="cud-set-library" />
 [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
 <fieldset class="rows">
     <legend>Set library</legend>
@@ -134,7 +141,9 @@ Updated:<ul>
 </fieldset>
 <div class="noshow">
     [% FOREACH recycle_loo IN recycle_loop %]
-    <input type="text" name="[% recycle_loo.param | html %]" value="[% recycle_loo.value | html %]" />
+        [% SET param = recycle_loo.param %]
+        [% IF param == 'op' %][% param = 'original_op' %][% END %]
+        <input type="text" name="[% param | html %]" value="[% recycle_loo.value | html %]" />
     [% END %]
     <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]" />
 </div>

@@ -40,6 +40,7 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user({
 my $sessionID = $query->cookie("CGISESSID");
 my $session = get_session($sessionID);
 
+my $op                  = $query->param('op') || q{};
 my $branch              = $query->param('branch');
 my $desk_id             = $query->param('desk_id');
 my $register_id         = $query->param('register_id');
@@ -48,8 +49,15 @@ my $userenv_desk        = C4::Context->userenv->{'desk_id'} || '';
 my $userenv_register_id = C4::Context->userenv->{'register_id'} || '';
 my @updated;
 
+my $library = Koha::Libraries->find($branch);
 # $session lines here are doing the updating
-if ( $branch and my $library = Koha::Libraries->find($branch) and ( C4::Auth::haspermission(C4::Context->userenv->{'id'}, { 'loggedinlibrary' => 1 }) or C4::Context::IsSuperLibraian() ) ) {
+if (
+       $op eq 'cud-set-library'
+    && $library
+    && (   C4::Auth::haspermission( C4::Context->userenv->{'id'}, { 'loggedinlibrary' => 1 } )
+        or C4::Context::IsSuperLibraian() )
+    )
+{
     if ( !$userenv_branch or $userenv_branch ne $branch  )  {
         my $branchname = $library->branchname;
         $session->param('branchname', $branchname);         # update sesssion in DB
@@ -98,15 +106,15 @@ if ( $branch and my $library = Koha::Libraries->find($branch) and ( C4::Auth::ha
 $template->param(updated => \@updated) if (scalar @updated);
 
 my @recycle_loop;
-foreach ($query->param()) {
-    $_ or next;                   # disclude blanks
-    $_ eq "branch"     and next;  # disclude branch
-    $_ eq "desk_id"    and next;  # disclude desk_id
-    $_ eq "register_id" and next;    # disclude register
-    $_ eq "oldreferer" and next;  # disclude oldreferer
+foreach my $param ($query->param()) {
+    $param or next;                   # disclude blanks
+    $param eq "branch"     and next;  # disclude branch
+    $param eq "desk_id"    and next;  # disclude desk_id
+    $param eq "register_id" and next;    # disclude register
+    $param eq "oldreferer" and next;  # disclude oldreferer
     push @recycle_loop, {
-        param => $_,
-        value => scalar $query->param($_),
+        param => $param,
+        value => scalar $query->param($param),
       };
 }
 
