@@ -128,14 +128,7 @@ sub store {
 
             # Assign item at booking time
             if ( !$self->item_id ) {
-                $self->item_id(
-                    $self->biblio->assign_item_for_booking(
-                        {
-                            start_date => $self->start_date,
-                            end_date   => $self->end_date
-                        }
-                    )
-                );
+                $self->_assign_item_for_booking;
             }
 
             $self = $self->SUPER::store;
@@ -143,6 +136,62 @@ sub store {
     );
 
     return $self;
+}
+
+=head3 _assign_item_for_booking
+
+  $self->_assign_item_for_booking;
+
+Used internally in Koha::Booking->store to ensure we have an item assigned for the booking.
+
+=cut
+
+sub _assign_item_for_booking {
+    my ($self) = @_;
+
+    my $biblio = $self->biblio;
+
+    my $start_date = dt_from_string( $self->start_date );
+    my $end_date   = dt_from_string( $self->end_date );
+
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
+    my $existing_bookings = $biblio->bookings(
+        [
+            start_date => {
+                '-between' => [
+                    $dtf->format_datetime($start_date),
+                    $dtf->format_datetime($end_date)
+                ]
+            },
+            end_date => {
+                '-between' => [
+                    $dtf->format_datetime($start_date),
+                    $dtf->format_datetime($end_date)
+                ]
+            },
+            {
+                start_date => { '<' => $dtf->format_datetime($start_date) },
+                end_date   => { '>' => $dtf->format_datetime($end_date) }
+            }
+        ]
+    );
+
+    my $checkouts =
+        $biblio->current_checkouts->search( { date_due => { '>=' => $dtf->format_datetime($start_date) } } );
+
+    my $bookable_items = $biblio->bookable_items->search(
+        {
+            itemnumber => [
+                '-and' => { '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query },
+                { '-not_in' => $checkouts->_resultset->get_column('itemnumber')->as_query }
+            ]
+        },
+        { rows => 1 }
+    );
+
+    my $itemnumber = $bookable_items->single->itemnumber;
+    return $self->item_id($itemnumber);
 }
 
 =head3 get_items_that_can_fill
