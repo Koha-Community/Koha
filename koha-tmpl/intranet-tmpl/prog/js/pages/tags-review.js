@@ -1,6 +1,5 @@
 review_ajax_params = {
     url: "/cgi-bin/koha/tags/review.pl",
-    type: "POST",
     dataType: "script"
 };
 
@@ -102,9 +101,10 @@ $(document).ready(function() {
         var gettitle;
         // window.alert(__("Click detected on ") + event.target + ": " + $(event.target).html);
         if ($(event.target).is('.ok')) {
-            $.ajax(Object.assign({}, review_ajax_params, {
+            $.ajax(Object.assign({}, {...review_ajax_params, type: "POST"}, {
                 data: {
-                    ok: $(event.target).attr("title")
+                    tag: $(event.target).attr("title"),
+                    op: 'cud-approve',
                 },
                 success: count_approve // success_approve
             }));
@@ -123,9 +123,10 @@ $(document).ready(function() {
             }
         }
         if ($(event.target).is('.rej')) {
-            $.ajax(Object.assign({}, review_ajax_params, {
+            $.ajax(Object.assign({}, {...review_ajax_params, type: "POST"}, {
                 data: {
-                    rej: $(event.target).attr("title")
+                    tag: $(event.target).attr("title"),
+                    op: 'cud-reject',
                 },
                 success: count_reject // success_reject
             }));
@@ -146,9 +147,10 @@ $(document).ready(function() {
         }
         if ($(event.target).is('#test_button')) {
             $(event.target).text( __("Testing...") ).prop('disabled', true);
-            $.ajax(Object.assign({}, review_ajax_params, {
+            $.ajax(Object.assign({}, {...review_ajax_params, type: "GET"}, {
                 data: {
-                    test: $('#test').val()
+                    tag: $('#test').val(),
+                    op: 'test',
                 },
                 success: success_test_call // success_reject
             }));

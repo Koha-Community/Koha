@@ -56,15 +56,17 @@ sub ajax_auth_cgi { # returns CGI object
 if (is_ajax()) {
     my $input = &ajax_auth_cgi($needed_flags);
     my $operator = C4::Context->userenv->{'number'};  # must occur AFTER auth
-    my ($tag, $js_reply);
-    if ($tag = $input->param('test')) {
+    my $js_reply;
+    my $op = $input->param('op') || q{};
+    my $tag = $input->param('tag');
+    if ($op eq 'test') {
         my $check = is_approved($tag);
         $js_reply = ( $check >=  1 ? 'success' : $check <= -1 ? 'failure' : 'indeterminate' ) . "_test('".uri_escape_utf8($tag)."');\n";
     }
-    if ($tag = $input->param('ok')) {
+    elsif ($op eq 'cud-approve') {
         $js_reply = (   whitelist($operator,$tag) ? 'success' : 'failure') . "_approve('".uri_escape_utf8($tag)."');\n";
     }
-    if ($tag = $input->param('rej')) {
+    elsif ($op eq 'cud-reject') {
         $js_reply = (   blacklist($operator,$tag) ? 'success' : 'failure')  . "_reject('".uri_escape_utf8($tag)."');\n";
     }
     output_with_http_headers $input, undef, $js_reply, 'js';
@@ -83,20 +85,17 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user(
     }
 );
 
-my ($op, @errors, @tags);
+my (@errors, @tags);
 
-foreach (qw( approve reject test )) {
-    $op = $_ if ( $input->param("op-$_") );
-}
-$op ||= 'none';
+my $op = $input->param('op') || q{};
 
 @tags = $input->multi_param('tags');
 
-if ($op eq 'approve') {
+if ($op eq 'cud-approve') {
     foreach (@tags) {
         whitelist($borrowernumber,$_) or push @errors, {failed_ok=>$_};
     }
-} elsif ($op eq 'reject' ) {
+} elsif ($op eq 'cud-reject' ) {
     foreach (@tags) {
          blacklist($borrowernumber,$_) or push @errors, {failed_rej=>$_};
     }

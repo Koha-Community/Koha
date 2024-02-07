@@ -81,8 +81,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 
   [% IF ( op_count ) %]
   <div class="dialog message" id="main_status">
-      [% IF ( op == 'approve' ) %]   <span>Approved</span>
-      [% ELSIF ( op == 'reject' ) %] <span>Rejected</span>
+      [% IF ( op == 'cud-approve' ) %]   <span>Approved</span>
+      [% ELSIF ( op == 'cud-reject' ) %] <span>Rejected</span>
       [% ELSIF ( op == 'test' ) %]   <span>Tested</span>
       [% ELSE %]<span>Unknown operation ([% op | html %]) on</span>
       [% END %]
@@ -184,8 +184,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
     </div> <!-- /.page-section -->
   [% END %]
     [% IF ( tagloop ) %]<fieldset class="action">
-   <button type="submit" value="Approve" class="btn btn-default" id="approve_button" name="op-approve"><i class="fa fa-check"></i> Approve</button>
-   <button type="submit" value="Reject" class="btn btn-default"  id="reject_button" name="op-reject"><i class="fa fa-times"></i> Reject</button>
+   <button type="submit" value="cud-approve" class="btn btn-default" id="approve_button" name="op"><i class="fa fa-check"></i> Approve</button>
+   <button type="submit" value="cud-reject" class="btn btn-default"  id="reject_button" name="op"><i class="fa fa-times"></i> Reject</button>
   </fieldset>[% END %]
   </form>
 </div>
