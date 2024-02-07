@@ -45,7 +45,7 @@
     [% SET edit_action_link = '/cgi-bin/koha/serials/subscription-batchedit.pl?referrer=' _ referrer %]
 
     [% BLOCK subscriptions_table %]
-        <form method="post">
+        <div>
             [% INCLUDE 'csrf-token.inc' %]
             [% IF closed %]
                 [% SET tab = 'closed' %]
@@ -214,7 +214,7 @@
                     </tr>
                 </tfoot>
             </table>
-        </form>
+        </div>
     [% END # /BLOCK subscriptions_table %]
 
     <div class="main container-fluid">
