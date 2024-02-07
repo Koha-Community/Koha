@@ -95,11 +95,6 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
         [% ELSIF ( message_loo.failed_rej ) %]<strong>Error: </strong><span>Failed to reject term ([% message_loo.failed_rej | html %]).</span>
         [% ELSIF ( message_loo.approver ) %]<span>No match for user ([% message_loo.approver | html %]). FILTER REQUIRES BORROWERNUMBER (not name).</span>
         [% ELSIF ( message_loo.approved_by ) %]<strong>Error: </strong><span>No match for borrowernumber ([% message_loo.approved_by | html %]).</span>
-        [% ELSIF ( message_loo.op_zero ) %]<strong>Error: </strong>
-            <span>The root koha user in your KOHA_CONF file
-            (default: kohaadmin) is not a valid tag moderator. These actions are logged
-            by borrowernumber, so the moderator must exist in your borrowers table.
-            Please log in as a different authorized staff user to moderate tags.</span>
         [% ELSE %]<span>Unrecognized error!</span>
         [% END %]
             <br />

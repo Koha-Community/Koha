@@ -92,7 +92,6 @@ $op ||= 'none';
 
 @tags = $input->multi_param('tags');
 
-$borrowernumber == 0 and push @errors, {op_zero=>1};
 if ($op eq 'approve') {
     foreach (@tags) {
         whitelist($borrowernumber,$_) or push @errors, {failed_ok=>$_};
