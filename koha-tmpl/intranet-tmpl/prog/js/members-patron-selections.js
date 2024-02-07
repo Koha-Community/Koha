@@ -16,9 +16,9 @@ function persistPatronSelections(form) {
 
 function showPatronSelections(number) {
     if (number === 0) {
-        $("#table_search_selections").hide()
+        $("#patron_search_selected").hide()
     } else {
-        $("#table_search_selections").show().find("span").text(__("Patrons selected: %s").format(number));
+        $("#patron_search_selected").show().find("span").text(__("Patrons selected: %s").format(number));
     }
 }
 
