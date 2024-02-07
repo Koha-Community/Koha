@@ -274,53 +274,6 @@ sub check_booking {
     return ( ( $total_bookable - $booked_count ) > 0 ) ? 1 : 0;
 }
 
-=head3 assign_item_for_booking
-
-=cut
-
-sub assign_item_for_booking {
-    my ( $self, $params ) = @_;
-
-    my $start_date = dt_from_string( $params->{start_date} );
-    my $end_date   = dt_from_string( $params->{end_date} );
-
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-
-    my $existing_bookings = $self->bookings(
-        [
-            start_date => {
-                '-between' => [
-                    $dtf->format_datetime($start_date),
-                    $dtf->format_datetime($end_date)
-                ]
-            },
-            end_date => {
-                '-between' => [
-                    $dtf->format_datetime($start_date),
-                    $dtf->format_datetime($end_date)
-                ]
-            },
-            {
-                start_date => { '<' => $dtf->format_datetime($start_date) },
-                end_date   => { '>' => $dtf->format_datetime($end_date) }
-            }
-        ]
-    );
-
-    my $checkouts = $self->current_checkouts->search( { date_due => { '>=' => $dtf->format_datetime($start_date) } } );
-
-    my $bookable_items = $self->bookable_items->search(
-        {
-            itemnumber => [
-                '-and' => { '-not_in' => $existing_bookings->_resultset->get_column('item_id')->as_query },
-                { '-not_in' => $checkouts->_resultset->get_column('itemnumber')->as_query }
-            ]
-        },
-        { rows => 1 }
-    );
-    return $bookable_items->single->itemnumber;
-}
-
 =head3 can_be_transferred
 
 $biblio->can_be_transferred({ to => $to_library, from => $from_library })
