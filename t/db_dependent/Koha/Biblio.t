@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More tests => 33;
 use Test::Exception;
 use Test::Warn;
 
@@ -146,6 +146,30 @@ subtest 'items() tests' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'bookable_items() tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+
+    # bookable items
+    my $bookable_item1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
+
+    # not bookable items
+    my $non_bookable_item1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 0 } );
+    my $non_bookable_item2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 0 } );
+
+    is( ref( $biblio->bookable_items ), 'Koha::Items', "bookable_items returns a Koha::Items resultset" );
+    is( $biblio->bookable_items->count, 1,             "bookable_items returns the correct number of items" );
+    is(
+        $biblio->bookable_items->next->itemnumber, $bookable_item1->itemnumber,
+        "bookable_items returned the correct item"
+    );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'get_coins and get_openurl' => sub {
