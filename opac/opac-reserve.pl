@@ -35,6 +35,7 @@ use C4::Overdues;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::CirculationRules;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Checkouts;
@@ -618,12 +619,12 @@ $template->param(OpacHoldNotes=>$show_notes);
 # display infos
 $template->param(bibitemloop => $biblioLoop);
 # can set reserve date in future
-if (
-    C4::Context->preference( 'AllowHoldDateInFuture' ) &&
-    C4::Context->preference( 'OPACAllowHoldDateInFuture' )
-    ) {
+if (   C4::Context->preference('AllowHoldDateInFuture')
+    && C4::Context->preference('OPACAllowHoldDateInFuture') )
+{
     $template->param(
-	    reserve_in_future         => 1,
+        reserve_in_future => 1,
+        today             => dt_from_string,
     );
 }
 
