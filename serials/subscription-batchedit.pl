@@ -51,8 +51,8 @@ foreach my $subscriptionid (@subscriptionids) {
 
 my @available_additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription' } )->as_list;
 
-my $batchedit = $cgi->param('batchedit');
-if ($batchedit) {
+my $op = $cgi->param('op') || q{};
+if ( $op eq 'cud-batchedit' ) {
     my %params = (
         aqbooksellerid  => scalar $cgi->param('booksellerid'),
         location        => scalar $cgi->param('location'),
