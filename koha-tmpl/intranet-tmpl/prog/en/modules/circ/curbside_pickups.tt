@@ -126,8 +126,7 @@
                     </div>
                 [% END %]
 
-                <form method="post" class="refresh-form">
-                    [% INCLUDE 'csrf-token.inc' %]
+                <form method="get" class="refresh-form">
                     <p>
                         <input type="hidden" name="tab" id="current-tab" value="[% tab | html %]" />
                         <button type="submit" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>
