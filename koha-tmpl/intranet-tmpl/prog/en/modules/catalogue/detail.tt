@@ -1895,7 +1895,7 @@
                             "data": "lost_status:last_seen_date:return_claim.patron",
                             "title": _("Status"),
                             "searchable": false,
-                            "orderable": true,
+                            "orderable": false,
                             "render": function(data, type, row, meta) {
                                 if ( row.lost_status == bundle_lost_value ) {
                                     let out = '<span class="lost">' + _("Last seen") + ': ' + $date(row.last_seen_date) + '</span>';
