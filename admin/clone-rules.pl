@@ -59,8 +59,5 @@ if ($frombranch && $tobranch && $frombranch ne $tobranch) {
     $template->param(error => 1);
 }
 
-$template->param(result => 1);
-
-
 output_html_with_http_headers $input, $cookie, $template->output;
 
