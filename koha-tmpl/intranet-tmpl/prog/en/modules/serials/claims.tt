@@ -77,8 +77,7 @@
                     </div>
                 [% END %]
 
-                <form id="claims" name="claims" action="claims.pl" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
+                <form id="claims" name="claims" action="claims.pl" method="get">
                     <fieldset>
                         <label for="supplierid">Vendor: </label>
                         <select id="supplierid" name="supplierid">
