@@ -23,9 +23,9 @@
                             [% IF ( error ) %]
                                 <div class="alert alert-warning">
                                     [% IF error == 'NO_BODY' %]
-                                        <p>There was an error sending the cart: No valid biblio records found.</p>
+                                        <p>There was an error sending the cart: No valid records were found.</p>
                                     [% ELSIF error == 'NO_REPLY_ADDRESS' %]
-                                        <p>Since we do not have your email address, we cannot send a mail. We need your email address as reply-to address.</p>
+                                        <p>There was an error sending the cart: We cannot send an email as there is no email address recorded for your account (your email address is used for the reply to address).</p>
                                     [% ELSE %]
                                         <p>There was an error sending the cart.</p>
                                     [% END %]
