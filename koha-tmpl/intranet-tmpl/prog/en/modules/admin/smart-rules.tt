@@ -98,6 +98,7 @@
                                 <select name="tobranch" id="tobranch">
                                     [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
                                 </select>
+                                <input type="hidden" name="op" value="cud-clone" />
                                 <input type="submit" id="clone_rules" class="btn btn-primary" value="Clone" />
                             </form>
                         [% END %]

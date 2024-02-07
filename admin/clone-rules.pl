@@ -41,13 +41,14 @@ my ($template, $loggedinuser, $cookie)
                             flagsrequired => {parameters => 'manage_circ_rules'},
                             });
 
+my $op         = $input->param("op") || q{};
 my $frombranch = $input->param("frombranch");
 my $tobranch   = $input->param("tobranch");
 
 $template->param(frombranch     => $frombranch)                if ($frombranch);
 $template->param(tobranch       => $tobranch)                  if ($tobranch);
 
-if ($frombranch && $tobranch && $frombranch ne $tobranch) {
+if ($op eq 'cud-clone' && $frombranch && $tobranch && $frombranch ne $tobranch) {
     $frombranch = ( $frombranch ne '*' ? $frombranch : undef );
     $tobranch = ( $tobranch ne '*' ? $tobranch : undef );
 
