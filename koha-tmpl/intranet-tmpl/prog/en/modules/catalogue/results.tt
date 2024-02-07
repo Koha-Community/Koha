@@ -361,12 +361,12 @@
                 [% END %]
 
                 [% ELSE # /IF total %]
-                    <form method="post" name="fz3950" class="fz3950bigrpad">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <div id="toolbar" class="btn-toolbar" style="background-color:transparent"><div>
-                            <button class="btn btn-default" type="button" id="z3950submit"><i class="fa fa-search"></i> Z39.50/SRU search</button>
-                        </div></div>
-                    </form>
+                    <div id="toolbar" class="btn-toolbar fz3950bigrpad" style="background-color:transparent">
+                        <div>
+                            <a class="btn btn-default" type="button" id="z3950submit"><i class="fa fa-search"></i> Z39.50/SRU search</a>
+                        </div>
+                    </div>
+
 
                     <div id="searchheader">
                         <h3>No results found</h3>
