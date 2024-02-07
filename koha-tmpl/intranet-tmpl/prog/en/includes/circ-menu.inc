@@ -23,9 +23,6 @@
         [% IF ( patron_is_superlibrarian ) %]
             <i class="fa fa-bolt fa-fw" title="Superlibrarian patron"></i>
         [% END %]
-        [% IF ( patron.protected ) %]
-            <i class="fa fa-lock fa-fw" title="Protected patron"></i>
-        [% END %]
         [% INCLUDE 'patron-title.inc' %]
     </h5>
 [% IF Koha.Preference('showLastPatron') %]
