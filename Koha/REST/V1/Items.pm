@@ -294,8 +294,15 @@ sub bundled_items {
     }
 
     return try {
-        my $items_set = $item->bundle_items;
-        my $items     = $c->objects->search( $items_set );
+        my $items_set = Koha::Items->search(
+            {
+                'item_bundles_item.host' => $item_id,
+            },
+            {
+                join => 'item_bundles_item',
+            }
+        );
+        my $items = $c->objects->search($items_set);
         return $c->render(
             status  => 200,
             openapi => $items
