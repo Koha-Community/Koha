@@ -835,8 +835,49 @@ subtest 'Search patrons in modal' => sub {
         );
     };
 
-    teardown();
+    subtest 'no clause for extended_attributes when none are default searchable' => sub {
+        $attribute_type_searchable_1->update( { searched_by_default => 0 } );
+        $attribute_type_searchable_2->update( { searched_by_default => 0 } );
 
+        $driver->get( $base_url . "/members/members-home.pl" );
+
+        $driver->execute_script( <<'EOF', 'capture_ajax_data' );
+jQuery( document ).on( "ajaxSend", function( event, request, settings ) {
+  jQuery('#patron_search_form').after('<div id="capture_ajax_data_was_executed"></div>');
+  var url = new URL(window.location.origin + settings.url);
+  var parts = url.search.substring(1).split('&');
+  var q;
+  for (var i = 0 ; i < parts.length ; i++) {
+     var p = parts[i].split('=');
+     if (p[0] === 'q') {
+        q = JSON.parse(decodeURIComponent(p[1]));
+        break;
+     }
+  }
+
+  for (var i = 0; i < q.length; i++) {
+    var q0 = q[i]['-and'];
+    for (var j = 0; q0 && j < q0.length; j++) {
+       for (var k = 0; k < q0[j].length; k++) {
+           if (q0[j][k].hasOwnProperty('extended_attributes.code')) {
+               jQuery('#patron_search_form').after('<div id="had_extended_attributes_clause"></div>');
+           }
+       }
+    }
+  }
+} );
+EOF
+        $s->fill_form( { search_patron_filter => 'test_patron' } );
+        $s->submit_form;
+        sleep $DT_delay && $s->wait_for_ajax;
+        my $e1 = $driver->find_elements( 'capture_ajax_data_was_executed', 'id' );
+        is( scalar(@$e1), 1, 'the capture script was executed' );
+        my $e2 = $driver->find_elements( 'had_extended_attributes_clause', 'id' );
+        is( scalar(@$e2), 0, 'there were no extended attributes on the search clause' );
+
+    };
+
+    teardown();
 };
 
 sub is_patron_shown {
