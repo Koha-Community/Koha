@@ -22,19 +22,19 @@ $(document).ready(function() {
     $('input:checkbox[name="import_record_id"]').change(function(){
         var container = $(this).parents("tr");
         if ( $(this).is(':checked') ) {
-            $(container).addClass("selected");
-            $(container).removeClass("unselected");
+            $(container).addClass("order-selected");
+            $(container).removeClass("order-unselected");
             $(container).find(".order_details").toggle(true);
         } else {
-            $(container).addClass("unselected");
-            $(container).removeClass("selected");
+            $(container).addClass("order-unselected");
+            $(container).removeClass("order-selected");
             $(container).find(".order_details").toggle(false);
         }
     } );
 
     $("input:checkbox").prop("checked", false);
-    $("div.biblio.unselected select").prop('disabled', false);
-    $("div.biblio.unselected input").prop('disabled', false);
+    $("div.biblio.order-unselected select").prop('disabled', false);
+    $("div.biblio.order-unselected input").prop('disabled', false);
 
     $("#checkAll").click(function(e){
         e.preventDefault();
@@ -99,7 +99,7 @@ $(document).ready(function() {
 });
 
 function disableUnchecked(){
-    $("fieldset.biblio.unselected").each(function(){
+    $("fieldset.biblio.order-unselected").each(function(){
         $(this).remove();
     });
     return 1;
@@ -110,7 +110,7 @@ function checkOrderBudgets(){
     var all_budget_id = $("#all_budget_id");
     // If we don't have an overarching default set we need to check each selected order
     if ( !all_budget_id.val() ) {
-        $("fieldset.biblio.rows.selected").each(function(){
+        $("fieldset.biblio.rows.order-selected").each(function(){
             var default_order_fund = $(this).find("[name='budget_id']");
             // For each order we see if budget is set for order
             if( !default_order_fund.val() ){
