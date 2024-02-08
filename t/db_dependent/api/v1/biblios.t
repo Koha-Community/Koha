@@ -896,7 +896,7 @@ subtest 'set_rating() tests' => sub {
 
 subtest 'post() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -1318,6 +1318,40 @@ subtest 'post() tests' => sub {
     $t->post_ok("//$userid:$password@/api/v1/biblios" => {'Content-Type' => 'application/marc', 'x-framework-id' => $frameworkcode} => $marc)
       ->status_is(200)
       ->json_has('/id');
+
+    subtest 'x-record-source-id header tests' => sub {
+
+        plan tests => 5;
+
+        my $record_source =
+            $builder->build_object( { class => 'Koha::RecordSources', value => { can_be_edited => 0 } } );
+
+        $t->post_ok(
+            "//$userid:$password@/api/v1/biblios" => {
+                'Content-Type'       => 'application/marc', 'x-framework-id' => $frameworkcode,
+                'x-record-source-id' => $record_source->id
+            } => $marc
+        )->status_is(403)->json_is( '/error' => 'You do not have permission to set the record source' );
+
+        # Add required subpermission
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $patron->id,
+                    module_bit     => 9,
+                    code           => 'set_record_sources'
+                }
+            }
+        );
+
+        $t->post_ok(
+            "//$userid:$password@/api/v1/biblios" => {
+                'Content-Type'       => 'application/marc', 'x-framework-id' => $frameworkcode,
+                'x-record-source-id' => $record_source->id
+            } => $marc
+        )->status_is(200);
+    };
 
     $schema->storage->txn_rollback;
 };

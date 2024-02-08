@@ -26,6 +26,7 @@ use Koha::RecordProcessor;
 use C4::Biblio qw( DelBiblio AddBiblio ModBiblio );
 use C4::Search qw( FindDuplicate );
 
+use C4::Auth qw( haspermission );
 use C4::Barcodes::ValueBuilder;
 use C4::Context;
 
@@ -653,6 +654,19 @@ sub add {
         my $flavour = $headers->header('x-record-schema');
         $flavour //= C4::Context->preference('marcflavour');
 
+        my $record_source_id = $headers->header('x-record-source-id');
+
+        if ($record_source_id) {
+
+            # We've been passed a record source. Verify they are allowed to
+            unless ( haspermission( $c->stash('koha.user')->userid, { editcatalogue => 'set_record_sources' } ) ) {
+                return $c->render(
+                    status  => 403,
+                    openapi => { error => 'You do not have permission to set the record source' }
+                );
+            }
+        }
+
         my $record;
 
         my $frameworkcode = $headers->header('x-framework-id');
@@ -690,12 +704,11 @@ sub add {
             }
         ) unless !$duplicatebiblionumber || $confirm_not_duplicate;
 
-        my ( $biblionumber, $oldbibitemnum );
-            ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
+        my ( $biblio_id ) = AddBiblio( $record, $frameworkcode, { record_source_id => $record_source_id } );
 
         $c->render(
             status  => 200,
-            openapi => { id => $biblionumber }
+            openapi => { id => $biblio_id }
         );
     }
     catch {
