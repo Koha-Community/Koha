@@ -714,6 +714,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SIP2SortBinMapping','',NULL,'Use the following mappings to determine the sort_bin of a returned item. The mapping should be on the form \"branchcode:item field:item field value:sort bin number\", with one mapping per line.','free'),
 ('SkipHoldTrapOnNotForLoanValue','',NULL,'If set, Koha will never trap items for hold with this notforloan value','Integer'),
 ('SlipCSS','',NULL,'Slips CSS url.','free'),
+('SMSSendAdditionalOptions', '', '', 'Additional SMS::Send parameters used to send SMS messages', 'free'),
 ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free'),
 ('SMSSendPassword', '', '', 'Password used to send SMS messages', 'free'),
 ('SMSSendUsername', '', '', 'Username/Login used to send SMS messages', 'free'),

@@ -98,17 +98,31 @@ sub send_sms {
     my $subpath = $driver;
     $subpath =~ s|::|/|g;
 
+    # Extract additional SMS::Send arguments from file
     my $sms_send_config = C4::Context->config('sms_send_config');
     my $conf_file = defined $sms_send_config
         ? File::Spec->catfile( $sms_send_config, $subpath )
         : $subpath;
     $conf_file .= q{.yaml};
 
-    my %args;
+    my %args = ();
     if ( -f $conf_file ) {
         require YAML::XS;
         my $conf = YAML::XS::LoadFile( $conf_file );
         %args = map { q{_} . $_ => $conf->{$_} } keys %$conf;
+    }
+
+    # Extract additional SMS::Send arguments from the syspref
+    # Merge with any arguments from file with syspref taking precedence
+    my $sms_send_config_syspref = C4::Context->preference('SMSSendAdditionalOptions');
+    if ( $sms_send_config_syspref ) {
+        require YAML::XS;
+
+        $sms_send_config_syspref = "$sms_send_config_syspref\n\n";
+        my $yaml;
+        eval { $yaml = YAML::XS::Load(Encode::encode_utf8($yaml)); };
+        my %syspref_args = map { q{_} . $_ => $conf->{$_} } keys %$conf;
+        %args = ( %args, %syspref_args );
     }
 
     eval {
