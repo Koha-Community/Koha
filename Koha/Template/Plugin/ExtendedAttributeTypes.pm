@@ -33,7 +33,9 @@ sub all {
 
 sub codes {
     my ( $self, $params ) = @_;
+
     return Koha::Patron::Attribute::Types->search($params)->get_column('code');
+
 }
 
 1;
