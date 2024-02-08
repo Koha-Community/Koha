@@ -105,8 +105,7 @@ div#result { margin-top: 1em; }
 
 [% IF ( choosereference ) %]
 <p>Please choose which record will be the reference for the merge. The record chosen as reference will be kept, and the other will be deleted.</p>
-<form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
+<form id="mergeform_ref" action="/cgi-bin/koha/cataloguing/merge.pl" method="get">
     <fieldset class="rows">
     <legend>Merge reference</legend>
     <ol>
@@ -186,6 +185,7 @@ div#result { margin-top: 1em; }
 <input type="hidden" name="frameworkcode" value="[% framework | html %]" />
 
 <fieldset class="action">
+    <input type="hidden" name="op" value="cud-merge" />
     <input type="submit" name="merge" class="btn btn-primary" value="Merge" />
     <label for="report_fields">Fields to display in report:</label>
     <input type="text" name="report_fields" id="report_fields" value="[% MergeReportFields | html %]" />

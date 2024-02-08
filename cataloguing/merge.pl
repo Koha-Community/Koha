@@ -42,11 +42,6 @@ use Koha::Items;
 use Koha::MetadataRecord;
 
 my $input = CGI->new;
-my @biblionumbers = $input->multi_param('biblionumber');
-my $merge = $input->param('merge');
-
-my @errors;
-
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "cataloguing/merge.tt",
@@ -56,10 +51,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my @biblionumbers = $input->multi_param('biblionumber');
+my $op = $input->param('op') || q{};
+
+my @errors;
 #------------------------
 # Merging
 #------------------------
-if ($merge) {
+if ($op eq 'cud-merge') {
 
     my $dbh = C4::Context->dbh;
 
