@@ -5307,7 +5307,10 @@ CREATE TABLE `pseudonymized_transactions` (
   PRIMARY KEY (`id`),
   KEY `pseudonymized_transactions_ibfk_1` (`categorycode`),
   KEY `pseudonymized_transactions_borrowers_ibfk_2` (`branchcode`),
-  KEY `pseudonymized_transactions_borrowers_ibfk_3` (`transaction_branchcode`)
+  KEY `pseudonymized_transactions_borrowers_ibfk_3` (`transaction_branchcode`),
+  KEY `pseudonymized_transactions_items_ibfk_4` (`itemnumber`),
+  KEY `pseudonymized_transactions_ibfk_5` (`transaction_type`),
+  KEY `pseudonymized_transactions_ibfk_6` (`datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
