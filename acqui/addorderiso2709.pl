@@ -225,7 +225,7 @@ if ($op eq ""){
         my @budget_ids =
             $input->multi_param( 'budget_code_' . $import_record->import_record_id ); # bad field name used in template!
         my @itemprices        = $input->multi_param( 'itemprice_' . $import_record->import_record_id );
-        my @replacementprices = $input->multi_param( 'replacementprice_' . $import_record->import_record_id );
+        my @replacementprices = $input->multi_param( 'itemreplacementprice_' . $import_record->import_record_id );
         my @itemcallnumbers   = $input->multi_param( 'itemcallnumber_' . $import_record->import_record_id );
         my @coded_location_qualifiers =
             $input->multi_param( 'coded_location_qualifier_' . $import_record->import_record_id );
