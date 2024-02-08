@@ -31,13 +31,6 @@ use Koha::Items;
 
 my $query = CGI->new;
 
-# The biblio to move the item to
-my $biblionumber = $query->param('biblionumber');
-
-# The barcode of the item to move
-my $barcode = barcodedecode($query->param('barcode'));
-
-
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
     {
         template_name   => "cataloguing/moveitem.tt",
@@ -47,12 +40,18 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
+my $op = $query->param('op') || q{};
+# The biblio to move the item to
+my $biblionumber = $query->param('biblionumber');
+# The barcode of the item to move
+my $barcode = barcodedecode($query->param('barcode'));
+
 my $biblio = Koha::Biblios->find( $biblionumber );
 $template->param(biblio => $biblio);
 $template->param(biblionumber => $biblionumber);
 
 # If we already have the barcode of the item to move and the biblionumber to move the item to
-if ( $barcode && $biblionumber ) {
+if ( $op eq 'cud-moveitem' && $barcode && $biblionumber ) {
 
     my $itemnumber;
     my $item = Koha::Items->find( { barcode => $barcode } );
