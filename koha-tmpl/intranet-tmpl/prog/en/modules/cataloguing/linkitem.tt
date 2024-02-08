@@ -36,19 +36,11 @@
 	[% IF ( errornomodbiblio ) %]ERROR: Unable to modify the bibliographic record.[% END %]
 	[% IF ( errornohostitemnumber ) %]ERROR: Unable to get the item number from this barcode.[% END %]
     </div>
-    <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
-        [% INCLUDE 'csrf-token.inc' %]
-    <input type="submit" class="btn btn-primary" value="OK" />
-	<input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-    </form>
+    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber | uri %]" class="btn btn-primary">OK</a>
 [% ELSE %]
     [% IF ( success ) %]
     <div class="dialog message">The item has successfully been linked to <em>[% bibliotitle | html %]</em>.</div>
-	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
-	    [% INCLUDE 'csrf-token.inc' %]
-        <input type="submit" class="btn btn-primary" value="OK" />
-	    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-	</form>
+    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber | uri %]" class="btn btn-primary">OK</a>
     [% ELSE %]
 	[% IF ( missingparameter ) %]
 	<form method="post" action="/cgi-bin/koha/cataloguing/linkitem.pl">
@@ -79,6 +71,7 @@
 	    <input type="hidden" name="barcode" id="barcode" value="[% barcode | html %]" />
 	    [% END %]
 
+        <input type="hidden" name="op" value="cud-linkitem" />
         <input type="submit" class="btn btn-primary" value="Select" />
 
 	</form>

@@ -31,9 +31,6 @@ use Koha::Biblios;
 
 my $query = CGI->new;
 
-my $biblionumber = $query->param('biblionumber');
-my $barcode	 = $query->param('barcode');
-
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
     {
         template_name   => "cataloguing/linkitem.tt",
@@ -43,6 +40,9 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
+my $biblionumber = $query->param('biblionumber');
+my $barcode      = $query->param('barcode');
+my $op           = $query->param('op') || q{};
 my $biblio = Koha::Biblios->find($biblionumber);
 my $record = $biblio->metadata->record;
 my $marcflavour = C4::Context->preference("marcflavour");
@@ -55,7 +55,7 @@ if ($marcflavour eq 'MARC21') {
 
 $template->param(biblionumber => $biblionumber);
 
-if ( $barcode && $biblionumber ) {
+if ( $op eq 'cud-linkitem' && $barcode && $biblionumber ) {
 
     my $item = Koha::Items->find( { barcode => $barcode } );
 
