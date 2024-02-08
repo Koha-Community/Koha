@@ -296,7 +296,7 @@
                                                                                     <select id="loc_item_[% item.item_id | html %]" name="loc_[% biblio.import_record_id | html %]">
                                                                                         <option value=""> </option>
                                                                                         [% FOREACH locationloo IN locationloop %]
-                                                                                            [% IF ( locationloo.code ) == (item.loc) %]
+                                                                                            [% IF ( locationloo.code ) == (item.location) %]
                                                                                                 <option value="[% locationloo.code | html %]" selected="selected">[% locationloo.description | html %]</option>
                                                                                             [% ELSE %]
                                                                                                 <option value="[% locationloo.code | html %]">[% locationloo.description | html %]</option>
