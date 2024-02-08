@@ -102,8 +102,7 @@
             </div>
     [% END %]
 [% ELSE %]
-        <form name="f" action="/cgi-bin/koha/reports/orders_by_fund.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form name="f" action="/cgi-bin/koha/reports/orders_by_fund.pl" method="get">
         <fieldset class="rows">
         <legend>Filters</legend>
         <ol><li><label for="budgetfilter">Fund: </label>

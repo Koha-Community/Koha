@@ -75,8 +75,7 @@
 [% END %]
 [% ELSE %]
         <h1>View a count of items held at your library grouped by item type</h1>
-        <form method="post" action="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form method="get" action="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">
           <fieldset class="rows">
             <ol>
               <li>

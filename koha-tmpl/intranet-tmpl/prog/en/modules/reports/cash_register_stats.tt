@@ -63,8 +63,7 @@
                 [% INCLUDE 'messages.inc' %]
 
     <h1>Cash register statistics</h1>
-    <form method="post" action="/cgi-bin/koha/reports/cash_register_stats.pl" id="frmCashRegister">
-        [% INCLUDE 'csrf-token.inc' %]
+    <form method="get" action="/cgi-bin/koha/reports/cash_register_stats.pl" id="frmCashRegister">
         <fieldset class="rows">
             <legend>Cash register statistics [% beginDate | $KohaDates %] to [% endDate | $KohaDates %]</legend>
             <ol>

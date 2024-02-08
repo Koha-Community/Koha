@@ -90,8 +90,7 @@
 	[% END %]
 [% ELSE %]
     <h1>Most-circulated items</h1>
-	<form method="post" action="/cgi-bin/koha/reports/cat_issues_top.pl">
-	    [% INCLUDE 'csrf-token.inc' %]
+	<form method="get" action="/cgi-bin/koha/reports/cat_issues_top.pl">
 	<fieldset class="rows">
 	<ol>
         <li>

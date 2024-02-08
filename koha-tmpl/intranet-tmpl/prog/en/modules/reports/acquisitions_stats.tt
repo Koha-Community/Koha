@@ -106,8 +106,7 @@
 		</table>
 	[% END %]
 [% ELSE %]
-	<form method="post" action="/cgi-bin/koha/reports/acquisitions_stats.pl">
-	    [% INCLUDE 'csrf-token.inc' %]
+	<form method="get" action="/cgi-bin/koha/reports/acquisitions_stats.pl">
 	<fieldset class="rows">
 	<legend>Acquisitions statistics</legend>
 	<table>

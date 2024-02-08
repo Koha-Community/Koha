@@ -71,8 +71,7 @@
     [% END %]
 [% ELSE %]
     <h1>Patrons with no checkouts</h1>
-    <form method="post" action="/cgi-bin/koha/reports/borrowers_out.pl">
-        [% INCLUDE 'csrf-token.inc' %]
+    <form method="get" action="/cgi-bin/koha/reports/borrowers_out.pl">
     <fieldset class="rows">
 		<ol>
             <li><label for="patroncategory">Patron category: </label> <select name="Filter" id="patroncategory"><option value="" > Any category code</option>
