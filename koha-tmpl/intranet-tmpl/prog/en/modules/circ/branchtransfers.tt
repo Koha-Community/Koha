@@ -77,11 +77,11 @@
                         <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
                         <input type="hidden" name="barcode" value="[% barcode | html %]" />
                         [% IF ( waiting or transferred or processing ) %]
-                            <input type="hidden" name="request" value="KillWaiting" />
+                            <input type="hidden" name="op" value="cud-KillWaiting" />
                             <input type="submit" class="btn btn-primary" value="Cancel" />
                         [% END %]
                         [% IF ( reserved ) %]
-                            <input type="hidden" name="request" value="SetTransit" />
+                            <input type="hidden" name="op" value="cud-SetTransit" />
                             <input type="submit" class="btn btn-primary" value="Transfer" />
                         [% END %]
                     </form>
@@ -103,7 +103,7 @@
                                 <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                 <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
                                 <input type="hidden" name="barcode" value="[% barcode | html %]">
-                                <input type="hidden" name="request" value="KillReserved" />
+                                <input type="hidden" name="op" value="cud-KillReserved" />
                                 <input type="submit" class="btn btn-primary" value="Cancel" />
                             </form>
                         </td>
@@ -112,8 +112,7 @@
                     <tr>
                         <th>Ignore and return to transfers: </th>
                             <td>
-                                <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
-                                    [% INCLUDE 'csrf-token.inc' %]
+                                <form method="get" name="mainform" id="mainform" action="branchtransfers.pl">
                                     <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
                                     <input type="hidden" name="barcode" />
                                     [% FOREACH trsfitemloo IN trsfitemloop %]
@@ -200,6 +199,7 @@
             <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
             <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
         [% END %]
+        <input type="hidden" name="op" value="cud-transfer" />
     </form>
 </div>
 

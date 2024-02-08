@@ -76,7 +76,7 @@ my $reqmessage;
 my $cancelled;
 my $settransit;
 
-my $request        = $query->param('cud-request')        || '';
+my $op             = $query->param('op')             || '';
 my $borrowernumber = $query->param('borrowernumber') ||  0;
 my $tobranchcd     = $query->param('tobranchcd')     || '';
 my $trigger        = 'Manual';
@@ -84,7 +84,7 @@ my $trigger        = 'Manual';
 my $ignoreRs = 0;
 ############
 # Deal with the requests....
-if ( $request eq "KillWaiting" ) {
+if ( $op eq "cud-KillWaiting" ) {
     my $item = $query->param('itemnumber');
     my $holds = Koha::Holds->search({
         itemnumber     => $item,
@@ -96,7 +96,7 @@ if ( $request eq "KillWaiting" ) {
         $reqmessage  = 1;
     } # FIXME else?
 }
-elsif ( $request eq "SetTransit" ) {
+elsif ( $op eq "cud-SetTransit" ) {
     my $item = $query->param('itemnumber');
     my $reserve_id = $query->param('reserve_id');
     ModReserveAffect( $item, $borrowernumber, 1, $reserve_id );
@@ -105,7 +105,7 @@ elsif ( $request eq "SetTransit" ) {
     $reqmessage  = 1;
     $trigger     = 'Reserve';
 }
-elsif ( $request eq 'KillReserved' ) {
+elsif ( $op eq 'cud-KillReserved' ) {
     my $biblionumber = $query->param('biblionumber');
     my $reserve_id = $query->param('reserve_id');
     my $hold = Koha::Holds->find({ reserve_id => $reserve_id });
@@ -122,8 +122,7 @@ my $transferred;
 my $barcode = $query->param('barcode');
 # remove leading/trailing whitespace
 $barcode = barcodedecode($barcode) if $barcode;
-# warn "barcode : $barcode";
-if ($barcode) {
+if ($op eq 'cud-transfer' && $barcode) {
 
     ( $transferred, $messages ) =
         transferbook({
