@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -155,6 +155,52 @@ subtest 'filter_by_id_including_transfers() tests' => sub {
 
     is( $orders_rs->count, 1, 'Only one order related to the specified ordernumber' );
     is( $orders_rs->next->ordernumber, $order_2->ordernumber, 'The right order is returned' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_obsolete and cancel' => sub {
+    plan tests => 11;
+    $schema->storage->txn_begin;
+
+    my $order_1 = $builder->build_object( { class => 'Koha::Acquisition::Orders' } );
+    my $order_2 = $builder->build_object( { class => 'Koha::Acquisition::Orders' } );
+    my $order_3 = $builder->build_object( { class => 'Koha::Acquisition::Orders' } );
+
+    # First make order 1 obsolete by removing biblio, and order 3 by status problem.
+    my $date = Koha::DateUtils::dt_from_string->subtract( days => 7 );
+    $order_1->orderstatus('ordered')->quantity(2)->quantityreceived(0)->datecancellationprinted(undef)
+        ->entrydate($date)->store;
+    Koha::Biblios->find( $order_1->biblionumber )->delete;
+    $order_1->discard_changes;
+    $order_2->orderstatus('ordered')->quantity(3)->quantityreceived(0)->datecancellationprinted(undef)->store;
+    $order_3->orderstatus('cancelled')->datecancellationprinted(undef)->store;
+
+    my $limit = { ordernumber => { '>=', $order_1->ordernumber } };
+    my $rs    = Koha::Acquisition::Orders->filter_by_obsolete->search($limit);
+    is( $rs->count, 2, 'Two obsolete' );
+    is( $rs->search( { ordernumber => $order_1->ordernumber } )->count, 1, 'Including order_1' );
+    is( $rs->search( { ordernumber => $order_2->ordernumber } )->count, 0, 'Excluding order_2' );
+
+    # Test param age
+    $rs = Koha::Acquisition::Orders->filter_by_obsolete( { age => 6 } )->search($limit);
+    is( $rs->count, 1, 'Age 6: Including order_1' );
+    $rs = Koha::Acquisition::Orders->filter_by_obsolete( { age => 7 } )->search($limit);
+    is( $rs->count, 0, 'Age 7: Excluding order_1' );
+
+    # Make order 2 obsolete too
+    Koha::Biblios->find( $order_2->biblionumber )->delete;
+    $order_2->discard_changes;
+
+    # Use the plural cancel method
+    $rs = Koha::Acquisition::Orders->filter_by_obsolete->search($limit);
+    is( $rs->count, 3, 'Three obsolete' );
+    my @results = $rs->cancel;
+    is( $results[0],                            3,           'All should be cancelled' );
+    is( @{ $results[1] },                       0,           'No messages' );
+    is( $order_1->discard_changes->orderstatus, 'cancelled', 'Check orderstatus of order_1' );
+    isnt( $order_2->discard_changes->datecancellationprinted, undef, 'Cancellation date of order_2 filled' );
+    isnt( $order_3->discard_changes->datecancellationprinted, undef, 'Cancellation date of order_3 filled' );
 
     $schema->storage->txn_rollback;
 };
