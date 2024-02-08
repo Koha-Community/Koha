@@ -597,7 +597,8 @@ if ($op eq "cud-add") {
     my $record = TransformHtmlToMarc($input, 0);
 
     my ($duplicateauthid,$duplicateauthvalue);
-     ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "cud-add") && (!$is_a_modif);
+    ( $duplicateauthid, $duplicateauthvalue ) = FindDuplicateAuthority( $record, $authtypecode ) unless $is_a_modif;
+
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if (!$duplicateauthid or $confirm_not_duplicate) {
