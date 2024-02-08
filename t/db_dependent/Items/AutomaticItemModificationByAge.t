@@ -47,7 +47,8 @@ $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 my $record = MARC::Record->new();
 $record->append_fields(
     MARC::Field->new( '100', ' ', ' ', a => 'Moffat, Steven' ),
-    MARC::Field->new( '245', ' ', ' ', a => 'Silence in the library', h => 'Book' ),
+    MARC::Field->new( '245', ' ', ' ', a => 'Silence in the library' ),
+    MARC::Field->new( '260', ' ', ' ', c => '1999' ),
     MARC::Field->new( '942', ' ', ' ', c => 'ITEMTYPE_T' ),
 );
 my ($biblionumber, undef) = C4::Biblio::AddBiblio($record, $frameworkcode);
@@ -336,8 +337,8 @@ is( $modified_item->new_status, 'agefield_new_value', q|ToggleNewStatus: Age = 2
         # does not exist
         conditions => [
             {
-                field => 'biblio.medium',
-                value => 'Book',
+                field => 'biblio.copyrightdate',
+                value => '1999',
             },
         ],
         substitutions => [
