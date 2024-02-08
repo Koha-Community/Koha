@@ -20,7 +20,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 
 use Koha::Database;
@@ -238,3 +238,46 @@ subtest 'arrayref top level OR tests' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'AND on subpermissions' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->id,
+                module_bit     => 9,                  # editcatalogue
+                code           => 'edit_catalogue',
+            },
+        }
+    );
+
+    my $r = haspermission( $patron->userid, { editcatalogue => { edit_catalogue => 1, advanced_editor => 1 } } );
+    is( $r, 0, "The user only has 'edit_catalogue' permissions, 0 returned" );
+
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->id,
+                module_bit     => 9,                   # editcatalogue
+                code           => 'advanced_editor',
+            },
+        }
+    );
+
+    $r = haspermission( $patron->userid, { editcatalogue => { edit_catalogue => 1, advanced_editor => 1 } } );
+
+    ok(
+        $r->{editcatalogue}->{edit_catalogue} && $r->{editcatalogue}->{advanced_editor},
+        "The patron has 'edit_catalogue' and 'advanced_editor', both returned"
+    );
+
+    $schema->storage->txn_rollback;
+};
