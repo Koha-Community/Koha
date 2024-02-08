@@ -1031,7 +1031,8 @@ sub checkauth {
             unless ($shibSuccess) {
                 if ( $cas && $query->param('ticket') ) {
                     my $retuserid;
-                    ( $return, $cardnumber, $retuserid, $cas_ticket ) =
+                    my $patron;
+                    ( $return, $cardnumber, $retuserid, $patron, $cas_ticket ) =
                       checkpw( $userid, $password, $query, $type );
                     $userid = $retuserid;
                     $info{'invalidCasLogin'} = 1 unless ($return);
@@ -1099,8 +1100,9 @@ sub checkauth {
                             && $q_userid eq C4::Context->preference('AutoSelfCheckID') )
                       )
                     {
+                        my $patron;
 
-                        ( $return, $cardnumber, $retuserid, $cas_ticket ) =
+                        ( $return, $cardnumber, $retuserid, $patron, $cas_ticket ) =
                           checkpw( $q_userid, $password, $query, $type );
                         $userid = $retuserid if ($retuserid);
                         $info{'invalid_username_or_password'} = 1 unless ($return);
@@ -1593,7 +1595,8 @@ sub check_api_auth {
                 return ( "failed", undef, undef );
             }
             my $newuserid;
-            ( $return, $cardnumber, $newuserid, $cas_ticket ) = checkpw( $userid, $password, $query );
+            my $patron;
+            ( $return, $cardnumber, $newuserid, $patron, $cas_ticket ) = checkpw( $userid, $password, $query );
         }
 
         if ( $return and haspermission( $userid, $flagsrequired ) ) {
