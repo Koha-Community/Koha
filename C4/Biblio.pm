@@ -178,7 +178,7 @@ The MARC record (in biblio_metadata.metadata) contains the complete marc record,
 
 =head2 AddBiblio
 
-  ($biblionumber,$biblioitemnumber) = AddBiblio($record,$frameworkcode);
+    ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, $frameworkcode, $options );
 
 Exported function (core API) for adding a new biblio to koha.
 
@@ -198,6 +198,8 @@ Used when the indexing scheduling will be handled by the caller
 Unless C<disable_autolink> is passed AddBiblio will link record headings
 to authorities based on settings in the system preferences. This flag allows
 us to not link records when the authority linker is saving modifications.
+
+=item B<record_source_id>: set as the record source when saving the record
 
 =back
 
@@ -293,7 +295,13 @@ sub AddBiblio {
             }
 
             # now add the record, don't index while we are in the transaction though
-            ModBiblioMarc( $record, $biblionumber, { skip_record_index => 1 } );
+            ModBiblioMarc(
+                $record, $biblionumber,
+                {
+                    skip_record_index => 1,
+                    record_source_id  => $options->{record_source_id},
+                }
+            );
 
             # update OAI-PMH sets
             if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
@@ -360,6 +368,10 @@ task to rebuild the holds queue for the biblio if I<RealTimeHoldsQueue> is enabl
 
 Used when the indexing schedulling will be handled by the caller
 
+=item C<record_source_id>
+
+Set as the record source when saving the record.
+
 =back
 
 Returns 1 on success 0 on failure
@@ -370,7 +382,14 @@ sub ModBiblio {
     my ( $record, $biblionumber, $frameworkcode, $options ) = @_;
 
     $options //= {};
-    my $mod_biblio_marc_options = { skip_record_index => $options->{'skip_record_index'} // 0 };
+    my $mod_biblio_marc_options = {
+        skip_record_index => $options->{'skip_record_index'} // 0,
+        (
+              ( exists $options->{record_source_id} )
+            ? ( record_source_id => $options->{record_source_id} )
+            : ()
+        )
+    };
 
     if (!$record) {
         carp 'No record passed to ModBiblio';
@@ -2795,7 +2814,7 @@ sub _koha_delete_biblio_metadata {
 
 =head2 ModBiblioMarc
 
-  ModBiblioMarc($newrec, $biblionumber, $options);
+    ModBiblioMarc( $newrec, $biblionumber, $options );
 
 Add MARC XML data for a biblio to koha
 
@@ -2805,7 +2824,9 @@ The C<$options> argument is a hashref with additional parameters:
 
 =over 4
 
-=item C<skip_record_index>: used when the indexing scheduling will be handled by the caller
+=item B<skip_record_index>: used when the indexing scheduling will be handled by the caller
+
+=item B<record_source_id>: set as the record source when saving the record
 
 =back
 
@@ -2890,8 +2911,16 @@ sub ModBiblioMarc {
         { action => 'save', payload => { biblio_id => $biblionumber, record => $record } }
     );
 
-    $m_rs->metadata( $record->as_xml_record($encoding) );
-    $m_rs->store;
+    $m_rs->set(
+        {
+            metadata => $record->as_xml_record($encoding),
+            (
+                exists $options->{record_source_id}
+                ? ( record_source_id => $options->{record_source_id} )
+                : ()
+            )
+        }
+    )->store;
 
     unless ( $skip_record_index ) {
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });

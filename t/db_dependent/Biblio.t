@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -45,7 +45,7 @@ Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'AddBiblio' => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     my $marcflavour = 'MARC21';
     t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour );
@@ -99,6 +99,25 @@ subtest 'AddBiblio' => sub {
     warning_like { $builder->build_sample_biblio(); }
         qr/My biblionumber is \d+ and my frameworkcode is /, "The biblionumber is correctly passed to BiblioAutoLink";
 
+    subtest 'record_source_id param tests' => sub {
+
+        plan tests => 2;
+
+        my $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+
+        my $record = MARC::Record->new;
+        $record->append_fields( MARC::Field->new( '245', ' ', ' ', a => 'Some title' ) );
+
+        my ($biblio_id) = C4::Biblio::AddBiblio( $record, '', { record_source_id => undef } );
+        my $metadata = Koha::Biblios->find($biblio_id)->metadata;
+
+        is( $metadata->record_source_id, undef, 'Record source is not defined' );
+
+        ($biblio_id) = C4::Biblio::AddBiblio( $record, '', { record_source_id => $source->id } );
+        $metadata = Koha::Biblios->find($biblio_id)->metadata;
+
+        is( $metadata->record_source_id, $source->id, 'Record source is stored as expected' );
+    };
 };
 
 subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
@@ -1057,6 +1076,35 @@ subtest 'UpdateTotalIssues on Invalid record' => sub {
 
 };
 
+subtest 'ModBiblio - record_source_id param tests' => sub {
+
+    plan tests => 4;
+
+    my $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+
+    my $record = MARC::Record->new;
+    $record->append_fields( MARC::Field->new( '245', ' ', ' ', a => 'Some title' ) );
+
+    my ($biblio_id) = C4::Biblio::AddBiblio( $record, '', { record_source_id => undef } );
+    my $metadata = Koha::Biblios->find($biblio_id)->metadata;
+
+    is( $metadata->record_source_id, undef, 'Record source is not defined' );
+
+    C4::Biblio::ModBiblio( $record, $biblio_id, '', { record_source_id => $source->id } );
+    $metadata->discard_changes;
+
+    is( $metadata->record_source_id, $source->id, 'Record source is stored as expected' );
+
+    C4::Biblio::ModBiblio( $record, $biblio_id, '' );
+    $metadata->discard_changes;
+
+    is( $metadata->record_source_id, $source->id, 'Record source not passed, remains untouched' );
+
+    C4::Biblio::ModBiblio( $record, $biblio_id, '', { record_source_id => undef } );
+    $metadata->discard_changes;
+
+    is( $metadata->record_source_id, undef, 'Record source is not defined' );
+};
 
 # Cleanup
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
