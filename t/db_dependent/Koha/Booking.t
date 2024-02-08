@@ -100,7 +100,7 @@ subtest 'Relation accessor tests' => sub {
 };
 
 subtest 'store() tests' => sub {
-    plan tests => 12;
+    plan tests => 13;
     $schema->storage->txn_begin;
 
     my $patron  = $builder->build_object( { class => "Koha::Patrons" } );
@@ -278,6 +278,16 @@ subtest 'store() tests' => sub {
     )->store();
     ok( $booking->in_storage, 'Booking stored OK when item not specified and the booking slot is available' );
     ok( $booking->item_id,    'An item was assigned to the booking' );
+
+    subtest '_assign_item_for_booking() tests' => sub {
+        plan tests => 1;
+        is( $booking->item_id, $item_1->itemnumber, "Item 1 was assigned to the booking" );
+
+        # Bookings
+        # ✓ Item 1    |----|
+        # ✓ Item 2     |--|
+        # ✓ Any (1)         |--|
+    };
 
     $schema->storage->txn_rollback;
 };
