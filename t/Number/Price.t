@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 35;
+use Test::More tests => 36;
 
 use Test::MockModule;
 use t::lib::Mocks;
@@ -135,6 +135,9 @@ is( Koha::Number::Price->new->unformat,    '0', 'CHF: unformat 0' );
 is( Koha::Number::Price->new(3)->unformat, '3', 'CHF: unformat 3' );
 is( Koha::Number::Price->new(1234567890)->unformat,
     '1234567890', 'CHF: unformat 1234567890' );
+
+# Rounding
+is( Koha::Number::Price->new(17.955)->round, '17.96', 'Round 17.955' );
 
 subtest 'Changes for format' => sub { # See also bug 18736
     plan tests => 3;
