@@ -64,8 +64,8 @@ use List::MoreUtils qw( uniq );
 my $query = CGI->new;
 
 my $borrowernumber = $query->param('borrowernumber');
-my $barcodes = [];
-my $barcode =  $query->param('barcode');
+my $barcodes       = [];
+my $barcode        = $query->param('barcode');
 
 
 # Barcode given by user could be '0'
@@ -114,8 +114,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 my $override_high_holds     = $query->param('override_high_holds');
 my $override_high_holds_tmp = $query->param('override_high_holds_tmp');
 
-my $sessionID = $query->cookie("CGISESSID") ;
-my $session = get_session($sessionID);
+my $sessionID = $query->cookie("CGISESSID");
+my $session   = get_session($sessionID);
 
 my $userenv = C4::Context->userenv;
 my $branch  = $userenv->{'branch'} // '';
@@ -124,10 +124,10 @@ my $desk_id = $userenv->{"desk_id"} || '';
 my $findborrower;
 my $autoswitched;
 
-if (C4::Context->preference("AutoSwitchPatron") && $barcode) {
+if ( C4::Context->preference("AutoSwitchPatron") && $barcode ) {
     my $new_barcode = $barcode;
     Koha::Plugins->call( 'patron_barcode_transform', \$new_barcode );
-    if (Koha::Patrons->search( { cardnumber => $new_barcode} )->count() > 0) {
+    if ( Koha::Patrons->search( { cardnumber => $new_barcode } )->count() > 0 ) {
         $findborrower = $barcode;
         undef $barcode;
         undef $borrowernumber;
