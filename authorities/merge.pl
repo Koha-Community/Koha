@@ -30,7 +30,7 @@ use Koha::MetadataRecord::Authority;
 
 my $input  = CGI->new;
 my @authid = $input->multi_param('authid');
-my $merge  = $input->param('merge');
+my $op     = $input->param('op') || q{};
 
 my @errors;
 
@@ -46,7 +46,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 #------------------------
 # Merging
 #------------------------
-if ($merge) {
+if ($op eq 'cud-merge') {
 
     # Creating a new record from the html code
     my $record   = TransformHtmlToMarc($input, 0);

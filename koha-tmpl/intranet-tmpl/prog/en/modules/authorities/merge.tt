@@ -68,8 +68,7 @@ div#result { margin-top: 1em; }
 [% ELSIF ( choosereference ) %]
 
 <p>Please choose which record will be the reference for the merge. The record chosen as reference will be kept, and the other will be deleted.</p>
-<form id="mergeform" action="/cgi-bin/koha/authorities/merge.pl" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
+<form id="mergeform_ref" action="/cgi-bin/koha/authorities/merge.pl" method="get">
     <fieldset class="rows">
     <legend>Merge reference</legend>
     <ol>
@@ -119,7 +118,10 @@ div#result { margin-top: 1em; }
 <input type="hidden" name="mergereference" value="[% mergereference | html %]" />
 <input type="hidden" name="frameworkcode" value="[% framework | html %]" />
 
-<fieldset class="action"><input type="submit" name="merge" class="btn btn-primary" value="Merge" /></fieldset>
+<fieldset class="action">
+    <input type="hidden" name="op" value="cud-merge" />
+    <input type="submit" class="btn btn-primary" value="Merge" />
+</fieldset>
 </form>
 
 [% END %]
