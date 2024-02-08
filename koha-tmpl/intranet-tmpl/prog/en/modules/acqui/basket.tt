@@ -708,7 +708,7 @@
                                                             <td>[% books_loo.suppliers_report | html %]</td>
                                                         [% END %]
                                                         <td>
-                                                            [% IF ( CAN_user_reserveforothers_place_holds ) %]
+                                                            [% IF ( books_loo.biblionumber && CAN_user_reserveforothers_place_holds ) %]
                                                                 <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% books_loo.biblionumber | uri %]">
                                                                     Place hold
                                                                 </a>
