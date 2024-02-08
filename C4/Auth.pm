@@ -2236,6 +2236,7 @@ sub get_cataloguing_page_permissions {
   $flagsrequired = { 'a_flag => 1, 'b_flag' => 1 };     # a_flag AND b_flag must be satisfied
   $flagsrequired = { 'a_flag' => 'sub_a' };             # sub_a of a_flag must be satisfied
   $flagsrequired = { 'a_flag' => [ 'sub_a, 'sub_b' ] }; # sub_a OR sub_b of a_flag must be satisfied
+  $flagsrequired = { 'a_flag' => { 'sub_a' => 1, 'sub_b' => 1 } };    # sub_a AND sub_b of a_flag must be satisfied
 
   $flags = ($userid, $flagsrequired);
 
