@@ -116,12 +116,12 @@ sub _get_authority_for_export {
 }
 
 sub _get_biblio_for_export {
-    my ($params)     = @_;
-    my $biblionumber = $params->{biblionumber};
-    my $itemnumbers  = $params->{itemnumbers};
-    my $export_items = $params->{export_items} // 1;
+    my ($params)                       = @_;
+    my $biblionumber                   = $params->{biblionumber};
+    my $itemnumbers                    = $params->{itemnumbers};
+    my $export_items                   = $params->{export_items} // 1;
     my $only_export_items_for_branches = $params->{only_export_items_for_branches};
-    my $embed_see_from_headings = $params->{embed_see_from_headings};
+    my $embed_see_from_headings        = $params->{embed_see_from_headings};
 
     my $biblio = Koha::Biblios->find($biblionumber);
     my $record = eval { $biblio->metadata->record };
