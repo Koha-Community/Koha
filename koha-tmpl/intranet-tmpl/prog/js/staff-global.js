@@ -860,7 +860,7 @@ function buildPatronSearchQuery(term, options) {
     if (
         typeof options !== "undefined" &&
         ((options.search_fields == "standard" &&
-            options.extended_attribute_types) ||
+            options.extended_attribute_types.length > 0) ||
             searched_attribute_fields.length > 0) &&
         extendedPatronAttributes
     ) {
