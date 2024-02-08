@@ -44,7 +44,7 @@ plugin that shows stats
 
 my $input = CGI->new;
 
-my $do_it    = $input->param('cud-do_it');
+my $do_it    = $input->param('do_it');
 my @modules  = $input->multi_param("modules");
 my $user     = $input->param("user") // '';
 my @actions  = $input->multi_param("actions");

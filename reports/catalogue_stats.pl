@@ -42,7 +42,7 @@ plugin that shows a stats on borrowers
 our $debug = 0;
 my $input = CGI->new;
 my $fullreportname = "reports/catalogue_stats.tt";
-my $do_it       = $input->param('cud-do_it');
+my $do_it       = $input->param('do_it');
 my $line        = $input->param("Line");
 my $column      = $input->param("Column");
 my $cellvalue      = $input->param("Cellvalue"); # one of 'items', 'biblios', 'deleteditems'

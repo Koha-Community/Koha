@@ -26,7 +26,7 @@ use C4::Output qw( output_html_with_http_headers );
 
 my $input = CGI->new;
 my $report_name=$input->param("report_name");
-my $do_it=$input->param('cud-do_it');
+my $do_it=$input->param('do_it');
 my $fullreportname = "reports/".$report_name.".tt";
 my @values = $input->multi_param("value");
 my ($template, $borrowernumber, $cookie)

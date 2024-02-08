@@ -39,7 +39,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
     flagsrequired => {reports => '*'},
 });
 
-my $do_it            = $input->param('cud-do_it');
+my $do_it            = $input->param('do_it');
 my $output           = $input->param("output");
 my $basename         = $input->param("basename");
 my $transaction_type = $input->param("transaction_type") || 'ACT';
