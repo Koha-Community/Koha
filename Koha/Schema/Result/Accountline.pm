@@ -32,6 +32,13 @@ __PACKAGE__->table("accountlines");
 =head2 issue_id
 
   data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+=head2 old_issue_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 borrowernumber
@@ -150,7 +157,9 @@ __PACKAGE__->add_columns(
   "accountlines_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "issue_id",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "old_issue_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itemnumber",
@@ -335,6 +344,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 issue
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Issue>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "issue",
+  "Koha::Schema::Result::Issue",
+  { issue_id => "issue_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -375,6 +404,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 old_issue
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::OldIssue>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "old_issue",
+  "Koha::Schema::Result::OldIssue",
+  { issue_id => "old_issue_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 register
 
 Type: belongs_to
@@ -396,8 +445,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-01-28 20:21:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PjQR7oUkefiDt+eV69jZ3A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-08 14:18:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aVLdvK1lek01lZ0mbaCwZQ
 
 =head2 patron
 

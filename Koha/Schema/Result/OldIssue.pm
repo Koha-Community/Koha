@@ -245,6 +245,21 @@ __PACKAGE__->set_primary_key("issue_id");
 
 =head1 RELATIONS
 
+=head2 accountlines
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Accountline>
+
+=cut
+
+__PACKAGE__->has_many(
+  "accountlines",
+  "Koha::Schema::Result::Accountline",
+  { "foreign.old_issue_id" => "self.issue_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrowernumber
 
 Type: belongs_to
@@ -306,8 +321,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-03-18 12:35:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0XlDHyg8uB3oD9/jJtOxRg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-08 14:18:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Pp1/8rwY5N9NBkgNCagvow
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
