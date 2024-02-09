@@ -43,6 +43,7 @@ use Koha::Patrons;
 use Koha::List::Patron qw( GetPatronLists );
 
 my $cgi = CGI->new;
+my $op  = $cgi->param('op') // q{};
 
 # Fetch the parameter list as a hash in scalar context:
 #  * returns parameter list as tied hash ref
@@ -107,7 +108,7 @@ if ( $step == 2 ) {
     );
 }
 
-elsif ( $step == 3 ) {
+elsif ( $op eq 'cud-delete' && $step == 3 ) {
     my $do_delete = $params->{'do_delete'};
     my $do_anonym = $params->{'do_anonym'};
 
