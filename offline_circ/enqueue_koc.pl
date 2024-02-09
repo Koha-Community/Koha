@@ -46,12 +46,13 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
      flagsrequired   => { circulate => "circulate_remaining_permissions" },
 });
 
-my $fileID=$query->param('uploadedfileid');
+my $fileID = $query->param('uploadedfileid');
+my $op     = $query->param('op') // q{};
 
 ## 'Local' globals.
 our $dbh = C4::Context->dbh();
 
-if ($fileID) {
+if ( $op eq 'cud-enqueue' && $fileID ) {
     my $upload = Koha::UploadedFiles->find($fileID);
     my $fh = $upload? $upload->file_handle: undef;
     my @input_lines = $fh? <$fh>: ();

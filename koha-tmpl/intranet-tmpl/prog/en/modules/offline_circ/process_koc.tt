@@ -72,6 +72,7 @@
    <div id="fileuploadform">
      <form method="post" action="/cgi-bin/koha/offline_circ/process_koc.pl" enctype="multipart/form-data" class="validated">
          [% INCLUDE 'csrf-token.inc' %]
+         <input type="hidden" name="op" value="cud-upload"/>
 		<fieldset class="brief">
        <ol><li><label for="fileToUpload">Choose .koc file: </label>
             <input class="required" required="required" type="file" id="fileToUpload" size="50" name="fileToUpload" />
@@ -88,15 +89,9 @@
 
    <form action="enqueue_koc.pl" id="processfile" method="post" enctype="multipart/form-data">
        [% INCLUDE 'csrf-token.inc' %]
+       <input type="hidden" name="op" value="cud-enqueue"/>
      <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
-     <input type="hidden" name="action" value="add_to_queue" />
      <input type="submit" value="Add to offline circulation queue" id="queueformsubmit" />
-   </form>
-
-   <form action="process_koc.pl" id="enqueuefile" method="post" enctype="multipart/form-data">
-       [% INCLUDE 'csrf-token.inc' %]
-     <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
-     <!-- <input type="submit" value="Apply directly" id="mainformsubmit" /> -->
    </form>
 [% END %]
 

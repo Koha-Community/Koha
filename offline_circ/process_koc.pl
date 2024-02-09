@@ -57,9 +57,7 @@ my $sessionID = $cookies{'CGISESSID'}->value;
 our $dbh = C4::Context->dbh();
 our @output = (); ## For storing messages to be displayed to the user
 
-if ( $op eq 'add_to_queue' ) {
-    $template->param(transactions_loaded => 1);
-} elsif ($fileID) {
+if ( $op eq 'cud-upload' && $fileID ) {
     my $upload = Koha::UploadedFiles->find( $fileID );
     my $fh = $upload? $upload->file_handle: undef;
     my $filename = $upload? $upload->filename: undef;
