@@ -10,8 +10,7 @@
     [% ELSE %]
         <div id="patron_search" role="tabpanel" class="tab-pane">
     [% END %]
-        <form method="post" action="/cgi-bin/koha/members/member.pl">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form action="/cgi-bin/koha/members/member.pl" method="get">
             <input type="hidden" name="quicksearch" value="1" />
 
             <div class="form-title">
