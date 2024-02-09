@@ -7,13 +7,13 @@
             <ul>
                 <li><a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports</a></li>
                 [% IF ( CAN_user_reports_create_reports ) %]
-                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new</a></li>
+                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form">Build new</a></li>
                 [% END %]
                 [% IF ( CAN_user_reports_execute_reports ) %]
-                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Use saved</a></li>
+                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list">Use saved</a></li>
                 [% END %]
                 [% IF ( CAN_user_reports_create_reports ) %]
-                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create%20report%20from%20SQL">Create from SQL</a></li>
+                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql">Create from SQL</a></li>
                 [% END %]
             </ul>
 

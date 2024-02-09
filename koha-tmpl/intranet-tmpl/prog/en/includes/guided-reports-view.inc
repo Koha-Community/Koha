@@ -4,7 +4,7 @@
 
 <h5>Run reports</h5>
 <ul>
-	[% IF ( CAN_user_reports_execute_reports ) %]<li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a></li>[% END %]
+	[% IF ( CAN_user_reports_execute_reports ) %]<li><a href="/cgi-bin/koha/reports/guided_reports.pl?op=list">Saved reports</a></li>[% END %]
 </ul>
 <h5>Reports dictionary</h5>
 <ul>

@@ -3,8 +3,8 @@
         <div class="btn-group">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New report <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                <li id="newmenuc"><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">New guided report</a> </li>
-                <li id="newsql"><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create%20report%20from%20SQL">New SQL report</a> </li>
+                <li id="newmenuc"><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form">New guided report</a> </li>
+                <li id="newsql"><a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql">New SQL report</a> </li>
                 [% IF Koha.Preference('Mana')==1 %]
                     <li id="new_mana_sql"><a href="#" data-toggle="modal" data-target="#mana_search_result">New SQL from Mana</a> </li>
                 [% END %]
@@ -15,9 +15,13 @@
     [% IF ( showsql || execute || editsql || save_successful ) %]
         [% IF ( CAN_user_reports_delete_reports && !CAN_user_reports_create_reports ) %]
             <div class="btn-group">
-                <a class="delete btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&phase=Delete%20Saved">
-                    <i class="fa fa-trash-can"></i> Delete
-                </a>
+                <form>
+                    <input type="hidden" name="op" value="cud-delete" />
+                    <input type="hidden" name="id" value="[% id | html %]" />
+                    <button type="submit" class="delete btn btn-default">
+                        <i class="fa fa-trash-can"></i> Delete
+                    </button>
+                </form>
             </div>
         [% ELSE %]
             [% IF ( CAN_user_reports_create_reports || CAN_user_reports_delete_reports ) %]
@@ -30,13 +34,13 @@
                         [% IF ( CAN_user_reports_create_reports ) %]
                             [% UNLESS ( editsql ) # Do not show edit button on edit page %]
                                 <li>
-                                    <a id="editreport" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Edit%20SQL">
+                                    <a id="editreport" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=edit_form">
                                         Edit
                                     </a>
                                 </li>
                             [% END %]
                             <li>
-                                <a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% id | uri %]">
+                                <a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?op=duplicate&amp;id=[% id | uri %]">
                                     Duplicate
                                 </a>
                             </li>
@@ -44,9 +48,12 @@
 
                         [% IF ( CAN_user_reports_delete_reports ) %]
                             <li>
-                                <a class="delete" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&phase=Delete%20Saved">
-                                    Delete
-                                </a>
+                                <form method="post" action="/cgi-bin/koha/reports/guided_reports.pl">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-delete" />
+                                    <input type="hidden" name="id" value="[% id | html %]" />
+                                </form>
+                                <a href="#" class="delete">Delete</button>
                             </li>
                         [% END %]
                     </ul>
@@ -58,7 +65,7 @@
     [% IF ( showsql || execute || editsql || save_successful ) %]
         [% UNLESS ( errors ) # Unless there are errors saving a report %]
             <div class="btn-group">
-                <a id="runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run%20this%20report">
+                <a id="runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run">
                     <i class="fa fa-play"></i> Run report
                 </a>
             </div>
@@ -71,7 +78,7 @@
                 <ul class="dropdown-menu">
                     [% FOREACH t IN templates %]
                         <li>
-                            <a id="runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run%20this%20report&amp;template=[% t.id | html %][% PROCESS params %]">
+                            <a id="runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;template=[% t.id | html %][% PROCESS params %]">
                                 [% t.name | html %]
                             </a>
                         </li>
@@ -130,11 +137,11 @@
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" aria-haspopup="menu" aria-label="Select format and download report results" data-toggle="dropdown" id="format"><i class="fa fa-download"></i> Download <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">[% PROCESS 'delimiter_text.inc' %]</a></li>
-                    <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
-                    <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
+                    <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=csv&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">[% PROCESS 'delimiter_text.inc' %]</a></li>
+                    <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=tab&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
+                    <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=ods&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
                     [% IF processed_notice_title %]
-                    <li><a id="template" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=template&amp;report_id=[% id | html %]&amp;template=[% template_id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Rendered template ([% processed_notice_title | html %])</a></li>
+                    <li><a id="template" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=template&amp;id=[% id | html %]&amp;template=[% template_id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Rendered template ([% processed_notice_title | html %])</a></li>
                     [% END %]
                     [% IF (results.json) %]
                         <li><a id="download-chart" href="#">Chart (.svg)</a></li>
@@ -151,7 +158,7 @@
                     <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-chart-bar"></i> Create chart</a>
                 [% ELSE %]
                     <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-chart-bar"></i> Create chart</a>
-                    <a class="btn btn-default fetch_chart_data" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run this report&amp;reportname=[% name |uri %][% PROCESS params %]&amp;want_full_chart=1"><i class="fa fa-chart-bar"></i> Fetch all data for chart</a>
+                    <a class="btn btn-default fetch_chart_data" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% id | html %]&amp;op=run&amp;reportname=[% name |uri %][% PROCESS params %]&amp;want_full_chart=1"><i class="fa fa-chart-bar"></i> Fetch all data for chart</a>
                 [% END %]
 
             </div>

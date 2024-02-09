@@ -30,25 +30,27 @@
                 <div class="col-xs-6">
 
                     [% IF ( CAN_user_reports_execute_reports || CAN_user_reports_create_reports ) %]
-                        <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
                             <fieldset class="brief">
                                 <h2>Guided reports</h2>
-                                <input name="phase" value="Use saved" type="hidden">
-                                <input name="filter_set" value="1" type="hidden">
                                 [% IF ( CAN_user_reports_create_reports ) %]
                                     <p>
-                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new"><i class="fa-solid fa-code-branch"></i> Create guided report</a>
+                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form"><i class="fa-solid fa-code-branch"></i> Create guided report</a>
                                     </p>
                                     <p>
-                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create%20report%20from%20SQL"><i class="fa fa-plus"></i> Create from SQL</a>
+                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql"><i class="fa fa-plus"></i> Create from SQL</a>
                                     </p>
                                 [% END %]
                                 <p>
-                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved"><i class="fa fa-list"></i> Use saved</a>
+                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list"><i class="fa fa-list"></i> Use saved</a>
                                 </p>
-                                <label for="filter_keyword">Search by keyword:</label> <input id="filter_keyword" name="filter_keyword" value="" size="16" type="text" /> <input type="submit" class="btn btn-primary" value="Search" />
+                                <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+                                    <input name="op" value="list" type="hidden">
+                                    <input name="filter_set" value="1" type="hidden">
+                                    <label for="filter_keyword">Search by keyword:</label>
+                                    <input id="filter_keyword" name="filter_keyword" value="" size="16" type="text" />
+                                    <input type="submit" class="btn btn-primary" value="Search" />
+                                </form>
                             </fieldset>
-                        </form>
                     [% END %]
 
         <h5>Reports dictionary</h5>

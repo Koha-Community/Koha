@@ -26,7 +26,7 @@ use C4::Output qw( output_html_with_http_headers );
 use CGI qw ( -utf8 );
 
 my $query  = CGI->new();
-my $report_id = $query->param('report_id');
+my $report_id = $query->param('id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
