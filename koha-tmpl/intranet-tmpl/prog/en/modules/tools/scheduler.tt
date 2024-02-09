@@ -91,7 +91,7 @@
 [% FOREACH JOB IN JOBS %]
 <form action="scheduler.pl" method="post">
     [% INCLUDE 'csrf-token.inc' %]
-<input type="hidden" name="op" value="cud-change" />
+<input type="hidden" name="op" value="cud-delete" />
 
 <tr>
 <td>[% JOB.TIME | html %]</td>

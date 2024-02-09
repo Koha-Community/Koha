@@ -49,7 +49,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $op = $input->param('op');
+my $op = $input->param('op') // q{};
 my $id = $input->param('id');
 
 if ( $op eq 'cud-add' ) {
@@ -100,7 +100,7 @@ if ( $op eq 'cud-add' ) {
     else {
         $template->param( job_add_failed => 1 );
     }
-} elsif ( $op eq 'cud-change' ) {
+} elsif ( $op eq 'cud-delete' ) {
     my $jobid = $input->param('jobid');
     remove_at_job($jobid);
 }
