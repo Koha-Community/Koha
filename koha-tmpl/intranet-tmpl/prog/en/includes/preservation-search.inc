@@ -2,8 +2,7 @@
 
 <div id="header_search">
     <div id="preservation_search" class="residentsearch">
-        <form name="find_stuff" action="/cgi-bin/koha/preservation/home.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form name="find_stuff" action="/cgi-bin/koha/preservation/home.pl" method="get">
             <span class="form-title">
                 <label class="control-label">Preservation search</label>
             </span>
