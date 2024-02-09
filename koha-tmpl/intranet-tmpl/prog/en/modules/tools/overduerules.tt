@@ -41,8 +41,7 @@
             <p>If you want Koha to trigger an action (send a letter or restrict a member), a delay value is required.</p>
             <p>Columns must be filled left to right: if the first column is blank, other columns will be ignored. </p>
         </div>
-            <form method="post" action="/cgi-bin/koha/tools/overduerules.pl" id="selectlibrary">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form method="get" action="/cgi-bin/koha/tools/overduerules.pl" id="selectlibrary">
             <label for="branch">Select a library:</label>
                 <select id="branch" name="branch">
                     <option value="">Default</option>
