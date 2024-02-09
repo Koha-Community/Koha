@@ -84,70 +84,99 @@
                         </ol>
                     </fieldset>
                     <fieldset class="action">
+                            <input type="hidden" id="op-add-edit" name="op" value="cud-add"/>
                             <input type="submit" id="save-alert" class="btn btn-primary" value="Submit" />
                             <a href="#" id="cancel-edit" class="cancel cancel-edit">Cancel</a>
                     </fieldset>
                 </form>
 
+                <h1>Audio alerts</h1>
+                [%IF !( Koha.Preference('AudioAlerts') ) %]
+                    <div class="dialog alert">
+                        <h3>Audio alerts are disabled</h3>
+                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                            <p>Please enable system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AudioAlerts">AudioAlerts</a> to activate sounds.</p>
+                        [% ELSE %]
+                            <p>The system preference <strong>AudioAlerts</strong> must be enabled to activate sounds.</p>
+                        [% END %]
+                    </div>
+                [% END %]
+                <div class="page-section">
+                    <table id="audio-alerts-table">
+                        <thead id="audio-alerts-table-head">
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Precedence</th>
+                                <th>Change order</th>
+                                <th>Selector</th>
+                                <th>Sound</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="audio-alerts-table-body">
+                            [% FOREACH a IN audio_alerts %]
+                                <tr>
+                                    <td><input id="del-checkbox-[% a.id | html %]" class="del-checkbox" type="checkbox" value="[% a.id | html %]" /></td>
+                                    <td>[% a.precedence | html %]</td>
+                                    <td style="white-space:nowrap;">
+                                        <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-move"/>
+                                            <input type="hidden" name="where" value="up"/>
+                                            <input type="hidden" name="id" value="[% a.id | html %]"/>
+                                            <button title="Move alert up" type="submit" class="btn btn-link">
+                                                <i class="fa fa-arrow-up fa-lg order-control"></i>
+                                            </button>
+                                        </form>
+
+                                        <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-move"/>
+                                            <input type="hidden" name="where" value="top"/>
+                                            <input type="hidden" name="id" value="[% a.id | html %]"/>
+                                            <button title="Move alert to top" type="submit" class="btn btn-link">
+                                                <i class="fa fa-arrow-up fa-lg overline order-control"></i>
+                                            </button>
+                                        </form>
+
+                                        <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-move"/>
+                                            <input type="hidden" name="where" value="bottom"/>
+                                            <input type="hidden" name="id" value="[% a.id | html %]"/>
+                                            <button title="Move alert to bottom" type="submit" class="btn btn-link">
+                                                <i class="fa fa-arrow-down fa-lg underline order-control"></i>
+                                            </button>
+                                        </form>
+
+                                        <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-move"/>
+                                            <input type="hidden" name="where" value="down"/>
+                                            <input type="hidden" name="id" value="[% a.id | html %]"/>
+                                            <button title="Move alert down" type="submit" class="btn btn-link">
+                                                <i class="fa fa-arrow-down fa-lg order-control"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>[% a.selector | html %]</td>
+                                    <td>[% a.sound | html %]</td>
+                                    <td>
+                                        <a class="btn btn-default btn-xs edit" data-soundid="[% a.id | html %]" data-precedence="[% a.precedence | html %]" data-selector="[% a.selector | html %]" data-sound="[% a.sound | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div> <!-- /.page-section -->
+
                 <form id="delete-alert-form" action="audio_alerts.pl" method="post">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <h1>Audio alerts</h1>
-                    [%IF !( Koha.Preference('AudioAlerts') ) %]
-                        <div class="dialog alert">
-                            <h3>Audio alerts are disabled</h3>
-                            [% IF ( CAN_user_parameters_manage_sysprefs ) %]
-                                <p>Please enable system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AudioAlerts">AudioAlerts</a> to activate sounds.</p>
-                            [% ELSE %]
-                                <p>The system preference <strong>AudioAlerts</strong> must be enabled to activate sounds.</p>
-                            [% END %]
-                        </div>
+                    [% FOREACH a IN audio_alerts %]
+                        <input id="del-hidden-[% a.id | html %]" type="hidden" name="delete" value="" />
                     [% END %]
-                    <div class="page-section">
-                        <table id="audio-alerts-table">
-                            <thead id="audio-alerts-table-head">
-                                <tr>
-                                    <th>&nbsp;</th>
-                                    <th>Precedence</th>
-                                    <th>Change order</th>
-                                    <th>Selector</th>
-                                    <th>Sound</th>
-                                    <th>&nbsp;</th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="audio-alerts-table-body">
-                                [% FOREACH a IN audio_alerts %]
-                                    <tr>
-                                        <td><input type="checkbox" name="delete" value="[% a.id | html %]" /></td>
-                                        <td>[% a.precedence | html %]</td>
-                                        <td style="white-space:nowrap;">
-                                            <a title="Move alert up" href="audio_alerts.pl?action=move&amp;where=up&amp;id=[% a.id | html %]">
-                                                <i class="fa fa-arrow-up fa-lg order-control"></i>
-                                            </a>
-
-                                            <a title="Move alert to top" href="audio_alerts.pl?action=move&amp;where=top&amp;id=[% a.id | html %]">
-                                                <i class="fa fa-arrow-up fa-lg overline order-control"></i>
-                                            </a>
-
-                                            <a title="Move alert to bottom" href="audio_alerts.pl?action=move&amp;where=bottom&amp;id=[% a.id | html %]">
-                                                <i class="fa fa-arrow-down fa-lg underline order-control"></i>
-                                            </a>
-
-                                            <a title="Move alert down" href="audio_alerts.pl?action=move&amp;where=down&amp;id=[% a.id | html %]">
-                                                <i class="fa fa-arrow-down fa-lg order-control"></i>
-                                            </a>
-                                        </td>
-                                        <td>[% a.selector | html %]</td>
-                                        <td>[% a.sound | html %]</td>
-                                        <td>
-                                            <a class="btn btn-default btn-xs edit" data-soundid="[% a.id | html %]" data-precedence="[% a.precedence | html %]" data-selector="[% a.selector | html %]" data-sound="[% a.sound | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></td>
-                                    </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
-                    </div> <!-- /.page-section -->
-
                     <fieldset class="action">
+                        <input type="hidden" name="op" value="cud-delete"/>
                         <button id="delete-alerts" type="submit" class="btn btn-default disabled"><i class="fa fa-trash-can"></i> Delete selected alerts</button>
                     </fieldset>
                 </form>

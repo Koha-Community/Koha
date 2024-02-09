@@ -27,37 +27,36 @@ use Koha::AudioAlerts;
 
 my $cgi = CGI->new;
 
+my $op       = $cgi->param('op') || q{};
 my $selector = $cgi->param('selector');
 my $sound    = $cgi->param('sound');
 my $id       = $cgi->param('id');
-my $action     = $cgi->param('action');
 my $where    = $cgi->param('where');
-my @delete   = $cgi->multi_param('cud-delete');
+my @delete   = $cgi->multi_param('delete');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/audio_alerts.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_audio_alerts' },
+        template_name => "admin/audio_alerts.tt",
+        query         => $cgi,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_audio_alerts' },
     }
 );
 
-if ( $id && $action && $where && $action eq 'move' ) {
+if ( $op eq 'cud-move' && $id && $where ) {
     Koha::AudioAlerts->find($id)->move($where);
-}
-elsif ( $id && $selector && $sound ) {
+} elsif ( $op eq 'cud-edit' && $id && $selector && $sound ) {
     my $alert = Koha::AudioAlerts->find($id);
-    $alert->selector( $selector );
-    $alert->sound( $sound );
+    $alert->selector($selector);
+    $alert->sound($sound);
     $alert->store();
-}
-elsif ( $selector && $sound ) {
+} elsif ( $op eq 'cud-add' && $selector && $sound ) {
     Koha::AudioAlert->new( { selector => $selector, sound => $sound } )->store();
 }
 
-if (@delete) {
-    map { Koha::AudioAlerts->find($_)->delete() } @delete;
+if ( $op eq 'cud-delete' ) {
+    @delete = grep { $_ } @delete;
+    Koha::AudioAlerts->search( { id => { -in => [@delete] } } )->delete();
     Koha::AudioAlerts->fix_precedences();
 }
 
