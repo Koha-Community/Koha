@@ -225,6 +225,8 @@
     </ul>
 
     <form method="post" action="[% SCRIPT_NAME | html %]" enctype="multipart/form-data">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-import" />
         <fieldset class="rows">
             <legend>Import into the borrowers table</legend>
 
@@ -381,7 +383,6 @@
         </fieldset>
 
         <fieldset class="action">
-            [% INCLUDE 'csrf-token.inc' %]
             <input type="submit" class="btn btn-primary" value="Import" />
         </fieldset>
     </form>

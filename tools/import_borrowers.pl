@@ -61,6 +61,7 @@ push( @columnkeys, 'patron_attributes' ) if $extended;
 push( @columnkeys, qw( guarantor_relationship guarantor_id ) );
 
 my $input = CGI->new();
+my $op    = $input->param('op') // q{};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -104,12 +105,7 @@ my $patronlistname = $uploadborrowers . ' (' . $timestamp .')';
 
 $template->param( SCRIPT_NAME => '/cgi-bin/koha/tools/import_borrowers.pl' );
 
-if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
-    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
-        unless Koha::Token->new->check_csrf({
-            session_id => scalar $input->cookie('CGISESSID'),
-            token  => scalar $input->param('csrf_token'),
-        });
+if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
 
     my $handle   = $input->upload('uploadborrowers');
     my %defaults = $input->Vars;
@@ -162,8 +158,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         total           => $imported + $alreadyindb + $invalid + $overwritten,
     );
 
-}
-else {
+} else {
     if ($extended) {
         my @matchpoints = ();
         my $attribute_types = Koha::Patron::Attribute::Types->search;
@@ -179,4 +174,3 @@ else {
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
