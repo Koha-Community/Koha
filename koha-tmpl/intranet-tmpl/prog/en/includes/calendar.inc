@@ -188,6 +188,13 @@
         if( typeof maxDate !== 'undefined' ) {
             options['maxDate'] = new Date(maxDate);
         }
+        if( $(input).data("flatpickr-time-only") === true ) {
+            options['enableTime'] = true;
+            options['noCalendar'] = true;
+            options['dateFormat'] = "H:i";
+            options['altFormat'] = flatpickr_timeformat_string;
+            options['plugins'] = [];
+        }
 
         let fp = $(input).flatpickr(options);
 

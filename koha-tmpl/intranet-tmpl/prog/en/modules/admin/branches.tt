@@ -301,43 +301,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                            [% IF library.library_hours # Existing library %]
-                                [% daycount = 0 %]
-                                [% FOREACH hr IN library.library_hours %]
-                                <tr id="hours_[% daycount | html %]">
+                            [% SET CalendarFirstDayOfWeek = Koha.Preference("CalendarFirstDayOfWeek") %]
+                            [% IF library.library_hours.count > 0 # Existing hours %]
+                                [% SET library_hours = library.library_hours.as_list %]
+
+                                [% FOR i IN [0..6] %]
+                                [% SET d = ( CalendarFirstDayOfWeek + i ) % 7 %]
+                                [% SET hr = library_hours.$d %]
+                                <tr id="hours_[% d | html %]">
                                     <td>
-                                        [% PROCESS dayname day=daycount %]
-                                        <input type="hidden" value="[% daycount | html %]" name="day">
+                                        [% PROCESS dayname day=d %]
+                                        <input type="hidden" value="[% d | html %]" name="day">
                                     </td>
                                     <td>
-                                        [% IF hr.day == daycount && hr.open_time %]
-                                        <input type="time" value="[% hr.open_time | html %]" name="open_time">
+                                        [% IF hr.open_time %]
+                                        <input type="text" size="5" value="[% hr.open_time | html %]" name="open_time" class="flatpickr" data-flatpickr-time-only="true">
                                         [% ELSE %]
-                                        <input type="time" value="" name="open_time">
+                                        <input type="text" size="5" value="" name="open_time" class="flatpickr" data-flatpickr-time-only="true">
                                         [% END %]
                                     </td>
                                     <td>
-                                        [% IF hr.day == daycount && hr.close_time %]
-                                        <input type="time" value="[% hr.close_time | html %]" name="close_time">
+                                        [% IF hr.close_time %]
+                                        <input type="text" size="5" value="[% hr.close_time | html %]" name="close_time" class="flatpickr" data-flatpickr-time-only="true">
                                         [% ELSE %]
-                                        <input type="time" value="" name="close_time">
+                                        <input type="text" size="5" value="" name="close_time" class="flatpickr" data-flatpickr-time-only="true">
                                         [% END %]
                                     </td>
                                 </tr>
-                                [% daycount = daycount+1 %]
                                 [% END %]
-                            [% ELSE # New library %]
-                                [% FOREACH daycount IN [0..6] %]
-                                <tr id="hours_[% day | html %]">
+                            [% ELSE # New hours %]
+                                [% FOR i IN [0..6] %]
+                                [% SET d = ( CalendarFirstDayOfWeek + i ) % 7 %]
+                                <tr id="hours_[% d | html %]">
                                     <td>
-                                        [% PROCESS dayname day=daycount %]
-                                        <input type="hidden" value="[% daycount | html %]" name="day">
+                                        [% PROCESS dayname day=d %]
+                                        <input type="hidden" value="[% d | html %]" name="day">
                                     </td>
                                     <td>
-                                        <input type="time" value="" name="open_time">
+                                        <input type="text" size="5" name="open_time" class="noEnterSubmit flatpickr" data-flatpickr-time-only="true">
                                     </td>
                                     <td>
-                                        <input type="time" value="" name="close_time">
+                                        <input type="text" size="5" name="close_time" class="noEnerSubmit flatpickr" data-flatpickr-time-only="true">
                                     </td>
                                 </tr>
                                 [% END %]
@@ -372,19 +376,19 @@
 
 [% BLOCK dayname %]
     [% IF day == 0 %]
-    <span>Monday</span>
-    [% ELSIF day == 1 %]
-    <span>Tuesday</span>
-    [% ELSIF day == 2 %]
-    <span>Wednesday</span>
-    [% ELSIF day == 3 %]
-    <span>Thursday</span>
-    [% ELSIF day == 4 %]
-    <span>Friday</span>
-    [% ELSIF day == 5 %]
-    <span>Saturday</span>
-    [% ELSE %]
     <span>Sunday</span>
+    [% ELSIF day == 1 %]
+    <span>Monday</span>
+    [% ELSIF day == 2 %]
+    <span>Tuesday</span>
+    [% ELSIF day == 3 %]
+    <span>Wednesday</span>
+    [% ELSIF day == 4 %]
+    <span>Thursday</span>
+    [% ELSIF day == 5 %]
+    <span>Friday</span>
+    [% ELSE %]
+    <span>Saturday</span>
     [% END %]
 [% END %]
 
@@ -552,7 +556,8 @@
                     </li>
                     <li>
                         <span class="label">Opening hours: </span>
-                        [% IF library.library_hours # Existing library %]
+                        [% IF library.library_hours.count > 0 # Existing library %]
+                            [% SET library_hours = library.library_hours.as_list %]
                             <table id="library_hours_table">
                                 <thead>
                                     <tr>
@@ -562,11 +567,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    [% daycount = 0 %]
-                                    [% FOREACH hr IN library.library_hours %]
-                                    <tr id="hours_[% daycount | html %]">
+                                    [% FOR i IN [0..6] %]
+                                    [% SET d = ( CalendarFirstDayOfWeek + i) % 7 %]
+                                    [% SET hr = library_hours.$d %]
+                                    <tr id="hours_[% d | html %]">
                                         <td>
-                                            <span>[% PROCESS dayname day=daycount %]</span>
+                                            <span>[% PROCESS dayname day=d %]</span>
                                         </td>
                                         <td>
                                             <span>[% hr.open_time | html %]</span>
@@ -575,7 +581,6 @@
                                             <span>[% hr.close_time | html %]</span>
                                         </td>
                                     </tr>
-                                    [% daycount = daycount+1 %]
                                     [% END %]
                                 </tbody>
                             </table>
@@ -611,6 +616,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
@@ -640,6 +646,7 @@
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
         var saved_table = localStorage.getItem("DataTables_libraries_/cgi-bin/koha/admin/branches.pl");
         var updated_settings = get_columns_saved_state(saved_table, table_settings);
+        var calendarFirstDayOfWeek = '[% Koha.Preference('CalendarFirstDayOfWeek') | html %]';
 
         $(document).ready(function() {
 
@@ -749,18 +756,25 @@
                     },
                     {
                         "data": function( row, type, val, meta ) {
-                            const daynames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-                            var daycount = 0;
-                            var result = '<table id="library_hours_table"><thead><tr><th>Day</th><th>Open time</th><th>Close time</th></tr></thead><tbody>';
-                            while ( row.library_hours[daycount] ) {
-                                result += '<tr id="hours_'+daycount+'">';
-                                result += '<td>'+daynames[daycount]+'</td>';
-                                result += '<td><span>'+row.library_hours[daycount].open_time+'</span></td>';
-                                result += '<td><span>'+row.library_hours[daycount].close_time+'</span></td>';
-                                result += '</tr>';
-                                daycount++;
+                            let result = '';
+                            if ( row.library_hours.length > 0 ) {
+                                const daysOfWeek = [ _("Sunday"), _("Monday"), _("Tuesday"), _("Wednesday"), _("Thursday"), _("Friday"), _("Saturday") ];
+
+                                result = '<table id="library_hours_table"><thead><tr><th>Day</th><th>Open time</th><th>Close time</th></tr></thead><tbody>';
+                                let counter = 0;
+                                for (let i = calendarFirstDayOfWeek; counter < 7; i++) {
+                                    const day = i % 7; // Wrap around the day using modulo operator
+                                    result += '<tr id="hours_'+day+'">';
+                                    result += '<td>'+daysOfWeek[day]+'</td>';
+                                    result += '<td><span>'+row.library_hours[day].open_time+'</span></td>';
+                                    result += '<td><span>'+row.library_hours[day].close_time+'</span></td>';
+                                    result += '</tr>';
+                                    counter++;
+                                }
+                                result += '</tbody></table>';
+                            } else {
+                                result = _("Library hours not set");
                             }
-                            result += '</tbody></table>';
                             return result;
                         },
                         "searchable": false,
