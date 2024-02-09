@@ -183,8 +183,7 @@
                         <div class="col-sm-12">
                     [% END %]
 
-                        <form method="post" action="/cgi-bin/koha/tools/upload-cover-image.pl" id="uploadfile" enctype="multipart/form-data">
-                            [% INCLUDE 'csrf-token.inc' %]
+                        <form method="get" action="/cgi-bin/koha/tools/upload-cover-image.pl" id="uploadfile" enctype="multipart/form-data">
                             <fieldset class="rows" >
                                 <div id="fileuploadform">
                                     <label for="fileToUpload">Select the file to upload: </label>
@@ -209,6 +208,7 @@
 
                         <form method="post" id="processfile" action="/cgi-bin/koha/tools/upload-cover-image.pl" enctype="multipart/form-data">
                             [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-process" />
                             <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
 
                             [% IF itemnumber %]

@@ -67,10 +67,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $filetype       = $input->param('filetype');
 my $biblionumber   = $input->param('biblionumber');
 my $itemnumber     = $input->param('itemnumber');
-#my $uploadfilename = $input->param('uploadfile'); # obsolete?
-my $replace        = !C4::Context->preference("AllowMultipleCovers")
-  || $input->param('replace');
-my $op        = $input->param('op');
+my $replace = !C4::Context->preference("AllowMultipleCovers")
+    || $input->param('replace');
+my $op = $input->param('op') // q{};
 
 my $error;
 
@@ -99,7 +98,7 @@ $template->param(
 my $total = 0;
 my @results;
 
-if ($fileID) {
+if ( $op eq 'cud-process' & $fileID ) {
     my $upload = Koha::UploadedFiles->find( $fileID );
     if ( $filetype eq 'image' ) {
         my $fh       = $upload->file_handle;
