@@ -88,8 +88,7 @@
     <li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalog.</li>
     <li>You can enter a name for this import. It may be useful, when creating a record, to remember where the suggested MARC data comes from!</li>
 </ul>
-<form method="post" id="uploadfile" enctype="multipart/form-data">
-    [% INCLUDE 'csrf-token.inc' %]
+<form method="get" id="uploadfile" enctype="multipart/form-data">
 <fieldset class="rows" id="uploadform">
 <legend>Upload a file to stage</legend>
 <ol>
@@ -131,6 +130,7 @@
 
     <form method="post" id="processfile" enctype="multipart/form-data">
         [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-stage" />
 [% IF basketno && booksellerid %]
     <input type="hidden" name="basketno" id="basketno" value="[% basketno | html %]" />
     <input type="hidden" name="booksellerid" id="booksellerid" value="[% booksellerid | html %]" />

@@ -44,6 +44,7 @@ use Koha::ImportBatches;
 use Koha::BackgroundJob::StageMARCForImport;
 
 my $input = CGI->new;
+my $op    = $input->param('op') // q{};
 
 my $fileID                     = $input->param('uploadedfileid');
 my $matcher_id                 = $input->param('matcher');
@@ -75,7 +76,7 @@ $template->param(
     booksellerid => $booksellerid,
 );
 
-if ($fileID) {
+if ( $op eq 'cud-stage' && $fileID ) {
     my $upload = Koha::UploadedFiles->find( $fileID );
     my $filepath = $upload->full_path;
     my $filename = $upload->filename;
