@@ -44,8 +44,7 @@
 
                     <p>Please pick your language from the following list. If your language is not listed, please inform your system administrator.</p>
 
-                    <form name="language" method="post" action="install.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
+                    <form name="language" action="install.pl" method="get">
                         <div class="form-group">
                             <label for="language">Select a language: </label>
                             <select id="language" name="language">
