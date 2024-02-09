@@ -3,8 +3,7 @@
 <div id="header_search" role="tablist">
     <div class="tab-content">
         <div id="city_search" role="tabpanel" class="tab-pane active">
-            <form action="[% script_name | html %]" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form action="[% script_name | html %]" method="get">
                 <div class="form-title">
                     <label class="control-label" for="city_name_filter"><span class="control-text">Search cities</span> <i class="fa fa-fw fa-building" aria-hidden="true"></i></label>
                 </div>
