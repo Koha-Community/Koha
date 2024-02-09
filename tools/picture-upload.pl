@@ -184,7 +184,7 @@ elsif ( ( $op eq 'cud-Upload' ) && !$uploadfile ) {
     $template->param( cardnumber => $cardnumber );
     $template->param( filetype   => $filetype );
 }
-elsif ( $op eq 'Delete' ) {
+elsif ( $op eq 'cud-Delete' ) {
     my $deleted = eval {
         Koha::Patron::Images->find( $borrowernumber )->delete;
     };
