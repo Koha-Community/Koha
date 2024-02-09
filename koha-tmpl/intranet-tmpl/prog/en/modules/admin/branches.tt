@@ -652,7 +652,7 @@
                 'emptyTable': '<div class="dialog message">'+_("There are no libraries defined.")+' <a href="/cgi-bin/koha/admin/branches.pl?op=add_form">'+_("Start defining libraries")+'</a>.</div>',
                 "stateSave": true,
                 "columnDefs": [ {
-                    "targets": [0,1,3,4,7,9,10,11,12,13,14,15,16,17],
+                    "targets": [0,1,3,4,7,10,11,12,13,14,15,16,17],
                     "render": function (data, type, row, meta) {
                         if ( type == 'display' ) {
                             if ( data != null ) {
@@ -753,10 +753,10 @@
                             var daycount = 0;
                             var result = '<table id="library_hours_table"><thead><tr><th>Day</th><th>Open time</th><th>Close time</th></tr></thead><tbody>';
                             while ( row.library_hours[daycount] ) {
-                                result += '<tr id="hours_"'+daycount+'>';
+                                result += '<tr id="hours_'+daycount+'">';
                                 result += '<td>'+daynames[daycount]+'</td>';
-                                result += '<td><span>'+row.open_time+'</span></td>';
-                                result += '<td><span>'+row.close_time+'</span></td>';
+                                result += '<td><span>'+row.library_hours[daycount].open_time+'</span></td>';
+                                result += '<td><span>'+row.library_hours[daycount].close_time+'</span></td>';
                                 result += '</tr>';
                                 daycount++;
                             }
