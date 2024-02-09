@@ -7,8 +7,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="#" method="post" id="overdrive-checkout-form">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form action="#" method="get" id="overdrive-checkout-form">
                 <div class="modal-body">
                     <input type="hidden" name="id" value="" />
                     <div id="overdrive-format-list">
