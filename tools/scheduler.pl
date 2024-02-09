@@ -49,10 +49,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $mode = $input->param('mode');
-my $id   = $input->param('id');
+my $op = $input->param('op');
+my $id = $input->param('id');
 
-if ( $mode eq 'job_add' ) {
+if ( $op eq 'cud-add' ) {
 
     my $startdate = dt_from_string( scalar $input->param('startdate'), 'iso' )->ymd;
 
@@ -100,13 +100,9 @@ if ( $mode eq 'job_add' ) {
     else {
         $template->param( job_add_failed => 1 );
     }
-}
-
-if ( $mode eq 'job_change' ) {
+} elsif ( $op eq 'cud-change' ) {
     my $jobid = $input->param('jobid');
-    if ( $input->param('cud-delete') ) {
-        remove_at_job($jobid);
-    }
+    remove_at_job($jobid);
 }
 
 my $jobs = get_jobs();

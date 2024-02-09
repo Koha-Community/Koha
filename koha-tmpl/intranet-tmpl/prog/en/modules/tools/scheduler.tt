@@ -41,7 +41,7 @@
 
 <form name="form1" action="scheduler.pl" method="post">
     [% INCLUDE 'csrf-token.inc' %]
-<input type="hidden" name="mode" value="job_add" />
+<input type="hidden" name="op" value="cud-add" />
 
 <fieldset class="rows">
 <legend>Task scheduler</legend><ol>
@@ -91,7 +91,7 @@
 [% FOREACH JOB IN JOBS %]
 <form action="scheduler.pl" method="post">
     [% INCLUDE 'csrf-token.inc' %]
-<input type="hidden" name="mode" value="job_change" />
+<input type="hidden" name="op" value="cud-change" />
 
 <tr>
 <td>[% JOB.TIME | html %]</td>
