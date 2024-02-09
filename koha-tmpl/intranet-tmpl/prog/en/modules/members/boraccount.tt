@@ -161,12 +161,11 @@
         [% END %]
         <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs details-action"><i class="fa fa-list"></i> Details</a>
         [% IF account.is_debit && account.amountoutstanding > 0 %]
-            <form method="post" action="/cgi-bin/koha/members/paycollect.pl">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form method="get" action="/cgi-bin/koha/members/paycollect.pl">
                 <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]"/>
-                <input type="hidden" name="pad_individual" value="1" />
+                <input type="hidden" name="pay_individual" value="1" />
                 <input type="hidden" name="debit_type_code" value="[% account.debit_type_code | html %]" />
-                <input type="hidden" name="amount" value="[% account.ammount | html %]" />
+                <input type="hidden" name="amount" value="[% account.amount | html %]" />
                 <input type="hidden" name="amountoutstanding" value="[% account.amountoutstanding | html %]"/>
                 <input type="hidden" name="description" value="[% account.description | html %]" />
                 <input type="hidden" name="itemnumber" value="[% account.itemnumber | html %]" />
