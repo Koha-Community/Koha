@@ -9,11 +9,11 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% IF mode == 'new' || mode == 'deleted' %]
+    [% IF op == 'new' %]
         [% t("Uploads") | html %] &rsaquo;
     [% ELSE %]
     [% END %]
-    [% IF mode == 'report' %]
+    [% IF op == 'report' %]
         [% t("Results") | html %] &rsaquo;
         [% t("Uploads") | html %] &rsaquo;
     [% END %]
@@ -30,8 +30,7 @@
 [% END %]
 
 [% BLOCK form_new %]
-    <form method="post" action="/cgi-bin/koha/tools/upload.pl" id="uploadfile" enctype="multipart/form-data">
-        [% INCLUDE 'csrf-token.inc' %]
+    <form method="get" action="/cgi-bin/koha/tools/upload.pl" id="uploadfile" enctype="multipart/form-data">
         [% PROCESS plugin_pars %]
         <fieldset class="rows" id="uploadform">
         <legend>Upload new files</legend>
@@ -99,10 +98,9 @@
 
 [% BLOCK form_browse %]
     [% IF uploadcategories %]
-    <form method="post" id="browsefile" action="/cgi-bin/koha/tools/upload.pl">
-        [% INCLUDE 'csrf-token.inc' %]
+    <form method="get" id="browsefile" action="/cgi-bin/koha/tools/upload.pl">
         [% PROCESS plugin_pars %]
-        <input type="hidden" name="op" value="cud-browse"/>
+        <input type="hidden" name="op" value="browse"/>
         <fieldset class="brief">
         <h4>Search uploads by category</h4>
         <ol>
@@ -129,10 +127,9 @@
 [% END %]
 
 [% BLOCK form_search %]
-    <form method="post" id="searchfile" action="/cgi-bin/koha/tools/upload.pl">
-        [% INCLUDE 'csrf-token.inc' %]
+    <form method="get" id="searchfile" action="/cgi-bin/koha/tools/upload.pl">
         [% PROCESS plugin_pars %]
-        <input type="hidden" name="op" value="cud-search"/>
+        <input type="hidden" name="op" value="search"/>
         <fieldset class="brief">
         <h4>Search uploads by name or hashvalue</h4>
         <ol>
@@ -148,9 +145,17 @@
     </form>
 [% END %]
 
-[% BLOCK submitter %]
-    <form id="submitter" style="display:none;" method="post">
+[% BLOCK form_delete %]
+    <form id="form_delete" style="display:none;" method="post">
         [% INCLUDE 'csrf-token.inc' %]
+        [% PROCESS plugin_pars %]
+        <input type="hidden" name="op" id="op" value="cud-delete"/>
+        <input type="hidden" name="id" id="id" value="" />
+    </form>
+[% END %]
+
+[% BLOCK submitter %]
+    <form id="submitter" style="display:none;" method="get">
         [% PROCESS plugin_pars %]
         <input type="hidden" name="op" id="op" value=""/>
         <input type="hidden" name="id" id="id" value="" />
@@ -262,7 +267,7 @@
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
             [% END %]
-            [% IF mode == 'new' || mode == 'deleted' %]
+            [% IF op == 'new' %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     <span>Uploads</span>
                 [% END %]
@@ -271,7 +276,7 @@
                     <a href="/cgi-bin/koha/tools/upload.pl">Uploads</a>
                 [% END %]
             [% END %]
-            [% IF mode == 'report' %]
+            [% IF op == 'report' %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     <span>Results</span>
                 [% END %]
@@ -290,7 +295,7 @@
 <div class="dialog alert" id="myalerts" style="display:none;"></div>
 
 [% PROCESS submitter %]
-[% IF mode == 'new' || mode == 'deleted' %]
+[% IF op == 'new' %]
     [% PROCESS form_new %]
     <div class="row">
         [% IF uploadcategories %]
@@ -305,7 +310,7 @@
         </div>
     </div>
     [% PROCESS closer %]
-[% ELSIF mode == 'report' %]
+[% ELSIF op == 'report' %]
     <div id="toolbar" class="btn-toolbar">
         <a href="/cgi-bin/koha/tools/upload.pl" class="btn btn-default">Upload file</a>
     </div>
@@ -314,6 +319,7 @@
         [% PROCESS table_results %]
         [% PROCESS closer %]
         [% PROCESS back %]
+        [% PROCESS form_delete %]
     [% ELSE %]
         <h4>Sorry, your request had no results.</h4>
         [% PROCESS newsearch %]
@@ -326,7 +332,7 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                [% IF mode == 'report' %]
+                [% IF op == 'report' %]
                     [% PROCESS form_browse %]
                     [% PROCESS form_search %]
                 [% END %]
@@ -457,7 +463,8 @@
             if( !confirm( _("Do you really want to delete this upload?") ))
                 return false;
             ClearField();
-            SubmitMe( 'delete', id );
+            $("#form_delete #id").val( id );
+            $("#form_delete").submit();
         }
         function ClearField() {
             [% IF plugin %]

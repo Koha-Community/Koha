@@ -55,11 +55,11 @@ $template->param(
 
 if ( $op eq 'new' ) {
     $template->param(
-        mode             => 'new',
+        op => 'new',
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
-} elsif ( $op eq 'cud-browse' ) {
+} elsif ( $op eq 'browse' ) {
     my $uploads;
     if ($browsecategory){
         $uploads = Koha::UploadedFiles->search({
@@ -69,14 +69,14 @@ if ( $op eq 'new' ) {
     }
 
     $template->param(
-        mode           => 'report',
+        op             => 'report',
         msg            => $msg,
         uploads        => $uploads,
         browsecategory => $browsecategory,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
-} elsif ( $op eq 'cud-search' ) {
+} elsif ( $op eq 'search' ) {
     my $uploads;
     if( $id ) { # might be a comma separated list
         my @id = split /,/, $id;
@@ -94,7 +94,7 @@ if ( $op eq 'new' ) {
     }
 
     $template->param(
-        mode    => 'report',
+        op      => 'report',
         msg     => $msg,
         uploads => $uploads,
     );
@@ -113,7 +113,7 @@ if ( $op eq 'new' ) {
         ? JSON::to_json({ $fn || $id, { code => ERR_NOT_DELETED }})
         : '';
     $template->param(
-        mode             => 'deleted',
+        op               => 'new',
         msg              => $msg,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
@@ -124,7 +124,7 @@ if ( $op eq 'new' ) {
     my $fh  = $rec? $rec->file_handle:  undef;
     if ( !$rec || !$fh ) {
         $template->param(
-            mode             => 'new',
+            op               => 'new',
             msg              => JSON::to_json({ $id => { code => ERR_READING }}),
         );
         output_html_with_http_headers $input, $cookie, $template->output;
