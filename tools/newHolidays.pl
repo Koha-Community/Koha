@@ -29,6 +29,7 @@ use DateTime;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $input               = CGI->new;
+my $op                  = $input->param('op') // q{};
 my $dbh                 = C4::Context->dbh();
 
 checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');
@@ -70,12 +71,12 @@ if ($end_dt){
     }
 }
 
-if($allbranches) {
+if ( $op eq 'cud-add' && $allbranches ) {
     my $libraries = Koha::Libraries->search;
     while ( my $library = $libraries->next ) {
         add_holiday($newoperation, $library->branchcode, $weekday, $day, $month, $year, $title, $description);
     }
-} else {
+} elsif ( $op eq 'cud-add' ) {
     add_holiday($newoperation, $branchcode, $weekday, $day, $month, $year, $title, $description);
 }
 

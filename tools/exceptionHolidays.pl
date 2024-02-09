@@ -12,7 +12,8 @@ use C4::Calendar;
 use Koha::DateUtils qw( dt_from_string );
 
 my $input = CGI->new;
-my $dbh = C4::Context->dbh();
+my $op    = $input->param('op') // q{};
+my $dbh   = C4::Context->dbh();
 
 checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');
 
@@ -52,12 +53,12 @@ if ($datecancelrange_dt){
                 }
 }
 
-if($allbranches) {
+if ( $op eq 'cud-edit' && $allbranches ) {
     my $libraries = Koha::Libraries->search;
     while ( my $library = $libraries->next ) {
         edit_holiday($showoperation, $library->branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype, @holiday_list);
     }
-} else {
+} elsif( $op eq 'cud-edit' ) {
     edit_holiday($showoperation, $branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype, @holiday_list);
 }
 
