@@ -65,6 +65,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
+                                        <input type="hidden" name="op" value="cud-renew" />
                                         <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
                                     </form>
                                 [% END %]
@@ -78,6 +79,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
+                                        <input type="hidden" name="op" value="cud-renew" />
                                         <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
                                     </form>
                                 [% END %]
@@ -91,6 +93,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
+                                        <input type="hidden" name="op" value="cud-renew" />
                                         <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                     </form>
                                 [% END %]
@@ -104,6 +107,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
+                                        <input type="hidden" name="op" value="cud-renew" />
                                         <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                     </form>
                                 [% END %]
@@ -117,6 +121,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
+                                        <input type="hidden" name="op" value="cud-renew" />
                                         <input type="submit" class="approve" value="Override and renew" />
                                     </form>
                                 [% END %]
@@ -130,6 +135,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
+                                        <input type="hidden" name="op" value="cud-renew" />
                                         <input type="submit" class="approve" value="Override and renew" />
                                     </form>
                                 [% END %]
@@ -143,6 +149,7 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
+                                        <input type="hidden" name="op" value="cud-renew" />
                                         <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
                                     </form>
                                 [% END %]
@@ -160,6 +167,7 @@
                                         <label for="renewonholdduedate">Renewal due date:</label>
                                         <input type="text" size="20" id="renewonholdduedate" name="renewonholdduedate" value="" class="flatpickr" data-flatpickr-enable-time="true" />
                                     </div>
+                                    <input type="hidden" name="op" value="cud-renew" />
                                     <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                 </form>
 
@@ -222,6 +230,7 @@
                             <input name="barcode" size="14" class="barcode focus" type="text" placeholder="Enter item barcode" />
 
                         [% END %]
+                        <input type="hidden" name="op" value="cud-renew" />
                         <button type="submit" class="btn btn-primary">Submit</button>
 
                         <div class="circ-settings show">

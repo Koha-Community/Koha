@@ -41,8 +41,9 @@ my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
 
 my $schema = Koha::Database->new()->schema();
 
-my $barcode        = $cgi->param('barcode') // '';
-my $unseen         = $cgi->param('unseen') || 0;
+my $op      = $cgi->param('op') || q{};
+my $barcode = $cgi->param('barcode') // '';
+my $unseen  = $cgi->param('unseen') || 0;
 $barcode = barcodedecode($barcode) if $barcode;
 my $override_limit = $cgi->param('override_limit');
 my $override_holds = $cgi->param('override_holds');
@@ -52,7 +53,7 @@ my ( $item, $checkout, $patron );
 my $error = q{};
 my ( $soonest_renew_date, $latest_auto_renew_date );
 
-if ($barcode) {
+if ($op eq 'cud-renew' && $barcode) {
     $barcode = barcodedecode($barcode) if $barcode;
     $item = Koha::Items->find({ barcode => $barcode });
 
