@@ -34,8 +34,7 @@
                 [% INCLUDE 'messages.inc' %]
 
 <h1>Quick spine label creator</h1>
-                <form action="/cgi-bin/koha/labels/spinelabel-print.pl" method="post" id="spinelabelprint">
-                    [% INCLUDE 'csrf-token.inc' %]
+                <form action="/cgi-bin/koha/labels/spinelabel-print.pl" method="get" id="spinelabelprint">
 				<fieldset class="brief">
 				<ol>
 					<li><label for="barcode">Barcode: </label>
