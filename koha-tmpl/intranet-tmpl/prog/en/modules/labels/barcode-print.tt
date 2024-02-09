@@ -68,8 +68,7 @@
                 [% INCLUDE 'messages.inc' %]
                 <h2>Barcode image generator</h2>
 
-                <form action="/cgi-bin/koha/svc/barcode" method="post" id="barcodegen">
-                    [% INCLUDE 'csrf-token.inc' %]
+                <form action="/cgi-bin/koha/svc/barcode" id="barcodegen" method="get" >
                     <fieldset class="brief">
                         <div class="row">
                             <div class="col-sm-6">
