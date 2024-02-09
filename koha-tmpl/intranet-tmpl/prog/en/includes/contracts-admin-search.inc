@@ -3,8 +3,7 @@
 <div id="header_search" role="tablist">
     <div class="tab-content">
         <div id="contract_description_search" role="tabpanel" class="tab-pane active">
-            <form action="[% script_name | html %]" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form action="[% script_name | html %]" method="get">
                 <div class="form-title">
                     <label class="control-label" for="searchfield"><span class="control-text">Search contracts</span> <i class="fa-solid fa-fw fa-pen-to-square" aria-hidden="true"></i></label>
                 </div>
