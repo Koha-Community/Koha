@@ -87,12 +87,6 @@ our %errors = ();
 # Case is important in these operational values as the template must use case to be visually pleasing!
 if ( ( $op eq 'cud-Upload' ) && ($uploadfile || $uploadfiletext) ) {
 
-    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
-        unless Koha::Token->new->check_csrf({
-            session_id => scalar $input->cookie('CGISESSID'),
-            token  => scalar $input->param('csrf_token'),
-        });
-
     my $dirname = File::Temp::tempdir( CLEANUP => 1 );
     my $filesuffix;
     if ( $uploadfilename =~ m/(\..+)$/i ) {
@@ -191,12 +185,6 @@ elsif ( ( $op eq 'cud-Upload' ) && !$uploadfile ) {
     $template->param( filetype   => $filetype );
 }
 elsif ( $op eq 'Delete' ) {
-    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
-        unless Koha::Token->new->check_csrf({
-            session_id => scalar $input->cookie('CGISESSID'),
-            token  => scalar $input->param('csrf_token'),
-        });
-
     my $deleted = eval {
         Koha::Patron::Images->find( $borrowernumber )->delete;
     };
