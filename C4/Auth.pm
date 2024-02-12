@@ -648,20 +648,9 @@ sub get_template_and_user {
     $template->param( logged_in_user     => $patron );
     $template->param( sessionID          => $sessionID );
 
-    my $op = $in->{query}->param('op');
-    if ( defined $op && $op =~ m{^cud-} ) {
-        unless (
-            Koha::Token->new->check_csrf(
-                {
-                    session_id => scalar $in->{query}->cookie('CGISESSID'),
-                    token      => scalar $in->{query}->param('csrf_token'),
-                }
-            )
-            )
-        {
-            Koha::Logger->get->debug("The form submission failed (Wrong CSRF token).");
-            C4::Output::output_and_exit( $in->{query}, $cookie, $template, 'wrong_csrf_token' );
-        }
+    if ( $in->{query}->param('invalid_csrf_token') ) {
+        Koha::Logger->get->debug("The form submission failed (Wrong CSRF token).");
+        C4::Output::output_and_exit( $in->{query}, $cookie, $template, 'wrong_csrf_token' );
     }
 
     return ( $template, $borrowernumber, $cookie, $flags );
@@ -1362,23 +1351,16 @@ sub checkauth {
         my $patron = $userid ? Koha::Patrons->find({ userid => $userid }) : undef;
         $patron->update_lastseen('login') if $patron;
 
+        # FIXME This is only needed for scripts not using plack
         my $op = $query->param('op');
         if ( defined $op && $op =~ m{^cud-} ) {
             die "Cannot use GET for this request"
                 if $request_method eq 'GET';
+        }
 
-            unless (
-                $skip_csrf_check
-                || Koha::Token->new->check_csrf(
-                    {
-                        session_id => scalar $query->cookie('CGISESSID'),
-                        token      => scalar $query->param('csrf_token'),
-                    }
-                )
-                )
-            {
-                Koha::Exceptions::Token::WrongCSRFToken->throw;
-            }
+
+        if ( !$skip_csrf_check && $query->param('invalid_csrf_token') ) {
+            Koha::Exceptions::Token::WrongCSRFToken->throw;
         }
 
         # In case, that this request was a login attempt, we want to prevent that users can repost the opac login
