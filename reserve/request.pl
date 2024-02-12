@@ -88,6 +88,7 @@ my $warnings;
 my $messages;
 my $exceeded_maxreserves;
 my $exceeded_holds_per_record;
+my @failed_holds = $input->multi_param('failed_holds');
 
 my $op = $input->param('op') || q{};
 
@@ -723,6 +724,8 @@ $template->param( biblionumbers => \@biblionumbers );
 $template->param( pickup => $pickup || C4::Context->userenv->{branch} );
 
 $template->param(borrowernumber => $borrowernumber_hold);
+
+$template->param( failed_holds => \@failed_holds );
 
 # printout the page
 output_html_with_http_headers $input, $cookie, $template->output;

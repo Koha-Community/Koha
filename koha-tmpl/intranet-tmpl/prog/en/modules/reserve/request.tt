@@ -168,6 +168,56 @@
                 </div>
             [% END %]
 
+            [% IF ( failed_holds ) %]
+                <div class="dialog alert">
+                    <strong>One or more holds were not placed due to following errors:</strong>
+                    <ul>
+                    [% FOREACH fail IN failed_holds %]
+                        <li>
+                        [% SWITCH fail %]
+                        [% CASE 'damaged' %]
+                            <span>Item is damaged</span>
+                        [% CASE 'ageRestricted' %]
+                            <span>The record and its items are age restricted</span>
+                        [% CASE 'tooManyHoldsForThisRecord' %]
+                            <span>Patron exceeded the number of concurrent holds for this record</span>
+                        [% CASE 'tooManyReservesToday' %]
+                            <span>Patron reached daily holds limit</span>
+                        [% CASE 'tooManyReserves' %]
+                            <span>Too many holds already</span>
+                        [% CASE 'notReservable' %]
+                            <span>Not holdable</span>
+                        [% CASE 'cannotReserveFromOtherBranches' %]
+                            <span>Patron from a different library</span>
+                        [% CASE 'branchNotInHoldGroup' %]
+                            <span>Holds are not allowed from patron's library</span>
+                        [% CASE 'itemAlreadyOnHold' %]
+                            <span>Patron already has a hold for failed item(s)</span>
+                        [% CASE 'cannotBeTransferred' %]
+                            <span>Cannot be transferred to pickup library</span>
+                        [% CASE 'pickupNotInHoldGroup' %]
+                            <span>The chosen pickup location is not allowed</span>
+                        [% CASE 'noReservesAllowed' %]
+                            <span>No holds are allowed on failed item(s)</span>
+                        [% CASE 'libraryNotPickupLocation' %]
+                            <span>Library is not a valid pickup location</span>
+                        [% CASE 'no_valid_pickup_location' %]
+                            <span>No valid pickup location</span>
+                        [% CASE 'notforloan' %]
+                            <span>Not for loan</span>
+                        [% CASE 'items_available' %]
+                            <span>There are items available in the library</span>
+                        [% CASE 'not_placed' %]
+                            <span>Error when placing hold</span>
+                        [% CASE %]
+                            <span>Error: [% fail | html %]</span>
+                        [% END %]
+                        </li>
+                    [% END %]
+                    </ul>
+                </div>
+            [% END %]
+
             [% UNLESS ( multi_hold ) %]
                 <h2>Place a hold on [% INCLUDE 'biblio-title.inc' link = 1 %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</h2>
             [% ELSE %]
@@ -754,9 +804,9 @@
                                                             Hold must be item group level
                                                         </span>
                                                     [% ELSIF ( itemloo.available ) %]
-                                                        <input type="radio" name="checkitem" value="[% itemloo.itemnumber | html %]" />
+                                                        <input type="checkbox" name="checkitem" value="[% itemloo.itemnumber | html %]" />
                                                     [% ELSIF ( itemloo.override ) %]
-                                                        <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber | html %]" />
+                                                        <input type="checkbox" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber | html %]" />
                                                         <i class="fa fa-exclamation-triangle fa-lg" style="color:gold" title="Requires override of hold policy"/></i>
                                                     [% ELSE %]
                                                         <span class="error">
@@ -1526,11 +1576,11 @@
 
             if ( ! $("#requestany").is(":checked") ) {
                 // requestany not selected, go through the item-specific cases
-                if ( $('input[type="radio"]:checked').length > 0 ) {
+                if ( $('input[name="checkitem"]:checked').length > 0 ) {
                     // got item-specific hold requests in the form!
                     // verify they have a pickup location selected
 
-                    if (table.find('input[type="radio"]:checked')
+                    if (table.find('input[name="checkitem"]:checked')
                                 .closest('tr')
                                 .find(".pickup_locations").val() === null) {
 
@@ -1621,15 +1671,17 @@
                 }
             });
             $("input[name=checkitem]").click(function() {
-                onechecked = 0;
+                let onechecked = 0;
                 $("input[name=checkitem]").each(function() {
                     if(this.checked){
-                        onechecked = 1;
+                        onechecked++;
                     }
                 });
-                if(onechecked == 1){
+                if(onechecked > 0){
                     $("#requestany").prop("checked", false);
                     $("#holds_to_place_count").prop('disabled', true);
+
+                    $("#holds_to_place_count").val(onechecked);
                 } else {
                     $("#requestany").prop("checked",true);
                     $("#holds_to_place_count").prop('disabled', false);
@@ -1695,10 +1747,10 @@
 
             [% IF Koha.Preference('EnableItemGroupHolds') %]
                 $(':radio[name="item_group_id"]').change(function(){
-                    $(':radio[name="checkitem"]').prop('checked', false);
+                    $('input[name="checkitem"]').prop('checked', false);
                 });
 
-                $(':radio[name="checkitem"]').change(function(){
+                $('input[name="checkitem"]').change(function(){
                     $(':radio[name="item_group_id"]').prop('checked', false);
                 });
             [% END %]
