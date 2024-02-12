@@ -183,7 +183,9 @@ sub update {
 
 =head3 delete
 
-Controller function that handles deleting a Koha::Patron object
+Controller function that handles deleting a Koha::Acquisition::Order object
+
+Note that we only allow deletion when the status is cancelled.
 
 =cut
 
@@ -196,6 +198,12 @@ sub delete {
         return $c->render(
             status  => 404,
             openapi => { error => 'Order not found' }
+        );
+    } elsif ( ( $order->orderstatus && $order->orderstatus ne 'cancelled' ) || !$order->datecancellationprinted ) {
+        # Koha may (historically) have inconsistent order data here (e.g. cancelled without date)
+        return $c->render(
+            status  => 403,
+            openapi => { error => 'Order status must be cancelled' }
         );
     }
 
