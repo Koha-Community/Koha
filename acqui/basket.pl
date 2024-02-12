@@ -41,6 +41,7 @@ use Koha::CsvProfiles;
 use Koha::Patrons;
 
 use Koha::AdditionalFields;
+use Koha::Old::Biblios;
 
 =head1 NAME
 
@@ -500,7 +501,8 @@ sub get_order_infos {
         $line{holds_on_order}      = $itemholds ? $itemholds : $holds_count if $line{left_holds_on_order};
         $line{order_object}        = $order;
         $line{invoice_object}      = $invoice;
-
+    } else {
+        $line{deleted_biblio} = Koha::Old::Biblios->find( $order->{deleted_biblionumber} );
     }
 
     my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
