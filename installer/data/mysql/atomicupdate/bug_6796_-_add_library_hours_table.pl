@@ -21,15 +21,27 @@ return {
             }
             );
 
-            my @indexes = ( 0 .. 6 );
-            for my $i (@indexes) {
-                $dbh->do(
-                    q{ INSERT INTO library_hours (library_id, day) SELECT branchcode, ? FROM branches }, undef,
-                    $i
-                );
+            my $branches =
+                $dbh->selectall_arrayref( "SELECT branchcode FROM branches", { Slice => {} } );
+            for my $branch (@$branches) {
+                my $branchcode = $branch->{branchcode};
+
+                my @indexes = ( 0 .. 6 );
+                for my $i (@indexes) {
+                    $dbh->do(
+                        q{ INSERT INTO library_hours (library_id, day) VALUES ( ?, ? ) }, undef, $branchcode,
+                        $i
+                    );
+                }
             }
 
             say $out "Added table `library_hours`";
+
+            $dbh->do(
+                q{ INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type ) VALUES ( 'ConsiderLibraryHoursInCirculation', 'ignore', 'close|open|ignore', "Take library opening hours into consideration to calculate due date when circulating.", 'Choice' ) }
+            );
+
+            say $out "Added system preference 'ConsiderLibraryHoursInCirculation'";
         }
     },
 };
