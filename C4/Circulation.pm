@@ -3893,11 +3893,20 @@ sub CalcDateDue {
     # starter vars so don't do calculations directly to $datedue
     my $potential_datedue  = $datedue->clone;
     my $library_close      = $datedue->clone;
-    my $dayofweek          = $datedue->day_of_week - 1;
-    my $tomorrow_dayofweek = $dayofweek + 1;
+    my $dayofweek          = $datedue->day_of_week;
 
-    # If it's Sunday and tomorrow would be == 7, make tomorrow 0 (Days are stored as 0-6)
-    if ( $tomorrow_dayofweek > 6 ) { $tomorrow_dayofweek = 0; }
+    # Representation fix
+    # DateTime object dow (1-7) where Monday is 1
+    # Arrays are 0-based where 0 = Sunday, not 7.
+    if ( $dayofweek == 7 ) {
+        $dayofweek = 0;
+    }
+
+    my $tomorrow_dayofweek = $dayofweek + 1;
+    if ( $tomorrow_dayofweek == 7 ) {
+        $tomorrow_dayofweek = 0;
+    }
+
     my $todayhours    = Koha::Library::Hours->find( { library_id => $branch, day => $dayofweek } );
     my @close         = undef;
     my $tomorrowhours = Koha::Library::Hours->find( { library_id => $branch, day => $tomorrow_dayofweek } )
