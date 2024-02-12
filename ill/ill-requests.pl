@@ -531,6 +531,7 @@ sub can_batch {
 
 # Get available metadata enrichment plugins
 sub get_metadata_enrichment {
+    return [] unless C4::Context->config("enable_plugins");
     my @candidates = Koha::Plugins->new()->GetPlugins({
         method => 'provides_api'
     });

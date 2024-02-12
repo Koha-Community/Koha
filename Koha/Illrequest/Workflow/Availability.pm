@@ -64,6 +64,8 @@ sub get_services {
         $plugin_filter->{metadata} = $params->{metadata};
     }
 
+    return [] unless C4::Context->config("enable_plugins");
+
     my @candidates = Koha::Plugins->new()->GetPlugins($plugin_filter);
     my @services   = ();
     foreach my $plugin (@candidates) {
