@@ -26,40 +26,40 @@
 
         <ul class="dropdown-menu [% pull_right | html %]" role="menu" aria-labelledby="[% aria_menu | html %]">
             <li>
-                <a class="ar-set-pending-request" href="#" onclick="HandleMulti( SetPending, [% id_arg | html %], $(this) ); return false;">
+                <a class="ar-set-pending-request" href="#">
                     <i class="fa fa-bars"></i>
                     Set request as pending
                 </a>
 
-                <a class="ar-process-request" href="#" onclick="HandleMulti( Process, [% id_arg | html %], $(this) ); return false;">
+                <a class="ar-process-request" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-cog"></i>
                     Process request
                 </a>
 
                 [% IF id_arg && format=='SCAN' %]
-                <a class="ar-edit-urls" href="#" onclick="HandleMulti( EditURLs, [% id_arg | html %], $(this) ); return false;">
+                <a class="ar-edit-urls" href="#" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa-solid fa-pencil" aria-hidden="true"></i>
                     Edit URLs
                 </a>
                 [% END %]
 
-                <a class="ar-complete-request" href="#" onclick="HandleMulti( Complete, [% id_arg | html %], $(this) ); return false;">
+                <a class="ar-complete-request" href="#" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-check-circle"></i>
                     Complete request
                 </a>
 
-                <a class="ar-cancel-request" href="#" onclick="Cancel( [% id_arg | html %], $(this) ); return false;">
+                <a class="ar-cancel-request" href="#" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-minus-circle"></i>
                     Cancel request
                 </a>
 
                 [% IF id_arg %]
-                <a class="ar-print-request" href="#" onclick="HandleMulti( PrintSlip, [% id_arg | html %], $(this) ); return false;">
+                <a class="ar-print-request" href="#" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-print"></i>
                     Print slip
                 </a>
                 [% ELSE %]
-                <a class="ar-print-request" href="#" onclick="PrintMultipleSlip(); return false;">
+                <a class="ar-print-multiple-requests" href="#">
                     <i class="fa fa-print"></i>
                     Print slip
                 </a>
@@ -577,9 +577,6 @@
                 var link = $('span#url_'+ id).parent().parent().find('td.ar-actions').find('div.dropdown a');
                 if( link.length > 0 ) link[0].focus();
             });
-            $( '#myModal button' ).on("click", function () {
-                SaveURLs( $('#myModal textarea').val() );
-            });
 
             requested_datatable = $("#article-requests-requested-table").DataTable($.extend(true, {}, dataTablesDefaults, {
                 "columnDefs": [
@@ -630,6 +627,10 @@
             var link = 'article-request-slip.pl?id='+id;
             window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
         }
+        $(".ar-print-request").on("click", function (e){
+            e.preventDefault();
+            HandleMulti(PrintSlip, $(this).data('ar-id'));
+        });
 
         $('#modal-cancellation-reason').on('change', function(e) {
             let reason = $(this).val();
@@ -671,8 +672,11 @@
             });
             var link = 'article-request-slip.pl?multi=1&id='+ids.join(',');
             window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
-
         }
+        $(".ar-print-multiple-requests").on("click", function (e){
+            e.preventDefault();
+            PrintMultipleSlip();
+        });
 
         function Cancel( id, a ) {
             cancel_id = id;
@@ -680,57 +684,45 @@
 
             $('#cancelModal').modal();
         }
+        $(".ar-cancel-request").on("click", function (e){
+            e.preventDefault();
+            HandleMulti(Cancel, $(this).data('ar-id'), $(this));
+        });
 
-        function SetPending( id, a ) {
-            var table_row = a.closest('tr');
-            table_row.find('.ar-set-pending-request').remove();
-            table_row.find('input[type="checkbox"]').prop('checked', false);
-            a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" class="spinner"/>').find('div.dropdown').hide();
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: {
-                    action: 'pending',
-                    id: id,
-                },
-                success: function( data ) {
-                    $("img.spinner").remove();
-                    requested_datatable.row( table_row ).remove().draw();
-                    pending_datatable.row.add( table_row ).draw();
-                    UpdateTabCounts();
-                    activateBatchActions( active_tab );
-                },
-                dataType: 'json'
-            });
-        }
+    </script>
 
-        function Process( id, a ) {
+    <script async type="module">
+        import { APIClient } from '/intranet-tmpl/prog/js/fetch/api-client.js';
+
+        async function Process( id, a ) {
             var table_row = a.closest('tr');
             var table = a.closest('table');
             var orig_datatable = table.attr('id')==='article-requests-pending-table'?pending_datatable:requested_datatable;
-            table_row.find('.ar-process-request').remove();
-            table_row.find('input[type="checkbox"]').prop('checked', false);
 
             a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" class="spinner"/>').find('div.dropdown').hide();
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: {
-                    action: 'process',
-                    id: id,
-                },
-                success: function( data ) {
+
+            const client = APIClient.article_request;
+            await client.articleRequests.process(id).then(
+                success => {
                     $("img.spinner").remove();
+                    table_row.find('.ar-process-request').remove();
+                    table_row.find('input[type="checkbox"]').prop('checked', false);
                     orig_datatable.row( table_row ).remove().draw();
                     processing_datatable.row.add( table_row ).draw();
                     UpdateTabCounts();
                     activateBatchActions( active_tab );
                 },
-                dataType: 'json'
-            });
+                error => {
+                    console.warn("Something wrong happened: %s".format(error));
+                }
+            );
         }
+        $(".ar-process-request").on("click", function (e){
+            e.preventDefault();
+            HandleMulti(Process, $(this).data('ar-id'), $(this));
+        });
 
-        function Complete( id, a ) {
+        async function Complete( id, a ) {
             // if it is a scan, check if urls field is filled
             var urlspan = $('span#url_'+id);
             if( urlspan.length>0 && urlspan.text() === '' ) {
@@ -738,21 +730,47 @@
                 return;
             }
             a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: {
-                    action: 'complete',
-                    id: id,
-                },
-                success: function( data ) {
+            const client = APIClient.article_request;
+            await client.articleRequests.complete(id).then(
+                success => {
+                    $("img.spinner").remove();
                     active_datatable.row( a.closest('tr') ).remove().draw();
                     UpdateTabCounts();
                     activateBatchActions( active_tab );
                 },
-                dataType: 'json'
-            });
+                error => {
+                    console.warn("Something wrong happened: %s".format(error));
+                }
+            );
         }
+        $(".ar-complete-request").on("click", function (e){
+            e.preventDefault();
+            HandleMulti(Complete, $(this).data('ar-id'), $(this));
+        });
+
+        async function SetPending( id, a ) {
+            var table_row = a.closest('tr');
+            table_row.find('.ar-set-pending-request').remove();
+            table_row.find('input[type="checkbox"]').prop('checked', false);
+            a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" class="spinner"/>').find('div.dropdown').hide();
+            const client = APIClient.article_request;
+            await client.articleRequests.pending(id).then(
+                success => {
+                    $("img.spinner").remove();
+                    requested_datatable.row( table_row ).remove().draw();
+                    pending_datatable.row.add( table_row ).draw();
+                    UpdateTabCounts();
+                    activateBatchActions( active_tab );
+                },
+                error => {
+                    console.warn("Something wrong happened: %s".format(error));
+                }
+            );
+        }
+        $(".ar-set-pending-request").on("click", function (e){
+            e.preventDefault();
+            HandleMulti(SetPending, $(this).data('ar-id'), $(this));
+        });
 
         function UpdateTabCounts() {
             $("#ar_requested_count").html( requested_datatable.rows().count() );
@@ -766,8 +784,12 @@
             $('#myModal textarea').attr('ar_id', id);
             $('#myModal').modal('show');
         }
+        $(".ar-edit-urls").on("click", function (e){
+            e.preventDefault();
+            HandleMulti(EditURLs, $(this).data('ar-id'));
+        });
 
-        function SaveURLs(newurl) {
+        async function SaveURLs(newurl) {
             var id = $('#myModal textarea').attr('ar_id');
             $('span#url_'+ id).text(newurl);
             if(newurl)
@@ -775,15 +797,19 @@
             else
                 $('span#url_yesno_'+id).text(_("No"));
 
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: { action: 'update_urls', id: id, urls: newurl },
-                dataType: 'json',
-                error: function() { alert('Error: Saving URL failed!'); },
-                success: function(data) { if(!data.success) alert('Saving URL failed!'); },
-            });
+            const client = APIClient.article_request;
+            await client.articleRequests.update_urls(id, newurl).then(
+                success => {
+                },
+                error => {
+                    console.warn("Something wrong happened: %s".format(error));
+                }
+            );
         }
+        $( '#myModal button' ).on("click", function () {
+            SaveURLs( $('#myModal textarea').val() );
+        });
+
     </script>
 [% END %]
 

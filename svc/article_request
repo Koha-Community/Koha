@@ -38,34 +38,36 @@ binmode STDOUT, ':encoding(UTF-8)';
 print $cgi->header( -type => 'text/plain', -charset => 'UTF-8' );
 
 my $id = $cgi->param('id');
-my $action = $cgi->param('action') || q{};
+my $op = $cgi->param('op') || q{};
 my $notes = $cgi->param('notes');
 
 my $ar = Koha::ArticleRequests->find($id);
 
 if ($ar) {
-    if ( $action eq 'cancel' ) {
+    if ( $op eq 'cud-cancel' ) {
         $ar = $ar->cancel({ notes => $notes });
     }
-    elsif ( $action eq 'process' ) {
+    elsif ( $op eq 'cud-process' ) {
         $ar = $ar->process();
     }
-    elsif ( $action eq 'pending' ) {
+    elsif ( $op eq 'cud-pending' ) {
         $ar = $ar->set_pending();
     }
-    elsif ( $action eq 'complete' ) {
+    elsif ( $op eq 'cud-complete' ) {
         $ar = $ar->complete();
     }
-    elsif ( $action eq 'update_branchcode' ) {
-        my $branchcode = $cgi->param('branchcode');
+    elsif ( $op eq 'cud-update_library_id' ) {
+        my $branchcode = $cgi->param('library_id');
         $ar->branchcode( $branchcode ) if $branchcode;
         $ar = $ar->store();
     }
-    elsif( $action eq 'update_urls' ) {
+    elsif( $op eq 'cud-update_urls' ) {
         my $urls = $cgi->param('urls') // q{};
         $ar->urls( $urls );
         $ar = $ar->store();
     }
+    else { undef $ar; }
 }
 
+# FIXME do not return 200 if not success
 print to_json( { success => $ar ? 1 : 0 } );
