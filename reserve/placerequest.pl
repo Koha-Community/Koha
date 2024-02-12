@@ -44,7 +44,7 @@ my $branch         = $input->param('pickup');
 my $startdate      = $input->param('reserve_date') || '';
 my @rank           = $input->multi_param('rank-request');
 my $title          = $input->param('title');
-my @checkitems      = $input->multi_param('checkitem');
+my @checkitems = $input->multi_param('checkitem');
 my $item_group_id  = $input->param('item_group_id');
 my $expirationdate = $input->param('expiration_date');
 my $itemtype       = $input->param('itemtype') || undef;
@@ -72,7 +72,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
 
         my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
         if ( @checkitems ) {
-            for ( my $i = 0; $i < scalar @checkitems; $i++ ){
+            for ( my $i = 0 ; $i < scalar @checkitems ; $i++ ) {
                 my $checkitem = $checkitems[$i];
                 if ( my $item_pickup_location = $input->param("item_pickup_$checkitem") ) {
 
@@ -82,9 +82,11 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                         $biblionumber = $item->biblionumber;
                     }
 
-                    my $can_item_be_reserved = CanItemBeReserved($patron, $item, $item_pickup_location)->{status};
+                    my $can_item_be_reserved = CanItemBeReserved( $patron, $item, $item_pickup_location )->{status};
 
-                    if ( $can_item_be_reserved eq 'OK' || ( $can_item_be_reserved ne 'itemAlreadyOnHold' && $can_override ) ) {
+                    if ( $can_item_be_reserved eq 'OK'
+                        || ( $can_item_be_reserved ne 'itemAlreadyOnHold' && $can_override ) )
+                    {
                         AddReserve(
                             {
                                 branchcode       => $item_pickup_location,
@@ -102,8 +104,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                             }
                         );
 
-                    }
-                    else {
+                    } else {
                         $failed_holds{$can_item_be_reserved} = 1;
                     }
                 }
@@ -157,11 +158,12 @@ if ( $op eq 'cud-placerequest' && $patron ) {
 
     my $redirect_url = URI->new("request.pl");
     my @failed_hold_msgs = ();
+
     #NOTE: Deduplicate failed hold reason statuses/codes
-    foreach my $msg (keys %failed_holds){
-        push(@failed_hold_msgs,$msg);
+    foreach my $msg ( keys %failed_holds ) {
+        push( @failed_hold_msgs, $msg );
     }
-    $redirect_url->query_form( biblionumber => [@biblionumbers], failed_holds => \@failed_hold_msgs);
+    $redirect_url->query_form( biblionumber => [@biblionumbers], failed_holds => \@failed_hold_msgs );
     print $input->redirect($redirect_url);
 }
 elsif ( $borrowernumber eq '' ) {
