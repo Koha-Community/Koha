@@ -72,9 +72,9 @@ subtest 'list() tests' => sub {
     $another_order = $builder->build_object({ class => 'Koha::Acquisition::Orders', value => $another_order });
 
     ## Authorized user tests
-    my $count_of_orders = Koha::Acquisition::Orders->search->count;
+    my $count_of_orders = Koha::Acquisition::Orders->search( { orderstatus => 'new' } )->count;
     # Make sure we are returned with the correct amount of orders
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?_per_page=-1" )
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?status=new&_per_page=-1" )
       ->status_is( 200, 'SWAGGER3.2.2' )
       ->json_has('/'.($count_of_orders-1).'/order_id')
       ->json_hasnt('/'.($count_of_orders).'/order_id');
@@ -449,7 +449,7 @@ subtest 'update() tests' => sub {
 };
 
 subtest 'delete() tests' => sub {
-    plan tests => 7;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -474,10 +474,13 @@ subtest 'delete() tests' => sub {
     $t->delete_ok( "//$unauth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )
       ->status_is(403);
 
+    # Check if status is cancelled?
+    $order->orderstatus('new')->store;
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )->status_is(403);
+    $order->orderstatus('cancelled')->store;
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
-
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )
       ->status_is(404);
 
