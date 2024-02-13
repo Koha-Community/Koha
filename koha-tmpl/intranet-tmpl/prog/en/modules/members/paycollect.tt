@@ -101,12 +101,16 @@
         <li role="presentation" class="makepayment active">
             <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Make a payment</a>
         </li>
-        <li role="presentation">
-            <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
-        </li>
-        <li role="presentation">
-            <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
-        </li>
+        [% IF CAN_user_updatecharges_manual_invoice %]
+            <li role="presentation" class="manualinvoice">
+                <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual invoice</a>
+            </li>
+        [% END %]
+        [% IF CAN_user_updatecharges_manual_credit %]
+            <li role="presentation" class="manualcredit">
+                <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" role="tab">Create manual credit</a>
+            </li>
+        [% END %]
     </ul> <!-- /.nav.nav-tabs -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active">
