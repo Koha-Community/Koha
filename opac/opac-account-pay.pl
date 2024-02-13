@@ -54,15 +54,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $amount_to_pay =
-  Koha::Database->new()->schema()->resultset('Accountline')->search( { accountlines_id => { -in => \@accountlines } } )
-  ->get_column('amountoutstanding')->sum();
-$amount_to_pay = sprintf( "%.2f", $amount_to_pay );
-
-my $active_currency = Koha::Acquisition::Currencies->get_active;
-
-my $error = 0;
-
 Koha::Plugins::Handler->run(
     {
         class  => $payment_method,
