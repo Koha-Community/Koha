@@ -53,7 +53,8 @@
 
                 <h1>Quote uploader</h1>
 
-                <div id="messages" style="display: none;">
+                [%# FIXME Remove the following div and use #message instead %]
+                <div id="messages_2" style="display: none;">
                     <div class="import_success dialog message" style="display: none;"></div>
                     <div class="import_error dialog alert" style="display: none;"></div>
                 </div>
@@ -242,7 +243,7 @@
                 if ( arrData[ arrData.length - 1 ] ) {
                     arrData[ arrData.length - 1 ].push( strMatchedValue );
                 } else {
-                    $("#messages .import_error").text(_("Something went wrong, check your CSV file."));
+                    $("#messages_2 .import_error").text(_("Something went wrong, check your CSV file."));
                 }
             }
 
@@ -389,24 +390,24 @@
                     data     : JSON.stringify(data),
                     dataType : "application/json",
                     success  : function(data) {
-                        $("#messages").addClass("message").show();
-                        var import_success = $("#messages .import_success");
+                        $("#messages_2").addClass("message").show();
+                        var import_success = $("#messages_2 .import_success");
                         import_success.show();
                         import_success.data("nb")
                         nb_success = import_success.data("nb") || 0;
                         nb_success++;
-                        $("#messages .import_success").text(MSG_IMPORT_SUCCESS.format(nb_success));
+                        $("#messages_2 .import_success").text(MSG_IMPORT_SUCCESS.format(nb_success));
                         import_success.data("nb", nb_success);
                     },
                     error    : function(xhr) {
                         if (xhr.status==201) { this.success(null, "Created", xhr); return; }
-                        $("#messages").addClass("alert").show();
-                        var import_error = $("#messages .import_error");
+                        $("#messages_2").addClass("alert").show();
+                        var import_error = $("#messages_2 .import_error");
                         import_error.show();
                         import_error.data("nb")
                         nb_error = import_error.data("nb") || 0;
                         nb_error++;
-                        $("#messages .import_error").text(MSG_IMPORT_ERROR.format(nb_error));
+                        $("#messages_2 .import_error").text(MSG_IMPORT_ERROR.format(nb_error));
                         import_error.data("nb", nb_error);
                     },
                 });

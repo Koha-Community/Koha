@@ -23,7 +23,7 @@ $(document).ready(function(){
 
     $("#filedrag").on("click", ".cancel_image", function(){
         $("#click_to_select").show();
-        $("#messages").html("");
+        $("#messages_2").html("");
         $("#fileToUpload").prop( "disabled", false );
         $("#process_images, #fileuploadstatus").hide();
         return false;
@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 function prepUpLoad( event ){
     $("#click_to_select,#upload_results").hide();
-    $("#messages").html("");
+    $("#messages_2").html("");
     var file;
     if( event ){
         file = event.originalEvent.dataTransfer.files[0];
@@ -185,7 +185,7 @@ function ParseFile(file) {
 
 // output information
 function Output(msg) {
-    var m = document.getElementById("messages");
+    var m = document.getElementById("messages_2");
     m.innerHTML = msg + m.innerHTML;
 }
 
