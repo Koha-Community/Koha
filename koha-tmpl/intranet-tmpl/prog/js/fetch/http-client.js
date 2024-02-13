@@ -1,4 +1,18 @@
-//import { setError, submitting, submitted } from "../messages";
+class Dialog {
+    constructor(options = {}) {}
+
+    setMessage(message) {
+        $("#messages").append(
+            '<div class="dialog message">%s</div>'.format(message)
+        );
+    }
+
+    setError(error) {
+        $("#messages").append(
+            '<div class="dialog alert">%s</div>'.format(error)
+        );
+    }
+}
 
 class HttpClient {
     constructor(options = {}) {
@@ -45,7 +59,7 @@ class HttpClient {
             })
             .catch(err => {
                 error = err;
-                //setError(err);
+                new Dialog().setError(err);
                 console.error(err);
             })
             .then(() => {
