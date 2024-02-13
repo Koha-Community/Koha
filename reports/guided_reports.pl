@@ -246,7 +246,7 @@ elsif ( $op eq 'cud-update_sql' || $op eq 'cud-update_and_run_sql' ){
             );
         }
         if ( $op eq 'cud-update_and_run_sql' ) {
-            $op = 'cud-run';
+            $op = 'run';
         }
     }
 }
@@ -756,7 +756,7 @@ elsif ( $op eq 'add_form_sql' || $op eq 'duplicate' ) {
     );
 }
 
-if ($op eq 'cud-run'){
+if ($op eq 'run'){
     # execute a saved report
     my $limit           = $input->param('limit') || 20;
     my $offset          = 0;

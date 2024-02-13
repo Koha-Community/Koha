@@ -849,9 +849,8 @@
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?op=edit_formid=[% id | uri %]" class="btn btn-primary">Edit SQL</a>
                         </fieldset>
                     [% ELSE #  IF ( auth_val_error ) %]
-                        <form method="post" action='/cgi-bin/koha/reports/guided_reports.pl'>
+                        <form method="get" action='/cgi-bin/koha/reports/guided_reports.pl'>
                             <input type='hidden' name='id' value="[% id | html %]" />
-                            <input type='hidden' name='op' value='cud-run' />
                             <h1>Enter parameters for report [% name | html %]:</h1>
                             [% IF ( notes ) %]
                                 <p>[% notes | html %]</p>
@@ -891,7 +890,7 @@
                                 </ol>
                             </fieldset> <!-- /.rows -->
                             <fieldset class="action">
-                                <input type="hidden" name="op" value="cud-run" />
+                                <input type="hidden" name="op" value="run" />
                                 <button type="submit" class="btn btn-primary">Run the report</button>
                             </fieldset>
                         </form>
@@ -1026,8 +1025,8 @@
                                         [%- END -%]
                                 [% END %]
 
-                                <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="limitselect">
-                                    <input type="hidden" name="op" value="cud-run"/>
+                                <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
+                                    <input type="hidden" name="op" value="run"/>
                                     <input type="hidden" name="reports" value="[% id | html %]"/>
                                     [% FOREACH p IN sql_params %]
                                         <input type="hidden" name="sql_params" value="[% p | html %]"/>
