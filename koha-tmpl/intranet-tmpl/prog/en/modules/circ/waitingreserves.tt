@@ -302,9 +302,16 @@
                 localStorage.selectedWaitingHolds = JSON.stringify(this_dt.$(".select_hold:checked", {"page": "all"}).toArray().map(el => $(el).data('id')));
             });
 
-            var activeTab = localStorage.getItem("waitingreserves_activetab");
-            if( activeTab ){
-                $("div#resultlist li:eq(" + activeTab + ") a").tab("show");
+            var hash = document.location.hash;
+            if( hash !== "" ){
+                /* The existence of location.hash means someone clicked a link which targets a specific tab */
+                $( hash ).tab("show");
+            } else {
+                /* If no specific tab was linked to, use the last active tab */
+                var activeTab = localStorage.getItem("waitingreserves_activetab");
+                if( activeTab ){
+                    $("div#resultlist li:eq(" + activeTab + ") a").tab("show");
+                }
             }
             $("div#resultlist a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                 var thisTab = $(e.target).parent();
