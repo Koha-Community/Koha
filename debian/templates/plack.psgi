@@ -78,24 +78,21 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
                 $q->param( 'debug_programming_error', "'$original_op' must start with 'cud-' for $request_method" );
             }
 
-            if ( $csrf_token ) {
-                unless (
-                    Koha::Token->new->check_csrf(
-                        {
-                            session_id => scalar $q->cookie('CGISESSID'),
-                            token      => $csrf_token,
-                        }
-                    )
-                    )
-                {
-                    Koha::Logger->get->debug("The form submission failed (Wrong CSRF token).");
-                    $q->param( 'op', '' );
-                    $q->param( 'invalid_csrf_token', 1);
-                }
-            } else {
-                Koha::Logger->get->warn("Programming error - No CSRF token passed for $request_method");
+            die "Programming error - No CSRF token passed for $request_method"
+                unless $csrf_token;
+
+            unless (
+                Koha::Token->new->check_csrf(
+                    {
+                        session_id => scalar $q->cookie('CGISESSID'),
+                        token      => $csrf_token,
+                    }
+                )
+                )
+            {
+                Koha::Logger->get->debug("The form submission failed (Wrong CSRF token).");
                 $q->param( 'op', '' );
-                $q->param( 'debug_programming_error', "No CSRF token passed for $request_method" );
+                $q->param( 'invalid_csrf_token', 1);
             }
         }
 
