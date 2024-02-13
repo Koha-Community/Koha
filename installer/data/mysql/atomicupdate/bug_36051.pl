@@ -10,7 +10,7 @@ return {
         # Do you stuffs here
         $dbh->do(
             q{
-            INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+            INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
             ('SMSSendAdditionalOptions', '', '', 'Additional SMS::Send parameters used to send SMS messages', 'free');
         }
         );
