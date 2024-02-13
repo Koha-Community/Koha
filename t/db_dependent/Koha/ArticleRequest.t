@@ -17,13 +17,15 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
+use Test::Exception;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::ArticleRequests;
+use Koha::Exceptions::ArticleRequest;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -206,6 +208,20 @@ subtest 'cancel() tests' => sub {
     is( $ar->notes, $notes, 'Notes stored correctly' );
 
     is( $patron->account->balance, -$payed_amount, 'The patron has a credit balance' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'store' => sub {
+    plan tests => 2;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'ArticleRequestsSupportedFormats', 'SCAN' );
+    my $ar = $builder->build_object( { class => 'Koha::ArticleRequests', value => { format => 'PHOTOCOPY' } } );
+    throws_ok { $ar->format('test')->store } 'Koha::Exceptions::ArticleRequest::WrongFormat',
+        'Format not supported';
+    t::lib::Mocks::mock_preference( 'ArticleRequestsSupportedFormats', 'SCAN|PHOTOCOPY|ELSE' );
+    lives_ok { $ar->format('PHOTOCOPY')->store } 'Now we do support it';
 
     $schema->storage->txn_rollback;
 };
