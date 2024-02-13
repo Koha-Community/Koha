@@ -206,14 +206,14 @@ if ( $op eq 'cud-show' ) {
         ,
         {
             name => "branchcode",
-            type => "cud-select",
+            type => "select",
             option => \@branches_option,
             mandatory => ( grep /branchcode/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "categorycode",
-            type => "cud-select",
+            type => "select",
             option => \@categories_option,
             mandatory => ( grep /categorycode/, @mandatoryFields ) ? 1 : 0,
         }
@@ -280,14 +280,14 @@ if ( $op eq 'cud-show' ) {
         ,
         {
             name => "sort1",
-            type => @sort1_option ? "cud-select" : "text",
+            type => @sort1_option ? "select" : "text",
             option => \@sort1_option,
             mandatory => ( grep /sort1/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "sort2",
-            type => @sort2_option ? "cud-select" : "text",
+            type => @sort2_option ? "select" : "text",
             option => \@sort2_option,
             mandatory => ( grep /sort2/, @mandatoryFields ) ? 1 : 0,
         }
@@ -335,6 +335,7 @@ if ( $op eq 'cud-show' ) {
     $template->param('patron_attributes_values', \@patron_attributes_values);
 
     $template->param( fields => \@fields );
+    $op = 'show';
 }
 
 # Process modifications
