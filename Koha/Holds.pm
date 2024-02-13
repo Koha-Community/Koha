@@ -218,10 +218,8 @@ Return the number of holds, where a hold group is counted as one hold.
 
 sub count_holds {
     my ( $self, $search_params ) = @_;
-
-    $search_params = {
-        hold_group_id => undef,
-    };
+    $search_params = {} if !$search_params;
+    $search_params->{hold_group_id} = undef;
     my $holds_without_group_count = $self->search($search_params)->count();
 
     $search_params = {

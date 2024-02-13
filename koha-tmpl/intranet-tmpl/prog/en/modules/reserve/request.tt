@@ -619,14 +619,6 @@
                             <input name="non_priority" id="non_priority" type="checkbox" />
                             <span class="hint">A non priority hold doesn't prevent a current checkout from renewing</span>
                         </li>
-
-                        [% IF ( Koha.Preference('DisplayAddHoldGroups') && ( multi_hold ) ) %]
-                            <li id="hold_group_list_item">
-                                <label for="hold_group">Treat as hold group: </label>
-                                <input name="hold_group" id="hold_group" type="checkbox" />
-                                <span class="hint">Place a hold on the next available title from this group</span>
-                            </li>
-                        [% END %]
                     </ol>
                 </fieldset>
                 <fieldset class="rows any_specific">
@@ -1097,6 +1089,14 @@
                             <label for="to">Hold expires on date:</label>
                             <input id="expiration_date" name="expiration_date" id="to" size="10" type="text" class="flatpickr" data-flatpickr-futuredate="true" />
                         </li>
+
+                        [% IF ( Koha.Preference('DisplayAddHoldGroups') ) %]
+                            <li id="hold_group_list_item">
+                                <label for="hold_group">Treat as hold group: </label>
+                                <input name="hold_group" id="hold_group" type="checkbox" />
+                                <span class="hint">Place a hold on the next available title from this group</span>
+                            </li>
+                        [% END %]
                     </ol>
                     <table id="requesttitles">
                         <tr>

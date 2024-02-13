@@ -272,7 +272,7 @@
 
                             [% IF ( RESERVES.count ) %]
                                 [% WRAPPER tab_item tabname= "opac-user-holds" %]
-                                    <span>Holds ([% RESERVES.count | html %])</span>
+                                    <span>Holds ([% reserves_count | html %])</span>
                                 [% END %]
                             [% END %]
                             [% IF Koha.Preference('UseRecalls') && RECALLS.count %]
@@ -1443,4 +1443,5 @@
             });
         </script>
     [% END %]
+    [% Asset.js("js/holds.js") | $raw %]
 [% END %]

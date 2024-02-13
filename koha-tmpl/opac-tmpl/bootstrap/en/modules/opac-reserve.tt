@@ -110,6 +110,18 @@
                     [% INCLUDE 'csrf-token.inc' %]
                     <legend class="sr-only">Hold requests</legend>
                     <input type="hidden" name="op" value="cud-place_reserve" />
+                    [% IF ( Koha.Preference('DisplayAddHoldGroups') && ( multi_hold ) ) %]
+                        <div id="hold_group">
+                            <fieldset class="rows">
+                                <ul>
+                                    <li>
+                                        <label for="add_to_hold_group_control">Treat as hold group (next available item fulfills all holds):</label>
+                                        <input type="checkbox" id="add_to_hold_group_control" name="add_to_hold_group" value="add_to_hold_group" />
+                                    </li>
+                                </ul>
+                            </fieldset>
+                        </div>
+                    [% END %]
                     <!-- These values are set dynamically by js -->
                     <input type="hidden" name="biblionumbers" id="biblionumbers" />
                     <input type="hidden" name="selecteditems" id="selections" />

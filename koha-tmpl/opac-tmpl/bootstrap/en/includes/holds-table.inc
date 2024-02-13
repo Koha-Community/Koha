@@ -64,6 +64,22 @@
                     [% IF HOLD.item_level_hold %]
                         <p class="hint">Item on hold: [% HOLD.item.barcode | html %]</p>
                     [% END %]
+                    [% IF HOLD.hold_group_id %]
+                        <div class="group_hold">
+                            <span class="hint">(part of a hold group)</span>
+                            <div class="group_hold_list" style="display:none">
+                                [% group_holds = HOLD.hold_group.holds %]
+                                [% IF ( group_holds.count ) %]
+                                    <span class="hint">Containing the following:</span>
+                                    <ul>
+                                        [% FOREACH hg_member IN group_holds %]
+                                            <li>[% INCLUDE 'biblio-title.inc' biblio=hg_member.biblio link=>1 %]</li>
+                                        [% END %]
+                                    </ul>
+                                [% END %]
+                            </div>
+                        </div>
+                    [% END %]
                 </td>
                 <td class="reservedate" data-order="[% HOLD.reservedate | html %]"> [% HOLD.reservedate | $KohaDates %] </td>
                 <td class="expirationdate" data-order="[% !HOLD.found ? HOLD.expirationdate : '0000-00-00' | html %]">

@@ -347,8 +347,9 @@ $template->param( show_barcode => 1 ) if $show_barcode;
 my $reserves = $patron->holds->filter_out_has_cancellation_requests;
 
 $template->param(
-    RESERVES     => $reserves,
-    showpriority => $show_priority,
+    RESERVES       => $reserves,
+    reserves_count => $reserves->count_holds,
+    showpriority   => $show_priority,
 );
 
 if ( C4::Context->preference('UseRecalls') ) {
