@@ -33,6 +33,12 @@ use Try::Tiny;
 
 my $cgi = CGI->new;
 
+# If ArticleRequests is disabled, leave immediately
+if ( !C4::Context->preference('ArticleRequests') ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-request-article.tt",
