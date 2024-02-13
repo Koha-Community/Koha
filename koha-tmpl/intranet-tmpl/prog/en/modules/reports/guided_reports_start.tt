@@ -996,12 +996,16 @@
                                 </form>
 
                                 <form method="get" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification" target="_blank">
-                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="show" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-                                    <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">
-                                        [%- cardnumbers = PROCESS batch_list results=results batch_type='cardnumber' | trim | html %][% IF cardnumbers %][% SET batch_cardnumbers = 1 %][% cardnumbers | html %][% END -%]
-                                    </textarea>
+                                    [%- cardnumbers = PROCESS batch_list results=results batch_type='cardnumber' | trim | html %]
+                                    [% IF cardnumbers %]
+                                        [% SET batch_cardnumbers = cardnumbers.length %]
+                                        [% FOR b IN cardnumbers.split("\n") %]
+                                            <input type="hidden" name="cardnumber" value="[% b | uri %]" />
+                                        [% END -%]
+                                    [% END %]
+
                                 </form>
 
                                 <form action="/cgi-bin/koha/patroncards/edit-batch.pl" id="patron_card_creator" method="post" target="_blank">

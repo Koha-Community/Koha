@@ -66,6 +66,8 @@ if ( $op eq 'cud-show' ) {
     if( my $cardnumberlist = $input->param('cardnumberlist') ){
         # User submitted a list of card numbers
         push @patronidnumbers, split( /\s\n/, $cardnumberlist );
+    } elsif ( my @cardnumbers = $input->multi_param('cardnumber') ) {
+        @patronidnumbers = @cardnumbers;
     } elsif ( my $cardnumberuploadfile = $input->param('cardnumberuploadfile') ){
         # User uploaded a file of card numbers
         binmode $cardnumberuploadfile, ':encoding(UTF-8)';
