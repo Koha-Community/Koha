@@ -27,6 +27,10 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::ArticleRequest',
         description => 'Article request limit was reached'
     },
+    'Koha::Exceptions::ArticleRequest::WrongFormat' => {
+        isa         => 'Koha::Exceptions::ArticleRequest',
+        description => 'Passed format is not locally supported'
+    },
 );
 
 =head1 NAME
