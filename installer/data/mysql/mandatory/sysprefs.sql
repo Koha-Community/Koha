@@ -213,6 +213,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('displayFacetCount','0',NULL,NULL,'YesNo'),
 ('DisplayIconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.','YesNo'),
 ('DisplayLibraryFacets',  'holding',  'home|holding|both',  'Defines which library facets to display.',  'Choice'),
+('DisplayMultiItemHolds','0','','Display the ability to place holds on different items at the same time in staff interface and OPAC','YesNo'),
 ('DisplayMultiPlaceHold','1','','Display the ability to place multiple holds or not','YesNo'),
 ('DisplayOPACiconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC.','YesNo'),
 ('DumpSearchQueryTemplate',0,'','Add the search query being passed to the search engine into the template for debugging','YesNo'),

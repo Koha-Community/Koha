@@ -5,6 +5,10 @@
 [% USE Price %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
+[% SET reserve_input_type = 'radio' %]
+[% IF ( Koha.Preference('DisplayMultiItemHolds') ) %]
+    [% SET reserve_input_type = 'checkbox' %]
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Placing a hold &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -397,7 +401,7 @@
                                                                 <tr class="holdable">
                                                             [% END %]
                                                                     <td class="copynumber" data-order="[% itemLoo.copynumber | html %]">
-                                                                        <input type="checkbox" class="checkitem checkitem_[% bibitemloo.biblionumber | html %]" name="checkitem_[% bibitemloo.biblionumber | html %]" value="[% itemLoo.itemnumber | html %]" />
+                                                                        <input type="[% reserve_input_type | html %]" class="checkitem checkitem_[% bibitemloo.biblionumber | html %]" name="checkitem_[% bibitemloo.biblionumber | html %]" value="[% itemLoo.itemnumber | html %]" />
                                                         [% ELSE %]
                                                             [% SET unholdable_items = 1 %]
                                                             [% IF ( itemLoo.checkout ) %]

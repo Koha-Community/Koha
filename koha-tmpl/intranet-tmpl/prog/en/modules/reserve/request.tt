@@ -11,6 +11,10 @@
 [% USE AuthorisedValues %]
 [% USE Price %]
 [% USE TablesSettings %]
+[% SET reserve_input_type = 'radio' %]
+[% IF ( Koha.Preference('DisplayMultiItemHolds') ) %]
+    [% SET reserve_input_type = 'checkbox' %]
+[% END %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -804,9 +808,9 @@
                                                             Hold must be item group level
                                                         </span>
                                                     [% ELSIF ( itemloo.available ) %]
-                                                        <input type="checkbox" name="checkitem" value="[% itemloo.itemnumber | html %]" />
+                                                        <input type="[% reserve_input_type | html %]" name="checkitem" value="[% itemloo.itemnumber | html %]" />
                                                     [% ELSIF ( itemloo.override ) %]
-                                                        <input type="checkbox" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber | html %]" />
+                                                        <input type="[% reserve_input_type | html %]" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber | html %]" />
                                                         <i class="fa fa-exclamation-triangle fa-lg" style="color:gold" title="Requires override of hold policy"/></i>
                                                     [% ELSE %]
                                                         <span class="error">
