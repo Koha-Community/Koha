@@ -3911,6 +3911,10 @@ sub CalcDateDue {
     my @close         = undef;
     my $tomorrowhours = Koha::Library::Hours->find( { library_id => $branch, day => $tomorrow_dayofweek } )
         ;    # get open hours of next day
+
+    # Defend against missing library hours definitions
+    if ( !$todayhours || !$tomorrowhours ) { $considerlibraryhours = 'ignore' }
+
     my @open = undef;
     if ( $considerlibraryhours ne 'ignore' and $todayhours->close_time and $tomorrowhours->open_time ) {
         @close             = split( ":", $todayhours->close_time );
