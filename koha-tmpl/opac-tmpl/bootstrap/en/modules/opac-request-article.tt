@@ -300,6 +300,35 @@
                 var first_format = supported_formats.split('|')[0].replace(/^\s*|\s*$/g, '');
                 $('#format option[value="'+first_format+'"]').attr('selected', true);
             }
-        });
-    </script>
+
+            if ( f.length ) {
+                alert( _("The following fields are required and not filled in: ") + f.join(", ") );
+                return 0;
+            }
+
+            // Check if all fields are blank
+            if( m.length == 0 && $('#title').val()=='' && $('#author').val()=='' && $('#volume').val()=='' && $('#issue').val()=='' && $('#date').val()=='' && $('#pages').val()=='' && $('#chapters').val()=='' && $('#patron_notes').val()=='' && !$('input[name="toc_request"]').prop('checked') ) {
+                alert( _("Please fill in at least one field.") );
+                return 0;
+            }
+
+            allow_submit = true;
+            $('#place-article-request').submit();
+        }
+    });
+
+    // Initialize format(s)
+    var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') | html %]";
+    if( !supported_formats.match(/PHOTOCOPY/) )
+        $('#format option[value="PHOTOCOPY"]').remove();
+    if( !supported_formats.match(/SCAN/) )
+        $('#format option[value="SCAN"]').remove();
+
+    if( $('#format option').length > 1 ) {
+        // Select first listed format
+        var first_format = supported_formats.split('|')[0].replace(/^\s*|\s*$/g, '');
+        $('#format option[value="'+first_format+'"]').attr('selected', true);
+    }
+});
+</script>
 [% END %]
