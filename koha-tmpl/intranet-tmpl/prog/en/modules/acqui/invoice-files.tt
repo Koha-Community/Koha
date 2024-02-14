@@ -75,8 +75,18 @@
                             [% f.date_uploaded | $KohaDates %]
                           </td>
                           <td>[% f.file_size | html %]</td>
-                          <td><a class="delete_file" href="?invoiceid=[% invoiceid | html %]&amp;op=delete&amp;file_id=[% f.file_id | html %]">Delete</a></td>
-                          <td><a href="?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">Download</a></td>
+                          <td>
+                                <form action="invoice-files.pl" method="post">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
+                                    <input type="hidden" name="file_id" value="[% f.file_id | html %]" />
+                                    <input type="hidden" name="op" value="cud-delete" />
+                                    <button type="submit" class="btn btn-default btn-xs delete_file">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                          <td><a class="btn btn-default btn-xs" href="?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]"><i class="fa fa-download"></i> Download</a></td>
                       </tr>
                     [% END %]
                   </tbody>
@@ -128,7 +138,7 @@
                 "searching": false,
                 "dom": "t"
             }));
-            $("a.delete_file").click(function(){
+            $(".delete_file").click(function(){
                 return ( confirm( _("Are you sure you want to delete this file ?") ) );
             });
         });
