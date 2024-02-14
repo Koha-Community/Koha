@@ -625,24 +625,18 @@ $(document).ready(function() {
             var description      = form.description.value;
             var opac_description = form.opac_description.value;
 
-            var data = "category="+encodeURIComponent(category)
-                +"&value="+encodeURIComponent(value)
-                +"&description="+encodeURIComponent(description)
-                +"&opac_description="+encodeURIComponent(opac_description);
-            $.ajax({
-                type: "POST",
-                url: "/cgi-bin/koha/svc/authorised_values",
-                data: data,
-                success: function(response) {
+            const client = APIClient.authorised_value;
+            client.values.create({category, value, description, opac_description}).then(
+                success => {
                     $('#avCreate').modal('hide');
 
-                    $(current_select2).append('<option selected value="'+response.value+'">'+response.description+'</option>');
+                    $(current_select2).append('<option selected value="'+success.value+'">'+success.description+'</option>');
                     $("#avCreate").modal("hide");
                 },
-                error: function() {
+                error => {
                     $(".avCreate_error").html(__("Something went wrong. Maybe the value already exists?")).show();
                 }
-            });
+            );
             return false;
         }
     });

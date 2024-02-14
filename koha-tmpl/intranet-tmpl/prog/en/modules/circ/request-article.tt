@@ -415,10 +415,7 @@
                 $('#format option[value="'+first_format+'"]').attr('selected', true);
             }
         });
-    </script>
 
-    <script async type="module">
-        import { APIClient } from '/intranet-tmpl/prog/js/fetch/api-client.js';
         $(".ar-update-branchcode").on('change', async function(e){
             var branchcode = this.value;
             var c = confirm(_("Are you sure you want to change the pickup library from %s to %s for this request?").format( previous_branchcode, branchcode ));
