@@ -866,7 +866,7 @@
                                                                     <span>On hold expected at [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %]</span>
                                                                 [% END %]
                                                             [% END %]
-                                                            <a class="info cancel-hold" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber | html %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber | html %]&amp;CancelItemnumber=[% itemloo.itemnumber | html %]">Cancel hold</a>
+                                                            <a class="info cancel-hold" href="#" data-biblionumber="[% itemloo.biblionumber | html %]" data-id="[% itemloo.reserve_id | html %]">Cancel hold</a>
                                                         [% END # /IF itemloo.nocancel %]
                                                     [% ELSE %]
                                                         Not on hold
@@ -1066,6 +1066,7 @@
                         <h2>Existing holds</h2>
                         <div id="toolbar" class="btn-toolbar">
                             <div class="btn-group">
+                                <input type="hidden" name="op" value="cud-modifyall">
                                 <input type="submit" class="btn btn-primary" name="submit" value="Update hold(s)" />
                             </div>
                             <div class="btn-group">
@@ -1256,6 +1257,11 @@
                     <h3>Confirm deletion</h3>
                 </div>
 
+                <form id="cancel_modal_form" method="post" action="request.pl">
+                [% INCLUDE 'csrf-token.inc' %]
+                <div id="inputs">
+                </div>
+
                 <div class="modal-body">
                     <p>Are you sure you want to cancel this hold?</p>
 
@@ -1263,7 +1269,7 @@
                         [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                         [% IF hold_cancellation.count %]
                             <label for="cancellation-reason">Cancellation reason: </label>
-                            <select class="cancellation-reason" name="modal-cancellation-reason" id="modal-cancellation-reason">
+                            <select class="cancellation-reason" name="cancellation-reason" id="modal-cancellation-reason">
                                 <option value="">No reason given</option>
                                 [% FOREACH reason IN hold_cancellation %]
                                     <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
@@ -1274,11 +1280,19 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger">Confirm cancellation</button>
+                    <input id="cancelModalConfirmBtn" type="submit" class="btn btn-danger" value="Confirm cancellation">
                     <a href="#" data-dismiss="modal">Cancel</a>
                 </div>
+
+                </form>
+
             </div>
         </div>
+    </div>
+    <div id="hold-actions">
+        <form id="hold-actions-form">
+            [% INCLUDE 'csrf-token.inc' %]
+        </form>
     </div>
 
 [% MACRO jsinclude BLOCK %]
@@ -1640,25 +1654,13 @@
             $(".cancel-hold").on("click",function(e) {
                 e.preventDefault;
                 cancel_link = $(this);
-                $('#cancelModal').modal();
-                return false;
-            });
-            $("#cancelModalConfirmBtn").on("click",function(e) {
-                let link;
-                if(cancel_link.data('bulk')) {
-                    [% SET data_url = 'biblionumber=' _ biblionumbers.join('&biblionumber=') %]
-                    link = `request.pl?[% data_url | url %]&amp;action=cancelBulk&amp;ids=${$('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',')}`;
-                } else {
-                    let borrowernumber = cancel_link.data('borrowernumber');
-                    let biblionumber = cancel_link.data('biblionumber');
+                $("#cancel_modal_form #inputs").empty();
                     let reserve_id = cancel_link.data('id');
-                    link = `request.pl?action=cancel&amp;borrowernumber=${ borrowernumber }&amp;biblionumber=${ biblionumber }&amp;reserve_id=${ reserve_id }`;
-                }
-                let reason = $("#modal-cancellation-reason").val();
-                if ( reason ) {
-                    link += "&amp;cancellation-reason=" + reason
-                }
-                window.location.href = link;
+                    let biblionumber = cancel_link.data('biblionumber');
+                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="reserve_id" value="' + reserve_id + '">');
+                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="biblionumber" value="' + biblionumber + '">');
+                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="op" value="cud-cancel">');
+                $('#cancelModal').modal();
                 return false;
             });
 
@@ -1723,13 +1725,81 @@
                 e.preventDefault();
                 if($('.holds_table .select_hold:checked').length) {
                     cancel_link = $(this);
+                    $("#cancel_modal_form #inputs").empty;
+                    biblionumbers.forEach( function(biblionumber){
+                        $("#cancel_modal_form #inputs").append('<input type="hidden" name="biblionumber" value="'+biblionumber+'">');
+                    });
+                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="op" value="cud-cancel_bulk">');
+                    let hold_ids= $('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id')).join(',');
+                    $("#cancel_modal_form #inputs").append('<input type="hidden" name="ids" value="' + hold_ids + '">');
                     delete localStorage.selectedHolds;
                     $('#cancelModal').modal();
                 }
                 return false;
             });
+
+            $(".hold-arrow").click(function(e) {
+                e.preventDefault();
+                let arrowForm = $("#hold-actions-form").attr({
+                    action: 'request.pl',
+                    method: 'post'
+                });
+                let arrow_op = $("<input />").attr({
+                    name: 'op',
+                    type: 'hidden',
+                    value: $(this).data('op')
+                });
+                let arrow_where = $("<input />").attr({
+                    name: 'where',
+                    type: 'hidden',
+                    value: $(this).data('where')
+                });
+                let arrow_fp = $("<input />").attr({
+                    name: 'first_priority',
+                    type: 'hidden',
+                    value: $(this).data('first_priority')
+                });
+                let arrow_lp = $("<input />").attr({
+                    name: 'last_priority',
+                    type: 'hidden',
+                    value: $(this).data('last_priority')
+                });
+                let arrow_pp = $("<input />").attr({
+                    name: 'prev_priority',
+                    type: 'hidden',
+                    value: $(this).data('prev_priority')
+                });
+                let arrow_np = $("<input />").attr({
+                    name: 'next_priority',
+                    type: 'hidden',
+                    value: $(this).data('next_priority')
+                });
+                let arrow_bn = $("<input />").attr({
+                    name: 'borrowernumber',
+                    type: 'hidden',
+                    value: $(this).data('borrowernumber')
+                });
+                let arrow_bb = $("<input />").attr({
+                    name: 'biblionumber',
+                    type: 'hidden',
+                    value: $(this).data('biblionumber')
+                });
+                let arrow_ri = $("<input />").attr({
+                    name: 'reserve_id',
+                    type: 'hidden',
+                    value: $(this).data('reserve_id')
+                });
+                let arrow_date = $("<input />").attr({
+                    name: 'date',
+                    type: 'hidden',
+                    value: $(this).data('date')
+                });
+                arrowForm.append(arrow_op,arrow_where,arrow_fp,arrow_lp,arrow_pp,arrow_np,arrow_bn,arrow_bb,arrow_ri,arrow_date);
+                $("#hold-actions-form").submit();
+                return true;
+            })
         });
-    </script>
+</script>
 
     <script>
         table_settings = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];

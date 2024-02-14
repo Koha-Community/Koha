@@ -95,19 +95,19 @@
                         [%- SET prev_priority  = loop.prev.priority -%]
                         [%- SET next_priority  = loop.next.priority -%]
                         <td style="white-space:nowrap;">
-                            <a class="hold-arrow" title="Move hold up" href="request.pl?action=move&amp;where=up&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <a class="hold-arrow" title="Move hold up" data-op="cud-move" data-where="up" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="[% prev_priority | html %]" data-next_priority="[% next_priority | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
                                 <i class="fa fa-lg icon-move-hold-up" aria-hidden="true"></i>
                             </a>
 
-                            <a class="hold-arrow" title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <a class="hold-arrow" title="Move hold to top" data-op="cud-move" data-where="top" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="[% prev_priority | html %]" data-next_priority="[% next_priority | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
                                 <i class="fa fa-lg icon-move-hold-top" aria-hidden="true"></i>
                             </a>
 
-                            <a class="hold-arrow" title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <a class="hold-arrow" title="Move hold to bottom" data-op="cud-move" data-where="bottom" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="[% prev_priority | html %]" data-next_priority="[% next_priority | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
                                 <i class="fa fa-lg icon-move-hold-bottom" aria-hidden="true"></i>
                             </a>
 
-                            <a class="hold-arrow" title="Move hold down" href="request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <a class="hold-arrow" title="Move hold down" data-op="cud-move" data-where="down" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="[% prev_priority | html %]" data-next_priority="[% next_priority | html %]" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
                                 <i class="fa fa-lg icon-move-hold-down" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -225,10 +225,10 @@
                 [%- UNLESS hold.found -%]
                         <td>
                                 [% IF ( hold.lowestPriority ) %]
-                                    <a class="hold-arrow" title="Remove lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                                    <a class="hold-arrow" title="Remove lowest priority" data-op="cud-setLowestPriority" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
                                         <i class="fa fa-lg fa-rotate-90 icon-unset-lowest" aria-hidden="true"></i>
                                 [% ELSE %]
-                                    <a class="hold-arrow" title="Set lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                                    <a class="hold-arrow" title="Set lowest priority" data-op="cud-setLowestPriority" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
                                         <i class="fa fa-lg fa-rotate-90 icon-set-lowest" aria-hidden="true"></i>
                                 [% END %]
                             </a>
@@ -238,7 +238,7 @@
             [%- END -%]
                 [%- END -%]
                 <td>
-                    <a class="cancel-hold" title="Cancel hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="request.pl?action=cancel&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                    <a class="cancel-hold" title="Cancel hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="request.pl?op=cancel&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
                         <i class="fa fa-trash" aria-label="Cancel hold"></i>
                     </a>
                 </td>
@@ -262,7 +262,7 @@
                         [%- END -%]
                     [%- END # IF SuspendHoldsIntranet -%]
                     [%- IF ( hold.found ) -%]
-                        <input type="button" id="revert_hold_[% hold.reserve_id | html %]" value="[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]" onclick="window.location.href='request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | uri %]&amp;last_priority=[% last_priority | uri %]&amp;prev_priority=0&amp;next_priority=1&amp;borrowernumber=[% hold.borrowernumber | uri %]&amp;biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]&amp;reserve_id=[% hold.reserve_id | uri %]&amp;date=[% hold.date | uri %]'">
+                        <input type="button" id="revert_hold_[% hold.reserve_id | html %]" value="[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]" onclick="window.location.href='request.pl?op=move&amp;where=down&amp;first_priority=[% first_priority | uri %]&amp;last_priority=[% last_priority | uri %]&amp;prev_priority=0&amp;next_priority=1&amp;borrowernumber=[% hold.borrowernumber | uri %]&amp;biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]&amp;reserve_id=[% hold.reserve_id | uri %]&amp;date=[% hold.date | uri %]'">
                     [%- END -%]
                 </td>
                 [% IF ( hold.intransit || hold.atdestination ) %]

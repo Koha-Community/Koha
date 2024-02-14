@@ -450,7 +450,32 @@ $(document).ready(function() {
         let reserve_id     = $(this).data('reserve-id');
         let biblionumber   = $(this).data('biblionumber');
         let suspend_until  = $('#suspend_until_' + reserve_id).val();
-        window.location.href='request.pl?action=toggleSuspend&reserve_id=' + reserve_id + '&biblionumber=' + biblionumber + '&suspend_until=' + suspend_until;
+        let suspendForm = $("#hold-actions-form").attr({
+            action: 'request.pl',
+            method: 'post'
+        });
+        let sus_op = $("<input />").attr({
+            type: 'hidden',
+            name: 'op',
+            value: 'cud-toggleSuspend'
+        });
+        let sus_bn = $("<input />").attr({
+            type: 'hidden',
+            name: 'biblionumber',
+            value: biblionumber
+        });
+        let sus_ri = $("<input />").attr({
+            type: 'hidden',
+            name: 'reserve_id',
+            value: reserve_id,
+        });
+        let sus_su = $("<input />").attr({
+            type: 'hidden',
+            name: 'suspend_until',
+            value: suspend_until
+        });
+        suspendForm.append( sus_op, sus_bn, sus_ri, sus_su );
+        $("#hold-actions-form").submit();
         return false;
     });
 });

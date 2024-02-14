@@ -89,10 +89,9 @@ my $messages;
 my $exceeded_maxreserves;
 my $exceeded_holds_per_record;
 
-my $action = $input->param('action');
-$action ||= q{};
+my $op = $input->param('op') || q{};
 
-if ( $action eq 'move' ) {
+if ( $op eq 'cud-move' ) {
     my $where           = $input->param('where');
     my $reserve_id      = $input->param('reserve_id');
     my $prev_priority   = $input->param('prev_priority');
@@ -110,22 +109,22 @@ if ( $action eq 'move' ) {
         );
     }
 }
-elsif ( $action eq 'cud-cancel' ) {
+elsif ( $op eq 'cud-cancel' ) {
     my $reserve_id          = $input->param('reserve_id');
     my $cancellation_reason = $input->param("cancellation-reason");
     my $hold                = Koha::Holds->find($reserve_id);
     $hold->cancel( { cancellation_reason => $cancellation_reason } ) if $hold;
 }
-elsif ( $action eq 'setLowestPriority' ) {
+elsif ( $op eq 'cud-setLowestPriority' ) {
     my $reserve_id = $input->param('reserve_id');
     ToggleLowestPriority($reserve_id);
 }
-elsif ( $action eq 'toggleSuspend' ) {
+elsif ( $op eq 'cud-toggleSuspend' ) {
     my $reserve_id    = $input->param('reserve_id');
     my $suspend_until = $input->param('suspend_until');
     ToggleSuspend( $reserve_id, $suspend_until );
 }
-elsif ( $action eq 'cancelBulk' ) {
+elsif ( $op eq 'cud-cancel_bulk' ) {
     my $cancellation_reason = $input->param("cancellation-reason");
     my @hold_ids            = split( ',', scalar $input->param("ids"));
     my $params              = {
@@ -173,7 +172,7 @@ $template->param(
 
 # If we have the borrowernumber because we've performed an action, then we
 # don't want to try to place another reserve.
-if ($borrowernumber_hold && !$action) {
+if ($borrowernumber_hold && !$op) {
     my $patron = Koha::Patrons->find( $borrowernumber_hold );
     my $diffbranch;
 
@@ -219,7 +218,7 @@ if ($borrowernumber_hold && !$action) {
     );
 }
 
-if ($club_hold && !$borrowernumber_hold && !$action) {
+if ($club_hold && !$borrowernumber_hold && !$op) {
     my $club = Koha::Clubs->find($club_hold);
 
     my $enrollments = $club->club_enrollments;
@@ -432,6 +431,7 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                     $item->{backgroundcolor} = 'reserved';
                     $item->{reservedate}     = $first_hold->reservedate;
                     $item->{ReservedFor}     = $p;
+                    $item->{reserve_id}      = $first_hold->reserve_id;
                     $item->{ExpectedAtLibrary}     = $first_hold->branchcode;
                     $item->{waitingdate} = $first_hold->waitingdate;
                 }
