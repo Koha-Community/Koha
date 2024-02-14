@@ -188,7 +188,7 @@
         </ol>
     </fieldset>
     <ol>
-    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% filters.borname | html %]" /></li>
+    <li><label>Name or card number:</label><input type="text" name="borname" value="[% filters.borname | html %]" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       [% FOREACH borcatloo IN borcatloop %]
         [% IF ( borcatloo.selected ) %]<option value="[% borcatloo.value | html %]" selected="selected">[% borcatloo.catname | html %]</option>[% ELSE %]<option value="[% borcatloo.value | html %]">[% borcatloo.catname | html %]</option>[% END %]

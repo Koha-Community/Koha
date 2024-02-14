@@ -11,7 +11,7 @@
         [% CASE 'success_on_insert_patron' %]
             <div class="alert alert-success">Administrator account created!</div>
         [% CASE 'error_on_insert_patron' %]
-            <div class="alert alert-danger">The patron has not been created! Cardnumber or Userid may already exist.</div>
+            <div class="alert alert-danger">The patron has not been created! Card number or Userid may already exist.</div>
         [% CASE 'ERROR_cardnumber_already_exists' %]
             <div class="alert alert-danger">Card number already in use.</div>
         [% CASE 'ERROR_cardnumber_length' %]
