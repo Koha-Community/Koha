@@ -280,7 +280,7 @@
                 </div>
                 [% ELSE %]
                     <div id="missing-cardnumber-picture-upload">
-                        <p>The patron must have a cardnumber before a patron photo can be uploaded.</p>
+                        <p>The patron must have a card number before a patron photo can be uploaded.</p>
                     </div>
                 [% END %]
             </div>
