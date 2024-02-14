@@ -203,12 +203,12 @@ sub cancel {
         }
     }
 
-    # Update order status
+    # Update order status; do not overwrite older cancellation date
+    $self->datecancellationprinted(dt_from_string) unless $self->datecancellationprinted;
     $self->set(
         {
-            cancellationreason      => $reason,
-            datecancellationprinted => \'NOW()',
-            orderstatus             => 'cancelled',
+            cancellationreason => $reason,
+            orderstatus        => 'cancelled',
         }
     )->store;
 

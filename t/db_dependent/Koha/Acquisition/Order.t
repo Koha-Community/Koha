@@ -659,7 +659,7 @@ subtest 'creator ()' => sub {
 
 subtest 'cancel() tests' => sub {
 
-    plan tests => 56;
+    plan tests => 58;
 
     $schema->storage->txn_begin;
 
@@ -1016,6 +1016,14 @@ subtest 'cancel() tests' => sub {
     };
     lives_ok { $order->set($columns)->store; } 'No croak on missing biblionumber when cancelling an order';
     throws_ok { $order->orderstatus('new')->store; } qr/Cannot insert order: Mandatory parameter biblionumber is missing/, 'Expected croak';
+
+    # Try to cancel again, not overwriting cancellation date
+    my $dt = dt_from_string->subtract( days => 1 );
+    $order->biblionumber($biblio_id)->datecancellationprinted($dt)->orderstatus('new')->store;
+    $order->cancel;
+    $order->discard_changes;
+    is( $order->orderstatus,             'cancelled', 'Check status after second cancel' );
+    is( $order->datecancellationprinted, $dt->ymd,    'Check date after second cancel' );
 
     $schema->storage->txn_rollback;
 };
