@@ -42,7 +42,7 @@ $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
 
@@ -110,11 +110,35 @@ subtest 'checkauth() tests' => sub {
         is( $userid, undef, 'If librarian user is used and password with GET, they should not be logged in' );
     };
 
-    subtest 'Template params tests (password_expired)' => sub {
+    subtest 'sessionID should be passed to the template for auth' => sub {
 
         plan tests => 1;
 
-        my $password_expired;
+        subtest 'hit auth.tt' => sub {
+
+            plan tests => 1;
+
+            my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+
+            my $password = set_weak_password($patron);
+
+            my $cgi_mock = Test::MockModule->new('CGI');
+            $cgi_mock->mock( 'request_method', sub { return 'POST' } );
+            my $cgi = CGI->new;
+
+            # Simulating the login form submission
+            $cgi->param( 'userid',   $patron->userid );
+            $cgi->param( 'password', $password );
+
+            my ( $userid, $cookie, $sessionID, $flags, $template ) =
+                C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+            ok( $template->{VARS}->{sessionID} );
+        };
+    };
+
+    subtest 'Template params tests (password_expired)' => sub {
+
+        plan tests => 1;
 
         my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
