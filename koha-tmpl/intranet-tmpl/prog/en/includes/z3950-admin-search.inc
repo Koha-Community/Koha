@@ -3,8 +3,7 @@
 <div id="header_search" role="tablist">
     <div class="tab-content">
         <div id="z3950_search" role="tabpanel" class="tab-pane active">
-            <form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form action="/cgi-bin/koha/admin/z3950servers.pl" method="get">
                 <div class="form-title">
                     <label class="control-label" for="searchfield"><span class="control-text">Search Z39.50/SRU servers</span> <i class="fa fa-fw fa-search" aria-hidden="true"></i></label>
                 </div>
@@ -12,7 +11,7 @@
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="Z39.50/SRU server search" />
                 </div>
-                <input type="hidden" name="op" value="cud-search" />
+                <input type="hidden" name="op" value="search" />
                 <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>

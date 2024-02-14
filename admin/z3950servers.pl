@@ -81,7 +81,7 @@ if( $op eq 'cud-delete_confirmed' && $id ) {
         Koha::Z3950Server->new( $formdata )->store;
         $template->param( msg_added => 1, msg_add => $formdata->{servername} );
     }
-} elsif ($op eq 'cud-search') {
+} elsif ($op eq 'search') {
     #use searchfield only in remaining operations
     $searchfield = $input->param('searchfield') || '';
 }
