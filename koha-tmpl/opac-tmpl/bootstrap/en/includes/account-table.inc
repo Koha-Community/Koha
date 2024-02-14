@@ -1,7 +1,7 @@
 [% PROCESS 'accounts.inc' %]
 <form method="post" action="opac-account-pay.pl" class="form-horizontal">
     [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="op" value="cud-pay"/>
+    <input type="hidden" name="op" value="cud-prep-redirect-form"/>
     [% IF ( ACCOUNT_LINES ) %]
         <table class="table table-bordered table-striped finestable" id="finestable">
             <caption class="sr-only">Your charges</caption>
