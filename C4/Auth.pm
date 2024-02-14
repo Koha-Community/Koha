@@ -277,12 +277,12 @@ sub get_template_and_user {
     }
 
     my $borrowernumber;
+    my $patron;
     if ($user) {
 
         # It's possible for $user to be the borrowernumber if they don't have a
         # userid defined (and are logging in through some other method, such
         # as SSL certs against an email address)
-        my $patron;
         $borrowernumber = getborrowernumber($user) if defined($user);
         if ( !defined($borrowernumber) && defined($user) ) {
             $patron = Koha::Patrons->find( $user );
@@ -297,12 +297,6 @@ sub get_template_and_user {
             $patron = Koha::Patrons->find( $borrowernumber );
             # FIXME What to do if $patron does not exist?
         }
-
-        # user info
-        $template->param( loggedinusername   => $user ); # OBSOLETE - Do not reuse this in template, use logged_in_user.userid instead
-        $template->param( loggedinusernumber => $borrowernumber ); # FIXME Should be replaced with logged_in_user.borrowernumber
-        $template->param( logged_in_user     => $patron );
-        $template->param( sessionID          => $sessionID );
 
         if ( $in->{'type'} eq 'opac' ) {
             require Koha::Virtualshelves;
@@ -446,8 +440,6 @@ sub get_template_and_user {
                 $template->param( invalidShibLogin => '1' );
             }
         }
-
-        $template->param( sessionID => $sessionID );
 
         if ( $in->{'type'} eq 'opac' ){
             require Koha::Virtualshelves;
@@ -663,6 +655,12 @@ sub get_template_and_user {
         my $languagecookie = C4::Templates::getlanguagecookie( $in->{'query'}, $language );
         $cookie = $cookie_mgr->replace_in_list( $cookie, $languagecookie );
     }
+
+    # user info
+    $template->param( loggedinusername   => $user ); # OBSOLETE - Do not reuse this in template, use logged_in_user.userid instead
+    $template->param( loggedinusernumber => $borrowernumber ); # FIXME Should be replaced with logged_in_user.borrowernumber
+    $template->param( logged_in_user     => $patron );
+    $template->param( sessionID          => $sessionID );
 
     return ( $template, $borrowernumber, $cookie, $flags );
 }
