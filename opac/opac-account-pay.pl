@@ -30,7 +30,8 @@ use Koha::Acquisition::Currencies;
 use Koha::Database;
 use Koha::Plugins::Handler;
 
-my $cgi = CGI->new;
+my $cgi            = CGI->new;
+my $op             = $cgi->param('op');
 my $payment_method = $cgi->param('payment_method');
 my @accountlines   = $cgi->multi_param('accountline');
 
@@ -43,6 +44,11 @@ my $use_plugin = Koha::Plugins::Handler->run(
 
 unless ( $use_plugin ) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
+unless ( $op eq 'cud-pay' ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/400.pl");
     exit;
 }
 
