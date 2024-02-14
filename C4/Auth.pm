@@ -194,6 +194,16 @@ sub get_template_and_user {
             { skip_csrf_check => 1 },
         );
     }
+    my $session = get_session($sessionID);
+
+    # We have just logged in
+    # If we are not coming from the login form we empty the credential to reject the access
+    if ( !$session && $user ) {
+        if ( $in->{query}->param('op') ne 'cud-login' ) {
+            $in->{query}->param('userid', '');
+            $in->{query}->param('password', '');
+        }
+    }
 
     # If we enforce GDPR and the user did not consent, redirect
     # Exceptions for consent page itself and SCI/SCO system
@@ -214,11 +224,8 @@ sub get_template_and_user {
 
     if ( $in->{type} eq 'opac' && $user ) {
         my $is_sco_user;
-        if ($sessionID){
-            my $session = get_session($sessionID);
-            if ($session){
-                $is_sco_user = $session->param('sco_user');
-            }
+        if ($session){
+            $is_sco_user = $session->param('sco_user');
         }
         my $kick_out;
 
@@ -538,8 +545,7 @@ sub get_template_and_user {
                 or $pagename =~ /^addbybiblionumber$/
                 or $pagename =~ /^review$/ )
             {
-                my $sessionSearch = get_session( $sessionID );
-                $sessionSearch->clear( ["busc"] ) if $sessionSearch;
+                $session->clear( ["busc"] ) if $session;
             }
         }
 
