@@ -1488,8 +1488,9 @@ sub checkauth {
 
     $template->param(
         LibraryName => C4::Context->preference("LibraryName"),
+        %info,
+        sessionID => $session->id,
     );
-    $template->param(%info);
 
     if ( $params->{do_not_print} ) {
         # This must be used for testing purpose only!
