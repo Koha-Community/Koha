@@ -42,7 +42,7 @@ $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 10;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
 
@@ -134,6 +134,35 @@ subtest 'checkauth() tests' => sub {
                 C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
             ok( $template->{VARS}->{sessionID} );
         };
+    };
+
+    subtest 'cas_ticket must be empty in session' => sub {
+
+        plan tests => 2;
+
+        my $patron = $builder->build_object(
+            { class => 'Koha::Patrons', value => { flags => 1 } } );
+        my $password = 'password';
+        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+        $patron->set_password( { password => $password } );
+        $cgi = Test::MockObject->new();
+        $cgi->mock( 'cookie', sub { return; } );
+        $cgi->mock(
+            'param',
+            sub {
+                my ( $self, $param ) = @_;
+                if    ( $param eq 'userid' )   { return $patron->userid; }
+                elsif ( $param eq 'password' ) { return $password; }
+                else                           { return; }
+            }
+        );
+
+        $cgi->mock( 'request_method', sub { return 'POST' } );
+        ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 'authrequired' );
+        is( $userid, $patron->userid, 'If librarian user is used and password with POST, they should be logged in' );
+        my $session = C4::Auth::get_session($sessionID);
+        is( $session->param('cas_ticket'), undef );
+
     };
 
     subtest 'Template params tests (password_expired)' => sub {
