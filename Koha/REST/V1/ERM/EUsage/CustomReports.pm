@@ -299,7 +299,7 @@ sub provider_rollup_report {
                     map { $_->{usage_total} } @filtered_object_data;
                 my $provider_rollup_total =
                     scalar(@data_object_usage_totals) > 0
-                    ? _get_usage_total(@data_object_usage_totals)
+                    ? _get_usage_total(\@data_object_usage_totals)
                     : 0;
 
                 my %usage_data_provider_hash = (
