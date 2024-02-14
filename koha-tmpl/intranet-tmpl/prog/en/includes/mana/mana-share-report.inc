@@ -26,7 +26,7 @@
                             <li><span class="label">Notes: </span><div id="shared_notes"></div></li>
                             [% IF (languages_loop) %]
                                 <li>
-                                    <input type="hidden" name="phase" value="Share">
+                                    <input type="hidden" name="op" value="cud-share">
                                     <label for="mana_language">Language:</label>
                                     <select id="mana_language" name="mana_language">
                                         [% FOREACH languages_loo IN languages_loop %]

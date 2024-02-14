@@ -598,7 +598,7 @@ elsif ( $op eq 'cud-save' ) {
     }
 }
 
-elsif ($op eq 'share'){
+elsif ($op eq 'cud-share'){
     my $lang = $input->param('mana_language') || '';
     my $reportid = $input->param('reportid');
     my $result = Koha::SharedContent::send_entity($lang, $borrowernumber, $reportid, 'report');
