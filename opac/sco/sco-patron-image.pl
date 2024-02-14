@@ -41,7 +41,6 @@ unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
 }
 
 my ($borrowernumber) = C4::Service->require_params('borrowernumber');
-my ($csrf_token) = C4::Service->require_params('csrf_token');
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 my $patron_image = $patron->image;
