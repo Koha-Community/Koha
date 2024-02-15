@@ -224,7 +224,8 @@ subtest 'add() tests' => sub {
     my $unauth_userid = $patron->userid;
 
     my $biblio  = $builder->build_sample_biblio;
-    my $item    = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $item1   = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $item2   = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
     my $booking = {
         biblio_id  => $biblio->id,
         item_id    => undef,
@@ -261,14 +262,8 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to create with existing id
     $booking->{booking_id} = $booking_id;
-    $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is(400)->json_is(
-        "/errors" => [
-            {
-                message => "Read-only.",
-                path    => "/body/booking_id"
-            }
-        ]
-    );
+    $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is(400)
+        ->json_is( "/error" => "Duplicate booking_id" );
 
     # TODO: Test bookings clashes
     # TODO: Test item auto-assignment
