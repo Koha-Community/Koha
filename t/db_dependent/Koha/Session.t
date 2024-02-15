@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use t::lib::TestBuilder;
 use C4::Auth;
@@ -26,4 +26,11 @@ subtest 'basic session fetch' => sub {
     is( $session->param('id'), 'superman', 'basic session fetched as expected' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'test session driver' => sub {
+    plan tests => 1;
+
+    my $params = Koha::Session->_get_session_params();
+    is( $params->{dsn}, 'serializer:yamlxs;driver:MySQL;id:md5', 'dsn setup correctly' );
 };
