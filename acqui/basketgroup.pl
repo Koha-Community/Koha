@@ -324,7 +324,7 @@ if ( $op eq "add_form" ) {
     my $basketgroupid = $input->param('basketgroupid');
     printbasketgrouppdf($basketgroupid);
     exit;
-}elsif ( $op eq "cud-export" ) {
+}elsif ( $op eq "export" ) {
 #
 # export a closed basketgroup in csv
 #
