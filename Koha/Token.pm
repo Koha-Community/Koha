@@ -57,6 +57,8 @@ use Digest::MD5 qw( md5_base64 );
 use Encode;
 use C4::Context;
 use Koha::Exceptions::Token;
+use Koha::Session;
+
 use base qw(Class::Accessor);
 use constant HMAC_SHA1_LENGTH => 20;
 use constant CSRF_EXPIRY_HOURS => 8; # 8 hours instead of 7 days..
@@ -215,11 +217,17 @@ sub decode_jwt {
 sub _add_default_csrf_params {
     my ( $params ) = @_;
     $params->{session_id} //= DEFA_SESSION_ID;
-    my $userenv = C4::Context->userenv;
-    if ( ( !$userenv ) || !$userenv->{id} ) {
-        $userenv = { id => DEFA_SESSION_USERID };
+
+    my $id;
+    my $session = Koha::Session->get_session( { sessionID => $params->{session_id} } );
+    if ($session) {
+        $id = $session->param('id');
     }
-    $params->{id} //= Encode::encode( 'UTF-8', $userenv->{id} );
+    if ( !$id ) {
+        $id = DEFA_SESSION_USERID;
+    }
+
+    $params->{id} //= Encode::encode( 'UTF-8', $id );
     $params->{id} .= '_' . $params->{session_id};
 
     my $pw = C4::Context->config('pass');
