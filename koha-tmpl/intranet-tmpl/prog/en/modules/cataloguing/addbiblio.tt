@@ -801,9 +801,8 @@ $(document).ready(function(){
 
     function Changefwk() {
         var f = document.f;
-        f.op.value = "[% op | html %]";
+        f.op.value = "cud-change-framework";
         f.biblionumber.value = "[% biblionumberdata | html %]";
-        f.changed_framework.value = "changed";
         f.submit();
     }
 
@@ -925,6 +924,7 @@ $(document).ready(function(){
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" value="[% IF ( biblionumber ) %]view[% ELSE %]items[% END %]" id="redirect" name="redirect" />
                         <input type="hidden" value="" id="current_tab" name="current_tab" />
+                        <input type="hidden" name="original_op" value="[% op | html %]" />
                         <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
                 [% END %]
 
@@ -1058,7 +1058,6 @@ $(document).ready(function(){
                 <input type="hidden" name="z3950" value="[% z3950 | html %]" />
                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                 <input type="hidden" name="breedingid" value="[% breedingid | html %]" />
-                <input type="hidden" name="changed_framework" value="" />
 
                 [% WRAPPER tabs id= "addbibliotabs" %]
                     [% WRAPPER tab_panels %]

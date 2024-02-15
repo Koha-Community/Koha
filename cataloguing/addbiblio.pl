@@ -63,7 +63,7 @@ if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
     MARC::File::XML->default_record_format('UNIMARC');
 }
 
-our($tagslib,$authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
+our($tagslib,$authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950,$op,$changed_framework);
 
 =head1 FUNCTIONS
 
@@ -316,8 +316,8 @@ sub build_tabs {
                                     index_tag         => $index_tag,
                                     record            => $record,
                                     hostitemnumber    => scalar $input->param('hostitemnumber'),
-                                    op                => scalar $input->param('op'),
-                                    changed_framework => scalar $input->param('changed_framework'),
+                                    op                => $op,
+                                    changed_framework => $changed_framework,
                                     breedingid        => scalar $input->param('breedingid'),
                                     tagslib           => $tagslib,
                                     mandatory_z3950   => $mandatory_z3950,
@@ -342,8 +342,8 @@ sub build_tabs {
                                         index_tag         => $index_tag,
                                         record            => $record,
                                         hostitemnumber    => scalar $input->param('hostitemnumber'),
-                                        op                => scalar $input->param('op'),
-                                        changed_framework => scalar $input->param('changed_framework'),
+                                        op                => $op,
+                                        changed_framework => $changed_framework,
                                         breedingid        => scalar $input->param('breedingid'),
                                         tagslib           => $tagslib,
                                         mandatory_z3950   => $mandatory_z3950,
@@ -383,8 +383,8 @@ sub build_tabs {
                                     index_tag         => $index_tag,
                                     record            => $record,
                                     hostitemnumber    => scalar $input->param('hostitemnumber'),
-                                    op                => scalar $input->param('op'),
-                                    changed_framework => scalar $input->param('changed_framework'),
+                                    op                => $op,
+                                    changed_framework => $changed_framework,
                                     breedingid        => scalar $input->param('breedingid'),
                                     tagslib           => $tagslib,
                                     mandatory_z3950   => $mandatory_z3950,
@@ -450,8 +450,8 @@ sub build_tabs {
                                     index_tag         => $index_tag,
                                     record            => $record,
                                     hostitemnumber    => scalar $input->param('hostitemnumber'),
-                                    op                => scalar $input->param('op'),
-                                    changed_framework => scalar $input->param('changed_framework'),
+                                    op                => $op,
+                                    changed_framework => $changed_framework,
                                     breedingid        => scalar $input->param('breedingid'),
                                     tagslib           => $tagslib,
                                     mandatory_z3950   => $mandatory_z3950,
@@ -498,7 +498,7 @@ my $biblionumber  = $input->param('biblionumber'); # if biblionumber exists, it'
 my $parentbiblio  = $input->param('parentbiblionumber');
 my $breedingid    = $input->param('breedingid');
 my $z3950         = $input->param('z3950');
-my $op            = $input->param('op') // q{};
+$op               = $input->param('op') // q{};
 my $mode          = $input->param('mode') // q{};
 my $frameworkcode = $input->param('frameworkcode');
 my $redirect      = $input->param('redirect');
@@ -515,7 +515,11 @@ my $fa_duedatespec        = $input->param('duedatespec');
 
 my $userflags = 'edit_catalogue';
 
-my $changed_framework = $input->param('changed_framework') // q{};
+if ( $op eq 'cud-change-framework' ) {
+    $op = $input->param('original_op');
+    $changed_framework = 1;
+}
+
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not( defined $frameworkcode) and $op ne 'cud-addbiblio' );
 
@@ -786,7 +790,7 @@ elsif ( $op eq "cud-delete" ) {
         $biblionumber = "";
     }
 
-    if($changed_framework eq "changed"){
+    if($changed_framework){
         $record = TransformHtmlToMarc( $input, 1 );
     }
     elsif( $record ne -1 ) {
