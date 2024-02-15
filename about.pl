@@ -172,6 +172,14 @@ $template->param(
     memcached_namespace => $memcached_namespace,
     is_memcached_still_active => $is_memcached_still_active,
     where_is_memcached_config => $where_is_memcached_config,
+    perlPath      => $perl_path,
+    zebraVersion  => $zebraVersion,
+    kohaVersion   => $versions{'kohaVersion'},
+    osVersion     => $versions{'osVersion'},
+    perlVersion   => $versions{'perlVersion'},
+    perlIncPath   => [ map { perlinc => $_ }, @INC ],
+    mysqlVersion  => $versions{'mysqlVersion'},
+    apacheVersion => $versions{'apacheVersion'},
     memcached_running   => Koha::Caches->get_instance->memcached_cache,
 );
 
@@ -667,14 +675,6 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
 my %versions = C4::Context::get_versions();
 
 $template->param(
-    kohaVersion   => $versions{'kohaVersion'},
-    osVersion     => $versions{'osVersion'},
-    perlPath      => $perl_path,
-    perlVersion   => $versions{'perlVersion'},
-    perlIncPath   => [ map { perlinc => $_ }, @INC ],
-    mysqlVersion  => $versions{'mysqlVersion'},
-    apacheVersion => $versions{'apacheVersion'},
-    zebraVersion  => $zebraVersion,
     prefRequireChoosingExistingAuthority => $prefRequireChoosingExistingAuthority,
     prefAutoCreateAuthorities => $prefAutoCreateAuthorities,
     warnPrefRequireChoosingExistingAuthority => $warnPrefRequireChoosingExistingAuthority,
