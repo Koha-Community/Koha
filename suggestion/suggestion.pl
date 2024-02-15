@@ -95,12 +95,13 @@ my $tabcode         = $input->param('tabcode');
 my $save_confirmed  = $input->param('save_confirmed') || 0;
 my $notify          = $input->param('notify');
 my $filter_archived = $input->param('filter_archived') || 0;
+my $new_itemtype    = $input->param('suggestion_itemtype');
+my $sugg_managedby  = $input->param('suggestion_managedby');
 
 my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
-# filter informations which are not suggestion related.
-my $suggestion_ref  = { %{$input->Vars} }; # Copying, otherwise $input will be modified
-delete $suggestion_ref->{csrf_token};
+my $suggestion_ref  = { $input->Vars };
+delete $suggestion_ref->{$_} for qw(csrf_token suggestion_itemtype suggestion_managedby table_1_length);
 
 # get only the columns of Suggestion
 my $schema = Koha::Database->new()->schema;
@@ -137,8 +138,7 @@ my $branchfilter = $input->param('branchcode') || C4::Context->userenv->{'branch
 ##  Operations
 ##
 
-if ( $op =~ /save/i ) {
-    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
+if ( $op =~ /cud-save/ ) {
     my @messages;
     my $biblio = MarcRecordFromNewSuggestion({
             title => $suggestion_only->{title},
@@ -250,14 +250,13 @@ if ( $op =~ /save/i ) {
         }
     }
 }
-elsif ($op=~/add/) {
+elsif ( $op eq 'add_form' ) {
     #Adds suggestion
     Init($suggestion_ref);
-    $op ='cud-save';
+    $op ='save';
 }
-elsif ($op=~/edit/) {
+elsif ( $op eq 'edit_form' ) {
     #Edit suggestion
-    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
     $suggestion_ref->{reasonsloop} = $reasonsloop;
     my $other_reason = 1;
@@ -269,10 +268,9 @@ elsif ($op=~/edit/) {
     $other_reason = 0 unless $suggestion_ref->{reason};
     $template->param(other_reason => $other_reason);
     Init($suggestion_ref);
-    $op ='cud-save';
+    $op ='save';
 }  
-elsif ($op eq "update_status" ) {
-    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
+elsif ($op eq "cud-update_status" ) {
     my $suggestion;
     # set accepted/rejected/managed informations if applicable
     # ie= if the librarian has chosen some action on the suggestions
@@ -309,46 +307,41 @@ elsif ($op eq "update_status" ) {
     }
     redirect_with_params($input);
 }elsif ($op eq "cud-delete" ) {
-    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     foreach my $delete_field (@editsuggestions) {
         &DelSuggestion( $borrowernumber, $delete_field,'intranet' );
     }
     redirect_with_params($input);
 }
-elsif ($op eq "archive" ) {
+elsif ($op eq "cud-archive" ) {
     Koha::Suggestions->find($_)->update({ archived => 1 }) for @editsuggestions;
-
     redirect_with_params($input);
 }
-elsif ($op eq "unarchive" ) {
+elsif ($op eq "cud-unarchive" ) {
     Koha::Suggestions->find($_)->update({ archived => 0 }) for @editsuggestions;
-
     redirect_with_params($input);
 }
-elsif ( $op eq 'update_itemtype' ) {
-    my $new_itemtype = $input->param('suggestion_itemtype');
+elsif ( $op eq 'cud-update_itemtype' ) {
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
         &ModSuggestion({ suggestionid => $suggestionid, itemtype => $new_itemtype });
     }
     redirect_with_params($input);
 }
-elsif ( $op eq 'update_manager' ) {
-    my $managedby = $input->param('suggestion_managedby');
+elsif ( $op eq 'cud-update_manager' ) {
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
-        &ModSuggestion({ suggestionid => $suggestionid, managedby => $managedby });
+        &ModSuggestion({ suggestionid => $suggestionid, managedby => $sugg_managedby });
     }
     redirect_with_params($input);
 }
-elsif ( $op eq 'cud-show' ) {
+elsif ( $op eq 'show' ) {
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
     my $budget = GetBudget $$suggestion_ref{budgetid};
     $$suggestion_ref{budgetname} = $$budget{budget_name};
     Init($suggestion_ref);
 }
-if ($op=~/else/) {
-    $op='else';
+
+if ( $op eq 'else' ) {
 
     $displayby||="STATUS";
     # distinct values of display by
@@ -535,18 +528,12 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }
 
-my $csrf_token = Koha::Token->new->generate_csrf(
-    {
-        session_id => scalar $input->cookie('CGISESSID'),
-    }
-);
-
 $template->param(
     %hashlists,
     borrowernumber     => ( $input->param('borrowernumber') // undef ),
     SuggestionStatuses => GetAuthorisedValues('SUGGEST_STATUS'),
-    csrf_token         => $csrf_token,
 );
+
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub redirect_with_params {

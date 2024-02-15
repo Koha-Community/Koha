@@ -96,8 +96,15 @@
                     [% INCLUDE 'messages.inc' %]
 
                     <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit&amp;csrf_token=[% csrf_token | html %]&amp;suggestionid=[% suggestionid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                        <a class="btn btn-default deletesuggestion" href="suggestion.pl?op=delete&amp;csrf_token=[% csrf_token | html %]&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                        <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit_form&amp;suggestionid=[% suggestionid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                        <form class="delete_form" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <fieldset class="action">
+                                <input type="hidden" name="op" value="cud-delete" />
+                                <input type="hidden" name="suggestionid" value="[% suggestionid | html %]" />
+                                <button type="submit" class="btn btn-primary">Delete</button>
+                            </fieldset>
+                        </form>
                     </div>
 
                     <fieldset class="rows">
@@ -632,19 +639,20 @@
 
                 <fieldset class="action">
                     <input type="hidden" id="returnsuggested" name="returnsuggested" value="[% IF ( returnsuggestedby ) %][% returnsuggestedby | html %][% ELSE %]noone[% END %]"/>
-                    <input type="hidden" name="op" value="cud-[% op | html %]" />
                     [% IF ( suggestionid ) %]
+                        <input type="hidden" name="op" value="cud-save" />
                         [% IF ( need_confirm ) %]
                             <input type="hidden" name="save_confirmed" value="1" />
-                            <input onclick="this.form.op.value = 'save'; this.form.submit();" type="submit" class="btn btn-primary" value="Confirm your suggestion" />
+                            <input type="submit" class="btn btn-primary" value="Confirm your suggestion" />
                         [% ELSE %]
                             <input type="submit" class="btn btn-primary" value="Save" />
                         [% END %]
                         <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby | uri %]#suggestions[% ELSE %]suggestion.pl[% END %]">Cancel</a>
                     [% ELSE %]
+                        <input type="hidden" name="op" value="cud-save" />
                         [% IF ( need_confirm ) %]
                             <input type="hidden" name="save_confirmed" value="1" />
-                            <input onclick="this.form.op.value = 'save'; this.form.submit();" type="submit" class="btn btn-primary" value="Confirm your suggestion" />
+                            <input type="submit" class="btn btn-primary" value="Confirm your suggestion" />
                         [% ELSE %]
                             <input type="submit" class="btn btn-primary" value="Submit your suggestion" />
                         [% END %]
@@ -652,11 +660,11 @@
                     [% END %]
                 </fieldset> <!-- /.action -->
             </form> <!-- /#add_edit -->
-        [% END # /IF op == 'save' %]
+        [% END %]
 
         [% IF op == 'else' %]
             <div id="toolbar" class="btn-toolbar">
-                <a class="btn btn-default" id="newsuggestion" href="suggestion.pl?op=add&branchcode=[% branchcode | uri %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
+                <a class="btn btn-default" id="newsuggestion" href="suggestion.pl?op=add_form&branchcode=[% branchcode | uri %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
             </div>
 
             <h1>Suggestions management</h1>
@@ -711,8 +719,14 @@
                 [% WRAPPER tab_panels %]
                     [% FOREACH suggestion IN suggestions %]
                         [% WRAPPER tab_panel tabname= suggestion.suggestiontype %]
-                            <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
-                            [% INCLUDE 'csrf-token.inc' %]
+                            <form id="action_form" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="" />[%# filled by click event %]
+                                <input type="hidden" name="suggestionid" value="" />
+                            </form>
+                            <form class="update_suggestions" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="" />[%# filled by submit %]
 
                                 [% IF suggestion.suggestions.size %]
                                     <p>
@@ -845,13 +859,21 @@
                                                     </td>
                                                     <td class="actions">
                                                         <div class="btn-group dropup">
-                                                            <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;csrf_token=[% csrf_token | html %]&amp;op=edit"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                                            <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
-                                                                <li><a class="deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% s.suggestionid | html %]&amp;csrf_token=[% csrf_token | html %]"><i class="fa fa-trash-can"></i> Delete</a></li>
+                                                                <li>
+                                                                    <fieldset class="action">
+                                                                        <button class="trigger_action" data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-primary">Delete</button>
+                                                                    </fieldset>
+                                                                </li>
                                                                 [% UNLESS s.archived %]
-                                                                    <li><a class="archivesuggestion" href="suggestion.pl?op=archive&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-archive"></i> Archive</a></li>
+                                                                    <li><fieldset class="action">
+                                                                        <button class="trigger_action" data-op="cud-archive" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-primary">Archive</button>
+                                                                    </fieldset></li>
                                                                 [% ELSE %]
-                                                                    <li><a class="unarchivesuggestion" href="suggestion.pl?op=unarchive&amp;suggestionid=[% s.suggestionid | html %]"><i class="fa fa-archive"></i> Unarchive</a></li>
+                                                                    <li><fieldset class="action">
+                                                                        <button class="trigger_action" data-op="cud-unarchive" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-primary">Unarchive</button>
+                                                                    </fieldset></li>
                                                                 [% END %]
                                                             </ul>
                                                         </div>
@@ -924,11 +946,11 @@
                                                     </span>
                                                 </div>
 
-                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                             </fieldset>
                                             <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="update_status">Submit</button>
+                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                                <button type="submit" data-op="cud-update_status" class="btn btn-primary">Submit</button>
                                             </fieldset>
                                         </div> <!-- /.col-sm-4 -->
 
@@ -938,11 +960,11 @@
                                                     Update item types with:
                                                 </label>
                                                 [% PROCESS 'av-build-dropbox.inc' name="suggestion_itemtype", category="SUGGEST_FORMAT", size = 20  %]
-                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                             </fieldset>
                                             <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="update_itemtype">Submit</button>
+                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                                <button type="submit" data-op="cud-update_itemtype" class="btn btn-primary">Submit</button>
                                             </fieldset>
                                         </div> <!-- /.col-sm-4 -->
 
@@ -951,32 +973,32 @@
                                                 <span class="label">Update manager</span>
                                                 <a id="set_manager_[% loop.count | html %]" data-tab="[% loop.count | html %]" class="set_manager" href="#"><i class="fa fa-search"></i> Select manager</a>
                                                 <span id="managedby_name[% loop.count | html %]"></span>
+                                            </fieldset>
+                                            <fieldset class="action">
                                                 <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count | html %]" value="[% logged_in_user.borrowernumber | html %]" />
                                                 <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                                 <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
-                                            </fieldset>
-                                            <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="update_manager">Submit</button>
+                                                <button type="submit" data-op="cud-update_manager" class="btn btn-primary">Submit</button>
                                             </fieldset>
                                         </div> <!-- /.col-sm-2 -->
 
                                         <div class="col-sm-2">
                                             <fieldset class="brief">
                                                 <span class="label">Delete selected</span>
-                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                             </fieldset>
                                             <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary" value="delete">Delete</button>
+                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                                <button type="submit" data-op="cud-delete" class="btn btn-primary">Delete</button>
                                             </fieldset>
                                         </div> <!-- /.col-sm-2 -->
                                         <div class="col-sm-2">
                                             <fieldset class="brief">
                                                 <span class="label">Archive selected</span>
-                                                <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
-                                                <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                                 <fieldset class="action">
-                                                    <button type="submit" class="btn btn-primary" value="archive">Archive</button>
+                                                    <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                                                    <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
+                                                    <button type="submit" data-op="cud-archive" class="btn btn-primary">Archive</button>
                                                 </fieldset>
                                             </fieldset>
                                         </div> <!-- /.col-sm-2 -->
@@ -999,7 +1021,6 @@
                 <div class="col-sm-2 col-sm-pull-10">
                     <aside>
                         <form name="suggestionfilter" action="suggestion.pl" method="get">
-                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                             <fieldset class="brief">
                                 <h4>Organize by:</h4>
@@ -1411,30 +1432,36 @@
                     $("." + target).toggle();
                 });
 
-                // Note: the selector below passes a second 'context' param - it is not a multiple selector
-                $("button[type='submit']", ".suggestions_batch_ops").on("click", function(e) {
+                $("button.trigger_action").on("click", function(e) {
+                    var id = $(this).data('suggestionid');
+                    var op = $(this).data('op');
+                    if ( op == 'cud-delete' && !confirm(_("Are you sure you want to delete this suggestion?")) ) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    $('#action_form input[name="op"]').val(op);
+                    $('#action_form input[name="suggestionid"]').val(id);
+                    $('#action_form').submit();
+                    return false;
+                });
+
+                $("form.update_suggestions button[type='submit']").on("click", function(e) {
                     var submit_button = this;
-                    var form = $(submit_button).parents("form");
-                    var action = $(submit_button).val();
-                    var selected_suggestions = $(form).find("input[name='suggestionid']:checked");
+                    var op = $(submit_button).data('op');
+                    var selected_suggestions = $('form.update_suggestions').find("input[type='checkbox'][name='suggestionid']:checked");
+
                     if ( selected_suggestions.length == 0 ) {
                         alert(_("Please select at least one suggestion"));
                         e.preventDefault();
                         return false;
                     }
-                    if ( action == "delete" ) {
-                        if ( selected_suggestions.length == 1 ) {
-                            if ( ! confirm(_("Are you sure you want to delete this suggestion?")) ) {
-                                e.preventDefault();
-                                return false;
-                            }
-                        } else if ( selected_suggestions.length > 1 ) {
-                            if ( ! confirm(_("Are you sure you want to delete these suggestions?")) ) {
-                                e.preventDefault();
-                                return false;
-                            }
+
+                    if ( op === "cud-delete" ) {
+                        if ( ! confirm(_("Are you sure you want to delete these suggestions?")) ) {
+                            e.preventDefault();
+                            return false;
                         }
-                    } else if ( action == "update_manager" ) {
+                    } else if ( op === "cud-update_manager" ) {
                         var managedby = $(submit_button).siblings("suggestion_managedby");
                         if ( managedby.val() == "" ) {
                             alert(_("Please select a manager to assign to the selected suggestions"));
@@ -1442,11 +1469,7 @@
                             return false;
                         }
                     }
-
-                    $('<input />').attr('type', 'hidden')
-                                  .attr('name', "op")
-                                  .attr('value', action)
-                                  .appendTo(form);
+                    $("form.update_suggestions input[name='op']").val(op);
                     return true;
                 });
             });
