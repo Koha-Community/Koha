@@ -110,7 +110,24 @@
               <li><a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
               <li><a class="merge_auth" href="#merge"><i class="fa fa-compress"></i> Merge</a></li>
               [% UNLESS ( resul.used ) %]
-                <li><a onclick='return confirm_deletion("[% resul.authid | html %]")'><i class="fa fa-trash-can"></i> Delete</a></li>
+                  <li><form class="form_delete" method="post" action="/cgi-bin/koha/authorities/authorities-home.pl">
+                      [% INCLUDE 'csrf-token.inc' %]
+                      <input type="hidden" name="op" value="cud-delete" />
+                      <input type="hidden" name="authid" value="[% resul.authid | html %]" />
+                      <input type="hidden" name="type" value="intranet" />
+                      <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
+                      <input type="hidden" name="marclist" value="[% marclist | html %]" />
+                      <input type="hidden" name="and_or" value="[% and_or | html %]" />
+                      <input type="hidden" name="excluding" value="[% excluding | html %]" />
+                      <input type="hidden" name="operator" value="[% operator | html %]" />
+                      <input type="hidden" name="orderby" value="[% orderby | html %]" />
+                      <input type="hidden" name="value" value="[% value | uri %]" />
+                      <input type="hidden" name="startfrom" value="[% startfrom | html %]" />
+                      <input type="hidden" name="resultsperpage" value="[% resultsperpage | html %]" />
+                      <fieldset class="action">
+                          <input type="submit" class="btn btn-primary" value="Delete" />
+                      </fieldset>
+                  </form></li>
               [% END %]
               <li class="authority_preview">
                 <a data-authid="[% resul.authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% resul.authid | uri %]"><i class="fa-solid fa-eye"></i> MARC preview</a>
