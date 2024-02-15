@@ -70,6 +70,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $docdir;
+if ( defined C4::Context->config('docdir') ) {
+    $docdir = C4::Context->config('docdir');
+} else {
+
+    # if no <docdir> is defined in koha-conf.xml, use the default location
+    # this is a work-around to stop breakage on upgraded Kohas, bug 8911
+    $docdir = C4::Context->config('intranetdir') . '/docs';
+}
+
 my $config_timezone = C4::Context->config('timezone') // '';
 my $config_invalid  = !DateTime::TimeZone->is_valid_name( $config_timezone );
 my $env_timezone    = $ENV{TZ} // '';
@@ -737,14 +747,6 @@ $template->param( table => $table );
 
 ## ------------------------------------------
 ## Koha contributions
-my $docdir;
-if ( defined C4::Context->config('docdir') ) {
-    $docdir = C4::Context->config('docdir');
-} else {
-    # if no <docdir> is defined in koha-conf.xml, use the default location
-    # this is a work-around to stop breakage on upgraded Kohas, bug 8911
-    $docdir = C4::Context->config('intranetdir') . '/docs';
-}
 
 ## Release teams
 my $teams =
