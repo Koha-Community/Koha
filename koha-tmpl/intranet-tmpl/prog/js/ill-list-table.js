@@ -119,7 +119,11 @@ $(document).ready(function() {
                 subquery_and.push( {"me.status":{"=": status }});
             }
             if(status_alias){
-                subquery_and.push({"me.status_alias":{"=": status_alias }});
+                if (status_alias === 'null' ){
+                    subquery_and.push({ "me.status_alias": { "=": null } });
+                }else{
+                    subquery_and.push({ "me.status_alias": { "=": status_alias } });
+                }
             }
 
             filters.push({"-and": subquery_and});
@@ -489,7 +493,8 @@ $(document).ready(function() {
             return '<li><label for="illfilter_status_alias">'+ill_status_aliases+':</label> <select name="illfilter_status_alias" id="illfilter_status_alias"></select></li>';
             });
             $('#illfilter_status_alias').append(
-                '<option value="">'+ill_all_status_aliases+'</option>'
+                '<option value="">'+ill_all_status_aliases+'</option>'+
+                '<option value="null">'+ill_no_status_alias+'</option>'
             );
             status_aliases.sort((a, b) => a.str.localeCompare(b.str)).forEach(function (status_alias) {
                 $('#illfilter_status_alias').append(
