@@ -94,41 +94,6 @@ elsif ( $op eq 'cud-woall' ) {
 elsif ( $op eq 'cud-apply_credits' ) {
     apply_credits({ patron => $patron, cgi => $input });
 }
-elsif ( $input->param('confirm_writeoff') ) {
-    #FIXME: This block really belongs in paycollect
-    my $item_id         = $input->param('itemnumber');
-    my $accountlines_id = $input->param('accountlines_id');
-    my $amount          = $input->param('amountwrittenoff');
-    my $payment_note    = $input->param("payment_note");
-
-    my $accountline = Koha::Account::Lines->find( $accountlines_id );
-
-    $amount = $accountline->amountoutstanding if (abs($amount - $accountline->amountoutstanding) < 0.01) && C4::Context->preference('RoundFinesAtPayment');
-    if ( $amount > $accountline->amountoutstanding ) {
-        print $input->redirect( "/cgi-bin/koha/members/paycollect.pl?"
-              . "borrowernumber=$borrowernumber"
-              . "&amount=" . $accountline->amount
-              . "&amountoutstanding=" . $accountline->amountoutstanding
-              . "&debit_type_code=" . $accountline->debit_type_code
-              . "&accountlines_id=" . $accountlines_id
-              . "&change_given=" . $change_given
-              . "&writeoff_individual=1"
-              . "&error_over=1" );
-
-    } else {
-        $payment_id = Koha::Account->new( { patron_id => $borrowernumber } )->pay(
-            {
-                amount     => $amount,
-                lines      => [ Koha::Account::Lines->find($accountlines_id) ],
-                type       => 'WRITEOFF',
-                note       => $payment_note,
-                interface  => C4::Context->interface,
-                item_id    => $item_id,
-                library_id => $branch,
-            }
-        )->{payment_id};
-    }
-}
 
 for (@names) {
     if ($op =~ /^cud-pay_indiv_(\d+)$/) {

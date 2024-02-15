@@ -231,12 +231,12 @@
         <li role="presentation" class="active"><a href="#">Write off</a></li>
     </ul>
 
-    <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
+    <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/paycollect.pl" method="post" >
     [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
     <legend>Write off an individual charge</legend>
+    <input type="hidden" name="op" value="cud-writeoff-individual" />
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-    <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
     <input type="hidden" name="description" id="description" value="[% individual_description | html %]" />
     <input type="hidden" name="debit_type_code" id="debit_type_code" value="[% debit_type_code | html %]" />
@@ -244,7 +244,6 @@
     <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
     <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note | html %]" />
     <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
-    <input type="hidden" name="confirm_writeoff" id="confirm_writeoff" value="1" />
     <input type="hidden" name="change_given" id="change_given" />
     <table>
     <thead><tr>

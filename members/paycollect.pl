@@ -58,6 +58,9 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
+# get operation
+my $op = $input->param('op') // qw{};
+
 my $account        = $patron->account;
 my $category       = $patron->category;
 my $user           = $input->remote_user;
@@ -262,6 +265,44 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     }
 } else {
     $total_paid = '0.00';    #TODO not right with pay_individual
+}
+
+if ( $op eq 'cud-writeoff-individual' ) {
+    my $item_id         = $input->param('itemnumber');
+    my $accountlines_id = $input->param('accountlines_id');
+    my $amount          = $input->param('amountwrittenoff');
+    my $payment_note    = $input->param("payment_note");
+
+    my $accountline = Koha::Account::Lines->find( $accountlines_id );
+
+    $amount = $accountline->amountoutstanding if (abs($amount - $accountline->amountoutstanding) < 0.01) && C4::Context->preference('RoundFinesAtPayment');
+    if ( $amount > $accountline->amountoutstanding ) {
+        print $input->redirect( "/cgi-bin/koha/members/paycollect.pl?"
+              . "borrowernumber=$borrowernumber"
+              . "&amount=" . $accountline->amount
+              . "&amountoutstanding=" . $accountline->amountoutstanding
+              . "&debit_type_code=" . $accountline->debit_type_code
+              . "&accountlines_id=" . $accountlines_id
+              . "&writeoff_individual=1"
+              . "&error_over=1" );
+
+    } else {
+        $payment_id = Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+            {
+                amount     => $amount,
+                lines      => [ Koha::Account::Lines->find($accountlines_id) ],
+                type       => 'WRITEOFF',
+                note       => $payment_note,
+                interface  => C4::Context->interface,
+                item_id    => $item_id,
+                library_id => $library_id,
+            }
+        )->{payment_id};
+
+        my $url = "/cgi-bin/koha/members/pay.pl";
+        $url .= "?borrowernumber=$borrowernumber";
+        print $input->redirect($url);
+    }
 }
 
 if ( $input->param('error_over') ) {
