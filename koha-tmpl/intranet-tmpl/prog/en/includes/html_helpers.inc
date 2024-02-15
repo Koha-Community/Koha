@@ -393,7 +393,11 @@
     [% ELSE %]
         <li role="presentation">
     [% END %]
-        <a href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-toggle="tab">
+        [% IF (linktab) %]
+            <a href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab">
+        [% ELSE %]
+            <a href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-toggle="tab">
+        [% END %]
             [% content | $raw %]
         </a>
     </li>
