@@ -83,7 +83,7 @@
                         </ol>
                     </div>
 
-                    <form name="frameworkselection" method="post" action="install.pl">
+                    <form name="frameworkselection" method="post" action="/cgi-bin/koha/installer/install.pl">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="step" value="3" />
                         <input type="hidden" name="op" value="cud-selectframeworks" />
@@ -123,7 +123,7 @@
                         </ol>
                     </div>
 
-                    <form name="frameworkselection" method="post" action="install.pl">
+                    <form name="frameworkselection" method="post" action="/cgi-bin/koha/installer/install.pl">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="step" value="3" />
                         <input type="hidden" name="op" value="cud-addframeworks" />
@@ -291,7 +291,7 @@
                             </ol>
                         </div>
 
-                        <form action="install.pl" method="post">
+                        <form action="/cgi-bin/koha/installer/install.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="step" value="3" />
                             <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
@@ -314,7 +314,7 @@
                     </div>
 
                     <p>Now we're ready to create the database tables and fill them with some default data.</p>
-                    <form action="install.pl" method="post">
+                    <form action="/cgi-bin/koha/installer/install.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="step" value="3" />
                         <input type="hidden" name="op" value="cud-importdatastructure" />
@@ -347,7 +347,7 @@
                         </div>
 
                         <p>We are ready to do some basic configuration.</p>
-                        <form action="install.pl" method="post">
+                        <form action="/cgi-bin/koha/installer/install.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="step" value="3" />
                             <input type="hidden" name="op" value="cud-choosemarc" />
