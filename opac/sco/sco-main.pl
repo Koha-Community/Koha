@@ -105,6 +105,7 @@ my ( $op, $patronlogin, $patronpw, $barcode, $confirmed, $newissues, $load_check
 );
 
 my $jwt = $query->cookie('JWT');
+#FIXME: This needs to be changed to a POSTed logout...
 if ($op eq "logout") {
     $template->param( loggedout => 1 );
     $query->param( patronlogin => undef, patronpw => undef );
@@ -141,7 +142,7 @@ my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
 
-if ( $patron && $op eq "returnbook" && $allowselfcheckreturns ) {
+if ( $patron && $op eq "cud-returnbook" && $allowselfcheckreturns ) {
     my $success = 1;
 
 
@@ -166,7 +167,7 @@ if ( $patron && $op eq "returnbook" && $allowselfcheckreturns ) {
 
     $template->param( returned => $success );
 }
-elsif ( $patron && ( $op eq 'checkout' ) ) {
+elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
 
     my $item = Koha::Items->find( { barcode => $barcode } );
     my $impossible  = {};
@@ -277,7 +278,7 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
     }
 } # $op
 
-if ( $patron && ( $op eq 'renew' ) ) {
+if ( $patron && ( $op eq 'cud-renew' ) ) {
     my $item = Koha::Items->find({ barcode => $barcode });
 
     if ( $patron->checkouts->find( { itemnumber => $item->itemnumber } ) ) {
