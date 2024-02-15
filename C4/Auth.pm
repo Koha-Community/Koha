@@ -53,6 +53,7 @@ use C4::Log qw( logaction );
 use Koha::CookieManager;
 use Koha::Auth::Permissions;
 use Koha::Token;
+use Koha::Session;
 
 # use utf8;
 
@@ -1871,39 +1872,15 @@ will be created.
 
 =cut
 
+#NOTE: We're keeping this for backwards compatibility
 sub _get_session_params {
-    my $storage_method = C4::Context->preference('SessionStorage');
-    if ( $storage_method eq 'mysql' ) {
-        my $dbh = C4::Context->dbh;
-        return { dsn => "serializer:yamlxs;driver:MySQL;id:md5", dsn_args => { Handle => $dbh } };
-    }
-    elsif ( $storage_method eq 'Pg' ) {
-        my $dbh = C4::Context->dbh;
-        return { dsn => "serializer:yamlxs;driver:PostgreSQL;id:md5", dsn_args => { Handle => $dbh } };
-    }
-    elsif ( $storage_method eq 'memcached' && Koha::Caches->get_instance->memcached_cache ) {
-        my $memcached = Koha::Caches->get_instance()->memcached_cache;
-        return { dsn => "serializer:yamlxs;driver:memcached;id:md5", dsn_args => { Memcached => $memcached } };
-    }
-    else {
-        # catch all defaults to tmp should work on all systems
-        my $dir = C4::Context::temporary_directory;
-        my $instance = C4::Context->config( 'database' ); #actually for packages not exactly the instance name, but generally safer to leave it as it is
-        return { dsn => "serializer:yamlxs;driver:File;id:md5", dsn_args => { Directory => "$dir/cgisess_$instance" } };
-    }
+    return Koha::Session->_get_session_params();
 }
 
+#NOTE: We're keeping this for backwards compatibility
 sub get_session {
-    my $sessionID      = shift;
-    my $params = _get_session_params();
-    my $session;
-    if( $sessionID ) { # find existing
-        CGI::Session::ErrorHandler->set_error( q{} ); # clear error, cpan issue #111463
-        $session = CGI::Session->load( $params->{dsn}, $sessionID, $params->{dsn_args} );
-    } else {
-        $session = CGI::Session->new( $params->{dsn}, $sessionID, $params->{dsn_args} );
-        # no need to flush here
-    }
+    my $sessionID = shift;
+    my $session   = Koha::Session->get_session( { sessionID => $sessionID } );
     return $session;
 }
 
