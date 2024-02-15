@@ -80,6 +80,7 @@ if ( defined C4::Context->config('docdir') ) {
     $docdir = C4::Context->config('intranetdir') . '/docs';
 }
 
+my %versions = C4::Context::get_versions();
 my $config_timezone = C4::Context->config('timezone') // '';
 my $config_invalid  = !DateTime::TimeZone->is_valid_name( $config_timezone );
 my $env_timezone    = $ENV{TZ} // '';
@@ -671,8 +672,6 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
 {
     $template->param( warnDbRowFormat => C4::Installer->has_non_dynamic_row_format );
 }
-
-my %versions = C4::Context::get_versions();
 
 $template->param(
     prefRequireChoosingExistingAuthority => $prefRequireChoosingExistingAuthority,
