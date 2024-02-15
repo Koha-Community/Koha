@@ -27,6 +27,8 @@ use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Templates;
 
+use Koha::Session;
+
 our (@ISA, @EXPORT_OK);
 BEGIN {
     @ISA    = qw(Exporter);
@@ -116,6 +118,17 @@ sub get_template_and_user {
         $in->{'flagsrequired'},
         $in->{'type'}
     );
+
+    my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
+
+    # We have just logged in
+    # If we are not coming from the login form we empty the credential to reject the access
+    if ( !$session && $user ) {
+        if ( $in->{query}->param('op') ne 'cud-login' ) {
+            $in->{query}->param('userid', '');
+            $in->{query}->param('password', '');
+        }
+    }
 
     #     use Data::Dumper;warn "utilisateur $user cookie : ".Dumper($cookie);
 
@@ -233,7 +246,6 @@ sub checkauth {
     my $dbh = C4::Context->dbh();
     my $template_name;
     $template_name = "installer/auth.tt";
-    my $sessdir = File::Spec->catdir( C4::Context::temporary_directory, 'cgisess_' . C4::Context->config('database') ); # same construction as in C4/Auth
 
     # state variables
     my $loggedin = 0;
@@ -242,9 +254,7 @@ sub checkauth {
     my $logout = $query->param('logout.x');
     if ( $sessionID = $query->cookie("CGISESSID") ) {
         C4::Context->_new_userenv($sessionID);
-        my $session =
-          CGI::Session->new( "driver:File", $sessionID,
-            { Directory => $sessdir } );
+        my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
         if ( $session->param('cardnumber') ) {
             C4::Context->set_userenv(
                 $session->param('number'),
@@ -283,8 +293,7 @@ sub checkauth {
         }
     }
     unless ($userid) {
-        my $session =
-          CGI::Session->new( "driver:File", undef, { Directory => $sessdir } );
+        my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
         $sessionID = $session->id;
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
@@ -388,7 +397,10 @@ sub checkauth {
                 $template->param( 'invalid_username_or_password' => $info{'invalid_username_or_password'});
     }
 
-    $template->param( \%info );
+    $template->param(
+        %info,
+        sessionID => $sessionID,
+    );
     $cookie = $query->cookie(
         -name    => 'CGISESSID',
         -value   => $sessionID,

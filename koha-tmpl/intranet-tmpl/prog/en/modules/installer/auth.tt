@@ -53,6 +53,7 @@
 
                     <form action="[% url | html %]" method="post" id="mainform">
                         [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-login" />
                         [% FOREACH INPUT IN INPUTS %]
                             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
                         [% END %]
