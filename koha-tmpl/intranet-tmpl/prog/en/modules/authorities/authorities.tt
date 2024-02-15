@@ -106,9 +106,8 @@
         $(".change-authtype").on("click", function(){
             var authtypecode = $(this).data("authtypecode");
             var f = document.f;
-            f.op.value = "[% op | html %]";
+            f.op.value = "cud-change-framework";
             f.authid.value = "[% authid | html %]";
-            f.changed_authtype.value = "changed";
             f.authtypecode.value = authtypecode;
             f.submit();
         });
@@ -431,6 +430,7 @@
                 <form method="post" id="f" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-add" />
+                    <input type="hidden" name="original_op" value="[% op | html %]" />
                     <input type="hidden" name="addfield_field" value="" />
                     <input type="hidden" name="repeat_field" value="" />
                     <input type="hidden" name="authtypecode" value="[% authtypecode | html%]" />

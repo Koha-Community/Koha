@@ -543,8 +543,12 @@ my $myindex = $input->param('index');
 my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
 my $breedingid    = $input->param('breedingid');
-my $changed_authtype = $input->param('changed_authtype') // q{};
 
+my $changed_authtype;
+if ( $op eq 'cud-change-framework' ) {
+    $op = $input->param('original_op');
+    $changed_authtype = 1;
+}
 
 my $dbh = C4::Context->dbh;
 if(!$authtypecode) {
@@ -636,7 +640,7 @@ if ($op eq "cud-add") {
         $authid = "";
     }
 
-    if ( $changed_authtype eq "changed" ) {
+    if ( $changed_authtype ) {
         $record = TransformHtmlToMarc( $input, 0 );
     }
 
