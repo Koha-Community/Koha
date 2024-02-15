@@ -157,9 +157,10 @@ describe("Infinite scroll", () => {
         cy.intercept("POST", "/api/v1/erm/agreements", {
             statusCode: 201,
             body: agreement,
-        });
+        }).as("submitForm");
         // Submit the form, no error should be thrown as the select has correctly set the license id
         cy.get("#agreements_add").contains("Submit").click();
+        cy.wait("@submitForm");
         cy.get("main div[class='dialog message']").contains(
             "Agreement created"
         );
@@ -242,8 +243,9 @@ describe("Infinite scroll", () => {
                 "X-Base-Total-Count": "20",
                 "X-Total-Count": "20",
             },
-        });
+        }).as("resetDropdown");
         cy.get("#license_id_0 .vs__open-indicator").click();
+        cy.wait("@resetDropdown");
         cy.get("#agreement_licenses").click();
         cy.get("#agreement_license_0").contains("License 50");
 
