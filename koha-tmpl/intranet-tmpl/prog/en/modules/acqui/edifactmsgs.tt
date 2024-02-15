@@ -150,7 +150,9 @@
                         "orderable": false,
                         "render": function(data, type, row, meta) {
                             var result = '<a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id='+encodeURIComponent(row.id)+'"><i class="fa fa-search"></i> '+_("View message")+'</a> ';
-                            result += '<a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-trash-can"></i> '+_("Delete")+'</a> ';
+                            result += '<form action="/cgi-bin/koha/acqui/edifactmsgs.pl" method="post"><input type="hidden" name="message_id" value="'+encodeURIComponent(row.id)+'" />';
+                            result += '<input type="hidden" name="csrf_token" value="' + $('meta[name="csrf-token"]').attr('content').trim() + '" />';
+                            result += '<input type="hidden" name="op" value="cud-delete" /><button type="submit" class="btn btn-default btn-xs delete_msg"><i class="fa fa-trash-can"></i> '+_("Delete")+'</button> ';
                             if ( row.status == 'new' ) {
                                 result += '<a class="btn btn-default btn-xs import_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=import&amp;message_id='+encodeURIComponent(row.id)+'"><i class="fa fa-cog"></i> '+_("Import")+'</a> ';
                             }
