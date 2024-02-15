@@ -83,13 +83,20 @@ sub add {
         $c->res->headers->location( $c->req->url->to_string . '/' . $booking->booking_id );
         return $c->render(
             status  => 201,
-            openapi => $c->objects->to_api( $booking ),
+            openapi => $c->objects->to_api($booking),
         );
     } catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Booking::Clash') ) {
             return $c->render(
                 status  => 400,
                 openapi => { error => "Booking would conflict" }
+            );
+        } elsif ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error => "Duplicate booking_id",
+                }
             );
         }
 
