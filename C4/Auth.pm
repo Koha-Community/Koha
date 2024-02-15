@@ -792,7 +792,7 @@ sub checkauth {
     my $type            = shift;
     my $emailaddress    = shift;
     my $template_name   = shift;
-    my $params          = shift || {}; # do_not_print
+    my $params          = shift || {};    # do_not_print
     $type = 'opac' unless $type;
 
     if ( $type eq 'opac' && !C4::Context->preference("OpacPublic") ) {
@@ -1334,7 +1334,7 @@ sub checkauth {
             $uri->query_param_delete('password');
             $uri->query_param_delete('koha_login_context');
             unless ( $params->{do_not_print} ) {
-                print $query->redirect(-uri => $uri->as_string, -cookie => $cookie, -status=>'303 See other');
+                print $query->redirect( -uri => $uri->as_string, -cookie => $cookie, -status => '303 See other' );
                 safe_exit;
             }
         }
