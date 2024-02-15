@@ -21,6 +21,35 @@ use CGI::Session;
 use C4::Context;
 use Koha::Caches;
 
+=head1 NAME
+
+Koha::Session - Session class for Koha
+
+=head1 SYNOPSIS
+
+  use Koha::Session;
+  my $session = Koha::Session->get_session({ sessionID => $sessionID});
+
+=head1 DESCRIPTION
+
+This simple class exposes some basic methods for managing user sessions.
+
+=head1 METHODS
+
+=head2 get_session
+
+  my $session = Koha::Session->get_session({ sessionID => $sessionID});
+
+Given a session ID, retrieves the CGI::Session object used to store
+the session's state.  The session object can be used to store
+data that needs to be accessed by different scripts during a
+user's session.
+
+If the C<$sessionID> parameter is an empty string, a new session
+will be created.
+
+=cut
+
 sub _get_session_params {
     my $class          = shift;
     my $storage_method = C4::Context->preference('SessionStorage');
@@ -47,7 +76,7 @@ sub _get_session_params {
 sub get_session {
     my ( $class, $args ) = @_;
     my $sessionID = $args->{sessionID};
-    my $params = $class->_get_session_params();
+    my $params    = $class->_get_session_params();
     my $session;
     if ($sessionID) {    # find existing
         CGI::Session::ErrorHandler->set_error(q{});    # clear error, cpan issue #111463
