@@ -45,6 +45,7 @@ use Koha::Patron::Images;
 use Koha::Patron::Messages;
 use Koha::Plugins;
 use Koha::Token;
+use Koha::CookieManager;
 
 my $query = CGI->new;
 
@@ -374,16 +375,15 @@ if ( $patron) {
         nouser     => $patronid,
     );
 }
-
-$cookie = $query->cookie(
+my $cookie_mgr = Koha::CookieManager->new;
+$cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
     -name => 'JWT',
     -value => $jwt // '',
     -expires => $jwt ? '+1d' : '',
     -HttpOnly => 1,
     -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
     -sameSite => 'Lax'
-);
-
+));
 $template->param(patronid => $patronid);
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
