@@ -83,7 +83,7 @@ if ( $op eq 'add_form' ) {
     }
     $city_name = q||;
     $op        = 'list';
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $city = Koha::Cities->find($cityid);
     $template->param( city => $city, );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
