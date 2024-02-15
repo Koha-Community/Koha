@@ -109,9 +109,9 @@
     </td>
     <td class="actions">
     [% IF ( line.amountoutstanding > 0 ) %]
-        <button type="submit" class="btn btn-default btn-xs" name="pay_indiv_[% line.accountlines_id | html %]" value="Pay">Pay</button>
+        <button type="submit" class="btn btn-default btn-xs" name="op" value="cud-pay_indiv_[% line.accountlines_id | html %]">Pay</button>
         [% IF CAN_user_updatecharges_writeoff %]
-            <button type="submit" class="btn btn-default btn-xs" name="wo_indiv_[% line.accountlines_id | html %]" value="Write off">Write off</button>
+            <button type="submit" class="btn btn-default btn-xs" name="op" value="cud-wo_indiv_[% line.accountlines_id | html %]">Write off</button>
         [% END %]
     [% END %]
     <input type="hidden" name="itemnumber[% line.accountlines_id | html %]" value="[% line.itemnumber | html %]" />
@@ -185,7 +185,7 @@
     [% IF outstanding_credits.total_outstanding < 0 %]
         <tr>
             <td class="total" colspan="12">Outstanding credits could be applied: </td>
-            <td class="credit" style="text-align: right;"><button type="submit" id="apply_credits" name="apply_credits" value="apply_credits" class="btn btn-default btn-sm">Apply <strong class="credit">[% outstanding_credits.total_outstanding | $Price %]</strong></button></td>
+            <td class="credit" style="text-align: right;"><button type="submit" id="apply_credits" name="op" value="cud-apply_credits" class="btn btn-default btn-sm">Apply <strong class="credit">[% outstanding_credits.total_outstanding | $Price %]</strong></button></td>
         </tr>
         <tr>
             <td class="total" colspan="12">Total due if credit applied:</td>
@@ -196,10 +196,12 @@
 
 </table>
 <fieldset class="action">
-<input type="submit" id="paycollect" name="paycollect"  value="Pay amount" class="submit" />
-<input type="submit" id="payselected" name="payselected"  value="Pay selected" class="submit" />
-[% IF CAN_user_updatecharges_writeoff %]<input type="submit" name="woall"  id="woall" value="Write off all" class="submit" />
-<input type="submit" id="writeoff-selected" name="writeoff_selected"  value="Write off selected" class="submit" />[% END %]
+<button type="submit" id="paycollect" name="op" value="cud-paycollect" class="submit btn btn-primary">Pay amount</button>
+<button type="submit" id="payselected" name="op" value="cud-payselected"  class="submit btn btn-primary">Pay selected</button>
+[% IF CAN_user_updatecharges_writeoff %]
+<button type="submit" id="woall" name="op" value="cud-woall" value="Write off all" class="submit btn btn-primary">Write off all</button>
+<button type="submit" id="writeoff-selected" name="op" value="cud-writeoff_selected" class="submit btn btn-primary">Write off selected</button>
+[% END %]
 <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
 </fieldset>
 </form>
