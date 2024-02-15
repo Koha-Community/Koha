@@ -227,7 +227,7 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 }
-elsif ( $op eq 'cud-delete_confirm' ) {
+elsif ( $op eq 'delete_confirm' ) {
   my $ass = Koha::Authority::Subfields->find(
       {
           authtypecode => $authtypecode,
