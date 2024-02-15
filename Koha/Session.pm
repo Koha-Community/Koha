@@ -51,8 +51,8 @@ will be created.
 =cut
 
 sub _get_session_params {
-    my $class          = shift;
-    my $storage_method = C4::Context->preference('SessionStorage');
+    my ( $class, $storage_method ) = @_;
+    $storage_method ||= C4::Context->preference('SessionStorage');
     if ( $storage_method eq 'mysql' ) {
         my $dbh = C4::Context->dbh;
         return { dsn => "serializer:yamlxs;driver:MySQL;id:md5", dsn_args => { Handle => $dbh } };
@@ -75,8 +75,9 @@ sub _get_session_params {
 
 sub get_session {
     my ( $class, $args ) = @_;
-    my $sessionID = $args->{sessionID};
-    my $params    = $class->_get_session_params();
+    my $sessionID      = $args->{sessionID};
+    my $storage_method = $args->{storage_method};
+    my $params         = $class->_get_session_params( { storage_method => $storage_method } );
     my $session;
     if ($sessionID) {    # find existing
         CGI::Session::ErrorHandler->set_error(q{});    # clear error, cpan issue #111463
