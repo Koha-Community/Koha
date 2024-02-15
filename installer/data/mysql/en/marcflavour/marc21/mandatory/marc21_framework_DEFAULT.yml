@@ -1135,8 +1135,8 @@ tables:
           frameworkcode: ""
 
         - tagfield: "023"
-          liblibrarian: "STANDARD FILM NUMBER (VM) [DELETED]"
-          libopac: "STANDARD FILM NUMBER (VM) [DELETED]"
+          liblibrarian: "CLUSTER ISSN"
+          libopac: "CLUSTER ISSN"
           repeatable: 1
           mandatory: 0
           authorised_value:
@@ -4800,8 +4800,8 @@ tables:
 
         - tagfield: "022"
           tagsubfield: "l"
-          liblibrarian: "ISSN-L"
-          libopac: "ISSN-L"
+          liblibrarian: "ISSN-L [OBSOLETE]"
+          libopac: "ISSN-L [OBSOLETE]"
           repeatable: 0
           mandatory: 0
           kohafield: ""
@@ -4818,8 +4818,8 @@ tables:
 
         - tagfield: "022"
           tagsubfield: "m"
-          liblibrarian: "Canceled ISSN-L"
-          libopac: "Canceled ISSN-L"
+          liblibrarian: "Canceled ISSN-L [OBSOLETE]"
+          libopac: "Canceled ISSN-L [OBSOLETE]"
           repeatable: 1
           mandatory: 0
           kohafield: ""
@@ -4871,10 +4871,136 @@ tables:
           defaultvalue:
 
         - tagfield: "023"
-          tagsubfield: "a"
-          liblibrarian: "Standard film number"
-          libopac: "Standard film number"
+          tagsubfield: "0"
+          liblibrarian: "Authority record control number or standard number"
+          libopac: "Authority record control number or standard number"
           repeatable: 0
+          mandatory: 0
+          kohafield: ""
+          tab: 0
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "023"
+          tagsubfield: "1"
+          liblibrarian: "Real World Object URI"
+          libopac: "Real World Object URI"
+          repeatable: 1
+          mandatory: 0
+          kohafield: ""
+          tab: 0
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "023"
+          tagsubfield: "2"
+          liblibrarian: "Source"
+          libopac: "Source"
+          repeatable: 0
+          mandatory: 0
+          kohafield: ""
+          tab: 0
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl: 0
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "023"
+          tagsubfield: "6"
+          liblibrarian: "Linkage"
+          libopac: "Linkage"
+          repeatable: 0
+          mandatory: 0
+          kohafield: ""
+          tab: 0
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl: 0
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "023"
+          tagsubfield: "8"
+          liblibrarian: "Field link and sequence number"
+          libopac: "Field link and sequence number"
+          repeatable: 1
+          mandatory: 0
+          kohafield: ""
+          tab: 0
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl: 0
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "023"
+          tagsubfield: "a"
+          liblibrarian: "Cluster ISSN"
+          libopac: "Cluster ISSN"
+          repeatable: 0
+          mandatory: 0
+          kohafield: ""
+          tab: 0
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl: 0
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "023"
+          tagsubfield: "y"
+          liblibrarian: "Incorrect Cluster ISSN"
+          libopac: "Incorrect Cluster ISSN"
+          repeatable: 1
+          mandatory: 0
+          kohafield: ""
+          tab: 0
+          authorised_value: ""
+          authtypecode: ""
+          value_builder: ""
+          isurl: 0
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "023"
+          tagsubfield: "z"
+          liblibrarian: "Canceled Cluster ISSN"
+          libopac: "Canceled Cluster ISSN"
+          repeatable: 1
           mandatory: 0
           kohafield: ""
           tab: 0
@@ -29696,6 +29822,24 @@ tables:
           tagsubfield: "z"
           liblibrarian: "Source of note information (AM CF VM SE) [OBSOLETE]"
           libopac: "Source of note information (AM CF VM SE) [OBSOLETE]"
+          repeatable: 0
+          mandatory: 0
+          kohafield:
+          tab: 5
+          authorised_value:
+          authtypecode:
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "532"
+          tagsubfield: "3"
+          liblibrarian: "Materials specified"
+          libopac: "Materials specified"
           repeatable: 0
           mandatory: 0
           kohafield:
