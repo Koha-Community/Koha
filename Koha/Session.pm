@@ -51,7 +51,8 @@ will be created.
 =cut
 
 sub _get_session_params {
-    my ( $class, $storage_method ) = @_;
+    my ( $class, $args ) = @_;
+    my $storage_method = $args->{storage_method};
     $storage_method ||= C4::Context->preference('SessionStorage');
     if ( $storage_method eq 'mysql' ) {
         my $dbh = C4::Context->dbh;
