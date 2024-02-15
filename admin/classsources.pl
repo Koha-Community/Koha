@@ -109,7 +109,7 @@ elsif ( $op eq "cud-add_source_validate" ) {
 
     $op = 'list';
 }
-elsif ( $op eq "delete_source_confirmed" ) {
+elsif ( $op eq "cud-delete_source_confirmed" ) {
     my $class_source = Koha::ClassSources->find($cn_source);
     my $deleted = eval { $class_source->delete };
     if ( $@ or not $deleted ) {
@@ -166,7 +166,7 @@ elsif ( $op eq "cud-add_sort_rule_validate" ) {
     }
     $op = 'list';
 }
-elsif ( $op eq "delete_sort_rule" ) {
+elsif ( $op eq "cud-delete_sort_rule" ) {
     my $sort_rule = Koha::ClassSortRules->find($class_sort_rule);
     my $deleted = eval { $sort_rule->delete };
     if ( $@ or not $deleted ) {
@@ -237,7 +237,7 @@ elsif ( $op eq "cud-add_split_rule_validate" ) {
     }
     $op = 'list';
 }
-elsif ( $op eq "delete_split_rule" ) {
+elsif ( $op eq "cud-delete_split_rule" ) {
     my $split_rule = Koha::ClassSplitRules->find($class_split_rule);
     my $deleted = eval { $split_rule->delete };
     if ( $@ or not $deleted ) {
