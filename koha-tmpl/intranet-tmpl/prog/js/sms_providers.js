@@ -70,7 +70,7 @@ function delete_provider( id, users ) {
     }
 
     if ( c ) {
-        $("#op").val('delete');
+        $("#op").val('cud-delete');
         $("#id").val( id );
         $("#sms_form").submit();
     }
