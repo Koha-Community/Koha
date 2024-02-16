@@ -64,12 +64,6 @@ Used to set a single system preference.
 
 sub set_preference {
     my ( $preference ) = @_;
-    die "wrong_csrf_token\n" unless Koha::Token->new->check_csrf(
-        {
-            session_id => scalar $query->cookie('CGISESSID'),
-            token      => scalar $query->param('csrf_token'),
-        }
-    );
 
     my $value = join( ',', $query->param( 'value' ) );
     C4::Context->set_preference( $preference, $value );
@@ -129,12 +123,6 @@ pref_virtualshelves=0
 =cut
 
 sub set_preferences {
-    die "wrong_csrf_token\n" unless Koha::Token->new->check_csrf(
-        {
-            session_id => scalar $query->cookie('CGISESSID'),
-            token      => scalar $query->param('csrf_token'),
-        }
-    );
 
     foreach my $param ( $query->param() ) {
         my ( $pref ) = ( $param =~ /pref_(.*)/ );

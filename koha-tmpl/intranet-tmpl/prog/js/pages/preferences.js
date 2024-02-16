@@ -8,41 +8,28 @@ KOHA.Preferences = {
             return;
         }
 
-        modified_prefs = $( form ).find( '.modified' );
-        // $.serialize removes empty value, we need to keep them.
-        // If a multiple select has all its entries unselected
-        var unserialized = new Array();
-        $(modified_prefs).each(function(){
-            if ( $(this).attr('multiple') && $(this).val().length == 0 ) {
-                unserialized.push($(this));
-            }
-        });
-        data = modified_prefs.serialize();
-        $(unserialized).each(function(){
-            data += '&' + $(this).attr('name') + '=';
-        });
-        if ( !data ) {
+        let sysprefs = $(form).find('.modified').toArray().reduce((map, e) => ({ ...map, [$(e).attr('name')]: [$(e).val()].flat()}), {});
+        if ( !Object.keys(sysprefs).length ) {
             humanMsg.displayAlert( __("Nothing to save") );
             return;
         }
-        let csrf_token_el = $( form ).find('input[name="csrf_token"]');
-        if (csrf_token_el.length > 0){
-            let csrf_token = csrf_token_el.val();
-            if (csrf_token){
-                data += '&' + 'csrf_token=' + csrf_token;
-            }
-        }
         KOHA.AJAX.MarkRunning($(form).find('.save-all'), __("Saving...") );
-        KOHA.AJAX.Submit( {
-            data: data,
-            url: '/cgi-bin/koha/svc/config/systempreferences/',
-            success: function ( data ) { KOHA.Preferences.Success( form ) },
-            complete: function () { KOHA.AJAX.MarkDone( $( form ).find( '.save-all' ) ) }
-        } );
+        const client = APIClient.syspref;
+        client.sysprefs.update_all(sysprefs).then(
+            success => {
+                KOHA.Preferences.Success( form );
+            },
+            error => {
+                 console.warn("Something wrong happened: %s".format(error));
+            }
+        ).then(() => {
+            KOHA.AJAX.MarkDone( $( form ).find( '.save-all' ) );
+        });
+
     },
     Success: function ( form ) {
         var msg = "";
-        modified_prefs.each(function(){
+        $(form).find('.modified').each(function(){
             var modified_pref = $(this).attr("id");
             modified_pref = modified_pref.replace("pref_","");
             msg += "<strong>" + __("Saved preference %s").format(modified_pref) + "</strong>\n";

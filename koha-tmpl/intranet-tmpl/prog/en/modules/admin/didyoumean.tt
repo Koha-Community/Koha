@@ -117,16 +117,15 @@
 
         function yesimeant() {
             var OPACdidyoumean = serialize_plugins('opac');
-
-            const csrf_token = "[% Koha.GenerateCSRF | $raw %]";
-            let data = "pref_OPACdidyoumean=%s&csrf_token=%s".format(encodeURIComponent(OPACdidyoumean), csrf_token);
-
-            $.ajax({
-                data: data,
-                type: 'POST',
-                url: '/cgi-bin/koha/svc/config/systempreferences/',
-                success: function () { alert(_("Successfully saved configuration")); },
-            });
+            const client = APIClient.syspref;
+            client.sysprefs.update('OPACdidyoumean', OPACdidyoumean).then(
+                success => {
+                    alert(_("Successfully saved configuration"));
+                },
+                error => {
+                     console.warn("Something wrong happened: %s".format(error));
+                }
+            );
             return false;
         }
 
