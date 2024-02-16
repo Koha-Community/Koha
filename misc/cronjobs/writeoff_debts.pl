@@ -21,10 +21,21 @@ GetOptions(
     'cc|category_code|category-code:s' => \@category_code,
     'f|file:s'                         => \$file,
     'c|confirm'                        => \$confirm,
-);
+) or pod2usage(2);
+
+pod2usage(1) if $help;
+
+if ( !$confirm && !$verbose ) {
+    say STDERR "Missing required option: either --verbose or --confirm must be supplied";
+    pod2usage(2);
+}
+
 @type = split( /,/, join( ',', @type ) );
 
-pod2usage(1) if ( $help || !$confirm && !$verbose || !$file && !@type && !$before && !$after );
+if ( !$file && !@type && !$before && !$after ) {
+    say STDERR "Missing required filter option: at least one filter option should be used";
+    pod2usage(2);
+}
 
 my $where = { 'amountoutstanding' => { '>' => 0 } };
 my $attr = {};
@@ -141,9 +152,17 @@ writeoff_debts.pl
 
 =head1 SYNOPSIS
 
-  ./writeoff_debts.pl --added_before DATE --type OVERDUE --file REPORT --confirm
+  writeoff_debts.pl --confirm [--verbose] <filter options>
+  writeoff_debts.pl --verbose <filter options>
+  writeoff_debts.pl --help
+
+  <filter options> are:
+      [--type <type>] [--file <file>] [--added-before <date>]
+      [--added-after <date>] [--category-code <category code>]
 
 This script batch waives debts.
+
+=head1 OPTIONS
 
 The options to select the debt records to writeoff are cumulative. For
 example, supplying both --added_before and --type specifies that the
@@ -153,8 +172,6 @@ You must pass at least one of the filtering options for the script to run.
 This is to prevent an accidental 'writeoff all' operation. Please note that
 --category-code must be accompanied by another filter - the script will not
 run if this is the only filter provided.
-
-=head1 OPTIONS
 
 =over
 
@@ -198,11 +215,17 @@ criteria.
 
 This flag set the script to output logging for the actions it will perform.
 
+The B<-v> option is mandatory if B<-c> is not supplied.
+
+It can be repeated for increased verbosity.
+
 =item B<-c|--confirm>
 
 This flag must be provided in order for the script to actually
-writeoff debts.  If it is not supplied, the script will
-only report on the accountline records it would have been written off.
+writeoff debts.
+
+If it is not supplied, the B<-v> option is required. The script will then only
+report on the accountline records it would have been written off.
 
 =back
 
