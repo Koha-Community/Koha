@@ -55,7 +55,7 @@ if($op && $op eq "new") {
         name => $name,
         descriptions => \@descriptions
     });
-} elsif($op && $op eq "cud-mod") {
+} elsif($op && $op eq "mod") {
     my $id = $input->param('id');
     my $set = GetOAISet($id);
     $template->param(

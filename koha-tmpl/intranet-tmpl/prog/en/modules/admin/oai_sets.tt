@@ -139,7 +139,7 @@
                                     Actions <b class="caret"></b></a>
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="oaisetsactions[% set.id | html %]">
                                     <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id | uri %]"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                                    <li><a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-trash-can"></i> Delete</a></li>
+                                    <li><a class="delete_oai_set" data-oai-set-id="[% set.id | html %]" href="#"><i class="fa fa-fw fa-trash-can"></i> Delete</a></li>
                                     <li><a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id | uri %]"><i class="fa fa-fw fa-info"></i> Define mappings</a></li>
                                     </ul>
                                 </div>
@@ -148,6 +148,11 @@
                         [% END %]
                     </tbody>
                 </table>
+                <form action="/cgi-bin/koha/admin/oai_sets.pl" id="oai_sets_delete" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-del" />
+                    <input type="hidden" id="oai_sets_id" name="id" value="" />
+                </form>
             </div> <!-- /.page-section -->
         [% ELSE %]
             <div class="dialog message"><p>There are no sets defined.</p></div>
@@ -181,13 +186,14 @@
             $(li).remove();
         }
 
-        function confirmDelete() {
-          return confirm(_("Are you sure you want to delete this OAI set?"));
-        }
-
         $(document).ready(function() {
-            $(".delete_oai_set").on("click",function(){
-                return confirmDelete();
+            $(".delete_oai_set").on("click",function(e){
+                e.preventDefault();
+                if( confirm(_("Are you sure you want to delete this OAI set?")) ){
+                    let oai_set_id = $(this).data("oai-set-id");
+                    $("#oai_sets_id").val( oai_set_id );
+                    $("#oai_sets_delete").submit();
+                }
             });
 
             $("body").on("click", ".remove_description", function(e){
