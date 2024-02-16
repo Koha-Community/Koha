@@ -1871,7 +1871,6 @@
                         e.preventDefault();
                         $.ajax({
                             url: "/cgi-bin/koha/svc/shelfbrowser.pl",
-                            type: "POST",
                             data: {
                                 "shelfbrowse_itemnumber": $("#browser_previous a").data( "prev-itemnumber" )
                             },
@@ -1897,7 +1896,6 @@
                         e.preventDefault();
                         $.ajax({
                             url: "/cgi-bin/koha/svc/shelfbrowser.pl",
-                            type: "POST",
                             data: {
                                 "shelfbrowse_itemnumber": $("#browser_next a").data( "next-itemnumber" )
                             },
