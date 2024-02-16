@@ -372,8 +372,11 @@ sub draw_label_text {
     my $font = $self->{'font'};
     my $item = _get_label_item($self->{'item_number'});
     my $label_fields = _get_text_fields($self->{'format_string'});
-    my $biblio = Koha::Biblios->find($item->{biblionumber});
-    my $record = $biblio->metadata->record;
+    my $biblio = Koha::Biblios->find($item->{'biblionumber'});
+    my $record;
+    if ( defined $biblio ) {
+        $record = $biblio->metadata->record;
+    }
     # FIXME - returns all items, so you can't get data from an embedded holdings field.
     # TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
     my $cn_source = ($item->{'cn_source'} ? $item->{'cn_source'} : C4::Context->preference('DefaultClassificationSource'));
