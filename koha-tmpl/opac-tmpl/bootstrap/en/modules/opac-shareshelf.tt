@@ -37,8 +37,12 @@
             <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="shareshelf" class="maincontent">
 
-                    [%# This section contains the essential code for error messages and three operations: invite, confirm_invite and accept. %]
-                    <h1>Share a list with another patron</h1>
+                    [%# This section contains the essential code for error messages and operations: show, invited and accept. %]
+                    <h1>
+                        [% IF op == 'show' || op == 'invited' %]Share a list with another patron
+                        [% ELSIF op == 'accept' %]Accept a shared list from another patron
+                        [% END %]
+                    </h1>
 
                     [% IF errcode %]
                         [% IF errcode==1 && op %]
@@ -70,13 +74,13 @@
                         [% END %]
                         <p><a href="/cgi-bin/koha/opac-shelves.pl?op=list">Return to your lists</a></p>
 
-                    [% ELSIF op=='invite' %]
+                    [% ELSIF op == 'show' %]
                         <div id="invite">
                             <form method="post" id="share_list">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <legend class="sr-only">Share list</legend>
                                 <fieldset class="rows">
-                                    <input type="hidden" name="op" value="cud-conf_invite"/>
+                                    <input type="hidden" name="op" value="cud-invite"/>
                                     <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]"/>
                                     <ol>
                                         <li>
@@ -95,7 +99,7 @@
                             </form> <!-- /#share_list -->
                         </div> <!-- /#invite -->
 
-                    [% ELSIF op=='cud-conf_invite' %]
+                    [% ELSIF op == 'invited' %]
                         <div id="conf_invite">
                             [% IF approvedaddress %]
                                 <p>An invitation to share list <em>[% shelfname | html %]</em> will be sent shortly to [% approvedaddress | html %].</p>
@@ -109,8 +113,22 @@
                             <p><a href="/cgi-bin/koha/opac-shelves.pl?op=list">Return to your lists</a></p>
                         </div>
 
-                    [% ELSIF op=='accept' %]
-                        [%# Nothing to do: we already display an error or we redirect. %]
+                    [% ELSIF op == 'accept' %]
+                        <div id="accept">
+                            <form method="post" id="accept_share">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <legend class="sr-only">Accept shared list</legend>
+                                <p>One of our patrons invited you to share their list [% shelfname | html %].</p>
+                                <input type="hidden" name="op" value="cud-accept"/>
+                                <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]"/>
+                                <input type="hidden" name="key" value="[% key | html %]"/>
+                                <fieldset class="action">
+                                    <input type="submit" value="Accept" class="btn btn-primary" />
+                                    <a href="/cgi-bin/koha/opac-shelves.pl?op=list" class="cancel">Cancel</a>
+                                </fieldset>
+                            </form> <!-- /#accept_share -->
+                        </div> <!-- /#accept -->
+
                     [% END %]
                     [%# End of essential part %]
 

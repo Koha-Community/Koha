@@ -257,7 +257,7 @@
                                             [% PROCESS delete_shelf context = "details" %]
 
                                             [% IF !public && Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                                <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link sharelist"><i class="fa fa-fw fa-share" aria-hidden="true"></i> Share list</a>
+                                                <a href="/cgi-bin/koha/opac-shareshelf.pl?op=show&shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link sharelist"><i class="fa fa-fw fa-share" aria-hidden="true"></i> Share list</a>
                                             [% END %]
                                         [% ELSIF !public # not manageshelf and private means shared %]
                                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="unshare[% shelf.shelfnumber | html %]" class="d-inline">
@@ -778,7 +778,7 @@
                                                             [% PROCESS delete_shelf shelf = s context = "list" %]
                                                         [% END %]
                                                         [% IF s.is_private AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber | uri %]" class="sharelist btn btn-link"><i class="fa fa-share" aria-hidden="true"></i> Share</a>
+                                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=show&shelfnumber=[% s.shelfnumber | uri %]" class="sharelist btn btn-link"><i class="fa fa-share" aria-hidden="true"></i> Share</a>
                                                         [% END %]
                                                         [% IF s.is_shared AND s.can_be_managed( loggedinusernumber ) %]
                                                             <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="d-inline">

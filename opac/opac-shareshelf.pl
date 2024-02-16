@@ -20,9 +20,7 @@
 use Modern::Perl;
 
 use constant KEYLENGTH     => 10;
-use constant TEMPLATE_NAME => 'opac-shareshelf.tt';
-use constant SHELVES_URL =>
-  '/cgi-bin/koha/opac-shelves.pl?display=privateshelves&viewshelf=';
+use constant SHELVES_URL => '/cgi-bin/koha/opac-shelves.pl?display=privateshelves&viewshelf=';
 
 use CGI qw ( -utf8 );
 
@@ -36,33 +34,43 @@ use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Virtualshelfshares;
 
-
 # if virtualshelves is disabled, leave immediately
+our $query = CGI->new;
 if ( ! C4::Context->preference('virtualshelves') ) {
-    my $query = CGI->new;
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
 #-------------------------------------------------------------------------------
 
-my $pvar = _init( {} );
+our ( $op, $template, $loggedinuser, $cookie );
+$op = $query->param('op') // q{show};
+
+my $pvar = _init();
+
+( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => 'opac-shareshelf.tt',
+        query           => $query,
+        type            => "opac",
+    }
+);
+
 if ( !$pvar->{errcode} ) {
-    show_invite($pvar)    if $pvar->{op} eq 'invite';
-    confirm_invite($pvar) if $pvar->{op} eq 'cud-conf_invite';
-    show_accept($pvar)    if $pvar->{op} eq 'accept';
+    show_invite($pvar)    if $op eq 'show';
+    show_accept($pvar)    if $op eq 'accept';
+    confirm_invite($pvar) if $op eq 'cud-invite';
+    handle_accept($pvar)  if $op eq 'cud-accept';
 }
+
 load_template_vars($pvar);
-output_html_with_http_headers $pvar->{query}, $pvar->{cookie}, $pvar->{template}->output, undef, { force_no_caching => 1 };
+output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 
 #-------------------------------------------------------------------------------
 
 sub _init {
-    my ($param) = @_;
-    my $query = CGI->new;
-    $param->{query}       = $query;
+    my $param = {};
     $param->{shelfnumber} = $query->param('shelfnumber') || 0;
-    $param->{op}          = $query->param('op') || '';
     $param->{addrlist}    = $query->param('invite_address') || '';
     $param->{key}         = $query->param('key') || '';
     $param->{appr_addr}   = [];
@@ -83,14 +91,13 @@ sub _init {
     $param->{owner}     = $shelf ? $shelf->owner : -1;
     $param->{public}    = $shelf ? $shelf->public : 0;
 
-    load_template($param);
     return $param;
 }
 
 sub check_common_errors {
     my ($param) = @_;
-    if ( $param->{op} !~ /^(invite|cud-conf_invite|accept)$/ ) {
-        return 1;    #no operation specified
+    if ( $op !~ /^(show|accept|cud-invite|cud-accept)$/ ) {
+        return 1;    #unknown operation
     }
     if ( $param->{shelfnumber} !~ /^\d+$/ ) {
         return 2;    #invalid shelf number
@@ -103,7 +110,7 @@ sub check_common_errors {
 
 sub show_invite {
     my ($param) = @_;
-    return unless check_owner_category($param);
+    check_owner_category($param);
 }
 
 sub confirm_invite {
@@ -112,6 +119,7 @@ sub confirm_invite {
     process_addrlist($param);
     if ( @{ $param->{appr_addr} } ) {
         send_invitekey($param);
+        $op = 'invited';
     }
     else {
         $param->{errcode} = 6;    #not one valid address
@@ -119,6 +127,21 @@ sub confirm_invite {
 }
 
 sub show_accept {
+    my ($param) = @_;
+    $template->param( key => $param->{key} );
+
+    # Main reason for checking the key here is not to expose shelfname
+    # to people who dont have the key
+    my $key = keytostring( stringtokey( $param->{key}, 0 ), 1 );
+    my $shared_shelves = Koha::Virtualshelfshares->search({
+        shelfnumber => $param->{shelfnumber},
+        invitekey => $key,
+    });
+    return if $shared_shelves->count;
+    $param->{errcode} = 7;    # not accepted: key invalid or expired
+}
+
+sub handle_accept {
     my ($param) = @_;
 
     my $shelfnumber = $param->{shelfnumber};
@@ -130,7 +153,7 @@ sub show_accept {
         $param->{errcode} = 2;
     } elsif( $shelf->public ) {
         $param->{errcode} = 5;
-    } elsif( $shelf->owner == $param->{loggedinuser} ) {
+    } elsif( $shelf->owner == $loggedinuser ) {
         $param->{errcode} = 8;
     }
     return if $param->{errcode};
@@ -144,13 +167,13 @@ sub show_accept {
     my $shared_shelf = $shared_shelves ? $shared_shelves->next : undef; # we pick the first, but there should only be one
 
     if ( $shared_shelf ) {
-        my $is_accepted = eval { $shared_shelf->accept( $key, $param->{loggedinuser} ) };
+        my $is_accepted = eval { $shared_shelf->accept( $key, $loggedinuser ) };
         if( $is_accepted ) {
             notify_owner($param);
             #redirect to view of this shared list
-            print $param->{query}->redirect(
+            print $query->redirect(
                 -uri    => SHELVES_URL . $param->{shelfnumber},
-                -cookie => $param->{cookie}
+                -cookie => $cookie,
             );
             exit;
         }
@@ -172,7 +195,7 @@ sub notify_owner {
         letter_code => 'SHARE_ACCEPT',
         branchcode  => C4::Context->userenv->{"branch"},
         lang        => $patron->lang,
-        tables      => { borrowers => $param->{loggedinuser}, },
+        tables      => { borrowers => $loggedinuser, },
         substitute  => { listname => $param->{shelfname}, },
     );
 
@@ -238,7 +261,7 @@ sub send_invitekey {
             letter_code => 'SHARE_INVITE',
             branchcode  => C4::Context->userenv->{"branch"},
             lang        => 'default', # Not sure how we could use something more useful else here
-            tables      => { borrowers => $param->{loggedinuser}, },
+            tables      => { borrowers => $loggedinuser, },
             substitute  => {
                 listname => $param->{shelfname},
                 shareurl => $url . keytostring( \@newkey, 0 ),
@@ -263,32 +286,18 @@ sub check_owner_category {
 
     #sharing user should be the owner
     #list should be private
-    $param->{errcode} = 4 if $param->{owner} != $param->{loggedinuser};
+    $param->{errcode} = 4 if $param->{owner} != $loggedinuser;
     $param->{errcode} = 5 if !$param->{errcode} && $param->{public};
     return !defined $param->{errcode};
 }
 
-sub load_template {
-    my ($param) = @_;
-    ( $param->{template}, $param->{loggedinuser}, $param->{cookie} ) =
-      get_template_and_user(
-        {
-            template_name   => TEMPLATE_NAME,
-            query           => $param->{query},
-            type            => "opac",
-            authnotrequired => 0,                 #should be a user
-        }
-      );
-}
-
 sub load_template_vars {
     my ($param) = @_;
-    my $template = $param->{template};
     my $appr = join '; ', @{ $param->{appr_addr} };
     my $fail = join '; ', @{ $param->{fail_addr} };
     $template->param(
+        op              => $op,
         errcode         => $param->{errcode},
-        op              => $param->{op},
         shelfnumber     => $param->{shelfnumber},
         shelfname       => $param->{shelfname},
         approvedaddress => $appr,
