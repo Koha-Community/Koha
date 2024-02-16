@@ -91,7 +91,12 @@
                                                 <td>[% field.authorised_values_category | html %]</td>
                                                 <td>
                                                     <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/items_search_field.pl?name=[% field.name | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                    <a class="field-delete btn btn-default btn-xs" href="/cgi-bin/koha/admin/items_search_fields.pl?op=del&name=[% field.name | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                    <form action="/cgi-bin/koha/admin/items_search_fields.pl" method="post">
+                                                        [% INCLUDE 'csrf-token.inc' %]
+                                                        <input type="hidden" name="op" value="cud-del" />
+                                                        <input type="hidden" name="name" value="[% field.name | html %]" />
+                                                        <button class="field-delete btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</a>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         [% END %]
