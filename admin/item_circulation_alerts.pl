@@ -146,7 +146,7 @@ patron category, and item type, this is where that policy would be set.
 =head2 URLs
 
 
-=head3 ?action=show
+=head3 ?op=show
 
 Display a branches item circulation alert preferences.
 
@@ -163,7 +163,7 @@ branch '*' is used.
 
 
 
-=head3 ?action=toggle
+=head3 ?op=cud-toggle
 
 Toggle a preference via AJAX
 
