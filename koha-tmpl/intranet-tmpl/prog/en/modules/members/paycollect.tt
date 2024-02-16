@@ -137,8 +137,9 @@
 
     <form name="payindivfine" id="payindivfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     [% INCLUDE 'csrf-token.inc' %]
+    <input type="hidden" name="op" value="cud-pay_individual" id="pay_individual" />
+    <input type="hidden" name="type" value="[% type | html %]" />
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-    <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
     <input type="hidden" name="description" id="description" value="[% individual_description | html %]" />
     <input type="hidden" name="debit_type_code" id="debit_type_code" value="[% debit_type_code | html %]" />
@@ -235,7 +236,8 @@
     [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
     <legend>Write off an individual charge</legend>
-    <input type="hidden" name="op" value="cud-writeoff-individual" />
+    <input type="hidden" name="op" value="cud-writeoff_individual" />
+    <input type="hidden" name="type" value="[% type | html %]" />
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
     <input type="hidden" name="description" id="description" value="[% individual_description | html %]" />
@@ -264,9 +266,9 @@
 
             <ol>
                 <li>
-                    <label for="amountwrittenoff">Writeoff amount: </label>
+                    <label for="paid">Writeoff amount: </label>
                     <!-- default to writing off all -->
-                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding | $Price on_editing => 1 %]" type="text" />
+                    <input name="paid" id="amountwrittenoff" value="[% amountoutstanding | $Price on_editing => 1 %]" type="text" />
                 </li>
             </ol>
         </fieldset>

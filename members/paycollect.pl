@@ -43,6 +43,9 @@ my $writeoff_individual = $input->param('writeoff_individual');
 my $change_given        = $input->param('change_given');
 my $type                = scalar $input->param('type') || 'PAYMENT';
 
+# get operation
+my $op = $input->param('op') // qw{};
+
 my $updatecharges_permissions = ($writeoff_individual || $type eq 'WRITEOFF') ? 'writeoff' : 'remaining_permissions';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/paycollect.tt',
@@ -57,9 +60,6 @@ my $borrowernumber = $input->param('borrowernumber');
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
-
-# get operation
-my $op = $input->param('op') // qw{};
 
 my $account        = $patron->account;
 my $category       = $patron->category;
@@ -138,14 +138,15 @@ if ( $selected_accts ) {
     $total_due = $sum->_resultset->first->get_column('total_amountoutstanding');
 }
 
-if ( $total_paid and $total_paid ne '0.00' ) {
+if ( $total_paid and $total_paid ne '0.00' && ( $op eq 'cud-writeoff_individual' || $op eq 'cud-pay_individual' ) ) {
+    $accountlines_id      = $input->param('accountlines_id');
     $total_paid = $total_due if (abs($total_paid - $total_due) < 0.01) && C4::Context->preference('RoundFinesAtPayment');
     if ( $total_paid < 0 or $total_paid > $total_due ) {
         $template->param(
             error_over => 1,
             total_due => $total_due
         );
-    } elsif ( $total_collected < $total_paid && !( $writeoff_individual || $type eq 'WRITEOFF' ) ) {
+    } elsif ( $total_collected < $total_paid && !( $op eq 'cud-writeoff_individual' || $type eq 'WRITEOFF' ) ) {
         $template->param(
             error_under => 1,
             total_paid => $total_paid
@@ -153,10 +154,11 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     } else {
         my $url;
         my $pay_result;
-        if ($pay_individual) {
+        if ($op eq 'cud-pay_individual') {
             my $line = Koha::Account::Lines->find($accountlines_id);
             $pay_result = $account->pay(
                 {
+                    type         => $type,
                     lines        => [$line],
                     amount       => $total_paid,
                     library_id   => $library_id,
@@ -184,6 +186,24 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 $payment->set_additional_fields(\@additional_fields);
             }
 
+            $url = "/cgi-bin/koha/members/pay.pl";
+        } elsif ($op eq 'cud-writeoff_individual') {
+            my $item_id         = $input->param('itemnumber');
+            my $payment_note    = $input->param("payment_note");
+
+            my $accountline = Koha::Account::Lines->find( $accountlines_id );
+            $pay_result = $account->pay(
+                {
+                    type       => 'WRITEOFF',
+                    amount     => $total_paid,
+                    lines      => [ $accountline ],
+                    note       => $payment_note,
+                    interface  => C4::Context->interface,
+                    item_id    => $item_id,
+                    library_id => $library_id,
+                }
+            );
+            $payment_id = $pay_result->{payment_id};
 
             $url = "/cgi-bin/koha/members/pay.pl";
         } else {
@@ -265,44 +285,6 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     }
 } else {
     $total_paid = '0.00';    #TODO not right with pay_individual
-}
-
-if ( $op eq 'cud-writeoff-individual' ) {
-    my $item_id         = $input->param('itemnumber');
-    my $accountlines_id = $input->param('accountlines_id');
-    my $amount          = $input->param('amountwrittenoff');
-    my $payment_note    = $input->param("payment_note");
-
-    my $accountline = Koha::Account::Lines->find( $accountlines_id );
-
-    $amount = $accountline->amountoutstanding if (abs($amount - $accountline->amountoutstanding) < 0.01) && C4::Context->preference('RoundFinesAtPayment');
-    if ( $amount > $accountline->amountoutstanding ) {
-        print $input->redirect( "/cgi-bin/koha/members/paycollect.pl?"
-              . "borrowernumber=$borrowernumber"
-              . "&amount=" . $accountline->amount
-              . "&amountoutstanding=" . $accountline->amountoutstanding
-              . "&debit_type_code=" . $accountline->debit_type_code
-              . "&accountlines_id=" . $accountlines_id
-              . "&writeoff_individual=1"
-              . "&error_over=1" );
-
-    } else {
-        $payment_id = Koha::Account->new( { patron_id => $borrowernumber } )->pay(
-            {
-                amount     => $amount,
-                lines      => [ Koha::Account::Lines->find($accountlines_id) ],
-                type       => 'WRITEOFF',
-                note       => $payment_note,
-                interface  => C4::Context->interface,
-                item_id    => $item_id,
-                library_id => $library_id,
-            }
-        )->{payment_id};
-
-        my $url = "/cgi-bin/koha/members/pay.pl";
-        $url .= "?borrowernumber=$borrowernumber";
-        print $input->redirect($url);
-    }
 }
 
 if ( $input->param('error_over') ) {
