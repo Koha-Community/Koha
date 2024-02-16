@@ -48,13 +48,27 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
         Koha::Caches->flush_L1_caches();
         Koha::Cache::Memory::Lite->flush();
 
+        my %stateless_methods = (
+            GET     => 1,
+            HEAD    => 1,
+            OPTIONS => 1,
+            TRACE   => 1,
+        );
+
+        my %stateful_methods = (
+            POST   => 1,
+            PUT    => 1,
+            DELETE => 1,
+            PATCH  => 1,
+        );
+
         my $original_op    = $q->param('op');
         my $request_method = $q->request_method // q{};
-        if ( $request_method eq 'GET' && defined $original_op && $original_op =~ m{^cud-} ) {
-            warn "Programming error - op '$original_op' must not start with 'cud-' for GET";
+        if ( $stateless_methods{$request_method} && defined $original_op && $original_op =~ m{^cud-} ) {
+            warn "Programming error - op '$original_op' must not start with 'cud-' for $request_method";
             $q->param( 'op', '' );
-            $q->param( 'debug_programming_error', "'$original_op' must not start with 'cud-' for GET" );
-        } elsif ( $request_method ne 'GET' && defined $q->param('op') && $original_op !~ m{^cud-} ) {
+            $q->param( 'debug_programming_error', "'$original_op' must not start with 'cud-' for $request_method" );
+        } elsif ( $stateful_methods{$request_method} && defined $q->param('op') && $original_op !~ m{^cud-} ) {
             warn "Programming error - op '$original_op' must start with 'cud-' for $request_method";
             $q->param( 'op', '' );
             $q->param( 'debug_programming_error', "'$original_op' must start with 'cud-' for $request_method" );
