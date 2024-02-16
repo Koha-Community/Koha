@@ -45,6 +45,8 @@ my $endrange = 366;
 my $mark_returned;
 my $borrower_category = [];
 my $skip_borrower_category = [];
+my @branches;
+my @skip_branches;
 my $itemtype = [];
 my $skip_itemtype = [];
 my $help=0;
@@ -68,6 +70,8 @@ GetOptions(
     'category=s'        => $borrower_category,
     'skip-category=s'   => $skip_borrower_category,
     'list-categories'   => \$list_categories,
+    'branch=s'          => \@branches,
+    'skip-branch=s'     => \@skip_branches,
     'itemtype=s'        => $itemtype,
     'skip-itemtype=s'   => $skip_itemtype,
     'list-itemtypes'    => \$list_itemtypes,
@@ -92,6 +96,14 @@ if ( scalar @$borrower_category && scalar @$skip_borrower_category) {
                            . "Use one or the other.",
                -exitval => 1
             );
+}
+
+if ( scalar @branches && scalar @skip_branches ) {
+    pod2usage(
+        -verbose => 1,
+        -message => "The options --branch and --skip-branch are mutually exclusive.\n" . "Use one or the other.",
+        -exitval => 1
+    );
 }
 
 if ( scalar @$itemtype && scalar @$skip_itemtype) {
@@ -121,6 +133,7 @@ if ( $list_itemtypes ) {
    longoverdue.pl --lost | -l DAYS=LOST_CODE [ --charge | -c CHARGE_CODE ] [ --verbose | -v ] [ --quiet ]
                   [ --maxdays MAX_DAYS ] [ --mark-returned ] [ --category BORROWER_CATEGORY ] ...
                   [ --skip-category BORROWER_CATEGORY ] ...
+                  [ --branch BRANCH_CODE ] [ --skip-branch BRANCH_CODE ] ...
                   [ --skip-lost-value LOST_VALUE [ --skip-lost-value LOST_VALUE ] ]
                   [ --commit ]
 
@@ -186,6 +199,16 @@ If not provided, the value of the system preference 'DefaultLongOverdueSkipPatro
 
 List borrower categories available for use by B<--category> or
 B<--skip-category>, and exit.
+
+=item B<--branch>
+
+Act on the listed branch codes.  Exclude all others.  This may be specified multiple times to include multiple branches.  Which branches are selected follows the CircControl system preference.
+May not be used with B<--skip-branch>
+
+=item B<--skip-branch>
+
+Act on all branch codes except the ones listed.  This may be specified multiple times to exclude multiple branches.  Which branches are excluded follows the CircControl system preference.
+May not be used with B<--branch>
 
 =item B<--itemtype>
 
@@ -332,6 +355,7 @@ sub longoverdue_sth {
 }
 
 my $dbh = C4::Context->dbh;
+my $circ_control_pref = C4::Context->preference('CircControl');
 
 my @available_categories = Koha::Patron::Categories->search()->get_column('categorycode');
 $borrower_category = [ map { uc $_ } @$borrower_category ];
@@ -360,6 +384,32 @@ if ( @$skip_borrower_category ) {
 }
 
 my $filter_borrower_categories = ( scalar @$borrower_category || scalar @$skip_borrower_category );
+
+my @available_branches = Koha::Libraries->search()->get_column('branchcode');
+my %branches_to_process;
+for my $lib (@branches) {
+    unless ( grep { $_ eq $lib } @available_branches ) {
+        pod2usage(
+            '-exitval' => 1,
+            '-message' => "The library $lib does not exist in the database",
+        );
+    }
+    $branches_to_process{$lib} = 1;
+}
+if (@skip_branches) {
+    for my $lib (@skip_branches) {
+        unless ( grep { $_ eq $lib } @available_branches ) {
+            pod2usage(
+                '-exitval' => 1,
+                '-message' => "The library $lib does not exist in the database",
+            );
+        }
+    }
+    %branches_to_process = map { $_ => 1 } @available_branches;
+    %branches_to_process = ( %branches_to_process, map { $_ => 0 } @skip_branches );
+}
+
+my $filter_branches = ( scalar @branches || scalar @skip_branches );
 
 my @available_itemtypes = Koha::ItemTypes->search()->get_column('itemtype');
 $itemtype = [ map { uc $_ } @$itemtype ];
@@ -413,6 +463,19 @@ foreach my $startrange (sort keys %$lost) {
             if( $filter_borrower_categories ) {
                 my $category = uc Koha::Patrons->find( $row->{borrowernumber} )->categorycode();
                 next ITEM unless ( $category_to_process{ $category } );
+            }
+            if ($filter_branches) {
+                my $lib;
+                for ($circ_control_pref) {
+                    if ( $_ eq 'PatronLibrary' ) {
+                        $lib = Koha::Patrons->find( $row->{borrowernumber} )->branchcode();
+                    } elsif ( $_ eq 'PickupLibrary' ) {
+                        $lib = C4::Context->userenv->{'branch'};
+                    } else {    # ( $_ eq 'ItemHomeLibrary' )
+                        $lib = Koha::Items->find( $row->{itemnumber} )->homebranch();
+                    }
+                }
+                next ITEM unless ( $branches_to_process{$lib} );
             }
             if ($filter_itemtypes) {
                 my $it = uc Koha::Items->find( $row->{itemnumber} )->effective_itemtype();
