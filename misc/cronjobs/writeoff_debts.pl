@@ -32,7 +32,7 @@ if ( !$confirm && !$verbose ) {
 
 @type = split( /,/, join( ',', @type ) );
 
-if ( !$file && !@type && !$before && !$after ) {
+if ( !$file && !@type && !$before && !$after && !@category_code ) {
     say STDERR "Missing required filter option: at least one filter option should be used";
     pod2usage(2);
 }
