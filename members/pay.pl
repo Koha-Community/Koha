@@ -78,6 +78,10 @@ our $branch = C4::Context->userenv->{'branch'};
 
 my $op = $input->param('op') // q{};
 
+# FIXME: paycollect, payselected, writeoff_selected, pay_individual and writeoff_individual 
+# are all stateless actions, but it does no harm to check the csrf here anyway and prevents 
+# the need for a complete re-write. 
+
 if ( $op eq 'cud-paycollect' ) {
     print $input->redirect(
         "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber&change_given=$change_given");
