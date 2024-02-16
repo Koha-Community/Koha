@@ -17,7 +17,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op = $input->param('action') // 'list';
+my $op = $input->param('op') // 'list';
 
 if ( $op eq 'cud-save' ) {
     my $module = $input->param('module');
