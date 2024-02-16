@@ -173,7 +173,7 @@ if ( $op eq 'add_form' ) {
     $searchfield = '';
     $op          = 'list';
 
- } elsif ( $op eq 'cud-delete_confirm' ) {
+ } elsif ( $op eq 'delete_confirm' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
     my $can_be_deleted = $itemtype->can_be_deleted();
     if ($can_be_deleted == 0) {

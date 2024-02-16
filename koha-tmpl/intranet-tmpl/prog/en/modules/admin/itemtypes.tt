@@ -23,7 +23,7 @@
             [% tx("Confirm deletion of item type '{item_type}'?", { item_type = itemtype.itemtype }) | html %]
         [% END %] &rsaquo;
     [% END %]
-    [% IF op == 'delete_confirmed' %]
+    [% IF op == 'cud-delete_confirmed' %]
         [% t("Data deleted") | html %] &rsaquo;
     [% END %]
     [% t("Item types") | html %] &rsaquo;
