@@ -88,7 +88,7 @@ if ( $op eq 'cud-add' ) {
     # list servers after adding
     $op = 'list';
 }
-elsif ( $op eq 'cud-edit_form' ) {
+elsif ( $op eq 'edit_form' ) {
     my $smtp_server_id = $input->param('smtp_server_id');
     my $smtp_server;
 
