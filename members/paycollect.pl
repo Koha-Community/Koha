@@ -138,7 +138,7 @@ if ( $selected_accts ) {
     $total_due = $sum->_resultset->first->get_column('total_amountoutstanding');
 }
 
-if ( $total_paid and $total_paid ne '0.00' && ( $op eq 'cud-writeoff_individual' || $op eq 'cud-pay_individual' ) ) {
+if ( $total_paid and $total_paid ne '0.00' ) {
     $accountlines_id      = $input->param('accountlines_id');
     $total_paid = $total_due if (abs($total_paid - $total_due) < 0.01) && C4::Context->preference('RoundFinesAtPayment');
     if ( $total_paid < 0 or $total_paid > $total_due ) {
@@ -206,7 +206,7 @@ if ( $total_paid and $total_paid ne '0.00' && ( $op eq 'cud-writeoff_individual'
             $payment_id = $pay_result->{payment_id};
 
             $url = "/cgi-bin/koha/members/pay.pl";
-        } else {
+        } elsif ( $op eq 'cud-pay' || $op eq 'cud-writeoff' ) {
             if ($selected_accts) {
                 if ( $total_paid > $total_due ) {
                     $template->param(
@@ -292,13 +292,13 @@ if ( $input->param('error_over') ) {
 }
 
 $template->param(
-    payment_id => $payment_id,
-
-    type           => $type,
-    borrowernumber => $borrowernumber,    # some templates require global
-    patron         => $patron,
-    total          => $total_due,
-    available_additional_fields => [ Koha::AdditionalFields->search({ tablename => 'accountlines:credit' })->as_list ],
+    payment_id                  => $payment_id,
+    type                        => $type,
+    borrowernumber              => $borrowernumber,    # some templates require global
+    patron                      => $patron,
+    total                       => $total_due,
+    available_additional_fields =>
+        [ Koha::AdditionalFields->search( { tablename => 'accountlines:credit' } )->as_list ],
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

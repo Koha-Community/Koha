@@ -366,6 +366,11 @@
     [% END %]
 
     <div class="action">
+        [% IF type != 'WRITEOFF' %]
+        <input type="hidden" name="op" value="cud-pay" />
+        [% ELSE %]
+        <input type="hidden" name="op" value="cud-writeoff" />
+        [% END %]
         <input type="submit" name="submitbutton" class="btn btn-primary" value="Confirm" />
         <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
     </div>
