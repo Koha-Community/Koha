@@ -20,7 +20,7 @@ $("#cancelBookingForm").on('submit', function(e) {
         if (bookings_table) {
             bookings_table.api().ajax.reload();
         }
-        if (timeline) {
+        if (typeof timeline !== 'undefined') {
             timeline.itemsData.remove(Number(booking_id));
         }
         $('.bookings_count').html(parseInt($('.bookings_count').html(), 10)-1);
