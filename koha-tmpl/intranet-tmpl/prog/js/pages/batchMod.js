@@ -20,6 +20,7 @@ function hideColumns() {
     if (valCookie) {
         valCookie = valCookie.split("/");
         $("#showall").prop("checked", false).parent().removeClass("selected");
+        $("#hideall").prop("checked", true).parent().addClass("selected");
         for ( var i = 0; i < valCookie.length; i++ ) {
             if (valCookie[i] !== '') {
                 var index = valCookie[i] - nb_cols;
