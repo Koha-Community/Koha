@@ -35,7 +35,8 @@ my ( $auth_status ) =
   check_cookie_auth( $input->cookie('CGISESSID'),
     { circulate => 'circulate_remaining_permissions' } );
 
-if ( $auth_status ne "ok" ) {
+my $op = $input->param('op') || q{};
+if ( $auth_status ne "ok" || $op ne "cud-checkin" ) {
     exit 0;
 }
 

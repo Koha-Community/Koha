@@ -570,34 +570,29 @@ $(document).ready(function() {
     });
 
     // Handle renewals and returns
-    $("#CheckinChecked").on("click",function(){
-
+    $("#CheckinChecked").on("click",function(e){
+        e.preventDefault();
         let refresh_table = true;
-        $(".checkin:checked:visible").each(function() {
-            itemnumber = $(this).val();
-
-            $(this).replaceWith("<img id='checkin_" + itemnumber + "' src='" + interface + "/" + theme + "/img/spinner-small.gif' />");
-
+        function checkin(item_id){
             params = {
-                itemnumber:     itemnumber,
-                borrowernumber: borrowernumber,
-                branchcode:     branchcode,
+                item_id,
+                patron_id:      borrowernumber,
+                library_id:     branchcode,
                 exempt_fine:    $("#exemptfine").is(':checked')
             };
 
-            $.post({
-                url: "/cgi-bin/koha/svc/checkin",
-                data: params,
-                success: function( data ) {
-                    id = "#checkin_" + data.itemnumber;
+            const client = APIClient.circulation;
+            return client.checkins.create(params).then(
+                success => {
+                    id = "#checkin_" + item_id;
 
                     content = "";
-                    if ( data.returned ) {
+                    if ( success.returned ) {
                         content = __("Checked in");
                         $(id).parent().parent().addClass('ok');
-                        $('#date_due_' + data.itemnumber).html( __("Checked in") );
-                        if ( data.patronnote != null ) {
-                            $('.patron_note_' + data.itemnumber).html( __("Patron note") + ": " + data.patronnote);
+                        $('#date_due_' + success.itemnumber).html( __("Checked in") );
+                        if ( success.patronnote != null ) {
+                            $('.patron_note_' + success.itemnumber).html( __("Patron note") + ": " + success.patronnote);
                         }
                     } else {
                         content = __("Unable to check in");
@@ -605,21 +600,46 @@ $(document).ready(function() {
                         refresh_table = false;
                     }
 
-                    $(id).replaceWith( content );
+                    $(id).parent().empty().append(content);
                 },
-                dataType: "json",
-                async: false,
-            });
-        });
-        // Refocus on barcode field if it exists
-        if ( $("#barcode").length ) {
-            $("#barcode").focus();
+                error => {
+                     console.warn("Something wrong happened: %s".format(error));
+                }
+            )
         }
 
-        if ( refresh_table ) {
-            RefreshIssuesTable();
+        function checkin_all(item_ids, fn){
+            let i = 0;
+            function next(){
+                if (i < item_ids.length) {
+                    return fn(item_ids[i++]).then(function(id) {
+                        return next();
+                    });
+                }
+            }
+
+            $(item_ids).each((i, id) => {
+                $("#checkin_"+id).parent().append("<img id='checkin_" + id+ "' src='" + interface + "/" + theme + "/img/spinner-small.gif' />");
+                $("#checkin_"+id).hide();
+            });
+
+            return next();
         }
-        $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
+
+        let item_ids = $(".checkin:checked:visible").map((i, c) => c.value);
+
+        checkin_all(item_ids, checkin).then(() => {
+            // Refocus on barcode field if it exists
+            if ( $("#barcode").length ) {
+                $("#barcode").focus();
+            }
+
+            if ( refresh_table ) {
+                RefreshIssuesTable();
+            }
+            $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
+        });
+
         // Prevent form submit
         return false;
     });
