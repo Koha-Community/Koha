@@ -2252,19 +2252,20 @@ subtest "Test unallocated option" => sub {
         "Picked the item"
     );
 
-    my $timestamp = $hold->timestamp;
+    my $original_timestamp = $hold->timestamp;
 
-    sleep 2;
+    sleep 2; # Allow time to pass after first hold was placed
     C4::HoldsQueue::CreateQueue();
     $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
     $hold     = $queue_rs->next;
-    isnt( $hold->timestamp, $timestamp, "Hold was reallocated when queue fully rebuilt" );
-    $timestamp = $hold->timestamp;
+    isnt( $hold->timestamp, $original_timestamp, "Hold was reallocated when queue fully rebuilt" );
+    my $after_rebuild_timestamp = $hold->timestamp;
 
+    sleep 2; # Allow time to pass after first full rebuild
     C4::HoldsQueue::CreateQueue( { unallocated => 1 } );
     $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
     $hold     = $queue_rs->next;
-    is( $hold->timestamp, $timestamp, "Previously allocated hold not updated when unallocated passed" );
+    is( $hold->timestamp, $after_rebuild_timestamp, "Previously allocated hold not updated when unallocated passed" );
 
     my $reserve_id_2 = AddReserve(
         {
@@ -2285,7 +2286,7 @@ subtest "Test unallocated option" => sub {
     $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
     $hold     = $queue_rs->next;
     is(
-        $hold->timestamp, $timestamp,
+        $hold->timestamp, $after_rebuild_timestamp,
         "Previously allocated hold not updated when unallocated passed and others are allocated"
     );
 };
