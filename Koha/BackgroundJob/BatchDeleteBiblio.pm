@@ -7,6 +7,7 @@ use C4::Biblio;
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
+use Koha::Acquisition::Orders;
 
 use base 'Koha::BackgroundJob';
 
@@ -121,6 +122,13 @@ sub process {
                 $self->step;
                 next RECORD_IDS;
             }
+        }
+
+        # Cancel acq order lines
+        my @result = Koha::Acquisition::Orders->search( { biblionumber => $biblionumber } )->cancel;
+        my $warns  = @{ $result[1] };
+        if ( $result[0] && $warns ) {    # warnings about order lines not removed
+            warn sprintf( "%d order lines were deleted, but %d lines gave a warning\n", $result[0], $warns );
         }
 
         # Finally, delete the biblio

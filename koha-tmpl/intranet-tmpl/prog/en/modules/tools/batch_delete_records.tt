@@ -89,6 +89,10 @@
         <ol>
           <li><label for="biblio_type">Bibliographic: </label><input type="radio" name="recordtype" value="biblio" id="biblio_type" checked="checked" /></li>
           <li><label for="authority_type">Authorities: </label><input type="radio" name="recordtype" value="authority" id="authority_type" /></li>
+          <li class="skip_open_orders">
+              <input type="checkbox" name="skip_open_orders" checked />
+              <label for="skip_open_orders">Skip biblio records with open acquisition orders</label>
+          </li>
         </ol>
       </fieldset>
 
@@ -260,8 +264,10 @@
             $("input[type='radio']").click(function() {
                 if ($(this).attr('id') == 'authority_type') {
                     $("a[href='#shelves_tab_panel']").parent().hide();
+                    $("li.skip_open_orders").hide();
                 } else if ($(this).attr('id') == 'biblio_type') {
                     $("a[href='#shelves_tab_panel']").parent().show();
+                    $("li.skip_open_orders").show();
                 }
             });
 

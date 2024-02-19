@@ -29,6 +29,7 @@ use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
 use C4::Biblio;
 use C4::AuthoritiesMarc;
+use Koha::Acquisition::Orders;
 use Koha::Virtualshelves;
 
 use Koha::Authorities;
@@ -37,9 +38,10 @@ use Koha::Items;
 use Koha::BackgroundJob::BatchDeleteBiblio;
 use Koha::BackgroundJob::BatchDeleteAuthority;
 
-my $input = CGI->new;
-my $op = $input->param('op') // q|form|;
-my $recordtype = $input->param('recordtype') // 'biblio';
+my $input            = CGI->new;
+my $op               = $input->param('op') // q|form|;
+my $recordtype       = $input->param('recordtype') // 'biblio';
+my $skip_open_orders = $input->param('skip_open_orders') // 0;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
         template_name => 'tools/batch_delete_records.tt',
@@ -106,6 +108,13 @@ if ( $op eq 'form' ) {
             $biblio->{holds_count} = $biblio_object->holds->count;
             $biblio->{issues_count} = C4::Biblio::CountItemsIssued( $record_id );
             $biblio->{subscriptions_count} = $biblio_object->subscriptions->count;
+
+            # Respect skip_open_orders
+            next
+                if $skip_open_orders
+                && Koha::Acquisition::Orders->search(
+                { biblionumber => $record_id, orderstatus => [ 'new', 'ordered', 'partial' ] } )->count;
+
             push @records, $biblio;
         } else {
             # Retrieve authority information
