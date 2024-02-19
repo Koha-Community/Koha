@@ -26,6 +26,7 @@ use C4::Templates;
 use C4::Log qw( logaction );
 use Koha::ActionLogs;
 use Koha::Notice::Template;
+use Koha::Patrons;
 
 =head1 NAME
 
@@ -257,15 +258,18 @@ sub get_request_logs {
     foreach my $alias(@{$aliases}) {
         $alias_hash->{$alias->{authorised_value}} = $alias;
     }
-    foreach my $log(@{$logs}) {
+    foreach my $log ( @{$logs} ) {
+        $log->{patron}       = Koha::Patrons->find( $log->{user} );
         $log->{notice_types} = $notice_hash;
-        $log->{aliases} = $alias_hash;
-        $log->{info} = from_json($log->{info});
-        $log->{template} = $self->get_log_template({
-            request => $request,
-            origin => $log->{info}->{log_origin},
-            action => $log->{action}
-        });
+        $log->{aliases}      = $alias_hash;
+        $log->{info}         = from_json( $log->{info} );
+        $log->{template}     = $self->get_log_template(
+            {
+                request => $request,
+                origin  => $log->{info}->{log_origin},
+                action  => $log->{action}
+            }
+        );
     }
 
     return $logs;
