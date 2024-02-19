@@ -20,9 +20,10 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
 use CGI;
 use POSIX;
+use Try::Tiny qw(catch try);
+
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user haspermission );
 use C4::Biblio qw(
@@ -48,6 +49,7 @@ use C4::Charset qw( SetMarcUnicodeFlag );
 use Koha::BiblioFrameworks;
 use Koha::DateUtils qw( dt_from_string );
 
+use Koha::Acquisition::Orders;
 use Koha::Biblios;
 use Koha::ItemTypes;
 use Koha::Libraries;
@@ -779,15 +781,29 @@ if ( $op eq "cud-addbiblio" ) {
         );
     }
 }
-elsif ( $op eq "cud-delete" ) {
     
-    my $error = &DelBiblio($biblionumber);
+elsif ( $op eq "cud-delete" ) {
+
+    # Cancel attached order lines first before deleting biblio !
+    my $error;
+    try {
+        my @result = Koha::Acquisition::Orders->search( { biblionumber => $biblionumber } )->cancel;
+        my $warns  = @{ $result[1] };
+        if ( $result[0] && $warns ) {    # warnings about order lines not removed
+            warn sprintf( "%d order lines were deleted, but %d lines gave a warning\n", $result[0], $warns );
+        }
+        $error = &DelBiblio($biblionumber);
+    } catch {
+        $error = ref($_) ? 'Exception raised - ' . $_->error : $_;
+    };
+
     if ($error) {
+        #FIXME This should be handled in template alert
         warn "ERROR when DELETING BIBLIO $biblionumber : $error";
         print "Content-Type: text/html\n\n<html><body><h1>ERROR when DELETING BIBLIO $biblionumber : $error</h1></body></html>";
-	exit;
+        exit;
     }
-    
+
     print $input->redirect('/cgi-bin/koha/catalogue/search.pl' . ($searchid ? "?searchid=$searchid" : ""));
     exit;
     
