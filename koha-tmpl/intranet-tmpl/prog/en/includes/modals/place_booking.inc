@@ -33,7 +33,7 @@
                             <li>
                                 <div id="period_fields">
                                     <label class="required" for="period">Booking dates: </label>
-                                    <input type="text" id="period" name="period" class="flatpickr" data-flatpickr-futuredate="true" required="required" disabled="true" autocomplete="off">
+                                    <input type="text" id="period" name="period" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-disable-shortcuts="true" required="required" disabled="true" autocomplete="off">
                                     <span class="required">Required</span>
                                 </div>
                                 <div class="hint">Select the booking start and end date</div>

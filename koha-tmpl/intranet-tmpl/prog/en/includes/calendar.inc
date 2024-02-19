@@ -181,6 +181,9 @@
             options['dateFormat'] = "Y-m-d H:i";
             options['altFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
         }
+        if ( $(input).data('flatpickr-disable-shortcuts') === true ) {
+            options['plugins'] = [];
+        }
 
         let fp = $(input).flatpickr(options);
 
