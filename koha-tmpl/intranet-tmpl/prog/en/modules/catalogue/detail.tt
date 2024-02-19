@@ -80,8 +80,8 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
-                [% INCLUDE 'messages.inc' %]
                 <div class="row">
+                [% INCLUDE 'messages.inc' %]
 
 [% IF ( unknownbiblionumber ) %]
   <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
@@ -92,7 +92,6 @@
 [% CoceHost        = Koha.Preference('CoceHost') %]
 [% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
 
-<div id="transient_result"></div>
 [% INCLUDE 'cat-toolbar.inc' %]
     [% IF ( ocoins ) %]
         <!-- COinS / OpenURL -->
