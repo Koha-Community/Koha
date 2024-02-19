@@ -27,7 +27,7 @@
         table = initTable();
 
         // Do the initial data population
-        window.doBatchApiRequest('', {
+        window.doBatchApiRequest( '?_per_page=-1', {
                 headers: {
                     'x-koha-embed': '+strings,requests+count,patron'
                 }
