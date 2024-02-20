@@ -5,6 +5,7 @@
 [% USE TablesSettings %]
 [% USE ItemTypes %]
 [% USE AdditionalContents %]
+[% USE AuthorisedValues %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 
@@ -147,6 +148,9 @@
                                             <span>Fulfilled</span>
                                         [% ELSIF hold.cancellationdate %]
                                             <span>Cancelled</span>
+                                            [% IF hold.cancellation_reason %]
+                                                ([% AuthorisedValues.GetByCode('HOLD_CANCELLATION', hold.cancellation_reason, 1) | html %])
+                                            [% END %]
                                         [% ELSIF hold.found == 'W' %]
                                             [% IF hold.cancellation_requests.count == 0 %]
                                                 <span>Waiting</span>
