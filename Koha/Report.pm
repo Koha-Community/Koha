@@ -169,7 +169,7 @@ sub prep_report {
         #        }
         #    ) if $quoted;
         #}
-        unless ( $split[ $i * 2 + 1 ] =~ /\|\s*list\s*$/ && $quoted ) {
+        unless ( $split[ $i * 2 + 1 ] =~ /\|\s*list\s*$|\s*\:in\s*$/ && $quoted ) {
             $quoted = C4::Context->dbh->quote($quoted);
         }
         else {

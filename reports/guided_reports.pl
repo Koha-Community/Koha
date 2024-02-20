@@ -798,7 +798,14 @@ if ($op eq 'run'){
                 if( defined $uniq_params{$text.$sep.$authorised_value_all} ){
                     next;
                 } else { $uniq_params{$text.$sep.$authorised_value_all} = "$i"; }
-                my ($authorised_value, $all) = split /:/, $authorised_value_all;
+                my ($authorised_value, $param_options) = split /:/, $authorised_value_all;
+                my $all;
+                my $multiple;
+                if ( $param_options eq "all" ) {
+                    $all = "all";
+                } elsif ( $param_options eq "in" ) {
+                    $multiple = "multiple";
+                }
                 my $input;
                 my $labelid;
                 if ( not defined $authorised_value ) {
@@ -917,7 +924,7 @@ if ($op eq 'run'){
                     };
                 }
 
-                push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid, 'name' => $text.$sep.$authorised_value_all, 'include_all' => $all };
+                push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid, 'name' => $text.$sep.$authorised_value_all, 'include_all' => $all, 'select_multiple' => $multiple };
             }
             $template->param('sql'         => $sql,
                             'name'         => $name,

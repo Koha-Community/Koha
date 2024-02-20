@@ -849,7 +849,7 @@
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?op=edit_formid=[% id | uri %]" class="btn btn-primary">Edit SQL</a>
                         </fieldset>
                     [% ELSE #  IF ( auth_val_error ) %]
-                        <form method="get" action='/cgi-bin/koha/reports/guided_reports.pl'>
+                        <form method="get" action='/cgi-bin/koha/reports/guided_reports.pl' id='report_param_form'>
                             <input type='hidden' name='id' value="[% id | html %]" />
                             <h1>Enter parameters for report [% name | html %]:</h1>
                             [% IF ( notes ) %]
@@ -876,9 +876,12 @@
                                         [% ELSE %]
                                             <li>
                                                 <label for="sql_params_[% sql_param.labelid | html %]">[% sql_param.entry | html %]:</label>
-                                                <select name="[%- sql_param.input.name | html -%]" tabindex="1"  id="[%- sql_param.input.id | html -%]">
+                                                <select name="[%- sql_param.input.name | html -%]" tabindex="1"  id="[%- sql_param.input.id | html -%]" [%- sql_param.select_multiple | html -%]>
                                                     [% IF (sql_param.include_all) %]
                                                         <option value="%">All</option>
+                                                    [% END %]
+                                                    [% IF (sql_param.select_multiple) %]
+                                                        <option value="null" hidden></option>
                                                     [% END %]
                                                     [% FOREACH value IN sql_param.input.values %]
                                                         <option value="[%- value | html -%]">[%- sql_param.input.labels.$value | html -%]</option>
@@ -1540,6 +1543,23 @@
     [% Asset.js( "js/mana.js" ) | $raw %]
 
     <script>
+
+        //  if the report param form has multiselects override default form submission
+        if( $('#report_param_form').find('select[multiple]').length ) {
+            $('#report_param_form').find('select[multiple]').each( function (i) {
+                $(this).on('change', function() {
+                    var $selected = $(this).val().join('\n');
+                    $(this).find('option:first').val($selected);
+                });
+            });
+
+            $('#report_param_form').on('submit', function(e) {
+                $('#report_param_form').find('select[multiple]').each( function (i) {
+                    var $selected = $('option:first', this).val();
+                    $(this).val($selected);
+                });
+            });
+        }
 
         function hide_bar_element() {
             $('#chart-column-horizontal').hide()

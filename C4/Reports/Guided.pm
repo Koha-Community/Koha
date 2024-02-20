@@ -974,7 +974,7 @@ sub GetParametersFromSQL {
 
     for ( my $i = 0; $i < ($#split/2) ; $i++ ) {
         my ($name,$authval) = split(/\|/,$split[$i*2+1]);
-        $authval =~ s/\:all$// if $authval;
+        $authval =~ s/\:all$|\:in$// if $authval;
         push @sql_parameters, { 'name' => $name, 'authval' => $authval };
     }
 
