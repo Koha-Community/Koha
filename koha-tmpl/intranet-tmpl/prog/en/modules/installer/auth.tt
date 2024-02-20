@@ -55,6 +55,10 @@
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="cud-login" />
                         [% FOREACH INPUT IN INPUTS %]
+                            [% NEXT IF INPUT.name == "op" %]
+                            [% NEXT IF INPUT.name == "csrf_token" %]
+                            [% NEXT IF INPUT.name == "login_userid" %]
+                            [% NEXT IF INPUT.name == "login_password" %]
                             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
                         [% END %]
 

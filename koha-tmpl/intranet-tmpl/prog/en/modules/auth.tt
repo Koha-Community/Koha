@@ -127,6 +127,8 @@
         <input type="hidden" name="op" value="cud-login" />
         <input type="hidden" name="koha_login_context" value="intranet" />
     [% FOREACH INPUT IN INPUTS %]
+        [% NEXT IF INPUT.name == "op" %]
+        [% NEXT IF INPUT.name == "csrf_token" %]
         [% NEXT IF INPUT.name == "koha_login_context" %]
         [% NEXT IF INPUT.name == "branch" %]
         <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
