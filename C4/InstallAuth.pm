@@ -245,11 +245,14 @@ sub checkauth {
     # state variables
     my $loggedin = 0;
     my %info;
-    my ( $userid, $cookie, $sessionID, $flags, $envcookie );
+    my ( $userid, $cookie, $flags, $envcookie );
     my $logout = $query->param('logout.x');
-    if ( $sessionID = $query->cookie("CGISESSID") ) {
+
+    my $sessionID = $query->cookie("CGISESSID");
+    my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
+
+    if ( $session ) {
         C4::Context->_new_userenv($sessionID);
-        my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
         if ( $session->param('cardnumber') ) {
             C4::Context->set_userenv(
                 $session->param('number'),
@@ -272,26 +275,18 @@ sub checkauth {
             $loggedin = 1;
             $userid   = $session->param('cardnumber');
         }
-
-        if ($logout) {
-
-            # voluntary logout the user
-            C4::Context->_unset_userenv($sessionID);
-            $sessionID = undef;
-            $userid    = undef;
-	   # Commented out due to its lack of usefulness
-           # open L, ">>/tmp/sessionlog";
-           # my $time = localtime( time() );
-           # printf L "%20s from %16s logged out at %30s (manually).\n", $userid,
-           #   $ip, $time;
-           # close L;
-        }
     }
+
+    if ($logout || !$session) {
+        # voluntary logout the user
+        C4::Context->_unset_userenv($sessionID);
+        $session = Koha::Session->get_session( { storage_method => 'file' } );
+    }
+
+    $sessionID = $session->id;
+
     unless ($userid) {
-        my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
-        $sessionID = $session->id;
-        $userid    = $query->param('login_userid');
-        C4::Context->_new_userenv($sessionID);
+        $userid = $query->param('login_userid');
         my $password = $query->param('login_password');
         C4::Context->_new_userenv($sessionID);
         my ( $return, $cardnumber ) = checkpw( $userid, $password );
@@ -393,7 +388,7 @@ sub checkauth {
     }
 
     unless ( $sessionID ) {
-        my $session = Koha::Session->get_session( { storage_method => 'file' } );
+        $session = Koha::Session->get_session( { storage_method => 'file' } );
         $sessionID = $session->id;
     }
     $template->param(
