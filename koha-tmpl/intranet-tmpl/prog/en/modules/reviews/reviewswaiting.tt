@@ -98,7 +98,12 @@
         </td>
         <td class="actions">
             [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-check"></i> Approve</a>[% END %]
-            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&amp;reviewid=[% review.reviewid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</a>
+            <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                [% INCLUDE 'csrf-token.inc' %]
+                <input type="hidden" name="op" value="cud-delete" />
+                <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                <button type="submit" class="btn btn-default btn-xs delete-comment"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
+            </form>
         </td>
     </tr>
     [% END %]</tbody>
@@ -123,6 +128,13 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    <script>
+        $(document).ready(function(){
+            $(".delete-comment").on("click", function(){
+                return confirm( _("Are you sure you want to delete this comment?") );
+            });
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
