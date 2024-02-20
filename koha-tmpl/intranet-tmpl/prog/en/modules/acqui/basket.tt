@@ -781,6 +781,7 @@
                                                     <th>GST %</th>
                                                     <th>GST</th>
                                                     <th>Fund</th>
+                                                    <th>Delete order</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -844,11 +845,19 @@
                                                         <td class="number">[% order.total_tax_included | $Price %]</td>
                                                         <td class="number">[% order.tax_rate * 100 | html %]</td>
                                                         <td class="number">[% order.tax_value | $Price %]</td>
-                                                        <td>[% order.budget_name | html %]
+                                                        <td>[% order.budget_name | html %]</td>
+                                                        <td>
+                                                            [% UNLESS closedate %]<a class="delete_order" href="#" data-ordernumber="[% order.ordernumber | html %]" data-biblionumber="[% order.biblionumber | html %]">Delete</a>[% END %]
+                                                        </td>
                                                     </tr>
                                                 [% END # /FOREACH order %]
                                             </tbody>
                                         </table> <!-- /#cancelledorderst -->
+                                        <form id="delete_order_form" method="post">
+                                            <input type="hidden" name="op" value="cud-delete-order"/>
+                                            <input type="hidden" name="ordernumber" value=""/>
+                                            <input type="hidden" name="basketno" value="[% basketno | html %]"/>
+                                        </form>
                                     </div> <!-- /#cancelledorders -->
                                 [% END # /IF (cancelledorders_loop) %]
                                 <br />
@@ -1113,6 +1122,20 @@
                     window.location = "/cgi-bin/koha/acqui/basket.pl?op=edi_confirm&basketno=[% basketno | html %]";
                 }
             }
+
+            $(document).ready(function() {
+                $(".delete_order").on('click', function(e) {
+                    e.preventDefault();
+                    if( $(this).data('biblionumber') ) {
+                        alert( _("Please delete the linked bibliographic record first.") );
+                        return false;
+                    } else if( !confirm(_("Are you sure you want to delete this order line?")) ) {
+                        return false;
+                    }
+                    $('#delete_order_form input[name="ordernumber"]').val( $(this).data('ordernumber') );
+                    $('#delete_order_form').submit();
+                });
+            });
         </script>
     [% ELSE %]
         <script>

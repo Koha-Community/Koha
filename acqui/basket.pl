@@ -119,7 +119,22 @@ $template->param( skip_confirm_reopen => 1) if $confirm_pref eq '2';
 
 my @messages;
 
-if ( $op eq 'cud-delete_confirm' ) {
+if ( $op eq 'cud-delete-order' ) {
+    output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
+        unless $logged_in_patron->has_permission( { acquisition => 'order_manage' } );
+
+    # We only allow deleting cancelled line without biblionumber for now
+    my $ordernumber = $query->param('ordernumber');
+    my $order       = Koha::Acquisition::Orders->search(
+        {
+            biblionumber => undef,
+            ordernumber  => $ordernumber, orderstatus => 'cancelled'
+        }
+    );
+    $order->delete if $order;
+    $op = 'list';
+
+} elsif ( $op eq 'cud-delete_confirm' ) {
 
     output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
       unless $logged_in_patron->has_permission( { acquisition => 'delete_baskets' } );
