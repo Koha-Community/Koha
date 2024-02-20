@@ -35,10 +35,11 @@ if ( $auth_status ne "ok" ) {
 
 my $success = 0;
 
+my $op = $cgi->param('op') || q{};
 my $id = $cgi->param('id');
 
 my $club = Koha::Clubs->find($id);
-if ($club) {
+if ($club && $op eq 'cud-delete') {
     $success = $club->delete();
 }
 

@@ -204,37 +204,39 @@
 
         function ConfirmDeleteTemplate( id, name ) {
             if ( confirm( _("Are you sure you want to delete the club template %s? This will delete all clubs using this template and cancel patron enrollments" ).format(name) ) ) {
-                $.ajax({
-                    type: "POST",
-                    url: '/cgi-bin/koha/svc/club/template/delete',
-                    data: { id: id },
-                    success: function( data ) {
-                        if ( data.success ) {
+                const client = APIClient.club;
+                client.templates.delete(id).then(
+                    success => {
+                        if ( success.success ) {
                             location.reload();
                         } else {
                             alert(_("Unable to delete template!"));
                         }
                     },
-                    dataType: 'json'
-                });
+                    error => {
+                        console.warn("Something wrong happened: %s".format(error));
+                        alert(_("Unable to delete template!"));
+                    }
+                );
             }
         }
 
         function ConfirmDeleteClub( id, name ) {
             if ( confirm( _("Are you sure you want to delete the club %s? This will cancel all patron enrollments in this club." ).format(name) ) ) {
-                $.ajax({
-                    type: "POST",
-                    url: '/cgi-bin/koha/svc/club/delete',
-                    data: { id: id },
-                    success: function( data ) {
-                        if ( data.success ) {
+                const client = APIClient.club;
+                client.clubs.delete(id).then(
+                    success => {
+                        if ( success.success ) {
                             location.reload();
                         } else {
                             alert(_("Unable to delete club!"));
                         }
                     },
-                    dataType: 'json'
-                });
+                    error => {
+                        console.warn("Something wrong happened: %s".format(error));
+                        alert(_("Unable to delete club!"));
+                    }
+                );
             }
         }
 

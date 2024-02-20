@@ -36,6 +36,9 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
+my $op = $cgi->param('op') || q{};
+exit unless $op eq 'cud-enroll'; # FIXME could be nicer here.
+
 my $id             = $cgi->param('id');
 my $borrowernumber = $cgi->param('borrowernumber');
 my $enrollent_id   = scalar $cgi->param('enrollent_id');

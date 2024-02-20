@@ -86,12 +86,10 @@ function loadEnrollmentForm( id, enrollent_id = 0 ) {
 
 function cancelEnrollment( id ) {
     $("body").css("cursor", "progress");
-    $.ajax({
-        type: "POST",
-        url: '/cgi-bin/koha/svc/club/cancel_enrollment',
-        data: { id: id },
-        success: function( data ) {
-            if ( data.success ) {
+    const client = APIClient.club;
+    client.enrollments.cancel(id).then(
+        success => {
+            if ( success.success ) {
                 $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]', function() {
                     $("body").css("cursor", "default");
                 });
@@ -99,8 +97,11 @@ function cancelEnrollment( id ) {
                 alert(_("Unable to cancel enrollment!"));
             }
         },
-        dataType: 'json'
-    });
+        error => {
+            console.warn("Something wrong happened: %s".format(error));
+            alert(_("Unable to cancel enrollment!"));
+        }
+    );
     return false;
 }
 </script>

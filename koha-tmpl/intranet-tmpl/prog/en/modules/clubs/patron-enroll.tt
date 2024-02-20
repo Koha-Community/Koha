@@ -67,12 +67,11 @@ if([% enrollent_id | html %]){
 }
 function addEnrollment() {
     $("body").css("cursor", "progress");
-    $.ajax({
-        type: "POST",
-        url: '/cgi-bin/koha/svc/club/enroll',
-        data: $( "#patron-enrollment-form" ).serialize(),
-        success: function( data ) {
-            if ( data.success ) {
+    const client = APIClient.club;
+    let data = $( "#patron-enrollment-form" ).serialize();
+    client.enrollments.enroll(data).then(
+        success => {
+            if ( success.success ) {
                 $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
                     $("body").css("cursor", "default");
                 });
@@ -80,8 +79,11 @@ function addEnrollment() {
                 alert(_("Unable to create enrollment!"));
             }
         },
-        dataType: 'json'
-    });
+        error => {
+            console.warn("Something wrong happened: %s".format(error));
+            alert(_("Unable to create enrollment!"));
+        }
+    );
     return false;
 }
 
