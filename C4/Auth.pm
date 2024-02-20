@@ -1389,6 +1389,8 @@ sub checkauth {
             $uri->query_param_delete('userid');
             $uri->query_param_delete('password');
             $uri->query_param_delete('koha_login_context');
+            $uri->query_param_delete('op');
+            $uri->query_param_delete('csrf_token');
             unless ( $params->{do_not_print} ) {
                 print $query->redirect( -uri => $uri->as_string, -cookie => $cookie, -status => '303 See other' );
                 safe_exit;
