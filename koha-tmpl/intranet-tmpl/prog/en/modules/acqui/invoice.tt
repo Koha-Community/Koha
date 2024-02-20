@@ -66,10 +66,10 @@
                         <ol>
                             <li>
                                 [% IF readonly %]
-                                    <label for="shipmentdate">Invoice number:</label>
+                                    <label for="invoicenumber">Invoice number:</label>
                                     [% invoicenumber | html %]
                                 [% ELSE %]
-                                    <label for="shipmentdate" class="required">Invoice number:</label>
+                                    <label for="invoicenumber" class="required">Invoice number:</label>
                                     <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="required" required="required"/>
                                     <span class="required">Required</span>
                                 [% END %]
