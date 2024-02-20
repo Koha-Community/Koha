@@ -112,7 +112,7 @@ if ( $op eq 'cud-updateconfirm' and $houseboundprofile ) {
     $deliverers = Koha::Patrons->search_housebound_deliverers;
     $choosers = Koha::Patrons->search_housebound_choosers;
     $houseboundvisit = $visit;
-} elsif ( $op eq 'visit_delete' and $visit ) {
+} elsif ( $op eq 'cud-visit_delete' and $visit ) {
     # We want ot delete a specific visit.
     my $success = eval { return $visit->delete };
     push @messages, { type => 'error', code => 'error_on_visit_delete' }
