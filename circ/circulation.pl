@@ -132,6 +132,8 @@ if ( C4::Context->preference("AutoSwitchPatron") && $barcode ) {
         $findborrower = $barcode;
         undef $barcode;
         undef $borrowernumber;
+        undef $patron;
+        $barcodes = [];
         $autoswitched = 1;
     }
 }
