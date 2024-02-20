@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 69;
+use Test::More tests => 70;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -1731,6 +1731,42 @@ subtest "CanBookBeRenewed tests" => sub {
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrower_obj, $recall_issue );
     is( $renewokay, 1, 'Can renew item if biblio-level recall has already been allocated an item' );
     $recall->set_cancelled;
+};
+
+subtest "CanBookBeRenewed | bookings" => sub {
+    plan tests => 3;
+
+    my $schema = Koha::Database->schema;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference('RenewalPeriodBase', 'date_due');
+
+    my $renewing_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $booked_patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item            = $builder->build_sample_item( { bookable => 1 } );
+
+    # issue
+    my $issue   = AddIssue( $renewing_patron, $item->barcode );
+    my $datedue = dt_from_string( $issue->date_due() );
+    is( defined $issue->date_due(), 1, "Item checked out, due date: " . $issue->date_due() );
+
+    # item-level booking
+    my $booking = Koha::Booking->new(
+        {
+            patron_id  => $booked_patron->borrowernumber,
+            item_id    => $item->itemnumber,
+            biblio_id  => $item->biblio->biblionumber,
+            start_date => $datedue->clone()->add( days => 2 ),
+            end_date   => $datedue->clone()->add( days => 10 ),
+        }
+    )->store();
+
+    # Proposed renewal would encroach on booking
+    my ( $renewok, $error ) = CanBookBeRenewed( $renewing_patron, $issue, 0 );
+    is( $renewok, 0,  "Renewal not allowed as it would mean the item was not returned before the next booking" );
+    is( $error,   'booked', "Error is 'booked'" );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest "GetUpcomingDueIssues" => sub {
