@@ -48,10 +48,10 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 if ($is_ajax) {
-    my $action = $query->param('action');
+    my $op = $query->param('op');
 
     # Issue Note
-    if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
+    if ( $op eq 'cud-add_note' && C4::Context->preference('AllowCheckoutNotes') ) {
         my $scrubber = C4::Scrubber->new();
         my $note = $query->param('note');
         my $issue_id = $query->param('issue_id');

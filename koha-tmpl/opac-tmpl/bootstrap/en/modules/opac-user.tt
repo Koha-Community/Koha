@@ -1390,7 +1390,9 @@
             var ajaxData = {
                 'action': 'issuenote',
                 'issue_id': issue_id,
-                'note': note
+                'note': note,
+                csrf_token: $('meta[name="csrf-token"]').attr('content'),
+                op: 'cud-add_note',
             };
 
             $.ajax({
