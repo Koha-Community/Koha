@@ -392,6 +392,10 @@ sub checkauth {
                 $template->param( 'invalid_username_or_password' => $info{'invalid_username_or_password'});
     }
 
+    unless ( $sessionID ) {
+        my $session = Koha::Session->get_session( { storage_method => 'file' } );
+        $sessionID = $session->id;
+    }
     $template->param(
         %info,
         sessionID => $sessionID,
