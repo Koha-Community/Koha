@@ -31,7 +31,7 @@ my ( $template, $loggedinuser, $cookie, $staffflags ) = get_template_and_user(
     }
 );
 
-my $op           = $query->param('op') // q{};
+my $op           = $input->param('op') // q{};
 my $patron_id    = $input->param('member');
 my $destination  = $input->param('destination');
 my $newpassword  = $input->param('newpassword');
