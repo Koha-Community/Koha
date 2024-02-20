@@ -431,8 +431,8 @@
                             <input type="hidden" name="koha_login_context" value="opac" />
                             <fieldset class="brief">
                                 <div class="local-login">
-                                    <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" autocomplete="off" />
-                                    <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" autocomplete="off" />
+                                    <label for="muserid">Login:</label><input type="text" id="muserid" name="login_userid" autocomplete="off" />
+                                    <label for="mpassword">Password:</label><input type="password" id="mpassword" name="login_password" autocomplete="off" />
                                     <fieldset class="action">
                                         <input type="hidden" name="op" value="cud-login" />
                                         <input type="submit" class="btn btn-primary" value="Log in" />

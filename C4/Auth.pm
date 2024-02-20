@@ -183,6 +183,14 @@ sub get_template_and_user {
         $in->{'query'},
     );
 
+    my $request_method = $in->{query}->request_method // q{};
+    unless ( $request_method eq 'POST' && $in->{query}->param('op') eq 'cud-login' ) {
+        for my $v ( qw( login_userid login_password ) ) {
+            $in->{query}->param($v, '')
+                if $in->{query}->param($v);
+        }
+    }
+
     if ( $in->{'template_name'} !~ m/maintenance/ ) {
         ( $user, $cookie, $sessionID, $flags ) = checkauth(
             $in->{'query'},
@@ -194,16 +202,8 @@ sub get_template_and_user {
             { skip_csrf_check => 1 },
         );
     }
-    my $session = get_session($sessionID);
 
-    # We have just logged in
-    # If we are not coming from the login form we empty the credential to reject the access
-    if ( !$session && $user ) {
-        if ( $in->{query}->param('op') ne 'cud-login' ) {
-            $in->{query}->param('userid', '');
-            $in->{query}->param('password', '');
-        }
-    }
+    my $session = get_session($sessionID);
 
     # If we enforce GDPR and the user did not consent, redirect
     # Exceptions for consent page itself and SCI/SCO system
@@ -861,7 +861,7 @@ sub checkauth {
     # This parameter is the name of the CAS server we want to authenticate against,
     # when using authentication against multiple CAS servers, as configured in Auth_cas_servers.yaml
     my $casparam = $query->param('cas');
-    my $q_userid = $query->param('userid') // '';
+    my $q_userid = $query->param('login_userid') // '';
 
     my $session;
     my $invalid_otp_token;
@@ -1047,7 +1047,7 @@ sub checkauth {
             || $pki_field ne 'None'
             || $emailaddress )
         {
-            my $password    = $query->param('password');
+            my $password    = $query->param('login_password');
             my $shibSuccess = 0;
             my ( $return, $cardnumber );
 
@@ -1384,10 +1384,10 @@ sub checkauth {
         # In case, that this request was a login attempt, we want to prevent that users can repost the opac login
         # request. We therefore redirect the user to the requested page again without the login parameters.
         # See Post/Redirect/Get (PRG) design pattern: https://en.wikipedia.org/wiki/Post/Redirect/Get
-        if ( $type eq "opac" && $query->param('koha_login_context') && $query->param('koha_login_context') ne 'sco' && $query->param('password') && $query->param('userid') ) {
+        if ( $type eq "opac" && $query->param('koha_login_context') && $query->param('koha_login_context') ne 'sco' && $query->param('login_password') && $query->param('login_userid') ) {
             my $uri = URI->new($query->url(-relative=>1, -query_string=>1));
-            $uri->query_param_delete('userid');
-            $uri->query_param_delete('password');
+            $uri->query_param_delete('login_userid');
+            $uri->query_param_delete('login_password');
             $uri->query_param_delete('koha_login_context');
             $uri->query_param_delete('op');
             $uri->query_param_delete('csrf_token');
@@ -1410,7 +1410,7 @@ sub checkauth {
 
     # get the inputs from the incoming query
     my @inputs = ();
-    my @inputs_to_clean = qw( userid password ticket logout.x otp_token );
+    my @inputs_to_clean = qw( login_userid login_password ticket logout.x otp_token );
     foreach my $name ( param $query) {
         next if grep { $name eq $_ } @inputs_to_clean;
         my @value = $query->multi_param($name);
@@ -1644,8 +1644,8 @@ sub check_api_auth {
     } else {
 
         # new login
-        my $userid   = $query->param('userid');
-        my $password = $query->param('password');
+        my $userid   = $query->param('login_userid');
+        my $password = $query->param('login_password');
         my ( $return, $cardnumber, $cas_ticket );
 
         # Proxy CAS auth

@@ -111,7 +111,13 @@ sub get_template_and_user {
     my $filename = "$path/modules/" . $tmplbase;
     my $interface = 'intranet';
     my $template = C4::Templates->new( $interface, $filename, $tmplbase, $query);
-    
+
+    my $request_method = $in->{query}->request_method // q{};
+    unless ( $request_method eq 'POST' && $in->{query}->param('op') eq 'cud-login' ) {
+        $in->{query}->param('login_userid', '');
+        $in->{query}->param('login_password', '')
+    }
+
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
         $in->{'query'},
         $in->{'authnotrequired'},
@@ -120,17 +126,6 @@ sub get_template_and_user {
     );
 
     my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
-
-    # We have just logged in
-    # If we are not coming from the login form we empty the credential to reject the access
-    if ( !$session && $user ) {
-        if ( $in->{query}->param('op') ne 'cud-login' ) {
-            $in->{query}->param('userid', '');
-            $in->{query}->param('password', '');
-        }
-    }
-
-    #     use Data::Dumper;warn "utilisateur $user cookie : ".Dumper($cookie);
 
     my $borrowernumber;
     if ($user) {
@@ -295,9 +290,9 @@ sub checkauth {
     unless ($userid) {
         my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
         $sessionID = $session->id;
-        $userid    = $query->param('userid');
+        $userid    = $query->param('login_userid');
         C4::Context->_new_userenv($sessionID);
-        my $password = $query->param('password');
+        my $password = $query->param('login_password');
         C4::Context->_new_userenv($sessionID);
         my ( $return, $cardnumber ) = checkpw( $userid, $password );
         if ($return) {
