@@ -131,7 +131,16 @@
                         <td>[% INCLUDE 'biblio-title.inc' biblio=collectionItemsLoo link = 1 %]</td>
                         <td>[% collectionItemsLoo.itemcallnumber | html %]</td>
                         <td>[% collectionItemsLoo.barcode | html %]</td>
-                        <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]&amp;barcode=[% collectionItemsLoo.barcode | uri %]&amp;removeItem=1&amp;action=addItem">Remove</a></td>
+                        <td>
+                            <form action="/cgi-bin/koha/rotating_collections/addItems.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-add" />
+                                <input type="hidden" name="colId" value="[% colId | html %]" />
+                                <input type="hidden" name="barcode" value="[% collectionItemsLoo.barcode | html %]" />
+                                <input type="hidden" name="removeItem" value="1" />
+                                <button type="submit" class="btn btn-default btn-xs removeitem"><i class="fa fa-trash"></i> Remove</a>
+                            </form>
+                        </td>
                       </tr>
                     [% END %]
                   </table>
