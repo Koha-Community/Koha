@@ -231,8 +231,18 @@ elsif ( $step && $step == 3 ) {
         # Remove the HandleError set at the beginning of the installer process
         C4::Context->dbh->disconnect;
 
+        my $cookie_mgr = Koha::CookieManager->new;
+        # Remove cookie of the installer session
+        $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
+            -name     => 'CGISESSID',
+            -value    => '',
+            -HttpOnly => 1,
+            -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+            -sameSite => 'Lax',
+        ));
+
         # we have finished, just redirect to mainpage.
-        print $query->redirect("/cgi-bin/koha/mainpage.pl");
+        print $query->redirect( -uri => "/cgi-bin/koha/mainpage.pl", -cookie => $cookie );
         exit;
     }
     elsif ( $op eq 'cud-finish' ) {
