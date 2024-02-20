@@ -182,7 +182,15 @@ sub check_csrf {
     my ( $self, $params ) = @_;
     return if !$params->{session_id};
     $params = _add_default_csrf_params( $params );
-    return $self->check({ %$params, type => 'CSRF' });
+    my $c = $self->check({ %$params, type => 'CSRF' });
+
+    unless ( $c ) {
+        # If the check failed we need to test with the "anonymous" in case the token was generating without the user being logged in yet.
+        $params->{id} = DEFA_SESSION_USERID . '_' . $params->{session_id};
+        $c = $self->check({ %$params, type => 'CSRF' });
+    }
+
+    return $c;
 }
 
 =head2 check_jwt
