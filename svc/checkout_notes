@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use JSON qw( to_json );
 use CGI;
-use C4::Service;
 use C4::Auth qw ( check_cookie_auth );
 use C4::Output qw( is_ajax output_with_http_headers );
 use Koha::Checkouts;
@@ -41,23 +40,16 @@ my ( $auth_status ) = check_cookie_auth( $query->cookie('CGISESSID'), { circulat
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
+my $op = $query->param('op');
 if ($is_ajax) {
     my $issue_id = $query->param('issue_id');
     my $issue = Koha::Checkouts->find($issue_id);
-    my $op = $query->param('op');
-    my $status = 'success';
-    if ($op eq 'seen'){
+    if ($op eq 'cud-seen'){
         $issue->set({ noteseen => 1 })->store;
-        if ( $issue->noteseen != 1 ) {
-            $status = 'failure';
-        }
-    } elsif ($op eq 'notseen'){
+    } elsif ($op eq 'cud-notseen'){
         $issue->set({ noteseen => 0 })->store;
-        if ( $issue->noteseen != 0 ) {
-            $status = 'failure';
-        }
     }
-    my $json = to_json ( { status => $status } );
+    my $json = to_json ( { seen => $issue->noteseen } );
     output_with_http_headers $query, undef, $json, 'js';
     exit;
 }

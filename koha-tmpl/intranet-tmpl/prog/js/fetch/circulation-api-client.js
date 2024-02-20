@@ -26,6 +26,29 @@ export class CirculationAPIClient extends HttpClient {
                 }),
         };
     }
+
+    get checkouts() {
+        return {
+            mark_as_seen: checkout_id =>
+                this.post({
+                    endpoint: "checkout_notes",
+                    body: "issue_id=%s&op=%s".format(checkout_id, "cud-seen"),
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded;charset=utf-8",
+                    },
+                }),
+            mark_as_not_seen: checkout_id =>
+                this.post({
+                    endpoint: "checkout_notes",
+                    body: "issue_id=%s&op=%s".format(checkout_id, "cud-notseen"),
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded;charset=utf-8",
+                    },
+                })
+        }
+    }
 }
 
 export default CirculationAPIClient;

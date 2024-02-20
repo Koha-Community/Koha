@@ -179,44 +179,52 @@
                 }
             });
 
+            function show_error(){
+                // FIXME Can be improved by displaying meaningful error.
+                $("#error").text(_("Unable to change status of note.")).show();
+            }
+
             $("#notestable").on("click", "button.seen, button.notseen", function(event){
                 event.preventDefault(); // prevent form submission
-                var $op = $(this).attr("name");
-                var $issue_id = $(this).data('issue_id');
-                var ajaxData = {
-                    'op': $op,
-                    'issue_id': $issue_id,
-                };
+                var op = $(this).attr("name");
+                var issue_id = $(this).data('issue_id');
 
-                $.ajax({
-                    url: '/cgi-bin/koha/svc/checkout_notes/',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: ajaxData,
-                })
-
-                .done(function(data){
-                    if (data.status == 'success'){
-                        if ( $op == 'notseen' ){
-                            $("#status_" + $issue_id).text(_("Not seen"));
-                            $(event.target).parent().siblings(".seen1").removeClass("seen1").addClass("seen0");
-                            $(event.target).siblings(".seen").prop("disabled", false);
-                            $(event.target).prop("disabled", true);
-                        } else {
-                            $("#status_" + $issue_id).text(_("Seen"));
-                            $(event.target).parent().siblings(".seen0").removeClass("seen0").addClass("seen1");
-                            $(event.target).siblings(".notseen").prop("disabled", false);
-                            $(event.target).prop("disabled", true);
+                const client = APIClient.circulation;
+                if ( op == 'seen' ) {
+                    client.checkouts.mark_as_seen(issue_id).then(
+                        success => {
+                            if (success.seen){
+                                $("#status_" + issue_id).text(_("Seen"));
+                                $(event.target).parent().siblings(".seen0").removeClass("seen0").addClass("seen1");
+                                $(event.target).siblings(".notseen").prop("disabled", false);
+                                $(event.target).prop("disabled", true);
+                            } else {
+                                show_error();
+                            }
+                        },
+                        error => {
+                            console.warn("Something wrong happened: %s".format(error));
+                            show_error();
                         }
-                    } else {
-                        $("#error").text(_("Unable to change status of note."));
-                        $("#error").show();
-                    }
-                })
-                .error(function(data){
-                    $("#error").text(_("Unable to change status of note."));
-                    $("#error").show();
-                });
+                    );
+                } else {
+                    client.checkouts.mark_as_not_seen(issue_id).then(
+                        success => {
+                            if (!success.seen){
+                                $("#status_" + issue_id).text(_("Not seen"));
+                                $(event.target).parent().siblings(".seen1").removeClass("seen1").addClass("seen0");
+                                $(event.target).siblings(".seen").prop("disabled", false);
+                                $(event.target).prop("disabled", true);
+                            } else {
+                                show_error();
+                            }
+                        },
+                        error => {
+                            console.warn("Something wrong happened: %s".format(error));
+                            show_error();
+                        }
+                    );
+                }
             });
         });
     </script>
