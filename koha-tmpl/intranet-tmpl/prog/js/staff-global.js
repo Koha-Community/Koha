@@ -244,7 +244,7 @@ $(document).ready(function() {
         resetSearchContext();
     });
     // add back to top button on each staff page
-    $("body").append('<button id="backtotop" class="btn btn-default"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>');
+    $("body").append('<button id="backtotop" class="btn btn-default" aria-label="' + __("Back to top") + '"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>');
     $("#backtotop").hide();
     $(window).scroll(function(){
         if ( $(window).scrollTop() < 300 ) {
