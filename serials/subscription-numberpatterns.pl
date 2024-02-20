@@ -102,8 +102,8 @@ if($op && $op eq 'cud-savenew') {
     }
 }
 
-if($op && ($op eq 'new' || $op eq 'cud-modify')) {
-    if($op eq 'cud-modify') {
+if($op && ($op eq 'new' || $op eq 'modify')) {
+    if($op eq 'modify') {
         my $id = $input->param('id');
         if(defined $id) {
             my $numberpattern = GetSubscriptionNumberpattern($id);

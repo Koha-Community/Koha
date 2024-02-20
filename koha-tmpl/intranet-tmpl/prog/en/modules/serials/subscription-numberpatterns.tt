@@ -301,7 +301,12 @@
                   <td>[% numberpattern.displayorder | html %]</td>
                   <td class="actions">
                     <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=modify&id=[% numberpattern.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <a class="delete_pattern btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=del&id=[% numberpattern.id | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                    <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-del" />
+                        <input type="hidden" name="id" value="[% numberpattern.id | html %]" />
+                        <button class="delete_pattern btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</button>
+                    </form>
                   </td>
                 </tr>
               [% END %]
