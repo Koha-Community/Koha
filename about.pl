@@ -388,7 +388,7 @@ if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
         # TODO: When new indexes get added, we could have other ways to
         #       fetch the list of available indexes (e.g. plugins, etc)
         $es_status->{nodes} = $es_conf->{nodes};
-        my $es = Search::Elasticsearch->new({ nodes => $es_conf->{nodes} });
+        my $es = Search::Elasticsearch->new( $es_conf );
         my $es_status->{version} = $es->info->{version}->{number};
 
         foreach my $index ( @indexes ) {
