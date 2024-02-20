@@ -17,8 +17,9 @@ class Dialog {
 class HttpClient {
     constructor(options = {}) {
         this._baseURL = options.baseURL || "";
-        this._headers = options.headers || {
+        this._headers = options.headers || { // FIXME we actually need to merge the headers
             "Content-Type": "application/json;charset=utf-8",
+            "X-Requested-With": "XMLHttpRequest"
         };
         this.csrf_token = $('meta[name="csrf-token"]').attr("content");
     }
