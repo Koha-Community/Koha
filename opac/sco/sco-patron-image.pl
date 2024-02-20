@@ -40,10 +40,16 @@ unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
     exit;
 }
 
-my ($borrowernumber) = C4::Service->require_params('borrowernumber');
+my $jwt = $query->cookie('JWT');
 
-my $patron = Koha::Patrons->find( $borrowernumber );
-my $patron_image = $patron->image;
+#NOTE: This should be borrowernumber and not cardnumber, but that's a deeper problem with patron images...
+my $cardnumber = $jwt ? Koha::Token->new->decode_jwt( { token => $jwt } ) : undef;
+my $patron     = Koha::Patrons->find( { cardnumber => $cardnumber } );
+
+my $patron_image;
+if ($patron) {
+    $patron_image = $patron->image;
+}
 
 if ($patron_image) {
 
