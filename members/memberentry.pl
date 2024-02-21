@@ -430,7 +430,7 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
             } else {
                 # FIXME Urgent error handling here, we cannot fail without relevant feedback
                 # Lot of code will need to be removed from this script to handle exceptions raised by Koha::Patron->store
-                warn "Patron creation failed! - $@"; # Maybe we must die instead of just warn
+                warn "Patron creation failed! - $_"; # Maybe we must die instead of just warn
                 push @messages, {error => 'error_on_insert_patron'};
             }
             $op = "add_form";
