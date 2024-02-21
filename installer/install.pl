@@ -233,7 +233,11 @@ elsif ( $step && $step == 3 ) {
 
         my $cookie_mgr = Koha::CookieManager->new;
         # Remove cookie of the installer session
-        $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
+        my $cookies = [];
+        if ( !ref $cookie ) {
+            push( @$cookies, $cookie );
+        }
+        $cookies = $cookie_mgr->replace_in_list( $cookies, $query->cookie(
             -name     => 'CGISESSID',
             -value    => '',
             -HttpOnly => 1,
@@ -242,7 +246,7 @@ elsif ( $step && $step == 3 ) {
         ));
 
         # we have finished, just redirect to mainpage.
-        print $query->redirect( -uri => "/cgi-bin/koha/mainpage.pl", -cookie => $cookie );
+        print $query->redirect( -uri => "/cgi-bin/koha/mainpage.pl", -cookie => $cookies );
         exit;
     }
     elsif ( $op eq 'cud-finish' ) {
