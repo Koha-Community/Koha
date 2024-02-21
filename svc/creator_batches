@@ -44,30 +44,26 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-if ($is_ajax) {
+my $op = $cgi->param('op') || q{};
+if ($is_ajax && $op eq 'cud-set_permission') {
     my $batch_id = $cgi->param('batch_id');
     my $description = $cgi->param('newdescription');
-    my $status = '';
     my $dbh = C4::Context->dbh;
-    my $query = "UPDATE creator_batches SET description = ? WHERE batch_id = ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($description, $batch_id);
-
-    # Check for success
-    my $creator = $cgi->param('creator');
-    if ( $creator eq 'patroncard' ) {
-        my $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
-        if ( $batch->{description} eq $description ) {
-            $status = 'success';
-        }
-    } elsif ( $creator eq 'label' ) {
-        my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
-        if ( $batch->{description} eq $description ) {
-            $status = 'success';
-        }
+    my $status = 'success';
+    eval {
+        my $query = "UPDATE creator_batches SET description = ? WHERE batch_id = ?";
+        my $sth = $dbh->prepare($query);
+        $sth->execute($description, $batch_id);
+    };
+    if ($@) {
+        warn $@;
+        undef $status;
     }
 
     my $json = encode_json ( { status => $status, newdesc => $description } );
     output_with_http_headers $cgi, undef, $json, 'js';
     exit;
+} else {
+    # FIXME be nicer
+    exit 0;
 }
