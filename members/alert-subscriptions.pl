@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI      qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
@@ -37,6 +37,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $borrowernumber = $input->param('borrowernumber');
+my $op = $input->param('op');
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 my $patron         = Koha::Patrons->find($borrowernumber);
@@ -45,9 +46,9 @@ output_and_exit_if_error(
     { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
 );
 
-my $subscription_id = $input->param('subscription_id');
-if ($subscription_id) {
-    my $subscription = Koha::Subscriptions->find($subscription_id);
+if ( $op eq 'cud-unsubscribe' ) {
+    my $subscription_id = $input->param('subscription_id');
+    my $subscription    = Koha::Subscriptions->find($subscription_id);
     $subscription->remove_subscriber($patron);
     print $input->redirect( "/cgi-bin/koha/members/alert-subscriptions.pl?borrowernumber=" . $borrowernumber );
 }
