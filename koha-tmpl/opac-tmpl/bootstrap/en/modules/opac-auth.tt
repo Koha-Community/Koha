@@ -88,7 +88,7 @@
                                             [% IF ( casAuthentication ) %]
                                                 [% IF ( invalidCasLogin ) %]
                                                     <!-- This is what is displayed if cas login has failed -->
-                                                    <p>Sorry, the CAS login also failed. If you have a local login you may use that below.</p>
+                                                    <p class="cas_invalid">Sorry, the CAS login also failed. If you have a local login you may use that below.</p>
                                                 [% ELSE %]
                                                     <p>If you have a CAS account, you may use that below.</p>
                                                 [% END %]
@@ -103,7 +103,7 @@
                                 [% END # /IF invalidShibLogin %]
                                 [% UNLESS ( Koha.Preference('OPACShibOnly') ) %]
                                     [% IF ( casAuthentication ) %]
-                                        <h2>CAS login</h2>
+                                        <h2 class="cas_title">CAS login</h2>
                                         <p>If you do not have a Shibboleth account, but you do have a CAS account, you can use CAS.</p>
                                     [% ELSE %]
                                         <h2 class="shib_local_title">Local login</h2>
@@ -116,34 +116,36 @@
                             [% IF ( casAuthentication ) %]
                                 [% IF ( shibbolethAuthentication ) %]
                                     [% IF ( casServerUrl ) %]
-                                        <p><a href="[% casServerUrl | $raw %]">Log in.</a><p>
+                                        <p><a class="cas_url" href="[% casServerUrl | $raw %]">Log in.</a><p>
                                     [% END %]
 
                                     [% IF ( casServersLoop ) %]
                                         <p>Please choose against which one you would like to authenticate: </p>
                                         <ul>
                                             [% FOREACH casServer IN casServersLoop %]
-                                                <li><a href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
+                                                <li><a class="cas_url" href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
                                             [% END %]
                                         </ul>
                                     [% END %]
                                 [% ELSE %]
-                                    <h2>CAS login</h2>
-
                                     [% IF ( invalidCasLogin ) %]
-                                        <!-- This is what is displayed if cas login has failed -->
-                                        <p>Sorry, the CAS login failed.</p>
+                                        <div class="alert alert-info">
+                                            <!-- This is what is displayed if cas login has failed -->
+                                            <p class="cas_invalid">Sorry, the CAS login failed.</p>
+                                        </div>
                                     [% END %]
 
+                                    <h2 class="cas_title">CAS login</h2>
+
                                     [% IF ( casServerUrl ) %]
-                                       <p><a href="[% casServerUrl | $raw %]">Log in using a CAS account.</a><p>
+                                       <p><a class="cas_url" href="[% casServerUrl | $raw %]">Log in using a CAS account.</a><p>
                                     [% END %]
 
                                     [% IF ( casServersLoop ) %]
                                         <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
                                         <ul>
                                             [% FOREACH casServer IN casServersLoop %]
-                                            <li><a href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
+                                            <li><a class="cas_url" href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
                                             [% END %]
                                         </ul>
                                     [% END %]
