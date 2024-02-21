@@ -53,7 +53,7 @@ will be created.
 sub _get_session_params {
     my ( $class, $args ) = @_;
     my $storage_method = $args->{storage_method};
-    $storage_method ||= C4::Context->preference('SessionStorage');
+    $storage_method ||= C4::Context->preference('SessionStorage') || 'file';
     if ( $storage_method eq 'mysql' ) {
         my $dbh = C4::Context->dbh;
         return { dsn => "serializer:yamlxs;driver:MySQL;id:md5", dsn_args => { Handle => $dbh } };
