@@ -32,7 +32,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'filter_by_active() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -66,29 +66,33 @@ subtest 'filter_by_active() tests' => sub {
         {
             class => 'Koha::Acquisition::Orders',
             value => {
-                basketno    => $basket_1->basketno,
-                orderstatus => 'new'
+                basketno         => $basket_1->basketno,
+                orderstatus      => 'new',
+                quantity         => 1,
+                quantityreceived => 0,
             }
         }
     );
     my $order_4 = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value => { orderstatus => 'ordered' }
+            value => { orderstatus => 'ordered', quantity => 1, quantityreceived => 0 }
         }
     );
     my $order_5 = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value => { orderstatus => 'partial' }
+            value => { orderstatus => 'partial', quantity => 2, quantityreceived => 1 }
         }
     );
     my $order_6 = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
             value => {
-                basketno    => $basket_2->basketno,
-                orderstatus => 'new'
+                basketno         => $basket_2->basketno,
+                orderstatus      => 'new',
+                quantity         => 1,
+                quantityreceived => 0,
             }
         }
     );
@@ -115,6 +119,10 @@ subtest 'filter_by_active() tests' => sub {
     is( $rs->next->ordernumber, $order_3->ordernumber , 'Expected order in resultset' );
     is( $rs->next->ordernumber, $order_4->ordernumber , 'Expected order in resultset' );
     is( $rs->next->ordernumber, $order_5->ordernumber , 'Expected order in resultset' );
+
+    # If we change quantities on order_5 (partial), we should no longer see it
+    $order_5->quantityreceived(2)->store;
+    is( $this_orders_rs->filter_by_active->count, 2, 'Dropped one order as expected' );
 
     $schema->storage->txn_rollback;
 };

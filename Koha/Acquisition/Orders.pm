@@ -152,7 +152,8 @@ sub filter_by_lates {
 Returns a new resultset containing active orders only.
 
 Note: An active order (line) has status ordered or partial, or it has status new
-and the basket is marked as standing order.
+and the basket is marked as standing order. Additionally, we still expect items
+on this order (checking quantity and quantityreceived).
 
 =cut
 
@@ -164,7 +165,8 @@ sub filter_by_active {
                 { 'basket.is_standing' => 1,
                   'orderstatus' => [ 'new', 'ordered', 'partial' ] },
                 { 'orderstatus' => [ 'ordered', 'partial' ] }
-            ]
+            ],
+            quantityreceived => { '<', \['COALESCE(quantity,0)'] },
         },
         { join => 'basket' }
     );
