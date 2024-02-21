@@ -12,6 +12,7 @@
             </div>
 
             <div class="form-content">
+                <input type="hidden" name="op" value="cud-checkin">
                 <input name="barcode" id="ret_barcode" class="head-searchbox form-control" accesskey="r" type="text" placeholder="Scan a barcode to check in" size="40"/>
             </div>
             <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>

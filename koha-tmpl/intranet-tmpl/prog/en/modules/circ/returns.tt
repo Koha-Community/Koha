@@ -421,6 +421,7 @@
                                         <div class="modal-footer">
                                             <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
                                                 [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-checkin" />
                                                 <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
                                                 <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                 <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
@@ -507,6 +508,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <input type="hidden" name="barcode" value="[% item.barcode | html %]">
+                                            <input type="hidden" name="op" value="cud-checkin">
                                             <input type="hidden" name="confirm_items_bundle_return" value="1">
                                             [% FOREACH inputloo IN inputloop %]
                                             <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
@@ -531,36 +533,33 @@
                             <div id="wrong-branch-modal" class="modal fade audio-alert-action block">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form method="post" action="returns.pl" name="mainform" id="mainform">
-                                            [% INCLUDE 'csrf-token.inc' %]
-                                            <div class="modal-header">
-                                                <h3>
-                                                    Cannot check in
-                                                </h3>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                                                        [% item.barcode | html %]: [% title | html %]
-                                                    </a>
-                                                </p>
-                                                <p>
-                                                    <strong>
-                                                        NOT CHECKED IN
-                                                    </strong>
-                                                </p>
-                                                <p>
-                                                    This item must be checked in at following library:
-                                                    <strong>
-                                                        [% Branches.GetName( rightbranch ) | html %]
-                                                    </strong>
-                                                </p>
-                                                [% INCLUDE all_checkin_messages %]
-                                            </div> <!-- /.modal-body -->
-                                            <div class="modal-footer">
-                                                <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
-                                            </div>
-                                        </form> <!-- /#mainform -->
+                                        <div class="modal-header">
+                                            <h3>
+                                                Cannot check in
+                                            </h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
+                                                    [% item.barcode | html %]: [% title | html %]
+                                                </a>
+                                            </p>
+                                            <p>
+                                                <strong>
+                                                    NOT CHECKED IN
+                                                </strong>
+                                            </p>
+                                            <p>
+                                                This item must be checked in at following library:
+                                                <strong>
+                                                    [% Branches.GetName( rightbranch ) | html %]
+                                                </strong>
+                                            </p>
+                                            [% INCLUDE all_checkin_messages %]
+                                        </div> <!-- /.modal-body -->
+                                        <div class="modal-footer">
+                                            <button type="button" data-dismiss="modal" class="btn btn-default"><i class="fa fa-check"></i> OK</button>
+                                        </div>
                                     </div> <!-- /.modal-content -->
                                 </div> <!-- /.modal-dialog -->
                             </div> <!-- /#wrong-branch-modal -->
@@ -578,6 +577,7 @@
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" name="wrongtransferform" id="wrongtransferform">
                                                 [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-transfer" />
                                                 <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                 <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                                                 <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
@@ -676,6 +676,7 @@
                                                         <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                                                     [% END %]
 
+                                                    <input type="hidden" name="op" value="cud-affect_reserve" />
                                                     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                                     <input type="hidden" name="biblionumber" value="[% itembiblionumber | html %]" />
@@ -761,6 +762,7 @@
                                                     <input type="hidden" name="tobranch" value="[% returnbranch | html %]" />
                                                     <input type="hidden" name="transferitem" value="[% itemnumber | html %]" />
                                                     <input type="hidden" name="barcode" value="0" />
+                                                    <input type="hidden" name="op" value="cud-dotransfer" />
                                                     <input type="hidden" name="trigger" value="[% trigger | html %]" />
                                                     [% INCLUDE all_checkin_messages %]
                                                 </div>
@@ -770,8 +772,8 @@
                                                         <button type="button" name="dotransfer" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
                                                         <button type="button" data-dismiss="modal" class="btn btn-default deny" name="notransfer" value="No" accesskey="n"><i class="fa fa-times"></i> No (N)</button>
                                                     [% ELSE %]
-                                                        <button type="button" data-dismiss="modal" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> OK (Y)</button>
-                                                        <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print slip (P)</button>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-default" accesskey="y"><i class="fa fa-check"></i> OK (Y)</button>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-default openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print slip (P)</button>
                                                     [% END %]
                                                     <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                     <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
@@ -868,6 +870,7 @@
                                                         <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                                                     [% END %]
 
+                                                    <input type="hidden" name="op" value="cud-affect_reserve" />
                                                     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                                     <input type="hidden" name="biblionumber" value="[% itembiblionumber | html %]" />
@@ -976,6 +979,7 @@
                                                         <h4><strong>Recall at</strong> [% Branches.GetName( recall.pickup_library_id ) | html %]</h4>
                                                     [% END %]
 
+                                                    <input type="hidden" name="op" value="cud-affect_recall">
                                                     <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]">
                                                     <input type="hidden" name="returnbranch" value="[% Branches.GetLoggedInBranchcode | html %]">
@@ -1078,6 +1082,7 @@
                                                         <h4><strong>Wait for pickup at</strong> [% Branches.GetName( recall.pickup_library_id ) | html %]</h4>
                                                     [% END %]
 
+                                                    <input type="hidden" name="op" value="cud-affect_recall">
                                                     <input type="hidden" name="recall_id" value="[% recall.id | html %]">
                                                     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]">
                                                     <input type="hidden" name="returnbranch" value="[% Branches.GetLoggedInBranchcode | html %]">
@@ -1121,6 +1126,7 @@
                                                 [% ELSE %]
                                                     <input name="barcode" id="barcode" size="14" placeholder="Enter item barcode" class="barcode focus" type="text" />
                                                 [% END %]
+                                                <input type="hidden" name="op" value="cud-checkin">
 
                                                 <div id="show-circ-settings">
                                                     <a href="#" title="Checkin settings"><i class="fa-solid fa-sliders"></i></a>
@@ -1555,10 +1561,6 @@
                 this.form.print_slip.value = 1;
                 let barcode = document.getElementById('confirm-hold-barcode');
                 if ( barcode ) barcode.remove();
-                if ($(this).attr('name') == "dotransfer") {
-                    var dotransfer = $("<input>").attr("type", "hidden").attr("name", "dotransfer").val("Yes");
-                    $('#mainform').append(dotransfer);
-                }
                 this.form.submit();
             });
 

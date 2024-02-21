@@ -139,14 +139,16 @@ foreach ( $query->param ) {
     push( @inputloop, \%input );
 }
 
+my $op          = $query->param('op');
+
 ############
 # Deal with the requests....
 my $itemnumber = $query->param('itemnumber');
-if ( $query->param('reserve_id') ) {
+if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve') {
     my $borrowernumber = $query->param('borrowernumber');
     my $reserve_id     = $query->param('reserve_id');
     my $diffBranchReturned = $query->param('diffBranch');
-    my $cancel_reserve = $query->param('cud-cancel_reserve');
+    my $cancel_reserve = $query->param('cancel_reserve');
     my $cancel_reason = $query->param('cancel_reason');
 
     # fix up item type for display
@@ -179,7 +181,7 @@ if ( $query->param('reserve_id') ) {
     }
 }
 
-if ( $query->param('recall_id') ) {
+if ( $query->param('recall_id') && $op eq 'cud-affect_recall' ) {
     my $recall = Koha::Recalls->find( scalar $query->param('recall_id') );
     my $itemnumber = $query->param('itemnumber');
     my $return_branch = $query->param('returnbranch');
@@ -214,7 +216,6 @@ if (
     undef $exemptfine;
 }
 my $dropboxmode = $query->param('dropboxmode');
-my $dotransfer  = $query->param('dotransfer');
 my $canceltransfer = $query->param('canceltransfer');
 my $transit = $query->param('transit');
 my $dest = $query->param('dest');
@@ -239,7 +240,7 @@ if ($return_date_override) {
     }
 }
 
-if ($dotransfer){
+if ( $op eq 'cud-dotransfer'){
 # An item has been returned to a branch other than the homebranch, and the librarian has chosen to initiate a transfer
     my $transferitem = $query->param('transferitem');
     my $tobranch     = $query->param('tobranch');
@@ -247,7 +248,7 @@ if ($dotransfer){
     ModItemTransfer($transferitem, $userenv_branch, $tobranch, $trigger);
 }
 
-if ($transit) {
+if ($transit && $op eq 'cud-transfer') {
     my $transfer = Koha::Item::Transfers->find($transit);
     if ( $canceltransfer ) {
         $transfer->cancel({ reason => 'Manual', force => 1});
@@ -282,7 +283,7 @@ if ($transit) {
 
 # actually return book and prepare item table.....
 my $returnbranch;
-if ($barcode) {
+if ($barcode && $op eq 'cud-checkin') {
     $barcode = barcodedecode($barcode) if $barcode;
     my $item = Koha::Items->find({ barcode => $barcode });
 
