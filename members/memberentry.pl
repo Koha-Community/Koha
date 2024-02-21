@@ -75,7 +75,7 @@ if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
 
 my $modify       = $input->param('modify');
 my $delete       = $input->param('cud-delete');
-my $op           = $input->param('op');
+my $op           = $input->param('op') || q{};
 my $destination  = $input->param('destination');
 my $cardnumber   = $input->param('cardnumber');
 my $check_member = $input->param('check_member');
