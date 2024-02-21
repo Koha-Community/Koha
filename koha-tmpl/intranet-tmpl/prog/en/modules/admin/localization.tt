@@ -136,50 +136,49 @@
         }
 
         function send_update_request( data, cell ) {
-            $.ajax({
-                data: data,
-                type: 'PUT',
-                url: '/cgi-bin/koha/svc/localization',
-                success: function (data) {
-                    if ( data.error ) {
+            const client = APIClient.localization;
+            client.localizations.update(data).then(
+                success => {
+                    if ( success.error ) {
                         $(cell).css('background-color', '#FF0000');
-                        show_message({ type: 'error_on_update', data: data });
-                    } else if ( data.is_changed == 1 ) {
+                        show_message({ type: 'error_on_update', data: success });
+                    } else if ( success.is_changed == 1 ) {
                         $(cell).css('background-color', '#00FF00');
-                        show_message({ type: 'success_on_update', data: data });
+                        show_message({ type: 'success_on_update', data: success });
                     }
 
                     if ( $(cell).hasClass('lang') ) {
-                        $(cell).text(data.lang)
+                        $(cell).text(success.lang)
                     } else if ( $(cell).hasClass('translation') ) {
-                        $(cell).text(data.translation)
+                        $(cell).text(success.translation)
                     }
                 },
-                error: function (data) {
+                error => {
                     $(cell).css('background-color', '#FF9090');
                     if ( $(cell).hasClass('lang') ) {
-                        $(cell).text(data.lang)
+                        $(cell).text(error.lang)
                     } else if ( $(cell).hasClass('translation') ) {
-                        $(cell).text(data.translation)
+                        $(cell).text(error.translation)
                     }
-                    show_message({ type: 'error_on_update', data: data });
-                },
-            });
+                    show_message({ type: 'error_on_update', data: error });
+                    console.warn("Something wrong happened: %s".format(error));
+                }
+            );
         }
 
         function send_delete_request( id, cell ) {
-            $.ajax({
-                type: 'DELETE',
-                url: '/cgi-bin/koha/svc/localization/?id='+id,
-                success: function (data) {
+            const client = APIClient.localization;
+            client.localizations.delete(id).then(
+                success => {
                     $("#localization").DataTable().row( '#row_id_' + id ).remove().draw();
-                    show_message({ type: 'success_on_delete', data: data });
+                    show_message({ type: 'success_on_delete', data: {id} });
                 },
-                error: function (data) {
+                error => {
                     $(cell).css('background-color', '#FF9090');
-                    show_message({ type: 'error_on_delete', data: data });
-                },
-            });
+                    show_message({ type: 'error_on_delete', data: error });
+                    console.warn("Something wrong happened: %s".format(error));
+                }
+            );
         }
 
         $(document).ready(function() {
@@ -224,8 +223,8 @@
                     var tr = $(this).parent().parent();
                     var id = $(tr).data('id');
                     var lang = $(this).find('option:selected').val();
-                    var data = "id=" + encodeURIComponent(id) + "&lang=" + encodeURIComponent(lang);
-                    send_update_request( data, td );
+                    var translation = $(this).text();
+                    send_update_request( {id, lang, translation}, td );
                 });
                 $(my_select).on('blur', function(){
                     $(td).html(lang);
@@ -236,9 +235,9 @@
             $("td.translation").on('blur', function(){
                 var tr = $(this).parent();
                 var id = $(tr).data('id');
+                var lang = $(tr).find('td.lang').text();
                 var translation = $(this).text();
-                var data = "id=" + encodeURIComponent(id) + "&translation=" + encodeURIComponent(translation);
-                send_update_request( data, this );
+                send_update_request( {id, lang, translation}, this );
             });
 
             $("body").on("click", "a.delete", function(e){
@@ -253,28 +252,28 @@
 
             $("#add_translation").on('submit', function(e){
                 e.preventDefault();
-                var entity = $(this).find('input[name="entity"]').val();
-                var code = $(this).find('input[name="code"]').val();
-                var lang = $(this).find('select[name="lang"] option:selected').val();
-                var translation = $(this).find('input[name="translation"]').val();
-                var data = "entity=" + encodeURIComponent(entity) + "&code=" + encodeURIComponent(code) + "&lang=" + encodeURIComponent(lang) + "&translation=" + encodeURIComponent(translation);
-                $.ajax({
-                    data: data,
-                    type: 'POST',
-                    url: '/cgi-bin/koha/svc/localization',
-                    success: function (data) {
-                        if ( data.error ) {
-                            show_message({ type: 'error_on_insert', data: data });
+                let localization = {
+                    entity: $(this).find('input[name="entity"]').val(),
+                    code: $(this).find('input[name="code"]').val(),
+                    lang: $(this).find('select[name="lang"] option:selected').val(),
+                    translation: $(this).find('input[name="translation"]').val(),
+                };
+                const client = APIClient.localization;
+                client.localizations.create(localization).then(
+                    success => {
+                        if ( success.error ) {
+                            show_message({ type: 'error_on_insert', data: success });
                         } else {
-                            var new_row = table.row.add( [ data.id, data.entity, data.code, data.lang, data.translation, "<a href=\"#\" class=\"delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
-                            $( new_row ).attr("id", "row_id_" + data.id ).data("id", data.id );
-                            show_message({ type: 'success_on_insert', data: data });
+                            var new_row = table.row.add( [ success.id, success.entity, success.code, success.lang, success.translation, "<a href=\"#\" class=\"delete\"><i class=\"fa fa-trash-can\"></i> Delete</a>" ] ).draw().node();
+                            $( new_row ).attr("id", "row_id_" + success.id ).data("id", success.id );
+                            show_message({ type: 'success_on_insert', data: success });
                         }
                     },
-                    error: function (data) {
-                        show_message({ type: 'error_on_insert', data: data });
-                    },
-                });
+                    error => {
+                        show_message({ type: 'error_on_insert', data: error });
+                        console.warn("Something wrong happened: %s".format(error));
+                    }
+                );
             });
 
          });

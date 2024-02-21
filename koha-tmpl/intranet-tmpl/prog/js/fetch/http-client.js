@@ -77,7 +77,7 @@ class HttpClient {
             ? typeof params.body === "string"
                 ? params.body
                 : JSON.stringify(params.body)
-            : params.data || undefined;
+            : undefined;
         let csrf_token = { csrf_token: this.csrf_token };
         let headers = { ...csrf_token, ...params.headers };
         return this._fetchJSON(
@@ -92,6 +92,44 @@ class HttpClient {
             true
         );
     }
+
+    put(params = {}) {
+        const body = params.body
+            ? typeof params.body === "string"
+                ? params.body
+                : JSON.stringify(params.body)
+            : undefined;
+        let csrf_token = { csrf_token: this.csrf_token };
+        let headers = { ...csrf_token, ...params.headers };
+        return this._fetchJSON(
+            params.endpoint,
+            headers,
+            {
+                ...params.options,
+                body,
+                method: "PUT",
+            },
+            false,
+            true
+        );
+    }
+
+    delete(params = {}) {
+        let csrf_token = { csrf_token: this.csrf_token };
+        let headers = { ...csrf_token, ...params.headers };
+        return this._fetchJSON(
+            params.endpoint,
+            headers,
+            {
+                parseResponse: false,
+                ...params.options,
+                method: "DELETE",
+            },
+            true,
+            true
+        );
+    }
+
 }
 
 export default HttpClient;
