@@ -104,7 +104,15 @@ sub new {
 
     my $ua = LWP::UserAgent->new();
     $ua->cookie_jar({});
-    my $resp = $ua->post( "$url/authentication", {userid =>$user, password => $password} );
+
+    my $get_resp   = $ua->get("$url/authentication");
+    my $csrf_token = $get_resp->header('X-CSRF-TOKEN');
+    $self->{csrf_token} = $csrf_token;
+
+    my $resp = $ua->post(
+        "$url/authentication",
+        { login_userid => $user, login_password => $password, csrf_token => $csrf_token }
+    );
     die $resp->status_line unless $resp->is_success;
 
     warn "# $user $url = ", $resp->decoded_content, "\n" if $self->{debug};
@@ -140,7 +148,11 @@ sub post {
     my ($self,$biblionumber,$marcxml) = @_;
     my $url = $self->{url};
     warn "# post $url/bib/$biblionumber\n" if $self->{debug};
-    my $resp = $self->{ua}->post( "$url/bib/$biblionumber", 'Content_type' => 'text/xml', Content => $marcxml );
+    my $csrf_token = $self->{csrf_token};
+    my $resp       = $self->{ua}->post(
+        "$url/bib/$biblionumber", 'Content_type' => 'text/xml', Content => $marcxml,
+        csrf_token => $csrf_token
+    );
     die $resp->status_line unless $resp->is_success;
     return $resp->decoded_content;
 }

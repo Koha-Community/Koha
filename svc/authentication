@@ -21,7 +21,7 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Auth qw/check_api_auth/;
+use C4::Auth qw/check_api_auth get_session/;
 use XML::Simple;
 
 my $query = CGI->new;
@@ -41,12 +41,26 @@ my $query = CGI->new;
 # 3. The session cookie should not be (directly) sent back to the user's
 # web browser, but instead should be stored and submitted by biblios.
 
-
-my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
-
-if ($status eq "ok") {
-    print $query->header(-type => 'text/xml', cookie => $cookie);
+my $csrf_token;
+my ( $status, $cookie, $sessionID ) = check_api_auth( $query, { editcatalogue => 'edit_catalogue' } );
+if ( $status eq "ok" ) {
+    $csrf_token = Koha::Token->new->generate_csrf( { session_id => scalar $sessionID } );
 } else {
-    print $query->header(-type => 'text/xml');
+    my $session = C4::Auth::get_session("");
+    $session->param( 'ip',          $session->remote_addr() );
+    $session->param( 'lasttime',    time() );
+    $session->param( 'sessiontype', 'anon' );
+    $session->param( 'interface',   'api' );
+    $session->flush();
+    $sessionID = $session->id();
+    $cookie    = $query->cookie(
+        -name     => 'CGISESSID',
+        -value    => $sessionID,
+        -HttpOnly => 1,
+        -secure   => ( C4::Context->https_enabled() ? 1 : 0 ),
+        -sameSite => 'Lax'
+    );
+    $csrf_token = Koha::Token->new->generate_csrf( { session_id => scalar $sessionID } );
 }
-print XMLout({ status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+print $query->header( -type => 'text/xml', cookie => $cookie, -'X-CSRF_TOKEN' => $csrf_token );
+print XMLout( { status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );

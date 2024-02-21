@@ -1602,7 +1602,7 @@ sub check_api_auth {
     }
 
     my ( $sessionID, $session );
-    unless ( $query->param('userid') ) {
+    unless ( $query->param('login_userid') ) {
         $sessionID = $query->cookie("CGISESSID");
     }
     if ( $sessionID && not( $cas && $query->param('PT') ) ) {
