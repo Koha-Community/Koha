@@ -160,7 +160,7 @@ if ( $op eq 'cud-delete-order' ) {
                 biblionumber  => $biblio->id,
                 title         => $biblio->title // '',
                 author        => $biblio->author // '',
-                countbiblio   => $biblio->active_orders->count,
+                countbiblio   => $biblio->uncancelled_orders->count,
                 itemcount     => $biblio->items->count,
                 subscriptions => $biblio->subscriptions->count,
             };
@@ -489,7 +489,7 @@ sub get_order_infos {
     my $biblionumber = $order->{'biblionumber'};
     if ( $biblionumber ) { # The biblio still exists
         my $biblio = Koha::Biblios->find( $biblionumber );
-        my $countbiblio = $biblio->active_orders->count;
+        my $countbiblio = $biblio->uncancelled_orders->count;
 
         my $ordernumber       = $order->{'ordernumber'};
         my $cnt_subscriptions = $biblio->subscriptions->count;

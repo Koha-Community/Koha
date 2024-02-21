@@ -161,7 +161,7 @@ sub cancel {
     if ( $biblio and $delete_biblio ) {
 
         if (
-            $biblio->active_orders->search(
+            $biblio->uncancelled_orders->search(
                 { ordernumber => { '!=' => $self->ordernumber } }
             )->count == 0
             and $biblio->subscriptions->count == 0
@@ -182,10 +182,10 @@ sub cancel {
 
             my $message;
 
-            if ( $biblio->active_orders->search(
+            if ( $biblio->uncancelled_orders->search(
                 { ordernumber => { '!=' => $self->ordernumber } }
             )->count > 0 ) {
-                $message = 'error_delbiblio_active_orders';
+                $message = 'error_delbiblio_uncancelled_orders';
             }
             elsif ( $biblio->subscriptions->count > 0 ) {
                 $message = 'error_delbiblio_subscriptions';

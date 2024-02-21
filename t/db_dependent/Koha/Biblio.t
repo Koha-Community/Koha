@@ -942,7 +942,7 @@ subtest 'get_volumes_query' => sub {
     );
 };
 
-subtest 'orders() and active_orders() tests' => sub {
+subtest 'orders() and uncancelled_orders() tests' => sub {
 
     plan tests => 5;
 
@@ -950,11 +950,14 @@ subtest 'orders() and active_orders() tests' => sub {
 
     my $biblio = $builder->build_sample_biblio();
 
-    my $orders        = $biblio->orders;
-    my $active_orders = $biblio->active_orders;
+    my $orders             = $biblio->orders;
+    my $uncancelled_orders = $biblio->uncancelled_orders;
 
     is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
-    is( $biblio->orders->count, $biblio->active_orders->count, '->orders->count returns the count for the resultset' );
+    is(
+        $biblio->orders->count, $biblio->uncancelled_orders->count,
+        '->orders->count returns the count for the resultset'
+    );
 
     # Add a couple orders
     foreach (1..2) {
@@ -979,12 +982,12 @@ subtest 'orders() and active_orders() tests' => sub {
         }
     );
 
-    $orders = $biblio->orders;
-    $active_orders = $biblio->active_orders;
+    $orders             = $biblio->orders;
+    $uncancelled_orders = $biblio->uncancelled_orders;
 
-    is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
-    is( ref($active_orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
-    is( $orders->count, $active_orders->count + 2, '->active_orders->count returns the rigt count' );
+    is( ref($orders),             'Koha::Acquisition::Orders', 'Result type is correct' );
+    is( ref($uncancelled_orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
+    is( $orders->count, $uncancelled_orders->count + 2,        '->uncancelled_orders->count returns the right count' );
 
     $schema->storage->txn_rollback;
 };

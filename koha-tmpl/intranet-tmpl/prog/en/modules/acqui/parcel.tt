@@ -404,7 +404,7 @@
                 },
                 "embed": [
                     "basket.basket_group",
-                    "biblio.active_orders+count",
+                    "biblio.uncancelled_orders+count",
                     "biblio.holds+count",
                     "biblio.items+count",
                     "biblio.suggestions.suggester",
@@ -618,7 +618,7 @@
 
                             if ( row.biblio != null ) {
                                 if ( row.biblio.items_count - row.items.length > 0 ||
-                                    row.biblio.active_orders_count > 1 ||
+                                    row.biblio.uncancelled_orders_count > 1 ||
                                     row.biblio.subscriptions_count > 0 ||
                                     row.biblio.holds_count > 0 ) { // biblio can be deleted
                                     result += '<span class="button" title="'
@@ -638,10 +638,10 @@
                                             +'">' + (row.biblio.items_count - row.items.length) + _(" item(s) left") + '</strong><br/>';
                                 }
 
-                                if ( row.biblio.active_orders_count > 1 ) {
+                                if ( row.biblio.uncancelled_orders_count > 1 ) {
                                     result += '<strong title="'
                                             + _("Can't delete catalog record, delete other orders linked to it first") + '">'
-                                            + (row.biblio.active_orders_count - 1) + _(" order(s) left") + '</strong><br/>';
+                                            + (row.biblio.uncancelled_orders_count - 1) + _(" order(s) left") + '</strong><br/>';
                                 }
 
                                 if ( row.biblio.subscriptions_count > 0 ) {

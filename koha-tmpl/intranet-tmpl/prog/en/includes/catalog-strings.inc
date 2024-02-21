@@ -6,7 +6,7 @@
     var count = [% count || 0 | html %];
     var holdcount = [% holdcount || 0 | html %];
     [% SET orders = biblio.orders %]
-    [% SET current   = Context.Scalar(orders, "filter_by_current") %]
+    [% SET current   = Context.Scalar(orders, "filter_out_cancelled") %]
     [% SET cancelled = Context.Scalar(orders, "filter_by_cancelled") %]
     var countorders = [% current.count || 0 | html %];
     var countdeletedorders = [% cancelled.count || 0 | html %];

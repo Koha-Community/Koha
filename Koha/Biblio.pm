@@ -144,20 +144,18 @@ sub orders {
     return Koha::Acquisition::Orders->_new_from_dbic($orders);
 }
 
-=head3 active_orders
+=head3 uncancelled_orders
 
-my $active_orders = $biblio->active_orders();
+my $uncancelled_orders = $biblio->uncancelled_orders;
 
-Returns the active acquisition orders related to this biblio.
-An order is considered active when it is not cancelled (i.e. when datecancellation
-is not undef).
+Returns acquisition orders related to this biblio that are not cancelled.
 
 =cut
 
-sub active_orders {
+sub uncancelled_orders {
     my ( $self ) = @_;
 
-    return $self->orders->search({ datecancellationprinted => undef });
+    return $self->orders->filter_out_cancelled;
 }
 
 =head3 tickets

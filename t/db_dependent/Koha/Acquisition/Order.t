@@ -816,7 +816,7 @@ subtest 'cancel() tests' => sub {
     is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
     @messages = @{ $order->object_messages };
-    is( $messages[0]->message, 'error_delbiblio_active_orders', 'Cannot delete biblio and it gets notified' );
+    is( $messages[0]->message, 'error_delbiblio_uncancelled_orders', 'Cannot delete biblio and it gets notified' );
 
     # Scenario:
     # * order with one item attached
