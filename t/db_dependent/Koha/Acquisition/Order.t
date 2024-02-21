@@ -590,7 +590,7 @@ subtest 'filter_by_late' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'filter_by_current & filter_by_cancelled' => sub {
+subtest 'filter_out_cancelled & filter_by_cancelled' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
@@ -631,7 +631,7 @@ subtest 'filter_by_current & filter_by_cancelled' => sub {
         }
     );
 
-    is( $orders->filter_by_current->count, 2);
+    is( $orders->filter_out_cancelled->count, 2);
     is( $orders->filter_by_cancelled->count, 1);
 
 

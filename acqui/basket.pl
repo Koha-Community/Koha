@@ -143,7 +143,7 @@ if ( $op eq 'cud-delete-order' ) {
     my $delbiblio  = $query->param('delbiblio');
     my $basket_obj = Koha::Acquisition::Baskets->find($basketno);
 
-    my $orders = $basket_obj->orders->filter_by_current;
+    my $orders = $basket_obj->orders->filter_out_cancelled;
 
     my @cannotdelbiblios;
 

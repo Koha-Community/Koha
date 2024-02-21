@@ -149,7 +149,10 @@ sub filter_by_lates {
 
     my $new_rs = $orders->filter_by_active;
 
-Returns a new resultset filtering orders that are not active.
+Returns a new resultset containing active orders only.
+
+Note: An active order (line) has status ordered or partial, or it has status new
+and the basket is marked as standing order.
 
 =cut
 
@@ -167,15 +170,15 @@ sub filter_by_active {
     );
 }
 
-=head3 filter_by_current
+=head3 filter_out_cancelled
 
-    $orders->filter_by_current
+    $orders->filter_out_cancelled
 
 Return the orders of the set that have not been cancelled.
 
 =cut
 
-sub filter_by_current {
+sub filter_out_cancelled {
     my ($self) = @_;
     return $self->search(
         {
