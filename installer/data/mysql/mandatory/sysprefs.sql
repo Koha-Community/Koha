@@ -148,7 +148,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CheckPrevCheckout','hardno','hardyes|softyes|softno|hardno','By default, for every item checked out, should we warn if the patron has borrowed that item in the past?','Choice'),
 ('CheckPrevCheckoutDelay','0', NULL,'Maximum number of days that will trigger a warning if the patron has borrowed that item in the past when CheckPrevCheckout is enabled.','free'),
 ('ChildNeedsGuarantor', 0, 'If ON, a child patron must have a guarantor when adding the patron.', '', 'YesNo'),
-('CircAutoPrintQuickSlip','qslip',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window or Clear the screen.','Choice'),
+('CircAutoPrintQuickSlip','qslip',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window, Do nothing, or Clear the screen.','Choice'),
 ('CircConfirmItemParts', '0', NULL, 'Require staff to confirm that all parts of an item are present at checkin/checkout.', 'Yes/No'),
 ('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specify the agency that controls the circulation and fines policy','Choice'),
 ('CircControlReturnsBranch','ItemHomeLibrary','ItemHomeLibrary|ItemHoldingLibrary|CheckInLibrary','Specify the agency that controls the return policy','Choice'),
