@@ -124,6 +124,7 @@ function AjaxUpload ( formData, progressbar, xtra, callback ) {
     progressbar.val( 0 );
     progressbar.next('.fileuploadpercent').text( '0' );
     xhr.open('POST', url, true);
+    xhr.setRequestHeader("csrf_token", $('meta[name="csrf-token"]').attr("content"));
     xhr.upload.onprogress = function (e) {
         var p = Math.round( (e.loaded/e.total) * 100 );
         progressbar.val( p );
@@ -203,23 +204,22 @@ function removeLocalImage(imagenumber) {
     thumbnail.find("img").css("opacity", ".2");
     thumbnail.find("a.remove").html("<img style='display:inline-block' src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' />");
 
-    $.ajax({
-        url: "/cgi-bin/koha/svc/cover_images?action=delete&biblionumber=" + biblionumber + "&imagenumber=" + imagenumber,
-        success: function(data) {
-            $(data).each( function() {
-                if ( this.deleted == 1 ) {
-                    location.href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=" + biblionumber;
-                } else {
-                    thumbnail.html( copy );
-                    alert(__("An error occurred on deleting this image"));
-                }
-            });
+    const client = APIClient.cover_image;
+    client.cover_images.delete(imagenumber).then(
+        success => {
+            if ( success.deleted == 1 ) {
+                location.href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=" + biblionumber;
+            } else {
+                thumbnail.html( copy );
+                alert(_("An error occurred on deleting this image"));
+            }
         },
-        error: function() {
+        error => {
             thumbnail.html( copy );
-            alert(__("An error occurred on deleting this image"));
+            alert(_("An error occurred on deleting this image"));
+            console.warn("Something wrong happened: %s".format(error));
         }
-    });
+    );
 }
 
 function resetForm(){

@@ -36,33 +36,31 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-my $action       = $input->param('action');
-my @imagenumbers = $input->multi_param('imagenumber');
+my $op           = $input->param('op') || q{};
+my $imagenumber = $input->param('imagenumber');
 
-# Array to store the reponse JSON
-my $response = [];
+my $response = q{};
 
-if ( $action eq "delete" ) {
+if ( $op eq "cud-delete" ) {
 
-    foreach my $imagenumber ( @imagenumbers ) {
-        eval {
-            Koha::CoverImages->find($imagenumber)->delete;
+    eval {
+        Koha::CoverImages->find($imagenumber)->delete;
+    };
+    if ( $@ ) {
+        $response = {
+            imagenumber => $imagenumber,
+            deleted => 0,
+            error => "MSG_INVALID_IMAGENUMBER"
         };
-        if ( $@ ) {
-            push @$response, {
-                imagenumber => $imagenumber,
-                deleted => 0,
-                error => "MSG_INVALID_IMAGENUMBER"
-            };
-        } else {
-            push @$response, {
-                imagenumber => $imagenumber,
-                deleted => 1
-            };
-        }
+    } else {
+        $response = {
+            imagenumber => $imagenumber,
+            deleted => 1
+        };
     }
 } else {
-    # invalid action
+    # FIXME be nicer!
+    # invalid op
     exit 0;
 }
 

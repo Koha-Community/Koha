@@ -1596,26 +1596,25 @@
             var copy = thumbnail.html();
             thumbnail.find("img").css("opacity", ".2");
             thumbnail.find("a.remove").html("<img style='display:inline-block' src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' />");
-            $.ajax({
-                url: "/cgi-bin/koha/svc/cover_images?action=delete&imagenumber=" + imagenumber,
-                success: function(data) {
-                    $(data).each( function(i) {
-                        if ( this.deleted == 1 ) {
-                            thumbnail.remove();
-                        } else {
-                            thumbnail.html( copy );
-                            alert(_("An error occurred on deleting this image"));
-                        }
-                        if ( $('ul.thumbnails > li').length == 0 ) {
-                            showNoImageMessage();
-                        }
-                    });
+            const client = APIClient.cover_image;
+            client.cover_images.delete(imagenumber).then(
+                success => {
+                    if ( success.deleted == 1 ) {
+                        thumbnail.remove();
+                    } else {
+                        thumbnail.html( copy );
+                        alert(_("An error occurred on deleting this image"));
+                    }
+                    if ( $('ul.thumbnails > li').length == 0 ) {
+                        showNoImageMessage();
+                    }
                 },
-                error: function(data) {
+                error => {
                     thumbnail.html( copy );
                     alert(_("An error occurred on deleting this image"));
+                    console.warn("Something wrong happened: %s".format(error));
                 }
-            });
+            );
         }
 
         function showNoImageMessage() {
