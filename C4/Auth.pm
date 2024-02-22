@@ -484,14 +484,6 @@ sub get_template_and_user {
         OPACBaseURL        => C4::Context->preference('OPACBaseURL'),
         minPasswordLength  => $minPasswordLength,
     );
-    if ( C4::Context->config('dev_install') ) {
-        # Dealing with debug_programming_error ( set from plack.psgi)
-        $template->param(
-            dev_install        => 1,
-            debug_programming_error => scalar $in->{query}->param('debug_programming_error'),
-        );
-        $in->{query}->delete('debug_programming_error');
-    }
     if ( $in->{'type'} eq "intranet" ) {
 
         $template->param(
@@ -648,9 +640,8 @@ sub get_template_and_user {
     $template->param( logged_in_user     => $patron );
     $template->param( sessionID          => $sessionID );
 
-    if ( $in->{query}->param('invalid_csrf_token') ) {
-        Koha::Logger->get->debug("The form submission failed (Wrong CSRF token).");
-        C4::Output::output_and_exit( $in->{query}, $cookie, $template, 'wrong_csrf_token' );
+    if ( $ENV{KOHA_ERROR} ) {
+        C4::Output::output_and_exit( $in->{query}, $cookie, $template, $ENV{KOHA_ERROR} );
     }
 
     return ( $template, $borrowernumber, $cookie, $flags );

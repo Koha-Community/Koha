@@ -47,55 +47,6 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
         $CGI::PARAM_UTF8 = 1;
         Koha::Caches->flush_L1_caches();
         Koha::Cache::Memory::Lite->flush();
-
-        my %stateless_methods = (
-            GET     => 1,
-            HEAD    => 1,
-            OPTIONS => 1,
-            TRACE   => 1,
-        );
-
-        my %stateful_methods = (
-            POST   => 1,
-            PUT    => 1,
-            DELETE => 1,
-            PATCH  => 1,
-        );
-
-        my $original_op    = $q->param('op');
-        my $request_method = $q->request_method // q{};
-        if ( $stateless_methods{$request_method} && defined $original_op && $original_op =~ m{^cud-} ) {
-            Koha::Logger->get->warn("Programming error - op '$original_op' must not start with 'cud-' for $request_method");
-            $q->param( 'op', '' );
-            $q->param( 'debug_programming_error', "'$original_op' must not start with 'cud-' for $request_method" );
-        } elsif ( $stateful_methods{$request_method} ) {
-            # Get the CSRF token from the param list or the header
-            my $csrf_token = $q->param('csrf_token') || $q->http('HTTP_CSRF_TOKEN');
-
-            if ( defined $q->param('op') && $original_op !~ m{^cud-} ) {
-                Koha::Logger->get->warn("Programming error - op '$original_op' must start with 'cud-' for $request_method");
-                $q->param( 'op', '' );
-                $q->param( 'debug_programming_error', "'$original_op' must start with 'cud-' for $request_method" );
-            }
-
-            die "Programming error - No CSRF token passed for $request_method"
-                unless $csrf_token;
-
-            unless (
-                Koha::Token->new->check_csrf(
-                    {
-                        session_id => scalar $q->cookie('CGISESSID'),
-                        token      => $csrf_token,
-                    }
-                )
-                )
-            {
-                Koha::Logger->get->debug("The form submission failed (Wrong CSRF token).");
-                $q->param( 'op', '' );
-                $q->param( 'invalid_csrf_token', 1);
-            }
-        }
-
         return $q;
     };
 }
@@ -126,6 +77,7 @@ builder {
     enable "+Koha::Middleware::RealIP";
 
     mount '/opac'          => builder {
+        enable "+Koha::Middleware::CSRF";
         #NOTE: it is important that these are relative links
         enable 'ErrorDocument',
             400 => 'errors/400.pl',
@@ -145,6 +97,7 @@ builder {
         $opac;
     };
     mount '/intranet'      => builder {
+        enable "+Koha::Middleware::CSRF";
         #NOTE: it is important that these are relative links
         enable 'ErrorDocument',
             400 => 'errors/400.pl',
