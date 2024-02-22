@@ -24,6 +24,7 @@ use Koha::SearchEngine::Indexer;
 
 use C4::Context;
 use C4::Biblio;
+use C4::Items;
 use C4::MarcModificationTemplates;
 
 use base 'Koha::BackgroundJob';
@@ -85,7 +86,10 @@ RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
             my $biblio = Koha::Biblios->find($biblionumber);
             my $record = $biblio->metadata->record;
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
-            my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
+            my $frameworkcode    = C4::Biblio::GetFrameworkCode($biblionumber);
+            my $biblioitemnumber = $biblio->biblioitem->biblioitemnumber;
+            C4::Items::AddItemFromMarc( $record, $biblionumber, { biblioitemnumber => $biblioitemnumber } );
+
             C4::Biblio::ModBiblio(
                 $record,
                 $biblionumber,
