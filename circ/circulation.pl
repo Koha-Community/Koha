@@ -111,6 +111,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     }
 );
 
+my $op                      = $query->param('op');
 my $override_high_holds     = $query->param('override_high_holds');
 my $override_high_holds_tmp = $query->param('override_high_holds_tmp');
 
@@ -137,7 +138,7 @@ if ( C4::Context->preference("AutoSwitchPatron") && $barcode ) {
 $findborrower ||= $query->param('findborrower') || q{};
 $findborrower =~ s|,| |g;
 
-if ( $query->param('confirm_hold') ) {
+if ( $op eq 'cud-confirm_hold' && $query->param('confirm_hold') ) {
     my $reserve_id          = $query->param('confirm_hold');
     my $hold_branch         = $query->param('hold_branch');
     my $hold_itemnumber     = $query->param('hold_itemnumber');
@@ -310,7 +311,7 @@ if ($patron) {
 # STEP 3 : ISSUING
 #
 #
-if (@$barcodes) {
+if (@$barcodes && $op eq 'cud-checkout') {
     my $checkout_infos;
     for my $barcode ( @$barcodes ) {
 
