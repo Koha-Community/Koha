@@ -55,15 +55,15 @@ my $code = $input->param("code");
 my $display_list = 0;
 if ($op eq "edit_attribute_type") {
     edit_attribute_type_form($template, $code);
-} elsif ($op eq "edit_attribute_type_confirmed") {
-    $display_list = add_update_attribute_type('cud-edit', $template, $code);
+} elsif ($op eq "cud-edit_attribute_type_confirmed") {
+    $display_list = add_update_attribute_type('edit', $template, $code);
 } elsif ($op eq "add_attribute_type") {
     add_attribute_type_form($template);
-} elsif ($op eq "add_attribute_type_confirmed") {
-    $display_list = add_update_attribute_type('cud-add', $template, $code);
+} elsif ($op eq "cud-add_attribute_type_confirmed") {
+    $display_list = add_update_attribute_type('add', $template, $code);
 } elsif ($op eq "delete_attribute_type") {
     $display_list = delete_attribute_type_form($template, $code);
-} elsif ($op eq "delete_attribute_type_confirmed") {
+} elsif ($op eq "cud-delete_attribute_type_confirmed") {
     delete_attribute_type($template, $code);
     $display_list = 1;
 } else {
@@ -87,7 +87,7 @@ sub add_attribute_type_form {
     my $patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
     $template->param(
         attribute_type_form => 1,
-        confirm_op => 'add_attribute_type_confirmed',
+        confirm_op => 'cud-add_attribute_type_confirmed',
         categories => $patron_categories,
     );
 }
@@ -101,7 +101,7 @@ sub error_add_attribute_type_form {
 
     $template->param(
         attribute_type_form => 1,
-        confirm_op => 'add_attribute_type_confirmed',
+        confirm_op => 'cud-add_attribute_type_confirmed',
         authorised_value_category => scalar $input->param('authorised_value_category'),
     );
 }
@@ -126,7 +126,7 @@ sub add_update_attribute_type {
     my $class                     = $input->param('class');
 
     my $attr_type = Koha::Patron::Attribute::Types->find($code);
-    if ( $op eq 'cud-edit' ) {
+    if ( $op eq 'edit' ) {
         $attr_type->description($description);
     }
     else {
@@ -166,7 +166,7 @@ sub add_update_attribute_type {
     my @branches = grep { ! /^\s*$/ } $input->multi_param('branches');
     $attr_type->library_limits( \@branches );
 
-    if ( $op eq 'cud-edit' ) {
+    if ( $op eq 'edit' ) {
         $template->param( edited_attribute_type => $attr_type->code() );
     }
     else {
@@ -185,7 +185,7 @@ sub delete_attribute_type_form {
     if (defined($attr_type)) {
         $template->param(
             delete_attribute_type_form => 1,
-            confirm_op => "delete_attribute_type_confirmed",
+            confirm_op => "cud-delete_attribute_type_confirmed",
             code => $code,
             description => $attr_type->description(),
         );
@@ -244,7 +244,7 @@ sub edit_attribute_type_form {
         edit_attribute_type => 1,
         can_be_set_to_nonrepeatable => $can_be_set_to_nonrepeatable,
         can_be_set_to_unique => $can_be_set_to_unique,
-        confirm_op => 'edit_attribute_type_confirmed',
+        confirm_op => 'cud-edit_attribute_type_confirmed',
         categories => $patron_categories,
     );
 
