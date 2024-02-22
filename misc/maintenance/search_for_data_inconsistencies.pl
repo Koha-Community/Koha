@@ -326,6 +326,97 @@ use C4::Biblio qw( GetMarcFromKohaField );
     }
 }
 
+{
+    my @loop_borrowers_relationships;
+    my $relationships      = Koha::Patron::Relationships->search();
+    my @patrons_guarantors = Koha::Patron::Relationships::guarantors($relationships)->as_list;
+    my @patrons_guarantees = Koha::Patron::Relationships::guarantees($relationships)->as_list;
+
+    foreach my $patron_guarantor (@patrons_guarantors) {
+        foreach my $patron_guarantee (@patrons_guarantees) {
+            if ( $patron_guarantor->borrowernumber == $patron_guarantee->borrowernumber ) {
+
+                my $guarantor_id;
+                my $guarantee_id;
+                my $size_list;
+                my $tmp_garantor_id = $patron_guarantor->borrowernumber;
+                my @guarantor_ids;
+
+                do {
+                    my @relationship_for_go = Koha::Patron::Relationships->search(
+                        {
+                            -or => [
+                                'guarantor_id' => { '=', $tmp_garantor_id },
+                            ]
+                        },
+                    )->as_list;
+                    $size_list = scalar @relationship_for_go;
+
+                    foreach my $relation (@relationship_for_go) {
+                        $guarantor_id = $relation->guarantor_id;
+                        unless ( grep { $_ == $guarantor_id } @guarantor_ids ) {
+                            push @guarantor_ids, $guarantor_id;
+                        }
+                        $guarantee_id = $relation->guarantee_id;
+
+                        my @relationship_for_go = Koha::Patron::Relationships->search(
+                            {
+                                -or => [
+                                    'guarantor_id' => { '=', $guarantee_id },
+                                ]
+                            },
+                        )->as_list;
+                        $size_list = scalar @relationship_for_go;
+
+                        if ( $patron_guarantor->borrowernumber == $guarantee_id ) {
+                            last;
+                        }
+
+                        foreach my $relation (@relationship_for_go) {
+                            $guarantor_id = $relation->guarantor_id;
+                            unless ( grep { $_ == $guarantor_id } @guarantor_ids ) {
+                                push @guarantor_ids, $guarantor_id;
+                            }
+                            $guarantee_id = $relation->guarantee_id;
+
+                            if ( $patron_guarantor->borrowernumber == $guarantee_id ) {
+                                last;
+                            }
+                        }
+                        if ( $patron_guarantor->borrowernumber == $guarantee_id ) {
+                            last;
+                        }
+                    }
+
+                    $tmp_garantor_id = $guarantee_id;
+                } while ( $patron_guarantor->borrowernumber != $guarantee_id && $size_list > 0 );
+
+                if ( $patron_guarantor->borrowernumber == $guarantee_id ) {
+                    unless ( grep { join( "", sort @$_ ) eq join( "", sort @guarantor_ids ) }
+                        @loop_borrowers_relationships )
+                    {
+                        push @loop_borrowers_relationships, \@guarantor_ids;
+                    }
+                }
+            }
+        }
+    }
+
+    if ( scalar @loop_borrowers_relationships > 0 ) {
+        new_section("The list of guarantors who are also guarantee.");
+        my $count = 0;
+        foreach my $table (@loop_borrowers_relationships) {
+            $count++;
+            print "Loop $count, borrowers id  : ";
+            foreach my $borrower_id (@$table) {
+                print "$borrower_id | ";
+            }
+            print "\n";
+        }
+        new_hint("Relationships that form guarantor loops must be deleted");
+    }
+}
+
 sub new_section {
     my ( $name ) = @_;
     say "\n== $name ==";
