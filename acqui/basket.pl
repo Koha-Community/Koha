@@ -162,7 +162,7 @@ if ( $op eq 'cud-delete_confirm' ) {
     );
 } elsif ( !$bookseller ) {
     $template->param( NO_BOOKSELLER => 1 );
-} elsif ($op eq 'cud-export') {
+} elsif ($op eq 'export') {
     print $query->header(
         -type       => 'text/csv',
         -attachment => 'basket' . $basket->{'basketno'} . '.csv',
