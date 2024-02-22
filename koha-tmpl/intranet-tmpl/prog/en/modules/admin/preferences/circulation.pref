@@ -452,6 +452,23 @@ Circulation:
             - <br>Leave this field empty if you don't want to skip any <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> statuses.
             - <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>.
         -
+            - pref: DefaultLongOverdueBorrowerCategories
+              choices: patron-categories
+              class: multiple
+            - the borrower categories that will be listed. Exclude all others.
+            - <br>WARNING — This preference will be active only if DefaultLongOverdueSkipBorrowerCategories is empty.
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+
+
+        -
+            - pref: DefaultLongOverdueSkipBorrowerCategories
+              choices: patron-categories
+              class: multiple
+            - the borrower categories that will not be listed. Include all others.
+            - <br>WARNING - This preference overrides the DefaultLongOverdueBorrowerCategories preference, so the DefaultLongOverdueBorrowerCategories filter will not take effect.
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+
+        -
             - "When issuing an item that has been marked as lost, "
             - pref: IssueLostItem
               choices:

@@ -275,6 +275,17 @@ if ( ! defined($charge) ) {
         $charge = $charge_value;
     }
 }
+
+if ( C4::Context->preference('DefaultLongOverdueBorrowerCategories') ) {
+    my $categories = C4::Context->preference('DefaultLongOverdueBorrowerCategories');
+    $borrower_category = [ split( ',', $categories ) ];
+}
+
+if ( C4::Context->preference('DefaultLongOverdueSkipBorrowerCategories') ) {
+    my $categories = C4::Context->preference('DefaultLongOverdueSkipBorrowerCategories');
+    $skip_borrower_category = [ split( ',', $categories ) ];
+}
+
 unless ($confirm) {
     $verbose = 1;     # If you're not running it for real, then the whole point is the print output.
     print "### TEST MODE -- NO ACTIONS TAKEN ###\n";
