@@ -115,7 +115,7 @@
                     [% END %]
                     <form action="[% script_name | html %]" name="Aform" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-[% confirm_op | html %]" />
+                        <input type="hidden" name="op" value="[% confirm_op | html %]" />
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -430,7 +430,7 @@
                         <h1>Confirm deletion of record matching rule <span class="ex">'[% code | html %]' ([% description | html %])</span>?</h1>
                         <form action="[% script_name | html %]" name="Aform" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-[% confirm_op | html %]" />
+                            <input type="hidden" name="op" value="[% confirm_op | html %]" />
                             <input type="hidden" name="matcher_id" value="[% matcher_id | html %]" />
                             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete record matching rule</button>
                         </form>

@@ -52,17 +52,17 @@ $template->param( valid_norms => \@valid_norms );
 my $display_list = 0;
 if ($op eq "edit_matching_rule") {
     edit_matching_rule_form($template, $matcher_id);
-} elsif ($op eq "edit_matching_rule_confirmed") {
+} elsif ($op eq "cud-edit_matching_rule_confirmed") {
     add_update_matching_rule($template, $matcher_id);
     $display_list = 1;
 } elsif ($op eq "add_matching_rule") {
     add_matching_rule_form($template);
-} elsif ($op eq "add_matching_rule_confirmed") {
+} elsif ($op eq "cud-add_matching_rule_confirmed") {
     add_update_matching_rule($template, $matcher_id);
     $display_list = 1;
 } elsif ($op eq "delete_matching_rule") {
     delete_matching_rule_form($template, $matcher_id);
-} elsif ($op eq "delete_matching_rule_confirmed") {
+} elsif ($op eq "cud-delete_matching_rule_confirmed") {
     delete_matching_rule($template, $matcher_id);
     $display_list = 1;
 } else {
@@ -82,7 +82,7 @@ sub add_matching_rule_form {
 
     $template->param(
         matching_rule_form => 1,
-        confirm_op => 'add_matching_rule_confirmed',
+        confirm_op => 'cud-add_matching_rule_confirmed',
         max_matchpoint => 1,
         max_matchcheck => 1
     );
@@ -181,7 +181,7 @@ sub delete_matching_rule_form {
     my $matcher = C4::Matcher->fetch($matcher_id);
     $template->param(
         delete_matching_rule_form => 1,
-        confirm_op => "delete_matching_rule_confirmed",
+        confirm_op => "cud-delete_matching_rule_confirmed",
         matcher_id => $matcher_id,
         code => $matcher->code(),
         description => $matcher->description(),
@@ -242,7 +242,7 @@ sub edit_matching_rule_form {
     $template->param(
         matching_rule_form => 1,
         edit_matching_rule => 1,
-        confirm_op => 'edit_matching_rule_confirmed',
+        confirm_op => 'cud-edit_matching_rule_confirmed',
         max_matchpoint => $mp_num,
         max_matchcheck => $mc_num
     );
