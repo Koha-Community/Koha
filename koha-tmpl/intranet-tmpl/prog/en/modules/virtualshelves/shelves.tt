@@ -638,7 +638,6 @@
                     serverSide:  true,
                     ajax:  {
                         url: "/cgi-bin/koha/svc/virtualshelves/search",
-                        type: "POST",
                         data: function ( d ) {
                             let order_by = [];
                             d.order.forEach((o, i) => order_by.push(sorton[o.column - 1] + " " + o.dir));
