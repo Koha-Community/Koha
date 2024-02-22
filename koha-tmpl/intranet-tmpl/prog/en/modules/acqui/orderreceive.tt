@@ -686,7 +686,8 @@
 
                 if(row.biblio.suggestions.length && row.biblio.suggestions[0].reason) {
                     params["suggestionid"] = row.biblio.suggestions[0].suggestion_id;
-                    if($("#reason option[value='"+row.biblio.suggestions[0].reason+"']").length) {
+                    const options = Array.from(document.querySelectorAll('#reason option'));
+                    if (options.some(option => option.value === row.biblio.suggestions[0].reason)) {
                         params['reason'] =  row.biblio.suggestions[0].reason;
                     } else {
                         params['reason'] = 'other';
@@ -1140,7 +1141,8 @@
                     }
                     if(row.biblio.suggestions[0].reason) {
                         $("#suggestion_reason").show();
-                        if($("#reason option[value='"+row.biblio.suggestions[0].reason+"']").length) {
+                        const options = Array.from(document.querySelectorAll('#reason option'));
+                        if (options.some(option => option.value === row.biblio.suggestions[0].reason)) {
                              $("#other_reason a").click();
                             $("#reason").val(row.biblio.suggestions[0].reason);
                             $("#select-other_reason").val(null);
