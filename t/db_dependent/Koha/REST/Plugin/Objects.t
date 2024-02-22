@@ -153,7 +153,7 @@ get '/my_patrons/:patron_id' => sub {
 };
 
 # The tests
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Mojo;
 
 use t::lib::Mocks;
