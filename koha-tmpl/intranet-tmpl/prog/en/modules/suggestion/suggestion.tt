@@ -862,18 +862,16 @@
                                                             <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=edit_form"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% s.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% s.suggestionid | html %]">
                                                                 <li>
-                                                                    <fieldset class="action">
-                                                                        <button class="trigger_action" data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-primary">Delete</button>
-                                                                    </fieldset>
+                                                                    <button data-op="cud-delete" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-default trigger_action">Delete</button>
                                                                 </li>
                                                                 [% UNLESS s.archived %]
-                                                                    <li><fieldset class="action">
-                                                                        <button class="trigger_action" data-op="cud-archive" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-primary">Archive</button>
-                                                                    </fieldset></li>
+                                                                    <li>
+                                                                        <button class="btn btn-default trigger_action" data-op="cud-archive" data-suggestionid="[% s.suggestionid | html %]">Archive</button>
+                                                                    </li>
                                                                 [% ELSE %]
-                                                                    <li><fieldset class="action">
-                                                                        <button class="trigger_action" data-op="cud-unarchive" data-suggestionid="[% s.suggestionid | html %]" class="btn btn-primary">Unarchive</button>
-                                                                    </fieldset></li>
+                                                                    <li>
+                                                                        <button class="btn btn-default trigger_action" data-op="cud-unarchive" data-suggestionid="[% s.suggestionid | html %]">Unarchive</button>
+                                                                    </li>
                                                                 [% END %]
                                                             </ul>
                                                         </div>
