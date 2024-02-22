@@ -6,6 +6,7 @@ import CoverImageAPIClient from "./cover-image-api-client.js";
 import LocalizationAPIClient from "./localization-api-client.js";
 import PatronAPIClient from "./patron-api-client.js";
 import SysprefAPIClient from "./system-preferences-api-client.js";
+import TicketAPIClient from "./ticket-api-client.js";
 
 export const APIClient = {
     article_request: new ArticleRequestAPIClient(),
@@ -15,5 +16,6 @@ export const APIClient = {
     cover_image: new CoverImageAPIClient(),
     localization: new LocalizationAPIClient(),
     patron: new PatronAPIClient(),
+    ticket: new TicketAPIClient(),
     syspref: new SysprefAPIClient(),
 };

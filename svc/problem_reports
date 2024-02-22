@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use JSON qw( to_json );
 use CGI;
-use C4::Service;
 use C4::Auth qw( check_cookie_auth );
 use C4::Output qw( is_ajax output_with_http_headers );
 use Koha::ProblemReports;
@@ -41,28 +40,18 @@ my ( $auth_status ) = check_cookie_auth( $query->cookie('CGISESSID'), { problem_
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
+my $op = $query->param('op') || q{};
 if ($is_ajax) {
     my $report_id = $query->param('report_id');
     my $report = Koha::ProblemReports->find($report_id);
-    my $action = $query->param('action');
-    my $status = 'success';
-    if ( $action eq 'viewed' ) {
+    if ( $op eq 'cud-viewed' ) {
         $report->set({ status => 'Viewed' })->store;
-        if ( $report->status ne 'Viewed' ) {
-            $status = 'failure';
-        }
-    } elsif ( $action eq 'closed' ) {
+    } elsif ( $op eq 'cud-closed' ) {
         $report->set({ status => 'Closed' })->store;
-        if ( $report->status ne 'Closed' ) {
-            $status = 'failure';
-        }
-    } elsif ( $action eq 'new' ) {
+    } elsif ( $op eq 'cud-new' ) {
         $report->set({ status => 'New' })->store;
-        if ( $report->status ne 'New' ) {
-            $status = 'failure';
-        }
     }
-    my $json = to_json ( { status => $status } );
+    my $json = to_json ( { status => $report->status } );
     output_with_http_headers $query, undef, $json, 'js';
     exit;
 }

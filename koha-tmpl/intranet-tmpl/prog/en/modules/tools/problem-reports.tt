@@ -203,52 +203,61 @@
                 }
             });
 
+
+            function show_error(){
+                // FIXME Can be improved by displaying meaningful error.
+                $("#error").text(_("Unable to change status of problem report.")).show();
+            }
+
             $("#problemreportstable").on("click", "button.viewed, button.closed, button.new", function(event){
                 event.preventDefault(); // prevent form submission
-                var $action = $(this).attr("name");
-                var $report_id = $(this).data('report_id');
-                var ajaxData = {
-                    'action': $action,
-                    'report_id': $report_id,
-                };
+                var op = $(this).attr("name");
+                var report_id = $(this).data('report_id');
 
-                $.ajax({
-                    url: '/cgi-bin/koha/svc/problem_reports/',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: ajaxData,
-                })
-
-                .done(function(data){
-                    if (data.status == 'success'){
-                        if ( $action == 'viewed' ){
-                            $("#status_" + $report_id).text(_("Viewed"));
+                const client = APIClient.ticket;
+                if ( op == 'viewed' ) {
+                    client.tickets.mark_as_viewed(report_id).then(
+                        success => {
+                            $("#status_" + report_id).text(_("Viewed"));
                             $(event.target).parent().siblings("[name='status']").removeClass().addClass("statusViewed");
                             $(event.target).siblings(".closed").prop("disabled", false);
                             $(event.target).siblings(".new").prop("disabled", false);
                             $(event.target).prop("disabled", true);
-                        } else if ( $action == 'new' ){
-                            $("#status_" + $report_id).text(_("New"));
-                            $(event.target).parent().siblings("[name='status']").removeClass().addClass("statusNew");
-                            $(event.target).siblings(".closed").prop("disabled", false);
-                            $(event.target).siblings(".viewed").prop("disabled", false);
-                            $(event.target).prop("disabled", true);
-                        } else {
-                            $("#status_" + $report_id).text(_("Closed"));
+                        },
+                        error => {
+                            console.warn("Something wrong happened: %s".format(error));
+                            show_error();
+                        }
+                    );
+                } else if ( op == "closed" ) {
+                    client.tickets.mark_as_closed(report_id).then(
+                        success => {
+                            $("#status_" + report_id).text(_("Closed"));
                             $(event.target).parent().siblings("[name='status']").removeClass().addClass("statusClosed");
                             $(event.target).siblings(".viewed").prop("disabled", false);
                             $(event.target).siblings(".new").prop("disabled", false);
                             $(event.target).prop("disabled", true);
+                        },
+                        error => {
+                            console.warn("Something wrong happened: %s".format(error));
+                            show_error();
                         }
-                    } else {
-                        $("#error").text(_("Unable to change status of problem report."));
-                        $("#error").show();
-                    }
-                })
-                .error(function(data){
-                    $("#error").text(_("Unable to change status of problem report."));
-                    $("#error").show();
-                });
+                    );
+                } else {
+                    client.tickets.mark_as_new(report_id).then(
+                        success => {
+                            $("#status_" + report_id).text(_("New"));
+                            $(event.target).parent().siblings("[name='status']").removeClass().addClass("statusNew");
+                            $(event.target).siblings(".closed").prop("disabled", false);
+                            $(event.target).siblings(".viewed").prop("disabled", false);
+                            $(event.target).prop("disabled", true);
+                        },
+                        error => {
+                            console.warn("Something wrong happened: %s".format(error));
+                            show_error();
+                        }
+                    );
+                }
             });
         });
     </script>
