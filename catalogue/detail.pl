@@ -293,7 +293,8 @@ if ( C4::Context->preference('AcquisitionDetails') ) {
     );    # GetHistory sorted by aqbooksellerid, but does it make sense?
 
     $template->param(
-        orders => $orders,
+        orders     => $orders,
+        acq_status => $biblio->acq_status,
     );
 }
 
