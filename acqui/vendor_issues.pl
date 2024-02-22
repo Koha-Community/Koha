@@ -92,7 +92,7 @@ if ( $op eq 'add_form' || $op eq 'cud-show' ) {
         };
     }
     $op = 'list';
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     $template->param( issue => $issue );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
     try {
