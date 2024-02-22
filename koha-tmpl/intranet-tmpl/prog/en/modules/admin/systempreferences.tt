@@ -101,7 +101,7 @@
         <fieldset class="rows">
             <legend class="sr-only">System preference details</legend>
             <ol>
-            <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="cud-[% explanation | html %]" /><input type="hidden" name="op" value="add_validate" /></li>
+            <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation | html %]" /><input type="hidden" name="op" value="cud-add_validate" /></li>
             <li>[% IF ( searchfield ) %]<span class="label">Variable: </span>[% searchfield | html %]<input type="hidden" name="variable" value="[% searchfield | html %]" />
             [% ELSE %]<label for="variable">Variable: </label><input type="text" name="variable" id="variable" size="60" />[% END %]</li>
             <li><label for="value">Value: </label>
