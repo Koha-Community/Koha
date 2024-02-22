@@ -134,7 +134,7 @@
 <form name="f" action="batchMod.pl" method="post">
     [% INCLUDE 'csrf-token.inc' %]
      <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
-     <input type="hidden" name="op" value="cud-[% op | html %]" />
+     <input type="hidden" name="op" value="[% op | html %]" />
      <input type="hidden" name="searchid" value="[% searchid | html %]" />
      <input type="hidden" name="src" id="src" value="[% src | html %]" />
      [% IF biblionumber %]
@@ -167,7 +167,7 @@
 
     [% IF ( itemresults ) %]
         <div id="cataloguing_additem_newitem" class="item_edit_form">
-         <input type="hidden" name="op" value="cud-[% op | html %]" />
+         <input type="hidden" name="op" value="[% op | html %]" />
          <p>This will delete [% IF ( too_many_items_display ) %]all the[% ELSE %]the selected[% END %] items.</p>
          <input type="hidden" name="del" value="1" />
          <input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label>
