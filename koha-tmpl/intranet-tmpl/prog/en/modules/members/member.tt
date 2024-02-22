@@ -316,32 +316,26 @@
         function patronListAdd(){
             var borrowernumbers = JSON.parse( localStorage.getItem("patron_search_selections") ) || [];
             if ( borrowernumbers.length > 0 ){
-                var data = {
-                    add_to_patron_list: $("#add_to_patron_list").val(),
-                    new_patron_list: $("#new_patron_list").val(),
-                    borrowernumbers: borrowernumbers
-                };
-                $.ajax({
-                    data: data,
-                    type: 'POST',
-                    url: '/cgi-bin/koha/svc/members/add_to_list',
-                    success: function(data) {
+                const client = APIClient.patron;
+                client.lists.add_patrons({patron_ids: borrowernumbers, new_list_name: $("#new_patron_list").val(), list_id: $("#add_to_patron_list").val()}).then(
+                    success => {
                         $("#patron_list_dialog").show();
-                        $("#patron_list_dialog > span.patrons-length").html(data.patrons_added_to_list);
-                        $("#patron_list_dialog > a").attr("href", "/cgi-bin/koha/patron_lists/list.pl?patron_list_id=" + data.patron_list.patron_list_id);
-                        $("#patron_list_dialog > a").html(data.patron_list.name);
+                        $("#patron_list_dialog > span.patrons-length").html(success.patrons_added_to_list);
+                        $("#patron_list_dialog > a").attr("href", "/cgi-bin/koha/patron_lists/list.pl?patron_list_id=" + success.patron_list.patron_list_id);
+                        $("#patron_list_dialog > a").html(success.patron_list.name);
 
                         if ( $('#add_to_patron_list').val() == 'new' ) {
                             /* Add a new entry to the menu */
-                            $("#patronlist-dropdown .divider").before('<li><a class="patron-list-add" href="#" data-listid="' + data.patron_list.patron_list_id + '">' + data.patron_list.name + '</li>');
+                            $("#patronlist-dropdown .divider").before('<li><a class="patron-list-add" href="#" data-listid="' + success.patron_list.patron_list_id + '">' + success.patron_list.name + '</li>');
                         }
                         persistPatronSelections('new-patron-list_form');
                         prepSelections();
                     },
-                    error: function() {
+                    error => {
                         alert( _("An error occurred. Patron list could not be updated.") );
+                        console.warn("Something wrong happened: %s".format(error));
                     }
-                });
+                );
                 return true;
             } else {
                 alert( _("You have not selected any patrons to add to a list!") );

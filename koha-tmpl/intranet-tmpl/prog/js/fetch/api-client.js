@@ -4,6 +4,7 @@ import CirculationAPIClient from "./circulation-api-client.js";
 import ClubAPIClient from "./club-api-client.js";
 import CoverImageAPIClient from "./cover-image-api-client.js";
 import LocalizationAPIClient from "./localization-api-client.js";
+import PatronAPIClient from "./patron-api-client.js";
 import SysprefAPIClient from "./system-preferences-api-client.js";
 
 export const APIClient = {
@@ -13,5 +14,6 @@ export const APIClient = {
     club: new ClubAPIClient(),
     cover_image: new CoverImageAPIClient(),
     localization: new LocalizationAPIClient(),
+    patron: new PatronAPIClient(),
     syspref: new SysprefAPIClient(),
 };

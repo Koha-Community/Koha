@@ -34,30 +34,34 @@ my ( $auth_status ) = check_cookie_auth(
 exit 0 if $auth_status ne "ok";
 my $add_to_patron_list = $input->param('add_to_patron_list');
 my $new_patron_list    = $input->param('new_patron_list');
-my @borrowernumbers    = $input->multi_param('borrowernumbers[]');
+my @borrowernumbers    = $input->multi_param('borrowernumber');
 
 my $response;
-if ($add_to_patron_list) {
-    my $patron_list = [];
-
-    if ( $add_to_patron_list eq 'new' ) {
-        $patron_list = AddPatronList( { name => $new_patron_list } );
-    }
-    else {
-        $patron_list =
-          [ GetPatronLists( { patron_list_id => $add_to_patron_list } ) ]->[0];
-    }
-
-    my @patrons_added_to_list = AddPatronsToList( { list => $patron_list, borrowernumbers => \@borrowernumbers } );
-
-    $response->{patron_list} = { patron_list_id => $patron_list->patron_list_id, name => $patron_list->name };
-    $response->{patrons_added_to_list} = scalar( @patrons_added_to_list );
-}
 
 binmode STDOUT, ":encoding(UTF-8)";
-print $input->header(
-    -type => 'application/json',
-    -charset => 'UTF-8'
-);
+if ($input->request_method eq "POST") {
+    if ($add_to_patron_list) {
+        my $patron_list = [];
+
+        if ( $add_to_patron_list eq 'new' ) {
+            $patron_list = AddPatronList( { name => $new_patron_list } );
+        }
+        else {
+            $patron_list =
+              [ GetPatronLists( { patron_list_id => $add_to_patron_list } ) ]->[0];
+        }
+
+        my @patrons_added_to_list = AddPatronsToList( { list => $patron_list, borrowernumbers => \@borrowernumbers } );
+
+        $response->{patron_list} = { patron_list_id => $patron_list->patron_list_id, name => $patron_list->name };
+        $response->{patrons_added_to_list} = scalar( @patrons_added_to_list );
+    }
+    print $input->header(
+        -type => 'application/json',
+        -charset => 'UTF-8'
+    );
+} else {
+    print $input->header(-type => 'text/xml', -status => '400 Bad Request');
+}
 
 print to_json( $response );
