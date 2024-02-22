@@ -158,6 +158,32 @@ sub uncancelled_orders {
     return $self->orders->filter_out_cancelled;
 }
 
+=head3 acq_status
+
+    print $biblio->acq_status;
+
+    This status can be:
+    - unlinked:   not any linked order found in the system
+    - acquired:   some lines are complete, rest is cancelled
+    - cancelled:  all lines are cancelled
+    - processing: some lines are active or new
+
+=cut
+
+sub acq_status {
+    my ($self) = @_;
+    my $orders = $self->orders;
+    unless ( $orders->count ) {
+        return 'unlinked';
+    } elsif ( !$self->uncancelled_orders->count ) {
+        return 'cancelled';
+    } elsif ( $orders->search( { orderstatus => [ 'new', 'ordered', 'partial' ] } )->count ) {
+        return 'processing';
+    } else {
+        return 'acquired';    # some lines must be complete here
+    }
+}
+
 =head3 tickets
 
   my $tickets = $biblio->tickets();

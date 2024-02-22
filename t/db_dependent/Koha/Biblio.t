@@ -942,9 +942,9 @@ subtest 'get_volumes_query' => sub {
     );
 };
 
-subtest 'orders() and uncancelled_orders() tests' => sub {
+subtest '->orders, ->uncancelled_orders and ->acq_status tests' => sub {
 
-    plan tests => 5;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -965,8 +965,9 @@ subtest 'orders() and uncancelled_orders() tests' => sub {
             {
                 class => 'Koha::Acquisition::Orders',
                 value => {
-                    biblionumber => $biblio->biblionumber,
-                    datecancellationprinted => '2019-12-31'
+                    biblionumber            => $biblio->biblionumber,
+                    datecancellationprinted => '2019-12-31',
+                    orderstatus             => 'cancelled',
                 }
             }
         );
@@ -976,8 +977,11 @@ subtest 'orders() and uncancelled_orders() tests' => sub {
         {
             class => 'Koha::Acquisition::Orders',
             value => {
-                biblionumber => $biblio->biblionumber,
-                datecancellationprinted => undef
+                biblionumber            => $biblio->biblionumber,
+                datecancellationprinted => undef,
+                orderstatus             => 'ordered',
+                quantity                => 1,
+                quantityreceived        => 0,
             }
         }
     );
@@ -988,6 +992,15 @@ subtest 'orders() and uncancelled_orders() tests' => sub {
     is( ref($orders),             'Koha::Acquisition::Orders', 'Result type is correct' );
     is( ref($uncancelled_orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
     is( $orders->count, $uncancelled_orders->count + 2,        '->uncancelled_orders->count returns the right count' );
+
+    # Check acq status
+    is( $biblio->acq_status, 'processing', 'Processing for presence of ordered lines' );
+    $orders->filter_by_active->update( { orderstatus => 'new' } );
+    is( $biblio->acq_status, 'processing', 'Still processing for presence of new lines' );
+    $orders->filter_out_cancelled->update( { orderstatus => 'complete' } );
+    is( $biblio->acq_status, 'acquired', 'Acquired: some complete, rest cancelled' );
+    $orders->cancel;
+    is( $biblio->acq_status, 'cancelled', 'Cancelled for only cancelled lines' );
 
     $schema->storage->txn_rollback;
 };
