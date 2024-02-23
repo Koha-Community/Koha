@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Warn;
 
 use Koha::Database;
@@ -1312,6 +1312,51 @@ subtest do_checkout_with_recalls => sub {
     is( $patron->checkouts->count, 1, 'Checkout was done because recalled item was allocated to them' );
     $recall2 = Koha::Recalls->find( $recall2->id );
     is( $recall2->status, 'fulfilled', 'Recall is fulfilled by checked out item' );
+};
+
+subtest 'Checkin message' => sub {
+    plan tests => 2;
+
+    my $mockILS = Test::MockObject->new;
+    my $server  = { ils => $mockILS };
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $institution = {
+        id             => $library->id,
+        implementation => "ILS",
+        policy         => {
+            checkin  => "true",
+            renewal  => "true",
+            checkout => "true",
+            timeout  => 100,
+            retries  => 5,
+        }
+    };
+    my $ils  = C4::SIP::ILS->new($institution);
+    my $item = $builder->build_sample_item(
+        {
+            library            => $library->branchcode,
+            location           => 'My Location',
+            permanent_location => 'My Permanent Location',
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'AllowItemsOnLoanCheckoutSIP', '' );
+
+    my $circ = $ils->checkout( $patron1->cardnumber, $item->barcode, undef, undef, $server->{account} );
+
+    $circ = $ils->checkout( $patron2->cardnumber, $item->barcode, undef, undef, $server->{account} );
+    is(
+        $circ->{screen_msg}, 'Item checked out to another patron',
+        "Checked out item was not checked out to the next patron"
+    );
+
+    t::lib::Mocks::mock_preference( 'AllowItemsOnLoanCheckoutSIP', '1' );
+
+    $circ = $ils->checkout( $patron2->cardnumber, $item->barcode, undef, undef, $server->{account} );
+    is( $circ->{screen_msg}, '', "Checked out item was checked out to the next patron" );
 };
 
 $schema->storage->txn_rollback;

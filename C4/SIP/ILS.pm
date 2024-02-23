@@ -6,21 +6,19 @@ package C4::SIP::ILS;
 
 use warnings;
 use strict;
-use C4::SIP::Sip qw( siplog );
-use Koha::DateUtils qw( dt_from_string output_pref );
-use Data::Dumper;
 
+use C4::Context;
 use C4::SIP::ILS::Item;
 use C4::SIP::ILS::Patron;
-use C4::SIP::ILS::Transaction;
-use C4::SIP::ILS::Transaction::Checkout;
 use C4::SIP::ILS::Transaction::Checkin;
+use C4::SIP::ILS::Transaction::Checkout;
 use C4::SIP::ILS::Transaction::FeePayment;
 use C4::SIP::ILS::Transaction::Hold;
 use C4::SIP::ILS::Transaction::Renew;
 use C4::SIP::ILS::Transaction::RenewAll;
-
-use C4::Context;    #BZ 18317
+use C4::SIP::ILS::Transaction;
+use C4::SIP::Sip qw( siplog );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my %supports = (
     'magnetic media'        => 1,
@@ -164,8 +162,8 @@ sub checkout {
     }
     elsif (
         $item->{borrowernumber}
-        && !C4::Context->preference('AllowItemsOnLoanCheckoutSIP')    #BZ 18317
-        && !_ci_cardnumber_cmp( $item->{borrowernumber}, $patron->borrowernumber )
+            && !C4::Context->preference('AllowItemsOnLoanCheckoutSIP')
+            && !_ci_cardnumber_cmp( $item->{borrowernumber}, $patron->borrowernumber )
         )
     {
         $circ->screen_msg("Item checked out to another patron");
