@@ -42,11 +42,11 @@
 
             [% IF ( selected_count ) %]
                 <div class="dialog message">
-                    [% IF ( action == 'viewed' ) %]
+                    [% IF ( action == 'cud-mark_selected-viewed' ) %]
                         <span>[% selected_count | html %] problem report(s) marked as viewed.</span>
-                    [% ELSIF ( action == 'closed' ) %]
+                    [% ELSIF ( action == 'cud-mark_selected-closed' ) %]
                         <span>[% selected_count | html %] problem report(s) marked as closed.</span>
-                    [% ELSIF ( action == 'new' ) %]
+                    [% ELSIF ( action == 'cud-mark_selected-new' ) %]
                         <span>[% selected_count | html %] problem report(s) marked as new.</span>
                     [% ELSE %]
                         <span>Failed to change the status of [% selected_count | html %] problem report(s).</span>
