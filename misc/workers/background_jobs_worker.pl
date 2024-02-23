@@ -47,6 +47,7 @@ The different values available are:
 
     default
     long_tasks
+    elastic_index
 
 =back
 
