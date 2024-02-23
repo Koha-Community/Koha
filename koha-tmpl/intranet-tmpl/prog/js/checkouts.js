@@ -362,7 +362,7 @@ function LoadIssuesTable() {
                     } else if ( oObj.can_renew_error == "on_reserve" ) {
                         return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>";
                     } else if ( oObj.materials ) {
-                        return "<input type='checkbox' class='confirm' id='confirm_" + oObj.itemnumber + "' name='confirm' value='" + oObj.itemnumber + "' data-materials='" + oObj.materials.escapeHtml() + "'></input>";
+                        return __("Confirm (%s)".format(oObj.materials.escapeHtml()));
                     } else {
                         return "<input type='checkbox' class='checkin' id='checkin_" + oObj.itemnumber + "' name='checkin' value='" + oObj.itemnumber +"'></input>";
                     }
@@ -643,31 +643,19 @@ $(document).ready(function() {
         // Prevent form submit
         return false;
     });
-    $("#RenewChecked").on("click",function(){
+    $("#RenewChecked").on("click",function(e){
+        e.preventDefault();
         let refresh_table = true;
-        $(".confirm:checked:visible").each(function() {
-            itemnumber = $(this).val();
-            id = "#checkin_" + itemnumber;
-            materials = $(this).data('materials');
-
-            $(this).replaceWith("<span class='confirm' id='checkin_" + itemnumber + "'>" + __("Confirm") + " (<span>" + materials + "</span>): <input type='checkbox' class='checkin' name='checkin' value='" + itemnumber +"'></input></span>");
-            $(id).parent().parent().addClass('warn');
-        });
-
-        $(".renew:checked:visible").each(function() {
+        function renew(item_id){
             var override_limit = $("#override_limit").is(':checked') ? 1 : 0;
 
-            var isOnReserve = $(this).data().hasOwnProperty('onReserve');
-
-            var itemnumber = $(this).val();
-
-            $(this).parent().parent().replaceWith("<img id='renew_" + itemnumber + "' src='" + interface + "/" + theme + "/img/spinner-small.gif' />");
+            $(this).parent().parent().replaceWith("<img id='renew_" + item_id+ "' src='" + interface + "/" + theme + "/img/spinner-small.gif' />");
 
             var params = {
-                itemnumber:      itemnumber,
-                borrowernumber:  borrowernumber,
-                branchcode:      branchcode,
-                override_limit:  override_limit
+                item_id,
+                patron_id:      borrowernumber,
+                library_id:     branchcode,
+                override_limit: override_limit
             };
 
             if (UnseenRenewals) {
@@ -676,43 +664,39 @@ $(document).ready(function() {
                 params.seen = renew_unseen === 1 ? 0 : 1;
             }
 
-            // Determine which due date we need to use
-            var dueDate = isOnReserve ?
-                $("#newonholdduedate input").val() :
-                $("#newduedate").val();
+            var dueDate = $("#newduedate").val();
 
             if (dueDate && dueDate.length > 0) {
                 params.date_due = dueDate
             }
 
-            $.post({
-                url: "/cgi-bin/koha/svc/renew",
-                data: params,
-                success: function( data ) {
-                    var id = "#renew_" + data.itemnumber;
+            const client = APIClient.circulation;
+            return client.checkouts.renew(params).then(
+                success => {
+                    var id = "#renew_" + success.itemnumber;
 
                     var content = "";
-                    if ( data.renew_okay ) {
-                        content = __("Renewed, due:") + " " + data.date_due;
-                        $('#date_due_' + data.itemnumber).replaceWith( data.date_due );
+                    if ( success.renew_okay ) {
+                        content = __("Renewed, due:") + " " + success.date_due;
+                        $('#date_due_' + success.itemnumber).replaceWith( success.date_due );
                     } else {
                         content = __("Renew failed:") + " ";
-                        if ( data.error == "no_checkout" ) {
+                        if ( success.error == "no_checkout" ) {
                             content += __("not checked out");
-                        } else if ( data.error == "too_many" ) {
+                        } else if ( success.error == "too_many" ) {
                             content += __("too many renewals");
-                        } else if ( data.error == "too_unseen" ) {
+                        } else if ( success.error == "too_unseen" ) {
                             content += __("too many consecutive renewals without being seen by the library");
-                        } else if ( data.error == "on_reserve" ) {
+                        } else if ( success.error == "on_reserve" ) {
                             content += __("on hold");
-                        } else if ( data.error == "restriction" ) {
+                        } else if ( success.error == "restriction" ) {
                             content += __("Not allowed: patron restricted");
-                        } else if ( data.error == "overdue" ) {
+                        } else if ( success.error == "overdue" ) {
                             content += __("Not allowed: overdue");
-                        } else if ( data.error == 'no_open_days' ) {
+                        } else if ( success.error == 'no_open_days' ) {
                             content += __('Unable to find an open day');
-                        } else if ( data.error ) {
-                            content += data.error;
+                        } else if ( success.error ) {
+                            content += success.error;
                         } else {
                             content += __("reason unknown");
                         }
@@ -720,20 +704,45 @@ $(document).ready(function() {
                     }
 
                     $(id).replaceWith( content );
-            },
-            dataType: "json",
-            async: false,
+                },
+                error => {
+                     console.warn("Something wrong happened: %s".format(error));
+                }
+            );
+        }
+
+        function renew_all(item_ids, fn){
+            let i = 0;
+            function next(){
+                if (i < item_ids.length) {
+                    return fn(item_ids[i++]).then(function(id) {
+                        return next();
+                    });
+                }
+            }
+
+            $(item_ids).each((i, id) => {
+                $("#renew_"+id).parent().append("<img id='renew_" + id+ "' src='" + interface + "/" + theme + "/img/spinner-small.gif' />");
+                $("#renew_"+id).hide();
             });
+
+            return next();
+        }
+
+        let item_ids = $(".renew:checked:visible").map((i, c) => c.value);
+
+        renew_all(item_ids, renew).then(() => {
+            // Refocus on barcode field if it exists
+            if ( $("#barcode").length ) {
+                $("#barcode").focus();
+            }
+
+            if ( refresh_table ) {
+                RefreshIssuesTable();
+            }
+            $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
         });
 
-        // Refocus on barcode field if it exists
-        if ( $("#barcode").length ) {
-            $("#barcode").focus();
-        }
-
-        if ( refresh_table ) {
-            RefreshIssuesTable();
-        }
         // Prevent form submit
         return false;
     });
