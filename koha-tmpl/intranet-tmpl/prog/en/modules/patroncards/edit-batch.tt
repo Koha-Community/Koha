@@ -124,7 +124,7 @@
                                                     [% FOREACH text_field IN table_loo.text_fields %]
                                                         [% IF ( text_field.select_field ) %]
                                                             <td>
-                                                                <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id | html %]&amp;label_id=[% text_field.field_value | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                                <a class="btn btn-default btn-xs delete" href="#" data-batch-id="[% batch_id | html %]" data-label-id="[% text_field.field_value | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                                 <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id | html %]" data-label-id="[% text_field.field_value | html %]"><i class="fa-solid fa-share-from-square"></i> Export</a>
                                                             </td>
                                                             <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>
@@ -138,6 +138,12 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </form>
+                            <form id="remove_patron_form" action="/cgi-bin/koha/patroncards/edit-batch.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-remove" />
+                                <input type="hidden" name="batch_id" value="" />
+                                <input type="hidden" name="label_id" value="" />
                             </form>
                             [% ELSE %]
                                 <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
@@ -316,7 +322,11 @@
                 return false;
             });
             $(".delete").on("click", function(){
-                return confirmDelete( _("Are you sure you want to delete this patron from the card batch?") );
+                if( confirmDelete( _("Are you sure you want to delete this patron from the card batch?") ) ) {
+                    $('#remove_patron_form input[name="batch_id"]').val($(this).data('batch-id'));
+                    $('#remove_patron_form input[name="label_id"]').val($(this).data('label-id'));
+                    $('#remove_patron_form').submit();
+                }
             });
             $(".export").on("click", function(e){
                 e.preventDefault();

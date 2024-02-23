@@ -68,10 +68,10 @@ foreach my $param (@errors) {
       if $error;
 }
 
-if ($op eq 'remove') {
+if ( $op eq 'cud-remove' ) {
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
     foreach my $label_id (@label_ids) {
-    $err = $batch->remove_item($label_id);
+        $err = $batch->remove_item($label_id);
     }
     if ($err) {
         print $cgi->redirect("edit-batch.pl?op=edit&batch_id=$batch_id&error=403"); # this allows us to avoid problems with the user hitting their refresh button
@@ -123,7 +123,7 @@ elsif ($op eq 'de_duplicate') {
         exit;
     }
 }
-elsif ($op eq 'cud-edit') {
+elsif ($op eq 'edit') { #FIXME edit_form actually
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
     $template->param( description => $batch->{'description'} );
 }
