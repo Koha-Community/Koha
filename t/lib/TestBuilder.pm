@@ -638,6 +638,7 @@ sub _gen_default_values {
             defaultreplacecost => 0,
             processfee => 0,
             notforloan => 0,
+            bookable => 0,
         },
         Aqbookseller => {
             tax_rate => 0,

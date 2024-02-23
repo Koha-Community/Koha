@@ -2176,7 +2176,7 @@ subtest 'filter_by_for_hold' => sub {
 };
 
 subtest 'filter_by_bookable' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -2195,5 +2195,22 @@ subtest 'filter_by_bookable' => sub {
         "the correct item is returned from filter_by_bookable"
     );
 
+    # unset level booking on item (for itemtype)
+    t::lib::Mocks::mock_preference( 'item-level_booking', 0 );
+
+    # test with itemtype directly bookable
+    my $item_type = $builder->build_object( { class => 'Koha::ItemTypes', value => { bookable => 1 } } );
+    my $biblio2   = $builder->build_sample_biblio( { itemtype => $item_type->itemtype } );
+
+    # bookable items
+    my $bookable_item3 = $builder->build_sample_item(
+        { biblionumber => $biblio2->biblionumber, itype => $item_type->itemtype, bookable => 1 } );
+    my $bookable_item4 = $builder->build_sample_item(
+        { biblionumber => $biblio2->biblionumber, itype => $item_type->itemtype, bookable => 0 } );
+
+    # items are bookable even if bookable => 0 on item (due to itemtype bookable => 1)
+    is( $biblio2->items->filter_by_bookable->count, 2, "filter_by_bookable returns the correct number of items" );
+
     $schema->storage->txn_rollback;
+
 };
