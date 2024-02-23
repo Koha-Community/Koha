@@ -470,52 +470,71 @@ subtest "CanBookBeRenewed tests" => sub {
     );
 
     # Create borrowers
-    my %renewing_borrower_data = (
-        firstname =>  'John',
-        surname => 'Renewal',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
-        autorenew_checkouts => 1,
-    );
 
-    my %reserving_borrower_data = (
-        firstname =>  'Katrin',
-        surname => 'Reservation',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
-    );
-
-    my %hold_waiting_borrower_data = (
-        firstname =>  'Kyle',
-        surname => 'Reservation',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
-    );
-
-    my %restricted_borrower_data = (
-        firstname =>  'Alice',
-        surname => 'Reservation',
-        categorycode => $patron_category->{categorycode},
-        debarred => '3228-01-01',
-        branchcode => $branch,
-    );
-
-    my %expired_borrower_data = (
-        firstname =>  'Ça',
-        surname => 'Glisse',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
-        dateexpiry => dt_from_string->subtract( months => 1 ),
-        autorenew_checkouts => 1,
-    );
-
-    my $renewing_borrower_obj = Koha::Patron->new(\%renewing_borrower_data)->store;
+    my $renewing_borrower_obj = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'John',
+                surname => 'Renewal',
+                categorycode => $patron_category->{categorycode},
+                branchcode => $branch,
+                autorenew_checkouts => 1,
+            }
+        }
+    )->store;
     my $renewing_borrowernumber = $renewing_borrower_obj->borrowernumber;
-    my $reserving_borrowernumber = Koha::Patron->new(\%reserving_borrower_data)->store->borrowernumber;
-    my $hold_waiting_borrowernumber = Koha::Patron->new(\%hold_waiting_borrower_data)->store->borrowernumber;
-    my $restricted_borrower_obj = Koha::Patron->new(\%restricted_borrower_data)->store;
 
-    my $expired_borrower_obj = Koha::Patron->new(\%expired_borrower_data)->store;
+    my $reserving_borrowernumber = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'Katrin',
+                surname => 'Reservation',
+                categorycode => $patron_category->{categorycode},
+                branchcode => $branch,
+            }
+        }
+    )->store->borrowernumber;
+
+    my $hold_waiting_borrowernumber = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'Kyle',
+                surname => 'Reservation',
+                categorycode => $patron_category->{categorycode},
+                branchcode => $branch,
+            }
+        }
+    )->store->borrowernumber;
+
+    my $restricted_borrower_obj = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'Alice',
+                surname => 'Reservation',
+                categorycode => $patron_category->{categorycode},
+                debarred => '3228-01-01',
+                branchcode => $branch,
+            }
+        }
+    )->store;
+
+    my $expired_borrower_obj = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'Ça',
+                surname => 'Glisse',
+                categorycode => $patron_category->{categorycode},
+                branchcode => $branch,
+                dateexpiry => dt_from_string->subtract( months => 1 ),
+                autorenew_checkouts => 1,
+            }
+        }
+    );
 
     my $bibitems       = '';
     my $priority       = '1';
@@ -1931,19 +1950,31 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
         }
     );
 
+    my $borrower1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname    => 'Kyle',
+                surname      => 'Hall',
+                categorycode => $patron_category->{categorycode},
+                branchcode   => $library2->{branchcode},
+            }
+        }
+    );
 
-    my $borrower1 = Koha::Patron->new({
-        firstname    => 'Kyle',
-        surname      => 'Hall',
-        categorycode => $patron_category->{categorycode},
-        branchcode   => $library2->{branchcode},
-    })->store;
-    my $borrowernumber2 = Koha::Patron->new({
-        firstname    => 'Chelsea',
-        surname      => 'Hall',
-        categorycode => $patron_category->{categorycode},
-        branchcode   => $library2->{branchcode},
-    })->store->borrowernumber;
+    my $borrowernumber2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname    => 'Chelsea',
+                surname      => 'Hall',
+                categorycode => $patron_category->{categorycode},
+                branchcode   => $library2->{branchcode},
+
+            }
+        }
+    )->borrowernumber;
+
     my $patron_category_2 = $builder->build(
         {
             source => 'Category',
@@ -1954,12 +1985,18 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
             }
         }
     );
-    my $borrowernumber3 = Koha::Patron->new({
-        firstname    => 'Carnegie',
-        surname      => 'Hall',
-        categorycode => $patron_category_2->{categorycode},
-        branchcode   => $library2->{branchcode},
-    })->store->borrowernumber;
+
+    my $borrowernumber3 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname    => 'Carnegie',
+                surname      => 'Hall',
+                categorycode => $patron_category_2->{categorycode},
+                branchcode   => $library2->{branchcode},
+            }
+        }
+    )->borrowernumber;
 
     my $issue = AddIssue( $borrower1, $item_1->barcode );
 
@@ -2121,12 +2158,17 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
         }
     );
 
-    my $borrower = Koha::Patron->new({
-        firstname =>  'fn',
-        surname => 'dn',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
-    })->store;
+    my $borrower = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'fn',
+                surname => 'dn',
+                categorycode => $patron_category->{categorycode},
+                branchcode => $branch,
+            }
+        }
+    );
 
     my $issue = AddIssue( $borrower, $item->barcode, undef, undef, undef, undef, { onsite_checkout => 1 } );
     my ( $renewed, $error ) = CanBookBeRenewed( $borrower, $issue );
@@ -2623,25 +2665,36 @@ subtest 'MultipleReserves' => sub {
     my $checkitem      = undef;
     my $found          = undef;
 
-    my %renewing_borrower_data = (
-        firstname =>  'John',
-        surname => 'Renewal',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
+    # Renewing borrower
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'John',
+                surname => 'Renewal',
+                categorycode => $patron_category->{categorycode},
+                branchcode => $branch,
+            }
+        }
     );
-    my $patron = Koha::Patron->new(\%renewing_borrower_data)->store;
+
     my $issue = AddIssue( $patron, $item_1->barcode);
     my $datedue = dt_from_string( $issue->date_due() );
     is (defined $issue->date_due(), 1, "item 1 checked out");
     my $borrowing_borrowernumber = Koha::Checkouts->find({ itemnumber => $item_1->itemnumber })->borrowernumber;
 
-    my %reserving_borrower_data1 = (
-        firstname =>  'Katrin',
-        surname => 'Reservation',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
-    );
-    my $reserving_borrowernumber1 = Koha::Patron->new(\%reserving_borrower_data1)->store->borrowernumber;
+    my $reserving_borrowernumber1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'Katrin',
+                surname => 'Reservation',
+                categorycode => $patron_category->{categorycode},
+                branchcode => $branch,
+            }
+        }
+    )->borrowernumber;
+
     AddReserve(
         {
             branchcode       => $branch,
@@ -2656,13 +2709,18 @@ subtest 'MultipleReserves' => sub {
         }
     );
 
-    my %reserving_borrower_data2 = (
-        firstname =>  'Kirk',
-        surname => 'Reservation',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
-    );
-    my $reserving_borrowernumber2 = Koha::Patron->new(\%reserving_borrower_data2)->store->borrowernumber;
+    my $reserving_borrowernumber2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                firstname =>  'Kirk',
+                surname => 'Reservation',
+                categorycode => $patron_category->{categorycode},
+                branchcode => $branch,
+            }
+        }
+    )->borrowernumber;
+
     AddReserve(
         {
             branchcode       => $branch,
@@ -4504,7 +4562,7 @@ subtest 'CanBookBeIssued | item-level_itypes=biblio' => sub {
 
     t::lib::Mocks::mock_preference('item-level_itypes', 0); # biblio
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } )->store;
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $item = $builder->build_sample_item(
         {
@@ -4523,7 +4581,7 @@ subtest 'CanBookBeIssued | notforloan' => sub {
     t::lib::Mocks::mock_preference('AllowNotForLoanOverride', 0);
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } )->store;
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $itemtype = $builder->build(
         {
@@ -5061,7 +5119,7 @@ subtest 'Incremented fee tests' => sub {
             class => 'Koha::Patrons',
             value => { categorycode => $patron_category->{categorycode} }
         }
-    )->store;
+    );
 
     my $itemtype = $builder->build_object(
         {
@@ -5326,7 +5384,7 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
             class => 'Koha::Patrons',
             value => { categorycode => $patron_category->{categorycode} }
         }
-    )->store;
+    );
 
     my $itemtype = $builder->build_object(
         {
@@ -5373,7 +5431,7 @@ subtest 'CanBookBeIssued & CircConfirmItemParts' => sub {
             class => 'Koha::Patrons',
             value => { categorycode => $patron_category->{categorycode} }
         }
-    )->store;
+    );
 
     my $item = $builder->build_sample_item(
         {
@@ -5444,7 +5502,7 @@ subtest 'Filling a hold should cancel existing transfer' => sub {
                 branchcode => $libraryA->branchcode,
             }
         }
-    )->store;
+    );
 
     my $item = $builder->build_sample_item({
         homebranch => $libraryB->branchcode,
