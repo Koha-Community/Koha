@@ -1,142 +1,104 @@
 $(document).ready(function() {
 
+    const client = APIClient.recall;
+
         $(".cancel_recall").click(function(e){
             if (confirmDelete(__("Are you sure you want to remove this recall?"))){
-                var $self = $(this);
-                var $recall_id = $(this).data('id');
-                var $action = $(this).data('action');
-                var ajaxData = {
-                    'recall_id': $recall_id,
-                    'action'   : $action,
-                };
-
-                $.ajax({
-                    url: '/cgi-bin/koha/svc/recall',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: ajaxData,
-                })
-                .done(function(data) {
-                    var message = "";
-                    if(data.success == 0) {
-                        message = __("The recall may have already been cancelled. Please refresh the page.");
-                    } else {
-                        message = __("Cancelled");
+                let td_node = $(this).parents('td');
+                let recall_id = $(this).data('id');
+                client.recalls.cancel(recall_id).then(
+                    success => {
+                        if(success.success == 0) {
+                            message = __("The recall may have already been cancelled. Please refresh the page.");
+                        } else {
+                            message = __("Cancelled");
+                        }
+                        td_node.html(message);
+                    },
+                    error => {
+                        console.warn("Something wrong happened: %s".format(error));
                     }
-                    $self.parent().parent().parent().parent().html(message);
-                });
+                );
             }
         });
 
         $(".expire_recall").click(function(e){
             if (confirmDelete(__("Are you sure you want to expire this recall?"))){
-                var $self = $(this);
-                var $recall_id = $(this).data('id');
-                var $action = $(this).data('action');
-                var ajaxData = {
-                    'recall_id': $recall_id,
-                    'action'   : $action,
-                };
-
-                $.ajax({
-                    url: '/cgi-bin/koha/svc/recall',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: ajaxData,
-                })
-                .done(function(data) {
-                    var message = "";
-                    if(data.success == 0) {
-                        message = __("The recall may have already been expired. Please refresh the page.");
-                    } else {
-                        message = __("Expired");
+                let td_node = $(this).parents('td');
+                let recall_id = $(this).data('id');
+                client.recalls.expire(recall_id).then(
+                    success => {
+                        if(success.success == 0) {
+                            message = __("The recall may have already been expired. Please refresh the page.");
+                        } else {
+                            message = __("Expired");
+                        }
+                        td_node.html(message);
+                    },
+                    error => {
+                        console.warn("Something wrong happened: %s".format(error));
                     }
-                    $self.parent().parent().parent().parent().html(message);
-                });
+                );
             }
         });
 
         $(".revert_recall").click(function(e){
             if (confirmDelete(__("Are you sure you want to revert the waiting status of this recall?"))){
-                var $self = $(this);
-                var $recall_id = $(this).data('id');
-                var $action = $(this).data('action');
-                var ajaxData = {
-                    'recall_id': $recall_id,
-                    'action'   : $action,
-                };
-
-                $.ajax({
-                    url: '/cgi-bin/koha/svc/recall',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: ajaxData,
-                })
-                .done(function(data) {
-                    var message = "";
-                    if(data.success == 0) {
-                        message = __("The recall waiting status may have already been reverted. Please refresh the page.");
-                    } else {
-                        message = __("Waiting status reverted");
+                let td_node = $(this).parents('td');
+                let recall_id = $(this).data('id');
+                client.recalls.revert(recall_id).then(
+                    success => {
+                        if(success.success == 0) {
+                            message = __("The recall may have already been reverted. Please refresh the page.");
+                        } else {
+                            message = __("Waiting status reverted");
+                        }
+                        td_node.html(message);
+                    },
+                    error => {
+                        console.warn("Something wrong happened: %s".format(error));
                     }
-                    $self.parent().parent().parent().parent().html(message);
-                });
+                );
             }
         });
 
         $(".overdue_recall").click(function(e){
             if (confirmDelete(__("Are you sure you want to mark this recall as overdue?"))){
-                var $self = $(this);
-                var $recall_id = $(this).data('id');
-                var $action = $(this).data('action');
-                var ajaxData = {
-                    'recall_id': $recall_id,
-                    'action'   : $action,
-                };
-
-                $.ajax({
-                    url: '/cgi-bin/koha/svc/recall',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: ajaxData,
-                })
-                .done(function(data) {
-                    var message = "";
-                    if(data.success == 0) {
-                        message = __("The recall may have already been marked as overdue. Please refresh the page.");
-                    } else {
-                        message = __("Marked overdue");
+                let td_node = $(this).parents('td');
+                let recall_id = $(this).data('id');
+                client.recalls.overdue(recall_id).then(
+                    success => {
+                        if(success.success == 0) {
+                            message = __("The recall may have already been marked as overdue. Please refresh the page.");
+                        } else {
+                            message = __("Marked overdue");
+                        }
+                        td_node.html(message);
+                    },
+                    error => {
+                        console.warn("Something wrong happened: %s".format(error));
                     }
-                    $self.parent().parent().parent().parent().html(message);
-                });
+                );
             }
         });
 
         $(".transit_recall").click(function(e){
             if (confirmDelete(__("Are you sure you want to remove this recall and return the item to it's home library?"))){
-                var $self = $(this);
-                var $recall_id = $(this).data('id');
-                var $action = $(this).data('action');
-                var ajaxData = {
-                    'recall_id': $recall_id,
-                    'action'   : $action,
-                };
-
-                $.ajax({
-                    url: '/cgi-bin/koha/svc/recall',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: ajaxData,
-                })
-                .done(function(data) {
-                    var message = "";
-                    if(data.success == 0) {
-                        message = __("The recall may have already been removed. Please refresh the page.");
-                    } else {
-                        message = __("Cancelled");
+                let td_node = $(this).parents('td');
+                let recall_id = $(this).data('id');
+                client.recalls.transit(recall_id).then(
+                    success => {
+                        if(success.success == 0) {
+                            message = __("The recall may have already been removed. Please refresh the page.");
+                        } else {
+                            message = __("Cancelled");
+                        }
+                        td_node.html(message);
+                    },
+                    error => {
+                        console.warn("Something wrong happened: %s".format(error));
                     }
-                    $self.parent().parent().parent().parent().html(message);
-                });
+                );
             }
         });
 

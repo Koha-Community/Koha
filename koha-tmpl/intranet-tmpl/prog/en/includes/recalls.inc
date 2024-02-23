@@ -102,15 +102,15 @@
                                 </button>
                                 <ul class="dropdown-menu pull-right">
                                     [% IF ( recall.requested or recall.overdue ) %]
-                                        <li><a class="cancel_recall" data-id="[% recall.id | html %]" data-action="cancel"><i class="fa fa-times"></i> Cancel</a></li>
+                                        <li><a class="cancel_recall" data-id="[% recall.id | html %]"><i class="fa fa-times"></i> Cancel</a></li>
                                         [% IF ( recall.should_be_overdue ) %]
-                                            <li><a class="overdue_recall" data-id="[% recall.id | html %]" data-action="overdue"><i class="fa fa-hourglass-end"></i> Mark as overdue</a></li>
+                                            <li><a class="overdue_recall" data-id="[% recall.id | html %]"><i class="fa fa-hourglass-end"></i> Mark as overdue</a></li>
                                         [% END %]
                                     [% ELSIF ( recall.waiting ) %]
-                                        <li><a class="revert_recall" data-id="[% recall.id | html %]" data-action="revert"><i class="fa fa-undo"></i> Revert waiting</a></li>
-                                        <li><a class="expire_recall" data-id="[% recall.id | html %]" data-action="expire"><i class="fa fa-times"></i> Expire</a></li>
+                                        <li><a class="revert_recall" data-id="[% recall.id | html %]"><i class="fa fa-undo"></i> Revert waiting</a></li>
+                                        <li><a class="expire_recall" data-id="[% recall.id | html %]"><i class="fa fa-times"></i> Expire</a></li>
                                     [% ELSIF ( recall.in_transit ) %]
-                                        <li><a class="transit_recall" data-id="[% recall.id | html %]" data-action="transit"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.item.homebranch) | html %]</a></li>
+                                        <li><a class="transit_recall" data-id="[% recall.id | html %]"><i class="fa fa-times"></i> Cancel recall and return to: [% Branches.GetName(recall.item.homebranch) | html %]</a></li>
                                     [% END %]
                                 </ul>
                             </div>

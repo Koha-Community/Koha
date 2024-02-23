@@ -45,37 +45,37 @@ unless ( $recall ) {
     exit;
 }
 
-my $op = $input->param('action');
+my $op = $input->param('op');
 
-if ( $op eq 'cancel' ) {
+if ( $op eq 'cud-cancel' ) {
     # cancel recall
     $recall->set_cancelled;
     if ( $recall->cancelled ){
         $json = encode_json({ success => 1 });
     }
 
-} elsif ( $op eq 'expire' ) {
+} elsif ( $op eq 'cud-expire' ) {
     # expire recall
     $recall->set_expired({ interface => 'INTRANET' });
     if ( $recall->expired ){
         $json = encode_json({ success => 1 });
     }
 
-} elsif ( $op eq 'revert' ) {
+} elsif ( $op eq 'cud-revert' ) {
     # revert recall waiting status
     $recall->revert_waiting;
     if ( $recall->requested ){
         $json = encode_json({ success => 1 });
     }
 
-} elsif ( $op eq 'overdue' ) {
+} elsif ( $op eq 'cud-overdue' ) {
     # mark recall as overdue
     $recall->set_overdue({ interface => 'INTRANET' });
     if ( $recall->overdue ){
         $json = encode_json({ success => 1 });
     }
 
-} elsif ( $op eq 'transit' ) {
+} elsif ( $op eq 'cud-transit' ) {
     # cancel recall and return item to home library
     if ( $recall->in_transit ) {
         C4::Items::ModItemTransfer(
