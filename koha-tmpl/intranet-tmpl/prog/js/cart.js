@@ -28,7 +28,8 @@ function resultsBatchProcess( op ){
             alert( __("No item was selected") );
             return false;
         } else {
-            /* form markup for batch edit or delete operations */
+            /* Dynamically create a form in the parent window so that */
+            /* the form submission will redirect in the expected way  */
             let params = [];
             const body = window.opener.document.getElementsByTagName("body");
             let f = document.createElement("form");
@@ -41,9 +42,7 @@ function resultsBatchProcess( op ){
                 f.setAttribute("action", "/cgi-bin/koha/tools/batch_delete_records.pl");
             }
             f.innerHTML = '<input type="hidden" name="recordtype" value="biblio" /><input type="hidden" name="op" value="cud-list" />';
-            /* Get token from parent window */
-            csrf = window.opener.document.querySelectorAll('[name="csrf_token"]');
-            f.append( csrf[0] );
+            f.innerHTML += '<input type="hidden" name="csrf_token" value="' + $('meta[name="csrf-token"]').attr('content').trim() + '" />';
             let textarea = document.createElement("textarea");
             textarea.setAttribute("name", "bib_list");
             textarea.setAttribute("style", "display:none");
@@ -102,15 +101,6 @@ $(document).ready(function(){
         } else {
             showLess();
         }
-    });
-
-    $("#batch_modify").on("click",function(e){
-        e.preventDefault();
-        batchModify();
-    });
-    $("#batch_delete").on("click",function(e){
-        e.preventDefault();
-        batchDelete();
     });
 
     $("#remove_from_cart").on("click",function(e){
