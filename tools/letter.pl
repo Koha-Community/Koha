@@ -123,7 +123,7 @@ if ($op eq 'cud-copy_form') {
 elsif ( $op eq 'add_form' ) {
     add_form($branchcode, $module, $code);
 }
-elsif ( $op eq 'cud-delete_confirm' ) {
+elsif ( $op eq 'delete_confirm' ) {
     delete_confirm($branchcode, $module, $code);
 }
 elsif ( $op eq 'cud-delete_confirmed' ) {
