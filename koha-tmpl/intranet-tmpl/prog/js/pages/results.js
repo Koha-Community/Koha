@@ -420,6 +420,7 @@ function toggleBatchOp( b ){
 
 function resultsBatchProcess( op ){
     var selected = $(".selection:checked");
+    var form = $("#build_batch_record_modification");
     var params = [];
     var url = "";
     if( op == "edit" ){
@@ -430,8 +431,9 @@ function resultsBatchProcess( op ){
             selected.each(function() {
                 params.push( $(this).val() );
             });
-            url = "/cgi-bin/koha/tools/batch_record_modification.pl?op=list&bib_list=" + params.join("/");
-            location.href = url;
+            form.attr("action", "/cgi-bin/koha/tools/batch_record_modification.pl");
+            $("#recordnumber_list").val( params.join("/") );
+            form.submit();
         }
     } else if( op == "delete" ){
         /* batch delete selected records */
@@ -441,8 +443,10 @@ function resultsBatchProcess( op ){
             selected.each(function() {
                 params.push( $(this).val() );
             });
-            url = "/cgi-bin/koha/tools/batch_delete_records.pl?op=list&type=biblio&bib_list=" + params.join("/");
-            location.href = url;
+
+            form.attr("action", "/cgi-bin/koha/tools/batch_delete_records.pl");
+            $("#recordnumber_list").val( params.join("/") );
+            form.submit();
         }
     } else if( op == "merge" ){
         /* merge selected records */

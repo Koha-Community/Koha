@@ -89,7 +89,7 @@ if ( $op eq 'form' ) {
             ]
         )
     );
-} elsif ( $op eq 'cud-list' ) {
+} elsif ( $op eq 'list' ) {
     # List all records to process
     my ( @records, @record_ids );
     if ( my $bib_list = $input->param('bib_list') ) {

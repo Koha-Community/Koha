@@ -357,6 +357,12 @@
                             [% END %]
 
                         </div> <!-- /#selection_ops -->
+                        <form id="build_batch_record_modification" method="post" action="/cgi-bin/koha/tools/batch_record_modification.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="recordtype" value="biblio">
+                            <input type="hidden" name="op" value="cud-list">
+                            <textarea id="recordnumber_list" name="bib_list" style="display:none"></textarea>
+                        </form>
                     </div> <!-- /#searchheader -->
                 [% END %]
 

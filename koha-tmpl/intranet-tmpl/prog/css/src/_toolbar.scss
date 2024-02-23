@@ -31,7 +31,6 @@
             touch-action: manipulation;
             cursor: pointer;
             background-image: none;
-            padding: 6px 12px;
             box-shadow: none;
             border-radius: 4px;
             user-select: none;
@@ -45,7 +44,6 @@
                 text-decoration: none;
                 background-color: #DADADA;
                 color: #696969;
-                padding: 6px 12px;
             }
 
             &:active {
@@ -67,6 +65,17 @@
 
                 &.incart {
                     display: block;
+                }
+            }
+
+            &+.dropdown-menu {
+                .btn {
+                    &.btn-default {
+                        border-radius: 0;
+                        color: black;
+                        padding: 3px 20px;
+                        text-align: left;
+                    }
                 }
             }
         }

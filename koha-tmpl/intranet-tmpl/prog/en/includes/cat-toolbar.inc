@@ -39,7 +39,15 @@
             [% END %]
 
             [% IF CAN_user_tools_records_batchmod %]
-            <li><a id="modifybiblio" href="/cgi-bin/koha/tools/batch_record_modification.pl?recordtype=biblio&op=list&recordnumber_list=[% biblionumber | html %]">Modify record using template</a></li>
+                <li>
+                    <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="recordtype" value="biblio" />
+                        <input type="hidden" name="op" value="list" />
+                        <input type="hidden" name="bib_list" value="[% biblionumber | html %]" />
+                        <button type="submit" class="btn btn-default" id="modifybiblio">Modify record using template</a>
+                    </form>
+                </li>
             [% END %]
 
             [% IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]

@@ -21,43 +21,46 @@ function placeHold () {
     window.close();
 }
 
-function batchDelete(){
-    var checkedItems = $("input:checkbox:checked");
-    if ($(checkedItems).size() === 0) {
-        alert( __("No item was selected") );
+function resultsBatchProcess( op ){
+    if( op == "edit" || op == "delete" ){
+        let checkedItems = $(".select_record:checked");
+        if ( checkedItems.size() === 0 ) {
+            alert( __("No item was selected") );
+            return false;
+        } else {
+            /* form markup for batch edit or delete operations */
+            let params = [];
+            const body = window.opener.document.getElementsByTagName("body");
+            let f = document.createElement("form");
+            f.setAttribute("method", "post");
+            if( op == "edit" ){
+                /* batch edit selected records */
+                f.setAttribute("action", "/cgi-bin/koha/tools/batch_record_modification.pl");
+            } else if( op == "delete" ){
+                /* batch delete selected records */
+                f.setAttribute("action", "/cgi-bin/koha/tools/batch_delete_records.pl");
+            }
+            f.innerHTML = '<input type="hidden" name="recordtype" value="biblio" /><input type="hidden" name="op" value="cud-list" />';
+            /* Get token from parent window */
+            csrf = window.opener.document.querySelectorAll('[name="csrf_token"]');
+            f.append( csrf[0] );
+            let textarea = document.createElement("textarea");
+            textarea.setAttribute("name", "bib_list");
+            textarea.setAttribute("style", "display:none");
+
+            checkedItems.each(function() {
+                params.push( $(this).val() );
+            });
+
+            textarea.value = params.join("/");
+            f.append( textarea );
+            body[0].append( f );
+            f.submit();
+            window.close();
+        }
+    } else {
         return false;
     }
-    var newloc;
-
-    var bibs = "";
-    checkedItems.each(function() {
-        var bib = $(this).val();
-        bibs += bib + "/";
-    });
-
-    newloc = "/cgi-bin/koha/tools/batch_delete_records.pl?op=list&type=biblio&bib_list=" + bibs;
-
-    window.opener.location = newloc;
-    window.close();
-}
-
-function batchModify(){
-    var checkedItems = $("input:checkbox:checked");
-    if ($(checkedItems).size() === 0) {
-        alert( __("No item was selected") );
-        return false;
-    }
-    var newloc;
-
-    var bibs = "";
-    $(checkedItems).each(function() {
-        var bib = $(this).val();
-        bibs += bib + "/";
-    });
-    newloc = "/cgi-bin/koha/tools/batch_record_modification.pl?op=list&bib_list=" + bibs + "&type=biblio";
-
-    window.opener.location = newloc;
-    window.close();
 }
 
 $(document).ready(function(){
@@ -145,5 +148,11 @@ $(document).ready(function(){
     });
     $(".select_record").on("change",function(){
         selRecord( this.value, this.checked );
+    });
+
+    $(".results_batch_op").on("click", function(e){
+        e.preventDefault();
+        var op = $(this).data("op");
+        resultsBatchProcess( op );
     });
 });

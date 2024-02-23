@@ -219,6 +219,7 @@
           <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will delete all selected authorities!</div>
       [% END %]
         <fieldset class="action">
+            [% INCLUDE 'csrf-token.inc' %]
           <input type="hidden" name="op" value="cud-delete" />
           <input type="hidden" name="recordtype" value="[% recordtype | html %]" />
           <input type="submit" class="btn btn-primary" value="Delete selected records" />
