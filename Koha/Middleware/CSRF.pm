@@ -76,8 +76,8 @@ sub call {
 
         #NOTE: Other Middleware will take care of logging to correct place, as Koha::Logger doesn't know where to go here
         warn $error;
-        $env->{'plack.middleware.Koha.CSRF'} = "BAD_CSRF";
-        my $res = Plack::Response->new( 403, [ 'Content-Type' => 'text/plain' ], ["Bad CSRF"] );
+        $env->{'plack.middleware.Koha.CSRF'} = $error;
+        my $res = Plack::Response->new( 403, [ 'Content-Type' => 'text/plain' ], ["Wrong CSRF token"] );
         return $res->finalize;
     }
 
