@@ -97,10 +97,6 @@ $(document).ready(function() {
         }
     });
 
-    $(".delete_template").on("click",function(){
-        return confirmDelete();
-    });
-
     $(".edit_action").on("click", function(){
         var mmta_id = $(this).data("mmta_id");
         var mmta = $.grep(mmtas, function(elt, id) {
@@ -113,6 +109,13 @@ $(document).ready(function() {
     KohaTable("templatest", {
     }, table_settings);
 
+    $(".confirm-delete-action").on("click", function(){
+        return confirm( __("Are you sure you wish to delete this template action?") );
+    });
+
+    $(".confirm-delete-template").on("click", function(){
+        return confirm( __("Are you sure you wish to delete this template?") );
+    });
 });
 
 function updateAllEvery(){
@@ -259,14 +262,6 @@ function clearFormElements(divId) {
         selectElements[i].selectedIndex = 0;
     }
 
-}
-
-function confirmDeleteAction() {
-    return confirm( __("Are you sure you wish to delete this template action?") );
-}
-
-function confirmDelete() {
-    return confirm( __("Are you sure you wish to delete this template?") );
 }
 
 var modaction_legend_innerhtml;

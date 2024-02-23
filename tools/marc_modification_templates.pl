@@ -50,7 +50,7 @@ if ( $op eq "cud-create_template" ) {
   $template_id = '' unless $cgi->param('duplicate_current_template');
   $template_id = AddModificationTemplate( scalar $cgi->param('template_name'), $template_id );
 
-} elsif ( $op eq "delete_template" ) {
+} elsif ( $op eq "cud-delete_template" ) {
 
   DelModificationTemplate( $template_id );
   $template_id = '';
@@ -108,7 +108,7 @@ if ( $op eq "cud-create_template" ) {
         $template->param( error => 'no_from_field' );
     }
 
-} elsif ( $op eq "delete_action" ) {
+} elsif ( $op eq "cud-delete_action" ) {
   DelModificationTemplateAction( scalar $cgi->param('mmta_id') );
 
 } elsif ( $op eq "move_action" ) {
