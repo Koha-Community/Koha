@@ -120,7 +120,7 @@
                                     <td><input id="del-checkbox-[% a.id | html %]" class="del-checkbox" type="checkbox" value="[% a.id | html %]" /></td>
                                     <td>[% a.precedence | html %]</td>
                                     <td style="white-space:nowrap;">
-                                        <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                                        <form class="move-alert-form" action="audio_alerts.pl" method="post">
                                             [% INCLUDE 'csrf-token.inc' %]
                                             <input type="hidden" name="op" value="cud-move"/>
                                             <input type="hidden" name="where" value="up"/>
@@ -130,7 +130,7 @@
                                             </button>
                                         </form>
 
-                                        <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                                        <form class="move-alert-form" action="audio_alerts.pl" method="post">
                                             [% INCLUDE 'csrf-token.inc' %]
                                             <input type="hidden" name="op" value="cud-move"/>
                                             <input type="hidden" name="where" value="top"/>
@@ -140,7 +140,7 @@
                                             </button>
                                         </form>
 
-                                        <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                                        <form class="move-alert-form" action="audio_alerts.pl" method="post">
                                             [% INCLUDE 'csrf-token.inc' %]
                                             <input type="hidden" name="op" value="cud-move"/>
                                             <input type="hidden" name="where" value="bottom"/>
@@ -150,7 +150,7 @@
                                             </button>
                                         </form>
 
-                                        <form id="delete-alert-form" action="audio_alerts.pl" method="post">
+                                        <form class="move-alert-form" action="audio_alerts.pl" method="post">
                                             [% INCLUDE 'csrf-token.inc' %]
                                             <input type="hidden" name="op" value="cud-move"/>
                                             <input type="hidden" name="where" value="down"/>
