@@ -147,6 +147,10 @@
                                 <input type="hidden" name="batch_id" value="" />
                                 <input type="hidden" name="label_id" value="" />
                             </form>
+                            <form id="batch_form" action="/cgi-bin/koha/patroncards/manage.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="" />
+                            </form>
                             [% ELSE %]
                                 <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                 <ol><li>
@@ -176,7 +180,10 @@
             var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id | html %]");
             var answer = confirm(msg);
             if (answer) {
-                window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&amp;card_element=batch&amp;element_id=[% batch_id | html %]";
+                $('#batch_form input[name="op"]').val('cud-delete');
+                $('#batch_form').append( '<input type="hidden" name="element_id" value="[% batch_id | html %]" />' );
+                $('#batch_form').append( '<input type="hidden" name="card_element" value="batch" />' );
+                $('#batch_form').submit();
             } else {
                 return; // abort delete
             }

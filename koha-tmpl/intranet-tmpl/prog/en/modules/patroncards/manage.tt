@@ -96,11 +96,15 @@
                                                 [% FOREACH text_field IN table_loo.text_fields %]
                                                     [% IF ( text_field.select_field ) %]
                                                         <td>
-                                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/patroncards/edit-[% card_element | html %].pl?op=edit&element_id=[% text_field.field_value | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                        [% IF ( print ) %]<a class="btn btn-default btn-xs export" data-batch-id="[% text_field.field_value |url %]" href="/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]"><i class="fa-solid fa-share-from-square"></i> Export</a>[% END %]
-                                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element | html %]&element_id=[% text_field.field_value | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/patroncards/edit-[% card_element | html %].pl?op=edit&element_id=[% text_field.field_value | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                                                            [% IF ( print ) %]
+                                                                <a class="btn btn-default btn-xs export" data-batch-id="[% text_field.field_value |url %]" href="/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]"><i class="fa-solid fa-share-from-square"></i> Export</a>
+                                                            [% END %]
+                                                            <a class="btn btn-default btn-xs delete" href="#" data-element-id="[% text_field.field_value | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                         </td>
-                                                        [% IF ( print ) %]<td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>[% END %]
+                                                        [% IF ( print ) %]
+                                                            <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>
+                                                        [% END %]
                                                     [% ELSIF ( text_field.field_value ) %]
                                                         <td>[% text_field.field_value | html %]</td>
                                                     [% ELSE %]
@@ -137,6 +141,10 @@
                                 <input class="btn btn-primary" type="button" id="printlist" value="Export from patron list" />
                             </fieldset>
                             [% END %]
+                            </form>
+                            <form id="manage_form" method="post" action="/cgi-bin/koha/patroncards/manage.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="" />
                             </form>
 
                             [% ELSE %]
@@ -277,10 +285,6 @@
                 Edit();
                 return false;
             });
-            $("#delete").click(function(){
-                DeleteConfirm();
-                return false;
-            });
             $("#print").click(function(){
                 Xport();
                 return false;
@@ -290,7 +294,13 @@
                 return false;
             });
             $(".delete").on("click", function(){
-                return confirmDelete( _("Are you sure you want to delete this?") );
+                if( confirmDelete( _("Are you sure you want to delete this?") ) ) {
+                    $('#manage_form input[name="op"]').val('cud-delete');
+                    $('#manage_form').append( '<input type="hidden" name="card_element" value="[% card_element | html %]" />' );
+                    var id = $(this).data('element-id');
+                    $('#manage_form').append( '<input type="hidden" name="element_id" value="' + id + '" />' );
+                    $('#manage_form').submit();
+                }
             });
             $(".export").on("click", function(e){
                 e.preventDefault();
