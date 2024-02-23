@@ -74,7 +74,7 @@ my $itype_or_itemtype =
 my $query = $input->param('q');
 
 # don't run the search if no search term !
-if ( $op eq "cud-do_search" && $query ) {
+if ( $op eq "do_search" && $query ) {
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {

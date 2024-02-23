@@ -40,7 +40,12 @@
 
                             [% IF ( CAN_user_serials_delete_subscription ) %]
                                 <li>
-                                    <a href="#" id="deletesub">Delete subscription</a>
+                                    <form action="subscription-detail.pl" method="post">
+                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-del" />
+                                        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                                        <button type="submit" class="btn btn-default" id="deletesub">Delete subscription</button>
+                                    </form>
                                 </li>
                             [% END %]
                         </ul>
@@ -57,9 +62,23 @@
             [% END %]
             [% UNLESS cannotedit %]
                 [% IF closed %]
-                    <div class="btn-group"><a id="reopen" class="btn btn-default" href="#"><i class="fa-solid fa-arrow-rotate-right"></i> Reopen</a></div>
+                    <div class="btn-group">
+                        <form action="subscription-detail.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-reopen" />
+                            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                            <button type="submit" class="btn btn-default" id="reopen"><i class="fa-solid fa-arrow-rotate-right"></i> Reopen</button>
+                        </form>
+                    </div>
                 [% ELSE %]
-                    <div class="btn-group"><a id="close" class="btn btn-default" href="#"><i class="fa fa-times-circle"></i> Close</a></div>
+                    <div class="btn-group">
+                        <form action="subscription-detail.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-close" />
+                            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                            <button type="submit" class="btn btn-default" id="close"><i class="fa fa-times-circle"></i> Close</button>
+                        </form>
+                    </div>
                 [% END %]
             [% END %]
         [% END %]

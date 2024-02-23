@@ -40,9 +40,9 @@ my $dbh            = C4::Context->dbh;
 my $subscriptionid = $query->param('subscriptionid');
 my $subscription = Koha::Subscriptions->find( $subscriptionid );
 
-if ( $op and $op eq "close" ) {
+if ( $op and $op eq "cud-close" ) {
     C4::Serials::CloseSubscription( $subscriptionid );
-} elsif ( $op and $op eq "reopen" ) {
+} elsif ( $op and $op eq "cud-reopen" ) {
     C4::Serials::ReopenSubscription( $subscriptionid );
 }
 
