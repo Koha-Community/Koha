@@ -129,7 +129,7 @@
                             let rendered = '';
                             if ( row.type == 'QUOTE' || row.type == 'ORDERS' ) {
                                 if ( row.basket_id ) {
-                                    rendered = '<a href="/cgi-bin/koha/acqui/basket.pl?basketno='+row.basked_id+'">'+_("Basket")+': '+row.basket_id+'</a>';
+                                    rendered = '<a href="/cgi-bin/koha/acqui/basket.pl?basketno='+row.basket_id+'">'+_("Basket")+': '+row.basket_id+'</a>';
                                 }
                             } else {
                                 rendered = '<a href="/cgi-bin/koha/acqui/invoices.pl?message_id='+row.id+'&op=do_search">'+_("Invoices")+'</a>';
