@@ -69,10 +69,10 @@
                     <i class="fa fa-code"></i> Run with template <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    [% FOREACH t IN templates %]
+                    [% FOREACH tmpl IN templates %]
                         <li>
-                            <a id="runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run%20this%20report&amp;template=[% t.id | html %][% PROCESS params %]">
-                                [% t.name | html %]
+                            <a id="runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run%20this%20report&amp;template=[% tmpl.id | html %][% PROCESS params %]">
+                                [% tmpl.name | html %]
                             </a>
                         </li>
                     [% END %]
