@@ -49,7 +49,7 @@ $template->param(
 );
 
 my $suggestions = [
-    Koha::Suggestions->search_limited( { suggestedby => $borrowernumber },
+    Koha::Suggestions->search_limited( { suggestedby => $borrowernumber, archived => 0 },
         { prefetch => 'managedby' } )->as_list
 ];
 
