@@ -85,13 +85,15 @@
                                 </div>
                             </form>
                             <div id="batch-manage" class="action">
-                                <a class="btn btn-default" id="additems" href="#"><i class="fa fa-plus"></i> Add patron(s)</a>[% IF ( table_loop ) %]
+                                <a class="btn btn-default" id="additems" href="#"><i class="fa fa-plus"></i> Add patron(s)</a>
+                                [% IF ( table_loop ) %]
                                 <a class="btn btn-default" id="savedesc" href="#" data-batch_id="[% batch_id | html %]"><i class="fa fa-save"></i> Save description</a>
                                 <a class="btn btn-default" id="removeitems" href="#"><i class="fa fa-trash-can"></i> Remove selected patrons</a>
                                 <a class="btn btn-default" id="deletebatch" href="#"><i class="fa fa-minus-square"></i> Delete batch</a>
                                 <a class="btn btn-default" id="deduplicate" href="#"><i class="fa fa-minus"></i> Remove duplicates</a>
                                 <a class="btn btn-default" id="exportitems" href="#"><i class="fa-solid fa-share-from-square"></i> Export selected card(s)</a>
-                                <a class="btn btn-default" id="exportbatch" href="#"><i class="fa-solid fa-share-from-square"></i> Export card batch</a>[% END %]
+                                <a class="btn btn-default" id="exportbatch" href="#"><i class="fa-solid fa-share-from-square"></i> Export card batch</a>
+                                [% END %]
                             </div>
                             [% IF ( table_loop ) %]
                             <form method="get" name="items">
@@ -139,9 +141,9 @@
                                     </table>
                                 </div>
                             </form>
-                            <form id="remove_patron_form" action="/cgi-bin/koha/patroncards/edit-batch.pl" method="post">
+                            <form id="patron_form" action="/cgi-bin/koha/patroncards/edit-batch.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-remove" />
+                                <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="batch_id" value="" />
                                 <input type="hidden" name="label_id" value="" />
                             </form>
@@ -185,7 +187,7 @@
             if(document.items.action.length > 0) {
                 for (var i=0; i < document.items.action.length; i++) {
                     if (document.items.action[i].checked) {
-                        items.push("label_id=" +  document.items.action[i].value);
+                        items.push( document.items.action[i].value );
                     }
                 }
                 getstr = items.join("&");
@@ -199,7 +201,13 @@
             }
             var answer = confirm(msg);
             if (answer) {
-                window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id | html %]&amp;" + getstr;
+                $('#patron_form input[name="op"]').val('cud-remove');
+                $('#patron_form input[name="batch_id"]').val( [% batch_id | html %] );
+                $('#patron_form input[name="label_id"]').remove();
+                items.forEach( (item_id) => {
+                    $('#patron_form').append( '<input type="hidden" name="label_id" value="' + item_id + '" />' );
+                });
+                $('#patron_form').submit();
             } else {
                 return; // abort delete
             }
@@ -221,8 +229,11 @@
         }
 
         function DeDuplicate() {
-            window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id | html %]";
-        };
+            $('#patron_form input[name="op"]').val('cud-dedup');
+            $('#patron_form input[name="batch_id"]').val('[% batch_id | html %]');
+            $('#patron_form').submit();
+        }
+
         function Xport(mode) {
             if (mode == 'label') {
                 patroncards= new Array;
@@ -323,9 +334,10 @@
             });
             $(".delete").on("click", function(){
                 if( confirmDelete( _("Are you sure you want to delete this patron from the card batch?") ) ) {
-                    $('#remove_patron_form input[name="batch_id"]').val($(this).data('batch-id'));
-                    $('#remove_patron_form input[name="label_id"]').val($(this).data('label-id'));
-                    $('#remove_patron_form').submit();
+                    $('#patron_form input[name="op"]').val('cud-remove');
+                    $('#patron_form input[name="batch_id"]').val($(this).data('batch-id'));
+                    $('#patron_form input[name="label_id"]').val($(this).data('label-id'));
+                    $('#patron_form').submit();
                 }
             });
             $(".export").on("click", function(e){

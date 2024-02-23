@@ -114,7 +114,7 @@ if ($bor_num_list) {
         exit;
     }
 }
-elsif ($op eq 'de_duplicate') {
+elsif ( $op eq 'cud-dedup' ) {
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
     $duplicate_count = $batch->remove_duplicates();
     $duplicate_message = 1 if $duplicate_count != -1;
