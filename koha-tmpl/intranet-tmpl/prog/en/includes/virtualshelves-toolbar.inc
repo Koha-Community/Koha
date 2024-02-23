@@ -16,11 +16,11 @@
             <ul class="dropdown-menu">
                 <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=edit_form&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;referer=[% op | uri %]">Edit list</a></li>
                 <li>
-                    <a id="deleteshelf_toolbar" href="#">Delete list</a>
                     <form id="deleteshelf_toolbar_form" action="shelves.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-delete">
-                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]">
+                        <input type="hidden" name="op" value="cud-delete" />
+                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                        <button type="submit" class="btn btn-default delete-list">Delete list</button>
                     </form>
                 </li>
             </ul>

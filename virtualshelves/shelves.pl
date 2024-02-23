@@ -63,7 +63,7 @@ my ( $shelf, $shelfnumber, @messages, $allow_transfer );
 if ( $op eq 'add_form' ) {
     # Only pass default
     $shelf = { allow_change_from_owner => 1 };
-} elsif ( $op eq 'cud-edit_form' ) {
+} elsif ( $op eq 'edit_form' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
