@@ -56,11 +56,11 @@ my $multi_batch_count = scalar(@batch_ids);
 my $card_count = scalar(@label_ids);
 my $borrower_count = scalar(@borrower_numbers);
 
-if ($op eq 'cud-export') {
+if ($op eq 'cud-export') {    #FIXME Seems like a GET operation?
     if (@label_ids) {
         my $label_id_param = '&amp;label_id=';
         $label_id_param .= join ('&amp;label_id=',@label_ids);
-        push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),
+        push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),    #FIXME csv not supported, no script?
                          batch_id        => $batch_ids[0],
                          template_id     => $template_id,
                          layout_id       => $layout_id,
@@ -77,7 +77,7 @@ if ($op eq 'cud-export') {
     elsif (@borrower_numbers) {
         my $borrower_number_param = '&amp;borrower_number=';
         $borrower_number_param .= join ('&amp;borrower_number=',@borrower_numbers);
-        push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),
+        push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),    #FIXME csv not supported, no script?
                          template_id     => $template_id,
                          layout_id       => $layout_id,
                          layout_back_id  => $layout_back_id,
@@ -92,7 +92,7 @@ if ($op eq 'cud-export') {
     }
     elsif (@batch_ids) {
         foreach my $batch_id (@batch_ids) {
-           push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),
+           push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),    #FIXME csv not supported, no script?
                             batch_id        => $batch_id,
                             template_id     => $template_id,
                             layout_id       => $layout_id,
