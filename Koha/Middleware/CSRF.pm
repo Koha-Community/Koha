@@ -69,6 +69,9 @@ sub call {
         }
     }
 
+    #NOTE: It is essential to check for this environmental variable.
+    #NOTE: If we don't check for it, then we'll also throw an error for the "subrequest" that ErrorDocument uses to
+    #fetch the error page document. Then we'll wind up with a very ugly error page and not our pretty one.
     if ( $error && !$env->{'plack.middleware.Koha.CSRF'} ) {
 
         #NOTE: Other Middleware will take care of logging to correct place, as Koha::Logger doesn't know where to go here
