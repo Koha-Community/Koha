@@ -18,8 +18,7 @@ package Koha::Middleware::CSRF;
 use Modern::Perl;
 
 use parent qw(Plack::Middleware);
-
-use Koha::Logger;
+use Plack::Response;
 
 sub call {
     my ( $self, $env ) = @_;
@@ -41,7 +40,7 @@ sub call {
 
     my $original_op    = $req->param('op');
     my $request_method = $req->method // q{};
-    my ( $error );
+    my ($error);
     if ( $stateless_methods{$request_method} && defined $original_op && $original_op =~ m{^cud-} ) {
         $error = sprintf "Programming error - op '%s' must not start with 'cud-' for %s", $original_op,
             $request_method;
@@ -70,10 +69,13 @@ sub call {
         }
     }
 
-    if ( $error ) {
-        Koha::Logger->get->warn( $error );
-        $env->{KOHA_ERROR} = $error;
-        $env->{PATH_INFO} = '/intranet/errors/403.pl';
+    if ( $error && !$env->{'plack.middleware.Koha.CSRF'} ) {
+
+        #NOTE: Other Middleware will take care of logging to correct place, as Koha::Logger doesn't know where to go here
+        warn $error;
+        $env->{'plack.middleware.Koha.CSRF'} = "BAD_CSRF";
+        my $res = Plack::Response->new( 403, [ 'Content-Type' => 'text/plain' ], ["Bad CSRF"] );
+        return $res->finalize;
     }
 
     return $self->app->($env);

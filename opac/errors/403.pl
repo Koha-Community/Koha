@@ -37,6 +37,10 @@ $template->param (
     admin => $admin,
     errno => 403,
 );
+my $csrf_error = $ENV{'plack.middleware.Koha.CSRF'};
+if ($csrf_error) {
+    $template->param( 'csrf_error' => 1 );
+}
 my $status = '403 Forbidden';
 if ( C4::Context->is_internal_PSGI_request() ) {
     $status = '200 OK';

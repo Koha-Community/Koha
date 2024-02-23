@@ -77,7 +77,6 @@ builder {
     enable "+Koha::Middleware::RealIP";
 
     mount '/opac'          => builder {
-        enable "+Koha::Middleware::CSRF";
         #NOTE: it is important that these are relative links
         enable 'ErrorDocument',
             400 => 'errors/400.pl',
@@ -94,10 +93,10 @@ builder {
             enable 'Log4perl', category => 'plack-opac';
             enable 'LogWarn';
         }
+        enable "+Koha::Middleware::CSRF";
         $opac;
     };
     mount '/intranet'      => builder {
-        enable "+Koha::Middleware::CSRF";
         #NOTE: it is important that these are relative links
         enable 'ErrorDocument',
             400 => 'errors/400.pl',
@@ -114,6 +113,7 @@ builder {
             enable 'Log4perl', category => 'plack-intranet';
             enable 'LogWarn';
         }
+        enable "+Koha::Middleware::CSRF";
         $intranet;
     };
     mount '/api/v1/app.pl' => builder {

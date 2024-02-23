@@ -36,6 +36,9 @@
             <li>You followed an outdated link e.g. from a search engine or a bookmark</li>
             <li>You tried to access a page that needs authentication</li>
             <li>An internal link in the client is broken and the page does not exist</li>
+            [% IF ( csrf_error ) %]
+            <li>A missing CSRF token</li>
+            [% END %]
         </ul>
         <h3>What's next?</h3>
         <ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;">

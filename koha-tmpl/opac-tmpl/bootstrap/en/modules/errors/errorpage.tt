@@ -48,6 +48,9 @@
 
                             [% IF ( errno == 403 ) %]
                                 <li>You are forbidden to view this page.</li>
+                                [% IF ( csrf_error ) %]
+                                    <li>A missing CSRF token</li>
+                                [% END %]
                             [% END %]
 
                             [% IF ( errno == 404 ) %]
