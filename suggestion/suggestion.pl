@@ -514,7 +514,7 @@ $template->param(patron_reason_loop=>$patron_reason_loop);
 my $sugg_budget_loop = [];
 my $sugg_budgets     = GetBudgetHierarchy();
 foreach my $r ( @{$sugg_budgets} ) {
-    next unless ( CanUserUseBudget( $borrowernumber, $r, $userflags ) );
+    next unless ( CanUserUseBudget( $librarian->unblessed, $r, $userflags ) );
     my $selected = ( $$suggestion_ref{budgetid} && $r->{budget_id} eq $$suggestion_ref{budgetid} ) ? 1 : 0;
     push @{$sugg_budget_loop},
       {
