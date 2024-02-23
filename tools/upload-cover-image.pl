@@ -98,7 +98,7 @@ $template->param(
 my $total = 0;
 my @results;
 
-if ( $op eq 'cud-process' & $fileID ) {
+if ( $op eq 'cud-process' && $fileID ) {
     my $upload = Koha::UploadedFiles->find( $fileID );
     if ( $filetype eq 'image' ) {
         my $fh       = $upload->file_handle;
