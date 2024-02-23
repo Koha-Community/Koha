@@ -41,10 +41,10 @@ unless ($auth_status eq 'ok') {
 }
 
 my $authtypecode = $input->param('authtypecode') || 'default';
-my $action = $input->param('action') || 'cud-export';
+my $op           = $input->param('op')           || 'export';
 
 ## Exporting
-if ($action eq 'cud-export' && $input->request_method() eq 'GET') {
+if ( $op eq 'export' ) {    # GET operation for downloading
     my $strXml = '';
     my $format = $input->param('type_export_' . $authtypecode);
     if ($authtypecode eq 'default') {
@@ -68,8 +68,7 @@ if ($action eq 'cud-export' && $input->request_method() eq 'GET') {
         print $input->header(-type => 'application/vnd.oasis.opendocument.spreadsheet', -attachment => 'export_' . $authtypecode . '.ods');
         print $strODS;
     }
-## Importing
-} elsif ($input->request_method() eq 'POST') {
+} elsif ( $op eq 'cud-import' ) {    # POST for importing
     my $ok = -1;
     my $fieldname = 'file_import_' . $authtypecode;
     if ($authtypecode eq 'default'){
