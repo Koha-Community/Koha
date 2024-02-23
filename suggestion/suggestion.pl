@@ -417,6 +417,9 @@ if ( $op eq 'else' ) {
               if $search_params->{$f} eq '__ANY__'
               || $search_params->{$f} eq '';
         }
+        for my $bi (qw (title author isbn publishercode copyrightdate collectiontitle)) {
+            $search_params->{$bi} = { 'LIKE' => "%" . $search_params->{$bi} . "%" } if $search_params->{$bi};
+        }
 
         $search_params->{archived} = 0 if !$filter_archived;
         my @suggestions = Koha::Suggestions->search_limited($search_params)->as_list;
