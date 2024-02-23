@@ -218,6 +218,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                         id_input = selects[0].getAttribute('id')+new_key;
                         selects[0].setAttribute('id',id_input);
                         selects[0].setAttribute('name',selects[0].getAttribute('name')+new_key);
+                        selects[0].selectedIndex = -1;
                     }catch(e2){ // it is a textarea if it s not a select or an input
                         var textareas = divs[i].getElementsByTagName('textarea');
                         if( textareas.length > 0 ){
@@ -377,6 +378,7 @@ function CloneSubfield(index, advancedMARCEditor){
         id_input = selects[i].getAttribute('id')+new_key;
         selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
         selects[i].setAttribute('name',selects[i].getAttribute('name')+new_key);
+        selects[i].selectedIndex = -1;
         linkid = id_input;
     }
 
