@@ -3,8 +3,8 @@
 <script>
     /* Some required variables from the template */
     var biblionumber = [% biblionumber | html %];
-    var count = [% count | html %];
-    var holdcount = [% holdcount | html %];
+    var count = [% count || 0 | html %];
+    var holdcount = [% holdcount || 0 | html %];
     [% SET orders = biblio.orders %]
     [% SET current   = Context.Scalar(orders, "filter_by_current") %]
     [% SET cancelled = Context.Scalar(orders, "filter_by_cancelled") %]
