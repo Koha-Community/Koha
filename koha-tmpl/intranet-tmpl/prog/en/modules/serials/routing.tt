@@ -162,7 +162,8 @@
                 data: {
                     subscriptionid: [% subscriptionid | html %],
                     borrowernumbers,
-                    op: 'add_new_recipients'
+                    op: 'cud-add_new_recipients',
+                    csrf_token: $('meta[name="csrf-token"]').attr('content'),
                 },
                 type: 'POST',
                 url: '/cgi-bin/koha/serials/routing.pl',
