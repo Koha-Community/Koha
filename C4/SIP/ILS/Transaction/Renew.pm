@@ -52,6 +52,7 @@ sub do_renew_for  {
         $self->renewal_ok(1);
     } else {
         $renewerror=~s/on_reserve/Item unavailable due to outstanding holds/;
+        $renewerror=~s/booked/Item is booked for another borrower/;
         $renewerror=~s/too_many/Item has reached maximum renewals/;
         $renewerror=~s/too_unseen/Item has reached maximum consecutive renewals without being seen/;
         $renewerror=~s/item_denied_renewal/Item renewal is not allowed/;
