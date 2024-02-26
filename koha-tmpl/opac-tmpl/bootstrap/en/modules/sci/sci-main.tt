@@ -109,11 +109,7 @@
                                         </tbody>
                                     </table>
                                     <div>
-                                        <form method="post" action="#" id="finish_form">
-                                            [% INCLUDE 'csrf-token.inc' %]
-                                            <legend class="sr-only">Finish</legend>
-                                            <button id="sci_finish_button" type="submit" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Finish</button>
-                                        </form>
+                                        <a href="/cgi-bin/koha/sci/sci-main.pl" id="sci_finish_button" class="btn btn-primary" role="button"><i class="fa fa-check" aria-hidden="true"></i> Finish</a>
                                     </div>
                             [% ELSE %]
                                 <div class="alert alert-warning">
