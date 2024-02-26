@@ -7,15 +7,29 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do(q{
-            INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES  ('item-level_booking', 1, '', 'enables item type level for future booking', 'YesNo');
-        });
-
-        $dbh->do(q{
+        $dbh->do(
+            q{
             ALTER TABLE itemtypes ADD IF NOT EXISTS bookable INT(1) DEFAULT 0
-        });
+        }
+        );
 
-        say $out "Added new system preference 'item-level_booking'";
         say $out "Added column 'itemtypes.bookable'";
+
+        $dbh->do(
+            q{
+            ALTER TABLE items MODIFY COLUMN bookable tinyint(1) DEFAULT NULL COMMENT 'nullable boolean value defining whether this this item is available for bookings or not'
+        }
+        );
+
+        say $out "Updated column 'items.bookable' allow nullable";
+
+        $dbh->do(
+            q{
+            ALTER TABLE deleteditems MODIFY COLUMN bookable tinyint(1) DEFAULT NULL COMMENT 'nullable boolean value defining whether this this item is available for bookings or not'
+        }
+        );
+
+        say $out "Updated column 'deleteditems.bookable' allow nullable";
+
     },
 };

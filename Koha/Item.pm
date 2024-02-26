@@ -1917,6 +1917,20 @@ sub effective_not_for_loan_status {
     return ( defined($itype_notforloan) && !$self->notforloan ) ? $itype_notforloan : $self->notforloan;
 }
 
+=head3 effective_bookable
+
+  my $bookable = $item->effective_bookable;
+
+Returns the effective bookability of the current item, be that item or itemtype level
+
+=cut
+
+sub effective_bookable {
+    my ($self) = @_;
+
+    return defined( $self->bookable ) ? $self->bookable : $self->itemtype->bookable;
+}
+
 =head3 orders
 
   my $orders = $item->orders();

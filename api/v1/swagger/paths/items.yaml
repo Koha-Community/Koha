@@ -22,6 +22,7 @@
           enum:
             - +strings
             - biblio
+            - effective_bookable
         collectionFormat: csv
       - $ref: "../swagger.yaml#/parameters/match"
       - $ref: "../swagger.yaml#/parameters/order_by"
@@ -88,6 +89,7 @@
           type: string
           enum:
             - +strings
+            - effective_bookable
         collectionFormat: csv
     consumes:
       - application/json
@@ -157,7 +159,7 @@
             * linked_analytics: The item has linked analytic records
             * not_same_branch: The item is blocked by independent branches
         schema:
-              $ref: "../swagger.yaml#/definitions/error"
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
