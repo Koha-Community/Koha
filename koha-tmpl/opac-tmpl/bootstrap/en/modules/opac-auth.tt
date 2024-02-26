@@ -210,12 +210,16 @@
                                 <form action="[% script_name | html %]" name="auth" id="auth" method="post" autocomplete="off">
                                     [% INCLUDE 'csrf-token.inc' %]
                             [% END %]
+                                <input type="hidden" name="op" value="cud-login" />
                                 <input type="hidden" name="koha_login_context" value="opac" />
 
                                 <div class="local-login">
                                     <fieldset class="brief">
                                         [% FOREACH INPUT IN INPUTS %]
                                             [% NEXT IF INPUT.name == 'logout.x' %]
+                                            [% NEXT IF INPUT.name == "op" %]
+                                            [% NEXT IF INPUT.name == "csrf_token" %]
+                                            [% NEXT IF INPUT.name == "koha_login_context" %]
                                             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
                                         [% END %]
                                         <div class="form-group">
