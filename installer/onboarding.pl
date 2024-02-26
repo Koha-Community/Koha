@@ -288,6 +288,8 @@ if ( $step == 5 ) {
                 recall_overdue_fine              => undef,
                 recall_shelf_time                => undef,
                 holds_pickup_period              => undef,
+                bookings_lead_period             => undef,
+                bookings_trail_period            => undef,
               }
         };
 

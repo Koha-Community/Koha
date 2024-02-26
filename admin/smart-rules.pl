@@ -138,11 +138,13 @@ elsif ($op eq 'cud-delete-branch-cat') {
             );
             Koha::CirculationRules->set_rules(
                 {
-                    branchcode   => undef,
-                    itemtype     => undef,
-                    rules        => {
+                    branchcode => undef,
+                    itemtype   => undef,
+                    rules      => {
                         holdallowed             => undef,
                         hold_fulfillment_policy => undef,
+                        bookings_lead_period    => undef,
+                        bookings_trail_period   => undef,
                         returnbranch            => undef,
                     }
                 }
@@ -174,11 +176,13 @@ elsif ($op eq 'cud-delete-branch-cat') {
         );
         Koha::CirculationRules->set_rules(
             {
-                branchcode   => $branch,
-                itemtype     => undef,
-                rules        => {
+                branchcode => $branch,
+                itemtype   => undef,
+                rules      => {
                     holdallowed             => undef,
                     hold_fulfillment_policy => undef,
+                    bookings_lead_period    => undef,
+                    bookings_trail_period   => undef,
                     returnbranch            => undef,
                 }
             }
@@ -203,11 +207,13 @@ elsif ($op eq 'cud-delete-branch-item') {
         if ($itemtype eq "*") {
             Koha::CirculationRules->set_rules(
                 {
-                    branchcode   => undef,
-                    itemtype     => undef,
-                    rules        => {
+                    branchcode => undef,
+                    itemtype   => undef,
+                    rules      => {
                         holdallowed             => undef,
                         hold_fulfillment_policy => undef,
+                        bookings_lead_period    => undef,
+                        bookings_trail_period   => undef,
                         returnbranch            => undef,
                     }
                 }
@@ -215,11 +221,13 @@ elsif ($op eq 'cud-delete-branch-item') {
         } else {
             Koha::CirculationRules->set_rules(
                 {
-                    branchcode   => undef,
-                    itemtype     => $itemtype,
-                    rules        => {
+                    branchcode => undef,
+                    itemtype   => $itemtype,
+                    rules      => {
                         holdallowed             => undef,
                         hold_fulfillment_policy => undef,
+                        bookings_lead_period    => undef,
+                        bookings_trail_period   => undef,
                         returnbranch            => undef,
                     }
                 }
@@ -228,11 +236,13 @@ elsif ($op eq 'cud-delete-branch-item') {
     } elsif ($itemtype eq "*") {
         Koha::CirculationRules->set_rules(
             {
-                branchcode   => $branch,
-                itemtype     => undef,
-                rules        => {
+                branchcode => $branch,
+                itemtype   => undef,
+                rules      => {
                     holdallowed             => undef,
                     hold_fulfillment_policy => undef,
+                    bookings_lead_period    => undef,
+                    bookings_trail_period   => undef,
                     returnbranch            => undef,
                 }
             }
@@ -240,11 +250,13 @@ elsif ($op eq 'cud-delete-branch-item') {
     } else {
         Koha::CirculationRules->set_rules(
             {
-                branchcode   => $branch,
-                itemtype     => $itemtype,
-                rules        => {
+                branchcode => $branch,
+                itemtype   => $itemtype,
+                rules      => {
                     holdallowed             => undef,
                     hold_fulfillment_policy => undef,
+                    bookings_lead_period    => undef,
+                    bookings_trail_period   => undef,
                     returnbranch            => undef,
                 }
             }
@@ -357,23 +369,27 @@ elsif ( $op eq 'cud-add' ) {
 
 }
 elsif ($op eq "cud-set-branch-defaults") {
-    my $categorycode  = $input->param('categorycode');
-    my $patron_maxissueqty = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
+    my $categorycode             = $input->param('categorycode');
+    my $patron_maxissueqty       = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
     $patron_maxonsiteissueqty = strip_non_numeric($patron_maxonsiteissueqty);
-    my $holdallowed   = $input->param('holdallowed');
+    my $holdallowed             = $input->param('holdallowed');
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
-    my $returnbranch  = $input->param('returnbranch');
-    my $max_holds = strip_non_numeric( scalar $input->param('max_holds') );
+    my $bookings_lead_period    = $input->param('bookings_lead_period');
+    my $bookings_trail_period   = $input->param('bookings_trail_period');
+    my $returnbranch            = $input->param('returnbranch');
+    my $max_holds               = strip_non_numeric( scalar $input->param('max_holds') );
 
     if ($branch eq "*") {
         Koha::CirculationRules->set_rules(
             {
-                itemtype     => undef,
-                branchcode   => undef,
-                rules        => {
+                itemtype   => undef,
+                branchcode => undef,
+                rules      => {
                     holdallowed             => $holdallowed,
                     hold_fulfillment_policy => $hold_fulfillment_policy,
+                    bookings_lead_period    => $bookings_lead_period,
+                    bookings_trail_period   => $bookings_trail_period,
                     returnbranch            => $returnbranch,
                 }
             }
@@ -391,11 +407,13 @@ elsif ($op eq "cud-set-branch-defaults") {
     } else {
         Koha::CirculationRules->set_rules(
             {
-                itemtype     => undef,
-                branchcode   => $branch,
-                rules        => {
+                itemtype   => undef,
+                branchcode => $branch,
+                rules      => {
                     holdallowed             => $holdallowed,
                     hold_fulfillment_policy => $hold_fulfillment_policy,
+                    bookings_lead_period    => $bookings_lead_period,
+                    bookings_trail_period   => $bookings_trail_period,
                     returnbranch            => $returnbranch,
                 }
             }
@@ -584,17 +602,21 @@ elsif ($op eq "cud-add-branch-item") {
     my $itemtype                = $input->param('itemtype');
     my $holdallowed             = $input->param('holdallowed');
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
+    my $bookings_lead_period    = $input->param('bookings_lead_period');
+    my $bookings_trail_period   = $input->param('bookings_trail_period');
     my $returnbranch            = $input->param('returnbranch');
 
     if ($branch eq "*") {
         if ($itemtype eq "*") {
             Koha::CirculationRules->set_rules(
                 {
-                    itemtype     => undef,
-                    branchcode   => undef,
-                    rules        => {
+                    itemtype   => undef,
+                    branchcode => undef,
+                    rules      => {
                         holdallowed             => $holdallowed,
                         hold_fulfillment_policy => $hold_fulfillment_policy,
+                        bookings_lead_period    => $bookings_lead_period,
+                        bookings_trail_period   => $bookings_trail_period,
                         returnbranch            => $returnbranch,
                     }
                 }
@@ -602,11 +624,13 @@ elsif ($op eq "cud-add-branch-item") {
         } else {
             Koha::CirculationRules->set_rules(
                 {
-                    itemtype     => $itemtype,
-                    branchcode   => undef,
-                    rules        => {
+                    itemtype   => $itemtype,
+                    branchcode => undef,
+                    rules      => {
                         holdallowed             => $holdallowed,
                         hold_fulfillment_policy => $hold_fulfillment_policy,
+                        bookings_lead_period    => $bookings_lead_period,
+                        bookings_trail_period   => $bookings_trail_period,
                         returnbranch            => $returnbranch,
                     }
                 }
@@ -615,11 +639,13 @@ elsif ($op eq "cud-add-branch-item") {
     } elsif ($itemtype eq "*") {
             Koha::CirculationRules->set_rules(
                 {
-                    itemtype     => undef,
-                    branchcode   => $branch,
-                    rules        => {
+                    itemtype   => undef,
+                    branchcode => $branch,
+                    rules      => {
                         holdallowed             => $holdallowed,
                         hold_fulfillment_policy => $hold_fulfillment_policy,
+                        bookings_lead_period    => $bookings_lead_period,
+                        bookings_trail_period   => $bookings_trail_period,
                         returnbranch            => $returnbranch,
                     }
                 }
@@ -627,11 +653,13 @@ elsif ($op eq "cud-add-branch-item") {
     } else {
         Koha::CirculationRules->set_rules(
             {
-                itemtype     => $itemtype,
-                branchcode   => $branch,
-                rules        => {
+                itemtype   => $itemtype,
+                branchcode => $branch,
+                rules      => {
                     holdallowed             => $holdallowed,
                     hold_fulfillment_policy => $hold_fulfillment_policy,
+                    bookings_lead_period    => $bookings_lead_period,
+                    bookings_trail_period   => $bookings_trail_period,
                     returnbranch            => $returnbranch,
                 }
             }

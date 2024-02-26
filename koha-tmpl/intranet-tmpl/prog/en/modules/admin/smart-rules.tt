@@ -633,6 +633,8 @@
                                 <th>Maximum total holds allowed (count)</th>
                                 <th>Hold policy</th>
                                 <th>Hold pickup library match</th>
+                                <th>Booking preparation period</th>
+                                <th>Booking precaution period</th>
                                 <th>Return policy</th>
                                 <th class="noExport">Actions</th>
                             </tr>
@@ -641,6 +643,8 @@
                             [% SET rule_value = CirculationRules.Search( current_branch, undef , undef, 'max_holds', { want_rule => 1 } ) %]
                             [% SET holdallowed = CirculationRules.Search( current_branch, undef, undef, 'holdallowed', { want_rule => 1 } ) %]
                             [% SET hold_fulfillment_policy = CirculationRules.Search( current_branch, undef, undef, 'hold_fulfillment_policy', { want_rule => 1 }) %]
+                            [% SET bookings_lead_period = CirculationRules.Search( current_branch, undef, undef, 'bookings_lead_period', { want_rule => 1 }) %]
+                            [% SET bookings_trail_period = CirculationRules.Search( current_branch, undef, undef, 'bookings_trail_period', { want_rule => 1 }) %]
                             [% SET returnbranch = CirculationRules.Search( current_branch, undef, undef, 'returnbranch', { want_rule => 1 }) %]
                             [% SET default_checkout_hold_and_return_policy = ( patron_maxissueqty || patron_maxonsiteissueqty || rule_value || holdallowed || hold_fulfillment_policy || returnbranch ) %]
                             <tr>
@@ -758,6 +762,12 @@
                                             </option>
                                         [% END %]
                                     </select>
+                                </td>
+                                <td>
+                                    <input type="text" name="bookings_lead_period" class="bookinglead" size="3" value="[% bookings_lead_period | html %]">
+                                </td>
+                                <td>
+                                    <input type="text" name="bookings_trail_period" class="bookingtrail" size="3" value="[% bookings_trail_period | html %]">
                                 </td>
                                 <td>
                                     <select name="returnbranch">
@@ -1275,12 +1285,12 @@
                 </div>
 
                 <div id="holds-policy-by-item-type" class="page-section">
-                    <h2>[% IF humanbranch %]Holds policy by item type for [% Branches.GetName( humanbranch ) | html %][% ELSE %]Default holds policy by item type[% END %]</h2>
+                    <h2>[% IF humanbranch %]Holds and bookings policies by item type for [% Branches.GetName( humanbranch ) | html %][% ELSE %]Default holds and bookings policies by item type[% END %]</h2>
                     <p>
                         For this library, you can edit rules for given itemtypes, regardless of the patron's category.
                     </p>
                     <p>
-                        Currently, this means hold policies. The various policies have the following effects:
+                        Currently, this means holds and bookings policies. The various policies have the following effects:
                     </p>
                     <ul>
                         <li><strong>From any library:</strong> Patrons from any library may put this item on hold. <cite>(default if none is defined)</cite></li>
@@ -1307,6 +1317,8 @@
                                 <th>Item type</th>
                                 <th>Hold policy</th>
                                 <th>Hold pickup library match</th>
+                                <th>Booking preparation period</th>
+                                <th>Booking precaution period</th>
                                 <th>Return policy</th>
                                 <th>&nbsp;</th>
                             </tr>
@@ -1315,9 +1327,11 @@
                                 [% SET c = undef %]
                                 [% SET holdallowed = all_rules.$c.$it.holdallowed %]
                                 [% SET hold_fulfillment_policy = all_rules.$c.$it.hold_fulfillment_policy %]
+                                [% SET bookings_lead_period = all_rules.$c.$it.bookings_lead_period %]
+                                [% SET bookings_trail_period = all_rules.$c.$it.bookings_trail_period %]
                                 [% SET returnbranch = all_rules.$c.$it.returnbranch %]
 
-                                [% IF holdallowed || hold_fulfillment_policy || returnbranch %]
+                                [% IF holdallowed || hold_fulfillment_policy || returnbranch || bookings_lead_period || bookings_trail_period %]
                                     <tr>
                                         <td>
                                             [% i.translated_description | html %]
@@ -1345,6 +1359,12 @@
                                             [% ELSIF hold_fulfillment_policy == 'holdingbranch' %]
                                                 <span>item's holding library</span>
                                             [% END %]
+                                        </td>
+                                        <td>
+                                            <span>[% bookings_lead_period | html %]</span>
+                                        </td>
+                                        <td>
+                                            <span>[% bookings_trail_period | html %]</span>
                                         </td>
                                         <td>
                                             [% IF returnbranch == 'homebranch' %]
@@ -1401,6 +1421,12 @@
                                             item's holding library
                                         </option>
                                     </select>
+                                </td>
+                                <td>
+                                    <input type="text" name="bookings_lead_period" class="bookinglead" size="3" value="[% bookings_lead_period | html %]">
+                                </td>
+                                <td>
+                                    <input type="text" name="bookings_trail_period" class="bookingtrail" size="3" value="[% bookings_trail_period | html %]">
                                 </td>
                                 <td>
                                     <select name="returnbranch">
