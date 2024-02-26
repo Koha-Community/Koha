@@ -245,8 +245,7 @@
                 </div>
                 <fieldset class="rows">
                     <legend>Hold details</legend>
-                    <form action="/api/v1/clubs/[% club.id | html %]/holds" method="post" name="form" id="club-request-form">
-                        [% INCLUDE 'csrf-token.inc' %]
+                    <form action="/api/v1/clubs/[% club.id | html %]/holds" method="get" name="form" id="club-request-form">
 
                         [% IF ( multi_hold ) %]
                             <input type="hidden" name="request" value="any"/>
