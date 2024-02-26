@@ -926,4 +926,10 @@ sub message_broker_check {
     }
   }
 
+if ( $tab eq 'database' ) {
+    use Koha::Database::Auditor;
+    my $db_auditor = Koha::Database::Auditor->new( { is_cli => 0 } );
+    my $audit_diff = $db_auditor->run;
+    $template->param( audit_diff => $audit_diff, audit_warning => $db_auditor->get_warning );
+}
 output_html_with_http_headers $query, $cookie, $template->output;

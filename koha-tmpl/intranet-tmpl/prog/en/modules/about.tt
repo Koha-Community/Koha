@@ -41,6 +41,7 @@
                     [% WRAPPER tab_item linktab = 1 tabname = "translations" bt_active = tab == "translations" %] <span>Translations</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "history" bt_active = tab == "history" %] <span>Timeline</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "dedications" bt_active = tab == "dedications" %] <span>Dedications</span> [% END %]
+                    [% WRAPPER tab_item linktab = 1 tabname = "database" bt_active = tab == "database" %] <span>Database audit</span> [% END %]
                 [% END %]
                 [% WRAPPER tab_panels %]
                     [% SWITCH tab %]
@@ -52,6 +53,7 @@
                         [% CASE 'translations' %] [% PROCESS translations_panel %]
                         [% CASE 'history' %] [% PROCESS history_panel %]
                         [% CASE 'dedications' %] [% PROCESS dedications_panel %]
+                        [% CASE 'database' %] [% PROCESS database_panel %]
                         [% CASE %] [% PROCESS about_panel %]
                     [% END %]
                 [% END %]
@@ -1349,4 +1351,15 @@
             mother of Simon and Jeremy, and grandmother of Ben, Toby, Anna, Charlotte and Billy.
         </p>
     [% END # tab=dedications %]
+[% END %]
+
+[% BLOCK database_panel %]
+    [% WRAPPER tab_panel tabname= "database" bt_active = 1 %]
+        <h2>Database audit</h2>
+        <p>Run the following SQL to fix the database:</p>
+        <code>
+            [% audit_diff | html %]
+        </code>
+        <p class="alert alert-warning">[% audit_warning | html %]</p>
+    [% END # tab=database %]
 [% END %]
