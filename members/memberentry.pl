@@ -100,11 +100,6 @@ my @messages;
 ## Deal with guarantor stuff
 $template->param( relationships => $patron->guarantor_relationships ) if $patron;
 
-my @relations = split /\|/, C4::Context->preference('borrowerRelationship'), -1;
-@relations = ('') unless @relations;
-my $empty_relationship_allowed = grep {$_ eq ""} @relations;
-$template->param( empty_relationship_allowed => $empty_relationship_allowed );
-
 my $guarantor_id = $input->param('guarantor_id');
 my $guarantor = undef;
 $guarantor = Koha::Patrons->find( $guarantor_id ) if $guarantor_id;

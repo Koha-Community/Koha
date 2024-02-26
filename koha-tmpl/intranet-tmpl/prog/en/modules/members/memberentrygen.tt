@@ -508,9 +508,9 @@ legend:hover {
                                                                 <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value="[% guarantor.borrowernumber | html %]"/>
                                                             </li>
 
-                                                            [% IF possible_relationships %]
+                                                            [% UNLESS norelationship %]
                                                                 <li>
-                                                                    [% UNLESS empty_relationship_allowed %]
+                                                                    [% IF mandatoryrelationship %]
                                                                         <label for="guarantor_relationship" class="required">Relationship: </label>
                                                                         <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
                                                                     [% ELSE %]
@@ -524,7 +524,7 @@ legend:hover {
                                                                             [% END %]
                                                                         [% END %]
                                                                     </select>
-                                                                    [% UNLESS empty_relationship_allowed %]
+                                                                    [% UNLESS mandatoryrelationship %]
                                                                         <span class="required">Required</span>
                                                                     [% END %]
                                                                 </li>
@@ -552,9 +552,9 @@ legend:hover {
                                                         <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value=""/>
                                                     </li>
 
-                                                    [% IF possible_relationships %]
+                                                    [% UNLESS norelationship %]
                                                         <li>
-                                                            [% UNLESS empty_relationship_allowed %]
+                                                            [% IF mandatoryrelationship %]
                                                                 <label for="guarantor_relationship" class="required">Relationship: </label>
                                                                 <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
                                                             [% ELSE %]
@@ -568,7 +568,7 @@ legend:hover {
                                                                     [% END %]
                                                                 [% END %]
                                                             </select>
-                                                            [% UNLESS empty_relationship_allowed %]
+                                                            [% IF mandatoryrelationship %]
                                                                 <span class="required">Required</span>
                                                             [% END %]
                                                         </li>
@@ -665,21 +665,27 @@ legend:hover {
                                                 [% END # /UNLESS noaltcontactfirstname %]
 
                                                 [% UNLESS norelationship %]
-                                                    [% IF possible_relationships %]
-                                                        <li>
+                                                    <li>
+                                                        [% IF mandatoryrelationship %]
+                                                            <label for="relationship" class="required">Relationship: </label>
+                                                            <select class="relationship" name="relationship" required="required">
+                                                        [% ELSE %]
                                                             <label for="relationship">Relationship: </label>
                                                             <select class="relationship" name="relationship">
-                                                                <option value=""></option>
-                                                                [% FOREACH pr IN possible_relationships.split('\|') %]
-                                                                    [% IF pr == borrower_data.relationship %]
-                                                                        <option value="[% pr | html %]" selected="selected">[% pr | html %]</option>
-                                                                    [% ELSE %]
-                                                                        <option value="[% pr | html %]">[% pr | html %]</option>
-                                                                    [% END %]
+                                                        [% END %]
+                                                            <option value=""></option>
+                                                            [% FOREACH pr IN possible_relationships.split('\|') %]
+                                                                [% IF pr == borrower_data.relationship %]
+                                                                    <option value="[% pr | html %]" selected="selected">[% pr | html %]</option>
+                                                                [% ELSE %]
+                                                                    <option value="[% pr | html %]">[% pr | html %]</option>
                                                                 [% END %]
-                                                            </select>
-                                                        </li>
-                                                    [% END #/IF possible_relationships %]
+                                                            [% END %]
+                                                        </select>
+                                                        [% IF mandatoryrelationship %]
+                                                            <span class="required">Required</span>
+                                                        [% END %]
+                                                    </li>
                                                 [% END # /UNLESS norelationship %]
                                             </ol>
                                         </fieldset> <!-- /#non_patron_guarantor -->
@@ -1943,9 +1949,11 @@ legend:hover {
                            new_field.appendTo("#quick_add_list");
                        } else {
                            let orig_input_id = orig_li.children("input,textarea,select").attr("id");
-                           let new_field = orig_li.clone();
-                           new_field.children("#"+orig_input_id).attr("id",orig_input_id + "_quick_add");
-                           new_field.appendTo("#quick_add_list");
+                           if ( orig_input_id ) {
+                               let new_field = orig_li.clone();
+                               new_field.children("#"+orig_input_id).attr("id",orig_input_id + "_quick_add");
+                               new_field.appendTo("#quick_add_list");
+                           }
                            [% UNLESS mandatorypassword %]
                                  if( input_label == 'password' ){
                                      let orig_p2 = $("#entryform label[for='password2']").parent();
