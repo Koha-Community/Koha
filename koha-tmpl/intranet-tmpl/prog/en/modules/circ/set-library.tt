@@ -72,10 +72,12 @@ Updated:<ul>
     [% END %]
     </ul>
 <form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]">
+    [% INCLUDE 'csrf-token.inc' %]
     <div class="noshow">
         [% FOREACH recycle_loo IN recycle_loop %]
             [% SET param = recycle_loo.param %]
             [% NEXT IF param == 'op' %]
+            [% NEXT IF param == 'csrf_token' %]
             [% IF param == 'original_op' %][% param = 'op' %][% END %]
             <input type="text" name="[% param | html %]" value="[% recycle_loo.value | html %]" />
             [% IF param == 'op' %][% SET has_op = 1 %][% END %]
