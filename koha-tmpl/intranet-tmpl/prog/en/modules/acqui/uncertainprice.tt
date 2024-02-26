@@ -88,8 +88,7 @@
 
         <div class="page-section">
             <h2>Order lines with uncertain prices</h2>
-            <form action="[% scriptname | html %]" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form action="[% scriptname | html %]" method="get">
                 <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                 <label for="owner">Orders from:</label>
                 <select id="owner" name="owner">
