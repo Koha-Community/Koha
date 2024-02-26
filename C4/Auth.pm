@@ -640,10 +640,6 @@ sub get_template_and_user {
     $template->param( logged_in_user     => $patron );
     $template->param( sessionID          => $sessionID );
 
-    if ( $ENV{'plack.middleware.Koha.CSRF'} ) {
-        C4::Output::output_and_exit( $in->{query}, $cookie, $template, $ENV{'plack.middleware.Koha.CSRF'} );
-    }
-
     return ( $template, $borrowernumber, $cookie, $flags );
 }
 
