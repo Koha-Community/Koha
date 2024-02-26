@@ -529,6 +529,13 @@ $(document).ready(function() {
 
                             span_style = "display: none";
                             span_class = "renewals-allowed-recalled";
+                        } else if ( oObj.can_renew_error == "booked" ) {
+                            msg += "<span>"
+                                    + "<a href='/cgi-bin/koha/bookings/list.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Booked") + "</a>"
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed-booked";
                         } else if ( oObj.can_renew_error == "on_reserve" ) {
                             msg += "<span>"
                                     +"<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>"
