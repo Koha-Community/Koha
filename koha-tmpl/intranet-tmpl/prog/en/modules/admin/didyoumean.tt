@@ -68,8 +68,7 @@
             most significant to least significant, and check the box to enable those
             plugins that you want to use.
         </div>
-        <form action="/cgi-bin/koha/admin/didyoumean.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form action="/cgi-bin/koha/admin/didyoumean.pl" method="get">
             <fieldset id="didyoumeanopac">
                 <legend>OPAC</legend>
                 [% PROCESS pluginlist plugins=OPACpluginlist type='opac' %]
