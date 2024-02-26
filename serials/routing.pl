@@ -26,6 +26,7 @@ printed out
 =cut
 
 use Modern::Perl;
+use Try::Tiny;
 use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Auth qw( get_template_and_user );
@@ -68,7 +69,13 @@ if($op eq 'cud-delete'){
 
 if ( $op eq 'cud-add_new_recipients' ) {
     for my $borrowernumber ( split ':', $borrowernumbers ) {
-        addroutingmember( $borrowernumber, $subscriptionid );
+        try {
+            addroutingmember( $borrowernumber, $subscriptionid );
+        } catch {
+            if ( $_ !~ m{Duplicate entry .* for key 'subscriptionid'} ) {
+                warn $_;
+            }
+        };
     }
 }
 if($op eq 'cud-save'){
