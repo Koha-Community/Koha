@@ -92,7 +92,15 @@
 
             [% IF CAN_user_editcatalogue_delete_all_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                 [% IF ( count ) %]
-                    <li><a href="#" id="deleteallitems">Delete all items</a></li>
+                    <li>
+                        <form action="/cgi-bin/koha/cataloguing/additem.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-delallitems" />
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="searchid" value="[% searchid | html %]" />
+                        </form>
+                        <a href="#" id="deleteallitems">Delete all items</a>
+                    </li>
                 [% ELSE %]
                     <li class="disabled"><a href="#" id="deleteallitems-disabled" data-toggle="tooltip" data-placement="left" title="This record has no items">Delete all items</a></li>
                 [% END %]

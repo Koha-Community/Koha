@@ -62,12 +62,12 @@ function confirm_deletion(link) {
 
 /* IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) */
 
-function confirm_items_deletion() {
+function confirm_items_deletion(link) {
     if ( holdcount > 0 ) {
         alert(__("%s hold(s) on this record. You must delete all holds before deleting all items.").format(holdcount));
     } else if ( count > 0 ) {
         if (confirm(__("Are you sure you want to delete the %s attached items?").format(count))) {
-            window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&biblionumber=" + biblionumber + (searchid ? "&searchid="+searchid : "");
+            return $(link).siblings('form').submit();
         } else {
             return false;
         }
@@ -88,7 +88,7 @@ $(document).ready(function() {
         return false;
     });
     $("#deleteallitems").click(function(){
-        confirm_items_deletion();
+        confirm_items_deletion(this);
         return false;
     });
     $("#printbiblio").click(function(){

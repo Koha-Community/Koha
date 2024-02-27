@@ -521,7 +521,7 @@ if ($op eq "cud-additem") {
         $nextop = "cud-additem";
     }
 #-------------------------------------------------------------------------------
-} elsif ($op eq "delallitems") {
+} elsif ($op eq "cud-delallitems") {
 #-------------------------------------------------------------------------------
     my $items = Koha::Items->search({ biblionumber => $biblionumber });
     while ( my $item = $items->next ) {
