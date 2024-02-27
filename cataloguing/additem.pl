@@ -486,7 +486,7 @@ if ($op eq "cud-additem") {
 #-------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
     $current_item = Koha::Items->find($itemnumber)->unblessed;
-    $nextop       = "saveitem";
+    $nextop       = "cud-saveitem";
 #-------------------------------------------------------------------------------
 } elsif ($op eq "dupeitem") {
 #-------------------------------------------------------------------------------
@@ -502,7 +502,7 @@ if ($op eq "cud-additem") {
 
     $nextop = "cud-additem";
 #-------------------------------------------------------------------------------
-} elsif ($op eq "delitem") {
+} elsif ($op eq "cud-delitem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
     my $item = Koha::Items->find($itemnumber);
@@ -547,7 +547,7 @@ if ($op eq "cud-additem") {
         exit;
     }
 #-------------------------------------------------------------------------------
-} elsif ($op eq "saveitem") {
+} elsif ($op eq "cud-saveitem") {
 #-------------------------------------------------------------------------------
 
     my $itemnumber = $input->param('itemnumber');

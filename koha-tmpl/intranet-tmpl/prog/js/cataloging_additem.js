@@ -134,6 +134,12 @@ $(document).ready(function(){
         });
     }
 
+    $(".delete").on("click", function(e){
+        e.preventDefault();
+        if ( confirmDelete(MSG_CONFIRM_DELETE_ITEM) ) {
+            return $(this).siblings('form').submit();
+        }
+    });
 });
 
 function CheckTemplateForm(f) {
@@ -198,8 +204,4 @@ function CheckMultipleAdd(f) {
 function Dopop(link,i) {
     var defaultvalue=document.forms[0].field_value[i].value;
     var newin=window.open(link+"&result=" + defaultvalue,"valuebuilder",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-function confirm_deletion() {
-    return confirm( MSG_CONFIRM_DELETE_ITEM );
 }

@@ -136,7 +136,16 @@
                                 <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
                                 <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item.itemnumber | uri %]" target="_blank" >Print label</a></li>
                                 [% UNLESS item.nomod %]
-                                    <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% item.biblionumber | html %]&amp;itemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]" onclick="return confirm_deletion();">Delete</a></li>
+                                    <li>
+                                        <form action="/cgi-bin/koha/cataloguing/additem.pl" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" name="op" value="cud-delitem" />
+                                            <input type="hidden" name="biblionumber" value="[% item.biblionumber | html %]" />
+                                            <input type="hidden" name="itemnumber" value="[% item.itemnumber | html %]" />
+                                            <input type="hidden" name="searchid" value="[% searchid | html %]" />
+                                        </form>
+                                        <a class="delete" href="#">Delete</a>
+                                    </li>
                                 [% END %]
                             [% END %]
                                 [% IF ( OPACBaseURL ) %]
@@ -182,7 +191,7 @@
         <input type="hidden" name="popup" value="1" />
     [% END %]
     <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
-    [% IF op != 'saveitem' %]
+    [% IF op != 'cud-saveitem' %]
         <h2 id="additema">Add item [% IF (circborrowernumber) %]<em>(fast cataloging)</em>[% END %]</h2>
     [% ELSE %]
         <h2 id="edititem">Edit item #[% itemnumber | html %][% IF ( barcode ) %] / Barcode [% barcode | html %][% END %]</h2>
@@ -251,7 +260,7 @@
         <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
     [% END %]
 
-[% IF item_groups.size && op != 'saveitem' && CAN_user_editcatalogue_manage_item_groups %]
+[% IF item_groups.size && op != 'cud-saveitem' && CAN_user_editcatalogue_manage_item_groups %]
     <fieldset class="rows">
         <legend><i class="fa fa-plus"></i> Add to item group</legend>
         [% FOREACH ig IN item_groups %]
@@ -280,7 +289,7 @@
     </fieldset>
 [% END %]
 
-<fieldset class="action">    [% IF op != 'saveitem' %]
+<fieldset class="action">    [% IF op != 'cud-saveitem' %]
     <input type="submit" name="phony_submit" value="phony_submit" id="phony_submit" style="display:none;" onclick="return false;" />
     <!-- Note : We use here a false submit button because we have several submit buttons and we don't want the user to believe they validated the adding of multiple items
 		when pressing the enter key, while in fact it is the first submit button that is validated, in our case the "add (single) item" button.
