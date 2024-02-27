@@ -372,7 +372,7 @@ elsif ( $step && $step == 3 ) {
             "error" => $error,
         );
     }
-    elsif ( $op eq 'updatestructure' ) {
+    elsif ( $op eq 'cud-updatestructure' ) {
         #
         # Not 1st install, the only sub-step : update database
         #

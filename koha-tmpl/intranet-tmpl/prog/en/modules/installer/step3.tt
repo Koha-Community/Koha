@@ -326,7 +326,12 @@
                     [% IF ( upgrading ) %]
                         <h1>Web installer &rsaquo; Update database</h1>
                         <p>We are upgrading from Koha [% dbversion | html %] to [% kohaversion | html %]</p>
-                        <p><a href="install.pl?step=3&amp;op=updatestructure" class="btn btn-primary">Update your database</a></p>
+                        <form action="/cgi-bin/koha/installer/install.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="step" value="3" />
+                            <input type="hidden" name="op" value="cud-updatestructure" />
+                            <p><input value="Update your database" class="btn btn-primary" type="submit" /></p>
+                        </form>
                     [% ELSE %]
                         <h1>Web installer &rsaquo; Install basic configuration settings</h1>
 
@@ -453,7 +458,14 @@
                         <p>Everything went okay. Update done.</p>
                         <p><a href="install.pl?step=3&amp;op=finished" class="btn btn-primary">Continue to log in to Koha</a></p>
                     [% ELSE %]
-                        <p><a href="install.pl?step=3&amp;op=updatestructure" class="btn btn-primary">Try again</a></p>
+                        <p>
+                            <form action="/cgi-bin/koha/installer/install.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="step" value="3" />
+                                <input type="hidden" name="op" value="cud-updatestructure" />
+                                <p><input value="Try again" class="btn btn-primary" type="submit" /></p>
+                            </form>
+                        </p>
                     [% END %]
                [% END # / IF updatestructure %]
             </div> <!-- / #installer-step3 -->
