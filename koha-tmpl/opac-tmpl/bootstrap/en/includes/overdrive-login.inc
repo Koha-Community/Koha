@@ -7,7 +7,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="#" method="post" id="overdrive-login-form">
+            <form action="#" id="overdrive-login-form">
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-body">
                         <fieldset class="brief">

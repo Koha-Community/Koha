@@ -193,6 +193,7 @@ KOHA.OverDriveCirculation = new function() {
     }
 
     function svc_ajax ( method, params, success_callback ) {
+        params.csrf_token = $('meta[name="csrf-token"]').attr('content');
         return $.ajax({
             method: method,
             dataType: "json",
@@ -218,7 +219,7 @@ KOHA.OverDriveCirculation = new function() {
     }
 
     function login(p) {
-        svc_ajax('get', { action: "login", password: p }, function(data) {
+        svc_ajax('post', { action: "cud-login", password: p }, function(data) {
             details = null;
             if( data.login_success ){
                 $(login_div).detach();
@@ -232,7 +233,7 @@ KOHA.OverDriveCirculation = new function() {
     }
 
     function logout (callback) {
-        svc_ajax('post', { action: "logout" }, function(data) {
+        svc_ajax('post', { action: "cud-logout" }, function(data) {
             details = null;
             callback(data);
         });
@@ -300,7 +301,7 @@ KOHA.OverDriveCirculation = new function() {
 
                 $(el).append( ajax_button( __("Check in"), function() {
                     if( confirm( __("Are you sure you want to return this item?") ) ) {
-                        item_action({action: "return", id: id}, el, copies_available + 1);
+                        item_action({action: "cud-return", id: id}, el, copies_available + 1);
                     }
                 }, "checkin") );
 
@@ -318,7 +319,7 @@ KOHA.OverDriveCirculation = new function() {
             if(copies_available && checkout_popup) {
                 $(el).append( ajax_button( __("Check out") , function() {
                     if( confirm( __("Are you sure you want to check out this item?") ) ) {
-                        svc_ajax('post', {action: "checkout", id: id}, function(data) {
+                        svc_ajax('post', {action: "cud-checkout", id: id}, function(data) {
                             if (data.checkouts) {
                                 details.checkouts = data.checkouts;
                             }
@@ -347,14 +348,14 @@ KOHA.OverDriveCirculation = new function() {
             }
             else if (!item) {
                 $(el).append( ajax_button( __("Place hold"), function() {
-                    item_action({action: "place-hold", id: id}, el, copies_available);
+                    item_action({action: "cud-place-hold", id: id}, el, copies_available);
                 }, "placehold") );
             }
 
             if (item) {
                 $(el).append( ajax_button( __("Cancel hold"), function() {
                     if( confirm( __("Are you sure you want to cancel this hold?") ) ) {
-                        item_action({action: "remove-hold", id: id}, el, copies_available);
+                        item_action({action: "cud-remove-hold", id: id}, el, copies_available);
                     }
                 }, "cancelhold") );
             }
@@ -399,7 +400,7 @@ KOHA.OverDriveCirculation = new function() {
         checkout_popup.find(".overdrive-checkout-submit").click(function(e) {
             e.preventDefault();
             var format = checkout_format_list.find("input[type='radio'][name='checkout-format']:checked").val();
-            item_action({action: "checkout-format", id: id, format: format}, el, copies_available);
+            item_action({action: "cud-checkout-format", id: id, format: format}, el, copies_available);
             $(this).unbind( e );
             checkout_popup.modal("hide");
         });

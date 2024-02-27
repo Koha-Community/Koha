@@ -44,7 +44,7 @@ my %data = (
 local $@;
 eval {
         {
-            $action eq 'login' && do {
+            $action eq 'cud-login' && do {
                 my $password = $cgi->param("password") // q{} ;
                 my $patron = Koha::Patrons->find({ userid => $user });
                 my $branch_info = $patron ? Koha::Library::OverDriveInfos->find( $patron->branchcode ) : undef;
@@ -64,7 +64,7 @@ eval {
             if ($od->is_logged_in) {
                 $data{is_logged_in} = JSON::true;
 
-                $action eq 'logout' && do {
+                $action eq 'cud-logout' && do {
                     $od->forget();
                     $data{login_url} = $od->auth_url($page_url);
                     $data{is_logged_in} = JSON::false;
@@ -78,7 +78,7 @@ eval {
                     last;
                 };
 
-                $action eq 'checkout' && do {
+                $action eq 'cud-checkout' && do {
                     my $id = $cgi->param('id')
                       or response_bad_request("No 'id' specified");
                     my $format = $cgi->param('format');
@@ -88,7 +88,7 @@ eval {
                     last;
                 };
 
-                $action eq 'checkout-format' && do {
+                $action eq 'cud-checkout-format' && do {
                     my $id = $cgi->param('id')
                       or response_bad_request("No 'id' specified");
                     my $format = $cgi->param('format')
@@ -105,7 +105,7 @@ eval {
                     last;
                 };
 
-                $action eq 'return' && do {
+                $action eq 'cud-return' && do {
                     my $id = $cgi->param('id')
                       or response_bad_request("No 'id' specified");
                     local $@;
@@ -115,7 +115,7 @@ eval {
                     last;
                 };
 
-                $action eq 'place-hold' && do {
+                $action eq 'cud-place-hold' && do {
                     my $id = $cgi->param('id')
                       or response_bad_request("No 'id' specified");
                     $data{action} = $od->place_hold($id);
@@ -123,7 +123,7 @@ eval {
                     last;
                 };
 
-                $action eq 'remove-hold' && do {
+                $action eq 'cud-remove-hold' && do {
                     my $id = $cgi->param('id')
                       or response_bad_request("No 'id' specified");
                     local $@;
