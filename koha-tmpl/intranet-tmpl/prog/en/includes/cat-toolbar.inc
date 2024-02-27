@@ -43,7 +43,7 @@
                     <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="recordtype" value="biblio" />
-                        <input type="hidden" name="op" value="list" />
+                        <input type="hidden" name="op" value="cud-list" />
                         <input type="hidden" name="bib_list" value="[% biblionumber | html %]" />
                         <button type="submit" class="btn btn-default" id="modifybiblio">Modify record using template</a>
                     </form>
