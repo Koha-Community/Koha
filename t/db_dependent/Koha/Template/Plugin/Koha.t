@@ -17,12 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Template::Context;
 use Template::Stash;
 
 use C4::Auth;
+use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::Template::Plugin::Koha;
 
@@ -46,4 +47,31 @@ subtest 'GenerateCSRF() tests' => sub {
     ok( Koha::Token->new->check_csrf( { session_id => $session->id, token => $token } ) );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'GenerateCSRF - New CSRF token generated everytime we need one' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $session = C4::Auth::get_session('');
+
+    my $stash   = Template::Stash->new( { sessionID => $session->id } );
+    my $context = Template::Context->new( { STASH => $stash } );
+
+    my $plugin = Koha::Template::Plugin::Koha->new($context);
+
+    my $token = $plugin->GenerateCSRF;
+
+    is( $plugin->GenerateCSRF, $token, 'the token is cached and no new one generate' );
+
+    Koha::Cache::Memory::Lite->flush();
+
+    isnt(
+        $plugin->GenerateCSRF, $token,
+        'new token generated after the cache is flushed'
+    );
+
+    $schema->storage->txn_rollback;
+
 };
