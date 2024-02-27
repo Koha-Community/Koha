@@ -219,13 +219,17 @@ sub ftp_download {
 
     my $msg_hash = $self->message_hash();
     my @downloaded_files;
-    my $ftp = Net::FTP->new(
+    my $port = $self->{account}->download_port ? $self->{account}->download_port : '21';
+    my $ftp  = Net::FTP->new(
         $self->{account}->host,
+        Port    => $port,
         Timeout => 10,
         Passive => 1
-      )
-      or return $self->_abort_download( undef,
-        "Cannot connect to $self->{account}->host: $EVAL_ERROR" );
+        )
+        or return $self->_abort_download(
+        undef,
+        "Cannot connect to $self->{account}->host: $EVAL_ERROR"
+        );
     $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex($self->{account}->password) )
       or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
     $ftp->cwd( $self->{account}->download_directory )
@@ -260,13 +264,17 @@ sub ftp_download {
 
 sub ftp_upload {
     my ( $self, @messages ) = @_;
-    my $ftp = Net::FTP->new(
+    my $port = $self->{account}->upload_port ? $self->{account}->upload_port : '21';
+    my $ftp  = Net::FTP->new(
         $self->{account}->host,
+        Port    => $port,
         Timeout => 10,
         Passive => 1
-      )
-      or return $self->_abort_download( undef,
-        "Cannot connect to $self->{account}->host: $EVAL_ERROR" );
+        )
+        or return $self->_abort_download(
+        undef,
+        "Cannot connect to $self->{account}->host: $EVAL_ERROR"
+        );
     $ftp->login( $self->{account}->username, Koha::Encryption->new->decrypt_hex($self->{account}->password) )
       or return $self->_abort_download( $ftp, "Cannot login: $ftp->message()" );
     $ftp->cwd( $self->{account}->upload_directory )
