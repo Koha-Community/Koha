@@ -2020,13 +2020,13 @@ sub is_superlibrarian {
 
 my $is_adult = $patron->is_adult
 
-Return true if the patron has a category with a type Adult (A) or Organization (I)
+Return true if the patron has a category with a type Adult (A), Organization (I) or Staff (S)
 
 =cut
 
 sub is_adult {
     my ( $self ) = @_;
-    return $self->category->category_type =~ /^(A|I)$/ ? 1 : 0;
+    return $self->category->category_type =~ /^(A|I|S)$/ ? 1 : 0;
 }
 
 =head3 is_child

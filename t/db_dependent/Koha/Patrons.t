@@ -1459,7 +1459,7 @@ subtest 'account_locked' => sub {
 };
 
 subtest 'is_child | is_adult' => sub {
-    plan tests => 8;
+    plan tests => 10;
     my $category = $builder->build_object(
         {
             class => 'Koha::Patron::Categories',
@@ -1508,21 +1508,36 @@ subtest 'is_child | is_adult' => sub {
             value => { categorycode => $category->categorycode }
         }
     );
+    $category = $builder->build_object(
+        {
+           class => 'Koha::Patron::Categories',
+           value => { category_type => 'S' }
+        }
+    );
+    my $patron_staff = $builder->build_object(
+        {
+           class => 'Koha::Patrons',
+           value => { categorycode => $category->categorycode }
+        }
+    );
     is( $patron_adult->is_adult, 1, 'Patron from category A should be considered adult' );
     is( $patron_adult_i->is_adult, 1, 'Patron from category I should be considered adult' );
     is( $patron_child->is_adult, 0, 'Patron from category C should not be considered adult' );
     is( $patron_other->is_adult, 0, 'Patron from category O should not be considered adult' );
+    is( $patron_staff->is_adult, 1, 'Patron from category S should be considered adult' );
 
     is( $patron_adult->is_child, 0, 'Patron from category A should be considered child' );
     is( $patron_adult_i->is_child, 0, 'Patron from category I should be considered child' );
     is( $patron_child->is_child, 1, 'Patron from category C should not be considered child' );
     is( $patron_other->is_child, 0, 'Patron from category O should not be considered child' );
+    is( $patron_staff->is_child, 0, 'Patron from category S should not be considered child' );
 
     # Clean up
     $patron_adult->delete;
     $patron_adult_i->delete;
     $patron_child->delete;
     $patron_other->delete;
+    $patron_staff->delete;
 };
 
 subtest 'overdues' => sub {
