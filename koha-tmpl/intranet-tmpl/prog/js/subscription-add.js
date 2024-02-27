@@ -422,7 +422,7 @@ function mana_search() {
     $("#mana_search").show();
 
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: "/cgi-bin/koha/svc/mana/search",
         data: {id: $("#biblionumber").val(), resource: 'subscription', usecomments: 1},
         dataType: "html",
@@ -461,7 +461,7 @@ function mana_use(mana_id){
     $.ajax( {
         type: "POST",
         url: "/cgi-bin/koha/svc/mana/use",
-        data: {id: mana_id, resource: 'subscription'},
+        data: {id: mana_id, resource: 'subscription', csrf_token: $('meta[name="csrf-token"]').attr('content')},
         dataType: "json",
     })
         .done(function(result){

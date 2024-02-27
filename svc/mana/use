@@ -36,7 +36,7 @@ my ( $auth_status ) =
   check_cookie_auth( $input->cookie('CGISESSID'),
     { serials => 'create_subscription' } );
 
-if ( $auth_status ne "ok" ) {
+if ( $auth_status ne "ok" || $input->request_method ne "POST" ) {
     exit 0;
 }
 

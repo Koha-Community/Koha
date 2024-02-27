@@ -6,7 +6,7 @@ function mana_increment(mana_id, resource, fieldvalue, stepvalue ) {
     $.ajax({
         type: "POST",
         url: "/cgi-bin/koha/svc/mana/increment",
-        data: {id: mana_id, resource: resource, field: fieldvalue, step: stepvalue},
+        data: {id: mana_id, resource: resource, field: fieldvalue, step: stepvalue, csrf_token: $('meta[name="csrf-token"]').attr('content')},
         datatype: "json",
     })
         .done(function() {
@@ -28,7 +28,7 @@ function mana_comment( target_id, manamsg, resource_type ) {
     $.ajax( {
         type: "POST",
         url: "/cgi-bin/koha/svc/mana/share",
-        data: { message: manamsg, resource: resource_type, resource_id: target_id },
+        data: { message: manamsg, resource: resource_type, resource_id: target_id, csrf_token: $('meta[name="csrf-token"]').attr('content') },
         dataType: "json",
     })
         .done(function( data ) {

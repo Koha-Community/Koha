@@ -2313,7 +2313,7 @@
             $.ajax( {
                 type:"POST",
                 url: "/cgi-bin/koha/svc/mana/use",
-                data: {id:mana_id, resource: 'report', saveinbase: 1},
+                data: {id:mana_id, resource: 'report', saveinbase: 1, csrf_token: $('meta[name="csrf-token"]').attr('content')},
                 dataType: "json",
             })
             .done( function (result){
