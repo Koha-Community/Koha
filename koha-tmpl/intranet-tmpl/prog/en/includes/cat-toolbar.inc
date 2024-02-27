@@ -56,7 +56,15 @@
 
             [% IF ( CAN_user_tools_items_batchmod ) %]
                 [% IF ( count ) %]
-                    <li><a id="batchedit" href="/cgi-bin/koha/tools/batchMod.pl?op=show&amp;biblionumber=[% biblionumber | html %]&amp;src=CATALOGUING">Edit items in batch</a></li>
+                    <li>
+                        <form action="/cgi-bin/koha/tools/batchMod.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-show" />
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="src" value="CATALOGUING" />
+                            <button id="batchedit" type="submit" class="btn btn-default" id="modifybiblio">Edit items in a batch</a>
+                        </form>
+                    </li>
                 [% ELSE %]
                     <li class="disabled"><a id="batchedit-disabled" href="#" data-toggle="tooltip" data-placement="left" title="This record has no items">Edit items in batch</a></li>
                 [% END %]
@@ -64,7 +72,16 @@
 
             [% IF ( CAN_user_tools_items_batchdel ) %]
                 [% IF ( count ) %]
-                    <li><a id="batchdelete" href="/cgi-bin/koha/tools/batchMod.pl?del=1&amp;op=show&amp;biblionumber=[% biblionumber | html %]&amp;src=CATALOGUING">Delete items in a batch</a></li>
+                    <li>
+                        <form action="/cgi-bin/koha/tools/batchMod.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-show" />
+                            <input type="hidden" name="del" value="1" />
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="src" value="CATALOGUING" />
+                            <button id="batchdelete" type="submit" class="btn btn-default" id="modifybiblio">Delete items in a batch</a>
+                        </form>
+                    </li>
                 [% ELSE %]
                     <li class="disabled"><a id="batchdelete-disabled" href="#" data-toggle="tooltip" data-placement="left" title="This record has no items">Delete items in a batch</a></li>
                 [% END %]
