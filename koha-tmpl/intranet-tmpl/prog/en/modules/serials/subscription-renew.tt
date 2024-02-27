@@ -17,8 +17,8 @@
 
 [% INCLUDE 'blocking_errors.inc' %]
 
-[% IF op == 'renew' OR op =='multi_renew' %]
-    [% IF op == 'renew' %]
+[% IF op == 'cud-renew' OR op =='cud-multi_renew' %]
+    [% IF op == 'cud-renew' %]
         <span>Subscription renewed.<span>
     [% ELSE %]
         <span>Subscriptions renewed.<span>
@@ -27,7 +27,24 @@
     <div id="closewindow">
         <a class="btn btn-default btn-default close" href="#">Close</a>
     </div>
-[% ELSE %]
+[% ELSIF op == 'multi_renew' %]
+
+    <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-multi_renew" />
+        Subscription renewal for:
+        <ul>
+        [% FOR subscription IN subscriptions %]
+            <li>
+                <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
+                [% subscription.bibliotitle | html %]
+            </li>
+        [% END %]
+        </ul>
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Submit" /></fieldset>
+    </form>
+
+[% ELSIF op == 'renew' %]
 
 <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
     [% INCLUDE 'csrf-token.inc' %]

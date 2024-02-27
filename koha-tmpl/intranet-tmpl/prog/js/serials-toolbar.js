@@ -1,7 +1,7 @@
 /* global subscriptionid __ */
 
 function popup(subscriptionid) {
-    newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes');
+    newin=window.open("subscription-renew.pl?op=renew&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes');
 }
 
  $(document).ready(function() {

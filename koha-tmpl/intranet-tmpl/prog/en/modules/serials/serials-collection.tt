@@ -125,7 +125,7 @@
                                         [% END %]
                                     [% END %]
                                     [% IF ( subscription.abouttoexpire || subscription.subscriptionexpired) %]
-                                        <a class="btn btn-default btn-xs subscription_renew" data-subscriptionid="[% subscription.subscriptionid | html %]" href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa-solid fa-rotate"></i> Renew</a>
+                                        <a class="btn btn-default btn-xs subscription_renew" data-subscriptionid="[% subscription.subscriptionid | html %]" href="/cgi-bin/koha/serials/subscription-renew.pl?op=renew&subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa-solid fa-rotate"></i> Renew</a>
                                     [% END %]
                                 [% ELSE %]
                                     &nbsp;

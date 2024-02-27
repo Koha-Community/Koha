@@ -58,7 +58,6 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 my $query = CGI->new;
 my $dbh   = C4::Context->dbh;
 
-my $mode           = $query->param('mode') || q{};
 my $op             = $query->param('op') || 'display';
 my @subscriptionids = $query->multi_param('subscriptionid');
 my $branchcode     = $query->param('branchcode');
@@ -66,7 +65,6 @@ my $sublength = $query->param('sublength');
 my $subtype = $query->param('subtype');
 my ($numberlength, $weeklength, $monthlength);
 
-my $done = 0;    # for after form has been submitted
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "serials/subscription-renew.tt",
@@ -101,7 +99,7 @@ if ( $op eq "cud-renew" ) {
             branchcode     => $branchcode
         }
     );
-} elsif ( $op eq 'multi_renew' ) {
+} elsif ( $op eq 'cud-multi_renew' ) {
     for my $subscriptionid ( @subscriptionids ) {
         my $subscription = GetSubscription( $subscriptionid );
         next unless $subscription;
@@ -117,7 +115,21 @@ if ( $op eq "cud-renew" ) {
             }
         );
     }
-} else {
+}
+elsif ( $op eq 'multi_renew' ) {
+    my @subscriptions;
+    for my $subscriptionid ( @subscriptionids ) {
+        my $subscription = GetSubscription( $subscriptionid );
+        next unless $subscription;
+        next if $subscription->{cannotedit};
+        push @subscriptions, $subscription;
+    }
+
+    $template->param(
+        subscriptions => \@subscriptions,
+    );
+}
+else {
     my $subscriptionid = $subscriptionids[0];
     my $subscription = GetSubscription($subscriptionid);
     output_and_exit( $query, $cookie, $template, 'unknown_subscription') unless $subscription;

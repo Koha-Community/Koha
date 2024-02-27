@@ -133,7 +133,7 @@
             </td>
             <td class="actions">
                 <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa-solid fa-rotate"></i> Renew</a>
+                <a href="#" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa-solid fa-rotate"></i> Renew</a>
             </td>
         </tr>
     [% END %]
@@ -159,7 +159,7 @@
             $(".renew_subscription").on("click",function(e){
                 e.preventDefault();
                 var subscriptionid = $(this).data("subscriptionid");
-                newin=window.open("/cgi-bin/koha/serials/subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
+                newin=window.open("/cgi-bin/koha/serials/subscription-renew.pl?op=renew&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
             });
             $('a.itemselection_action_renew').on("click", function(e){
                 e.preventDefault();
