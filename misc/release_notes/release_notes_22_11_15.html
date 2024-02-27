@@ -1,0 +1,303 @@
+<h1 id="releasenotesforkoha22.11.15">RELEASE NOTES FOR KOHA 22.11.15</h1>
+
+<p>27 févr. 2024</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 22.11.15 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-22.11.15.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 22.11.15 is a bugfix/maintenance release.</p>
+
+<p>It includes 9 bugfixes.</p>
+
+<p><strong>System requirements</strong></p>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha on the <a href="https://wiki.koha-community.org/wiki/System_requirements_and_recommendations">community wiki</a>.</p>
+
+<h4 id="securitybugs">Security bugs</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=29510">29510</a> objects.find should call search_limited if present</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34623">34623</a> Update jQuery-validate plugin to 1.20.0</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35890">35890</a> AutoLocation system preference + setting the library IP field - can still login and unexpected results</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35918">35918</a> Incorrect library used when AutoLocation configured using the same IP</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35941">35941</a> OPAC user can guess clubs of other users</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36072">36072</a> Can request articles even if ArticleRequests is off</li>
+</ul>
+
+<h2 id="bugfixes">Bugfixes</h2>
+
+<h3 id="authentication">Authentication</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36034">36034</a> cas_ticket is set to serialized patron object in session</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35518">35518</a> Call to C4::Context->userenv happens before it's gets populated breaks code logic in circulation</li>
+</ul>
+
+<h3 id="webservices">Web services</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34893">34893</a> ILS-DI can return the wrong patron for AuthenticatePatron</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><p><a href="http://koha-community.org/documentation/">Koha Documentation</a>
+As of the date of these release notes, the Koha manual is available in the following languages:</p></li>
+<li><p><a href="https://koha-community.org/manual/22.11//html/">Chinese (Traditional)</a> (61%)</p></li>
+<li><a href="https://koha-community.org/manual/22.11//html/">English</a> (100%)</li>
+<li><a href="https://koha-community.org/manual/22.11/en/html/">English (USA)</a></li>
+<li><a href="https://koha-community.org/manual/22.11/fr/html/">French</a> (38%)</li>
+<li><a href="https://koha-community.org/manual/22.11/de/html/">German</a> (40%)</li>
+<li><a href="https://koha-community.org/manual/22.11/hi/html/">Hindi</a> (74%)</li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<div style="column-count: 2;">
+
+- Arabic (ar_ARAB) (75%)
+- Armenian (hy_ARMN) (100%)
+- Bulgarian (bg_CYRL) (100%)
+- Chinese (Traditional) (81%)
+- Czech (70%)
+- Dutch (88%)
+- English (100%)
+- English (New Zealand) (69%)
+- English (USA)
+- English (United Kingdom) (99%)
+- Finnish (96%)
+- French (100%)
+- French (Canada) (96%)
+- German (100%)
+- German (Switzerland) (56%)
+- Greek (57%)
+- Hindi (100%)
+- Italian (92%)
+- Norwegian Bokmål (69%)
+- Persian (fa_ARAB) (75%)
+- Polish (99%)
+- Portuguese (Brazil) (99%)
+- Portuguese (Portugal) (88%)
+- Russian (93%)
+- Slovak (67%)
+- Spanish (100%)
+- Swedish (88%)
+- Telugu (77%)
+- Turkish (88%)
+- Ukrainian (79%)
+- hyw_ARMN (generated) (hyw_ARMN) (70%)
+</div>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 22.11.15 is</p>
+
+<ul>
+<li><p>Release Manager: Tomás Cohen Arazi</p></li>
+<li><p>Release Manager assistants:</p>
+
+<ul>
+<li>Jonathan Druart</li>
+<li>Martin Renvoize</li>
+</ul></li>
+<li><p>QA Manager: Katrin Fischer</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Aleisha Amohia</li>
+<li>Nick Clemens</li>
+<li>Jonathan Druart</li>
+<li>Lucas Gass</li>
+<li>Victor Grousset</li>
+<li>Kyle M Hall</li>
+<li>Joonas Kylmälä</li>
+<li>Andrew Nugged</li>
+<li>Martin Renvoize</li>
+<li>Marcel de Rooy</li>
+<li>Fridolin Somers</li>
+<li>Petro Vashchuk</li>
+<li>David Cook</li>
+</ul></li>
+<li><p>Topic Experts:</p>
+
+<ul>
+<li>UI Design -- Owen Leonard</li>
+<li>Zebra -- Fridolin Somers</li>
+</ul></li>
+<li><p>Bug Wranglers:</p>
+
+<ul>
+<li>Aleisha Amohia</li>
+<li>Jake Deery</li>
+<li>Lucas Gass</li>
+<li>Séverine Queune</li>
+</ul></li>
+<li><p>Packaging Manager: Mason James</p></li>
+<li><p>Documentation Manager: David Nind</p></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>Donna Bachowski</li>
+<li>Aude Charillon</li>
+<li>Martin Renvoize</li>
+<li>Lucy Vaux-Harvey</li>
+</ul></li>
+<li><p>Translation Manager: Bernardo González Kriegel</p></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>Thomas Dukleth</li>
+<li>Katrin Fischer</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>22.05 -- Lucas Gass</li>
+<li>21.11 -- Arthur Suzuki</li>
+<li>21.05 -- Victor Grousset</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following individuals who contributed patches to Koha 22.11.15</p>
+
+<div style="column-count: 2;">
+
+- Aleisha Amohia (1)
+- Tomás Cohen Arazi (2)
+- Nick Clemens (1)
+- Frédéric Demians (4)
+- Jonathan Druart (7)
+- Andreas Jonsson (1)
+- Owen Leonard (1)
+- Martin Renvoize (4)
+- Marcel de Rooy (1)
+</div>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 22.11.15</p>
+
+<div style="column-count: 2;">
+
+- Athens County Public Libraries (1)
+- ByWater-Solutions (1)
+- Catalyst Open Source Academy (1)
+- Koha Community Developers (7)
+- Kreablo AB (1)
+- PTFS-Europe (4)
+- Rijksmuseum (1)
+- Tamil (4)
+- Theke Solutions (2)
+</div>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha</p>
+
+<div style="column-count: 2;">
+
+- Matt Blenkinsop (3)
+- Frédéric Demians (13)
+- Jonathan Druart (1)
+- Magnus Enger (2)
+- Lucas Gass (2)
+- Victor Grousset (1)
+- Kyle M Hall (7)
+- David Nind (1)
+- Martin Renvoize (7)
+- Marcel de Rooy (2)
+- Fridolin Somers (12)
+</div>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 22.11.x-security.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 27 févr. 2024 06:56:02.</p>
