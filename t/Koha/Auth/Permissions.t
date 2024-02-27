@@ -195,6 +195,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_parameters_manage_patron_attributes'              => 1,
         'CAN_user_parameters_manage_patron_categories'              => 1,
         'CAN_user_parameters_manage_patron_restrictions'            => 1,
+        'CAN_user_parameters_manage_record_sources'                 => 1,
         'CAN_user_parameters_manage_search_engine_config'           => 1,
         'CAN_user_parameters_manage_search_filters'                 => 1,
         'CAN_user_parameters_manage_search_targets'                 => 1,
