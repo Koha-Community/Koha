@@ -81,6 +81,12 @@ if ( $op eq "cud-renew" ) {
     # Make sure the subscription exists
     my $subscription = GetSubscription( $subscriptionid );
     output_and_exit( $query, $cookie, $template, 'unknown_subscription') unless $subscription;
+
+    if ($subscription->{cannotedit}){
+      carp "Attempt to renew subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+      print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
+    }
+
     my $startdate = output_pref( { str => scalar $query->param('startdate'), dateonly => 1, dateformat => 'iso' } );
     ($numberlength, $weeklength, $monthlength) = GetSubscriptionLength( $subtype, $sublength );
     ReNewSubscription(
@@ -99,6 +105,7 @@ if ( $op eq "cud-renew" ) {
     for my $subscriptionid ( @subscriptionids ) {
         my $subscription = GetSubscription( $subscriptionid );
         next unless $subscription;
+        next if $subscription->{cannotedit};
         ReNewSubscription(
             {
                 subscriptionid => $subscriptionid,
