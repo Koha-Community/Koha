@@ -86,7 +86,15 @@
                 [% ELSIF ( biblio.subscriptions.count ) %]
                     <li class="disabled"><a id="deletebiblio" data-toggle="tooltip" data-placement="left" title="[% biblio.subscriptions.count | html %] subscription(s) are attached to this record. You must delete all subscriptions before deleting this record." href="#">Delete record</a></li>
                 [% ELSE %]
-                    <li><a id="deletebiblio" data-order-manage="[% CAN_user_acquisition_order_manage | html %]" href="#">Delete record</a></li>
+                    <li>
+                        <form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="post">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-delete" />
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="searchid" value="[% searchid | html %]" />
+                        </form>
+                        <a id="deletebiblio" data-order-manage="[% CAN_user_acquisition_order_manage | html %]" href="#">Delete record</a>
+                    </li>
                 [% END %]
             [% END %]
 

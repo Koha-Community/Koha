@@ -52,7 +52,7 @@ function confirm_deletion(link) {
     }
     if (is_confirmed) {
         $("#deletebiblio").unbind('click');
-        window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&biblionumber=" + biblionumber + (searchid ? "&searchid="+searchid : "");
+        return $(link).siblings('form').submit();
     } else {
         return false;
     }
