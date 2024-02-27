@@ -53,7 +53,7 @@ my $basket = Koha::Acquisition::Baskets->find({ basketno => $basketno }, { prefe
 my $referrer = $input->param('referrer') || $input->referer;
 my $delete_biblio = $input->param('del_biblio') ? 1 : 0;
 
-if( $op eq "confirmcancel" ) {
+if( $op eq "cud-confirmcancel" ) {
     my $reason = $input->param('reason');
     my $order  = Koha::Acquisition::Orders->find($ordernumber);
     my @messages;

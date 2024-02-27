@@ -49,7 +49,7 @@
           <p>
             [% PROCESS 'av-build-dropbox.inc' name="reason", category="ORDER_CANCELLATION_REASON" default="0" %]
           </p>
-          <input type="hidden" name="op" value="confirmcancel" />
+          <input type="hidden" name="op" value="cud-confirmcancel" />
           <input type="hidden" value="[% ordernumber | html %]" name="ordernumber" />
           <input type="hidden" value="[% biblionumber | html %]" name="biblionumber" />
           <input type="hidden" value="[% basket.basketno | html %]" name="basketno" />
