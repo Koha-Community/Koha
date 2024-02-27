@@ -221,7 +221,7 @@ if ( $op eq 'cud-delete_confirm' ) {
         basketgroupname => $basket->{'basketname'},
     );
     }
-} elsif ($op eq 'reopen') {
+} elsif ($op eq 'cud-reopen') {
     ReopenBasket(scalar $query->param('basketno'));
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 }

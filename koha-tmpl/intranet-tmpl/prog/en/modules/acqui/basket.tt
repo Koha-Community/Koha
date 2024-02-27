@@ -192,7 +192,14 @@
                                             <div class="btn-group"><a href="#" class="btn btn-default disabled" id="reopenbutton"><i class="fa-solid fa-rotate"></i> Reopen basket</a></div>
                                         </div>
                                     [% ELSE %]
-                                        <div class="btn-group"><a href="#" class="btn btn-default" id="reopenbutton"><i class="fa-solid fa-rotate"></i> Reopen basket</a></div>
+                                        <div class="btn-group">
+                                            <form action="basket.pl" method="post" id="reopenform">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-reopen">
+                                                <input type="hidden" name="basketno" value="[% basketno | html %]">
+                                                <button type="submit" class="btn btn-default"><i class="fa-solid fa-rotate"></i> Reopen basket</button>
+                                            </form>
+                                        </div>
 
                                         [% PROCESS csv_export %]
                                     [% END %]
@@ -1117,17 +1124,6 @@
                 });
             });
         </script>
-        [% UNLESS ( grouped ) %]
-            <script>
-                function confirm_reopen() {
-                    var skip = [% IF ( skip_confirm_reopen ) %] 1 [% ELSE %] 0 [% END %];
-                    var is_confirmed = skip || confirm(_("Are you sure you want to reopen this basket?"));
-                    if (is_confirmed) {
-                        window.location = "/cgi-bin/koha/acqui/basket.pl?op=reopen&basketno=[% basketno | html %]";
-                    }
-                }
-            </script>
-        [% END # /UNLESS grouped %]
     [% END # /UNLESS (closedate) %]
     <script>
         $(document).ready(function() {
@@ -1144,9 +1140,11 @@
             var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "pagingType": "full"
             } ) );
-            $("#reopenbutton").on("click",function(e){
-                e.preventDefault();
-                confirm_reopen();
+            $("#reopenform").on("submit",function(e){
+                var skip = [% IF ( skip_confirm_reopen ) %] 1 [% ELSE %] 0 [% END %];
+                var is_confirmed = skip || confirm(_("Are you sure you want to reopen this basket?"));
+                if( is_confirmed ){ return true; }
+                else{ return false }
             });
             // Generates a dynamic link for exporting the selections data as CSV
             $("#exportbutton, #export-csv-menu a").click(function() {
