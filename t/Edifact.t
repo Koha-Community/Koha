@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
-use Test::More tests => 40;
+use Test::More tests => 41;
 use Koha::EDI;
 
 BEGIN { use_ok('Koha::Edifact') }
@@ -123,6 +123,9 @@ is( $y, 'ANF', 'Sequence code returned' );
 
 $y = $ol->girfield( 'stock_category', 4 );
 is( $y, 'RS', 'Copy stock category returned' );
+
+$y = $ol->girfield( 'library_rotation_plan', 0);
+is( $y, 'WRPC2', 'Library rotation plan returned' );
 
 # test internal routines for prices
 my $dp =  Koha::EDI::_discounted_price(33.0, 9);
