@@ -243,7 +243,7 @@
                                                 </td>
                                                 <td class="actions">
                                                   <a href="#" class="editrule btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                  <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% i || '*' | html %]&amp;categorycode=[% c || '*' | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                  <a href="#" class="delete btn btn-default btn-xs" data-itemtype="[% i || '*' | html %]" data-categorycode="[% c || '*' | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                 </td>
                                                 <td>
                                                     [% IF note.defined && note != '' %]
@@ -410,7 +410,7 @@
                                                 [% END %]
                                                 <td class="actions">
                                                   <a href="#" class="editrule btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                  <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% i || '*' | uri %]&amp;categorycode=[% c || '*' | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                  <a href="#" class="delete btn btn-default btn-xs" data-itemtype="[% i || '*' | html %]" data-categorycode="[% c || '*' | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                 </td>
                                         </tr>
                                     [% END %]
@@ -801,7 +801,7 @@
                                 <td class="actions">
                                     <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
                                     [% IF ( default_checkout_hold_and_return_policy ) %]
-                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch | html %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
+                                        <a href="#" class="delete-branch-cat btn btn-default btn-xs" data-categorycode="[% c || '*' | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-undo"></i> Unset</a>
                                     [% END %]
                                 </td>
                             </tr>
@@ -868,7 +868,7 @@
                                     </td>
 
                                     <td class="actions">
-                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% c | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                        <a href="#" class="delete-branch-cat btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                     </td>
                                 </tr>
                                 [% END %]
@@ -940,7 +940,7 @@
                                                 [% END %]
                                             </td>
                                             <td class="actions">
-                                                <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=del-waiting-hold-cancellation&amp;waiting_hold_cancellation_category=[% c | uri %]&amp;waiting_hold_cancellation_itemtype=[% i | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                <a href="#" class="del-waiting-hold-cancellation btn btn-default btn-xs" data-categorycode="[% c | html %]" data-itemtype="[% i | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                             </td>
                                         </tr>
                                     [% END %]
@@ -1011,7 +1011,7 @@
                                     </td>
 
                                     <td class="actions">
-                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=del-open-article-requests-limit&amp;categorycode=[% c | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                        <a href="#" class="del-open-article-requests-limit btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                     </td>
                                 </tr>
                                 [% END %]
@@ -1070,7 +1070,7 @@
                                         [% END %]
                                     </td>
                                     <td class="actions">
-                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=del-article-request-fee&amp;article_request_fee_category=[% c | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                        <a href="#" class="del-article-request-fee btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                     </td>
                                 </tr>
                                 [% END %]
@@ -1360,7 +1360,7 @@
                                             [% END %]
                                         </td>
                                         <td class="actions">
-                                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% i.itemtype | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                            <a href="#" class="delete-branch-item btn btn-default btn-xs" data-itemtype="[% i.itemtype | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                         </td>
                                     </tr>
                                 [% END %]
@@ -1416,6 +1416,15 @@
                             </tr>
                         </table>
                     </form>
+
+                    <form id="delete_form" action="/cgi-bin/koha/admin/smart-rules.pl" method="post">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="" />
+                        <input type="hidden" name="itemtype" value="" />
+                        <input type="hidden" name="categorycode" value="" />
+                        <input type="hidden" name="branch" value="" />
+                    </form>
+
                 </div>
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -1470,10 +1479,6 @@
 
         $(document).ready(function() {
             $('[data-toggle="popover"]').popover();
-
-            $(".delete").on("click",function(){
-                return confirmDelete(MSG_CONFIRM_DELETE);
-            });
 
             $("#clone_rules").on("click",function(){
                 var library_dropdown = document.getElementById("branch");
@@ -1596,6 +1601,81 @@
                 }
                 return true;
             });
+
+            $(".delete").on("click", function(e){
+                e.preventDefault();
+                if ( !confirmDelete(MSG_CONFIRM_DELETE) ) {
+                    return false;
+                }
+                let f = $("#delete_form");
+                f.find("[name='op']").val('cud-delete');
+                f.find("[name='itemtype']").val($(this).data('itemtype'));
+                f.find("[name='categorycode']").val($(this).data('categorycode'));
+                f.find("[name='branch']").val($(this).data('branch'));
+                return f.submit();
+            });
+
+            $(".delete-branch-cat").on("click", function(e){
+                e.preventDefault();
+                if ( !confirmDelete(MSG_CONFIRM_DELETE) ) {
+                    return false;
+                }
+                let f = $("#delete_form");
+                f.find("[name='op']").val('cud-delete-branch-cat');
+                f.find("[name='categorycode']").val($(this).data('categorycode'));
+                f.find("[name='branch']").val($(this).data('branch'));
+                return f.submit();
+            });
+
+            $(".del-waiting-hold-cancellation").on("click", function(e){
+                e.preventDefault();
+                if ( !confirmDelete(MSG_CONFIRM_DELETE) ) {
+                    return false;
+                }
+                let f = $("#delete_form");
+                f.find("[name='op']").val('cud-del-waiting-hold-cancellation');
+                f.find("[name='itemtype']").val($(this).data('itemtype'));
+                f.find("[name='categorycode']").val($(this).data('categorycode'));
+                f.find("[name='branch']").val($(this).data('branch'));
+                return f.submit();
+            });
+
+            $(".del-open-article-requests-limit").on("click", function(e){
+                e.preventDefault();
+                if ( !confirmDelete(MSG_CONFIRM_DELETE) ) {
+                    return false;
+                }
+                let f = $("#delete_form");
+                f.find("[name='op']").val('cud-del-open-article-requests-limit');
+                f.find("[name='categorycode']").val($(this).data('categorycode'));
+                f.find("[name='branch']").val($(this).data('branch'));
+                return f.submit();
+            });
+
+            $(".del-article-request-fee").on("click", function(e){
+                e.preventDefault();
+                if ( !confirmDelete(MSG_CONFIRM_DELETE) ) {
+                    return false;
+                }
+                let f = $("#delete_form");
+                f.find("[name='op']").val('cud-del-article-request-fee');
+                f.find("[name='categorycode']").val($(this).data('categorycode'));
+                f.find("[name='branch']").val($(this).data('branch'));
+                return f.submit();
+            });
+
+            $(".delete-branch-item").on("click", function(e){
+                e.preventDefault();
+                if ( !confirmDelete(MSG_CONFIRM_DELETE) ) {
+                    return false;
+                }
+                let f = $("#delete_form");
+                f.find("[name='op']").val('cud-delete-branch-item');
+                f.find("[name='itemtype']").val($(this).data('itemtype'));
+                f.find("[name='branch']").val($(this).data('branch'));
+                return f.submit();
+            });
+
         });
     </script>
 [% END %]

@@ -121,7 +121,7 @@ if ($op eq 'cud-delete') {
         }
     );
 }
-elsif ($op eq 'delete-branch-cat') {
+elsif ($op eq 'cud-delete-branch-cat') {
     my $categorycode  = $input->param('categorycode');
     if ($branch eq "*") {
         if ($categorycode eq "*") {
@@ -197,7 +197,7 @@ elsif ($op eq 'delete-branch-cat') {
         );
     }
 }
-elsif ($op eq 'delete-branch-item') {
+elsif ($op eq 'cud-delete-branch-item') {
     my $itemtype  = $input->param('itemtype');
     if ($branch eq "*") {
         if ($itemtype eq "*") {
@@ -519,7 +519,7 @@ elsif ( $op eq "cud-add-open-article-requests-limit" ) {
             }
         );
     }
-} elsif ( $op eq 'del-open-article-requests-limit' ) {
+} elsif ( $op eq 'cud-del-open-article-requests-limit' ) {
     my $categorycode = $input->param('categorycode');
     if ( $branch eq "*" ) {
         if ( $categorycode eq "*" ) {
@@ -555,7 +555,7 @@ elsif ( $op eq "cud-add-open-article-requests-limit" ) {
 }
 elsif ( $op eq "cud-set-article-request-fee" ) {
 
-    my $category = $input->param('article_request_fee_category');
+    my $category = $input->param('categorycode');
     my $fee      = strip_non_numeric( scalar $input->param('article_request_fee') );
 
     Koha::Exception->throw("No value passed for article request fee")
@@ -569,9 +569,9 @@ elsif ( $op eq "cud-set-article-request-fee" ) {
         }
     );
 
-} elsif ( $op eq 'del-article-request-fee' ) {
+} elsif ( $op eq 'cud-del-article-request-fee' ) {
 
-    my $category  = $input->param('article_request_fee_category');
+    my $category  = $input->param('categorycode');
 
     Koha::CirculationRules->set_rules(
         {   categorycode => ( $category eq  '*' ) ? undef : $category,
@@ -709,10 +709,10 @@ elsif ( $op eq 'cud-mod-refund-lost-item-fee-rule' ) {
         }
     );
 
-} elsif ( $op eq 'del-waiting-hold-cancellation' ) {
+} elsif ( $op eq 'cud-del-waiting-hold-cancellation' ) {
 
-    my $category = $input->param('waiting_hold_cancellation_category');
-    my $itemtype = $input->param('waiting_hold_cancellation_itemtype');
+    my $category = $input->param('categorycode');
+    my $itemtype = $input->param('itemtype');
 
     Koha::CirculationRules->set_rules(
         {   categorycode => ( $category eq '*' ) ? undef : $category,
