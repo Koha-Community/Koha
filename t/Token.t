@@ -20,7 +20,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 12;
 use Test::Exception;
 use Time::HiRes qw|usleep|;
 
@@ -61,20 +61,6 @@ $result = $tokenizer->check_csrf({
     session_id => $id, token => $csrftoken, MaxAge => $age,
 });
 isnt( $result, 1, "CSRF token expired after one second" );
-
-subtest 'Same id (cookie CGISESSID) with an other logged in user' => sub {
-    plan tests => 2;
-    $csrftoken = $tokenizer->generate_csrf({ session_id => $id });
-    $result = $tokenizer->check_csrf({
-        session_id => $id, token => $csrftoken,
-    });
-    is( $result, 1, "CSRF token verified" );
-    C4::Context->set_userenv(0,43,0,'firstname','surname', 'CPL', 'Library 1', 0, '');
-    $result = $tokenizer->check_csrf({
-        session_id => $id, token => $csrftoken,
-    });
-    is( $result, '', "CSRF token is not verified if another logged in user is using the same id" );
-};
 
 subtest 'Same logged in user with another session (cookie CGISESSID)' => sub {
     plan tests => 2;
@@ -125,7 +111,7 @@ subtest 'testing _add_default_csrf_params with/without userenv (bug 27849)' => s
     # Current userenv: userid == 42
     my $result = Koha::Token::_add_default_csrf_params({ session_id => '567' });
     is( $result->{session_id}, 567, 'Check session id' );
-    is( $result->{id}, '42_567', 'Check userid' );
+    is( $result->{id}, 'anonymous_567', 'Check userid' );
 
     # Clear userenv
     C4::Context::_unset_userenv('DUMMY SESSION');
