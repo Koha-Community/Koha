@@ -64,6 +64,10 @@
                 <div class="col-lg-2">
                     <div id="navigation"> [% INCLUDE 'navigation.inc' IsPatronPage=1 %] </div>
                 </div>
+            [% ELSIF (!logged_in_user) %]
+                <div class="col-lg-2">
+                    <div id="navigation"> </div>
+                </div>
             [% END %]
 
             [% SET column_class = "col order-first order-md-first order-lg-2" %]

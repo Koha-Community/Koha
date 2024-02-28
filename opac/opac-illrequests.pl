@@ -183,6 +183,7 @@ if ( $op eq 'list' ) {
 }
 
 $template->param(
+    unauthenticated_ill          => C4::Context->preference('ILLOpacUnauthenticatedRequest'),
     can_patron_place_ill_in_opac => $can_patron_place_ill_in_opac,
     message                      => $params->{message},
     illrequestsview              => 1,
