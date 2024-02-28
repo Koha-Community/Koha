@@ -128,7 +128,9 @@ sub capabilities {
         provides_batch_requests => sub { return 1; },
 
         # We can create ILL requests with data passed from the API
-        create_api => sub { $self->create_api(@_) }
+        create_api => sub { $self->create_api(@_) },
+
+        opac_unauthenticated_ill_requests => sub { return 1; }
     };
     return $capabilities->{$name};
 }
