@@ -243,7 +243,11 @@
                     "targets": [0,1,2,3,4],
                     "render": function (data, type, row, meta) {
                         if ( type == 'display' ) {
-                            return data.escapeHtml();
+                            if ( data != null ) {
+                                return data.escapeHtml();
+                            } else {
+                                return "";
+                            }
                         }
                         return data;
                     }
