@@ -38,11 +38,10 @@ subtest 'order by me.barcode should return 200' => sub {
 
     $patron->set_password( { password => $password, skip_validation => 1 } );
 
-    my $userid = $patron->userid;
+    my $userid     = $patron->userid;
     my $itemnumber = $bundle->itemnumber;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items/$itemnumber/bundled_items?_order_by=+me.barcode" )
-        ->status_is(200);
+    $t->get_ok("//$userid:$password@/api/v1/items/$itemnumber/bundled_items?_order_by=+me.barcode")->status_is(200);
 
     $schema->storage->txn_rollback;
 };
