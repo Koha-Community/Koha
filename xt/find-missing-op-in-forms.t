@@ -65,7 +65,7 @@ sub catch_missing_op {
         if ( $in_form && $line =~ m{</form} ) {
             $closed_form = 0;
             if ($has_op) {
-                unless ( $op_value =~ m{^cud-} ) {
+                if ( $op_value !~ m{^cud-} && $op_value !~ m{^\[%} ) {
                     push @errors, $line_open_form;
                 }
             } else {
