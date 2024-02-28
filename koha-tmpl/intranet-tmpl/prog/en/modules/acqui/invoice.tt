@@ -230,7 +230,8 @@
                                         [% END # /IF adjustment.encumber_open  %]
                                         [% UNLESS readonly %]
                                             <td>
-                                                <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id | html %]&invoiceid=[% invoiceid | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                <a class="btn btn-default btn-xs submit-form-link" href="#" data-adjustment_id="[% adjustment.adjustment_id | html %]" data-invoiceid="[% invoiceid | html %]" data-action="invoice.pl" data-method="post" data-op="cud-del_adj" data-confirmation="confirm_del_adj">
+                                                <i class="fa fa-trash-can"></i> Delete</a>
                                             </td>
                                         [% END %]
                                     </tr>
@@ -537,7 +538,9 @@
 </span> <!-- /#all_fund_dropdown -->
 
 [% MACRO jsinclude BLOCK %]
+    <script>var confirm_del_adj = _("Are you sure you want to delete this adjustment?");</script>
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
@@ -585,9 +588,6 @@
             $(".toggle_invoice_adjustment").on("click", function(e){
                 e.preventDefault();
                 $("#show_invoice_adjustment, #cancel_invoice_adjustment, #add_invoice_adjustment").toggle();
-            });
-            $("a.delete_adjustment").click(function(){
-                return ( confirm( _("Are you sure you want to delete this file ?") ) );
             });
 
             //keep a copy of all budgets before removing the inactives

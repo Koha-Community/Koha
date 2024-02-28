@@ -71,7 +71,7 @@ if ( C4::Context->preference('AcqEnableFiles') ) {
         tabletag => 'aqinvoices', recordid => $invoiceid );
 }
 
-if ( $op && $op eq 'close' ) {
+if ( $op && $op eq 'cud-close' ) {
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
     my @invoiceid = $input->multi_param('invoiceid');
@@ -84,7 +84,7 @@ if ( $op && $op eq 'close' ) {
         exit 0;
     }
 }
-elsif ( $op && $op eq 'reopen' ) {
+elsif ( $op && $op eq 'cud-reopen' ) {
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'reopen_closed_invoices' } );
     my @invoiceid = $input->multi_param('invoiceid');
@@ -154,7 +154,7 @@ elsif ( $op && $op eq 'cud-delete' ) {
         exit 0;
     }
 }
-elsif ( $op && $op eq 'del_adj' ) {
+elsif ( $op && $op eq 'cud-del_adj' ) {
 
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
