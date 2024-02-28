@@ -53,7 +53,7 @@
                         <xsl:otherwise>m</xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:value-of select="concat('      ',$leader06,$leader07,'         3u     ')"/>
+                <xsl:value-of select="concat('      ',$leader06,$leader07,' a       3u     ')"/>
             </xsl:element>
 
             <datafield tag="042" ind1=" " ind2=" ">
