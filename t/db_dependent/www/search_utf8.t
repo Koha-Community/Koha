@@ -92,8 +92,8 @@ if ( not defined $mock_zebra->{indexer_pid} ) {
 our $agent = Test::WWW::Mechanize->new( autocheck => 1 );
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
 $agent->form_name('loginform');
-$agent->field( 'userid', $ENV{KOHA_PASS} );
-$agent->field( 'password', $ENV{KOHA_USER} );
+$agent->field( 'login_userid', $ENV{KOHA_PASS} );
+$agent->field( 'login_password', $ENV{KOHA_USER} );
 $agent->field( 'branch',   '' );
 $agent->click_ok( '', 'login to staff interface' );
 

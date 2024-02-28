@@ -53,8 +53,8 @@ my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
 # Login
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'Load the intranet login page' );
 $agent->form_name('loginform');
-$agent->field( 'password', $password );
-$agent->field( 'userid',   $user );
+$agent->field( 'login_password', $password );
+$agent->field( 'login_userid',   $user );
 $agent->field( 'branch',   '' );
 $agent->click( '', 'Login to the intranet' );
 $agent->get_ok( "$intranet/cgi-bin/koha/about.pl", 'Load the about page' );

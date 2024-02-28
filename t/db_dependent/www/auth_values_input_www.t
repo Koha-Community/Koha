@@ -64,8 +64,8 @@ my ($category, $expected_base, $add_form_link_exists);
 
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'connect to intranet' );
 $agent->form_name('loginform');
-$agent->field( 'password', $password );
-$agent->field( 'userid',   $user );
+$agent->field( 'login_password', $password );
+$agent->field( 'login_userid',   $user );
 $agent->field( 'branch',   '' );
 $agent->click_ok( '', 'login to staff interface' );
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );

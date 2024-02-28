@@ -69,8 +69,8 @@ subtest 'checkauth() tests' => sub {
     $cgi->mock( 'cookie', sub { return; } );
     $cgi->mock( 'param', sub {
             my ( $self, $param ) = @_;
-            if ( $param eq 'userid' ) { return $db_user_id; }
-            elsif ( $param eq 'password' ) { return $db_user_pass; }
+            if ( $param eq 'login_userid' ) { return $db_user_id; }
+            elsif ( $param eq 'login_password' ) { return $db_user_pass; }
             else { return; }
         });
     $cgi->mock( 'request_method', sub { return 'POST' } );
@@ -95,8 +95,8 @@ subtest 'checkauth() tests' => sub {
             'param',
             sub {
                 my ( $self, $param ) = @_;
-                if    ( $param eq 'userid' )   { return $patron->userid; }
-                elsif ( $param eq 'password' ) { return $password; }
+                if    ( $param eq 'login_userid' )   { return $patron->userid; }
+                elsif ( $param eq 'login_password' ) { return $password; }
                 else                           { return; }
             }
         );
@@ -124,8 +124,8 @@ subtest 'checkauth() tests' => sub {
             'param',
             sub {
                 my ( $self, $param ) = @_;
-                if    ( $param eq 'userid' )   { return $patron->userid; }
-                elsif ( $param eq 'password' ) { return $password; }
+                if    ( $param eq 'login_userid' )   { return $patron->userid; }
+                elsif ( $param eq 'login_password' ) { return $password; }
                 else                           { return; }
             }
         );
@@ -155,8 +155,8 @@ subtest 'checkauth() tests' => sub {
             my $cgi = CGI->new;
 
             # Simulating the login form submission
-            $cgi->param( 'userid',   $patron->userid );
-            $cgi->param( 'password', $password );
+            $cgi->param( 'login_userid',   $patron->userid );
+            $cgi->param( 'login_password', $password );
 
             my ( $userid, $cookie, $sessionID, $flags, $template ) =
                 C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
@@ -177,8 +177,8 @@ subtest 'checkauth() tests' => sub {
         $cgi_mock->mock( 'request_method', sub { return 'POST' } );
         my $cgi  = CGI->new;
         # Simulating the login form submission
-        $cgi->param( 'userid',   $patron->userid );
-        $cgi->param( 'password', $password );
+        $cgi->param( 'login_userid',   $patron->userid );
+        $cgi->param( 'login_password', $password );
 
         my ( $userid, $cookie, $sessionID, $flags, $template ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
         is( $template->{VARS}->{password_has_expired}, 1 );
@@ -210,8 +210,8 @@ subtest 'checkauth() tests' => sub {
         $mock2->mock( 'cookie',         sub { return $sessionID; } );    # oversimplified..
         my $cgi = CGI->new;
 
-        $cgi->param( -name => 'userid',             -value => 'Bond' );
-        $cgi->param( -name => 'password',           -value => 'James Bond' );
+        $cgi->param( -name => 'login_userid',             -value => 'Bond' );
+        $cgi->param( -name => 'login_password',           -value => 'James Bond' );
         $cgi->param( -name => 'koha_login_context', -value => 1 );
         my ( $userid, $cookie, $flags, $template );
         ( $userid, $cookie, $sessionID, $flags, $template ) =
@@ -246,8 +246,8 @@ subtest 'checkauth() tests' => sub {
         my $cgi = CGI->new;
         my $password = 'Incr3d1blyZtr@ng93$';
         $patron2->set_password({ password => $password });
-        $cgi->param( -name => 'userid',             -value => $patron2->userid );
-        $cgi->param( -name => 'password',           -value => $password );
+        $cgi->param( -name => 'login_userid',             -value => $patron2->userid );
+        $cgi->param( -name => 'login_password',           -value => $password );
         $cgi->param( -name => 'koha_login_context', -value => 1 );
         my ( $userid, $cookie, $sessionID, $flags, $template ) =
             C4::Auth::checkauth( $cgi, 0, {}, 'opac', undef, undef, { do_not_print => 1 } );
@@ -263,8 +263,8 @@ subtest 'checkauth() tests' => sub {
         $session->flush;
         $previous_sessionID = $session->id;
         C4::Context->_new_userenv($previous_sessionID);
-        $cgi->param( -name => 'userid',             -value => $patron2->userid );
-        $cgi->param( -name => 'password',           -value => $password );
+        $cgi->param( -name => 'login_userid',             -value => $patron2->userid );
+        $cgi->param( -name => 'login_password',           -value => $password );
         $cgi->param( -name => 'koha_login_context', -value => 1 );
         ( $userid, $cookie, $sessionID, $flags, $template ) =
             C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
@@ -286,8 +286,8 @@ subtest 'checkauth() tests' => sub {
             'param',
             sub {
                 my ( $self, $param ) = @_;
-                if    ( $param eq 'userid' )    { return $patron->userid; }
-                elsif ( $param eq 'password' )  { return $password; }
+                if    ( $param eq 'login_userid' )    { return $patron->userid; }
+                elsif ( $param eq 'login_password' )  { return $password; }
                 elsif ( $param eq 'otp_token' ) { return $otp_token; }
                 elsif ( $param eq 'logout.x' )  { return $logout; }
                 else                            { return; }
@@ -394,8 +394,8 @@ subtest 'checkauth() tests' => sub {
             'param',
             sub {
                 my ( $self, $param ) = @_;
-                if    ( $param eq 'userid' )   { return $staff_user->userid; }
-                elsif ( $param eq 'password' ) { return $password; }
+                if    ( $param eq 'login_userid' )   { return $staff_user->userid; }
+                elsif ( $param eq 'login_password' ) { return $password; }
                 elsif ( $param eq 'branch' )   { return $branch->branchcode; }
                 else                           { return; }
             }
@@ -807,8 +807,8 @@ subtest 'checkauth & check_cookie_auth' => sub {
     is( $session, undef );
 
     # Simulating the login form submission
-    $cgi->param('userid', $patron->userid);
-    $cgi->param('password', $password);
+    $cgi->param('login_userid', $patron->userid);
+    $cgi->param('login_password', $password);
 
     # Logged in!
     ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
@@ -838,7 +838,7 @@ subtest 'checkauth & check_cookie_auth' => sub {
 
     # Logging out!
     $cgi->param('logout.x', 1);
-    $cgi->delete( 'userid', 'password' );
+    $cgi->delete( 'login_userid', 'login_password' );
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
 
@@ -871,8 +871,8 @@ subtest 'checkauth & check_cookie_auth' => sub {
     {
         # First logging in
         $cgi = CGI->new;
-        $cgi->param('userid', $patron->userid);
-        $cgi->param('password', $password);
+        $cgi->param('login_userid', $patron->userid);
+        $cgi->param('login_password', $password);
         ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 0, {catalogue => 1});
         is( $userid, $patron->userid );
         $first_sessionID = $sessionID;
@@ -1311,8 +1311,8 @@ subtest 'AutoLocation' => sub {
     my $auth = Test::MockModule->new('C4::Auth');
 
     # Simulating the login form submission
-    $cgi->param( 'userid',   $patron->userid );
-    $cgi->param( 'password', $password );
+    $cgi->param( 'login_userid',   $patron->userid );
+    $cgi->param( 'login_password', $password );
 
     $ENV{REMOTE_ADDR} = '127.0.0.1';
     my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
