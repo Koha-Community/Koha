@@ -212,8 +212,13 @@
 [% ELSIF TwoFA_prompt %]
     <form action="[% script_name | html %]" method="post" name="loginform" id="loginform" autocomplete="off">
         [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-login" />
         <input type="hidden" name="koha_login_context" value="intranet" />
         [% FOREACH INPUT IN INPUTS %]
+            [% NEXT IF INPUT.name == "op" %]
+            [% NEXT IF INPUT.name == "csrf_token" %]
+            [% NEXT IF INPUT.name == "koha_login_context" %]
+            [% NEXT IF INPUT.name == "branch" %]
             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
         [% END %]
         [% IF invalid_otp_token %]
