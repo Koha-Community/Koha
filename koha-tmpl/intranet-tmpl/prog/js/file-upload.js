@@ -5,6 +5,7 @@ function AjaxUpload ( input, progressbar, xtra, callback ) {
     $.each( input.prop('files'), function( dx, file ) {
         formData.append( "uploadfile", file );
     });
+    formData.append( "csrf_token", $('meta[name="csrf-token"]').attr('content') );
     var xhr= new XMLHttpRequest();
     var url= '/cgi-bin/koha/tools/upload-file.pl?' + xtra;
     progressbar.val( 0 );

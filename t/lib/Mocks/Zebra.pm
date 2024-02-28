@@ -23,6 +23,7 @@ use File::Path qw( rmtree );
 use JSON qw( decode_json );
 use C4::ImportBatch;
 use Koha::BackgroundJobs;
+use Koha::Token;
 
 =head1 NAME
 
@@ -130,8 +131,8 @@ sub load_records_ui {
     our $agent = Test::WWW::Mechanize->new( autocheck => 1 );
     $agent->get_ok( "$cgi_root/mainpage.pl", 'connect to intranet' );
     $agent->form_name('loginform');
-    $agent->field( 'userid', $ENV{KOHA_PASS} );
-    $agent->field( 'password', $ENV{KOHA_USER} );
+    $agent->field( 'login_userid', $ENV{KOHA_PASS} );
+    $agent->field( 'login_password', $ENV{KOHA_USER} );
     $agent->field( 'branch',   '' );
     $agent->click_ok( '', 'login to staff interface' );
 
@@ -141,9 +142,11 @@ sub load_records_ui {
     $agent->follow_link_ok( { text => 'Stage records for import' },
         'go to stage MARC' );
 
+    my $session_id = $agent->cookie_jar->get_cookies('koha.local')->{CGISESSID};
+    my $csrf_token = Koha::Token->new->generate_csrf({session_id => $session_id});
     $agent->post(
         "$cgi_root/tools/upload-file.pl?temp=1",
-        [ 'fileToUpload' => [$file], ],
+        [ 'fileToUpload' => [$file], csrf_token => $csrf_token ],
         'Content_Type' => 'form-data',
     );
     ok( $agent->success, 'uploaded file' );
@@ -156,7 +159,7 @@ sub load_records_ui {
         'reopen stage MARC page' );
     $agent->submit_form_ok(
         {
-            form_number => 5,
+            form_id => 'processfile',
             fields      => {
                 'uploadedfileid'  => $fileid,
                 'nomatch_action'  => 'create_new',
@@ -166,7 +169,9 @@ sub load_records_ui {
                 'comments'        => '',
                 'encoding'        => 'utf8',
                 'parse_items'     => '1',
-                'record_type'     => 'biblio'
+                'record_type'     => 'biblio',
+                op                => 'cud-stage',
+                csrf_token        => $csrf_token, # TODO May need to retrieve another token if we invalid them at some point
             }
         },
         'stage MARC'
