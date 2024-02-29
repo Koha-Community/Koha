@@ -10,7 +10,7 @@ return {
         # Do you stuffs here
         $dbh->do(
             q{
-            INSERT INTO systempreferences (variable, value, options, explanation, type) VALUES
+            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES
             ('DefaultLongOverdueBorrowerCategories', '', NULL, NULL, NULL),
             ('DefaultLongOverdueSkipBorrowerCategories', '', NULL, NULL, NULL);
         }
