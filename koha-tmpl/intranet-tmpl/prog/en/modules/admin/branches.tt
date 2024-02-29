@@ -733,13 +733,15 @@
             var syntax = $(this).data("syntax");
             $("#collapse_" + target ).show();
             if( syntax ){
+                var esLintConfig = { 'esversion': 6 };
+                var lint_type = syntax === 'javascript' ? esLintConfig : true;
                 var editor = CodeMirror.fromTextArea( document.getElementById( target ), {
                     lineNumbers: true,
                     mode: syntax,
                     lineWrapping: true,
                     viewportMargin: Infinity,
                     gutters: ["CodeMirror-lint-markers"],
-                    lint: true
+                    lint: lint_type,
                 });
                 editor.on("blur", function(){
                     editor.save();
