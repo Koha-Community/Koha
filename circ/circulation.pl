@@ -426,7 +426,7 @@ if (@$barcodes && $op eq 'cud-checkout') {
                 $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
                 $template_params->{NEEDSCONFIRMATION} = 1;
                 $confirm_required = 1;
-                if ( $needsconfirmation eq 'BOOKED_TO_ANOTHER' ) {
+                if ( $needsconfirmation_key eq 'BOOKED_TO_ANOTHER' ) {
                     my $reduceddue =
                         dt_from_string( $$needsconfirmation{$needsconfirmation_key}->start_date )->subtract( days => 1 );
                     $template_params->{reduceddue} = $reduceddue;

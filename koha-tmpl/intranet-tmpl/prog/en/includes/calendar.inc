@@ -184,6 +184,10 @@
         if ( $(input).data('flatpickr-disable-shortcuts') === true ) {
             options['plugins'] = [];
         }
+        let maxDate = $(input).data("flatpickr-maxdate");
+        if( typeof maxDate !== 'undefined' ) {
+            options['maxDate'] = new Date(maxDate);
+        }
 
         let fp = $(input).flatpickr(options);
 
