@@ -3,7 +3,7 @@
 [% USE Languages %]
 [% PROCESS 'i18n.inc' %]
 [% USE AdditionalContents %]
-[% SET OPACResultsSidebar = AdditionalContents.get( location => "OPACResultsSidebar", lang => lang, library => branchcode || default_branch ) %]
+[% SET OPACResultsSidebar = AdditionalContents.get( location => "OPACResultsSidebar", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% IF ( opacfacets && facets_loop && total ) %]
     <div id="search-facets">
         <h2><a href="#" class="menu-collapse-toggle">Refine your search</a></h2>
