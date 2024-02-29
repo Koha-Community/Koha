@@ -19,12 +19,20 @@ Installation instructions can be found at:
 
 Koha 23.05.09 is a bugfix/maintenance release.
 
-It includes 2 enhancements, 40 bugfixes.
+It includes 6 security fixes, 2 enhancements, and 40 bugfixes.
 
 **System requirements**
 
 You can learn about the system components (like OS and database) needed for running Koha on the [community wiki](https://wiki.koha-community.org/wiki/System_requirements_and_recommendations).
 
+#### Security bugs
+
+- [29510](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=29510) objects.find should call search_limited if present
+- [34623](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34623) Update jQuery-validate plugin to 1.20.0
+- [35890](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35890) AutoLocation system preference + setting the library IP field - can still login and unexpected results
+- [35918](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35918) Incorrect library used when AutoLocation configured using the same IP
+- [35942](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35942) OPAC user can enroll several times to the same club
+- [36072](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36072) Can request articles even if ArticleRequests is off
 
 ## Bugfixes
 
