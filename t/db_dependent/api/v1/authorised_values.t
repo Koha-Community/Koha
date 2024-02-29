@@ -26,6 +26,8 @@ use t::lib::Mocks;
 use Koha::AuthorisedValues;
 use Koha::Database;
 
+use JSON qw( encode_json );
+
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
@@ -34,7 +36,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list_av_from_category() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -82,6 +84,38 @@ subtest 'list_av_from_category() tests' => sub {
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/authorised_value_categories/$av_cat/authorised_values")
       ->status_is(403);
+
+    # Test the query webservice endpoint for multiple av_cats
+    my $av_cat_2 =
+        $builder->build_object( { class => 'Koha::AuthorisedValueCategories', value => { category_name => 'cat_a' } } );
+    my $av_cat_3 =
+        $builder->build_object( { class => 'Koha::AuthorisedValueCategories', value => { category_name => 'cat_b' } } );
+    my $query = { "me.category_name" => [ $av_cat_2->category_name, $av_cat_3->category_name ] };
+    $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?q=" . encode_json($query) )->status_is(200)
+        ->json_is( [ $av_cat_2->to_api, $av_cat_3->to_api ] );
+
+    # Test the above but with x-koha-embed: authorised_values
+    my $embedded_query = { "me.category_name" => [ $av_cat_2->category_name, $av_cat_3->category_name ] };
+    $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?q="
+            . encode_json($embedded_query) => { 'x-koha-embed' => 'authorised_values' } )->status_is(200)
+        ->json_has( '/0/authorised_values', 'authorised_values object correctly embedded' )
+        ->json_has( '/1/authorised_values', 'authorised_values object correctly embedded' )
+        ->json_hasnt( '/2/', 'authorised_values object correctly embedded' );
+
+    # Test the query webservice endpoint for multiple av_cats with authorised_values embedded
+    my $av_2 = $builder->build_object(
+        { class => 'Koha::AuthorisedValues', value => { category => $av_cat_2->category_name, lib => undef } } );
+    my $av_3 = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => { category => $av_cat_2->category_name, lib => 'description_value' }
+        }
+    );
+
+    my $embedded_av_query = { "me.category_name" => [ $av_cat_2->category_name ] };
+    $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?q="
+            . encode_json($embedded_av_query) => { 'x-koha-embed' => 'authorised_values' } )->status_is(200)
+        ->json_is( [ { %{ $av_cat_2->to_api }, authorised_values => [ $av_2->to_api, $av_3->to_api ] } ] );
 
     $schema->storage->txn_rollback;
 };
