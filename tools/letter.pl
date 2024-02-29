@@ -307,18 +307,18 @@ sub add_validate {
     my $oldmodule     = $input->param('oldmodule');
     my $code          = $input->param('code');
     my $name          = $input->param('name');
-    my $style         = $input->param('style');
-    my $format_all    = $input->param('format_all');
     my @mtt           = $input->multi_param('message_transport_type');
     my @title         = $input->multi_param('title');
     my @content       = $input->multi_param('content');
     my @lang          = $input->multi_param('lang');
     for my $mtt ( @mtt ) {
-        my $lang = shift @lang;
-        if ( $format_all ) {
-            my @letters = Koha::Notice::Templates->search({ lang => $lang })->as_list;
-            foreach my $letter ( @letters ) {
-                $letter->set({ style => $style })->store;
+        my $lang       = shift @lang;
+        my $style      = $input->param("style_$lang");
+        my $format_all = $input->param("format_all_$lang");
+        if ($format_all) {
+            my @letters = Koha::Notice::Templates->search( { lang => $lang } )->as_list;
+            foreach my $letter (@letters) {
+                $letter->set( { style => $style } )->store;
             }
         }
         my $is_html = $input->param("is_html_$mtt\_$lang");

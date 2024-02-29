@@ -49,7 +49,7 @@ function confirmOverwrite( new_lettercode, new_branchcode ){
 }
 
 function confirmFormatOverwrite( event ) {
-    if ( confirm(__("Existing format settings for all notices will be overwritten by these format settings.")) ) {
+    if ( confirm(__("Existing format settings for all notices of the same language will be overwritten by these format settings.")) ) {
         return true;
     } else {
         return false;
@@ -94,7 +94,7 @@ $(document).ready(function() {
     });
 
     $("#submit_form").on("click",function(e){
-        if ( $("#format_all").is(":checked") ){
+        if ( $(".format_all").is(":checked") ){
             if ( confirmFormatOverwrite(e) ) {
                 $("#add_notice").submit();
             } else {

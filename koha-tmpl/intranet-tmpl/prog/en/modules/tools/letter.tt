@@ -680,17 +680,17 @@
                         <ol>
                             <li id="css-helpers">
                                 <label>Insert selectors to apply styles to: </label>
-                                <a class="css-helper" id="headings">Headings</a>
-                                <a class="css-helper" id="tables">Tables</a>
-                                <a class="css-helper" id="text">All text</a>
+                                <a class="css-helper headings" data-lang="[% lang | html %]">Headings</a>
+                                <a class="css-helper tables" data-lang="[% lang | html %]">Tables</a>
+                                <a class="css-helper text" data-lang="[% lang | html %]">All text</a>
                             </li>
-                            <li>
-                                <label for="style">Style (CSS): </label>
-                                <textarea id="style" name="style" rows="15" cols="80">[% letters.$lang.params.style | $raw %]</textarea>
+                            <li class="style_notices_option">
+                                <label for="style_[% lang | html %]">Style (CSS): </label>
+                                <textarea id="style_[% lang | html %]" name="style_[% lang | html %]" rows="15" cols="80">[% letters.$lang.params.style | $raw %]</textarea>
                             </li>
-                            <li>
-                                <label for="format_all">Apply format settings to all notices:</label>
-                                <input type="checkbox" name="format_all" id="format_all" value="1" />
+                            <li class="format_all_notices_option">
+                                <label for="format_all_[% lang | html %]">Apply format settings to all notices[% IF Koha.Preference('TranslateNotices') %] for this language[% END %]:</label>
+                                <input type="checkbox" name="format_all_[% lang | html %]" id="format_all_[% lang | html %]" class="format_all" value="1" />
                                 <span class="hint">Existing format settings will be overwritten.</span>
                             </li>
                         </ol>
@@ -719,23 +719,26 @@
         var new_branchcode = '[% new_branchcode | html %]';
         var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'notices', 'lettert', 'json' ) | $raw %];
         $(document).ready(function(){
-            $("#headings").click(function(){
-                $("#style").val(function(i, text) {
+            $(".headings").click(function(){
+                var lang = $(this).data('lang');
+                $("#style_"+lang).val(function(i, text) {
                     return text + 'pre, #slip, #slip h1, #slip h2, #slip h3, #slip h4, #slip h5, #slip h6,\n' +
                     '#receipt, #receipt h1, #receipt h2, #receipt h3, #receipt h4, #receipt h5, #receipt h6 {\n' +
                     '// insert CSS here\n' +
                     '}';
                 });
             });
-            $("#tables").click(function(){
-                $("#style").val(function(i, text) {
+            $(".tables").click(function(){
+                var lang = $(this).data('lang');
+                $("#style_"+lang).val(function(i, text) {
                     return text + '\nbody, table, th, td, th:last-child, td:last-child {\n' +
                     '// insert CSS here\n' +
                     '}';
                 });
             });
-            $("#text").click(function(){
-                $("#style").val(function(i, text) {
+            $(".text").click(function(){
+                var lang = $(this).data('lang');
+                $("#style_"+lang).val(function(i, text) {
                     return text + 'pre, #slip, #slip h1, #slip h2, #slip h3, #slip h4, #slip h5, #slip h6,\n' +
                     '#receipt, #receipt h1, #receipt h2, #receipt h3, #receipt h4, #receipt h5, #receipt h6,\n' +
                     'table, th, td, th:last-child, td:last-child {\n' +
