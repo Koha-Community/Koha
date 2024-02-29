@@ -34,7 +34,7 @@ use Try::Tiny;
 use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Auth qw( get_session get_template_and_user );
 use C4::Koha;
-use C4::Circulation qw( barcodedecode CanBookBeIssued AddIssue );
+use C4::Circulation qw( barcodedecode CanBookBeIssued AddIssue AddReturn );
 use C4::Members;
 use C4::Biblio qw( TransformMarcToKoha );
 use C4::Search qw( new_record_from_zebra );
@@ -354,6 +354,21 @@ if (@$barcodes) {
         $biblio = $item->biblio;
     }
 
+    if ( $issuingimpossible->{'STATS'} ) {
+        $template->param( STATS => 1 );
+
+        if ( $item->onloan ) {
+            my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
+                AddReturn( $item->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 );
+
+            $template->param(
+                CHECKEDIN => $stats_return,
+                MESSAGES  => $stats_messages,
+                ITEM      => $stats_iteminformation,
+                BORROWER  => $stats_borrower,
+            );
+        }
+    }
     # Fix for bug 7494: optional checkout-time fallback search for a book
 
     if ( $issuingimpossible->{'UNKNOWN_BARCODE'}
