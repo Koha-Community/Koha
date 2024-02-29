@@ -129,15 +129,21 @@ a {
     &.incart {
         color: #666;
     }
+}
 
-    &.remove {
+a,
+button {
+    &.remove,
+    &.removeitems {
+        i.fa {
+            color: #C60000;
+        }
+
         &:hover {
             color: #900;
 
-            i {
-                .fa {
-                    color: #C60000;
-                }
+            i.fa {
+                color: #C60000;
             }
         }
     }
@@ -550,7 +556,12 @@ th {
             }
         }
 
-        &.remove {
+        &.remove,
+        &.removeitems {
+            i.fa {
+                color: #900;
+            }
+
             &:hover {
                 color: #900;
 

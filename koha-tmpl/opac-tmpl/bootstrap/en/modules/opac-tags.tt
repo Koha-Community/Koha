@@ -119,68 +119,74 @@
                         [% END # / TAGLOOP%]
                         [% IF ( add_op ) %]
                             [% IF ( added_count ) %]
-                                <div class="dialog message">[% added_count | html %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
+                                <div class="alert alert-info">[% added_count | html %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
                             [% END %]
                             [% IF ( deleted_count ) %]
-                                <div class="dialog message">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
+                                <div class="alert alert-info">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
                             [% END %]
                         [% END # /add_op %]
 
                         [% IF ( MY_TAGS ) %]
-                        <form id="deletetags" method="post" action="opac-tags.pl">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <table id="mytagst" class="table table-bordered table-striped">
-                            <caption>Your tags</caption>
-                                <thead>
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th>Term</th>
-                                        <th class="all anti-the">Title</th>
-                                        <th>Date added</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOREACH MY_TAG IN MY_TAGS %]
-                                        [% IF MY_TAG.visible %]
+                            <form method="post" action="opac-tags.pl">
+                                <table id="mytagst" class="table table-bordered table-striped">
+                                    <caption>Your tags</caption>
+                                    <thead>
                                         <tr>
-                                            <td class="selectcol">
-                                                <input type="checkbox" name="del[% MY_TAG.tag_id | html %]" value="del[% MY_TAG.tag_id | html %]">
-                                            </td>
-                                            <td class="tagterm">
-                                                <span class="tdlabel">Tag:</span>
-                                                [% IF MY_TAG.approved == 1 %]
-                                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |uri %]&amp;q=[% MY_TAG.term |uri %]">[% MY_TAG.term | html %]</a>
-                                                [% ELSE %]
-                                                    [% MY_TAG.term | html %] (not approved)
-                                                [% END %]
-                                            </td>
-                                            <td>
-                                                [% IF ( MY_TAG.XSLTBloc ) %]
-                                                    [% MY_TAG.XSLTBloc | $raw %]
-                                                [% ELSE %]
-                                                    <span class="tdlabel">Title:</span>
-                                                    [% INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 %]
-                                                    [% IF ( MY_TAG.author ) %]
-                                                        by [% MY_TAG.author | html %]
-                                                    [% END %]
-                                                [% END # /IF MY_TAG.XSLTBloc %]
-
-                                                [% INCLUDE 'title-actions-menu.inc' items=MY_TAG %]
-                                            </td>
-                                            <td data-order="[% MY_TAG.date_created | html %]">
-                                                <span class="tdlabel">Date added:</span>
-                                                [% MY_TAG.date_created | $KohaDates %]
-                                            </td>
-                                            <td></td>
+                                            <th>&nbsp;</th>
+                                            <th>Term</th>
+                                            <th class="all anti-the">Title</th>
+                                            <th>Date added</th>
+                                            <th class="NoSort"></th>
+                                            <th></th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH MY_TAG IN MY_TAGS %]
+                                            [% IF MY_TAG.visible %]
+                                                <tr id="row[% MY_TAG.tag_id | html %]">
+                                                    <td class="selectcol">
+                                                        <input type="checkbox" class="cb" name="biblionumber" value="[% MY_TAG.biblionumber | html %]" data-title="[% MY_TAG.title | html %]" data-tagname="[% MY_TAG.term | html %]" data-tagid="[% MY_TAG.tag_id | html %]" aria-label="[% check_title | html %]"/>
+                                                    </td>
+                                                    <td class="tagterm">
+                                                        <span class="tdlabel">Tag:</span>
+                                                        [% IF MY_TAG.approved == 1 %]
+                                                            <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |uri %]&amp;q=[% MY_TAG.term |uri %]">[% MY_TAG.term | html %]</a>
+                                                        [% ELSE %]
+                                                            [% MY_TAG.term | html %] (not approved)
+                                                        [% END %]
+                                                    </td>
+                                                    <td>
+                                                        [% IF ( MY_TAG.XSLTBloc ) %]
+                                                            [% MY_TAG.XSLTBloc | $raw %]
+                                                        [% ELSE %]
+                                                            <span class="tdlabel">Title:</span>
+                                                            [% INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 %]
+                                                            [% IF ( MY_TAG.author ) %]
+                                                                by [% MY_TAG.author | html %]
+                                                            [% END %]
+                                                        [% END # /IF MY_TAG.XSLTBloc %]
+
+                                                        [% INCLUDE 'title-actions-menu.inc' items=MY_TAG %]
+                                                    </td>
+                                                    <td data-order="[% MY_TAG.date_created | html %]">
+                                                        <span class="tdlabel">Date added:</span>
+                                                        [% MY_TAG.date_created | $KohaDates %]
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-link btn-sm remove" data-tagname="[% MY_TAG.term | html %]" data-tagid="[% MY_TAG.tag_id | html %]" data-biblionumber="[% MY_TAG.biblionumber | html %]" type="button"><i class="fa fa-times" aria-hidden="true"></i> Remove tag</button>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            [% END %]
                                         [% END %]
-                                    [% END %]
-                                </tbody>
-                            </table>
-                            <input type="hidden" name="op" value="cud-del" />
-                            <input type="submit" value="Delete selected tags" class="btn btn-danger btn-sm delete">
-                        </form>
+                                    </tbody>
+                                </table>
+                                <input type="submit" value="Remove selected tags" class="btn btn-danger remove">
+                            </form>
+                            <form id="deletetags" name="deletetags" method="post" action="/cgi-bin/koha/opac-tags.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-del" />
+                            </form>
                         [% END # /MY_TAGS %]
                     </div> <!-- / .usertags -->
                 </div> <!-- / .span10/12 -->
@@ -193,21 +199,49 @@
 [% INCLUDE 'datatables.inc' %]
 <script>
 
-    function checkboxesChecked() {
-        if ($("#deletetags input:checkbox:checked").length > 0) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
     $(document).ready(function(){
-        $(".delete").on("click", function(e){
-            if ( checkboxesChecked() == 1 ) {
-                return confirmDelete( _("Are you sure you want to delete the selected tag(s)?") );
+        $("body").on("click", ".remove", function(e){
+            e.preventDefault();
+            var href;
+            var title;
+            var yes_label;
+            var no_label;
+            var message = "";
+            var tag_delete_form = $("#deletetags");
+            /* Single "Remove from list" link has a biblionumber data-attribute */
+            if( $(this).data("biblionumber") ){
+                /* Use the checkbox with that value to preview the title in the confirmation */
+                var selected_titles = $("#row" + $(this).data("tagid") + " .cb[value='" + $(this).data("biblionumber") + "'");
+                var href = $(this).attr("href");
             } else {
-                alert(_("Please select a tag to delete."));
-                e.preventDefault();
+                var selected_titles = $(".cb:checked");
+            }
+            if ( selected_titles.size() < 1 ) {
+                alert( _("No item was selected") );
+            } else {
+                if( selected_titles.size() > 1 ){
+                    message = $("<ul></ul>");
+                    title = _("Are you sure you want to remove the selected tags from these titles?");
+                    yes_label = _("Yes, delete tags");
+                    no_label = _("No, do not delete tags");
+                    selected_titles.each(function(){
+                        message.append( "<li><em>" +  $(this).data("title") + "</em> ... <b>Tag:</b> " + $(this).data("tagname") + "</li>" );
+                        tag_delete_form.append( '<input type="hidden" name="del' + $(this).data("tagid") + '" value="del' + $(this).data("tagid") + '" />' );
+                    });
+                } else {
+                    title = _("Are you sure you want to remove the selected tag from this title?");
+                    yes_label = _("Yes, delete tag");
+                    no_label = _("No, do not delete tag");
+                    selected_titles.each(function(){
+                        message += "<em>" + $(this).data("title") + "</em> ... <b>Tag:</b> " + $(this).data("tagname");
+                        tag_delete_form.append( '<input type="hidden" name="del' + $(this).data("tagid") + '" value="del' + $(this).data("tagid") + '" />' );
+                    });
+                }
+                confirmModal( message, title, yes_label, no_label, function( result ){
+                    if( result ){
+                        $("#deletetags").submit();
+                    }
+                });
             }
         });
 
