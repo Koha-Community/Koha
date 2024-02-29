@@ -181,6 +181,10 @@
             options['dateFormat'] = "Y-m-d H:i";
             options['altFormat'] = flatpickr_dateformat_string + " " + flatpickr_timeformat_string;
         }
+        let maxDate = $(input).data("flatpickr-maxdate");
+        if( typeof maxDate !== 'undefined' ) {
+            options['maxDate'] = new Date(maxDate);
+        }
 
         let fp = $(input).flatpickr(options);
 

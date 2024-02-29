@@ -345,7 +345,7 @@
                                     [% IF ( INVALID_DATE ) %]
                                         <p>
                                           <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" class="flatpickr" data-flatpickr-enable-time="true" data-flatpickr-on-close-focus="#barcode" />
-                                            <label for="duedatespec">Due date</label>
+                                          <label for="duedatespec">Due date</label>
                                         </p>
                                     [% ELSE %]
                                         <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
@@ -354,7 +354,7 @@
                                     [% IF ( BOOKED_TO_ANOTHER ) %]
                                         <p>
                                             <label for="reduceddue">Reducing due date to: <label>
-                                            <input type="text" size="20" id="reudceddue" name="reduceddue" value="[% reduceddue | $KohaDates with_hours => 1 %]" readonly="readonly">
+                                            <input type="text" size="20" id="reduceddue" name="reduceddue" value="[% reduceddue | html %]" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-maxdate="[% reduceddue | html %]" required="required">
                                         </p>
                                     [% END %]
 
