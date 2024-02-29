@@ -153,6 +153,12 @@
                 <dl>
                     <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl">Manage plugins</a></dt>
                     <dd>View, manage, configure and run plugins.</dd>
+                    [% IF ( CAN_user_plugins_admin && admin_plugins ) %]
+                        [% FOREACH plugin IN admin_plugins %]
+                        <dt><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=admin"><span class="plugin_name">[% plugin.metadata.name | html %]</span></a></dt>
+                        <dd>[% plugin.metadata.description | html %]</dd>
+                        [% END %]
+                    [% END %]
                 </dl>
             [% END %]
 

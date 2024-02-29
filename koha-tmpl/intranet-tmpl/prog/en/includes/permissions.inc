@@ -737,6 +737,11 @@
             Use tool plugins
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'admin' -%]
+        <span class="sub_permission admin_subpermission">
+            Use adminitstrative plugins
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'delete_public_lists' -%]
         <span class="sub_permission delete_public_lists_subpermission">
             Delete public lists
