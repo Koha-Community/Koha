@@ -36,8 +36,9 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $authorised_value_categories_set = Koha::AuthorisedValueCategories->new;
-        my $authorised_value_categories = $c->objects->search( $authorised_value_categories_set );
+        my $authorised_value_categories_set =
+            Koha::AuthorisedValueCategories->search( {}, { order_by => 'category_name' } );
+        my $authorised_value_categories = $c->objects->search($authorised_value_categories_set);
         return $c->render( status => 200, openapi => $authorised_value_categories );
     }
     catch {
