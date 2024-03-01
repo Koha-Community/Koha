@@ -50,7 +50,7 @@ sub monthly_report {
     return try {
 
         my $json = JSON->new;
-        my $args = $json->decode($c->param('q'));
+        my $args = $json->decode( $c->param('q') );
         my @query_params_array;
 
         if ( ref($args) eq 'ARRAY' ) {
@@ -66,8 +66,7 @@ sub monthly_report {
 
         my $usage_data_providers =
             Koha::ERM::EUsage::UsageDataProviders->search( {}, {} )->unblessed;
-        my $metric_types =
-            $query_params_array[0]->{'erm_usage_muses.metric_type'};
+        my $metric_types = $query_params_array[0]->{'erm_usage_muses.metric_type'};
         my $access_types =
               $query_params_array[0]->{'erm_usage_muses.access_type'}
             ? $query_params_array[0]->{'erm_usage_muses.access_type'}
@@ -213,8 +212,9 @@ sub metric_types_report {
             push @{$data}, $missing_result if $missing_result;
         }
 
-        my @metric_types = ('metric_types_report'); # Dummy value to ensure the loop triggers at least once in _create_report_rows
-        my $report_data  = _get_report_data(
+        my @metric_types =
+            ('metric_types_report');    # Dummy value to ensure the loop triggers at least once in _create_report_rows
+        my $report_data = _get_report_data(
             {
                 data_type            => $data_type,
                 data                 => $data,
@@ -257,11 +257,10 @@ sub provider_rollup_report {
         my $usage_data_providers_set = Koha::ERM::EUsage::UsageDataProviders->new;
         my $usage_data_providers     = $c->objects->search($usage_data_providers_set);
 
-        my $data_type = $c->param('data_type');
-        my $key       = 'erm_usage_' . $data_type . 's';
-        my $metric_types =
-            $query_params_array[0]->{ $key . '.erm_usage_muses.metric_type' };
-            
+        my $data_type    = $c->param('data_type');
+        my $key          = 'erm_usage_' . $data_type . 's';
+        my $metric_types = $query_params_array[0]->{ $key . '.erm_usage_muses.metric_type' };
+
         my @usage_data_provider_report_data;
 
         for my $usage_data_provider ( @{$usage_data_providers} ) {
@@ -276,7 +275,8 @@ sub provider_rollup_report {
                         grep { $metric_type eq $_->{metric_type} } @$statistics;
                     my @usage_counts =
                         map { $_->{usage_count} } @filtered_statistics;
-                    my $sum = scalar(@usage_counts) > 0
+                    my $sum =
+                        scalar(@usage_counts) > 0
                         ? _get_usage_total( \@usage_counts )
                         : 0;
 
@@ -299,7 +299,7 @@ sub provider_rollup_report {
                     map { $_->{usage_total} } @filtered_object_data;
                 my $provider_rollup_total =
                     scalar(@data_object_usage_totals) > 0
-                    ? _get_usage_total(\@data_object_usage_totals)
+                    ? _get_usage_total( \@data_object_usage_totals )
                     : 0;
 
                 my %usage_data_provider_hash = (
@@ -405,13 +405,15 @@ sub _get_result_with_no_statistics {
     if ( !$check_result ) {
         my $missing_result   = _get_missing_data( $data_type, $id );
         my @blank_statistics = ();
-        return _get_object_hash({
-            data_type   => $data_type,
-            data_object => $missing_result,
-            statistics  => \@blank_statistics,
-            provider    => '',
-            metric_type => '',
-        });
+        return _get_object_hash(
+            {
+                data_type   => $data_type,
+                data_object => $missing_result,
+                statistics  => \@blank_statistics,
+                provider    => '',
+                metric_type => '',
+            }
+        );
     }
     return 0;
 }
@@ -623,7 +625,8 @@ sub _create_report_rows {
                     grep { $metric_type eq $_->{metric_type} } @stats_by_access_type;
                 my @usage_counts =
                     map { $_->{usage_count} } @stats_by_metric_type;
-                my $sum = $period eq 'monthly' && scalar(@usage_counts) > 0
+                my $sum =
+                    $period eq 'monthly' && scalar(@usage_counts) > 0
                     ? _get_usage_total( \@usage_counts )
                     : 0;
 
@@ -652,8 +655,9 @@ sub _create_report_rows {
                 : @usage_stats;
             my @usage_counts =
                 map { $_->{usage_count} } @stats_by_metric_type;
-            my $sum = $period eq 'monthly' && scalar(@usage_counts) > 0
-                ? _get_usage_total(\@usage_counts)
+            my $sum =
+                $period eq 'monthly' && scalar(@usage_counts) > 0
+                ? _get_usage_total( \@usage_counts )
                 : 0;
 
             my $data_object_hash = _get_object_hash(
@@ -681,14 +685,14 @@ A method for summing the usage counts for a data  object
 =cut
 
 sub _get_usage_total {
-    my ( $statistics ) = @_;
+    my ($statistics) = @_;
 
     my $sum = 0;
     foreach my $statistic (@$statistics) {
         $sum += $statistic;
     }
 
-    return $sum
+    return $sum;
 }
 
 1;
