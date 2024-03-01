@@ -488,6 +488,12 @@
                 table.fnFilter( '', 4 ); // Not filter, display all columns
             });
             $("#show_all_orders").click();
+
+            [% IF print_routing_list_issue %]
+                var myurl = '/cgi-bin/koha/serials/routing-preview.pl?op=print&subscriptionid=[% subscriptionid | uri %]&issue=[% print_routing_list_issue | uri %]';
+                window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+            [% END %]
+
         });
 
         function mana_comment_close(){

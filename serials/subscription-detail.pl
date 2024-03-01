@@ -166,6 +166,7 @@ $template->param(
     orders_grouped => $orders_grouped,
     (uc(C4::Context->preference("marcflavour"))) => 1,
     mana_comments => $subs->{comments},
+    print_routing_list_issue => scalar $query->param('print_routing_list_issue'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

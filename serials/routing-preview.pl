@@ -104,20 +104,26 @@ if($op eq 'cud-save_and_preview'){
         }
     }
 	}
-
-    ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/routing-preview-slip.tt",
-				query => $query,
-				type => "intranet",
-				flagsrequired => {serials => '*'},
-				});
+    print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid&print_routing_list_issue=" . $query->param('issue_escaped'));
+    exit;
+} elsif ( $op eq 'print' ) {
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "serials/routing-preview-slip.tt",
+            query         => $query,
+            type          => "intranet",
+            flagsrequired => { serials => '*' },
+        }
+    );
 } else {
-    ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/routing-preview.tt",
-				query => $query,
-				type => "intranet",
-				flagsrequired => {serials => '*'},
-				});
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "serials/routing-preview.tt",
+            query         => $query,
+            type          => "intranet",
+            flagsrequired => { serials => '*' },
+        }
+    );
 }
 
 $template->param( libraryname => $library->branchname ) if $library;
