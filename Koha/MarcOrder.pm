@@ -644,8 +644,6 @@ sub import_biblios_list {
                     my $itemrecord = {%$iteminfos};
                     $itemrecord->{item_id} = $item_id++;
 
-                    # Rename price field to match UI
-                    $itemrecord->{itemprice} = delete $itemrecord->{price} if $itemrecord->{price};
                     $all_items_quantity++;
                     push @itemlist, $itemrecord;
                 }
