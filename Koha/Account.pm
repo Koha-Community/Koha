@@ -23,7 +23,6 @@ use Carp;
 use Data::Dumper qw( Dumper );
 use Try::Tiny qw( catch try );
 
-use C4::Circulation qw( ReturnLostItem CanBookBeRenewed AddRenewal );
 use C4::Letters;
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );

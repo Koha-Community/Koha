@@ -79,7 +79,6 @@ use Pod::Usage qw( pod2usage );
 use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
-use C4::Circulation qw( CanBookBeRenewed AddRenewal );
 use C4::Context;
 use C4::Log qw( cronlogaction );
 use C4::Letters;
