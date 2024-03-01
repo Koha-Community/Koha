@@ -893,9 +893,9 @@
             parent_block.find(".info").hide();
             parent_block.find(".error").hide();
             if ( add_user(borrowernumber, borrowername) < 0 ) {
-                parent_block.find(".error").html(_("Patron '%s' is already in the list.").format(borrowername.escapeHtml())).show();
+                parent_block.find(".error").html(_("Patron '%s' is already in the list.").format(borrowername)).show();
             } else {
-                parent_block.find(".info").html(_("Patron '%s' added.").format(borrowername.escapeHtml())).show();
+                parent_block.find(".info").html(_("Patron '%s' added.").format(borrowername)).show();
             }
         }
         function modal_select_user(borrowernumber, data) {

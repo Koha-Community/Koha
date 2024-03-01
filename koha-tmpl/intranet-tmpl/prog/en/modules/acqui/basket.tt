@@ -1189,7 +1189,7 @@
             if (ids.indexOf(borrowernumber.toString()) < 0) {
                 ids.push(borrowernumber);
                 $("#users_ids").val(ids.join(':'));
-                var li = '<li id="user_'+borrowernumber+'">'+borrowername.escapeHtml()
+                var li = '<li id="user_'+borrowernumber+'">'+borrowername
                 + ' <a href="#" data-borrowernumber="'+borrowernumber+'" class="del_user"><i class="fa fa-trash-can"></i> '
                     + _("Delete user") + '</a></li>';
                 $("#users_names").prepend(li);

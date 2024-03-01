@@ -1282,7 +1282,7 @@
             if (borrowernumber) {
                 var managerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
                     + '?borrowernumber=' + borrowernumber + '">'
-                    + borrowername.escapeHtml() + '</a>';
+                    + borrowername + '</a>';
                 managedby_name.html(managerlink);
                 managedby.val(borrowernumber);
             }
