@@ -87,6 +87,8 @@ sub setup {
                 value => {
                     surname       => "test_patron_" . $i++,
                     firstname     => $firstname,
+                    middle_name   => q{}, # We don't want to copy the logic from patron_to_html
+                    othernames    => q{},
                     categorycode  => $patron_category->categorycode,
                     branchcode    => $library->branchcode,
                     borrowernotes => $borrowernotes,
@@ -103,6 +105,8 @@ sub setup {
             value => {
                 surname       => "test",
                 firstname     => "not_p_a_t_r_o_n",                # won't match 'patron'
+                middle_name   => q{}, # We don't want to copy the logic from patron_to_html
+                othernames    => q{},
                 categorycode  => $patron_category->categorycode,
                 branchcode    => $library->branchcode,
                 borrowernotes => $borrowernotes,
@@ -126,6 +130,8 @@ sub setup {
             value => {
                 surname       => "test_patron_27",
                 firstname     => $firstname,
+                middle_name   => q{}, # We don't want to copy the logic from patron_to_html
+                othernames    => q{},
                 categorycode  => $patron_category->categorycode,
                 branchcode    => $library_2->branchcode,
                 borrowernotes => $borrowernotes,
@@ -252,8 +258,8 @@ subtest 'Search patrons' => sub {
     is(
         $driver->get_title,
         sprintf(
-            "Modify patron %s %s %s (%s) %s (%s) (%s) › Patrons › Koha",
-            $first_patron->title, $first_patron->firstname, $first_patron->middle_name, $first_patron->othernames, $first_patron->surname, $first_patron->cardnumber,
+            "Modify patron %s %s %s (%s) (%s) › Patrons › Koha",
+            $first_patron->title, $first_patron->firstname, $first_patron->surname, $first_patron->cardnumber,
             $first_patron->category->description,
         ),
         'Page title is correct after following modification link'
@@ -493,7 +499,7 @@ subtest 'Search patrons in modal' => sub {
         is(
             $driver->find_element('//div[@id="patron_preview_modal"]//h1')->get_text(),
             sprintf(
-                "%s %s %s (%s) %s (%s)", $patron->title, $patron->firstname, $patron->middle_name, $patron->othernames,
+                "%s %s %s (%s)", $patron->title, $patron->firstname,
                 $patron->surname,        $patron->cardnumber
             )
         );
@@ -577,8 +583,8 @@ subtest 'Search patrons in modal' => sub {
         is(
             $driver->find_element('//div[@id="patron_preview_modal"]//h1')->get_text(),
             sprintf(
-                "%s %s %s (%s) %s (%s)", $patron->title, $patron->firstname, $patron->middle_name, $patron->othernames,
-                $patron->surname,        $patron->cardnumber
+                "%s %s %s (%s)",  $patron->title, $patron->firstname,
+                $patron->surname, $patron->cardnumber
             )
         );
 
@@ -639,7 +645,7 @@ subtest 'Search patrons in modal' => sub {
         is(
             $driver->find_element('//div[@id="patron_preview_modal"]//h1')->get_text(),
             sprintf(
-                "%s %s %s (%s) %s (%s)", $patron->title, $patron->firstname, $patron->middle_name, $patron->othernames,
+                "%s %s %s (%s)", $patron->title, $patron->firstname,
                 $patron->surname,        $patron->cardnumber
             )
         );
@@ -662,7 +668,7 @@ subtest 'Search patrons in modal' => sub {
 
         # Info has been added about the patron
         is(
-            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="info"]')->get_text,
+            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="info dialog message"]')->get_text,
             sprintf( "Patron '%s %s' added.", $patron->firstname, $patron->surname )
         );
 
@@ -674,7 +680,7 @@ subtest 'Search patrons in modal' => sub {
 
         # Warning has been added about the patron
         is(
-            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="error"]')->get_text,
+            $driver->find_element('//div[@id="patron_search_modal_users"]//div[@class="error dialog alert"]')->get_text,
             sprintf( "Patron '%s %s' is already in the list.", $patron->firstname, $patron->surname )
         );
 
