@@ -148,17 +148,19 @@
                 </dl>
             [% END %]
 
-            [% IF CAN_user_plugins && plugins_enabled %]
+            [% IF plugins_enabled %]
                 <h3>Plugins</h3>
                 <dl>
+                [% IF CAN_user_plugins_manage || CAN_user_plugins_configure %]
                     <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl">Manage plugins</a></dt>
                     <dd>View, manage, configure and run plugins.</dd>
-                    [% IF ( CAN_user_plugins_admin && admin_plugins ) %]
-                        [% FOREACH plugin IN admin_plugins %]
+                [% END %]
+                [% IF ( CAN_user_plugins_admin && admin_plugins ) %]
+                    [% FOREACH plugin IN admin_plugins %]
                         <dt><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=admin"><span class="plugin_name">[% plugin.metadata.name | html %]</span></a></dt>
                         <dd>[% plugin.metadata.description | html %]</dd>
-                        [% END %]
                     [% END %]
+                [% END %]
                 </dl>
             [% END %]
 
