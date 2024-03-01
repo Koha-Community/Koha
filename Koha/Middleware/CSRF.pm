@@ -39,21 +39,25 @@ sub call {
     );
 
     my $original_op    = $req->param('op');
-    my $request_method = $req->method // q{};
+    my $request_method = $req->method  // q{};
+    my $uri            = $req->uri     // q{};
+    my $referer        = $req->referer // q{No referer};
+
     my ($error);
     if ( $stateless_methods{$request_method} && defined $original_op && $original_op =~ m{^cud-} ) {
-        $error = sprintf "Programming error - op '%s' must not start with 'cud-' for %s", $original_op,
-            $request_method;
+        $error = sprintf "Programming error - op '%s' must not start with 'cud-' for %s %s (referer: %s)", $original_op,
+            $request_method, $uri, $referer;
     } elsif ( $stateful_methods{$request_method} ) {
 
         # Get the CSRF token from the param list or the header
         my $csrf_token = $req->param('csrf_token') || $req->header('CSRF_TOKEN');
 
         if ( defined $req->param('op') && $original_op !~ m{^cud-} ) {
-            $error = sprintf "Programming error - op '%s' must start with 'cud-' for %s", $original_op,
-                $request_method;
+            $error = sprintf "Programming error - op '%s' must start with 'cud-' for %s %s (referer: %s)", $original_op,
+                $request_method, $uri, $referer;
         } elsif ( !$csrf_token ) {
-            $error = sprintf "Programming error - No CSRF token passed for %s", $request_method;
+            $error = sprintf "Programming error - No CSRF token passed for %s %s (referer: %s)", $request_method,
+                $uri, $referer;
         } else {
             unless (
                 Koha::Token->new->check_csrf(
