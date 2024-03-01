@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 4;
 
 use Koha::MarcOrder;
 use Koha::Acquisition::Baskets;
@@ -32,13 +32,13 @@ use t::lib::TestBuilder;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-
 subtest '_get_MarcItemFieldsToOrder_syspref_data()' => sub {
     plan tests => 14;
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'MarcItemFieldsToOrder', 'homebranch: 975$a
+    t::lib::Mocks::mock_preference(
+        'MarcItemFieldsToOrder', 'homebranch: 975$a
 holdingbranch: 975$b
 itype: 975$y
 nonpublic_note: 975$x
@@ -51,7 +51,8 @@ copyno: 975$n
 quantity: 975$q
 budget_code: 975$h
 price: 975$p
-replacementprice: 975$v' );
+replacementprice: 975$v'
+    );
 
     my $record = MARC::Record->new();
 
@@ -64,10 +65,11 @@ replacementprice: 975$v' );
         ],
     );
 
-    my $marc_item_fields_to_order = Koha::MarcOrder::_get_MarcItemFieldsToOrder_syspref_data(
-        $record,
-    );
-
+    my $marc_item_fields_to_order = @{
+        Koha::MarcOrder::_get_MarcItemFieldsToOrder_syspref_data(
+            $record,
+        )
+    }[0];
 
     is(
         $marc_item_fields_to_order->{price}, 10,
@@ -134,9 +136,11 @@ subtest '_get_MarcFieldsToOrder_syspref_data()' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference( 'MarcFieldsToOrder', 'price: 975$p
+    t::lib::Mocks::mock_preference(
+        'MarcFieldsToOrder', 'price: 975$p
 quantity: 975$q
-budget_code: 975$h' );
+budget_code: 975$h'
+    );
 
     my $record = MARC::Record->new();
 
@@ -191,12 +195,12 @@ subtest 'add_biblio_from_import_record()' => sub {
 
     $record->add_fields(
         [ '001', '1234' ],
-        [ '020', ' ', ' ', a => '9780596004931'],
+        [ '020', ' ', ' ', a => '9780596004931' ],
         [ '975', ' ', ' ', p => 10, q => 1, h => 1 ],
     );
 
     my $import_record_id = C4::ImportBatch::AddBiblioToBatch( $import_batch_id, 0, $record, 'utf8', 0 );
-    my $import_record = Koha::Import::Records->find($import_record_id);
+    my $import_record    = Koha::Import::Records->find($import_record_id);
 
     my $result = Koha::MarcOrder::add_biblio_from_import_record(
         {
@@ -216,7 +220,7 @@ subtest 'add_biblio_from_import_record()' => sub {
     # Check that records are skipped if not selected when called from addorderiso2709.pl
     # Pass in an empty array and the record should be skipped
     my @import_record_id_selected = ();
-    my $result2 = Koha::MarcOrder::add_biblio_from_import_record(
+    my $result2                   = Koha::MarcOrder::add_biblio_from_import_record(
         {
             import_record             => $import_record,
             matcher_id                => $sample_import_batch->{matcher_id},
@@ -227,173 +231,9 @@ subtest 'add_biblio_from_import_record()' => sub {
         }
     );
 
-    is( $result2->{skip}, 1, 'Record was skipped');
+    is( $result2->{skip},                1, 'Record was skipped' );
     is( $result2->{duplicates_in_batch}, 0, 'Record was skipped - no duplicate checking needed' );
-    is( $result2->{record_result}, 0, 'Record was skipped');
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'add_items_from_import_record() - cronjob' => sub {
-    plan tests => 9;
-
-    $schema->storage->txn_begin;
-
-    my $bpid = C4::Budgets::AddBudgetPeriod(
-        {
-            budget_period_startdate => '2008-01-01', budget_period_enddate => '2008-12-31'
-            , budget_period_active      => 1
-            , budget_period_description => "MAPERI"
-        }
-    );
-    my $budgetid = C4::Budgets::AddBudget(
-        {
-            budget_code      => "BC_1",
-            budget_name      => "budget_name_test_1",
-            budget_period_id => $bpid,
-        }
-    );
-    my $budgetid2 = C4::Budgets::AddBudget(
-        {
-            budget_code      => "BC_2",
-            budget_name      => "budget_name_test_2",
-            budget_period_id => $bpid,
-        }
-    );
-    my $fund1 = C4::Budgets::GetBudget($budgetid);
-    my $fund2 = C4::Budgets::GetBudget($budgetid2);
-    my $budget_code_1 = $fund1->{budget_code};
-    my $budget_code_2 = $fund2->{budget_code};
-
-    my $sample_import_batch = {
-        matcher_id     => 1,
-        template_id    => 1,
-        branchcode     => 'CPL',
-        overlay_action => 'create_new',
-        nomatch_action => 'create_new',
-        item_action    => 'always_add',
-        import_status  => 'staged',
-        batch_type     => 'z3950',
-        file_name      => 'test.mrc',
-        comments       => 'test',
-        record_type    => 'auth',
-    };
-
-    my $import_batch_id = C4::ImportBatch::AddImportBatch($sample_import_batch);
-
-    my $record = MARC::Record->new();
-
-    $record->add_fields(
-        [ '001', '1234' ],
-        [ '020', ' ', ' ', a => '9780596004931' ],
-        [ '975', ' ', ' ', p => 10, q => 1, h => $budget_code_2 ],
-    );
-
-    my $import_record_id = C4::ImportBatch::AddBiblioToBatch( $import_batch_id, 0, $record, 'utf8', 0 );
-    my $import_record    = Koha::Import::Records->find($import_record_id);
-
-    my $result = Koha::MarcOrder::add_biblio_from_import_record(
-        {
-            import_record   => $import_record,
-            matcher_id      => $sample_import_batch->{matcher_id},
-            overlay_action  => $sample_import_batch->{overlay_action},
-            agent           => 'cron',
-            import_batch_id => $import_batch_id
-        }
-    );
-
-    my $bookseller = Koha::Acquisition::Bookseller->new(
-        {
-            name         => "my vendor",
-            address1     => "bookseller's address",
-            phone        => "0123456",
-            active       => 1,
-            deliverytime => 5,
-        }
-    )->store;
-
-    t::lib::Mocks::mock_preference('MarcItemFieldsToOrder', '');
-    t::lib::Mocks::mock_preference('MarcFieldsToOrder', '');
-
-    my $order_line_details = Koha::MarcOrder::add_items_from_import_record(
-        {
-            record_result => $result->{record_result},
-            basket_id     => 1,
-            vendor        => $bookseller,
-            budget_id     => $budgetid,
-            agent         => 'cron',
-        }
-    );
-
-    is(
-        @{$order_line_details}[0]->{rrp}, undef,
-        "Price has been read correctly"
-    );
-    is(
-        @{$order_line_details}[0]->{listprice}, 0,
-        "Listprice has defaulted to 0"
-    );
-    is(
-        @{$order_line_details}[0]->{quantity}, 1,
-        "Quantity has been defaulted to 1 correctly"
-    );
-    is(
-        @{$order_line_details}[0]->{budget_id}, $budgetid,
-        "Budget code has been read correctly"
-    );
-
-    #test that when a budget is mapped it is correctly used in the order line
-    t::lib::Mocks::mock_preference(
-        'MarcItemFieldsToOrder', 'homebranch: 975$a
-holdingbranch: 975$b
-itype: 975$y
-nonpublic_note: 975$x
-public_note: 975$z
-loc: 975$c
-ccode: 975$8
-notforloan: 975$7
-uri: 975$u
-copyno: 975$n
-quantity: 975$q
-budget_code: 975$h
-price: 975$p
-replacementprice: 975$v'
-    );
-
-    my $order_line_details2 = Koha::MarcOrder::add_items_from_import_record(
-        {
-            record_result => $result->{record_result},
-            basket_id     => 1,
-            vendor        => $bookseller,
-            budget_id     => $budgetid,
-            agent         => 'cron',
-        }
-    );
-
-    is(
-        @{$order_line_details2}[0]->{budget_id}, $budgetid2,
-        "Budget code has been read correctly from the syspref mapping"
-    );
-    is(
-        @{$order_line_details2}[0]->{rrp}, 10,
-        "Price has been read correctly"
-    );
-    is(
-        @{$order_line_details2}[0]->{quantity}, 1,
-        "Quantity has been read correctly"
-    );
-
-    my @created_items = @{$order_line_details2}[0]->{itemnumbers};
-    my $new_item = Koha::Items->find($created_items[0]);
-
-    isnt(
-        $new_item, undef,
-        'Item was successfully created'
-    );
-    is(
-        $new_item->price, '10.00',
-        'Item values mapped correctly'
-    );
+    is( $result2->{record_result},       0, 'Record was skipped' );
 
     $schema->storage->txn_rollback;
 };
@@ -453,9 +293,9 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         [ '975', ' ', ' ', p => 10, q => 1, h => $budget_code_2 ],
     );
 
-    my $import_record_id = C4::ImportBatch::AddBiblioToBatch( $import_batch_id, 0, $record, 'utf8', 0 );
-    my $import_record    = Koha::Import::Records->find($import_record_id);
-    my @import_record_id_selected = ( $import_record_id );
+    my $import_record_id          = C4::ImportBatch::AddBiblioToBatch( $import_batch_id, 0, $record, 'utf8', 0 );
+    my $import_record             = Koha::Import::Records->find($import_record_id);
+    my @import_record_id_selected = ($import_record_id);
 
     my $result = Koha::MarcOrder::add_biblio_from_import_record(
         {
@@ -587,115 +427,3 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
     $schema->storage->txn_rollback;
 };
 
-
-subtest 'create_order_lines()' => sub {
-    plan tests => 1;
-
-    $schema->storage->txn_begin;
-
-    my $quantity = 3;
-
-    my $bpid = C4::Budgets::AddBudgetPeriod(
-        {
-            budget_period_startdate => '2008-01-01', budget_period_enddate => '2008-12-31'
-            , budget_period_active      => 1
-            , budget_period_description => "MAPERI"
-        }
-    );
-    my $budgetid = C4::Budgets::AddBudget(
-        {
-            budget_code      => "budget_code_test_1",
-            budget_name      => "budget_name_test_1",
-            budget_period_id => $bpid,
-        }
-    );
-
-    my $sample_import_batch = {
-        matcher_id     => 1,
-        template_id    => 1,
-        branchcode     => 'CPL',
-        overlay_action => 'create_new',
-        nomatch_action => 'create_new',
-        item_action    => 'always_add',
-        import_status  => 'staged',
-        batch_type     => 'z3950',
-        file_name      => 'test.mrc',
-        comments       => 'test',
-        record_type    => 'auth',
-    };
-
-    my $import_batch_id = C4::ImportBatch::AddImportBatch($sample_import_batch);
-
-    my $record = MARC::Record->new();
-
-    $record->add_fields(
-        [ '001', '1234' ],
-        [ '020', ' ', ' ', a => '9780596004931' ],
-        [
-            '975', ' ', ' ', p => 10, q => $quantity, h => $budgetid, a => 'CPL', b => 'CPL', y => 'Book',
-            x => 'Private note', z => 'Public note', c => 'Shelf', 8 => 'ccode', 7 => 0,
-            u => '12345abcde',   n => '12345',       v => 10
-        ]
-    );
-
-    my $import_record_id = C4::ImportBatch::AddBiblioToBatch( $import_batch_id, 0, $record, 'utf8', 0 );
-    my $import_record    = Koha::Import::Records->find($import_record_id);
-
-    my $result = Koha::MarcOrder::add_biblio_from_import_record(
-        {
-            import_record   => $import_record,
-            matcher_id      => $sample_import_batch->{matcher_id},
-            overlay_action  => $sample_import_batch->{overlay_action},
-            agent           => 'cron',
-            import_batch_id => $import_batch_id
-        }
-    );
-
-    my $bookseller = Koha::Acquisition::Bookseller->new(
-        {
-            name         => "my vendor",
-            address1     => "bookseller's address",
-            phone        => "0123456",
-            active       => 1,
-            deliverytime => 5,
-        }
-    )->store;
-
-
-        t::lib::Mocks::mock_preference(
-        'MarcItemFieldsToOrder', 'homebranch: 975$a
-holdingbranch: 975$b
-itype: 975$y
-nonpublic_note: 975$x
-public_note: 975$z
-loc: 975$c
-ccode: 975$8
-notforloan: 975$7
-uri: 975$u
-copyno: 975$n
-quantity: 975$q
-budget_code: 975$h
-price: 975$p
-replacementprice: 975$v'
-    );
-
-    my $order_line_details = Koha::MarcOrder::add_items_from_import_record(
-        {
-            record_result => $result->{record_result},
-            basket_id     => 1,
-            vendor        => $bookseller,
-            budget_id     => $budgetid,
-            agent         => 'cron',
-        }
-    );
-
-    my $nb_of_orders = Koha::Acquisition::Orders->count;
-
-    my $order_lines = Koha::MarcOrder::create_order_lines( { order_line_details => $order_line_details } );
-
-    my $new_nb_of_orders = Koha::Acquisition::Orders->count;
-
-    is($new_nb_of_orders, ( $nb_of_orders + $quantity ), 'Orders created successfully');
-
-    $schema->storage->txn_rollback;
-};

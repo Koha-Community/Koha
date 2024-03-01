@@ -444,7 +444,7 @@ sub add_items_from_import_record {
     # return \@order_line_details;
 }
 
-=head3 create_items_and_generate_order_hash
+=head3 create_order_lines
 
     my $order_lines = create_order_lines({
         order_line_details => $order_line_details
