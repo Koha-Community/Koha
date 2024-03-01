@@ -36,19 +36,17 @@ my $query = CGI->new;
 my $subscriptionid = $query->param('subscriptionid');
 my $issue = $query->param('issue');
 my $routingid;
-my $ok = $query->param('ok');
-my $edit = $query->param('cud-edit');
-my $delete = $query->param('cud-delete');
+my $op = $query->param('op') || q{};
 my $dbh = C4::Context->dbh;
 
-if($delete){
+if($op eq 'cud-delete'){
     delroutingmember($routingid,$subscriptionid);
     my $sth = $dbh->prepare("UPDATE serial SET routingnotes = NULL WHERE subscriptionid = ?");
     $sth->execute($subscriptionid);
     print $query->redirect("routing.pl?subscriptionid=$subscriptionid&op=new");
 }
 
-if($edit){
+if($op eq 'cud-edit'){
     print $query->redirect("routing.pl?subscriptionid=$subscriptionid");
 }
 
@@ -58,7 +56,7 @@ my ($tmp ,@serials) = GetSerials($subscriptionid);
 my ($template, $loggedinuser, $cookie);
 
 my $library;
-if($ok){
+if($op eq 'cud-save_and_preview'){
     # get biblio information....
     my $biblionumber = $subs->{'bibnum'};
 
