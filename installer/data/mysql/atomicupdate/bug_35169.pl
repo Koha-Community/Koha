@@ -11,8 +11,8 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES
-            ('DefaultLongOverdueBorrowerCategories', '', NULL, NULL, NULL),
-            ('DefaultLongOverdueSkipBorrowerCategories', '', NULL, NULL, NULL);
+            ('DefaultLongOverdueBorrowerCategories', '', NULL, 'Set the borrower categories that will be listed when longoverdue cronjob is executed', 'choice'),
+            ('DefaultLongOverdueSkipBorrowerCategories', '', NULL, 'Set the borrower categories that will not be listed when longoverdue cronjob is executed', 'choice');
         }
         );
 
