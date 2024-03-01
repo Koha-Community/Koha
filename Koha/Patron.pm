@@ -375,17 +375,18 @@ sub store {
                     my $info;
                     my $from_storage = $self_from_storage->unblessed;
                     my $from_object  = $self->unblessed;
+
+                    # Object's dateexpiry is a DateTime object which stringifies to iso8601 datetime,
+                    # but the column in only a date so we need to convert the datetime to just a date
+                    # to know if it has actually changed.
+                    $from_object->{dateexpiry} = dt_from_string( $from_object->{dateexpiry} )->ymd
+                        if $from_object->{dateexpiry};
+
                     my @skip_fields  = (qw/lastseen updated_on/);
                     for my $key ( keys %{$from_storage} ) {
                         next if any { /$key/ } @skip_fields;
-                        if (
-                            ( !defined( $from_storage->{$key} ) && defined( $from_object->{$key} ) )
-                            || ( defined( $from_storage->{$key} )
-                                && !defined( $from_object->{$key} ) )
-                            || (   defined( $from_storage->{$key} )
-                                && defined( $from_object->{$key} )
-                                && ( $from_storage->{$key} ne $from_object->{$key} ) )
-                            )
+                        if (   ( $from_storage->{$key} || $from_object->{$key} )
+                            && ( $from_storage->{$key} ne $from_object->{$key} ) )
                         {
                             $info->{$key} = {
                                 before => $from_storage->{$key},
