@@ -93,7 +93,7 @@ sub add {
             );
         } elsif ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
-                status  => 400,
+                status  => 409,
                 openapi => {
                     error => "Duplicate booking_id",
                 }

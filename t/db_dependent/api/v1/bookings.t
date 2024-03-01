@@ -262,7 +262,7 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to create with existing id
     $booking->{booking_id} = $booking_id;
-    $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is(400)
+    $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is(409)
         ->json_is( "/error" => "Duplicate booking_id" );
 
     # TODO: Test bookings clashes
