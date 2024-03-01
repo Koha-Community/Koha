@@ -144,7 +144,7 @@
                                         <th>Maximum Koha version</th>
                                         <th>Last updated</th>
                                         <th>Status</th>
-                                        [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                        [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool || CAN_user_plugins_admin ) %]
                                             <th class="noExport NoSort">Actions</th>
                                         [% END %]
                                     </tr>
@@ -211,6 +211,12 @@
                                                         [% IF ( CAN_user_plugins_tool ) %]
                                                             [% IF plugin.can('tool') %]
                                                                 <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool"><i class="fa fa-wrench fa-fw"></i> Run tool</a></li>
+                                                            [% END %]
+                                                        [% END %]
+
+                                                        [% IF ( CAN_user_plugins_admin ) %]
+                                                            [% IF plugin.can('admin') %]
+                                                                <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=admin"><i class="fa fa-wrench fa-fw"></i> Run admin tool</a></li>
                                                             [% END %]
                                                         [% END %]
 
