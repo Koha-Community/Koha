@@ -327,7 +327,7 @@ sub transferbook {
     my $trigger  = $params->{trigger};
     my $messages;
     my $dotransfer      = 1;
-    my $item = Koha::Items->find( { barcode => $barcode } );
+    my $item = $barcode ? Koha::Items->find( { barcode => $barcode } ) : undef;
 
     Koha::Exceptions::MissingParameter->throw(
         "Missing mandatory parameter: from_branch")
