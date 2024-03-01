@@ -1311,8 +1311,8 @@
                     "x-koha-embed": "+strings"
                 },
                 success: function (data) {
-                    var suggested = '<input type="hidden" id="suggestedby" name="suggestedby" value="' + data.borrowernumber + '" />';
-                    suggested += '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + data.borrowernumber + '">';
+                    var suggested = '<input type="hidden" id="suggestedby" name="suggestedby" value="' + data.patron_id + '" />';
+                    suggested += '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + data.patron_id + '">';
                     suggested += data.surname.escapeHtml() + ', ' + data.firstname.escapeHtml() + ' (' + data.cardnumber.escapeHtml() + ')';
                     suggested += '</a> ';
                     suggested += data._strings.library_id.str.escapeHtml() + ' (' + data._strings.category_id.str.escapeHtml() + ')';
