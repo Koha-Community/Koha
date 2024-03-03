@@ -1334,7 +1334,7 @@
                                                             </span>
                                                         </span>
                                                     [% END %]
-                                                    [% IF riloo.patron.privacy < 2 %]
+                                                    [% IF riloo.patron.privacy < 2 %] [%# 2 is the privacy rule "Never" (Delete my history immediately) %]
                                                         <a class="btn btn-default btn-xs printcheckinslip" href="#" data-borrowernumber="[% riloo.patron.borrowernumber | html %]"><i class="fa fa-print"></i> Print checkin slip</a>
                                                     [% END %]
                                                 [% ELSE %]

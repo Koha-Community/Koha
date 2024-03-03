@@ -30,7 +30,7 @@
                 [% IF patron.has_overdues %]
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
-                [% IF patron.privacy < 2 %]
+                [% IF patron.privacy < 2 %] [%# 2 is the privacy rule "Never" (Delete my history immediately) %]
                     <li><a class="printslip" data-code="checkinslip" href="#">Print checkin slip</a></li>
                 [% END %]
                 [% FOREACH notice IN Notices.GetTemplates( 'patron_slip' ) %]
