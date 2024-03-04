@@ -142,7 +142,7 @@ sub load_records_ui {
     $agent->follow_link_ok( { text => 'Stage records for import' },
         'go to stage MARC' );
 
-    my $session_id = $agent->cookie_jar->get_cookies('koha.local')->{CGISESSID};
+    my $session_id = $agent->cookie_jar->get_cookies( $self->{intranet} )->{CGISESSID};
     my $csrf_token = Koha::Token->new->generate_csrf({session_id => $session_id});
     $agent->post(
         "$cgi_root/tools/upload-file.pl?temp=1",
