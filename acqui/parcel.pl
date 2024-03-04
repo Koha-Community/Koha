@@ -82,7 +82,7 @@ my $op = $input->param('op') // '';
 
 # process cancellation first so that list of
 # orders to display is calculated after
-if ($op eq 'cancelreceipt') {
+if ($op eq 'cud-cancelreceipt') {
     my $ordernumber = $input->param('ordernumber');
     my $parent_ordernumber = CancelReceipt($ordernumber);
     unless($parent_ordernumber) {

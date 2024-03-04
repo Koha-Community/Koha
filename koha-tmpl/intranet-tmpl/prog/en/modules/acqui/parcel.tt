@@ -294,7 +294,13 @@
                           Can't cancel receipt
                       </span>
                     [% ELSE %]
-                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | uri %]&op=cancelreceipt&ordernumber=[% order.ordernumber | uri %]">Cancel receipt</a>
+                        <form id="cancel_receipt_[% order.ordernumber | html %]" method="post" action="/cgi-bin/koha/acqui/parcel.pl">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <input type="hidden" name="op" value="cud-cancelreceipt" />
+                            <input type="hidden" name="ordernumber" value="[% order.ordernumber | html %]" />
+                            <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
+                        </form>
+                        <a href="#" class="cancel_receipt" data-ordernumber="[% order.ordernumber | html %]">Cancel receipt</a>
                     [% END %]
                 </td>
             </tr>
@@ -358,6 +364,11 @@
         var columns_filter = {};
 
         $(document).ready(function(){
+
+            $(".cancel_receipt").on( 'click', function(e){
+                e.preventDefault();
+                $('#cancel_receipt_' + $(this).data('ordernumber')).submit();
+            });
 
             if ( $("#receivedt").length ) {
                 var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
