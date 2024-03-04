@@ -681,6 +681,7 @@
             [% END %]
 
             var _doSave = function(params) {
+                params.data.csrf_token = $('meta[name="csrf-token"]').attr('content');
                 $.ajax($.extend({
                     method: 'POST',
                     url: '/cgi-bin/koha/acqui/finishreceive.pl'

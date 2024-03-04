@@ -36,9 +36,14 @@ use Koha::Number::Price;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 
+my $input = CGI->new;
 
-my $input=CGI->new;
-my $flagsrequired = {acquisition => 'order_receive'};
+if ( $input->request_method ne "POST" ) {
+    print $input->header( -status => 400 );
+    exit;
+}
+
+my $flagsrequired = { acquisition => 'order_receive' };
 
 checkauth($input, 0, $flagsrequired, 'intranet');
 
