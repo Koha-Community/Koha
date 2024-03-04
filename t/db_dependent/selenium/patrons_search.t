@@ -539,7 +539,9 @@ subtest 'Search patrons in modal' => sub {
         $s->auth;
 
         # Go to the add patron form
-        $driver->get( $base_url . "/admin/aqbudgets.pl?op=add_form&budget_id=1&budget_period_id=1" );
+        my $fund = $builder->build_object( { class => 'Koha::Acquisition::Funds' } );
+        push @cleanup, $fund->budget, $fund;
+        $driver->get( $base_url . sprintf "/admin/aqbudgets.pl?op=add_form&budget_id=%s&budget_period_id=%s", $fund->budget_id, $fund->budget_period_id );
 
         # Click "Select owner"
         $driver->find_element('//a[@href="#patron_search_modal_owner"]')->click();
