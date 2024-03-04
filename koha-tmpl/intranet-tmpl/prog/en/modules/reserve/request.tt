@@ -1665,7 +1665,7 @@
 
             [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems || nobiblio ) %]
                 [% IF ( PatronAutoComplete ) %]
-                    patron_autocomplete($("#search_patron_filter"), { 'link-to': 'reserve', 'url-params': '[% url_biblio_params | url %]' });
+                    patron_autocomplete($(".search_patron_filter"), { 'link-to': 'reserve', 'url-params': '[% url_biblio_params | url %]' });
                 [% END %]
             [% END %]
 
