@@ -16,6 +16,7 @@
 <p>Unhandled error</p>
 [% END %]
 [% END %]
+[% SET opac = whole.value.other.opac %]
 
 [% IF whole.stage == "form" %]
 <h2>Create a manual ILL request</h2>

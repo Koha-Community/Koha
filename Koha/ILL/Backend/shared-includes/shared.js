@@ -1,10 +1,14 @@
 var core = [ [% whole.core %] ];
+var opac = [ [% opac %] ];
 document.addEventListener('DOMContentLoaded', function() {
     $('#add-new-fields').click(function(e) {
         e.preventDefault();
         var row = '<li class="form-horizontal">' +
-            '<input type="text" class="custom-name" name="custom_key">' +
-            '<input type="text" id="custom-value" name="custom_value"> '+
+            '<input type="text" class="custom-name ' +
+            ( opac ? 'form-control input-fluid custom-field-input' : '') +
+            '" name="custom_key" placeholder="key">' +
+            '<input type="text" id="custom-value" name="custom_value" class="' +
+            ( opac ? 'form-control input-fluid custom-field-input' : '') +'" placeholder="value"> ' +
             '<button type="button" class="btn btn-danger btn-sm ' +
             'delete-new-field">' +
             '<span class="fa fa-trash">' +
