@@ -1,4 +1,6 @@
 [% SET koha_version = Koha.Version %]
+[% cwd = whole.cwd %]
+[% PROCESS "${cwd}/shared-includes/form_input_helpers.inc" %]
 [% IF whole.error %]
 [% IF whole.status == 'missing_identifier' %]
 <p><em>Please Note:</em> Mandatory field Identifier is missing.</p>
@@ -73,7 +75,6 @@
       </li>
     </ol>
   </fieldset>
-  [% cwd = whole.cwd %]
   [% type = whole.value.other.type %]
   [% IF type %]
       [% INCLUDE "${cwd}/shared-includes/forms/${type}.inc" %]

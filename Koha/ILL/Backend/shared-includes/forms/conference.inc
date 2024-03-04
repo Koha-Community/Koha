@@ -1,49 +1,16 @@
 <fieldset id="conference-standard-fieldset" class="rows">
     <legend>Conference details</legend>
     <ol id="conference-standard-fields">
-        <li>
-            <label for="title">Conference title:</label>
-            <input type="text" name="title" id="title" value="[% whole.value.other.title | html %]" />
-        </li>
-        <li>
-            <label for="publication">Publication:</label>
-            <input type="text" name="publication" id="publication" value="[% whole.value.other.publication | html %]" />
-        </li>
-        <li>
-            <label for="conference_date">Conference date:</label>
-            <input type="text" name="conference_date" id="conference_date" value="[% whole.value.other.conference_date | html %]" />
-        </li>
-        <li>
-            <label for="venue">Venue:</label>
-            <input type="text" name="venue" id="venue" value="[% whole.value.other.venue | html %]" />
-        </li>
-        <li>
-            <label for="sponsor">Sponsor:</label>
-            <input type="text" name="sponsor" id="sponsor" value="[% whole.value.other.sponsor | html %]" />
-        </li>
-        <li>
-            <label for="volume">Volume:</label>
-            <input type="text" name="volume" id="volume" value="[% whole.value.other.volume | html %]" />
-        </li>
-        <li>
-            <label for="isbn">ISBN:</label>
-            <input type="text" name="isbn" id="isbn" value="[% whole.value.other.isbn | html %]" />
-        </li>
-        <li>
-            <label for="issn">ISSN:</label>
-            <input type="text" name="issn" id="issn" value="[% whole.value.other.issn | html %]" />
-        </li>
-        <li>
-            <label for="part_edition">Part:</label>
-            <input type="text" name="part_edition" id="part_edition" value="[% whole.value.other.part_edition | html %]" />
-        </li>
-        <li>
-            <label for="paper_title">Paper title:</label>
-            <input type="text" name="paper_title" id="paper_title" value="[% whole.value.other.paper_title | html %]" />
-        </li>
-        <li>
-            <label for="paper_author">Paper author:</label>
-            <input type="text" name="paper_author" id="paper_author" value="[% whole.value.other.paper_author | html %]" />
-        </li>
+        [% PROCESS ill_text_input_field id = 'title' label = t('Conference title') value = whole.value.other.title %]
+        [% PROCESS ill_text_input_field id = 'publication' label = t('Publication') value = whole.value.other.publication %]
+        [% PROCESS ill_text_input_field id = 'conference_date' label = t('Conference date') value = whole.value.other.conference_date %]
+        [% PROCESS ill_text_input_field id = 'venue' label = t('Venue') value = whole.value.other.venue %]
+        [% PROCESS ill_text_input_field id = 'sponsor' label = t('Sponsor') value = whole.value.other.sponsor %]
+        [% PROCESS ill_text_input_field id = 'volume' label = t('Volume') value = whole.value.other.volume %]
+        [% PROCESS ill_text_input_field id = 'isbn' label = t('ISBN') value = whole.value.other.isbn %]
+        [% PROCESS ill_text_input_field id = 'issn' label = t('ISSN') value = whole.value.other.issn %]
+        [% PROCESS ill_text_input_field id = 'part_edition' label = t('Part') value = whole.value.other.part_edition %]
+        [% PROCESS ill_text_input_field id = 'paper_title' label = t('Paper title') value = whole.value.other.paper_title %]
+        [% PROCESS ill_text_input_field id = 'paper_author' label = t('Paper author') value = whole.value.other.paper_author %]
     </ol>
 </fieldset>

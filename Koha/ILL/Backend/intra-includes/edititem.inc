@@ -1,3 +1,5 @@
+[% cwd = whole.cwd %]
+[% PROCESS "${cwd}/shared-includes/form_input_helpers.inc" %]
 [% IF whole.error %]
 [% IF whole.status == 'missing_type' %]
 <p><em>Please Note:</em> Mandatory field Type is missing.</p>
@@ -66,7 +68,6 @@
         </li>
       </ol>
     </fieldset>
-    [% cwd = whole.cwd %]
     [% type = whole.value.other.type %]
     [% IF type %]
         [% INCLUDE "${cwd}/shared-includes/forms/${type}.inc" %]

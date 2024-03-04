@@ -1,53 +1,17 @@
 <fieldset id="resource-standard-fieldset" class="rows">
     <legend>Generic resource details</legend>
     <ol id="resource-standard-fields">
-        <li>
-            <label for="title">Title:</label>
-            <input type="text" name="title" value="[% whole.value.other.title | html %]" />
-        </li>
-        <li>
-            <label for="author">Author:</label>
-            <input type="text" name="author" id="author" value="[% whole.value.other.author | html %]" />
-        </li>
-        <li>
-            <label for="editor">Editor:</label>
-            <input type="text" name="editor" id="editor" value="[% whole.value.other.editor | html %]" />
-        </li>
-        <li>
-            <label for="publisher">Publisher:</label>
-            <input type="text" name="publisher" id="publisher" value="[% whole.value.other.publisher | html %]" />
-        </li>
-        <li>
-            <label for="published_place">Place of publication:</label>
-            <input type="text" name="published_place" id="published_place" value="[% whole.value.other.published_place | html %]" />
-        </li>
-        <li>
-            <label for="year">Year:</label>
-            <input type="text" name="year" id="year" value="[% whole.value.other.year | html %]" />
-        </li>
-        <li>
-            <label for="part_edition">Part / Edition:</label>
-            <input type="text" name="part_edition" id="part_edition" value="[% whole.value.other.part_edition | html %]" />
-        </li>
-        <li>
-            <label for="volume">Volume:</label>
-            <input type="text" name="volume" id="volume" value="[% whole.value.other.volume | html %]" />
-        </li>
-        <li>
-            <label for="pages">Pages:</label>
-            <input type="text" name="pages" id="pages" value="[% whole.value.other.pages | html %]" />
-        </li>
-        <li>
-            <label for="isbn">ISBN:</label>
-            <input type="text" name="isbn" id="isbn" value="[% whole.value.other.isbn | html %]" />
-        </li>
-        <li>
-            <label for "issn">ISSN:</label>
-            <input type="text" name="issn" id="issn" value="[% whole.value.other.issn | html %]" />
-        </li>
-        <li>
-            <label for="doi">DOI:</label>
-            <input type="text" name="doi" id="doi" value="[% whole.value.other.doi | html %]" />
-        </li>
+        [% PROCESS ill_text_input_field id = 'title' label = t('Title') value = whole.value.other.title %]
+        [% PROCESS ill_text_input_field id = 'author' label = t('Author') value = whole.value.other.author %]
+        [% PROCESS ill_text_input_field id = 'editor' label = t('Editor') value = whole.value.other.editor %]
+        [% PROCESS ill_text_input_field id = 'publisher' label = t('Publisher') value = whole.value.other.publisher %]
+        [% PROCESS ill_text_input_field id = 'published_place' label = t('Place of publication') value = whole.value.other.published_place %]
+        [% PROCESS ill_text_input_field id = 'year' label = t('Year') value = whole.value.other.year %]
+        [% PROCESS ill_text_input_field id = 'part_edition' label = t('Part / Edition') value = whole.value.other.part_edition %]
+        [% PROCESS ill_text_input_field id = 'volume' label = t('Volume') value = whole.value.other.volume %]
+        [% PROCESS ill_text_input_field id = 'pages' label = t('Pages') value = whole.value.other.pages %]
+        [% PROCESS ill_text_input_field id = 'isbn' label = t('ISBN') value = whole.value.other.isbn %]
+        [% PROCESS ill_text_input_field id = 'issn' label = t('ISSN') value = whole.value.other.issn %]
+        [% PROCESS ill_text_input_field id = 'doi' label = t('DOI') value = whole.value.other.doi %]
     </ol>
 </fieldset>
