@@ -19,18 +19,28 @@
     var flatpickr_timeformat_string = [% IF Koha.Preference('TimeFormat') == '12hr' %]"G:i K"[% ELSE %]"H:i"[% END %];
     var flatpickr_timeformat = [% IF Koha.Preference('TimeFormat') == '12hr' %]false[% ELSE %]true[% END %];
     var flatpickr_dateformat_string = "";
+    var delimter = "";
+    var altinput_dateformat = "";
     switch ( dateformat_pref ){
         case "us":
             flatpickr_dateformat_string = "m/d/Y";
+            altinput_dateformat = 'mm/dd/yyyy';
+            delimiter = "/";
             break;
         case "metric":
             flatpickr_dateformat_string = "d/m/Y";
+             altinput_dateformat = 'dd/mm/yyyy';
+             delimiter = "/";
             break;
         case "dmydot":
             flatpickr_dateformat_string = "d.m.Y";
+            altinput_dateformat = 'dd/mm/yyyy';
+            delimiter = ".";
             break;
         default:
             flatpickr_dateformat_string = "Y-m-d";
+            altinput_dateformat = 'yyyy/mm/dd';
+            delimiter = "-";
     }
 
     function get_dateformat_str(dateformat) {
@@ -48,6 +58,8 @@
     }
 </script>
 [% Asset.js("lib/flatpickr/flatpickr.min.js") | $raw %]
+[% Asset.js("lib/maskito/maskito.core.js") | $raw %]
+[% Asset.js("lib/maskito/maskito.kit.js") | $raw %]
 <script>
     flatpickr.l10ns.default.weekdays = flatpickr_weekdays;
     flatpickr.l10ns.default.months   = flatpickr_months;
@@ -90,6 +102,15 @@
                         instance.set('allowInput',false);
                     }
                 });
+        },
+        onOpen: function( selectedDates, dateText, instance ) {
+            var thisInput = instance.input;
+            let options = maskitoDateOptionsGenerator({
+                mode: altinput_dateformat,
+                separator: delimiter,
+            });
+
+            new Maskito( instance.altInput, options );
         },
         onClose: function( selectedDates, dateText, instance) {
             validate_date( dateText, instance );
