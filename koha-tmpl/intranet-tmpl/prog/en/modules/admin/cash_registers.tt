@@ -189,39 +189,39 @@
                            <td>[% cash_register.library.branchname | html %]</td>
                            <td>[% IF cash_register.branch_default %]Yes[% ELSE %]No[% END %]</td>
                            <td>[% cash_register.starting_float | $Price %]</td>
-                           [% IF cash_register.archived == '0' %]
                            <td class="actions">
+                           [% IF cash_register.archived == '0' %]
                                <a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                [% IF cash_register.branch_default %]
                                 <form id="drop_default_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-drop_default" />
                                     <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                                    <button type="submit" id="drop_default_button" class="btn btn-default btn-xs" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Drop default</button>
                                 </form>
-                                <a id="drop_default_button" class="btn btn-default btn-xs" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Drop default</a>
                                [% ELSE %]
                                 <form id="make_default_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-make_default" />
                                     <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                                    <button type="submit" class="btn btn-default btn-xs make_default_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Make default</button>
                                 </form>
-                                <a class="btn btn-default btn-xs make_default_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Make default</a>
                                [% END %]
                                 <form id="archive_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-archive" />
                                     <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                                    <button type="submit" class="btn btn-default btn-xs archive_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Archive</button>
                                 </form>
-                                <a class="btn btn-default btn-xs archive_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-archive"></i> Archive</a>
-                           </td>
                            [% ELSE %]
                             <form id="unarchive_[% cash_register.id | html %]" method="post" action="/cgi-bin/koha/admin/cash_registers.pl">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-unarchive" />
                                 <input type="hidden" name="id" value="[% cash_register.id | html %]" />
+                                <button type="submit" class="btn btn-default btn-xs unarchive_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-trash-can-restore"></i> Restore</button>
                             </form>
-                           <td class="actions"><a class="btn btn-default btn-xs unarchive_button" href="#" data-id="[% cash_register.id | html %]"><i class="fa fa-trash-can-restore"></i> Restore</a></td>
                            [% END %]
+                           </td>
                        </tr>
                        [% END %]
                        </tbody>
@@ -277,29 +277,6 @@
             filterDataTable( crtable, 2, opt );
         });
 
-        $("#drop_default_button").on("click", function(e){
-            e.preventDefault();
-            var id = $(this).data('id');
-            $('#drop_default_'+id).submit();
-        });
-
-        $(".make_default_button").on("click", function(e){
-            e.preventDefault();
-            var id = $(this).data('id');
-            $('#make_default_'+id).submit();
-        });
-
-        $(".archive_button").on("click", function(e){
-            e.preventDefault();
-            var id = $(this).data('id');
-            $('#archive_'+id).submit();
-        });
-
-        $(".unarchive_button").on("click", function(e){
-            e.preventDefault();
-            var id = $(this).data('id');
-            $('#unarchive_'+id).submit();
-        });
     });
     </script>
 [% END %]

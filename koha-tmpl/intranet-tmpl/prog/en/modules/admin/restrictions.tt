@@ -229,8 +229,8 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="op" value="cud-make_default" />
                                         <input type="hidden" name="code" value="[% restriction.code | html %]" />
+                                        <button type="submit" class="btn btn-default btn-xs make_default_button" href="#" data-code="[% restriction.code | html %]"><i class="fa fa-archive"></i> Make default</button>
                                     </form>
-                                    <a class="btn btn-default btn-xs make_default_button" href="#" data-code="[% restriction.code | html %]"><i class="fa fa-archive"></i> Make default</a>
                                 [% END %]
                             </td>
                         </tr>
@@ -274,12 +274,6 @@
             } else {
                 $("#fee_limit").prop("required",false).nextAll().remove();
             }
-        });
-
-        $(".make_default_button").on("click", function(e){
-            e.preventDefault();
-            var code = $(this).data('code');
-            $('#make_default_'+code).submit();
         });
 
     </script>

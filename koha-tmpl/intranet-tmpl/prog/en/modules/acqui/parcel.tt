@@ -294,12 +294,6 @@
                           Can't cancel receipt
                       </span>
                     [% ELSE %]
-                        <form id="cancel_receipt_[% order.ordernumber | html %]" method="post" action="/cgi-bin/koha/acqui/parcel.pl">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-cancelreceipt" />
-                            <input type="hidden" name="ordernumber" value="[% order.ordernumber | html %]" />
-                            <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
-                        </form>
                         <a href="#" class="cancel_receipt" data-ordernumber="[% order.ordernumber | html %]">Cancel receipt</a>
                     [% END %]
                 </td>
@@ -307,6 +301,12 @@
         [% END %]
     </tbody>
     </table>
+    </form>
+    <form id="cancel_receipt" method="post" action="/cgi-bin/koha/acqui/parcel.pl">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-cancelreceipt" />
+        <input type="hidden" name="ordernumber" id="cancel_ordernumber" value="" />
+        <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
     </form>
 
     [% ELSE %]There are no received orders.[% END %]
@@ -367,7 +367,8 @@
 
             $(".cancel_receipt").on( 'click', function(e){
                 e.preventDefault();
-                $('#cancel_receipt_' + $(this).data('ordernumber')).submit();
+                $('#cancel_ordernumber').val( $(this).data('ordernumber') );
+                $('#cancel_receipt').submit();
             });
 
             if ( $("#receivedt").length ) {
