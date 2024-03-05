@@ -476,7 +476,7 @@ subtest 'delete() tests' => sub {
 
     # Check if status is cancelled?
     $order->orderstatus('new')->store;
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )->status_is(403);
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )->status_is(409);
     $order->orderstatus('cancelled')->store;
     $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders/" . $order->ordernumber )
       ->status_is(204, 'SWAGGER3.2.4')

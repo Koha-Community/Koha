@@ -202,7 +202,7 @@ sub delete {
     } elsif ( ( $order->orderstatus && $order->orderstatus ne 'cancelled' ) || !$order->datecancellationprinted ) {
         # Koha may (historically) have inconsistent order data here (e.g. cancelled without date)
         return $c->render(
-            status  => 403,
+            status  => 409,
             openapi => { error => 'Order status must be cancelled' }
         );
     }
