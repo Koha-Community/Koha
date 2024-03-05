@@ -979,12 +979,14 @@ sub add_request {
 
     my ( $self, $params ) = @_;
 
+    my $unauthenticated_request =
+        C4::Context->preference("ILLOpacUnauthenticatedRequest") && !$params->{other}->{'cardnumber'};
+
     # ...Populate Illrequestattributes
     # generate $request_details
     my $request_details = _get_request_details( $params, $params->{other} );
 
-    my ( $brw_count, $brw ) =
-        _validate_borrower( $params->{other}->{'cardnumber'} );
+    my ( $brw_count, $brw ) = _validate_borrower( $params->{other}->{'cardnumber'} ) unless $unauthenticated_request;
 
     ## Create request
 
@@ -994,7 +996,7 @@ sub add_request {
     # ...Populate Illrequest
     my $request = $params->{request};
     $request->biblio_id($biblionumber) unless $biblionumber == 0;
-    $request->borrowernumber( $brw->borrowernumber );
+    $request->borrowernumber( $brw ? $brw->borrowernumber : undef );
     $request->branchcode( $params->{other}->{branchcode} );
     $request->status( $unauthenticated_request ? 'UNAUTH' : 'NEW' );
     $request->backend( $params->{other}->{backend} );
@@ -1012,6 +1014,15 @@ sub add_request {
         }
     } keys %{$request_details};
     $request->extended_attributes( \@request_details_array );
+
+    if ($unauthenticated_request) {
+        my $unauthenticated_notes_text =
+              "Unauthenticated request.\nFirst name: $params->{other}->{'unauthenticated_first_name'}"
+            . ".\nLast name: $params->{other}->{'unauthenticated_last_name'}."
+            . "\nEmail: $params->{other}->{'unauthenticated_email'}.";
+        $request->append_to_note($unauthenticated_notes_text);
+        $request->notesopac($unauthenticated_notes_text)->store;
+    }
 
     return $request;
 }
