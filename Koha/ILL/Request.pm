@@ -2207,8 +2207,11 @@ Patron object
 sub can_patron_place_ill_in_opac {
     my ( $self, $patron ) = @_;
 
+    return 1 if C4::Context->preference('ILLOpacUnauthenticatedRequest') && !$patron;
+
     return 0
-        unless $patron->_result->categorycode->can_place_ill_in_opac
+        unless $patron
+        && $patron->_result->categorycode->can_place_ill_in_opac
         && !( $patron->is_expired
         && $patron->category->effective_BlockExpiredPatronOpacActions_contains('ill_request') );
     return 1;
