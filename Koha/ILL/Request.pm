@@ -1094,16 +1094,12 @@ sub backend_create {
     # ... complex case: commit!
 
     # Do we still have space for an ILL or should we queue?
-    my $permitted = $self->check_limits( { patron => $self->patron }, { librarycode => $self->branchcode } );
-
-    # Now augment our committed request.
-
-    $result->{permitted} = $permitted;    # Queue request?
-
-    # This involves...
-
-    # ...Updating status!
-    $self->status('QUEUED')->store unless ($permitted);
+    my $permitted = 1;
+    if ( $self->patron ) {
+        $permitted = $self->check_limits( { patron => $self->patron }, { librarycode => $self->branchcode } );
+        $result->{permitted} = $permitted;
+        $self->status('QUEUED')->store unless ($permitted);
+    }
 
     ## Handle Unmediated ILLs
 
