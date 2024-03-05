@@ -126,16 +126,6 @@
                         <div id="didyoumean">Not what you expected? Check for <a href="/cgi-bin/koha/svc/suggestion?render=standalone&amp;q=[% querystring | uri %]">suggestions</a></div>
                     [% END %]
 
-                    [% IF ( koha_spsuggest ) %]
-                        Did you mean:
-                        <ul style="list-style: none;">
-                            [% FOREACH SPELL_SUGGES IN SPELL_SUGGEST %]
-                            <li>
-                                <a href="/cgi-bin/koha/opac-search.pl?q=[% SPELL_SUGGES.spsuggestion | uri %]">[% SPELL_SUGGES.spsuggestion | html %]</a>
-                            </li>
-                            [% END %]
-                        </ul>
-                    [% END # / IF koha_spsuggest%]
                     [% IF ( total ) %]
                         [% IF ( ReturnPath ) %]
                             <div class="returntosearch">
