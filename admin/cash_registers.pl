@@ -99,7 +99,7 @@ elsif ( $op eq 'cud-add_validate' ) {
     $op = 'list';
 }
 
-elsif ( $op eq 'archive' ) {
+elsif ( $op eq 'cud-archive' ) {
     if ($registerid) {
         try {
             my $cash_register = Koha::Cash::Registers->find($registerid);
@@ -113,7 +113,7 @@ elsif ( $op eq 'archive' ) {
     }
     $op = 'list';
 }
-elsif ( $op eq 'unarchive' ) {
+elsif ( $op eq 'cud-unarchive' ) {
     if ($registerid) {
         try {
             my $cash_register = Koha::Cash::Registers->find($registerid);
@@ -127,7 +127,7 @@ elsif ( $op eq 'unarchive' ) {
     $op = 'list';
 }
 
-elsif ( $op eq 'make_default' ) {
+elsif ( $op eq 'cud-make_default' ) {
     if ($registerid) {
         try {
             my $cash_register = Koha::Cash::Registers->find($registerid);
@@ -140,7 +140,7 @@ elsif ( $op eq 'make_default' ) {
     }
     $op = 'list';
 }
-elsif ( $op eq 'drop_default' ) {
+elsif ( $op eq 'cud-drop_default' ) {
     if ($registerid) {
         try {
             my $cash_register = Koha::Cash::Registers->find($registerid);
