@@ -223,10 +223,20 @@
                                             [% IF !debit_type.archived %]
                                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                                 [% IF !debit_type.is_system %]
-                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=archive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
+                                                    <form id="archive_[% debit_type.code | html %]" method="post" action="/cgi-bin/koha/admin/debit_types.pl">
+                                                        [% INCLUDE 'csrf-token.inc' %]
+                                                        <input type="hidden" name="op" value="cud-archive" />
+                                                        <input type="hidden" name="code" value="[% debit_type.code | html %]" />
+                                                    </form>
+                                                    <a class="btn btn-default btn-xs archive_button" href="#" data-code="[% debit_type.code | html %]"><i class="fa fa-archive"></i> Archive</a>
                                                 [% END %]
                                             [% ELSIF debit_type.archived %]
-                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=unarchive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
+                                                <form id="unarchive_[% debit_type.code | html %]" method="post" action="/cgi-bin/koha/admin/debit_types.pl">
+                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                    <input type="hidden" name="op" value="cud-unarchive" />
+                                                    <input type="hidden" name="code" value="[% debit_type.code | html %]" />
+                                                </form>
+                                                <a class="btn btn-default btn-xs unarchive_button" href="#" data-code="[% debit_type.code | html %]"><i class="fa fa-undo"></i> Restore</a>
                                             [% END %]
                                         </td>
                                     </tr>
@@ -284,6 +294,18 @@
 
             //Start filtered
             $('#filter_system').click();
+
+            $(".archive_button").on("click", function(e){
+                e.preventDefault();
+                var code = $(this).data('code');
+                $('#archive_'+code).submit();
+            });
+
+            $(".unarchive_button").on("click", function(e){
+                e.preventDefault();
+                var code = $(this).data('code');
+                $('#unarchive_'+code).submit();
+            });
         });
     </script>
 [% END %]
