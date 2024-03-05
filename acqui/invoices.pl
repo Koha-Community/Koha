@@ -105,22 +105,8 @@ $template->param(
 );
 
 # Build suppliers list
-my @suppliers      = Koha::Acquisition::Booksellers->search( undef, { order_by => { -asc => 'name' } } )->as_list;
-my $suppliers_loop = [];
-my $suppliername;
-foreach (@suppliers) {
-    my $selected = 0;
-    if ($supplierid && $supplierid == $_->id ) {
-        $selected = 1;
-        $suppliername = $_->name;
-    }
-    push @{$suppliers_loop},
-      {
-        suppliername => $_->name,
-        booksellerid   => $_->id,
-        selected     => $selected,
-      };
-}
+my $supplier;
+$supplier = Koha::Acquisition::Booksellers->find($supplierid) if $supplierid;
 
 my $budgets = GetBudgets();
 my @budgets_loop;
@@ -140,24 +126,23 @@ for my $sub ( @{$invoices} ) {
 $template->{'VARS'}->{'budgets_loop'} = \@budgets_loop;
 
 $template->param(
-    openedinvoices => \@openedinvoices,
-    closedinvoices => \@closedinvoices,
-    do_search => ( $op and $op eq 'do_search' ) ? 1 : 0,
-    invoices => $invoices,
-    invoicenumber   => $invoicenumber,
-    booksellerid    => $supplierid,
-    suppliername    => $suppliername,
+    openedinvoices   => \@openedinvoices,
+    closedinvoices   => \@closedinvoices,
+    do_search        => ( $op and $op eq 'do_search' ) ? 1 : 0,
+    invoices         => $invoices,
+    invoicenumber    => $invoicenumber,
+    booksellerid     => $supplierid,
+    supplier         => $supplier,
     shipmentdatefrom => $shipmentdatefrom,
     shipmentdateto   => $shipmentdateto,
-    billingdatefrom => $billingdatefrom,
-    billingdateto   => $billingdateto,
-    isbneanissn     => $isbneanissn,
-    title           => $title,
-    author          => $author,
-    publisher       => $publisher,
-    publicationyear => $publicationyear,
-    branch          => $branch,
-    suppliers_loop  => $suppliers_loop,
+    billingdatefrom  => $billingdatefrom,
+    billingdateto    => $billingdateto,
+    isbneanissn      => $isbneanissn,
+    title            => $title,
+    author           => $author,
+    publisher        => $publisher,
+    publicationyear  => $publicationyear,
+    branch           => $branch,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
