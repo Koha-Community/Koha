@@ -18,14 +18,14 @@ return {
                 `module` IN (SELECT `module` FROM `marc_overlay_rules` WHERE `filter` = "*") AND
                 `filter` NOT IN (SELECT `filter` FROM `marc_overlay_rules` WHERE `tag` = "*")
         };
-        my @results = $dbh->selectall_array( $query );
-        for my $result ( @results ) {
-            my ($module, $filter) = @{$result};
+        my @results = $dbh->selectall_array($query);
+        for my $result (@results) {
+            my ( $module, $filter ) = @{$result};
             $query = q{
                 INSERT INTO `marc_overlay_rules`(`tag`, `module`, `filter`, `add`, `append`, `remove`, `delete`)
                 VALUES(?, ?, ?, ?, ?, ?, ?)
             };
-            $dbh->do($query, undef, '*', $module, $filter, 1, 1, 1, 1);
+            $dbh->do( $query, undef, '*', $module, $filter, 1, 1, 1, 1 );
         }
         say $out "Added record overlay rules to preserve current behavior";
     },
