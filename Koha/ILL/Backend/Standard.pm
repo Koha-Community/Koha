@@ -276,9 +276,6 @@ sub create {
         }
 
         # Received completed details of form.  Validate and create request.
-        ## Validate
-        my ( $brw_count, $brw ) =
-            _validate_borrower( $other->{'cardnumber'} );
         my $result = {
             cwd     => dirname(__FILE__),
             status  => "",
@@ -290,31 +287,37 @@ sub create {
             core    => $core_fields
         };
         my $failed = 0;
-        if ( !$other->{'type'} ) {
-            $result->{status} = "missing_type";
-            $result->{value}  = $params;
-            $failed           = 1;
-        } elsif ( !$other->{'branchcode'} ) {
-            $result->{status} = "missing_branch";
-            $result->{value}  = $params;
-            $failed           = 1;
-        } elsif ( !Koha::Libraries->find( $other->{'branchcode'} ) ) {
-            $result->{status} = "invalid_branch";
-            $result->{value}  = $params;
-            $failed           = 1;
-        } elsif ( $brw_count == 0 ) {
-            $result->{status} = "invalid_borrower";
-            $result->{value}  = $params;
-            $failed           = 1;
-        } elsif ( $brw_count > 1 ) {
 
-            # We must select a specific borrower out of our options.
-            $params->{brw}   = $brw;
-            $result->{value} = $params;
-            $result->{stage} = "borrowers";
-            $result->{error} = 0;
-            $failed          = 1;
+        my $unauthenticated_request =
+            C4::Context->preference("ILLOpacUnauthenticatedRequest") && !$other->{'cardnumber'};
+        if ($unauthenticated_request) {
+            ( $failed, $result ) = _validate_form_params( $other, $result, $params );
+            if ( !_unauth_request_data_check($other) ) {
+                $result->{status} = "missing_unauth_data";
+                $result->{value}  = $params;
+                $failed           = 1;
+            }
+        } else {
+            ( $failed, $result ) = _validate_form_params( $other, $result, $params );
+
+            my ( $brw_count, $brw ) =
+                _validate_borrower( $other->{'cardnumber'} );
+
+            if ( $brw_count == 0 ) {
+                $result->{status} = "invalid_borrower";
+                $result->{value}  = $params;
+                $failed           = 1;
+            } elsif ( $brw_count > 1 ) {
+
+                # We must select a specific borrower out of our options.
+                $params->{brw}   = $brw;
+                $result->{value} = $params;
+                $result->{stage} = "borrowers";
+                $result->{error} = 0;
+                $failed          = 1;
+            }
         }
+
         return $result if $failed;
 
         $self->add_request( { request => $params->{request}, other => $other } );
@@ -1219,6 +1222,54 @@ sub _set_suppression {
     $record->append_fields($new942);
 
     return 1;
+}
+
+=head3 _unauth_request_data_check
+
+    _unauth_request_data_check($other);
+
+Checks if unauthenticated request data is present
+
+=cut
+
+sub _unauth_request_data_check {
+    my ($other) = @_;
+
+    return 1 unless C4::Context->preference("ILLOpacUnauthenticatedRequest");
+
+    return
+           $other->{unauthenticated_first_name}
+        && $other->{unauthenticated_last_name}
+        && $other->{unauthenticated_email};
+}
+
+=head3 _validate_form_params
+
+    _validate_form_params( $other, $result, $params );
+
+Validate form parameters and return the validation result
+
+=cut
+
+sub _validate_form_params {
+    my ( $other, $result, $params ) = @_;
+
+    my $failed = 0;
+    if ( !$other->{'type'} ) {
+        $result->{status} = "missing_type";
+        $result->{value}  = $params;
+        $failed           = 1;
+    } elsif ( !$other->{'branchcode'} ) {
+        $result->{status} = "missing_branch";
+        $result->{value}  = $params;
+        $failed           = 1;
+    } elsif ( !Koha::Libraries->find( $other->{'branchcode'} ) ) {
+        $result->{status} = "invalid_branch";
+        $result->{value}  = $params;
+        $failed           = 1;
+    }
+
+    return ( $failed, $result );
 }
 
 =head1 AUTHORS

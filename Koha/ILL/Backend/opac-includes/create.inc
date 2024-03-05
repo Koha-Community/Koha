@@ -11,6 +11,10 @@
     <div class="alert alert-warning">
         <strong>Please note:</strong> Type is a mandatory field.
     </div>
+[% ELSIF whole.status == 'missing_unauth_data' %]
+    <div class="alert alert-warning">
+        <strong>Please note:</strong> Patron data (first name, last name and e-mail) are mandatory fields.
+    </div>
 [% ELSIF whole.status == 'missing_branch' %]
     <div class="alert alert-warning">
         <strong>Please note:</strong> Library is a mandatory field.
